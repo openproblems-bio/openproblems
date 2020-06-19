@@ -2,4 +2,5 @@ import numpy as np
 
 
 def accuracy(adata):
-    return np.mean(adata.obs["labels"] == adata.obs["labels_pred"])
+    test_data = adata[~adata.obs["is_train"]]
+    return np.mean(test_data.obs["labels"] == test_data.obs["labels_pred"])
