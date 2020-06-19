@@ -7,7 +7,7 @@ install_requires = [
     "scikit-learn>=0.19.1",
 ]
 
-test_requires = ["nose2", "parameterized", "black"]
+test_requires = ["nose2", "parameterized"]
 
 doc_requires = [
     "sphinx>=2.2,<2.4",
