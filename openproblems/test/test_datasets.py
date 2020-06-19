@@ -9,4 +9,3 @@ import openproblems
 def test_task(dataset):
     X = dataset()
     assert isinstance(X, anndata.AnnData)
-
