@@ -1,5 +1,6 @@
 from openproblems import TASKS
 
+
 def test():
     for task in TASKS:
         for dataset in task.DATASETS:
@@ -8,5 +9,3 @@ def test():
                 y = method(X)
                 for metric in task.METRICS:
                     m = metric(X, y)
-
-
