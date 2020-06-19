@@ -1,4 +1,4 @@
-from .. import utils
+from ... import utils
 from . import datasets, methods, metrics
 
 DATASETS = utils.get_members(datasets)
