@@ -2,10 +2,7 @@ import os
 import sys
 from setuptools import setup, find_packages
 
-install_requires = [
-    "numpy>=1.12.0",
-    "scikit-learn>=0.19.1",
-]
+install_requires = ["numpy>=1.12.0", "scikit-learn>=0.19.1", "anndata"]
 
 test_requires = ["nose2", "parameterized"]
 

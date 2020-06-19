@@ -1,5 +1,5 @@
 import numpy as np
-
+import anndata
 
 def dummy():
-    return np.random.uniform((100, 10))
+    return anndata.AnnData(np.random.uniform((100, 10)))
