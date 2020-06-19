@@ -13,7 +13,7 @@ import openproblems
     ]
 )
 def test_method(task, dataset, method):
-    X = dataset()
-    Y = method(X)
+    adata = dataset()
+    method(adata)
     for metric in task.METRICS:
-        m = metric(X, Y)
+        m = metric(adata)

@@ -1,5 +1,5 @@
 import numpy as np
 
 
-def dummy(X):
-    return np.zeros(X.shape[0])
+def dummy(adata):
+    adata.obs["labels_pred"] = np.random.choice(2, adata.shape[0], replace=True)

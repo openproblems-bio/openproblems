@@ -1,2 +1,2 @@
-def dummy(X, y):
+def dummy(adata):
     return 0

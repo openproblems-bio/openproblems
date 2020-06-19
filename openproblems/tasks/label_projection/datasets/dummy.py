@@ -3,4 +3,6 @@ import anndata
 
 
 def dummy():
-    return anndata.AnnData(np.random.uniform((100, 10)))
+    adata = anndata.AnnData(np.random.uniform(0, 1, (100, 10)))
+    adata.obs["labels"] = np.random.choice(2, 100, replace=True)
+    return adata
