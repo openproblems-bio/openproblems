@@ -1,0 +1,29 @@
+language: python
+python:
+  - '3.5'
+  - '3.6'
+  - 3.7-dev
+sudo: required
+dist: xenial
+addons:
+  apt:
+    packages:
+      - libhdf5-dev
+      - pandoc
+      - gfortran
+      - libblas-dev
+      - liblapack-dev
+cache:
+  - pip
+  - apt
+install:
+  - pip install -U .
+script:
+  - python -c "import openproblems"
+  - 'pip install -U .[test]'
+  - 'if [ "$TRAVIS_PYTHON_VERSION" != "3.5" ]; then black . --check --diff; fi'
+  - python setup.py test
+  - 'pip install -U .[doc]'
+  - python setup.py build_sphinx
+
+
