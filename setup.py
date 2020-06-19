@@ -4,6 +4,8 @@ from setuptools import setup, find_packages
 
 install_requires = ["numpy>=1.12.0", "scikit-learn>=0.19.1", "anndata"]
 
+evaluate_requires = ["tabulate"]
+
 test_requires = ["nose2", "parameterized"]
 
 doc_requires = [
@@ -31,7 +33,11 @@ setup(
     license="MIT",
     install_requires=install_requires,
     python_requires=">=3.5",
-    extras_require={"test": test_requires, "doc": doc_requires},
+    extras_require={
+        "test": test_requires,
+        "doc": doc_requires,
+        "evaluate": evaluate_requires,
+    },
     test_suite="nose2.collector.collector",
     long_description=readme,
     long_description_content_type="text/markdown",
