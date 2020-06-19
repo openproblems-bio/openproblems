@@ -1,5 +1,6 @@
 import unittest
 import parameterized
+import numbers
 
 import openproblems
 
@@ -15,5 +16,7 @@ import openproblems
 def test_method(task, dataset, method):
     adata = dataset()
     method(adata)
+    assert task.checks.check_method(adata)
     for metric in task.METRICS:
         m = metric(adata)
+        assert isinstance(m, numbers.Number)

@@ -40,3 +40,39 @@ To add a new dataset, method, or metric to a task, simply create a new `.py` fil
 from .f2 import f2
 ```
 to [`openproblems/tasks/label_projection/metrics/__init__.py`](openproblems/tasks/label_projection/metrics/__init__.py).
+
+## Adding a new task
+
+The task directory structure is as follows
+
+```
+opensproblems/
+  - tasks/
+    - task_name/
+      - README.md
+      - __init__.py
+      - checks.py
+      - datasets/
+        - __init__.py
+        - dataset1.py
+        - ...
+      - methods/
+        - __init__.py
+        - method1.py
+        - ...
+      - metrics/
+        - __init__.py
+        - metric1.py
+        - ...
+```
+
+`task_name/__init__.py` can be copied from an existing task. 
+
+`checks.py` should implement the following functions:
+
+```
+check_dataset(AnnData adata) -> bool # checks that a dataset fits the task-specific schema
+check_method(AnnData adata) -> bool # checks that the output from a method fits the task-specific schema
+```
+
+For adding datasets, methods and metrics, see above.
