@@ -14,7 +14,7 @@ import openproblems
     ]
 )
 def test_method(task, dataset, method):
-    adata = dataset()
+    adata = dataset(test=True)
     method(adata)
     assert task.checks.check_method(adata)
     for metric in task.METRICS:

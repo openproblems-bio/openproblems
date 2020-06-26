@@ -14,10 +14,10 @@ Each task consists of datasets, methods, and metrics.
 Datasets should take no arguments and return an AnnData object.
 
 ```
-function dataset() -> AnnData adata
+function dataset(bool test=False) -> AnnData adata
 ```
 
-Methods should take an AnnData object and store the output in-place in  `adata.obs` according to the specification of the task.
+Methods should take an AnnData object and store the output in-place in  `adata.obs` according to the specification of the task. If `test is True`, then the method should return a small version of the same data (preferably <200 cells and <500 genes).
 
 ```
 function method(AnnData adata) -> None
@@ -35,7 +35,7 @@ Task-specific APIs are described in the README for each task.
 
 ## Adding a new dataset / method / metric
 
-To add a new dataset, method, or metric to a task, simply create a new `.py` file corresponding to your proposed new functionality and import the main function in the corresponding `__init__.py`. E.g., to add a "F2" metric to the label projection task, we would create `openproblems/tasks/label_projection/metrics/f2.py` and add a line 
+To add a new dataset, method, or metric to a task, simply create a new `.py` file corresponding to your proposed new functionality and import the main function in the corresponding `__init__.py`. E.g., to add a "F2" metric to the label projection task, we would create `openproblems/tasks/label_projection/metrics/f2.py` and add a line
 ```
 from .f2 import f2
 ```
@@ -66,7 +66,7 @@ opensproblems/
         - ...
 ```
 
-`task_name/__init__.py` can be copied from an existing task. 
+`task_name/__init__.py` can be copied from an existing task.
 
 `checks.py` should implement the following functions:
 
