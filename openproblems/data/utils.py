@@ -9,8 +9,8 @@ def loader(func, *args, test=False, **kwargs):
     filename = "openproblems_{}_test-{}.h5ad".format(hash(func), test)
     filepath = os.path.join(TEMPDIR.name, filename)
     if os.path.isfile(filepath):
-        return anndata.read_h5ad(filename)
+        return anndata.read_h5ad(filepath)
     else:
         adata = func(test=test)
-        adata.write(filename)
+        adata.write(filepath)
         return adata
