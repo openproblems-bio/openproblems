@@ -30,9 +30,9 @@ def load_scicar(
         atac_data = scprep.io.load_mtx(atac_file, cell_axis="col").tocsr()
 
     if test:
-        remove_genes = rna_data.sum(axis=0).A.flatten() < 1
+        remove_genes = rna_data.sum(axis=0).A.flatten() < 1000
         rna_genes, rna_data = rna_genes[~remove_genes], rna_data[:, ~remove_genes]
-        remove_genes = atac_data.sum(axis=0).A.flatten() < 1
+        remove_genes = atac_data.sum(axis=0).A.flatten() < 1000
         atac_genes, atac_data = atac_genes[~remove_genes], atac_data[:, ~remove_genes]
 
         rna_genes, rna_data = rna_genes[:200], rna_data[:, :200]
