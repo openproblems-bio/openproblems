@@ -14,7 +14,7 @@ addons:
       - libblas-dev
       - liblapack-dev
       - libedit-dev
-      - llvm-9-dev
+      - llvm-dev
 cache:
   - pip
   - apt
