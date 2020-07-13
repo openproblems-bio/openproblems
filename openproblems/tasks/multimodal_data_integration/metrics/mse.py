@@ -8,7 +8,7 @@ def _square(X):
         X.data = X.data ** 2
         return X
     else:
-        return X ** 2
+        return scprep.utils.toarray(X) ** 2
 
 
 def mse(adata):
