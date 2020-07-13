@@ -32,6 +32,7 @@ function metric(AnnData adata) -> float
 Task-specific APIs are described in the README for each task.
 
 * [Label Projection](openproblems/tasks/label_projection)
+* [Multimodal Data Integration](openproblems/tasks/multimodal_data_integration)
 
 ## Adding a new dataset / method / metric
 
