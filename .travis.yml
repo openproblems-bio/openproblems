@@ -13,6 +13,8 @@ addons:
       - gfortran
       - libblas-dev
       - liblapack-dev
+      - cmake
+      - libedit-dev
 cache:
   - pip
   - apt
