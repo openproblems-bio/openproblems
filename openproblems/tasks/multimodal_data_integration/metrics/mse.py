@@ -13,7 +13,7 @@ def _square(X):
 
 def mse(adata):
     X = adata.obsm["aligned"]
-    Y = adata.uns["mode2"].obsm["aligned"]
+    Y = adata.obsm["mode2_aligned"]
     # mean and norm
     vstack = sparse.vstack if sparse.issparse(X) and sparse.issparse(Y) else np.vstack
     Z = vstack([X, Y])

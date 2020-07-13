@@ -1,9 +1,10 @@
 import numpy as np
-import anndata
+from ....data.dummy import load_dummy
 
 
 def dummy(test=False):
-    adata = anndata.AnnData(np.random.uniform(0, 1, (100, 10)))
-    adata.obs["labels"] = np.random.choice(2, 100, replace=True)
-    adata.obs["is_train"] = np.random.choice([True, False], 100, replace=True)
+    adata = load_dummy()
+    adata.obs["is_train"] = np.random.choice(
+        [True, False], adata.shape[0], replace=True
+    )
     return adata

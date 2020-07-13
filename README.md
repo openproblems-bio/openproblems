@@ -17,7 +17,7 @@ Datasets should take no arguments and return an AnnData object.
 function dataset(bool test=False) -> AnnData adata
 ```
 
-Methods should take an AnnData object and store the output in-place in  `adata.obs` according to the specification of the task. If `test is True`, then the method should return a small version of the same data (preferably <200 cells and <500 genes).
+Methods should take an AnnData object and store the output in-place in  `adata.obs` according to the specification of the task. If `test is True`, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) for faster downstream analysis.
 
 ```
 function method(AnnData adata) -> None
@@ -34,13 +34,19 @@ Task-specific APIs are described in the README for each task.
 * [Label Projection](openproblems/tasks/label_projection)
 * [Multimodal Data Integration](openproblems/tasks/multimodal_data_integration)
 
-## Adding a new dataset / method / metric
+## Adding a new dataset
 
-To add a new dataset, method, or metric to a task, simply create a new `.py` file corresponding to your proposed new functionality and import the main function in the corresponding `__init__.py`. E.g., to add a "F2" metric to the label projection task, we would create `openproblems/tasks/label_projection/metrics/f2.py` and add a line
+Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader` in order to cache the result.
+
+## Adding a dataset / method / metric to a task
+
+To add a dataset, method, or metric to a task, simply create a new `.py` file corresponding to your proposed new functionality and import the main function in the corresponding `__init__.py`. E.g., to add a "F2" metric to the label projection task, we would create `openproblems/tasks/label_projection/metrics/f2.py` and add a line
 ```
 from .f2 import f2
 ```
 to [`openproblems/tasks/label_projection/metrics/__init__.py`](openproblems/tasks/label_projection/metrics/__init__.py).
+
+For datasets in particular, these should be loaded using a `loader` function from `openproblems.data`, with only task-specific annotations added in the task-specific data file.
 
 ## Adding a new task
 

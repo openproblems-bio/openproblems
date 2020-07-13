@@ -9,7 +9,7 @@ def knn_auc(adata, n_neighbors=100):
     _, indices_pred = (
         NearestNeighbors(n_neighbors=n_neighbors)
         .fit(adata.obsm["aligned"])
-        .kneighbors(adata.uns["mode2"].obsm["aligned"])
+        .kneighbors(adata.obsm["mode2_aligned"])
     )
     neighbors_match = np.zeros(n_neighbors)
     for i in range(adata.shape[0]):

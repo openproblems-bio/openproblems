@@ -3,13 +3,14 @@ import sys
 from setuptools import setup, find_packages
 
 install_requires = [
-    "numpy>=1.12.0",
+    "numpy>=1.17.0",
     "scikit-learn>=0.19.1",
     "anndata",
     "mnnpy",
     "scprep",
     "scipy",
     "scanpy",
+    "decorator",
 ]
 
 evaluate_requires = ["tabulate"]
