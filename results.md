@@ -1,12 +1,18 @@
-|    | metric   |      value | method     | task                        |
-|---:|:---------|-----------:|:-----------|:----------------------------|
-|  0 | accuracy | 1          | cheat      | Label Projection            |
-|  1 | dummy    | 0          | cheat      | Label Projection            |
-|  0 | accuracy | 0.590909   | dummy      | Label Projection            |
-|  1 | dummy    | 0          | dummy      | Label Projection            |
-|  0 | knn_auc  | 0.697669   | cheat      | Multimodal Data Integration |
-|  1 | mse      | 0          | cheat      | Multimodal Data Integration |
-|  0 | knn_auc  | 0.00745504 | mnn        | Multimodal Data Integration |
-|  1 | mse      | 1.08376    | mnn        | Multimodal Data Integration |
-|  0 | knn_auc  | 0.00670292 | procrustes | Multimodal Data Integration |
-|  1 | mse      | 0.999936   | procrustes | Multimodal Data Integration |
+|    | metric   |      value | method     | task                        | dataset             |
+|---:|:---------|-----------:|:-----------|:----------------------------|:--------------------|
+|  0 | accuracy | 0.613636   | dummy      | Label Projection            | dummy               |
+|  0 | accuracy | 1          | cheat      | Label Projection            | dummy               |
+|  1 | dummy    | 0          | cheat      | Label Projection            | dummy               |
+|  1 | dummy    | 0          | dummy      | Label Projection            | dummy               |
+|  0 | knn_auc  | 0.00298368 | procrustes | Multimodal Data Integration | scicar_cell_lines   |
+|  0 | knn_auc  | 0.063787   | mnn        | Multimodal Data Integration | scicar_cell_lines   |
+|  0 | knn_auc  | 1.0        | cheat      | Multimodal Data Integration | scicar_cell_lines   |
+|  1 | mse      | 0          | cheat      | Multimodal Data Integration | scicar_cell_lines   |
+|  1 | mse      | 0.833609   | procrustes | Multimodal Data Integration | scicar_cell_lines   |
+|  1 | mse      | 1.05767    | mnn        | Multimodal Data Integration | scicar_cell_lines   |
+|  0 | knn_auc  | 0.00108704 | mnn        | Multimodal Data Integration | scicar_mouse_kidney |
+|  0 | knn_auc  | 0.0217382  | procrustes | Multimodal Data Integration | scicar_mouse_kidney |
+|  0 | knn_auc  | 1.0        | cheat      | Multimodal Data Integration | scicar_mouse_kidney |
+|  1 | mse      | 0          | cheat      | Multimodal Data Integration | scicar_mouse_kidney |
+|  1 | mse      | 0.939236   | procrustes | Multimodal Data Integration | scicar_mouse_kidney |
+|  1 | mse      | 0.981983   | mnn        | Multimodal Data Integration | scicar_mouse_kidney |

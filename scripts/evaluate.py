@@ -19,7 +19,9 @@ def evaluate_dataset(task, dataset):
     adata = dataset()
     result = []
     for method in task.METHODS:
-        result.append(evaluate_method(task, adata, method))
+        r = evaluate_method(task, adata, method)
+        r["dataset"] = dataset.__name__
+        result.append(r)
 
     result = pd.concat(result)
     return result
@@ -39,7 +41,7 @@ def main():
     for task in openproblems.TASKS:
         result.append(evaluate_task(task))
 
-    result = pd.concat(result)
+    result = pd.concat(result).sort_values(["task", "dataset", "metric", "value"])
     with open("../results.md", "w") as handle:
         result.to_markdown(handle)
     return result
