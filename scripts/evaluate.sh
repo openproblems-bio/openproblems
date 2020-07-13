@@ -1,4 +1,4 @@
-if [ "$TRAVIS_PYTHON_VERSION" == "3.6" ]; then
+if [ "$TRAVIS_PYTHON_VERSION" = "3.6" ]; then
     python evaluate.py
     git add ../results.md
     git commit -m "update results for ${TRAVIS_TAG}"
