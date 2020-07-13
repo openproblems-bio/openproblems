@@ -1,12 +1,14 @@
 import numpy as np
 from scipy import sparse
+import scprep
 
 
 def mse(adata):
-    X = adata.obsm["aligned"]
-    Y = adata.uns["mode2"].obsm["aligned"]
+    X = scprep.utils.to_array_or_spmatrix(adata.obsm["aligned"])
+    Y = scprep.utils.to_array_or_spmatrix(adata.uns["mode2"].obsm["aligned"])
     # mean and norm
-    Z = np.vstack([X, Y])
+    vstack = sparse.vstack if sparse.issparse(X) and sparse.issparse(Y) else np.vstack
+    Z = vstack([X, Y])
     Z -= np.mean(Z, axis=0)
     Z /= np.sqrt(np.sum(Z ** 2))
     # split back out
