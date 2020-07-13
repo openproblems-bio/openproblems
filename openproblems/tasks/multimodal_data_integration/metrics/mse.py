@@ -12,8 +12,8 @@ def _square(X):
 
 
 def mse(adata):
-    X = scprep.utils.toarray(data.obsm["aligned"])
-    Y = scprep.utils.toarray(data.obsm["mode2_aligned"])
+    X = scprep.utils.toarray(adata.obsm["aligned"])
+    Y = scprep.utils.toarray(adata.obsm["mode2_aligned"])
 
     # mean and norm
     Z = np.vstack([X, Y])
