@@ -23,7 +23,7 @@ install:
 script:
   - python -c "import openproblems"
   - 'pip install -U .[test]'
-  - 'if [ "$TRAVIS_PYTHON_VERSION" != "3.5" ]; then black . --check --diff; fi'
+  - black . --check --diff
   - python setup.py test
 deploy:
   provider: script

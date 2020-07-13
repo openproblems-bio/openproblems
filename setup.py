@@ -14,7 +14,7 @@ install_requires = [
 
 evaluate_requires = ["tabulate"]
 
-test_requires = ["nose2", "parameterized"]
+test_requires = ["nose2", "parameterized", "black"]
 
 doc_requires = [
     "sphinx>=2.2,<2.4",
@@ -23,11 +23,6 @@ doc_requires = [
     "ipykernel",
     "nbsphinx",
 ]
-
-if sys.version_info[:2] < (3, 6):
-    test_requires += []
-else:
-    test_requires += ["black"]
 
 version_py = os.path.join(os.path.dirname(__file__), "openproblems", "version.py")
 version = open(version_py).read().strip().split("=")[-1].replace('"', "").strip()
