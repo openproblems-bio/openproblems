@@ -9,6 +9,7 @@ install_requires = [
     "mnnpy",
     "scprep",
     "scipy",
+    "scanpy",
 ]
 
 evaluate_requires = ["tabulate"]
