@@ -3,14 +3,22 @@ from scipy import sparse
 import scprep
 
 
+def _square(X):
+    if sparse.issparse(X):
+        X.data = X.data ** 2
+        return X
+    else:
+        return X ** 2
+
+
 def mse(adata):
-    X = scprep.utils.to_array_or_spmatrix(adata.obsm["aligned"])
-    Y = scprep.utils.to_array_or_spmatrix(adata.uns["mode2"].obsm["aligned"])
+    X = adata.obsm["aligned"]
+    Y = adata.uns["mode2"].obsm["aligned"]
     # mean and norm
     vstack = sparse.vstack if sparse.issparse(X) and sparse.issparse(Y) else np.vstack
     Z = vstack([X, Y])
     Z -= np.mean(Z, axis=0)
-    Z /= np.sqrt(np.sum(Z ** 2))
+    Z /= np.sqrt(np.sum(_square(Z)))
     # split back out
     X, Y = Z[: X.shape[0]], Z[X.shape[0] :]
-    return np.mean(np.sum((X - Y) ** 2))
+    return np.mean(np.sum(_square(X - Y)))
