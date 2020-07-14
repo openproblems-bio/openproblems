@@ -1,5 +1,6 @@
 import pandas as pd
 import openproblems
+import openproblems.test.utils
 
 
 def evaluate_method(task, adata, method):
@@ -37,6 +38,8 @@ def evaluate_task(task):
 
 
 def main():
+    openproblems.test.utils.ignore_numba_warnings()
+
     result = []
     for task in openproblems.TASKS:
         result.append(evaluate_task(task))

@@ -1,6 +1,9 @@
 import anndata
 import parameterized
 import openproblems
+from openproblems.test import utils
+
+utils.ignore_numba_warnings()
 
 
 @parameterized.parameterized(

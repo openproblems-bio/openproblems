@@ -3,6 +3,9 @@ import parameterized
 import numbers
 
 import openproblems
+from openproblems.test import utils
+
+utils.ignore_numba_warnings()
 
 
 @parameterized.parameterized(
