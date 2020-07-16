@@ -40,11 +40,11 @@ subtitle = "*Aggregating open problems for integrating the Human Cell Atlas*"
 
 [design.spacing]
   # Customize the section spacing. Order is top, right, bottom, left.
-  padding = ["180px", "0", "20px", "0"]
+  padding = ["100px", "0", "20px", "0"]
 
 [advanced]
  # Custom CSS.
- css_style = "height: 600px; "
+ css_style = "height: 400px; "
 
  # CSS class.
  css_class = ""
