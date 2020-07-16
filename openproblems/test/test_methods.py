@@ -18,7 +18,8 @@ utils.ignore_numba_warnings()
 )
 def test_method(task, dataset, method):
     adata = dataset(test=True)
-    method(adata)
+    output = method(adata)
+    assert output is None
     assert task.checks.check_method(adata)
     for metric in task.METRICS:
         m = metric(adata)
