@@ -11,13 +11,13 @@ Formalizing and benchmarking open problems in single-cell genomics
 
 Each task consists of datasets, methods, and metrics.
 
-Datasets should take no arguments and return an AnnData object.
+Datasets should take no arguments and return an AnnData object. If `test is True`, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) for faster downstream analysis.
 
 ```
 function dataset(bool test=False) -> AnnData adata
 ```
 
-Methods should take an AnnData object and store the output in-place in  `adata.obs` according to the specification of the task. If `test is True`, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) for faster downstream analysis.
+Methods should take an AnnData object and store the output in-place in  `adata.obs` according to the specification of the task.
 
 ```
 function method(AnnData adata) -> None
