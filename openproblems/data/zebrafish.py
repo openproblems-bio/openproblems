@@ -9,7 +9,7 @@ import scanpy as sc
 from .utils import loader
 
 URL = (
-    "https://ndownloader.figshare.com/files/23820602?private_link=a23de5c2117a69d64af4"
+    "https://ndownloader.figshare.com/files/23992451?private_link=e3921450ec1bd0587870"
 )
 
 
