@@ -1,18 +1,29 @@
+import os
+import tempfile
+
 import numpy as np
-from ....data.zebrafish import load_zebrafish
+import anndata
+import scprep
+import scanpy as sc
+
+from .utils import loader
+
+URL = (
+    "https://ndownloader.figshare.com/files/23992451?private_link=e3921450ec1bd0587870"
+)
 
 
-def zebrafish_labels(test=False):
-    adata = load_zebrafish(test=test)
-    adata.obs["labels"] = adata.obs["cell_type"]
-    adata.obs["is_train"] = adata.obs["labels"] == "Schier"
-    return adata
-
-
-def zebrafish_random(test=False):
-    adata = load_zebrafish(test=test)
-    adata.obs["labels"] = adata.obs["cell_type"]
-    adata.obs["is_train"] = adata.obs["is_train"] = np.random.choice(
-        [True, False], adata.shape[0], replace=True
-    )
-    return adata
+@loader
+def load_zebrafish(test=False):
+    if test:
+        # load full data first, cached if available
+        adata = load_zebrafish(test=False)
+        sc.pp.subsample(adata, n_obs=100)
+        adata = adata[:, :100]
+        return adata
+    else:
+        with tempfile.TemporaryDirectory() as tempdir:
+            filepath = os.path.join(tempdir, "zebrafish.h5ad")
+            scprep.io.download.download_url(URL, filepath)
+            adata = anndata.read_h5ad(filepath)
+        return adata
