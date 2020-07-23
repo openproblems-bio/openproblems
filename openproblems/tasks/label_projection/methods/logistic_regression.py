@@ -1,6 +1,7 @@
 from sklearn.linear_model import LogisticRegression
 import numpy as np
 
+
 def logistic_regression(adata):
     classifier = LogisticRegression()
 
@@ -10,4 +11,7 @@ def logistic_regression(adata):
     classifier.fit(adata_train.X, adata_train.obs["labels"])
     adata_test.obs["labels_pred"] = classifier.predict(adata_test.X)
 
-    adata.obs['labels_pred'] = [adata_test.obs['labels_pred'][idx] if idx in adata_test.obs_names else np.nan for idx in adata.obs_names]
+    adata.obs["labels_pred"] = [
+        adata_test.obs["labels_pred"][idx] if idx in adata_test.obs_names else np.nan
+        for idx in adata.obs_names
+    ]
