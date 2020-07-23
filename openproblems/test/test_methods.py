@@ -8,13 +8,14 @@ from openproblems.test import utils
 utils.ignore_numba_warnings()
 
 
-@parameterized.parameterized(
+@parameterized.parameterized.expand(
     [
         (task, dataset, method)
         for task in openproblems.TASKS
         for dataset in task.DATASETS
         for method in task.METHODS
-    ]
+    ],
+    name_func=utils.name_test,
 )
 def test_method(task, dataset, method):
     adata = dataset(test=True)
