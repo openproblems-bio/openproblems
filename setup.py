@@ -12,6 +12,7 @@ install_requires = [
     "scanpy",
     "decorator",
     "rpy2",
+    "scIB @ git+https://github.com/theislab/scib@master",
 ]
 
 evaluate_requires = ["tabulate"]
