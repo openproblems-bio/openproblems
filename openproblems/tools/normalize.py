@@ -1,10 +1,12 @@
 import scanpy as sc
 from scIB.preprocessing import normalize
+from .utils import normalizer
 
 
+@normalizer
 def log_scran_pooling(adata):
     """
-    This function scran-normalizes the data 
+    This function scran-normalizes the data
     """
 
     # Normalize via scran-pooling with own clustering at res=0.5
@@ -14,11 +16,13 @@ def log_scran_pooling(adata):
     del adata.raw
 
 
+@normalizer
 def cpm(adata):
     adata.layers["counts"] = adata.X.copy()
     sc.pp.normalize_total(adata, target_sum=1e6, key_added="size_factors")
 
 
+@normalizer
 def log_cpm(adata):
     cpm(adata)
     sc.pp.log1p(adata)
