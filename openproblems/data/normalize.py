@@ -2,7 +2,7 @@ import scanpy as sc
 from scIB.preprocessing import normalize
 
 
-def scran_pooling(adata):
+def log_scran_pooling(adata):
     """
     This function scran-normalizes the data 
     """
