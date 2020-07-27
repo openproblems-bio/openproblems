@@ -11,6 +11,7 @@ install_requires = [
     "scipy",
     "scanpy",
     "decorator",
+    "rpy2",
 ]
 
 evaluate_requires = ["tabulate"]
