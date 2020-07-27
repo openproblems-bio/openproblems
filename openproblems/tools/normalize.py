@@ -1,4 +1,5 @@
 import scanpy as sc
+import scprep
 import scIB.preprocessing
 from .utils import normalizer
 
@@ -8,7 +9,7 @@ def log_scran_pooling(adata):
     """
     This function scran-normalizes the data
     """
-
+    scprep.run.install_bioconductor("scran")
     # Normalize via scran-pooling with own clustering at res=0.5
     scIB.preprocessing.normalize(adata)
 
