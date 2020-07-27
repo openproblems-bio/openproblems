@@ -48,6 +48,8 @@ to [`openproblems/tasks/label_projection/metrics/__init__.py`](openproblems/task
 
 For datasets in particular, these should be loaded using a `loader` function from `openproblems.data`, with only task-specific annotations added in the task-specific data file.
 
+Note that data is not normalized in the data loader; normalization should be performed as part of each method. For ease of use, we provide a collection of common normalization functions in [`openproblems.tools.normalize`](openproblems/tools/normalize.py).
+
 ## Adding a new task
 
 The task directory structure is as follows
