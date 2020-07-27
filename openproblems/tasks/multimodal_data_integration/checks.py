@@ -8,8 +8,6 @@ def check_dataset(adata):
     assert "mode2_var" in adata.uns
     assert np.all(adata.obs.index == adata.uns["mode2_obs"])
     assert len(adata.uns["mode2_var"]) == adata.obsm["mode2"].shape[1]
-    assert adata.raw is not None
-    assert adata.obsm["mode2_raw"].shape == adata.obsm["mode2"].shape
     return True
 
 
