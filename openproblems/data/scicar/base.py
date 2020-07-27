@@ -62,17 +62,4 @@ def load_scicar(
     adata.obsm["mode2"] = atac_data
     adata.uns["mode2_obs"] = atac_cells.to_numpy()
     adata.uns["mode2_var"] = atac_genes.to_numpy()
-
-    adata.obsm["mode2_raw"] = atac_data.copy()
-    adata.raw = adata
-
-    sc.pp.normalize_total(adata, target_sum=1e4)
-    adata.obsm["mode2"] = scprep.normalize.library_size_normalize(
-        adata.obsm["mode2"], rescale=1e4
-    )
-
-    sc.pp.log1p(adata)
-    adata.obsm["mode2"] = scprep.transform.log(
-        adata.obsm["mode2"], pseudocount=1, base="e"
-    )
     return adata
