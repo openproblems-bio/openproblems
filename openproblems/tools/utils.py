@@ -14,7 +14,9 @@ def normalizer(func, *args, obsm=None, obs=None, var=None, **kwargs):
         else:
             obs = obs if obs else adata.obs
             var = var if var else adata.var
-            adata_temp = anndata.AnnData(adata.obsm[obsm], obs=obs, var=var)
+            adata_temp = anndata.AnnData(
+                adata.obsm[obsm], obs=adata.uns[obs], var=adata.uns[var]
+            )
             func(adata_temp, *args[1:], **kwargs)
             adata.obsm[obsm] = adata.obsm[cache_name] = adata_temp.X
     else:
