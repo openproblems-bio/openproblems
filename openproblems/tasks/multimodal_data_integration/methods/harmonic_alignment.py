@@ -14,4 +14,4 @@ def harmonic_alignment(adata, n_svd=100):
     ha_op.align(X_pca, Y_pca)
     XY_aligned = ha_op.diffusion_map()
     adata.obsm["aligned"] = XY_aligned[: X_pca.shape[0]]
-    adata.obsm["mode2_aligned"] = XY_corrected[X_pca.shape[0] :]
+    adata.obsm["mode2_aligned"] = XY_aligned[X_pca.shape[0] :]
