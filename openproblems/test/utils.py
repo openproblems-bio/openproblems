@@ -30,7 +30,7 @@ def ignore_numba_warnings():
 
 
 def data(obsm=None):
-    adata = anndata.AnnData(np.random.poisson(2, (100, 10)))
+    adata = anndata.AnnData(np.random.poisson(2, (100, 30)))
     if obsm is not None:
         adata.obsm[obsm] = adata.X * 2 + 1
         adata.uns["{}_obs".format(obsm)] = np.arange(adata.shape[0]) + 5
