@@ -12,6 +12,7 @@ install_requires = [
     "scanpy",
     "decorator",
     "rpy2",
+    "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
 ]
 
 evaluate_requires = ["tabulate"]
