@@ -24,10 +24,12 @@ def _cpm(adata):
 
 @utils.normalizer
 def cpm(adata):
+    """Normalize data to counts per million"""
     _cpm(adata)
 
 
 @utils.normalizer
 def log_cpm(adata):
+    """Normalize data to log counts per million"""
     _cpm(adata)
     sc.pp.log1p(adata)
