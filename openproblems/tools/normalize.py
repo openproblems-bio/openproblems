@@ -33,3 +33,10 @@ def log_cpm(adata):
     """Normalize data to log counts per million"""
     _cpm(adata)
     sc.pp.log1p(adata)
+
+
+@utils.normalizer
+def sqrt_cpm(adata):
+    """Normalize data to log counts per million"""
+    _cpm(adata)
+    adata.X = scprep.transform.sqrt(adata.X)
