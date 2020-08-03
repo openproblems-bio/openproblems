@@ -9,6 +9,7 @@ def procrustes(adata, n_svd=100):
     if min(adata.obsm["mode2"].shape) <= n_svd:
         n_svd = min(adata.obsm["mode2"].shape) - 1
     log_cpm(adata)
+    log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
     Y_pca = TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
     X_proc, Y_proc, _ = scipy.spatial.procrustes(X_pca, Y_pca)
