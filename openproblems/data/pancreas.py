@@ -36,11 +36,6 @@ def load_pancreas(test=False, preprocess=True):
 
             # Correct covariate naming and remove preprocessing
             prep_pancreas(adata)
-
-            #Preprocessing
-            if preprocess:
-                for fn in dir(n):
-                    adata.layers[str(fn)] = fn(adata)
                 
         return adata
 
@@ -51,12 +46,6 @@ def prep_pancreas(adata):
     adata.obs['batch'] = adata.obs['tech'].copy()
     adata.obs['labels'] = adata.obs['celltype'].copy()
     
-    # Assign training/test
-    test_batches = ['inDrop4', 'smartseq2']
-    adata.obs['is_train'] = [False if adata.obs['batch'][idx] in test_batches
-                             else True
-                             for idx in adata.obs_names]
-
     # Drop excess covariates
     adata.obs = adata.obs.drop(columns=['tech', 'size_factors', 'celltype'])
 
