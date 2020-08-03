@@ -1,7 +1,9 @@
 import anndata
+import functools
 
 
 def normalizer(func, *args, **kwargs):
+    @functools.wraps(func)
     def normalize(adata, *args, obsm=None, obs=None, var=None, **kwargs):
         assert isinstance(adata, anndata.AnnData)
 
@@ -22,6 +24,4 @@ def normalizer(func, *args, **kwargs):
                 func(adata, *args, **kwargs)
                 adata.layers[func.__name__] = adata.X
 
-    normalize.__name__ = func.__name__
-    normalize.__doc__ = func.__doc__
     return normalize
