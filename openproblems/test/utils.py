@@ -29,7 +29,10 @@ def ignore_numba_warnings():
     warnings.filterwarnings("ignore", category=numba.NumbaWarning)
 
 
-def data():
+def data(obsm=None):
     adata = anndata.AnnData(np.random.poisson(2, (100, 10)))
-    adata.obsm["test"] = adata.X * 2 + 1
+    if obsm is not None:
+        adata.obsm[obsm] = adata.X * 2 + 1
+        adata.uns["{}_obs".format(obsm)] = np.arange(adata.shape[0]) + 5
+        adata.uns["{}_var".format(obsm)] = np.arange(adata.shape[1]) + 12
     return adata
