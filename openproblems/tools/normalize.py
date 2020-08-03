@@ -1,10 +1,10 @@
 import scanpy as sc
 import scprep
 import scIB.preprocessing
-from .utils import normalizer
+from . import utils
 
 
-@normalizer
+@utils.normalizer
 def log_scran_pooling(adata):
     """
     This function scran-normalizes the data
@@ -22,12 +22,12 @@ def _cpm(adata):
     sc.pp.normalize_total(adata, target_sum=1e6, key_added="size_factors")
 
 
-@normalizer
+@utils.normalizer
 def cpm(adata):
     _cpm(adata)
 
 
-@normalizer
+@utils.normalizer
 def log_cpm(adata):
     _cpm(adata)
     sc.pp.log1p(adata)
