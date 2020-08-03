@@ -1,5 +1,7 @@
 import warnings
 import parameterized
+import numpy as np
+import anndata
 
 
 def object_name(x):
@@ -25,3 +27,9 @@ def ignore_numba_warnings():
         return
 
     warnings.filterwarnings("ignore", category=numba.NumbaWarning)
+
+
+def data():
+    adata = anndata.AnnData(np.random.poisson(2, (100, 10)))
+    adata.obsm["test"] = adata.X * 2 + 1
+    return adata
