@@ -1,6 +1,7 @@
 import unittest
 import parameterized
 import numpy as np
+from scipy import sparse
 
 import openproblems
 from openproblems.test import utils
@@ -28,7 +29,10 @@ def test_normalize(normalizer):
 
     # modify normalized data
     adata.layers[normalizer.__name__] = adata.layers[normalizer.__name__].copy()
-    adata.layers[normalizer.__name__] *= 2
+    if sparse.issparse(adata.layers[normalizer.__name__]):
+        adata.layers[normalizer.__name__].data += 1
+    else:
+        adata.layers[normalizer.__name__] += 1
     assert np.all(adata.X != adata.layers[normalizer.__name__])
 
     # use cached
@@ -57,7 +61,10 @@ def test_normalize_obsm(normalizer, obsm="test"):
 
     # modify normalized data
     adata.obsm[cache_name] = adata.obsm[cache_name].copy()
-    adata.obsm[cache_name] += 1
+    if sparse.issparse(adata.obsm[cache_name]):
+        adata.obsm[cache_name].data += 1
+    else:
+        adata.obsm[cache_name] += 1
     assert np.all(adata.obsm[obsm] != adata.obsm[cache_name])
 
     # use cached
