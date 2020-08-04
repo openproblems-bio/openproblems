@@ -28,7 +28,7 @@ def test_normalize(normalizer):
 
     # modify normalized data
     adata.layers[normalizer.__name__] = adata.layers[normalizer.__name__].copy()
-    adata.layers[normalizer.__name__] += 1
+    adata.layers[normalizer.__name__] *= 2
     assert np.all(adata.X != adata.layers[normalizer.__name__])
 
     # use cached
