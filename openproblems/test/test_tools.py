@@ -31,9 +31,10 @@ def test_normalize(normalizer):
     adata.layers[normalizer.__name__] = adata.layers[normalizer.__name__].copy()
     if sparse.issparse(adata.layers[normalizer.__name__]):
         adata.layers[normalizer.__name__].data += 1
+        assert np.all(adata.X.data != adata.layers[normalizer.__name__].data)
     else:
         adata.layers[normalizer.__name__] += 1
-    assert np.all(adata.X != adata.layers[normalizer.__name__])
+        assert np.all(adata.X != adata.layers[normalizer.__name__])
 
     # use cached
     normalizer(adata)
@@ -63,9 +64,10 @@ def test_normalize_obsm(normalizer, obsm="test"):
     adata.obsm[cache_name] = adata.obsm[cache_name].copy()
     if sparse.issparse(adata.obsm[cache_name]):
         adata.obsm[cache_name].data += 1
+        assert np.all(adata.obsm[obsm].data != adata.obsm[cache_name].data)
     else:
         adata.obsm[cache_name] += 1
-    assert np.all(adata.obsm[obsm] != adata.obsm[cache_name])
+        assert np.all(adata.obsm[obsm] != adata.obsm[cache_name])
 
     # use cached
     normalizer(adata, obsm=obsm)
