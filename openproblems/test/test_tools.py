@@ -1,6 +1,7 @@
 import unittest
 import parameterized
 import numpy as np
+from scipy import sparse
 
 import openproblems
 from openproblems.test import utils
@@ -24,16 +25,20 @@ def test_normalize(normalizer):
     # normalize from scratch
     normalizer(adata)
     assert normalizer.__name__ in adata.layers
-    np.testing.assert_array_equal(adata.X, adata.layers[normalizer.__name__])
+    utils.assert_array_equal(adata.X, adata.layers[normalizer.__name__])
 
     # modify normalized data
     adata.layers[normalizer.__name__] = adata.layers[normalizer.__name__].copy()
-    adata.layers[normalizer.__name__] += 1
-    assert np.all(adata.X != adata.layers[normalizer.__name__])
+    if sparse.issparse(adata.layers[normalizer.__name__]):
+        adata.layers[normalizer.__name__].data += 1
+        assert np.all(adata.X.data != adata.layers[normalizer.__name__].data)
+    else:
+        adata.layers[normalizer.__name__] += 1
+        assert np.all(adata.X != adata.layers[normalizer.__name__])
 
     # use cached
     normalizer(adata)
-    np.testing.assert_array_equal(adata.X, adata.layers[normalizer.__name__])
+    utils.assert_array_equal(adata.X, adata.layers[normalizer.__name__])
 
 
 @parameterized.parameterized.expand(
@@ -53,13 +58,17 @@ def test_normalize_obsm(normalizer, obsm="test"):
     # normalize from scratch
     normalizer(adata, obsm=obsm)
     assert cache_name in adata.obsm
-    np.testing.assert_array_equal(adata.obsm[obsm], adata.obsm[cache_name])
+    utils.assert_array_equal(adata.obsm[obsm], adata.obsm[cache_name])
 
     # modify normalized data
     adata.obsm[cache_name] = adata.obsm[cache_name].copy()
-    adata.obsm[cache_name] += 1
-    assert np.all(adata.obsm[obsm] != adata.obsm[cache_name])
+    if sparse.issparse(adata.obsm[cache_name]):
+        adata.obsm[cache_name].data += 1
+        assert np.all(adata.obsm[obsm].data != adata.obsm[cache_name].data)
+    else:
+        adata.obsm[cache_name] += 1
+        assert np.all(adata.obsm[obsm] != adata.obsm[cache_name])
 
     # use cached
     normalizer(adata, obsm=obsm)
-    np.testing.assert_array_equal(adata.obsm[obsm], adata.obsm[cache_name])
+    utils.assert_array_equal(adata.obsm[obsm], adata.obsm[cache_name])
