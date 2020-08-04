@@ -1,6 +1,7 @@
 import warnings
 import parameterized
 import numpy as np
+from scipy import sparse
 import anndata
 
 
@@ -36,3 +37,17 @@ def data(obsm=None):
         adata.uns["{}_obs".format(obsm)] = np.arange(adata.shape[0]) + 5
         adata.uns["{}_var".format(obsm)] = np.arange(adata.shape[1]) + 12
     return adata
+
+
+def assert_array_equal(X, Y):
+    assert X.shape == Y.shape
+    if sparse.issparse(X) and sparse.issparse(Y):
+        X = X.tocsr()
+        Y = Y.tocsr()
+        np.testing.assert_array_equal(X.data, Y.data)
+        np.testing.assert_array_equal(X.indices, Y.indices)
+        np.testing.assert_array_equal(X.indptr, Y.indptr)
+    else:
+        X = np.asarray(X)
+        Y = np.asarray(Y)
+        np.testing.assert_array_equal(X, Y)

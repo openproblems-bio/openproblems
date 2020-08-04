@@ -24,7 +24,7 @@ def test_normalize(normalizer):
     # normalize from scratch
     normalizer(adata)
     assert normalizer.__name__ in adata.layers
-    np.testing.assert_array_equal(adata.X, adata.layers[normalizer.__name__])
+    utils.assert_array_equal(adata.X, adata.layers[normalizer.__name__])
 
     # modify normalized data
     adata.layers[normalizer.__name__] = adata.layers[normalizer.__name__].copy()
@@ -33,7 +33,7 @@ def test_normalize(normalizer):
 
     # use cached
     normalizer(adata)
-    np.testing.assert_array_equal(adata.X, adata.layers[normalizer.__name__])
+    utils.assert_array_equal(adata.X, adata.layers[normalizer.__name__])
 
 
 @parameterized.parameterized.expand(
@@ -53,7 +53,7 @@ def test_normalize_obsm(normalizer, obsm="test"):
     # normalize from scratch
     normalizer(adata, obsm=obsm)
     assert cache_name in adata.obsm
-    np.testing.assert_array_equal(adata.obsm[obsm], adata.obsm[cache_name])
+    utils.assert_array_equal(adata.obsm[obsm], adata.obsm[cache_name])
 
     # modify normalized data
     adata.obsm[cache_name] = adata.obsm[cache_name].copy()
@@ -62,4 +62,4 @@ def test_normalize_obsm(normalizer, obsm="test"):
 
     # use cached
     normalizer(adata, obsm=obsm)
-    np.testing.assert_array_equal(adata.obsm[obsm], adata.obsm[cache_name])
+    utils.assert_array_equal(adata.obsm[obsm], adata.obsm[cache_name])
