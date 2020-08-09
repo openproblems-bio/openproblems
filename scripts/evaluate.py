@@ -20,7 +20,7 @@ def evaluate_dataset(task, dataset):
     adata = dataset()
     result = []
     for method in task.METHODS:
-        r = evaluate_method(task, adata, method)
+        r = evaluate_method(task, adata.copy(), method)
         r["dataset"] = dataset.__name__
         result.append(r)
 
