@@ -15,7 +15,10 @@
   max-width: 300px;
   background: #ffffff;
 
-  width: 280px;
+  width: 100%;
+  min-width: 240px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .task-card img{
