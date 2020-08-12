@@ -9,7 +9,7 @@ active = true  # Activate this widget? true/false
 weight = 15  # Order that this section will appear.
 
 title = "**Single Cell Open Problems**"
-subtitle = "*Aggregating open problems for integrating the Human Cell Atlas*"
+subtitle = "***Aggregating Open Problems for Integrating the Human Cell Atlas***"
 
 [design]
   # Choose how many columns the section has. Valid values: 1 or 2.
