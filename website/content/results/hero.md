@@ -8,8 +8,8 @@ headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
 weight = 15  # Order that this section will appear.
 
-title = "Single Cell Open Problems"
-subtitle = "*Aggregating open problems for integrating the Human Cell Atlas*"
+title = "**Results**"
+subtitle = ""
 
 [design]
   # Choose how many columns the section has. Valid values: 1 or 2.
@@ -30,13 +30,13 @@ subtitle = "*Aggregating open problems for integrating the Human Cell Atlas*"
 
   # Background image.
    image = "heros/home_hero.jpg"  # Name of image in `static/img/`.
-  # image_darken = 0.6  # Darken the image? Range 0-1 where 0 is transparent and 1 is opaque.
+   image_darken = 0.2  # Darken the image? Range 0-1 where 0 is transparent and 1 is opaque.
   # image_size = "cover"  #  Options are `cover` (default), `contain`, or `actual` size.
   # image_position = "center"  # Options include `left`, `center` (default), or `right`.
   # image_parallax = true  # Use a fun parallax-like fixed background effect? true/false
 
   # Text color (true=light or false=dark).
-  text_color_light = false
+  text_color_light = true
 
 [design.spacing]
   # Customize the section spacing. Order is top, right, bottom, left.
@@ -44,8 +44,8 @@ subtitle = "*Aggregating open problems for integrating the Human Cell Atlas*"
 
 [advanced]
  # Custom CSS.
- css_style = "height: 400px; "
+ css_style = "height: 400px;"
 
  # CSS class.
- css_class = ""
+ css_class = "hero "
 +++
