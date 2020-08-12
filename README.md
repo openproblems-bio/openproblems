@@ -1,6 +1,6 @@
 # SingleCellOpenProblems
 
-[![Travis CI Build](https://api.travis-ci.com/scottgigante/SingleCellOpenProblems.svg?branch=master)](https://travis-ci.com/scottgigante/SingleCellOpenProblems)
+[![Travis CI Build](https://api.travis-ci.com/singlecellopenproblems/SingleCellOpenProblems.svg?branch=master)](https://travis-ci.com/singlecellopenproblems/SingleCellOpenProblems)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Formalizing and benchmarking open problems in single-cell genomics
@@ -11,13 +11,13 @@ Formalizing and benchmarking open problems in single-cell genomics
 
 Each task consists of datasets, methods, and metrics.
 
-Datasets should take no arguments and return an AnnData object.
+Datasets should take no arguments and return an AnnData object. If `test is True`, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) for faster downstream analysis.
 
 ```
 function dataset(bool test=False) -> AnnData adata
 ```
 
-Methods should take an AnnData object and store the output in-place in  `adata.obs` according to the specification of the task. If `test is True`, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) for faster downstream analysis.
+Methods should take an AnnData object and store the output in-place in  `adata.obs` according to the specification of the task.
 
 ```
 function method(AnnData adata) -> None
@@ -47,6 +47,8 @@ from .f2 import f2
 to [`openproblems/tasks/label_projection/metrics/__init__.py`](openproblems/tasks/label_projection/metrics/__init__.py).
 
 For datasets in particular, these should be loaded using a `loader` function from `openproblems.data`, with only task-specific annotations added in the task-specific data file.
+
+Note that data is not normalized in the data loader; normalization should be performed as part of each method. For ease of use, we provide a collection of common normalization functions in [`openproblems.tools.normalize`](openproblems/tools/normalize.py).
 
 ## Adding a new task
 
