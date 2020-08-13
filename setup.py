@@ -11,6 +11,9 @@ install_requires = [
     "scipy",
     "scanpy",
     "decorator",
+    "rpy2",
+    "scIB @ git+https://github.com/theislab/scib@master",
+    "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
 ]
 
 evaluate_requires = ["tabulate"]
