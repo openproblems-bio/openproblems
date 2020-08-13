@@ -1,0 +1,31 @@
+.hero{
+
+}
+
+.hero h1{
+  font-size: 2.5rem;
+}
+
+.hero p{
+  font-size: 1rem;
+}
+
+.task-card{
+  max-height: 400px;
+  max-width: 300px;
+  background: #ffffff;
+
+  width: 100%;
+  min-width: 240px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.task-card img{
+  max-height:200px; /* Needed for safari?? */
+  padding-top:20px;
+}
+
+.task-card .card-body{
+  padding: 0rem 1rem 1rem;
+}
