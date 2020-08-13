@@ -33,13 +33,13 @@ subtitle = ""
 [[item]]
 name = "Multimodal Data Integration"
 img = "/img/tasks/multimodal_icon.svg"
-link= "multimodal"
+link= "multimodal_data_integration"
 description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 
 [[item]]
 name = "Label projection"
 img = "/img/tasks/labelprojection_icon.svg"
-link= "projection"
+link= "label_projection"
 description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 
 +++
