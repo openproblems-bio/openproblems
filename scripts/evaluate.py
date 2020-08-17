@@ -40,14 +40,22 @@ def evaluate_task(task):
 def main():
     openproblems.test.utils.ignore_numba_warnings()
 
-    result = []
+    results = []
     for task in openproblems.TASKS:
-        result.append(evaluate_task(task))
+        result = evaluate_task(task).sort_values(["dataset", "metric", "value"])
+        with open(
+            "../website/content/results/{}.md".format(task.__name__), "w"
+        ) as content_handle, open(
+            "../website/results_frontmatter/{}.md".format(task.__name__), "r"
+        ) as frontmatter_handle:
+            content_handle.write(frontmatter_handle.read())
+            result.to_markdown(content_handle)
+        results.append(result)
 
-    result = pd.concat(result).sort_values(["task", "dataset", "metric", "value"])
+    results = pd.concat(results).sort_values(["task", "dataset", "metric", "value"])
     with open("../results.md", "w") as handle:
-        result.to_markdown(handle)
-    return result
+        results.to_markdown(handle)
+    return results
 
 
 if __name__ == "__main__":
