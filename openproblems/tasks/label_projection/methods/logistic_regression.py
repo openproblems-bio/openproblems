@@ -12,7 +12,11 @@ def _logistic_regression(adata, max_iter=1000, n_pca=100):
     adata_test = adata[~adata.obs["is_train"]].copy()
 
     # Dimensionality reduction & scaling
-    pc_op = PCA(n_components=min(n_pca, min(adata.shape)))
+    pc_op = PCA(
+        n_components=min(
+            [n_pca, adata_train.shape[0], adata_test.shape[0], adata.shape[1]]
+        )
+    )
     adata_train.obsm["pca"] = pc_op.fit_transform(adata_train.X.toarray())
     adata_train.obsm["pca_scale"] = sklearn.preprocessing.scale(adata_train.obsm["pca"])
 
