@@ -18,7 +18,9 @@ utils.ignore_numba_warnings()
 def test_task(dataset, task, test):
     X = dataset(test=test)
     assert isinstance(X, anndata.AnnData)
-    assert task.checks.check_dataset(X)
+    assert X.shape[0] > 0
+    assert X.shape[1] > 0
     if test:
         assert X.shape[0] < 600
         assert X.shape[1] < 1500
+    assert task.checks.check_dataset(X)
