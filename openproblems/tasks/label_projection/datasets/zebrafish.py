@@ -5,7 +5,7 @@ from ....data.zebrafish import load_zebrafish
 def zebrafish_labels(test=False):
     adata = load_zebrafish(test=test)
     adata.obs["labels"] = adata.obs["cell_type"]
-    adata.obs["is_train"] = adata.obs["labels"] == "Schier"
+    adata.obs["is_train"] = adata.obs["lab"] == "Schier"
     return adata
 
 
