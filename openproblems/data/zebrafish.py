@@ -15,7 +15,6 @@ URL = (
 
 @loader
 def load_zebrafish(test=False):
-
     with tempfile.TemporaryDirectory() as tempdir:
         filepath = os.path.join(tempdir, "zebrafish.h5ad")
         scprep.io.download.download_url(URL, filepath)
