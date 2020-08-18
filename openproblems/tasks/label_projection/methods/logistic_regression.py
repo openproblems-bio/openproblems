@@ -1,13 +1,19 @@
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
+
 import numpy as np
+from scipy import sparse
+
 from ....tools.normalize import log_cpm, log_scran_pooling
 
 
 def _logistic_regression(adata):
     classifier = Pipeline(
-        [("scaler", StandardScaler()), ("regression", LogisticRegression())]
+        [
+            ("scaler", StandardScaler(with_mean=not sparse.issparse(adata.X))),
+            ("regression", LogisticRegression()),
+        ]
     )
 
     adata_train = adata[adata.obs["is_train"]]
