@@ -9187,3 +9187,6 @@ html[dir="rtl"] body {
 
 .task-card .card-body {
   padding: 0rem 1rem 1rem; }
+
+.contributing-hero section {
+  filter: blur(8px); }
