@@ -61,24 +61,24 @@ To get started let's look at the structure of the [OpenProblems GitHub repositor
 
 ```python
 openproblems/
+├── __init__.py
 ├── data/ # functions to download raw datasets
 │   ├── dummy.py
 │   ├── __init__.py
 │   ├── scicar/ # downloads sci-CAR data from the Gene Expression Omnibus (GEO)
-│   │   ├── base.py
+│   │   ├──__init__.py
+│   │   ├──  base.py
 │   │   ├── cell_lines.py
-│   │   ├── __init__.py
 │   │   └── mouse_kidney.py
 │   ├── utils.py
 │   └── zebrafish.py
-├── __init__.py
 ├── tasks/ # contains code specific to each task
 │   ├── __init__.py
 │   ├── label_projection/
 │   └── `multimodal_data_integration`/ # all the code for the multimodal integration task
+│       ├── __init__.py
 │       ├── checks.py
 │       ├── datasets/ # functions to load task-specific versions of each dataset
-│       ├── __init__.py
 │       ├── methods/  # methods to perform multimodal integration
 │       ├── metrics/  # metrics used to benchmark each task
 │       └── README.md
@@ -88,26 +88,26 @@ openproblems/
 └── version.py
 ```
 
-There are a few other things in the repository, such as the `website/` directory that contains the files the build the website you're reading right now, but for the purposes of getting involved, the `openproblems/` module is the most important.
+There are a few other things in the repository, such as the [`website/`]((https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/website/)) directory that contains the files the build the website you're reading right now, but for the purposes of getting involved, the [`openproblems/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/) module is the most important.
 
 The first thing that's important to note is that there is not necessarily a one-to-one correspondence between datasets and tasks. Intuitively, this makes sense if you consider that it may be useful to use a dataset both for data integration and visualization. Because of this, we separated the functions that download raw data from the code that prepares the data for a specific task.
 
-Next, we look at the `tasks/` directory that contains the folder for the `multimodal_data_integration/` task.
+Next, we look at the [`tasks/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks) directory that contains the folder for the [`multimodal_data_integration/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration) task.
 
 ```python
 tasks/multimodal_data_integration/
 ├── checks.py
-├── datasets/
+├── datasets/ # Code to load task-specific versions of each dataset
 │   ├── __init__.py
 │   └── scicar.py
 ├── __init__.py
-├── methods/
+├── methods/ # Code to execute methods on test and train data
 │   ├── cheat.py
 │   ├── harmonic_alignment.py
 │   ├── __init__.py
 │   ├── mnn.py
 │   └── procrustes.py
-├── metrics/
+├── metrics/ # Metrics to benchmark each dataset
 │   ├── __init__.py
 │   ├── knn_auc.py
 │   └── mse.py
@@ -116,4 +116,43 @@ tasks/multimodal_data_integration/
 
 ### What are the datasets?
 
-To benchmark multimodal integration methods, we use joint-profiling datasets where we have a one-to-one correspondence between measurements of each data type. These matched datasets provide ground truth that can be used to determine how accurately a method can align measurements of the same biological system.
+All datasets in the Open Problems repositories are expected to return counts matrices or equivalent. To ensure that methods will be evaluated on an even playing field, we apply the same normalization steps to each dataset.
+
+To benchmark multimodal integration methods, we use joint-profiling datasets where we have a one-to-one correspondence between measurements of each data type. These matched datasets provide ground truth that can be used to determine how accurately a method can align measurements of the same biological system. As of writing, we're using two datasets from the sci-CAR paper.
+
+These datasets are loaded by the [`scicar.py`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/tasks/multimodal_data_integration/datasets/scicar.py) file within the [`multimodal_data_integration`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration) directory. Let's look at that file:
+
+```python
+# openproblems.tasks.multimodal_data_integration.datasets.scicar
+
+from ....data.scicar import load_scicar_cell_lines, load_scicar_mouse_kidney
+
+
+def scicar_cell_lines(test=False):
+    return load_scicar_cell_lines(test=test)
+
+
+def scicar_mouse_kidney(test=False):
+    return load_scicar_mouse_kidney(test=test)
+```
+
+This file outsources all the processing for data loading to the [`openproblems.data.scicar`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/data/scicar) submodule. Briefly, this submodule contains three files:
+
+```
+openproblems/data/
+└──scicar/ # downloads sci-CAR data from the Gene Expression Omnibus (GEO)
+    ├──__init__.py
+    ├──  base.py # code to filter cells and preprocess counts
+    ├── cell_lines.py # downloads sci-CAR cell line data
+    └── mouse_kidney.py # downlaods sci-CAR mouse data
+```
+
+You can inspect these files yourself to see the exact implementation. The basic API of a data loader is
+
+`function dataset(bool test=False) -> AnnData adata`
+
+That is, a data loader function should take a single argument `test` and return an [AnnData](https://github.com/theislab/anndata/) object. If `test` is True, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) for faster downstream analysis. We can then use these loaded AnnData objects to evaluate various methods.
+
+### Integration Methods
+
+Next, we look at the [`methods/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration/methods/) submodule within the [`multimodal_data_integration/`]((https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration)) task.
