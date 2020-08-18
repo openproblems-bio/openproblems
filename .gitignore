@@ -131,3 +131,6 @@ dmypy.json
 # Hugo ignores
 public/
 resources/
+
+# macOS
+.DS_Store
