@@ -6,14 +6,17 @@ install_requires = [
     "numpy>=1.17.0",
     "scikit-learn>=0.19.1",
     "anndata",
-    "mnnpy",
     "scprep",
     "scipy",
     "scanpy",
     "decorator",
+]
+
+methods_requires = [
+    "mnnpy",
+    "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
     "rpy2",
     "scIB @ git+https://github.com/theislab/scib@master",
-    "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
 ]
 
 evaluate_requires = ["tabulate"]
@@ -41,9 +44,10 @@ setup(
     install_requires=install_requires,
     python_requires=">=3.5",
     extras_require={
-        "test": test_requires,
+        "test": test_requires + methods_requires,
         "doc": doc_requires,
-        "evaluate": evaluate_requires,
+        "methods": methods_requires,
+        "evaluate": evaluate_requires + methods_requires,
     },
     test_suite="nose2.collector.collector",
     long_description=readme,
