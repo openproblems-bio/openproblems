@@ -13,9 +13,12 @@ def _logistic_regression(adata, max_iter=1000, n_pca=100):
 
     adata_train = adata[adata.obs["is_train"]]
     adata_test = adata[~adata.obs["is_train"]].copy()
-
-    n_pca = min([n_pca, adata_train.shape[0], adata_test.shape[0], adata.shape[1]])
     is_sparse = sparse.issparse(adata.X)
+
+    min_pca = min([adata_train.shape[0], adata_test.shape[0], adata.shape[1]])
+    if is_sparse:
+        min_pca -= 1
+    n_pca = min([n_pca, min_pca])
     pca_op = TruncatedSVD if is_sparse else PCA
 
     classifier = Pipeline(
