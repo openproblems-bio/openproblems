@@ -1,10 +1,11 @@
-import mnnpy
 import numpy as np
 from sklearn.decomposition import TruncatedSVD
 from ....tools.normalize import log_cpm, log_scran_pooling
 
 
 def _mnn(adata, n_svd=100):
+    import mnnpy
+
     if min(adata.X.shape) <= n_svd:
         n_svd = min(adata.X.shape) - 1
     if min(adata.obsm["mode2"].shape) <= n_svd:

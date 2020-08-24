@@ -1,15 +1,38 @@
 from sklearn.linear_model import LogisticRegression
+from sklearn.decomposition import PCA, TruncatedSVD
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
 import numpy as np
+from scipy import sparse
+
 from ....tools.normalize import log_cpm, log_scran_pooling
 
 
-def _logistic_regression(adata):
-    classifier = LogisticRegression()
+def _logistic_regression(adata, max_iter=1000, n_pca=100):
 
     adata_train = adata[adata.obs["is_train"]]
     adata_test = adata[~adata.obs["is_train"]].copy()
+    is_sparse = sparse.issparse(adata.X)
 
+    min_pca = min([adata_train.shape[0], adata_test.shape[0], adata.shape[1]])
+    if is_sparse:
+        min_pca -= 1
+    n_pca = min([n_pca, min_pca])
+    pca_op = TruncatedSVD if is_sparse else PCA
+
+    classifier = Pipeline(
+        [
+            ("pca", pca_op(n_components=n_pca)),
+            ("scaler", StandardScaler(with_mean=not is_sparse)),
+            ("regression", LogisticRegression(max_iter=max_iter)),
+        ]
+    )
+
+    # Fit to train data
     classifier.fit(adata_train.X, adata_train.obs["labels"])
+
+    # Predict on test data
     adata_test.obs["labels_pred"] = classifier.predict(adata_test.X)
 
     adata.obs["labels_pred"] = [
