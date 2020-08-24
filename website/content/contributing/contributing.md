@@ -102,9 +102,9 @@ tasks/multimodal_data_integration/
 │   └── scicar.py
 ├── __init__.py
 ├── methods/ # Code to execute methods on test and train data
+│   ├── __init__.py
 │   ├── cheat.py
 │   ├── harmonic_alignment.py
-│   ├── __init__.py
 │   ├── mnn.py
 │   └── procrustes.py
 ├── metrics/ # Metrics to benchmark each dataset
@@ -116,7 +116,17 @@ tasks/multimodal_data_integration/
 
 ### What are the datasets?
 
+#### About the dataset loaders
+
 All datasets in the Open Problems repositories are expected to return counts matrices or equivalent. To ensure that methods will be evaluated on an even playing field, we apply the same normalization steps to each dataset.
+
+The basic API of a **dataset** loader is
+
+```
+function dataset(bool test=False) -> AnnData adata
+```
+
+That is, a data loader function should take a single argument `test` and return an [AnnData](https://github.com/theislab/anndata/) object. If `test` is True, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) for faster downstream analysis. We can then use these loaded AnnData objects to evaluate various methods.
 
 To benchmark multimodal integration methods, we use joint-profiling datasets where we have a one-to-one correspondence between measurements of each data type. These matched datasets provide ground truth that can be used to determine how accurately a method can align measurements of the same biological system. As of writing, we're using two datasets from the sci-CAR paper.
 
@@ -147,12 +157,39 @@ openproblems/data/
     └── mouse_kidney.py # downlaods sci-CAR mouse data
 ```
 
-You can inspect these files yourself to see the exact implementation. The basic API of a data loader is
+You can inspect these files yourself to see the exact implementation.
 
-`function dataset(bool test=False) -> AnnData adata`
+#### Examining the data
 
-That is, a data loader function should take a single argument `test` and return an [AnnData](https://github.com/theislab/anndata/) object. If `test` is True, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) for faster downstream analysis. We can then use these loaded AnnData objects to evaluate various methods.
+Let's inspect the data for in the sci-CAR cell lines dataset. This data was collected from a mixed-species experiment comprising human embryonic kidney (HEK) 293T and NIH/3T3 (mouse) cells.
+
+```python
+from openproblems.tasks.multimodal_data_integration import datasets
+adata = datasets.scicar.load_scicar_cell_lines()
+```
+
+In the `adata` object, the data from the gene expression profiles is stored in `adata.X` and the corresponding cell barcodes and gene names are in `adata.obs_names` and `adata.var_names`, respectively.
 
 ### Integration Methods
 
 Next, we look at the [`methods/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration/methods/) submodule within the [`multimodal_data_integration/`]((https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration)) task.
+
+The basis syntax of a **method** is
+
+```
+function method(AnnData adata) -> None
+```
+
+The exact output of each method will vary by task, but it is expected that the output will vary by task. For the multimodal integration task, we're looking to align cells from two different modalities.
+
+```python
+tasks/multimodal_data_integration/
+└── methods/ # Code to execute methods on test and train data
+    ├── __init__.py
+    ├── cheat.py
+    ├── harmonic_alignment.py
+    ├── mnn.py
+    └── procrustes.py
+```
+
+We have four methods here. The first `cheat.py` is a testing function that always returns the correct match of cells from either modality.
