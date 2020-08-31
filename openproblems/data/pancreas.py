@@ -19,7 +19,7 @@ def load_pancreas(test=False, preprocess=True):
 
         # Subsample pancreas data
         cts = ["delta", "gamma"]
-        batches = ["inDrop2", "smarter", "celseq"]
+        batches = ["inDrop4", "smarter", "celseq"]
         adata = adata[
             (adata.obs["batch"].isin(batches)) & (adata.obs["labels"].isin(cts)), :200
         ].copy()
