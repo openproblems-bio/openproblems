@@ -1,0 +1,13 @@
+{{ partial "page_edit" . }}
+{{ partial "tags" . }}
+{{ partial "share" . }}
+{{ partial "page_author" . }}
+{{ partial "comments" . }}
+
+{{ if site.Params.section_pager }}
+<div class="article-widget">
+  {{ partial "section_pager" . }}
+</div>
+{{ end }}
+
+{{ partial "page_related" . }}

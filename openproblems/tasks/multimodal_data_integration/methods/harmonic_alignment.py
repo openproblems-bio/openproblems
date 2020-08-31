@@ -1,10 +1,11 @@
-import harmonicalignment
 import numpy as np
 from sklearn.decomposition import TruncatedSVD
 from ....tools.normalize import sqrt_cpm, log_cpm, log_scran_pooling
 
 
 def _harmonic_alignment(adata, n_svd=100):
+    import harmonicalignment
+
     if min(adata.X.shape) <= n_svd:
         n_svd = min(adata.X.shape) - 1
     if min(adata.obsm["mode2"].shape) <= n_svd:
