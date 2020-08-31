@@ -13,3 +13,14 @@ def pancreas_batch(test=False):
     ]
 
     return adata
+
+
+def pancreas_random(test=False):
+    adata = load_pancreas(test=test)
+
+    # Assign training/test
+    adata.obs["is_train"] = np.random.choice(
+        [True, False], adata.shape[0], replace=True, p=[0.8, 0.2]
+    )
+
+    return adata
