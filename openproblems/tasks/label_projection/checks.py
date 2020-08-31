@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def check_dataset(adata):
     assert "labels" in adata.obs
     assert "is_train" in adata.obs
