@@ -56,7 +56,9 @@ def load_scicar(
     atac_cells, atac_data = atac_cells.iloc[atac_order], atac_data[atac_order]
 
     adata = anndata.AnnData(
-        rna_data, obs=pd.DataFrame(index=rna_cells), var=pd.DataFrame(index=rna_genes),
+        rna_data,
+        obs=pd.DataFrame(index=rna_cells),
+        var=pd.DataFrame(index=rna_genes),
     )
 
     adata.obsm["mode2"] = atac_data
