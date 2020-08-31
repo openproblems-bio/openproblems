@@ -52,7 +52,11 @@ def main():
             result.to_markdown(content_handle)
         results.append(result)
 
-    results = pd.concat(results).sort_values(["task", "dataset", "metric", "value"])
+    results = (
+        pd.concat(results)
+        .sort_values("value", ascending=False)
+        .sort_values(["task", "dataset", "metric"])
+    )
     with open("../results.md", "w") as handle:
         results.to_markdown(handle)
     return results
