@@ -1,5 +1,5 @@
 import numpy as np
-from .....data.pancreas import load_pancreas
+from ....data.pancreas import load_pancreas
 
 
 def pancreas_batch(test=False):
