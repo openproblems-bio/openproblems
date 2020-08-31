@@ -36,7 +36,7 @@ install:
 script:
   - python -c "import openproblems"
   - 'pip install -U .[test]'
-  - black . --check --diff
+  - black . --check --diff --exclude=website
   - python setup.py test
 deploy:
   provider: script
