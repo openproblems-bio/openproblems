@@ -8,7 +8,7 @@ import scanpy as sc
 from .utils import loader
 from ..tools import normalize as n
 
-URL = "https://ndownloader.figshare.com/files/22891151"
+URL = "https://ndownloader.figshare.com/files/24539828"
 
 
 @loader
