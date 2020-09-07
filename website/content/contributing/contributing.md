@@ -16,8 +16,9 @@ subtitle = ""
   columns = "1"
 
 [design.background]
-    # Text color (true=light or false=dark).
+  # Text color (true=light or false=dark).
   text_color_light = false
+  color = "white"
 
 [design.spacing]
   # Customize the section spacing. Order is top, right, bottom, left.
@@ -48,148 +49,80 @@ Each task is composed of three components:
 * **Metrics** - a set of quantitative measures that are used to rank methods
 * **Methods** - algorithms contributed by the community to perform the task
 
-All of the code for these tasks are hosted in an open source [GitHub repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems). To understand how these components work together, let's examine the Multimodal Data Integration task.
+All of the code for these tasks are hosted in an open source [GitHub repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems).
 
-## Multimodal Data Integration
+## Adding a dataset
 
-### What's the task?
-Several recently described technologies allow for simultaneous measurement of different aspects of cell state. For example, [sci-CAR](https://doi.org/10.1126/science.aau0730) jointly profiles RNA expression and chromatin accessibility on the same cell and [CITE-seq](https://doi.org/10.1038/nmeth.4380) measures surface protein abundance and RNA expression from each cell. However, these joint profiling methods have several tradeoffs compared to unimodal measurements. Joint methods can be more expensive or lower throughput or more noisy than measuring a single modality at a time. Therefore it is useful to develop methods that are capable of integrating measurements of the same biological system but obtained using different technologies. Here the goal is to match measurements acquired for the same cell without using the cell barcodes that link the two measurements.
+### Data downloaders vs data loaders
 
-### How's the GitHub organized?
+Datasets are collections of single cell measurements that can be used for benchmarking a task. To add a dataset, you need to set up two components:
 
-To get started let's look at the structure of the [OpenProblems GitHub repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems):
+1. A data downloader function in `openproblems/data`
+2. A task-specific data loader function in `openproblems/task/<task_name>/datasets`
 
-```python
-openproblems/
-├── __init__.py
-├── data/ # functions to download raw datasets
-│   ├── dummy.py
-│   ├── __init__.py
-│   ├── scicar/ # downloads sci-CAR data from the Gene Expression Omnibus (GEO)
-│   │   ├──__init__.py
-│   │   ├──  base.py
-│   │   ├── cell_lines.py
-│   │   └── mouse_kidney.py
-│   ├── utils.py
-│   └── zebrafish.py
-├── tasks/ # contains code specific to each task
-│   ├── __init__.py
-│   ├── label_projection/
-│   └── `multimodal_data_integration`/ # all the code for the multimodal integration task
-│       ├── __init__.py
-│       ├── checks.py
-│       ├── datasets/ # functions to load task-specific versions of each dataset
-│       ├── methods/  # methods to perform multimodal integration
-│       ├── metrics/  # metrics used to benchmark each task
-│       └── README.md
-├── test/ # unit tests for the module
-├── tools/ # utility functions like normalization
-├── utils.py
-└── version.py
-```
+The role of the data downloader is to grab the data from a public repository, perform any necessary preprocessing, and return an [`AnnData`](https://github.com/theislab/anndata/) object.
 
-There are a few other things in the repository, such as the [`website/`]((https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/website/)) directory that contains the files the build the website you're reading right now, but for the purposes of getting involved, the [`openproblems/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/) module is the most important.
-
-The first thing that's important to note is that there is not necessarily a one-to-one correspondence between datasets and tasks. Intuitively, this makes sense if you consider that it may be useful to use a dataset both for data integration and visualization. Because of this, we separated the functions that download raw data from the code that prepares the data for a specific task.
-
-Next, we look at the [`tasks/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks) directory that contains the folder for the [`multimodal_data_integration/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration) task.
-
-```python
-tasks/multimodal_data_integration/
-├── checks.py
-├── datasets/ # Code to load task-specific versions of each dataset
-│   ├── __init__.py
-│   └── scicar.py
-├── __init__.py
-├── methods/ # Code to execute methods on test and train data
-│   ├── __init__.py
-│   ├── cheat.py
-│   ├── harmonic_alignment.py
-│   ├── mnn.py
-│   └── procrustes.py
-├── metrics/ # Metrics to benchmark each dataset
-│   ├── __init__.py
-│   ├── knn_auc.py
-│   └── mse.py
-└── README.md
-```
-
-### What are the datasets?
-
-#### About the dataset loaders
-
-All datasets in the Open Problems repositories are expected to return counts matrices or equivalent. To ensure that methods will be evaluated on an even playing field, we apply the same normalization steps to each dataset.
-
-The basic API of a **dataset** loader is
+The API of a **data downloader** is
 
 ```
 function dataset(bool test=False) -> AnnData adata
 ```
 
-That is, a data loader function should take a single argument `test` and return an [AnnData](https://github.com/theislab/anndata/) object. If `test` is True, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) for faster downstream analysis. We can then use these loaded AnnData objects to evaluate various methods.
+If `test` is True, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) for faster downstream analysis. We can then use these loaded AnnData objects to evaluate various methods.
 
-To benchmark multimodal integration methods, we use joint-profiling datasets where we have a one-to-one correspondence between measurements of each data type. These matched datasets provide ground truth that can be used to determine how accurately a method can align measurements of the same biological system. As of writing, we're using two datasets from the sci-CAR paper.
-
-These datasets are loaded by the [`scicar.py`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/tasks/multimodal_data_integration/datasets/scicar.py) file within the [`multimodal_data_integration`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration) directory. Let's look at that file:
-
-```python
-# openproblems.tasks.multimodal_data_integration.datasets.scicar
-
-from ....data.scicar import load_scicar_cell_lines, load_scicar_mouse_kidney
+Next, we need a task-specific **data loader** that loads the data in a way that's formatted correctly for a given task. The specific data format for each task can be found in the `README.md` file in each `openproblems/task/<task_name>` directory. For example, the label projection task has the following requirements:
 
 
-def scicar_cell_lines(test=False):
-    return load_scicar_cell_lines(test=test)
+> ## API
+>
+> Datasets should contain the following attributes:
+>
+> * `adata.obs["labels"]` (ground truth celltype labels)
+> * `adata.obs["is_train"]` (train vs. test boolean)
 
+Note, we may be able to prepare a single dataset multiple ways for a single task. For example, in the zebrafish dataset that comprises single cell profiles from two different labs, we can create a train/test split based on the lab or by randomly splitting cells regardless of where they were measured.
 
-def scicar_mouse_kidney(test=False):
-    return load_scicar_mouse_kidney(test=test)
-```
+## Adding a metric
 
-This file outsources all the processing for data loading to the [`openproblems.data.scicar`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/data/scicar) submodule. Briefly, this submodule contains three files:
+Metrics are used to compare the output of each method and are task-specific. You can find a thorough discussion of model evaluation metrics in the `sklearn` [User Guide](https://scikit-learn.org/stable/modules/model_evaluation.html). The API of a metric is as follows:
 
 ```
-openproblems/data/
-└──scicar/ # downloads sci-CAR data from the Gene Expression Omnibus (GEO)
-    ├──__init__.py
-    ├──  base.py # code to filter cells and preprocess counts
-    ├── cell_lines.py # downloads sci-CAR cell line data
-    └── mouse_kidney.py # downlaods sci-CAR mouse data
+function metric(adata) -> float
 ```
 
-You can inspect these files yourself to see the exact implementation.
+We encourage developers to submit a variety of metrics for each task since each method for model evaluation has specific biases. For example, [a recent comparison](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2.full) of dataset integration methods used 14 different evaluation metrics to compare methods.
 
-#### Examining the data
+## Adding a method
 
-Let's inspect the data for in the sci-CAR cell lines dataset. This data was collected from a mixed-species experiment comprising human embryonic kidney (HEK) 293T and NIH/3T3 (mouse) cells.
+### Introduction to methods
 
-```python
-from openproblems.tasks.multimodal_data_integration import datasets
-adata = datasets.scicar.load_scicar_cell_lines()
-```
+Methods are the backbone of Single Cell Open Problems, and we hope that this is where most of the development will occur. Like metrics, methods are task-specific. The exact API of each method can be found in each `openproblems/task/<task_name>` directory. For example, the label projection task has the following API
 
-In the `adata` object, the data from the gene expression profiles is stored in `adata.X` and the corresponding cell barcodes and gene names are in `adata.obs_names` and `adata.var_names`, respectively.
-
-### Integration Methods
-
-Next, we look at the [`methods/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration/methods/) submodule within the [`multimodal_data_integration/`]((https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration)) task.
-
-The basis syntax of a **method** is
+> Methods should assign celltype labels to `adata.obs['labels_pred']` using only the labels from the training data. The true labels are contained in `adata['labels']`.
 
 ```
-function method(AnnData adata) -> None
+function _labelprojection(adata) -> adata.obs['labels_pred']
 ```
 
-The exact output of each method will vary by task, but it is expected that the output will vary by task. For the multimodal integration task, we're looking to align cells from two different modalities.
+The `_` precedes the method name because it is not intended to be called directly during benchmarking. Instead, this method will be combined with preprocessing functions to create a full method as described in the following section.
 
-```python
-tasks/multimodal_data_integration/
-└── methods/ # Code to execute methods on test and train data
-    ├── __init__.py
-    ├── cheat.py
-    ├── harmonic_alignment.py
-    ├── mnn.py
-    └── procrustes.py
-```
+### Handling preprocessing
 
-We have four methods here. The first `cheat.py` is a testing function that always returns the correct match of cells from either modality.
+Preprocessing is a major factor affecting the output of a single cell analysis pipeline, yet there is [little consensus](https://doi.org/10.1186/s13059-020-02136-7) on the optimal set of preprocessing steps for any given single cell task. Our approach is to provide multiple preprocessing options that can be easily combined with any given method.
+
+Functions for normalization (accounting for varying UMIs per cell) and transformation (scaling for differences in average detection of each gene) can be found in [`openproblems/tools/normalize.py`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/tools/normalize.py).
+
+We currently provide three flavors of normalization:
+* `log_cpm` - log-transformed, counts-per-million normalized
+* `sqrt_cpm` - sqrt-transformed, counts-per-million normalized
+* `log_scran_pooling` - log-transformed, [scran](https://doi.org/10.1186/s13059-016-0947-7) normalized
+
+To define a full method, we need to combine the base method above with a preprocessing function. For example, in the [`logistic_regression.py`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/tasks/label_projection/methods/logistic_regression.py) script, we define a `_logistic_regression()` base function and then combine it with preprocessing steps in the `logistic_regression_log_cpm()` and `logistic_regression_scran()` functions.
+
+### Pull requests trigger benchmarking
+
+Our current infrastructure will evaluate the performance of a method once the code has been merged to the `master` branch. We encourage you to take advantage of the test versions of each dataset and ensure that a new method will run properly on each dataset. Next, the easiest way to evaluate the performance of the method against all the datasets assigned to a task is to submit a pull request on GitHub.
+
+## Join us on Slack
+
+If you have any questions or would like to get more involved, please join us on the [CZI Science Slack](https://join.slack.com/t/cziscience/shared_invite/zt-czl1kp2v-sgGpY4RxO3bPYmFg2XlbZA). Once you've created an account, look for the `open-problems` channel.

@@ -8,7 +8,7 @@ headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
 weight = 20  # Order that this section will appear.
 
-title = "Single Cell Open Problems"
+title = "**Single Cell Open Problems**"
 subtitle = ""
 
 [design]
@@ -53,21 +53,7 @@ Thanks to recent advances in single cell technologies, we now have the opportuni
 
 Assembling a Human Cell Atlas will require development of [new computational methods](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-1926-6) developed by groups spanning computational and biological sciences. To facilitate these collaborations, we are aggregating formalized open problems with standardized datasets and test metrics. This approach is inspired by similar challenges in computer science such as the [ImageNet Challenge](http://www.image-net.org/challenges/LSVRC/) or the [Netflix Prize](https://www.netflixprize.com/) that drive innovation in algorithm development for computationally important tasks. However, with a few notable [exceptions](https://predictioncenter.org/), these challenges do not exist for biological problems.
 
-## How the Open Problems are structured
+## Our mission
+Our goal is to facilitate the development of novel computational methods to address open problems in integrating the [Human Cell Atlas](https://www.humancellatlas.org/). We are focused on bridging the gap between experts in computer science and machine learning and the biological problems associated with the single cell data. We want to identify important problems, aggregate standardized datasets, and create a platform to benchmark novel methods against the current state of the art using a common set of test metrics.
 
-We have broken down the development of the Single Cell Open Problems into **tasks**. A task is a specific quantifiable problem that addresses an open problem in integrating the Human Cell Atlas. An example of a task is [Multimodal Data Integration](results/#multimodal_data_integration) in which the goal is to take a set of multimodal measurements of the same set of cells (e.g. joint single cell RNA and ATAC profiling) and identify which pairs of measurements were acquired from the same cell without using cell barcodes.
-
-Each task is composed of three aspects:
-
-* **Datasets** - a group of high quality curated datasets matched to a task
-* **Metrics** - a set of quantitative measures that are used to rank methods
-* **Methods** - algorithms contributed by the community to perform the task
-
-At this stage, we are looking for two kinds of contributions:
-* **Task developers** - these individuals will help develop tasks for labs to solve
-* **Method developers** - these groups will contribute new methods that will get displayed on our leaderboards
-
-We have more information on each of these parts of the Open Problems project on our [Contributing](/contributing) page.
-
-
-<a href="/contributing"><button type="button" class="btn btn-primary btn-lg">**Get Involved**</button></a>
+This project is sponsored by the [Chan Zuckerberg Initiative](https://chanzuckerberg.com/science/), and we are looking for broad input from the scientific community. If you'd like to learn more, click here: <a href="/contributing"><button type="button" class="btn btn-primary btn-lg">**Get Involved**</button></a>

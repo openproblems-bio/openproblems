@@ -9,7 +9,7 @@ active = true  # Activate this widget? true/false
 weight = 15  # Order that this section will appear.
 
 title = "**Get involved**"
-subtitle = ""
+subtitle = "[Join Us on Slack!](https://join.slack.com/t/cziscience/shared_invite/zt-czl1kp2v-sgGpY4RxO3bPYmFg2XlbZA)"
 
 [design]
   # Choose how many columns the section has. Valid values: 1 or 2.
