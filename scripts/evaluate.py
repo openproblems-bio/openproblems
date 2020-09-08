@@ -10,6 +10,7 @@ def evaluate_method(task, adata, method):
         result["metric"].append(metric.__name__)
         result["value"].append(metric(adata))
 
+    del adata
     result = pd.DataFrame(result)
     result["method"] = method.__name__
     result["task"] = task._task_name
@@ -24,6 +25,7 @@ def evaluate_dataset(task, dataset):
         r["dataset"] = dataset.__name__
         result.append(r)
 
+    del adata
     result = pd.concat(result)
     return result
 
