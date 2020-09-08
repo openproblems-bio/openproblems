@@ -9,7 +9,7 @@ active = true  # Activate this widget? true/false
 weight = 20  # Order that this section will appear.
 
 title = "Multimodal Data Integration"
-subtitle = "Realigning multimodal measurements of the same cell using various technologies"
+subtitle = "*Realigning multimodal measurements of the same cell*"
 
 [design]
   # Choose how many columns the section has. Valid values: 1 or 2.
@@ -31,6 +31,12 @@ subtitle = "Realigning multimodal measurements of the same cell using various te
  css_class = ""
 
 +++
+Several recently described technologies allow for simultaneous measurement of different aspects of cell state. For example, [sci-CAR](https://doi.org/10.1126/science.aau0730) jointly profiles RNA expression and chromatin accessibility on the same cell and [CITE-seq](https://doi.org/10.1038/nmeth.4380) measures surface protein abundance and RNA expression from each cell. However, these joint profiling methods have several tradeoffs compared to unimodal measurements.
+
+Joint methods can be more expensive or lower throughput or more noisy than measuring a single modality at a time. Therefore it is useful to develop methods that are capable of integrating measurements of the same biological system but obtained using different technologies.
+
+Here the goal is to match measurements acquired for the same cell without using the cell barcodes that link the two measurements.
+
 | metric   |      value | method     | task                        | dataset             |
 |:---------|-----------:|:-----------|:----------------------------|:--------------------|
 | knn_auc  | 0.00298303 | procrustes | Multimodal Data Integration | scicar_cell_lines   |
