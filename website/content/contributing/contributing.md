@@ -96,7 +96,7 @@ We encourage developers to submit a variety of metrics for each task since each 
 
 ### Introduction to methods
 
-Methods are the backbone of Single Cell Open Problems, and we hope that this is where most of the development will occur. Like metrics, methods are task-specific. The exact API of each method can be found in each `openproblems/task/<task_name>` directory. For example, the label projection task has the following API
+Methods are the backbone of Single Cell Open Problems, and we hope that this is where most of the development will occur. Like metrics, methods are task-specific. The exact API of each method can be found in each `openproblems/task/<task_name>/methods/` directory. For example, the label projection task has the following API
 
 > Methods should assign celltype labels to `adata.obs['labels_pred']` using only the labels from the training data. The true labels are contained in `adata['labels']`.
 
