@@ -4,9 +4,9 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/83b92388-53c7-4fef-9003-e14d94c6ac6f/deploy-status)](https://app.netlify.com/sites/openproblems/deploys)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Formalizing and benchmarking open problems in single-cell genomics
+Formalizing and benchmarking open problems in single-cell genomics.
 
-[Results](results.md)
+[**Visit the Open Problems Website**](https://openproblems.netlify.app/)
 
 ## API
 
