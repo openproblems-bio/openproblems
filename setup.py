@@ -17,6 +17,7 @@ methods_requires = [
     "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
     "rpy2",
     "scIB @ git+https://github.com/theislab/scib@master",
+    "anndata2ri>=1.0.4",
 ]
 
 evaluate_requires = ["tabulate"]
