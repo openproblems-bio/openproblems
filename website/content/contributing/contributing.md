@@ -123,6 +123,17 @@ To define a full method, we need to combine the base method above with a preproc
 
 Our current infrastructure will evaluate the performance of a method once the code has been merged to the `master` branch. We encourage you to take advantage of the test versions of each dataset and ensure that a new method will run properly on each dataset. Next, the easiest way to evaluate the performance of the method against all the datasets assigned to a task is to submit a pull request on GitHub.
 
+## Adding a task
+
+To add a new task, you need to collect all three of the above components of a task:
+
+* One or more **datasets**
+* One or more **metric**
+* One or more **method**
+
+We'd love to see new tasks added to the framework, and our core group of developers can help get new tasks off the group. We already have some proposed tasks in our [GitHub Issues tracker](https://github.com/singlecellopenproblems/SingleCellOpenProblems/issues?q=is%3Aissue+is%3Aopen+label%3Atask). Join us on Slack to get started!
+
+
 ## Join us on Slack
 
 If you have any questions or would like to get more involved, please join us on the [CZI Science Slack](https://join.slack.com/t/cziscience/shared_invite/zt-czl1kp2v-sgGpY4RxO3bPYmFg2XlbZA). Once you've created an account, look for the `open-problems` channel.
