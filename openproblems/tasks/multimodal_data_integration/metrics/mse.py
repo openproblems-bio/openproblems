@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import sparse
 import scprep
+from ....tools.decorators import metric
 
 
 def _square(X):
@@ -11,6 +12,7 @@ def _square(X):
         return scprep.utils.toarray(X) ** 2
 
 
+@metric(metric_name="Mean squared error", maximize=False)
 def mse(adata):
     X = scprep.utils.toarray(adata.obsm["aligned"])
     Y = scprep.utils.toarray(adata.obsm["mode2_aligned"])
