@@ -1,7 +1,9 @@
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
+from ....tools.decorators import metric
 
 
+@metric(metric_name="kNN Area Under the Curve", maximize=True)
 def knn_auc(adata, n_neighbors=100):
     _, indices_true = (
         NearestNeighbors(n_neighbors=n_neighbors).fit(adata.X).kneighbors(adata.X)
