@@ -20,6 +20,7 @@
       $({{ printf "#%s" $id }}).DataTable(
       {"paging": false,
       "bInfo" : false,
+      "searching": false,
       "columnDefs":[
         {
           "orderable": false, "targets":[
@@ -38,7 +39,7 @@
 
 <h3>{{ $dataFile.name }}</h3>
 
-<table id="{{ $id }}" class="display" width="100%">
+<table id="{{ $id }}" class="display center" >
   <thead>
     {{ range $dataFile.headers.names }}
       <th class="{{ . }}">
