@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.decomposition import TruncatedSVD
 from ....tools.normalize import log_cpm, log_scran_pooling
+from ....tools.decorators import method
 
 
 def _mnn(adata, n_svd=100):
@@ -20,12 +21,26 @@ def _mnn(adata, n_svd=100):
     adata.obsm["mode2_aligned"] = Y_corrected
 
 
+@method(
+    method_name="Mutual Nearest Neighbors (log CPM)",
+    paper_name="Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+    paper_url="https://www.nature.com/articles/nbt.4091",
+    paper_year=2018,
+    code_url="https://github.com/chriscainx/mnnpy",
+)
 def mnn_log_cpm(adata, n_svd=100):
     log_cpm(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _mnn(adata, n_svd=n_svd)
 
 
+@method(
+    method_name="Mutual Nearest Neighbors (log scran)",
+    paper_name="Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+    paper_url="https://www.nature.com/articles/nbt.4091",
+    paper_year=2018,
+    code_url="https://github.com/chriscainx/mnnpy",
+)
 def mnn_log_scran_pooling(adata, n_svd=100):
     log_scran_pooling(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
