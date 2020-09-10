@@ -24,7 +24,7 @@ def evaluate_method(task, adata, method):
 
 
 def evaluate_dataset(task, dataset):
-    adata = dataset(test=True)
+    adata = dataset(test=False)
     result = []
     for method in task.METHODS:
         r = evaluate_method(task, adata.copy(), method)
