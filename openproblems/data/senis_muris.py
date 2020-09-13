@@ -18,5 +18,3 @@ def load_senis_muris(test=False):
     if test:
         sc.pp.subsample(adata, fraction=0.1)
     return adata
-
-
