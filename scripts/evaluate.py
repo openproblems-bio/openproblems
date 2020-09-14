@@ -73,7 +73,7 @@ def main():
     mkdir(RESULTS_DIR)
     for task in openproblems.TASKS:
         task_name = task.__name__.split(".")[-1]
-        result = evaluate_task(task).sort_values(["dataset", "metric", "value"])
+        result = evaluate_task(task)
         results[task_name] = result
 
     with open("../results.json", "w") as handle:
