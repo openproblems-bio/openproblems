@@ -36,7 +36,8 @@ def mkdir(dir):
 
 def save_result(result, task, dataset_name):
     result = copy.copy(result)
-    del result["memory_leaked_gb"]
+    for i in range(len(result)):
+        del result[i]["Memory leaked (GB)"]
     result = {
         "name": task._task_name,
         "headers": {
