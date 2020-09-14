@@ -1,11 +1,12 @@
 # SingleCellOpenProblems
 
 [![Travis CI Build](https://api.travis-ci.com/singlecellopenproblems/SingleCellOpenProblems.svg?branch=master)](https://travis-ci.com/singlecellopenproblems/SingleCellOpenProblems)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/83b92388-53c7-4fef-9003-e14d94c6ac6f/deploy-status)](https://app.netlify.com/sites/openproblems/deploys)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Formalizing and benchmarking open problems in single-cell genomics
+Formalizing and benchmarking open problems in single-cell genomics.
 
-[Results](results.md)
+[**Visit the Open Problems Website**](https://openproblems.netlify.app/)
 
 ## API
 
@@ -47,6 +48,8 @@ from .f2 import f2
 to [`openproblems/tasks/label_projection/metrics/__init__.py`](openproblems/tasks/label_projection/metrics/__init__.py).
 
 For datasets in particular, these should be loaded using a `loader` function from `openproblems.data`, with only task-specific annotations added in the task-specific data file.
+
+For methods and metrics, they should be decorated with the appropriate function in `openproblems.tools.decorators` to include metadata required for the evaluation and presentation of results.
 
 Note that data is not normalized in the data loader; normalization should be performed as part of each method. For ease of use, we provide a collection of common normalization functions in [`openproblems.tools.normalize`](openproblems/tools/normalize.py).
 
