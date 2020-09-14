@@ -13,7 +13,9 @@ def _harmonic_alignment(adata, n_svd=100):
         n_svd = min(adata.obsm["mode2"].shape) - 1
     X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
     Y_pca = TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
-    ha_op = harmonicalignment.HarmonicAlignment(n_filters=8)
+    ha_op = harmonicalignment.HarmonicAlignment(
+        n_filters=8, n_pca_XY=100, n_eigenvectors=100
+    )
     ha_op.align(X_pca, Y_pca)
     XY_aligned = ha_op.diffusion_map()
     adata.obsm["aligned"] = XY_aligned[: X_pca.shape[0]]
