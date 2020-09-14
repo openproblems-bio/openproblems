@@ -1,4 +1,4 @@
-import pandas as pd
+import json
 import openproblems
 import openproblems.test.utils
 
@@ -6,17 +6,17 @@ import openproblems.test.utils
 def evaluate_method(task, adata, method):
     output = openproblems.tools.decorators.profile(method)(adata)
     result = {
-        "metric": [],
-        "value": [],
+        "metrics": dict(),
     }
     for metric in task.METRICS:
-        result["metric"].append(metric.__name__)
-        result["value"].append(metric(adata))
+        result["metrics"][metric.__name__] = metric(adata)
 
     del adata
-    result = pd.DataFrame(result)
-    result["method"] = method.__name__
-    result["task"] = task._task_name
+    result["method"] = method.metadata["method_name"]
+    result["paper_name"] = method.metadata["paper_name"]
+    result["paper_url"] = method.metadata["paper_url"]
+    result["paper_year"] = method.metadata["paper_year"]
+    result["code_url"] = method.metadata["code_url"]
     result["memory_mb"] = output["memory_mb"]
     result["memory_leaked_mb"] = output["memory_leaked_mb"]
     result["runtime_s"] = output["runtime_s"]
@@ -24,50 +24,42 @@ def evaluate_method(task, adata, method):
 
 
 def evaluate_dataset(task, dataset):
-    adata = dataset(test=False)
+    adata = dataset(test=True)
     result = []
     for method in task.METHODS:
         r = evaluate_method(task, adata.copy(), method)
-        r["dataset"] = dataset.__name__
+        with open(
+            "../website/data/results/{}/{}.json".format(
+                task.__name__.split(".")[-1], dataset.__name__
+            ),
+            "w",
+        ) as handle:
+            json.dump(r, handle)
         result.append(r)
 
     del adata
-    result = pd.concat(result)
     return result
 
 
 def evaluate_task(task):
-    result = []
+    result = dict()
     for dataset in task.DATASETS:
-        result.append(evaluate_dataset(task, dataset))
+        result[dataset.__name__] = evaluate_dataset(task, dataset)
 
-    result = pd.concat(result)
     return result
 
 
 def main():
     openproblems.test.utils.ignore_numba_warnings()
 
-    results = []
+    results = dict()
     for task in openproblems.TASKS:
         task_name = task.__name__.split(".")[-1]
         result = evaluate_task(task).sort_values(["dataset", "metric", "value"])
-        with open(
-            "../website/content/results/{}.md".format(task_name), "w"
-        ) as content_handle, open(
-            "../website/results_frontmatter/{}.md".format(task_name), "r"
-        ) as frontmatter_handle:
-            content_handle.write(frontmatter_handle.read())
-            result.to_markdown(content_handle)
-        results.append(result)
+        results[task_name] = result
 
-    results = (
-        pd.concat(results)
-        .sort_values("value", ascending=False)
-        .sort_values(["task", "dataset", "metric"])
-    )
-    with open("../results.md", "w") as handle:
-        results.to_markdown(handle)
+    with open("../results.json", "w") as handle:
+        json.dump(results, handle)
     return results
 
 
