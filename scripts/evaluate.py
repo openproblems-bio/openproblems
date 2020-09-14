@@ -23,18 +23,28 @@ def evaluate_method(task, adata, method):
     return result
 
 
+def save_result(result, task_name, dataset_name):
+    results_dir = os.path.join("..", "website", "data", "results", task_name)
+    try:
+        os.mkdir(results_dir)
+    except OSError:
+        pass
+    with open(
+        os.path.join(
+            results_dir,
+            "{}.json".format(dataset_name),
+        ),
+        "w",
+    ) as handle:
+        json.dump(result, handle)
+
+
 def evaluate_dataset(task, dataset):
     adata = dataset(test=True)
     result = []
     for method in task.METHODS:
         r = evaluate_method(task, adata.copy(), method)
-        with open(
-            "../website/data/results/{}/{}.json".format(
-                task.__name__.split(".")[-1], dataset.__name__
-            ),
-            "w",
-        ) as handle:
-            json.dump(r, handle)
+        save_result(r, task.__name__.split(".")[-1], dataset.__name__)
         result.append(r)
 
     del adata
