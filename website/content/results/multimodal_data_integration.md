@@ -31,25 +31,25 @@ subtitle = "Realigning multimodal measurements of the same cell using various te
  css_class = ""
 
 +++
-|    | metric   |    value | method                               | task                        |   memory_mb |   memory_leaked_mb |   runtime_s | dataset             |
-|---:|:---------|---------:|:-------------------------------------|:----------------------------|------------:|-------------------:|------------:|:--------------------|
-|  0 | knn_auc  | 0.417506 | mnn_log_cpm                          | Multimodal Data Integration |    35.4883  |         3.46875    |   7.68056   | scicar_cell_lines   |
-|  0 | knn_auc  | 0.521865 | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |     7.18359 |         1.53125    |   0.216146  | scicar_cell_lines   |
-|  0 | knn_auc  | 0.52371  | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     5.72656 |         0.015625   |   0.214223  | scicar_cell_lines   |
-|  0 | knn_auc  | 0.627982 | mnn_log_scran_pooling                | Multimodal Data Integration |    10.2695  |         0.332031   |   3.88503   | scicar_cell_lines   |
-|  0 | knn_auc  | 0.769706 | procrustes                           | Multimodal Data Integration |     5.87891 |         0.015625   |   0.0487141 | scicar_cell_lines   |
-|  1 | mse      | 0.442196 | procrustes                           | Multimodal Data Integration |     5.87891 |         0.015625   |   0.0487141 | scicar_cell_lines   |
-|  1 | mse      | 0.974549 | mnn_log_scran_pooling                | Multimodal Data Integration |    10.2695  |         0.332031   |   3.88503   | scicar_cell_lines   |
-|  1 | mse      | 0.984945 | mnn_log_cpm                          | Multimodal Data Integration |    35.4883  |         3.46875    |   7.68056   | scicar_cell_lines   |
-|  1 | mse      | 0.998209 | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |     7.18359 |         1.53125    |   0.216146  | scicar_cell_lines   |
-|  1 | mse      | 1.01319  | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     5.72656 |         0.015625   |   0.214223  | scicar_cell_lines   |
-|  0 | knn_auc  | 0.41964  | mnn_log_cpm                          | Multimodal Data Integration |    14.1328  |         0.414062   |   3.90117   | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.549842 | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |     6.13672 |         0.132812   |   0.250555  | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.552441 | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     5.85156 |         0.00390625 |   0.2584    | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.59586  | mnn_log_scran_pooling                | Multimodal Data Integration |    14.1914  |         0.0703125  |   3.90184   | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.846586 | procrustes                           | Multimodal Data Integration |     6.05859 |        -0.00390625 |   0.0877079 | scicar_mouse_kidney |
-|  1 | mse      | 0.185888 | procrustes                           | Multimodal Data Integration |     6.05859 |        -0.00390625 |   0.0877079 | scicar_mouse_kidney |
-|  1 | mse      | 1.00367  | mnn_log_cpm                          | Multimodal Data Integration |    14.1328  |         0.414062   |   3.90117   | scicar_mouse_kidney |
-|  1 | mse      | 1.004    | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     5.85156 |         0.00390625 |   0.2584    | scicar_mouse_kidney |
-|  1 | mse      | 1.00711  | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |     6.13672 |         0.132812   |   0.250555  | scicar_mouse_kidney |
-|  1 | mse      | 1.03358  | mnn_log_scran_pooling                | Multimodal Data Integration |    14.1914  |         0.0703125  |   3.90184   | scicar_mouse_kidney |
+|    | metric   |       value | method                               | task                        |   memory_mb |   memory_leaked_mb |   runtime_s | dataset             |
+|---:|:---------|------------:|:-------------------------------------|:----------------------------|------------:|-------------------:|------------:|:--------------------|
+|  0 | knn_auc  | 0.00158035  | mnn_log_cpm                          | Multimodal Data Integration |   358310    |          134.586   |    101.913  | scicar_cell_lines   |
+|  0 | knn_auc  | 0.00183253  | procrustes                           | Multimodal Data Integration |     5452.34 |            0.34375 |     17.5809 | scicar_cell_lines   |
+|  0 | knn_auc  | 0.00269102  | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     7808.71 |          688.152   |    143.401  | scicar_cell_lines   |
+|  0 | knn_auc  | 0.00400918  | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    10403    |          933.652   |    355.739  | scicar_cell_lines   |
+|  0 | knn_auc  | 0.0192371   | mnn_log_scran_pooling                | Multimodal Data Integration |   392598    |          469.57    |    299.433  | scicar_cell_lines   |
+|  1 | mse      | 0.890782    | procrustes                           | Multimodal Data Integration |     5452.34 |            0.34375 |     17.5809 | scicar_cell_lines   |
+|  1 | mse      | 0.999424    | mnn_log_cpm                          | Multimodal Data Integration |   358310    |          134.586   |    101.913  | scicar_cell_lines   |
+|  1 | mse      | 1.00051     | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    10403    |          933.652   |    355.739  | scicar_cell_lines   |
+|  1 | mse      | 1.00051     | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     7808.71 |          688.152   |    143.401  | scicar_cell_lines   |
+|  1 | mse      | 1.06542     | mnn_log_scran_pooling                | Multimodal Data Integration |   392598    |          469.57    |    299.433  | scicar_cell_lines   |
+|  0 | knn_auc  | 9.31453e-05 | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    22347.9  |         3370.47    |   1796.5    | scicar_mouse_kidney |
+|  0 | knn_auc  | 0.000131428 | mnn_log_cpm                          | Multimodal Data Integration |   372573    |          136.637   |    274.892  | scicar_mouse_kidney |
+|  0 | knn_auc  | 0.000314393 | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |    22236.3  |         3897.51    |   1416.68   | scicar_mouse_kidney |
+|  0 | knn_auc  | 0.000440322 | procrustes                           | Multimodal Data Integration |     6056.96 |           30.9297  |     37.9718 | scicar_mouse_kidney |
+|  0 | knn_auc  | 0.019729    | mnn_log_scran_pooling                | Multimodal Data Integration |   429002    |          736.094   |    473.523  | scicar_mouse_kidney |
+|  1 | mse      | 0.942629    | procrustes                           | Multimodal Data Integration |     6056.96 |           30.9297  |     37.9718 | scicar_mouse_kidney |
+|  1 | mse      | 1.00022     | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |    22236.3  |         3897.51    |   1416.68   | scicar_mouse_kidney |
+|  1 | mse      | 1.00022     | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    22347.9  |         3370.47    |   1796.5    | scicar_mouse_kidney |
+|  1 | mse      | 1.04403     | mnn_log_scran_pooling                | Multimodal Data Integration |   429002    |          736.094   |    473.523  | scicar_mouse_kidney |
+|  1 | mse      | 1.04866     | mnn_log_cpm                          | Multimodal Data Integration |   372573    |          136.637   |    274.892  | scicar_mouse_kidney |

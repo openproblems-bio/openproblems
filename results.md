@@ -1,54 +1,54 @@
-|    | metric   |      value | method                               | task                        |   memory_mb |   memory_leaked_mb |   runtime_s | dataset             |
-|---:|:---------|-----------:|:-------------------------------------|:----------------------------|------------:|-------------------:|------------:|:--------------------|
-|  0 | accuracy | 0.621951   | logistic_regression_log_cpm          | Label Projection            |     7.26562 |         1.48828    |   0.0520863 | pancreas_batch      |
-|  0 | accuracy | 0.579268   | mlp_log_cpm                          | Label Projection            |     6.24609 |         0.285156   |   0.579627  | pancreas_batch      |
-|  0 | accuracy | 0.567073   | mlp_scran                            | Label Projection            |    30.9023  |        24.9648     |   0.586668  | pancreas_batch      |
-|  0 | accuracy | 0.554878   | logistic_regression_scran            | Label Projection            |   633.137   |       627.602      |  14.9918    | pancreas_batch      |
-|  1 | f1       | 0.624757   | logistic_regression_log_cpm          | Label Projection            |     7.26562 |         1.48828    |   0.0520863 | pancreas_batch      |
-|  1 | f1       | 0.583483   | mlp_log_cpm                          | Label Projection            |     6.24609 |         0.285156   |   0.579627  | pancreas_batch      |
-|  1 | f1       | 0.572338   | mlp_scran                            | Label Projection            |    30.9023  |        24.9648     |   0.586668  | pancreas_batch      |
-|  1 | f1       | 0.560702   | logistic_regression_scran            | Label Projection            |   633.137   |       627.602      |  14.9918    | pancreas_batch      |
-|  0 | accuracy | 0.8        | mlp_log_cpm                          | Label Projection            |     5.96875 |         0          |   0.620226  | pancreas_random     |
-|  0 | accuracy | 0.746667   | logistic_regression_log_cpm          | Label Projection            |     5.98047 |         0.0546875  |   0.0506659 | pancreas_random     |
-|  0 | accuracy | 0.706667   | mlp_scran                            | Label Projection            |    26.4219  |        20.4375     |   0.626644  | pancreas_random     |
-|  0 | accuracy | 0.693333   | logistic_regression_scran            | Label Projection            |     6.13672 |         0.117188   |   0.0792254 | pancreas_random     |
-|  1 | f1       | 0.801547   | mlp_log_cpm                          | Label Projection            |     5.96875 |         0          |   0.620226  | pancreas_random     |
-|  1 | f1       | 0.749658   | logistic_regression_log_cpm          | Label Projection            |     5.98047 |         0.0546875  |   0.0506659 | pancreas_random     |
-|  1 | f1       | 0.710184   | mlp_scran                            | Label Projection            |    26.4219  |        20.4375     |   0.626644  | pancreas_random     |
-|  1 | f1       | 0.697304   | logistic_regression_scran            | Label Projection            |     6.13672 |         0.117188   |   0.0792254 | pancreas_random     |
-|  0 | accuracy | 0.0163934  | mlp_log_cpm                          | Label Projection            |     5.76562 |         0          |   0.244471  | zebrafish_labels    |
-|  0 | accuracy | 0          | mlp_scran                            | Label Projection            |     5.74219 |         0          |   0.211888  | zebrafish_labels    |
-|  0 | accuracy | 0          | logistic_regression_scran            | Label Projection            |     5.79688 |         0.0703125  |   0.288389  | zebrafish_labels    |
-|  0 | accuracy | 0          | logistic_regression_log_cpm          | Label Projection            |     5.83984 |         0.0976562  |   0.0701691 | zebrafish_labels    |
-|  1 | f1       | 0.00252207 | mlp_log_cpm                          | Label Projection            |     5.76562 |         0          |   0.244471  | zebrafish_labels    |
-|  1 | f1       | 0          | logistic_regression_scran            | Label Projection            |     5.79688 |         0.0703125  |   0.288389  | zebrafish_labels    |
-|  1 | f1       | 0          | logistic_regression_log_cpm          | Label Projection            |     5.83984 |         0.0976562  |   0.0701691 | zebrafish_labels    |
-|  1 | f1       | 0          | mlp_scran                            | Label Projection            |     5.74219 |         0          |   0.211888  | zebrafish_labels    |
-|  0 | accuracy | 0.192308   | logistic_regression_scran            | Label Projection            |     5.66406 |         0          |   0.0699402 | zebrafish_random    |
-|  0 | accuracy | 0.134615   | logistic_regression_log_cpm          | Label Projection            |     5.71484 |         0          |   0.0692928 | zebrafish_random    |
-|  0 | accuracy | 0.115385   | mlp_scran                            | Label Projection            |     5.62109 |         0          |   0.22847   | zebrafish_random    |
-|  0 | accuracy | 0.115385   | mlp_log_cpm                          | Label Projection            |     5.63672 |         0          |   0.208209  | zebrafish_random    |
-|  1 | f1       | 0.154773   | logistic_regression_scran            | Label Projection            |     5.66406 |         0          |   0.0699402 | zebrafish_random    |
-|  1 | f1       | 0.136126   | logistic_regression_log_cpm          | Label Projection            |     5.71484 |         0          |   0.0692928 | zebrafish_random    |
-|  1 | f1       | 0.107166   | mlp_log_cpm                          | Label Projection            |     5.63672 |         0          |   0.208209  | zebrafish_random    |
-|  1 | f1       | 0.0779093  | mlp_scran                            | Label Projection            |     5.62109 |         0          |   0.22847   | zebrafish_random    |
-|  0 | knn_auc  | 0.769706   | procrustes                           | Multimodal Data Integration |     5.87891 |         0.015625   |   0.0487141 | scicar_cell_lines   |
-|  0 | knn_auc  | 0.627982   | mnn_log_scran_pooling                | Multimodal Data Integration |    10.2695  |         0.332031   |   3.88503   | scicar_cell_lines   |
-|  0 | knn_auc  | 0.52371    | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     5.72656 |         0.015625   |   0.214223  | scicar_cell_lines   |
-|  0 | knn_auc  | 0.521865   | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |     7.18359 |         1.53125    |   0.216146  | scicar_cell_lines   |
-|  0 | knn_auc  | 0.417506   | mnn_log_cpm                          | Multimodal Data Integration |    35.4883  |         3.46875    |   7.68056   | scicar_cell_lines   |
-|  1 | mse      | 1.01319    | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     5.72656 |         0.015625   |   0.214223  | scicar_cell_lines   |
-|  1 | mse      | 0.998209   | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |     7.18359 |         1.53125    |   0.216146  | scicar_cell_lines   |
-|  1 | mse      | 0.984945   | mnn_log_cpm                          | Multimodal Data Integration |    35.4883  |         3.46875    |   7.68056   | scicar_cell_lines   |
-|  1 | mse      | 0.974549   | mnn_log_scran_pooling                | Multimodal Data Integration |    10.2695  |         0.332031   |   3.88503   | scicar_cell_lines   |
-|  1 | mse      | 0.442196   | procrustes                           | Multimodal Data Integration |     5.87891 |         0.015625   |   0.0487141 | scicar_cell_lines   |
-|  0 | knn_auc  | 0.846586   | procrustes                           | Multimodal Data Integration |     6.05859 |        -0.00390625 |   0.0877079 | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.59586    | mnn_log_scran_pooling                | Multimodal Data Integration |    14.1914  |         0.0703125  |   3.90184   | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.552441   | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     5.85156 |         0.00390625 |   0.2584    | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.549842   | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |     6.13672 |         0.132812   |   0.250555  | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.41964    | mnn_log_cpm                          | Multimodal Data Integration |    14.1328  |         0.414062   |   3.90117   | scicar_mouse_kidney |
-|  1 | mse      | 1.03358    | mnn_log_scran_pooling                | Multimodal Data Integration |    14.1914  |         0.0703125  |   3.90184   | scicar_mouse_kidney |
-|  1 | mse      | 1.00711    | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |     6.13672 |         0.132812   |   0.250555  | scicar_mouse_kidney |
-|  1 | mse      | 1.004      | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     5.85156 |         0.00390625 |   0.2584    | scicar_mouse_kidney |
-|  1 | mse      | 1.00367    | mnn_log_cpm                          | Multimodal Data Integration |    14.1328  |         0.414062   |   3.90117   | scicar_mouse_kidney |
-|  1 | mse      | 0.185888   | procrustes                           | Multimodal Data Integration |     6.05859 |        -0.00390625 |   0.0877079 | scicar_mouse_kidney |
+|    | metric   |       value | method                               | task                        |   memory_mb |   memory_leaked_mb |   runtime_s | dataset             |
+|---:|:---------|------------:|:-------------------------------------|:----------------------------|------------:|-------------------:|------------:|:--------------------|
+|  0 | accuracy | 0.96673     | mlp_scran                            | Label Projection            |    11480.3  |         1583.9     |   8032.8    | pancreas_batch      |
+|  0 | accuracy | 0.962402    | logistic_regression_scran            | Label Projection            |     9715.58 |         2859.99    |   6131.92   | pancreas_batch      |
+|  0 | accuracy | 0.96132     | mlp_log_cpm                          | Label Projection            |    10374.1  |         1193.23    |   1247.76   | pancreas_batch      |
+|  0 | accuracy | 0.957533    | logistic_regression_log_cpm          | Label Projection            |     7388.76 |         1234.49    |   3832.58   | pancreas_batch      |
+|  1 | f1       | 0.967599    | mlp_scran                            | Label Projection            |    11480.3  |         1583.9     |   8032.8    | pancreas_batch      |
+|  1 | f1       | 0.963136    | logistic_regression_scran            | Label Projection            |     9715.58 |         2859.99    |   6131.92   | pancreas_batch      |
+|  1 | f1       | 0.961816    | mlp_log_cpm                          | Label Projection            |    10374.1  |         1193.23    |   1247.76   | pancreas_batch      |
+|  1 | f1       | 0.957188    | logistic_regression_log_cpm          | Label Projection            |     7388.76 |         1234.49    |   3832.58   | pancreas_batch      |
+|  0 | accuracy | 0.988654    | mlp_scran                            | Label Projection            |    11596    |         -129.852   |   2042.24   | pancreas_random     |
+|  0 | accuracy | 0.98804     | mlp_log_cpm                          | Label Projection            |    11859.4  |         1192.83    |   1125.12   | pancreas_random     |
+|  0 | accuracy | 0.985281    | logistic_regression_scran            | Label Projection            |    11829.9  |         -366.125   |   2839.29   | pancreas_random     |
+|  0 | accuracy | 0.984667    | logistic_regression_log_cpm          | Label Projection            |    12093.3  |         1193.82    |   1216.17   | pancreas_random     |
+|  1 | f1       | 0.988574    | mlp_scran                            | Label Projection            |    11596    |         -129.852   |   2042.24   | pancreas_random     |
+|  1 | f1       | 0.987946    | mlp_log_cpm                          | Label Projection            |    11859.4  |         1192.83    |   1125.12   | pancreas_random     |
+|  1 | f1       | 0.985162    | logistic_regression_scran            | Label Projection            |    11829.9  |         -366.125   |   2839.29   | pancreas_random     |
+|  1 | f1       | 0.984502    | logistic_regression_log_cpm          | Label Projection            |    12093.3  |         1193.82    |   1216.17   | pancreas_random     |
+|  0 | accuracy | 0.250487    | logistic_regression_scran            | Label Projection            |    14136.6  |          267.969   |   2515.71   | zebrafish_labels    |
+|  0 | accuracy | 0.241144    | logistic_regression_log_cpm          | Label Projection            |     6784.05 |          377.191   |    476.718  | zebrafish_labels    |
+|  0 | accuracy | 0.186259    | mlp_log_cpm                          | Label Projection            |     6371.76 |          376.219   |     96.3792 | zebrafish_labels    |
+|  0 | accuracy | 0.182886    | mlp_scran                            | Label Projection            |    13841.3  |          898.965   |   1319.6    | zebrafish_labels    |
+|  1 | f1       | 0.296262    | logistic_regression_scran            | Label Projection            |    14136.6  |          267.969   |   2515.71   | zebrafish_labels    |
+|  1 | f1       | 0.274748    | logistic_regression_log_cpm          | Label Projection            |     6784.05 |          377.191   |    476.718  | zebrafish_labels    |
+|  1 | f1       | 0.199748    | mlp_log_cpm                          | Label Projection            |     6371.76 |          376.219   |     96.3792 | zebrafish_labels    |
+|  1 | f1       | 0.197855    | mlp_scran                            | Label Projection            |    13841.3  |          898.965   |   1319.6    | zebrafish_labels    |
+|  0 | accuracy | 0.841637    | logistic_regression_scran            | Label Projection            |    14185.7  |          301.129   |   1237.9    | zebrafish_random    |
+|  0 | accuracy | 0.838929    | mlp_scran                            | Label Projection            |    13922.1  |          603.562   |   1101.95   | zebrafish_random    |
+|  0 | accuracy | 0.82833     | logistic_regression_log_cpm          | Label Projection            |     6540.18 |          376.273   |     50.3583 | zebrafish_random    |
+|  0 | accuracy | 0.819975    | mlp_log_cpm                          | Label Projection            |     6183.93 |          376.273   |     64.0222 | zebrafish_random    |
+|  1 | f1       | 0.839594    | logistic_regression_scran            | Label Projection            |    14185.7  |          301.129   |   1237.9    | zebrafish_random    |
+|  1 | f1       | 0.838426    | mlp_scran                            | Label Projection            |    13922.1  |          603.562   |   1101.95   | zebrafish_random    |
+|  1 | f1       | 0.825164    | logistic_regression_log_cpm          | Label Projection            |     6540.18 |          376.273   |     50.3583 | zebrafish_random    |
+|  1 | f1       | 0.819633    | mlp_log_cpm                          | Label Projection            |     6183.93 |          376.273   |     64.0222 | zebrafish_random    |
+|  0 | knn_auc  | 0.0192371   | mnn_log_scran_pooling                | Multimodal Data Integration |   392598    |          469.57    |    299.433  | scicar_cell_lines   |
+|  0 | knn_auc  | 0.00400918  | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    10403    |          933.652   |    355.739  | scicar_cell_lines   |
+|  0 | knn_auc  | 0.00269102  | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     7808.71 |          688.152   |    143.401  | scicar_cell_lines   |
+|  0 | knn_auc  | 0.00183253  | procrustes                           | Multimodal Data Integration |     5452.34 |            0.34375 |     17.5809 | scicar_cell_lines   |
+|  0 | knn_auc  | 0.00158035  | mnn_log_cpm                          | Multimodal Data Integration |   358310    |          134.586   |    101.913  | scicar_cell_lines   |
+|  1 | mse      | 1.06542     | mnn_log_scran_pooling                | Multimodal Data Integration |   392598    |          469.57    |    299.433  | scicar_cell_lines   |
+|  1 | mse      | 1.00051     | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     7808.71 |          688.152   |    143.401  | scicar_cell_lines   |
+|  1 | mse      | 1.00051     | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    10403    |          933.652   |    355.739  | scicar_cell_lines   |
+|  1 | mse      | 0.999424    | mnn_log_cpm                          | Multimodal Data Integration |   358310    |          134.586   |    101.913  | scicar_cell_lines   |
+|  1 | mse      | 0.890782    | procrustes                           | Multimodal Data Integration |     5452.34 |            0.34375 |     17.5809 | scicar_cell_lines   |
+|  0 | knn_auc  | 0.019729    | mnn_log_scran_pooling                | Multimodal Data Integration |   429002    |          736.094   |    473.523  | scicar_mouse_kidney |
+|  0 | knn_auc  | 0.000440322 | procrustes                           | Multimodal Data Integration |     6056.96 |           30.9297  |     37.9718 | scicar_mouse_kidney |
+|  0 | knn_auc  | 0.000314393 | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |    22236.3  |         3897.51    |   1416.68   | scicar_mouse_kidney |
+|  0 | knn_auc  | 0.000131428 | mnn_log_cpm                          | Multimodal Data Integration |   372573    |          136.637   |    274.892  | scicar_mouse_kidney |
+|  0 | knn_auc  | 9.31453e-05 | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    22347.9  |         3370.47    |   1796.5    | scicar_mouse_kidney |
+|  1 | mse      | 1.04866     | mnn_log_cpm                          | Multimodal Data Integration |   372573    |          136.637   |    274.892  | scicar_mouse_kidney |
+|  1 | mse      | 1.04403     | mnn_log_scran_pooling                | Multimodal Data Integration |   429002    |          736.094   |    473.523  | scicar_mouse_kidney |
+|  1 | mse      | 1.00022     | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    22347.9  |         3370.47    |   1796.5    | scicar_mouse_kidney |
+|  1 | mse      | 1.00022     | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |    22236.3  |         3897.51    |   1416.68   | scicar_mouse_kidney |
+|  1 | mse      | 0.942629    | procrustes                           | Multimodal Data Integration |     6056.96 |           30.9297  |     37.9718 | scicar_mouse_kidney |
