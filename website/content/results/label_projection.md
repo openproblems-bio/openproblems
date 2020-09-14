@@ -44,7 +44,7 @@ Here, we compare methods for annotation based on a reference dataset. The datase
 ## The metrics
 Metrics for label projection aim to characterize how well each classifer correctly assigns cell type labels to cells in the test set.
 
-* **Metric 1**: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-* **Metric 2**: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+* **Accuracy**: Average number of correctly applied labels.
+* **F1**: [From sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html): The F1 score can be interpreted as a weighted average of the precision and recall, where an F1 score reaches its best value at 1 and worst score at 0. 
 
 ## The results
