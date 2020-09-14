@@ -39,7 +39,7 @@ def save_result(result, task, dataset_name):
     for i in range(len(result)):
         del result[i]["Memory leaked (GB)"]
     result = {
-        "name": task._task_name,
+        "name": dataset_name,
         "headers": {
             "names": ["Rank"]
             + [metric.metadata["metric_name"] for metric in task.METRICS]
@@ -70,6 +70,18 @@ def evaluate_dataset(task, dataset):
         result.append(r)
 
     del adata
+
+    rankings = np.zeros(len(results))
+    for metric in task.METRICS:
+        sorted_order = np.argsort([r[metric.metadata["metric_name"]] for r in result])
+        if metric.metadata["maximize"]:
+            sorted_order = sorted_order[::-1]
+        rankings += np.argsort(sorted_order)
+
+    final_ranking = np.argsort(np.argsort(rankings))
+    for i, rank in enumerate(final_ranking):
+        result[i]["Rank"] = rank
+
     save_result(result, task, dataset.__name__)
     return result
 
