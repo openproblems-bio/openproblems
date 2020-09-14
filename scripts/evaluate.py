@@ -12,7 +12,7 @@ def evaluate_method(task, adata, method):
         "metrics": dict(),
     }
     for metric in task.METRICS:
-        result["metrics"][metric.__name__] = metric(adata)
+        result["metrics"][metric.__name__] = float(metric(adata))
 
     del adata
     result["method"] = method.metadata["method_name"]
@@ -20,9 +20,9 @@ def evaluate_method(task, adata, method):
     result["paper_url"] = method.metadata["paper_url"]
     result["paper_year"] = method.metadata["paper_year"]
     result["code_url"] = method.metadata["code_url"]
-    result["memory_mb"] = output["memory_mb"]
-    result["memory_leaked_mb"] = output["memory_leaked_mb"]
-    result["runtime_s"] = output["runtime_s"]
+    result["memory_mb"] = float(output["memory_mb"])
+    result["memory_leaked_mb"] = float(output["memory_leaked_mb"])
+    result["runtime_s"] = float(output["runtime_s"])
     return result
 
 
