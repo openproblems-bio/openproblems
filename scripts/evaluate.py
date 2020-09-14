@@ -1,5 +1,6 @@
 import json
 import os
+import copy
 import openproblems
 import openproblems.test.utils
 
@@ -12,17 +13,17 @@ def evaluate_method(task, adata, method):
         "metrics": dict(),
     }
     for metric in task.METRICS:
-        result["metrics"][metric.__name__] = float(metric(adata))
+        result[metric.metadata["metric_name"]] = float(metric(adata))
 
     del adata
-    result["method"] = method.metadata["method_name"]
-    result["paper_name"] = method.metadata["paper_name"]
-    result["paper_url"] = method.metadata["paper_url"]
-    result["paper_year"] = method.metadata["paper_year"]
-    result["code_url"] = method.metadata["code_url"]
-    result["memory_mb"] = float(output["memory_mb"])
-    result["memory_leaked_mb"] = float(output["memory_leaked_mb"])
-    result["runtime_s"] = float(output["runtime_s"])
+    result["Name"] = method.metadata["method_name"]
+    result["Paper"] = method.metadata["paper_name"]
+    result["Paper URL"] = method.metadata["paper_url"]
+    result["Year"] = method.metadata["paper_year"]
+    result["Code"] = method.metadata["code_url"]
+    result["Memory (GB)"] = float(output["memory_mb"]) / 1024
+    result["Memory leaked (GB)"] = float(output["memory_leaked_mb"]) / 1024
+    result["Runtime (min)"] = float(output["runtime_s"]) / 60
     return result
 
 
@@ -33,8 +34,22 @@ def mkdir(dir):
         pass
 
 
-def save_result(result, task_name, dataset_name):
-    results_dir = os.path.join("..", "website", "data", "results", task_name)
+def save_result(result, task, dataset_name):
+    result = copy.copy(result)
+    del result["memory_leaked_gb"]
+    result = {
+        "name": task._task_name,
+        "headers": {
+            "names": ["Rank"]
+            + [metric.metadata["metric_name"] for metric in task.METRICS]
+            + ["Memory (GB)", "Runtime (min)", "Name", "Paper", "Code", "Year"],
+            "fixed": ["Name", "Paper", "Website"],
+        },
+        "results": result,
+    }
+    results_dir = os.path.join(
+        "..", "website", "data", "results", task.__name__.split(".")[-1]
+    )
     mkdir(results_dir)
     with open(
         os.path.join(
@@ -51,10 +66,10 @@ def evaluate_dataset(task, dataset):
     result = []
     for method in task.METHODS:
         r = evaluate_method(task, adata.copy(), method)
-        save_result(r, task.__name__.split(".")[-1], dataset.__name__)
         result.append(r)
 
     del adata
+    save_result(result, task, dataset.__name__)
     return result
 
 
