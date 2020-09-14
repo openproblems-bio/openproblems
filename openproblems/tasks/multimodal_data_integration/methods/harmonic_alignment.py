@@ -4,17 +4,21 @@ from ....tools.normalize import sqrt_cpm, log_cpm, log_scran_pooling
 from ....tools.decorators import method
 
 
-def _harmonic_alignment(adata, n_svd=100):
+def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
     import harmonicalignment
 
     if min(adata.X.shape) <= n_svd:
         n_svd = min(adata.X.shape) - 1
     if min(adata.obsm["mode2"].shape) <= n_svd:
         n_svd = min(adata.obsm["mode2"].shape) - 1
+    if adata.X.shape[0] <= n_eigenvectors:
+        n_eigenvectors = None
+    if adata.X.shape[0] <= n_pca_XY:
+        n_pca_XY = None
     X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
     Y_pca = TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
     ha_op = harmonicalignment.HarmonicAlignment(
-        n_filters=8, n_pca_XY=100, n_eigenvectors=100
+        n_filters=8, n_pca_XY=n_pca_XY, n_eigenvectors=n_eigenvectors
     )
     ha_op.align(X_pca, Y_pca)
     XY_aligned = ha_op.diffusion_map()
