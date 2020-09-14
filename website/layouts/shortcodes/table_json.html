@@ -1,7 +1,7 @@
 {{ $dataset := .Get "dataset" }}
 {{ $task := .Get "task" }}
 {{ $dataFile := index (index .Site.Data.results $task) $dataset }}
-{{ $id := .Get "id" }}
+{{ $id := .Get "dataset" }}
 {{ $.Scratch.Set "count" 0 }}
 
 <script>
@@ -52,17 +52,20 @@
   <tr>
     {{ range $attr := $dataFile.headers.names }}
       {{ $val := index $method $attr }}
-      {{ if (eq $attr "Paper") }}
+      {{ if or (eq $attr "Paper") (eq $attr "Name") }}
       <td>
       {{ else }}
       <td class="text-center">
       {{ end }}
         {{ if (eq $attr "Paper" )}}
           <a href='{{ index $method "Paper URL"}}'>{{ substr $val 0 20 }}...</a>
+
         {{ else if (eq $attr "Code")}}
           <a href='{{ $val }}'><i class="fas fa-code"></i></a>
         {{ else if (eq $attr "Rank")}}
           <strong>{{ $val }}</strong>
+        {{ else if not (in "Name Paper Code Year" $attr) }}
+           {{ lang.NumFmt 2 $val }}
         {{ else }}
           {{ $val }}
         {{ end }}
