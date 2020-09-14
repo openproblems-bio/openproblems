@@ -21,7 +21,7 @@ def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
         n_filters=8, n_pca_XY=n_pca_XY, n_eigenvectors=n_eigenvectors
     )
     ha_op.align(X_pca, Y_pca)
-    XY_aligned = ha_op.diffusion_map()
+    XY_aligned = ha_op.diffusion_map(n_eigenvectors=n_eigenvectors)
     adata.obsm["aligned"] = XY_aligned[: X_pca.shape[0]]
     adata.obsm["mode2_aligned"] = XY_aligned[X_pca.shape[0] :]
 
