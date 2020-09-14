@@ -3,13 +3,13 @@
 # Any elements can be added in the body: https://sourcethemes.com/academic/docs/writing-markdown-latex/
 # Add more sections by duplicating this file and customizing to your requirements.
 
-widget = "blank"  # See https://sourcethemes.com/academic/docs/page-builder/
+widget = "result"  # See https://sourcethemes.com/academic/docs/page-builder/
 headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
 weight = 20  # Order that this section will appear.
 
 title = "Multimodal Data Integration"
-subtitle = "Realigning multimodal measurements of the same cell using various technologies"
+subtitle = "*Realigning multimodal measurements of the same cell*"
 
 [design]
   # Choose how many columns the section has. Valid values: 1 or 2.
@@ -31,25 +31,23 @@ subtitle = "Realigning multimodal measurements of the same cell using various te
  css_class = ""
 
 +++
-|    | metric   |       value | method                               | task                        |   memory_mb |   memory_leaked_mb |   runtime_s | dataset             |
-|---:|:---------|------------:|:-------------------------------------|:----------------------------|------------:|-------------------:|------------:|:--------------------|
-|  0 | knn_auc  | 0.00158035  | mnn_log_cpm                          | Multimodal Data Integration |   358310    |          134.586   |    101.913  | scicar_cell_lines   |
-|  0 | knn_auc  | 0.00183253  | procrustes                           | Multimodal Data Integration |     5452.34 |            0.34375 |     17.5809 | scicar_cell_lines   |
-|  0 | knn_auc  | 0.00269102  | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     7808.71 |          688.152   |    143.401  | scicar_cell_lines   |
-|  0 | knn_auc  | 0.00400918  | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    10403    |          933.652   |    355.739  | scicar_cell_lines   |
-|  0 | knn_auc  | 0.0192371   | mnn_log_scran_pooling                | Multimodal Data Integration |   392598    |          469.57    |    299.433  | scicar_cell_lines   |
-|  1 | mse      | 0.890782    | procrustes                           | Multimodal Data Integration |     5452.34 |            0.34375 |     17.5809 | scicar_cell_lines   |
-|  1 | mse      | 0.999424    | mnn_log_cpm                          | Multimodal Data Integration |   358310    |          134.586   |    101.913  | scicar_cell_lines   |
-|  1 | mse      | 1.00051     | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    10403    |          933.652   |    355.739  | scicar_cell_lines   |
-|  1 | mse      | 1.00051     | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |     7808.71 |          688.152   |    143.401  | scicar_cell_lines   |
-|  1 | mse      | 1.06542     | mnn_log_scran_pooling                | Multimodal Data Integration |   392598    |          469.57    |    299.433  | scicar_cell_lines   |
-|  0 | knn_auc  | 9.31453e-05 | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    22347.9  |         3370.47    |   1796.5    | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.000131428 | mnn_log_cpm                          | Multimodal Data Integration |   372573    |          136.637   |    274.892  | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.000314393 | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |    22236.3  |         3897.51    |   1416.68   | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.000440322 | procrustes                           | Multimodal Data Integration |     6056.96 |           30.9297  |     37.9718 | scicar_mouse_kidney |
-|  0 | knn_auc  | 0.019729    | mnn_log_scran_pooling                | Multimodal Data Integration |   429002    |          736.094   |    473.523  | scicar_mouse_kidney |
-|  1 | mse      | 0.942629    | procrustes                           | Multimodal Data Integration |     6056.96 |           30.9297  |     37.9718 | scicar_mouse_kidney |
-|  1 | mse      | 1.00022     | harmonic_alignment_sqrt_cpm          | Multimodal Data Integration |    22236.3  |         3897.51    |   1416.68   | scicar_mouse_kidney |
-|  1 | mse      | 1.00022     | harmonic_alignment_log_scran_pooling | Multimodal Data Integration |    22347.9  |         3370.47    |   1796.5    | scicar_mouse_kidney |
-|  1 | mse      | 1.04403     | mnn_log_scran_pooling                | Multimodal Data Integration |   429002    |          736.094   |    473.523  | scicar_mouse_kidney |
-|  1 | mse      | 1.04866     | mnn_log_cpm                          | Multimodal Data Integration |   372573    |          136.637   |    274.892  | scicar_mouse_kidney |
+## The task
+
+Several recently described technologies allow for simultaneous measurement of different aspects of cell state. For example, [sci-CAR](https://doi.org/10.1126/science.aau0730) jointly profiles RNA expression and chromatin accessibility on the same cell and [CITE-seq](https://doi.org/10.1038/nmeth.4380) measures surface protein abundance and RNA expression from each cell. However, these joint profiling methods have several tradeoffs compared to unimodal measurements.
+
+Joint methods can be more expensive or lower throughput or more noisy than measuring a single modality at a time. Therefore it is useful to develop methods that are capable of integrating measurements of the same biological system but obtained using different technologies.
+
+Here the goal is to learn a latent space where observations from the same cell acquired using different modalities. A perfect result has each of the paired observations sharing the same coordinates in the latent space.
+
+## The metrics
+Metrics for multimodal data integration aim to characterize how well the aligned datasets correspond to the ground truth.
+
+* **kNN AUC**: Let $f(i) ∈ F$ be the scRNA-seq measurement of cell $i$, and $g(i) ∈ G$ be the scATAC- seq measurement of cell $i$. kNN-AUC calculates the average percentage overlap of neighborhoods of $f(i)$ in $F$ with neighborhoods of $g(i)$ in $G$. Higher is better.
+* **MSE**: Mean squared error (MSE) is the average distance between each pair of matched observations of the same cell in the learned latent space. Lower is better.
+
+
+## The results
+
+{{< table_json task="multimodal_data_integration" dataset="scicar_cell_lines" id="example">}}
+
+<br>
