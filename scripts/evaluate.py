@@ -3,6 +3,8 @@ import os
 import openproblems
 import openproblems.test.utils
 
+RESULTS_DIR = os.path.join("..", "website", "data", "results")
+
 
 def evaluate_method(task, adata, method):
     output = openproblems.tools.decorators.profile(method)(adata)
@@ -24,12 +26,16 @@ def evaluate_method(task, adata, method):
     return result
 
 
-def save_result(result, task_name, dataset_name):
-    results_dir = os.path.join("..", "website", "data", "results", task_name)
+def mkdir(dir):
     try:
-        os.mkdir(results_dir)
+        os.mkdir(dir)
     except OSError:
         pass
+
+
+def save_result(result, task_name, dataset_name):
+    results_dir = os.path.join("..", "website", "data", "results", task_name)
+    mkdir(results_dir)
     with open(
         os.path.join(
             results_dir,
@@ -64,6 +70,7 @@ def main():
     openproblems.test.utils.ignore_numba_warnings()
 
     results = dict()
+    mkdir(RESULTS_DIR)
     for task in openproblems.TASKS:
         task_name = task.__name__.split(".")[-1]
         result = evaluate_task(task).sort_values(["dataset", "metric", "value"])
