@@ -44,7 +44,7 @@ def _logistic_regression(adata, max_iter=1000, n_pca=100):
 
 @method(
     method_name="Logistic regression (log CPM)",
-    paper_name="Generalized Procrustes analysis",
+    paper_name="Applied Logistic Regression",
     paper_url="https://books.google.com/books?id=64JYAwAAQBAJ",
     paper_year=2013,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
@@ -56,7 +56,7 @@ def logistic_regression_log_cpm(adata):
 
 @method(
     method_name="Logistic regression (log scran)",
-    paper_name="Generalized Procrustes analysis",
+    paper_name="Applied Logistic Regression",
     paper_url="https://books.google.com/books?id=64JYAwAAQBAJ",
     paper_year=2013,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
