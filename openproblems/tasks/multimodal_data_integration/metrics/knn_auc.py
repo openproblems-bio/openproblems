@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
+from sklearn.decomposition import TruncatedSVD
 
 
 def knn_auc(adata, n_neighbors=100, n_svd=100):
