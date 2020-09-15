@@ -54,7 +54,5 @@ setup(
     test_suite="nose2.collector.collector",
     long_description=readme,
     long_description_content_type="text/markdown",
-    keywords=[
-        "computational-biology",
-    ],
+    keywords=["computational-biology",],
 )

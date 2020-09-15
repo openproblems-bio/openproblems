@@ -57,11 +57,7 @@ def save_result(result, task, dataset):
     )
     mkdir(results_dir)
     with open(
-        os.path.join(
-            results_dir,
-            "{}.json".format(dataset.__name__),
-        ),
-        "w",
+        os.path.join(results_dir, "{}.json".format(dataset.__name__),), "w",
     ) as handle:
         json.dump(result, handle)
 
