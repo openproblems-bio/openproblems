@@ -10,6 +10,7 @@ install_requires = [
     "scipy",
     "scanpy",
     "decorator",
+    "memory-profiler",
 ]
 
 methods_requires = [
