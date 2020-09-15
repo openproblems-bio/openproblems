@@ -59,7 +59,7 @@ def save_result(result, task, dataset):
         ),
         "w",
     ) as handle:
-        json.dump(result, handle)
+        json.dump(result, handle, indent=4)
 
 
 def evaluate_dataset(task, dataset):
@@ -105,7 +105,7 @@ def main():
         results[task_name] = result
 
     with open("../results.json", "w") as handle:
-        json.dump(results, handle)
+        json.dump(results, handle, indent=4)
     return results
 
 
