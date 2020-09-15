@@ -7,6 +7,7 @@ import numpy as np
 from scipy import sparse
 
 from ....tools.normalize import log_cpm, log_scran_pooling
+from ....tools.decorators import method
 
 
 def _logistic_regression(adata, max_iter=1000, n_pca=100):
@@ -41,11 +42,25 @@ def _logistic_regression(adata, max_iter=1000, n_pca=100):
     ]
 
 
+@method(
+    method_name="Logistic regression (log CPM)",
+    paper_name="Applied Logistic Regression",
+    paper_url="https://books.google.com/books?id=64JYAwAAQBAJ",
+    paper_year=2013,
+    code_url="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+)
 def logistic_regression_log_cpm(adata):
     log_cpm(adata)
     _logistic_regression(adata)
 
 
+@method(
+    method_name="Logistic regression (log scran)",
+    paper_name="Applied Logistic Regression",
+    paper_url="https://books.google.com/books?id=64JYAwAAQBAJ",
+    paper_year=2013,
+    code_url="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+)
 def logistic_regression_scran(adata):
     log_scran_pooling(adata)
     _logistic_regression(adata)

@@ -7,6 +7,7 @@ import numpy as np
 from scipy import sparse
 
 from ....tools.normalize import log_cpm, log_scran_pooling
+from ....tools.decorators import method
 
 
 def _mlp(adata, n_pca=100):
@@ -41,11 +42,25 @@ def _mlp(adata, n_pca=100):
     ]
 
 
+@method(
+    method_name="Multilayer perceptron (log CPM)",
+    paper_name="Connectionist learning procedures",
+    paper_url="https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
+    paper_year=1990,
+    code_url="https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+)
 def mlp_log_cpm(adata):
     log_cpm(adata)
     _mlp(adata)
 
 
+@method(
+    method_name="Multilayer perceptron (log scran)",
+    paper_name="Connectionist learning procedures",
+    paper_url="https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
+    paper_year=1990,
+    code_url="https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+)
 def mlp_scran(adata):
     log_scran_pooling(adata)
     _mlp(adata)
