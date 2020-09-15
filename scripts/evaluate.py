@@ -65,7 +65,7 @@ def save_result(result, task, dataset_name):
 
 
 def evaluate_dataset(task, dataset):
-    adata = dataset(test=False)
+    adata = dataset(test=True)
     result = []
     for method in task.METHODS:
         r = evaluate_method(task, adata.copy(), method)
