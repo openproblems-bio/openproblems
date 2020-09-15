@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
 from ....tools.decorators import metric
+from sklearn.decomposition import TruncatedSVD
 
 
 @metric(metric_name="kNN Area Under the Curve", maximize=True)
