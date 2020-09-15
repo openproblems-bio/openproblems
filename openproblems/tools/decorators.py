@@ -60,6 +60,7 @@ def metric(metric_name, maximize):
 
     return decorator
 
+
 def dataset(dataset_name):
     def decorator(func):
         @functools.wraps(func)
