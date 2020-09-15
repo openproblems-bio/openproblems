@@ -1,7 +1,9 @@
 import numpy as np
 from ....data.pancreas import load_pancreas
+from ....tools.decorators import dataset
 
 
+@dataset("Pancreas (by batch)")
 def pancreas_batch(test=False):
     adata = load_pancreas(test=test)
 
@@ -15,6 +17,7 @@ def pancreas_batch(test=False):
     return adata
 
 
+@dataset("Pancreas (random split)")
 def pancreas_random(test=False):
     adata = load_pancreas(test=test)
 

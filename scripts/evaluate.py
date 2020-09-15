@@ -1,6 +1,8 @@
+import numpy as np
 import json
 import os
 import copy
+
 import openproblems
 import openproblems.test.utils
 
@@ -9,9 +11,7 @@ RESULTS_DIR = os.path.join("..", "website", "data", "results")
 
 def evaluate_method(task, adata, method):
     output = openproblems.tools.decorators.profile(method)(adata)
-    result = {
-        "metrics": dict(),
-    }
+    result = dict()
     for metric in task.METRICS:
         result[metric.metadata["metric_name"]] = float(metric(adata))
 
@@ -34,12 +34,12 @@ def mkdir(dir):
         pass
 
 
-def save_result(result, task, dataset_name):
+def save_result(result, task, dataset):
     result = copy.copy(result)
     for i in range(len(result)):
         del result[i]["Memory leaked (GB)"]
     result = {
-        "name": task._task_name,
+        "name": dataset.metadata["dataset_name"],
         "headers": {
             "names": ["Rank"]
             + [metric.metadata["metric_name"] for metric in task.METRICS]
@@ -55,7 +55,7 @@ def save_result(result, task, dataset_name):
     with open(
         os.path.join(
             results_dir,
-            "{}.json".format(dataset_name),
+            "{}.json".format(dataset.__name__),
         ),
         "w",
     ) as handle:
@@ -70,7 +70,19 @@ def evaluate_dataset(task, dataset):
         result.append(r)
 
     del adata
-    save_result(result, task, dataset.__name__)
+
+    rankings = np.zeros(len(result))
+    for metric in task.METRICS:
+        sorted_order = np.argsort([r[metric.metadata["metric_name"]] for r in result])
+        if metric.metadata["maximize"]:
+            sorted_order = sorted_order[::-1]
+        rankings += np.argsort(sorted_order)
+
+    final_ranking = np.argsort(np.argsort(rankings))
+    for i, rank in enumerate(final_ranking):
+        result[i]["Rank"] = int(rank) + 1
+
+    save_result(result, task, dataset)
     return result
 
 
