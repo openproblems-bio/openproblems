@@ -83,9 +83,7 @@ def profile(func):
             pass
 
         base_memory = memory_usage(
-            (dummy, tuple(), dict()),
-            interval=0.1,
-            max_usage=True,
+            (dummy, tuple(), dict()), interval=0.1, max_usage=True,
         )
 
         def apply_func(*args, **kwargs):
@@ -105,9 +103,7 @@ def profile(func):
         utils.garbage_collection()
 
         post_memory = memory_usage(
-            (dummy, tuple(), dict()),
-            interval=0.1,
-            max_usage=True,
+            (dummy, tuple(), dict()), interval=0.1, max_usage=True,
         )
         output["memory_leaked_mb"] = post_memory - base_memory
         return output
