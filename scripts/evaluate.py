@@ -82,7 +82,7 @@ def evaluate_dataset(task, dataset):
 
     final_ranking = np.argsort(np.argsort(rankings))
     for i, rank in enumerate(final_ranking):
-        result[i]["Rank"] = rank
+        result[i]["Rank"] = int(rank)
 
     save_result(result, task, dataset.__name__)
     return result
