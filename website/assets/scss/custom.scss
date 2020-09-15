@@ -33,3 +33,13 @@
 .contributing-hero section{
   filter: blur(8px);
 }
+
+.frontpage-banner img{
+  width: 800px;
+}
+
+@media only screen and (max-width: 770px) {
+  .frontpage-banner img{
+    width: 10000px;
+  }
+}
