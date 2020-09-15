@@ -1,7 +1,9 @@
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
+from ....tools.decorators import metric
 
 
+@metric(metric_name="kNN Area Under the Curve", maximize=True)
 def knn_auc(adata, n_neighbors=100, n_svd=100):
     if min(adata.X.shape) <= n_svd:
         n_svd = min(adata.X.shape) - 1

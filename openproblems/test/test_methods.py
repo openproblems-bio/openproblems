@@ -25,3 +25,19 @@ def test_method(task, dataset, method):
     for metric in task.METRICS:
         m = metric(adata)
         assert isinstance(m, numbers.Number)
+
+
+@parameterized.parameterized.expand(
+    [(method,) for task in openproblems.TASKS for method in task.METHODS],
+    name_func=utils.name_test,
+)
+def test_method_metadata(method):
+    assert hasattr(method, "metadata")
+    for attr in [
+        "method_name",
+        "paper_name",
+        "paper_url",
+        "paper_year",
+        "code_url",
+    ]:
+        assert attr in method.metadata
