@@ -61,6 +61,18 @@ def metric(metric_name, maximize):
     return decorator
 
 
+def dataset(dataset_name):
+    def decorator(func):
+        @functools.wraps(func)
+        def apply_func(*args, **kwargs):
+            return func(*args, **kwargs)
+
+        apply_func.metadata = dict(dataset_name=dataset_name)
+        return apply_func
+
+    return decorator
+
+
 def profile(func):
     @functools.wraps(func)
     def decorated(*args, **kwargs):
