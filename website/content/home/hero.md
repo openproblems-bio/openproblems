@@ -44,10 +44,11 @@ weight = 10  # Order that this section will appear.
 
 [advanced]
  # Custom CSS.
- css_style = "height: 500px;"
+ css_style = ""
 
  # CSS class.
- css_class = "hero"
+ css_class = "frontpage-hero"
 +++
-
-{{< figure src="/img/HCA_logo.png" class="frontpage-banner">}}
+<p class="text-center">
+<img src="/img/HCA_logo.png" class="frontpage-banner"  style="margin: auto" />
+</p>
