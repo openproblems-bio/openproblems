@@ -1,6 +1,8 @@
+import numpy as np
 import json
 import os
 import copy
+
 import openproblems
 import openproblems.test.utils
 
