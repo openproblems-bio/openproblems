@@ -9,11 +9,15 @@ import openproblems.test.utils
 RESULTS_DIR = os.path.join("..", "website", "data", "results")
 
 
+def format_float(x, p=2):
+    return float(np.round(x, p))
+
+
 def evaluate_method(task, adata, method):
     output = openproblems.tools.decorators.profile(method)(adata)
     result = dict()
     for metric in task.METRICS:
-        result[metric.metadata["metric_name"]] = float(metric(adata))
+        result[metric.metadata["metric_name"]] = format_float(metric(adata))
 
     del adata
     result["Name"] = method.metadata["method_name"]
@@ -21,9 +25,9 @@ def evaluate_method(task, adata, method):
     result["Paper URL"] = method.metadata["paper_url"]
     result["Year"] = method.metadata["paper_year"]
     result["Code"] = method.metadata["code_url"]
-    result["Memory (GB)"] = float(output["memory_mb"]) / 1024
-    result["Memory leaked (GB)"] = float(output["memory_leaked_mb"]) / 1024
-    result["Runtime (min)"] = float(output["runtime_s"]) / 60
+    result["Memory (GB)"] = format_float(output["memory_mb"] / 1024)
+    result["Memory leaked (GB)"] = format_float(output["memory_leaked_mb"] / 1024)
+    result["Runtime (min)"] = format_float(output["runtime_s"] / 60)
     return result
 
 
