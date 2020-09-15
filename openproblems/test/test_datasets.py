@@ -24,3 +24,15 @@ def test_task(dataset, task, test):
         assert X.shape[0] < 600
         assert X.shape[1] < 1500
     assert task.checks.check_dataset(X)
+
+
+@parameterized.parameterized.expand(
+    [(dataset,) for task in openproblems.TASKS for dataset in task.DATASETS],
+    name_func=utils.name_test,
+)
+def test_dataset_metadata(dataset):
+    assert hasattr(dataset, "metadata")
+    for attr in [
+        "dataset_name",
+    ]:
+        assert attr in dataset.metadata
