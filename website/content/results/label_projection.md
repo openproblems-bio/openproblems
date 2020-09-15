@@ -32,7 +32,6 @@ subtitle = "*Using cell labels from a reference dataset to annotate an unseen da
 
 datafile = "/assets/results/test.csv"
 +++
-
 ## The task
 
 A major challenge for integrating single cell datasets is creating matching cell type annotations for each cell. One of the most common strategies for annotating cell types is referred to as ["cluster-then-annotate"](https://www.nature.com/articles/s41576-018-0088-9) whereby cells are aggregated into clusters based on feature similarity and then manually characterized based on differential gene expression or previously identified marker genes. Recently, methods have emerged to build on this strategy and annotate cells using [known marker genes](https://www.nature.com/articles/s41592-019-0535-3). However, these strategies pose a difficulty for integrating atlas-scale datasets as the particular annotations may not match.
