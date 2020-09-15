@@ -73,7 +73,7 @@ def evaluate_dataset(task, dataset):
 
     del adata
 
-    rankings = np.zeros(len(results))
+    rankings = np.zeros(len(result))
     for metric in task.METRICS:
         sorted_order = np.argsort([r[metric.metadata["metric_name"]] for r in result])
         if metric.metadata["maximize"]:
