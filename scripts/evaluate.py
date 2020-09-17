@@ -21,6 +21,7 @@ def evaluate_method(task, adata, method):
     result["Paper URL"] = method.metadata["paper_url"]
     result["Year"] = method.metadata["paper_year"]
     result["Code"] = method.metadata["code_url"]
+    result["Version"] = method.metadata["code_version"]
     result["Memory (GB)"] = float(output["memory_mb"] / 1024)
     result["Memory leaked (GB)"] = float(output["memory_leaked_mb"] / 1024)
     result["Runtime (min)"] = float(output["runtime_s"] / 60)
