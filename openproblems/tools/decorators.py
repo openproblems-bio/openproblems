@@ -31,7 +31,7 @@ def normalizer(func, *args, **kwargs):
     return normalize
 
 
-def method(method_name, paper_name, paper_url, paper_year, code_url):
+def method(method_name, paper_name, paper_url, paper_year, code_url, code_version):
     def decorator(func):
         @functools.wraps(func)
         def apply_method(*args, **kwargs):
@@ -43,6 +43,7 @@ def method(method_name, paper_name, paper_url, paper_year, code_url):
             paper_url=paper_url,
             paper_year=paper_year,
             code_url=code_url,
+            code_version=code_version,
         )
         return apply_method
 

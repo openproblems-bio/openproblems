@@ -8,6 +8,7 @@ from scipy import sparse
 
 from ....tools.normalize import log_cpm, log_scran_pooling
 from ....tools.decorators import method
+from ....tools.utils import check_version
 
 
 def _mlp(adata, n_pca=100):
@@ -48,6 +49,7 @@ def _mlp(adata, n_pca=100):
     paper_url="https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
     paper_year=1990,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+    code_version=check_version("scikit-learn"),
 )
 def mlp_log_cpm(adata):
     log_cpm(adata)
@@ -60,6 +62,7 @@ def mlp_log_cpm(adata):
     paper_url="https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
     paper_year=1990,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+    code_version=check_version("scikit-learn"),
 )
 def mlp_scran(adata):
     log_scran_pooling(adata)
