@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.decomposition import TruncatedSVD
 from ....tools.normalize import sqrt_cpm, log_cpm, log_scran_pooling
 from ....tools.decorators import method
+from ....tools.utils import check_version
 
 
 def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
@@ -32,6 +33,7 @@ def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
     paper_url="https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
     paper_year=2020,
     code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
+    code_version=check_version("harmonicalignment"),
 )
 def harmonic_alignment_sqrt_cpm(adata, n_svd=100):
     sqrt_cpm(adata)
@@ -45,6 +47,7 @@ def harmonic_alignment_sqrt_cpm(adata, n_svd=100):
     paper_url="https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
     paper_year=2020,
     code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
+    code_version=check_version("harmonicalignment"),
 )
 def harmonic_alignment_log_scran_pooling(adata, n_svd=100):
     log_scran_pooling(adata)
