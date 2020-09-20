@@ -1,1 +1,356 @@
-{"label_projection": {"pancreas_batch": [{"Accuracy": 0.96, "F1 score": 0.96, "Name": "Logistic regression (log CPM)", "Paper": "Applied Logistic Regression", "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ", "Year": 2013, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html", "Memory (GB)": 7.24, "Runtime (min)": 2.74, "Rank": 4}, {"Accuracy": 0.96, "F1 score": 0.96, "Name": "Logistic regression (log scran)", "Paper": "Applied Logistic Regression", "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ", "Year": 2013, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html", "Memory (GB)": 9.47, "Runtime (min)": 20.01, "Rank": 3}, {"Accuracy": 0.97, "F1 score": 0.97, "Name": "Multilayer perceptron (log CPM)", "Paper": "Connectionist learning procedures", "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298", "Year": 1990, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html", "Memory (GB)": 10.19, "Runtime (min)": 2.2, "Rank": 2}, {"Accuracy": 0.97, "F1 score": 0.97, "Name": "Multilayer perceptron (log scran)", "Paper": "Connectionist learning procedures", "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298", "Year": 1990, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html", "Memory (GB)": 11.1, "Runtime (min)": 7.91, "Rank": 1}], "pancreas_random": [{"Accuracy": 0.98, "F1 score": 0.98, "Name": "Logistic regression (log CPM)", "Paper": "Applied Logistic Regression", "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ", "Year": 2013, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html", "Memory (GB)": 11.76, "Runtime (min)": 2.2, "Rank": 4}, {"Accuracy": 0.98, "F1 score": 0.98, "Name": "Logistic regression (log scran)", "Paper": "Applied Logistic Regression", "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ", "Year": 2013, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html", "Memory (GB)": 11.51, "Runtime (min)": 9.44, "Rank": 3}, {"Accuracy": 0.98, "F1 score": 0.98, "Name": "Multilayer perceptron (log CPM)", "Paper": "Connectionist learning procedures", "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298", "Year": 1990, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html", "Memory (GB)": 11.52, "Runtime (min)": 2.4, "Rank": 2}, {"Accuracy": 0.98, "F1 score": 0.98, "Name": "Multilayer perceptron (log scran)", "Paper": "Connectionist learning procedures", "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298", "Year": 1990, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html", "Memory (GB)": 11.22, "Runtime (min)": 8.87, "Rank": 1}], "zebrafish_labels": [{"Accuracy": 0.22, "F1 score": 0.24, "Name": "Logistic regression (log CPM)", "Paper": "Applied Logistic Regression", "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ", "Year": 2013, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html", "Memory (GB)": 6.61, "Runtime (min)": 0.9, "Rank": 2}, {"Accuracy": 0.23, "F1 score": 0.28, "Name": "Logistic regression (log scran)", "Paper": "Applied Logistic Regression", "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ", "Year": 2013, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html", "Memory (GB)": 13.89, "Runtime (min)": 12.55, "Rank": 1}, {"Accuracy": 0.2, "F1 score": 0.21, "Name": "Multilayer perceptron (log CPM)", "Paper": "Connectionist learning procedures", "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298", "Year": 1990, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html", "Memory (GB)": 6.17, "Runtime (min)": 2.15, "Rank": 4}, {"Accuracy": 0.22, "F1 score": 0.23, "Name": "Multilayer perceptron (log scran)", "Paper": "Connectionist learning procedures", "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298", "Year": 1990, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html", "Memory (GB)": 13.57, "Runtime (min)": 12.83, "Rank": 3}], "zebrafish_random": [{"Accuracy": 0.83, "F1 score": 0.82, "Name": "Logistic regression (log CPM)", "Paper": "Applied Logistic Regression", "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ", "Year": 2013, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html", "Memory (GB)": 6.54, "Runtime (min)": 1.59, "Rank": 3}, {"Accuracy": 0.83, "F1 score": 0.83, "Name": "Logistic regression (log scran)", "Paper": "Applied Logistic Regression", "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ", "Year": 2013, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html", "Memory (GB)": 13.91, "Runtime (min)": 13.72, "Rank": 2}, {"Accuracy": 0.82, "F1 score": 0.82, "Name": "Multilayer perceptron (log CPM)", "Paper": "Connectionist learning procedures", "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298", "Year": 1990, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html", "Memory (GB)": 6.19, "Runtime (min)": 2.43, "Rank": 4}, {"Accuracy": 0.83, "F1 score": 0.83, "Name": "Multilayer perceptron (log scran)", "Paper": "Connectionist learning procedures", "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298", "Year": 1990, "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html", "Memory (GB)": 13.58, "Runtime (min)": 12.32, "Rank": 1}]}, "multimodal_data_integration": {"scicar_cell_lines": [{"kNN Area Under the Curve": 0.0, "Mean squared error": 1.01, "Name": "Harmonic Alignment (log scran)", "Paper": "Harmonic Alignment", "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36", "Year": 2020, "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment", "Memory (GB)": 10.11, "Runtime (min)": 2.84, "Rank": 4}, {"kNN Area Under the Curve": 0.0, "Mean squared error": 1.01, "Name": "Harmonic Alignment (sqrt CPM)", "Paper": "Harmonic Alignment", "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36", "Year": 2020, "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment", "Memory (GB)": 4.92, "Runtime (min)": 1.37, "Rank": 5}, {"kNN Area Under the Curve": 0.0, "Mean squared error": 1.0, "Name": "Mutual Nearest Neighbors (log CPM)", "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors", "Paper URL": "https://www.nature.com/articles/nbt.4091", "Year": 2018, "Code": "https://github.com/chriscainx/mnnpy", "Memory (GB)": 353.22, "Runtime (min)": 2.42, "Rank": 2}, {"kNN Area Under the Curve": 0.02, "Mean squared error": 1.059999942779541, "Name": "Mutual Nearest Neighbors (log scran)", "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors", "Paper URL": "https://www.nature.com/articles/nbt.4091", "Year": 2018, "Code": "https://github.com/chriscainx/mnnpy", "Memory (GB)": 388.17, "Runtime (min)": 3.87, "Rank": 3}, {"kNN Area Under the Curve": 0.0, "Mean squared error": 0.89, "Name": "Procrustes", "Paper": "Generalized Procrustes analysis", "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf", "Year": 1975, "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html", "Memory (GB)": 5.39, "Runtime (min)": 0.38, "Rank": 1}], "scicar_mouse_kidney": [{"kNN Area Under the Curve": 0.0, "Mean squared error": 1.01, "Name": "Harmonic Alignment (log scran)", "Paper": "Harmonic Alignment", "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36", "Year": 2020, "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment", "Memory (GB)": 11.82, "Runtime (min)": 8.74, "Rank": 3}, {"kNN Area Under the Curve": 0.0, "Mean squared error": 1.01, "Name": "Harmonic Alignment (sqrt CPM)", "Paper": "Harmonic Alignment", "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36", "Year": 2020, "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment", "Memory (GB)": 5.37, "Runtime (min)": 5.82, "Rank": 4}, {"kNN Area Under the Curve": 0.0, "Mean squared error": 1.0499999523162842, "Name": "Mutual Nearest Neighbors (log CPM)", "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors", "Paper URL": "https://www.nature.com/articles/nbt.4091", "Year": 2018, "Code": "https://github.com/chriscainx/mnnpy", "Memory (GB)": 366.87, "Runtime (min)": 4.47, "Rank": 5}, {"kNN Area Under the Curve": 0.02, "Mean squared error": 1.0499999523162842, "Name": "Mutual Nearest Neighbors (log scran)", "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors", "Paper URL": "https://www.nature.com/articles/nbt.4091", "Year": 2018, "Code": "https://github.com/chriscainx/mnnpy", "Memory (GB)": 427.67, "Runtime (min)": 6.87, "Rank": 2}, {"kNN Area Under the Curve": 0.0, "Mean squared error": 0.94, "Name": "Procrustes", "Paper": "Generalized Procrustes analysis", "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf", "Year": 1975, "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html", "Memory (GB)": 6.05, "Runtime (min)": 0.63, "Rank": 1}]}}
+{
+    "label_projection": {
+        "pancreas_batch": [
+            {
+                "Accuracy": 0.9596970516635109,
+                "F1 score": 0.9600063416180393,
+                "Name": "Logistic regression (log CPM)",
+                "Paper": "Applied Logistic Regression",
+                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
+                "Year": 2013,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 7.2374725341796875,
+                "Runtime (min)": 1.5831143465669204,
+                "Rank": 4
+            },
+            {
+                "Accuracy": 0.967811739248039,
+                "F1 score": 0.9682064994786991,
+                "Name": "Logistic regression (log scran)",
+                "Paper": "Applied Logistic Regression",
+                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
+                "Year": 2013,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 9.527168273925781,
+                "Runtime (min)": 5.874728589047057,
+                "Rank": 1
+            },
+            {
+                "Accuracy": 0.9661888017311333,
+                "F1 score": 0.9665651577828098,
+                "Name": "Multilayer perceptron (log CPM)",
+                "Paper": "Connectionist learning procedures",
+                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
+                "Year": 1990,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 10.13454818725586,
+                "Runtime (min)": 1.3300847699555258,
+                "Rank": 3
+            },
+            {
+                "Accuracy": 0.9667297809034352,
+                "F1 score": 0.9672056967831517,
+                "Name": "Multilayer perceptron (log scran)",
+                "Paper": "Connectionist learning procedures",
+                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
+                "Year": 1990,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 11.146728515625,
+                "Runtime (min)": 5.758964230003767,
+                "Rank": 2
+            }
+        ],
+        "pancreas_random": [
+            {
+                "Accuracy": 0.9888922245571901,
+                "F1 score": 0.9887499402783962,
+                "Name": "Logistic regression (log CPM)",
+                "Paper": "Applied Logistic Regression",
+                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
+                "Year": 2013,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 11.757488250732422,
+                "Runtime (min)": 1.2271473786871259,
+                "Rank": 2
+            },
+            {
+                "Accuracy": 0.9864905433803662,
+                "F1 score": 0.9864989835529059,
+                "Name": "Logistic regression (log scran)",
+                "Paper": "Applied Logistic Regression",
+                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
+                "Year": 2013,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 11.486309051513672,
+                "Runtime (min)": 5.788034617450709,
+                "Rank": 4
+            },
+            {
+                "Accuracy": 0.9882918042629841,
+                "F1 score": 0.9883835211936333,
+                "Name": "Multilayer perceptron (log CPM)",
+                "Paper": "Connectionist learning procedures",
+                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
+                "Year": 1990,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 11.626033782958984,
+                "Runtime (min)": 1.2344469918015724,
+                "Rank": 3
+            },
+            {
+                "Accuracy": 0.9900930651456019,
+                "F1 score": 0.9901755887245616,
+                "Name": "Multilayer perceptron (log scran)",
+                "Paper": "Connectionist learning procedures",
+                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
+                "Year": 1990,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 11.369865417480469,
+                "Runtime (min)": 5.864794119160312,
+                "Rank": 1
+            }
+        ],
+        "zebrafish_labels": [
+            {
+                "Accuracy": 0.22200596859997404,
+                "F1 score": 0.2549479764743082,
+                "Name": "Logistic regression (log CPM)",
+                "Paper": "Applied Logistic Regression",
+                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
+                "Year": 2013,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 6.593021392822266,
+                "Runtime (min)": 0.5692243504958848,
+                "Rank": 3
+            },
+            {
+                "Accuracy": 0.2506163228234073,
+                "F1 score": 0.2956719042134417,
+                "Name": "Logistic regression (log scran)",
+                "Paper": "Applied Logistic Regression",
+                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
+                "Year": 2013,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 13.933712005615234,
+                "Runtime (min)": 9.61343284296648,
+                "Rank": 1
+            },
+            {
+                "Accuracy": 0.24140391851563514,
+                "F1 score": 0.282984354527767,
+                "Name": "Multilayer perceptron (log CPM)",
+                "Paper": "Connectionist learning procedures",
+                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
+                "Year": 1990,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 6.163082122802734,
+                "Runtime (min)": 0.6122496256061519,
+                "Rank": 2
+            },
+            {
+                "Accuracy": 0.23238614246788633,
+                "F1 score": 0.2314563491889015,
+                "Name": "Multilayer perceptron (log scran)",
+                "Paper": "Connectionist learning procedures",
+                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
+                "Year": 1990,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 13.638080596923828,
+                "Runtime (min)": 9.815031126133787,
+                "Rank": 4
+            }
+        ],
+        "zebrafish_random": [
+            {
+                "Accuracy": 0.8305357553460566,
+                "F1 score": 0.8281298071515112,
+                "Name": "Logistic regression (log CPM)",
+                "Paper": "Applied Logistic Regression",
+                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
+                "Year": 2013,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 6.388835906982422,
+                "Runtime (min)": 0.7389369288226589,
+                "Rank": 3
+            },
+            {
+                "Accuracy": 0.8391201042385222,
+                "F1 score": 0.8366001779257939,
+                "Name": "Logistic regression (log scran)",
+                "Paper": "Applied Logistic Regression",
+                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
+                "Year": 2013,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 13.827144622802734,
+                "Runtime (min)": 9.883584061202903,
+                "Rank": 1
+            },
+            {
+                "Accuracy": 0.8257070590940446,
+                "F1 score": 0.8240575530044146,
+                "Name": "Multilayer perceptron (log CPM)",
+                "Paper": "Connectionist learning procedures",
+                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
+                "Year": 1990,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 6.0680084228515625,
+                "Runtime (min)": 0.7117941512648637,
+                "Rank": 4
+            },
+            {
+                "Accuracy": 0.8362075572928642,
+                "F1 score": 0.8355807562815496,
+                "Name": "Multilayer perceptron (log scran)",
+                "Paper": "Connectionist learning procedures",
+                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
+                "Year": 1990,
+                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+                "Version": "0.23.2",
+                "Memory (GB)": 13.44083023071289,
+                "Runtime (min)": 9.718595591187476,
+                "Rank": 2
+            }
+        ]
+    },
+    "multimodal_data_integration": {
+        "scicar_cell_lines": [
+            {
+                "kNN Area Under the Curve": 0.010679050600457934,
+                "Mean squared error": 1.010113474039977,
+                "Name": "Harmonic Alignment (log scran)",
+                "Paper": "Harmonic Alignment",
+                "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
+                "Year": 2020,
+                "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
+                "Version": "0.0",
+                "Memory (GB)": 10.249420166015625,
+                "Runtime (min)": 1.9129597396124154,
+                "Rank": 3
+            },
+            {
+                "kNN Area Under the Curve": 0.006271901446233912,
+                "Mean squared error": 1.0089323752789718,
+                "Name": "Harmonic Alignment (sqrt CPM)",
+                "Paper": "Harmonic Alignment",
+                "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
+                "Year": 2020,
+                "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
+                "Version": "0.0",
+                "Memory (GB)": 4.790855407714844,
+                "Runtime (min)": 0.8887904512618358,
+                "Rank": 4
+            },
+            {
+                "kNN Area Under the Curve": 0.011291355612088265,
+                "Mean squared error": 0.9994030594825745,
+                "Name": "Mutual Nearest Neighbors (log CPM)",
+                "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+                "Paper URL": "https://www.nature.com/articles/nbt.4091",
+                "Year": 2018,
+                "Code": "https://github.com/chriscainx/mnnpy",
+                "Version": "0.1.9.5",
+                "Memory (GB)": 349.63093185424805,
+                "Runtime (min)": 1.483344142131197,
+                "Rank": 2
+            },
+            {
+                "kNN Area Under the Curve": 0.010131299060090207,
+                "Mean squared error": 1.0609958171844482,
+                "Name": "Mutual Nearest Neighbors (log scran)",
+                "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+                "Paper URL": "https://www.nature.com/articles/nbt.4091",
+                "Year": 2018,
+                "Code": "https://github.com/chriscainx/mnnpy",
+                "Version": "0.1.9.5",
+                "Memory (GB)": 383.5002746582031,
+                "Runtime (min)": 2.6429348045339185,
+                "Rank": 5
+            },
+            {
+                "kNN Area Under the Curve": 0.025590476598038484,
+                "Mean squared error": 0.8915140431371498,
+                "Name": "Procrustes",
+                "Paper": "Generalized Procrustes analysis",
+                "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
+                "Year": 1975,
+                "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
+                "Version": "1.5.2",
+                "Memory (GB)": 5.246021270751953,
+                "Runtime (min)": 0.23518443432015676,
+                "Rank": 1
+            }
+        ],
+        "scicar_mouse_kidney": [
+            {
+                "kNN Area Under the Curve": 0.0018600027077181633,
+                "Mean squared error": 1.0091983972603564,
+                "Name": "Harmonic Alignment (log scran)",
+                "Paper": "Harmonic Alignment",
+                "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
+                "Year": 2020,
+                "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
+                "Version": "0.0",
+                "Memory (GB)": 11.715278625488281,
+                "Runtime (min)": 6.141576146800071,
+                "Rank": 4
+            },
+            {
+                "kNN Area Under the Curve": 0.0036157502772908214,
+                "Mean squared error": 1.0085986127374413,
+                "Name": "Harmonic Alignment (sqrt CPM)",
+                "Paper": "Harmonic Alignment",
+                "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
+                "Year": 2020,
+                "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
+                "Version": "0.0",
+                "Memory (GB)": 5.225055694580078,
+                "Runtime (min)": 3.924957307521254,
+                "Rank": 2
+            },
+            {
+                "kNN Area Under the Curve": 0.005287505755058561,
+                "Mean squared error": 1.0487875938415527,
+                "Name": "Mutual Nearest Neighbors (log CPM)",
+                "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+                "Paper URL": "https://www.nature.com/articles/nbt.4091",
+                "Year": 2018,
+                "Code": "https://github.com/chriscainx/mnnpy",
+                "Version": "0.1.9.5",
+                "Memory (GB)": 362.1465263366699,
+                "Runtime (min)": 3.0423812261627368,
+                "Rank": 5
+            },
+            {
+                "kNN Area Under the Curve": 0.006120666666375415,
+                "Mean squared error": 1.044835090637207,
+                "Name": "Mutual Nearest Neighbors (log scran)",
+                "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+                "Paper URL": "https://www.nature.com/articles/nbt.4091",
+                "Year": 2018,
+                "Code": "https://github.com/chriscainx/mnnpy",
+                "Version": "0.1.9.5",
+                "Memory (GB)": 422.99440002441406,
+                "Runtime (min)": 6.055255135435922,
+                "Rank": 3
+            },
+            {
+                "kNN Area Under the Curve": 0.008647101949151173,
+                "Mean squared error": 0.9428006899399345,
+                "Name": "Procrustes",
+                "Paper": "Generalized Procrustes analysis",
+                "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
+                "Year": 1975,
+                "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
+                "Version": "1.5.2",
+                "Memory (GB)": 5.876457214355469,
+                "Runtime (min)": 0.43542033778503536,
+                "Rank": 1
+            }
+        ]
+    }
+}
