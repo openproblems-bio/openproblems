@@ -26,6 +26,7 @@ def _mnn(adata, n_svd=100):
         [np.full(X_pca.shape[0], 1), np.full(Y_pca.shape[0], 2)]
     ).tolist()
 
+    ro.r("library(batchelor)")
     ro.r("batch <- as.integer(batch)")
     ro.r("sce <- fastMNN(expr, batch = batch)")
     ro.r("out <- assay(sce, 'reconstructed')")
