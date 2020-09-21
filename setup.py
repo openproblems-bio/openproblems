@@ -15,6 +15,8 @@ install_requires = [
 
 methods_requires = [
     "mnnpy",
+    "numba==0.45",
+    "llvmlite==0.30",
     "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
     "rpy2",
     "scIB @ git+https://github.com/theislab/scib@master",
