@@ -34,14 +34,15 @@ subtitle = ""
 
 +++
 ## Our mission
-Our goal is to facilitate the development of novel computational methods to address open problems in integrating the [Human Cell Atlas](https://www.humancellatlas.org/). We are focused on bridging the gap between experts in computer science and machine learning and the biological problems associated with the single cell data. We want to identify important problems, aggregate standardized datasets, and create a platform to benchmark novel methods against the current state of the art using a common set of test metrics.
+Our goal is to facilitate the development of novel computational methods to address open problems in the single-cell field, with a particular focus towards optimally using the data generated within the scope of the [Human Cell Atlas](https://www.humancellatlas.org/). We are focused on bridging the gap between experts in computer science and machine learning and the biological problems associated with the single cell data. We want to identify important problems, aggregate standardized datasets, and create a platform to benchmark novel methods against the current state of the art using a common set of test metrics.
 
 ## Who can get involved
-We want to build a diverse and inclusive community the support the Open Problems. As such we welcome any individual who wants to get involved and agrees to follow our [Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/). We are currently supported by the [Chan Zuckerberg Initiative](https://chanzuckerberg.com/) and welcome participation from labs in the [Seed Networks for the Human Cell Atlas](https://chanzuckerberg.com/science/programs-resources/single-cell-biology/seednetworks/).
+We want to build a diverse and inclusive community to support the Open Problems. As such we welcome any individual who wants to get involved and agrees to follow our [Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/). We are currently supported by the [Chan Zuckerberg Initiative](https://chanzuckerberg.com/) and welcome participation from labs across the single cell and/or machine learning communities, and in particular labs already involved in the [Seed Networks for the Human Cell Atlas](https://chanzuckerberg.com/science/programs-resources/single-cell-biology/seednetworks/).
 
 ## How the Open Problems are structured
 
-We have broken down the development of the Single Cell Open Problems into **tasks**. A task is a specific quantifiable problem that addresses an open problem in integrating the Human Cell Atlas. An example of a task is [Multimodal Data Integration](results/#multimodal_data_integration) in which the goal is to take a set of multimodal measurements of the same set of cells (e.g. joint single cell RNA and ATAC profiling) and identify which pairs of measurements were acquired from the same cell without using cell barcodes.
+We have broken down the development of Single Cell Open Problems into **tasks**. A task is a specific quantifiable problem that addresses an open problem in the single-cell field. An example of a task is [Multimodal Data Integration](results/#multimodal_data_integration) in which the goal is to align single-cell measurements of different -omics modalities that will enable us to build increasingly complex characterizations of cell types and states.
+#We evaluate these methods by using datasets where multimodal data is measured on the exact same cells (e.g. joint single cell RNA and ATAC profiling) to assess which methods correctly matched these measurements without using cell barcodes.
 
 Each task is composed of three components:
 
@@ -68,7 +69,7 @@ The API of a **data downloader** is
 function dataset(bool test=False) -> AnnData adata
 ```
 
-If `test` is True, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) for faster downstream analysis. We can then use these loaded AnnData objects to evaluate various methods.
+If `test` is True, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) that can be used for testing purposes. The loaded AnnData objects are then used to evaluate various methods.
 
 Next, we need a task-specific **data loader** that loads the data in a way that's formatted correctly for a given task. The specific data format for each task can be found in the `README.md` file in each `openproblems/task/<task_name>` directory. For example, the label projection task has the following requirements:
 
@@ -128,10 +129,10 @@ Our current infrastructure will evaluate the performance of a method once the co
 To add a new task, you need to collect all three of the above components of a task:
 
 * One or more **datasets**
-* One or more **metric**
-* One or more **method**
+* One or more **metrics**
+* One or more **methods**
 
-We'd love to see new tasks added to the framework, and our core group of developers can help get new tasks off the group. We already have some proposed tasks in our [GitHub Issues tracker](https://github.com/singlecellopenproblems/SingleCellOpenProblems/issues?q=is%3Aissue+is%3Aopen+label%3Atask). Join us on Slack to get started!
+We'd love to see new tasks added to the framework, and our core group of developers can help get new tasks off the ground. We already have some proposed tasks in our [GitHub Issues tracker](https://github.com/singlecellopenproblems/SingleCellOpenProblems/issues?q=is%3Aissue+is%3Aopen+label%3Atask). Join us on Slack to get started!
 
 
 ## Join us on Slack
