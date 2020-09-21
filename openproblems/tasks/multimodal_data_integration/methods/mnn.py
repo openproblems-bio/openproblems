@@ -12,7 +12,6 @@ def _mnn(adata, n_svd=100):
         n_svd = min(adata.X.shape) - 1
     if min(adata.obsm["mode2"].shape) <= n_svd:
         n_svd = min(adata.obsm["mode2"].shape) - 1
-    # TODO: also normalize obsm["mode2"]
     X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
     Y_pca = TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
     (X_corrected, Y_corrected), _, _ = mnnpy.mnn_correct(
