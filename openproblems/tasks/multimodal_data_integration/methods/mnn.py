@@ -26,12 +26,11 @@ def _mnn(adata, n_svd=100):
         [np.full(X_pca.shape[0], 1), np.full(Y_pca.shape[0], 2)]
     ).tolist()
 
-    ro.r("library(batchelor)")
     ro.r("batch <- as.integer(batch)")
-    ro.r("sce <- fastMNN(expr, batch = batch)")
-    ro.r("out <- assay(sce, 'reconstructed')")
+    ro.r("out <- as.matrix(SummarizedExperiment::assay(batchelor::fastMNN(expr, batch = batch), 'reconstructed'))")
 
-    XY_corrected = numpy2ri.rpy2py(ro.r("as.matrix(out)")).T
+    XY_corrected = numpy2ri.rpy2py(ro.globalenv["out"]).T
+    ro.r("rm(list=ls())")
     adata.obsm["aligned"] = XY_corrected[: X_pca.shape[0]]
     adata.obsm["mode2_aligned"] = XY_corrected[X_pca.shape[0] :]
 
