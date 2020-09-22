@@ -29,7 +29,7 @@ def _mnn(adata, n_svd=100):
     ro.r("batch <- as.integer(batch)")
     ro.r("out <- as.matrix(SummarizedExperiment::assay(batchelor::fastMNN(expr, batch = batch), 'reconstructed'))")
 
-    XY_corrected = numpy2ri.rpy2py(ro.globalenv["out"]).T
+    XY_corrected = ro.globalenv["out"].T
     ro.r("rm(list=ls())")
     adata.obsm["aligned"] = XY_corrected[: X_pca.shape[0]]
     adata.obsm["mode2_aligned"] = XY_corrected[X_pca.shape[0] :]
