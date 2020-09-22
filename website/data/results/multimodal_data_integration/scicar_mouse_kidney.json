@@ -1,1 +1,89 @@
-{"name": "sciCAR Mouse Kidney", "headers": {"names": ["Rank", "kNN Area Under the Curve", "Mean squared error", "Memory (GB)", "Runtime (min)", "Name", "Paper", "Code", "Year"], "fixed": ["Name", "Paper", "Website"]}, "results": [{"kNN Area Under the Curve": 0.0, "Mean squared error": 1.01, "Name": "Harmonic Alignment (log scran)", "Paper": "Harmonic Alignment", "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36", "Year": 2020, "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment", "Memory (GB)": 11.82, "Runtime (min)": 8.74, "Rank": 3}, {"kNN Area Under the Curve": 0.0, "Mean squared error": 1.01, "Name": "Harmonic Alignment (sqrt CPM)", "Paper": "Harmonic Alignment", "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36", "Year": 2020, "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment", "Memory (GB)": 5.37, "Runtime (min)": 5.82, "Rank": 4}, {"kNN Area Under the Curve": 0.0, "Mean squared error": 1.0499999523162842, "Name": "Mutual Nearest Neighbors (log CPM)", "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors", "Paper URL": "https://www.nature.com/articles/nbt.4091", "Year": 2018, "Code": "https://github.com/chriscainx/mnnpy", "Memory (GB)": 366.87, "Runtime (min)": 4.47, "Rank": 5}, {"kNN Area Under the Curve": 0.02, "Mean squared error": 1.0499999523162842, "Name": "Mutual Nearest Neighbors (log scran)", "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors", "Paper URL": "https://www.nature.com/articles/nbt.4091", "Year": 2018, "Code": "https://github.com/chriscainx/mnnpy", "Memory (GB)": 427.67, "Runtime (min)": 6.87, "Rank": 2}, {"kNN Area Under the Curve": 0.0, "Mean squared error": 0.94, "Name": "Procrustes", "Paper": "Generalized Procrustes analysis", "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf", "Year": 1975, "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html", "Memory (GB)": 6.05, "Runtime (min)": 0.63, "Rank": 1}]}
+{
+    "name": "sciCAR Mouse Kidney",
+    "headers": {
+        "names": [
+            "Rank",
+            "kNN Area Under the Curve",
+            "Mean squared error",
+            "Memory (GB)",
+            "Runtime (min)",
+            "Name",
+            "Paper",
+            "Code",
+            "Year"
+        ],
+        "fixed": [
+            "Name",
+            "Paper",
+            "Website",
+            "Code"
+        ]
+    },
+    "results": [
+        {
+            "kNN Area Under the Curve": 0.001875286972899154,
+            "Mean squared error": 1.0090527139211432,
+            "Name": "Harmonic Alignment (log scran)",
+            "Paper": "Harmonic Alignment",
+            "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
+            "Year": 2020,
+            "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
+            "Version": "0.0",
+            "Memory (GB)": 10.748802185058594,
+            "Runtime (min)": 6.801644760781588,
+            "Rank": 4
+        },
+        {
+            "kNN Area Under the Curve": 0.003739314799884605,
+            "Mean squared error": 1.0086064035201314,
+            "Name": "Harmonic Alignment (sqrt CPM)",
+            "Paper": "Harmonic Alignment",
+            "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
+            "Year": 2020,
+            "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
+            "Version": "0.0",
+            "Memory (GB)": 4.625244140625,
+            "Runtime (min)": 4.61860654457317,
+            "Rank": 2
+        },
+        {
+            "kNN Area Under the Curve": 0.004837514640971365,
+            "Mean squared error": 1.0660006635642034,
+            "Name": "Mutual Nearest Neighbors (log CPM)",
+            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+            "Paper URL": "https://www.nature.com/articles/nbt.4091",
+            "Year": 2018,
+            "Code": "https://github.com/LTLA/batchelor",
+            "Version": "3.3.5",
+            "Memory (GB)": 4.6308135986328125,
+            "Runtime (min)": 0.9286481536459178,
+            "Rank": 5
+        },
+        {
+            "kNN Area Under the Curve": 0.0056803314029108985,
+            "Mean squared error": 1.0635080879703793,
+            "Name": "Mutual Nearest Neighbors (log scran)",
+            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+            "Paper URL": "https://www.nature.com/articles/nbt.4091",
+            "Year": 2018,
+            "Code": "https://github.com/LTLA/batchelor",
+            "Version": "3.3.5",
+            "Memory (GB)": 10.79806900024414,
+            "Runtime (min)": 3.1126844154981277,
+            "Rank": 3
+        },
+        {
+            "kNN Area Under the Curve": 0.00974715571153277,
+            "Mean squared error": 0.9430228473120023,
+            "Name": "Procrustes",
+            "Paper": "Generalized Procrustes analysis",
+            "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
+            "Year": 1975,
+            "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
+            "Version": "1.5.2",
+            "Memory (GB)": 4.631927490234375,
+            "Runtime (min)": 0.5370028763155763,
+            "Rank": 1
+        }
+    ]
+}

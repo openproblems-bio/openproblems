@@ -14,7 +14,6 @@ install_requires = [
 ]
 
 methods_requires = [
-    "mnnpy",
     "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
     "rpy2",
     "scIB @ git+https://github.com/theislab/scib@master",

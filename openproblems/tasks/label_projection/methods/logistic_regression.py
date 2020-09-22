@@ -8,6 +8,7 @@ from scipy import sparse
 
 from ....tools.normalize import log_cpm, log_scran_pooling
 from ....tools.decorators import method
+from ....tools.utils import check_version
 
 
 def _logistic_regression(adata, max_iter=1000, n_pca=100):
@@ -48,6 +49,7 @@ def _logistic_regression(adata, max_iter=1000, n_pca=100):
     paper_url="https://books.google.com/books?id=64JYAwAAQBAJ",
     paper_year=2013,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+    code_version=check_version("scikit-learn"),
 )
 def logistic_regression_log_cpm(adata):
     log_cpm(adata)
@@ -60,6 +62,7 @@ def logistic_regression_log_cpm(adata):
     paper_url="https://books.google.com/books?id=64JYAwAAQBAJ",
     paper_year=2013,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+    code_version=check_version("scikit-learn"),
 )
 def logistic_regression_scran(adata):
     log_scran_pooling(adata)
