@@ -8,8 +8,8 @@ headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
 weight = 10  # Order that this section will appear.
 
-title = "**Single Cell Open Problems**"
-subtitle = "***Aggregating Open Problems for Integrating the Human Cell Atlas***"
+#title = "**Single Cell Open Problems**"
+#subtitle = "***Aggregating Open Problems for Integrating the Human Cell Atlas***"
 
 [design]
   # Choose how many columns the section has. Valid values: 1 or 2.
@@ -40,12 +40,15 @@ subtitle = "***Aggregating Open Problems for Integrating the Human Cell Atlas***
 
 [design.spacing]
   # Customize the section spacing. Order is top, right, bottom, left.
-  padding = ["100px", "0", "20px", "0"]
+  padding = ["0px", "0", "100px", "0"]
 
 [advanced]
  # Custom CSS.
- css_style = "height: 400px;"
+ css_style = ""
 
  # CSS class.
- css_class = "hero"
+ css_class = "frontpage-hero"
 +++
+<p class="text-center">
+<img src="/img/HCA_logo.png" class="frontpage-banner"  style="margin: auto" />
+</p>
