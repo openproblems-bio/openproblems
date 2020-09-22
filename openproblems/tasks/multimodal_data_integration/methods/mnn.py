@@ -27,7 +27,9 @@ def _mnn(adata, n_svd=100):
     ).tolist()
 
     ro.r("batch <- as.integer(batch)")
-    ro.r("out <- as.matrix(SummarizedExperiment::assay(batchelor::fastMNN(expr, batch = batch), 'reconstructed'))")
+    ro.r(
+        "out <- as.matrix(SummarizedExperiment::assay(batchelor::fastMNN(expr, batch = batch), 'reconstructed'))"
+    )
 
     XY_corrected = ro.globalenv["out"].T
     ro.r("rm(list=ls())")
