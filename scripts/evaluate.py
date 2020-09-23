@@ -36,7 +36,7 @@ def mkdir(dir):
 
 
 def save_result(result, task, dataset):
-    result = copy.copy(result)
+    result = copy.deepcopy(result)
     for i in range(len(result)):
         del result[i]["Memory leaked (GB)"]
     result = {
