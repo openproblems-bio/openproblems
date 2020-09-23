@@ -1,12 +1,16 @@
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
 from ....tools.decorators import metric
+from sklearn.decomposition import TruncatedSVD
 
 
 @metric(metric_name="kNN Area Under the Curve", maximize=True)
-def knn_auc(adata, n_neighbors=100):
+def knn_auc(adata, n_neighbors=100, n_svd=100):
+    if min(adata.X.shape) <= n_svd:
+        n_svd = min(adata.X.shape) - 1
+    X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
     _, indices_true = (
-        NearestNeighbors(n_neighbors=n_neighbors).fit(adata.X).kneighbors(adata.X)
+        NearestNeighbors(n_neighbors=n_neighbors).fit(X_pca).kneighbors(X_pca)
     )
     _, indices_pred = (
         NearestNeighbors(n_neighbors=n_neighbors)
