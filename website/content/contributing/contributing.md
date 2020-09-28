@@ -71,7 +71,7 @@ function dataset(bool test=False) -> AnnData adata
 
 If `test` is True, then the method should load the full dataset, but only return a small version of the same data (preferably <200 cells and <500 genes) that can be used for testing purposes. The loaded AnnData objects are then used to evaluate various methods.
 
-Next, we need a task-specific **data loader** that loads the data in a way that's formatted correctly for a given task. The specific data format for each task can be found in the `README.md` file in each `openproblems/task/<task_name>` directory. For example, the label projection task has the following requirements:
+Next, we need a task-specific **data loader** that loads the data in a way that's formatted correctly for a given task. The specific data format for each task can be found in the `README.md` file in each `openproblems/tasks/<task_name>` directory. Generally speaking, `adata.X` should contain UMI counts (or equivalent). For example, the label projection task has the following requirements:
 
 
 > ## API

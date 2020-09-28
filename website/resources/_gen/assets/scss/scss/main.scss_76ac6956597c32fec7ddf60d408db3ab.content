@@ -9190,3 +9190,18 @@ html[dir="rtl"] body {
 
 .contributing-hero section {
   filter: blur(8px); }
+
+.frontpage-banner {
+  width: 800px;
+  text-align: center; }
+
+.frontpage-hero {
+  height: 500px; }
+
+@media screen and (max-width: 575.98px) {
+  .frontpage-hero {
+    height: 325px; } }
+
+@media screen and (min-width: 576px) and (max-width: 767.98px) {
+  .frontpage-hero {
+    height: 350px; } }
