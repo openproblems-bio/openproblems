@@ -11,16 +11,13 @@ SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def evaluate_metric(adata_file, metric_name, output_file):
     subprocess.call(
-        " ".join(
-            [
-                sys.executable,
-                os.path.join(SCRIPTS_DIR, "evaluate_metric.py"),
-                adata_file,
-                metric_name,
-                output_file,
-            ]
-        ),
-        shell=True,
+        [
+            sys.executable,
+            os.path.join(SCRIPTS_DIR, "evaluate_metric.py"),
+            adata_file,
+            metric_name,
+            output_file,
+        ]
     )
     with open(output_file, "r") as handle:
         result = json.load(handle)
