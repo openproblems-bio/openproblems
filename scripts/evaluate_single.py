@@ -34,7 +34,7 @@ def evaluate_method(task, adata, method):
         for metric in task.METRICS:
             output_file = os.path.join(tempdir, "result.json")
             result[metric.metadata["metric_name"]] = evaluate_metric(
-                adata_file, ".".join(metric.__module__, metric.__name__), output_file
+                adata_file, ".".join([metric.__module__, metric.__name__]), output_file
             )
 
     del adata
