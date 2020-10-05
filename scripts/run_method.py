@@ -1,5 +1,6 @@
 import openproblems
 import sys
+import anndata
 
 
 def main(task_name, method_name, input_file, output_h5ad, output_json):
