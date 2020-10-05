@@ -54,10 +54,10 @@ def evaluate_method(task, adata, method):
 def main():
     openproblems.test.utils.ignore_numba_warnings()
 
-    task_name = sys.argv[0]
-    method_name = sys.argv[1]
-    adata_file = sys.argv[2]
-    output_file = sys.argv[3]
+    task_name = sys.argv[1]
+    method_name = sys.argv[2]
+    adata_file = sys.argv[3]
+    output_file = sys.argv[4]
 
     task = eval(task_name)
     method = eval(method_name)
