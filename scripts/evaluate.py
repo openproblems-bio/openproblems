@@ -14,17 +14,14 @@ RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
 
 def evaluate_method(task_name, adata_file, method_name, output_file):
     subprocess.call(
-        " ".join(
-            [
-                sys.executable,
-                os.path.join(SCRIPTS_DIR, "evaluate_single.py"),
-                task_name,
-                method_name,
-                adata_file,
-                output_file,
-            ]
-        ),
-        shell=True,
+        [
+            sys.executable,
+            os.path.join(SCRIPTS_DIR, "evaluate_single.py"),
+            task_name,
+            method_name,
+            adata_file,
+            output_file,
+        ]
     )
     with open(output_file, "r") as handle:
         result = json.load(handle)
