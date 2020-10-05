@@ -4,7 +4,7 @@ import sys
 import openproblems
 
 
-def main(task_name, dataset_name, input_file, input_dir, output_file):
+def main(task_name, dataset_name, input_dir, output_file):
 
     task = eval("openproblems.tasks.{}".format(task_name))
     dataset = getattr(task.datasets, dataset_name)
