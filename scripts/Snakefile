@@ -82,4 +82,4 @@ rule load_dataset:
         script = "load_dataset.py",
         code = "{}/../openproblems/version.py".format(SCRIPTS_DIR)
     output: temp("{tempdir}/{task}/{dataset}.data.h5ad")
-    shell: "python3 {input} {wildcards.task} {wildcards.dataset} {output}"
+    shell: "python3 {input.script} {wildcards.task} {wildcards.dataset} {output}"
