@@ -11,6 +11,7 @@ def _mnn(adata, n_svd=100):
     import rpy2.robjects as ro
     from rpy2.robjects import numpy2ri
 
+    numpy2ri.activate()
     scprep.run.install_bioconductor("batchelor")
 
     if min(adata.X.shape) <= n_svd:
@@ -20,19 +21,17 @@ def _mnn(adata, n_svd=100):
     X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
     Y_pca = TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
 
-    ro.globalenv["expr"] = numpy2ri.py2rpy(np.vstack([X_pca, Y_pca]).T)
-    ro.globalenv["batch"] = numpy2ri.py2rpy(
-        np.concatenate(
-            [np.full(X_pca.shape[0], 1), np.full(Y_pca.shape[0], 2)]
-        ).tolist()
-    )
+    ro.globalenv["expr"] = np.vstack([X_pca, Y_pca]).T
+    ro.globalenv["batch"] = np.concatenate(
+        [np.full(X_pca.shape[0], 1), np.full(Y_pca.shape[0], 2)]
+    ).tolist()
 
     ro.r("batch <- as.integer(batch)")
     ro.r(
         "out <- as.matrix(SummarizedExperiment::assay(batchelor::fastMNN(expr, batch = batch), 'reconstructed'))"
     )
 
-    XY_corrected = numpy2ri.rpy2py(ro.globalenv["out"]).T
+    XY_corrected = ro.globalenv["out"].T
     ro.r("rm(list=ls())")
     adata.obsm["aligned"] = XY_corrected[: X_pca.shape[0]]
     adata.obsm["mode2_aligned"] = XY_corrected[X_pca.shape[0] :]
