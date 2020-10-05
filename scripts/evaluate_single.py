@@ -3,6 +3,7 @@ import json
 import os
 import sys
 import tempfile
+import subprocess
 
 import openproblems
 import openproblems.test.utils
