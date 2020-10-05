@@ -4,34 +4,27 @@ import sys
 import openproblems
 
 
-def main(task_name, dataset_name, input_file, input_dir, output_file):
+def main(input_dir, output_file):
 
-    task = eval("openproblems.tasks.{}".format(task_name))
-    dataset = getattr(task.datasets, dataset_name)
-
-    result = []
-    for method in task.METHODS:
-        result_file = os.path.join(input_dir, "{}.json".format(method.__name__))
-        with open(result_file, "r") as handle:
-            result.append(json.load(handle))
-
-    for i in range(len(result)):
-        del result[i]["Memory leaked (GB)"]
-
-    result = {
-        "name": dataset.metadata["dataset_name"],
-        "headers": {
-            "names": ["Rank"]
-            + [metric.metadata["metric_name"] for metric in task.METRICS]
-            + ["Memory (GB)", "Runtime (min)", "Name", "Paper", "Code", "Year"],
-            "fixed": ["Name", "Paper", "Website", "Code"],
-        },
-        "results": result,
-    }
+    result = dict()
+    for task in openproblems.TASKS:
+        task_name = task.__name__.split(".")[-1]
+        result[task_name] = dict()
+        for dataset in task.DATASETS:
+            result[task_name][dataset.__name__] = list()
+            for method in task.METHODS:
+                result_file = os.path.join(
+                    input_dir,
+                    task_name,
+                    dataset.__name__,
+                    "{}.json".format(method.__name__),
+                )
+                with open(result_file, "r") as handle:
+                    result[task_name][dataset.__name__].append(json.load(handle))
 
     with open(output_file, "w") as handle:
         json.dump(result, handle, indent=4)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(*sys.argv[1:])
