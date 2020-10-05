@@ -74,7 +74,7 @@ def evaluate_dataset(task, dataset):
             r = evaluate_method(
                 task.__name__,
                 adata_file,
-                ".".join([method.__module__, method.__name__]),
+                ".".join([task.__name__, "methods", method.__name__]),
                 output_file,
             )
             result.append(r)
