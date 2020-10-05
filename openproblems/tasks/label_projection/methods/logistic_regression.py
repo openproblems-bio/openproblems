@@ -4,7 +4,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 
 import numpy as np
-import pandas as pd
 from scipy import sparse
 
 from ....tools.normalize import log_cpm, log_scran_pooling
@@ -14,7 +13,6 @@ from ....tools.utils import check_version
 
 def _logistic_regression(adata, max_iter=1000, n_pca=100):
 
-    adata.obs["labels"], label_names = pd.factorize(adata.obs["labels"])
     adata_train = adata[adata.obs["is_train"]]
     adata_test = adata[~adata.obs["is_train"]].copy()
     is_sparse = sparse.issparse(adata.X)
@@ -37,7 +35,7 @@ def _logistic_regression(adata, max_iter=1000, n_pca=100):
     classifier.fit(adata_train.X, adata_train.obs["labels"])
 
     # Predict on test data
-    adata_test.obs["labels_pred"] = label_names[classifier.predict(adata_test.X)]
+    adata_test.obs["labels_pred"] = classifier.predict(adata_test.X)
 
     adata.obs["labels_pred"] = [
         adata_test.obs["labels_pred"][idx] if idx in adata_test.obs_names else np.nan
