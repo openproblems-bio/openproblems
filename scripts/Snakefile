@@ -3,15 +3,15 @@ import tempfile
 import os
 import sys
 
-TEMPDIR = tempfile.TemporaryDirectory()
+TEMPDIR = "./tmp"#TEMPDIR_OBJ = tempfile.TemporaryDirectory(); TEMPDIR = TEMPDIR_OBJ.name
 SCRIPTS_DIR = os.getcwd()
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
 
 def tasks(wildcards):
-    return [os.path.join(TEMPDIR.name, "{}.json".format(t.__name__.split(".")[-1])) for t in openproblems.TASKS]
+    return [os.path.join(TEMPDIR, "{}.json".format(t.__name__.split(".")[-1])) for t in openproblems.TASKS]
 
 def all_methods(wildcards):
-    return [os.path.join(TEMPDIR.name, task.__name__.split(".")[-1],
+    return [os.path.join(TEMPDIR, task.__name__.split(".")[-1],
                          dataset.__name__,
                          "{}.result.json".format(method.__name__))
             for task in openproblems.TASKS
@@ -20,11 +20,11 @@ def all_methods(wildcards):
 
 def methods(wildcards):
     task = getattr(openproblems.tasks, wildcards.task)
-    return [os.path.join(TEMPDIR.name, wildcards.task, wildcards.dataset, "{}.result.json".format(m.__name__)) for m in task.METHODS]
+    return [os.path.join(TEMPDIR, wildcards.task, wildcards.dataset, "{}.result.json".format(m.__name__)) for m in task.METHODS]
 
 def metrics(wildcards):
     task = getattr(openproblems.tasks, wildcards.task)
-    return [os.path.join(TEMPDIR.name, wildcards.task, wildcards.dataset, wildcards.method, "{}.metric.json".format(m.__name__)) for m in task.METRICS]
+    return [os.path.join(TEMPDIR, wildcards.task, wildcards.dataset, wildcards.method, "{}.metric.json".format(m.__name__)) for m in task.METRICS]
 
 def datasets(wildcards):
     return [os.path.join(RESULTS_DIR, task.__name__.split(".")[-1], "{}.json".format(d.__name__)) for task in openproblems.TASKS for d in task.DATASETS]
@@ -32,11 +32,11 @@ def datasets(wildcards):
 rule all:
     input:
         summary = "{}/../results.json".format(SCRIPTS_DIR),
-        website = "{}/complete.temp".format(TEMPDIR.name),
+        website = "{}/complete.temp".format(TEMPDIR),
 
 rule website:
     input: datasets
-    output: temp("{}/complete.temp".format(TEMPDIR.name))
+    output: temp("{}/complete.temp".format(TEMPDIR))
     shell: "touch {output}"
 
 rule summary:
@@ -44,14 +44,14 @@ rule summary:
         script = "collate_dataset.py",
         methods = all_methods,
     output: "{}/../results.json".format(SCRIPTS_DIR)
-    shell: "python3 {{input.script}} {tempdir} {{output}}".format(tempdir=TEMPDIR.name)
+    shell: "python3 {{input.script}} {tempdir} {{output}}".format(tempdir=TEMPDIR)
 
 rule collate_dataset:
     input:
         script = "collate_dataset.py",
         methods = methods,
     output: "{}/{{task}}/{{dataset}}.json".format(RESULTS_DIR)
-    shell: "python3 {{input.script}} {{wildcards.task}} {{wildcards.dataset}} {tempdir}/{{wildcards.task}}/{{wildcards.dataset}} {{output}}".format(tempdir=TEMPDIR.name)
+    shell: "python3 {{input.script}} {{wildcards.task}} {{wildcards.dataset}} {tempdir}/{{wildcards.task}}/{{wildcards.dataset}} {{output}}".format(tempdir=TEMPDIR)
 
 rule collate_method:
     input:
