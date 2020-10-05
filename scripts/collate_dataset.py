@@ -11,7 +11,7 @@ def main(task_name, dataset_name, input_dir, output_file):
 
     result = []
     for method in task.METHODS:
-        result_file = os.path.join(input_dir, "{}.json".format(method.__name__))
+        result_file = os.path.join(input_dir, "{}.result.json".format(method.__name__))
         with open(result_file, "r") as handle:
             result.append(json.load(handle))
 

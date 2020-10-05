@@ -17,7 +17,7 @@ def main(input_dir, output_file):
                     input_dir,
                     task_name,
                     dataset.__name__,
-                    "{}.json".format(method.__name__),
+                    "{}.result.json".format(method.__name__),
                 )
                 with open(result_file, "r") as handle:
                     result[task_name][dataset.__name__].append(json.load(handle))
