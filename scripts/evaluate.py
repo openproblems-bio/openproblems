@@ -8,14 +8,15 @@ import subprocess
 import openproblems
 import openproblems.test.utils
 
-RESULTS_DIR = os.path.join("..", "website", "data", "results")
+SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
+RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
 
 
 def evaluate_method(task_name, adata_file, method_name, output_file):
     subprocess.call(
         [
             sys.executable,
-            os.path.join(os.getcwd(), "evaluate_single.py"),
+            os.path.join(SCRIPTS_DIR, "evaluate_single.py"),
             task_name,
             method_name,
             adata_file,
@@ -66,7 +67,7 @@ def evaluate_dataset(task, dataset):
     with tempfile.TemporaryDirectory() as tempdir:
         adata = dataset(test=False)
         adata_file = os.path.join(tempdir, "{}.h5ad".format(dataset.__name__))
-        adata.save_h5ad(adata_file)
+        adata.write_h5ad(adata_file)
         result = []
         for method in task.METHODS:
             output_file = os.path.join(tempdir, "result.json")
