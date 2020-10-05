@@ -70,7 +70,7 @@ def evaluate_dataset(task, dataset):
         adata.write_h5ad(adata_file)
         result = []
         for method in task.METHODS:
-            output_file = os.path.join(tempdir, "result.json")
+            output_file = os.path.join(tempdir, "{}.json".format(method.__name__))
             r = evaluate_method(
                 task.__name__,
                 adata_file,

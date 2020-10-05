@@ -30,11 +30,11 @@ def evaluate_method(task, adata, method):
     output = openproblems.tools.decorators.profile(method)(adata)
     result = dict()
     with tempfile.TemporaryDirectory() as tempdir:
-        adata_file = os.path.join(tempdir, "{}.h5ad".format(metric.__name__))
+        adata_file = os.path.join(tempdir, "{}.h5ad".format(method.__name__))
         adata.write_h5ad(adata_file)
         result = []
         for metric in task.METRICS:
-            output_file = os.path.join(tempdir, "result.json")
+            output_file = os.path.join(tempdir, "{}.json".format(metric.__name__))
             result[metric.metadata["metric_name"]] = evaluate_metric(
                 adata_file, ".".join([metric.__module__, metric.__name__]), output_file
             )
