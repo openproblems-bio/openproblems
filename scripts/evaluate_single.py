@@ -6,11 +6,14 @@ import openproblems
 import openproblems.test.utils
 
 
+SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
 def evaluate_metric(adata_file, metric_name, output_file):
     subprocess.call(
         [
             sys.executable,
-            os.path.join(os.getcwd(), "evaluate_metric.py"),
+            os.path.join(SCRIPTS_DIR, "evaluate_metric.py"),
             adata_file,
             metric_name,
             output_file,
@@ -26,7 +29,7 @@ def evaluate_method(task, adata, method):
     result = dict()
     with tempfile.TemporaryDirectory() as tempdir:
         adata_file = os.path.join(tempdir, "{}.h5ad".format(metric.__name__))
-        adata.save_h5ad(adata_file)
+        adata.write_h5ad(adata_file)
         result = []
         for metric in task.METRICS:
             output_file = os.path.join(tempdir, "result.json")
