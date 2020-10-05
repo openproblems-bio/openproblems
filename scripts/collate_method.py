@@ -9,7 +9,7 @@ def main(task_name, meta_file, input_dir, output_file):
     task = eval("openproblems.tasks.{}".format(task_name))
 
     with open(meta_file, "r") as handle:
-        result = json.load(meta_file)
+        result = json.load(handle)
 
     for metric in task.METRICS:
         result_file = os.path.join(input_dir, "{}.metric.json".format(metric.__name__))
