@@ -14,8 +14,8 @@ def evaluate_metric(adata, metric):
 def main():
     openproblems.test.utils.ignore_numba_warnings()
 
-    metric_name = sys.argv[1]
-    adata_file = sys.argv[2]
+    adata_file = sys.argv[1]
+    metric_name = sys.argv[2]
     output_file = sys.argv[3]
 
     metric = eval(metric_name)
