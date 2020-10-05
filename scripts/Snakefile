@@ -32,11 +32,11 @@ def datasets(wildcards):
 rule all:
     input:
         summary = "{}/../results.json".format(SCRIPTS_DIR),
-        website = "{}/complete.temp".format(TEMPDIR),
+        website = "{}/complete.temp".format(TEMPDIR.name),
 
 rule website:
     input: datasets
-    output: temp("{}/complete.temp".format(TEMPDIR))
+    output: temp("{}/complete.temp".format(TEMPDIR.name))
     shell: "touch {output}"
 
 rule summary:
@@ -44,14 +44,14 @@ rule summary:
         script = "collate_dataset.py",
         methods = all_methods,
     output: "{}/../results.json".format(SCRIPTS_DIR)
-    shell: "python3 {{input.script}} {tempdir} {{output}}".format(tempdir=TEMPDIR)
+    shell: "python3 {{input.script}} {tempdir} {{output}}".format(tempdir=TEMPDIR.name)
 
 rule collate_dataset:
     input:
         script = "collate_dataset.py",
         methods = methods,
     output: "{}/{{task}}/{{dataset}}.json".format(RESULTS_DIR)
-    shell: "python3 {{input.script}} {{wildcards.task}} {{wildcards.dataset}} {tempdir}/{{wildcards.task}}/{{wildcards.dataset}} {{output}}".format(tempdir=TEMPDIR)
+    shell: "python3 {{input.script}} {{wildcards.task}} {{wildcards.dataset}} {tempdir}/{{wildcards.task}}/{{wildcards.dataset}} {{output}}".format(tempdir=TEMPDIR.name)
 
 rule collate_method:
     input:
