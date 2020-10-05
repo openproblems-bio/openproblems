@@ -1,31 +1,17 @@
-import anndata
-import json
-import sys
-
 import openproblems
-import openproblems.test.utils
+import sys
+import json
 
 
-def evaluate_metric(adata, metric):
-    result = float(metric(adata))
-    return result
-
-
-def main():
-    openproblems.test.utils.ignore_numba_warnings()
-
-    adata_file = sys.argv[1]
-    metric_name = sys.argv[2]
-    output_file = sys.argv[3]
-
-    metric = eval(metric_name)
-    adata = anndata.read_h5ad(adata_file)
-
-    result = evaluate_metric(adata, metric)
-
+def main(task_name, metric_name, input_file, output_file):
+    task = eval("openproblems.tasks.{}".format(task_name))
+    metrics = getattr(task, "metrics")
+    metric = getattr(metrics, metric_name)
+    adata = anndata.read_h5ad(input_file)
+    result = metric(adata)
     with open(output_file, "w") as handle:
         json.dump(result, handle, indent=4)
 
 
 if __name__ == "__main__":
-    main()
+    main(*sys.argv[1:])
