@@ -21,4 +21,4 @@ def main(task_name, meta_file, input_dir, output_file):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(*sys.argv[1:])

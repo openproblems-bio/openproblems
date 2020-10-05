@@ -43,4 +43,4 @@ def main(task_name, dataset_name, input_file, input_dir, output_file):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(*sys.argv[1:])
