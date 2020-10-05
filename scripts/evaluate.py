@@ -1,7 +1,9 @@
 import numpy as np
 import json
 import os
-import copy
+import sys
+import tempfile
+import subprocess
 
 import openproblems
 import openproblems.test.utils
@@ -9,22 +11,19 @@ import openproblems.test.utils
 RESULTS_DIR = os.path.join("..", "website", "data", "results")
 
 
-def evaluate_method(task, adata, method):
-    output = openproblems.tools.decorators.profile(method)(adata)
-    result = dict()
-    for metric in task.METRICS:
-        result[metric.metadata["metric_name"]] = float(metric(adata))
-
-    del adata
-    result["Name"] = method.metadata["method_name"]
-    result["Paper"] = method.metadata["paper_name"]
-    result["Paper URL"] = method.metadata["paper_url"]
-    result["Year"] = method.metadata["paper_year"]
-    result["Code"] = method.metadata["code_url"]
-    result["Version"] = method.metadata["code_version"]
-    result["Memory (GB)"] = float(output["memory_mb"] / 1024)
-    result["Memory leaked (GB)"] = float(output["memory_leaked_mb"] / 1024)
-    result["Runtime (min)"] = float(output["runtime_s"] / 60)
+def evaluate_method(task_name, adata_file, method_name, output_file):
+    subprocess.call(
+        [
+            sys.executable,
+            os.path.join(os.getcwd(), "evaluate_single.py"),
+            task_name,
+            method_name,
+            adata_file,
+            output_file,
+        ]
+    )
+    with open(output_file, "r") as handle:
+        result = json.load(handle)
     return result
 
 
@@ -64,11 +63,20 @@ def save_result(result, task, dataset):
 
 
 def evaluate_dataset(task, dataset):
-    adata = dataset(test=False)
-    result = []
-    for method in task.METHODS:
-        r = evaluate_method(task, adata.copy(), method)
-        result.append(r)
+    with tempfile.TemporaryDirectory() as tempdir:
+        adata = dataset(test=False)
+        adata_file = os.path.join(tempdir, "{}.h5ad".format(dataset.__name__))
+        adata.save_h5ad(adata_file)
+        result = []
+        for method in task.METHODS:
+            output_file = os.path.join(tempdir, "result.json")
+            r = evaluate_method(
+                task.__name__,
+                adata_file,
+                ".".join(method.__module__, method.__name__),
+                output_file,
+            )
+            result.append(r)
 
     del adata
 
