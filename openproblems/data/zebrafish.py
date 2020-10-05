@@ -19,6 +19,8 @@ def load_zebrafish(test=False):
         scprep.io.download.download_url(URL, filepath)
         adata = anndata.read_h5ad(filepath)
 
+    adata.obs["labels"] = adata.obs["labels"].astype(str)
+
     if test:
         sc.pp.subsample(adata, n_obs=100)
         adata = adata[:, :100]
