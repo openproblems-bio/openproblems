@@ -14,7 +14,7 @@ from ....tools.utils import check_version
 
 def _mlp(adata, n_pca=100):
 
-    adata["labels"], label_names = pd.factorize(adata["labels"])
+    adata.obs["labels"], label_names = pd.factorize(adata.obs["labels"])
     adata_train = adata[adata.obs["is_train"]]
     adata_test = adata[~adata.obs["is_train"]].copy()
     is_sparse = sparse.issparse(adata.X)
