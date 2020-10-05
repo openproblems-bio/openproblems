@@ -58,14 +58,14 @@ rule collate_method:
         script = "collate_method.py",
         meta = "{tempdir}/{task}/{dataset}/{method}.meta.json",
         metrics = metrics,
-    output: "{tempdir}/{task}/{dataset}/{method}.result.json"
+    output: temp("{tempdir}/{task}/{dataset}/{method}.result.json")
     shell: "python3 {input.script} {wildcards.task} {input.meta} {wildcards.tempdir}/{wildcards.task}/{wildcards.dataset}/{wildcards.method} {output}"
 
 rule evaluate_metric:
     input:
         script = "evaluate_metric.py",
         data = "{tempdir}/{task}/{dataset}/{method}.method.h5ad",
-    output: "{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json"
+    output: temp("{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json")
     shell: "python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}"
 
 rule run_method:
@@ -73,13 +73,13 @@ rule run_method:
         script = "run_method.py",
         data = "{tempdir}/{task}/{dataset}.data.h5ad",
     output:
-        data = "{tempdir}/{task}/{dataset}/{method}.method.h5ad",
-        json = "{tempdir}/{task}/{dataset}/{method}.meta.json",
+        data = temp("{tempdir}/{task}/{dataset}/{method}.method.h5ad"),
+        json = temp("{tempdir}/{task}/{dataset}/{method}.meta.json"),
     shell: "python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}"
 
 rule load_dataset:
     input:
         script = "load_dataset.py",
         code = "{}/../openproblems/version.py".format(SCRIPTS_DIR)
-    output: "{tempdir}/{task}/{dataset}.data.h5ad"
+    output: temp("{tempdir}/{task}/{dataset}.data.h5ad")
     shell: "python3 {input} {wildcards.task} {wildcards.dataset} {output}"
