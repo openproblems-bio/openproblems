@@ -78,6 +78,8 @@ rule run_method:
     shell: "python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}"
 
 rule load_dataset:
-    input: "load_dataset.py"
+    input:
+        script = "load_dataset.py",
+        code = "{}/../openproblems/version.py".format(SCRIPTS_DIR)
     output: "{tempdir}/{task}/{dataset}.data.h5ad"
     shell: "python3 {input} {wildcards.task} {wildcards.dataset} {output}"
