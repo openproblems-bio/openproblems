@@ -42,7 +42,7 @@ def load_pancreas(test=False, preprocess=True):
 def prep_pancreas(adata):
     # Rename categories
     adata.obs["batch"] = adata.obs["tech"].copy()
-    adata.obs["labels"] = adata.obs["celltype"].copy()
+    adata.obs["labels"] = adata.obs["celltype"].astype(str)
 
     # Drop excess covariates
     adata.obs = adata.obs.drop(columns=["tech", "size_factors", "celltype"])
