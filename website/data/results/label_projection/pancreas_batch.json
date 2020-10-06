@@ -21,55 +21,55 @@
     },
     "results": [
         {
-            "Accuracy": 0.9523938328374357,
-            "F1 score": 0.9511809729433653,
             "Name": "Logistic regression (log CPM)",
             "Paper": "Applied Logistic Regression",
             "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 7.235176086425781,
-            "Runtime (min)": 16.131095437713277,
-            "Rank": 4
+            "Memory (GB)": 6.002845764160156,
+            "Runtime (min)": 0.4471558031994694,
+            "Accuracy": 0.9580741141466054,
+            "F1 score": 0.9583360051413248,
+            "Rank": 3
         },
         {
-            "Accuracy": 0.9637543954557749,
-            "F1 score": 0.9639750934549929,
             "Name": "Logistic regression (log scran)",
             "Paper": "Applied Logistic Regression",
             "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 9.548519134521484,
-            "Runtime (min)": 79.26774780265987,
-            "Rank": 2
+            "Memory (GB)": 7.676425933837891,
+            "Runtime (min)": 5.007033896166831,
+            "Accuracy": 0.9580741141466054,
+            "F1 score": 0.9575046864770115,
+            "Rank": 4
         },
         {
-            "Accuracy": 0.9610494995942657,
-            "F1 score": 0.9615870651092376,
             "Name": "Multilayer perceptron (log CPM)",
             "Paper": "Connectionist learning procedures",
             "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 10.154106140136719,
-            "Runtime (min)": 23.83783542101737,
-            "Rank": 3
+            "Memory (GB)": 6.002826690673828,
+            "Runtime (min)": 0.4767137464329911,
+            "Accuracy": 0.9645658642142277,
+            "F1 score": 0.9651682480210593,
+            "Rank": 2
         },
         {
-            "Accuracy": 0.967811739248039,
-            "F1 score": 0.9685717359172674,
             "Name": "Multilayer perceptron (log scran)",
             "Paper": "Connectionist learning procedures",
             "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 11.167316436767578,
-            "Runtime (min)": 75.1171294690886,
+            "Memory (GB)": 7.745403289794922,
+            "Runtime (min)": 5.058120975967419,
+            "Accuracy": 0.9670002704895861,
+            "F1 score": 0.9679098379169825,
             "Rank": 1
         }
     ]
