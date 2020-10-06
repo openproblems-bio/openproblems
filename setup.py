@@ -20,7 +20,7 @@ methods_requires = [
     "anndata2ri>=1.0.4",
 ]
 
-evaluate_requires = ["tabulate"]
+evaluate_requires = ["snakemake"]
 
 test_requires = ["nose2", "parameterized", "black"]
 
