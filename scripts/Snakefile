@@ -3,7 +3,7 @@ import tempfile
 import os
 import sys
 
-TEMPDIR = "./tmp"#TEMPDIR_OBJ = tempfile.TemporaryDirectory(); TEMPDIR = TEMPDIR_OBJ.name
+TEMPDIR = ".evaluate"
 SCRIPTS_DIR = os.getcwd()
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
 
