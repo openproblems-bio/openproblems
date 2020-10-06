@@ -27,10 +27,10 @@
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 1.7759780883789062,
-            "Runtime (min)": 0.6013220756334098,
-            "Accuracy": 0.2683274944855326,
-            "F1 score": 0.3019503214018024,
+            "Memory (GB)": 1.7755889892578125,
+            "Runtime (min)": 0.5623397655319422,
+            "Accuracy": 0.28973660308810173,
+            "F1 score": 0.3397081591448076,
             "Rank": 1
         },
         {
@@ -40,10 +40,10 @@
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 11.436717987060547,
-            "Runtime (min)": 8.545534957099395,
-            "Accuracy": 0.2591799662644349,
-            "F1 score": 0.32003443419370853,
+            "Memory (GB)": 11.314506530761719,
+            "Runtime (min)": 8.653546714699283,
+            "Accuracy": 0.22667704684053458,
+            "F1 score": 0.2659709893772118,
             "Rank": 2
         },
         {
@@ -53,10 +53,10 @@
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 1.7765045166015625,
-            "Runtime (min)": 0.6143932233176504,
-            "Accuracy": 0.2453613598027767,
-            "F1 score": 0.28150387063327653,
+            "Memory (GB)": 1.77618408203125,
+            "Runtime (min)": 0.5600980913169527,
+            "Accuracy": 0.2055274425846633,
+            "F1 score": 0.23712562153352934,
             "Rank": 3
         },
         {
@@ -66,10 +66,10 @@
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 11.821037292480469,
-            "Runtime (min)": 8.586491411183184,
-            "Accuracy": 0.23991176852212276,
-            "F1 score": 0.23987071722167175,
+            "Memory (GB)": 11.24636459350586,
+            "Runtime (min)": 8.696397418067015,
+            "Accuracy": 0.2087712469183859,
+            "F1 score": 0.21913015008352982,
             "Rank": 4
         }
     ]

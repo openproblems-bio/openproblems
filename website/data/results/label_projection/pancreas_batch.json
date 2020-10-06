@@ -27,11 +27,11 @@
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 6.002845764160156,
-            "Runtime (min)": 0.4471558031994694,
-            "Accuracy": 0.9580741141466054,
-            "F1 score": 0.9583360051413248,
-            "Rank": 3
+            "Memory (GB)": 6.003185272216797,
+            "Runtime (min)": 0.4867538864995974,
+            "Accuracy": 0.9494184473897755,
+            "F1 score": 0.9490758352127137,
+            "Rank": 4
         },
         {
             "Name": "Logistic regression (log scran)",
@@ -40,11 +40,11 @@
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 7.676425933837891,
-            "Runtime (min)": 5.007033896166831,
-            "Accuracy": 0.9580741141466054,
-            "F1 score": 0.9575046864770115,
-            "Rank": 4
+            "Memory (GB)": 8.00341796875,
+            "Runtime (min)": 5.196319355084173,
+            "Accuracy": 0.9651068433865296,
+            "F1 score": 0.9653861125247696,
+            "Rank": 3
         },
         {
             "Name": "Multilayer perceptron (log CPM)",
@@ -53,10 +53,10 @@
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 6.002826690673828,
-            "Runtime (min)": 0.4767137464329911,
-            "Accuracy": 0.9645658642142277,
-            "F1 score": 0.9651682480210593,
+            "Memory (GB)": 5.101108551025391,
+            "Runtime (min)": 0.5315126540837809,
+            "Accuracy": 0.9667297809034352,
+            "F1 score": 0.9674370429308907,
             "Rank": 2
         },
         {
@@ -66,10 +66,10 @@
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 7.745403289794922,
-            "Runtime (min)": 5.058120975967419,
+            "Memory (GB)": 7.596031188964844,
+            "Runtime (min)": 5.207421855816695,
             "Accuracy": 0.9670002704895861,
-            "F1 score": 0.9679098379169825,
+            "F1 score": 0.9677440933534309,
             "Rank": 1
         }
     ]
