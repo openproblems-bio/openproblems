@@ -41,7 +41,7 @@ rule website:
 
 rule summary:
     input:
-        script = "collate_dataset.py",
+        script = "collate_all.py",
         methods = all_methods,
     output: "{}/../results.json".format(SCRIPTS_DIR)
     shell: "python3 {{input.script}} {tempdir} {{output}}".format(tempdir=TEMPDIR)
