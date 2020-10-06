@@ -134,3 +134,6 @@ resources/
 
 # macOS
 .DS_Store
+
+# Snakemake
+.snakemake/
