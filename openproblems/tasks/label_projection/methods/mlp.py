@@ -4,6 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 
 import numpy as np
+import pandas as pd
 from scipy import sparse
 
 from ....tools.normalize import log_cpm, log_scran_pooling

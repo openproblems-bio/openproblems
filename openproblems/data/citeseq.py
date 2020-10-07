@@ -14,9 +14,9 @@ RNA_URL = "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&
 
 
 @loader
-def load_citeseq_cmbc(test=False):
+def load_citeseq_cbmc(test=False):
     if test:
-        adata = load_citeseq_cmbc(test=False)
+        adata = load_citeseq_cbmc(test=False)
         keep_cells = np.random.choice(adata.shape[0], 500, replace=False)
         adata = adata[keep_cells]
 
