@@ -154,7 +154,7 @@ rule build_docker:
 
 rule build_docker_r:
     input:
-        dockerfile="../docker/base/Dockerfile",
+        dockerfile="../docker/r/Dockerfile",
         temp=".docker_push"
     output:
         temp(".docker_build_r")
