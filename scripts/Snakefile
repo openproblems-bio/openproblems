@@ -143,14 +143,6 @@ rule login_docker:
     shell:
         "docker login --username=singlecellopenproblems --password={params.password} && touch .docker_login"
 
-rule pull_docker:
-    input:
-        ".docker_login"
-    output:
-        temp(".docker_build")
-    shell:
-        "docker pull singlecellopenproblems/openproblems"
-
 rule build_docker:
     input:
         dockerfile="../Dockerfile",
