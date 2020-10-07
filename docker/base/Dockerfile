@@ -12,8 +12,8 @@ RUN apt-get update -qq
 RUN apt-get install r-base-core=3.6\* -y
 
 # R local library setup
-echo 'export R_LIBS_USER="$HOME/R/Library"' >> $HOME/.bashrc
-echo ".libPaths(c('$R_LIBS_USER', .libPaths()))" >> $HOME/.Rprofile
+RUN echo 'export R_LIBS_USER="$HOME/R/Library"' >> $HOME/.bashrc
+RUN echo ".libPaths(c('$R_LIBS_USER', .libPaths()))" >> $HOME/.Rprofile
 
 # Install single-cell open problems
 RUN pip install git+https://github.com/singlecellopenproblems/SingleCellOpenProblems.git#egg=openproblems[methods]
