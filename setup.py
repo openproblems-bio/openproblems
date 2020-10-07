@@ -52,10 +52,10 @@ setup(
         "doc": doc_requires,
         "methods": methods_requires,
         "evaluate": evaluate_requires + methods_requires,
-        "multimodal_data_integration/harmonic_alignment_sqrt_cpm": [
+        "multimodal_data_integration-harmonic_alignment_sqrt_cpm": [
             "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python"
         ],
-        "multimodal_data_integration/harmonic_alignment_log_scran_pooling": [
+        "multimodal_data_integration-harmonic_alignment_log_scran_pooling": [
             "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python"
         ],
     },
