@@ -145,7 +145,7 @@ rule login_docker:
 
 rule build_docker:
     input:
-        dockerfile="../Dockerfile",
+        dockerfile="../docker/base/Dockerfile",
         login=".docker_login"
     output:
         temp(".docker_build")
