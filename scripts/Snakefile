@@ -118,7 +118,7 @@ rule run_method:
     input:
         script = "run_method.py",
         data = "{tempdir}/{task}/{dataset}.data.h5ad",
-        docker = ".docker_push",
+        docker = ".docker_push_r",
     output:
         data = temp("{tempdir}/{task}/{dataset}/{method}.method.h5ad"),
         json = temp("{tempdir}/{task}/{dataset}/{method}.meta.json"),
@@ -169,7 +169,7 @@ rule push_docker:
     shell:
         "docker push singlecellopenproblems/openproblems && touch {output}"
 
-rule push_docker:
+rule push_docker_r:
     input:
         ".docker_build_r"
     output:
