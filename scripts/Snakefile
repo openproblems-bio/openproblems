@@ -5,7 +5,7 @@ import sys
 
 TEMPDIR = ".evaluate"
 SCRIPTS_DIR = os.getcwd()
-DOCKER_DIR = "/opt/openproblems"
+DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
 
 
@@ -126,7 +126,7 @@ rule run_method:
         workdir = DOCKER_DIR
     singularity:
         "docker://singlecellopenproblems/openproblems"
-    shell: "cd {params.workdir} && python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}"
+    shell: "cd {params.workdir} && pip install -U ..[{wildcards.task}:{wildcards.method}] && python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}"
 
 rule load_dataset:
     input:
