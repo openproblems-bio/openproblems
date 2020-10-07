@@ -106,6 +106,7 @@ rule evaluate_metric:
     input:
         script = "evaluate_metric.py",
         data = "{tempdir}/{task}/{dataset}/{method}.method.h5ad",
+        docker = ".docker_push",
     output: temp("{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json")
     params:
         workdir = DOCKER_DIR
@@ -117,6 +118,7 @@ rule run_method:
     input:
         script = "run_method.py",
         data = "{tempdir}/{task}/{dataset}.data.h5ad",
+        docker = ".docker_push",
     output:
         data = temp("{tempdir}/{task}/{dataset}/{method}.method.h5ad"),
         json = temp("{tempdir}/{task}/{dataset}/{method}.meta.json"),
@@ -133,10 +135,35 @@ rule load_dataset:
     output: temp("{tempdir}/{task}/{dataset}.data.h5ad")
     shell: "python3 {input.script} {wildcards.task} {wildcards.dataset} {output}"
 
-rule run_docker:
-    input:
-        ".docker"
+rule login_docker:
     output:
-        "docker_test.txt"
+        temp(".docker_login")
+    params:
+        password=os.environ['DOCKER_PASSWORD']
     shell:
-        "cat /opt/openproblems/.docker > /opt/openproblems/docker_test.txt"
+        "docker login --username=singlecellopenproblems --password={params.password} && touch .docker_login"
+
+rule pull_docker:
+    input:
+        ".docker_login"
+    output:
+        temp(".docker_build")
+    shell:
+        "docker pull singlecellopenproblems/openproblems"
+
+rule build_docker:
+    input:
+        dockerfile="../Dockerfile",
+        login=".docker_login"
+    output:
+        temp(".docker_build")
+    shell:
+        "docker build -f {input.dockerfile} -t singlecellopenproblems/openproblems . && touch .docker_build"
+
+rule push_docker:
+    input:
+        ".docker_build"
+    output:
+        ".docker_push"
+    shell:
+        "docker push singlecellopenproblems/openproblems && touch .docker_push"
