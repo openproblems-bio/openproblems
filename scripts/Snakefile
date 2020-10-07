@@ -5,6 +5,7 @@ import sys
 
 TEMPDIR = ".evaluate"
 SCRIPTS_DIR = os.getcwd()
+DOCKER_DIR = "/opt/openproblems"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
 
 
@@ -65,7 +66,6 @@ def datasets(wildcards):
         for d in task.DATASETS
     ]
 
-
 rule all:
     input:
         summary = "{}/../results.json".format(SCRIPTS_DIR),
@@ -107,7 +107,11 @@ rule evaluate_metric:
         script = "evaluate_metric.py",
         data = "{tempdir}/{task}/{dataset}/{method}.method.h5ad",
     output: temp("{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json")
-    shell: "python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}"
+    params:
+        workdir = DOCKER_DIR
+    singularity:
+        "docker://singlecellopenproblems/openproblems"
+    shell: "cd {params.workdir} && python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}"
 
 rule run_method:
     input:
@@ -116,7 +120,11 @@ rule run_method:
     output:
         data = temp("{tempdir}/{task}/{dataset}/{method}.method.h5ad"),
         json = temp("{tempdir}/{task}/{dataset}/{method}.meta.json"),
-    shell: "python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}"
+    params:
+        workdir = DOCKER_DIR
+    singularity:
+        "docker://singlecellopenproblems/openproblems"
+    shell: "cd {params.workdir} && python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}"
 
 rule load_dataset:
     input:
@@ -124,3 +132,11 @@ rule load_dataset:
         code = "{}/../openproblems/version.py".format(SCRIPTS_DIR)
     output: temp("{tempdir}/{task}/{dataset}.data.h5ad")
     shell: "python3 {input.script} {wildcards.task} {wildcards.dataset} {output}"
+
+rule run_docker:
+    input:
+        ".docker"
+    output:
+        "docker_test.txt"
+    shell:
+        "cat /opt/openproblems/.docker > /opt/openproblems/docker_test.txt"
