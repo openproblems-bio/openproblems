@@ -14,11 +14,14 @@ install_requires = [
 ]
 
 methods_requires = [
-    "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
     "rpy2",
     "scIB @ git+https://github.com/theislab/scib@master",
     "anndata2ri>=1.0.4",
 ]
+
+harmonic_alignment_requires = [
+    "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
+] + methods_requires
 
 evaluate_requires = ["snakemake"]
 
@@ -49,6 +52,12 @@ setup(
         "doc": doc_requires,
         "methods": methods_requires,
         "evaluate": evaluate_requires + methods_requires,
+        "multimodal_data_integration/harmonic_alignment_sqrt_cpm": [
+            "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python"
+        ],
+        "multimodal_data_integration/harmonic_alignment_log_scran_pooling": [
+            "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python"
+        ],
     },
     test_suite="nose2.collector.collector",
     long_description=readme,
