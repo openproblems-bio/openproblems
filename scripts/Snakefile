@@ -112,7 +112,7 @@ rule evaluate_metric:
         workdir = DOCKER_DIR
     singularity:
         "docker://singlecellopenproblems/openproblems"
-    shell: "cd {params.workdir} && pip install -U ..[{wildcards.task}-{wildcards.metric}] && python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}"
+    shell: "cd {params.workdir} && pip install --no-cache-dir --user -q -U ..[{wildcards.task}-{wildcards.metric}] && python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}"
 
 rule run_method:
     input:
@@ -126,7 +126,7 @@ rule run_method:
         workdir = DOCKER_DIR
     singularity:
         "docker://singlecellopenproblems/openproblems"
-    shell: "cd {params.workdir} && pip install -U ..[{wildcards.task}-{wildcards.method}] && python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}"
+    shell: "cd {params.workdir} && pip install --no-cache-dir --user -q -U ..[{wildcards.task}-{wildcards.method}] && python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}"
 
 rule load_dataset:
     input:
