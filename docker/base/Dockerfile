@@ -10,8 +10,6 @@ RUN apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2A
 RUN echo 'deb http://cloud.r-project.org/bin/linux/debian stretch-cran35/' >> /etc/apt/sources.list
 RUN apt-get update -qq
 RUN apt-get install r-base-core=3.6\* -y
-RUN export R_LIBS_USER="$HOME/R/Library"
-RUN echo ".libPaths(c('$R_LIBS_USER', .libPaths()))" >> $HOME/.Rprofile
 
 # Install single-cell open problems
 RUN pip install git+https://github.com/singlecellopenproblems/SingleCellOpenProblems.git#egg=openproblems[methods]
