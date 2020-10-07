@@ -125,7 +125,7 @@ rule run_method:
     params:
         workdir = DOCKER_DIR
     singularity:
-        "docker://singlecellopenproblems/openproblems"
+        "docker://singlecellopenproblems/openproblems-r-base"
     shell: "./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.method}] && cd {params.workdir} && python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}"
 
 rule load_dataset:
@@ -141,7 +141,7 @@ rule login_docker:
     params:
         password=os.environ['DOCKER_PASSWORD']
     shell:
-        "docker login --username=singlecellopenproblems --password={params.password} && touch .docker_login"
+        "docker login --username=singlecellopenproblems --password={params.password} && touch {output}"
 
 rule build_docker:
     input:
@@ -150,7 +150,16 @@ rule build_docker:
     output:
         temp(".docker_build")
     shell:
-        "docker build -f {input.dockerfile} -t singlecellopenproblems/openproblems . && touch .docker_build"
+        "docker build -f {input.dockerfile} -t singlecellopenproblems/openproblems . && touch {output}"
+
+rule build_docker_r:
+    input:
+        dockerfile="../docker/base/Dockerfile",
+        temp=".docker_push"
+    output:
+        temp(".docker_build_r")
+    shell:
+        "docker build -f {input.dockerfile} -t singlecellopenproblems/openproblems-r-base . && touch {output}"
 
 rule push_docker:
     input:
@@ -158,4 +167,12 @@ rule push_docker:
     output:
         ".docker_push"
     shell:
-        "docker push singlecellopenproblems/openproblems && touch .docker_push"
+        "docker push singlecellopenproblems/openproblems && touch {output}"
+
+rule push_docker:
+    input:
+        ".docker_build_r"
+    output:
+        ".docker_push_r"
+    shell:
+        "docker push singlecellopenproblems/openproblems-r-base && touch {output}"
