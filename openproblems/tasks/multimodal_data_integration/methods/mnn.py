@@ -7,6 +7,16 @@ from ....tools.decorators import method
 from ....tools.utils import check_version
 
 
+def _rpy2py(X):
+    import rpy2.robjects as ro
+    from rpy2.robjects import numpy2ri
+
+    try:
+        return numpy2ri.rpy2py(X)
+    except NotImplementedError:
+        return ro.conversion.rpy2py(X)
+
+
 def _mnn(adata, n_svd=100):
     import rpy2.robjects as ro
     from rpy2.robjects import numpy2ri
@@ -31,7 +41,7 @@ def _mnn(adata, n_svd=100):
         "out <- as.matrix(SummarizedExperiment::assay(batchelor::fastMNN(expr, batch = batch), 'reconstructed'))"
     )
 
-    XY_corrected = ro.globalenv["out"].T
+    XY_corrected = _rpy2py(ro.globalenv["out"]).T
     ro.r("rm(list=ls())")
     adata.obsm["aligned"] = XY_corrected[: X_pca.shape[0]]
     adata.obsm["mode2_aligned"] = XY_corrected[X_pca.shape[0] :]
