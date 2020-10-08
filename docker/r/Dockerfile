@@ -13,5 +13,6 @@ RUN echo ".libPaths(c('$HOME/R/Library', .libPaths()))" >> $HOME/.Rprofile
 
 # Install single-cell open problems
 RUN R -e "install.packages('BiocManager'); BiocManager::install('scran')"
+RUN R -e "BiocManager::install('batchelor')"
 
 RUN apt-get clean -y && apt-get autoremove -y
