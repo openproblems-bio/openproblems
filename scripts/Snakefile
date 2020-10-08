@@ -146,7 +146,8 @@ rule login_docker:
 rule build_docker:
     input:
         dockerfile="../docker/base/Dockerfile",
-        login=".docker_login"
+        login=".docker_login",
+        code = "{}/../openproblems/version.py".format(SCRIPTS_DIR)
     output:
         temp(".docker_build")
     shell:
