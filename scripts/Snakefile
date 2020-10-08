@@ -112,7 +112,10 @@ rule evaluate_metric:
         workdir = DOCKER_DIR
     singularity:
         "docker://singlecellopenproblems/openproblems"
-    shell: "./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.metric}] && cd {params.workdir} && python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}"
+    shell: """./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.metric}] &&
+    cd {params.workdir} &&
+    python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}
+    """
 
 rule run_method:
     input:
@@ -126,7 +129,11 @@ rule run_method:
         workdir = DOCKER_DIR
     singularity:
         "docker://singlecellopenproblems/openproblems-r-base"
-    shell: "./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.method}] && cd {params.workdir} && python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}"
+    shell: """
+    ./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.method}] &&
+    cd {params.workdir} &&
+    python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}
+    """
 
 rule load_dataset:
     input:
