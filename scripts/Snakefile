@@ -110,7 +110,7 @@ def singularity_image(wildcards, output):
         fun = getattr(task.metrics, wildcards.metric)
     except AttributeError:
         fun = getattr(task.methods, wildcards.method)
-    return fun.image
+    return fun.metadata['image']
 
 rule evaluate_metric:
     input:
