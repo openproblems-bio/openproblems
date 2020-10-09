@@ -1,5 +1,5 @@
 {
-    "name": "sciCAR Cell Lines",
+    "name": "CITE-seq Cord Blood Mononuclear Cells",
     "headers": {
         "names": [
             "Rank",
@@ -27,11 +27,11 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "0.0",
-            "Memory (GB)": 6.197353363037109,
-            "Runtime (min)": 1.674458865565248,
-            "kNN Area Under the Curve": 0.07064327978363942,
-            "Mean squared error": 1.0001010302598767,
-            "Rank": 2
+            "Memory (GB)": 4.607475280761719,
+            "Runtime (min)": 2.5131540340332625,
+            "kNN Area Under the Curve": 0.03889897832836083,
+            "Mean squared error": 1.0001202346565135,
+            "Rank": 3
         },
         {
             "Name": "Harmonic Alignment (sqrt CPM)",
@@ -40,11 +40,11 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "0.0",
-            "Memory (GB)": 0.5749168395996094,
-            "Runtime (min)": 0.6934051233013937,
-            "kNN Area Under the Curve": 0.04311015151904021,
-            "Mean squared error": 0.9997449506702836,
-            "Rank": 4
+            "Memory (GB)": 0.48244476318359375,
+            "Runtime (min)": 0.9247985997159655,
+            "kNN Area Under the Curve": 0.04953944879744557,
+            "Mean squared error": 1.0001755131707704,
+            "Rank": 2
         },
         {
             "Name": "Mutual Nearest Neighbors (log CPM)",
@@ -53,11 +53,11 @@
             "Year": 2018,
             "Code": "https://github.com/LTLA/batchelor",
             "Version": "3.3.6",
-            "Memory (GB)": 1.0372238159179688,
-            "Runtime (min)": 0.408842068266434,
-            "kNN Area Under the Curve": 0.050317699232892234,
-            "Mean squared error": 0.9344073802004631,
-            "Rank": 3
+            "Memory (GB)": 0.8698616027832031,
+            "Runtime (min)": 0.17786889251631996,
+            "kNN Area Under the Curve": 0.04532153157949634,
+            "Mean squared error": 1.0769764232084447,
+            "Rank": 5
         },
         {
             "Name": "Mutual Nearest Neighbors (log scran)",
@@ -66,11 +66,11 @@
             "Year": 2018,
             "Code": "https://github.com/LTLA/batchelor",
             "Version": "3.3.6",
-            "Memory (GB)": 6.2756500244140625,
-            "Runtime (min)": 1.257482451281976,
-            "kNN Area Under the Curve": 0.06704686647071567,
-            "Mean squared error": 1.0087463521460285,
-            "Rank": 5
+            "Memory (GB)": 4.701179504394531,
+            "Runtime (min)": 1.6049322748498525,
+            "kNN Area Under the Curve": 0.02767169232680513,
+            "Mean squared error": 0.9998523673729451,
+            "Rank": 4
         },
         {
             "Name": "Procrustes",
@@ -79,10 +79,10 @@
             "Year": 1975,
             "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
             "Version": "1.5.2",
-            "Memory (GB)": 0.5045242309570312,
-            "Runtime (min)": 0.20562944368381675,
-            "kNN Area Under the Curve": 0.0841392536388303,
-            "Mean squared error": 0.8917558662813883,
+            "Memory (GB)": 0.321990966796875,
+            "Runtime (min)": 0.041921477584401144,
+            "kNN Area Under the Curve": 0.20401752495191292,
+            "Mean squared error": 0.5777651058801672,
             "Rank": 1
         }
     ]

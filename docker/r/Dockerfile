@@ -1,8 +1,4 @@
-FROM rackspacedot/python37:latest
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN pip install --no-cache-dir -U pip wheel setuptools cmake
+FROM singlecellopenproblems/openproblems:latest
 
 # Install R
 RUN apt install dirmngr ca-certificates gnupg gpgv
@@ -16,6 +12,7 @@ RUN echo 'export R_LIBS_USER="$HOME/R/Library"' >> $HOME/.bashrc
 RUN echo ".libPaths(c('$HOME/R/Library', .libPaths()))" >> $HOME/.Rprofile
 
 # Install single-cell open problems
-RUN pip install git+https://github.com/singlecellopenproblems/SingleCellOpenProblems.git#egg=openproblems[methods]
+RUN R -e "install.packages('BiocManager'); BiocManager::install('scran')"
+RUN R -e "BiocManager::install('batchelor')"
 
 RUN apt-get clean -y && apt-get autoremove -y
