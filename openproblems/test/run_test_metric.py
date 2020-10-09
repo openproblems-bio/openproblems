@@ -11,6 +11,7 @@ def test_method(task, data_path, metric):
 
 
 def main(task_name, metric_name, data_path):
+    openproblems.data.no_cleanup()
     task = getattr(openproblems.tasks, task_name)
     metric = getattr(task.metrics, metric_name)
     test_method(task, data_path, metric)

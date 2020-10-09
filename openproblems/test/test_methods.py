@@ -33,7 +33,6 @@ def test_method(task, dataset, method):
                 "run_test_method.py",
                 task_name,
                 method.__name__,
-                openproblems.data.TEMPDIR.name,
                 dataset.__name__,
                 data_file.name,
             ]
