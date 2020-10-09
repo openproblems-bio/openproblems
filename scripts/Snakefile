@@ -169,7 +169,6 @@ rule build_docker:
     input:
         dockerfile="../docker/{image}/Dockerfile",
         login=".docker_login",
-        code = "{}/../openproblems/version.py".format(SCRIPTS_DIR)
     output:
         temp("../docker/{image}/.docker_build")
     shell:
