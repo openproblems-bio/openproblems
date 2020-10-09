@@ -2,6 +2,7 @@ import unittest
 import parameterized
 import tempfile
 import os
+import subprocess
 
 import openproblems
 from openproblems.test import utils
