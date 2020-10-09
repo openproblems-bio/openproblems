@@ -1,9 +1,13 @@
 # openproblems-r-base Docker image
 
 Base image: singlecellopenproblems/openproblems
+
 OS: Debian Stretch
+
 Python: 3.7
+
 R: 3.6
+
 apt packages:
 
 * dirmngr
