@@ -24,7 +24,7 @@ TESTDIR = os.path.dirname(os.path.abspath(__file__))
 def test_method(task, dataset, method):
     task_name = task.__name__.split(".")[-1]
     image = "docker://singlecellopenproblems/{}".format(method.metadata["image"])
-    with tempfile.NamedTemporaryFile() as data_file:
+    with tempfile.NamedTemporaryFile(suffix=".h5ad") as data_file:
         code = subprocess.call(
             [
                 "bash",
