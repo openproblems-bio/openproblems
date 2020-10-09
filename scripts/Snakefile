@@ -69,13 +69,21 @@ def datasets(wildcards):
     ]
 
 
-def singularity_command(wildcards, output):
+def docker_image(wildcards):
     task = getattr(openproblems.tasks, wildcards.task)
     try:
-        image = getattr(task.metrics, wildcards.metric).metadata['image']
+        fun = getattr(task.metrics, wildcards.metric)
     except AttributeError:
-        image = getattr(task.methods, wildcards.method).metadata['image']
-    return SINGULARITY_EXEC.format(image=image)
+        fun = getattr(task.methods, wildcards.method)
+    return fun.metadata['image']
+
+
+def docker_push(wildcards):
+    return "../docker/{}/.docker_push".format(docker_image(wildcards))
+
+
+def singularity_command(wildcards, output):
+    return SINGULARITY_EXEC.format(image=docker_image(wildcards))
 
 
 rule all:
@@ -118,7 +126,7 @@ rule evaluate_metric:
     input:
         script = "evaluate_metric.py",
         data = "{tempdir}/{task}/{dataset}/{method}.method.h5ad",
-        docker = ".docker_push",
+        docker = docker_push,
     output: temp("{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json")
     params:
         workdir = DOCKER_DIR,
@@ -131,7 +139,7 @@ rule run_method:
     input:
         script = "run_method.py",
         data = "{tempdir}/{task}/{dataset}.data.h5ad",
-        docker = ".docker_push_r",
+        docker = docker_push,
     output:
         data = temp("{tempdir}/{task}/{dataset}/{method}.method.h5ad"),
         json = temp("{tempdir}/{task}/{dataset}/{method}.meta.json"),
@@ -159,35 +167,18 @@ rule login_docker:
 
 rule build_docker:
     input:
-        dockerfile="../docker/base/Dockerfile",
+        dockerfile="../docker/{image}/Dockerfile",
         login=".docker_login",
         code = "{}/../openproblems/version.py".format(SCRIPTS_DIR)
     output:
-        temp(".docker_build")
+        temp("../docker/{image}/.docker_build")
     shell:
-        "docker build -f {input.dockerfile} -t singlecellopenproblems/openproblems . && touch {output}"
-
-rule build_docker_r:
-    input:
-        dockerfile="../docker/r/Dockerfile",
-        temp=".docker_push"
-    output:
-        temp(".docker_build_r")
-    shell:
-        "docker build -f {input.dockerfile} -t singlecellopenproblems/openproblems-r-base . && touch {output}"
+        "docker build -f {input.dockerfile} -t singlecellopenproblems/{wildcards.image} . && touch {output}"
 
 rule push_docker:
     input:
-        ".docker_build"
+        "../docker/{image}/.docker_build"
     output:
-        ".docker_push"
+        "../docker/{image}/.docker_push"
     shell:
-        "docker push singlecellopenproblems/openproblems && touch {output}"
-
-rule push_docker_r:
-    input:
-        ".docker_build_r"
-    output:
-        ".docker_push_r"
-    shell:
-        "docker push singlecellopenproblems/openproblems-r-base && touch {output}"
+        "docker push singlecellopenproblems/{wildcards.image} && touch {output}"
