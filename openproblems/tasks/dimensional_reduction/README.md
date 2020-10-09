@@ -5,7 +5,6 @@ Dimensional reduction is one of the key challenges in single-cell data represent
 
 Each *feature* in a dataset functions as a single dimension. In the AnnData structure, these are stored in the `adata.var` component. Each cell analyzed is stored in `adata.obs`. The measured cells are thereby represented in the **cell x gene expression matrix**, `adata.X`.
 
-<a src="./images/core_anndata.png"></a>
 ![AnnData Structure](/images/core_anndata.png)
 
 While each of the ~30,000 dimensions measured in each cell (not accounting for roughly 75-90% data dropout per cell, another issue entirely), likely contribute to some sort of data structure, the overall structure of the data is diluted due to the <a href = "https://en.wikipedia.org/wiki/Curse_of_dimensionality">*curse of dimensionality*</a>. In short, it's difficult to visualize the contribution of each individual gene in a way that makes sense to the human eye, i.e., two or three dimensions (at most). Thus, we need to find a way to <a href = "https://en.wikipedia.org/wiki/Dimensionality_reduction">*dimensionally reduce*</a> the data for visualization and interpretation.
