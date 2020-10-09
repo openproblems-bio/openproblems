@@ -7,12 +7,12 @@ RUN echo 'deb http://cloud.r-project.org/bin/linux/debian stretch-cran35/' >> /e
 RUN apt-get update -qq
 RUN apt-get install r-base-core=3.6\* -y
 
-# R local library setup
-RUN echo 'export R_LIBS_USER="$HOME/R/Library"' >> $HOME/.bashrc
-RUN echo ".libPaths(c('$HOME/R/Library', .libPaths()))" >> $HOME/.Rprofile
-
-# Install single-cell open problems
+# Install R packages
 RUN R -e "install.packages('BiocManager'); BiocManager::install('scran')"
 RUN R -e "BiocManager::install('batchelor')"
+
+# Install Python packages
+RUN pip install git+https://github.com/singlecellopenproblems/SingleCellOpenProblems.git#egg=openproblems[r]
+
 
 RUN apt-get clean -y && apt-get autoremove -y
