@@ -5,6 +5,7 @@ import openproblems
 
 
 def main(input_dir, output_file):
+    openproblems.data.no_cleanup()
 
     result = dict()
     for task in openproblems.TASKS:
