@@ -1,6 +1,6 @@
 import unittest
 import parameterized
-import numbers
+import tempfile
 
 import openproblems
 from openproblems.test import utils
@@ -18,13 +18,37 @@ utils.ignore_numba_warnings()
     name_func=utils.name_test,
 )
 def test_method(task, dataset, method):
-    adata = dataset(test=True)
-    output = method(adata)
-    assert output is None
-    assert task.checks.check_method(adata)
-    for metric in task.METRICS:
-        m = metric(adata)
-        assert isinstance(m, numbers.Number)
+    task_name = task.__name__.split(".")[-1]
+    image = "docker://singlecellopenproblems/{}".format(method.metadata["image"])
+    with tempfile.NamedTemporaryFile() as tempfile:
+        code = subprocess.call(
+            [
+                "bash",
+                "singularity_run.sh",
+                "run_test_method.py",
+                task_name,
+                method.__name__,
+                openproblems.data.TEMPDIR,
+                dataset.__name__,
+                tempfile,
+            ]
+        )
+        assert code == 0, code
+        for metric in task.METRICS:
+            image = "docker://singlecellopenproblems/{}".format(
+                metric.metadata["image"]
+            )
+            code = subprocess.call(
+                [
+                    "bash",
+                    "singularity_run.sh",
+                    "run_test_metric.py",
+                    task_name,
+                    metric.__name__,
+                    tempfile,
+                ]
+            )
+            assert code == 0, code
 
 
 @parameterized.parameterized.expand(
