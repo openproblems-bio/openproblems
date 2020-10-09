@@ -23,7 +23,7 @@ TESTDIR = os.path.dirname(os.path.abspath(__file__))
 def test_method(task, dataset, method):
     task_name = task.__name__.split(".")[-1]
     image = "docker://singlecellopenproblems/{}".format(method.metadata["image"])
-    with tempfile.NamedTemporaryFile() as tempfile:
+    with tempfile.NamedTemporaryFile() as data_file:
         code = subprocess.call(
             [
                 "bash",
@@ -34,7 +34,7 @@ def test_method(task, dataset, method):
                 method.__name__,
                 openproblems.data.TEMPDIR,
                 dataset.__name__,
-                tempfile,
+                data_file.name,
             ]
         )
         assert code == 0, code
@@ -50,7 +50,7 @@ def test_method(task, dataset, method):
                     "run_test_metric.py",
                     task_name,
                     metric.__name__,
-                    tempfile,
+                    data_file.name,
                 ]
             )
             assert code == 0, code
