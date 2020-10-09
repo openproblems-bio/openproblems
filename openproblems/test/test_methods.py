@@ -25,7 +25,7 @@ def test_method(task, dataset, method):
     task_name = task.__name__.split(".")[-1]
     image = "docker://singlecellopenproblems/{}".format(method.metadata["image"])
     with tempfile.NamedTemporaryFile(suffix=".h5ad") as data_file:
-        code = subprocess.call(
+        p = subprocess.run(
             [
                 "bash",
                 os.path.join(TESTDIR, "singularity_run.sh"),
@@ -35,14 +35,17 @@ def test_method(task, dataset, method):
                 method.__name__,
                 dataset.__name__,
                 data_file.name,
-            ]
+            ],
+            stderr=subprocess.PIPE,
         )
-        assert code == 0, code
+        assert p.returncode == 0, "Return code {}\n\n{}".format(
+            p.returncode, p.stderr.decode("utf-8")
+        )
         for metric in task.METRICS:
             image = "docker://singlecellopenproblems/{}".format(
                 metric.metadata["image"]
             )
-            code = subprocess.call(
+            p = subprocess.run(
                 [
                     "bash",
                     os.path.join(TESTDIR, "singularity_run.sh"),
@@ -51,9 +54,12 @@ def test_method(task, dataset, method):
                     task_name,
                     metric.__name__,
                     data_file.name,
-                ]
+                ],
+                stderr=subprocess.PIPE,
             )
-            assert code == 0, code
+            assert p.returncode == 0, "Return code {}\n\n{}".format(
+                p.returncode, p.stderr.decode("utf-8")
+            )
 
 
 @parameterized.parameterized.expand(
