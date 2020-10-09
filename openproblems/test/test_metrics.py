@@ -10,9 +10,6 @@ from openproblems.test import utils
 )
 def test_metric_metadata(metric):
     assert hasattr(metric, "metadata")
-    for attr in [
-        "metric_name",
-        "maximize",
-    ]:
+    for attr in ["metric_name", "maximize", "image"]:
         assert attr in metric.metadata
     assert isinstance(metric.metadata["maximize"], bool)
