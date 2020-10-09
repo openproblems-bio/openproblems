@@ -117,6 +117,11 @@ rule evaluate_metric:
     python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}
     """
 
+def test(*args, **kwargs):
+    print(*args)
+    print(**kwargs)
+    return "docker://singlecellopenproblems/openproblems-r-base"
+
 rule run_method:
     input:
         script = "run_method.py",
@@ -128,7 +133,7 @@ rule run_method:
     params:
         workdir = DOCKER_DIR
     singularity:
-        "docker://singlecellopenproblems/openproblems-r-base"
+        test
     shell: """
     ./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.method}] &&
     cd {params.workdir} &&
