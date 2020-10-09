@@ -27,11 +27,11 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "0.0",
-            "Memory (GB)": 4.607475280761719,
-            "Runtime (min)": 2.5131540340332625,
-            "kNN Area Under the Curve": 0.03889897832836083,
-            "Mean squared error": 1.0001202346565135,
-            "Rank": 3
+            "Memory (GB)": 4.776008605957031,
+            "Runtime (min)": 2.365690798033029,
+            "kNN Area Under the Curve": 0.049369469280176895,
+            "Mean squared error": 1.0000884844758557,
+            "Rank": 2
         },
         {
             "Name": "Harmonic Alignment (sqrt CPM)",
@@ -40,11 +40,11 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "0.0",
-            "Memory (GB)": 0.48244476318359375,
-            "Runtime (min)": 0.9247985997159655,
-            "kNN Area Under the Curve": 0.04953944879744557,
-            "Mean squared error": 1.0001755131707704,
-            "Rank": 2
+            "Memory (GB)": 0.5183830261230469,
+            "Runtime (min)": 1.107113321548483,
+            "kNN Area Under the Curve": 0.04869762192594989,
+            "Mean squared error": 0.9999762712850204,
+            "Rank": 3
         },
         {
             "Name": "Mutual Nearest Neighbors (log CPM)",
@@ -53,10 +53,10 @@
             "Year": 2018,
             "Code": "https://github.com/LTLA/batchelor",
             "Version": "3.3.6",
-            "Memory (GB)": 0.8698616027832031,
-            "Runtime (min)": 0.17786889251631996,
-            "kNN Area Under the Curve": 0.04532153157949634,
-            "Mean squared error": 1.0769764232084447,
+            "Memory (GB)": 0.8710784912109375,
+            "Runtime (min)": 0.19707994433119894,
+            "kNN Area Under the Curve": 0.04547591268318759,
+            "Mean squared error": 1.0767083225540162,
             "Rank": 5
         },
         {
@@ -66,10 +66,10 @@
             "Year": 2018,
             "Code": "https://github.com/LTLA/batchelor",
             "Version": "3.3.6",
-            "Memory (GB)": 4.701179504394531,
-            "Runtime (min)": 1.6049322748498525,
-            "kNN Area Under the Curve": 0.02767169232680513,
-            "Mean squared error": 0.9998523673729451,
+            "Memory (GB)": 5.0509490966796875,
+            "Runtime (min)": 1.568382465284473,
+            "kNN Area Under the Curve": 0.028037809742870855,
+            "Mean squared error": 0.9929587429676795,
             "Rank": 4
         },
         {
@@ -79,10 +79,10 @@
             "Year": 1975,
             "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
             "Version": "1.5.2",
-            "Memory (GB)": 0.321990966796875,
-            "Runtime (min)": 0.041921477584401144,
-            "kNN Area Under the Curve": 0.20401752495191292,
-            "Mean squared error": 0.5777651058801672,
+            "Memory (GB)": 0.32535552978515625,
+            "Runtime (min)": 0.05192132733063772,
+            "kNN Area Under the Curve": 0.20339769166860433,
+            "Mean squared error": 0.5787570624787728,
             "Rank": 1
         }
     ]
