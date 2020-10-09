@@ -28,7 +28,7 @@ def test_method(task, dataset, method):
         code = subprocess.call(
             [
                 "bash",
-                "singularity_run.sh",
+                os.path.join(TESTDIR, "singularity_run.sh"),
                 TESTDIR,
                 "run_test_method.py",
                 task_name,
@@ -46,7 +46,7 @@ def test_method(task, dataset, method):
             code = subprocess.call(
                 [
                     "bash",
-                    "singularity_run.sh",
+                    os.path.join(TESTDIR, "singularity_run.sh"),
                     TESTDIR,
                     "run_test_metric.py",
                     task_name,
