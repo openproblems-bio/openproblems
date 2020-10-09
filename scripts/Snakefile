@@ -70,6 +70,7 @@ def datasets(wildcards):
 
 
 def singularity_command(wildcards, output):
+    task = getattr(openproblems.tasks, wildcards.task)
     try:
         fun = wildcards.metric
         image = getattr(task.metrics, wildcards.metric).metadata['image']
