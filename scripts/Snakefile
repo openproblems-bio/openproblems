@@ -105,11 +105,14 @@ rule collate_method:
     shell: "python3 {input.script} {wildcards.task} {input.meta} {wildcards.tempdir}/{wildcards.task}/{wildcards.dataset}/{wildcards.method} {output}"
 
 def singularity_image(wildcards, output):
+    print(wildcards)
+    print(output)
     task = getattr(openproblems.tasks, wildcards.task)
     try:
         fun = getattr(task.metrics, wildcards.metric)
     except AttributeError:
         fun = getattr(task.methods, wildcards.method)
+    print(fun.metadata)
     return fun.metadata['image']
 
 rule evaluate_metric:
@@ -123,7 +126,7 @@ rule evaluate_metric:
         singularity = SINGULARITY_EXEC,
         image = singularity_image
     shell: """
-    {params.singularity} docker://singlecellopenproblems/
+    {params.singularity} {params.image}
     ./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.metric}] &&
     cd {params.workdir} &&
     python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}
@@ -142,7 +145,7 @@ rule run_method:
         singularity = SINGULARITY_EXEC,
         image = singularity_image
     shell: """
-    {params.singularity} docker://singlecellopenproblems/
+    {params.singularity} {params.image}
     ./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.method}] &&
     cd {params.workdir} &&
     python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}
