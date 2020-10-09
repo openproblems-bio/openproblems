@@ -2,7 +2,9 @@ import openproblems
 import tempfile
 import os
 import sys
+import multiprocessing
 
+N_THREADS = multiprocessing.cpu_count()
 TEMPDIR = ".evaluate"
 SCRIPTS_DIR = os.getcwd()
 DOCKER_DIR = "/opt/openproblems/scripts/"
@@ -131,6 +133,7 @@ rule evaluate_metric:
     params:
         workdir = DOCKER_DIR,
         singularity = singularity_command
+    threads: N_THREADS
     shell: """
     {params.singularity} {params.workdir} {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}
     """
@@ -146,6 +149,7 @@ rule run_method:
     params:
         workdir = DOCKER_DIR,
         singularity = singularity_command
+    threads: N_THREADS
     shell: """
     {params.singularity} {params.workdir} {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}
     """

@@ -1,6 +1,6 @@
 set -x
 pip install -U ..[evaluate]
-./snakemake.sh || travis_terminate 1
+snakemake -j $(grep -c processor /proc/cpuinfo) all || travis_terminate 1
 if [ "$TRAVIS_PYTHON_VERSION" = "3.6" ]; then
     git remote set-url origin https://singlecellopenproblems:${GITHUB_PASSWORD}@github.com/${TRAVIS_REPO_SLUG}.git
     git checkout -B master
