@@ -104,6 +104,14 @@ rule collate_method:
     output: temp("{tempdir}/{task}/{dataset}/{method}.result.json")
     shell: "python3 {input.script} {wildcards.task} {input.meta} {wildcards.tempdir}/{wildcards.task}/{wildcards.dataset}/{wildcards.method} {output}"
 
+def singularity_image(wildcards, output):
+    task = getattr(openproblems.tasks, wildcards.task)
+    try:
+        fun = getattr(task.metrics, wildcards.metric)
+    except AttributeError:
+        fun = getattr(task.methods, wildcards.method)
+    return fun.image
+
 rule evaluate_metric:
     input:
         script = "evaluate_metric.py",
@@ -111,7 +119,7 @@ rule evaluate_metric:
         docker = ".docker_push",
     output: temp("{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json")
     params:
-        workdir = DOCKER_DIR
+        workdir = DOCKER_DIR,
         singularity = SINGULARITY_EXEC,
         image = singularity_image
     shell: """
@@ -120,14 +128,6 @@ rule evaluate_metric:
     cd {params.workdir} &&
     python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}
     """
-
-def singularity_image(wildcards, output):
-    task = getattr(openproblems.tasks, wildcards.task)
-    try:
-        fun = getattr(task.metrics, wildcards.metric)
-    except AttributeError:
-        fun = getattr(task.methods, wildcards.method)
-    return fun.image
 
 rule run_method:
     input:
