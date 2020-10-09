@@ -13,7 +13,7 @@ install_requires = [
     "memory-profiler",
 ]
 
-methods_requires = [
+r_requires = [
     "rpy2",
     "scIB @ git+https://github.com/theislab/scib@master",
     "anndata2ri>=1.0.4",
@@ -21,7 +21,7 @@ methods_requires = [
 
 harmonic_alignment_requires = [
     "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
-] + methods_requires
+] + r_requires
 
 evaluate_requires = ["snakemake"]
 
@@ -48,10 +48,10 @@ setup(
     install_requires=install_requires,
     python_requires=">=3.5",
     extras_require={
-        "test": test_requires + methods_requires,
+        "test": test_requires + r_requires,
         "doc": doc_requires,
-        "methods": methods_requires,
-        "evaluate": evaluate_requires + methods_requires,
+        "r": r_requires,
+        "evaluate": evaluate_requires + r_requires,
         "multimodal_data_integration-harmonic_alignment_sqrt_cpm": harmonic_alignment_requires,
         "multimodal_data_integration-harmonic_alignment_log_scran_pooling": harmonic_alignment_requires,
     },
