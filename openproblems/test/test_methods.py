@@ -1,11 +1,14 @@
 import unittest
 import parameterized
 import tempfile
+import os
 
 import openproblems
 from openproblems.test import utils
 
 utils.ignore_numba_warnings()
+
+TESTDIR = os.path.dirname(os.path.abspath(__file__))
 
 
 @parameterized.parameterized.expand(
@@ -25,6 +28,7 @@ def test_method(task, dataset, method):
             [
                 "bash",
                 "singularity_run.sh",
+                TESTDIR,
                 "run_test_method.py",
                 task_name,
                 method.__name__,
@@ -42,6 +46,7 @@ def test_method(task, dataset, method):
                 [
                     "bash",
                     "singularity_run.sh",
+                    TESTDIR,
                     "run_test_metric.py",
                     task_name,
                     metric.__name__,
