@@ -8,7 +8,7 @@ SCRIPTS_DIR = os.getcwd()
 DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
 os.environ['SINGULARITY_CACHEDIR'] = "/tmp/.singularity"
-SINGULARITY_EXEC = "singularity exec -B {mountdir}:/opt/openproblems docker://singlecellopenproblems/{{image}} {mountdir}/singularity_run.sh".format(mountdir=os.path.dirname(SCRIPTS_DIR), workdir=DOCKER_DIR)
+SINGULARITY_EXEC = "singularity exec -B {mountdir}:/opt/openproblems docker://singlecellopenproblems/{{image}} {workdir}/singularity_run.sh".format(mountdir=os.path.dirname(SCRIPTS_DIR), workdir=DOCKER_DIR)
 
 
 def tasks(wildcards):
