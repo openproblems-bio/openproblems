@@ -8,7 +8,7 @@ SCRIPTS_DIR = os.getcwd()
 DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
 os.environ['SINGULARITY_CACHEDIR'] = "/tmp/.singularity"
-SINGULARITY_EXEC = "singularity exec -B {}:/opt/openproblems".format(os.path.dirname(SCRIPTS_DIR))
+SINGULARITY_EXEC = "singularity exec -B {mountdir}:/opt/openproblems docker://singlecellopenproblems/{{image}} pip install --no-cache-dir --user -q -U $1 {workdir}/..[{{task}}-{{fun}}] && cd {workdir} && python3".format(mountdir=os.path.dirname(SCRIPTS_DIR), workdir=DOCKER_DIR)
 
 
 def tasks(wildcards):
@@ -69,13 +69,17 @@ def datasets(wildcards):
     ]
 
 
-def singularity_image(wildcards, output):
-    task = getattr(openproblems.tasks, wildcards.task)
+def singularity_command(wildcards, output):
     try:
-        fun = getattr(task.metrics, wildcards.metric)
+        fun = wildcards.metric
+        image = getattr(task.metrics, wildcards.metric).metadata['image']
     except AttributeError:
-        fun = getattr(task.methods, wildcards.method)
-    return "docker://singlecellopenproblems/{}".format(fun.metadata['image'])
+        fun = wildcards.method
+        image = getattr(task.methods, wildcards.method).metadata['image']
+    return SINGULARITY_EXEC.format(
+    image=image, task=wildcards.task, fun=fun
+    )
+
 
 rule all:
     input:
@@ -120,14 +124,9 @@ rule evaluate_metric:
         docker = ".docker_push",
     output: temp("{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json")
     params:
-        workdir = DOCKER_DIR,
-        singularity = SINGULARITY_EXEC,
-        image = singularity_image
+        singularity = singularity_command
     shell: """
-    {params.singularity} {params.image}
-    ./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.metric}] &&
-    cd {params.workdir} &&
-    python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}
+    {params.singularity} {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}
     """
 
 rule run_method:
@@ -139,14 +138,9 @@ rule run_method:
         data = temp("{tempdir}/{task}/{dataset}/{method}.method.h5ad"),
         json = temp("{tempdir}/{task}/{dataset}/{method}.meta.json"),
     params:
-        workdir = DOCKER_DIR,
-        singularity = SINGULARITY_EXEC,
-        image = singularity_image
+        singularity = singularity_command
     shell: """
-    {params.singularity} {params.image}
-    ./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.method}] &&
-    cd {params.workdir} &&
-    python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}
+    {params.singularity} {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}
     """
 
 rule load_dataset:
