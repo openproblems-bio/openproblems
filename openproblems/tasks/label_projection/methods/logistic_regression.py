@@ -63,6 +63,7 @@ def logistic_regression_log_cpm(adata):
     paper_year=2013,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
     code_version=check_version("scikit-learn"),
+    image="openproblems-r-base",
 )
 def logistic_regression_scran(adata):
     log_scran_pooling(adata)

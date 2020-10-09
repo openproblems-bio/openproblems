@@ -7,6 +7,8 @@ TEMPDIR = ".evaluate"
 SCRIPTS_DIR = os.getcwd()
 DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
+os.environ['SINGULARITY_CACHEDIR'] = "/tmp/.singularity"
+SINGULARITY_EXEC = "singularity exec -B {}:/opt/openproblems".format(os.path.dirname(SCRIPTS_DIR))
 
 
 def tasks(wildcards):
@@ -110,17 +112,22 @@ rule evaluate_metric:
     output: temp("{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json")
     params:
         workdir = DOCKER_DIR
-    singularity:
-        "docker://singlecellopenproblems/openproblems"
-    shell: """./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.metric}] &&
+        singularity = SINGULARITY_EXEC,
+        image = singularity_image
+    shell: """
+    {params.singularity} docker://singlecellopenproblems/
+    ./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.metric}] &&
     cd {params.workdir} &&
     python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}
     """
 
-def test(*args, **kwargs):
-    print(*args)
-    print(**kwargs)
-    return "docker://singlecellopenproblems/openproblems-r-base"
+def singularity_image(wildcards, output):
+    task = getattr(openproblems.tasks, wildcards.task)
+    try:
+        fun = getattr(task.metrics, wildcards.metric)
+    except AttributeError:
+        fun = getattr(task.methods, wildcards.method)
+    return fun.image
 
 rule run_method:
     input:
@@ -131,10 +138,11 @@ rule run_method:
         data = temp("{tempdir}/{task}/{dataset}/{method}.method.h5ad"),
         json = temp("{tempdir}/{task}/{dataset}/{method}.meta.json"),
     params:
-        workdir = DOCKER_DIR
-    singularity:
-        test
+        workdir = DOCKER_DIR,
+        singularity = SINGULARITY_EXEC,
+        image = singularity_image
     shell: """
+    {params.singularity} docker://singlecellopenproblems/
     ./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.method}] &&
     cd {params.workdir} &&
     python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}
