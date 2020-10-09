@@ -1,1 +1,1 @@
-snakemake -j $(grep -c processor /proc/cpuinfo) --use-singularity --singularity-args "-B $(dirname $(pwd)):/opt/openproblems" all
+snakemake -j 1 --use-singularity --singularity-prefix /tmp/.snakemake --singularity-args "-B $(dirname $(pwd)):/opt/openproblems" all

@@ -112,21 +112,28 @@ rule evaluate_metric:
         workdir = DOCKER_DIR
     singularity:
         "docker://singlecellopenproblems/openproblems"
-    shell: "cd {params.workdir} && pip install --no-cache-dir --user -q -U ..[{wildcards.task}-{wildcards.metric}] && python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}"
+    shell: """./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.metric}] &&
+    cd {params.workdir} &&
+    python3 {input.script} {wildcards.task} {wildcards.metric} {input.data} {output}
+    """
 
 rule run_method:
     input:
         script = "run_method.py",
         data = "{tempdir}/{task}/{dataset}.data.h5ad",
-        docker = ".docker_push",
+        docker = ".docker_push_r",
     output:
         data = temp("{tempdir}/{task}/{dataset}/{method}.method.h5ad"),
         json = temp("{tempdir}/{task}/{dataset}/{method}.meta.json"),
     params:
         workdir = DOCKER_DIR
     singularity:
-        "docker://singlecellopenproblems/openproblems"
-    shell: "cd {params.workdir} && pip install --no-cache-dir --user -q -U ..[{wildcards.task}-{wildcards.method}] && python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}"
+        "docker://singlecellopenproblems/openproblems-r-base"
+    shell: """
+    ./singularity_setup.sh {params.workdir}/..[{wildcards.task}-{wildcards.method}] &&
+    cd {params.workdir} &&
+    python3 {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json}
+    """
 
 rule load_dataset:
     input:
@@ -141,16 +148,26 @@ rule login_docker:
     params:
         password=os.environ['DOCKER_PASSWORD']
     shell:
-        "docker login --username=singlecellopenproblems --password={params.password} && touch .docker_login"
+        "docker login --username=singlecellopenproblems --password={params.password} && touch {output}"
 
 rule build_docker:
     input:
         dockerfile="../docker/base/Dockerfile",
-        login=".docker_login"
+        login=".docker_login",
+        code = "{}/../openproblems/version.py".format(SCRIPTS_DIR)
     output:
         temp(".docker_build")
     shell:
-        "docker build -f {input.dockerfile} -t singlecellopenproblems/openproblems . && touch .docker_build"
+        "docker build -f {input.dockerfile} -t singlecellopenproblems/openproblems . && touch {output}"
+
+rule build_docker_r:
+    input:
+        dockerfile="../docker/r/Dockerfile",
+        temp=".docker_push"
+    output:
+        temp(".docker_build_r")
+    shell:
+        "docker build -f {input.dockerfile} -t singlecellopenproblems/openproblems-r-base . && touch {output}"
 
 rule push_docker:
     input:
@@ -158,4 +175,12 @@ rule push_docker:
     output:
         ".docker_push"
     shell:
-        "docker push singlecellopenproblems/openproblems && touch .docker_push"
+        "docker push singlecellopenproblems/openproblems && touch {output}"
+
+rule push_docker_r:
+    input:
+        ".docker_build_r"
+    output:
+        ".docker_push_r"
+    shell:
+        "docker push singlecellopenproblems/openproblems-r-base && touch {output}"
