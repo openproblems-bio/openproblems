@@ -27,10 +27,10 @@
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 1.6703300476074219,
-            "Runtime (min)": 0.798245038583021,
-            "Accuracy": 0.8241225369458128,
-            "F1 score": 0.8209001219267394,
+            "Memory (GB)": 1.6563949584960938,
+            "Runtime (min)": 0.5804153887496796,
+            "Accuracy": 0.8282882606023356,
+            "F1 score": 0.8250226576334346,
             "Rank": 3
         },
         {
@@ -40,11 +40,11 @@
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 11.604679107666016,
-            "Runtime (min)": 8.618020995067976,
-            "Accuracy": 0.8336668719211823,
-            "F1 score": 0.8314374196080471,
-            "Rank": 2
+            "Memory (GB)": 11.727577209472656,
+            "Runtime (min)": 6.534001304232516,
+            "Accuracy": 0.8403503380454825,
+            "F1 score": 0.8381156089604289,
+            "Rank": 1
         },
         {
             "Name": "Multilayer perceptron (log CPM)",
@@ -53,10 +53,10 @@
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 1.6702232360839844,
-            "Runtime (min)": 0.7663929810320648,
-            "Accuracy": 0.8225831280788177,
-            "F1 score": 0.8222148731931381,
+            "Memory (GB)": 1.6556510925292969,
+            "Runtime (min)": 0.5545408726320602,
+            "Accuracy": 0.8228334357713584,
+            "F1 score": 0.8215087692611447,
             "Rank": 4
         },
         {
@@ -66,11 +66,11 @@
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 11.903026580810547,
-            "Runtime (min)": 8.801432825966428,
-            "Accuracy": 0.8341286945812808,
-            "F1 score": 0.8319592760772325,
-            "Rank": 1
+            "Memory (GB)": 12.35245132446289,
+            "Runtime (min)": 6.542745267149682,
+            "Accuracy": 0.8363552550706822,
+            "F1 score": 0.8350506483767951,
+            "Rank": 2
         }
     ]
 }
