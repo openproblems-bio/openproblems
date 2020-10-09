@@ -40,5 +40,6 @@ def test_method_metadata(method):
         "paper_year",
         "code_url",
         "code_version",
+        "image",
     ]:
         assert attr in method.metadata
