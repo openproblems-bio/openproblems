@@ -9,7 +9,7 @@ def loader(func, *args, **kwargs):
     filename = "openproblems_{}-{}-{}.h5ad".format(
         hash(func), hash(str(args)), hash(str(kwargs))
     )
-    filepath = os.path.join(TEMPDIR.name, filename)
+    filepath = os.path.join(TEMPDIR, filename)
     if os.path.isfile(filepath):
         return anndata.read_h5ad(filepath)
     else:

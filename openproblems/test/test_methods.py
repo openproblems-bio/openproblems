@@ -1,11 +1,15 @@
 import unittest
 import parameterized
-import numbers
+import tempfile
+import os
+import subprocess
 
 import openproblems
 from openproblems.test import utils
 
 utils.ignore_numba_warnings()
+
+TESTDIR = os.path.dirname(os.path.abspath(__file__))
 
 
 @parameterized.parameterized.expand(
@@ -18,13 +22,44 @@ utils.ignore_numba_warnings()
     name_func=utils.name_test,
 )
 def test_method(task, dataset, method):
-    adata = dataset(test=True)
-    output = method(adata)
-    assert output is None
-    assert task.checks.check_method(adata)
-    for metric in task.METRICS:
-        m = metric(adata)
-        assert isinstance(m, numbers.Number)
+    task_name = task.__name__.split(".")[-1]
+    image = "docker://singlecellopenproblems/{}".format(method.metadata["image"])
+    with tempfile.NamedTemporaryFile(suffix=".h5ad") as data_file:
+        p = subprocess.run(
+            [
+                "bash",
+                os.path.join(TESTDIR, "singularity_run.sh"),
+                TESTDIR,
+                "run_test_method.py",
+                task_name,
+                method.__name__,
+                dataset.__name__,
+                data_file.name,
+            ],
+            stderr=subprocess.PIPE,
+        )
+        assert p.returncode == 0, "Return code {}\n\n{}".format(
+            p.returncode, p.stderr.decode("utf-8")
+        )
+        for metric in task.METRICS:
+            image = "docker://singlecellopenproblems/{}".format(
+                metric.metadata["image"]
+            )
+            p = subprocess.run(
+                [
+                    "bash",
+                    os.path.join(TESTDIR, "singularity_run.sh"),
+                    TESTDIR,
+                    "run_test_metric.py",
+                    task_name,
+                    metric.__name__,
+                    data_file.name,
+                ],
+                stderr=subprocess.PIPE,
+            )
+            assert p.returncode == 0, "Return code {}\n\n{}".format(
+                p.returncode, p.stderr.decode("utf-8")
+            )
 
 
 @parameterized.parameterized.expand(
