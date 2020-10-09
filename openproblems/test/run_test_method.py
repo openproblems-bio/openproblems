@@ -10,8 +10,8 @@ def test_method(task, dataset, method, data_path):
     adata.write_h5ad(data_path)
 
 
-def main(task_name, method_name, tempdir, dataset_name, data_path):
-    openproblems.data.TEMPDIR = tempdir
+def main(task_name, method_name, dataset_name, data_path):
+    openproblems.data.no_cleanup()
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     method = getattr(task.methods, method_name)
