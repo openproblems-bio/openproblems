@@ -68,6 +68,15 @@ def datasets(wildcards):
         for d in task.DATASETS
     ]
 
+
+def singularity_image(wildcards, output):
+    task = getattr(openproblems.tasks, wildcards.task)
+    try:
+        fun = getattr(task.metrics, wildcards.metric)
+    except AttributeError:
+        fun = getattr(task.methods, wildcards.method)
+    return "docker://singlecellopenproblems/{}".format(fun.metadata['image'])
+
 rule all:
     input:
         summary = "{}/../results.json".format(SCRIPTS_DIR),
@@ -103,17 +112,6 @@ rule collate_method:
         metrics = metrics,
     output: temp("{tempdir}/{task}/{dataset}/{method}.result.json")
     shell: "python3 {input.script} {wildcards.task} {input.meta} {wildcards.tempdir}/{wildcards.task}/{wildcards.dataset}/{wildcards.method} {output}"
-
-def singularity_image(wildcards, output):
-    print(wildcards)
-    print(output)
-    task = getattr(openproblems.tasks, wildcards.task)
-    try:
-        fun = getattr(task.metrics, wildcards.metric)
-    except AttributeError:
-        fun = getattr(task.methods, wildcards.method)
-    print(fun.metadata)
-    return fun.metadata['image']
 
 rule evaluate_metric:
     input:
