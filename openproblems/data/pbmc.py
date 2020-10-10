@@ -24,4 +24,3 @@ def load_pbmc(test=False):
         adata = adata[:, :1000]
 
     return adata
- 
