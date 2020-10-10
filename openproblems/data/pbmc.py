@@ -17,7 +17,7 @@ def load_pbmc(test=False):
     with tempfile.TemporaryDirectory() as tempdir:
         filepath = os.path.join(tempdir, "pbmc.h5ad")
         scprep.io.download.download_url(URL, filepath)
-        adata = anndata.read_h5ad(filepath)
+        adata = sc.read_h5ad(filepath)
 
     if test:
         sc.pp.subsample(adata, n_obs=1000)
