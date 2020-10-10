@@ -5,6 +5,7 @@ from scipy import AnnData
 
 from ....tools.decorators import metric
 
+
 @metric(metric_name="Mean-squared error", maximize=False)
 def mse(adata):
 
