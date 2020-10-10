@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.metrics import mean_squared_error
-import scipy as sc
+import scanpy as sc
 from scanpy import AnnData
 
 from ....tools.decorators import metric
