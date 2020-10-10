@@ -1,3 +1,4 @@
+import numpy as np
 from sklearn.metrics import mean_squared_error
 import scipy as sc
 from scipy import AnnData
