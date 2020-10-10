@@ -6,10 +6,10 @@ from ....tools.utils import check_version
 
 @method(
     method_name="No denoising",
-    paper_name="N/A",
-    # paper_url="https://books.google.com/books?id=64JYAwAAQBAJ",
-    # paper_year=2013,
-    # code_url="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+    paper_name="Molecular Cross-Validation for Single-Cell RNA-seq",
+    paper_url="https://www.biorxiv.org/content/10.1101/786269v1",
+    paper_year=2019,
+    code_url="https://github.com/czbiohub/molecular-cross-validation",
     code_version=check_version("scanpy"),
 )
 def no_denoising(adata: AnnData) -> None:
