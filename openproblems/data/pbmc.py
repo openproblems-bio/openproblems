@@ -12,7 +12,7 @@ from ..tools import normalize as n
 @loader
 def load_pbmc(test=False):
     """Downloads PBMC data from figshare"""
-    URL = "https://ndownloader.figshare.com/files/24974582"
+    URL = "https://ndownloader.figshare.com/files/24974465"
 
     with tempfile.TemporaryDirectory() as tempdir:
         filepath = os.path.join(tempdir, "pbmc.h5ad")
@@ -20,7 +20,8 @@ def load_pbmc(test=False):
         adata = sc.read_h5ad(filepath)
 
     if test:
-        sc.pp.subsample(adata, n_obs=1000)
+        sc.pp.subsample(adata, n_obs=100)
         adata = adata[:, :1000]
 
     return adata
+ 
