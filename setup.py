@@ -18,7 +18,7 @@ methods_requires = [
     "rpy2",
     "scIB @ git+https://github.com/theislab/scib@master",
     "anndata2ri>=1.0.4",
-    "molecular-cross-validation @ git+https://github.com/czbiohub/molecular-cross-validation@e753a05",
+    "molecular-cross-validation @ git+https://github.com/flo-compbio/molecular-cross-validation@f867de0",
 ]
 
 evaluate_requires = ["snakemake"]
