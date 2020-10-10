@@ -29,7 +29,7 @@ def split_data(adata: AnnData, train_frac: float = 0.9, seed: int = 0) -> AnnDat
     return adata
 
 
-@dataset("1k PBMCs from a Healthy Donor (10x/v3)")
+@dataset("10k PBMCs from a Healthy Donor (10x/v3)")
 def pbmc(test=False):
     adata = load_pbmc(test=test)
     adata = split_data(adata)
