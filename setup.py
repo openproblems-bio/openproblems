@@ -11,6 +11,8 @@ install_requires = [
     "scanpy",
     "decorator",
     "memory-profiler",
+    "pybedtools",
+    "pyensembl"
 ]
 
 methods_requires = [

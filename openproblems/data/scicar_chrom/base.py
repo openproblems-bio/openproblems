@@ -21,9 +21,6 @@ def load_scicar(
     rna_cells = pd.read_csv(rna_cells_url, low_memory=False, index_col=0)
     atac_cells = pd.read_csv(atac_cells_url, low_memory=False, index_col=0)
 
-    print(atac_genes.head())
-    print(rna_genes.head())
-
     with tempfile.TemporaryDirectory() as tempdir:
         rna_file = os.path.join(tempdir, "rna.mtx.gz")
         scprep.io.download.download_url(rna_url, rna_file)
@@ -46,9 +43,6 @@ def load_scicar(
     atac_cells, atac_data = atac_cells.loc[atac_subset], atac_data[atac_subset]
     atac_order = np.argsort(atac_cells.index)
     atac_cells, atac_data = atac_cells.iloc[atac_order], atac_data[atac_order]
-
-    print((rna_cells.index == common_cells).sum())
-    print((atac_cells.index == common_cells).sum())
 
     adata = anndata.AnnData(
         rna_data,
