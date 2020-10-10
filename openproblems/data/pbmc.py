@@ -8,6 +8,7 @@ import scanpy as sc
 from .utils import loader
 from ..tools import normalize as n
 
+
 @loader
 def load_pbmc(test=False):
     """Downloads PBMC data from figshare"""
