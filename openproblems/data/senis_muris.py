@@ -10,9 +10,9 @@ from .utils import loader
 
 @loader
 def load_senis_muris(test=False):
-    url = "https://ndownloader.figshare.com/files/24130931"
+    url = "https://ndownloader.figshare.com/files/25021913"
     with tempfile.TemporaryDirectory() as tempdir:
-        filepath = os.path.join(tempdir, "senis_muris_sub.h5ad")
+        filepath = os.path.join(tempdir, "senis_muris_sub_new.h5ad")
         scprep.io.download.download_url(url, filepath)
         adata = sc.read_h5ad(filepath)
     if test:
