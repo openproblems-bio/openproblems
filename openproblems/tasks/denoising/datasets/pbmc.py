@@ -1,8 +1,10 @@
-from ....data.pbmc import load_pbmc
-from ....tools.decorators import dataset
-
+import numpy as np
+from scipy.sparse import issparse
 from scanpy import AnnData
 import molecular_cross_validation.util as ut
+
+from ....data.pbmc import load_pbmc
+from ....tools.decorators import dataset
 
 
 def split_data(adata: AnnData, train_frac: float = 0.9, seed: int = 0) -> AnnData:
