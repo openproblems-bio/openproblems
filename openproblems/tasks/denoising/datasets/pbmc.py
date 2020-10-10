@@ -14,7 +14,7 @@ def split_data(adata: AnnData, train_frac: float = 0.9, seed: int = 0) -> AnnDat
 
     random_state = np.random.RandomState(seed)
 
-    X = adata.raw.X
+    X = adata.X
 
     if issparse(X):
         X = np.array(X.todense())
