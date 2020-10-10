@@ -43,10 +43,10 @@ def load_citeseq_cbmc(test=False):
         return adata
 
     rna_data = scprep.io.load_csv(
-        RNA_URL, cell_axis="col", compression="gzip", sparse=True
+        RNA_URL, cell_axis="col", compression="gzip", sparse=True, chunksize=1000
     )
     adt_data = scprep.io.load_csv(
-        ADT_URL, cell_axis="col", compression="gzip", sparse=True
+        ADT_URL, cell_axis="col", compression="gzip", sparse=True, chunksize=1000
     )
 
     rna_data = scprep.filter.filter_empty_cells(rna_data)
