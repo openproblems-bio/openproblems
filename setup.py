@@ -11,6 +11,7 @@ install_requires = [
     "scanpy",
     "decorator",
     "memory-profiler",
+    "molecular-cross-validation @ git+https://github.com/flo-compbio/molecular-cross-validation@f867de0",
 ]
 
 methods_requires = [
@@ -18,7 +19,6 @@ methods_requires = [
     "rpy2",
     "scIB @ git+https://github.com/theislab/scib@master",
     "anndata2ri>=1.0.4",
-    "molecular-cross-validation @ git+https://github.com/flo-compbio/molecular-cross-validation@f867de0",
 ]
 
 evaluate_requires = ["snakemake"]
