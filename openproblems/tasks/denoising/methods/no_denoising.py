@@ -1,6 +1,7 @@
 from scanpy import AnnData
 
 from ....tools.decorators import method
+from ....tools.utils import check_version
 
 
 @method(
