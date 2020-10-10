@@ -26,43 +26,56 @@ def _get_annotation(adata):
             genes.append([gene.gene_id, gene.gene_name, 'chr%s' % gene.contig, gene.start, gene.end, gene.strand])
         except:
             genes.append([np.nan, np.nan, np.nan, np.nan, np.nan, np.nan])
-    adata.var = pd.concat([adata.var, pd.DataFrame(genes, index=adata.var_names)], axis=1)
+    adata._var = pd.concat([adata.var, pd.DataFrame(genes, index=adata.var_names)], axis=1)
 
 
-def _atac_genes_score(adata):
+def _atac_genes_score(adata, top_genes=500, threshold=1):
     # basic quality control
     sc.pp.filter_cells(adata, min_genes=200)
     sc.pp.filter_genes(adata, min_cells=5)
+
     adata.var['mt'] = adata.var.gene_short_name.str.startswith('mt-')  # annotate the group of mitochondrial genes as 'mt'
     sc.pp.calculate_qc_metrics(adata, qc_vars=['mt'], percent_top=None, log1p=False, inplace=True)
-    adata = adata[adata.obs.n_genes_by_counts < 2000, :]
-    adata = adata[adata.obs.pct_counts_mt < 10, :]
+
+    adata._inplace_subset_obs(adata.obs.n_genes_by_counts < 2000)
+    adata._inplace_subset_obs(adata.obs.pct_counts_mt < 10)
     adata.obsm['X_tsne'] = adata.obs.loc[:, ['tsne_1', 'tsne_2']].values
+
+    sc.pp.normalize_total(adata, target_sum=1e4)
+    sc.pp.log1p(adata)
+    sc.pp.highly_variable_genes(adata, n_top_genes=top_genes)
+
+    #adata = adata[:, adata.var.highly_variable]
+    adata._inplace_subset_var(adata.var.highly_variable)
+
+    sc.pp.regress_out(adata, ['total_counts', 'pct_counts_mt'])
+    sc.pp.scale(adata, max_value=10)
 
     # get annotation for TSS
     _get_annotation(adata)
 
     # generate peak to gene weight matrix
     # remove genes without annotation
-    adata_sub = adata[:, (adata.var.iloc[:, 10].isin(np.unique(adata.uns['mode2_var'][:, 0]))) & (
-        ~pd.isnull(adata.var.iloc[:, 3]))]
-    adata_sub.var.index = adata_sub.var.iloc[:, 8]
+    adata._inplace_subset_var((adata.var.loc[:, 2].isin(np.unique(adata.uns['mode2_var'][:, 0]))) & (~pd.isnull(adata.var.loc[:, 2])))
 
     # filter atac-seq matrix
-    sel = np.isin(adata_sub.uns['mode2_var'][:, 0], adata_sub.var.iloc[:, 10].unique())
-    adata_sub.uns['mode2_var'] = adata_sub.uns['mode2_var'][sel]
-    adata_sub.obsm['mode2'] = adata_sub.obsm['mode2'][:, sel]
+    sel = np.isin(adata.uns['mode2_var'][:, 0], adata.var.loc[:, 2].unique())
+    adata.uns['mode2_var'] = adata.uns['mode2_var'][sel]
+    adata.obsm['mode2'] = adata.obsm['mode2'][:, sel]
 
     # extend tss upstream and downstream
-    extend_tss = adata_sub.var.iloc[:, -3:].apply(_chrom_limit, axis=1)
-    extend_tss = pd.concat([adata_sub.var.iloc[:, 10],
+    extend_tss = adata.var.iloc[:, -3:].apply(_chrom_limit, axis=1)
+
+    extend_tss = pd.concat([adata.var.loc[:, 2],
                             extend_tss.map(lambda x: x[0]).astype('int32'),
                             extend_tss.map(lambda x: x[1]).astype('int32'),
-                            pd.Series(np.arange(adata_sub.shape[1]),
-                                      index=adata_sub.var_names)], axis=1)
+                            pd.Series(np.arange(adata.shape[1]),
+                                      index=adata.var_names)], axis=1)
 
     # peak summits
-    peaks = pd.DataFrame(adata_sub.uns['mode2_var'])
+    peaks = pd.DataFrame({'chr': adata.uns['mode2_var'][:, 0], 
+                          'start': adata.uns['mode2_var'][:, 1].astype('int32'),
+                          'end': adata.uns['mode2_var'][:, 2].astype('int32')})
     summits = pd.concat([peaks.iloc[:, 0],
                          peaks.iloc[:, [1, 2]].mean(axis=1).astype('int32'),
                          (peaks.iloc[:, [1, 2]].mean(axis=1)+1).astype('int32'),
@@ -82,8 +95,8 @@ def _atac_genes_score(adata):
 
     gene_to_peak_weight = csr_matrix((tss_to_peaks.weight.values,
                                      (tss_to_peaks.thickEnd.astype('int32').values, tss_to_peaks.name.values)),
-                                     shape=(adata_sub.shape[1], adata_sub.uns['mode2_var'].shape[0]))
-    return gene_to_peak_weight, adata_sub
+                                     shape=(adata.shape[1], adata.uns['mode2_var'].shape[0]))
+    adata.obsm['gene_score'] = csr_matrix.dot(gene_to_peak_weight, adata.obsm['mode2'].T >= threshold).T
 
 
 @method(
@@ -94,15 +107,5 @@ def _atac_genes_score(adata):
     code_version='1.0',
     code_url='',
 )
-def linear_regression_expotential_decay(adata, decay=1e4, threshold=1, top_genes=500):
-    weight_matrix, adata_sub = _atac_genes_score(adata)
-    adata_sub.obsm['gene_score'] = csr_matrix.dot(weight_matrix, adata_sub.obsm['mode2'].T >= threshold).T
-
-    sc.pp.normalize_total(adata_sub, target_sum=1e4)
-    sc.pp.log1p(adata_sub)
-    sc.pp.highly_variable_genes(adata_sub, n_top_genes=top_genes)
-    adata_filter = adata_sub[:, adata_sub.var.highly_variable]
-    sc.pp.regress_out(adata_filter, ['total_counts', 'pct_counts_mt'])
-    sc.pp.scale(adata_filter, max_value=10)
-
-    adata = adata_filter.copy()
+def linear_regression_expotential_decay(adata, n_top_genes=200, threshold=1):
+    _atac_genes_score(adata, top_genes=n_top_genes, threshold=threshold)
