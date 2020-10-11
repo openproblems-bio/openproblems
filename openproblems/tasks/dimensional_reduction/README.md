@@ -37,6 +37,11 @@ Where $y_i$ is the sum of pairwise euclidian distances between each value embedd
 
 <a href = "http://cda.psych.uiuc.edu/psychometrika_highly_cited_articles/kruskal_1964a.pdf">Kruskel's stress</a> uses the RMSE, more or less in the now commonly-used MDS (multi-dimensional scaling). We can calculate and plot Kruskel's stress to get an idea where the majority of distortion of the ***topography*** of the data in high-dimensional space.
 
+![stress plot rmse CITE-seq](./images/stress_plot_citeseq_rmse.png)
+
+Above is a "complex heatmap", which aims to show the regions that contribute the most stress. You can see that while a majority of the stress comes from the left side of the plot (as shown by the top of the complex heat map), the center of that left set of clusters does not contribute much to the stress, leading us to believe that by the measure of RMSE, the topology is relatively well-preserved. The stress mostly comes from the clusters at the top and bottom of that group of clusters spread across the second PC. 
+
+
 ![RMSE PCA CITE-seq](./images/rmse_citeseq.png)
 
 We performed principle component analysis, obtaining the first 50 components. We can then calculate the relative stress using the RMSE for each, in comparison to the original data, $y$. As one might suspect, the more components used, the lower the amount of distortion of the original data.
