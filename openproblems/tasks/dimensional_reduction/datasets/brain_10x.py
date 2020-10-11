@@ -6,7 +6,7 @@ import anndata
 import scprep
 import scanpy as sc
 
-from .utils import loader
+from ....data.utils import loader
 
 
 @loader
