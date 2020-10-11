@@ -29,9 +29,9 @@ We processed the CITE-seq dataset with ***Scanpy***, using a variety of dimensio
 ### The root mean square error
 ---
 
-\[
+$$
     RMSE = \sqrt{ \sum_{i=1}^{n} \frac{(\hat{y}_i - y_i)^2}{n} }
-\]
+$$
 
 Where $y_i$ is the sum of pairwise euclidian distances between each value embedded in low-dimensional space and $\hat{y_i}$ is the sum of pairwise euclidian distances between each value in the original, high-dimensional space. The goal, in terms of preservation of this space is to minimize the difference between these terms. Finding the root-mean of the square of all differences (Root mean square error or $RMSE$ is a simple way to represent this as a scalar, which can then be used to compare to other methods.  
 
@@ -43,5 +43,5 @@ We performed principle component analysis, obtaining the first 50 components. We
 
 ![RMSE comparison](./images/rmse_comparison.png)
 
-We can make this comparison across multiple dimensionality reduction methods. We can see that *t*-SNE seems to distort the data the least, in terms of pairwise euclidian distances. This does not necessarily mean the data is best represented by *t*-SNE, however. There are multiple means of measuring the "goodness" of a dimensional reduction; RMSE is simply one of them. 
+We can make this comparison across multiple dimensionality reduction methods. We can see that *t*-SNE seems to distort the data the least, in terms of pairwise euclidian distances. This does not necessarily mean the data is best represented by *t*-SNE, however. There are multiple means of measuring the "goodness" of a dimensional reduction; RMSE is simply one of them.
 
