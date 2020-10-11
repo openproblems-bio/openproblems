@@ -1,1 +1,4 @@
-##
+from .root_mean_square_error import compare_RMSE
+from .root_mean_square_error import plot_rmse
+from .root_mean_square_error import kruskel_plot
+from .root_mean_square_error import plot_rmse_comparison
