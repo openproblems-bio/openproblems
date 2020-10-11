@@ -1,7 +1,5 @@
 import numpy as np
 import pandas as pd
-import pybedtools
-from pyensembl import EnsemblRelease
 from scipy.sparse import csr_matrix
 import scanpy as sc
 import os
@@ -17,6 +15,8 @@ def _chrom_limit(x):
 
 
 def _get_annotation(adata):
+    from pyensembl import EnsemblRelease
+
     os.system("pyensembl install --release 100 --species mus_musculus")
     data = EnsemblRelease(100, species="mus_musculus")
     # get ensemble gene coordinate
@@ -42,6 +42,8 @@ def _get_annotation(adata):
 
 
 def _atac_genes_score(adata, top_genes=500, threshold=1):
+    import pybedtools
+
     # basic quality control
     sc.pp.filter_cells(adata, min_genes=200)
     sc.pp.filter_genes(adata, min_cells=5)
