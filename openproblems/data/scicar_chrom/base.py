@@ -29,8 +29,12 @@ def load_scicar(
         scprep.io.download.download_url(atac_url, atac_file)
         atac_data = scprep.io.load_mtx(atac_file, cell_axis="col").tocsr()
 
-    rna_data, rna_cells_index = scprep.filter.filter_empty_cells(rna_data, rna_cells.index)
-    atac_data, atac_cells_index = scprep.filter.filter_empty_cells(atac_data, atac_cells.index)
+    rna_data, rna_cells_index = scprep.filter.filter_empty_cells(
+        rna_data, rna_cells.index
+    )
+    atac_data, atac_cells_index = scprep.filter.filter_empty_cells(
+        atac_data, atac_cells.index
+    )
 
     common_cells = np.intersect1d(rna_cells_index, atac_cells_index)
 
