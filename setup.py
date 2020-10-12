@@ -19,7 +19,7 @@ methods_requires = [
     "scIB @ git+https://github.com/theislab/scib@master",
     "anndata2ri>=1.0.4",
     "pybedtools",
-    "pyensembl"
+    "pyensembl",
 ]
 
 evaluate_requires = ["snakemake"]
