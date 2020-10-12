@@ -22,5 +22,4 @@ def load_scicar_cell_lines(test=False):
         atac_url,
         atac_cells_url,
         atac_genes_url,
-        test=test,
     )
