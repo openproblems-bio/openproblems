@@ -16,14 +16,16 @@ utils.ignore_numba_warnings()
     name_func=utils.name_test,
 )
 def test_task(dataset, task, test):
-    X = dataset(test=test)
-    assert isinstance(X, anndata.AnnData)
-    assert X.shape[0] > 0
-    assert X.shape[1] > 0
+    adata = dataset(test=test)
+    assert isinstance(adata, anndata.AnnData)
+    assert adata.shape[0] > 0
+    assert adata.shape[1] > 0
+    assert adata.X.sum(axis=1).min() > 0
+    assert adata.X.sum(axis=0).min() > 0
     if test:
-        assert X.shape[0] < 600
-        assert X.shape[1] < 1500
-    assert task.checks.check_dataset(X)
+        assert adata.shape[0] < 600
+        assert adata.shape[1] < 1500
+    assert task.checks.check_dataset(adata)
 
 
 @parameterized.parameterized.expand(
