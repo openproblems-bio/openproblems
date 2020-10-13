@@ -1,5 +1,7 @@
+import scanpy as sc
 import os
 import anndata
+
 from decorator import decorator
 from . import TEMPDIR
 
