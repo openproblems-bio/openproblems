@@ -16,3 +16,8 @@ def loader(func, *args, **kwargs):
         adata = func(*args, **kwargs)
         adata.write(filepath)
         return adata
+
+
+def filter_genes_cells(adata):
+    sc.pp.filter_genes(adata, min_counts=1)
+    sc.pp.filter_cells(adata, min_counts=1)
