@@ -25,6 +25,9 @@ def load_pancreas(test=False, preprocess=True):
         ].copy()
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
+        # Ensure there are no cells or genes with 0 counts
+        _filter_genes_cells(adata)
+
         return adata
 
     else:
@@ -36,7 +39,14 @@ def load_pancreas(test=False, preprocess=True):
             # Correct covariate naming and remove preprocessing
             prep_pancreas(adata)
 
+            # Ensure there are no cells or genes with 0 counts
+            _filter_genes_cells(adata)
+
         return adata
+
+def _filter_genes_cells(adata):
+    sc.pp.filter_genes(adata, min_counts=1)
+    sc.pp.filter_cells(adata, min_counts=1)
 
 
 def prep_pancreas(adata):
