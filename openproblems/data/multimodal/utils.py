@@ -40,7 +40,7 @@ def create_joint_adata(
         X_index = X_index[X_keep_idx]
         Y_index = Y_index[Y_keep_idx]
     adata = anndata.AnnData(
-        X.sparse.to_coo().tocsr(),
+        scprep.utils.to_array_or_spmatrix(X).tocsr(),
         obs=pd.DataFrame(index=X_index),
         var=pd.DataFrame(index=X_columns),
     )
