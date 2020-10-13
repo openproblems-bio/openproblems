@@ -1,3 +1,8 @@
+import numpy as np
+import scprep
+import anndata
+
+
 def filter_joint_data_empty_cells(adata):
     assert np.all(adata.uns["mode2_obs"] == adata.obs.index)
     n_mode1 = scprep.utils.toarray(adata.X.sum(axis=1))
