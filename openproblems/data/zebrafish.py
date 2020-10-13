@@ -18,6 +18,7 @@ def load_zebrafish(test=False):
         filepath = os.path.join(tempdir, "zebrafish.h5ad")
         scprep.io.download.download_url(URL, filepath)
         adata = anndata.read_h5ad(filepath)
+        adata = adata[:, adata.X.sum(axis=0).A.flatten() > 0].copy()
 
     if test:
         sc.pp.subsample(adata, n_obs=100)
