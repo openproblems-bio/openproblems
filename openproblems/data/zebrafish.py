@@ -22,5 +22,6 @@ def load_zebrafish(test=False):
 
     if test:
         sc.pp.subsample(adata, n_obs=100)
+        adata = adata[:, adata.X.sum(axis=0).A.flatten() > 0].copy()
         adata = adata[:, :100]
     return adata
