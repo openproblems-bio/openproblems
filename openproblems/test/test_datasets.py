@@ -1,6 +1,7 @@
 import anndata
 import parameterized
 import openproblems
+from scipy import sparse
 from openproblems.test import utils
 
 utils.ignore_numba_warnings()
@@ -20,6 +21,7 @@ def test_task(dataset, task, test):
     assert isinstance(adata, anndata.AnnData)
     assert adata.shape[0] > 0
     assert adata.shape[1] > 0
+    assert sparse.issparse(adata.X)
     assert adata.X.sum(axis=0).min() > 0
     assert adata.X.sum(axis=1).min() > 0
     if test:
