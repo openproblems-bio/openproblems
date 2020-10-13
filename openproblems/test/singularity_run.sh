@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 WORKDIR=$1
 SCRIPT=$2
 TASKNAME=$3
