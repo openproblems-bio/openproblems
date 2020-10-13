@@ -36,8 +36,8 @@ def create_joint_adata(
         Y_keep_idx = np.isin(Y_index, joint_index)
         X = X[X_keep_idx]
         Y = Y[Y_keep_idx]
-        X = X[np.argsort(X_index[X_keep_idx])]
-        Y = Y[np.argsort(Y_index[Y_keep_idx])]
+        X = X[np.argsort(X_index[X_keep_idx]).flatten()]
+        Y = Y[np.argsort(Y_index[Y_keep_idx]).flatten()]
         X_index = X_index[X_keep_idx]
         Y_index = Y_index[Y_keep_idx]
     adata = anndata.AnnData(
@@ -45,7 +45,7 @@ def create_joint_adata(
         obs=pd.DataFrame(index=X_index),
         var=pd.DataFrame(index=X_columns),
     )
-    adata.obsm["mode2"] = Y.sparse.to_coo().tocsr()
+    adata.obsm["mode2"] = scprep.utils.to_array_or_spmatrix(Y).tocsr()
     adata.uns["mode2_obs"] = Y_index.to_numpy()
     adata.uns["mode2_var"] = Y_columns.to_numpy()
     return adata
