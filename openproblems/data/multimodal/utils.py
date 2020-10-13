@@ -54,6 +54,7 @@ def create_joint_adata(
 def subset_joint_data(adata, n_cells=500, n_genes=200):
     keep_cells = np.random.choice(adata.shape[0], n_cells, replace=False)
     adata = adata[keep_cells]
+    adata.uns["mode2_obs"] = adata.uns["mode2_obs"][keep_cells]
 
     keep_rna_genes = np.argwhere(
         scprep.utils.toarray(adata.X.sum(axis=0)).flatten() > 0
@@ -64,7 +65,6 @@ def subset_joint_data(adata, n_cells=500, n_genes=200):
             np.random.choice(len(keep_rna_genes), n_genes, replace=False)
         ]
     adata = adata[:, keep_rna_genes].copy()
-    adata.uns["mode2_obs"] = adata.uns["mode2_obs"][keep_cells]
 
     keep_adt_genes = np.argwhere(
         scprep.utils.toarray(adata.obsm["mode2"].sum(axis=0)).flatten() > 0
