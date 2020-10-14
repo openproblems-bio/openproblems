@@ -38,15 +38,15 @@ jobs:
       with: 
         python-version: ${{ matrix.config.python }}
 
-    - name: Install package
+    - name: Install package & dependencies
       run: |
         pip install -U .
-    
-    - name: Run tests
-      run: |
         python -c "import openproblems"
         pip install -U .[test]
         black . --check --diff --exclude=website
+    
+    - name: Run tests
+      run: |
         nose2 openproblems -v
     
     - name: Run benchmark
