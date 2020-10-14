@@ -1,0 +1,103 @@
+name: Run evaluation
+
+on:
+  push:
+    branches: [ master, docker ]
+  pull_request:
+    branches: [ master, docker ]
+
+jobs:
+  scala-ci:
+    runs-on: ${{ matrix.config.os }}
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        config: 
+        - {name: 'current', os: ubuntu-latest, r: '4.0.3', python: '3.8' }
+        - {name: 'prev', os: ubuntu-latest, r: '3.6.3', python: '3.7' }
+        - {name: 'old', os: ubuntu-latest, r: '3.5.3', python: '3.6' }
+        - {name: 'mac', os: macos-latest, r: '4.0.3', python: '3.8' }
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Cache packages
+      uses: actions/cache@v1
+      with:
+        path: |
+          ${{ env.R_LIBS_USER }}
+          pip
+        key: ${{ matrix.config.name }}
+        restore-keys: ${{ matrix.config.name }}
+        
+    - name: Install system dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+    
+    - name: Install Singularity
+      uses: eWaterCycle/setup-singularity@v3
+      with:
+        singularity-version: 3.6.1
+    
+    - name: Set up R
+      if: false # r is not needed, right?
+      uses: r-lib/actions/setup-r@master
+      with:
+        r-version: ${{ matrix.config.r }}
+      
+    - name: Install R packages
+      # if R is also needed, add 'libcurl4-openssl-dev' to the system dependencies
+      if: false # r is not needed, right?
+      run: |
+        install.packages('remotes')
+        remotes::install_cran(c("tidyverse"))
+      shell: Rscript {0}
+      
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with: 
+        python-version: ${{ matrix.config.python }}
+
+    - name: Install package
+      run: |
+        pip install -U .
+    
+    - name: Run tests
+      run: |
+        python -c "import openproblems"
+        pip install -U .[test]
+        black . --check --diff --exclude=website
+        nose2 openproblems
+    
+    - name: Run benchmark
+      if: false # disabled for now
+      run: |
+        pip install -U .[evaluate]
+        cd scripts
+        snakemake -j $(grep -c processor /proc/cpuinfo)
+        cd ..
+        
+    - name: Upload results on success
+      if: false # disabled for now
+      # if: matrix.config.name == 'main'
+      run: |
+        git remote set-url origin https://${GH_USERNAME}:${GH_PASSWORD}@github.com/${GITHUB_REPOSITORY}.git
+        git checkout -B master
+        git pull origin master
+        git add results.md
+        git add website/data/results
+        git config user.name "Github Actions"
+        git config user.email "singlecellopenproblems@protonmail.com"
+        git commit -m "Update results for ${GITHUB_REF} - ci skip"
+        git push origin master
+      
+    - name: Upload check results on fail
+      if: failure()
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{ matrix.config.name }}_results
+        path: check
