@@ -3,6 +3,7 @@ import parameterized
 import tempfile
 import os
 import subprocess
+import functools
 
 import openproblems
 from openproblems.test import utils
@@ -10,6 +11,37 @@ from openproblems.test import utils
 utils.ignore_warnings()
 
 TESTDIR = os.path.dirname(os.path.abspath(__file__))
+
+
+@functools.lru_cache(maxsize=None)
+def cache_image(image):
+    p = subprocess.run(
+        [
+            "singularity-permanent-cache",
+            "--cache-dir",
+            os.path.join(os.environ["HOME"], ".singularity"),
+            "docker://singlecellopenproblems/{}".format(image),
+        ],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+    )
+    assert p.returncode == 0, "Return code {}\n\n{}".format(
+        p.returncode, p.stderr.decode("utf-8")
+    )
+    return p.stdout.decode("utf-8")
+
+
+def singularity_command(image, script, *args):
+    [
+        "singularity",
+        "exec",
+        "--quiet",
+        cache_image(image),
+        "/bin/bash",
+        os.path.join(TESTDIR, "singularity_run.sh"),
+        TESTDIR,
+        script,
+    ] + args
 
 
 @parameterized.parameterized.expand(
@@ -26,20 +58,14 @@ def test_method(task, dataset, method):
     image = "docker://singlecellopenproblems/{}".format(method.metadata["image"])
     with tempfile.NamedTemporaryFile(suffix=".h5ad") as data_file:
         p = subprocess.run(
-            [
-                "singularity",
-                "exec",
-                "--quiet",
-                "docker://singlecellopenproblems/{}".format(method.metadata["image"]),
-                "/bin/bash",
-                os.path.join(TESTDIR, "singularity_run.sh"),
-                TESTDIR,
+            singularity_command(
+                method.metadata["image"],
                 "run_test_method.py",
                 task_name,
                 method.__name__,
                 dataset.__name__,
                 data_file.name,
-            ],
+            ),
             stderr=subprocess.PIPE,
         )
         assert p.returncode == 0, "Return code {}\n\n{}".format(
@@ -50,21 +76,13 @@ def test_method(task, dataset, method):
                 metric.metadata["image"]
             )
             p = subprocess.run(
-                [
-                    "singularity",
-                    "exec",
-                    "--quiet",
-                    "docker://singlecellopenproblems/{}".format(
-                        metric.metadata["image"]
-                    ),
-                    "/bin/bash",
-                    os.path.join(TESTDIR, "singularity_run.sh"),
-                    TESTDIR,
+                singularity_command(
+                    metric.metadata["image"],
                     "run_test_metric.py",
                     task_name,
                     metric.__name__,
                     data_file.name,
-                ],
+                ),
                 stderr=subprocess.PIPE,
             )
             assert p.returncode == 0, "Return code {}\n\n{}".format(

@@ -25,7 +25,7 @@ harmonic_alignment_requires = [
 
 evaluate_requires = ["snakemake"]
 
-test_requires = ["nose2", "parameterized", "black"]
+test_requires = ["nose2", "parameterized", "black", "singularity-permanent-cache"]
 
 doc_requires = [
     "sphinx>=2.2,<2.4",
