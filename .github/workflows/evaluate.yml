@@ -7,7 +7,7 @@ on:
     branches: [ master, docker ]
 
 jobs:
-  scala-ci:
+  evaluate:
     runs-on: ${{ matrix.config.os }}
     if: "!contains(github.event.head_commit.message, 'ci skip')"
     
@@ -15,23 +15,14 @@ jobs:
       fail-fast: false
       matrix:
         config: 
-        - {name: 'current', os: ubuntu-latest, r: '4.0.3', python: '3.8' }
-        - {name: 'prev', os: ubuntu-latest, r: '3.6.3', python: '3.7' }
-        - {name: 'old', os: ubuntu-latest, r: '3.5.3', python: '3.6' }
-        - {name: 'mac', os: macos-latest, r: '4.0.3', python: '3.8' }
+        - {name: 'current', os: ubuntu-latest, python: '3.8' }
+        - {name: 'prev', os: ubuntu-latest, python: '3.7' }
+        - {name: 'old', os: ubuntu-latest, python: '3.6' }
+        - {name: 'mac', os: macos-latest, python: '3.8' }
 
     steps:
     - uses: actions/checkout@v2
     
-    - name: Cache packages
-      uses: actions/cache@v1
-      with:
-        path: |
-          ${{ env.R_LIBS_USER }}
-          pip
-        key: ${{ matrix.config.name }}
-        restore-keys: ${{ matrix.config.name }}
-        
     - name: Install system dependencies
       if: runner.os == 'Linux'
       run: |
@@ -43,20 +34,6 @@ jobs:
       with:
         singularity-version: 3.6.1
     
-    - name: Set up R
-      if: false # r is not needed, right?
-      uses: r-lib/actions/setup-r@master
-      with:
-        r-version: ${{ matrix.config.r }}
-      
-    - name: Install R packages
-      # if R is also needed, add 'libcurl4-openssl-dev' to the system dependencies
-      if: false # r is not needed, right?
-      run: |
-        install.packages('remotes')
-        remotes::install_cran(c("tidyverse"))
-      shell: Rscript {0}
-      
     - name: Set up Python
       uses: actions/setup-python@v2
       with: 
