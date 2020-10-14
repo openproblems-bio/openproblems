@@ -3,6 +3,8 @@ import parameterized
 import openproblems
 from openproblems.test import utils
 
+utils.ignore_warnings()
+
 
 @parameterized.parameterized.expand(
     [(metric,) for task in openproblems.TASKS for metric in task.METRICS],
