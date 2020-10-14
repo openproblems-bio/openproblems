@@ -18,7 +18,7 @@ def cache_image(image):
     p = subprocess.run(
         [
             "singularity-permanent-cache",
-            "-v",
+            "-vvv",
             "--cache-dir",
             os.path.join(tempfile.gettempdir(), ".singularity"),
             "docker://singlecellopenproblems/{}".format(image),
