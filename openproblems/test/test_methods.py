@@ -27,7 +27,10 @@ def test_method(task, dataset, method):
     with tempfile.NamedTemporaryFile(suffix=".h5ad") as data_file:
         p = subprocess.run(
             [
-                "bash",
+                "singularity",
+                "exec",
+                "docker://singlecellopenproblems/{}".format(method.metadata["image"]),
+                "/bin/bash",
                 os.path.join(TESTDIR, "singularity_run.sh"),
                 TESTDIR,
                 "run_test_method.py",
@@ -47,7 +50,12 @@ def test_method(task, dataset, method):
             )
             p = subprocess.run(
                 [
-                    "bash",
+                    "singularity",
+                    "exec",
+                    "docker://singlecellopenproblems/{}".format(
+                        metric.metadata["image"]
+                    ),
+                    "/bin/bash",
                     os.path.join(TESTDIR, "singularity_run.sh"),
                     TESTDIR,
                     "run_test_metric.py",
