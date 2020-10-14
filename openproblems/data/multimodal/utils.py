@@ -78,7 +78,9 @@ def subset_joint_data(adata, n_cells=500, n_genes=200):
         adata = adata[:, keep_mode1_genes].copy()
 
     if adata.obsm["mode2"].shape[1] > n_genes:
-        keep_mode2_genes = np.random.choice(adata.obsm["mode2"], n_genes, replace=False)
+        keep_mode2_genes = np.random.choice(
+            adata.obsm["mode2"].shape[1], n_genes, replace=False
+        )
         adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_mode2_genes]
         adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_mode2_genes]
 
