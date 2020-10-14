@@ -29,6 +29,7 @@ def test_method(task, dataset, method):
             [
                 "singularity",
                 "exec",
+                "--quiet",
                 "docker://singlecellopenproblems/{}".format(method.metadata["image"]),
                 "/bin/bash",
                 os.path.join(TESTDIR, "singularity_run.sh"),
@@ -52,6 +53,7 @@ def test_method(task, dataset, method):
                 [
                     "singularity",
                     "exec",
+                    "--quiet",
                     "docker://singlecellopenproblems/{}".format(
                         metric.metadata["image"]
                     ),
