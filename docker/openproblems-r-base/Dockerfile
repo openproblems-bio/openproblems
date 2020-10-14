@@ -11,8 +11,4 @@ RUN apt-get install r-base-core=3.6\* -y
 RUN R -e "install.packages('BiocManager'); BiocManager::install('scran')"
 RUN R -e "BiocManager::install('batchelor')"
 
-# Install Python packages
-RUN pip install git+https://github.com/singlecellopenproblems/SingleCellOpenProblems.git#egg=openproblems[r]
-
-
 RUN apt-get clean -y && apt-get autoremove -y
