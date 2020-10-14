@@ -8,6 +8,12 @@ Formalizing and benchmarking open problems in single-cell genomics.
 
 [**Visit the Open Problems Website**](https://openproblems.netlify.app/)
 
+## The team
+
+**Core**: Scott Gigante (@scottgigante), Daniel Burkhardt (@dburkhardt), Malte Luecken (@LuckyMD)  
+**Tasks**: Mohammad Lotfallahi (@M0hammadL), Qian Qin (@qinqian), Michael Vinyard (@mvinyard), Florian Wagner (@flo-compbio)
+
+
 ## API
 
 Each task consists of datasets, methods, and metrics.
