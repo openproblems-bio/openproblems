@@ -57,7 +57,7 @@ jobs:
     
     - name: Run benchmark
       # only on master branch using the main config
-      if: {{ github.ref == 'ref/head/master'  && matrix.config.name == 'main' }}
+      if: github.ref == 'ref/head/master' && matrix.config.name == 'main'
       run: |
         pip install -U .[evaluate]
         cd scripts
@@ -66,7 +66,7 @@ jobs:
         
     - name: Upload results on success
       # only on master branch using the main config
-      if: {{ github.ref == 'ref/head/master' && matrix.config.name == 'main' }}
+      if: github.ref == 'ref/head/master' && matrix.config.name == 'main'
       run: |
         git remote set-url origin https://${GH_USERNAME}:${GH_PASSWORD}@github.com/${GITHUB_REPOSITORY}.git
         git checkout -B master
