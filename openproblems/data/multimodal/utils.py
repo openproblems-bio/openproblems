@@ -8,12 +8,18 @@ from ..utils import filter_genes_cells
 
 def filter_joint_data_empty_cells(adata):
     assert np.all(adata.uns["mode2_obs"] == adata.obs.index)
-    n_mode1 = scprep.utils.toarray(adata.X.sum(axis=1)).flatten()
-    n_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=1)).flatten()
-    keep_cells = np.minimum(n_mode1, n_mode2) > 0
+    # filter cells
+    n_cells_mode1 = scprep.utils.toarray(adata.X.sum(axis=1)).flatten()
+    n_cells_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=1)).flatten()
+    keep_cells = np.minimum(n_cells_mode1, n_cells_mode2) > 0
     adata.uns["mode2_obs"] = adata.uns["mode2_obs"][keep_cells]
-    adata = adata[keep_cells, :]
-    return adata.copy()
+    adata = adata[keep_cells, :].copy()
+    # filter genes
+    sc.pp.filter_genes(adata, min_counts=1)
+    keep_genes_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=0)).flatten()
+    adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes_mode2]
+    adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes_mode2]
+    return adata
 
 
 def create_joint_adata(
