@@ -17,7 +17,8 @@ def filter_joint_data_empty_cells(adata):
     adata = adata[keep_cells, :].copy()
     # filter genes
     sc.pp.filter_genes(adata, min_counts=1)
-    keep_genes_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=0)).flatten()
+    n_genes_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=0)).flatten()
+    keep_genes_mode2 = n_genes_mode2 > 0
     adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes_mode2]
     adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes_mode2]
     return adata
