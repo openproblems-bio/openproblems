@@ -1,5 +1,6 @@
 from .base import load_scicar
 from ...utils import loader
+from ..utils import subset_joint_data
 
 rna_url = "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM3271040&format=file&file=GSM3271040%5FRNA%5FsciCAR%5FA549%5Fgene%5Fcount.txt.gz"
 rna_cells_url = "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM3271040&format=file&file=GSM3271040%5FRNA%5FsciCAR%5FA549%5Fcell.txt.gz"
