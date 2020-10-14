@@ -15,21 +15,24 @@ TESTDIR = os.path.dirname(os.path.abspath(__file__))
 
 @functools.lru_cache(maxsize=None)
 def cache_image(image):
+    filename = os.path.join(
+        tempfile.gettempdir(), ".singularity", "{}.sif".format(image)
+    )
     p = subprocess.run(
         [
-            "singularity-permanent-cache",
-            "-vvv",
-            "--cache-dir",
-            os.path.join(tempfile.gettempdir(), ".singularity"),
+            "singularity",
+            "pull",
+            "-v",
+            "--name",
+            filename,
             "docker://singlecellopenproblems/{}".format(image),
         ],
         stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE,
     )
     assert p.returncode == 0, "Return code {}\n\n{}".format(
         p.returncode, p.stderr.decode("utf-8")
     )
-    return p.stdout.decode("utf-8")
+    return filename
 
 
 def singularity_command(image, script, *args):
