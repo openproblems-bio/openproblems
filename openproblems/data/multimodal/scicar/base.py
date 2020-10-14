@@ -3,7 +3,7 @@ import scprep
 import tempfile
 import os
 
-from ..utils import filter_joint_data_empty_cells, create_joint_adata, subset_joint_data
+from ..utils import filter_joint_data_empty_cells, create_joint_adata
 
 
 def load_scicar(
