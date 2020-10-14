@@ -7,7 +7,7 @@ import subprocess
 import openproblems
 from openproblems.test import utils
 
-utils.ignore_numba_warnings()
+utils.ignore_warnings()
 
 TESTDIR = os.path.dirname(os.path.abspath(__file__))
 

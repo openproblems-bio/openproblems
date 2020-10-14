@@ -1,5 +1,8 @@
 import sys
 import openproblems
+from openproblems.test import utils
+
+utils.ignore_warnings()
 
 
 def test_method(task, dataset, method, data_path):

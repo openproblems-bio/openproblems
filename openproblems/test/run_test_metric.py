@@ -2,6 +2,9 @@ import sys
 import openproblems
 import anndata
 import numbers
+from openproblems.test import utils
+
+utils.ignore_warnings()
 
 
 def test_method(task, data_path, metric):

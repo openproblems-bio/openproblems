@@ -5,7 +5,7 @@ import warnings
 from scipy import sparse
 from openproblems.test import utils
 
-utils.ignore_numba_warnings()
+utils.ignore_warnings()
 
 
 @parameterized.parameterized.expand(
