@@ -22,9 +22,12 @@ Formalizing and benchmarking open problems in single-cell genomics.
 * Florian Wagner (@flo-compbio) - Data denoising  
 
 **Supervision** (_alphabetically_):  
-* Jonah Cool, CZI  
 * Smita Krishnaswamy, Yale  
 * Fabian Theis, Helmholtz Munich  
+
+**Chan Zuckerberg Initiative Support** (_alphabetically_):  
+* Jonah Cool  
+* Fiona Wagner
 
 ## API
 
