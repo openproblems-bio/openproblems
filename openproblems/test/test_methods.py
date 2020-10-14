@@ -11,13 +11,14 @@ from openproblems.test import utils
 utils.ignore_warnings()
 
 TESTDIR = os.path.dirname(os.path.abspath(__file__))
+CACHEDIR = os.path.join(tempfile.gettempdir(), ".singularity")
+os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
+os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
 
 
 @functools.lru_cache(maxsize=None)
 def cache_image(image):
-    filename = os.path.join(
-        tempfile.gettempdir(), ".singularity", "{}.sif".format(image)
-    )
+    filename = "{}.sif".format(image)
     p = subprocess.run(
         [
             "singularity",
@@ -38,8 +39,8 @@ def cache_image(image):
 def singularity_command(image, script, *args):
     [
         "singularity",
+        "--verbose",
         "exec",
-        "--quiet",
         cache_image(image),
         "/bin/bash",
         os.path.join(TESTDIR, "singularity_run.sh"),
