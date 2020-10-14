@@ -21,8 +21,8 @@ def cache_image(image):
     p = subprocess.run(
         [
             "singularity",
+            "--verbose",
             "pull",
-            "-v",
             "--name",
             filename,
             "docker://singlecellopenproblems/{}".format(image),
