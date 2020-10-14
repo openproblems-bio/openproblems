@@ -11,7 +11,11 @@ Formalizing and benchmarking open problems in single-cell genomics.
 ## The team
 
 **Core**: Scott Gigante (@scottgigante), Daniel Burkhardt (@dburkhardt), Malte Luecken (@LuckyMD)  
-**Tasks**: Mohammad Lotfallahi (@M0hammadL), Qian Qin (@qinqian), Michael Vinyard (@mvinyard), Florian Wagner (@flo-compbio)
+**Task authors** (_alphabetically_):  
+* Mohammad Lotfallahi (@M0hammadL) - Label projection task
+* Qian Qin (@qinqian) - Predicting gene expression from chromatin accessibility  
+* Michael Vinyard (@mvinyard) - Stress preservation in Dimensionality Reduction
+* Florian Wagner (@flo-compbio) - Data denoising
 
 
 ## API
