@@ -6,6 +6,6 @@ RUN for pkg in $(cat r_requirements.txt); do R -e "BiocManager::install('${pkg}'
 
 # Install Python packages
 COPY ./docker/openproblems-r-extras/requirements.txt ./requirements.txt
-RUN pip install -y -r requirements.txt
+RUN pip install --no-cache-dir -U -r requirements.txt
 
 RUN apt-get clean -y && apt-get autoremove -y
