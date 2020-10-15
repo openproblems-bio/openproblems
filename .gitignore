@@ -137,3 +137,5 @@ resources/
 
 # Snakemake
 .snakemake/
+.evaluate/
+.r_packages/
