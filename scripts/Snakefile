@@ -83,7 +83,7 @@ def docker_image(wildcards):
 
 
 def docker_requirements(wildcards):
-    docker_dir = "../docker/{}/".format(docker_image(wildcards))
+    docker_dir = "../docker/{}/".format(wildcards.image)
     return [
         os.path.join(docker_dir, f)
         for f in os.listdir(docker_dir)
