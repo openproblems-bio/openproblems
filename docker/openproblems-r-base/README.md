@@ -20,7 +20,6 @@ R packages:
 
 * BiocManager
 * scran
-* batchelor
 
 Python packages:
 
