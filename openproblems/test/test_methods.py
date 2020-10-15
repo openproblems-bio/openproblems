@@ -37,7 +37,7 @@ def cache_image(image):
 
 
 def singularity_command(image, script, *args):
-    [
+    return [
         "singularity",
         "--verbose",
         "exec",
