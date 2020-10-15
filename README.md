@@ -27,7 +27,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
 
 **Chan Zuckerberg Initiative Support** (_alphabetically_):  
 * Jonah Cool  
-* Fiona Wagner
+* Fiona Griffin
 
 ## API
 
