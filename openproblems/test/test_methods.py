@@ -46,7 +46,7 @@ def singularity_command(image, script, *args):
         os.path.join(TESTDIR, "singularity_run.sh"),
         TESTDIR,
         script,
-    ] + args
+    ] + list(args)
 
 
 @parameterized.parameterized.expand(
