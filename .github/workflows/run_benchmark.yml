@@ -1,23 +1,18 @@
-name: Run evaluation
+name: Run benchmark
 
 on:
   push:
-    branches: [ master, docker ]
-  pull_request:
-    branches: [ master, docker ]
+    tags: [ * ]
 
 jobs:
-  evaluate:
+  run_benchmark:
     runs-on: ${{ matrix.config.os }}
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
     
     strategy:
       fail-fast: false
       matrix:
         config: 
         - {name: 'current', os: ubuntu-latest, python: '3.8' }
-        - {name: 'prev', os: ubuntu-latest, python: '3.7' }
-        - {name: 'old', os: ubuntu-latest, python: '3.6' }
 
     steps:
     - uses: actions/checkout@v2
@@ -45,19 +40,7 @@ jobs:
         pip install -U .[test]
         black . --check --diff --exclude=website
     
-    - name: Build docker container
-      run: |
-        # build docker containers using the current repository
-        docker build -f docker/openproblems/Dockerfile -t singlecellopenproblems/openproblems .
-        docker build -f docker/openproblems-r-base/Dockerfile -t singlecellopenproblems/openproblems-r-base .
-    
-    - name: Run tests
-      run: |
-        nose2 openproblems -v
-    
     - name: Run benchmark
-      # only on master branch using the main config
-      if: github.ref == 'ref/head/master' && matrix.config.name == 'main'
       run: |
         pip install -U .[evaluate]
         cd scripts
@@ -65,8 +48,6 @@ jobs:
         cd ..
         
     - name: Upload results on success
-      # only on master branch using the main config
-      if: github.ref == 'ref/head/master' && matrix.config.name == 'main'
       run: |
         git remote set-url origin https://${GH_USERNAME}:${GH_PASSWORD}@github.com/${GITHUB_REPOSITORY}.git
         git checkout -B master
