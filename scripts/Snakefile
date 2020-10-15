@@ -84,11 +84,17 @@ def docker_image(wildcards):
 
 def docker_requirements(wildcards):
     docker_dir = "../docker/{}/".format(wildcards.image)
-    return [
+    requirements = [
         os.path.join(docker_dir, f)
         for f in os.listdir(docker_dir)
         if f.endswith("requirements.txt")
     ]
+    with open(os.path.join(docker_dir, "Dockerfile"), 'r') as handle:
+        base_image = next(handle).replace("FROM ", "")
+        if base_image.startswith("singlecellopenproblems"):
+            base_image = base_image.split(":")[0].split("/")[1]
+            requirements.append("../docker/{}/.docker_push".format(base_image))
+    return requirements
 
 
 def docker_push(wildcards):
