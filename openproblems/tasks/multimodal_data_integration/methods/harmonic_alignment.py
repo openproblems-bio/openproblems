@@ -31,6 +31,7 @@ def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
     paper_year=2020,
     code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
     code_version=check_version("harmonicalignment"),
+    image="openproblems-python-extras",
 )
 def harmonic_alignment_sqrt_cpm(adata, n_svd=100):
     sqrt_cpm(adata)
@@ -45,7 +46,7 @@ def harmonic_alignment_sqrt_cpm(adata, n_svd=100):
     paper_year=2020,
     code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
     code_version=check_version("harmonicalignment"),
-    image="openproblems-r-base",
+    image="openproblems-r-extras",
 )
 def harmonic_alignment_log_scran_pooling(adata, n_svd=100):
     log_scran_pooling(adata)

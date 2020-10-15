@@ -51,7 +51,7 @@ def _mnn(adata, n_svd=100):
     paper_year=2018,
     code_url="https://github.com/LTLA/batchelor",
     code_version=check_version("rpy2"),
-    image="openproblems-r-base",
+    image="openproblems-r-extras",
 )
 def mnn_log_cpm(adata, n_svd=100):
     log_cpm(adata)
@@ -66,7 +66,7 @@ def mnn_log_cpm(adata, n_svd=100):
     paper_year=2018,
     code_url="https://github.com/LTLA/batchelor",
     code_version=check_version("rpy2"),
-    image="openproblems-r-base",
+    image="openproblems-r-extras",
 )
 def mnn_log_scran_pooling(adata, n_svd=100):
     log_scran_pooling(adata)

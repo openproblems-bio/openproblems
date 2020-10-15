@@ -82,6 +82,15 @@ def docker_image(wildcards):
     return fun.metadata["image"]
 
 
+def docker_requirements(wildcards):
+    docker_dir = "../docker/{}/".format(docker_image(wildcards))
+    return [
+        os.path.join(docker_dir, f)
+        for f in os.listdir(docker_dir)
+        if f.endswith("requirements.txt")
+    ]
+
+
 def docker_push(wildcards):
     return "../docker/{}/.docker_push".format(docker_image(wildcards))
 
@@ -184,6 +193,7 @@ rule build_docker:
     input:
         dockerfile="../docker/{image}/Dockerfile",
         login=".docker_login",
+        requirements=docker_requirements,
     output:
         temp("../docker/{image}/.docker_build")
     params:
