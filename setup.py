@@ -11,6 +11,7 @@ install_requires = [
     "scanpy",
     "decorator",
     "memory-profiler",
+    "parameterized",
 ]
 
 r_requires = [
@@ -25,7 +26,7 @@ harmonic_alignment_requires = [
 
 evaluate_requires = ["snakemake"]
 
-test_requires = ["nose2", "parameterized", "black"]
+test_requires = ["nose2", "black"]
 
 doc_requires = [
     "sphinx>=2.2,<2.4",
