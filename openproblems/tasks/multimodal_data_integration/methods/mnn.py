@@ -24,10 +24,7 @@ def _mnn(adata, n_svd=100):
     numpy2ri.activate()
     scprep.run.install_bioconductor("batchelor")
 
-    if min(adata.X.shape) <= n_svd:
-        n_svd = min(adata.X.shape) - 1
-    if min(adata.obsm["mode2"].shape) <= n_svd:
-        n_svd = min(adata.obsm["mode2"].shape) - 1
+    n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
     X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
     Y_pca = TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
 
