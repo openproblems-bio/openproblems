@@ -2,7 +2,8 @@ name: Run benchmark
 
 on:
   push:
-    tags: [ * ]
+    tags: 
+      - *
 
 jobs:
   run_benchmark:
