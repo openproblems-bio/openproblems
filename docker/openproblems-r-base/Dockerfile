@@ -1,5 +1,7 @@
 FROM singlecellopenproblems/openproblems:latest
 
+ARG SOURCEDIR=.
+
 # Install R
 RUN apt install dirmngr ca-certificates gnupg gpgv
 RUN apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
@@ -12,7 +14,7 @@ RUN R -e "install.packages('BiocManager'); BiocManager::install('scran')"
 RUN R -e "BiocManager::install('batchelor')"
 
 # Install Python packages
-RUN pip install git+https://github.com/singlecellopenproblems/SingleCellOpenProblems.git#egg=openproblems[r]
-
+COPY $SOURCEDIR /usr/src/singlecellopenproblems
+RUN pip install -e /usr/src/singlecellopenproblems[r]
 
 RUN apt-get clean -y && apt-get autoremove -y
