@@ -8,10 +8,7 @@ from ....tools.utils import check_version
 def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
     import harmonicalignment
 
-    if min(adata.X.shape) <= n_svd:
-        n_svd = min(adata.X.shape) - 1
-    if min(adata.obsm["mode2"].shape) <= n_svd:
-        n_svd = min(adata.obsm["mode2"].shape) - 1
+    n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
     if adata.X.shape[0] <= n_eigenvectors:
         n_eigenvectors = None
     if adata.X.shape[0] <= n_pca_XY:
