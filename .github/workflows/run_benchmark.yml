@@ -3,7 +3,7 @@ name: Run Benchmark
 on:
   push:
     tags: 
-      - *
+      - '*'
     branches:
       - test_benchmark
 
