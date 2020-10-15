@@ -47,6 +47,7 @@ jobs:
         pip install -U .[test]
         
     - name: Linting
+      run: |
         black . --check --diff --exclude=website
     
     - name: Build docker container # can snakemake do this?
