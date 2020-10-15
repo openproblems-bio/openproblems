@@ -13,8 +13,10 @@ from ....tools.utils import check_version
     paper_year=2017,
     code_url="http://tomwildenhain.com/PowerPointTM/PowerPointTM.pptx",
     code_version=check_version("numpy"),
+    # image="openproblems-template-image" # only if required
 )
 def template_method(adata):
+    # TODO: update
     # Normalize the data
     log_cpm(adata)
     # Complete the result in-place
