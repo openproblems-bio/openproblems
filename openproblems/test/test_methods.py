@@ -33,7 +33,7 @@ def cache_image(image):
     assert p.returncode == 0, "Return code {}\n\n{}".format(
         p.returncode, p.stderr.decode("utf-8")
     )
-    return filename
+    return os.path.join(CACHEDIR, filename)
 
 
 def singularity_command(image, script, *args):
