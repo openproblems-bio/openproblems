@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import scanpy as sc
 import scprep
 import anndata
 
@@ -16,7 +17,8 @@ def filter_joint_data_empty_cells(adata):
     adata = adata[keep_cells, :].copy()
     # filter genes
     sc.pp.filter_genes(adata, min_counts=1)
-    keep_genes_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=0)).flatten()
+    n_genes_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=0)).flatten()
+    keep_genes_mode2 = n_genes_mode2 > 0
     adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes_mode2]
     adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes_mode2]
     return adata
@@ -65,29 +67,22 @@ def create_joint_adata(
 
 
 def subset_joint_data(adata, n_cells=500, n_genes=200):
-    keep_cells = np.random.choice(adata.shape[0], n_cells, replace=False)
-    adata = adata[keep_cells]
-    adata.uns["mode2_obs"] = adata.uns["mode2_obs"][keep_cells]
+    if adata.shape[0] > n_cells:
+        keep_cells = np.random.choice(adata.shape[0], n_cells, replace=False)
+        adata = adata[keep_cells].copy()
+        adata.uns["mode2_obs"] = adata.uns["mode2_obs"][keep_cells]
+        adata = filter_joint_data_empty_cells(adata)
 
-    keep_rna_genes = np.argwhere(
-        scprep.utils.toarray(adata.X.sum(axis=0)).flatten() > 0
-    ).flatten()
+    if adata.shape[1] > n_genes:
+        keep_mode1_genes = np.random.choice(adata.shape[1], n_genes, replace=False)
+        adata = adata[:, keep_mode1_genes].copy()
 
-    if len(keep_rna_genes) > n_genes:
-        keep_rna_genes = keep_rna_genes[
-            np.random.choice(len(keep_rna_genes), n_genes, replace=False)
-        ]
-    adata = adata[:, keep_rna_genes].copy()
-
-    keep_adt_genes = np.argwhere(
-        scprep.utils.toarray(adata.obsm["mode2"].sum(axis=0)).flatten() > 0
-    ).flatten()
-    if len(keep_adt_genes) > n_genes:
-        keep_adt_genes = keep_adt_genes[
-            np.random.choice(len(keep_adt_genes), n_genes, replace=False)
-        ]
-    adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_adt_genes]
-    adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_adt_genes]
+    if adata.obsm["mode2"].shape[1] > n_genes:
+        keep_mode2_genes = np.random.choice(
+            adata.obsm["mode2"].shape[1], n_genes, replace=False
+        )
+        adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_mode2_genes]
+        adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_mode2_genes]
 
     adata = filter_joint_data_empty_cells(adata)
     return adata
