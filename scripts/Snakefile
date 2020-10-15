@@ -189,7 +189,7 @@ rule build_docker:
     params:
         sourcedir=os.path.dirname(SCRIPTS_DIR)
     shell:
-        "docker build -f {input.dockerfile} -t singlecellopenproblems/{wildcards.image} --build-arg SOURCEDIR={params.sourcedir} . && touch {output}"
+        "docker build -f {input.dockerfile} -t singlecellopenproblems/{wildcards.image} .. && touch {output}"
 
 rule push_docker:
     input:
