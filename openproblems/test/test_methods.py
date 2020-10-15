@@ -28,7 +28,8 @@ def cache_image(image):
             filename,
             "docker://singlecellopenproblems/{}".format(image),
         ],
-        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
     )
     assert p.returncode == 0, "Return code {}\n\n{}".format(
         p.returncode, p.stderr.decode("utf-8")
