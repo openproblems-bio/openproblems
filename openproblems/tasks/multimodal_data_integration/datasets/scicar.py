@@ -1,4 +1,4 @@
-from ....data.scicar import load_scicar_cell_lines, load_scicar_mouse_kidney
+from ....data.multimodal.scicar import load_scicar_cell_lines, load_scicar_mouse_kidney
 from ....tools.decorators import dataset
 
 
