@@ -1,9 +1,11 @@
-name: Run benchmark
+name: Run Benchmark
 
 on:
   push:
     tags: 
       - *
+    branches:
+      - test_benchmark
 
 jobs:
   run_benchmark:
