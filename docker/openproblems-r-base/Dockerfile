@@ -8,7 +8,7 @@ RUN apt-get update -qq
 RUN apt-get install r-base-core=3.6\* -y
 
 # Install R packages
-COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
+COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
 RUN R -e "install.packages('BiocManager')"
 RUN for pkg in $(cat r_requirements.txt); do R -e "BiocManager::install('${pkg}')"; done
 
