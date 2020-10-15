@@ -186,8 +186,10 @@ rule build_docker:
         login=".docker_login",
     output:
         temp("../docker/{image}/.docker_build")
+    params:
+        sourcedir=os.path.dirname(SCRIPTS_DIR)
     shell:
-        "docker build -f {input.dockerfile} -t singlecellopenproblems/{wildcards.image} . && touch {output}"
+        "docker build -f {input.dockerfile} -t singlecellopenproblems/{wildcards.image} --build-arg SOURCEDIR={params.sourcedir} . && touch {output}"
 
 rule push_docker:
     input:

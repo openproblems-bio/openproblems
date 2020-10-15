@@ -22,7 +22,7 @@ r_requires = [
 
 harmonic_alignment_requires = [
     "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
-] + r_requires
+]
 
 evaluate_requires = ["snakemake"]
 
