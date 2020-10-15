@@ -20,6 +20,7 @@ cache:
   - apt
   - directories:
       - $HOME/R/Library
+      - $HOME/.singularity
 before_install:
   - >-
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys
