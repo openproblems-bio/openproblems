@@ -52,8 +52,11 @@ jobs:
     
     - name: Build docker container # can snakemake do this?
       run: |
-        docker build -f docker/openproblems/Dockerfile -t singlecellopenproblems/openproblems .
-        docker build -f docker/openproblems-r-base/Dockerfile -t singlecellopenproblems/openproblems-r-base .
+        for image in $(ls -1d docker/open* | sed 's#docker/##'); do
+          # only works when you have a DOCKER_PASSWORD variable defined, for now
+          # snakemake -j 1 docker/${image}/.docker_push
+          docker build -f docker/$image/Dockerfile -t singlecellopenproblems/$image .
+        done
     
     - name: Run tests
       run: |
