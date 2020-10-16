@@ -15,4 +15,4 @@ RUN for pkg in $(cat r_requirements.txt); do R -e "BiocManager::install('${pkg}'
 
 # Install Python packages
 COPY . /usr/src/singlecellopenproblems
-RUN pip install -e /usr/src/singlecellopenproblems[r]
+RUN pip install --no-cache-dir /usr/src/singlecellopenproblems[r]
