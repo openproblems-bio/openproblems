@@ -2,7 +2,8 @@ FROM rackspacedot/python37:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN pip install --no-cache-dir -U pip wheel setuptools cmake
+COPY ./docker/openproblems/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -U -r requirements.txt
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems

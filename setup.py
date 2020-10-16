@@ -11,6 +11,7 @@ install_requires = [
     "scanpy",
     "decorator",
     "memory-profiler",
+    "parameterized",
 ]
 
 r_requires = [
@@ -19,13 +20,9 @@ r_requires = [
     "anndata2ri>=1.0.4",
 ]
 
-harmonic_alignment_requires = [
-    "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
-] + r_requires
-
 evaluate_requires = ["snakemake"]
 
-test_requires = ["nose2", "parameterized", "black"]
+test_requires = ["nose2", "black"]
 
 doc_requires = [
     "sphinx>=2.2,<2.4",
@@ -52,8 +49,6 @@ setup(
         "doc": doc_requires,
         "r": r_requires,
         "evaluate": evaluate_requires + r_requires,
-        "multimodal_data_integration-harmonic_alignment_sqrt_cpm": harmonic_alignment_requires,
-        "multimodal_data_integration-harmonic_alignment_log_scran_pooling": harmonic_alignment_requires,
     },
     test_suite="nose2.collector.collector",
     long_description=readme,
