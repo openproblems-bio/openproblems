@@ -24,10 +24,7 @@ def _mnn(adata, n_svd=100):
     numpy2ri.activate()
     scprep.run.install_bioconductor("batchelor")
 
-    if min(adata.X.shape) <= n_svd:
-        n_svd = min(adata.X.shape) - 1
-    if min(adata.obsm["mode2"].shape) <= n_svd:
-        n_svd = min(adata.obsm["mode2"].shape) - 1
+    n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
     X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
     Y_pca = TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
 
@@ -54,7 +51,7 @@ def _mnn(adata, n_svd=100):
     paper_year=2018,
     code_url="https://github.com/LTLA/batchelor",
     code_version=check_version("rpy2"),
-    image="openproblems-r-base",
+    image="openproblems-r-extras",
 )
 def mnn_log_cpm(adata, n_svd=100):
     log_cpm(adata)
@@ -69,7 +66,7 @@ def mnn_log_cpm(adata, n_svd=100):
     paper_year=2018,
     code_url="https://github.com/LTLA/batchelor",
     code_version=check_version("rpy2"),
-    image="openproblems-r-base",
+    image="openproblems-r-extras",
 )
 def mnn_log_scran_pooling(adata, n_svd=100):
     log_scran_pooling(adata)

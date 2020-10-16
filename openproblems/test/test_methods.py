@@ -11,7 +11,7 @@ from openproblems.test import utils
 utils.ignore_warnings()
 
 TESTDIR = os.path.dirname(os.path.abspath(__file__))
-CACHEDIR = os.path.join(tempfile.gettempdir(), ".singularity")
+CACHEDIR = os.path.join(os.environ["HOME"], ".singularity")
 os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
 os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
 
@@ -28,7 +28,8 @@ def cache_image(image):
             filename,
             "docker://singlecellopenproblems/{}".format(image),
         ],
-        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
     )
     assert p.returncode == 0, "Return code {}\n\n{}".format(
         p.returncode, p.stderr.decode("utf-8")
