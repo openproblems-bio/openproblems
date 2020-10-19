@@ -1,1 +1,1 @@
-from .correlation import correlation
+from .correlation import pearson_correlation, spearman_correlation
