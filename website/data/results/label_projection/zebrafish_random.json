@@ -27,11 +27,11 @@
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 1.6703300476074219,
-            "Runtime (min)": 0.798245038583021,
-            "Accuracy": 0.8241225369458128,
-            "F1 score": 0.8209001219267394,
-            "Rank": 3
+            "Memory (GB)": 1.6748313903808594,
+            "Runtime (min)": 0.6284185575476537,
+            "Accuracy": 0.8308133674497945,
+            "F1 score": 0.8289151800060621,
+            "Rank": 4
         },
         {
             "Name": "Logistic regression (log scran)",
@@ -40,11 +40,11 @@
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 11.604679107666016,
-            "Runtime (min)": 8.618020995067976,
-            "Accuracy": 0.8336668719211823,
-            "F1 score": 0.8314374196080471,
-            "Rank": 2
+            "Memory (GB)": 12.933002471923828,
+            "Runtime (min)": 7.4605532487660335,
+            "Accuracy": 0.8420562921609677,
+            "F1 score": 0.8406642317107845,
+            "Rank": 1
         },
         {
             "Name": "Multilayer perceptron (log CPM)",
@@ -53,11 +53,11 @@
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 1.6702232360839844,
-            "Runtime (min)": 0.7663929810320648,
-            "Accuracy": 0.8225831280788177,
-            "F1 score": 0.8222148731931381,
-            "Rank": 4
+            "Memory (GB)": 1.6696243286132812,
+            "Runtime (min)": 0.6333092868987781,
+            "Accuracy": 0.831433666744204,
+            "F1 score": 0.8312446399796503,
+            "Rank": 3
         },
         {
             "Name": "Multilayer perceptron (log scran)",
@@ -66,11 +66,11 @@
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 11.903026580810547,
-            "Runtime (min)": 8.801432825966428,
-            "Accuracy": 0.8341286945812808,
-            "F1 score": 0.8319592760772325,
-            "Rank": 1
+            "Memory (GB)": 12.051559448242188,
+            "Runtime (min)": 7.67292711068488,
+            "Accuracy": 0.833837326510041,
+            "F1 score": 0.834245979766217,
+            "Rank": 2
         }
     ]
 }
