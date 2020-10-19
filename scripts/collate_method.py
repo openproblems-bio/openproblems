@@ -5,6 +5,7 @@ import openproblems
 
 
 def main(task_name, meta_file, input_dir, output_file):
+    openproblems.data.no_cleanup()
 
     task = eval("openproblems.tasks.{}".format(task_name))
 

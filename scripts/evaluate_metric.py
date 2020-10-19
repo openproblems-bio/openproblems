@@ -5,6 +5,7 @@ import anndata
 
 
 def main(task_name, metric_name, input_file, output_file):
+    openproblems.data.no_cleanup()
     task = eval("openproblems.tasks.{}".format(task_name))
     metrics = getattr(task, "metrics")
     metric = getattr(metrics, metric_name)

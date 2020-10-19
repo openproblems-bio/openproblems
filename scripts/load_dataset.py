@@ -3,6 +3,7 @@ import sys
 
 
 def main(task_name, dataset_name, output_file):
+    openproblems.data.no_cleanup()
     task = eval("openproblems.tasks.{}".format(task_name))
     datasets = getattr(task, "datasets")
     dataset = getattr(datasets, dataset_name)
