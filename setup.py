@@ -12,6 +12,8 @@ install_requires = [
     "decorator",
     "memory-profiler",
     "parameterized",
+    "pybedtools",
+    "pyensembl",
 ]
 
 r_requires = [
