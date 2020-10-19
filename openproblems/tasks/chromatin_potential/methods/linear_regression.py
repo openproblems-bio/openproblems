@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
 import scanpy as sc
-import os
+import subprocess
 from ....tools.decorators import method
 
 
@@ -17,7 +17,9 @@ def _chrom_limit(x):
 def _get_annotation(adata):
     from pyensembl import EnsemblRelease
 
-    os.system("pyensembl install --release 100 --species mus_musculus")
+    subprocess.call(
+        "pyensembl install --release 100 --species mus_musculus", shell=True
+    )
     data = EnsemblRelease(100, species="mus_musculus")
     # get ensemble gene coordinate
     genes = []
@@ -57,7 +59,6 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
 
     adata._inplace_subset_obs(adata.obs.n_genes_by_counts < 2000)
     adata._inplace_subset_obs(adata.obs.pct_counts_mt < 10)
-    adata.obsm["X_tsne"] = adata.obs.loc[:, ["tsne_1", "tsne_2"]].values
 
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
@@ -149,7 +150,7 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     paper_url="https://pubmed.ncbi.nlm.nih.gov/24263090/",
     paper_year=2013,
     code_version="1.0",
-    code_url="",
+    code_url="http://cistrome.org/BETA/src/BETA_1.0.7.zip",
 )
-def linear_regression_expotential_decay(adata, n_top_genes=200, threshold=1):
+def linear_regression_exponential_decay(adata, n_top_genes=200, threshold=1):
     _atac_genes_score(adata, top_genes=n_top_genes, threshold=threshold)

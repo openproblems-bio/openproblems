@@ -11,5 +11,6 @@ def check_dataset(adata):
 
 
 def check_method(adata):
-    assert "atac_rna_cor" in adata.obs.columns
+    assert "atac_rna_cor" in adata.obs
+    assert "gene_score" in adata.obsm
     return True

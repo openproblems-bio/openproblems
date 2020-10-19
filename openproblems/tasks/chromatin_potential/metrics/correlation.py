@@ -5,8 +5,7 @@ import numpy as np
 from ....tools.decorators import metric
 
 
-@metric(metric_name="Correlation between RNA and ATAC", maximize=True)
-def correlation(adata, method="pearson"):
+def _correlation(adata, method="pearson"):
     if method == "pearson":
         method = pearsonr
     else:
@@ -22,4 +21,14 @@ def correlation(adata, method="pearson"):
         y = adata.X[i].toarray()[0] if issparse(adata.X) else adata.X[i]
         cors.append(method(x, y)[0])
     cors = np.array(cors)
-    return cors[~np.isnan(cors)].mean()
+    return np.median(cors[~np.isnan(cors)])
+
+
+@metric(metric_name="Correlation between RNA and ATAC", maximize=True)
+def pearson_correlation(adata):
+    return _correlation(adata)
+
+
+@metric(metric_name="Correlation between RNA and ATAC", maximize=True)
+def spearman_correlation(adata):
+    return _correlation(adata, method="spearman")
