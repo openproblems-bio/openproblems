@@ -12,10 +12,10 @@ install_requires = [
     "decorator",
     "memory-profiler",
     "molecular-cross-validation @ git+https://github.com/flo-compbio/molecular-cross-validation@f867de0",
+    "parameterized",
 ]
 
-methods_requires = [
-    "harmonicalignment @ git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python",
+r_requires = [
     "rpy2",
     "scIB @ git+https://github.com/theislab/scib@master",
     "anndata2ri>=1.0.4",
@@ -23,7 +23,7 @@ methods_requires = [
 
 evaluate_requires = ["snakemake"]
 
-test_requires = ["nose2", "parameterized", "black"]
+test_requires = ["nose2", "black"]
 
 doc_requires = [
     "sphinx>=2.2,<2.4",
@@ -46,10 +46,10 @@ setup(
     install_requires=install_requires,
     python_requires=">=3.5",
     extras_require={
-        "test": test_requires + methods_requires,
+        "test": test_requires + r_requires,
         "doc": doc_requires,
-        "methods": methods_requires,
-        "evaluate": evaluate_requires + methods_requires,
+        "r": r_requires,
+        "evaluate": evaluate_requires + r_requires,
     },
     test_suite="nose2.collector.collector",
     long_description=readme,

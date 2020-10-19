@@ -1,5 +1,6 @@
 from .base import load_scicar
-from ..utils import loader
+from ...utils import loader
+from ..utils import subset_joint_data
 
 rna_url = "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM3271044&format=file&file=GSM3271044%5FRNA%5Fmouse%5Fkidney%5Fgene%5Fcount.txt.gz"
 rna_cells_url = "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM3271044&format=file&file=GSM3271044%5FRNA%5Fmouse%5Fkidney%5Fcell.txt.gz"
@@ -11,6 +12,10 @@ atac_genes_url = "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM3271045&form
 
 @loader
 def load_scicar_mouse_kidney(test=False):
+    if test:
+        adata = load_scicar_mouse_kidney(test=False)
+        adata = subset_joint_data(adata)
+        return adata
     return load_scicar(
         rna_url,
         rna_cells_url,
@@ -18,5 +23,4 @@ def load_scicar_mouse_kidney(test=False):
         atac_url,
         atac_cells_url,
         atac_genes_url,
-        test=test,
     )

@@ -31,7 +31,15 @@ def normalizer(func, *args, **kwargs):
     return normalize
 
 
-def method(method_name, paper_name, paper_url, paper_year, code_url, code_version):
+def method(
+    method_name,
+    paper_name,
+    paper_url,
+    paper_year,
+    code_url,
+    code_version,
+    image="openproblems",
+):
     def decorator(func):
         @functools.wraps(func)
         def apply_method(*args, **kwargs):
@@ -44,19 +52,22 @@ def method(method_name, paper_name, paper_url, paper_year, code_url, code_versio
             paper_year=paper_year,
             code_url=code_url,
             code_version=code_version,
+            image=image,
         )
         return apply_method
 
     return decorator
 
 
-def metric(metric_name, maximize):
+def metric(metric_name, maximize, image="openproblems"):
     def decorator(func):
         @functools.wraps(func)
         def apply_metric(*args, **kwargs):
             return func(*args, **kwargs)
 
-        apply_metric.metadata = dict(metric_name=metric_name, maximize=maximize)
+        apply_metric.metadata = dict(
+            metric_name=metric_name, maximize=maximize, image=image
+        )
         return apply_metric
 
     return decorator
