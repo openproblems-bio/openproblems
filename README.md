@@ -45,7 +45,7 @@ Methods should take an AnnData object and store the output in-place in  `adata.o
 function method(AnnData adata) -> None
 ```
 
-Metrics should take an AnnData object and return a float.
+Metrics should take an AnnData object and return a `float`.
 
 ```
 function metric(AnnData adata) -> float
