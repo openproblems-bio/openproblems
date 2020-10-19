@@ -10,9 +10,10 @@ SCRIPTS_DIR = os.getcwd()
 DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
 os.environ["SINGULARITY_CACHEDIR"] = "/tmp/.singularity"
-SINGULARITY_EXEC = "singularity exec -B {mountdir}:/opt/openproblems docker://singlecellopenproblems/{{image}} /bin/bash {workdir}/singularity_run.sh".format(
+SINGULARITY_EXEC = "singularity exec -B {mountdir}:/opt/openproblems {{protocol}}singlecellopenproblems/{{image}} /bin/bash {workdir}/singularity_run.sh".format(
     mountdir=os.path.dirname(SCRIPTS_DIR), workdir=DOCKER_DIR
 )
+DOCKER_PASSWORD = os.environ['DOCKER_PASSWORD'] if 'DOCKER_PASSWORD' in os.environ else None
 
 
 def tasks(wildcards):
@@ -73,13 +74,30 @@ def datasets(wildcards):
     ]
 
 
-def docker_image(wildcards):
+def docker_image_name(wildcards):
     task = getattr(openproblems.tasks, wildcards.task)
     try:
         fun = getattr(task.metrics, wildcards.metric)
     except AttributeError:
         fun = getattr(task.methods, wildcards.method)
     return fun.metadata["image"]
+
+
+def docker_image_marker(image):
+    docker_path = "../docker/{}".format(image)
+    docker_push = os.path.join(docker_path, ".docker_push")
+    docker_build = os.path.join(docker_path, ".docker_build")
+    dockerfile = os.path.join(docker_path, "Dockerfile")
+    if os.path.getmtime(docker_push) > os.path.getmtime(dockerfile):
+        # Dockerfile hasn't been changed since last push
+        return docker_push
+    elif DOCKER_PASSWORD:
+        # we have the password, let's push it
+        return docker_push
+    else:
+        # new image and we don't have the password, build locally
+        return docker_build
+
 
 
 def docker_requirements(wildcards):
@@ -93,16 +111,23 @@ def docker_requirements(wildcards):
         base_image = next(handle).replace("FROM ", "")
         if base_image.startswith("singlecellopenproblems"):
             base_image = base_image.split(":")[0].split("/")[1]
-            requirements.append("../docker/{}/.docker_push".format(base_image))
+            requirements.append(docker_image_marker(base_image))
     return requirements
 
 
 def docker_push(wildcards):
-    return "../docker/{}/.docker_push".format(docker_image(wildcards))
+    return docker_image_marker(docker_image_name(wildcards))
 
 
 def singularity_command(wildcards, output):
-    return SINGULARITY_EXEC.format(image=docker_image(wildcards))
+    image = docker_image_name(wildcards)
+    if docker_image_marker(image).endswith(".docker_build"):
+        # local build
+        protocol = "docker-daemon:"
+    else:
+        # download
+        protocol = "docker://"
+    return SINGULARITY_EXEC.format(protocol=protocol, image=image)
 
 
 rule all:
@@ -178,38 +203,36 @@ rule load_dataset:
     output: temp("{tempdir}/{task}/{dataset}.data.h5ad")
     shell: "python3 {input.script} {wildcards.task} {wildcards.dataset} {output}"
 
+rule build_docker:
+    input:
+        dockerfile="../docker/{image}/Dockerfile",
+        requirements=docker_requirements,
+    output:
+        "../docker/{image}/.docker_build"
+    params:
+        sourcedir=os.path.dirname(SCRIPTS_DIR)
+    shell:
+        "docker build -f {input.dockerfile} -t singlecellopenproblems/{wildcards.image} .. && touch {output}"
+
 rule password_docker:
     output:
         filename=temp(".docker_password")
     run:
         with open(output.filename, 'w') as handle:
-            handle.write(os.environ['DOCKER_PASSWORD'])
+            handle.write(DOCKER_PASSWORD)
 
 rule login_docker:
     input:
         ".docker_password"
     output:
         temp(".docker_login")
-    params:
-        password=os.environ['DOCKER_PASSWORD']
     shell:
         "cat {input} | docker login --username=singlecellopenproblems --password-stdin && touch {output}"
 
-rule build_docker:
-    input:
-        dockerfile="../docker/{image}/Dockerfile",
-        login=".docker_login",
-        requirements=docker_requirements,
-    output:
-        temp("../docker/{image}/.docker_build")
-    params:
-        sourcedir=os.path.dirname(SCRIPTS_DIR)
-    shell:
-        "docker build -f {input.dockerfile} -t singlecellopenproblems/{wildcards.image} .. && touch {output}"
-
 rule push_docker:
     input:
-        "../docker/{image}/.docker_build"
+        build="../docker/{image}/.docker_build",
+        login=".docker_login",
     output:
         "../docker/{image}/.docker_push"
     shell:
