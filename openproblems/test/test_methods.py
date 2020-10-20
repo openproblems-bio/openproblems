@@ -19,21 +19,22 @@ os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
 @functools.lru_cache(maxsize=None)
 def cache_image(image):
     filename = "{}.sif".format(image)
-    p = subprocess.run(
-        [
-            "singularity",
-            "--verbose",
-            "pull",
-            "--name",
-            filename,
-            "docker://singlecellopenproblems/{}".format(image),
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-    )
-    assert p.returncode == 0, "Return code {}\n\n{}".format(
-        p.returncode, p.stdout.decode("utf-8")
-    )
+    if not os.path.isfile(os.path.join(CACHEDIR, filename)):
+        p = subprocess.run(
+            [
+                "singularity",
+                "--verbose",
+                "pull",
+                "--name",
+                filename,
+                "docker://singlecellopenproblems/{}".format(image),
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        assert p.returncode == 0, "Return code {}\n\n{}".format(
+            p.returncode, p.stdout.decode("utf-8")
+        )
     return os.path.join(CACHEDIR, filename)
 
 
