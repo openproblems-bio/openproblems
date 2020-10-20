@@ -32,5 +32,5 @@ def loader(func, *args, **kwargs):
 
 
 def filter_genes_cells(adata):
-    sc.pp.filter_genes(adata, min_counts=1)
-    sc.pp.filter_cells(adata, min_counts=1)
+    sc.pp.filter_genes(adata, min_cells=1)
+    sc.pp.filter_cells(adata, min_genes=1)
