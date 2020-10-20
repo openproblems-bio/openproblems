@@ -32,7 +32,7 @@ def cache_image(image):
         stderr=subprocess.STDOUT,
     )
     assert p.returncode == 0, "Return code {}\n\n{}".format(
-        p.returncode, p.stderr.decode("utf-8")
+        p.returncode, p.stdout.decode("utf-8")
     )
     return os.path.join(CACHEDIR, filename)
 
