@@ -3,6 +3,8 @@ import parameterized
 import openproblems
 from openproblems.test import utils
 
+utils.ignore_warnings()
+
 
 @parameterized.parameterized.expand(
     [(metric,) for task in openproblems.TASKS for metric in task.METRICS],
@@ -10,9 +12,6 @@ from openproblems.test import utils
 )
 def test_metric_metadata(metric):
     assert hasattr(metric, "metadata")
-    for attr in [
-        "metric_name",
-        "maximize",
-    ]:
+    for attr in ["metric_name", "maximize", "image"]:
         assert attr in metric.metadata
     assert isinstance(metric.metadata["maximize"], bool)

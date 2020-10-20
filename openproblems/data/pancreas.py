@@ -5,7 +5,7 @@ import numpy as np
 import scprep
 import scanpy as sc
 
-from .utils import loader
+from .utils import loader, filter_genes_cells
 from ..tools import normalize as n
 
 URL = "https://ndownloader.figshare.com/files/24539828"
@@ -26,7 +26,7 @@ def load_pancreas(test=False, preprocess=True):
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
         # Ensure there are no cells or genes with 0 counts
-        _filter_genes_cells(adata)
+        filter_genes_cells(adata)
 
         return adata
 
@@ -40,13 +40,9 @@ def load_pancreas(test=False, preprocess=True):
             prep_pancreas(adata)
 
             # Ensure there are no cells or genes with 0 counts
-            _filter_genes_cells(adata)
+            filter_genes_cells(adata)
 
         return adata
-
-def _filter_genes_cells(adata):
-    sc.pp.filter_genes(adata, min_cells=1)
-    sc.pp.filter_cells(adata, min_genes=1)
 
 
 def prep_pancreas(adata):
