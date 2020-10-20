@@ -45,8 +45,8 @@ def load_pancreas(test=False, preprocess=True):
         return adata
 
 def _filter_genes_cells(adata):
-    sc.pp.filter_genes(adata, min_counts=1)
-    sc.pp.filter_cells(adata, min_counts=1)
+    sc.pp.filter_genes(adata, min_cells=1)
+    sc.pp.filter_cells(adata, min_genes=1)
 
 
 def prep_pancreas(adata):
