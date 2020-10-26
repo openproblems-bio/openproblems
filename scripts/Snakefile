@@ -13,7 +13,7 @@ DOCKER_EXEC = """
     CONTAINER=$(docker run -dt --rm \
                 --mount type=bind,source="{mountdir}",target=/opt/openproblems \
                 singlecellopenproblems/{{image}})
-    docker exec $CONTAINER /bin/bash /opt/openproblems/scripts/docker_run.sh
+    docker exec $CONTAINER /bin/bash /opt/openproblems/scripts/docker_run.sh \
 """.format(
     mountdir=os.path.dirname(SCRIPTS_DIR)
 )
