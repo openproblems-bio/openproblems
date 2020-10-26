@@ -137,8 +137,8 @@ def docker_command(image, script, *args):
         "exec",
         container,
         "/bin/bash",
-        os.path.join(TESTDIR, "singularity_run.sh"),
-        TESTDIR,
+        "/opt/openproblems/test/singularity_run.sh",
+        "/opt/openproblems/test/",
         script,
     ] + list(args)
     stop_command = ["docker", "stop", container]
