@@ -55,7 +55,7 @@ def image_requires_docker(image):
                     code=p.returncode,
                     stderr=p.stderr.decode("utf-8"),
                     dockerfile=dockerfile,
-                    basedir=basedir,
+                    basedir=BASEDIR,
                 )
             )
         else:
@@ -69,7 +69,7 @@ def image_requires_docker(image):
                     "The Dockerfile for image singlecellopenproblems/{image} is"
                     " newer than the latest build. Build it with "
                     "`docker build -f {dockerfile} -t singlecellopenproblems/{image} {basedir}`.".format(
-                        image=image, dockerfile=dockerfile, basedir=basedir
+                        image=image, dockerfile=dockerfile, basedir=BASEDIR
                     )
                 )
         return True
