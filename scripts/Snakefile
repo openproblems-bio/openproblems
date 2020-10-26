@@ -105,20 +105,23 @@ def docker_image_marker(image):
 
 
 
-def docker_requirements(wildcards):
-    docker_dir = "../docker/{}/".format(wildcards.image)
+def _docker_requirements(image):
+    docker_dir = "../docker/{}/".format(image)
+    dockerfile = os.path.join(docker_dir, "Dockerfile")
     requirements = [
         os.path.join(docker_dir, f)
         for f in os.listdir(docker_dir)
         if f.endswith("requirements.txt")
-    ]
+    ] + [dockerfile]
     with open(os.path.join(docker_dir, "Dockerfile"), 'r') as handle:
         base_image = next(handle).replace("FROM ", "")
         if base_image.startswith("singlecellopenproblems"):
             base_image = base_image.split(":")[0].split("/")[1]
-            requirements.append(docker_image_marker(base_image))
+            requirements.extend(_docker_requirements(base_image))
     return requirements
 
+def docker_requirements(wildcards):
+    return _docker_requirements(wildcards.image)
 
 def docker_push(wildcards):
     return docker_image_marker(docker_image_name(wildcards))
