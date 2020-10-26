@@ -2,7 +2,6 @@ import unittest
 import parameterized
 import tempfile
 import os
-import subprocess
 import functools
 import json
 import datetime
@@ -19,59 +18,57 @@ os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
 os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
 
 
-@functools.lru_cache(maxsize=None)
-def image_requires_docker(image):
+def docker_paths(image):
     docker_path = os.path.join(BASEDIR, "docker", image)
     docker_push = os.path.join(docker_path, ".docker_push")
     dockerfile = os.path.join(docker_path, "Dockerfile")
+    return docker_push, dockerfile
+
+
+def build_docker(image):
+    _, dockerfile = docker_paths(image)
+    utils.run(
+        [
+            "docker",
+            "build",
+            "-f",
+            dockerfile,
+            "-t",
+            "singlecellopenproblems/{}".format(image),
+            BASEDIR,
+        ]
+    )
+
+
+@functools.lru_cache(maxsize=None)
+def image_requires_docker(image):
+    docker_push, dockerfile = docker_paths(image)
     if os.path.getmtime(docker_push) > os.path.getmtime(dockerfile):
         return False
     else:
-        p = subprocess.run(
+        utils.run(
             ["docker", "images"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
+            error_raises=RuntimeError,
+            format_error=lambda p: "The Dockerfile for image {} is newer than the "
+            "latest push, but Docker is not available. "
+            "Return code {}\n\n{}".format(
+                image, p.returncode, p.stdout.decode("utf-8")
+            ),
         )
-        if not p.returncode == 0:
-            raise RuntimeError(
-                "The Dockerfile for image {} is newer than the "
-                "latest push, but Docker is not available. "
-                "Return code {}\n\n{}".format(
-                    image, p.returncode, p.stdout.decode("utf-8")
-                )
-            )
-        p = subprocess.run(
+        image_info = utils.run(
             ["docker", "inspect", "singlecellopenproblems/{}:latest".format(image)],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            return_stdout=True,
         )
         if not p.returncode == 0:
-            raise RuntimeError(
-                "The Dockerfile for image singlecellopenproblems/{image} is newer than the "
-                "latest push, but the image has not been built. Build it with "
-                "`docker build -f {dockerfile} -t singlecellopenproblems/{image} {basedir}`."
-                "Return code {code}\n\n{stderr}".format(
-                    image=image,
-                    code=p.returncode,
-                    stderr=p.stderr.decode("utf-8"),
-                    dockerfile=dockerfile,
-                    basedir=BASEDIR,
-                )
-            )
+            build_docker(image)
         else:
-            image_info = json.loads(p.stdout.decode("utf-8"))[0]
-            created_time = image_info["Created"].split(".")[0]
+            image_dict = json.loads(image_info)[0]
+            created_time = image_dict["Created"].split(".")[0]
             created_timestamp = datetime.datetime.strptime(
                 created_time, "%Y-%m-%dT%H:%M:%S"
             ).timestamp()
             if not created_timestamp > os.path.getmtime(dockerfile):
-                raise RuntimeError(
-                    "The Dockerfile for image singlecellopenproblems/{image} is"
-                    " newer than the latest build. Build it with "
-                    "`docker build -f {dockerfile} -t singlecellopenproblems/{image} {basedir}`.".format(
-                        image=image, dockerfile=dockerfile, basedir=BASEDIR
-                    )
-                )
+                build_docker(image)
         return True
 
 
@@ -79,7 +76,7 @@ def image_requires_docker(image):
 def cache_singularity_image(image):
     filename = "{}.sif".format(image)
     if not os.path.isfile(os.path.join(CACHEDIR, filename)):
-        p = subprocess.run(
+        utils.run(
             [
                 "singularity",
                 "--verbose",
@@ -87,12 +84,7 @@ def cache_singularity_image(image):
                 "--name",
                 filename,
                 "docker://singlecellopenproblems/{}".format(image),
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-        )
-        assert p.returncode == 0, "Return code {}\n\n{}".format(
-            p.returncode, p.stdout.decode("utf-8")
+            ]
         )
     return os.path.join(CACHEDIR, filename)
 
@@ -113,7 +105,7 @@ def singularity_command(image, script, *args):
 
 
 def cache_docker_image(image):
-    p = subprocess.run(
+    hash = utils.run(
         [
             "docker",
             "run",
@@ -123,13 +115,9 @@ def cache_docker_image(image):
             "type=bind,source={},target=/opt/openproblems".format(BASEDIR),
             "singlecellopenproblems/{}".format(image),
         ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        return_stdout=True,
     )
-    assert p.returncode == 0, "Return code {}\n\n{}".format(
-        p.returncode, p.stderr.decode("utf-8")
-    )
-    return p.stdout.decode("utf-8")[:12]
+    return hash[:12]
 
 
 def docker_command(image, script, *args):
@@ -152,16 +140,9 @@ def run_image(image, *args):
         command, stop_command = docker_command(image, *args)
     else:
         command = singularity_command(image, *args)
-    p = subprocess.run(
-        command,
-        stderr=subprocess.STDOUT,
-        stdout=subprocess.PIPE,
-    )
+    utils.run(command)
     if image_requires_docker(image):
-        subprocess.run(stop_command)
-    assert p.returncode == 0, "Return code {}\n\n{}".format(
-        p.returncode, p.stdout.decode("utf-8")
-    )
+        utils.run(stop_command)
 
 
 @parameterized.parameterized.expand(
