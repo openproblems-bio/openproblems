@@ -110,7 +110,6 @@ def singularity_command(image, script, *args):
     ] + list(args)
 
 
-@functools.lru_cache(maxsize=None)
 def cache_docker_image(image):
     p = subprocess.run(
         [
@@ -132,20 +131,23 @@ def cache_docker_image(image):
 
 
 def docker_command(image, script, *args):
-    return [
+    container = cache_docker_image(image)
+    run_command = [
         "docker",
         "exec",
-        cache_docker_image(image),
+        container,
         "/bin/bash",
         os.path.join(TESTDIR, "singularity_run.sh"),
         TESTDIR,
         script,
     ] + list(args)
+    stop_command = ["docker", "stop", container]
+    return run_command, stop_command
 
 
 def run_image(image, *args):
     if image_requires_docker(image):
-        command = docker_command(image, *args)
+        command, stop_command = docker_command(image, *args)
     else:
         command = singularity_command(image, *args)
     p = subprocess.run(
@@ -154,7 +156,7 @@ def run_image(image, *args):
         stdout=subprocess.PIPE,
     )
     if image_requires_docker(image):
-        subprocess.run(["docker", "stop", cache_docker_image(image)])
+        subprocess.run(stop_command)
     assert p.returncode == 0, "Return code {}\n\n{}".format(
         p.returncode, p.stdout.decode("utf-8")
     )
