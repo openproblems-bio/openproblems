@@ -4,6 +4,8 @@ import tempfile
 import os
 import subprocess
 import functools
+import json
+import datetime
 
 import openproblems
 from openproblems.test import utils
@@ -11,29 +13,87 @@ from openproblems.test import utils
 utils.ignore_warnings()
 
 TESTDIR = os.path.dirname(os.path.abspath(__file__))
+BASEDIR = os.path.dirname(os.path.dirname(TESTDIR))
 CACHEDIR = os.path.join(os.environ["HOME"], ".singularity")
 os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
 os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
 
 
 @functools.lru_cache(maxsize=None)
-def cache_image(image):
+def image_requires_docker(image):
+    docker_path = os.path.join(BASEDIR, "docker", image)
+    docker_push = os.path.join(docker_path, ".docker_push")
+    dockerfile = os.path.join(docker_path, "Dockerfile")
+    if os.path.getmtime(docker_push) > os.path.getmtime(dockerfile):
+        return False
+    else:
+        p = subprocess.run(
+            ["docker", "images"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if not p.returncode == 0:
+            raise RuntimeError(
+                "The Dockerfile for image {} is newer than the "
+                "latest push, but Docker is not available. "
+                "Return code {}\n\n{}".format(
+                    image, p.returncode, p.stdout.decode("utf-8")
+                )
+            )
+        p = subprocess.run(
+            ["docker", "inspect", "singlecellopenproblems/{}:latest".format(image)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        if not p.returncode == 0:
+            raise RuntimeError(
+                "The Dockerfile for image singlecellopenproblems/{image} is newer than the "
+                "latest push, but the image has not been built. Build it with "
+                "`docker build -f {dockerfile} -t singlecellopenproblems/{image} {basedir}`."
+                "Return code {code}\n\n{stderr}".format(
+                    image=image,
+                    code=p.returncode,
+                    stderr=p.stderr.decode("utf-8"),
+                    dockerfile=dockerfile,
+                    basedir=basedir,
+                )
+            )
+        else:
+            image_info = json.loads(p.stdout.decode("utf-8"))[0]
+            created_time = image_info["Created"].split(".")[0]
+            created_timestamp = datetime.datetime.strptime(
+                created_time, "%Y-%m-%dT%H:%M:%S"
+            ).timestamp()
+            if not created_timestamp > os.path.getmtime(dockerfile):
+                raise RuntimeError(
+                    "The Dockerfile for image singlecellopenproblems/{image} is"
+                    " newer than the latest build. Build it with "
+                    "`docker build -f {dockerfile} -t singlecellopenproblems/{image} {basedir}`.".format(
+                        image=image, dockerfile=dockerfile, basedir=basedir
+                    )
+                )
+        return True
+
+
+@functools.lru_cache(maxsize=None)
+def cache_singularity_image(image):
     filename = "{}.sif".format(image)
-    p = subprocess.run(
-        [
-            "singularity",
-            "--verbose",
-            "pull",
-            "--name",
-            filename,
-            "docker://singlecellopenproblems/{}".format(image),
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-    )
-    assert p.returncode == 0, "Return code {}\n\n{}".format(
-        p.returncode, p.stderr.decode("utf-8")
-    )
+    if not os.path.isfile(os.path.join(CACHEDIR, filename)):
+        p = subprocess.run(
+            [
+                "singularity",
+                "--verbose",
+                "pull",
+                "--name",
+                filename,
+                "docker://singlecellopenproblems/{}".format(image),
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        assert p.returncode == 0, "Return code {}\n\n{}".format(
+            p.returncode, p.stdout.decode("utf-8")
+        )
     return os.path.join(CACHEDIR, filename)
 
 
@@ -42,12 +102,62 @@ def singularity_command(image, script, *args):
         "singularity",
         "--verbose",
         "exec",
-        cache_image(image),
+        cache_singularity_image(image),
         "/bin/bash",
         os.path.join(TESTDIR, "singularity_run.sh"),
         TESTDIR,
         script,
     ] + list(args)
+
+
+@functools.lru_cache(maxsize=None)
+def cache_docker_image(image):
+    p = subprocess.run(
+        [
+            "docker",
+            "run",
+            "-dt",
+            "--rm",
+            "--mount",
+            "type=bind,source={},target=/opt/openproblems/test".format(TESTDIR),
+            "singlecellopenproblems/{}".format(image),
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    assert p.returncode == 0, "Return code {}\n\n{}".format(
+        p.returncode, p.stderr.decode("utf-8")
+    )
+    return p.stdout.decode("utf-8")
+
+
+def docker_command(image, script, *args):
+    return [
+        "docker",
+        "exec",
+        cache_docker_image(image),
+        "/bin/bash",
+        os.path.join(TESTDIR, "singularity_run.sh"),
+        TESTDIR,
+        script,
+    ] + list(args)
+
+
+def run_image(image, *args):
+    if image_requires_docker(image):
+        command = docker_command(image, *args)
+    else:
+        command = singularity_command(image, *args)
+    p = subprocess.run(
+        command,
+        stderr=subprocess.STDOUT,
+        stdout=subprocess.PIPE,
+    )
+    if image_requires_docker(image):
+        subprocess.run(["docker", "stop", cache_docker_image(image)])
+    assert p.returncode == 0, "Return code {}\n\n{}".format(
+        p.returncode, p.stdout.decode("utf-8")
+    )
 
 
 @parameterized.parameterized.expand(
@@ -61,38 +171,22 @@ def singularity_command(image, script, *args):
 )
 def test_method(task, dataset, method):
     task_name = task.__name__.split(".")[-1]
-    image = "docker://singlecellopenproblems/{}".format(method.metadata["image"])
     with tempfile.NamedTemporaryFile(suffix=".h5ad") as data_file:
-        p = subprocess.run(
-            singularity_command(
-                method.metadata["image"],
-                "run_test_method.py",
-                task_name,
-                method.__name__,
-                dataset.__name__,
-                data_file.name,
-            ),
-            stderr=subprocess.PIPE,
-        )
-        assert p.returncode == 0, "Return code {}\n\n{}".format(
-            p.returncode, p.stderr.decode("utf-8")
+        run_image(
+            method.metadata["image"],
+            "run_test_method.py",
+            task_name,
+            method.__name__,
+            dataset.__name__,
+            data_file.name,
         )
         for metric in task.METRICS:
-            image = "docker://singlecellopenproblems/{}".format(
-                metric.metadata["image"]
-            )
-            p = subprocess.run(
-                singularity_command(
-                    metric.metadata["image"],
-                    "run_test_metric.py",
-                    task_name,
-                    metric.__name__,
-                    data_file.name,
-                ),
-                stderr=subprocess.PIPE,
-            )
-            assert p.returncode == 0, "Return code {}\n\n{}".format(
-                p.returncode, p.stderr.decode("utf-8")
+            run_image(
+                metric.metadata["image"],
+                "run_test_metric.py",
+                task_name,
+                metric.__name__,
+                data_file.name,
             )
 
 
