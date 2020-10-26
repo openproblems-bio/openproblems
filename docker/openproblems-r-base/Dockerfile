@@ -11,7 +11,7 @@ RUN apt-get clean -y && apt-get autoremove -y
 # Install R packages
 COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
 RUN R -e "install.packages('BiocManager')"
-RUN for pkg in $(cat r_requirements.txt); do R -e "BiocManager::install('${pkg}')"; done
+RUN for pkg in $(cat r_requirements.txt); do R -e "BiocManager::install('${pkg}')" 2>&1 | grep "^ERROR"; done
 
 # Install Python packages
 COPY . /usr/src/singlecellopenproblems
