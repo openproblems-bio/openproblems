@@ -14,13 +14,13 @@ apt packages:
 * ca-certificates
 * gnupg
 * gpgv
+* gfortran
 * r-base-core=3.6
 
 R packages:
 
 * BiocManager
 * scran
-* SingleCellExperiment
 
 Python packages:
 
