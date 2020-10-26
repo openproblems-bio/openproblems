@@ -240,8 +240,6 @@ rule push_docker:
         "docker push singlecellopenproblems/{wildcards.image} && touch {output}"
 
 rule pull_docker:
-    input:
-        "../docker/{image}/.docker_push"
     output:
         temp("../docker/{image}/.docker_pull")
     shell:
