@@ -1,8 +1,11 @@
+import numpy as np
+
+import anndata
 import warnings
 import parameterized
-import numpy as np
+import subprocess
+
 from scipy import sparse
-import anndata
 
 
 def object_name(x):
