@@ -1,7 +1,7 @@
 FROM singlecellopenproblems/openproblems:latest
 
 # Install R
-RUN apt-get -yq --no-install-suggests --no-install-recommends install dirmngr ca-certificates gnupg gpgv
+RUN apt-get -yq --no-install-suggests --no-install-recommends install dirmngr ca-certificates gnupg gpgv gfortran
 RUN apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
 RUN echo 'deb http://cloud.r-project.org/bin/linux/debian stretch-cran35/' >> /etc/apt/sources.list
 RUN apt-get update -qq
