@@ -102,10 +102,12 @@ def singularity_command(image, script, *args):
         "singularity",
         "--verbose",
         "exec",
+        "-B",
+        "{}:/opt/openproblems/test".format(TESTDIR),
         cache_singularity_image(image),
         "/bin/bash",
-        os.path.join(TESTDIR, "singularity_run.sh"),
-        TESTDIR,
+        "/opt/openproblems/test/singularity_run.sh",
+        "/opt/openproblems/test",
         script,
     ] + list(args)
 
