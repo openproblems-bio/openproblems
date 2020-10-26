@@ -10,10 +10,11 @@ SCRIPTS_DIR = os.getcwd()
 DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
 DOCKER_EXEC = """
-    docker run -d \
-    --mount type=bind,source="{mountdir}",target=/opt/openproblems \
-    singlecellopenproblems/{{image}} \
-    /bin/bash {workdir}/docker_run.sh
+    CONTAINER=$(docker run -dt --rm \
+                --mount type=bind,source="{mountdir}",target=/opt/openproblems \
+                singlecellopenproblems/openproblems)
+    docker exec $CONTAINER /bin/bash /opt/openproblems/scripts/docker_run.sh
+    docker stop $CONTAINER
 """.format(
     mountdir=os.path.dirname(SCRIPTS_DIR), workdir=DOCKER_DIR
 )
