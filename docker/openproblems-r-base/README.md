@@ -20,6 +20,7 @@ R packages:
 
 * BiocManager
 * scran
+* SingleCellExperiment
 
 Python packages:
 
