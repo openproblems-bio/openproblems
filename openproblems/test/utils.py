@@ -85,7 +85,7 @@ def run(
 ):
     if return_stdout and print_stdout:
         raise NotImplementedError
-    elif return_stdout or print_stdout:
+    elif return_stdout:
         stderr = subprocess.PIPE
         if format_error is None:
             format_error = format_error_stderr
