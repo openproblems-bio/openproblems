@@ -62,9 +62,15 @@ def assert_array_equal(X, Y):
         np.testing.assert_array_equal(X, Y)
 
 
-def format_error(process):
+def format_error_stderr(process):
     return "Return code {}\n\n{}".format(
-        process.returncode, process.stderr.decode("utf-8")
+        process.returncode, process.stdout.decode("utf-8")
+    )
+
+
+def format_error_stdout(process):
+    return "Return code {}\n\n{}".format(
+        process.returncode, process.stdout.decode("utf-8")
     )
 
 
@@ -73,13 +79,17 @@ def run(
     shell=False,
     return_stdout=False,
     error_raises=AssertionError,
-    format_error=format_error,
+    format_error=None,
 ):
     if return_stdout:
-        stdout = subprocess.PIPE
+        stderr = subprocess.PIPE
+        if format_error is None:
+            format_error = format_error_stderr
     else:
-        stdout = subprocess.STDERR
-    p = subprocess.run(command, shell=shell, stderr=subprocess.PIPE, stdout=stdout)
+        stderr = subprocess.STDOUT
+        if format_error is None:
+            format_error = format_error_stdout
+    p = subprocess.run(command, shell=shell, stdout=subprocess.PIPE, stderr=stderr)
     if not p.returncode == 0:
         raise error_raises(format_error(p))
     if return_stdout:
