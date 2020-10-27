@@ -44,8 +44,11 @@ def build_docker(image):
 @functools.lru_cache(maxsize=None)
 def image_requires_docker(image):
     docker_push, dockerfile = docker_paths(image)
-    with open(docker_push, "r") as handle:
-        push_timestamp = int(handle.read().strip())
+    try:
+        with open(docker_push, "r") as handle:
+            push_timestamp = int(handle.read().strip())
+    except FileNotFoundError:
+        push_timestamp = 0
     if push_timestamp > os.path.getmtime(dockerfile):
         return False
     else:
