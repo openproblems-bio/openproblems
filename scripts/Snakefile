@@ -240,7 +240,7 @@ rule push_docker:
     output:
         "../docker/{image}/.docker_push"
     shell:
-        "docker push singlecellopenproblems/{wildcards.image} && touch {output}"
+        "docker push singlecellopenproblems/{wildcards.image} && date +%s > {output}"
 
 rule pull_docker:
     output:
