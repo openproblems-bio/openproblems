@@ -119,4 +119,4 @@ def run(
     if not return_code and not p.returncode == 0:
         raise error_raises(format_error(p))
     if output:
-        return tuple(output)
+        return output[0] if len(output) == 1 else tuple(output)
