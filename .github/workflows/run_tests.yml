@@ -50,13 +50,13 @@ jobs:
       run: |
         black . --check --diff --exclude=website
     
-    - name: Build docker container # can snakemake do this?
+    - name: Build docker container
       run: |
+        cd scripts
         for image in $(ls -1d docker/open* | sed 's#docker/##'); do
-          # only works when you have a DOCKER_PASSWORD variable defined, for now
-          # snakemake -j 1 docker/${image}/.docker_push
-          docker build -f docker/$image/Dockerfile -t singlecellopenproblems/$image .
+          snakemake -j 1 docker/${image}/.docker_build
         done
+        cd ..
     
     - name: Run tests
       run: |
