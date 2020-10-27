@@ -44,6 +44,8 @@ jobs:
         black . --check --diff --exclude=website
     
     - name: Run benchmark
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         pip install -U .[evaluate]
         cd scripts
@@ -51,6 +53,9 @@ jobs:
         cd ..
         
     - name: Upload results on success
+      env:
+        GH_USERNAME: ${{ secrets.GH_USERNAME }}
+        GH_PASSWORD: ${{ secrets.GH_PASSWORD }}
       run: |
         git remote set-url origin https://${GH_USERNAME}:${GH_PASSWORD}@github.com/${GITHUB_REPOSITORY}.git
         git checkout -B master
