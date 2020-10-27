@@ -75,9 +75,11 @@ def format_error_stdout(process):
 
 
 def git_file_age(filename):
-    return utils.run(
-        ["git", "log", "-1", '--format="%ad"', "--date=unix", "--", filename],
-        return_stdout=True,
+    return int(
+        utils.run(
+            ["git", "log", "-1", '--format="%ad"', "--date=unix", "--", filename],
+            return_stdout=True,
+        ).strip()
     )
 
 
