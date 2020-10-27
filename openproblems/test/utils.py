@@ -78,6 +78,7 @@ def run(
     command,
     shell=False,
     return_stdout=False,
+    return_code=False,
     error_raises=AssertionError,
     format_error=None,
 ):
@@ -90,7 +91,12 @@ def run(
         if format_error is None:
             format_error = format_error_stdout
     p = subprocess.run(command, shell=shell, stdout=subprocess.PIPE, stderr=stderr)
-    if not p.returncode == 0:
-        raise error_raises(format_error(p))
+    output = []
     if return_stdout:
-        return p.stdout.decode("utf-8")
+        output.append(p.stdout.decode("utf-8"))
+    if return_code:
+        output.append(p.returncode)
+    if not return_code and not p.returncode == 0:
+        raise error_raises(format_error(p))
+    if output:
+        return tuple(output)

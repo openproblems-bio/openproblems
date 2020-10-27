@@ -55,11 +55,12 @@ def image_requires_docker(image):
                 image, p.returncode, p.stdout.decode("utf-8")
             ),
         )
-        image_info = utils.run(
+        image_info, returncode = utils.run(
             ["docker", "inspect", "singlecellopenproblems/{}:latest".format(image)],
             return_stdout=True,
+            return_code=True,
         )
-        if not p.returncode == 0:
+        if not returncode == 0:
             build_docker(image)
         else:
             image_dict = json.loads(image_info)[0]
