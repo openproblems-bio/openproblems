@@ -64,7 +64,7 @@ def assert_array_equal(X, Y):
 
 def format_error_stderr(process):
     return "Return code {}\n\n{}".format(
-        process.returncode, process.stdout.decode("utf-8")
+        process.returncode, process.stderr.decode("utf-8")
     )
 
 
