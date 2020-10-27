@@ -49,7 +49,7 @@ def image_requires_docker(image):
             push_timestamp = int(handle.read().strip())
     except FileNotFoundError:
         push_timestamp = 0
-    if push_timestamp > os.path.getmtime(dockerfile):
+    if push_timestamp > utils.git_file_age(dockerfile):
         return False
     else:
         utils.run(
