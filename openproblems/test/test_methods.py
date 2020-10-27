@@ -2,8 +2,9 @@ import unittest
 import parameterized
 import tempfile
 import os
-import subprocess
 import functools
+import json
+import datetime
 
 import openproblems
 from openproblems.test import utils
@@ -11,29 +12,81 @@ from openproblems.test import utils
 utils.ignore_warnings()
 
 TESTDIR = os.path.dirname(os.path.abspath(__file__))
+BASEDIR = os.path.dirname(os.path.dirname(TESTDIR))
 CACHEDIR = os.path.join(os.environ["HOME"], ".singularity")
 os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
 os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
 
 
-@functools.lru_cache(maxsize=None)
-def cache_image(image):
-    filename = "{}.sif".format(image)
-    p = subprocess.run(
+def docker_paths(image):
+    docker_path = os.path.join(BASEDIR, "docker", image)
+    docker_push = os.path.join(docker_path, ".docker_push")
+    dockerfile = os.path.join(docker_path, "Dockerfile")
+    return docker_push, dockerfile
+
+
+def build_docker(image):
+    _, dockerfile = docker_paths(image)
+    utils.run(
         [
-            "singularity",
-            "--verbose",
-            "pull",
-            "--name",
-            filename,
-            "docker://singlecellopenproblems/{}".format(image),
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
+            "docker",
+            "build",
+            "-f",
+            dockerfile,
+            "-t",
+            "singlecellopenproblems/{}".format(image),
+            BASEDIR,
+        ]
     )
-    assert p.returncode == 0, "Return code {}\n\n{}".format(
-        p.returncode, p.stderr.decode("utf-8")
-    )
+
+
+@functools.lru_cache(maxsize=None)
+def image_requires_docker(image):
+    docker_push, dockerfile = docker_paths(image)
+    if os.path.getmtime(docker_push) > os.path.getmtime(dockerfile):
+        return False
+    else:
+        utils.run(
+            ["docker", "images"],
+            error_raises=RuntimeError,
+            format_error=lambda p: "The Dockerfile for image {} is newer than the "
+            "latest push, but Docker is not available. "
+            "Return code {}\n\n{}".format(
+                image, p.returncode, p.stdout.decode("utf-8")
+            ),
+        )
+        image_info, returncode = utils.run(
+            ["docker", "inspect", "singlecellopenproblems/{}:latest".format(image)],
+            return_stdout=True,
+            return_code=True,
+        )
+        if not returncode == 0:
+            build_docker(image)
+        else:
+            image_dict = json.loads(image_info)[0]
+            created_time = image_dict["Created"].split(".")[0]
+            created_timestamp = datetime.datetime.strptime(
+                created_time, "%Y-%m-%dT%H:%M:%S"
+            ).timestamp()
+            if not created_timestamp > os.path.getmtime(dockerfile):
+                build_docker(image)
+        return True
+
+
+@functools.lru_cache(maxsize=None)
+def cache_singularity_image(image):
+    filename = "{}.sif".format(image)
+    if not os.path.isfile(os.path.join(CACHEDIR, filename)):
+        utils.run(
+            [
+                "singularity",
+                "--verbose",
+                "pull",
+                "--name",
+                filename,
+                "docker://singlecellopenproblems/{}".format(image),
+            ]
+        )
     return os.path.join(CACHEDIR, filename)
 
 
@@ -42,12 +95,55 @@ def singularity_command(image, script, *args):
         "singularity",
         "--verbose",
         "exec",
-        cache_image(image),
+        "-B",
+        "{}:/opt/openproblems".format(BASEDIR),
+        cache_singularity_image(image),
         "/bin/bash",
-        os.path.join(TESTDIR, "singularity_run.sh"),
-        TESTDIR,
+        "/opt/openproblems/openproblems/test/singularity_run.sh",
+        "/opt/openproblems/openproblems/test",
         script,
     ] + list(args)
+
+
+def cache_docker_image(image):
+    hash = utils.run(
+        [
+            "docker",
+            "run",
+            "-dt",
+            "--rm",
+            "--mount",
+            "type=bind,source={},target=/opt/openproblems".format(BASEDIR),
+            "singlecellopenproblems/{}".format(image),
+        ],
+        return_stdout=True,
+    )
+    return hash[:12]
+
+
+def docker_command(image, script, *args):
+    container = cache_docker_image(image)
+    run_command = [
+        "docker",
+        "exec",
+        container,
+        "/bin/bash",
+        "/opt/openproblems/openproblems/test/singularity_run.sh",
+        "/opt/openproblems/openproblems/test/",
+        script,
+    ] + list(args)
+    stop_command = ["docker", "stop", container]
+    return run_command, stop_command
+
+
+def run_image(image, *args):
+    if image_requires_docker(image):
+        command, stop_command = docker_command(image, *args)
+    else:
+        command = singularity_command(image, *args)
+    utils.run(command)
+    if image_requires_docker(image):
+        utils.run(stop_command)
 
 
 @parameterized.parameterized.expand(
@@ -61,38 +157,22 @@ def singularity_command(image, script, *args):
 )
 def test_method(task, dataset, method):
     task_name = task.__name__.split(".")[-1]
-    image = "docker://singlecellopenproblems/{}".format(method.metadata["image"])
     with tempfile.NamedTemporaryFile(suffix=".h5ad") as data_file:
-        p = subprocess.run(
-            singularity_command(
-                method.metadata["image"],
-                "run_test_method.py",
-                task_name,
-                method.__name__,
-                dataset.__name__,
-                data_file.name,
-            ),
-            stderr=subprocess.PIPE,
-        )
-        assert p.returncode == 0, "Return code {}\n\n{}".format(
-            p.returncode, p.stderr.decode("utf-8")
+        run_image(
+            method.metadata["image"],
+            "run_test_method.py",
+            task_name,
+            method.__name__,
+            dataset.__name__,
+            data_file.name,
         )
         for metric in task.METRICS:
-            image = "docker://singlecellopenproblems/{}".format(
-                metric.metadata["image"]
-            )
-            p = subprocess.run(
-                singularity_command(
-                    metric.metadata["image"],
-                    "run_test_metric.py",
-                    task_name,
-                    metric.__name__,
-                    data_file.name,
-                ),
-                stderr=subprocess.PIPE,
-            )
-            assert p.returncode == 0, "Return code {}\n\n{}".format(
-                p.returncode, p.stderr.decode("utf-8")
+            run_image(
+                metric.metadata["image"],
+                "run_test_metric.py",
+                task_name,
+                metric.__name__,
+                data_file.name,
             )
 
 
