@@ -101,7 +101,7 @@ def run(
                 break
             if output:
                 print(output.strip())
-    p.wait()
+    p.stderr, p.stdout = p.communicate()
     output = []
     if return_stdout:
         output.append(p.stdout.decode("utf-8"))
