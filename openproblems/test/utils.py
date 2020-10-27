@@ -96,7 +96,7 @@ def run(
     p = subprocess.Popen(command, shell=shell, stdout=subprocess.PIPE, stderr=stderr)
     if print_stdout:
         while True:
-            output = p.stdout.readline()
+            output = p.stdout.readline().decode("utf-8")
             if output == "" and p.poll() is not None:
                 break
             if output:
