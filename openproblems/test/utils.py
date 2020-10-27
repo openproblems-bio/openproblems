@@ -77,12 +77,15 @@ def format_error_stdout(process):
 def run(
     command,
     shell=False,
+    print_stdout=False,
     return_stdout=False,
     return_code=False,
     error_raises=AssertionError,
     format_error=None,
 ):
-    if return_stdout:
+    if return_stdout and print_stdout:
+        raise NotImplementedError
+    elif return_stdout or print_stdout:
         stderr = subprocess.PIPE
         if format_error is None:
             format_error = format_error_stderr
@@ -90,7 +93,15 @@ def run(
         stderr = subprocess.STDOUT
         if format_error is None:
             format_error = format_error_stdout
-    p = subprocess.run(command, shell=shell, stdout=subprocess.PIPE, stderr=stderr)
+    p = subprocess.Popen(command, shell=shell, stdout=subprocess.PIPE, stderr=stderr)
+    if print_stdout:
+        while True:
+            output = p.stdout.readline()
+            if output == "" and p.poll() is not None:
+                break
+            if output:
+                print(output.strip())
+    p.wait()
     output = []
     if return_stdout:
         output.append(p.stdout.decode("utf-8"))

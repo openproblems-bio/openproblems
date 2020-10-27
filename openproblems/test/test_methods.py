@@ -36,7 +36,8 @@ def build_docker(image):
             "-t",
             "singlecellopenproblems/{}".format(image),
             BASEDIR,
-        ]
+        ],
+        print_stdout=True,
     )
 
 
