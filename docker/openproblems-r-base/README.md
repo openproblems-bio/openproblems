@@ -14,6 +14,9 @@ apt packages:
 * ca-certificates
 * gnupg
 * gpgv
+* gfortran
+* libblas-dev
+* liblapack-dev
 * r-base-core=3.6
 
 R packages:
