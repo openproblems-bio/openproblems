@@ -10,9 +10,9 @@ Formalizing and benchmarking open problems in single-cell genomics.
 
 ## The team
 
-**Core**: 
+**Core**:
 * Scott Gigante (@scottgigante)  
-* Daniel Burkhardt (@dburkhardt) 
+* Daniel Burkhardt (@dburkhardt)
 * Malte Luecken (@LuckyMD)  
 
 **Task authors** (_alphabetically_):  
@@ -39,10 +39,10 @@ Datasets should take no arguments and return an AnnData object. If `test is True
 function dataset(bool test=False) -> AnnData adata
 ```
 
-Methods should take an AnnData object and store the output in-place in  `adata.obs` according to the specification of the task.
+Methods should take an AnnData object and store the output in  `adata.obs` according to the specification of the task.
 
 ```
-function method(AnnData adata) -> None
+function method(AnnData adata) -> AnnData adata
 ```
 
 Metrics should take an AnnData object and return a float.
