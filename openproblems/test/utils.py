@@ -79,7 +79,9 @@ def git_file_age(filename):
         run(
             ["git", "log", "-1", '--format="%ad"', "--date=unix", "--", filename],
             return_stdout=True,
-        ).strip()
+        )
+        .strip()
+        .replace('"', "")
     )
 
 
