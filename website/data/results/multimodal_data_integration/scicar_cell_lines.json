@@ -27,10 +27,10 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "0.0",
-            "Memory (GB)": 6.354240417480469,
-            "Runtime (min)": 1.6248510423853684,
-            "kNN Area Under the Curve": 0.07142332258538199,
-            "Mean squared error": 1.0000055691894856,
+            "Memory (GB)": 3.5957260131835938,
+            "Runtime (min)": 1.6215764140632625,
+            "kNN Area Under the Curve": 0.07139300416686455,
+            "Mean squared error": 1.000047262230058,
             "Rank": 2
         },
         {
@@ -40,10 +40,10 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "0.0",
-            "Memory (GB)": 0.6801986694335938,
-            "Runtime (min)": 0.6830301083663168,
-            "kNN Area Under the Curve": 0.04822722004699475,
-            "Mean squared error": 1.0004928265570263,
+            "Memory (GB)": 0.6153831481933594,
+            "Runtime (min)": 0.6635952787163357,
+            "kNN Area Under the Curve": 0.03757061336719472,
+            "Mean squared error": 1.0003742483694247,
             "Rank": 5
         },
         {
@@ -53,10 +53,10 @@
             "Year": 2018,
             "Code": "https://github.com/LTLA/batchelor",
             "Version": "3.3.6",
-            "Memory (GB)": 1.0809822082519531,
-            "Runtime (min)": 0.469500859566809,
-            "kNN Area Under the Curve": 0.04890718514272932,
-            "Mean squared error": 0.9345109738342324,
+            "Memory (GB)": 0.9922714233398438,
+            "Runtime (min)": 0.399182583965982,
+            "kNN Area Under the Curve": 0.04935508792558289,
+            "Mean squared error": 0.9215429041428809,
             "Rank": 3
         },
         {
@@ -66,10 +66,10 @@
             "Year": 2018,
             "Code": "https://github.com/LTLA/batchelor",
             "Version": "3.3.6",
-            "Memory (GB)": 5.678504943847656,
-            "Runtime (min)": 1.421825962133395,
-            "kNN Area Under the Curve": 0.06715707534764234,
-            "Mean squared error": 1.0023613821543123,
+            "Memory (GB)": 3.5932655334472656,
+            "Runtime (min)": 1.2653425173989186,
+            "kNN Area Under the Curve": 0.06715762795027001,
+            "Mean squared error": 1.0138226542945634,
             "Rank": 4
         },
         {
@@ -78,11 +78,11 @@
             "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
             "Year": 1975,
             "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
-            "Version": "1.5.2",
-            "Memory (GB)": 0.6030158996582031,
-            "Runtime (min)": 0.21932028168424342,
-            "kNN Area Under the Curve": 0.08348926560204335,
-            "Mean squared error": 0.8894380189024722,
+            "Version": "1.5.3",
+            "Memory (GB)": 0.5012435913085938,
+            "Runtime (min)": 0.21943396599963308,
+            "kNN Area Under the Curve": 0.08426042716589172,
+            "Mean squared error": 0.8897414061813376,
             "Rank": 1
         }
     ]
