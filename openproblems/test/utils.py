@@ -28,7 +28,8 @@ def ignore_warnings():
     warnings.filterwarnings(
         "ignore",
         category=FutureWarning,
-        message="is_categorical is deprecated and will be removed in a future version.  Use is_categorical_dtype instead",
+        message="is_categorical is deprecated and will be removed in a future version."
+        "  Use is_categorical_dtype instead",
     )
 
     try:
