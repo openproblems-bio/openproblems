@@ -12,6 +12,7 @@ def main(task_name, method_name, input_file, output_h5ad, output_json):
     adata = anndata.read_h5ad(input_file)
 
     output = openproblems.tools.decorators.profile(method)(adata)
+    adata = output["result"]
     adata.write_h5ad(output_h5ad)
     del adata
 
