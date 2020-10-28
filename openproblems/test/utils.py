@@ -1,8 +1,11 @@
+import numpy as np
+
+import anndata
 import warnings
 import parameterized
-import numpy as np
+import subprocess
+
 from scipy import sparse
-import anndata
 
 
 def object_name(x):
@@ -57,3 +60,65 @@ def assert_array_equal(X, Y):
         X = np.asarray(X)
         Y = np.asarray(Y)
         np.testing.assert_array_equal(X, Y)
+
+
+def format_error_stderr(process):
+    return "Return code {}\n\n{}".format(
+        process.returncode, process.stderr.decode("utf-8")
+    )
+
+
+def format_error_stdout(process):
+    return "Return code {}\n\n{}".format(
+        process.returncode, process.stdout.decode("utf-8")
+    )
+
+
+def git_file_age(filename):
+    return int(
+        run(
+            ["git", "log", "-1", '--format="%ad"', "--date=unix", "--", filename],
+            return_stdout=True,
+        )
+        .strip()
+        .replace('"', "")
+    )
+
+
+def run(
+    command,
+    shell=False,
+    print_stdout=False,
+    return_stdout=False,
+    return_code=False,
+    error_raises=AssertionError,
+    format_error=None,
+):
+    if return_stdout and print_stdout:
+        raise NotImplementedError
+    elif return_stdout:
+        stderr = subprocess.PIPE
+        if format_error is None:
+            format_error = format_error_stderr
+    else:
+        stderr = subprocess.STDOUT
+        if format_error is None:
+            format_error = format_error_stdout
+    p = subprocess.Popen(command, shell=shell, stdout=subprocess.PIPE, stderr=stderr)
+    if print_stdout:
+        while True:
+            output = p.stdout.readline().decode("utf-8")
+            if output == "" and p.poll() is not None:
+                break
+            if output:
+                print(output.strip())
+    p.stdout, p.stderr = p.communicate()
+    output = []
+    if return_stdout:
+        output.append(p.stdout.decode("utf-8"))
+    if return_code:
+        output.append(p.returncode)
+    if not return_code and not p.returncode == 0:
+        raise error_raises(format_error(p))
+    if output:
+        return output[0] if len(output) == 1 else tuple(output)

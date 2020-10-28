@@ -8,11 +8,12 @@
                 "Year": 2013,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 5.322605133056641,
-                "Memory leaked (GB)": 1.2129936218261719,
-                "Runtime (min)": 0.19493275800098975,
-                "Accuracy": 0.955369218285096,
-                "F1 score": 0.9553248336523836
+                "Memory (GB)": 5.700954437255859,
+                "Memory leaked (GB)": 1.2015953063964844,
+                "Runtime (min)": 0.20866485165121654,
+                "Accuracy": 0.9599675412496619,
+                "F1 score": 0.960194921134344,
+                "Micro F1 score": 0.9599675412496619
             },
             {
                 "Name": "Logistic regression (log scran)",
@@ -21,11 +22,12 @@
                 "Year": 2013,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 8.464508056640625,
-                "Memory leaked (GB)": 2.6500930786132812,
-                "Runtime (min)": 4.102838670799974,
-                "Accuracy": 0.9569921558020016,
-                "F1 score": 0.9574680321384231
+                "Memory (GB)": 7.520092010498047,
+                "Memory leaked (GB)": 1.5965461730957031,
+                "Runtime (min)": 4.66631585053013,
+                "Accuracy": 0.9561806870435489,
+                "F1 score": 0.9566200591930137,
+                "Micro F1 score": 0.9561806870435489
             },
             {
                 "Name": "Multilayer perceptron (log CPM)",
@@ -34,11 +36,12 @@
                 "Year": 1990,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 5.5233306884765625,
-                "Memory leaked (GB)": 1.2086067199707031,
-                "Runtime (min)": 0.2177254910658424,
-                "Accuracy": 0.9672707600757371,
-                "F1 score": 0.9676614838704733
+                "Memory (GB)": 5.009269714355469,
+                "Memory leaked (GB)": 1.2130699157714844,
+                "Runtime (min)": 0.22916519918944686,
+                "Accuracy": 0.9618609683527184,
+                "F1 score": 0.9622789080210892,
+                "Micro F1 score": 0.9618609683527184
             },
             {
                 "Name": "Multilayer perceptron (log scran)",
@@ -47,11 +50,12 @@
                 "Year": 1990,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 8.570194244384766,
-                "Memory leaked (GB)": 2.801799774169922,
-                "Runtime (min)": 3.987074547486069,
-                "Accuracy": 0.9648363538003787,
-                "F1 score": 0.9655344695638565
+                "Memory (GB)": 7.760185241699219,
+                "Memory leaked (GB)": 1.6299705505371094,
+                "Runtime (min)": 5.002540404768661,
+                "Accuracy": 0.9637543954557749,
+                "F1 score": 0.9645666665214839,
+                "Micro F1 score": 0.9637543954557749
             }
         ],
         "pancreas_random": [
@@ -62,11 +66,12 @@
                 "Year": 2013,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 5.148448944091797,
-                "Memory leaked (GB)": 1.2132682800292969,
-                "Runtime (min)": 0.197912445551871,
-                "Accuracy": 0.9874617737003059,
-                "F1 score": 0.987226607359212
+                "Memory (GB)": 4.981151580810547,
+                "Memory leaked (GB)": 1.2022209167480469,
+                "Runtime (min)": 0.2174978520643587,
+                "Accuracy": 0.9866342648845686,
+                "F1 score": 0.9865321442355197,
+                "Micro F1 score": 0.9866342648845686
             },
             {
                 "Name": "Logistic regression (log scran)",
@@ -75,11 +80,12 @@
                 "Year": 2013,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 9.265312194824219,
-                "Memory leaked (GB)": 2.6841392517089844,
-                "Runtime (min)": 3.911564966784014,
-                "Accuracy": 0.9871559633027523,
-                "F1 score": 0.9870531229598665
+                "Memory (GB)": 8.060546875,
+                "Memory leaked (GB)": 1.6349449157714844,
+                "Runtime (min)": 4.772908641421236,
+                "Accuracy": 0.9869380315917375,
+                "F1 score": 0.9868719555155361,
+                "Micro F1 score": 0.9869380315917375
             },
             {
                 "Name": "Multilayer perceptron (log CPM)",
@@ -88,11 +94,12 @@
                 "Year": 1990,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 5.168853759765625,
-                "Memory leaked (GB)": 1.2259368896484375,
-                "Runtime (min)": 0.2276957241158622,
-                "Accuracy": 0.9886850152905199,
-                "F1 score": 0.9885931343617974
+                "Memory (GB)": 5.898853302001953,
+                "Memory leaked (GB)": 1.2123260498046875,
+                "Runtime (min)": 0.2284146731486544,
+                "Accuracy": 0.9872417982989065,
+                "F1 score": 0.9872083972332211,
+                "Micro F1 score": 0.9872417982989065
             },
             {
                 "Name": "Multilayer perceptron (log scran)",
@@ -101,11 +108,12 @@
                 "Year": 1990,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 8.57650375366211,
-                "Memory leaked (GB)": 2.5214157104492188,
-                "Runtime (min)": 3.9342897596497397,
-                "Accuracy": 0.9902140672782874,
-                "F1 score": 0.9901131711676852
+                "Memory (GB)": 7.490489959716797,
+                "Memory leaked (GB)": 1.5597305297851562,
+                "Runtime (min)": 4.747239233320579,
+                "Accuracy": 0.988456865127582,
+                "F1 score": 0.9884498204894728,
+                "Micro F1 score": 0.988456865127582
             }
         ],
         "zebrafish_labels": [
@@ -116,11 +124,12 @@
                 "Year": 2013,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 1.7686004638671875,
-                "Memory leaked (GB)": 0.4037818908691406,
-                "Runtime (min)": 0.49322463090065866,
-                "Accuracy": 0.23550019462826002,
-                "F1 score": 0.27799864452131795
+                "Memory (GB)": 1.7698707580566406,
+                "Memory leaked (GB)": 0.4065208435058594,
+                "Runtime (min)": 0.6399566968514895,
+                "Accuracy": 0.23485143376151552,
+                "F1 score": 0.27757245753160237,
+                "Micro F1 score": 0.23485143376151552
             },
             {
                 "Name": "Logistic regression (log scran)",
@@ -129,11 +138,12 @@
                 "Year": 2013,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 12.984378814697266,
-                "Memory leaked (GB)": 2.912273406982422,
-                "Runtime (min)": 7.203251753149865,
-                "Accuracy": 0.2729336966394187,
-                "F1 score": 0.3211043072785477
+                "Memory (GB)": 11.943897247314453,
+                "Memory leaked (GB)": 1.9750823974609375,
+                "Runtime (min)": 7.759680753240051,
+                "Accuracy": 0.2403659011288439,
+                "F1 score": 0.2817802652828652,
+                "Micro F1 score": 0.2403659011288439
             },
             {
                 "Name": "Multilayer perceptron (log CPM)",
@@ -142,11 +152,12 @@
                 "Year": 1990,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 1.7621879577636719,
-                "Memory leaked (GB)": 0.4010124206542969,
-                "Runtime (min)": 0.5116802502501135,
-                "Accuracy": 0.22200596859997404,
-                "F1 score": 0.2531573516601316
+                "Memory (GB)": 1.7593994140625,
+                "Memory leaked (GB)": 0.4033699035644531,
+                "Runtime (min)": 0.4515685135032982,
+                "Accuracy": 0.2022836382509407,
+                "F1 score": 0.21518377000309918,
+                "Micro F1 score": 0.2022836382509407
             },
             {
                 "Name": "Multilayer perceptron (log scran)",
@@ -155,11 +166,12 @@
                 "Year": 1990,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 11.780033111572266,
-                "Memory leaked (GB)": 2.838909149169922,
-                "Runtime (min)": 7.295380855666008,
-                "Accuracy": 0.20448942519787205,
-                "F1 score": 0.24378901619735677
+                "Memory (GB)": 10.497447967529297,
+                "Memory leaked (GB)": 1.9385337829589844,
+                "Runtime (min)": 7.6507362990407275,
+                "Accuracy": 0.21739976644608797,
+                "F1 score": 0.2562282392809992,
+                "Micro F1 score": 0.21739976644608797
             }
         ],
         "zebrafish_random": [
@@ -170,11 +182,12 @@
                 "Year": 2013,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 1.6748313903808594,
-                "Memory leaked (GB)": 0.3991851806640625,
-                "Runtime (min)": 0.6284185575476537,
-                "Accuracy": 0.8308133674497945,
-                "F1 score": 0.8289151800060621
+                "Memory (GB)": 1.6777687072753906,
+                "Memory leaked (GB)": 0.4014549255371094,
+                "Runtime (min)": 0.7674388997489586,
+                "Accuracy": 0.8270526960784313,
+                "F1 score": 0.8240915932859854,
+                "Micro F1 score": 0.8270526960784313
             },
             {
                 "Name": "Logistic regression (log scran)",
@@ -183,11 +196,12 @@
                 "Year": 2013,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 12.933002471923828,
-                "Memory leaked (GB)": 2.8756942749023438,
-                "Runtime (min)": 7.4605532487660335,
-                "Accuracy": 0.8420562921609677,
-                "F1 score": 0.8406642317107845
+                "Memory (GB)": 11.053783416748047,
+                "Memory leaked (GB)": 1.8948287963867188,
+                "Runtime (min)": 7.977429020986892,
+                "Accuracy": 0.8380821078431373,
+                "F1 score": 0.8361124612983362,
+                "Micro F1 score": 0.8380821078431373
             },
             {
                 "Name": "Multilayer perceptron (log CPM)",
@@ -196,11 +210,12 @@
                 "Year": 1990,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 1.6696243286132812,
-                "Memory leaked (GB)": 0.399993896484375,
-                "Runtime (min)": 0.6333092868987781,
-                "Accuracy": 0.831433666744204,
-                "F1 score": 0.8312446399796503
+                "Memory (GB)": 1.6613960266113281,
+                "Memory leaked (GB)": 0.4024696350097656,
+                "Runtime (min)": 0.5258183833444491,
+                "Accuracy": 0.8241421568627451,
+                "F1 score": 0.8228996586304657,
+                "Micro F1 score": 0.8241421568627451
             },
             {
                 "Name": "Multilayer perceptron (log scran)",
@@ -209,11 +224,12 @@
                 "Year": 1990,
                 "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
                 "Version": "0.23.2",
-                "Memory (GB)": 12.051559448242188,
-                "Memory leaked (GB)": 2.843067169189453,
-                "Runtime (min)": 7.67292711068488,
-                "Accuracy": 0.833837326510041,
-                "F1 score": 0.834245979766217
+                "Memory (GB)": 10.590446472167969,
+                "Memory leaked (GB)": 1.7847976684570312,
+                "Runtime (min)": 7.760708172316663,
+                "Accuracy": 0.8338694852941176,
+                "F1 score": 0.8329496564286063,
+                "Micro F1 score": 0.8338694852941176
             }
         ]
     },
@@ -226,11 +242,11 @@
                 "Year": 2020,
                 "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
                 "Version": "0.0",
-                "Memory (GB)": 4.776008605957031,
-                "Memory leaked (GB)": 1.3560791015625,
-                "Runtime (min)": 2.365690798033029,
-                "kNN Area Under the Curve": 0.049369469280176895,
-                "Mean squared error": 1.0000884844758557
+                "Memory (GB)": 4.162391662597656,
+                "Memory leaked (GB)": 1.0101966857910156,
+                "Runtime (min)": 2.716457477413739,
+                "kNN Area Under the Curve": 0.03894453538154758,
+                "Mean squared error": 1.0000082282396225
             },
             {
                 "Name": "Harmonic Alignment (sqrt CPM)",
@@ -239,11 +255,11 @@
                 "Year": 2020,
                 "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
                 "Version": "0.0",
-                "Memory (GB)": 0.5183830261230469,
-                "Memory leaked (GB)": 0.2350921630859375,
-                "Runtime (min)": 1.107113321548483,
-                "kNN Area Under the Curve": 0.04869762192594989,
-                "Mean squared error": 0.9999762712850204
+                "Memory (GB)": 0.5083847045898438,
+                "Memory leaked (GB)": 0.24002838134765625,
+                "Runtime (min)": 0.9965652265430739,
+                "kNN Area Under the Curve": 0.05725691476290225,
+                "Mean squared error": 1.0000443241992736
             },
             {
                 "Name": "Mutual Nearest Neighbors (log CPM)",
@@ -252,11 +268,11 @@
                 "Year": 2018,
                 "Code": "https://github.com/LTLA/batchelor",
                 "Version": "3.3.6",
-                "Memory (GB)": 0.8710784912109375,
-                "Memory leaked (GB)": 0.64739990234375,
-                "Runtime (min)": 0.19707994433119894,
-                "kNN Area Under the Curve": 0.04547591268318759,
-                "Mean squared error": 1.0767083225540162
+                "Memory (GB)": 0.8699569702148438,
+                "Memory leaked (GB)": 0.6475181579589844,
+                "Runtime (min)": 0.14972959206594774,
+                "kNN Area Under the Curve": 0.04593519874202547,
+                "Mean squared error": 1.0848770850280005
             },
             {
                 "Name": "Mutual Nearest Neighbors (log scran)",
@@ -265,11 +281,11 @@
                 "Year": 2018,
                 "Code": "https://github.com/LTLA/batchelor",
                 "Version": "3.3.6",
-                "Memory (GB)": 5.0509490966796875,
-                "Memory leaked (GB)": 1.3264503479003906,
-                "Runtime (min)": 1.568382465284473,
-                "kNN Area Under the Curve": 0.028037809742870855,
-                "Mean squared error": 0.9929587429676795
+                "Memory (GB)": 4.1711578369140625,
+                "Memory leaked (GB)": 0.9763755798339844,
+                "Runtime (min)": 1.8411024707757557,
+                "kNN Area Under the Curve": 0.026736106294247924,
+                "Mean squared error": 1.0039821836809701
             },
             {
                 "Name": "Procrustes",
@@ -277,12 +293,12 @@
                 "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
                 "Year": 1975,
                 "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
-                "Version": "1.5.2",
-                "Memory (GB)": 0.32535552978515625,
-                "Memory leaked (GB)": 0.10013198852539062,
-                "Runtime (min)": 0.05192132733063772,
-                "kNN Area Under the Curve": 0.20339769166860433,
-                "Mean squared error": 0.5787570624787728
+                "Version": "1.5.3",
+                "Memory (GB)": 0.3254737854003906,
+                "Memory leaked (GB)": 0.101806640625,
+                "Runtime (min)": 0.03788838076870889,
+                "kNN Area Under the Curve": 0.20326888624564204,
+                "Mean squared error": 0.5792371399693139
             }
         ],
         "scicar_cell_lines": [
@@ -293,11 +309,11 @@
                 "Year": 2020,
                 "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
                 "Version": "0.0",
-                "Memory (GB)": 6.354240417480469,
-                "Memory leaked (GB)": 1.4776153564453125,
-                "Runtime (min)": 1.6248510423853684,
-                "kNN Area Under the Curve": 0.07142332258538199,
-                "Mean squared error": 1.0000055691894856
+                "Memory (GB)": 3.5957260131835938,
+                "Memory leaked (GB)": 1.2374229431152344,
+                "Runtime (min)": 1.6215764140632625,
+                "kNN Area Under the Curve": 0.07139300416686455,
+                "Mean squared error": 1.000047262230058
             },
             {
                 "Name": "Harmonic Alignment (sqrt CPM)",
@@ -306,11 +322,11 @@
                 "Year": 2020,
                 "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
                 "Version": "0.0",
-                "Memory (GB)": 0.6801986694335938,
-                "Memory leaked (GB)": 0.2557373046875,
-                "Runtime (min)": 0.6830301083663168,
-                "kNN Area Under the Curve": 0.04822722004699475,
-                "Mean squared error": 1.0004928265570263
+                "Memory (GB)": 0.6153831481933594,
+                "Memory leaked (GB)": 0.29885101318359375,
+                "Runtime (min)": 0.6635952787163357,
+                "kNN Area Under the Curve": 0.03757061336719472,
+                "Mean squared error": 1.0003742483694247
             },
             {
                 "Name": "Mutual Nearest Neighbors (log CPM)",
@@ -319,11 +335,11 @@
                 "Year": 2018,
                 "Code": "https://github.com/LTLA/batchelor",
                 "Version": "3.3.6",
-                "Memory (GB)": 1.0809822082519531,
-                "Memory leaked (GB)": 0.7595939636230469,
-                "Runtime (min)": 0.469500859566809,
-                "kNN Area Under the Curve": 0.04890718514272932,
-                "Mean squared error": 0.9345109738342324
+                "Memory (GB)": 0.9922714233398438,
+                "Memory leaked (GB)": 0.7531585693359375,
+                "Runtime (min)": 0.399182583965982,
+                "kNN Area Under the Curve": 0.04935508792558289,
+                "Mean squared error": 0.9215429041428809
             },
             {
                 "Name": "Mutual Nearest Neighbors (log scran)",
@@ -332,11 +348,11 @@
                 "Year": 2018,
                 "Code": "https://github.com/LTLA/batchelor",
                 "Version": "3.3.6",
-                "Memory (GB)": 5.678504943847656,
-                "Memory leaked (GB)": 1.5391998291015625,
-                "Runtime (min)": 1.421825962133395,
-                "kNN Area Under the Curve": 0.06715707534764234,
-                "Mean squared error": 1.0023613821543123
+                "Memory (GB)": 3.5932655334472656,
+                "Memory leaked (GB)": 1.4032745361328125,
+                "Runtime (min)": 1.2653425173989186,
+                "kNN Area Under the Curve": 0.06715762795027001,
+                "Mean squared error": 1.0138226542945634
             },
             {
                 "Name": "Procrustes",
@@ -344,12 +360,12 @@
                 "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
                 "Year": 1975,
                 "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
-                "Version": "1.5.2",
-                "Memory (GB)": 0.6030158996582031,
-                "Memory leaked (GB)": 0.19725799560546875,
-                "Runtime (min)": 0.21932028168424342,
-                "kNN Area Under the Curve": 0.08348926560204335,
-                "Mean squared error": 0.8894380189024722
+                "Version": "1.5.3",
+                "Memory (GB)": 0.5012435913085938,
+                "Memory leaked (GB)": 0.17230224609375,
+                "Runtime (min)": 0.21943396599963308,
+                "kNN Area Under the Curve": 0.08426042716589172,
+                "Mean squared error": 0.8897414061813376
             }
         ],
         "scicar_mouse_kidney": [
@@ -360,11 +376,11 @@
                 "Year": 2020,
                 "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
                 "Version": "0.0",
-                "Memory (GB)": 7.887809753417969,
-                "Memory leaked (GB)": 1.3094367980957031,
-                "Runtime (min)": 4.840273703332059,
-                "kNN Area Under the Curve": 0.04635129861622007,
-                "Mean squared error": 1.0001825219793845
+                "Memory (GB)": 4.064502716064453,
+                "Memory leaked (GB)": 1.0870552062988281,
+                "Runtime (min)": 5.36290024445237,
+                "kNN Area Under the Curve": 0.046253999730665095,
+                "Mean squared error": 1.0001023740218118
             },
             {
                 "Name": "Harmonic Alignment (sqrt CPM)",
@@ -373,11 +389,11 @@
                 "Year": 2020,
                 "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
                 "Version": "0.0",
-                "Memory (GB)": 1.4492073059082031,
-                "Memory leaked (GB)": 0.6184005737304688,
-                "Runtime (min)": 2.8873845239635556,
-                "kNN Area Under the Curve": 0.053526352270085016,
-                "Mean squared error": 0.9997679518638991
+                "Memory (GB)": 1.4668998718261719,
+                "Memory leaked (GB)": 0.7270278930664062,
+                "Runtime (min)": 3.4337769398931415,
+                "kNN Area Under the Curve": 0.05465530907925562,
+                "Mean squared error": 0.9997785204256074
             },
             {
                 "Name": "Mutual Nearest Neighbors (log CPM)",
@@ -386,11 +402,11 @@
                 "Year": 2018,
                 "Code": "https://github.com/LTLA/batchelor",
                 "Version": "3.3.6",
-                "Memory (GB)": 1.1778640747070312,
-                "Memory leaked (GB)": 0.8775177001953125,
-                "Runtime (min)": 0.8256441405857913,
-                "kNN Area Under the Curve": 0.04998922647235015,
-                "Mean squared error": 1.009571173243506
+                "Memory (GB)": 1.1754798889160156,
+                "Memory leaked (GB)": 0.8836097717285156,
+                "Runtime (min)": 0.728043926297687,
+                "kNN Area Under the Curve": 0.04928770170971893,
+                "Mean squared error": 1.0098765242970988
             },
             {
                 "Name": "Mutual Nearest Neighbors (log scran)",
@@ -399,11 +415,11 @@
                 "Year": 2018,
                 "Code": "https://github.com/LTLA/batchelor",
                 "Version": "3.3.6",
-                "Memory (GB)": 7.029609680175781,
-                "Memory leaked (GB)": 1.2613449096679688,
-                "Runtime (min)": 2.4208867152337916,
-                "kNN Area Under the Curve": 0.05907059935419222,
-                "Mean squared error": 1.0596759269402192
+                "Memory (GB)": 4.039081573486328,
+                "Memory leaked (GB)": 1.3976516723632812,
+                "Runtime (min)": 2.517510076231944,
+                "kNN Area Under the Curve": 0.05900694134916547,
+                "Mean squared error": 1.0608849487245942
             },
             {
                 "Name": "Procrustes",
@@ -411,12 +427,12 @@
                 "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
                 "Year": 1975,
                 "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
-                "Version": "1.5.2",
-                "Memory (GB)": 0.6176338195800781,
-                "Memory leaked (GB)": 0.17676544189453125,
-                "Runtime (min)": 0.3795316635980271,
-                "kNN Area Under the Curve": 0.07448075973601523,
-                "Mean squared error": 0.942570117583613
+                "Version": "1.5.3",
+                "Memory (GB)": 0.7563667297363281,
+                "Memory leaked (GB)": 0.1953582763671875,
+                "Runtime (min)": 0.383237151747259,
+                "kNN Area Under the Curve": 0.07382223181435377,
+                "Mean squared error": 0.9423514041303667
             }
         ]
     }
