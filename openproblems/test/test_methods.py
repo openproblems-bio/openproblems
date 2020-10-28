@@ -22,11 +22,16 @@ def docker_paths(image):
     docker_path = os.path.join(BASEDIR, "docker", image)
     docker_push = os.path.join(docker_path, ".docker_push")
     dockerfile = os.path.join(docker_path, "Dockerfile")
-    return docker_push, dockerfile
+    requirements = [
+        os.path.join(docker_path, f)
+        for f in os.listdir(docker_path)
+        if f.endswith("requirements.txt")
+    ]
+    return docker_push, dockerfile, requirements
 
 
 def build_docker(image):
-    _, dockerfile = docker_paths(image)
+    _, dockerfile, _ = docker_paths(image)
     utils.run(
         [
             "docker",
@@ -43,12 +48,15 @@ def build_docker(image):
 
 @functools.lru_cache(maxsize=None)
 def image_requires_docker(image):
-    docker_push, dockerfile = docker_paths(image)
+    docker_push, dockerfile, requirements = docker_paths(image)
     try:
         with open(docker_push, "r") as handle:
             push_timestamp = int(handle.read().strip())
     except FileNotFoundError:
         push_timestamp = 0
+    image_age = utils.git_file_age(dockerfile)
+    for req in requirements:
+        image_age = max(image_age, utils.git_file_age(req))
     if push_timestamp > utils.git_file_age(dockerfile):
         return False
     else:
