@@ -45,6 +45,31 @@ def build_docker(image):
     )
 
 
+def docker_image_age(image):
+    utils.run(
+        ["docker", "images"],
+        error_raises=RuntimeError,
+        format_error=lambda p: "The Dockerfile for image {} is newer than the "
+        "latest push, but Docker is not available. "
+        "Return code {}\n\n{}".format(image, p.returncode, p.stdout.decode("utf-8")),
+    )
+    image_info, returncode = utils.run(
+        ["docker", "inspect", "singlecellopenproblems/{}:latest".format(image)],
+        return_stdout=True,
+        return_code=True,
+    )
+    if not returncode == 0:
+        # image not available
+        return 0
+    else:
+        image_dict = json.loads(image_info)[0]
+        created_time = image_dict["Created"].split(".")[0]
+        created_timestamp = datetime.datetime.strptime(
+            created_time, "%Y-%m-%dT%H:%M:%S"
+        ).timestamp()
+        return created_timestamp
+
+
 @functools.lru_cache(maxsize=None)
 def image_requires_docker(image):
     docker_push, dockerfile, requirements = docker_paths(image)
@@ -60,30 +85,8 @@ def image_requires_docker(image):
     if push_timestamp > image_age:
         return False
     else:
-        utils.run(
-            ["docker", "images"],
-            error_raises=RuntimeError,
-            format_error=lambda p: "The Dockerfile for image {} is newer than the "
-            "latest push, but Docker is not available. "
-            "Return code {}\n\n{}".format(
-                image, p.returncode, p.stdout.decode("utf-8")
-            ),
-        )
-        image_info, returncode = utils.run(
-            ["docker", "inspect", "singlecellopenproblems/{}:latest".format(image)],
-            return_stdout=True,
-            return_code=True,
-        )
-        if not returncode == 0:
+        if docker_image_age(image) < image_age:
             build_docker(image)
-        else:
-            image_dict = json.loads(image_info)[0]
-            created_time = image_dict["Created"].split(".")[0]
-            created_timestamp = datetime.datetime.strptime(
-                created_time, "%Y-%m-%dT%H:%M:%S"
-            ).timestamp()
-            if not created_timestamp > os.path.getmtime(dockerfile):
-                build_docker(image)
         return True
 
 
