@@ -30,8 +30,8 @@ _mnn = scprep.run.RFunction(
     XY_recons <- t(assay(fastMNN(t(XY_svd), batch = batch), 'reconstructed'))
     X_recons <- XY_recons[1:nrow(X_svd),]
     Y_recons <- XY_recons[(nrow(X_svd)+1):nrow(XY_svd),]
-    reducedDim(sce, "aligned") <- as(X_recons, "RsparseMatrix")
-    reducedDim(sce, "mode2_aligned") <- as(Y_recons, "RsparseMatrix")
+    reducedDim(sce, "aligned") <- as.matrix(X_recons)
+    reducedDim(sce, "mode2_aligned") <- as.matrix(Y_recons)
     sce
     """,
 )
