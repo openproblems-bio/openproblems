@@ -6,7 +6,7 @@ install_requires = [
     "numpy>=1.17.0",
     "scikit-learn>=0.19.1",
     "anndata",
-    "scprep",
+    "scprep>=1.0.9",
     "scipy",
     "scanpy",
     "decorator",
