@@ -53,12 +53,12 @@ def image_requires_docker(image):
             push_timestamp = int(handle.read().strip())
     except FileNotFoundError:
         push_timestamp = 0
-    print("{}: push age {}".format(image, push_timestamp))
+    print("{}: push age {}".format(image, push_timestamp), file=sys.stderr)
     image_age = utils.git_file_age(dockerfile)
-    print("{}: git age {}".format(dockerfile, image_age))
+    print("{}: git age {}".format(dockerfile, image_age), file=sys.stderr)
     for req in requirements:
         req_age = utils.git_file_age(req)
-        print("{}: git age {}".format(req, req_age))
+        print("{}: git age {}".format(req, req_age), file=sys.stderr)
         image_age = max(image_age, req_age)
     if push_timestamp > utils.git_file_age(dockerfile):
         return False
