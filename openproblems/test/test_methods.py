@@ -131,6 +131,8 @@ def cache_docker_image(image):
             "--rm",
             "--mount",
             "type=bind,source={},target=/opt/openproblems".format(BASEDIR),
+            "--mount",
+            "type=bind,source=/tmp,target=/tmp".format(BASEDIR),
             "singlecellopenproblems/{}".format(image),
         ],
         return_stdout=True,
