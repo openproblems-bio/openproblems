@@ -74,15 +74,29 @@ def format_error_stdout(process):
     )
 
 
+def git_file_age(filename):
+    return int(
+        run(
+            ["git", "log", "-1", '--format="%ad"', "--date=unix", "--", filename],
+            return_stdout=True,
+        )
+        .strip()
+        .replace('"', "")
+    )
+
+
 def run(
     command,
     shell=False,
+    print_stdout=False,
     return_stdout=False,
     return_code=False,
     error_raises=AssertionError,
     format_error=None,
 ):
-    if return_stdout:
+    if return_stdout and print_stdout:
+        raise NotImplementedError
+    elif return_stdout:
         stderr = subprocess.PIPE
         if format_error is None:
             format_error = format_error_stderr
@@ -90,7 +104,15 @@ def run(
         stderr = subprocess.STDOUT
         if format_error is None:
             format_error = format_error_stdout
-    p = subprocess.run(command, shell=shell, stdout=subprocess.PIPE, stderr=stderr)
+    p = subprocess.Popen(command, shell=shell, stdout=subprocess.PIPE, stderr=stderr)
+    if print_stdout:
+        while True:
+            output = p.stdout.readline().decode("utf-8")
+            if output == "" and p.poll() is not None:
+                break
+            if output:
+                print(output.strip())
+    p.stdout, p.stderr = p.communicate()
     output = []
     if return_stdout:
         output.append(p.stdout.decode("utf-8"))
@@ -99,4 +121,4 @@ def run(
     if not return_code and not p.returncode == 0:
         raise error_raises(format_error(p))
     if output:
-        return tuple(output)
+        return output[0] if len(output) == 1 else tuple(output)

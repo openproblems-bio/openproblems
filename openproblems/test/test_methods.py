@@ -36,14 +36,20 @@ def build_docker(image):
             "-t",
             "singlecellopenproblems/{}".format(image),
             BASEDIR,
-        ]
+        ],
+        print_stdout=True,
     )
 
 
 @functools.lru_cache(maxsize=None)
 def image_requires_docker(image):
     docker_push, dockerfile = docker_paths(image)
-    if os.path.getmtime(docker_push) > os.path.getmtime(dockerfile):
+    try:
+        with open(docker_push, "r") as handle:
+            push_timestamp = int(handle.read().strip())
+    except FileNotFoundError:
+        push_timestamp = 0
+    if push_timestamp > utils.git_file_age(dockerfile):
         return False
     else:
         utils.run(
