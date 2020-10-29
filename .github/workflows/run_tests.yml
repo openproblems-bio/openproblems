@@ -43,8 +43,9 @@ jobs:
     - name: Install package & dependencies
       run: |
         pip install -U .
-        python -c "import openproblems"
         pip install -U .[test]
+        pip install -U .[evaluate] # install snakemake
+        python -c "import openproblems"
         
     - name: Linting
       run: |
@@ -52,7 +53,6 @@ jobs:
     
     - name: Build docker container
       run: |
-        cd scripts
         for image in $(ls -1d ../docker/open*); do
           snakemake -j 1 ${image}/.docker_build
         done
