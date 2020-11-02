@@ -34,3 +34,13 @@ def loader(func, *args, **kwargs):
 def filter_genes_cells(adata):
     sc.pp.filter_genes(adata, min_cells=1)
     sc.pp.filter_cells(adata, min_genes=1)
+
+
+def subsample_even(adata, n_obs, even_obs):
+    obs = adata.obs[even_obs].unique()
+    adata_sub = []
+    for o in obs:
+        adata_sub.append(
+            sc.pp.subsample(adata[adata.obs[even_obs] == o], n_obs=n_obs // len(obs))
+        )
+    return sc.concat(adata_sub)
