@@ -1,10 +1,8 @@
 import os
 import tempfile
 
-import numpy as np
 import anndata
 import scprep
-import scanpy as sc
 
 from . import utils
 
