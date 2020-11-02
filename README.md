@@ -56,6 +56,10 @@ Task-specific APIs are described in the README for each task.
 * [Label Projection](openproblems/tasks/label_projection)
 * [Multimodal Data Integration](openproblems/tasks/multimodal_data_integration)
 
+### Writing functions in R
+
+Metrics and methods can also be written in R, using [`scprep`'s `RFunction`](https://scprep.readthedocs.io/en/stable/reference.html#scprep.run.RFunction) class. AnnData Python objects are converted to and from `SingleCellExperiment` R objects using [`anndata2ri`](https://icb-anndata2ri.readthedocs-hosted.com/en/latest/). See the anndata2ri docs for API details.
+
 ## Adding a new dataset
 
 Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader` in order to cache the result.
