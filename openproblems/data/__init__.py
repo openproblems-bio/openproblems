@@ -17,10 +17,11 @@ TEMPDIR = _make_tempdir()
 
 
 def _cleanup():
-    try:
-        shutil.rmtree(TEMPDIR)
-    except (FileNotFoundError, PermissionError):
-        pass
+    if os.path.isdir(TEMPDIR):
+        try:
+            shutil.rmtree(TEMPDIR)
+        except (FileNotFoundError, PermissionError):
+            pass
 
 
 atexit.register(_cleanup)
