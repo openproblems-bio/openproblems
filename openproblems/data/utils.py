@@ -52,10 +52,11 @@ def subsample_even(adata, n_obs, even_obs):
     adata : AnnData
         Subsampled AnnData object
     """
-    obs = adata.obs[even_obs].unique()
-    adata_sub = []
-    for o in obs:
-        adata_sub.append(
-            sc.pp.subsample(adata[adata.obs[even_obs] == o], n_obs=n_obs // len(obs))
-        )
-    return sc.concat(adata_sub)
+    values = adata.obs[even_obs].unique()
+    adata_subsets = []
+    n_obs_per_value = n_obs // len(values)
+    for v in values:
+        adata_subset = adata[adata.obs[even_obs] == v].copy()
+        sc.pp.subsample(adata_subset, n_obs=min(n_obs_per_value, adata_subset.shape[0]))
+        adata_subsets.append(adata_subset)
+    return sc.concat(adata_subsets)
