@@ -37,6 +37,21 @@ def filter_genes_cells(adata):
 
 
 def subsample_even(adata, n_obs, even_obs):
+    """Subsample a dataset evenly across an obs.
+
+    Parameters
+    ----------
+    adata : AnnData
+    n_obs : int
+        Total number of cells to retain
+    even_obs : str
+        `adata.obs[even_obs]` to be subsampled evenly across partitions.
+
+    Returns
+    -------
+    adata : AnnData
+        Subsampled AnnData object
+    """
     obs = adata.obs[even_obs].unique()
     adata_sub = []
     for o in obs:
