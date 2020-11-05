@@ -21,7 +21,12 @@ r_requires = [
 
 evaluate_requires = ["snakemake"]
 
-test_requires = ["nose2", "black"]
+test_requires = [
+    "nose2",
+    "black",
+    "coverage",
+    "coveralls",
+]
 
 doc_requires = [
     "sphinx>=2.2,<2.4",
