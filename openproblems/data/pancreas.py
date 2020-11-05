@@ -23,14 +23,8 @@ def load_pancreas(test=False):
         adata = adata[:, :500].copy()
         filter_genes_cells(adata)
 
-        keep_celltypes = ["delta", "gamma"]
-        keep_techs = ["inDrop4", "smarter", "celseq"]
-        assert np.all(np.isin(keep_celltypes, adata.obs["celltype"])), adata.obs[
-            "celltype"
-        ].unique()
-        assert np.all(np.isin(keep_techs, adata.obs["tech"])), adata.obs[
-            "tech"
-        ].unique()
+        keep_celltypes = adata.obs["celltype"].dtype.categories[[0, 3]]
+        keep_techs = adata.obs["tech"].dtype.categories[[0, -3, -2]]
         keep_tech_idx = adata.obs["tech"].isin(keep_techs)
         keep_celltype_idx = adata.obs["celltype"].isin(keep_celltypes)
         adata = adata[keep_tech_idx & keep_celltype_idx].copy()
@@ -57,10 +51,6 @@ def load_pancreas(test=False):
 
 
 def prep_pancreas(adata):
-    # Fix category dtypes
-    adata.obs["tech"] = adata.obs["tech"].astype(str).astype("category")
-    adata.obs["celltype"] = adata.obs["celltype"].astype(str).astype("category")
-
     # Remove processing
     adata.X = adata.layers["counts"]
     del adata.layers["counts"]
