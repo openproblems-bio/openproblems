@@ -4,6 +4,7 @@ import os
 import functools
 import json
 import datetime
+import time
 
 import openproblems
 from openproblems.test import utils
@@ -70,14 +71,18 @@ def docker_image_age(image):
         return created_timestamp
 
 
+def docker_push_age(filename):
+    try:
+        with open(filename, "r") as handle:
+            return int(handle.read().strip())
+    except FileNotFoundError:
+        return 0
+
+
 @functools.lru_cache(maxsize=None)
 def image_requires_docker(image):
     docker_push, dockerfile, requirements = docker_paths(image)
-    try:
-        with open(docker_push, "r") as handle:
-            push_timestamp = int(handle.read().strip())
-    except FileNotFoundError:
-        push_timestamp = 0
+    push_timestamp = docker_push_age(docker_push)
     image_age = utils.git_file_age(dockerfile)
     for req in requirements:
         req_age = utils.git_file_age(req)
@@ -92,19 +97,26 @@ def image_requires_docker(image):
 
 @functools.lru_cache(maxsize=None)
 def cache_singularity_image(image):
-    filename = "{}.sif".format(image)
-    if not os.path.isfile(os.path.join(CACHEDIR, filename)):
+    docker_push, _, _ = docker_paths(image)
+    push_timestamp = docker_push_age(docker_push)
+    image_filename = "{}.sif".format(image)
+    image_path = os.path.join(CACHEDIR, image_filename)
+    image_age_filename = os.path.join(CACHEDIR, "{}.age.txt".format(image))
+    image_age = docker_push_age(image_age_filename)
+    if (not os.path.isfile(image_path)) or push_timestamp > image_age:
         utils.run(
             [
                 "singularity",
                 "--verbose",
                 "pull",
                 "--name",
-                filename,
+                image_filename,
                 "docker://singlecellopenproblems/{}".format(image),
             ]
         )
-    return os.path.join(CACHEDIR, filename)
+        with open(image_age_filename, "w") as handle:
+            handle.write(str(time.time()))
+    return image_path
 
 
 def singularity_command(image, script, *args):
