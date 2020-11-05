@@ -15,6 +15,9 @@ def load_pancreas(test=False):
     if test:
         # load full data first, cached if available
         adata = load_pancreas(test=False)
+        import sys
+
+        print(adata, file=sys.stderr)
 
         # Subsample pancreas data
         adata = adata[:, :500].copy()
@@ -22,8 +25,8 @@ def load_pancreas(test=False):
 
         cts = ["delta", "gamma"]
         batches = ["inDrop4", "smarter", "celseq"]
-        assert np.all(np.isin(cts, adata.obs["labels"]))
-        assert np.all(np.isin(batches, adata.obs["batch"]))
+        assert np.all(np.isin(cts, adata.obs["labels"])), adata.obs["labels"].unique()
+        assert np.all(np.isin(batches, adata.obs["batch"])), adata.obs["batch"].unique()
         keep_batches = adata.obs["batch"].isin(batches)
         keep_labels = adata.obs["labels"].isin(cts)
         adata = adata[keep_batches & keep_labels].copy()
