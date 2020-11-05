@@ -23,13 +23,17 @@ def load_pancreas(test=False):
         adata = adata[:, :500].copy()
         filter_genes_cells(adata)
 
-        cts = ["delta", "gamma"]
-        batches = ["inDrop4", "smarter", "celseq"]
-        assert np.all(np.isin(cts, adata.obs["labels"])), adata.obs["labels"].unique()
-        assert np.all(np.isin(batches, adata.obs["batch"])), adata.obs["batch"].unique()
-        keep_batches = adata.obs["batch"].isin(batches)
-        keep_labels = adata.obs["labels"].isin(cts)
-        adata = adata[keep_batches & keep_labels].copy()
+        keep_celltypes = ["delta", "gamma"]
+        keep_techs = ["inDrop4", "smarter", "celseq"]
+        assert np.all(np.isin(keep_celltypes, adata.obs["celltype"])), adata.obs[
+            "celltype"
+        ].unique()
+        assert np.all(np.isin(keep_techs, adata.obs["tech"])), adata.obs[
+            "tech"
+        ].unique()
+        keep_tech_idx = adata.obs["tech"].isin(keep_techs)
+        keep_celltype_idx = adata.obs["celltype"].isin(keep_celltypes)
+        adata = adata[keep_tech_idx & keep_celltype_idx].copy()
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
         # Ensure there are no cells or genes with 0 counts
@@ -53,12 +57,9 @@ def load_pancreas(test=False):
 
 
 def prep_pancreas(adata):
-    # Rename categories
-    adata.obs["batch"] = adata.obs["tech"].copy()
-    adata.obs["labels"] = adata.obs["celltype"].copy()
-
-    # Drop excess covariates
-    adata.obs = adata.obs.drop(columns=["tech", "size_factors", "celltype"])
+    # Fix category dtypes
+    adata.obs["tech"] = adata.obs["tech"].astype(str).astype("category")
+    adata.obs["celltype"] = adata.obs["celltype"].astype(str).astype("category")
 
     # Remove processing
     adata.X = adata.layers["counts"]
