@@ -3,6 +3,7 @@ import tempfile
 
 import scprep
 import scanpy as sc
+import numpy as np
 
 from .utils import loader, filter_genes_cells
 
@@ -16,11 +17,16 @@ def load_pancreas(test=False):
         adata = load_pancreas(test=False)
 
         # Subsample pancreas data
+        adata = adata[:, :500].copy()
+        filter_genes_cells(adata)
+
         cts = ["delta", "gamma"]
         batches = ["inDrop4", "smarter", "celseq"]
-        adata = adata[
-            (adata.obs["batch"].isin(batches)) & (adata.obs["labels"].isin(cts)), :500
-        ].copy()
+        assert np.all(np.isin(cts, adata.obs["labels"]))
+        assert np.all(np.isin(batches, adata.obs["batch"]))
+        keep_batches = adata.obs["batch"].isin(batches)
+        keep_labels = adata.obs["labels"].isin(cts)
+        adata = adata[keep_batches & keep_labels].copy()
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
         # Ensure there are no cells or genes with 0 counts
