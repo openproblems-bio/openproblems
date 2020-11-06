@@ -3,7 +3,6 @@ import tempfile
 
 import scprep
 import scanpy as sc
-import numpy as np
 
 from .utils import loader, filter_genes_cells
 
@@ -40,16 +39,11 @@ def load_pancreas(test=False):
             scprep.io.download.download_url(URL, filepath)
             adata = sc.read(filepath)
 
-            # Correct covariate naming and remove preprocessing
-            prep_pancreas(adata)
+            # Remove preprocessing
+            adata.X = adata.layers["counts"]
+            del adata.layers["counts"]
 
             # Ensure there are no cells or genes with 0 counts
             filter_genes_cells(adata)
 
         return adata
-
-
-def prep_pancreas(adata):
-    # Remove processing
-    adata.X = adata.layers["counts"]
-    del adata.layers["counts"]
