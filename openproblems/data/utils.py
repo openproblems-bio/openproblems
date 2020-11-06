@@ -32,6 +32,7 @@ def loader(func, *args, **kwargs):
 
 
 def filter_genes_cells(adata):
+    """Remove empty cells and genes."""
     sc.pp.filter_genes(adata, min_cells=1)
     sc.pp.filter_cells(adata, min_genes=1)
 

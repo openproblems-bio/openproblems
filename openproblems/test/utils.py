@@ -9,6 +9,7 @@ from scipy import sparse
 
 
 def object_name(x):
+    """Get a human readable name for an object."""
     try:
         return x.__name__
     except AttributeError:
@@ -16,6 +17,7 @@ def object_name(x):
 
 
 def name_test(testcase_func, param_num, param):
+    """Get a human readable name for a parameterized test."""
     return "%s_%s" % (
         testcase_func.__name__,
         parameterized.parameterized.to_safe_name(
@@ -25,6 +27,7 @@ def name_test(testcase_func, param_num, param):
 
 
 def ignore_warnings():
+    """Ignore irrelevant warnings."""
     warnings.filterwarnings(
         "ignore",
         category=FutureWarning,
@@ -41,6 +44,7 @@ def ignore_warnings():
 
 
 def data(obsm=None):
+    """Create fake data."""
     adata = anndata.AnnData(np.random.poisson(2, (100, 30)))
     if obsm is not None:
         adata.obsm[obsm] = adata.X * 2 + 1
@@ -50,6 +54,7 @@ def data(obsm=None):
 
 
 def assert_array_equal(X, Y):
+    """Assert two arrays to be equal, whether sparse or dense."""
     assert X.shape == Y.shape
     if sparse.issparse(X) and sparse.issparse(Y):
         X = X.tocsr()
@@ -64,18 +69,21 @@ def assert_array_equal(X, Y):
 
 
 def format_error_stderr(process):
+    """Format subprocess output from stderr."""
     return "Return code {}\n\n{}".format(
         process.returncode, process.stderr.decode("utf-8")
     )
 
 
 def format_error_stdout(process):
+    """Format subprocess output from stdout."""
     return "Return code {}\n\n{}".format(
         process.returncode, process.stdout.decode("utf-8")
     )
 
 
 def git_file_age(filename):
+    """Get the age of a file's last git commit."""
     git_age = (
         run(
             ["git", "log", "-1", '--format="%ad"', "--date=unix", "--", filename],
@@ -99,6 +107,25 @@ def run(
     error_raises=AssertionError,
     format_error=None,
 ):
+    """Run subprocess.
+
+    Parameters
+    ----------
+    command : list of str
+    shell : bool
+        Run command in a new shell
+    print_stdout : bool
+        Print subprocess stdout to sys.stdout
+    return_stdout : bool
+        Return subprocess stdout
+    return_code : bool
+        Return subprocess exit code
+    error_raises : Exception
+        Which exception to raise on failure
+    format_error : callable
+        Function to call to generate error message. If None, chooses from
+        `format_error_stderr` and `format_error_stdout` automatically.
+    """
     if return_stdout and print_stdout:
         raise NotImplementedError
     elif return_stdout:

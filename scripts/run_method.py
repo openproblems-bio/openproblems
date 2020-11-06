@@ -5,6 +5,7 @@ import anndata
 
 
 def main(task_name, method_name, input_file, output_h5ad, output_json):
+    """Apply a method to a single dataset."""
     openproblems.data.no_cleanup()
     task = eval("openproblems.tasks.{}".format(task_name))
     methods = getattr(task, "methods")
