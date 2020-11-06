@@ -28,6 +28,8 @@ def load_pancreas(test=False):
         keep_tech_idx = adata.obs["tech"].isin(keep_techs)
         keep_celltype_idx = adata.obs["celltype"].isin(keep_celltypes)
         adata = adata[keep_tech_idx & keep_celltype_idx].copy()
+
+        sc.pp.subsample(adata, n_obs=500)
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
         # Ensure there are no cells or genes with 0 counts
