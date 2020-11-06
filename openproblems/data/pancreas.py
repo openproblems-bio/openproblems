@@ -15,9 +15,6 @@ def load_pancreas(test=False):
     if test:
         # load full data first, cached if available
         adata = load_pancreas(test=False)
-        import sys
-
-        print(adata, file=sys.stderr)
 
         # Subsample pancreas data
         adata = adata[:, :500].copy()
