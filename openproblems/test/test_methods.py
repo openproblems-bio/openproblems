@@ -103,7 +103,7 @@ def cache_singularity_image(image):
     image_path = os.path.join(CACHEDIR, image_filename)
     image_age_filename = os.path.join(CACHEDIR, "{}.age.txt".format(image))
     image_age = docker_push_age(image_age_filename)
-    if push_timestamp > image_age:
+    if push_timestamp > image_age and os.path.isfile(image_path):
         os.remove(image_path)
     if not os.path.isfile(image_path):
         utils.run(
