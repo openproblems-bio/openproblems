@@ -1,6 +1,6 @@
 ## Dimensional Reduction
 
-Dimensional reduction is a key challenge in single-cell data representation.
+Dimensional reduction is a key challenge in single-cell data representation [<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02128-7">1</a>].
 
 ## API
 
@@ -9,7 +9,8 @@ Datasets should contain the following attributes:
 * `adata.obs["labels"]` (cell/observation labels)
 * `adata.var["labels"]` (gene name feature labels)
 
-**Methods** should assign dimensionally-reduced embedding coordinates to `adata.obsm['dimensional_reduction_method']`
+**Methods** should assign dimensionally-reduced embedding coordinates to `adata.obsm['dimensional_reduction']` i.e., `adata.obsm['X_pca']` or `adata.obsm['X_tsne']`.
 
-**Metrics** should calculate the quality or "goodness of fit" of a dimensional reduction **method**. These matrices should be assigned to`adata.uns['metric']`.
+**Metrics** should calculate the quality or "goodness of fit" of a dimensional reduction **method**.
 
+1. Raimundo, F., Vallot, C. & Vert, J. Tuning parameters of dimensionality reduction methods for single-cell RNA-seq analysis. Genome Biol 21, 212 (2020). https://doi.org/10.1186/s13059-020-02128-7
