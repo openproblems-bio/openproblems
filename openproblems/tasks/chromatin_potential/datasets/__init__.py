@@ -1,1 +1,1 @@
-from .scicar_chrom import scicar_mouse_kidney
+from .scicar import scicar_mouse_kidney

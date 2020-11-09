@@ -12,10 +12,5 @@ def check_dataset(adata):
 
 
 def check_method(adata):
-    assert "gene_short_name" in adata.var
-    assert "chr" in adata.var
-    assert "start" in adata.var
-    assert "end" in adata.var
-    assert "strand" in adata.var
     assert "gene_score" in adata.obsm
     return True
