@@ -74,7 +74,7 @@ def docker_image_age(image):
 def docker_push_age(filename):
     try:
         with open(filename, "r") as handle:
-            return int(handle.read().strip())
+            return float(handle.read().strip())
     except FileNotFoundError:
         return 0
 
