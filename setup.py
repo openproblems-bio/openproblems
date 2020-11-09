@@ -7,7 +7,7 @@ install_requires = [
     "anndata",
     "scprep>=1.0.10",
     "scipy",
-    "scanpy",
+    "scanpy>=1.6",
     "decorator",
     "memory-profiler",
     "parameterized",
