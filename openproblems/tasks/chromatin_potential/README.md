@@ -12,4 +12,4 @@ Datasets should contain the following attributes:
 
 Methods should assign gene regulation scores to `adata.obsm['gene_score']` using only single cell atac-seq peak counts. 
 
-Metrics should maximize the median correlation metric.
+Metrics should compare adata.obsm['gene_score'] with the true gene expression in adata.X.

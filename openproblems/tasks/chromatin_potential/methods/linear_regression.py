@@ -7,6 +7,11 @@ from ....tools.decorators import method
 
 
 def _chrom_limit(x, tss_size=2e5):
+    """This function returns upstream and downstream intervals
+    of tss_size for calculating gene score of ATAC-seq
+
+    @tss_size: upstream and downstream limit size
+    """
     y = x.values
     gene_direction = y[-1]
     gene_start = y[-3]
@@ -18,6 +23,7 @@ def _chrom_limit(x, tss_size=2e5):
 
 
 def _get_annotation(adata):
+    """This function insert meta data into .obs for adata"""
     from pyensembl import EnsemblRelease
 
     # TODO: add more species
@@ -41,15 +47,16 @@ def _get_annotation(adata):
         except:
             genes.append([np.nan, np.nan, np.nan, np.nan])
     old_col = adata.var.columns.values
-    adata._var = pd.concat(
+    adata.var = pd.concat(
         [adata.var, pd.DataFrame(genes, index=adata.var_names)], axis=1
     )
-    adata._var.columns = np.hstack(
+    adata.var.columns = np.hstack(
         [old_col, np.array(["chr", "start", "end", "strand"])]
     )
 
 
 def _atac_genes_score(adata, top_genes=500, threshold=1):
+    """This function calculate gene score and insert into .obsm"""
     import pybedtools
 
     # get annotation for TSS
@@ -76,6 +83,7 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     sc.pp.highly_variable_genes(adata, n_top_genes=top_genes)
 
     adata._inplace_subset_var(adata.var.highly_variable)
+    # adata = adata[:, adata.var.highly_variable].copy()
 
     sc.pp.regress_out(adata, ["total_counts", "pct_counts_mt"])
     sc.pp.scale(adata, max_value=10)

@@ -46,9 +46,6 @@ def load_scicar(
         varname = "mode2_var_{}".format(key)
         adata.uns[varname] = atac_genes[key].values
         adata.uns["mode2_varnames"].append(varname)
-    print(adata.uns["mode2_var_chr"].shape)
-    print(adata.uns["mode2_var"].shape)
-    print(adata.obsm["mode2"].shape)
 
     adata = filter_joint_data_empty_cells(adata)
     return adata
