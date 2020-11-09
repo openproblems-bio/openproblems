@@ -68,18 +68,21 @@ def assert_array_equal(X, Y):
         np.testing.assert_array_equal(X, Y)
 
 
+def _format_error(process, stream):
+    """Format subprocess output."""
+    return "{}\nReturn code {}\n\n{}".format(
+        " ".join(process.cmd), process.returncode, stream.decode("utf-8")
+    )
+
+
 def format_error_stderr(process):
     """Format subprocess output from stderr."""
-    return "Return code {}\n\n{}".format(
-        process.returncode, process.stderr.decode("utf-8")
-    )
+    return _format_error(process, process.stderr)
 
 
 def format_error_stdout(process):
     """Format subprocess output from stdout."""
-    return "Return code {}\n\n{}".format(
-        process.returncode, process.stdout.decode("utf-8")
-    )
+    return _format_error(process, process.stdout)
 
 
 def git_file_age(filename):
