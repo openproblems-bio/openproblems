@@ -41,8 +41,11 @@ def load_scicar(
     adata.var = rna_genes
     for key in atac_cells.columns:
         adata.obs[key] = atac_cells[key]
+    adata.uns["mode2_varnames"] = []
     for key in atac_genes.columns:
-        adata.uns["mode2_var_{}".format(key)] = atac_genes[key].values
+        varname = "mode2_var_{}".format(key)
+        adata.uns[varname] = atac_genes[key].values
+        adata.uns["mode2_varnames"].append(varname)
     print(adata.uns["mode2_var_chr"].shape)
     print(adata.uns["mode2_var"].shape)
     print(adata.obsm["mode2"].shape)
