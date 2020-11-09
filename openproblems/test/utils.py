@@ -71,7 +71,7 @@ def assert_array_equal(X, Y):
 def _format_error(process, stream):
     """Format subprocess output."""
     return "{}\nReturn code {}\n\n{}".format(
-        " ".join(process.cmd), process.returncode, stream.decode("utf-8")
+        " ".join(process.args), process.returncode, stream.decode("utf-8")
     )
 
 
