@@ -62,7 +62,7 @@ def subsample_even(adata, n_obs, even_obs):
         if adata_out is None:
             adata_out = adata_subset
         else:
-            adata_out = adata_out.concatenate(adata_subset)
+            adata_out = adata_out.concatenate(adata_subset, batch_key="_obs_batch")
 
     adata_out.uns = adata.uns
     adata_out.varm = adata.varm
