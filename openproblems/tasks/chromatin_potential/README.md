@@ -13,3 +13,6 @@ Datasets should contain the following attributes:
 Methods should assign gene regulation scores to `adata.obsm['gene_score']` using only single cell atac-seq peak counts. 
 
 Metrics should compare adata.obsm['gene_score'] with the true gene expression in adata.X.
+
+## Annotation
+This task currently assumes Mus Musculus reference is used in the single cell dataset, which can be extended in the future if other species single cell sci-car, SNARE-seq or SHARE-seq is added.
