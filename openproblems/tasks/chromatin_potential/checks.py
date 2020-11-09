@@ -13,4 +13,5 @@ def check_dataset(adata):
 def check_method(adata):
     assert "atac_rna_cor" in adata.obs
     assert "gene_score" in adata.obsm
+    ##assert "gene_short_name" in adata.var
     return True

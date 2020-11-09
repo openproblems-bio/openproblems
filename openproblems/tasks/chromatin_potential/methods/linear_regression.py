@@ -6,12 +6,15 @@ import subprocess
 from ....tools.decorators import method
 
 
-def _chrom_limit(x):
+def _chrom_limit(x, tss_size=2e5):
     y = x.values
-    if y[-1] == "+":
-        return [y[-3] - 1e5, y[-3] + 1e5]
+    gene_direction = y[-1]
+    gene_start = y[-3]
+    gene_end = y[-2]
+    if gene_direction == "+":
+        return [gene_start - tss_size // 2, gene_start + tss_size // 2]
     else:
-        return [y[-2] - 1e5, y[-2] + 1e5]
+        return [gene_end - tss_size // 2, gene_end + tss_size // 2]
 
 
 def _get_annotation(adata):
@@ -46,13 +49,18 @@ def _get_annotation(adata):
 def _atac_genes_score(adata, top_genes=500, threshold=1):
     import pybedtools
 
+    # get annotation for TSS
+    _get_annotation(adata)
     # basic quality control
     sc.pp.filter_cells(adata, min_genes=200)
     sc.pp.filter_genes(adata, min_cells=5)
 
-    adata.var["mt"] = adata.var.gene_short_name.str.startswith(
+    adata.var["mt"] = adata.var.iloc[:, 2].str.startswith(
         "mt-"
     )  # annotate the group of mitochondrial genes as 'mt'
+
+    adata._inplace_subset_var(~pd.isnull(adata.var["mt"]))
+
     sc.pp.calculate_qc_metrics(
         adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
     )
@@ -64,14 +72,10 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     sc.pp.log1p(adata)
     sc.pp.highly_variable_genes(adata, n_top_genes=top_genes)
 
-    # adata = adata[:, adata.var.highly_variable]
     adata._inplace_subset_var(adata.var.highly_variable)
 
     sc.pp.regress_out(adata, ["total_counts", "pct_counts_mt"])
     sc.pp.scale(adata, max_value=10)
-
-    # get annotation for TSS
-    _get_annotation(adata)
 
     # generate peak to gene weight matrix
     # remove genes without annotation
@@ -86,7 +90,7 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     adata.obsm["mode2"] = adata.obsm["mode2"][:, sel]
 
     # extend tss upstream and downstream
-    extend_tss = adata.var.iloc[:, -3:].apply(_chrom_limit, axis=1)
+    extend_tss = adata.var.loc[:, [3, 4, 5]].apply(_chrom_limit, axis=1)
 
     extend_tss = pd.concat(
         [
@@ -152,5 +156,5 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     code_version="1.0",
     code_url="http://cistrome.org/BETA/src/BETA_1.0.7.zip",
 )
-def linear_regression_exponential_decay(adata, n_top_genes=200, threshold=1):
+def linear_regression_exponential_decay(adata, n_top_genes=2000, threshold=1):
     _atac_genes_score(adata, top_genes=n_top_genes, threshold=threshold)
