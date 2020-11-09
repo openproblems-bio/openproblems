@@ -21,6 +21,9 @@ def filter_joint_data_empty_cells(adata):
     keep_genes_mode2 = n_genes_mode2 > 0
     adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes_mode2]
     adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes_mode2]
+    adata.uns["mode2_var_start"] = adata.uns["mode2_var_start"][keep_genes_mode2]
+    adata.uns["mode2_var_end"] = adata.uns["mode2_var_end"][keep_genes_mode2]
+    adata.uns["mode2_var_chr"] = adata.uns["mode2_var_chr"][keep_genes_mode2]
     return adata
 
 

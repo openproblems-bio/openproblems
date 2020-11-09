@@ -11,17 +11,11 @@ atac_genes_url = "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM3271045&form
 
 
 @loader
-def load_scicar_mouse_kidney(test=False, with_peak=False):
+def load_scicar_mouse_kidney(test=False):
     if test:
-        adata = load_scicar_mouse_kidney(test=False, with_peak=with_peak)
+        adata = load_scicar_mouse_kidney(test=False)
         adata = subset_joint_data(adata)
         return adata
     return load_scicar(
-        rna_url,
-        rna_cells_url,
-        rna_genes_url,
-        atac_url,
-        atac_cells_url,
-        atac_genes_url,
-        with_peak=with_peak,
+        rna_url, rna_cells_url, rna_genes_url, atac_url, atac_cells_url, atac_genes_url
     )

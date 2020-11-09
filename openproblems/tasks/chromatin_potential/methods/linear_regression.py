@@ -20,8 +20,9 @@ def _chrom_limit(x, tss_size=2e5):
 def _get_annotation(adata):
     from pyensembl import EnsemblRelease
 
+    # TODO: add more species
     subprocess.call(
-        "pyensembl install --release 100 --species mus_musculus", shell=True
+        ["pyensembl", "install", "--release", "100", "--species", "mus_musculus"]
     )
     data = EnsemblRelease(100, species="mus_musculus")
     # get ensemble gene coordinate
@@ -31,8 +32,6 @@ def _get_annotation(adata):
             gene = data.gene_by_id(i)
             genes.append(
                 [
-                    gene.gene_id,
-                    gene.gene_name,
                     "chr%s" % gene.contig,
                     gene.start,
                     gene.end,
@@ -40,9 +39,13 @@ def _get_annotation(adata):
                 ]
             )
         except:
-            genes.append([np.nan, np.nan, np.nan, np.nan, np.nan, np.nan])
+            genes.append([np.nan, np.nan, np.nan, np.nan])
+    old_col = adata.var.columns.values
     adata._var = pd.concat(
         [adata.var, pd.DataFrame(genes, index=adata.var_names)], axis=1
+    )
+    adata._var.columns = np.hstack(
+        [old_col, np.array(["chr", "start", "end", "strand"])]
     )
 
 
@@ -55,7 +58,7 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     sc.pp.filter_cells(adata, min_genes=200)
     sc.pp.filter_genes(adata, min_cells=5)
 
-    adata.var["mt"] = adata.var.iloc[:, 2].str.startswith(
+    adata.var["mt"] = adata.var.gene_short_name.str.startswith(
         "mt-"
     )  # annotate the group of mitochondrial genes as 'mt'
 
@@ -80,21 +83,26 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     # generate peak to gene weight matrix
     # remove genes without annotation
     adata._inplace_subset_var(
-        (adata.var.loc[:, 2].isin(np.unique(adata.uns["mode2_var"][:, 0])))
-        & (~pd.isnull(adata.var.loc[:, 2]))
+        (adata.var.loc[:, "chr"].isin(np.unique(adata.uns["mode2_var_chr"])))
+        & (~pd.isnull(adata.var.loc[:, "chr"]))
     )
 
     # filter atac-seq matrix
-    sel = np.isin(adata.uns["mode2_var"][:, 0], adata.var.loc[:, 2].unique())
+    sel = np.isin(adata.uns["mode2_var_chr"], adata.var.loc[:, "chr"].unique())
     adata.uns["mode2_var"] = adata.uns["mode2_var"][sel]
+    adata.uns["mode2_var_chr"] = adata.uns["mode2_var_chr"][sel]
+    adata.uns["mode2_var_start"] = adata.uns["mode2_var_start"][sel]
+    adata.uns["mode2_var_end"] = adata.uns["mode2_var_end"][sel]
     adata.obsm["mode2"] = adata.obsm["mode2"][:, sel]
 
     # extend tss upstream and downstream
-    extend_tss = adata.var.loc[:, [3, 4, 5]].apply(_chrom_limit, axis=1)
+    extend_tss = adata.var.loc[:, ["start", "end", "strand"]].apply(
+        _chrom_limit, axis=1
+    )
 
     extend_tss = pd.concat(
         [
-            adata.var.loc[:, 2],
+            adata.var.loc[:, "chr"],
             extend_tss.map(lambda x: x[0]).astype("int32"),
             extend_tss.map(lambda x: x[1]).astype("int32"),
             pd.Series(np.arange(adata.shape[1]), index=adata.var_names),
@@ -105,11 +113,12 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     # peak summits
     peaks = pd.DataFrame(
         {
-            "chr": adata.uns["mode2_var"][:, 0],
-            "start": adata.uns["mode2_var"][:, 1].astype("int32"),
-            "end": adata.uns["mode2_var"][:, 2].astype("int32"),
+            "chr": adata.uns["mode2_var_chr"],
+            "start": adata.uns["mode2_var_start"].astype("int32"),
+            "end": adata.uns["mode2_var_end"].astype("int32"),
         }
     )
+
     summits = pd.concat(
         [
             peaks.iloc[:, 0],
@@ -156,5 +165,5 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     code_version="1.0",
     code_url="http://cistrome.org/BETA/src/BETA_1.0.7.zip",
 )
-def linear_regression_exponential_decay(adata, n_top_genes=2000, threshold=1):
+def linear_regression_exponential_decay(adata, n_top_genes=5000, threshold=1):
     _atac_genes_score(adata, top_genes=n_top_genes, threshold=threshold)
