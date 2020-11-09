@@ -6,9 +6,10 @@ Chromatin accessibility prediction refers to the gene expression prediction of a
 
 Datasets should contain the following attributes:
 
-* `adata.obsm["gene_score"]` (model-based atac-seq prediction of gene regulation)
-* `adata.obs["atac_rna_cor"]` (predicted correlation between gene expression and atac-seq)
+* `adata.obsm['mode2']` (cell by peak matrix of single cell atac-seq)
+* `adata.X` (cell by gene matrix of single cell gene expression, which is the ground truth)
+* `adata.obsm["gene_score"]` (model-based atac-seq prediction of gene regulation, which is the prediction)
 
-Methods should assign gene regulation scores to `adata.obs['gene_score']` using only single cell atac-seq peak counts. 
+Methods should assign gene regulation scores to `adata.obsm['gene_score']` using only single cell atac-seq peak counts. 
 
-Metrics should maximize the median correlation metric stored in `adata['atac_rna_cor']`.
+Metrics should maximize the median correlation metric.

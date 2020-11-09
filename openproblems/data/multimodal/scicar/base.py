@@ -2,8 +2,6 @@ import pandas as pd
 import scprep
 import tempfile
 import os
-import numpy as np
-import anndata
 
 from ..utils import filter_joint_data_empty_cells, create_joint_adata
 
@@ -44,7 +42,10 @@ def load_scicar(
     for key in atac_cells.columns:
         adata.obs[key] = atac_cells[key]
     for key in atac_genes.columns:
-        adata.uns["mode2_var_{}".format(key)] = atac_genes[key]
+        adata.uns["mode2_var_{}".format(key)] = atac_genes[key].values
+    print(adata.uns["mode2_var_chr"].shape)
+    print(adata.uns["mode2_var"].shape)
+    print(adata.obsm["mode2"].shape)
 
     adata = filter_joint_data_empty_cells(adata)
     return adata
