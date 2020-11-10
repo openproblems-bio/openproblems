@@ -8,6 +8,7 @@ install_requires = [
     "scprep>=1.0.10",
     "scipy",
     "scanpy>=1.6",
+    "louvain>=0.6,<0.7",
     "decorator",
     "memory-profiler",
     "parameterized",
