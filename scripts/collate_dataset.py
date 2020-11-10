@@ -6,6 +6,7 @@ import openproblems
 
 
 def main(task_name, dataset_name, input_dir, output_file):
+    """Collate results from all methods of a task applied to one dataset."""
     openproblems.data.no_cleanup()
 
     task = eval("openproblems.tasks.{}".format(task_name))
@@ -29,12 +30,13 @@ def main(task_name, dataset_name, input_dir, output_file):
         result[i]["Rank"] = int(rank) + 1
         del result[i]["Memory leaked (GB)"]
 
+    names = ["Rank"]
+    names += [metric.metadata["metric_name"] for metric in task.METRICS]
+    names += ["Memory (GB)", "Runtime (min)", "Name", "Paper", "Code", "Year"]
     result = {
         "name": dataset.metadata["dataset_name"],
         "headers": {
-            "names": ["Rank"]
-            + [metric.metadata["metric_name"] for metric in task.METRICS]
-            + ["Memory (GB)", "Runtime (min)", "Name", "Paper", "Code", "Year"],
+            "names": names,
             "fixed": ["Name", "Paper", "Website", "Code"],
         },
         "results": result,

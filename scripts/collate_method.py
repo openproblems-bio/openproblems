@@ -5,6 +5,7 @@ import openproblems
 
 
 def main(task_name, meta_file, input_dir, output_file):
+    """Collate results from all metrics of a task applied to one method dataset pair."""
     openproblems.data.no_cleanup()
 
     task = eval("openproblems.tasks.{}".format(task_name))

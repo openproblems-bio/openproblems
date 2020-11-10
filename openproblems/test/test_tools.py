@@ -1,4 +1,3 @@
-import unittest
 import parameterized
 import numpy as np
 from scipy import sparse

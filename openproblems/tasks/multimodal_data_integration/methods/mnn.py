@@ -1,47 +1,40 @@
-import numpy as np
 import scprep
 
-from sklearn.decomposition import TruncatedSVD
 from ....tools.normalize import log_cpm, log_scran_pooling
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
 
-def _rpy2py(X):
-    import rpy2.robjects as ro
-    from rpy2.robjects import numpy2ri
-
-    try:
-        return numpy2ri.rpy2py(X)
-    except NotImplementedError:
-        return ro.conversion.rpy2py(X)
-
-
-def _mnn(adata, n_svd=100):
-    import rpy2.robjects as ro
-    from rpy2.robjects import numpy2ri
-
-    numpy2ri.activate()
-    scprep.run.install_bioconductor("batchelor")
-
-    n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
-    X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
-    Y_pca = TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
-
-    ro.globalenv["expr"] = np.vstack([X_pca, Y_pca]).T
-    ro.globalenv["batch"] = np.concatenate(
-        [np.full(X_pca.shape[0], 1), np.full(Y_pca.shape[0], 2)]
-    ).tolist()
-
-    ro.r("batch <- as.integer(batch)")
-    ro.r(
-        "out <- as.matrix(SummarizedExperiment::assay(batchelor::fastMNN(expr, batch = batch), 'reconstructed'))"
+_mnn = scprep.run.RFunction(
+    setup="""
+    library(SingleCellExperiment)
+    library(Matrix)
+    library(sparsesvd)
+    library(batchelor)
+    """,
+    args="sce, n_svd=100",
+    body="""
+    assay(sce, "X") <- as(assay(sce, "X"), "CsparseMatrix")
+    reducedDim(sce, "mode2") <- as(reducedDim(sce, "mode2"), "CsparseMatrix")
+    n_svd <- min(
+      n_svd,
+      dim(assay(sce, "X")),
+      dim(reducedDim(sce, "mode2"))
     )
-
-    XY_corrected = _rpy2py(ro.globalenv["out"]).T
-    ro.r("rm(list=ls())")
-    adata.obsm["aligned"] = XY_corrected[: X_pca.shape[0]]
-    adata.obsm["mode2_aligned"] = XY_corrected[X_pca.shape[0] :]
+    X_svd <- sparsesvd(t(assay(sce, "X")), n_svd)
+    X_svd <- X_svd[[2]] %*% diag(X_svd[[1]])
+    Y_svd <- sparsesvd(reducedDim(sce, "mode2"), n_svd)
+    Y_svd <- Y_svd[[2]] %*% diag(Y_svd[[1]])
+    XY_svd <- rbind(X_svd, Y_svd)
+    batch <- c(rep(1, nrow(X_svd)), rep(2, nrow(Y_svd)))
+    XY_recons <- t(assay(fastMNN(t(XY_svd), batch = batch), 'reconstructed'))
+    X_recons <- XY_recons[1:nrow(X_svd),]
+    Y_recons <- XY_recons[(nrow(X_svd)+1):nrow(XY_svd),]
+    reducedDim(sce, "aligned") <- as.matrix(X_recons)
+    reducedDim(sce, "mode2_aligned") <- as.matrix(Y_recons)
+    sce
+    """,
+)
 
 
 @method(
@@ -56,7 +49,7 @@ def _mnn(adata, n_svd=100):
 def mnn_log_cpm(adata, n_svd=100):
     log_cpm(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _mnn(adata, n_svd=n_svd)
+    return _mnn(adata, n_svd=n_svd)
 
 
 @method(
@@ -71,4 +64,4 @@ def mnn_log_cpm(adata, n_svd=100):
 def mnn_log_scran_pooling(adata, n_svd=100):
     log_scran_pooling(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _mnn(adata, n_svd=n_svd)
+    return _mnn(adata, n_svd=n_svd)
