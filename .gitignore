@@ -137,4 +137,7 @@ resources/
 
 # Snakemake
 .snakemake/
-./openproblems/tasks/dimensional_reduction/examples/citeseq_rmse/citeseq_processed_rmse_calculated.h5ad
+.evaluate/
+.r_packages/
+.docker_pull
+.docker_build

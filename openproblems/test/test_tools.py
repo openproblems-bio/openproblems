@@ -1,4 +1,3 @@
-import unittest
 import parameterized
 import numpy as np
 from scipy import sparse
@@ -6,7 +5,7 @@ from scipy import sparse
 import openproblems
 from openproblems.test import utils
 
-utils.ignore_numba_warnings()
+utils.ignore_warnings()
 
 
 @parameterized.parameterized.expand(

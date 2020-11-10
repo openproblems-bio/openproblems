@@ -1,8 +1,6 @@
 language: python
 python:
-  - '3.6'
-  - 3.7-dev
-  - 3.8-dev
+  - 3.7
 sudo: required
 dist: xenial
 addons:
@@ -20,6 +18,7 @@ cache:
   - apt
   - directories:
       - $HOME/R/Library
+      - $HOME/.singularity
 before_install:
   - >-
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys
@@ -27,8 +26,11 @@ before_install:
   - >-
     echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial-cran35/" | sudo
     tee -a /etc/apt/sources.list
+  - curl http://neuro.debian.net/_static/neuro.debian.net.asc | sudo apt-key add
+  - wget -O- http://neuro.debian.net/lists/xenial.us-nh.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
   - sudo apt-get update -qq
-  - sudo apt-get install r-base-core=3.6\* -y
+  - sudo apt-get install -yq --no-install-suggests --no-install-recommends r-base-core=3.6\*
+  - sudo apt-get install -yq --no-install-suggests --no-install-recommends singularity-container
   - export R_LIBS_USER="$HOME/R/Library"
   - 'echo ".libPaths(c(''$R_LIBS_USER'', .libPaths()))" >> $HOME/.Rprofile'
 install:
@@ -38,6 +40,8 @@ script:
   - 'pip install -U .[test]'
   - black . --check --diff --exclude=website
   - nose2 openproblems
+after_success:
+  - coveralls
 deploy:
   provider: script
   skip_cleanup: true
