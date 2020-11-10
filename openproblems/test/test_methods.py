@@ -19,6 +19,7 @@ os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
 
 
 def docker_paths(image):
+    """Get relevant paths for a Docker image."""
     docker_path = os.path.join(BASEDIR, "docker", image)
     docker_push = os.path.join(docker_path, ".docker_push")
     dockerfile = os.path.join(docker_path, "Dockerfile")
@@ -31,6 +32,7 @@ def docker_paths(image):
 
 
 def build_docker(image):
+    """Build a Docker image."""
     _, dockerfile, _ = docker_paths(image)
     utils.run(
         [
@@ -47,6 +49,7 @@ def build_docker(image):
 
 
 def docker_image_age(image):
+    """Check when the Docker image was built."""
     utils.run(
         ["docker", "images"],
         error_raises=RuntimeError,
@@ -72,6 +75,7 @@ def docker_image_age(image):
 
 
 def docker_push_age(filename):
+    """Check when the Docker image was last pushed to Docker Hub."""
     try:
         with open(filename, "r") as handle:
             return float(handle.read().strip())
@@ -81,6 +85,11 @@ def docker_push_age(filename):
 
 @functools.lru_cache(maxsize=None)
 def image_requires_docker(image):
+    """Check if a specific image requires Docker or Singularity.
+
+    If the image has been modified more recently than it was pushed to Docker Hub, then
+    it should be run in Docker. Otherwise, we use Singularity.
+    """
     docker_push, dockerfile, requirements = docker_paths(image)
     push_timestamp = docker_push_age(docker_push)
     image_age = utils.git_file_age(dockerfile)
@@ -97,6 +106,7 @@ def image_requires_docker(image):
 
 @functools.lru_cache(maxsize=None)
 def cache_singularity_image(image):
+    """Download a Singularity image from Dockerhub."""
     docker_push, _, _ = docker_paths(image)
     push_timestamp = docker_push_age(docker_push)
     image_filename = "{}.sif".format(image)
@@ -122,6 +132,7 @@ def cache_singularity_image(image):
 
 
 def singularity_command(image, script, *args):
+    """Get the Singularity command to run a script."""
     return [
         "singularity",
         "--verbose",
@@ -137,6 +148,7 @@ def singularity_command(image, script, *args):
 
 
 def cache_docker_image(image):
+    """Run a Docker image and get the machine ID."""
     hash = utils.run(
         [
             "docker",
@@ -155,6 +167,7 @@ def cache_docker_image(image):
 
 
 def docker_command(image, script, *args):
+    """Get the Docker command to run a script."""
     container = cache_docker_image(image)
     run_command = [
         "docker",
@@ -170,6 +183,7 @@ def docker_command(image, script, *args):
 
 
 def run_image(image, *args):
+    """Run a Python script in a container."""
     if image_requires_docker(image):
         command, stop_command = docker_command(image, *args)
     else:
@@ -189,6 +203,7 @@ def run_image(image, *args):
     name_func=utils.name_test,
 )
 def test_method(task, dataset, method):
+    """Test application of a method."""
     task_name = task.__name__.split(".")[-1]
     with tempfile.NamedTemporaryFile(suffix=".h5ad") as data_file:
         run_image(
@@ -214,6 +229,7 @@ def test_method(task, dataset, method):
     name_func=utils.name_test,
 )
 def test_method_metadata(method):
+    """Test for existence of method metadata."""
     assert hasattr(method, "metadata")
     for attr in [
         "method_name",
