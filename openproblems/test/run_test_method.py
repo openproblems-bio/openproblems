@@ -1,4 +1,5 @@
 import sys
+import anndata
 import openproblems
 from openproblems.test import utils
 
@@ -7,8 +8,8 @@ utils.ignore_warnings()
 
 def test_method(task, dataset, method, data_path):
     adata = dataset(test=True)
-    output = method(adata)
-    assert output is None
+    adata = method(adata)
+    assert isinstance(adata, anndata.AnnData)
     assert task.checks.check_method(adata)
     adata.write_h5ad(data_path)
 
