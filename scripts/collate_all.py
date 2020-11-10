@@ -5,6 +5,7 @@ import openproblems
 
 
 def main(input_dir, output_file):
+    """Collate results from all tasks."""
     openproblems.data.no_cleanup()
 
     result = dict()
