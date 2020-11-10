@@ -5,6 +5,7 @@
             "Rank",
             "Accuracy",
             "F1 score",
+            "Micro F1 score",
             "Memory (GB)",
             "Runtime (min)",
             "Name",
@@ -27,10 +28,11 @@
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 1.6703300476074219,
-            "Runtime (min)": 0.798245038583021,
-            "Accuracy": 0.8241225369458128,
-            "F1 score": 0.8209001219267394,
+            "Memory (GB)": 1.6777687072753906,
+            "Runtime (min)": 0.7674388997489586,
+            "Accuracy": 0.8270526960784313,
+            "F1 score": 0.8240915932859854,
+            "Micro F1 score": 0.8270526960784313,
             "Rank": 3
         },
         {
@@ -40,11 +42,12 @@
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
             "Version": "0.23.2",
-            "Memory (GB)": 11.604679107666016,
-            "Runtime (min)": 8.618020995067976,
-            "Accuracy": 0.8336668719211823,
-            "F1 score": 0.8314374196080471,
-            "Rank": 2
+            "Memory (GB)": 11.053783416748047,
+            "Runtime (min)": 7.977429020986892,
+            "Accuracy": 0.8380821078431373,
+            "F1 score": 0.8361124612983362,
+            "Micro F1 score": 0.8380821078431373,
+            "Rank": 1
         },
         {
             "Name": "Multilayer perceptron (log CPM)",
@@ -53,10 +56,11 @@
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 1.6702232360839844,
-            "Runtime (min)": 0.7663929810320648,
-            "Accuracy": 0.8225831280788177,
-            "F1 score": 0.8222148731931381,
+            "Memory (GB)": 1.6613960266113281,
+            "Runtime (min)": 0.5258183833444491,
+            "Accuracy": 0.8241421568627451,
+            "F1 score": 0.8228996586304657,
+            "Micro F1 score": 0.8241421568627451,
             "Rank": 4
         },
         {
@@ -66,11 +70,12 @@
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
             "Version": "0.23.2",
-            "Memory (GB)": 11.903026580810547,
-            "Runtime (min)": 8.801432825966428,
-            "Accuracy": 0.8341286945812808,
-            "F1 score": 0.8319592760772325,
-            "Rank": 1
+            "Memory (GB)": 10.590446472167969,
+            "Runtime (min)": 7.760708172316663,
+            "Accuracy": 0.8338694852941176,
+            "F1 score": 0.8329496564286063,
+            "Micro F1 score": 0.8338694852941176,
+            "Rank": 2
         }
     ]
 }

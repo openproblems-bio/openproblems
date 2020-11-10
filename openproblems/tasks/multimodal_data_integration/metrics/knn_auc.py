@@ -6,8 +6,7 @@ from sklearn.decomposition import TruncatedSVD
 
 @metric(metric_name="kNN Area Under the Curve", maximize=True)
 def knn_auc(adata, proportion_neighbors=0.1, n_svd=100):
-    if min(adata.X.shape) <= n_svd:
-        n_svd = min(adata.X.shape) - 1
+    n_svd = min([n_svd, min(adata.X.shape) - 1])
     n_neighbors = int(np.ceil(proportion_neighbors * adata.X.shape[0]))
     X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
     _, indices_true = (
