@@ -22,6 +22,7 @@ def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
     XY_aligned = ha_op.diffusion_map(n_eigenvectors=n_eigenvectors)
     adata.obsm["aligned"] = XY_aligned[: X_pca.shape[0]]
     adata.obsm["mode2_aligned"] = XY_aligned[X_pca.shape[0] :]
+    return adata
 
 
 @method(
@@ -37,6 +38,7 @@ def harmonic_alignment_sqrt_cpm(adata, n_svd=100):
     sqrt_cpm(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _harmonic_alignment(adata, n_svd=n_svd)
+    return adata
 
 
 @method(
@@ -52,3 +54,4 @@ def harmonic_alignment_log_scran_pooling(adata, n_svd=100):
     log_scran_pooling(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _harmonic_alignment(adata, n_svd=n_svd)
+    return adata
