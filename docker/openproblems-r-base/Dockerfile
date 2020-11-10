@@ -15,5 +15,5 @@ RUN R -e "install.packages('BiocManager')"
 RUN for pkg in $(cat r_requirements.txt); do R -e "BiocManager::install('${pkg}')" 2>&1 > /dev/null | grep -v "^\*\*"; done
 
 # Install Python packages
-COPY . /usr/src/singlecellopenproblems
-RUN pip install -e /usr/src/singlecellopenproblems[r]
+COPY ./docker/openproblems-r-base/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -U -r requirements.txt

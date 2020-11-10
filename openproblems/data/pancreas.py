@@ -1,28 +1,31 @@
 import os
 import tempfile
 
-import numpy as np
 import scprep
 import scanpy as sc
 
 from .utils import loader, filter_genes_cells
-from ..tools import normalize as n
 
 URL = "https://ndownloader.figshare.com/files/24539828"
 
 
 @loader
-def load_pancreas(test=False, preprocess=True):
+def load_pancreas(test=False):
     if test:
         # load full data first, cached if available
         adata = load_pancreas(test=False)
 
         # Subsample pancreas data
-        cts = ["delta", "gamma"]
-        batches = ["inDrop4", "smarter", "celseq"]
-        adata = adata[
-            (adata.obs["batch"].isin(batches)) & (adata.obs["labels"].isin(cts)), :200
-        ].copy()
+        adata = adata[:, :500].copy()
+        filter_genes_cells(adata)
+
+        keep_celltypes = adata.obs["celltype"].dtype.categories[[0, 3]]
+        keep_techs = adata.obs["tech"].dtype.categories[[0, -3, -2]]
+        keep_tech_idx = adata.obs["tech"].isin(keep_techs)
+        keep_celltype_idx = adata.obs["celltype"].isin(keep_celltypes)
+        adata = adata[keep_tech_idx & keep_celltype_idx].copy()
+
+        sc.pp.subsample(adata, n_obs=500)
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
         # Ensure there are no cells or genes with 0 counts
@@ -36,23 +39,11 @@ def load_pancreas(test=False, preprocess=True):
             scprep.io.download.download_url(URL, filepath)
             adata = sc.read(filepath)
 
-            # Correct covariate naming and remove preprocessing
-            prep_pancreas(adata)
+            # Remove preprocessing
+            adata.X = adata.layers["counts"]
+            del adata.layers["counts"]
 
             # Ensure there are no cells or genes with 0 counts
             filter_genes_cells(adata)
 
         return adata
-
-
-def prep_pancreas(adata):
-    # Rename categories
-    adata.obs["batch"] = adata.obs["tech"].copy()
-    adata.obs["labels"] = adata.obs["celltype"].copy()
-
-    # Drop excess covariates
-    adata.obs = adata.obs.drop(columns=["tech", "size_factors", "celltype"])
-
-    # Remove processing
-    adata.X = adata.layers["counts"]
-    del adata.layers["counts"]

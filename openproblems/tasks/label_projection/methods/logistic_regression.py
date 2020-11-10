@@ -41,6 +41,7 @@ def _logistic_regression(adata, max_iter=1000, n_pca=100):
         adata_test.obs["labels_pred"][idx] if idx in adata_test.obs_names else np.nan
         for idx in adata.obs_names
     ]
+    return adata
 
 
 @method(
@@ -53,7 +54,7 @@ def _logistic_regression(adata, max_iter=1000, n_pca=100):
 )
 def logistic_regression_log_cpm(adata):
     log_cpm(adata)
-    _logistic_regression(adata)
+    return _logistic_regression(adata)
 
 
 @method(
@@ -67,4 +68,4 @@ def logistic_regression_log_cpm(adata):
 )
 def logistic_regression_scran(adata):
     log_scran_pooling(adata)
-    _logistic_regression(adata)
+    return _logistic_regression(adata)

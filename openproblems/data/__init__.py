@@ -17,14 +17,16 @@ TEMPDIR = _make_tempdir()
 
 
 def _cleanup():
-    try:
-        shutil.rmtree(TEMPDIR)
-    except (FileNotFoundError, PermissionError):
-        pass
+    if os.path.isdir(TEMPDIR):
+        try:
+            shutil.rmtree(TEMPDIR)
+        except (FileNotFoundError, PermissionError):
+            pass
 
 
 atexit.register(_cleanup)
 
 
 def no_cleanup():
+    """Don't delete temporary data files on exit."""
     atexit.unregister(_cleanup)
