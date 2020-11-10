@@ -6,6 +6,7 @@ FUN=$4
 ARRAY=( $@ )
 LEN=${#ARRAY[@]}
 ARGS=${ARRAY[@]:4:$LEN}
-pip install --no-cache-dir -qq -U $(dirname $(dirname $WORKDIR))
+CODEDIR=$(dirname $(dirname $WORKDIR))
+pip install --no-cache-dir -qq -U $CODEDIR
 cd ${WORKDIR}
-python3 $SCRIPT $TASKNAME $FUN ${ARGS}
+coverage run --parallel --source=${CODEDIR}/openproblems $SCRIPT $TASKNAME $FUN ${ARGS}
