@@ -22,3 +22,4 @@ def procrustes(adata, n_svd=100):
     X_proc, Y_proc, _ = scipy.spatial.procrustes(X_pca, Y_pca)
     adata.obsm["aligned"] = X_proc
     adata.obsm["mode2_aligned"] = Y_proc
+    return adata

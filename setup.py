@@ -1,14 +1,13 @@
 import os
-import sys
 from setuptools import setup, find_packages
 
 install_requires = [
     "numpy>=1.17.0",
     "scikit-learn>=0.19.1",
     "anndata",
-    "scprep",
+    "scprep>=1.0.10",
     "scipy",
-    "scanpy",
+    "scanpy>=1.6",
     "decorator",
     "memory-profiler",
     "molecular-cross-validation @ git+https://github.com/flo-compbio/molecular-cross-validation@f867de0",
@@ -23,7 +22,12 @@ r_requires = [
 
 evaluate_requires = ["snakemake"]
 
-test_requires = ["nose2", "black"]
+test_requires = [
+    "nose2",
+    "black",
+    "coverage",
+    "coveralls",
+]
 
 doc_requires = [
     "sphinx>=2.2,<2.4",
