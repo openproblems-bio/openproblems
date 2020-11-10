@@ -27,6 +27,10 @@ def loader(func, *args, **kwargs):
         return anndata.read_h5ad(filepath)
     else:
         adata = func(*args, **kwargs)
+        try:
+            os.mkdir(TEMPDIR)
+        except OSError:
+            pass
         adata.write(filepath)
         return adata
 
