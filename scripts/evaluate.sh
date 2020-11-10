@@ -1,7 +1,7 @@
 set -x
 pip install -U ..[evaluate]
 snakemake -j $(grep -c processor /proc/cpuinfo) all || travis_terminate 1
-if [ "$TRAVIS_PYTHON_VERSION" = "3.6" ]; then
+if [ "$TRAVIS_PYTHON_VERSION" = "3.7" ]; then
     git remote set-url origin https://singlecellopenproblems:${GITHUB_PASSWORD}@github.com/${TRAVIS_REPO_SLUG}.git
     git checkout -B master
     git pull origin master
