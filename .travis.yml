@@ -19,7 +19,6 @@ cache:
   - directories:
       - $HOME/R/Library
       - $HOME/.singularity
-      - $HOME/.nose2
 before_install:
   - >-
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys
