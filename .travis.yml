@@ -40,6 +40,7 @@ script:
   - 'pip install -U .[test]'
   - black . --check --diff --exclude=website
   - nose2 openproblems
+  - coverage combine . ./openproblems/test
 after_success:
   - coveralls
 deploy:
