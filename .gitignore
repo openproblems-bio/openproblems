@@ -127,3 +127,17 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Hugo ignores
+public/
+resources/
+
+# macOS
+.DS_Store
+
+# Snakemake
+.snakemake/
+.evaluate/
+.r_packages/
+.docker_pull
+.docker_build

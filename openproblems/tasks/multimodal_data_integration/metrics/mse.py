@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import sparse
 import scprep
+from ....tools.decorators import metric
 
 
 def _square(X):
@@ -11,15 +12,12 @@ def _square(X):
         return scprep.utils.toarray(X) ** 2
 
 
+@metric(metric_name="Mean squared error", maximize=False)
 def mse(adata):
     X = scprep.utils.toarray(adata.obsm["aligned"])
     Y = scprep.utils.toarray(adata.obsm["mode2_aligned"])
 
-    # mean and norm
-    Z = np.vstack([X, Y])
-    Z -= np.mean(Z, axis=0)
-    Z /= np.sqrt(np.sum(_square(Z)))
-
-    # split back out
-    X, Y = Z[: X.shape[0]], Z[X.shape[0] :]
-    return np.mean(np.sum(_square(X - Y)))
+    X_shuffled = X[np.random.permutation(np.arange(X.shape[0])), :]
+    error_random = np.mean(np.sum(_square(X_shuffled - Y)))
+    error_abs = np.mean(np.sum(_square(X - Y)))
+    return error_abs / error_random
