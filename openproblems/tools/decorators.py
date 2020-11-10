@@ -7,6 +7,8 @@ from . import utils
 
 
 def normalizer(func, *args, **kwargs):
+    """Decorate a normalization function."""
+
     @functools.wraps(func)
     def normalize(adata, *args, obsm=None, obs=None, var=None, **kwargs):
         assert isinstance(adata, anndata.AnnData)
@@ -40,6 +42,24 @@ def method(
     code_version,
     image="openproblems",
 ):
+    """Decorate a method function.
+
+    Parameters
+    ----------
+    method_name : str
+        Unique human readable name of the method
+    paper_name : str
+        Title of the seminal paper describing the method
+    paper_url : str
+        Link to the paper, preferably a DOI URL
+    paper_year : int
+        Year the paper was published
+    code_url : str
+        Link to the code base providing the canonical implementation
+    image : str, optional (default: "openproblems")
+        Name of the Docker image to be used for this method
+    """
+
     def decorator(func):
         @functools.wraps(func)
         def apply_method(*args, **kwargs):
@@ -60,6 +80,23 @@ def method(
 
 
 def metric(metric_name, maximize, image="openproblems"):
+    """Decorate a metric function.
+
+    Parameters
+    ----------
+    dataset_name : str
+        Unique human readable name of the dataset
+
+    Parameters
+    ----------
+    metric_name : str
+        Unique human readable name of the metric
+    maximize : bool
+        If True, the metric should be maximized. If False, it should be minimized.
+    image : str, optional (default: "openproblems")
+        Name of the Docker image to be used for this metric
+    """
+
     def decorator(func):
         @functools.wraps(func)
         def apply_metric(*args, **kwargs):
@@ -74,6 +111,14 @@ def metric(metric_name, maximize, image="openproblems"):
 
 
 def dataset(dataset_name):
+    """Decorate a dataset function.
+
+    Parameters
+    ----------
+    dataset_name : str
+        Unique human readable name of the dataset
+    """
+
     def decorator(func):
         @functools.wraps(func)
         def apply_func(*args, **kwargs):
@@ -86,6 +131,14 @@ def dataset(dataset_name):
 
 
 def profile(func):
+    """Decorate a function for performance profiling.
+
+    Returns
+    -------
+    result : dict
+        Contains 'result', 'runtime_s', 'memory_mb', 'memory_leaked_mb'
+    """
+
     @functools.wraps(func)
     def decorated(*args, **kwargs):
         output = dict()
