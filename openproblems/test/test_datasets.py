@@ -17,7 +17,8 @@ utils.ignore_warnings()
     ],
     name_func=utils.name_test,
 )
-def test_task(dataset, task, test):
+def test_dataset(dataset, task, test):
+    """Test dataset loading."""
     adata = dataset(test=test)
     assert isinstance(adata, anndata.AnnData)
     assert adata.shape[0] > 0
@@ -43,6 +44,7 @@ def test_task(dataset, task, test):
     name_func=utils.name_test,
 )
 def test_dataset_metadata(dataset):
+    """Test for existence of dataset metadata."""
     assert hasattr(dataset, "metadata")
     for attr in [
         "dataset_name",

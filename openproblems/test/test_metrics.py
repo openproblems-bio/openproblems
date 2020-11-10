@@ -11,6 +11,7 @@ utils.ignore_warnings()
     name_func=utils.name_test,
 )
 def test_metric_metadata(metric):
+    """Test for existence of metric metadata."""
     assert hasattr(metric, "metadata")
     for attr in ["metric_name", "maximize", "image"]:
         assert attr in metric.metadata
