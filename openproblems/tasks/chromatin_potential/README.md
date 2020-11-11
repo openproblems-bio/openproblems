@@ -6,13 +6,18 @@ Chromatin accessibility prediction refers to the gene expression prediction of a
 
 Datasets should contain the following attributes:
 
+* `adata.uns['species']` (now support only `mus_musculus`)
+* `adata.uns['release']` (now support only `100`)
+* `adata.var['chr']` (single cell rna-seq gene chromosome annotation from ensembl)
+* `adata.var['start']` (single cell rna-seq gene chromosome start position from ensembl)
+* `adata.var['end']` (single cell rna-seq gene chromosome end position from ensembl)
+* `adata.uns['mode2_var_chr']` (single cell atac-seq peak chromosome)
+* `adata.uns['mode2_var_start']` (single cell atac-seq peak start position)
+* `adata.uns['mode2_var_end']` (single cell atac-seq peak end position)
 * `adata.obsm['mode2']` (cell by peak matrix of single cell atac-seq)
 * `adata.X` (cell by gene matrix of single cell gene expression, which is the ground truth)
-* `adata.obsm["gene_score"]` (model-based atac-seq prediction of gene regulation, which is the prediction)
 
 Methods should assign gene regulation scores to `adata.obsm['gene_score']` using only single cell atac-seq peak counts. 
 
-Metrics should compare adata.obsm['gene_score'] with the true gene expression in adata.X.
+Metrics should compare `adata.obsm['gene_score']` with the true gene expression in `adata.X`.
 
-## Annotation
-This task currently assumes Mus Musculus reference is used in the single cell dataset, which can be extended in the future if other species single cell sci-car, SNARE-seq or SHARE-seq is added.
