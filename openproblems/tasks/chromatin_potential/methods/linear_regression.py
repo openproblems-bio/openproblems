@@ -7,10 +7,14 @@ from ....tools.decorators import method
 
 
 def _chrom_limit(x, tss_size=2e5):
-    """This function returns upstream and downstream intervals
-    of tss_size for calculating gene score of ATAC-seq
+    """Extending TSS to upstream and downstream intervals
 
-    @tss_size: upstream and downstream limit size
+    Parameters
+    ----------
+    x : pd.Series
+        a pd.Series containing [start, end, direction] where start and end are ints and direction is {'+', '-'}.
+    tss_size: int
+        a int that defines the upstream and downstream extending regions around TSS
     """
     y = x.values
     gene_direction = y[-1]
@@ -31,6 +35,10 @@ def _get_annotation(adata):
         ["pyensembl", "install", "--release", "100", "--species", "mus_musculus"]
     )
     data = EnsemblRelease(100, species="mus_musculus")
+
+    adata.uns["species"] = "mus_musculus"
+    adata.uns["release"] = "100"
+
     # get ensemble gene coordinate
     genes = []
     for i in adata.var.index.map(lambda x: x.split(".")[0]):
