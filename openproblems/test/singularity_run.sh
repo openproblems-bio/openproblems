@@ -7,6 +7,7 @@ ARRAY=( $@ )
 LEN=${#ARRAY[@]}
 ARGS=${ARRAY[@]:4:$LEN}
 CODEDIR=$(dirname $(dirname $WORKDIR))
-pip install --no-cache-dir -qq -U $CODEDIR
+python3 -m pip install --no-cache-dir -qq -U $CODEDIR
+python3 -m pip install -qq -U coverage
 cd ${WORKDIR}
-coverage run --parallel --source=${CODEDIR}/openproblems $SCRIPT $TASKNAME $FUN ${ARGS}
+python3 -m coverage run --parallel --source=${CODEDIR}/openproblems $SCRIPT $TASKNAME $FUN ${ARGS}
