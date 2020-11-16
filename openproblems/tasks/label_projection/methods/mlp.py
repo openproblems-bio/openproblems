@@ -33,7 +33,7 @@ def _mlp(adata, n_pca=100):
     )
 
     # Fit to train data
-    classifier.fit(adata_train.X, adata_train.obs["labels"])
+    classifier.fit(adata_train.X, adata_train.obs["labels"].astype(str))
 
     # Predict on test data
     adata_test.obs["labels_pred"] = classifier.predict(adata_test.X)
