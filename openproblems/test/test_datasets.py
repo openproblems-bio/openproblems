@@ -43,16 +43,13 @@ def test_dataset(dataset, task, test):
     assert adata.shape[0] > 0
     assert adata.shape[1] > 0
 
-    is_sparse = scipy.sparse.issparse(adata.X)
-    assert is_sparse or packaging.version.parse(
-        openproblems.__version__
-    ) < packaging.version.parse("1.0")
-    if not is_sparse:
-        warnings.warn(
-            "{}-{}: Dense data will raise an error in openproblems v1.0".format(
+    if not scipy.sparse.issparse(adata.X):
+        utils.future_warning(
+            "{}-{}: adata.X is loaded as dense.".format(
                 task.__name__.split(".")[-1], dataset.__name__
             ),
-            FutureWarning,
+            error_version="1.0",
+            error_category=TypeError,
         )
 
     assert _assert_not_bytes(adata.obs)
