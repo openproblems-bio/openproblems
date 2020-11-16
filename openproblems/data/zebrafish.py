@@ -18,9 +18,6 @@ def load_zebrafish(test=False):
         filepath = os.path.join(tempdir, "zebrafish.h5ad")
         scprep.io.download.download_url(URL, filepath)
         adata = anndata.read_h5ad(filepath)
-        adata.obs.index = adata.obs.index.astype(str)
-        adata.obs.lab = adata.obs.lab.astype(str).astype("category")
-        adata.obs.cell_type = adata.obs.cell_type.astype(str).astype("category")
         utils.filter_genes_cells(adata)
 
     if test:
