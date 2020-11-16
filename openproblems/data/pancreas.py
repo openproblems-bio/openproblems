@@ -39,11 +39,6 @@ def load_pancreas(test=False):
             scprep.io.download.download_url(URL, filepath)
             adata = sc.read(filepath)
 
-            # Convert bytes to str
-            adata.obs.index = adata.obs.index.astype(str)
-            adata.obs.tech = adata.obs.tech.astype(str).astype("category")
-            adata.obs.celltype = adata.obs.celltype.astype(str).astype("category")
-
             # Remove preprocessing
             adata.X = adata.layers["counts"]
             del adata.layers["counts"]
