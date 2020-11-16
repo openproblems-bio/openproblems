@@ -1,11 +1,13 @@
 import numpy as np
 
+import openproblems
 import anndata
 import warnings
 import parameterized
 import subprocess
 
-from scipy import sparse
+import scipy.sparse
+import packaging.version
 
 
 def object_name(x):
@@ -24,6 +26,18 @@ def name_test(testcase_func, param_num, param):
             "_".join(object_name(x) for x in param.args)
         ),
     )
+
+
+def future_warning(msg, error_version, error_category, warning_category=FutureWarning):
+    """Raise a warning until a specific version, then raise an error."""
+    current_version = packaging.version.parse(openproblems.__version__)
+    if current_version < packaging.version.parse(error_version):
+        msg += " This will raise a {} in openproblems v{}".format(
+            error_category.__name__, error_version
+        )
+        warnings.warn(msg, warning_category)
+    else:
+        raise error_category(msg)
 
 
 def ignore_warnings():
@@ -56,7 +70,7 @@ def data(obsm=None):
 def assert_array_equal(X, Y):
     """Assert two arrays to be equal, whether sparse or dense."""
     assert X.shape == Y.shape
-    if sparse.issparse(X) and sparse.issparse(Y):
+    if scipy.sparse.issparse(X) and scipy.sparse.issparse(Y):
         X = X.tocsr()
         Y = Y.tocsr()
         np.testing.assert_array_equal(X.data, Y.data)
