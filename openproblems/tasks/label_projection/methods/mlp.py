@@ -50,7 +50,8 @@ def _mlp(adata, n_pca=100):
     paper_name="Connectionist learning procedures",
     paper_url="https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
     paper_year=1990,
-    code_url="https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+    code_url="https://scikit-learn.org/stable/modules/generated/"
+    "sklearn.neural_network.MLPClassifier.html",
     code_version=check_version("scikit-learn"),
 )
 def mlp_log_cpm(adata):
@@ -63,7 +64,8 @@ def mlp_log_cpm(adata):
     paper_name="Connectionist learning procedures",
     paper_url="https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
     paper_year=1990,
-    code_url="https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
+    code_url="https://scikit-learn.org/stable/modules/generated/"
+    "sklearn.neural_network.MLPClassifier.html",
     code_version=check_version("scikit-learn"),
     image="openproblems-r-base",
 )
