@@ -1,9 +1,7 @@
-import pandas as pd
 import scanpy as sc
 import os
 import anndata
 import hashlib
-import functools
 
 from decorator import decorator
 from . import TEMPDIR
@@ -17,28 +15,9 @@ def _obj_to_bytes(obj):
     return bytes(str(obj), encoding="utf-8")
 
 
-def _bytes_to_str(series):
-    if series.dtype.name == "object":
-        is_bytes = series.apply(lambda x: isinstance(x, bytes))
-        series[is_bytes] = series[is_bytes].astype(str)
-    elif series.dtype.name == "category":
-        series = series.astype(str).astype("category")
-    return series
-
-
-def _adata_bytes_to_str(adata):
-    for meta in [adata.obs, adata.var]:
-        meta.index = _bytes_to_str(meta.index.to_series())
-        for key in meta.columns:
-            meta[key] = _bytes_to_str(meta[key])
-    for key, value in adata.uns.items():
-        if isinstance(value, pd.Series):
-            adata.uns[key] = _bytes_to_str(value)
-    return adata
-
-
 @decorator
 def loader(func, *args, **kwargs):
+    """Decorate a data loader function."""
     hash = hashlib.sha256()
     hash.update(_func_to_bytes(func))
     hash.update(_obj_to_bytes(args))
@@ -49,7 +28,6 @@ def loader(func, *args, **kwargs):
         return anndata.read_h5ad(filepath)
     else:
         adata = func(*args, **kwargs)
-        adata = _adata_bytes_to_str(adata)
         try:
             os.mkdir(TEMPDIR)
         except OSError:
