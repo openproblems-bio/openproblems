@@ -2,9 +2,7 @@ import pandas as pd
 import anndata
 import parameterized
 import openproblems
-import warnings
 
-import packaging.version
 import scipy.sparse
 from openproblems.test import utils
 
