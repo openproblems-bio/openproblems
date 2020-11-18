@@ -2,6 +2,8 @@ import pandas as pd
 import anndata
 import parameterized
 import openproblems
+import unittest
+import os
 
 import scipy.sparse
 from openproblems.test import utils
@@ -25,51 +27,76 @@ def _assert_not_bytes(X):
     return True
 
 
-@parameterized.parameterized.expand(
+@parameterized.parameterized_class(
+    ("dataset", "task", "test"),
     [
         (dataset, task, test)
         for task in openproblems.TASKS
         for dataset in task.DATASETS
         for test in [True, False]
     ],
-    name_func=utils.name_test,
+    class_name_func=utils.name_test,
 )
-def test_dataset(dataset, task, test):
+class TestDataset(unittest.TestCase):
     """Test dataset loading."""
-    adata = dataset(test=test)
-    assert isinstance(adata, anndata.AnnData)
-    assert adata.shape[0] > 0
-    assert adata.shape[1] > 0
 
-    if not scipy.sparse.issparse(adata.X):
-        utils.future_warning(
-            "{}-{}: adata.X is loaded as dense.".format(
-                task.__name__.split(".")[-1], dataset.__name__
-            ),
-            error_version="1.0",
-            error_category=TypeError,
+    @classmethod
+    def setUpClass(cls):
+        """Load data."""
+        cls.adata = cls.dataset(test=cls.test)
+
+    def test_adata_class(self):
+        """Ensure output is AnnData."""
+        assert isinstance(self.adata, anndata.AnnData)
+
+    def test_adata_shape(self):
+        """Ensure output is of appropriate size."""
+        assert self.adata.shape[0] > 0
+        assert self.adata.shape[1] > 0
+        if self.test:
+            assert self.adata.shape[0] < 600
+            assert self.adata.shape[1] < 1500
+
+    def test_sparse(self):
+        """Ensure output is sparse."""
+        if not scipy.sparse.issparse(self.adata.X):
+            utils.future_warning(
+                "{}-{}: self.adata.X is loaded as dense.".format(
+                    self.task.__name__.split(".")[-1], self.dataset.__name__
+                ),
+                error_version="1.0",
+                error_category=TypeError,
+            )
+
+    def test_not_bytes(self):
+        """Ensure output does not contain byte strings."""
+        assert _assert_not_bytes(self.adata.obs)
+        assert _assert_not_bytes(self.adata.var)
+        assert _assert_not_bytes(self.adata.uns)
+
+    def test_not_empty(self):
+        """Ensure output does not have empty rows or columns."""
+        assert self.adata.X.sum(axis=0).min() > 0
+        assert self.adata.X.sum(axis=1).min() > 0
+
+    def test_task_checks(self):
+        """Run task-specific tests."""
+        assert self.task.checks.check_dataset(self.adata)
+
+    def test_cache(self):
+        """Test that AnnData files are written to disk."""
+        filename = "openproblems_{}.h5ad".format(
+            openproblems.data.utils._hash_function(self.dataset, test=self.test)
         )
+        filepath = os.path.join(openproblems.data.TEMPDIR, filename)
+        assert os.path.isfile(filepath)
+        adata = anndata.read_h5ad(filepath)
+        assert adata.shape == self.adata.shape
 
-    assert _assert_not_bytes(adata.obs)
-    assert _assert_not_bytes(adata.var)
-    assert _assert_not_bytes(adata.uns)
-
-    assert adata.X.sum(axis=0).min() > 0
-    assert adata.X.sum(axis=1).min() > 0
-    if test:
-        assert adata.shape[0] < 600
-        assert adata.shape[1] < 1500
-    assert task.checks.check_dataset(adata)
-
-
-@parameterized.parameterized.expand(
-    [(dataset,) for task in openproblems.TASKS for dataset in task.DATASETS],
-    name_func=utils.name_test,
-)
-def test_dataset_metadata(dataset):
-    """Test for existence of dataset metadata."""
-    assert hasattr(dataset, "metadata")
-    for attr in [
-        "dataset_name",
-    ]:
-        assert attr in dataset.metadata
+    def test_metadata(self):
+        """Test for existence of dataset metadata."""
+        assert hasattr(self.dataset, "metadata")
+        for attr in [
+            "dataset_name",
+        ]:
+            assert attr in self.dataset.metadata
