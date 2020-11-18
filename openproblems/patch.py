@@ -1,6 +1,5 @@
 import anndata
-import packaging.version
-from .version import __version__
+from . import utils
 
 
 def _write_h5ad_patch(self, *args, **kwargs):
@@ -9,8 +8,8 @@ def _write_h5ad_patch(self, *args, **kwargs):
     self._write_h5ad(*args, **kwargs)
 
 
+@utils.temporary(version="0.3.1")
 def patch_anndata():
     """Temporary fix for https://github.com/theislab/anndata/pull/457."""
-    assert packaging.version.parse(__version__) < packaging.version.parse("0.3.1")
     anndata.AnnData._write_h5ad = anndata.AnnData.write_h5ad
     anndata.AnnData.write_h5ad = _write_h5ad_patch
