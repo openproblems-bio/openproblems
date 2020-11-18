@@ -4,7 +4,7 @@ from .version import __version__
 
 
 @decorator.decorator
-def temporary(func, version, *args, **kwargs):
+def temporary(func, version=None, *args, **kwargs):
     """Decorate a function as a temporary fix.
 
     Parameters
@@ -12,6 +12,8 @@ def temporary(func, version, *args, **kwargs):
     version : str
         Version after which this function should raise a RuntimeError
     """
+    if version is None:
+        raise TypeError("temporary() missing 1 required keyword argument: 'version'")
     if packaging.version.parse(__version__) >= packaging.version.parse(version):
         raise RuntimeError(
             "Temporary function {}.{} is temporary and should not be used "
