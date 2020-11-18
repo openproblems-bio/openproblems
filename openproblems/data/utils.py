@@ -15,14 +15,18 @@ def _obj_to_bytes(obj):
     return bytes(str(obj), encoding="utf-8")
 
 
-@decorator
-def loader(func, *args, **kwargs):
-    """Decorate a data loader function."""
+def _hash_function(func, *args, **kwargs):
     hash = hashlib.sha256()
     hash.update(_func_to_bytes(func))
     hash.update(_obj_to_bytes(args))
     hash.update(_obj_to_bytes(kwargs))
-    filename = "openproblems_{}.h5ad".format(hash.hexdigest())
+    return hash.hexdigest()
+
+
+@decorator
+def loader(func, *args, **kwargs):
+    """Decorate a data loader function."""
+    filename = "openproblems_{}.h5ad".format(_hash_function(func, *args, **kwargs))
     filepath = os.path.join(TEMPDIR, filename)
     if os.path.isfile(filepath):
         return anndata.read_h5ad(filepath)
@@ -32,7 +36,7 @@ def loader(func, *args, **kwargs):
             os.mkdir(TEMPDIR)
         except OSError:
             pass
-        adata.write(filepath)
+        adata.write_h5ad(filepath)
         return adata
 
 
