@@ -88,6 +88,20 @@ class TestDataset(unittest.TestCase):
         assert adata.__from_cache__
         assert adata.shape == self.adata.shape
 
+    @parameterized.parameterized.expand(
+        [
+            (normalizer,)
+            for normalizer in openproblems.utils.get_callable_members(
+                openproblems.tools.normalize
+            )
+        ]
+    )
+    def test_normalize(self, normalizer):
+        """Test that normalizations can be safely applied."""
+        adata = self.adata.copy()
+        normalizer(adata)
+        utils.assert_finite(adata.X)
+
     def test_metadata(self):
         """Test for existence of dataset metadata."""
         assert hasattr(self.dataset, "metadata")
