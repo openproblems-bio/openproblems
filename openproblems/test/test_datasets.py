@@ -29,7 +29,7 @@ def _assert_not_bytes(X):
 @parameterized.parameterized_class(
     ("dataset", "task", "test"),
     [
-        (dataset, task, test)
+        (staticmethod(dataset), task, test)
         for task in openproblems.TASKS
         for dataset in task.DATASETS
         for test in [True, False]
@@ -84,7 +84,7 @@ class TestDataset(unittest.TestCase):
 
     def test_cache(self):
         """Test that AnnData files are written to disk."""
-        adata = self.__class__.dataset(test=self.test)
+        adata = self.dataset(test=self.test)
         assert adata.__from_cache__
         assert adata.shape == self.adata.shape
 
