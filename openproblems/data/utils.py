@@ -29,9 +29,12 @@ def loader(func, *args, **kwargs):
     filename = "openproblems_{}.h5ad".format(_hash_function(func, *args, **kwargs))
     filepath = os.path.join(TEMPDIR, filename)
     if os.path.isfile(filepath):
-        return anndata.read_h5ad(filepath)
+        adata = anndata.read_h5ad(filepath)
+        adata.__from_cache__ = True
+        return adata
     else:
         adata = func(*args, **kwargs)
+        adata.__from_cache__ = False
         try:
             os.mkdir(TEMPDIR)
         except OSError:
