@@ -29,6 +29,13 @@ def name_test(testcase_func, param_num, param):
     )
 
 
+def assert_finite(X):
+    """Assert numpy or scipy matrix is finite."""
+    X = X.data if scipy.sparse.issparse(X) else X
+    assert np.all(np.isfinite(X))
+    return True
+
+
 def future_warning(msg, error_version, error_category, warning_category=FutureWarning):
     """Raise a warning until a specific version, then raise an error."""
     current_version = packaging.version.parse(openproblems.__version__)

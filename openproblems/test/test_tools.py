@@ -9,12 +9,6 @@ from openproblems.test import utils
 utils.ignore_warnings()
 
 
-def _assert_finite(X):
-    X = X.data if sparse.issparse(X) else X
-    assert np.all(np.isfinite(X))
-    return True
-
-
 def _dense_data(X):
     if sparse.issparse(X):
         return X.data
@@ -40,13 +34,13 @@ class TestNormalizeX(unittest.TestCase):
         """Generate and normalize data."""
         cls.adata = utils.data()
         cls.cache_name = cls.normalizer.__name__
-        assert _assert_finite(cls.adata.X)
+        assert utils.assert_finite(cls.adata.X)
         assert cls.cache_name not in cls.adata.layers
         cls.normalizer(cls.adata)
 
     def test_finite(self):
         """Test that normalized data is finite."""
-        assert _assert_finite(self.adata.X)
+        assert utils.assert_finite(self.adata.X)
 
     def test_layers(self):
         """Test that normalized data is cached in adata.layers."""
@@ -87,13 +81,13 @@ class TestNormalizeObsM(unittest.TestCase):
         cls.obsm = "test"
         cls.adata = utils.data(obsm=cls.obsm)
         cls.cache_name = "{}_{}".format(cls.obsm, cls.normalizer.__name__)
-        assert _assert_finite(cls.adata.obsm[cls.obsm])
+        assert utils.assert_finite(cls.adata.obsm[cls.obsm])
         assert cls.cache_name not in cls.adata.obsm
         cls.normalizer(cls.adata, obsm=cls.obsm)
 
     def test_finite(self):
         """Test that normalized data is finite."""
-        assert _assert_finite(self.adata.obsm[self.obsm])
+        assert utils.assert_finite(self.adata.obsm[self.obsm])
 
     def test_layers(self):
         """Test that normalized data is cached in adata.obsm."""
