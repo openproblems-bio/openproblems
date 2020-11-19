@@ -8,6 +8,12 @@ from openproblems.test import utils
 utils.ignore_warnings()
 
 
+def _assert_finite(X):
+    X = X.data if sparse.issparse(X) else X
+    assert np.all(np.isfinite(X))
+    return True
+
+
 @parameterized.parameterized.expand(
     [
         (normalizer,)
@@ -19,10 +25,12 @@ utils.ignore_warnings()
 )
 def test_normalize(normalizer):
     adata = utils.data()
+    assert _assert_finite(adata.X)
     assert normalizer.__name__ not in adata.layers
 
     # normalize from scratch
     normalizer(adata)
+    assert _assert_finite(adata.X)
     assert normalizer.__name__ in adata.layers
     utils.assert_array_equal(adata.X, adata.layers[normalizer.__name__])
 
@@ -51,11 +59,13 @@ def test_normalize(normalizer):
 )
 def test_normalize_obsm(normalizer, obsm="test"):
     adata = utils.data(obsm=obsm)
+    assert _assert_finite(adata.obsm[obsm])
     cache_name = "{}_{}".format(obsm, normalizer.__name__)
     assert cache_name not in adata.obsm
 
     # normalize from scratch
     normalizer(adata, obsm=obsm)
+    assert _assert_finite(adata.obsm[obsm])
     assert cache_name in adata.obsm
     utils.assert_array_equal(adata.obsm[obsm], adata.obsm[cache_name])
 
