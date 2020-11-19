@@ -1,4 +1,5 @@
 import parameterized
+import unittest
 import numpy as np
 from scipy import sparse
 
@@ -14,70 +15,105 @@ def _assert_finite(X):
     return True
 
 
-@parameterized.parameterized.expand(
+def _dense_data(X):
+    if sparse.issparse(X):
+        return X.data
+    else:
+        return X
+
+
+@parameterized.parameterized_class(
+    ("normalizer"),
     [
-        (normalizer,)
+        (staticmethod(normalizer),)
         for normalizer in openproblems.utils.get_callable_members(
             openproblems.tools.normalize
         )
     ],
-    name_func=utils.name_test,
+    class_name_func=utils.name_test,
 )
-def test_normalize(normalizer):
-    adata = utils.data()
-    assert _assert_finite(adata.X)
-    assert normalizer.__name__ not in adata.layers
+class TestNormalizeX(unittest.TestCase):
+    """Test normalization of adata.X."""
 
-    # normalize from scratch
-    normalizer(adata)
-    assert _assert_finite(adata.X)
-    assert normalizer.__name__ in adata.layers
-    utils.assert_array_equal(adata.X, adata.layers[normalizer.__name__])
+    @classmethod
+    def setUpClass(cls):
+        """Generate and normalize data."""
+        cls.adata = utils.data()
+        cls.cache_name = cls.normalizer.__name__
+        assert _assert_finite(cls.adata.X)
+        assert cls.cache_name not in cls.adata.layers
+        cls.normalizer(cls.adata)
 
-    # modify normalized data
-    adata.layers[normalizer.__name__] = adata.layers[normalizer.__name__].copy()
-    if sparse.issparse(adata.layers[normalizer.__name__]):
-        adata.layers[normalizer.__name__].data += 1
-        assert np.all(adata.X.data != adata.layers[normalizer.__name__].data)
-    else:
-        adata.layers[normalizer.__name__] += 1
-        assert np.all(adata.X != adata.layers[normalizer.__name__])
+    def test_finite(self):
+        """Test that normalized data is finite."""
+        assert _assert_finite(self.adata.X)
 
-    # use cached
-    normalizer(adata)
-    utils.assert_array_equal(adata.X, adata.layers[normalizer.__name__])
+    def test_layers(self):
+        """Test that normalized data is cached in adata.layers."""
+        assert self.cache_name in self.adata.layers
+        utils.assert_array_equal(self.adata.X, self.adata.layers[self.cache_name])
+
+    def test_cache(self):
+        """Test that rerunning normalizer loads cached data."""
+        # modify normalized data
+        self.adata.layers[self.cache_name] = self.adata.layers[self.cache_name].copy()
+        cache_data = _dense_data(self.adata.layers[self.cache_name])
+        current_data = _dense_data(self.adata.X)
+
+        cache_data += 1
+        assert np.all(current_data != _dense_data(self.adata.layers[self.cache_name]))
+
+        # use cached
+        self.normalizer(self.adata)
+        utils.assert_array_equal(self.adata.X, self.adata.layers[self.cache_name])
 
 
-@parameterized.parameterized.expand(
+@parameterized.parameterized_class(
+    ("normalizer"),
     [
-        (normalizer,)
+        (staticmethod(normalizer),)
         for normalizer in openproblems.utils.get_callable_members(
             openproblems.tools.normalize
         )
     ],
-    name_func=utils.name_test,
+    class_name_func=utils.name_test,
 )
-def test_normalize_obsm(normalizer, obsm="test"):
-    adata = utils.data(obsm=obsm)
-    assert _assert_finite(adata.obsm[obsm])
-    cache_name = "{}_{}".format(obsm, normalizer.__name__)
-    assert cache_name not in adata.obsm
+class TestNormalizeObsM(unittest.TestCase):
+    """Test normalization of adata.X."""
 
-    # normalize from scratch
-    normalizer(adata, obsm=obsm)
-    assert _assert_finite(adata.obsm[obsm])
-    assert cache_name in adata.obsm
-    utils.assert_array_equal(adata.obsm[obsm], adata.obsm[cache_name])
+    @classmethod
+    def setUpClass(cls):
+        """Generate and normalize data."""
+        cls.obsm = "test"
+        cls.adata = utils.data(obsm=cls.obsm)
+        cls.cache_name = "{}_{}".format(cls.obsm, cls.normalizer.__name__)
+        assert _assert_finite(cls.adata.obsm[cls.obsm])
+        assert cls.cache_name not in cls.adata.obsm
+        cls.normalizer(cls.adata, obsm=cls.obsm)
 
-    # modify normalized data
-    adata.obsm[cache_name] = adata.obsm[cache_name].copy()
-    if sparse.issparse(adata.obsm[cache_name]):
-        adata.obsm[cache_name].data += 1
-        assert np.all(adata.obsm[obsm].data != adata.obsm[cache_name].data)
-    else:
-        adata.obsm[cache_name] += 1
-        assert np.all(adata.obsm[obsm] != adata.obsm[cache_name])
+    def test_finite(self):
+        """Test that normalized data is finite."""
+        assert _assert_finite(self.adata.obsm[self.obsm])
 
-    # use cached
-    normalizer(adata, obsm=obsm)
-    utils.assert_array_equal(adata.obsm[obsm], adata.obsm[cache_name])
+    def test_layers(self):
+        """Test that normalized data is cached in adata.obsm."""
+        assert self.cache_name in self.adata.obsm
+        utils.assert_array_equal(
+            self.adata.obsm[self.obsm], self.adata.obsm[self.cache_name]
+        )
+
+    def test_cache(self):
+        """Test that rerunning normalizer loads cached data."""
+        # modify normalized data
+        self.adata.obsm[self.cache_name] = self.adata.obsm[self.cache_name].copy()
+        cache_data = _dense_data(self.adata.obsm[self.cache_name])
+        current_data = _dense_data(self.adata.obsm[self.obsm])
+
+        cache_data += 1
+        assert np.all(current_data != _dense_data(self.adata.obsm[self.cache_name]))
+
+        # use cached
+        self.normalizer(self.adata, obsm=self.obsm)
+        utils.assert_array_equal(
+            self.adata.obsm[self.obsm], self.adata.obsm[self.cache_name]
+        )
