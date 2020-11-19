@@ -3,7 +3,6 @@ import anndata
 import parameterized
 import openproblems
 import unittest
-import os
 
 import scipy.sparse
 from openproblems.test import utils
@@ -85,12 +84,8 @@ class TestDataset(unittest.TestCase):
 
     def test_cache(self):
         """Test that AnnData files are written to disk."""
-        filename = "openproblems_{}.h5ad".format(
-            openproblems.data.utils._hash_function(self.dataset, test=self.test)
-        )
-        filepath = os.path.join(openproblems.data.TEMPDIR, filename)
-        assert os.path.isfile(filepath)
-        adata = anndata.read_h5ad(filepath)
+        adata = self.__class__.dataset(test=self.test)
+        assert adata.__from_cache__
         assert adata.shape == self.adata.shape
 
     def test_metadata(self):
