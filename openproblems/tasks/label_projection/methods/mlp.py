@@ -42,6 +42,7 @@ def _mlp(adata, n_pca=100):
         adata_test.obs["labels_pred"][idx] if idx in adata_test.obs_names else np.nan
         for idx in adata.obs_names
     ]
+    return adata
 
 
 @method(
@@ -54,7 +55,7 @@ def _mlp(adata, n_pca=100):
 )
 def mlp_log_cpm(adata):
     log_cpm(adata)
-    _mlp(adata)
+    return _mlp(adata)
 
 
 @method(
@@ -64,7 +65,8 @@ def mlp_log_cpm(adata):
     paper_year=1990,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
     code_version=check_version("scikit-learn"),
+    image="openproblems-r-base",
 )
 def mlp_scran(adata):
     log_scran_pooling(adata)
-    _mlp(adata)
+    return _mlp(adata)

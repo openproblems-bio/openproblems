@@ -5,12 +5,15 @@ import anndata
 
 
 def main(task_name, method_name, input_file, output_h5ad, output_json):
+    """Apply a method to a single dataset."""
+    openproblems.data.no_cleanup()
     task = eval("openproblems.tasks.{}".format(task_name))
     methods = getattr(task, "methods")
     method = getattr(methods, method_name)
     adata = anndata.read_h5ad(input_file)
 
     output = openproblems.tools.decorators.profile(method)(adata)
+    adata = output["result"]
     adata.write_h5ad(output_h5ad)
     del adata
 
