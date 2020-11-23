@@ -223,7 +223,7 @@ rule build_docker:
     output:
         "../docker/{image}/.docker_build"
     params:
-        sourcedir = os.path.dirname(SCRIPTS_DIR)
+        sourcedir = os.path.dirname(SCRIPTS_DIR),
         user = "singlecellopenproblems"
     shell:
         """docker build -f {input.dockerfile} -t {params.user}/{wildcards.image} .. \
