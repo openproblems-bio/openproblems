@@ -5,6 +5,7 @@ RUN update-alternatives --remove python /usr/local/bin/python
 RUN update-alternatives --install /usr/local/bin/python python /usr/bin/python3.5 10
 
 # Dependencies
+RUN apt-get update
 RUN apt-get install -y lsb-core software-properties-common apt-transport-https init
 
 # Install Docker
