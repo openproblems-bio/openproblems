@@ -32,12 +32,16 @@ def _get_annotation(adata):
 
     # TODO: add more species
     subprocess.call(
-        ["pyensembl", "install", "--release", "100", "--species", "mus_musculus"]
+        [
+            "pyensembl",
+            "install",
+            "--release",
+            adata.uns["release"],
+            "--species",
+            adata.uns["species"],
+        ]
     )
-    data = EnsemblRelease(100, species="mus_musculus")
-
-    adata.uns["species"] = "mus_musculus"
-    adata.uns["release"] = "100"
+    data = EnsemblRelease(adata.uns["release"], species=adata.uns["species"])
 
     # get ensemble gene coordinate
     genes = []
