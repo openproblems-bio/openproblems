@@ -15,3 +15,4 @@ import scanpy as sc
 def tsne(adata):
     
     sc.tl.tsne(adata)
+    adata.obsm['X_emb'] = adata.obsm['X_tsne']
