@@ -27,7 +27,3 @@ RUN apt-get update
 RUN apt-get install -y singularity-container
 
 RUN python3.7 -m pip install /usr/src/singlecellopenproblems[test]
-
-# sudo docker run --privileged=true -d --mount type=bind,source=/home/scottgigante/sync/2_work/
-33_openproblems/,target=/opt/openproblems -it singlecellopenproblems/openproblems-r-base /sbin/init
-# cd /opt/openproblems && service docker start && python3.7 -m nose2 openproblems.test
