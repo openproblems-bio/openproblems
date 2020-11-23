@@ -26,4 +26,4 @@ RUN apt-get update
 RUN apt-get install -y singularity-container
 
 RUN python3.7 -m pip install /usr/src/singlecellopenproblems[test]
-RUN python3.7 -m pip uninstall openproblems
+RUN python3.7 -m pip uninstall -y openproblems
