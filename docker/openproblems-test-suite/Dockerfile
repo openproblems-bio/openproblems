@@ -17,7 +17,6 @@ RUN add-apt-repository \
 RUN apt-get update
 RUN apt-get install -y docker-ce docker-ce-cli containerd.io
 RUN systemctl enable docker
-RUN systemctl start docker
 
 # Install singularity
 
