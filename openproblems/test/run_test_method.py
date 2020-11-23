@@ -7,6 +7,7 @@ utils.ignore_warnings()
 
 
 def test_method(task, dataset, method, data_path):
+    """Test a method applied to a specific dataset."""
     adata = dataset(test=True)
     adata = method(adata)
     assert isinstance(adata, anndata.AnnData)
@@ -15,6 +16,10 @@ def test_method(task, dataset, method, data_path):
 
 
 def main(task_name, method_name, dataset_name, data_path):
+    """Run the test.
+
+    This test is run via a subprocess call in test_methods.py.
+    """
     openproblems.data.no_cleanup()
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
