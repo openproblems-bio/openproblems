@@ -10,12 +10,12 @@ URL = "https://ndownloader.figshare.com/files/25555751"
 
 
 @loader
-def load_nestorowa_2016(test=False):
+def load_human_blood_nestorowa2016(test=False):
     if test:
         # load full data first, cached if available
-        adata = load_nestorowa_2016(test=False)
+        adata = load_human_blood_nestorowa2016(test=False)
 
-        # Subsample pancreas data
+        # Subsample data
         adata = adata[:, :500].copy()
         filter_genes_cells(adata)
 
@@ -29,7 +29,7 @@ def load_nestorowa_2016(test=False):
 
     else:
         with tempfile.TemporaryDirectory() as tempdir:
-            filepath = os.path.join(tempdir, "nestorowa_2016.h5ad")
+            filepath = os.path.join(tempdir, "human_blood_nestorowa2016.h5ad")
             scprep.io.download.download_url(URL, filepath)
             adata = sc.read(filepath)
 
