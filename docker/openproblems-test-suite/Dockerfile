@@ -20,7 +20,6 @@ RUN apt-get install -y docker-ce docker-ce-cli containerd.io
 RUN systemctl enable docker
 
 # Install singularity
-
 RUN wget -O- http://neuro.debian.net/lists/xenial.us-ca.full >> /etc/apt/sources.list.d/neurodebian.sources.list
 RUN curl http://neuro.debian.net/_static/neuro.debian.net.asc | apt-key add
 RUN apt-get update
