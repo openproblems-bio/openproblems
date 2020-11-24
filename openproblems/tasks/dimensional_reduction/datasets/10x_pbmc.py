@@ -4,5 +4,5 @@ from ....tools.decorators import dataset
 
 
 @dataset("10X PBMCs v3 Chemistry")
-def _10x_5k_pbmc(test=False):
+def tenx_5k_pbmc(test=False):
     return load_10x_5k_pbmc(test=test)
