@@ -30,7 +30,6 @@ def _get_annotation(adata):
     """This function insert meta data into .obs for adata"""
     from pyensembl import EnsemblRelease
 
-    # TODO: add more species
     subprocess.call(
         [
             "pyensembl",
@@ -77,25 +76,25 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     sc.pp.filter_cells(adata, min_genes=200)
     sc.pp.filter_genes(adata, min_cells=5)
 
-    adata.var["mt"] = adata.var.gene_short_name.str.startswith(
+    adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
         "mt-"
     )  # annotate the group of mitochondrial genes as 'mt'
 
-    adata._inplace_subset_var(~pd.isnull(adata.var["mt"]))
+    adata = adata[:, ~pd.isnull(adata.var["mt"])].copy()
 
     sc.pp.calculate_qc_metrics(
         adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
     )
 
-    adata._inplace_subset_obs(adata.obs.n_genes_by_counts < 2000)
-    adata._inplace_subset_obs(adata.obs.pct_counts_mt < 10)
+    adata = adata[
+        (adata.obs.n_genes_by_counts < 2000) & (adata.obs.pct_counts_mt < 10), :
+    ].copy()
 
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
     sc.pp.highly_variable_genes(adata, n_top_genes=top_genes)
 
-    adata._inplace_subset_var(adata.var.highly_variable)
-    # adata = adata[:, adata.var.highly_variable].copy()
+    adata = adata[:, adata.var.highly_variable].copy()
 
     sc.pp.regress_out(adata, ["total_counts", "pct_counts_mt"])
     sc.pp.scale(adata, max_value=10)
@@ -175,6 +174,7 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     adata.obsm["gene_score"] = csr_matrix.dot(
         gene_to_peak_weight, adata.obsm["mode2"].T >= threshold
     ).T
+    return adata
 
 
 @method(
@@ -186,4 +186,5 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     code_url="http://cistrome.org/BETA/src/BETA_1.0.7.zip",
 )
 def linear_regression_exponential_decay(adata, n_top_genes=5000, threshold=1):
-    _atac_genes_score(adata, top_genes=n_top_genes, threshold=threshold)
+    adata = _atac_genes_score(adata, top_genes=n_top_genes, threshold=threshold)
+    return adata
