@@ -7,7 +7,7 @@ import parameterized
 import subprocess
 import time
 import threading
-import Queue
+import queue
 
 import scipy.sparse
 import packaging.version
