@@ -5,6 +5,9 @@ import anndata
 import warnings
 import parameterized
 import subprocess
+import time
+import threading
+import Queue
 
 import scipy.sparse
 import packaging.version
@@ -90,6 +93,15 @@ def assert_array_equal(X, Y):
         np.testing.assert_array_equal(X, Y)
 
 
+def format_error_timeout(process, timeout, stream):
+    """Format subprocess output on timeout."""
+    return "{}\nTimed out after {} s\n\n{}".format(
+        " ".join(process.args),
+        timeout,
+        NonBlockingStreamReader(stream).read().decode("utf-8"),
+    )
+
+
 def _format_error(process, stream):
     """Format subprocess output."""
     return "{}\nReturn code {}\n\n{}".format(
@@ -131,6 +143,7 @@ def run(
     return_code=False,
     error_raises=AssertionError,
     format_error=None,
+    timeout=3600,
 ):
     """Run subprocess.
 
@@ -162,6 +175,18 @@ def run(
         if format_error is None:
             format_error = format_error_stdout
     p = subprocess.Popen(command, shell=shell, stdout=subprocess.PIPE, stderr=stderr)
+    if timeout is not None:
+        runtime = 0
+        if p.poll() is None:
+            time.sleep(1)
+            runtime += 1
+        if runtime > timeout:
+            raise RuntimeError(
+                format_error_timeout(
+                    p, timeout, p.stderr if stderr is subprocess.PIPE else p.stdout
+                )
+            )
+
     if print_stdout:
         while True:
             output = p.stdout.readline().decode("utf-8")
@@ -179,3 +204,62 @@ def run(
         raise error_raises(format_error(p))
     if output:
         return output[0] if len(output) == 1 else tuple(output)
+
+
+class NonBlockingStreamReader:
+    """Filestream that can be read without blocking.
+
+    Parameters
+    ----------
+    stream: the stream to read from.
+        Usually a process' stdout or stderr.
+    """
+
+    @staticmethod
+    def populateQueue(stream, queue):
+        """Collect lines from 'stream' and put them in 'queue'."""
+        while True:
+            line = stream.readline()
+            if line:
+                queue.put(line)
+            else:
+                raise RuntimeError("Stream ended without EOF.")
+
+    def __init__(self, stream):
+        """Initialize class."""
+        self.stream = stream
+        self.queue = Queue.Queue()
+
+        self.thread = threading.Thread(
+            target=self.populateQueue, args=(self.stream, self.queue)
+        )
+        self.thread.daemon = True
+        self.thread.start()  # start collecting lines from the stream
+
+    def readline(self, timeout=None):
+        """Read one line from stream if available.
+
+        Parameters
+        ----------
+        timeout : int, optional (default: None)
+            Seconds to wait for output. If None, block until response.
+        """
+        try:
+            return self.queue.get(block=timeout is not None, timeout=timeout)
+        except Queue.Empty:
+            return None
+
+    def read(self, timeout=None):
+        """Read all available lines from stream.
+
+        Parameters
+        ----------
+        timeout : int, optional (default: None)
+            Seconds to wait for output. If None, block until EOF.
+        """
+        output = b""
+        while True:
+            next_line = self.readline(timeout=timeout)
+            if next_line is None:
+                return output
+            output += next_line + b"\n"
