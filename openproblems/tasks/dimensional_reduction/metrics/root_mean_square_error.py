@@ -56,4 +56,6 @@ def rmse(adata):
         adata.uns["kruskel_score"],
         adata.uns["rmse_score"],
     ) = calculate_rmse(adata)
+    
+    return float(adata.uns["rmse_score"])
 
