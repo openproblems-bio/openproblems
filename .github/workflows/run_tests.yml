@@ -1,0 +1,71 @@
+name: Run Tests
+
+on:
+  push:
+    branches: 
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  run_tests:
+    runs-on: ${{ matrix.config.os }}
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        config: 
+        - {name: 'current', os: ubuntu-latest, python: '3.8' }
+        - {name: 'prev', os: ubuntu-latest, python: '3.7' }
+        - {name: 'old', os: ubuntu-latest, python: '3.6' }
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install system dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+    
+    - name: Install Singularity
+      uses: eWaterCycle/setup-singularity@v3
+      with:
+        singularity-version: 3.6.1
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with: 
+        python-version: ${{ matrix.config.python }}
+
+    - name: Install package & dependencies
+      run: |
+        pip install -U .
+        pip install -U .[test]
+        pip install -U .[evaluate] # install snakemake
+        python -c "import openproblems"
+        
+    - name: Linting
+      run: |
+        black . --check --diff --exclude=website
+    
+    - name: Build docker container
+      run: |
+        cd scripts
+        for image in $(ls -1d ../docker/open*); do
+          snakemake -j 1 ${image}/.docker_build
+        done
+        cd ..
+    
+    - name: Run tests
+      run: |
+        nose2 openproblems -v
+    
+    - name: Upload check results on fail
+      if: failure()
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{ matrix.config.name }}_results
+        path: check
