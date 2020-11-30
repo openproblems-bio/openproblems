@@ -228,7 +228,7 @@ class NonBlockingStreamReader:
     def __init__(self, stream):
         """Initialize class."""
         self.stream = stream
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
 
         self.thread = threading.Thread(
             target=self.populateQueue, args=(self.stream, self.queue)
@@ -246,7 +246,7 @@ class NonBlockingStreamReader:
         """
         try:
             return self.queue.get(block=timeout is not None, timeout=timeout)
-        except Queue.Empty:
+        except queue.Empty:
             return None
 
     def read(self, timeout=None):
