@@ -49,14 +49,6 @@ jobs:
       run: |
         black . --check --diff --exclude=website
 
-    - name: Build docker container
-      run: |
-        cd scripts
-        for image in $(ls -1d ../docker/open*); do
-          snakemake -j 1 ${image}/.docker_build
-        done
-        cd ..
-
     - name: Run tests
       run: |
         nose2 openproblems -v
