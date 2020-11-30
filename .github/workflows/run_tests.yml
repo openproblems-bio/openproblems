@@ -42,9 +42,7 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        pip install -U .
         pip install -U .[test]
-        pip install -U .[evaluate] # install snakemake
         python -c "import openproblems"
 
     - name: Linting
@@ -62,6 +60,7 @@ jobs:
     - name: Run tests
       run: |
         nose2 openproblems -v
+        coveralls
 
     - name: Upload check results on fail
       if: failure()
