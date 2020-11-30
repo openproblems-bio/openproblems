@@ -40,7 +40,8 @@ jobs:
       with:
         python-version: ${{ matrix.config.python }}
 
-    - uses: actions/cache@v2
+    - name: Cache Python packages
+      uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
         key: ${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
@@ -49,6 +50,12 @@ jobs:
       run: |
         pip install -U .[test]
         python -c "import openproblems"
+
+    - name: Cache Singularity images
+      uses: actions/cache@v2
+      with:
+        path: ~/.singularity
+        key: ${{ env.pythonLocation }}-${{ hashFiles('**/.docker_push') }}
 
     - name: Run tests
       run: |
