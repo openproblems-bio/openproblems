@@ -45,10 +45,6 @@ jobs:
         pip install -U .[test]
         python -c "import openproblems"
 
-    - name: Linting
-      run: |
-        black . --check --diff --exclude=website
-
     - name: Run tests
       run: |
         nose2 openproblems -v
