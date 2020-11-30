@@ -27,10 +27,14 @@ jobs:
       with:
         python-version: ${{ matrix.config.python }}
 
-    - name: Install Black
+    - name: Install tools
       run: |
-        pip install -U black
+        pip install -U black flake8
 
-    - name: Linting
+    - name: Lint with Black
       run: |
-        black . --check --diff --exclude=website
+        black . --check --diff
+
+    - name: Lint with flake8
+      run: |
+        flake8 openproblems
