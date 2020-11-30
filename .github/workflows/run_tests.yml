@@ -48,6 +48,7 @@ jobs:
 
     - name: Install package & dependencies
       run: |
+        pip install -U pip wheel setuptools
         pip install -U .[test]
         python -c "import openproblems"
 
