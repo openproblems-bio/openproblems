@@ -40,6 +40,11 @@ jobs:
       with:
         python-version: ${{ matrix.config.python }}
 
+    - uses: actions/cache@v2
+      with:
+        path: ${{ env.pythonLocation }}
+        key: ${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+
     - name: Install package & dependencies
       run: |
         pip install -U .[test]
