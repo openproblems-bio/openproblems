@@ -1,0 +1,36 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  run_tests:
+    runs-on: ${{ matrix.config.os }}
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {name: 'current', os: ubuntu-latest, python: '3.8' }
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config.python }}
+
+    - name: Install Black
+      run: |
+        pip install -U black
+
+    - name: Linting
+      run: |
+        black . --check --diff --exclude=website
