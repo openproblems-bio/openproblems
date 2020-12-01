@@ -43,7 +43,8 @@ jobs:
     - name: Install package & dependencies
       if: steps.cache-result.outputs.cache-hit != 'true'
       run: |
-        pip install -U pip wheel setuptools
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools
         pip install -U .
         pip install -U snakemake
         python -c "import openproblems"
