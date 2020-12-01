@@ -111,6 +111,7 @@ def image_requires_docker(image):
                 ),
                 file=sys.stderr,
             )
+            sys.stderr.flush()
             build_docker(image)
         return True
 
