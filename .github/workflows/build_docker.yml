@@ -1,0 +1,66 @@
+name: Build Docker images
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  run_tests:
+    runs-on: ${{ matrix.config.os }}
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {name: 'current', os: ubuntu-latest, python: '3.8' }
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Cache result
+      uses: actions/cache@v2
+      id: cache-result
+      with:
+        path: ~/.docker_cache
+        key: ${{ hashFiles('docker/**/*requirements.txt') }}-${{ hashFiles('docker/**/Dockerfile') }}
+
+    - name: Set up Python
+      if: steps.cache-result.outputs.cache-hit != 'true'
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config.python }}
+
+    - name: Cache Python packages
+      if: steps.cache-result.outputs.cache-hit != 'true'
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.pythonLocation }}
+        key: ${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{ env.pythonLocation }}-
+
+    - name: Install package & dependencies
+      if: steps.cache-result.outputs.cache-hit != 'true'
+      run: |
+        pip install -U pip wheel setuptools
+        pip install -U .
+        pip install -U snakemake
+        python -c "import openproblems"
+
+    - name: Build images
+      if: steps.cache-deps.outputs.cache-hit != 'true'
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        cd scripts
+        for image in docker/*/; do
+          snakemake -j 1 ${image}/.docker_push
+        done
+
+    - name: Upload check results on fail
+      if: failure()
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{ matrix.config.name }}_results
+        path: check
