@@ -107,7 +107,7 @@ def image_requires_docker(image):
                 "Docker push age: {}\n"
                 "Docker image modified: {}\n"
                 "Docker image age: {}".format(
-                    image, docker_push, git_file_age, docker_image_age(image)
+                    image, push_timestamp, git_file_age, docker_image_age(image)
                 ),
                 file=sys.stderr,
             )
