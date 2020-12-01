@@ -92,14 +92,25 @@ def image_requires_docker(image):
     """
     docker_push, dockerfile, requirements = docker_paths(image)
     push_timestamp = docker_push_age(docker_push)
-    image_age = utils.git_file_age(dockerfile)
+    git_file_age = utils.git_file_age(dockerfile)
     for req in requirements:
         req_age = utils.git_file_age(req)
-        image_age = max(image_age, req_age)
-    if push_timestamp > image_age:
+        git_file_age = max(git_file_age, req_age)
+    if push_timestamp > git_file_age:
         return False
     else:
-        if docker_image_age(image) < image_age:
+        if docker_image_age(image) < git_file_age:
+            import sys
+
+            print(
+                "Building {}:\n"
+                "Docker push age: {}\n"
+                "Docker image modified: {}\n"
+                "Docker image age: {}".format(
+                    image, docker_push, git_file_age, docker_image_age(image)
+                ),
+                file=sys.stderr,
+            )
             build_docker(image)
         return True
 
