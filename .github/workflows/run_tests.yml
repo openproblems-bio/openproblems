@@ -44,8 +44,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{ env.pythonLocation }}-
+        key: ${{runner.os}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
       run: |
@@ -57,7 +57,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.singularity
-        key: ${{ env.pythonLocation }}-${{ hashFiles('**/.docker_push') }}
+        key: ${{runner.os}}-singularity-${{ env.pythonLocation }}-${{ hashFiles('**/.docker_push') }}
 
     - name: Run tests
       run: |

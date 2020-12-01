@@ -37,8 +37,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{ env.pythonLocation }}-
+        key: ${{runner.os}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
       if: steps.cache-result.outputs.cache-hit != 'true'
