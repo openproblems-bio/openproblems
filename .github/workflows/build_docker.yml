@@ -49,7 +49,7 @@ jobs:
         python -c "import openproblems"
 
     - name: Build images
-      if: steps.cache-deps.outputs.cache-hit != 'true'
+      if: steps.cache-result.outputs.cache-hit != 'true'
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
