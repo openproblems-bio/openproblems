@@ -9,7 +9,6 @@ def log_scran_pooling(adata):
     import scIB.preprocessing
     import anndata2ri
 
-    scprep.run.install_bioconductor("scran")
     # Normalize via scran-pooling with own clustering at res=0.5
     scIB.preprocessing.normalize(adata)
     anndata2ri.deactivate()
