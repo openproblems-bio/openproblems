@@ -12,6 +12,8 @@ jobs:
   run_tests:
     runs-on: ${{ matrix.config.os }}
     if: "!contains(github.event.head_commit.message, 'ci skip')"
+    env:
+      RENV_PATHS_ROOT: ~/.local/share/renv
 
     strategy:
       fail-fast: false
@@ -72,8 +74,6 @@ jobs:
           ${{ runner.os }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-
 
     - name: Install R packages
-      env:
-        RENV_PATHS_ROOT: ~/.local/share/renv
       run: |
         if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
         renv::restore()
@@ -87,8 +87,6 @@ jobs:
         key: ${{runner.os}}-singularity-${{ env.pythonLocation }}-${{ hashFiles('**/.docker_push') }}
 
     - name: Run tests
-      env:
-        RENV_PATHS_ROOT: ~/.local/share/renv
       run: |
         nose2 openproblems -v
         coveralls
