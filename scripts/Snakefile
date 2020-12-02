@@ -4,12 +4,15 @@ import snakemake_tools as tools
 rule all:
     input:
         summary = "{}/../results.json".format(tools.SCRIPTS_DIR),
-        website = "{}/complete.temp".format(tools.TEMPDIR),
+        website = "{}/website.complete.temp".format(tools.TEMPDIR),
 
 rule website:
     input: tools.datasets
-    output: temp("{}/complete.temp".format(tools.TEMPDIR))
+    output: temp("{}/website.complete.temp".format(tools.TEMPDIR))
     shell: "touch {output}"
+
+rule docker:
+    input: tools.images
 
 rule summary:
     input:
