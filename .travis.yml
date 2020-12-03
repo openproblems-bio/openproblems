@@ -33,6 +33,8 @@ before_install:
   - sudo apt-get install -yq --no-install-suggests --no-install-recommends singularity-container
   - export R_LIBS_USER="$HOME/R/Library"
   - 'echo ".libPaths(c(''$R_LIBS_USER'', .libPaths()))" >> $HOME/.Rprofile'
+  - R -e "install.packages('RcppAnnoy')"
+  - R -e "install.packages('https://cran.r-project.org/src/contrib/Archive/RcppAnnoy/RcppAnnoy_0.0.16.tar.gz', repos = NULL, type = 'source')"
 install:
   - pip install -U .
 script:
