@@ -89,6 +89,7 @@ jobs:
     - name: Run tests
       run: |
         nose2 openproblems -v
+        coverage combine -a . ./openproblems/test
         coveralls
 
     - name: Upload check results on fail
