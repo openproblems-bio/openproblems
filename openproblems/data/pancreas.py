@@ -3,10 +3,8 @@ import tempfile
 
 import scprep
 import scanpy as sc
-import scipy.sparse
 
 from .utils import loader, filter_genes_cells
-from .. import utils
 
 URL = "https://ndownloader.figshare.com/files/24539828"
 
