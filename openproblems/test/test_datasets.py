@@ -98,9 +98,10 @@ class TestDataset(unittest.TestCase):
     )
     def test_normalize(self, normalizer):
         """Test that normalizations can be safely applied."""
-        adata = self.adata.copy()
-        normalizer(adata)
-        utils.assert_finite(adata.X)
+        if self.test:
+            adata = self.adata.copy()
+            normalizer(adata)
+            utils.assert_finite(adata.X)
 
     def test_metadata(self):
         """Test for existence of dataset metadata."""
