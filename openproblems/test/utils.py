@@ -8,6 +8,7 @@ import subprocess
 import time
 import threading
 import queue
+import sys
 
 import scipy.sparse
 import packaging.version
@@ -196,6 +197,7 @@ def run(
                 break
             if output:
                 print(output.strip())
+                sys.stdout.flush()
     p.stdout, p.stderr = p.communicate()
     output = []
     if return_stdout:
