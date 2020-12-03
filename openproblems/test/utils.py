@@ -15,9 +15,11 @@ import packaging.version
 
 def object_name(x):
     """Get a human readable name for an object."""
-    try:
+    if hasattr(x, "__name__"):
         return x.__name__
-    except AttributeError:
+    elif hasattr(x, "__func__"):
+        return object_name(x.__func__)
+    else:
         return str(x)
 
 
