@@ -88,7 +88,7 @@ jobs:
 
     - name: Run tests
       run: |
-        nose2 openproblems -v
+        nose2 openproblems -vvv
         coverage combine -a . ./openproblems/test
         coveralls
 
