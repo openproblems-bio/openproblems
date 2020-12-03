@@ -11,7 +11,6 @@ def log_scran_pooling(adata):
     import anndata2ri
 
     # Normalize via scran-pooling with own clustering at res=0.5
-    adata.X = scipy.sparse.csc_matrix(adata.X)
     scIB.preprocessing.normalize(adata)
     anndata2ri.deactivate()
 
