@@ -200,7 +200,7 @@ def run_image(image, *args):
         command, stop_command = docker_command(image, *args)
     else:
         command = singularity_command(image, *args)
-    utils.run(command)
+    utils.run(command, print_stdout=True)
     if image_requires_docker(image):
         utils.run(stop_command)
 
