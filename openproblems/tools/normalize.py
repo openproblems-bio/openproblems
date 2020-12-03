@@ -1,5 +1,4 @@
 import scanpy as sc
-import scipy.sparse
 import scprep
 from . import decorators
 
