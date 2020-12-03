@@ -41,10 +41,6 @@ script:
   - python -c "import openproblems"
   - 'pip install -U .[test]'
   - black . --check --diff --exclude=website
-  - nose2 openproblems -vvv --fail-fast openproblems.test.test_tools
-  - coverage combine -a . ./openproblems/test
-after_success:
-  - coveralls
 deploy:
   provider: script
   skip_cleanup: true
