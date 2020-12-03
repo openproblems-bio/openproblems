@@ -11,12 +11,6 @@ from .. import utils
 URL = "https://ndownloader.figshare.com/files/24539828"
 
 
-@utils.temporary(version="1.0")
-def _fix_pancreas(adata):
-    adata.X = scipy.sparse.csr_matrix(adata.X)
-    return adata
-
-
 @loader
 def load_pancreas(test=False):
     """Download pancreas data from figshare."""
@@ -54,7 +48,5 @@ def load_pancreas(test=False):
 
             # Ensure there are no cells or genes with 0 counts
             filter_genes_cells(adata)
-
-            adata = _fix_pancreas(adata)
 
         return adata
