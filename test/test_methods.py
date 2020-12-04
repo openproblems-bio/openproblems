@@ -7,6 +7,7 @@ import functools
 import json
 import datetime
 import time
+import atexit
 
 import openproblems
 
@@ -166,6 +167,7 @@ def singularity_command(image, script, *args):
     ] + list(args)
 
 
+@functools.lru_cache(maxsize=None)
 def cache_docker_image(image):
     """Run a Docker image and get the machine ID."""
     hash = utils.run.run(
@@ -197,20 +199,21 @@ def docker_command(image, script, *args):
         "/opt/openproblems/test/",
         script,
     ] + list(args)
-    stop_command = ["docker", "stop", container]
-    return run_command, stop_command
+
+    def stop():
+        utils.run.run(["docker", "stop", container])
+
+    atexit.register(stop)
+    return run_command
 
 
 def run_image(image, *args):
     """Run a Python script in a container."""
     if image_requires_docker(image) or docker_available():
-        command, stop_command = docker_command(image, *args)
+        container_command = docker_command
     else:
-        command = singularity_command(image, *args)
-        stop_command = None
-    utils.run.run(command, print_stdout=True)
-    if stop_command:
-        utils.run.run(stop_command)
+        container_command = singularity_command
+    utils.run.run(container_command(image, *args), print_stdout=True)
 
 
 @parameterized.parameterized.expand(
