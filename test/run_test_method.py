@@ -1,7 +1,8 @@
+from . import utils
+
 import sys
 import anndata
 import openproblems
-from openproblems.test import utils, log_level
 
 utils.ignore_warnings()
 
@@ -33,6 +34,5 @@ def main(task_name, method_name, dataset_name, data_path):
 
 
 if __name__ == "__main__":
-    openproblems.log.setLevel(log_level)
     openproblems.log.debug("Running method test with args {}".format(sys.argv))
     main(*sys.argv[1:])
