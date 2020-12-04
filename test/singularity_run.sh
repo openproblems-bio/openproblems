@@ -14,4 +14,4 @@ python3 -m pip install --use-deprecated=legacy-resolver --upgrade-strategy=only-
 python3 -m pip install --use-deprecated=legacy-resolver -U coverage
 
 cd ${CODEDIR}
-python3 -m coverage run --source=openproblems ${WORKDIR}/${SCRIPT} $TASKNAME $FUN ${ARGS}
+python3 -m coverage run --rcfile=${WORKDIR}/.coveragerc --source=openproblems ${WORKDIR}/${SCRIPT} $TASKNAME $FUN ${ARGS}
