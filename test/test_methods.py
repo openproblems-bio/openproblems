@@ -185,6 +185,11 @@ def cache_docker_image(image):
         ],
         return_stdout=True,
     )
+
+    def stop():
+        utils.run.run(["docker", "stop", container])
+
+    atexit.register(stop)
     return hash[:12]
 
 
@@ -200,11 +205,6 @@ def docker_command(image, script, *args):
         "/opt/openproblems/test/",
         script,
     ] + list(args)
-
-    def stop():
-        utils.run.run(["docker", "stop", container])
-
-    atexit.register(stop)
     return run_command
 
 
