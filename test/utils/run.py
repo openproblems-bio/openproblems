@@ -82,22 +82,15 @@ def run(
         raise NotImplementedError
     elif return_stdout:
         stderr = subprocess.PIPE
-        stdout = subprocess.PIPE
-        if format_error is None:
-            format_error = format_error_stderr
-    elif print_stdout:
-        stderr = subprocess.PIPE
-        stdout = None
         if format_error is None:
             format_error = format_error_stderr
     else:
         stderr = subprocess.STDOUT
-        stdout = subprocess.PIPE
         if format_error is None:
             format_error = format_error_stdout
 
     log.debug("Running subprocess: {}".format(command))
-    p = subprocess.Popen(command, shell=shell, stdout=stdout, stderr=stderr)
+    p = subprocess.Popen(command, shell=shell, stdout=subprocess.PIPE, stderr=stderr)
     if timeout is not None:
         runtime = 0
         if p.poll() is None:
@@ -111,7 +104,17 @@ def run(
             )
 
     log.debug("Awaiting subprocess completion")
-    p.wait()
+    if print_stdout:
+        while True:
+            output = p.stdout.readline().decode("utf-8")
+            if output == "" and p.poll() is not None:
+                break
+            if output:
+                print(output.strip())
+                sys.stdout.flush()
+    else:
+        p.wait()
+
     log.debug("Subprocess complete")
     p.stdout, p.stderr = p.communicate()
     output = []
