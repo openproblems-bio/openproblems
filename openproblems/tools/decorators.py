@@ -4,6 +4,7 @@ import time
 import anndata
 
 from . import utils
+from .. import log
 
 
 def normalizer(func, *args, **kwargs):
@@ -11,6 +12,7 @@ def normalizer(func, *args, **kwargs):
 
     @functools.wraps(func)
     def normalize(adata, *args, obsm=None, obs=None, var=None, **kwargs):
+        log.debug("Running {} normalization".format(func.__name__))
         assert isinstance(adata, anndata.AnnData)
 
         if obsm is not None:
@@ -63,6 +65,7 @@ def method(
     def decorator(func):
         @functools.wraps(func)
         def apply_method(*args, **kwargs):
+            log.debug("Running {} method".format(func.__name__))
             return func(*args, **kwargs)
 
         apply_method.metadata = dict(
@@ -100,6 +103,7 @@ def metric(metric_name, maximize, image="openproblems"):
     def decorator(func):
         @functools.wraps(func)
         def apply_metric(*args, **kwargs):
+            log.debug("Running {} metric".format(func.__name__))
             return func(*args, **kwargs)
 
         apply_metric.metadata = dict(
@@ -122,6 +126,7 @@ def dataset(dataset_name):
     def decorator(func):
         @functools.wraps(func)
         def apply_func(*args, **kwargs):
+            log.debug("Loading {} dataset".format(func.__name__))
             return func(*args, **kwargs)
 
         apply_func.metadata = dict(dataset_name=dataset_name)
@@ -154,6 +159,7 @@ def profile(func):
         )
 
         def apply_func(*args, **kwargs):
+            log.debug("Profiling {} function".format(func.__name__))
             start_time = time.perf_counter()
             output["result"] = func(*args, **kwargs)
             end_time = time.perf_counter()

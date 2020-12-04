@@ -7,8 +7,9 @@ import datetime
 import time
 
 import openproblems
-from openproblems.test import utils
+from openproblems.test import utils, log_level
 
+openproblems.log.setLevel(log_level)
 utils.ignore_warnings()
 
 TESTDIR = os.path.dirname(os.path.abspath(__file__))

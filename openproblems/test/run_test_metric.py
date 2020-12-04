@@ -2,7 +2,7 @@ import sys
 import openproblems
 import anndata
 import numbers
-from openproblems.test import utils
+from openproblems.test import utils, log_level
 
 utils.ignore_warnings()
 
@@ -22,8 +22,15 @@ def main(task_name, metric_name, data_path):
     openproblems.data.no_cleanup()
     task = getattr(openproblems.tasks, task_name)
     metric = getattr(task.metrics, metric_name)
+    openproblems.log.debug(
+        "Testing {} metric on data located at {} from {} task".format(
+            metric.__name__, data_path, task.__name__
+        )
+    )
     test_metric(task, data_path, metric)
 
 
 if __name__ == "__main__":
+    openproblems.log.setLevel(log_level)
+    openproblems.log.debug("Running metric test with args {}".format(sys.argv))
     main(*sys.argv[1:])
