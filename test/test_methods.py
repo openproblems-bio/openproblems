@@ -137,7 +137,8 @@ def cache_singularity_image(image):
                 "--name",
                 image_filename,
                 "docker://singlecellopenproblems/{}".format(image),
-            ]
+            ],
+            print_stdout=True,
         )
         with open(image_age_filename, "w") as handle:
             handle.write(str(time.time()))
