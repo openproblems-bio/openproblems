@@ -50,6 +50,7 @@ def build_docker(image):
     )
 
 
+@functools.lru_cache(maxsize=None)
 def docker_available():
     """Check if Docker can be run."""
     returncode = utils.run.run(["docker", "images"], return_code=True)
