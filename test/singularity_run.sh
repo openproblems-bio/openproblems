@@ -13,4 +13,4 @@ python3 -m pip install --use-deprecated=legacy-resolver --upgrade-strategy=only-
 python3 -m pip install --use-deprecated=legacy-resolver -U coverage nose2
 
 cd ${WORKDIR}
-python3 -m coverage run --parallel --source=${CODEDIR}/openproblems $SCRIPT $TASKNAME $FUN ${ARGS}
+python3 $SCRIPT $TASKNAME $FUN ${ARGS}

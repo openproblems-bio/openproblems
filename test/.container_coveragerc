@@ -1,0 +1,6 @@
+[run]
+parallel = True
+
+[paths]
+source =
+    ../openproblems/
