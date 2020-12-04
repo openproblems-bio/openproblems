@@ -1,17 +1,17 @@
+from . import utils
+
+import numpy as np
 import parameterized
 import unittest
-import numpy as np
-from scipy import sparse
-
 import openproblems
-from openproblems.test import utils, log_level
 
-openproblems.log.setLevel(log_level)
+import scipy.sparse
+
 utils.ignore_warnings()
 
 
 def _dense_data(X):
-    if sparse.issparse(X):
+    if scipy.sparse.issparse(X):
         return X.data
     else:
         return X

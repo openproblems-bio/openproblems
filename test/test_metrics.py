@@ -1,9 +1,8 @@
+from . import utils
+
 import parameterized
-
 import openproblems
-from openproblems.test import utils, log_level
 
-openproblems.log.setLevel(log_level)
 utils.ignore_warnings()
 
 

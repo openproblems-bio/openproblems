@@ -1,8 +1,9 @@
+from . import utils
+
 import sys
 import openproblems
 import anndata
 import numbers
-from openproblems.test import utils, log_level
 
 utils.ignore_warnings()
 
@@ -31,6 +32,5 @@ def main(task_name, metric_name, data_path):
 
 
 if __name__ == "__main__":
-    openproblems.log.setLevel(log_level)
     openproblems.log.debug("Running metric test with args {}".format(sys.argv))
     main(*sys.argv[1:])

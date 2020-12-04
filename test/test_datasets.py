@@ -1,3 +1,5 @@
+from . import utils
+
 import pandas as pd
 import anndata
 import parameterized
@@ -5,9 +7,7 @@ import openproblems
 import unittest
 
 import scipy.sparse
-from openproblems.test import utils, log_level
 
-openproblems.log.setLevel(log_level)
 utils.ignore_warnings()
 
 
