@@ -13,7 +13,7 @@ import openproblems
 utils.ignore_warnings()
 
 TESTDIR = os.path.dirname(os.path.abspath(__file__))
-BASEDIR = os.path.dirname(os.path.dirname(TESTDIR))
+BASEDIR = os.path.dirname(TESTDIR)
 CACHEDIR = os.path.join(os.environ["HOME"], ".singularity")
 os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
 os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
