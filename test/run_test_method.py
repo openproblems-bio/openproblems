@@ -7,13 +7,17 @@ import openproblems
 utils.warnings.ignore_warnings()
 
 
-def test_method(task, dataset, method, data_path):
+def create_test(task, dataset, method, data_path):
     """Test a method applied to a specific dataset."""
-    adata = dataset(test=True)
-    adata = method(adata)
-    assert isinstance(adata, anndata.AnnData)
-    assert task.checks.check_method(adata)
-    adata.write_h5ad(data_path)
+
+    def test():
+        adata = dataset(test=True)
+        adata = method(adata)
+        assert isinstance(adata, anndata.AnnData)
+        assert task.checks.check_method(adata)
+        adata.write_h5ad(data_path)
+
+    return test
 
 
 def main(task_name, method_name, dataset_name, data_path):
@@ -21,6 +25,7 @@ def main(task_name, method_name, dataset_name, data_path):
 
     This test is run via a subprocess call in test_methods.py.
     """
+    global test_method
     openproblems.data.no_cleanup()
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
@@ -30,7 +35,8 @@ def main(task_name, method_name, dataset_name, data_path):
             method.__name__, dataset.__name__, task.__name__
         )
     )
-    test_method(task, dataset, method, data_path)
+    test_method = create_test(task, dataset, method, data_path)
+    nose2.main()
 
 
 if __name__ == "__main__":
