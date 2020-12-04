@@ -88,9 +88,9 @@ jobs:
 
     - name: Run tests
       run: |
-        # nose2 openproblems -vvv openproblems.test.test_tools
-        # coverage combine -a . ./openproblems/test
-        # coveralls
+        nose2 openproblems -vvv openproblems.test.test_tools
+        coverage combine -a . ./openproblems/test
+        coveralls
 
     - name: Upload check results on fail
       if: failure()
