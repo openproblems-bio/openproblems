@@ -87,9 +87,11 @@ jobs:
         key: ${{runner.os}}-singularity-${{ env.pythonLocation }}-${{ hashFiles('**/.docker_push') }}
 
     - name: Run tests
+      run: nose2 -vvv
+
+    - name: Upload coverage
       run: |
-        nose2 -vvv
-        coverage combine -a . ./test
+        coverage combine -a .
         coveralls
 
     - name: Upload check results on fail
