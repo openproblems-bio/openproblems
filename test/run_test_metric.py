@@ -35,7 +35,7 @@ def main(task_name, metric_name, data_path):
         )
     )
     test_metric = create_test(task, data_path, metric)
-    sys.argv = ["nose2", "--with-coverage", "--cov-config" ".container_coveragerc"]
+    sys.argv = ["nose2", "--with-coverage", "--coverage-config" ".container_coveragerc"]
     nose2.main()
 
 
