@@ -3,22 +3,17 @@ import utils
 import sys
 import anndata
 import openproblems
-import nose2
 
 utils.warnings.ignore_warnings()
 
 
-def create_test(task, dataset, method, data_path):
+def test_method(task, dataset, method, data_path):
     """Test a method applied to a specific dataset."""
-
-    def test():
-        adata = dataset(test=True)
-        adata = method(adata)
-        assert isinstance(adata, anndata.AnnData)
-        assert task.checks.check_method(adata)
-        adata.write_h5ad(data_path)
-
-    return test
+    adata = dataset(test=True)
+    adata = method(adata)
+    assert isinstance(adata, anndata.AnnData)
+    assert task.checks.check_method(adata)
+    adata.write_h5ad(data_path)
 
 
 def main(task_name, method_name, dataset_name, data_path):
@@ -36,16 +31,7 @@ def main(task_name, method_name, dataset_name, data_path):
             method.__name__, dataset.__name__, task.__name__
         )
     )
-    test_method = create_test(task, dataset, method, data_path)
-    sys.argv = [
-        "nose2",
-        "--with-coverage",
-        "--coverage",
-        "../openproblems",
-        "--coverage-config",
-        ".container_coveragerc",
-    ]
-    nose2.main()
+    test_method(task, dataset, method, data_path)
 
 
 if __name__ == "__main__":
