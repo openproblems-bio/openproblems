@@ -1,10 +1,10 @@
-from . import utils
+import utils
 
 import sys
 import anndata
 import openproblems
 
-utils.ignore_warnings()
+utils.warnings.ignore_warnings()
 
 
 def test_method(task, dataset, method, data_path):
