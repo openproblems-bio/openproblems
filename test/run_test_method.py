@@ -37,7 +37,12 @@ def main(task_name, method_name, dataset_name, data_path):
         )
     )
     test_method = create_test(task, dataset, method, data_path)
-    sys.argv = ["nose2", "--with-coverage", "--coverage-config" ".container_coveragerc"]
+    sys.argv = [
+        "nose2",
+        "--with-coverage",
+        "--coverage-config",
+        ".container_coveragerc",
+    ]
     nose2.main()
 
 
