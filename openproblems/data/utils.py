@@ -2,10 +2,13 @@ import scanpy as sc
 import os
 import anndata
 import hashlib
+import logging
 
 from decorator import decorator
 from . import TEMPDIR
-from .. import log
+
+
+log = logging.getLogger("openproblems")
 
 
 def _func_to_bytes(func):
