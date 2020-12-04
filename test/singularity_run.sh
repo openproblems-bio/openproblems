@@ -6,7 +6,7 @@ FUN=$4
 ARRAY=( $@ )
 LEN=${#ARRAY[@]}
 ARGS=${ARRAY[@]:4:$LEN}
-CODEDIR=$(dirname $(dirname $WORKDIR))
+CODEDIR=$(dirname $WORKDIR)
 
 python3 -m pip install --upgrade "pip<=21.0"
 python3 -m pip install --use-deprecated=legacy-resolver --upgrade-strategy=only-if-needed --no-cache-dir -qq -U $CODEDIR
