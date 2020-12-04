@@ -5,6 +5,7 @@ import hashlib
 
 from decorator import decorator
 from . import TEMPDIR
+from .. import log
 
 
 def _func_to_bytes(func):
@@ -26,6 +27,7 @@ def _hash_function(func, *args, **kwargs):
 @decorator
 def loader(func, *args, **kwargs):
     """Decorate a data loader function."""
+    log.debug("Downloading {} dataset".format(func.__name__))
     filename = "openproblems_{}.h5ad".format(_hash_function(func, *args, **kwargs))
     filepath = os.path.join(TEMPDIR, filename)
     if os.path.isfile(filepath):
