@@ -44,7 +44,7 @@ script:
   - python -c "import openproblems"
   - 'pip install -U .[test]'
   - black . --check --diff --exclude=website
-  - nose2 test -vvv --fail-fast
+  - nose2 -vvv --fail-fast
   - coverage combine -a . ./test
 after_success:
   - coveralls
