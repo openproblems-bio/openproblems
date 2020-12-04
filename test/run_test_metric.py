@@ -1,11 +1,11 @@
-from . import utils
+import utils
 
 import sys
 import openproblems
 import anndata
 import numbers
 
-utils.ignore_warnings()
+utils.warnings.ignore_warnings()
 
 
 def test_metric(task, data_path, metric):

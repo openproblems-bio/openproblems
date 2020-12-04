@@ -1,4 +1,4 @@
-from . import utils
+import utils
 
 import pandas as pd
 import anndata
@@ -8,7 +8,7 @@ import unittest
 
 import scipy.sparse
 
-utils.ignore_warnings()
+utils.warnings.ignore_warnings()
 
 
 def _assert_not_bytes(X):
@@ -35,7 +35,7 @@ def _assert_not_bytes(X):
         for dataset in task.DATASETS
         for test in [True, False]
     ],
-    class_name_func=utils.name_test,
+    class_name_func=utils.name.name_test,
 )
 class TestDataset(unittest.TestCase):
     """Test dataset loading."""
@@ -60,7 +60,7 @@ class TestDataset(unittest.TestCase):
     def test_sparse(self):
         """Ensure output is sparse."""
         if not scipy.sparse.issparse(self.adata.X):
-            utils.future_warning(
+            utils.warnings.future_warning(
                 "{}-{}: self.adata.X is loaded as dense.".format(
                     self.task.__name__.split(".")[-1], self.dataset.__name__
                 ),
@@ -102,7 +102,7 @@ class TestDataset(unittest.TestCase):
         if self.test:
             adata = self.adata.copy()
             normalizer(adata)
-            utils.assert_finite(adata.X)
+            utils.asserts.assert_finite(adata.X)
 
     def test_metadata(self):
         """Test for existence of dataset metadata."""
