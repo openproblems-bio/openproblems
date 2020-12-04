@@ -1,5 +1,8 @@
 import anndata
-from . import utils, log
+import logging
+from . import utils
+
+log = logging.getLogger("openproblems")
 
 
 def _write_h5ad_patch(self, *args, **kwargs):
