@@ -7,6 +7,7 @@ ARRAY=( $@ )
 LEN=${#ARRAY[@]}
 ARGS=${ARRAY[@]:4:$LEN}
 CODEDIR=$(dirname $WORKDIR)
+export PYTHONPATH=$CODEDIR
 
 python3 -m pip install --upgrade "pip<=21.0"
 python3 -m pip install --use-deprecated=legacy-resolver --upgrade-strategy=only-if-needed --no-cache-dir -U $CODEDIR
