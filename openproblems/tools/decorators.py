@@ -2,9 +2,11 @@ import functools
 from memory_profiler import memory_usage
 import time
 import anndata
+import logging
 
 from . import utils
-from .. import log
+
+log = logging.getLogger("openproblems")
 
 
 def normalizer(func, *args, **kwargs):
