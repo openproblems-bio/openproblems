@@ -38,6 +38,8 @@ def main(task_name, metric_name, data_path):
     sys.argv = [
         "nose2",
         "--with-coverage",
+        "--coverage",
+        "../openproblems",
         "--coverage-config",
         ".container_coveragerc",
     ]
