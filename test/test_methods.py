@@ -49,15 +49,15 @@ def build_docker(image):
     )
 
 
+def docker_available():
+    """Check if Docker can be run."""
+    returncode = utils.run.run(["docker", "images"], return_code=True)
+    return returncode == 0
+
+
 def docker_image_age(image):
     """Check when the Docker image was built."""
-    utils.run.run(
-        ["docker", "images"],
-        error_raises=RuntimeError,
-        format_error=lambda p: "The Dockerfile for image {} is newer than the "
-        "latest push, but Docker is not available. "
-        "Return code {}\n\n{}".format(image, p.returncode, p.stdout.decode("utf-8")),
-    )
+    assert docker_available()
     image_info, returncode = utils.run.run(
         ["docker", "inspect", "singlecellopenproblems/{}:latest".format(image)],
         return_stdout=True,
@@ -100,6 +100,11 @@ def image_requires_docker(image):
     if push_timestamp > git_file_age:
         return False
     else:
+        if not docker_available():
+            raise RuntimeError(
+                "The Dockerfile for image {} is newer than the "
+                "latest push, but Docker is not available."
+            )
         if docker_image_age(image) < git_file_age:
             import sys
 
@@ -198,12 +203,13 @@ def docker_command(image, script, *args):
 
 def run_image(image, *args):
     """Run a Python script in a container."""
-    if image_requires_docker(image):
+    if image_requires_docker(image) or docker_available():
         command, stop_command = docker_command(image, *args)
     else:
         command = singularity_command(image, *args)
+        stop_command = None
     utils.run.run(command, print_stdout=True)
-    if image_requires_docker(image):
+    if stop_command:
         utils.run.run(stop_command)
 
 
