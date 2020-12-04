@@ -3,6 +3,7 @@ import utils
 import sys
 import anndata
 import openproblems
+import nose2
 
 utils.warnings.ignore_warnings()
 
