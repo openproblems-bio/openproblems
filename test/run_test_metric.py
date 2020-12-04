@@ -4,15 +4,20 @@ import sys
 import openproblems
 import anndata
 import numbers
+import nose2
 
 utils.warnings.ignore_warnings()
 
 
-def test_metric(task, data_path, metric):
+def create_test(task, data_path, metric):
     """Test a metric applied to a specific dataset run through a specific method."""
-    adata = anndata.read_h5ad(data_path)
-    m = metric(adata)
-    assert isinstance(m, numbers.Number)
+
+    def test():
+        adata = anndata.read_h5ad(data_path)
+        m = metric(adata)
+        assert isinstance(m, numbers.Number)
+
+    return test
 
 
 def main(task_name, metric_name, data_path):
@@ -20,6 +25,7 @@ def main(task_name, metric_name, data_path):
 
     This test is run via a subprocess call in test_metrics.py.
     """
+    global test_metric
     openproblems.data.no_cleanup()
     task = getattr(openproblems.tasks, task_name)
     metric = getattr(task.metrics, metric_name)
@@ -28,7 +34,8 @@ def main(task_name, metric_name, data_path):
             metric.__name__, data_path, task.__name__
         )
     )
-    test_metric(task, data_path, metric)
+    test_metric = create_test(task, data_path, metric)
+    nose2.main()
 
 
 if __name__ == "__main__":
