@@ -39,7 +39,8 @@ _mnn = scprep.run.RFunction(
 
 @method(
     method_name="Mutual Nearest Neighbors (log CPM)",
-    paper_name="Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+    paper_name="Batch effects in single-cell RNA-sequencing data are corrected by "
+    "matching mutual nearest neighbors",
     paper_url="https://www.nature.com/articles/nbt.4091",
     paper_year=2018,
     code_url="https://github.com/LTLA/batchelor",
@@ -54,7 +55,8 @@ def mnn_log_cpm(adata, n_svd=100):
 
 @method(
     method_name="Mutual Nearest Neighbors (log scran)",
-    paper_name="Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+    paper_name="Batch effects in single-cell RNA-sequencing data are corrected by "
+    "matching mutual nearest neighbors",
     paper_url="https://www.nature.com/articles/nbt.4091",
     paper_year=2018,
     code_url="https://github.com/LTLA/batchelor",
