@@ -1,5 +1,6 @@
 import numpy as np
 import scipy as sp
+import sklearn.decomposition
 
 from ....tools.decorators import metric
 
@@ -13,9 +14,10 @@ def calculate_squareform_pairwise_distance(data):
     return sp.spatial.distance.squareform(sp.spatial.distance.pdist(data))
 
 
-def calculate_rmse(adata):
+def calculate_rmse(adata, n_svd=200):
     """Calculate dimensional reduction stress via root mean square error."""
-    high_dimensional_distance_matrix = calculate_squareform_pairwise_distance(adata.X)
+    X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
+    high_dimensional_distance_matrix = calculate_squareform_pairwise_distance(X)
 
     low_dimensional_distance_matrix = calculate_squareform_pairwise_distance(
         adata.obsm["X_emb"]
