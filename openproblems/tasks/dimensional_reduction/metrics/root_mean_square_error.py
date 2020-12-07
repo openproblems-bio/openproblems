@@ -1,26 +1,22 @@
 import numpy as np
 import scipy as sp
-from scipy import spatial
 import pandas as pd
+
 from ....tools.decorators import metric
 
 
 def calculate_squareform_pairwise_distance(data):
+    """Calculate pairwise distances.
 
+    Compute pairwise distance between points in a matrix / vector and then format this
+    into a squareform vector.
     """
-    Calculate the pairwise distance between points in a matrix / vector and then format this into a squareform vector.
-    """
-
     df = pd.DataFrame(sp.spatial.distance.squareform(sp.spatial.distance.pdist(data)))
-
     return df
 
 
 def calculate_rmse(adata):
-
-    """
-    Calculate dimensional reduction stress via root mean square error.
-    """
+    """Calculate dimensional reduction stress via root mean square error."""
     high_dimensional_distance_matrix = calculate_squareform_pairwise_distance(
         pd.DataFrame(adata.X)
     )
@@ -48,15 +44,15 @@ def calculate_rmse(adata):
 
 @metric(metric_name="root mean squared error", maximize=True)
 def rmse(adata):
+    """Calculate the root mean squared error.
 
-    """Calculate the root mean squared error (RMSE) between the full (or processed) data matrix and a list of dimensionally-reduced matrices."""
+    Computes  (RMSE) between the full (or processed) data matrix and a list of
+    dimensionally-reduced matrices.
+    """
+    (
+        adata.obsp["kruskel_matrix"],
+        adata.uns["kruskel_score"],
+        adata.uns["rmse_score"],
+    ) = calculate_rmse(adata)
 
-    if check_method(adata) == True:
-
-        (
-            adata.obsp["kruskel_matrix"],
-            adata.uns["kruskel_score"],
-            adata.uns["rmse_score"],
-        ) = calculate_rmse(adata)
-
-        return float(adata.uns["rmse_score"])
+    return float(adata.uns["rmse_score"])
