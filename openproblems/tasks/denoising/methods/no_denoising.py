@@ -1,5 +1,3 @@
-from scanpy import AnnData
-
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
@@ -12,7 +10,7 @@ from ....tools.utils import check_version
     code_url="https://github.com/czbiohub/molecular-cross-validation",
     code_version=check_version("scanpy"),
 )
-def no_denoising(adata: AnnData) -> None:
+def no_denoising(adata):
     """Do nothing."""
     adata.obsm["denoised"] = adata.obsm["train"]
     return adata
