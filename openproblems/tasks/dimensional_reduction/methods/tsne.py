@@ -11,7 +11,8 @@ import scanpy as sc
     paper_year=2008,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.manifold.TSNE.html#sklearn.manifold.TSNE",
-    code_version=check_version("scikit-learn"),
+    code_version=check_version("MulticoreTSNE"),
+    image="openproblems-python-extras",
 )
 def tsne(adata):
 
