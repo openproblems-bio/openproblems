@@ -1,13 +1,22 @@
 import scanpy as sc
-from .utils import loader
+import scprep
+from . import utils
 
-url = "https://ndownloader.figshare.com/files/24130931"
+URL = "https://ndownloader.figshare.com/files/24130931"
 
 
-@loader
+@utils.loader
 def load_senis_muris(test=False):
     """Download Tabula Senis."""
-    adata = sc.read(url=url)
     if test:
+        adata = load_senis_muris(test=False)
         sc.pp.subsample(adata, fraction=0.1)
-    return adata
+        utils.filter_genes_cells(adata)
+        return adata
+    else:
+        with tempfile.TemporaryDirectory() as tempdir:
+            filepath = os.path.join(tempdir, "senis_muris.h5ad")
+            scprep.io.download.download_url(URL, filepath)
+            adata = sc.read(filepath)
+            utils.filter_genes_cells(adata)
+            return adata
