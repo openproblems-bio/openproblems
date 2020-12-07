@@ -14,6 +14,7 @@ def load_scicar(
     atac_cells_url,
     atac_genes_url,
 ):
+    """Load sci-CAR data from GEO."""
     rna_cells = pd.read_csv(rna_cells_url, low_memory=False)["sample"]
     rna_genes = pd.read_csv(rna_genes_url, low_memory=False)["gene_id"]
     atac_cells = pd.read_csv(atac_cells_url, low_memory=False)["sample"]
