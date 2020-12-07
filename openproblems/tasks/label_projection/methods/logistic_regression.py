@@ -32,7 +32,7 @@ def _logistic_regression(adata, max_iter=1000, n_pca=100):
     )
 
     # Fit to train data
-    classifier.fit(adata_train.X, adata_train.obs["labels"])
+    classifier.fit(adata_train.X, adata_train.obs["labels"].astype(str))
 
     # Predict on test data
     adata_test.obs["labels_pred"] = classifier.predict(adata_test.X)
@@ -49,7 +49,8 @@ def _logistic_regression(adata, max_iter=1000, n_pca=100):
     paper_name="Applied Logistic Regression",
     paper_url="https://books.google.com/books?id=64JYAwAAQBAJ",
     paper_year=2013,
-    code_url="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+    code_url="https://scikit-learn.org/stable/modules/generated/"
+    "sklearn.linear_model.LogisticRegression.html",
     code_version=check_version("scikit-learn"),
 )
 def logistic_regression_log_cpm(adata):
@@ -62,7 +63,8 @@ def logistic_regression_log_cpm(adata):
     paper_name="Applied Logistic Regression",
     paper_url="https://books.google.com/books?id=64JYAwAAQBAJ",
     paper_year=2013,
-    code_url="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+    code_url="https://scikit-learn.org/stable/modules/generated/"
+    "sklearn.linear_model.LogisticRegression.html",
     code_version=check_version("scikit-learn"),
     image="openproblems-r-base",
 )
