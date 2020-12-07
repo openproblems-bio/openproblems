@@ -90,6 +90,7 @@ jobs:
       run: nose2 -vvv
 
     - name: Upload coverage
+      env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         coverage combine -a .
         coveralls
