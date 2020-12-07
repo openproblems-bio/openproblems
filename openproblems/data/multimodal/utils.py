@@ -4,10 +4,9 @@ import scanpy as sc
 import scprep
 import anndata
 
-from ..utils import filter_genes_cells
-
 
 def filter_joint_data_empty_cells(adata):
+    """Remove empty cells and genes from a multimodal dataset."""
     assert np.all(adata.uns["mode2_obs"] == adata.obs.index)
     # filter cells
     n_cells_mode1 = scprep.utils.toarray(adata.X.sum(axis=1)).flatten()
@@ -27,6 +26,7 @@ def filter_joint_data_empty_cells(adata):
 def create_joint_adata(
     X, Y, X_index=None, X_columns=None, Y_index=None, Y_columns=None
 ):
+    """Create a multimodal dataset."""
     if X_index is None:
         X_index = X.index
     if X_columns is None:
@@ -67,6 +67,7 @@ def create_joint_adata(
 
 
 def subset_joint_data(adata, n_cells=500, n_genes=1000):
+    """Randomly subset a multimodal dataset."""
     if adata.shape[0] > n_cells:
         keep_cells = np.random.choice(adata.shape[0], n_cells, replace=False)
         adata = adata[keep_cells].copy()
