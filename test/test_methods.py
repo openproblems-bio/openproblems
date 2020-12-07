@@ -145,7 +145,6 @@ def cache_singularity_image(image):
                 image_filename,
                 "docker://singlecellopenproblems/{}".format(image),
             ],
-            print_stdout=True,
         )
         with open(image_age_filename, "w") as handle:
             handle.write(str(time.time()))
@@ -215,7 +214,7 @@ def run_image(image, *args):
         container_command = docker_command
     else:
         container_command = singularity_command
-    utils.run.run(container_command(image, *args), print_stdout=True)
+    utils.run.run(container_command(image, *args))
 
 
 @parameterized.parameterized.expand(
