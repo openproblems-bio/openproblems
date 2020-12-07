@@ -1,4 +1,4 @@
-import magic
+import magic as _magic
 import scprep
 import numpy as np
 
@@ -19,7 +19,7 @@ from ....tools.utils import check_version
 def magic(adata):
     X, libsize = scprep.normalize.library_size_normalize(adata.obsm["train"], rescale=1)
     X = scprep.transform.sqrt(X)
-    Y = magic.MAGIC().fit_transform(X, genes="all_genes")
+    Y = _magic.MAGIC().fit_transform(X, genes="all_genes")
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
