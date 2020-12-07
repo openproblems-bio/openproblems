@@ -10,10 +10,11 @@ URL = "https://ndownloader.figshare.com/files/25555739"
 
 
 @loader
-def load_10x_5k_pbmc(test=False):
+def load_tenx_5k_pbmc(test=False):
+    """Download 5k PBMCs from 10x Genomics."""
     if test:
         # load full data first, cached if available
-        adata = load_10x_5k_pbmc(test=False)
+        adata = load_tenx_5k_pbmc(test=False)
 
         # Subsample pancreas data
         adata = adata[:, :500].copy()
@@ -37,4 +38,3 @@ def load_10x_5k_pbmc(test=False):
             filter_genes_cells(adata)
 
         return adata
-
