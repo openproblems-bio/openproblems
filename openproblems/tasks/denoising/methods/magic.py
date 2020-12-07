@@ -1,4 +1,6 @@
 import magic
+import scprep
+import numpy as np
 
 from ....tools.decorators import method
 from ....tools.utils import check_version
@@ -14,8 +16,11 @@ from ....tools.utils import check_version
     code_version=check_version("magic-impute"),
     image="openproblems-python-extras",
 )
-def no_denoising(adata):
-    adata.obsm["denoised"] = magic.MAGIC().fit_transform(
-        adata.obsm["train"], genes="all_genes"
-    )
+def magic(adata):
+    X, libsize = scprep.normalize.library_size_normalize(adata.obsm["train"], rescale=1)
+    X = scprep.transform.sqrt(X)
+    Y = magic.MAGIC().fit_transform(X, genes="all_genes")
+    Y = scprep.utils.matrix_transform(Y, np.square)
+    Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
+    adata.obsm["denoised"] = Y
     return adata
