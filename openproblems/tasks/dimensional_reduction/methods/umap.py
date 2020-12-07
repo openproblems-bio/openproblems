@@ -15,3 +15,4 @@ import scanpy as sc
 def umap(adata):
     
     sc.tl.umap(adata)
+    adata.obsm['X_emb'] = adata.obsm['X_umap']
