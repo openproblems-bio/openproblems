@@ -37,4 +37,3 @@ def load_human_blood_nestorowa2016(test=False):
             filter_genes_cells(adata)
 
         return adata
-

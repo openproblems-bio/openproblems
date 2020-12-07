@@ -2,6 +2,7 @@ from ....tools.decorators import method
 
 import scanpy as sc
 
+
 @method(
     method_name="Uniform Manifold Approximation and Projection (UMAP)",
     paper_name="UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction",
@@ -10,9 +11,7 @@ import scanpy as sc
     code_url="https://github.com/lmcinnes/umap",
     code_version="0.4.6",
 )
-
-
 def umap(adata):
-    
+
     sc.tl.umap(adata)
-    adata.obsm['X_emb'] = adata.obsm['X_umap']
+    adata.obsm["X_emb"] = adata.obsm["X_umap"]
