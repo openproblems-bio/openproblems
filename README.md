@@ -59,7 +59,7 @@ Task-specific APIs are described in the README for each task.
 
 ### Writing functions in R
 
-Metrics and methods can also be written in R, using [`scprep`'s `RFunction`](https://scprep.readthedocs.io/en/stable/reference.html#scprep.run.RFunction) class. AnnData Python objects are converted to and from `SingleCellExperiment` R objects using [`anndata2ri`](https://icb-anndata2ri.readthedocs-hosted.com/en/latest/). See the anndata2ri docs for API details.
+Metrics and methods can also be written in R, using [`scprep`'s `RFunction`](https://scprep.readthedocs.io/en/stable/reference.html#scprep.run.RFunction) class. AnnData Python objects are converted to and from `SingleCellExperiment` R objects using [`anndata2ri`](https://icb-anndata2ri.readthedocs-hosted.com/en/latest/). See the anndata2ri docs for API details. For an example of how to use this functionality, see our implementation of [fastMNN batch correction](openproblems/tasks/multimodal_data_integration/methods/mnn.py).
 
 ## Adding a new dataset
 
