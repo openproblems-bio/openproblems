@@ -1,0 +1,104 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  run_tests:
+    runs-on: ${{ matrix.config.os }}
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    env:
+      RENV_PATHS_ROOT: ~/.local/share/renv
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {name: 'current', os: ubuntu-latest, python: '3.8', r: 'release' }
+        - {name: 'prev', os: ubuntu-latest, python: '3.7', r: 'release' }
+        - {name: 'old', os: ubuntu-latest, python: '3.6', r: 'release' }
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Install system dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev libcurl4-openssl-dev
+
+    - name: Install Singularity
+      uses: eWaterCycle/setup-singularity@v5
+      with:
+        singularity-version: 3.6.1
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config.python }}
+
+    - name: Set up R
+      id: setup-r
+      uses: r-lib/actions/setup-r@v1
+      with:
+        r-version: ${{ matrix.config.r }}
+
+    - name: Cache Python packages
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.pythonLocation }}
+        key: ${{runner.os}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
+
+    - name: Install package & dependencies
+      run: |
+        python -m pip install --upgrade "pip<=21.0"
+        pip install --use-deprecated=legacy-resolver -U wheel setuptools
+        pip install --use-deprecated=legacy-resolver -U .[test,r]
+        python -c "import openproblems"
+
+    - name: Cache R packages
+      uses: actions/cache@v2
+      if: startsWith(runner.os, 'Linux')
+      with:
+        path: ${{ env.RENV_PATHS_ROOT }}
+        key: ${{ runner.os }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-${{ hashFiles('**/renv.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-
+
+    - name: Install R packages
+      run: |
+        if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+        renv::restore()
+        renv::install("bioc::scran")
+      shell: Rscript {0}
+
+    - name: Cache Singularity images
+      uses: actions/cache@v2
+      with:
+        path: ~/.singularity
+        key: ${{runner.os}}-singularity-${{ env.pythonLocation }}-${{ hashFiles('**/.docker_push') }}
+
+    - name: Run tests
+      run: nose2 -vvv
+
+    - name: Upload coverage
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        coverage combine -a .
+        coveralls
+
+    - name: Upload check results on fail
+      if: failure()
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{ matrix.config.name }}_results
+        path: check

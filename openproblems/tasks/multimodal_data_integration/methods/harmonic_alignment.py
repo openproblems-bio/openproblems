@@ -1,4 +1,3 @@
-import numpy as np
 from sklearn.decomposition import TruncatedSVD
 from ....tools.normalize import sqrt_cpm, log_cpm, log_scran_pooling
 from ....tools.decorators import method
