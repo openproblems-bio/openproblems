@@ -1,6 +1,3 @@
-import numpy as np
-
-
 def check_dataset(adata):
     """Check that dataset output fits expected API."""
     return True
