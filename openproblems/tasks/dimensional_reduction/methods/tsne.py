@@ -2,6 +2,7 @@ from ....tools.decorators import method
 
 import scanpy as sc
 
+
 @method(
     method_name="“t-Distributed Stochastic Neighbor Embedding (t-SNE)",
     paper_name="Visualizing Data using t-SNE",
@@ -10,9 +11,7 @@ import scanpy as sc
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html#sklearn.manifold.TSNE",
     code_version=check_version("scikit-learn"),
 )
-
-
 def tsne(adata):
-    
+
     sc.tl.tsne(adata)
-    adata.obsm['X_emb'] = adata.obsm['X_tsne']
+    adata.obsm["X_emb"] = adata.obsm["X_tsne"]

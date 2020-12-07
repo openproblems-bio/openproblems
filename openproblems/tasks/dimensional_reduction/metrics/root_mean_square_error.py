@@ -50,7 +50,7 @@ def calculate_rmse(adata):
 def rmse(adata):
 
     """Calculate the root mean squared error (RMSE) between the full (or processed) data matrix and a list of dimensionally-reduced matrices."""
-    
+
     if check_method(adata) == True:
 
         (
@@ -60,4 +60,3 @@ def rmse(adata):
         ) = calculate_rmse(adata)
 
         return float(adata.uns["rmse_score"])
-

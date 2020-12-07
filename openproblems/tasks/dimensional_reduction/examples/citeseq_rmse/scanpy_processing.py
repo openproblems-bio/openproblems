@@ -1,9 +1,11 @@
 import scanpy as sc
 
+
 def run_standard_scanpy_preprocessing(adata):
 
     sc.pl.highest_expr_genes(
-        adata, n_top=20,
+        adata,
+        n_top=20,
     )
     sc.pp.filter_cells(adata, min_genes=200)
     sc.pp.filter_genes(adata, min_cells=3)
@@ -40,30 +42,32 @@ def run_standard_scanpy_preprocessing(adata):
 
     return adata
 
+
 def scanpy_plot_pca(adata, color, edges, frameon, size):
-    
+
     import scanpy as sc
 
     sc.pl.pca(adata, color=color, edges=edges, frameon=frameon, size=size)
 
 
 def scanpy_plot_umap(adata, color, edges, frameon, size):
-    
+
     import scanpy as sc
 
     sc.pl.umap(adata, color=color, edges=edges, frameon=frameon, size=size)
 
 
 def scanpy_plot_tsne(adata, color, edges, frameon, size):
-    
+
     import scanpy as sc
 
     sc.pl.tsne(adata, color=color, edges=edges, frameon=frameon, size=size)
-    
+
+
 def scanpy_pca(adata, color, edges, frameon, size):
-    
+
     import scanpy as sc
-    
+
     try:
         scanpy_plot_pca(adata, color, edges, frameon, size)
     except:
@@ -73,9 +77,9 @@ def scanpy_pca(adata, color, edges, frameon, size):
 
 
 def scanpy_umap(adata, color, edges, frameon, size):
-    
+
     import scanpy as sc
-    
+
     try:
         scanpy_plot_umap(adata, color, edges, frameon, size)
     except:
@@ -84,29 +88,37 @@ def scanpy_umap(adata, color, edges, frameon, size):
 
 
 def scanpy_tsne(adata, color, edges, frameon, size):
-    
+
     import scanpy as sc
-    
+
     try:
         scanpy_plot_tsne(adata, color, edges, frameon, size)
     except:
         sc.tl.tsne(adata)
         scanpy_plot_tsne(adata, color, edges, frameon, size)
-        
-def scanpy_projection(adata, color=['leiden', "HUMAN_HDAC1", "HUMAN_TP53"], pca=True, umap=True, tsne=True, edges=False, frameon=False, size=30):
-    
+
+
+def scanpy_projection(
+    adata,
+    color=["leiden", "HUMAN_HDAC1", "HUMAN_TP53"],
+    pca=True,
+    umap=True,
+    tsne=True,
+    edges=False,
+    frameon=False,
+    size=30,
+):
+
     import scanpy as sc
-    
+
     sc.pp.neighbors(adata, n_neighbors=10, n_pcs=50)
     sc.tl.leiden(adata)
-    
-    if pca==True:
-        scanpy_pca(adata, color, edges, frameon, size) 
-        
 
-    
-    if tsne==True:
+    if pca == True:
+        scanpy_pca(adata, color, edges, frameon, size)
+
+    if tsne == True:
         scanpy_tsne(adata, color, edges, frameon, size)
-        
-    if umap==True:
+
+    if umap == True:
         scanpy_umap(adata, color, edges, frameon, size)

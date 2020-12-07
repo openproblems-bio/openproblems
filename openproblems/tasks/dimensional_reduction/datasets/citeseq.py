@@ -1,4 +1,3 @@
-  
 from ....data.multimodal.citeseq import load_citeseq_cbmc
 from ....tools.decorators import dataset
 
