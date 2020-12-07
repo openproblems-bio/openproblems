@@ -1,12 +1,9 @@
 import os
 import tempfile
-
-import numpy as np
 import scprep
 import scanpy as sc
 
 from .utils import loader
-from ..tools import normalize as n
 
 
 @loader
