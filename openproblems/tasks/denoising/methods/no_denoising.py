@@ -15,3 +15,4 @@ from ....tools.utils import check_version
 def no_denoising(adata: AnnData) -> None:
     """Do nothing."""
     adata.obsm["denoised"] = adata.obsm["train"]
+    return adata
