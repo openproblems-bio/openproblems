@@ -15,5 +15,5 @@ import scanpy as sc
 )
 def pca(adata):
     sc.tl.pca(adata)
-    adata.obsm["X_emb"] = adata.obsm["X_pca"]
+    adata.obsm["X_emb"] = adata.obsm["X_pca"][:, :2]
     return adata

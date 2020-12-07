@@ -8,5 +8,6 @@ def check_dataset(adata):
 
 def check_method(adata):
     """Check that method output fits expected API."""
-    assert np.sum(adata.obsm["X_emb"]) > 0
+    assert "X_emb" in adata.obsm
+    assert adata.obsm["X_emb"].shape[1] == 2
     return True
