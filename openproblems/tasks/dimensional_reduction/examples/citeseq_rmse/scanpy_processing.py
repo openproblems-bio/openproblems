@@ -44,56 +44,38 @@ def run_standard_scanpy_preprocessing(adata):
 
 
 def scanpy_plot_pca(adata, color, edges, frameon, size):
-
-    import scanpy as sc
-
     sc.pl.pca(adata, color=color, edges=edges, frameon=frameon, size=size)
 
 
 def scanpy_plot_umap(adata, color, edges, frameon, size):
-
-    import scanpy as sc
-
     sc.pl.umap(adata, color=color, edges=edges, frameon=frameon, size=size)
 
 
 def scanpy_plot_tsne(adata, color, edges, frameon, size):
-
-    import scanpy as sc
-
     sc.pl.tsne(adata, color=color, edges=edges, frameon=frameon, size=size)
 
 
 def scanpy_pca(adata, color, edges, frameon, size):
-
-    import scanpy as sc
-
     try:
         scanpy_plot_pca(adata, color, edges, frameon, size)
-    except:
+    except KeyError:
         sc.tl.pca(adata)
         sc.pl.pca_variance_ratio(adata, log=True)
         scanpy_plot_pca(adata, color, edges, frameon, size)
 
 
 def scanpy_umap(adata, color, edges, frameon, size):
-
-    import scanpy as sc
-
     try:
         scanpy_plot_umap(adata, color, edges, frameon, size)
-    except:
+    except KeyError:
         sc.tl.umap(adata)
         scanpy_plot_umap(adata, color, edges, frameon, size)
 
 
 def scanpy_tsne(adata, color, edges, frameon, size):
-
-    import scanpy as sc
-
     try:
         scanpy_plot_tsne(adata, color, edges, frameon, size)
-    except:
+    except KeyError:
         sc.tl.tsne(adata)
         scanpy_plot_tsne(adata, color, edges, frameon, size)
 
@@ -108,17 +90,14 @@ def scanpy_projection(
     frameon=False,
     size=30,
 ):
-
-    import scanpy as sc
-
     sc.pp.neighbors(adata, n_neighbors=10, n_pcs=50)
     sc.tl.leiden(adata)
 
-    if pca == True:
+    if pca:
         scanpy_pca(adata, color, edges, frameon, size)
 
-    if tsne == True:
+    if tsne:
         scanpy_tsne(adata, color, edges, frameon, size)
 
-    if umap == True:
+    if umap:
         scanpy_umap(adata, color, edges, frameon, size)
