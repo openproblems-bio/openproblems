@@ -14,6 +14,6 @@ import scanpy as sc
     code_version=check_version("umap-learn"),
 )
 def umap(adata):
-
     sc.tl.umap(adata)
     adata.obsm["X_emb"] = adata.obsm["X_umap"]
+    return adata

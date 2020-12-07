@@ -14,6 +14,6 @@ import scanpy as sc
     code_version=check_version("scikit-learn"),
 )
 def pca(adata):
-
     sc.tl.pca(adata)
     adata.obsm["X_emb"] = adata.obsm["X_pca"]
+    return adata
