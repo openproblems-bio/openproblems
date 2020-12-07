@@ -11,18 +11,15 @@ def calculate_squareform_pairwise_distance(data):
     Compute pairwise distance between points in a matrix / vector and then format this
     into a squareform vector.
     """
-    df = pd.DataFrame(sp.spatial.distance.squareform(sp.spatial.distance.pdist(data)))
-    return df
+    return sp.spatial.distance.squareform(sp.spatial.distance.pdist(data))
 
 
 def calculate_rmse(adata):
     """Calculate dimensional reduction stress via root mean square error."""
-    high_dimensional_distance_matrix = calculate_squareform_pairwise_distance(
-        pd.DataFrame(adata.X)
-    )
+    high_dimensional_distance_matrix = calculate_squareform_pairwise_distance(adata.X)
 
     low_dimensional_distance_matrix = calculate_squareform_pairwise_distance(
-        pd.DataFrame(adata.obsm["X_emb"])
+        adata.obsm["X_emb"]
     )
 
     diff = high_dimensional_distance_matrix - low_dimensional_distance_matrix
