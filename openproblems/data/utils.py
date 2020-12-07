@@ -2,9 +2,13 @@ import scanpy as sc
 import os
 import anndata
 import hashlib
+import logging
 
 from decorator import decorator
 from . import TEMPDIR
+
+
+log = logging.getLogger("openproblems")
 
 
 def _func_to_bytes(func):
@@ -15,19 +19,35 @@ def _obj_to_bytes(obj):
     return bytes(str(obj), encoding="utf-8")
 
 
-@decorator
-def loader(func, *args, **kwargs):
+def _hash_function(func, *args, **kwargs):
     hash = hashlib.sha256()
     hash.update(_func_to_bytes(func))
     hash.update(_obj_to_bytes(args))
     hash.update(_obj_to_bytes(kwargs))
-    filename = "openproblems_{}.h5ad".format(hash.hexdigest())
+    return hash.hexdigest()
+
+
+@decorator
+def loader(func, *args, **kwargs):
+    """Decorate a data loader function."""
+    filename = "openproblems_{}.h5ad".format(_hash_function(func, *args, **kwargs))
     filepath = os.path.join(TEMPDIR, filename)
     if os.path.isfile(filepath):
-        return anndata.read_h5ad(filepath)
+        log.debug(
+            "Loading cached {}({}, {}) dataset".format(func.__name__, args, kwargs)
+        )
+        adata = anndata.read_h5ad(filepath)
+        adata.__from_cache__ = True
+        return adata
     else:
+        log.debug("Downloading {}({}, {}) dataset".format(func.__name__, args, kwargs))
         adata = func(*args, **kwargs)
-        adata.write(filepath)
+        adata.__from_cache__ = False
+        try:
+            os.mkdir(TEMPDIR)
+        except OSError:
+            pass
+        adata.write_h5ad(filepath)
         return adata
 
 

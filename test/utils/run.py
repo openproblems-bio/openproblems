@@ -1,71 +1,19 @@
-import numpy as np
-
-import anndata
-import warnings
-import parameterized
 import subprocess
+import time
+import sys
+import logging
+from . import streams
 
-from scipy import sparse
-
-
-def object_name(x):
-    """Get a human readable name for an object."""
-    try:
-        return x.__name__
-    except AttributeError:
-        return str(x)
+log = logging.getLogger("openproblems")
 
 
-def name_test(testcase_func, param_num, param):
-    """Get a human readable name for a parameterized test."""
-    return "%s_%s" % (
-        testcase_func.__name__,
-        parameterized.parameterized.to_safe_name(
-            "_".join(object_name(x) for x in param.args)
-        ),
+def format_error_timeout(process, timeout, stream):
+    """Format subprocess output on timeout."""
+    return "{}\nTimed out after {} s\n\n{}".format(
+        " ".join(process.args),
+        timeout,
+        streams.NonBlockingStreamReader(stream).read().decode("utf-8"),
     )
-
-
-def ignore_warnings():
-    """Ignore irrelevant warnings."""
-    warnings.filterwarnings(
-        "ignore",
-        category=FutureWarning,
-        message="is_categorical is deprecated and will be removed in a future version."
-        "  Use is_categorical_dtype instead",
-    )
-
-    try:
-        import numba
-    except ImportError:
-        return
-
-    warnings.filterwarnings("ignore", category=numba.NumbaWarning)
-
-
-def data(obsm=None):
-    """Create fake data."""
-    adata = anndata.AnnData(np.random.poisson(2, (100, 30)))
-    if obsm is not None:
-        adata.obsm[obsm] = adata.X * 2 + 1
-        adata.uns["{}_obs".format(obsm)] = np.arange(adata.shape[0]) + 5
-        adata.uns["{}_var".format(obsm)] = np.arange(adata.shape[1]) + 12
-    return adata
-
-
-def assert_array_equal(X, Y):
-    """Assert two arrays to be equal, whether sparse or dense."""
-    assert X.shape == Y.shape
-    if sparse.issparse(X) and sparse.issparse(Y):
-        X = X.tocsr()
-        Y = Y.tocsr()
-        np.testing.assert_array_equal(X.data, Y.data)
-        np.testing.assert_array_equal(X.indices, Y.indices)
-        np.testing.assert_array_equal(X.indptr, Y.indptr)
-    else:
-        X = np.asarray(X)
-        Y = np.asarray(Y)
-        np.testing.assert_array_equal(X, Y)
 
 
 def _format_error(process, stream):
@@ -109,6 +57,7 @@ def run(
     return_code=False,
     error_raises=AssertionError,
     format_error=None,
+    timeout=3600,
 ):
     """Run subprocess.
 
@@ -139,7 +88,22 @@ def run(
         stderr = subprocess.STDOUT
         if format_error is None:
             format_error = format_error_stdout
+
+    log.debug("Running subprocess: {}".format(command))
     p = subprocess.Popen(command, shell=shell, stdout=subprocess.PIPE, stderr=stderr)
+    if timeout is not None:
+        runtime = 0
+        if p.poll() is None:
+            time.sleep(1)
+            runtime += 1
+        if runtime > timeout:
+            raise RuntimeError(
+                format_error_timeout(
+                    p, timeout, p.stderr if stderr is subprocess.PIPE else p.stdout
+                )
+            )
+
+    log.debug("Awaiting subprocess completion")
     if print_stdout:
         while True:
             output = p.stdout.readline().decode("utf-8")
@@ -147,6 +111,11 @@ def run(
                 break
             if output:
                 print(output.strip())
+                sys.stdout.flush()
+    else:
+        p.wait()
+
+    log.debug("Subprocess complete")
     p.stdout, p.stderr = p.communicate()
     output = []
     if return_stdout:

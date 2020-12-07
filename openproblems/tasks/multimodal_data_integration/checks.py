@@ -2,6 +2,7 @@ import numpy as np
 
 
 def check_dataset(adata):
+    """Check that dataset output fits expected API."""
     assert "mode2" in adata.obsm
     assert "mode2_obs" in adata.uns
     assert "mode2_var" in adata.uns
@@ -11,6 +12,7 @@ def check_dataset(adata):
 
 
 def check_method(adata):
+    """Check that method output fits expected API."""
     assert "aligned" in adata.obsm
     assert "mode2_aligned" in adata.obsm
     assert adata.obsm["aligned"].shape[0] == adata.shape[0]
