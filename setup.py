@@ -4,10 +4,11 @@ from setuptools import setup, find_packages
 install_requires = [
     "numpy>=1.17.0",
     "scikit-learn>=0.19.1",
-    "anndata",
+    "anndata>=0.7.5",
     "scprep>=1.0.10",
     "scipy",
     "scanpy>=1.6",
+    "louvain>=0.6,<0.7",
     "decorator",
     "memory-profiler",
     "parameterized",
