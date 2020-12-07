@@ -1,7 +1,7 @@
 from ... import utils
 from . import datasets, methods, metrics, checks
 
-_task_name = "Gene expression prediction"
+_task_name = "Regulatory effect prediction"
 
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)
