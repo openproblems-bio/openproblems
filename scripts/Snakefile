@@ -1,229 +1,108 @@
-import openproblems
-import tempfile
 import os
-import sys
-import multiprocessing
-
-N_THREADS = multiprocessing.cpu_count()
-TEMPDIR = ".evaluate"
-SCRIPTS_DIR = os.getcwd()
-DOCKER_DIR = "/opt/openproblems/scripts/"
-RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
-DOCKER_EXEC = """
-    CONTAINER=$(docker run -dt --rm \
-                --mount type=bind,source="{mountdir}",target=/opt/openproblems \
-                singlecellopenproblems/{{image}})
-    docker exec $CONTAINER /bin/bash /opt/openproblems/scripts/docker_run.sh \
-""".format(
-    mountdir=os.path.dirname(SCRIPTS_DIR)
-)
-DOCKER_PASSWORD = os.environ['DOCKER_PASSWORD'] if 'DOCKER_PASSWORD' in os.environ else None
-
-
-def tasks(wildcards):
-    return [
-        os.path.join(TEMPDIR, "{}.json".format(t.__name__.split(".")[-1]))
-        for t in openproblems.TASKS
-    ]
-
-
-def all_methods(wildcards):
-    return [
-        os.path.join(
-            TEMPDIR,
-            task.__name__.split(".")[-1],
-            dataset.__name__,
-            "{}.result.json".format(method.__name__),
-        )
-        for task in openproblems.TASKS
-        for dataset in task.DATASETS
-        for method in task.METHODS
-    ]
-
-
-def methods(wildcards):
-    task = getattr(openproblems.tasks, wildcards.task)
-    return [
-        os.path.join(
-            TEMPDIR,
-            wildcards.task,
-            wildcards.dataset,
-            "{}.result.json".format(m.__name__),
-        )
-        for m in task.METHODS
-    ]
-
-
-def metrics(wildcards):
-    task = getattr(openproblems.tasks, wildcards.task)
-    return [
-        os.path.join(
-            TEMPDIR,
-            wildcards.task,
-            wildcards.dataset,
-            wildcards.method,
-            "{}.metric.json".format(m.__name__),
-        )
-        for m in task.METRICS
-    ]
-
-
-def datasets(wildcards):
-    return [
-        os.path.join(
-            RESULTS_DIR, task.__name__.split(".")[-1], "{}.json".format(d.__name__)
-        )
-        for task in openproblems.TASKS
-        for d in task.DATASETS
-    ]
-
-
-def docker_image_name(wildcards):
-    task = getattr(openproblems.tasks, wildcards.task)
-    try:
-        fun = getattr(task.metrics, wildcards.metric)
-    except AttributeError:
-        fun = getattr(task.methods, wildcards.method)
-    return fun.metadata["image"]
-
-
-def docker_image_marker(image):
-    docker_path = "../docker/{}".format(image)
-    docker_push = os.path.join(docker_path, ".docker_push")
-    docker_pull = os.path.join(docker_path, ".docker_pull")
-    docker_build = os.path.join(docker_path, ".docker_build")
-    dockerfile = os.path.join(docker_path, "Dockerfile")
-    if os.path.getmtime(docker_push) > os.path.getmtime(dockerfile):
-        # Dockerfile hasn't been changed since last push, pull it
-        return docker_pull
-    elif DOCKER_PASSWORD:
-        # we have the password, let's push it
-        return docker_push
-    else:
-        # new image and we don't have the password, build locally
-        return docker_build
-
-
-
-def _docker_requirements(image):
-    docker_dir = "../docker/{}/".format(image)
-    dockerfile = os.path.join(docker_dir, "Dockerfile")
-    requirements = [
-        os.path.join(docker_dir, f)
-        for f in os.listdir(docker_dir)
-        if f.endswith("requirements.txt")
-    ] + [dockerfile]
-    with open(os.path.join(docker_dir, "Dockerfile"), 'r') as handle:
-        base_image = next(handle).replace("FROM ", "")
-        if base_image.startswith("singlecellopenproblems"):
-            base_image = base_image.split(":")[0].split("/")[1]
-            requirements.extend(_docker_requirements(base_image))
-    return requirements
-
-def docker_requirements(wildcards):
-    return _docker_requirements(wildcards.image)
-
-def docker_push(wildcards):
-    return docker_image_marker(docker_image_name(wildcards))
-
-
-def docker_command(wildcards, output):
-    image = docker_image_name(wildcards)
-    return DOCKER_EXEC.format(image=image)
-
+import snakemake_tools as tools
 
 rule all:
     input:
-        summary = "{}/../results.json".format(SCRIPTS_DIR),
-        website = "{}/complete.temp".format(TEMPDIR),
+        summary = "{}/../results.json".format(tools.SCRIPTS_DIR),
+        website = "{}/website.complete.temp".format(tools.TEMPDIR),
 
 rule website:
-    input: datasets
-    output: temp("{}/complete.temp".format(TEMPDIR))
+    input: tools.datasets
+    output: temp("{}/website.complete.temp".format(tools.TEMPDIR))
     shell: "touch {output}"
+
+rule docker:
+    input: tools.images
 
 rule summary:
     input:
         script = "collate_all.py",
-        methods = all_methods,
+        methods = tools.all_methods,
     params:
-        dir = TEMPDIR
-    output: "{}/../results.json".format(SCRIPTS_DIR)
+        dir = tools.TEMPDIR
+    output: "{}/../results.json".format(tools.SCRIPTS_DIR)
     shell: "python3 {input.script} {params.dir} {output}"
 
 rule collate_dataset:
     input:
         script = "collate_dataset.py",
-        methods = methods,
+        methods = tools.methods,
     params:
-        dir = TEMPDIR
-    output: "{}/{{task}}/{{dataset}}.json".format(RESULTS_DIR)
-    shell: "python3 {input.script} {wildcards.task} {wildcards.dataset} {params.dir}/{wildcards.task}/{wildcards.dataset} {output}"
+        dir = tools.TEMPDIR
+    output: "{}/{{task}}/{{dataset}}.json".format(tools.RESULTS_DIR)
+    shell:
+        """python3 {input.script} {wildcards.task} {wildcards.dataset} \
+        {params.dir}/{wildcards.task}/{wildcards.dataset} {output}"""
 
 rule collate_method:
     input:
         script = "collate_method.py",
         meta = "{tempdir}/{task}/{dataset}/{method}.meta.json",
-        metrics = metrics,
+        metrics = tools.metrics,
     output: temp("{tempdir}/{task}/{dataset}/{method}.result.json")
-    shell: "python3 {input.script} {wildcards.task} {input.meta} {wildcards.tempdir}/{wildcards.task}/{wildcards.dataset}/{wildcards.method} {output}"
+    shell:
+        """python3 {input.script} {wildcards.task} {input.meta} \
+        {wildcards.tempdir}/{wildcards.task}/{wildcards.dataset}/{wildcards.method} \
+        {output}"""
 
 rule evaluate_metric:
     input:
         script = "evaluate_metric.py",
         data = "{tempdir}/{task}/{dataset}/{method}.method.h5ad",
-        docker = docker_push,
+        docker = tools.docker_push,
     output: temp("{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json")
     params:
-        workdir = DOCKER_DIR,
-        docker = docker_command
-    threads: N_THREADS
-    shell: """
-    {params.docker} {params.workdir} {input.script} {wildcards.task} {wildcards.metric} {input.data} {output} && \
-    docker stop $CONTAINER
-    """
+        workdir = tools.DOCKER_DIR,
+        docker = tools.docker_command
+    threads: tools.N_THREADS
+    shell:
+        """{params.docker} {params.workdir} {input.script} {wildcards.task} \
+        {wildcards.metric} {input.data} {output} && \
+        docker stop $CONTAINER"""
 
 rule run_method:
     input:
         script = "run_method.py",
         data = "{tempdir}/{task}/{dataset}.data.h5ad",
-        docker = docker_push,
+        docker = tools.docker_push,
     output:
         data = temp("{tempdir}/{task}/{dataset}/{method}.method.h5ad"),
         json = temp("{tempdir}/{task}/{dataset}/{method}.meta.json"),
     params:
-        workdir = DOCKER_DIR,
-        docker = docker_command
-    threads: N_THREADS
-    shell: """
-    {params.docker} {params.workdir} {input.script} {wildcards.task} {wildcards.method} {input.data} {output.data} {output.json} && \
-    docker stop $CONTAINER
-    """
+        workdir = tools.DOCKER_DIR,
+        docker = tools.docker_command
+    threads: tools.N_THREADS
+    shell:
+        """{params.docker} {params.workdir} {input.script} {wildcards.task} \
+        {wildcards.method} {input.data} {output.data} {output.json} && \
+        docker stop $CONTAINER"""
 
 rule load_dataset:
     input:
         script = "load_dataset.py",
-        code = "{}/../openproblems/version.py".format(SCRIPTS_DIR)
+        code = "{}/../openproblems/version.py".format(tools.SCRIPTS_DIR)
     output: temp("{tempdir}/{task}/{dataset}.data.h5ad")
     shell: "python3 {input.script} {wildcards.task} {wildcards.dataset} {output}"
 
 rule build_docker:
     input:
-        dockerfile="../docker/{image}/Dockerfile",
-        requirements=docker_requirements,
+        dockerfile = "../docker/{image}/Dockerfile",
+        requirements = tools.docker_requirements,
     output:
         "../docker/{image}/.docker_build"
     params:
-        sourcedir=os.path.dirname(SCRIPTS_DIR)
+        sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
+        user = "singlecellopenproblems"
     shell:
-        "docker build -f {input.dockerfile} -t singlecellopenproblems/{wildcards.image} .. && touch {output}"
+        """docker build -f {input.dockerfile} -t {params.user}/{wildcards.image} .. \
+        && touch {output}"""
 
 rule password_docker:
     output:
-        filename=temp(".docker_password")
+        filename = temp(".docker_password")
     run:
         with open(output.filename, 'w') as handle:
-            handle.write(DOCKER_PASSWORD)
+            handle.write(tools.DOCKER_PASSWORD)
 
 rule login_docker:
     input:
@@ -231,12 +110,14 @@ rule login_docker:
     output:
         temp(".docker_login")
     shell:
-        "cat {input} | docker login --username=singlecellopenproblems --password-stdin && touch {output}"
+        """cat {input} | \
+        docker login --username=singlecellopenproblems --password-stdin && \
+        touch {output}"""
 
 rule push_docker:
     input:
-        build="../docker/{image}/.docker_build",
-        login=".docker_login",
+        build = "../docker/{image}/.docker_build",
+        login = ".docker_login",
     output:
         "../docker/{image}/.docker_push"
     shell:

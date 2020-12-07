@@ -1,0 +1,74 @@
+name: Run Benchmark
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - test_benchmark
+
+jobs:
+  run_benchmark:
+    runs-on: ${{ matrix.config.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {name: 'current', os: ubuntu-latest, python: '3.8' }
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install system dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config.python }}
+
+    - name: Cache Python packages
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.pythonLocation }}
+        key: ${{runner.os}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
+
+    - name: Install package & dependencies
+      run: |
+        python -m pip install --upgrade "pip<=21.0"
+        pip install --use-deprecated=legacy-resolver -U wheel setuptools
+        pip install --use-deprecated=legacy-resolver -U .[evaluate]
+        python -c "import openproblems"
+
+    - name: Run benchmark
+      run: |
+        cd scripts
+        snakemake -j $(grep -c processor /proc/cpuinfo) all
+        cd ..
+
+    - name: Upload results on success
+      env:
+        GH_USERNAME: ${{ secrets.GH_USERNAME }}
+        GH_PASSWORD: ${{ secrets.GH_PASSWORD }}
+      run: |
+        git remote set-url origin https://${GH_USERNAME}:${GH_PASSWORD}@github.com/${GITHUB_REPOSITORY}.git
+        git checkout -B master
+        git pull origin master
+        git add results.md
+        git add website/data/results
+        git config user.name "Github Actions"
+        git config user.email "singlecellopenproblems@protonmail.com"
+        git commit -m "Update results for ${GITHUB_REF} - ci skip"
+        git push origin master
+
+    - name: Upload check results on fail
+      if: failure()
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{ matrix.config.name }}_results
+        path: check

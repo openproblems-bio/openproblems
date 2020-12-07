@@ -7,14 +7,15 @@ from ....tools.decorators import method
 
 
 def _chrom_limit(x, tss_size=2e5):
-    """Extending TSS to upstream and downstream intervals
+    """Extend TSS to upstream and downstream intervals.
 
     Parameters
     ----------
     x : pd.Series
-        a pd.Series containing [start, end, direction] where start and end are ints and direction is {'+', '-'}.
+        a pd.Series containing [start, end, direction]
+        where start and end are ints and direction is {'+', '-'}.
     tss_size: int
-        a int that defines the upstream and downstream extending regions around TSS
+        a int that defines the upstream and downstream regions around TSS
     """
     y = x.values
     gene_direction = y[-1]
@@ -27,7 +28,7 @@ def _chrom_limit(x, tss_size=2e5):
 
 
 def _get_annotation(adata):
-    """This function insert meta data into .obs for adata"""
+    """Insert meta data into adata.obs."""
     from pyensembl import EnsemblRelease
 
     subprocess.call(
@@ -55,7 +56,7 @@ def _get_annotation(adata):
                     gene.strand,
                 ]
             )
-        except:
+        except KeyError:
             genes.append([np.nan, np.nan, np.nan, np.nan])
     old_col = adata.var.columns.values
     adata.var = pd.concat(
@@ -67,7 +68,7 @@ def _get_annotation(adata):
 
 
 def _atac_genes_score(adata, top_genes=500, threshold=1):
-    """This function calculate gene score and insert into .obsm"""
+    """Calculate gene scores and insert into .obsm."""
     import pybedtools
 
     # get annotation for TSS
@@ -101,10 +102,8 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
 
     # generate peak to gene weight matrix
     # remove genes without annotation
-    adata._inplace_subset_var(
-        (adata.var.loc[:, "chr"].isin(np.unique(adata.uns["mode2_var_chr"])))
-        & (~pd.isnull(adata.var.loc[:, "chr"]))
-    )
+    adata = adata[:, ~pd.isnull(adata.var.loc[:, "chr"])]
+    adata = adata[adata.var.loc[:, "chr"].isin(np.unique(adata.uns["mode2_var_chr"]))]
 
     # filter atac-seq matrix
     sel = np.isin(adata.uns["mode2_var_chr"], adata.var.loc[:, "chr"].unique())
@@ -179,12 +178,14 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
 
 @method(
     method_name="BETA",
-    paper_name="Target analysis by integration of transcriptome and ChIP-seq data with BETA",
+    paper_name="Target analysis by integration of transcriptome "
+    "and ChIP-seq data with BETA",
     paper_url="https://pubmed.ncbi.nlm.nih.gov/24263090/",
     paper_year=2013,
     code_version="1.0",
     code_url="http://cistrome.org/BETA/src/BETA_1.0.7.zip",
+    image="openproblems-python-extras",
 )
-def linear_regression_exponential_decay(adata, n_top_genes=5000, threshold=1):
+def beta(adata, n_top_genes=5000, threshold=1):
     adata = _atac_genes_score(adata, top_genes=n_top_genes, threshold=threshold)
     return adata

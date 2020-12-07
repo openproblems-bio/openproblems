@@ -1,3 +1,5 @@
+import utils
+
 import parameterized
 import tempfile
 import os
@@ -5,20 +7,21 @@ import functools
 import json
 import datetime
 import time
+import atexit
 
 import openproblems
-from openproblems.test import utils
 
-utils.ignore_warnings()
+utils.warnings.ignore_warnings()
 
 TESTDIR = os.path.dirname(os.path.abspath(__file__))
-BASEDIR = os.path.dirname(os.path.dirname(TESTDIR))
+BASEDIR = os.path.dirname(TESTDIR)
 CACHEDIR = os.path.join(os.environ["HOME"], ".singularity")
 os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
 os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
 
 
 def docker_paths(image):
+    """Get relevant paths for a Docker image."""
     docker_path = os.path.join(BASEDIR, "docker", image)
     docker_push = os.path.join(docker_path, ".docker_push")
     dockerfile = os.path.join(docker_path, "Dockerfile")
@@ -31,8 +34,9 @@ def docker_paths(image):
 
 
 def build_docker(image):
+    """Build a Docker image."""
     _, dockerfile, _ = docker_paths(image)
-    utils.run(
+    utils.run.run(
         [
             "docker",
             "build",
@@ -46,15 +50,17 @@ def build_docker(image):
     )
 
 
+@functools.lru_cache(maxsize=None)
+def docker_available():
+    """Check if Docker can be run."""
+    returncode = utils.run.run(["docker", "images"], return_code=True)
+    return returncode == 0
+
+
 def docker_image_age(image):
-    utils.run(
-        ["docker", "images"],
-        error_raises=RuntimeError,
-        format_error=lambda p: "The Dockerfile for image {} is newer than the "
-        "latest push, but Docker is not available. "
-        "Return code {}\n\n{}".format(image, p.returncode, p.stdout.decode("utf-8")),
-    )
-    image_info, returncode = utils.run(
+    """Check when the Docker image was built."""
+    assert docker_available()
+    image_info, returncode = utils.run.run(
         ["docker", "inspect", "singlecellopenproblems/{}:latest".format(image)],
         return_stdout=True,
         return_code=True,
@@ -72,6 +78,7 @@ def docker_image_age(image):
 
 
 def docker_push_age(filename):
+    """Check when the Docker image was last pushed to Docker Hub."""
     try:
         with open(filename, "r") as handle:
             return float(handle.read().strip())
@@ -81,22 +88,45 @@ def docker_push_age(filename):
 
 @functools.lru_cache(maxsize=None)
 def image_requires_docker(image):
+    """Check if a specific image requires Docker or Singularity.
+
+    If the image has been modified more recently than it was pushed to Docker Hub, then
+    it should be run in Docker. Otherwise, we use Singularity.
+    """
     docker_push, dockerfile, requirements = docker_paths(image)
     push_timestamp = docker_push_age(docker_push)
-    image_age = utils.git_file_age(dockerfile)
+    git_file_age = utils.run.git_file_age(dockerfile)
     for req in requirements:
-        req_age = utils.git_file_age(req)
-        image_age = max(image_age, req_age)
-    if push_timestamp > image_age:
+        req_age = utils.run.git_file_age(req)
+        git_file_age = max(git_file_age, req_age)
+    if push_timestamp > git_file_age:
         return False
     else:
-        if docker_image_age(image) < image_age:
+        if not docker_available():
+            raise RuntimeError(
+                "The Dockerfile for image {} is newer than the "
+                "latest push, but Docker is not available."
+            )
+        if docker_image_age(image) < git_file_age:
+            import sys
+
+            print(
+                "Building {}:\n"
+                "Docker push age: {}\n"
+                "Docker image modified: {}\n"
+                "Docker image age: {}".format(
+                    image, push_timestamp, git_file_age, docker_image_age(image)
+                ),
+                file=sys.stderr,
+            )
+            sys.stderr.flush()
             build_docker(image)
         return True
 
 
 @functools.lru_cache(maxsize=None)
 def cache_singularity_image(image):
+    """Download a Singularity image from Dockerhub."""
     docker_push, _, _ = docker_paths(image)
     push_timestamp = docker_push_age(docker_push)
     image_filename = "{}.sif".format(image)
@@ -106,7 +136,7 @@ def cache_singularity_image(image):
     if push_timestamp > image_age and os.path.isfile(image_path):
         os.remove(image_path)
     if not os.path.isfile(image_path):
-        utils.run(
+        utils.run.run(
             [
                 "singularity",
                 "--verbose",
@@ -114,7 +144,7 @@ def cache_singularity_image(image):
                 "--name",
                 image_filename,
                 "docker://singlecellopenproblems/{}".format(image),
-            ]
+            ],
         )
         with open(image_age_filename, "w") as handle:
             handle.write(str(time.time()))
@@ -122,6 +152,7 @@ def cache_singularity_image(image):
 
 
 def singularity_command(image, script, *args):
+    """Get the Singularity command to run a script."""
     return [
         "singularity",
         "--verbose",
@@ -130,14 +161,16 @@ def singularity_command(image, script, *args):
         "{}:/opt/openproblems".format(BASEDIR),
         cache_singularity_image(image),
         "/bin/bash",
-        "/opt/openproblems/openproblems/test/singularity_run.sh",
-        "/opt/openproblems/openproblems/test",
+        "/opt/openproblems/test/singularity_run.sh",
+        "/opt/openproblems/test",
         script,
     ] + list(args)
 
 
+@functools.lru_cache(maxsize=None)
 def cache_docker_image(image):
-    hash = utils.run(
+    """Run a Docker image and get the machine ID."""
+    hash = utils.run.run(
         [
             "docker",
             "run",
@@ -151,32 +184,37 @@ def cache_docker_image(image):
         ],
         return_stdout=True,
     )
-    return hash[:12]
+    container = hash[:12]
+
+    def stop():
+        utils.run.run(["docker", "stop", container])
+
+    atexit.register(stop)
+    return container
 
 
 def docker_command(image, script, *args):
+    """Get the Docker command to run a script."""
     container = cache_docker_image(image)
     run_command = [
         "docker",
         "exec",
         container,
         "/bin/bash",
-        "/opt/openproblems/openproblems/test/singularity_run.sh",
-        "/opt/openproblems/openproblems/test/",
+        "/opt/openproblems/test/singularity_run.sh",
+        "/opt/openproblems/test/",
         script,
     ] + list(args)
-    stop_command = ["docker", "stop", container]
-    return run_command, stop_command
+    return run_command
 
 
 def run_image(image, *args):
-    if image_requires_docker(image):
-        command, stop_command = docker_command(image, *args)
+    """Run a Python script in a container."""
+    if image_requires_docker(image) or docker_available():
+        container_command = docker_command
     else:
-        command = singularity_command(image, *args)
-    utils.run(command)
-    if image_requires_docker(image):
-        utils.run(stop_command)
+        container_command = singularity_command
+    utils.run.run(container_command(image, *args))
 
 
 @parameterized.parameterized.expand(
@@ -186,9 +224,10 @@ def run_image(image, *args):
         for dataset in task.DATASETS
         for method in task.METHODS
     ],
-    name_func=utils.name_test,
+    name_func=utils.name.name_test,
 )
 def test_method(task, dataset, method):
+    """Test application of a method."""
     task_name = task.__name__.split(".")[-1]
     with tempfile.NamedTemporaryFile(suffix=".h5ad") as data_file:
         run_image(
@@ -211,9 +250,10 @@ def test_method(task, dataset, method):
 
 @parameterized.parameterized.expand(
     [(method,) for task in openproblems.TASKS for method in task.METHODS],
-    name_func=utils.name_test,
+    name_func=utils.name.name_test,
 )
 def test_method_metadata(method):
+    """Test for existence of method metadata."""
     assert hasattr(method, "metadata")
     for attr in [
         "method_name",

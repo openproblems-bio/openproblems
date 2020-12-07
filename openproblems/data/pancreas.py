@@ -11,6 +11,7 @@ URL = "https://ndownloader.figshare.com/files/24539828"
 
 @loader
 def load_pancreas(test=False):
+    """Download pancreas data from figshare."""
     if test:
         # load full data first, cached if available
         adata = load_pancreas(test=False)
