@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
-from scipy.sparse import csr_matrix
 import scanpy as sc
-import subprocess
+import scipy.sparse
 from ....tools.decorators import method
 
 
@@ -27,52 +26,10 @@ def _chrom_limit(x, tss_size=2e5):
         return [gene_end - tss_size // 2, gene_end + tss_size // 2]
 
 
-def _get_annotation(adata):
-    """Insert meta data into adata.obs."""
-    from pyensembl import EnsemblRelease
-
-    subprocess.call(
-        [
-            "pyensembl",
-            "install",
-            "--release",
-            adata.uns["release"],
-            "--species",
-            adata.uns["species"],
-        ]
-    )
-    data = EnsemblRelease(adata.uns["release"], species=adata.uns["species"])
-
-    # get ensemble gene coordinate
-    genes = []
-    for i in adata.var.index.map(lambda x: x.split(".")[0]):
-        try:
-            gene = data.gene_by_id(i)
-            genes.append(
-                [
-                    "chr%s" % gene.contig,
-                    gene.start,
-                    gene.end,
-                    gene.strand,
-                ]
-            )
-        except KeyError:
-            genes.append([np.nan, np.nan, np.nan, np.nan])
-    old_col = adata.var.columns.values
-    adata.var = pd.concat(
-        [adata.var, pd.DataFrame(genes, index=adata.var_names)], axis=1
-    )
-    adata.var.columns = np.hstack(
-        [old_col, np.array(["chr", "start", "end", "strand"])]
-    )
-
-
 def _atac_genes_score(adata, top_genes=500, threshold=1):
     """Calculate gene scores and insert into .obsm."""
     import pybedtools
 
-    # get annotation for TSS
-    _get_annotation(adata)
     # basic quality control
     sc.pp.filter_cells(adata, min_genes=200)
     sc.pp.filter_genes(adata, min_cells=5)
@@ -163,14 +120,14 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     )
     tss_to_peaks["weight"] = np.exp(-0.5 - 4 * tss_to_peaks["distance"].values)
 
-    gene_to_peak_weight = csr_matrix(
+    gene_to_peak_weight = scipy.sparse.csr_matrix(
         (
             tss_to_peaks.weight.values,
             (tss_to_peaks.thickEnd.astype("int32").values, tss_to_peaks.name.values),
         ),
         shape=(adata.shape[1], adata.uns["mode2_var"].shape[0]),
     )
-    adata.obsm["gene_score"] = csr_matrix.dot(
+    adata.obsm["gene_score"] = scipy.sparse.csr_matrix.dot(
         gene_to_peak_weight, adata.obsm["mode2"].T >= threshold
     ).T
     return adata
