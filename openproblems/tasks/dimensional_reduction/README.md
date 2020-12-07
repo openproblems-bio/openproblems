@@ -4,7 +4,7 @@ Dimensional reduction is a key challenge in single-cell data representation [<a 
 
 ## API
 
-**Methods** should assign dimensionally-reduced embedding coordinates to `adata.obsm['X_emb']` as well as the method of choice, i.e., `adata.obsm['X_pca']` or `adata.obsm['X_tsne']`.
+**Methods** should assign dimensionally-reduced 2D embedding coordinates to `adata.obsm['X_emb']` as well as the method of choice, i.e., `adata.obsm['X_pca']` or `adata.obsm['X_tsne']`.
 
 **Metrics** should calculate the quality or "goodness of fit" of a dimensional reduction **method**.
 
