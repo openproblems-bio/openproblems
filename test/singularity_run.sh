@@ -17,4 +17,4 @@ if [ ! -f ~/.install_complete ]; then
 fi
 
 cd ${CODEDIR}
-python3 -m coverage run --rcfile=${WORKDIR}/.coveragerc --source=openproblems ${WORKDIR}/${SCRIPT} $TASKNAME $FUN ${ARGS}
+python3 -m coverage run --parallel --source=openproblems ${WORKDIR}/${SCRIPT} $TASKNAME $FUN ${ARGS}

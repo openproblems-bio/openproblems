@@ -158,11 +158,11 @@ def singularity_command(image, script, *args):
         "--verbose",
         "exec",
         "-B",
-        "{}:/opt/openproblems".format(BASEDIR),
+        "{0}:{0}".format(BASEDIR),
         cache_singularity_image(image),
         "/bin/bash",
-        "/opt/openproblems/test/singularity_run.sh",
-        "/opt/openproblems/test",
+        "{}/test/singularity_run.sh".format(BASEDIR),
+        "{}/test".format(BASEDIR),
         script,
     ] + list(args)
 
@@ -177,7 +177,7 @@ def cache_docker_image(image):
             "-dt",
             "--rm",
             "--mount",
-            "type=bind,source={},target=/opt/openproblems".format(BASEDIR),
+            "type=bind,source={0},target={0}".format(BASEDIR),
             "--mount",
             "type=bind,source=/tmp,target=/tmp",
             "singlecellopenproblems/{}".format(image),
@@ -201,8 +201,8 @@ def docker_command(image, script, *args):
         "exec",
         container,
         "/bin/bash",
-        "/opt/openproblems/test/singularity_run.sh",
-        "/opt/openproblems/test/",
+        "{}/test/singularity_run.sh".format(BASEDIR),
+        "{}/test/".format(BASEDIR),
         script,
     ] + list(args)
     return run_command
