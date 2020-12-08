@@ -5,7 +5,7 @@ from . import datasets
 from . import methods
 from . import metrics
 
-_task_name = "Label Projection"
+_task_name = "Denoising"
 
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)

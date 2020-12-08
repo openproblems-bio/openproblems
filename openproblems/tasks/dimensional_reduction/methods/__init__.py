@@ -1,3 +1,3 @@
-from .umap import umap
-from .tsne import tsne
 from .pca import pca
+from .tsne import tsne
+from .umap import umap
