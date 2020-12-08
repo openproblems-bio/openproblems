@@ -1,6 +1,7 @@
 # SingleCellOpenProblems
 
-[![Travis CI Build](https://api.travis-ci.com/singlecellopenproblems/SingleCellOpenProblems.svg?branch=master)](https://travis-ci.com/singlecellopenproblems/SingleCellOpenProblems)
+![Travis CI Status](https://img.shields.io/travis/com/singlecellopenproblems/singlecellopenproblems/master?label=Travis%20CI)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/singlecellopenproblems/singlecellopenproblems/Run%20Tests/master?label=Github%20Actions)
 [![Coverage Status](https://coveralls.io/repos/github/SingleCellOpenProblems/singlecellopenproblems/badge.svg?branch=master)](https://coveralls.io/github/SingleCellOpenProblems/singlecellopenproblems?branch=master)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/83b92388-53c7-4fef-9003-e14d94c6ac6f/deploy-status)](https://app.netlify.com/sites/openproblems/deploys)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
