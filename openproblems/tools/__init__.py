@@ -1,1 +1,2 @@
-from . import normalize, decorators
+from . import decorators
+from . import normalize
