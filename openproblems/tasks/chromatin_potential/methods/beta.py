@@ -1,9 +1,10 @@
+from ....tools.decorators import method
+
 import numpy as np
 import pandas as pd
-from scipy.sparse import csr_matrix
 import scanpy as sc
+import scipy.sparse
 import subprocess
-from ....tools.decorators import method
 
 
 def _chrom_limit(x, tss_size=2e5):
@@ -163,16 +164,14 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     )
     tss_to_peaks["weight"] = np.exp(-0.5 - 4 * tss_to_peaks["distance"].values)
 
-    gene_to_peak_weight = csr_matrix(
+    gene_peak_weight = scipy.sparse.csr_matrix(
         (
             tss_to_peaks.weight.values,
             (tss_to_peaks.thickEnd.astype("int32").values, tss_to_peaks.name.values),
         ),
         shape=(adata.shape[1], adata.uns["mode2_var"].shape[0]),
     )
-    adata.obsm["gene_score"] = csr_matrix.dot(
-        gene_to_peak_weight, adata.obsm["mode2"].T >= threshold
-    ).T
+    adata.obsm["gene_score"] = (adata.obsm["mode2"] >= threshold) @ gene_peak_weight.T
     return adata
 
 
