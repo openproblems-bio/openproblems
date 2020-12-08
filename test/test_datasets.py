@@ -13,7 +13,10 @@ utils.warnings.ignore_warnings()
 
 def _assert_not_bytes(X):
     if isinstance(X, pd.Series):
-        assert not X.apply(lambda x: isinstance(x, bytes)).any()
+        if pd.api.types.is_categorical_dtype(X):
+            return _assert_not_bytes(X.dtype.categories)
+        else:
+            assert not X.apply(lambda x: isinstance(x, bytes)).any()
     elif isinstance(X, pd.Index):
         return _assert_not_bytes(X.to_series())
     elif isinstance(X, pd.DataFrame):
