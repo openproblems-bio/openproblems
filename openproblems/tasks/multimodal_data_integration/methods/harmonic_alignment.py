@@ -1,7 +1,10 @@
-from sklearn.decomposition import TruncatedSVD
-from ....tools.normalize import sqrt_cpm, log_cpm, log_scran_pooling
 from ....tools.decorators import method
+from ....tools.normalize import log_cpm
+from ....tools.normalize import log_scran_pooling
+from ....tools.normalize import sqrt_cpm
 from ....tools.utils import check_version
+
+import sklearn.decomposition
 
 
 def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
@@ -12,8 +15,8 @@ def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
         n_eigenvectors = None
     if adata.X.shape[0] <= n_pca_XY:
         n_pca_XY = None
-    X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
-    Y_pca = TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
+    X_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
+    Y_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
     ha_op = harmonicalignment.HarmonicAlignment(
         n_filters=8, n_pca_XY=n_pca_XY, n_eigenvectors=n_eigenvectors
     )

@@ -1,8 +1,8 @@
-import tempfile
-import os
-import shutil
 import atexit
 import logging
+import os
+import shutil
+import tempfile
 
 log = logging.getLogger("openproblems")
 

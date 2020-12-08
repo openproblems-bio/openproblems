@@ -1,10 +1,10 @@
-import functools
-from memory_profiler import memory_usage
-import time
-import anndata
-import logging
-
 from . import utils
+
+import anndata
+import functools
+import logging
+import memory_profiler
+import time
 
 log = logging.getLogger("openproblems")
 
@@ -154,7 +154,7 @@ def profile(func):
         def dummy():
             pass
 
-        base_memory = memory_usage(
+        base_memory = memory_profiler.memory_usage(
             (dummy, tuple(), dict()),
             interval=0.1,
             max_usage=True,
@@ -167,7 +167,7 @@ def profile(func):
             end_time = time.perf_counter()
             output["runtime_s"] = end_time - start_time
 
-        peak_memory = memory_usage(
+        peak_memory = memory_profiler.memory_usage(
             (apply_func, args, kwargs),
             multiprocess=True,
             include_children=True,
@@ -177,7 +177,7 @@ def profile(func):
         output["memory_mb"] = peak_memory - base_memory
         utils.garbage_collection()
 
-        post_memory = memory_usage(
+        post_memory = memory_profiler.memory_usage(
             (dummy, tuple(), dict()),
             interval=0.1,
             max_usage=True,
