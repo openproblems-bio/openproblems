@@ -1,15 +1,14 @@
+from . import utils
+
 import os
-import tempfile
-
-import scprep
 import scanpy as sc
-
-from .utils import loader, filter_genes_cells
+import scprep
+import tempfile
 
 URL = "https://ndownloader.figshare.com/files/25555739"
 
 
-@loader
+@utils.loader
 def load_tenx_5k_pbmc(test=False):
     """Download 5k PBMCs from 10x Genomics."""
     if test:
@@ -18,13 +17,13 @@ def load_tenx_5k_pbmc(test=False):
 
         # Subsample pancreas data
         adata = adata[:, :500].copy()
-        filter_genes_cells(adata)
+        utils.filter_genes_cells(adata)
 
         sc.pp.subsample(adata, n_obs=500)
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
         # Ensure there are no cells or genes with 0 counts
-        filter_genes_cells(adata)
+        utils.filter_genes_cells(adata)
 
         return adata
 
@@ -35,6 +34,6 @@ def load_tenx_5k_pbmc(test=False):
             adata = sc.read(filepath)
 
             # Ensure there are no cells or genes with 0 counts
-            filter_genes_cells(adata)
+            utils.filter_genes_cells(adata)
 
         return adata

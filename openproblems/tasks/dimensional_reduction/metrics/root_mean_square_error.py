@@ -1,8 +1,9 @@
+from ....tools.decorators import metric
+
 import numpy as np
 import scipy as sp
 import sklearn.decomposition
-
-from ....tools.decorators import metric
+import sklearn.metrics
 
 
 def calculate_squareform_pairwise_distance(data):
@@ -32,10 +33,7 @@ def calculate_rmse(adata, n_svd=200):
     y_actual = high_dimensional_distance_matrix
     y_predic = low_dimensional_distance_matrix
 
-    from sklearn.metrics import mean_squared_error
-    from math import sqrt
-
-    rms = sqrt(mean_squared_error(y_actual, y_predic))
+    rms = np.sqrt(sklearn.metrics.mean_squared_error(y_actual, y_predic))
 
     return kruskel_matrix, kruskel_score, rms
 
