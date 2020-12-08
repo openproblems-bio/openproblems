@@ -1,6 +1,6 @@
-from .base import load_scicar
 from ...utils import loader
 from ..utils import subset_joint_data
+from .base import load_scicar
 
 rna_url = (
     "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM3271040"
