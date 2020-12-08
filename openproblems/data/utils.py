@@ -1,11 +1,11 @@
-import scanpy as sc
-import os
+from . import TEMPDIR
+
 import anndata
+import decorator
 import hashlib
 import logging
-
-from decorator import decorator
-from . import TEMPDIR
+import os
+import scanpy as sc
 
 
 log = logging.getLogger("openproblems")
@@ -27,7 +27,7 @@ def _hash_function(func, *args, **kwargs):
     return hash.hexdigest()
 
 
-@decorator
+@decorator.decorator
 def loader(func, *args, **kwargs):
     """Decorate a data loader function."""
     filename = "openproblems_{}.h5ad".format(_hash_function(func, *args, **kwargs))

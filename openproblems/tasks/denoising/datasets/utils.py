@@ -1,10 +1,12 @@
-import numpy as np
-from scipy.sparse import issparse
-from scanpy import AnnData
+import anndata
 import molecular_cross_validation.util
+import numpy as np
+import scipy.sparse
 
 
-def split_data(adata: AnnData, train_frac: float = 0.9, seed: int = 0) -> AnnData:
+def split_data(
+    adata: anndata.AnnData, train_frac: float = 0.9, seed: int = 0
+) -> anndata.AnnData:
     """Split data using molecular cross-validation.
 
     Stores "train" and "test" dataset using the AnnData.obsm property.
@@ -13,7 +15,7 @@ def split_data(adata: AnnData, train_frac: float = 0.9, seed: int = 0) -> AnnDat
 
     X = adata.X
 
-    if issparse(X):
+    if scipy.sparse.issparse(X):
         X = np.array(X.todense())
     if np.allclose(X, X.astype(np.int)):
         X = X.astype(np.int)

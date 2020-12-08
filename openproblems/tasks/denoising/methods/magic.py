@@ -1,9 +1,9 @@
-import magic as _magic
-import scprep
-import numpy as np
-
 from ....tools.decorators import method
 from ....tools.utils import check_version
+
+import magic as _magic
+import numpy as np
+import scprep
 
 
 @method(

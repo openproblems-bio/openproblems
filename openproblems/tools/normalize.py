@@ -1,13 +1,13 @@
+from . import decorators
 import scanpy as sc
 import scprep
-from . import decorators
 
 
 @decorators.normalizer
 def log_scran_pooling(adata):
     """Normalize data with scran via rpy2."""
-    import scIB.preprocessing
     import anndata2ri
+    import scIB.preprocessing
 
     scprep.run.install_bioconductor("scran")
     # Normalize via scran-pooling with own clustering at res=0.5

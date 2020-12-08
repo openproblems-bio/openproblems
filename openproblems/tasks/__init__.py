@@ -1,6 +1,4 @@
-from . import (
-    label_projection,
-    multimodal_data_integration,
-    dimensional_reduction,
-    denoising,
-)
+from . import denoising
+from . import dimensional_reduction
+from . import label_projection
+from . import multimodal_data_integration
