@@ -11,6 +11,7 @@ install_requires = [
     "louvain>=0.6,<0.7",
     "decorator",
     "memory-profiler",
+    "molecular-cross-validation @ git+https://github.com/czbiohub/molecular-cross-validation",
     "parameterized",
 ]
 

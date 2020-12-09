@@ -1,6 +1,10 @@
-import logging as _logging
-from . import tasks, utils, tools, patch
+from . import patch
+from . import tasks
+from . import tools
+from . import utils
 from .version import __version__
+
+import logging as _logging
 
 _logging.basicConfig()
 log = _logging.getLogger("openproblems")
