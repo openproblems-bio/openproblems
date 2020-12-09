@@ -57,7 +57,7 @@ def _get_annotation(adata):
                     gene.strand,
                 ]
             )
-        except:
+        except ValueError:
             genes.append([np.nan, np.nan, np.nan, np.nan])
     old_col = adata.var.columns.values
     adata.var = pd.concat(
