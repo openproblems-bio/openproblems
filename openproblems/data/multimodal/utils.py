@@ -1,8 +1,8 @@
+import anndata
 import numpy as np
 import pandas as pd
 import scanpy as sc
 import scprep
-import anndata
 
 
 def subset_mode2_genes(adata, keep_genes):

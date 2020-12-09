@@ -1,6 +1,7 @@
+from . import utils
+
 import anndata
 import logging
-from . import utils
 
 log = logging.getLogger("openproblems")
 

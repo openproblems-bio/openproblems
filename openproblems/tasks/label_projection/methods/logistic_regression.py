@@ -1,33 +1,28 @@
-from sklearn.linear_model import LogisticRegression
-from sklearn.decomposition import PCA, TruncatedSVD
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
+from ....tools.decorators import method
+from ....tools.normalize import log_cpm
+from ....tools.normalize import log_scran_pooling
+from ....tools.utils import check_version
+
+from .utils import pca_op
 
 import numpy as np
-from scipy import sparse
+import scipy.sparse
 
-from ....tools.normalize import log_cpm, log_scran_pooling
-from ....tools.decorators import method
-from ....tools.utils import check_version
+import sklearn.linear_model
+import sklearn.pipeline
+import sklearn.preprocessing
 
 
 def _logistic_regression(adata, max_iter=1000, n_pca=100):
-
     adata_train = adata[adata.obs["is_train"]]
     adata_test = adata[~adata.obs["is_train"]].copy()
-    is_sparse = sparse.issparse(adata.X)
+    is_sparse = scipy.sparse.issparse(adata.X)
 
-    min_pca = min([adata_train.shape[0], adata_test.shape[0], adata.shape[1]])
-    if is_sparse:
-        min_pca -= 1
-    n_pca = min([n_pca, min_pca])
-    pca_op = TruncatedSVD if is_sparse else PCA
-
-    classifier = Pipeline(
+    classifier = sklearn.pipeline.Pipeline(
         [
-            ("pca", pca_op(n_components=n_pca)),
-            ("scaler", StandardScaler(with_mean=not is_sparse)),
-            ("regression", LogisticRegression(max_iter=max_iter)),
+            ("pca", pca_op(adata_train, adata_test, n_components=n_pca)),
+            ("scaler", sklearn.preprocessing.StandardScaler(with_mean=not is_sparse)),
+            ("regression", sklearn.linear_model.LogisticRegression(max_iter=max_iter)),
         ]
     )
 
