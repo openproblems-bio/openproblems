@@ -57,7 +57,7 @@ def _get_annotation(adata):
                     gene.strand,
                 ]
             )
-        except KeyError:
+        except:
             genes.append([np.nan, np.nan, np.nan, np.nan])
     old_col = adata.var.columns.values
     adata.var = pd.concat(
@@ -78,12 +78,10 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     sc.pp.filter_cells(adata, min_genes=200)
     sc.pp.filter_genes(adata, min_cells=5)
 
+    adata = adata[:, ~pd.isnull(adata.var.loc[:, "chr"])].copy()
     adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
         "mt-"
     )  # annotate the group of mitochondrial genes as 'mt'
-
-    adata = adata[:, ~pd.isnull(adata.var["mt"])].copy()
-
     sc.pp.calculate_qc_metrics(
         adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
     )
@@ -97,14 +95,14 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     sc.pp.highly_variable_genes(adata, n_top_genes=top_genes)
 
     adata = adata[:, adata.var.highly_variable].copy()
-
     sc.pp.regress_out(adata, ["total_counts", "pct_counts_mt"])
     sc.pp.scale(adata, max_value=10)
 
     # generate peak to gene weight matrix
     # remove genes without annotation
-    adata = adata[:, ~pd.isnull(adata.var.loc[:, "chr"])]
-    adata = adata[adata.var.loc[:, "chr"].isin(np.unique(adata.uns["mode2_var_chr"]))]
+    adata = adata[
+        :, adata.var.loc[:, "chr"].isin(np.unique(adata.uns["mode2_var_chr"]))
+    ].copy()
 
     # filter atac-seq matrix
     sel = np.isin(adata.uns["mode2_var_chr"], adata.var.loc[:, "chr"].unique())
@@ -185,6 +183,6 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     code_url="http://cistrome.org/BETA/src/BETA_1.0.7.zip",
     image="openproblems-python-extras",
 )
-def beta(adata, n_top_genes=5000, threshold=1):
+def beta(adata, n_top_genes=500, threshold=1):
     adata = _atac_genes_score(adata, top_genes=n_top_genes, threshold=threshold)
     return adata
