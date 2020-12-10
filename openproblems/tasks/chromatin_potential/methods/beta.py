@@ -1,4 +1,5 @@
 from ....tools.decorators import method
+from ....patch import patch_datacache
 
 import numpy as np
 import pandas as pd
@@ -28,31 +29,22 @@ def _chrom_limit(x, tss_size=2e5):
         return [gene_end - tss_size // 2, gene_end + tss_size // 2]
 
 
-def _get_annotation(adata):
+def _get_annotation(adata, retries=3):
     """Insert meta data into adata.obs."""
     from pyensembl import EnsemblRelease
 
-    status = -1
-    trials = 0
-    while status != 0 and trials <= 3:
+    data = EnsemblRelease(
+        adata.uns["release"],
+        adata.uns["species"],
+    )
+    for _ in range(retries):
         try:
-            status = subprocess.call(
-                [
-                    "pyensembl",
-                    "install",
-                    "--release",
-                    adata.uns["release"],
-                    "--species",
-                    adata.uns["species"],
-                    "--custom-mirror",
-                    "https://github.com/openvax/ensembl-data/releases/download/%s.%s"
-                    % (adata.uns["version"], adata.uns["release"]),
-                ]
-            )
+            with patch_datacache():
+                data.download(overwrite=False)
+                data.index(overwrite=False)
+            break
         except TimeoutError:
-            trials += 1
             pass
-    data = EnsemblRelease(adata.uns["release"], species=adata.uns["species"])
 
     # get ensemble gene coordinate
     genes = []
