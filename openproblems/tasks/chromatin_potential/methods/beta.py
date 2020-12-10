@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 import scanpy as sc
 import scipy.sparse
-import subprocess
 
 
 def _chrom_limit(x, tss_size=2e5):
