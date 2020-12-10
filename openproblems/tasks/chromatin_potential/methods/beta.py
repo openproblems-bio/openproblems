@@ -75,8 +75,9 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     # get annotation for TSS
     _get_annotation(adata)
     # basic quality control
-    sc.pp.filter_cells(adata, min_genes=200)
-    sc.pp.filter_genes(adata, min_cells=5)
+    if adata.shape[0] >= 600:
+        sc.pp.filter_cells(adata, min_genes=200)
+        sc.pp.filter_genes(adata, min_cells=5)
 
     adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
         "mt-"
