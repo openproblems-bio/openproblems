@@ -32,16 +32,21 @@ def _get_annotation(adata):
     """Insert meta data into adata.obs."""
     from pyensembl import EnsemblRelease
 
-    subprocess.call(
-        [
-            "pyensembl",
-            "install",
-            "--release",
-            adata.uns["release"],
-            "--species",
-            adata.uns["species"],
-        ]
-    )
+    status = -1
+    while status != 0:
+        try:
+            status = subprocess.call(
+                [
+                    "pyensembl",
+                    "install",
+                    "--release",
+                    adata.uns["release"],
+                    "--species",
+                    adata.uns["species"],
+                ]
+            )
+        except TimeoutError:
+            pass
     data = EnsemblRelease(adata.uns["release"], species=adata.uns["species"])
 
     # get ensemble gene coordinate
