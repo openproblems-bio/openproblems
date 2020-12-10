@@ -33,7 +33,8 @@ def _get_annotation(adata):
     from pyensembl import EnsemblRelease
 
     status = -1
-    while status != 0:
+    trials = 0
+    while status != 0 and trials <= 3:
         try:
             status = subprocess.call(
                 [
@@ -43,9 +44,13 @@ def _get_annotation(adata):
                     adata.uns["release"],
                     "--species",
                     adata.uns["species"],
+                    "--custom-mirror",
+                    "https://github.com/openvax/ensembl-data/releases/download/%s.%s"
+                    % (adata.uns["version"], adata.uns["release"]),
                 ]
             )
         except TimeoutError:
+            trials += 1
             pass
     data = EnsemblRelease(adata.uns["release"], species=adata.uns["species"])
 
