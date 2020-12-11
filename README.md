@@ -48,7 +48,7 @@ Methods should take an AnnData object and store the output in `adata.obs` accord
 function method(AnnData adata) -> AnnData adata
 ```
 
-Metrics should take an AnnData object and return a float.
+Metrics should take an AnnData object and return a `float`.
 
 ```
 function metric(AnnData adata) -> float

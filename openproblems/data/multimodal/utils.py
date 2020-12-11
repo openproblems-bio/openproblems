@@ -5,6 +5,15 @@ import scanpy as sc
 import scprep
 
 
+def subset_mode2_genes(adata, keep_genes):
+    adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes]
+    adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes]
+    if "mode2_varnames" in adata.uns:
+        for varname in adata.uns["mode2_varnames"]:
+            adata.uns[varname] = adata.uns[varname][keep_genes]
+    return adata
+
+
 def filter_joint_data_empty_cells(adata):
     """Remove empty cells and genes from a multimodal dataset."""
     assert np.all(adata.uns["mode2_obs"] == adata.obs.index)
@@ -18,8 +27,7 @@ def filter_joint_data_empty_cells(adata):
     sc.pp.filter_genes(adata, min_counts=1)
     n_genes_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=0)).flatten()
     keep_genes_mode2 = n_genes_mode2 > 0
-    adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes_mode2]
-    adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes_mode2]
+    adata = subset_mode2_genes(adata, keep_genes_mode2)
     return adata
 
 
@@ -79,11 +87,10 @@ def subset_joint_data(adata, n_cells=500, n_genes=1000):
         adata = adata[:, keep_mode1_genes].copy()
 
     if adata.obsm["mode2"].shape[1] > n_genes:
-        keep_mode2_genes = np.random.choice(
+        keep_genes_mode2 = np.random.choice(
             adata.obsm["mode2"].shape[1], n_genes, replace=False
         )
-        adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_mode2_genes]
-        adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_mode2_genes]
+        adata = subset_mode2_genes(adata, keep_genes_mode2)
 
     adata = filter_joint_data_empty_cells(adata)
     return adata
