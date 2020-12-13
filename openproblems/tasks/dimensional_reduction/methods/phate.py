@@ -2,8 +2,6 @@ from ....tools.decorators import method
 from ....tools.normalize import sqrt_cpm
 from ....tools.utils import check_version
 
-from phate import PHATE
-
 
 @method(
     method_name="PHATE",
@@ -15,6 +13,8 @@ from phate import PHATE
     image="openproblems-python-extras",
 )
 def phate(adata):
+    from phate import PHATE
+
     sqrt_cpm(adata)
     phate_op = PHATE(verbose=False, n_jobs=-1)
     adata.obsm["X_emb"] = phate_op.fit_transform(adata.X)
