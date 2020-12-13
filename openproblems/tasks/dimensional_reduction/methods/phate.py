@@ -12,6 +12,7 @@ from phate import PHATE
     paper_year=2019,
     code_url="https://github.com/KrishnaswamyLab/PHATE/",
     code_version=check_version("phate"),
+    image="openproblems-python-extras",
 )
 def phate(adata):
     sqrt_cpm(adata)
