@@ -22,7 +22,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
   * [Adding a dataset / method / metric to a task](#adding-a-dataset---method---metric-to-a-task)
   * [Adding a new task](#adding-a-new-task)
 
-[//]: # Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/)
+<!-- Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
 
 ## The team
 
