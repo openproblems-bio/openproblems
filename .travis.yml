@@ -16,7 +16,6 @@ addons:
       - liblapack-dev
       - libedit-dev
       - llvm-dev
-      - libgit2-dev
 cache:
   - pip
   - apt

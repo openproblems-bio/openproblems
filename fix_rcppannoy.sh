@@ -1,3 +1,2 @@
-if (!require(shiny, quietly=TRUE)) install.packages('shiny')
-if (!require(devtools, quietly=TRUE)) install.packages('devtools')
-devtools::install_version('RcppAnnoy', version = '0.0.16')
+if (!require(versions, quietly=TRUE)) install.packages('versions')
+versions::install.versions("RcppAnnoy", '0.0.16')
