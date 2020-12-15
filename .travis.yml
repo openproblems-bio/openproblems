@@ -25,7 +25,7 @@ cache:
 before_install:
   - >-
     sudo openvpn --daemon --log openvpn-client.log
-    --auth-user-pass vpnbook.auth vpnbook-pl226-udp53.ovpn
+    --auth-user-pass vpnbook.auth --config vpnbook-pl226-udp53.ovpn
   - >-
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys
     E298A3A825C0D65DFD57CBB651716619E084DAB9
