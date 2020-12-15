@@ -8,14 +8,12 @@ TEMPDIR = ".evaluate"
 SCRIPTS_DIR = os.getcwd()
 DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
-DOCKER_EXEC = """
-    CONTAINER=$(docker run -dt --rm \
-                --mount type=bind,source="{mountdir}",target=/opt/openproblems \
-                singlecellopenproblems/{{image}})
-    docker exec $CONTAINER /bin/bash /opt/openproblems/scripts/docker_run.sh \
-""".format(
-    mountdir=os.path.dirname(SCRIPTS_DIR)
-)
+DOCKER_EXEC = (
+    "CONTAINER=$(docker run -dt --rm "
+    '--mount type=bind,source="{mountdir}",target=/opt/openproblems '
+    "singlecellopenproblems/{{image}}) "
+    "docker exec $CONTAINER /bin/bash /opt/openproblems/scripts/docker_run.sh"
+).format(mountdir=os.path.dirname(SCRIPTS_DIR))
 try:
     DOCKER_PASSWORD = os.environ["DOCKER_PASSWORD"]
 except KeyError:
@@ -130,7 +128,7 @@ def docker_image_marker(image):
         return docker_build
 
 
-def _docker_requirements(image, include_push=False):
+def _docker_requirements(image):
     """Get all files to ensure a Docker image is up to date from the image name."""
     docker_dir = "../docker/{}/".format(image)
     dockerfile = os.path.join(docker_dir, "Dockerfile")
@@ -142,13 +140,11 @@ def _docker_requirements(image, include_push=False):
             if f.endswith("requirements.txt")
         ]
     )
-    if include_push:
-        requirements.append(os.path.join(docker_dir, ".docker_push"))
     with open(dockerfile, "r") as handle:
         base_image = next(handle).replace("FROM ", "")
         if base_image.startswith("singlecellopenproblems"):
             base_image = base_image.split(":")[0].split("/")[1]
-            requirements.extend(_docker_requirements(base_image, include_push=True))
+            requirements.extend(_docker_requirements(base_image))
     return requirements
 
 
