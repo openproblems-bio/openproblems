@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'master'
-      - 'test_benchmark'
+      - 'test_docker'
 
 jobs:
   build_images:
