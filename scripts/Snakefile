@@ -12,7 +12,10 @@ rule website:
     shell: "touch {output}"
 
 rule docker:
-    input: tools.images
+    input: tools.push_images
+
+rule docker_build:
+    input: tools.build_images
 
 rule summary:
     input:
