@@ -28,13 +28,17 @@ jobs:
         key: ${{ hashFiles('docker/**/*requirements.txt') }}-${{ hashFiles('docker/**/Dockerfile') }}
 
     - name: Set up Python
-      if: steps.cache-result.outputs.cache-hit != 'true'
+      if: |
+        (steps.cache-result.outputs.cache-hit != 'true') ||
+        startsWith(github.ref, 'refs/heads/test_benchmark')
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.config.python }}
 
     - name: Cache Python packages
-      if: steps.cache-result.outputs.cache-hit != 'true'
+      if: |
+        (steps.cache-result.outputs.cache-hit != 'true') ||
+        startsWith(github.ref, 'refs/heads/test_benchmark')
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
@@ -42,7 +46,9 @@ jobs:
         restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
-      if: steps.cache-result.outputs.cache-hit != 'true'
+      if: |
+        (steps.cache-result.outputs.cache-hit != 'true') ||
+        startsWith(github.ref, 'refs/heads/test_benchmark')
       run: |
         python -m pip install --upgrade "pip<=21.0"
         pip install --use-deprecated=legacy-resolver -U wheel setuptools
