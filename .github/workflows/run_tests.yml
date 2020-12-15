@@ -6,9 +6,10 @@ on:
       - '*'
   pull_request:
     branches:
-      - '*'
-      - '!test_docker'
-      - '!test_benchmark'
+      - '**'
+    branches-ignore:
+      - 'test_docker'
+      - 'test_benchmark'
 
 jobs:
   run_linter:
