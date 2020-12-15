@@ -30,14 +30,23 @@ def tasks(wildcards):
     ]
 
 
-def images(wildcards):
-    """Get Docker push timestamp for all images."""
+def _images(filename):
     docker_dir = os.path.join("..", "docker")
     return [
-        os.path.join(docker_dir, image, ".docker_push")
+        os.path.join(docker_dir, image, filename)
         for image in os.listdir(docker_dir)
         if os.path.isdir(os.path.join(docker_dir, image))
     ]
+
+
+def push_images(wildcards):
+    """Get Docker push timestamp for all images."""
+    return _images(".docker_push")
+
+
+def build_images(wildcards):
+    """Get Docker build timestamp for all images."""
+    return _images(".docker_build")
 
 
 def _method(task_name, dataset_name, method):
