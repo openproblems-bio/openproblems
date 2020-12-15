@@ -30,7 +30,7 @@ jobs:
     - name: Set up Python
       if: |
         (steps.cache-result.outputs.cache-hit != 'true') ||
-        startsWith(github.ref, 'refs/heads/test_benchmark')
+        startsWith(github.ref, 'refs/heads/test_docker')
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.config.python }}
@@ -38,7 +38,7 @@ jobs:
     - name: Cache Python packages
       if: |
         (steps.cache-result.outputs.cache-hit != 'true') ||
-        startsWith(github.ref, 'refs/heads/test_benchmark')
+        startsWith(github.ref, 'refs/heads/test_docker')
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
@@ -48,7 +48,7 @@ jobs:
     - name: Install package & dependencies
       if: |
         (steps.cache-result.outputs.cache-hit != 'true') ||
-        startsWith(github.ref, 'refs/heads/test_benchmark')
+        startsWith(github.ref, 'refs/heads/test_docker')
       run: |
         python -m pip install --upgrade "pip<=21.0"
         pip install --use-deprecated=legacy-resolver -U wheel setuptools
@@ -59,7 +59,7 @@ jobs:
     - name: Build images
       if: |
         (steps.cache-result.outputs.cache-hit != 'true') ||
-        startsWith(github.ref, 'refs/heads/test_benchmark')
+        startsWith(github.ref, 'refs/heads/test_docker')
       run: |
         cd scripts
         snakemake -j $(grep -c processor /proc/cpuinfo) docker_build
