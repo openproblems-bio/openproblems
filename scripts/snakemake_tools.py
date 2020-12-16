@@ -128,7 +128,7 @@ def docker_image_marker(image):
         return docker_build
 
 
-def _docker_requirements(image):
+def _docker_requirements(image, include_push=False):
     """Get all files to ensure a Docker image is up to date from the image name."""
     docker_dir = "../docker/{}/".format(image)
     dockerfile = os.path.join(docker_dir, "Dockerfile")
@@ -140,6 +140,8 @@ def _docker_requirements(image):
             if f.endswith("requirements.txt")
         ]
     )
+    if include_push:
+        requirements.append(docker_image_marker(image))
     with open(dockerfile, "r") as handle:
         base_image = next(handle).replace("FROM ", "")
         if base_image.startswith("singlecellopenproblems"):
