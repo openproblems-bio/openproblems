@@ -146,7 +146,7 @@ def _docker_requirements(image, include_push=False):
         base_image = next(handle).replace("FROM ", "")
         if base_image.startswith("singlecellopenproblems"):
             base_image = base_image.split(":")[0].split("/")[1]
-            requirements.extend(_docker_requirements(base_image))
+            requirements.extend(_docker_requirements(base_image, include_push=True))
     return requirements
 
 
