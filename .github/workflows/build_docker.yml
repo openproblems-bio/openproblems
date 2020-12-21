@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'master'
+      - 'test_docker'
 
 jobs:
   build_images:
@@ -17,6 +18,11 @@ jobs:
         - {name: 'current', os: ubuntu-latest, python: '3.8' }
 
     steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.6.0
+      with:
+        access_token: ${{ github.token }}
+
     - uses: actions/checkout@v2
 
     - name: Cache result
@@ -27,13 +33,17 @@ jobs:
         key: ${{ hashFiles('docker/**/*requirements.txt') }}-${{ hashFiles('docker/**/Dockerfile') }}
 
     - name: Set up Python
-      if: steps.cache-result.outputs.cache-hit != 'true'
+      if: |
+        (steps.cache-result.outputs.cache-hit != 'true') ||
+        startsWith(github.ref, 'refs/heads/test_docker')
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.config.python }}
 
     - name: Cache Python packages
-      if: steps.cache-result.outputs.cache-hit != 'true'
+      if: |
+        (steps.cache-result.outputs.cache-hit != 'true') ||
+        startsWith(github.ref, 'refs/heads/test_docker')
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
@@ -41,7 +51,9 @@ jobs:
         restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
-      if: steps.cache-result.outputs.cache-hit != 'true'
+      if: |
+        (steps.cache-result.outputs.cache-hit != 'true') ||
+        startsWith(github.ref, 'refs/heads/test_docker')
       run: |
         python -m pip install --upgrade "pip<=21.0"
         pip install --use-deprecated=legacy-resolver -U wheel setuptools
@@ -50,7 +62,18 @@ jobs:
         python -c "import openproblems"
 
     - name: Build images
-      if: steps.cache-result.outputs.cache-hit != 'true'
+      if: |
+        (steps.cache-result.outputs.cache-hit != 'true') ||
+        startsWith(github.ref, 'refs/heads/test_docker')
+      run: |
+        cd scripts
+        snakemake -j $(grep -c processor /proc/cpuinfo) docker_build
+        cd ..
+
+    - name: Push images
+      if: |
+        (steps.cache-result.outputs.cache-hit != 'true') &&
+        startsWith(github.ref, 'refs/heads/master')
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
