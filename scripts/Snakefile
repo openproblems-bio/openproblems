@@ -12,7 +12,10 @@ rule website:
     shell: "touch {output}"
 
 rule docker:
-    input: tools.images
+    input: tools.push_images
+
+rule docker_build:
+    input: tools.build_images
 
 rule summary:
     input:
@@ -110,8 +113,7 @@ rule login_docker:
     output:
         temp(".docker_login")
     shell:
-        """cat {input} | \
-        docker login --username=singlecellopenproblems --password-stdin && \
+        """docker login --username=singlecellopenproblems --password=$(cat {input}) && \
         touch {output}"""
 
 rule push_docker:
