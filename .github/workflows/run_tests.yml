@@ -2,8 +2,9 @@ name: Run Tests
 
 on:
   push:
-    branches:
-      - '*'
+    branches-ignore:
+      - 'test_docker'
+      - 'test_benchmark'
   pull_request:
     branches:
       - '*'
