@@ -3,3 +3,4 @@ pyensembl
 pybedtools
 magic-impute
 MulticoreTSNE
+datatable

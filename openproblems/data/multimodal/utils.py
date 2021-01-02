@@ -44,13 +44,17 @@ def create_joint_adata(
     if Y_columns is None:
         Y_columns = Y.columns
     joint_index = np.sort(np.intersect1d(X_index, Y_index))
-    try:
+    print(joint_index)
+    print(joint_index.shape)
+
+    if hasattr(X, "loc") and hasattr(Y, "loc"):
         X = X.loc[joint_index]
         Y = Y.loc[joint_index]
-    except AttributeError:
+    else:
         # keep only common observations
         X_keep_idx = np.isin(X_index, joint_index)
         Y_keep_idx = np.isin(Y_index, joint_index)
+
         X = X[X_keep_idx]
         Y = Y[Y_keep_idx]
 

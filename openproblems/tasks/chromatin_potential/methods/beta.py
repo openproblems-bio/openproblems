@@ -59,7 +59,19 @@ def _get_annotation(adata, retries=3):
                 ]
             )
         except ValueError:
-            genes.append([np.nan, np.nan, np.nan, np.nan])
+            try:
+                i = data.gene_ids_of_gene_name(i)[0]
+                gene = data.gene_by_id(i)
+                genes.append(
+                    [
+                        "chr%s" % gene.contig,
+                        gene.start,
+                        gene.end,
+                        gene.strand,
+                    ]
+                )
+            except (IndexError, ValueError) as e:
+                genes.append([np.nan, np.nan, np.nan, np.nan])
     old_col = adata.var.columns.values
     adata.var = pd.concat(
         [adata.var, pd.DataFrame(genes, index=adata.var_names)], axis=1
