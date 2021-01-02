@@ -1,6 +1,6 @@
-from .base import load_scicar
 from ...utils import loader
 from ..utils import subset_joint_data
+from .base import load_scicar
 
 rna_url = (
     "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM3271044"
@@ -36,10 +36,5 @@ def load_scicar_mouse_kidney(test=False):
         adata = subset_joint_data(adata)
         return adata
     return load_scicar(
-        rna_url,
-        rna_cells_url,
-        rna_genes_url,
-        atac_url,
-        atac_cells_url,
-        atac_genes_url,
+        rna_url, rna_cells_url, rna_genes_url, atac_url, atac_cells_url, atac_genes_url
     )

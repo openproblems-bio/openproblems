@@ -1,15 +1,15 @@
+from . import utils
+
 import os
+import scanpy as sc
+import scprep
 import tempfile
 
-import scprep
-import scanpy as sc
-
-from .utils import loader, filter_genes_cells
 
 URL = "https://ndownloader.figshare.com/files/24539828"
 
 
-@loader
+@utils.loader
 def load_pancreas(test=False):
     """Download pancreas data from figshare."""
     if test:
@@ -18,7 +18,7 @@ def load_pancreas(test=False):
 
         # Subsample pancreas data
         adata = adata[:, :500].copy()
-        filter_genes_cells(adata)
+        utils.filter_genes_cells(adata)
 
         keep_celltypes = adata.obs["celltype"].dtype.categories[[0, 3]]
         keep_techs = adata.obs["tech"].dtype.categories[[0, -3, -2]]
@@ -30,7 +30,7 @@ def load_pancreas(test=False):
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
         # Ensure there are no cells or genes with 0 counts
-        filter_genes_cells(adata)
+        utils.filter_genes_cells(adata)
 
         return adata
 
@@ -45,6 +45,6 @@ def load_pancreas(test=False):
             del adata.layers["counts"]
 
             # Ensure there are no cells or genes with 0 counts
-            filter_genes_cells(adata)
+            utils.filter_genes_cells(adata)
 
         return adata

@@ -1,9 +1,10 @@
+from ..utils import create_joint_adata
+from ..utils import filter_joint_data_empty_cells
+
+import os
 import pandas as pd
 import scprep
 import tempfile
-import os
-
-from ..utils import filter_joint_data_empty_cells, create_joint_adata
 
 
 def load_scicar(
@@ -15,10 +16,10 @@ def load_scicar(
     atac_genes_url,
 ):
     """Load sci-CAR data from GEO."""
-    rna_cells = pd.read_csv(rna_cells_url, low_memory=False)["sample"]
-    rna_genes = pd.read_csv(rna_genes_url, low_memory=False)["gene_id"]
-    atac_cells = pd.read_csv(atac_cells_url, low_memory=False)["sample"]
-    atac_genes = pd.read_csv(atac_genes_url, low_memory=False, index_col=0)["peak"]
+    rna_genes = pd.read_csv(rna_genes_url, low_memory=False, index_col=0)
+    atac_genes = pd.read_csv(atac_genes_url, low_memory=False, index_col=1)
+    rna_cells = pd.read_csv(rna_cells_url, low_memory=False, index_col=0)
+    atac_cells = pd.read_csv(atac_cells_url, low_memory=False, index_col=0)
 
     with tempfile.TemporaryDirectory() as tempdir:
         rna_file = os.path.join(tempdir, "rna.mtx.gz")
@@ -31,10 +32,22 @@ def load_scicar(
     adata = create_joint_adata(
         rna_data,
         atac_data,
-        X_index=rna_cells,
-        X_columns=rna_genes,
-        Y_index=atac_cells,
-        Y_columns=atac_genes,
+        X_index=rna_cells.index,
+        X_columns=rna_genes.index,
+        Y_index=atac_cells.index,
+        Y_columns=atac_genes.index,
     )
+
+    # merge obs and var
+    adata.obs = rna_cells.loc[adata.obs.index]
+    adata.var = rna_genes
+    for key in atac_cells.columns:
+        adata.obs[key] = atac_cells[key]
+    adata.uns["mode2_varnames"] = []
+    for key in atac_genes.columns:
+        varname = "mode2_var_{}".format(key)
+        adata.uns[varname] = atac_genes[key].values
+        adata.uns["mode2_varnames"].append(varname)
+
     adata = filter_joint_data_empty_cells(adata)
     return adata

@@ -12,7 +12,7 @@ URL = (
 
 
 @utils.loader
-def load_zebrafish(test=False):
+def load_zebrafish_combined_timecourse(test=False):
     """Download zebrafish data from figshare."""
     with tempfile.TemporaryDirectory() as tempdir:
         filepath = os.path.join(tempdir, "zebrafish.h5ad")
