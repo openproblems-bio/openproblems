@@ -4,26 +4,51 @@ from ....tools.utils import check_version
 import numpy as np
 import scprep
 
+_alra = scprep.run.RFunction(
+    setup="""
+    library(SingleCellExperiment)
+    library(Matrix)
+    library(rsvd)
+    source('https://raw.githubusercontent.com/KlugerLab/ALRA/master/alra.R')
+    
+    """,
+    args="sce",
+    body="""
+    assay(sce, "X") <- as(assay(sce, "X"), "CsparseMatrix")
+    reducedDim(sce, "train") <- as(reducedDim(sce, "train"), "CsparseMatrix")
+    completed <- alra(as.matrix(reducedDim(sce, "train")))
+    normCompleted <- completed[[3]]
+    reducedDim(sce, "train") <- as.matrix(normCompleted)
+    sce
+    """,
+)
 
 @method(
-    method_name="MAGIC",
-    paper_name="Recovering Gene Interactions from Single-Cell Data "
-    "Using Data Diffusion",
-    paper_url="https://www.cell.com/cell/abstract/S0092-8674(18)30724-4",
+    method_name="ALRA",
+    paper_name="Zero-preserving imputation of scRNA-seq data using low-rank approximation",
+    paper_url="https://www.biorxiv.org/content/10.1101/397588v1",
     paper_year=2018,
-    code_url="https://github.com/KrishnaswamyLab/MAGIC",
-    code_version=check_version("magic-impute"),
-    image="openproblems-python-extras",
+    code_url="https://github.com/KlugerLab/ALRA",
+    code_version=check_version("scprep"),
+    image="openproblems-r-extras",
 )
-def magic(adata):
-    from magic import MAGIC
+#support method alra_calc takes adata and any arguments to alra
+def alra_calc(adata)
+    adata_fit <- r_alra(adata)
+    return adata_fit
 
+def alra(adata):
     X, libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
     )
-    X = scprep.transform.sqrt(X)
-    Y = MAGIC().fit_transform(X, genes="all_genes")
+    X = scprep.transform.sqrt(X) #note that log transform is used in the examples of alra on github
+    adata.obsm['train']=X #we know that the scprep's .run.Rfunction uses anndata.2ri, where reducedDim(d, "PCA")=adata.obsm["X_PCA"], but that these dim-reduction equivalents 
+    #do not encompass any given key hold true across all contexts. Thus, we use X_PCA for now to ensure compatability. 
+    Y = _alra(X)
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
-    adata.obsm["denoised"] = Y
+    Y = alra_calc(adata)
+    Y = scprep.utils.matrix_transform(Y, np.square)
+    Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
+    adata.obsm["train"]=Y
     return adata
