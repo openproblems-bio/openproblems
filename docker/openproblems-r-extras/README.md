@@ -11,7 +11,9 @@ R: 3.6
 R packages:
 
 * batchelor
+* rsvd
 
 Python packages:
 
+* scprep
 * harmonic-alignment
