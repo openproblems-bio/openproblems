@@ -1,5 +1,5 @@
-from ....tools.decorators import method
 from ....patch import patch_datacache
+from ....tools.decorators import method
 
 import numpy as np
 import pandas as pd
@@ -194,7 +194,7 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     paper_url="https://pubmed.ncbi.nlm.nih.gov/24263090/",
     paper_year=2013,
     code_version="1.0",
-    code_url="http://cistrome.org/BETA/src/BETA_1.0.7.zip",
+    code_url="http://cistrome.org/BETA",
     image="openproblems-python-extras",
 )
 def beta(adata, n_top_genes=500, threshold=1):

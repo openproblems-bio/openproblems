@@ -1,7 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
-import magic as _magic
 import numpy as np
 import scprep
 
@@ -17,11 +16,13 @@ import scprep
     image="openproblems-python-extras",
 )
 def magic(adata):
+    from magic import MAGIC
+
     X, libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
     )
     X = scprep.transform.sqrt(X)
-    Y = _magic.MAGIC().fit_transform(X, genes="all_genes")
+    Y = MAGIC().fit_transform(X, genes="all_genes")
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
