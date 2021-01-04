@@ -33,7 +33,7 @@ _alra = scprep.run.RFunction(
     image="openproblems-r-extras",
 )
 #support method alra_calc takes adata and any arguments to alra
-def alra_calc(adata)
+def alra_calc(adata):
     adata_fit <- r_alra(adata)
     return adata_fit
 
