@@ -39,8 +39,6 @@ def _download_aftp(
     ) as tmp:
         tmp_path = tmp.name
 
-    if timeout is None:
-        timeout = 120
     wget_command_list = [
         "wget",
         "--ftp-user=anonymous",
@@ -50,9 +48,9 @@ def _download_aftp(
         tmp_path,
         "--no-verbose",
         "--passive-ftp",
-        "-T",
-        str(timeout),
     ]
+    if timeout:
+        wget_command_list += ["-T", str(timeout)]
 
     log.debug("Running: %s" % (" ".join(wget_command_list)))
     subprocess.call(wget_command_list)
