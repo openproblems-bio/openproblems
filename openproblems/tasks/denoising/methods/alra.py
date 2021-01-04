@@ -50,5 +50,5 @@ def alra(adata):
     Y = alra_calc(adata)
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
-    adata.obsm["train"]=Y
+    adata.obsm["denoised"]=Y
     return adata
