@@ -103,7 +103,7 @@ jobs:
         branch: auto_update
         delete-branch: true
         base: master
-        title: [auto] Update .docker_push
+        title: '[auto] Update .docker_push'
         reviewers: scottgigante, dburkhardt, singlecellopenproblems
 
     - name: Upload check results on fail
