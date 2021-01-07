@@ -30,6 +30,22 @@ def _assert_not_bytes(X):
     return True
 
 
+@parameterized.parameterized.expand(
+    [
+        (task.__name__.split(".")[-1], dataset.__name__)
+        for task in openproblems.TASKS
+        for dataset in task.DATASETS
+    ],
+    name_func=utils.name.name_test,
+)
+@utils.docker_test
+def test_load_dataset(task_name, dataset_name):
+    """Test loading and caching of a dataset."""
+    task = getattr(openproblems.tasks, task_name)
+    dataset = getattr(task.datasets, dataset_name)
+    dataset(test=True)
+
+
 @parameterized.parameterized_class(
     ("dataset", "task", "test"),
     [
@@ -41,7 +57,7 @@ def _assert_not_bytes(X):
     class_name_func=utils.name.name_test,
 )
 class TestDataset(unittest.TestCase):
-    """Test dataset loading."""
+    """Test cached dataset characteristics."""
 
     @classmethod
     def setUpClass(cls):
