@@ -7,7 +7,7 @@ import openproblems
 
 utils.warnings.ignore_warnings()
 
-TEMPDIR = tempfile.TemporaryDirectory()
+TEMPDIR = tempfile.TemporaryDirectory(prefix=openproblems.data.TEMPDIR)
 
 
 @parameterized.parameterized.expand(
