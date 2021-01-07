@@ -78,7 +78,7 @@ rule run_method:
     shell:
         """{params.docker} {params.workdir} {input.script} {wildcards.task} \
         {wildcards.method} {input.data} {output.data} {output.json} && \
-        docker stop $CONTAINER"""
+        docker stop $CONTAINER'"""
 
 rule load_dataset:
     input:
