@@ -217,7 +217,11 @@ def run_image(image, *args):
 
 @decorator.decorator
 def docker_test(func, *args, **kwargs):
-    """Run a test function in Docker."""
+    """Run a test function in Docker.
+
+    The function must take only simple objects as arguments
+    (i.e. eval(str(args)) == args) and the final argument must be the Docker image.
+    """
     image = args[-1]
     assert eval(str(args)) == args
     assert eval(str(kwargs)) == kwargs
@@ -234,6 +238,5 @@ def docker_test(func, *args, **kwargs):
             handle.write("    import openproblems\n")
             handle.write("    openproblems.data.no_cleanup()\n")
             handle.write("    {}(*{}, **{})\n".format(func.__name__, args, kwargs))
-        import subprocess
-        subprocess.run(['cat', f])
+
         run_image(image, f)
