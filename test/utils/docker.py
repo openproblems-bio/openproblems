@@ -11,7 +11,7 @@ import tempfile
 import time
 
 
-TESTDIR = os.path.dirname(os.path.abspath(__file__))
+TESTDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASEDIR = os.path.dirname(TESTDIR)
 CACHEDIR = os.path.join(os.environ["HOME"], ".singularity")
 os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
@@ -216,16 +216,24 @@ def run_image(image, *args):
 
 
 @decorator.decorator
-def docker_test(func, image="openproblems", *args, **kwargs):
+def docker_test(func, *args, **kwargs):
     """Run a test function in Docker."""
+    image = args[-1]
     assert eval(str(args)) == args
     assert eval(str(kwargs)) == kwargs
     with tempfile.TemporaryDirectory() as tempdir:
         f = os.path.join(tempdir, "test.py")
         with open(f, "w") as handle:
-            handle.write(inspect.getsource(func))
-            handle.write("if __name__ == '__main__':")
-            handle.write("    import openproblems")
-            handle.write("    openproblems.data.no_cleanup()")
-            handle.write("    {}(*{}, **{})".format(func.__name__, args, kwargs))
+            in_func = False
+            for line in inspect.getsource(func).split("\n"):
+                if in_func or line.startswith("def {}(".format(func.__name__)):
+                    in_func = True
+                    handle.write(line + "\n")
+            handle.write("\n")
+            handle.write("if __name__ == '__main__':\n")
+            handle.write("    import openproblems\n")
+            handle.write("    openproblems.data.no_cleanup()\n")
+            handle.write("    {}(*{}, **{})\n".format(func.__name__, args, kwargs))
+        import subprocess
+        subprocess.run(['cat', f])
         run_image(image, f)

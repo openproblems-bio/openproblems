@@ -32,14 +32,14 @@ def _assert_not_bytes(X):
 
 @parameterized.parameterized.expand(
     [
-        (task.__name__.split(".")[-1], dataset.__name__)
+        (task.__name__.split(".")[-1], dataset.__name__, dataset.metadata["image"])
         for task in openproblems.TASKS
         for dataset in task.DATASETS
     ],
     name_func=utils.name.name_test,
 )
-@utils.docker_test
-def test_load_dataset(task_name, dataset_name):
+@utils.docker.docker_test
+def test_load_dataset(task_name, dataset_name, image):
     """Test loading and caching of a dataset."""
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
