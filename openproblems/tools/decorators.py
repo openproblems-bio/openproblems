@@ -133,7 +133,7 @@ def dataset(dataset_name, image="openproblems"):
             log.debug("Loading {} dataset".format(func.__name__))
             return func(*args, **kwargs)
 
-        apply_func.metadata = dict(dataset_name=dataset_name)
+        apply_func.metadata = dict(dataset_name=dataset_name, image=image)
         return apply_func
 
     return decorator
