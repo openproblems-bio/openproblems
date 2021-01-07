@@ -2,9 +2,6 @@ import utils
 
 import parameterized
 import tempfile
-import os
-import anndata
-import numbers
 
 import openproblems
 
@@ -15,21 +12,23 @@ TEMPDIR = tempfile.TemporaryDirectory()
 
 @parameterized.parameterized.expand(
     [
-        (task.__name__.split(".")[-1], dataset.__name__, method.__name__)
+        (task.__name__.split(".")[-1], dataset.__name__, method.__name__, TEMPDIR.name, method.metadata["image"])
         for task in openproblems.TASKS
         for dataset in task.DATASETS
         for method in task.METHODS
     ],
     name_func=utils.name.name_test,
 )
-@utils.docker_test
-def test_method(task_name, method_name, dataset_name):
+@utils.docker.docker_test
+def test_method(task_name, dataset_name, method_name, tempdir, image):
     """Test application of a method."""
+    import anndata
+    import os
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     method = getattr(task.methods, method_name)
     data_path = os.path.join(
-        TEMPDIR, "{}_{}_{}.h5ad".format(task_name, dataset_name, method_name)
+        tempdir, "{}_{}_{}.h5ad".format(task_name, dataset_name, method_name)
     )
     openproblems.log.debug(
         "Testing {} method on {} dataset from {} task".format(
@@ -50,6 +49,8 @@ def test_method(task_name, method_name, dataset_name):
             dataset.__name__,
             method.__name__,
             metric.__name__,
+            TEMPDIR.name,
+            metric.metadata["image"],
         )
         for task in openproblems.TASKS
         for dataset in task.DATASETS
@@ -58,15 +59,18 @@ def test_method(task_name, method_name, dataset_name):
     ],
     name_func=utils.name.name_test,
 )
-@utils.docker_test
-def test_metric(task_name, method_name, dataset_name, metric_name):
+@utils.docker.docker_test
+def test_metric(task_name, dataset_name, method_name, metric_name, tempdir, image):
     """Test application of a method."""
+    import anndata
+    import numbers
+    import os
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     method = getattr(task.methods, method_name)
     metric = getattr(task.metrics, metric_name)
     data_path = os.path.join(
-        TEMPDIR, "{}_{}_{}.h5ad".format(task_name, dataset_name, method_name)
+        tempdir, "{}_{}_{}.h5ad".format(task_name, dataset_name, method_name)
     )
     openproblems.log.debug(
         "Testing {} metric on {} method applied to {} dataset from {} task".format(
