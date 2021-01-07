@@ -12,7 +12,13 @@ TEMPDIR = tempfile.TemporaryDirectory()
 
 @parameterized.parameterized.expand(
     [
-        (task.__name__.split(".")[-1], dataset.__name__, method.__name__, TEMPDIR.name, method.metadata["image"])
+        (
+            task.__name__.split(".")[-1],
+            dataset.__name__,
+            method.__name__,
+            TEMPDIR.name,
+            method.metadata["image"],
+        )
         for task in openproblems.TASKS
         for dataset in task.DATASETS
         for method in task.METHODS
@@ -24,6 +30,7 @@ def test_method(task_name, dataset_name, method_name, tempdir, image):
     """Test application of a method."""
     import anndata
     import os
+
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     method = getattr(task.methods, method_name)
@@ -65,6 +72,7 @@ def test_metric(task_name, dataset_name, method_name, metric_name, tempdir, imag
     import anndata
     import numbers
     import os
+
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     method = getattr(task.methods, method_name)
