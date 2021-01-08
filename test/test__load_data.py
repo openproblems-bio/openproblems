@@ -2,7 +2,6 @@ import utils
 
 import parameterized
 import openproblems
-import os
 
 utils.warnings.ignore_warnings()
 
@@ -18,6 +17,8 @@ utils.warnings.ignore_warnings()
 @utils.docker.docker_test
 def test_load_dataset(task_name, dataset_name, image):
     """Test loading and caching of a dataset."""
+    import os
+
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     dataset(test=True)
