@@ -159,7 +159,7 @@ def singularity_command(image, script, *args):
         "{0}:{0}".format(BASEDIR),
         cache_singularity_image(image),
         "/bin/bash",
-        "{}/test/singularity_run.sh".format(BASEDIR),
+        "{}/test/docker_run.sh".format(BASEDIR),
         "{}/test".format(BASEDIR),
         script,
     ] + list(args)
@@ -199,7 +199,7 @@ def docker_command(image, script, *args):
         "exec",
         container,
         "/bin/bash",
-        "{}/test/singularity_run.sh".format(BASEDIR),
+        "{}/test/docker_run.sh".format(BASEDIR),
         "{}/test/".format(BASEDIR),
         script,
     ] + list(args)
