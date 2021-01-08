@@ -112,9 +112,12 @@ jobs:
       run: |
         if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
         renv::restore()
-        renv::install("bioc::scran@1.18.2")
-        renv::install("bioc::scuttle@1.0.3")
-        renv::install("bioc::beachmat@2.6.3")
+
+        con = file("docker/openproblems-r-base/r_requirements.txt", "r")
+        while ( length(pkg <- readLines(con, n = 1)) > 0 ) {
+          renv::install(pkg)
+        }
+        close(con)
       shell: Rscript {0}
 
     - name: Run tests
