@@ -112,7 +112,9 @@ jobs:
       run: |
         if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
         renv::restore()
-        renv::install("bioc::scran")
+        renv::install("bioc::scran@1.18.2")
+        renv::install("bioc::scuttle@1.0.3")
+        renv::install("bioc::beachmat@2.6.3")
       shell: Rscript {0}
 
     - name: Run tests
