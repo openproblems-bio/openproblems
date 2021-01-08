@@ -42,6 +42,9 @@ def test_method(task_name, dataset_name, method_name, tempdir, image):
             method.__name__, dataset.__name__, task.__name__
         )
     )
+    assert os.path.isfile(
+        openproblems.data._cache_path(dataset, test=True)
+    ), "Intermediate file missing. Did test_dataset fail?"
     adata = dataset(test=True)
     adata = method(adata)
     assert isinstance(adata, anndata.AnnData)
