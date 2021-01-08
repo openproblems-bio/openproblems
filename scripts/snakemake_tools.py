@@ -105,10 +105,12 @@ def datasets(wildcards):
 def docker_image_name(wildcards):
     """Get the name of the Docker image required for a task and method/metric."""
     task = getattr(openproblems.tasks, wildcards.task)
-    try:
+    if hasattr(wildcards, "metric"):
         fun = getattr(task.metrics, wildcards.metric)
-    except AttributeError:
+    elif hasattr(wildcards, "method"):
         fun = getattr(task.methods, wildcards.method)
+    else:
+        fun = getattr(task.datasets, wildcards.dataset)
     return fun.metadata["image"]
 
 
