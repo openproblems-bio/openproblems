@@ -7,7 +7,7 @@ import openproblems
 
 utils.warnings.ignore_warnings()
 
-TEMPDIR = tempfile.TemporaryDirectory(prefix=openproblems.data.TEMPDIR)
+TEMPDIR = tempfile.TemporaryDirectory(prefix=openproblems.data.TEMPDIR + "/")
 
 
 @parameterized.parameterized.expand(
@@ -68,7 +68,7 @@ def test_method(task_name, dataset_name, method_name, tempdir, image):
 )
 @utils.docker.docker_test
 def test_metric(task_name, dataset_name, method_name, metric_name, tempdir, image):
-    """Test application of a method."""
+    """Test computation of a metric."""
     import anndata
     import numbers
     import os
