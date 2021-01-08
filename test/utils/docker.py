@@ -226,7 +226,7 @@ def docker_test(func, *args, **kwargs):
     assert eval(str(args)) == args
     assert eval(str(kwargs)) == kwargs
     with tempfile.TemporaryDirectory() as tempdir:
-        f = os.path.join(tempdir, "test.py")
+        f = os.path.join(tempdir, "{}.py".format(func.__name__))
         with open(f, "w") as handle:
             in_func = False
             for line in inspect.getsource(func).split("\n"):
