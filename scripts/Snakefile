@@ -83,7 +83,7 @@ rule run_method:
 rule load_dataset:
     input:
         script = "load_dataset.py",
-        code = "{}/../openproblems/version.py".format(tools.SCRIPTS_DIR)
+        code = "{}/../openproblems/version.py".format(tools.SCRIPTS_DIR),
         docker = tools.docker_push,
     output: temp("{tempdir}/{task}/{dataset}.data.h5ad")
     params:
