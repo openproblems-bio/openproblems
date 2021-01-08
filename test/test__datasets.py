@@ -4,6 +4,7 @@ import pandas as pd
 import anndata
 import parameterized
 import openproblems
+import os
 import unittest
 
 import scipy.sparse
@@ -44,6 +45,7 @@ def test_load_dataset(task_name, dataset_name, image):
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     dataset(test=True)
+    assert os.path.isfile(openproblems.data._cache_path(dataset, test=True))
 
 
 @parameterized.parameterized_class(
