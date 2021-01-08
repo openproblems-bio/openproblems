@@ -1,5 +1,4 @@
 import anndata
-import molecular_cross_validation.util
 import numpy as np
 import scipy.sparse
 
@@ -11,6 +10,8 @@ def split_data(
 
     Stores "train" and "test" dataset using the AnnData.obsm property.
     """
+    import molecular_cross_validation.util
+
     random_state = np.random.RandomState(seed)
 
     X = adata.X
