@@ -11,12 +11,12 @@ RUN apt-get clean -y && apt-get autoremove -y
 
 # Install R packages
 COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
-RUN R -e "install.packages('BiocManager')"
+RUN R -e "install.packages('renv')"
 # Temporary fix for RcppAnnoy
 RUN R -e "if (!require(RcppAnnoy, quietly=TRUE)) install.packages('RcppAnnoy')"
 RUN R -e "install.packages('https://cran.r-project.org/src/contrib/Archive/RcppAnnoy/RcppAnnoy_0.0.16.tar.gz', repos = NULL, type = 'source')"
 # Install r_requirements.txt
-RUN for pkg in $(cat r_requirements.txt); do R -e "BiocManager::install('${pkg}')" 2>&1 > /dev/null | grep -v "^\*\*"; done
+RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install('${pkg}')" 2>&1 > /dev/null | grep -v "^\*\*"; done
 
 # Install Python packages
 COPY ./docker/openproblems-r-base/requirements.txt ./requirements.txt
