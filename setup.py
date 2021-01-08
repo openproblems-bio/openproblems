@@ -12,7 +12,6 @@ install_requires = [
     "decorator",
     "memory-profiler",
     "molecular-cross-validation @ git+https://github.com/czbiohub/molecular-cross-validation",
-    "parameterized",
 ]
 
 r_requires = [
@@ -28,6 +27,7 @@ test_requires = [
     "black",
     "coverage",
     "coveralls",
+    "parameterized>=0.7.4",
 ]
 
 doc_requires = [
