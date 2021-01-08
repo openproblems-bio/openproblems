@@ -80,6 +80,7 @@ def test_metric(task_name, dataset_name, method_name, metric_name, tempdir, imag
     data_path = os.path.join(
         tempdir, "{}_{}_{}.h5ad".format(task_name, dataset_name, method_name)
     )
+    assert os.path.isfile(data_path), "Intermediate file missing. Did test_method fail?"
     openproblems.log.debug(
         "Testing {} metric on {} method applied to {} dataset from {} task".format(
             metric.__name__, method.__name__, dataset.__name__, task.__name__
