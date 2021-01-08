@@ -21,5 +21,7 @@ def test_load_dataset(task_name, dataset_name, image):
 
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
-    dataset(test=True)
-    assert os.path.isfile(openproblems.data.utils._cache_path(dataset, test=True))
+    adata = dataset(test=True)
+    assert not adata.__from_cache__
+    adata = dataset(test=True)
+    assert adata.__from_cache__
