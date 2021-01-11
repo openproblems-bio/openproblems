@@ -12,8 +12,8 @@ utils.warnings.ignore_warnings()
             task.__name__.split(".")[-1],
             dataset.__name__,
             test,
-            dataset.metadata["image"],
             utils.TEMPDIR.name,
+            dataset.metadata["image"],
         )
         for task in openproblems.TASKS
         for dataset in task.DATASETS
@@ -22,7 +22,7 @@ utils.warnings.ignore_warnings()
     name_func=utils.name.name_test,
 )
 @utils.docker.docker_test
-def test_load_dataset(task_name, dataset_name, test, image, tempdir):
+def test_load_dataset(task_name, dataset_name, test, tempdir, image):
     """Test loading and caching of a dataset."""
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
