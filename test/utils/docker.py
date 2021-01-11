@@ -9,6 +9,7 @@ import json
 import os
 import tempfile
 import time
+import warnings
 
 
 TESTDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -223,6 +224,8 @@ def docker_test(func, *args, **kwargs):
     (i.e. eval(str(args)) == args) and the final argument must be the Docker image.
     """
     image = args[-1]
+    if not image.startswith("openproblems"):
+        warnings.warn("Image {} expectd to begin with openproblems.".format(image))
     assert eval(str(args)) == args
     assert eval(str(kwargs)) == kwargs
     with tempfile.TemporaryDirectory() as tempdir:
