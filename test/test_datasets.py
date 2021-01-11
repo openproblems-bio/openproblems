@@ -32,7 +32,7 @@ def _assert_not_bytes(X):
 
 
 @parameterized.parameterized_class(
-    ("dataset", "task", "test"),
+    ("dataset", "task", "test", "tempdir"),
     [
         (staticmethod(dataset), task, test, utils.TEMPDIR.name)
         for task in openproblems.TASKS
