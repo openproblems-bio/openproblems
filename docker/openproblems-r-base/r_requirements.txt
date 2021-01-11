@@ -1,5 +1,2 @@
 RcppAnnoy
 bioc::scran
-https://bioconductor.org/packages/3.12/bioc/src/contrib/Archive/scran/scran_1.18.2.tar.gz
-https://bioconductor.org/packages/3.12/bioc/src/contrib/Archive/beachmat/beachmat_2.6.3.tar.gz
-https://bioconductor.org/packages/3.12/bioc/src/contrib/Archive/scuttle/scuttle_1.0.3.tar.gz
