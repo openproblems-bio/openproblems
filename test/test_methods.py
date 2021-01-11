@@ -24,11 +24,12 @@ utils.warnings.ignore_warnings()
 def test_method(task_name, dataset_name, method_name, tempdir, image):
     """Test application of a method."""
     import anndata
+    import cache
 
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     method = getattr(task.methods, method_name)
-    adata = utils.cache.load(
+    adata = cache.load(
         tempdir, task, dataset, test=True, dependency="test_load_dataset"
     )
     openproblems.log.debug(
@@ -39,7 +40,7 @@ def test_method(task_name, dataset_name, method_name, tempdir, image):
     adata = method(adata)
     assert isinstance(adata, anndata.AnnData)
     assert task.checks.check_method(adata)
-    utils.cache.save(adata, tempdir, task, dataset, method=method)
+    cache.save(adata, tempdir, task, dataset, method=method)
 
 
 @parameterized.parameterized.expand(
@@ -62,15 +63,14 @@ def test_method(task_name, dataset_name, method_name, tempdir, image):
 @utils.docker.docker_test
 def test_metric(task_name, dataset_name, method_name, metric_name, tempdir, image):
     """Test computation of a metric."""
+    import cache
     import numbers
 
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     method = getattr(task.methods, method_name)
     metric = getattr(task.metrics, metric_name)
-    adata = utils.cache.load(
-        tempdir, task, dataset, method=method, dependency="test_method"
-    )
+    adata = cache.load(tempdir, task, dataset, method=method, dependency="test_method")
     openproblems.log.debug(
         "Testing {} metric on {} method applied to {} dataset from {} task".format(
             metric.__name__, method.__name__, dataset.__name__, task.__name__

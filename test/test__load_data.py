@@ -24,10 +24,12 @@ utils.warnings.ignore_warnings()
 @utils.docker.docker_test
 def test_load_dataset(task_name, dataset_name, test, tempdir, image):
     """Test loading and caching of a dataset."""
+    import cache
+
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     adata = dataset(test=test)
     adata2 = dataset(test=test)
     assert adata2.shape == adata.shape
     assert adata2.__from_cache__
-    utils.cache.save(adata, tempdir, task, dataset, test=test)
+    cache.save(adata, tempdir, task, dataset, test=test)
