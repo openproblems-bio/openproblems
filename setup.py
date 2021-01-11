@@ -2,7 +2,7 @@ import os
 from setuptools import setup, find_packages
 
 install_requires = [
-    "numpy>=1.17.0,<1.19.5",
+    "numpy>=1.17.0",
     "scikit-learn>=0.19.1",
     "anndata>=0.7.5",
     "scprep>=1.0.10",
@@ -14,9 +14,9 @@ install_requires = [
 ]
 
 r_requires = [
-    "rpy2<3.4.0",
+    "rpy2",
     "scIB @ git+https://github.com/theislab/scib@master",
-    "anndata2ri>=1.0.4",
+    "anndata2ri>=1.0.6",
 ]
 
 evaluate_requires = ["snakemake"]
