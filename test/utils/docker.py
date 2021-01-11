@@ -242,8 +242,6 @@ def docker_test(func, *args, **kwargs):
             handle.write("    openproblems.data.no_cleanup()\n")
             handle.write("    import sys\n")
             handle.write("    sys.path.append('{}')\n".format(TESTDIR))
-            handle.write("    import utils\n")
-            handle.write("    utils.warnings.ignore_warnings()\n")
             handle.write("    {}(*{}, **{})\n".format(func.__name__, args, kwargs))
 
         run_image(image, f)
