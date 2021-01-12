@@ -94,9 +94,11 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
 
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
-    sc.pp.highly_variable_genes(adata, n_top_genes=top_genes)
 
-    adata = adata[:, adata.var.highly_variable].copy()
+    if top_genes > adata.shape[1]:
+        sc.pp.highly_variable_genes(adata, n_top_genes=top_genes)
+        adata = adata[:, adata.var.highly_variable].copy()
+
     sc.pp.regress_out(adata, ["total_counts", "pct_counts_mt"])
     sc.pp.scale(adata, max_value=10)
 

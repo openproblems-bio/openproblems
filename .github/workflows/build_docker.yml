@@ -81,6 +81,31 @@ jobs:
         snakemake -j $(grep -c processor /proc/cpuinfo) docker
         cd ..
 
+    - name: Commit result
+      if: |
+        (steps.cache-result.outputs.cache-hit != 'true') &&
+        startsWith(github.ref, 'refs/heads/master')
+      uses: EndBug/add-and-commit@v6
+      with:
+        author_name: SingleCellOpenProblems
+        author_email: singlecellopenproblems@protonmail.com
+        message: 'Push Docker images # ci skip'
+        add: 'docker/*/.docker_push'
+        branch: auto_update
+        push: false
+
+    - name: Create Pull Request
+      if: |
+        (steps.cache-result.outputs.cache-hit != 'true') &&
+        startsWith(github.ref, 'refs/heads/master')
+      uses: peter-evans/create-pull-request@v3
+      with:
+        branch: auto_update
+        delete-branch: true
+        base: master
+        title: '[auto] Update .docker_push'
+        reviewers: scottgigante, dburkhardt, singlecellopenproblems
+
     - name: Upload check results on fail
       if: failure()
       uses: actions/upload-artifact@master
