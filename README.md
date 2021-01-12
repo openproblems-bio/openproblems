@@ -31,6 +31,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
 * Daniel Burkhardt (@dburkhardt)
 * Malte Luecken (@LuckyMD)  
 * Angela Pisco (@aopisco)
+* Olga Botvinnik (@olgabot)
 
 **Task authors** (_alphabetically_):  
 * Mohammad Lotfallahi (@M0hammadL) - Label projection task
