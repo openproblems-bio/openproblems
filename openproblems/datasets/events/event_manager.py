@@ -84,7 +84,6 @@ class PipeEventManager(EventManagerABC):
 
         result = handlers[0](*args, **kwargs)
         args = args[1:]
-        print(result)
 
         for handler in handlers[1:]:
             result = handler(result, *args, **kwargs)
