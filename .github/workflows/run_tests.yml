@@ -123,12 +123,13 @@ jobs:
     - name: Run tests
       run: nose2 -vvv
 
+    - name: Combine coverage
+      run: coverage combine -a .
+
     - name: Upload coverage
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        coverage combine -a .
-        coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload check results on fail
       if: failure()
