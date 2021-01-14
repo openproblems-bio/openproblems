@@ -213,11 +213,12 @@ def run_image(image, script, *args, timeout=None, retries=0):
         container_command = docker_command
     else:
         container_command = singularity_command
+    command = container_command(image, script, *args)
     if timeout is not None:
-        container_command = ["timeout", str(timeout)] + container_command
+        command = ["timeout", str(timeout)] + command
     while True:
         try:
-            return run.run(container_command(image, script, *args))
+            return run.run(command)
         except Exception as e:
             if retries > 0:
                 warnings.warn(
