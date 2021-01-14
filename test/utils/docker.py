@@ -207,17 +207,30 @@ def docker_command(image, script, *args):
     return run_command
 
 
-def run_image(image, *args):
+def run_image(image, script, *args, timeout=None, retries=0):
     """Run a Python script in a container."""
     if image_requires_docker(image) or docker_available():
         container_command = docker_command
     else:
         container_command = singularity_command
-    run.run(container_command(image, *args))
+    if timeout is not None:
+        container_command = ["timeout", str(timeout)] + container_command
+    while True:
+        try:
+            return run.run(container_command(image, script, *args))
+        except Exception as e:
+            if retries > 0:
+                warnings.warn(
+                    'Container failed with {}("{}").'.format(type(e).__name__, str(e)),
+                    RuntimeWarning,
+                )
+                retries -= 1
+            else:
+                raise
 
 
 @decorator.decorator
-def docker_test(func, *args, **kwargs):
+def docker_test(func, timeout=None, retries=0, *args, **kwargs):
     """Run a test function in Docker.
 
     The function must take only simple objects as arguments
@@ -244,4 +257,4 @@ def docker_test(func, *args, **kwargs):
             handle.write("    sys.path.append('{}')\n".format(TESTDIR))
             handle.write("    {}(*{}, **{})\n".format(func.__name__, args, kwargs))
 
-        run_image(image, f)
+        run_image(image, f, timeout=timeout, retries=retries)
