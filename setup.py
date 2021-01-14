@@ -24,7 +24,7 @@ evaluate_requires = ["snakemake"]
 
 test_requires = [
     "pytest",
-    "pytyest-cov",
+    "pytest-cov",
     "black",
     "coverage",
     "coveralls",
