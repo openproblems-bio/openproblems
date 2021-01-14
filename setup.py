@@ -23,7 +23,8 @@ r_requires = [
 evaluate_requires = ["snakemake"]
 
 test_requires = [
-    "nose2",
+    "pytest",
+    "pytyest-cov",
     "black",
     "coverage",
     "coveralls",
