@@ -126,9 +126,7 @@ jobs:
     - name: Upload coverage
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        coverage combine -a .
-        coveralls
+      run: coveralls
 
     - name: Upload check results on fail
       if: failure()
