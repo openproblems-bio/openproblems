@@ -20,7 +20,7 @@ utils.warnings.ignore_warnings()
     ],
     name_func=utils.name.name_test,
 )
-@utils.docker.docker_test
+@utils.docker.docker_test(timeout=600, retries=2)
 def test_method(task_name, dataset_name, method_name, tempdir, image):
     """Test application of a method."""
     import anndata
