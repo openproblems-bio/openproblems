@@ -1,5 +1,8 @@
 import utils
-import cache
+import utils.asserts
+import utils.cache
+import utils.name
+import utils.warnings
 
 import pandas as pd
 import anndata
@@ -47,7 +50,7 @@ class TestDataset(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Load data."""
-        cls.adata = cache.load(
+        cls.adata = utils.cache.load(
             cls.tempdir,
             cls.task,
             cls.dataset,

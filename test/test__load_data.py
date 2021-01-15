@@ -1,4 +1,7 @@
 import utils
+import utils.docker
+import utils.name
+import utils.warnings
 
 import parameterized
 import openproblems
@@ -24,8 +27,8 @@ utils.warnings.ignore_warnings()
 @utils.docker.docker_test(retries=2)
 def test_load_dataset(task_name, dataset_name, test, tempdir, image):
     """Test loading and caching of a dataset."""
-    import cache
-    import utils
+    import utils.cache
+    import utils.asserts
 
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
@@ -34,4 +37,4 @@ def test_load_dataset(task_name, dataset_name, test, tempdir, image):
     adata2 = dataset(test=test)
     assert adata2.shape == adata.shape
     assert adata2.__from_cache__
-    cache.save(adata, tempdir, task, dataset, test=test)
+    utils.cache.save(adata, tempdir, task, dataset, test=test)
