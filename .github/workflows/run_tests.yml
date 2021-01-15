@@ -126,6 +126,7 @@ jobs:
     - name: Upload coverage
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_SERVICE_NAME: github
       run: |
         coverage combine -a .
         coveralls
