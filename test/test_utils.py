@@ -15,7 +15,7 @@ def test_temporary_version_missing():
         pass
 
     np.testing.assert_raises_regex(
-        TypeError, "temporary() missing 1 required keyword argument: 'version'", test_fn
+        TypeError, "missing 1 required keyword argument: 'version'", test_fn
     )
 
 
