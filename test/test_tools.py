@@ -1,4 +1,7 @@
-import utils
+import utils.asserts
+import utils.data
+import utils.name
+import utils.warnings
 
 import numpy as np
 import parameterized
