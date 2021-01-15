@@ -22,7 +22,10 @@ def test_temporary_version_missing():
 def test_temporary_version_future():
     """Test temporary decorator behavior with version from the future."""
     version = packaging.version.parse(openproblems.__version__)
-    temp_version = "{}.{}".format(version.major, version.minor + 1)
+    if version.minor > 0:
+        temp_version = "{}.{}".format(version.major, version.minor - 1)
+    else:
+        temp_version = "{}.{}".format(version.major - 1, 0)
 
     @openproblems.utils.temporary(version=temp_version)
     def test_fn():
