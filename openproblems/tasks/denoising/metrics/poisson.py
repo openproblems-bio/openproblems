@@ -1,10 +1,9 @@
-from molecular_cross_validation.mcv_sweep import poisson_nll_loss
-
 from ....tools.decorators import metric
 
 
-@metric(metric_name="Poisson loss", maximize=False)
+@metric(metric_name="Poisson loss", maximize=False, image="openproblems-python-extras")
 def poisson(adata):
+    from molecular_cross_validation.mcv_sweep import poisson_nll_loss
 
     test_data = adata.obsm["test"]
     denoised_data = adata.obsm["denoised"]
