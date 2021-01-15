@@ -13,5 +13,5 @@ def poisson(adata):
     target_sum = test_data.sum()
     denoised_data = denoised_data * target_sum / initial_sum
 
-    error = poisson_nll_loss(test_data.X, denoised_data.X)
+    error = poisson_nll_loss(test_data, denoised_data)
     return error
