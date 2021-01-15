@@ -138,9 +138,8 @@ def test_profile():
         assert key in result, key
         assert isinstance(result[key], np.float64 if key == "result" else float), key
 
-    assert result["memory_mb"] > 130
-    assert result["memory_mb"] < 150
-    assert result["memory_leaked_mb"] < 1
+    assert result["memory_mb"] >= 0
     assert result["memory_leaked_mb"] >= 0
+    assert result["memory_leaked_mb"] < result["memory_mb"] / 100
     assert result["runtime_s"] >= 2
     assert result["runtime_s"] < 3
