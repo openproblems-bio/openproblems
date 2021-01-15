@@ -121,15 +121,13 @@ jobs:
       shell: Rscript {0}
 
     - name: Run tests
-      run: nose2 -vvv
+      run: pytest --cov=openproblems -v
 
     - name: Upload coverage
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_SERVICE_NAME: github
-      run: |
-        coverage combine -a .
-        coveralls
+      run: coveralls
 
     - name: Upload check results on fail
       if: failure()
