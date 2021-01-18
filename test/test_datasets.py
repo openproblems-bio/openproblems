@@ -67,8 +67,8 @@ class TestDataset(unittest.TestCase):
         assert self.adata.shape[0] > 0
         assert self.adata.shape[1] > 0
         if self.test:
-            assert self.adata.shape[0] < 600
-            assert self.adata.shape[1] < 1500
+            assert self.adata.shape[0] <= 600
+            assert self.adata.shape[1] <= 1500
 
     def test_sparse(self):
         """Ensure output is sparse."""
