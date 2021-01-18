@@ -1,6 +1,6 @@
 import gc
-import pkg_resources
 import numpy as np
+import pkg_resources
 import scipy.sparse
 
 
