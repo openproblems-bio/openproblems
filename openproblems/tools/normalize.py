@@ -1,4 +1,5 @@
-from . import decorators, utils
+from . import decorators
+from . import utils
 import scanpy as sc
 import scprep
 import warnings
