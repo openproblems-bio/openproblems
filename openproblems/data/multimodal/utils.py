@@ -6,6 +6,7 @@ import scprep
 
 
 def subset_mode2_genes(adata, keep_genes):
+    """Randomly subset genes from adata.obsm["mode2"]."""
     adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes]
     adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes]
     if "mode2_varnames" in adata.uns:
