@@ -74,7 +74,7 @@ def create_joint_adata(
     return adata
 
 
-def subset_joint_data(adata, n_cells=500, n_genes=1000):
+def subset_joint_data(adata, n_cells=600, n_genes=1500):
     """Randomly subset a multimodal dataset."""
     if adata.shape[0] > n_cells:
         keep_cells = np.random.choice(adata.shape[0], n_cells, replace=False)
