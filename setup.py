@@ -11,6 +11,7 @@ install_requires = [
     "louvain>=0.6,<0.7",
     "decorator",
     "memory-profiler",
+    "umap-learn<0.5",
 ]
 
 r_requires = [
@@ -22,7 +23,8 @@ r_requires = [
 evaluate_requires = ["snakemake"]
 
 test_requires = [
-    "nose2",
+    "pytest",
+    "pytest-cov",
     "black",
     "coverage",
     "coveralls",

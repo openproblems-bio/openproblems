@@ -1,10 +1,9 @@
-from molecular_cross_validation.mcv_sweep import poisson_nll_loss
-
 from ....tools.decorators import metric
 
 
-@metric(metric_name="Poisson loss", maximize=False)
+@metric(metric_name="Poisson loss", maximize=False, image="openproblems-python-extras")
 def poisson(adata):
+    from molecular_cross_validation.mcv_sweep import poisson_nll_loss
 
     test_data = adata.obsm["test"]
     denoised_data = adata.obsm["denoised"]
@@ -14,5 +13,5 @@ def poisson(adata):
     target_sum = test_data.sum()
     denoised_data = denoised_data * target_sum / initial_sum
 
-    error = poisson_nll_loss(test_data.X, denoised_data.X)
+    error = poisson_nll_loss(test_data, denoised_data)
     return error

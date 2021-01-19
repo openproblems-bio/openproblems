@@ -1,9 +1,13 @@
-import utils
+import utils.asserts
+import utils.data
+import utils.name
+import utils.warnings
 
 import numpy as np
 import parameterized
 import unittest
 import openproblems
+import time
 
 import scipy.sparse
 
@@ -116,3 +120,26 @@ class TestNormalizeObsM(unittest.TestCase):
         utils.asserts.assert_array_equal(
             self.adata.obsm[self.obsm], self.adata.obsm[self.cache_name]
         )
+
+
+def test_profile():
+    """Test the profiler."""
+
+    @openproblems.tools.decorators.profile
+    def test_fn():
+        X = np.random.normal(0, 1, (100, 100))
+        time.sleep(2)
+        result = X.sum()
+        del X
+        return result
+
+    result = test_fn()
+    for key in ["result", "runtime_s", "memory_mb", "memory_leaked_mb"]:
+        assert key in result, key
+        assert isinstance(result[key], np.float64 if key == "result" else float), key
+
+    assert result["memory_mb"] >= 0
+    assert result["memory_leaked_mb"] >= 0
+    assert result["memory_leaked_mb"] < result["memory_mb"] / 100
+    assert result["runtime_s"] >= 2
+    assert result["runtime_s"] < 3
