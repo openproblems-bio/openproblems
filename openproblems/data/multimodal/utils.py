@@ -21,7 +21,7 @@ def filter_joint_data_empty_cells(adata):
     # filter cells
     n_cells_mode1 = scprep.utils.toarray(adata.X.sum(axis=1)).flatten()
     n_cells_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=1)).flatten()
-    keep_cells = np.minimum(n_cells_mode1, n_cells_mode2) > 0
+    keep_cells = np.minimum(n_cells_mode1, n_cells_mode2) > 1
     adata.uns["mode2_obs"] = adata.uns["mode2_obs"][keep_cells]
     adata = adata[keep_cells, :].copy()
     # filter genes
