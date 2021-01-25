@@ -82,7 +82,7 @@ def _get_annotation(adata, retries=3):
     )
 
 
-def _atac_genes_score(adata, top_genes=500, threshold=1):
+def _atac_genes_score(adata, top_genes=500, threshold=1, method="beta"):
     """Calculate gene scores and insert into .obsm."""
     import pybedtools
 
@@ -173,12 +173,20 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
         (tss_to_peaks.thickEnd != ".") | (tss_to_peaks.score != "."), :
     ]
 
-    # weight matrix by peak to TSS distances
+    if method == "beta":
+        _beta(tss_to_peaks, adata, threshold)
+    elif method == "archr_model21":
+        _archr_model21(tss_to_peaks, adata)
+    elif method == "marge":
+        _marge(tss_to_peaks, adata)
+    return adata
+
+
+def _beta(tss_to_peaks, adata, threshold=1):
     tss_to_peaks["distance"] = tss_to_peaks.apply(
         lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 1e5, axis=1
     )
     tss_to_peaks["weight"] = np.exp(-0.5 - 4 * tss_to_peaks["distance"].values)
-
     gene_peak_weight = scipy.sparse.csr_matrix(
         (
             tss_to_peaks.weight.values,
@@ -187,7 +195,46 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
         shape=(adata.shape[1], adata.uns["mode2_var"].shape[0]),
     )
     adata.obsm["gene_score"] = (adata.obsm["mode2"] >= threshold) @ gene_peak_weight.T
-    return adata
+
+
+def _archr_model21(tss_to_peaks, adata):
+    """
+    https://www.archrproject.com/bookdown/calculating-gene-scores-in-archr.html
+    """
+    tss_to_peaks["distance"] = tss_to_peaks.apply(
+        lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 5000, axis=1
+    )
+    tss_to_peaks["weight"] = np.exp(tss_to_peaks["distance"].values)
+    gene_peak_weight = scipy.sparse.csr_matrix(
+        (
+            tss_to_peaks.weight.values,
+            (tss_to_peaks.thickEnd.astype("int32").values, tss_to_peaks.name.values),
+        ),
+        shape=(adata.shape[1], adata.uns["mode2_var"].shape[0]),
+    )
+    adata.obsm["gene_score"] = adata.obsm["mode2"] @ gene_peak_weight.T
+
+
+def _marge(tss_to_peaks, adata):
+    """
+    https://www.archrproject.com/bookdown/calculating-gene-scores-in-archr.html
+    """
+    import math
+
+    alpha = -math.log(1.0 / 3.0) * 1e5 / 1e4
+    tss_to_peaks["distance"] = tss_to_peaks.apply(
+        lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 1e5, axis=1
+    )
+    decay_score = np.exp(-alpha * tss_to_peaks["distance"].values)
+    tss_to_peaks["weight"] = 2.0 * decay_score / (1.0 + decay_score)
+    gene_peak_weight = scipy.sparse.csr_matrix(
+        (
+            tss_to_peaks.weight.values,
+            (tss_to_peaks.thickEnd.astype("int32").values, tss_to_peaks.name.values),
+        ),
+        shape=(adata.shape[1], adata.uns["mode2_var"].shape[0]),
+    )
+    adata.obsm["gene_score"] = adata.obsm["mode2"] @ gene_peak_weight.T
 
 
 @method(
@@ -200,6 +247,36 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     code_url="http://cistrome.org/BETA",
     image="openproblems-python-extras",
 )
-def beta(adata, n_top_genes=500, threshold=1):
-    adata = _atac_genes_score(adata, top_genes=n_top_genes, threshold=threshold)
+def beta(adata, n_top_genes=200, threshold=1):
+    adata = _atac_genes_score(
+        adata, top_genes=n_top_genes, threshold=threshold, method="beta"
+    )
+    return adata
+
+
+@method(
+    method_name="MARGE",
+    paper_name="Modeling cis-regulation with a compendium of genome-wide histone H3K27ac profiles",
+    paper_url="https://genome.cshlp.org/content/26/10/1417.long",
+    paper_year=2016,
+    code_version="1.0",
+    code_url="https://github.com/suwangbio/MARGE",
+    image="openproblems-python-extras",
+)
+def marge(adata, n_top_genes=200):
+    adata = _atac_genes_score(adata, top_genes=n_top_genes, method="marge")
+    return adata
+
+
+@method(
+    method_name="ArchR",
+    paper_name="ArchR: An integrative and scalable software package for single-cell chromatin accessibility analysis",
+    paper_url="https://www.biorxiv.org/content/10.1101/2020.04.28.066498v1",
+    paper_year=2020,
+    code_version="1.0",
+    code_url="https://github.com/GreenleafLab/ArchR",
+    image="openproblems-python-extras",
+)
+def archr_model21(adata, n_top_genes=200):
+    adata = _atac_genes_score(adata, top_genes=n_top_genes, method="archr_model21")
     return adata
