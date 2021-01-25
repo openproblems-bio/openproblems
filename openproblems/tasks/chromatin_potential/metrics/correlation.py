@@ -22,7 +22,11 @@ def _metric(adata, method="pearson"):
             else adata.obsm["gene_score"][i]
         )
         y = adata.X[i].toarray()[0] if scipy.sparse.issparse(adata.X) else adata.X[i]
-        metrics.append(method(x, y)[0])
+        res = method(x, y)
+        if not isinstance(res, np.float64):
+            metrics.append(res[0])
+        else:
+            metrics.append(res)
     metrics = np.array(metrics)
     adata.obs["atac_rna_cor"] = metrics
     return np.median(metrics[~np.isnan(metrics)])
@@ -38,6 +42,6 @@ def spearman_correlation(adata):
     return _metric(adata, method="spearman")
 
 
-@metric(metric_name="Mean squared error", minimize=True)
+@metric(metric_name="Mean squared error", maximize=False)
 def mse(adata):
     return _metric(adata, method="mse")
