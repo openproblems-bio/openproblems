@@ -112,18 +112,22 @@ jobs:
       run: |
         if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
         renv::restore()
-        renv::install("bioc::scran")
+
+        con = file("docker/openproblems-r-base/r_requirements.txt", "r")
+        while ( length(pkg <- readLines(con, n = 1)) > 0 ) {
+          renv::install(pkg)
+        }
+        close(con)
       shell: Rscript {0}
 
     - name: Run tests
-      run: nose2 -vvv
+      run: pytest --cov=openproblems -v
 
     - name: Upload coverage
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        coverage combine -a .
-        coveralls
+        COVERALLS_SERVICE_NAME: github
+      run: coveralls
 
     - name: Upload check results on fail
       if: failure()

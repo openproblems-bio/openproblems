@@ -11,23 +11,24 @@ install_requires = [
     "louvain>=0.6,<0.7",
     "decorator",
     "memory-profiler",
-    "molecular-cross-validation @ git+https://github.com/czbiohub/molecular-cross-validation",
-    "parameterized",
+    "umap-learn<0.5",
 ]
 
 r_requires = [
     "rpy2",
     "scIB @ git+https://github.com/theislab/scib@master",
-    "anndata2ri>=1.0.4",
+    "anndata2ri>=1.0.6",
 ]
 
 evaluate_requires = ["snakemake"]
 
 test_requires = [
-    "nose2",
+    "pytest",
+    "pytest-cov",
     "black",
     "coverage",
     "coveralls",
+    "parameterized>=0.7.4",
 ]
 
 doc_requires = [

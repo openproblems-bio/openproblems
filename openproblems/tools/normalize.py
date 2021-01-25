@@ -1,21 +1,39 @@
 from . import decorators
+from . import utils
 import scanpy as sc
 import scprep
+import warnings
+
+
+def _scran(adata, retries=2):
+    import anndata2ri
+    import scIB.preprocessing
+
+    try:
+        # Normalize via scran-pooling with own clustering at res=0.5
+        scIB.preprocessing.normalize(adata)
+        utils.assert_finite(adata.X)
+    except Exception as e:
+        if retries > 0:
+            warnings.warn(
+                "scran pooling failed with {}({})".format(type(e).__name__, str(e))
+            )
+            _scran(adata, retries=retries - 1)
+        else:
+            raise e
+
+    # deactivate converter
+    anndata2ri.deactivate()
+
+    # Make lightweight
+    del adata.raw
 
 
 @decorators.normalizer
 def log_scran_pooling(adata):
     """Normalize data with scran via rpy2."""
-    import anndata2ri
-    import scIB.preprocessing
-
     scprep.run.install_bioconductor("scran")
-    # Normalize via scran-pooling with own clustering at res=0.5
-    scIB.preprocessing.normalize(adata)
-    anndata2ri.deactivate()
-
-    # Make lightweight
-    del adata.raw
+    _scran(adata)
 
 
 def _cpm(adata):

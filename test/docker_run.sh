@@ -1,11 +1,9 @@
 #!/bin/bash
 WORKDIR=$1
 SCRIPT=$2
-TASKNAME=$3
-FUN=$4
 ARRAY=( $@ )
 LEN=${#ARRAY[@]}
-ARGS=${ARRAY[@]:4:$LEN}
+ARGS=${ARRAY[@]:2:$LEN}
 CODEDIR=$(dirname $WORKDIR)
 export PYTHONPATH=$WORKDIR
 
@@ -18,4 +16,4 @@ if [ ! -f ~/.install_complete ]; then
 fi
 
 cd ${CODEDIR}
-python3 -m coverage run --parallel --source=openproblems ${WORKDIR}/${SCRIPT} $TASKNAME $FUN ${ARGS}
+python3 -m coverage run --parallel --source=openproblems ${SCRIPT} ${ARGS}

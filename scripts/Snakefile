@@ -61,7 +61,7 @@ rule evaluate_metric:
     shell:
         """{params.docker} {params.workdir} {input.script} {wildcards.task} \
         {wildcards.metric} {input.data} {output} && \
-        docker stop $CONTAINER"""
+        docker stop $CONTAINER'"""
 
 rule run_method:
     input:
@@ -78,14 +78,21 @@ rule run_method:
     shell:
         """{params.docker} {params.workdir} {input.script} {wildcards.task} \
         {wildcards.method} {input.data} {output.data} {output.json} && \
-        docker stop $CONTAINER"""
+        docker stop $CONTAINER'"""
 
 rule load_dataset:
     input:
         script = "load_dataset.py",
-        code = "{}/../openproblems/version.py".format(tools.SCRIPTS_DIR)
+        code = "{}/../openproblems/version.py".format(tools.SCRIPTS_DIR),
+        docker = tools.docker_push,
     output: temp("{tempdir}/{task}/{dataset}.data.h5ad")
-    shell: "python3 {input.script} {wildcards.task} {wildcards.dataset} {output}"
+    params:
+        workdir = tools.DOCKER_DIR,
+        docker = tools.docker_command
+    threads: tools.N_THREADS
+    shell: """{params.docker} {params.workdir} {input.script} {wildcards.task} \
+           {wildcards.dataset} {output} && \
+           docker stop $CONTAINER'"""
 
 rule build_docker:
     input:

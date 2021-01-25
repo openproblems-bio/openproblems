@@ -116,13 +116,15 @@ def metric(metric_name, maximize, image="openproblems"):
     return decorator
 
 
-def dataset(dataset_name):
+def dataset(dataset_name, image="openproblems"):
     """Decorate a dataset function.
 
     Parameters
     ----------
     dataset_name : str
         Unique human readable name of the dataset
+    image : str, optional (default: "openproblems")
+        Name of the Docker image to be used for this dataset
     """
 
     def decorator(func):
@@ -131,7 +133,7 @@ def dataset(dataset_name):
             log.debug("Loading {} dataset".format(func.__name__))
             return func(*args, **kwargs)
 
-        apply_func.metadata = dict(dataset_name=dataset_name)
+        apply_func.metadata = dict(dataset_name=dataset_name, image=image)
         return apply_func
 
     return decorator
@@ -182,7 +184,7 @@ def profile(func):
             interval=0.1,
             max_usage=True,
         )
-        output["memory_leaked_mb"] = post_memory - base_memory
+        output["memory_leaked_mb"] = max(0.0, post_memory - base_memory)
         return output
 
     return decorated

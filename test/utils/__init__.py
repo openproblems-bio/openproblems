@@ -1,4 +1,6 @@
-from . import asserts, data, name, run, warnings
 import logging
+import tempfile
 
 logging.getLogger("openproblems").setLevel(logging.DEBUG)
+
+TEMPDIR = tempfile.TemporaryDirectory()
