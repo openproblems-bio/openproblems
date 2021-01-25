@@ -11,3 +11,4 @@ Python packages:
 * harmonic-alignment
 * pybedtools
 * pyensembl
+* datatable
