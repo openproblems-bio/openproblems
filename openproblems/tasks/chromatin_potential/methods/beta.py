@@ -247,7 +247,7 @@ def _marge(tss_to_peaks, adata):
     code_url="http://cistrome.org/BETA",
     image="openproblems-python-extras",
 )
-def beta(adata, n_top_genes=200, threshold=1):
+def beta(adata, n_top_genes=500, threshold=1):
     adata = _atac_genes_score(
         adata, top_genes=n_top_genes, threshold=threshold, method="beta"
     )
@@ -263,7 +263,7 @@ def beta(adata, n_top_genes=200, threshold=1):
     code_url="https://github.com/suwangbio/MARGE",
     image="openproblems-python-extras",
 )
-def marge(adata, n_top_genes=200):
+def marge(adata, n_top_genes=500):
     adata = _atac_genes_score(adata, top_genes=n_top_genes, method="marge")
     return adata
 
@@ -277,6 +277,6 @@ def marge(adata, n_top_genes=200):
     code_url="https://github.com/GreenleafLab/ArchR",
     image="openproblems-python-extras",
 )
-def archr_model21(adata, n_top_genes=200):
+def archr_model21(adata, n_top_genes=500):
     adata = _atac_genes_score(adata, top_genes=n_top_genes, method="archr_model21")
     return adata
