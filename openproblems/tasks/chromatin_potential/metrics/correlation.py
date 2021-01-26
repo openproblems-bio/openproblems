@@ -28,7 +28,6 @@ def _metric(adata, method="pearson"):
         else:
             metrics.append(res)
     metrics = np.array(metrics)
-    adata.obs["atac_rna_cor"] = metrics
     return np.median(metrics[~np.isnan(metrics)])
 
 

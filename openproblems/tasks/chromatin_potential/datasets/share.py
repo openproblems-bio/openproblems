@@ -2,7 +2,9 @@ from ....data.multimodal import share
 from ....tools.decorators import dataset
 
 
-@dataset("SHARE-seq mouse skin data with cell clusters")
+@dataset(
+    "SHARE-seq mouse skin data with cell clusters", image="openproblems-python-extras"
+)
 def share_mouse_skin(test=False):
     adata = share.load_share_mouse_skin(test=test)
 
@@ -12,7 +14,10 @@ def share_mouse_skin(test=False):
     return adata
 
 
-@dataset("SHARE-seq mouse brain data with cell clusters")
+@dataset(
+    "SHARE-seq mouse brain data with cell clusters",
+    "image='openproblems-python-extras'",
+)
 def share_mouse_brain(test=False):
     adata = share.load_share_mouse_brain(test=test)
 
@@ -22,7 +27,9 @@ def share_mouse_brain(test=False):
     return adata
 
 
-@dataset("SHARE-seq mouse lung data with cell clusters")
+@dataset(
+    "SHARE-seq mouse lung data with cell clusters", image="openproblems-python-extras"
+)
 def share_mouse_lung(test=False):
     adata = share.load_share_mouse_lung(test=test)
 
@@ -32,7 +39,9 @@ def share_mouse_lung(test=False):
     return adata
 
 
-@dataset("SHARE-seq GM12878 rep1 data with cell clusters")
+@dataset(
+    "SHARE-seq GM12878 rep1 data with cell clusters", image="openproblems-python-extras"
+)
 def share_gm12878_rep1(test=False):
     adata = share.load_share_gm12878_rep1(test=test)
 
@@ -42,7 +51,9 @@ def share_gm12878_rep1(test=False):
     return adata
 
 
-@dataset("SHARE-seq GM12878 rep2 data with cell clusters")
+@dataset(
+    "SHARE-seq GM12878 rep2 data with cell clusters", image="openproblems-python-extras"
+)
 def share_gm12878_rep2(test=False):
     adata = share.load_share_gm12878_rep2(test=test)
 
@@ -52,7 +63,9 @@ def share_gm12878_rep2(test=False):
     return adata
 
 
-@dataset("SHARE-seq GM12878 rep3 data with cell clusters")
+@dataset(
+    "SHARE-seq GM12878 rep3 data with cell clusters", image="openproblems-python-extras"
+)
 def share_gm12878_rep3(test=False):
     adata = share.load_share_gm12878_rep3(test=test)
 

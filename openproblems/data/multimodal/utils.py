@@ -45,8 +45,6 @@ def create_joint_adata(
     if Y_columns is None:
         Y_columns = Y.columns
     joint_index = np.sort(np.intersect1d(X_index, Y_index))
-    print(joint_index)
-    print(joint_index.shape)
 
     if hasattr(X, "loc") and hasattr(Y, "loc"):
         X = X.loc[joint_index]
