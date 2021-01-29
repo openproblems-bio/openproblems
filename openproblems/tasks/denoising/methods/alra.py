@@ -32,10 +32,6 @@ _alra = scprep.run.RFunction(
     code_version=check_version("scprep"),
     image="openproblems-r-extras",
 )
-#support method alra_calc takes adata and any arguments to alra
-def alra_calc(adata):
-    adata_fit <- r_alra(adata)
-    return adata_fit
 
 def alra(adata):
     X, libsize = scprep.normalize.library_size_normalize(
