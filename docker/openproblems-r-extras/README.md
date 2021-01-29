@@ -15,5 +15,4 @@ R packages:
 
 Python packages:
 
-* scprep
 * harmonic-alignment
