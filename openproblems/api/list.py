@@ -16,5 +16,4 @@ def list_functions(task_name, function_type):
 def main(args):
     """Run the ``list`` subcommand."""
     functions = list_functions(args.task, args.function_type)
-    print("\n".join(functions))
-    return 0
+    return functions

@@ -12,5 +12,4 @@ def main(args):
     """Run the ``evaluate`` subcommand."""
     adata = anndata.read_h5ad(args.input)
     result = evaluate_metric(adata, args.task, args.name)
-    print(result)
-    return 0
+    return result

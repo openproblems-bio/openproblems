@@ -11,5 +11,4 @@ def get_image(task_name, function_type, function_name):
 def main(args):
     """Run the ``image`` subcommand."""
     image = get_image(args.task, args.function_type, args.name)
-    print(image)
-    return 0
+    return image

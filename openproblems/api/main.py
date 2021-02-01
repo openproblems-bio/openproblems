@@ -10,10 +10,10 @@ SUBCOMMANDS = {
 }
 
 
-def main():
+def main(args=None, print=True):
     """Run the command-line interface."""
     argparser = parser.create_parser()
-    args = argparser.parse_args()
+    args = argparser.parse_args(args=args)
 
     if args.parallel:
         data.no_cleanup()
@@ -21,6 +21,11 @@ def main():
     if args.subcommand is None:
         argparser.print_help()
     elif args.subcommand in SUBCOMMANDS:
-        return SUBCOMMANDS[args.subcommand].main(args)
+        output = SUBCOMMANDS[args.subcommand].main(args)
+        if print:
+            utils.print_output(output)
+            return 0
+        else:
+            return output
     else:
         raise NotImplementedError

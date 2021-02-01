@@ -11,5 +11,4 @@ def get_tasks():
 def main(args):
     """Run the ``tasks`` subcommand."""
     tasks = get_tasks()
-    print("\n".join(tasks))
-    return 0
+    return tasks

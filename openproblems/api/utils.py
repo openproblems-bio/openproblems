@@ -26,3 +26,13 @@ def get_function(task_name, function_type, function_name):
     task = str_to_task(task_name)
     functions = getattr(task, function_type)
     return getattr(functions, function_name)
+
+
+def print_output(output):
+    """Print output of the CLI."""
+    if output is None:
+        pass
+    elif isinstance(output, list):
+        print("\n".join(output))
+    else:
+        print(output)
