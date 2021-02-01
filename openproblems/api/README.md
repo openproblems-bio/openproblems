@@ -69,7 +69,7 @@ $ openproblems-cli evaluate --task label_projection --input method.h5ad accuracy
 openproblems-cli tasks
 openproblems-cli list --datasets --task label_projection
 openproblems-cli image --datasets --task label_projection pancreas_batch
-docker run -itd openproblems-cli load --task label_projection --output dataset.h5ad pancreas_batch
+docker run -dt openproblems-cli load --task label_projection --output dataset.h5ad pancreas_batch
 openproblems-cli list --methods --task label_projection
 openproblems-cli image --methods --task label_projection logistic_regression_scran
 openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cpm
@@ -94,7 +94,7 @@ zebrafish_labels
 zebrafish_random
 $ openproblems-cli image --datasets --task label_projection pancreas_batch
 openproblems
-$ docker run -itd singlecellopenproblems/openproblems openproblems-cli load --task label_projection --output dataset.h5ad pancreas_batch
+$ docker run -dt singlecellopenproblems/openproblems openproblems-cli load --task label_projection --output dataset.h5ad pancreas_batch
 $ openproblems-cli list --methods --task label_projection
 logistic_regression_log_cpm
 logistic_regression_scran
@@ -102,13 +102,13 @@ mlp_log_cpm
 mlp_scran
 $ openproblems-cli image --methods --task label_projection logistic_regression_scran
 openproblems-r-base
-$ docker run -itd singlecellopenproblems/openproblems-r-base openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cpm
+$ docker run -dt singlecellopenproblems/openproblems-r-base openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cpm
 $ openproblems-cli list --metrics --task label_projection
 accuracy
 f1
 f1_micro
 $ openproblems-cli image --metrics --task label_projection accuracy
 openproblems
-$ docker run -itd singlecellopenproblems/openproblems openproblems-cli evaluate --task label_projection --input method.h5ad accuracy
+$ docker run -dt singlecellopenproblems/openproblems openproblems-cli evaluate --task label_projection --input method.h5ad accuracy
 0.9521233432512848
 ```
