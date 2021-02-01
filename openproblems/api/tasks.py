@@ -1,5 +1,5 @@
-from . import utils
 from .. import TASKS
+from . import utils
 
 
 def get_tasks():
