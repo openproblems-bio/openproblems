@@ -13,4 +13,3 @@ def main(args):
     adata = anndata.read_h5ad(args.input)
     adata = run_method(adata, args.task, args.name)
     adata.write_h5ad(args.output)
-    return 0
