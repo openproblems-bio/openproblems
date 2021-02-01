@@ -37,7 +37,7 @@ rule summary:
 rule collate_task:
     input:
         datasets = lambda wildcards: [
-            "{tempdir}/{task}/{dataset}.dataset.json".format(
+            "{tempdir}/{task}/{dataset}.json".format(
                 tempdir=tools.RESULTS_DIR,
                 task=wildcards.task,
                 dataset=dataset
@@ -65,7 +65,7 @@ rule collate_dataset:
         ]
     params:
         dir = tools.TEMPDIR
-    output: "{}/{{task}}/{{dataset}}.dataset.json".format(tools.RESULTS_DIR)
+    output: "{}/{{task}}/{{dataset}}.json".format(tools.RESULTS_DIR)
     shell:
         """python3 {input.script} {wildcards.task} {wildcards.dataset} \
         {params.dir}/{wildcards.task}/{wildcards.dataset} {output}"""
