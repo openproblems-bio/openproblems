@@ -99,6 +99,22 @@ def create_image_parser(subparsers):
     parser.add_argument("name", type=str, help="Name of the selected method")
 
 
+def create_hash_parser(subparsers):
+    """Create the argument parser for ``openproblems-cli hash``."""
+    parser = subparsers.add_parser(
+        "hash", help="Fetch a git hash associated with a function"
+    )
+    parser.add_argument(
+        "-t",
+        "--task",
+        type=str,
+        help="Select functions from a specific task",
+        required=True,
+    )
+    parse_function_type(parser)
+    parser.add_argument("name", type=str, help="Name of the selected method")
+
+
 def create_load_parser(subparsers):
     """Create the argument parser for ``openproblems-cli load``."""
     parser = subparsers.add_parser("load", help="Load a dataset for a task")
@@ -166,6 +182,7 @@ def create_parser():
         create_load_parser,
         create_run_parser,
         create_evaluate_parser,
+        create_hash_parser,
     ]:
         create_subparser(subparsers)
 

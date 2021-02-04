@@ -2,11 +2,11 @@ from .. import data
 from . import parser
 from . import utils
 
-from . import tasks, list, image, load, run, evaluate  # noqa
+from . import tasks, list, image, load, run, evaluate, hash  # noqa
 
 SUBCOMMANDS = {
     utils.module_to_str(module): module
-    for module in [tasks, list, image, load, run, evaluate]
+    for module in [tasks, list, image, load, run, evaluate, hash]
 }
 
 

@@ -95,6 +95,7 @@ rule collate_method:
 rule evaluate_metric:
     input:
         script = "evaluate_metric.py",
+        code = "{tempdir}/{task}/{metric}.metrics.hash",
         data = "{tempdir}/{task}/{dataset}/{method}.method.h5ad",
         docker = tools.docker_push,
     output: temp("{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json")
@@ -110,6 +111,7 @@ rule evaluate_metric:
 rule run_method:
     input:
         script = "run_method.py",
+        code = "{tempdir}/{task}/{method}.methods.hash",
         data = "{tempdir}/{task}/{dataset}.data.h5ad",
         docker = tools.docker_push,
     output:
@@ -127,7 +129,8 @@ rule run_method:
 rule load_dataset:
     input:
         script = "load_dataset.py",
-        code = "{}/../openproblems/version.py".format(tools.SCRIPTS_DIR),
+        version = "{}/../openproblems/version.py".format(tools.SCRIPTS_DIR),
+        code = "{tempdir}/{task}/{dataset}.datasets.hash",
         docker = tools.docker_push,
     output: temp("{tempdir}/{task}/{dataset}.data.h5ad")
     params:
@@ -137,6 +140,10 @@ rule load_dataset:
     shell: """{params.docker} {params.workdir} {input.script} {wildcards.task} \
            {wildcards.dataset} {output} && \
            docker stop $CONTAINER'"""
+
+rule hash_code:
+    output: "{tempdir}/{task}/{function}.{function_type}.hash"
+    shell: "openproblems-cli hash --task {wildcards.task} --{wildcards.function_type} {wildcards.function} > {output}"
 
 rule build_docker:
     input:
