@@ -1,7 +1,7 @@
 from . import decorators
 from . import utils
-import scanpy as sc
 import numpy as np
+import scanpy as sc
 import scprep
 import warnings
 
