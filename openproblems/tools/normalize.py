@@ -10,6 +10,9 @@ def _scran(adata, retries=2):
     import anndata2ri
     import scIB.preprocessing
 
+    # deactivate converter
+    anndata2ri.deactivate()
+
     try:
         # Normalize via scran-pooling with own clustering at res=0.5
         if np.any(adata.X.sum(axis=1) < 1):
