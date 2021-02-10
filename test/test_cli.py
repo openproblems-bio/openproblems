@@ -153,8 +153,6 @@ def test_pipeline():
                 "--task",
                 "label_projection",
                 "--input",
-                dataset_file,
-                "--output",
                 method_file,
                 "accuracy",
             ],
