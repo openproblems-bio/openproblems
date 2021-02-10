@@ -1,34 +1,18 @@
 from . import decorators
 from . import utils
-import numpy as np
+
 import scanpy as sc
 import scprep
-import warnings
 
 
-def _scran(adata, retries=2):
+def _scran(adata):
     import anndata2ri
     import scIB.preprocessing
 
     # deactivate converter
     anndata2ri.deactivate()
-
-    try:
-        # Normalize via scran-pooling with own clustering at res=0.5
-        if np.any(adata.X.sum(axis=1) < 1):
-            warnings.warn("adata has empty cells")
-        scIB.preprocessing.normalize(adata)
-        utils.assert_finite(adata.X)
-    except Exception as e:
-        if np.all(adata.X.sum(axis=1) > 0):
-            warnings.warn("adata has no empty cells")
-        if retries > 0:
-            warnings.warn(
-                "scran pooling failed with {}({})".format(type(e).__name__, str(e))
-            )
-            _scran(adata, retries=retries - 1)
-        else:
-            raise e
+    scIB.preprocessing.normalize(adata)
+    utils.assert_finite(adata.X)
 
     # deactivate converter
     anndata2ri.deactivate()
