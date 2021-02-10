@@ -1,10 +1,10 @@
-from . import utils
 import numpy as np
 import openproblems
 from openproblems.api.main import main
 import os
 import parameterized
 import tempfile
+import utils
 
 
 def test_tasks():
