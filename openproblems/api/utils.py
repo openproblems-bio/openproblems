@@ -25,7 +25,16 @@ def get_function(task_name, function_type, function_name):
     # get function
     task = str_to_task(task_name)
     functions = getattr(task, function_type)
-    return getattr(functions, function_name)
+    try:
+        fun = getattr(functions, function_name)
+        assert callable(fun)
+    except (AssertionError, AttributeError):
+        raise RuntimeError(
+            "Task {} has no {} '{}'".format(
+                task_name, function_type[:-1], function_name
+            )
+        )
+    return fun
 
 
 def print_output(output):
