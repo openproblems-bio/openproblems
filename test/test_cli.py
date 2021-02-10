@@ -20,10 +20,10 @@ def test_print(capsys):
 
 def test_tasks(capsys):
     """Test task listing."""
-    result = np.array(main(["tasks"]), print=False)
+    result = np.array(main(["tasks"], print=False))
     expected = np.array([task.__name__.split(".")[-1] for task in openproblems.TASKS])
     assert np.all(result == expected)
-    result = np.array(main(["tasks"]), print=True)
+    result = np.array(main(["tasks"], print=True))
     expected = (
         "\n".join([task.__name__.split(".")[-1] for task in openproblems.TASKS]) + "\n"
     )
