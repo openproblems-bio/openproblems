@@ -103,10 +103,12 @@ def test_image_metrics(task, metric):
 def test_hash():
     """Test git hash function."""
     h1 = main(
-        ["hash", "--task", "label_projection", "--datasets", "pancreas"], print=False
+        ["hash", "--task", "label_projection", "--datasets", "pancreas_batch"],
+        print=False,
     )
     h2 = main(
-        ["hash", "--task", "label_projection", "--datasets", "pancreas"], print=False
+        ["hash", "--task", "label_projection", "--datasets", "pancreas_batch"],
+        print=False,
     )
     assert h1 == h2
 
@@ -126,7 +128,7 @@ def test_pipeline():
                 "--test",
                 "--output",
                 dataset_file,
-                "pancreas",
+                "pancreas_batch",
             ],
             print=False,
         )
