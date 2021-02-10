@@ -11,8 +11,17 @@ def _scran(adata):
 
     # deactivate converter
     anndata2ri.deactivate()
+
     scIB.preprocessing.normalize(adata)
-    utils.assert_finite(adata.X)
+
+    try:
+        utils.assert_finite(adata.X)
+    except:
+        import sys
+
+        print(adata.X.sum(0).min(), file=sys.stderr)
+        print(adata.X.sum(1).min(), file=sys.stderr)
+        raise
 
     # deactivate converter
     anndata2ri.deactivate()
