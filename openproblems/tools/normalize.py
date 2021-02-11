@@ -5,25 +5,23 @@ import scanpy as sc
 import scprep
 
 
-def _scran(adata):
+def _scran(adata, precluster=True):
     import anndata2ri
     import scIB.preprocessing
 
     # deactivate converter
     anndata2ri.deactivate()
-    min0 = adata.X.sum(0).min()
-    min1 = adata.X.sum(1).min()
 
     scIB.preprocessing.normalize(adata)
 
     try:
         utils.assert_finite(adata.X)
     except AssertionError:
-        import sys
-
-        print(min0, file=sys.stderr)
-        print(min1, file=sys.stderr)
-        raise
+        if precluster:
+            adata.X = adata.raw.X
+            _scran(adata, precluster=False)
+        else:
+            raise
 
     # deactivate converter
     anndata2ri.deactivate()
