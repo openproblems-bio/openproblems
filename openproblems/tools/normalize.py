@@ -11,16 +11,18 @@ def _scran(adata):
 
     # deactivate converter
     anndata2ri.deactivate()
+    min0 = adata.X.sum(0).min()
+    min1 = adata.X.sum(1).min()
 
     scIB.preprocessing.normalize(adata)
 
     try:
         utils.assert_finite(adata.X)
-    except:
+    except AssertionError:
         import sys
 
-        print(adata.X.sum(0).min(), file=sys.stderr)
-        print(adata.X.sum(1).min(), file=sys.stderr)
+        print(min0, file=sys.stderr)
+        print(min1, file=sys.stderr)
         raise
 
     # deactivate converter
