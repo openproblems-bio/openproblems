@@ -14,7 +14,8 @@ This sub-task was taken from a [benchmarking study of data integration methods](
 
 Datasets should contain the following attributes:
 
-* `adata.obs["template_variable"]`
+* `adata.obs["batch"]`
+* `adata.obs["label"]`
 
 Methods should assign output to `adata.obsp['connectivities']`.
 
