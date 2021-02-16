@@ -28,6 +28,7 @@ def _metric(adata, method="pearson"):
         else:
             metrics.append(res)
     metrics = np.array(metrics)
+    adata.obs["regulatory_effect_score"] = metrics
     return np.median(metrics[~np.isnan(metrics)])
 
 

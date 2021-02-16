@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import scanpy as sc
 import scipy.sparse
+import warnings
 
 
 def _chrom_limit(x, tss_size=2e5):
@@ -49,7 +50,9 @@ def _get_annotation(adata, retries=3):
     genes = []
     for i in adata.var.index.map(lambda x: x.split(".")[0]):
         try:
-            gene = data.gene_by_id(i)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                gene = data.gene_by_id(i)
             genes.append(
                 [
                     "chr%s" % gene.contig,
@@ -60,7 +63,9 @@ def _get_annotation(adata, retries=3):
             )
         except ValueError:
             try:
-                i = data.gene_ids_of_gene_name(i)[0]
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    i = data.gene_ids_of_gene_name(i)[0]
                 gene = data.gene_by_id(i)
                 genes.append(
                     [
@@ -82,27 +87,32 @@ def _get_annotation(adata, retries=3):
     )
 
 
-def _atac_genes_score(adata, top_genes=500, threshold=1, method="beta"):
+def _atac_genes_score(adata, top_genes=2000, threshold=1, method="beta"):
     """Calculate gene scores and insert into .obsm."""
     import pybedtools
 
     # get annotation for TSS
     _get_annotation(adata)
     # basic quality control
-    if adata.shape[0] >= 600:
+    if adata.shape[0] >= 10000:
         sc.pp.filter_cells(adata, min_genes=200)
         sc.pp.filter_genes(adata, min_cells=5)
 
     adata = adata[:, ~pd.isnull(adata.var.loc[:, "chr"])].copy()
-    adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
-        "mt-"
-    )  # annotate the group of mitochondrial genes as 'mt'
+    if adata.uns["species"] == "mus_musculus":
+        adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
+            "mt-"
+        )  # annotate the group of mitochondrial genes as 'mt'
+    else:
+        adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
+            "MT-"
+        )  # annotate the group of mitochondrial genes as 'mt'
     sc.pp.calculate_qc_metrics(
         adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
     )
 
     adata = adata[
-        (adata.obs.n_genes_by_counts < 2000) & (adata.obs.pct_counts_mt < 10), :
+        (adata.obs.n_genes_by_counts <= 2000) & (adata.obs.pct_counts_mt <= 10), :
     ].copy()
 
     sc.pp.normalize_total(adata, target_sum=1e4)

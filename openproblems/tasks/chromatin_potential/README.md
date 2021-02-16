@@ -8,12 +8,15 @@ Datasets should contain the following attributes:
 
 * `adata.uns['species']` (ensembl species name, e.g. `"mus_musculus"`)
 * `adata.uns['release']` (ensembl release, e.g. `"100"`)
-* `adata.uns['mode2_var_chr']` (single cell atac-seq peak chromosome)
-* `adata.uns['mode2_var_start']` (single cell atac-seq peak start position)
-* `adata.uns['mode2_var_end']` (single cell atac-seq peak end position)
-* `adata.obsm['mode2']` (cell by peak matrix of single cell atac-seq)
+* `adata.uns['mode2_var_chr']` (single cell ATAC-seq peak chromosome)
+* `adata.uns['mode2_var_start']` (single cell ATAC-seq peak start position)
+* `adata.uns['mode2_var_end']` (single cell ATAC-seq peak end position)
+* `adata.obsm['mode2']` (cell by peak matrix of single cell ATAC-seq)
 * `adata.X` (cell by gene matrix of single cell gene expression, which is the ground truth)
 
-Methods should assign gene regulation scores to `adata.obsm['gene_score']` using only single cell atac-seq peak counts.
+## Method output
+Methods should assign gene regulation scores to `adata.obsm['gene_score']` using only single cell ATAC-seq peak counts.
 
-Metrics should compare `adata.obsm['gene_score']` with the true gene expression in `adata.X`.
+## Benchmark
+Metrics should compare `adata.obsm['gene_score']` with the true gene expression in `adata.X`, and store the metrics into 
+`adata.obs['regulatory_effect_score']`.
