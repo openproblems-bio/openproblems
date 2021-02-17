@@ -11,7 +11,8 @@ jobs:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
         with:
-          access_token: ${{ github.token }}\
+          access_token: ${{ github.token }}
+
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -28,7 +29,6 @@ jobs:
 
       - uses: pre-commit/action@v2.0.0
         continue-on-error: true
-
 
       - name: Commit changes
         env:
