@@ -10,7 +10,6 @@ repos:
     rev: 5.6.4
     hooks:
       - id: isort
-        args: [--show-config]
   - repo: https://github.com/psf/black
     rev: 20.8b1
     hooks:
