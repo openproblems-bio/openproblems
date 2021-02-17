@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
-# Sync Language Packs
-# Script to synchronize each language pack's items against Academic's master pack (English).
-# https://sourcethemes.com/academic/
-#
-# Prerequisites: pip3 install PyYAML
-#
-# TODO: Switch from PyYAML to Ruamel in order to load/dump comments -
-#  see https://stackoverflow.com/questions/47382227/python-yaml-update-preserving-order-and-comments
+"""Sync Language Packs.
+
+Script to synchronize each language pack's items against
+Academic's master pack (English). https://sourcethemes.com/academic/
+
+Prerequisites: pip3 install PyYAML
+
+TODO: Switch from PyYAML to Ruamel in order to load/dump comments - see
+stackoverflow.com/questions/47382227/python-yaml-update-preserving-order-and-comments
+"""
 
 import copy
 from pathlib import Path
