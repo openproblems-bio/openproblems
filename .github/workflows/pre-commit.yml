@@ -37,10 +37,8 @@ jobs:
         run: |
           if [[ `git status --porcelain --untracked-files=no` ]]; then
             git remote set-url origin https://${GH_USERNAME}:${GH_PASSWORD}@github.com/${GITHUB_REPOSITORY}.git
-            git checkout -B ${{ github.ref }}
-            git pull origin ${{ github.ref }}
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -am "pre-commit"
-            git push origin ${{ github.ref }}
+            git push
           fi
