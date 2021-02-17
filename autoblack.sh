@@ -11,5 +11,3 @@ for file in \$files; do
 done
 EOF
 chmod +x .git/hooks/pre-commit
-
-
