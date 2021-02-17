@@ -1,9 +1,9 @@
 from ..utils import create_joint_adata
 from ..utils import filter_joint_data_empty_cells
-
-import os
 from scipy import sparse
+
 import numpy as np
+import os
 
 
 def load_share(
@@ -13,10 +13,10 @@ def load_share(
     atac_genes_url,
 ):
     """Load SHARE-seq data from GEO."""
+    import datatable as dt
     import pandas as pd
     import scprep
     import tempfile
-    import datatable as dt
 
     with tempfile.TemporaryDirectory() as tempdir:
         atac_gene_file = os.path.join(tempdir, "atac_gene.csv.gz")
