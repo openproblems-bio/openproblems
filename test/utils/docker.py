@@ -1,8 +1,5 @@
-from . import run
-
 import atexit
 import datetime
-import decorator
 import functools
 import inspect
 import json
@@ -11,6 +8,9 @@ import tempfile
 import time
 import warnings
 
+import decorator
+
+from . import run
 
 TESTDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASEDIR = os.path.dirname(TESTDIR)

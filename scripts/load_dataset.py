@@ -1,5 +1,6 @@
-import openproblems
 import sys
+
+import openproblems
 
 
 def main(task_name, dataset_name, output_file):

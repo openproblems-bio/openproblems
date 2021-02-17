@@ -1,16 +1,14 @@
+import numpy as np
+import scipy.sparse
+import sklearn.linear_model
+import sklearn.pipeline
+import sklearn.preprocessing
+
 from ....tools.decorators import method
 from ....tools.normalize import log_cpm
 from ....tools.normalize import log_scran_pooling
 from ....tools.utils import check_version
-
 from .utils import pca_op
-
-import numpy as np
-import scipy.sparse
-
-import sklearn.linear_model
-import sklearn.pipeline
-import sklearn.preprocessing
 
 
 def _logistic_regression(adata, max_iter=1000, n_pca=100):

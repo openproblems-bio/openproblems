@@ -1,12 +1,12 @@
-from . import TEMPDIR
-
-import anndata
-import decorator
 import hashlib
 import logging
 import os
+
+import anndata
+import decorator
 import scanpy as sc
 
+from . import TEMPDIR
 
 log = logging.getLogger("openproblems")
 

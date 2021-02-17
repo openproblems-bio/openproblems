@@ -1,10 +1,9 @@
-from ..utils import loader
+import scprep
 
+from ..utils import loader
 from .utils import create_joint_adata
 from .utils import filter_joint_data_empty_cells
 from .utils import subset_joint_data
-
-import scprep
 
 ADT_URL = (
     "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866"

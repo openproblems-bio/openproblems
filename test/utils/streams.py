@@ -1,5 +1,5 @@
-import threading
 import queue
+import threading
 
 
 class NonBlockingStreamReader:

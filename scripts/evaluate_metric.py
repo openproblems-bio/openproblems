@@ -1,7 +1,9 @@
-import openproblems
-import sys
 import json
+import sys
+
 import anndata
+
+import openproblems
 
 
 def main(task_name, metric_name, input_file, output_file):

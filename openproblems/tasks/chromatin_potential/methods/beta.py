@@ -1,10 +1,10 @@
-from ....patch import patch_datacache
-from ....tools.decorators import method
-
 import numpy as np
 import pandas as pd
 import scanpy as sc
 import scipy.sparse
+
+from ....patch import patch_datacache
+from ....tools.decorators import method
 
 
 def _chrom_limit(x, tss_size=2e5):
