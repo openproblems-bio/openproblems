@@ -1,7 +1,7 @@
 from .version import __version__
 
-import packaging.version
 import decorator
+import packaging.version
 
 
 @decorator.decorator
