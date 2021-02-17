@@ -25,3 +25,4 @@ repos:
     hooks:
       - id: flake8
         args: [openproblems]
+        additional_dependencies: ['hacking']
