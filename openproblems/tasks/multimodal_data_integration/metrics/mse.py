@@ -1,6 +1,6 @@
 import numpy as np
-import scprep
 from scipy import sparse
+import scprep
 
 from ....tools.decorators import metric
 
