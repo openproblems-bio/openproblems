@@ -1,7 +1,7 @@
 import numpy as np
 
-from ....tools.decorators import metric
-from scIB.metrics import graph_connectivity
+from .....tools.decorators import metric
+import scIB.metrics
 
 
 @metric(
@@ -10,4 +10,4 @@ from scIB.metrics import graph_connectivity
     # image="openproblems-template-image" # only if required
 )
 def graph_connectivity(adata):
-    return graph_connectivity(adata, "labels")
+    return scIB.metrics.graph_connectivity(adata, "labels")

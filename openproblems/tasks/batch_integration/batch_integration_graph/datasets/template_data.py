@@ -1,6 +1,6 @@
 import numpy as np
-from ....data.template import load_template_data
-from ....tools.decorators import dataset
+from .....data.template import load_template_data
+from .....tools.decorators import dataset
 
 
 @dataset("Template dataset")

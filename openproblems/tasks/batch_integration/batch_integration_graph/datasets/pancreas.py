@@ -1,5 +1,5 @@
-from ....data.pancreas import load_pancreas
-from ....tools.decorators import dataset
+from .....data.pancreas import load_pancreas
+from .....tools.decorators import dataset
 from scIB.preprocessing import normalize, hvg_batch
 
 import numpy as np

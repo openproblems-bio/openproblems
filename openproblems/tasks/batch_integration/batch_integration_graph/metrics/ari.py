@@ -1,6 +1,6 @@
 import numpy as np
 
-from ....tools.decorators import metric
+from .....tools.decorators import metric
 from scIB.metrics import ari
 from scIB.clustering import opt_louvain
 

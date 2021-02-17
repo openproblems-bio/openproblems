@@ -1,4 +1,4 @@
-from ....tools.decorators import metric
+from .....tools.decorators import metric
 
 import scIB
 
