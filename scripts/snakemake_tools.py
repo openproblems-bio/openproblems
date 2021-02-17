@@ -1,7 +1,7 @@
-import openproblems
-import os
 import multiprocessing
+import os
 
+import openproblems
 
 N_THREADS = multiprocessing.cpu_count()
 TEMPDIR = ".evaluate"

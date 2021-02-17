@@ -1,10 +1,11 @@
-from . import utils
-
-import anndata
 import contextlib
 import logging
 import subprocess
 import tempfile
+
+import anndata
+
+from . import utils
 
 log = logging.getLogger("openproblems")
 

@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.sparse
+
 from openproblems.tools.utils import assert_finite  # noqa
 
 

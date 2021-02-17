@@ -13,6 +13,7 @@ stackoverflow.com/questions/47382227/python-yaml-update-preserving-order-and-com
 
 import copy
 from pathlib import Path
+
 import yaml
 
 I18N_PATH = Path(__file__).resolve().parent.parent.joinpath("i18n")

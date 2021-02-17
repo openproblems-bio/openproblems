@@ -1,15 +1,15 @@
+import time
+import unittest
+
+import numpy as np
+import parameterized
+import scipy.sparse
 import utils.asserts
 import utils.data
 import utils.name
 import utils.warnings
 
-import numpy as np
-import parameterized
-import unittest
 import openproblems
-import time
-
-import scipy.sparse
 
 utils.warnings.ignore_warnings()
 

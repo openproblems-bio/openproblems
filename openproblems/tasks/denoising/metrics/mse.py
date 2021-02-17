@@ -1,9 +1,9 @@
-from ....tools.decorators import metric
-
 import anndata
 import numpy as np
 import scanpy as sc
 import sklearn.metrics
+
+from ....tools.decorators import metric
 
 
 @metric(metric_name="Mean-squared error", maximize=False)

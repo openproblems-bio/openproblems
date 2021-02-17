@@ -1,8 +1,10 @@
-from . import decorators
-from . import utils
+import warnings
+
 import scanpy as sc
 import scprep
-import warnings
+
+from . import decorators
+from . import utils
 
 
 def _scran(adata, retries=2):

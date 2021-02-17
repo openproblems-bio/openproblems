@@ -1,8 +1,8 @@
+import numpy as np
+import packaging.version
 import utils
 
-import numpy as np
 import openproblems
-import packaging.version
 
 utils.warnings.ignore_warnings()
 

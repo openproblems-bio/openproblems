@@ -1,10 +1,10 @@
+import sklearn.decomposition
+
 from ....tools.decorators import method
 from ....tools.normalize import log_cpm
 from ....tools.normalize import log_scran_pooling
 from ....tools.normalize import sqrt_cpm
 from ....tools.utils import check_version
-
-import sklearn.decomposition
 
 
 def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):

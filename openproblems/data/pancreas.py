@@ -1,10 +1,10 @@
-from . import utils
-
 import os
-import scanpy as sc
-import scprep
 import tempfile
 
+import scanpy as sc
+import scprep
+
+from . import utils
 
 URL = "https://ndownloader.figshare.com/files/24539828"
 

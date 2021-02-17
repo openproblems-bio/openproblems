@@ -1,8 +1,8 @@
-from ....tools.decorators import metric
-
 import numpy as np
 import sklearn.decomposition
 import sklearn.neighbors
+
+from ....tools.decorators import metric
 
 
 @metric(metric_name="kNN Area Under the Curve", maximize=True)

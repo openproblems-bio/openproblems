@@ -1,9 +1,9 @@
-from ....tools.decorators import metric
-
 import numpy as np
 import scipy as sp
 import sklearn.decomposition
 import sklearn.metrics
+
+from ....tools.decorators import metric
 
 
 def calculate_squareform_pairwise_distance(data):
