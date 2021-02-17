@@ -37,7 +37,7 @@ jobs:
         run: |
           if [[ `git status --porcelain --untracked-files=no` ]]; then
             git config --local user.email "singlecellopenproblems@protonmail.com"
-            git config --local user.name "pre-commit[bot]"
+            git config --local user.name "singlecellopenproblems"
             git commit -m "pre-commit" -a
           fi
 
