@@ -11,9 +11,9 @@ TODO: Switch from PyYAML to Ruamel in order to load/dump comments - see
 stackoverflow.com/questions/47382227/python-yaml-update-preserving-order-and-comments
 """
 
-import copy
 from pathlib import Path
 
+import copy
 import yaml
 
 I18N_PATH = Path(__file__).resolve().parent.parent.joinpath("i18n")

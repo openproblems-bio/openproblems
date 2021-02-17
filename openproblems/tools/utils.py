@@ -1,5 +1,4 @@
 import gc
-
 import numpy as np
 import pkg_resources
 import scipy.sparse

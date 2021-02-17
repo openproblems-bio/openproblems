@@ -1,8 +1,7 @@
+import openproblems
 import parameterized
 import utils.name
 import utils.warnings
-
-import openproblems
 
 utils.warnings.ignore_warnings()
 

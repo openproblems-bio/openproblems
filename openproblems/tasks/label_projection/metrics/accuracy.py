@@ -1,7 +1,7 @@
+from ....tools.decorators import metric
+
 import numpy as np
 import sklearn.preprocessing
-
-from ....tools.decorators import metric
 
 
 @metric(metric_name="Accuracy", maximize=True)

@@ -1,8 +1,8 @@
+from ....tools.decorators import metric
+
 import numpy as np
 import scipy.sparse
 import scipy.stats
-
-from ....tools.decorators import metric
 
 
 def _correlation(adata, method="pearson"):

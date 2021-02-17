@@ -1,10 +1,9 @@
+import openproblems
 import parameterized
 import utils
 import utils.docker
 import utils.name
 import utils.warnings
-
-import openproblems
 
 utils.warnings.ignore_warnings()
 

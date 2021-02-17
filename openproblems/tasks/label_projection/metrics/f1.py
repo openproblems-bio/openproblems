@@ -1,7 +1,7 @@
+from ....tools.decorators import metric
+
 import sklearn.metrics
 import sklearn.preprocessing
-
-from ....tools.decorators import metric
 
 
 def _f1(adata, average="weighted"):

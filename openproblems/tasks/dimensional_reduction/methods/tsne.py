@@ -1,7 +1,7 @@
-import scanpy as sc
-
 from ....tools.decorators import method
 from ....tools.utils import check_version
+
+import scanpy as sc
 
 
 @method(

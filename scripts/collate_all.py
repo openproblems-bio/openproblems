@@ -1,8 +1,7 @@
 import json
+import openproblems
 import os
 import sys
-
-import openproblems
 
 
 def main(input_dir, output_file):

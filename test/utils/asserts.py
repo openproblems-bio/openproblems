@@ -1,7 +1,7 @@
+from openproblems.tools.utils import assert_finite  # noqa
+
 import numpy as np
 import scipy.sparse
-
-from openproblems.tools.utils import assert_finite  # noqa
 
 
 def assert_array_equal(X, Y):

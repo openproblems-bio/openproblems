@@ -1,7 +1,7 @@
-import numpy as np
-
 from ....data.pancreas import load_pancreas
 from ....tools.decorators import dataset
+
+import numpy as np
 
 
 @dataset("Pancreas (by batch)")
