@@ -1,8 +1,9 @@
 name: pre-commit
 # This workflow is triggered on PR to the repository.
 on:
-  pull_request:
-      - '*'
+  push:
+    branches-ignore:
+      - 'master'
 
 jobs:
   pre-commit:
