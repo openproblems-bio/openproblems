@@ -1,7 +1,7 @@
-import numpy as np
-
 from ....data.zebrafish import load_zebrafish
 from ....tools.decorators import dataset
+
+import numpy as np
 
 
 @dataset("Zebrafish (by labels)")

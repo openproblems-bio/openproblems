@@ -1,9 +1,9 @@
+from . import streams
+
 import logging
 import subprocess
 import sys
 import time
-
-from . import streams
 
 log = logging.getLogger("openproblems")
 

@@ -1,16 +1,14 @@
-import unittest
-
 import anndata
+import openproblems
 import pandas as pd
 import parameterized
 import scipy.sparse
+import unittest
 import utils
 import utils.asserts
 import utils.cache
 import utils.name
 import utils.warnings
-
-import openproblems
 
 utils.warnings.ignore_warnings()
 

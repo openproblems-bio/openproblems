@@ -1,8 +1,8 @@
+from ... import utils
 from . import checks
 from . import datasets
 from . import methods
 from . import metrics
-from ... import utils
 
 _task_name = "Regulatory effect prediction"
 

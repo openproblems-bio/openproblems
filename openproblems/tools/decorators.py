@@ -1,11 +1,10 @@
-import functools
-import logging
-import time
+from . import utils
 
 import anndata
+import functools
+import logging
 import memory_profiler
-
-from . import utils
+import time
 
 log = logging.getLogger("openproblems")
 

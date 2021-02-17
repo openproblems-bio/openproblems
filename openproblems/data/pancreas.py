@@ -1,10 +1,9 @@
-import os
-import tempfile
+from . import utils
 
+import os
 import scanpy as sc
 import scprep
-
-from . import utils
+import tempfile
 
 URL = "https://ndownloader.figshare.com/files/24539828"
 

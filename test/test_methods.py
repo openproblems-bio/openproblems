@@ -1,10 +1,9 @@
+import openproblems
 import parameterized
 import utils
 import utils.docker
 import utils.name
 import utils.warnings
-
-import openproblems
 
 utils.warnings.ignore_warnings()
 
@@ -68,7 +67,6 @@ def test_method(task_name, dataset_name, method_name, tempdir, image):
 def test_metric(task_name, dataset_name, method_name, metric_name, tempdir, image):
     """Test computation of a metric."""
     import numbers
-
     import utils.cache
 
     task = getattr(openproblems.tasks, task_name)
