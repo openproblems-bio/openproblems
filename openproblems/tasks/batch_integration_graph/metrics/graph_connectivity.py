@@ -10,4 +10,4 @@ from scIB.metrics import graph_connectivity
     # image="openproblems-template-image" # only if required
 )
 def graph_connectivity(adata):
-    return graph_connectivity(adata, 'labels')
+    return graph_connectivity(adata, "labels")

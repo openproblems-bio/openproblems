@@ -10,4 +10,6 @@ from scIB.metrics import graph_connectivity
     # image="openproblems-template-image" # only if required
 )
 def isolated_labels_f1(adata):
-    return isolated_labels(adata, label_key='labels', batch_key='batch', cluster=True, verbose=False)
+    return isolated_labels(
+        adata, label_key="labels", batch_key="batch", cluster=True, verbose=False
+    )
