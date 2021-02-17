@@ -17,7 +17,7 @@ repos:
       - id: black
         language_version: python3.6
   - repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: 1.5.4
+    rev: v1.5.4
     hooks:
       - id: autopep8
   - repo: https://gitlab.com/pycqa/flake8
