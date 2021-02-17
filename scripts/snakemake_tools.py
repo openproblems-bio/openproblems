@@ -22,14 +22,6 @@ except KeyError:
     DOCKER_PASSWORD = None
 
 
-def tasks(wildcards):
-    """Get JSON output for each task."""
-    return [
-        os.path.join(TEMPDIR, "{}.json".format(t.__name__.split(".")[-1]))
-        for t in openproblems.TASKS
-    ]
-
-
 def _images(filename):
     docker_dir = os.path.join("..", "docker")
     return [
@@ -47,59 +39,6 @@ def push_images(wildcards):
 def build_images(wildcards):
     """Get Docker build timestamp for all images."""
     return _images(".docker_build")
-
-
-def _method(task_name, dataset_name, method):
-    return os.path.join(
-        TEMPDIR,
-        task_name,
-        dataset_name,
-        "{}.result.json".format(method.__name__),
-    )
-
-
-def all_methods(wildcards):
-    """Get JSON output for each method for each task and dataset."""
-    return [
-        _method(task.__name__.split(".")[-1], dataset.__name__, method)
-        for task in openproblems.TASKS
-        for dataset in task.DATASETS
-        for method in task.METHODS
-    ]
-
-
-def methods(wildcards):
-    """Get JSON output for each method for a specific task and dataset."""
-    task = getattr(openproblems.tasks, wildcards.task)
-    return [
-        _method(wildcards.task, wildcards.dataset, method) for method in task.METHODS
-    ]
-
-
-def metrics(wildcards):
-    """Get JSON output for each metric for a specific task, method and dataset."""
-    task = getattr(openproblems.tasks, wildcards.task)
-    return [
-        os.path.join(
-            TEMPDIR,
-            wildcards.task,
-            wildcards.dataset,
-            wildcards.method,
-            "{}.metric.json".format(m.__name__),
-        )
-        for m in task.METRICS
-    ]
-
-
-def datasets(wildcards):
-    """Get JSON output for each dataset for each task."""
-    return [
-        os.path.join(
-            RESULTS_DIR, task.__name__.split(".")[-1], "{}.json".format(d.__name__)
-        )
-        for task in openproblems.TASKS
-        for d in task.DATASETS
-    ]
 
 
 def docker_image_name(wildcards):
