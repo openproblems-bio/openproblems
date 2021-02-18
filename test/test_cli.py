@@ -1,7 +1,8 @@
-import numpy as np
-import openproblems
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
+
+import numpy as np
+import openproblems
 import os
 import parameterized
 import tempfile
