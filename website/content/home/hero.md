@@ -50,5 +50,5 @@ weight = 10  # Order that this section will appear.
  css_class = "frontpage-hero"
 +++
 <p class="text-center">
-<img src="/img/HCA_logo.png" class="frontpage-banner"  style="margin: auto" />
+<img src="/img/heros/home_hero_text.png" class="frontpage-banner"  style="margin: auto" />
 </p>
