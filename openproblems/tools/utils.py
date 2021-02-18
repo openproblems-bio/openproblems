@@ -1,5 +1,7 @@
 import gc
+import numpy as np
 import pkg_resources
+import scipy.sparse
 
 
 def check_version(pkg):
@@ -18,3 +20,10 @@ def garbage_collection():
     gc.collect()
     gc.collect()
     gc.collect()
+
+
+def assert_finite(X):
+    """Assert numpy or scipy matrix is finite."""
+    X = X.data if scipy.sparse.issparse(X) else X
+    assert np.all(np.isfinite(X))
+    return True

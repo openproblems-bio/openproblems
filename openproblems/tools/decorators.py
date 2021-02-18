@@ -184,7 +184,7 @@ def profile(func):
             interval=0.1,
             max_usage=True,
         )
-        output["memory_leaked_mb"] = post_memory - base_memory
+        output["memory_leaked_mb"] = max(0.0, post_memory - base_memory)
         return output
 
     return decorated

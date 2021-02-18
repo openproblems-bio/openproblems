@@ -1,21 +1,40 @@
 from . import decorators
+from . import utils
+
 import scanpy as sc
 import scprep
+
+
+def _scran(adata, precluster=True):
+    import anndata2ri
+    import scIB.preprocessing
+
+    # deactivate converter
+    anndata2ri.deactivate()
+
+    scIB.preprocessing.normalize(adata)
+
+    try:
+        utils.assert_finite(adata.X)
+    except AssertionError:
+        if precluster:
+            adata.X = adata.raw.X
+            _scran(adata, precluster=False)
+        else:
+            raise
+
+    # deactivate converter
+    anndata2ri.deactivate()
+
+    # Make lightweight
+    del adata.raw
 
 
 @decorators.normalizer
 def log_scran_pooling(adata):
     """Normalize data with scran via rpy2."""
-    import anndata2ri
-    import scIB.preprocessing
-
     scprep.run.install_bioconductor("scran")
-    # Normalize via scran-pooling with own clustering at res=0.5
-    scIB.preprocessing.normalize(adata)
-    anndata2ri.deactivate()
-
-    # Make lightweight
-    del adata.raw
+    _scran(adata)
 
 
 def _cpm(adata):

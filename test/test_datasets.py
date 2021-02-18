@@ -1,5 +1,8 @@
 import utils
-import cache
+import utils.asserts
+import utils.cache
+import utils.name
+import utils.warnings
 
 import pandas as pd
 import anndata
@@ -47,7 +50,7 @@ class TestDataset(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Load data."""
-        cls.adata = cache.load(
+        cls.adata = utils.cache.load(
             cls.tempdir,
             cls.task,
             cls.dataset,
@@ -64,8 +67,8 @@ class TestDataset(unittest.TestCase):
         assert self.adata.shape[0] > 0
         assert self.adata.shape[1] > 0
         if self.test:
-            assert self.adata.shape[0] < 600
-            assert self.adata.shape[1] < 1500
+            assert self.adata.shape[0] <= 600
+            assert self.adata.shape[1] <= 1500
 
     def test_sparse(self):
         """Ensure output is sparse."""

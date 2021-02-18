@@ -96,7 +96,7 @@ jobs:
       run: |
         python -m pip install --upgrade "pip<=21.0"
         pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U .[test,r]
+        pip install --use-deprecated=legacy-resolver -U --editable .[test,r]
         python -c "import openproblems"
 
     - name: Cache R packages
@@ -121,14 +121,13 @@ jobs:
       shell: Rscript {0}
 
     - name: Run tests
-      run: nose2 -vvv
+      run: pytest --cov=openproblems -v
 
     - name: Upload coverage
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        coverage combine -a .
-        coveralls
+        COVERALLS_SERVICE_NAME: github
+      run: coveralls
 
     - name: Upload check results on fail
       if: failure()
