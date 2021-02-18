@@ -29,5 +29,5 @@ def pancreas_batch(test=False):
 
     if test:
         sc.pp.subsample(adata, n_obs=200)
-        return adata[:,:500]
+        return adata[:, :500]
     return adata
