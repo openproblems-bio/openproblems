@@ -1,7 +1,7 @@
 # from ....tools.normalize import log_cpm
 from .....tools.decorators import method
 
-# from ....tools.utils import check_version
+from ....tools.utils import check_version
 from scIB.integration import runBBKNN
 from scIB.preprocessing import hvg_batch, scale_batch
 
@@ -12,7 +12,7 @@ from scIB.preprocessing import hvg_batch, scale_batch
     paper_url="https://academic.oup.com/bioinformatics/article/36/3/964/5545955",
     paper_year=2020,
     code_url="",
-    # code_version=check_version("numpy"),
+    code_version=check_version("bbknn"),
     # image="openproblems-template-image" # only if required
 )
 def bbknn_full_unscaled(adata):
