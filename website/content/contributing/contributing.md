@@ -137,4 +137,4 @@ We'd love to see new tasks added to the framework, and our core group of develop
 
 ## Join us on Slack
 
-If you have any questions or would like to get more involved, please join us on the [CZI Science Slack](https://join-cziscience-slack.herokuapp.com/). Once you've created an account, look for the `#hca-open-problems` channel.
+If you have any questions or would like to get more involved, please join us on the [CZI Science Slack](https://join-cziscience-slack.herokuapp.com/). Once you've created an account, look for the `#open-problems-sca` channel.
