@@ -45,10 +45,10 @@ local_business_type = ""
 
 # Organization name (optional)
 # Enter an organization or project name. Defaults to the site title from `config.toml`.
-org_name = "Single Cell Open Problems"
+org_name = "Open Problems in Single Cell Analysis"
 
 # Description for social sharing and search engines. If undefined, superuser role is used in place.
-description = "Aggregating and Benchmarking Open Problems for the Human Cell Atlas"
+description = "Aggregating and Benchmarking Open Problems in Single Cell Analysis"
 
 ############################
 ## Site Features

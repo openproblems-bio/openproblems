@@ -34,10 +34,10 @@ subtitle = ""
 
 +++
 ## Our mission
-Our goal is to facilitate the development of novel computational methods to address open problems in the single-cell field, with a particular focus towards optimally using the data generated within the scope of the [Human Cell Atlas](https://www.humancellatlas.org/). We are focused on bridging the gap between experts in computer science and machine learning and the biological problems associated with the single cell data. We want to identify important problems, aggregate standardized datasets, and create a platform to benchmark novel methods against the current state of the art using a common set of test metrics.
+Our goal is to facilitate the development of novel computational methods to address open problems in the single-cell field. We are focused on bridging the gap between experts in computer science and machine learning and the biological problems associated with the single cell data. We want to identify important problems, aggregate standardized datasets, and create a platform to benchmark novel methods against the current state of the art using a common set of test metrics.
 
 ## Who can get involved
-We want to build a diverse and inclusive community to support the Open Problems. As such we welcome any individual who wants to get involved and agrees to follow our [Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/). We are currently supported by the [Chan Zuckerberg Initiative](https://chanzuckerberg.com/) and welcome participation from labs across the single cell and/or machine learning communities, and in particular labs already involved in the [Seed Networks for the Human Cell Atlas](https://chanzuckerberg.com/science/programs-resources/single-cell-biology/seednetworks/).
+We want to build a diverse and inclusive community to support the Open Problems. As such we welcome any individual who wants to get involved and agrees to follow our [Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/). We are currently supported by the [Chan Zuckerberg Initiative](https://chanzuckerberg.com/) and welcome participation from labs across the single cell and/or machine learning communities, and in particular labs already involved in the [Single Cell Biology Seed Networks](https://chanzuckerberg.com/science/programs-resources/single-cell-biology/seednetworks/).
 
 ## How the Open Problems are structured
 
