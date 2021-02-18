@@ -3,25 +3,25 @@ from . import utils
 
 import scanpy as sc
 import scprep
-import warnings
 
 
-def _scran(adata, retries=2):
+def _scran(adata, precluster=True):
     import anndata2ri
     import scIB.preprocessing
 
+    # deactivate converter
+    anndata2ri.deactivate()
+
+    scIB.preprocessing.normalize(adata)
+
     try:
-        # Normalize via scran-pooling with own clustering at res=0.5
-        scIB.preprocessing.normalize(adata)
         utils.assert_finite(adata.X)
-    except Exception as e:
-        if retries > 0:
-            warnings.warn(
-                "scran pooling failed with {}({})".format(type(e).__name__, str(e))
-            )
-            _scran(adata, retries=retries - 1)
+    except AssertionError:
+        if precluster:
+            adata.X = adata.raw.X
+            _scran(adata, precluster=False)
         else:
-            raise e
+            raise
 
     # deactivate converter
     anndata2ri.deactivate()
