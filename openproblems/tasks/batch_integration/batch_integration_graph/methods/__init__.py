@@ -1,2 +1,2 @@
 # TODO: update
-from .template_method import template_method
+from .bbknn import bbknn_full_unscaled

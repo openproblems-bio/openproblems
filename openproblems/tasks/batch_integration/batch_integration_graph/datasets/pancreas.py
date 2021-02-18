@@ -27,4 +27,7 @@ def pancreas_batch(test=False):
 
     sc.pp.neighbors(adata, use_rep="X_uni", key_added="uni")
 
+    if test:
+        sc.pp.subsample(adata, n_obs=200)
+        return adata[:,:500]
     return adata

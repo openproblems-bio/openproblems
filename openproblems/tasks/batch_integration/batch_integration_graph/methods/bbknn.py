@@ -3,6 +3,7 @@ from .....tools.decorators import method
 
 # from ....tools.utils import check_version
 from scIB.integration import runBBKNN
+from scIB.preprocessing import
 
 
 @method(
@@ -14,9 +15,10 @@ from scIB.integration import runBBKNN
     # code_version=check_version("numpy"),
     # image="openproblems-template-image" # only if required
 )
-def bbknn(adata):
-    # TODO: update
+def bbknn_full_unscaled(adata):
     # Normalize the data
+
     runBBKNN(adata, "batch")
     # Complete the result in-place
     adata.obs["template_output"] = 0
+    return adata

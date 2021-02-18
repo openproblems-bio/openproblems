@@ -1,2 +1,2 @@
 # TODO: update
-from .template_data import template_data
+from .pancreas import pancreas_batch
