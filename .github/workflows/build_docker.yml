@@ -30,7 +30,7 @@ jobs:
       id: cache-result
       with:
         path: ~/.docker_cache
-        key: ${{ hashFiles('docker/**/*requirements.txt') }}-${{ hashFiles('docker/**/Dockerfile') }}
+        key: ${{ hashFiles('docker/**/*requirements.txt') }}-${{ hashFiles('docker/**/Dockerfile') }}-${{ hashFiles('setup.py') }}
 
     - name: Set up Python
       if: |

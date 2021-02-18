@@ -6,6 +6,7 @@ import scprep
 
 
 def subset_mode2_genes(adata, keep_genes):
+    """Randomly subset genes from adata.obsm["mode2"]."""
     adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes]
     adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes]
     if "mode2_varnames" in adata.uns:
@@ -20,7 +21,7 @@ def filter_joint_data_empty_cells(adata):
     # filter cells
     n_cells_mode1 = scprep.utils.toarray(adata.X.sum(axis=1)).flatten()
     n_cells_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=1)).flatten()
-    keep_cells = np.minimum(n_cells_mode1, n_cells_mode2) > 0
+    keep_cells = np.minimum(n_cells_mode1, n_cells_mode2) > 1
     adata.uns["mode2_obs"] = adata.uns["mode2_obs"][keep_cells]
     adata = adata[keep_cells, :].copy()
     # filter genes
@@ -74,7 +75,7 @@ def create_joint_adata(
     return adata
 
 
-def subset_joint_data(adata, n_cells=500, n_genes=1000):
+def subset_joint_data(adata, n_cells=600, n_genes=1500):
     """Randomly subset a multimodal dataset."""
     if adata.shape[0] > n_cells:
         keep_cells = np.random.choice(adata.shape[0], n_cells, replace=False)
