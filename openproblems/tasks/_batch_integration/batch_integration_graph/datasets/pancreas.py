@@ -1,6 +1,7 @@
 from .....data.pancreas import load_pancreas
 from .....tools.decorators import dataset
-from scIB.preprocessing import normalize, hvg_batch
+from .....tools.normalize import log_scran_pooling
+#from scIB.preprocessing import normalize, hvg_batch
 
 import numpy as np
 import scanpy as sc
@@ -13,13 +14,11 @@ def pancreas_batch(test=False):
 
     adata.obs["batch"] = adata.obs["tech"]
 
-    normalize(adata)
+    log_scran_pooling(adata)
+    adata.layers['normalized'] = adata.X
 
-    hvg_list = hvg_batch(adata, batch_key="batch")
-    adata.var["highly_variable"] = np.in1d(adata.var_names, hvg_list)
     sc.tl.pca(
         adata,
-        use_highly_variable="highly_variable",
         svd_solver="arpack",
         return_info=True,
     )
