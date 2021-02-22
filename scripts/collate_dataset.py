@@ -1,8 +1,8 @@
-import numpy as np
 import json
+import numpy as np
+import openproblems
 import os
 import sys
-import openproblems
 
 
 def main(task_name, dataset_name, input_dir, output_file):

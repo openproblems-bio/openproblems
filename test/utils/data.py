@@ -1,5 +1,5 @@
-import numpy as np
 import anndata
+import numpy as np
 
 
 def data(obsm=None):
