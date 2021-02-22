@@ -17,7 +17,9 @@ _scran = scprep.run.RFunction(
 def log_scran_pooling(adata):
     """Normalize data with scran via rpy2."""
     scprep.run.install_bioconductor("scran")
-    _scran(adata)
+    adata.obs["size_factors"] = _scran(adata)
+    adata.X /= adata.obs["size_factors"].values[:, None]
+    sc.pp.log1p(adata)
 
 
 def _cpm(adata):
