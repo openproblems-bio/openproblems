@@ -21,7 +21,6 @@ def load_snare(
     rna_genes = pd.read_csv(
         rna_genes_url, low_memory=False, index_col=0, compression="gzip", header=None
     )
-    print(rna_genes)
     atac_genes = pd.read_csv(
         atac_genes_url, low_memory=False, index_col=0, compression="gzip", header=None
     )
@@ -39,9 +38,6 @@ def load_snare(
         atac_file = os.path.join(tempdir, "atac.mtx.gz")
         scprep.io.download.download_url(atac_url, atac_file)
         atac_data = scprep.io.load_mtx(atac_file, cell_axis="col").tocsr()
-
-    print(rna_genes.shape, atac_genes.shape, rna_cells.shape, atac_cells.shape)
-    print(rna_data.shape, atac_data.shape)
 
     adata = create_joint_adata(
         rna_data,
@@ -69,6 +65,5 @@ def load_snare(
     adata.uns["mode2_var_chr"] = adata.uns["mode2_var"][:, 0]
     adata.uns["mode2_var_start"] = adata.uns["mode2_var"][:, 1]
     adata.uns["mode2_var_end"] = adata.uns["mode2_var"][:, 2]
-    print(adata.shape)
     adata = filter_joint_data_empty_cells(adata)
     return adata

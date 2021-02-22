@@ -44,9 +44,6 @@ def load_share(
             list(map(lambda x: x.replace(",", "."), atac_cells.iloc[:, 0].values))
         )
 
-        print(rna_data.shape)
-        print(atac_data.shape)
-
     adata = create_joint_adata(
         rna_data,
         atac_data,

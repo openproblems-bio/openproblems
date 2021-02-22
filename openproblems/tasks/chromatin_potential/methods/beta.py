@@ -51,7 +51,9 @@ def _get_annotation(adata, retries=3):
     for i in adata.var.index.map(lambda x: x.split(".")[0]):
         try:
             with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
+                warnings.filterwarnings(
+                    action="ignore", message="No results found for query"
+                )
                 gene = data.gene_by_id(i)
             genes.append(
                 [
@@ -64,7 +66,9 @@ def _get_annotation(adata, retries=3):
         except ValueError:
             try:
                 with warnings.catch_warnings():
-                    warnings.simplefilter("ignore")
+                    warnings.filterwarnings(
+                        action="ignore", message="No results found for query"
+                    )
                     i = data.gene_ids_of_gene_name(i)[0]
                 gene = data.gene_by_id(i)
                 genes.append(
@@ -93,27 +97,24 @@ def _atac_genes_score(adata, top_genes=2000, threshold=1, method="beta"):
 
     # get annotation for TSS
     _get_annotation(adata)
-    # basic quality control
-    if adata.shape[0] >= 10000:
-        sc.pp.filter_cells(adata, min_genes=200)
-        sc.pp.filter_genes(adata, min_cells=5)
 
+    # basic quality control
     adata = adata[:, ~pd.isnull(adata.var.loc[:, "chr"])].copy()
-    if adata.uns["species"] == "mus_musculus":
+    if adata.uns["species"] in ["mus_musculus", "homo_sapiens"]:
         adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
             "mt-"
         )  # annotate the group of mitochondrial genes as 'mt'
-    else:
-        adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
-            "MT-"
-        )  # annotate the group of mitochondrial genes as 'mt'
-    sc.pp.calculate_qc_metrics(
-        adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
-    )
+        sc.pp.calculate_qc_metrics(
+            adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
+        )
 
-    adata = adata[
-        (adata.obs.n_genes_by_counts <= 2000) & (adata.obs.pct_counts_mt <= 10), :
-    ].copy()
+        adata_filter = adata[
+            (adata.obs.n_genes_by_counts <= 2000) & (adata.obs.pct_counts_mt <= 10), :
+        ].copy()
+        sc.pp.filter_cells(adata_filter, min_genes=200)
+        sc.pp.filter_genes(adata_filter, min_cells=5)
+        if adata_filter.shape[0] > 100:
+            adata = adata_filter.copy()
 
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
@@ -229,9 +230,7 @@ def _marge(tss_to_peaks, adata):
     """
     https://www.archrproject.com/bookdown/calculating-gene-scores-in-archr.html
     """
-    import math
-
-    alpha = -math.log(1.0 / 3.0) * 1e5 / 1e4
+    alpha = -np.log(1.0 / 3.0) * 1e5 / 1e4
     tss_to_peaks["distance"] = tss_to_peaks.apply(
         lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 1e5, axis=1
     )

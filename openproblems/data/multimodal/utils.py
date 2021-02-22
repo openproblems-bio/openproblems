@@ -8,13 +8,11 @@ import scprep
 def subset_mode2_genes(adata, keep_genes):
     """Randomly subset genes from adata.obsm["mode2"]."""
     adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes]
-    print(adata.uns["mode2_var"].shape)
-    print(keep_genes.shape)
     adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes]
     if len(adata.uns["mode2_var"].shape) > 1:
         for i, element in enumerate(["chr", "start", "end"]):
-            if "mode2_var_%s" % element in adata.uns:
-                adata.uns["mode2_var_%s" % element] = adata.uns["mode2_var"][:, i]
+            if f"mode2_var_{element}" in adata.uns:
+                adata.uns[f"mode2_var_{element}"] = adata.uns["mode2_var"][:, i]
     if "mode2_varnames" in adata.uns:
         for varname in adata.uns["mode2_varnames"]:
             adata.uns[varname] = adata.uns[varname][keep_genes]

@@ -16,7 +16,4 @@ Datasets should contain the following attributes:
 
 ## Method output
 Methods should assign gene regulation scores to `adata.obsm['gene_score']` using only single cell ATAC-seq peak counts.
-
-## Benchmark
-Metrics should compare `adata.obsm['gene_score']` with the true gene expression in `adata.X`, and store the metrics into 
-`adata.obs['regulatory_effect_score']`.
+Metrics function should compare `adata.obsm['gene_score']` with the true gene expression in `adata.X`, and return float metrics.

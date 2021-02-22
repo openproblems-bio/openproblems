@@ -14,7 +14,7 @@ def _metric(adata, method="pearson"):
     elif method == "mse":
         method = mean_squared_error
 
-    metrics = []
+    results = []
     for i in range(adata.shape[0]):
         x = (
             adata.obsm["gene_score"][i].toarray()[0]
@@ -22,19 +22,18 @@ def _metric(adata, method="pearson"):
             else adata.obsm["gene_score"][i]
         )
         y = adata.X[i].toarray()[0] if scipy.sparse.issparse(adata.X) else adata.X[i]
-        res = method(x, y)
-        if not isinstance(res, np.float64):
-            metrics.append(res[0])
+        result = method(x, y)
+        if not isinstance(result, np.float64):
+            results.append(result[0])
         else:
-            metrics.append(res)
-    metrics = np.array(metrics)
-    adata.obs["regulatory_effect_score"] = metrics
-    return np.median(metrics[~np.isnan(metrics)])
+            results.append(result)
+    results = np.array(results)
+    return np.median(results[~np.isnan(results)])
 
 
 @metric(metric_name="Median Pearson correlation", maximize=True)
 def pearson_correlation(adata):
-    return _metric(adata)
+    return _metric(adata, method="pearson")
 
 
 @metric(metric_name="Median Spearman correlation", maximize=True)
