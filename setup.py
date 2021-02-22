@@ -1,5 +1,7 @@
+from setuptools import find_packages
+from setuptools import setup
+
 import os
-from setuptools import setup, find_packages
 
 install_requires = [
     "numpy>=1.17.0",

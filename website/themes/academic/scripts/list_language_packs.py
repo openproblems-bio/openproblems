@@ -6,8 +6,9 @@
 #
 # Prerequisites: pip3 install PyYAML
 
-import yaml
 from pathlib import Path
+
+import yaml
 
 LANG_PATH = Path(__file__).resolve().parent.parent.joinpath("data").joinpath("i18n")
 LANG_YAML = LANG_PATH.joinpath("languages.yaml")

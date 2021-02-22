@@ -1,8 +1,9 @@
-import subprocess
-import time
-import sys
-import logging
 from . import streams
+
+import logging
+import subprocess
+import sys
+import time
 
 log = logging.getLogger("openproblems")
 
