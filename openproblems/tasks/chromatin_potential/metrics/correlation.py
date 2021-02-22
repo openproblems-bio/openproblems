@@ -1,9 +1,9 @@
 from ....tools.decorators import metric
+from sklearn.metrics import mean_squared_error
 
 import numpy as np
 import scipy.sparse
 import scipy.stats
-from sklearn.metrics import mean_squared_error
 
 
 def _metric(adata, method="pearson"):
