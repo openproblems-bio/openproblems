@@ -18,7 +18,11 @@ def log_scran_pooling(adata):
     """Normalize data with scran via rpy2."""
     scprep.run.install_bioconductor("scran")
     adata.obs["size_factors"] = _scran(adata)
-    adata.X /= adata.obs["size_factors"].values[:, None]
+    print(adata.obs["size_factors"])
+    print(np.all(np.isfinite(adata.obs["size_factors"])))
+    adata.X = scprep.utils.matrix_vector_elementwise_multiply(
+        adata.X, adata.obs["size_factors"], axis=0
+    )
     sc.pp.log1p(adata)
 
 
