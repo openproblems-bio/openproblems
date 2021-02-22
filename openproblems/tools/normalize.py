@@ -1,6 +1,5 @@
 from . import decorators
 
-import numpy as np
 import scanpy as sc
 import scprep
 
