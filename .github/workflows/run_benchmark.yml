@@ -20,6 +20,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
 
     - name: Install system dependencies
       if: runner.os == 'Linux'
