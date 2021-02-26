@@ -6,6 +6,7 @@ on:
       - '*'
     branches:
       - 'test_benchmark'
+      - 'infrastructure/nextflow'
 
 jobs:
   run_benchmark:
@@ -15,10 +16,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {name: 'current', os: ubuntu-latest, python: '3.8' java_version: 15 }
+        - {name: 'current', os: ubuntu-latest, python: '3.8', java_version: 15 }
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
 
     - name: Install system dependencies
       if: runner.os == 'Linux'
@@ -53,6 +56,14 @@ jobs:
         wget -qO- get.nextflow.io | bash
         sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
 
+    - name: Install AWS CLI
+      run: |
+        mkdir /tmp/awscli
+        cd /tmp/awscli
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install
+
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade "pip<=21.0"
@@ -66,8 +77,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        cd workflow
-        nextflow run main.nf
+        cd nf-openproblems
+        nextflow run . -bucket-dir s3://openproblems-nextflow/benchmark
         cd ..
 
     - name: Upload results on success
