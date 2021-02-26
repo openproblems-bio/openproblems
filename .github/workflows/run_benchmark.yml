@@ -76,7 +76,7 @@ jobs:
         AWS_DEFAULT_REGION: us-west-2
       run: |
         cd nf-openproblems
-        nextflow run main.nf
+        nextflow run . -bucket-dir s3://openproblems-nextflow/benchmark
         cd ..
 
     - name: Upload results on success
