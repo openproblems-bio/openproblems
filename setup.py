@@ -20,7 +20,6 @@ install_requires = [
 
 r_requires = [
     "rpy2",
-    "scIB @ git+https://github.com/theislab/scib@master",
     "anndata2ri>=1.0.6",
 ]
 
