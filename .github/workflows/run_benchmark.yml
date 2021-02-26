@@ -6,7 +6,7 @@ on:
       - '*'
     branches:
       - 'test_benchmark'
-      - 'instrastructure/nextflow'
+      - 'infrastructure/nextflow'
 
 jobs:
   run_benchmark:
