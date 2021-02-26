@@ -6,6 +6,7 @@ on:
       - '*'
     branches:
       - 'test_benchmark'
+      - 'instrastructure/nextflow'
 
 jobs:
   run_benchmark:
@@ -66,7 +67,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        cd workflow
+        cd nf-openproblems
         nextflow run main.nf
         cd ..
 
