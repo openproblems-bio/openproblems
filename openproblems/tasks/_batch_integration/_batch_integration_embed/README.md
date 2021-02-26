@@ -22,4 +22,3 @@ Metrics can compare:
 * `adata.obsm['X_embed']` to `adata.obs['X_unintegrated']`,
 * `adata.obsm['X_embed']` to `adata.obs['label']`, and/or
 * `adata.obsm['X_embed']` to `adata.obs['batch']`.
-

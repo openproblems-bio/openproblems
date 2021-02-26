@@ -1,8 +1,8 @@
-import numpy as np
-
 from .....tools.decorators import metric
-from scIB.metrics import nmi
 from scIB.clustering import opt_louvain
+from scIB.metrics import nmi
+
+import numpy as np
 
 
 @metric(

@@ -1,10 +1,11 @@
 from .....data.pancreas import load_pancreas
 from .....tools.decorators import dataset
 from .....tools.normalize import log_scran_pooling
-#from scIB.preprocessing import normalize, hvg_batch
 
 import numpy as np
 import scanpy as sc
+
+# from scIB.preprocessing import normalize, hvg_batch
 
 
 @dataset("Pancreas (by batch)")
@@ -15,7 +16,7 @@ def pancreas_batch(test=False):
     adata.obs["batch"] = adata.obs["tech"]
 
     log_scran_pooling(adata)
-    adata.layers['normalized'] = adata.X
+    adata.layers["normalized"] = adata.X
 
     sc.tl.pca(
         adata,

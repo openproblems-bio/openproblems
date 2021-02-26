@@ -1,6 +1,7 @@
-import numpy as np
 from .....data.template import load_template_data
 from .....tools.decorators import dataset
+
+import numpy as np
 
 
 @dataset("Template dataset")
