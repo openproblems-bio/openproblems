@@ -2,12 +2,12 @@
 from .....tools.decorators import method
 
 from .....tools.utils import check_version
-from scIB.integration import runScvi
+from scIB.integration import runScanorama
 from scIB.preprocessing import hvg_batch, scale_batch, reduce_data
 
 
 @method(
-    method_name="Scvi",
+    method_name="Scanorama",
     paper_name="Sc"
     paper_url="temp",
     paper_year=2020,
@@ -15,29 +15,29 @@ from scIB.preprocessing import hvg_batch, scale_batch, reduce_data
     code_version=check_version("scanorama"),
     # image="openproblems-template-image" # only if required
 )
-def scvi_full_unscaled(adata):
-    runScvi(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+def scanorama_feature_full_unscaled(adata):
+    runScanorama(adata, "batch")
+    reduce_data(adata)
     # Complete the result in-place
     return adata
 
-def scvi_hvg_unscaled(adata):
+def scanorama_feature_hvg_unscaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)    
-    runScvi(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+    runScanorama(adata, "batch")
+    reduce_data(adata)
     return adata
 
-def scvi_hvg_scaled(adata):
+def scanorama_feature_hvg_scaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)    
-    adata = scale_batch(adata, "batch")
-    runScvi(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+    adata = scale_batch(adata, 'batch')
+    runScanorama(adata, "batch")
+    reduce_data(adata)
     return adata
 
-def scvi_full_scaled(adata):
-    adata = scale_batch(adata, "batch")
-    runScvi(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+def scanorama_feature_full_scaled(adata):
+    adata = scale_batch(adata, 'batch')
+    runScanorama(adata, "batch")
+    reduce_data(adata)
     return adata
 
 

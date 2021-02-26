@@ -15,27 +15,27 @@ from scIB.preprocessing import hvg_batch, scale_batch
     code_version=check_version("bbknn"),
     # image="openproblems-template-image" # only if required
 )
-def bbknn_full_unscaled(adata):
+def _full_unscaled(adata):
     # Normalize the data
 
     runBBKNN(adata, "batch")
     # Complete the result in-place
     return adata
 
-def bbknn_hvg_unscaled(adata):
+def _hvg_unscaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)    
     runBBKNN(adata, "batch")
     # Complete the result in-place
     return adata
 
-def bbknn_hvg_scaled(adata):
+def _hvg_scaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)    
     adata = scale_batch(adata, 'batch')
     runBBKNN(adata, "batch")
     # Complete the result in-place
     return adata
 
-def bbknn_full_scaled(adata):
+def _full_scaled(adata):
     adata = scale_batch(adata, 'batch')
     runBBKNN(adata, "batch")
     # Complete the result in-place
