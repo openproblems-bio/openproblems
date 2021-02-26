@@ -7,7 +7,6 @@ import logging
 import os
 import scanpy as sc
 
-
 log = logging.getLogger("openproblems")
 
 

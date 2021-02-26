@@ -1,7 +1,7 @@
 from ....tools.decorators import metric
+from scipy import sparse
 
 import numpy as np
-from scipy import sparse
 import scprep
 
 

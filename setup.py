@@ -1,5 +1,7 @@
+from setuptools import find_packages
+from setuptools import setup
+
 import os
-from setuptools import setup, find_packages
 
 install_requires = [
     "numpy>=1.17.0",
@@ -12,6 +14,7 @@ install_requires = [
     "decorator",
     "memory-profiler",
     "umap-learn<0.5",
+    "colorama>=0.3.9",
 ]
 
 r_requires = [
@@ -56,6 +59,9 @@ setup(
         "doc": doc_requires,
         "r": r_requires,
         "evaluate": evaluate_requires + r_requires,
+    },
+    entry_points={
+        "console_scripts": ["openproblems-cli=openproblems.api.main:main"],
     },
     test_suite="nose2.collector.collector",
     long_description=readme,
