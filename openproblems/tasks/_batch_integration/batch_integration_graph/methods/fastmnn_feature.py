@@ -1,18 +1,21 @@
 # from ....tools.normalize import log_cpm
 from .....tools.decorators import method
-
 from .....tools.utils import check_version
+
 #from scIB.integration import _fastmnn_feature
-from scIB.preprocessing import hvg_batch, scale_batch, reduce_data
+from scIB.preprocessing import hvg_batch
+from scIB.preprocessing import reduce_data
+from scIB.preprocessing import scale_batch
+
 import scprep
 
 _fastmnn_feature = scprep.run.RFunction(
-        setup="""
+    setup="""
             library(SingleCellExperiment)
             library(batchelor)
         """,
-        args="sobj, batch, hvg=2000",
-        body="""
+    args="sobj, batch, hvg=2000",
+    body="""
             expr <- sobj@assays$RNA@data
 
 	        sce <- fastMNN(expr, batch = sobj@meta.data[[batch]])
@@ -40,23 +43,24 @@ def fastmnn_feature_full_unscaled(adata):
     # Complete the result in-place
     return adata
 
+
 def fastmnn_feature_hvg_unscaled(adata):
-    adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)    
+    adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _fastmnn_feature(adata, "batch")
     reduce_data(adata)
     return adata
 
+
 def fastmnn_feature_hvg_scaled(adata):
-    adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)    
+    adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, 'batch')
     adata = _fastmnn_feature(adata, "batch")
     reduce_data(adata)
     return adata
+
 
 def fastmnn_feature_full_scaled(adata):
     adata = scale_batch(adata, 'batch')
     adata = _fastmnn_feature(adata, "batch")
     reduce_data(adata)
     return adata
-
-
