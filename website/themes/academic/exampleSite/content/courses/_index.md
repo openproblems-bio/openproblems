@@ -7,4 +7,3 @@ header:
   caption: ""
   image: ""
 ---
-

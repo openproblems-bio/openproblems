@@ -1,7 +1,7 @@
 import json
+import openproblems
 import os
 import sys
-import openproblems
 
 
 def main(task_name, meta_file, input_dir, output_file):
