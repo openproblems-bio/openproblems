@@ -1,7 +1,7 @@
-import numpy as np
-
 from .....tools.decorators import metric
 from scIB.metrics import graph_connectivity
+
+import numpy as np
 
 
 @metric(
