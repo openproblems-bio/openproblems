@@ -80,6 +80,27 @@ jobs:
         sudo chown $USER /mnt/openproblems-nextflow
         s3fs openproblems-nextflow /mnt/openproblems-nextflow
 
+    - name: Update Docker images
+      run: |
+        cd workflow
+        snakemake -j 4 docker
+        cd ..
+
+    - name: Upload Docker images
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+          docker login --username AWS --password-stdin $ECR_ENDPOINT
+        cd docker
+        for image in $(ls -1d */ | sed 's:/$::'); do
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${image}
+          docker push ${ECR_ENDPOINT}/openproblems:${image}
+        done
+
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade "pip<=21.0"
@@ -94,7 +115,9 @@ jobs:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        nextflow run singlecellopenproblems/nf-openproblems -r master -with-tower -profile aws -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}" -bucket-dir s3://openproblems-nextflow/benchmark
+        cd nf-openproblems
+        nextflow run . -with-tower -profile aws -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}" -bucket-dir s3://openproblems-nextflow/benchmark
+        cd ..
 
     - name: Remove working directory
       if: always()
