@@ -84,7 +84,7 @@ jobs:
       run: |
         python -m pip install --upgrade "pip<=21.0"
         pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U . snakemake
+        pip install --use-deprecated=legacy-resolver -U .
         python -c "import openproblems"
 
     - name: Upload Docker images
@@ -101,9 +101,7 @@ jobs:
           IMAGE_PUSH_DATE=$(date --date=$(docker inspect -f="{{.Created}}" singlecellopenproblems/${image}) +%s)
           IMAGE_MODIFIED_DATE=$(git log -1 --format="%ad" --date=unix -- docker/${image}/*)
           if [[ $IMAGE_PUSH_DATE -lt $IMAGE_MODIFIED_DATE ]]; then
-            cd workflow
-            snakemake -j 1 ../docker/${image}/.docker_build
-            cd ..
+            docker build -f docker/${image}/.docker_build -t singlecellopenproblems/${image}
           fi
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${image}
           docker push ${ECR_ENDPOINT}/openproblems:${image}
