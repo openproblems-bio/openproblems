@@ -64,6 +64,17 @@ jobs:
         unzip awscliv2.zip
         sudo ./aws/install
 
+    - name: Set up S3FS
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        sudo apt install s3fs
+        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > /etc/passwd-s3fs
+        chmod 600 /etc/passwd-s3fs
+        s3fs openproblems-nextflow /mnt/openproblems-nextflow
+
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade "pip<=21.0"
@@ -79,7 +90,7 @@ jobs:
         AWS_DEFAULT_REGION: us-west-2
       run: |
         cd nf-openproblems
-        nextflow run . -with-tower -profile aws -bucket-dir s3://openproblems-nextflow/benchmark
+        nextflow run . -with-tower -profile aws -work-dir /mnt/openproblems-nextflow/work -bucket-dir s3://openproblems-nextflow/benchmark
         cd ..
 
     - name: Upload results on success
