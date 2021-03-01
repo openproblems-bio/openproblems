@@ -75,7 +75,7 @@ jobs:
         sudo chmod 600 /etc/passwd-s3fs
         sudo mkdir -p /mnt/openproblems-nextflow
         sudo chmod 755 /mnt/openproblems-nextflow
-        s3fs openproblems-nextflow /mnt/openproblems-nextflow
+        sudo s3fs openproblems-nextflow /mnt/openproblems-nextflow
 
     - name: Install package & dependencies
       run: |
