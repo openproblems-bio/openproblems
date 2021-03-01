@@ -94,9 +94,7 @@ jobs:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        cd nf-openproblems
-        nextflow run . -with-tower -profile aws -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}" -bucket-dir s3://openproblems-nextflow/benchmark
-        cd ..
+        nextflow run singlecellopenproblems/nf-openproblems -r 472c3a588e92a6c00def62f49bd2173c5512c991 -with-tower -profile aws -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}" -bucket-dir s3://openproblems-nextflow/benchmark
 
     - name: Remove working directory
       if: always()
