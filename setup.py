@@ -1,5 +1,7 @@
+from setuptools import find_packages
+from setuptools import setup
+
 import os
-from setuptools import setup, find_packages
 
 install_requires = [
     "numpy>=1.17.0",
@@ -13,11 +15,11 @@ install_requires = [
     "memory-profiler",
     "umap-learn<0.5",
     "colorama>=0.3.9",
+    "packaging",
 ]
 
 r_requires = [
     "rpy2",
-    "scIB @ git+https://github.com/theislab/scib@master",
     "anndata2ri>=1.0.6",
 ]
 

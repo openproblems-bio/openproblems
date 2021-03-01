@@ -77,7 +77,7 @@
 - id: date
   translation: Data
 - id: last_updated
-  translation: Azkenengoz editatua 
+  translation: Azkenengoz editatua
 - id: event
   translation: Ekitaldia
 - id: location
