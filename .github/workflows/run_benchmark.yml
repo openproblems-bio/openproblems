@@ -74,8 +74,8 @@ jobs:
         echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY | sudo tee /etc/passwd-s3fs
         sudo chmod 600 /etc/passwd-s3fs
         sudo mkdir -p /mnt/openproblems-nextflow
-        sudo chmod 755 /mnt/openproblems-nextflow
         sudo s3fs openproblems-nextflow /mnt/openproblems-nextflow
+        sudo chmod 755 /mnt/openproblems-nextflow
 
     - name: Install package & dependencies
       run: |
@@ -92,7 +92,7 @@ jobs:
         AWS_DEFAULT_REGION: us-west-2
       run: |
         cd nf-openproblems
-        sudo nextflow run . -with-tower -profile aws -work-dir /mnt/openproblems-nextflow/work -bucket-dir s3://openproblems-nextflow/benchmark
+        nextflow run . -with-tower -profile aws -work-dir /mnt/openproblems-nextflow/work -bucket-dir s3://openproblems-nextflow/benchmark
         cd ..
 
     - name: Upload results on success
