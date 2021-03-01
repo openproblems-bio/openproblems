@@ -101,7 +101,7 @@ jobs:
           docker pull singlecellopenproblems/${image}
           IMAGE_PUSH_DATE=$(date --date=$(docker inspect -f="{{.Created}}" singlecellopenproblems/${image}) +%s)
           IMAGE_MODIFIED_DATE=$(git log -1 --format="%ad" --date=unix -- docker/${image}/*)
-          if [[ -z IMAGE_MODIFIED_DATE || $IMAGE_PUSH_DATE -lt $IMAGE_MODIFIED_DATE ]]; then
+          if [[ ! -z IMAGE_MODIFIED_DATE || $IMAGE_PUSH_DATE -lt $IMAGE_MODIFIED_DATE ]]; then
             docker build -f docker/${image}/.docker_build -t singlecellopenproblems/${image}
           fi
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${image}
