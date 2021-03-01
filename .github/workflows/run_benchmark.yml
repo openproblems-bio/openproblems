@@ -12,6 +12,9 @@ jobs:
   run_benchmark:
     runs-on: ${{ matrix.config.os }}
 
+    env:
+      RUN_ID: ${{ github.workflow}}_${{ github.run_number }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -92,8 +95,18 @@ jobs:
         AWS_DEFAULT_REGION: us-west-2
       run: |
         cd nf-openproblems
-        nextflow run . -with-tower -profile aws -work-dir /mnt/openproblems-nextflow/work -bucket-dir s3://openproblems-nextflow/benchmark
+        nextflow run . -with-tower -profile aws -work-dir /mnt/openproblems-nextflow/work${RUN_ID} -bucket-dir s3://openproblems-nextflow/benchmark
         cd ..
+
+    - name: Remove working directory
+      if: always()
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        aws s3 rm s3://openproblems-nextflow/work${RUN_ID}
+
 
     - name: Upload results on success
       env:
