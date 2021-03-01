@@ -2,12 +2,10 @@ from ....tools.decorators import method
 from ....tools.normalize import log_cpm
 from ....tools.normalize import log_scran_pooling
 from ....tools.utils import check_version
-
 from .utils import pca_op
 
 import numpy as np
 import scipy.sparse
-
 import sklearn.neural_network
 import sklearn.pipeline
 import sklearn.preprocessing

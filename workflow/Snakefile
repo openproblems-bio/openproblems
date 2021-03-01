@@ -1,5 +1,6 @@
 import os
 import snakemake_tools as tools
+import openproblems.api.main
 
 rule all:
     input:
@@ -7,7 +8,11 @@ rule all:
         website = "{}/website.complete.temp".format(tools.TEMPDIR),
 
 rule website:
-    input: tools.datasets
+    input:
+        tasks = [
+            "{tempdir}/{task}.task.json".format(tempdir=tools.TEMPDIR, task=task)
+            for task in openproblems.api.main.main(['tasks'], print=False)
+        ]
     output: temp("{}/website.complete.temp".format(tools.TEMPDIR))
     shell: "touch {output}"
 
@@ -20,16 +25,44 @@ rule docker_build:
 rule summary:
     input:
         script = "collate_all.py",
-        methods = tools.all_methods,
+        tasks = [
+            "{tempdir}/{task}.task.json".format(tempdir=tools.TEMPDIR, task=task)
+            for task in openproblems.api.main.main(['tasks'], print=False)
+        ],
     params:
         dir = tools.TEMPDIR
     output: "{}/../results.json".format(tools.SCRIPTS_DIR)
     shell: "python3 {input.script} {params.dir} {output}"
 
+rule collate_task:
+    input:
+        datasets = lambda wildcards: [
+            "{tempdir}/{task}/{dataset}.json".format(
+                tempdir=tools.RESULTS_DIR,
+                task=wildcards.task,
+                dataset=dataset
+            ) for dataset in openproblems.api.main.main(
+                ['list', '--datasets', '--task', wildcards.task],
+                print=False
+            )
+        ]
+    output: temp("{tempdir}/{task}.task.json")
+    shell: "touch {output}"
+
 rule collate_dataset:
     input:
         script = "collate_dataset.py",
-        methods = tools.methods,
+        methods = lambda wildcards: [
+            "{tempdir}/{task}/{dataset}/{method}.result.json".format(
+                tempdir=tools.TEMPDIR,
+                task=wildcards.task,
+                dataset=wildcards.dataset,
+                method=method
+            ) for method in openproblems.api.main.main(
+                ['list', '--methods', '--task', wildcards.task],
+                print=False
+            )
+        ]
     params:
         dir = tools.TEMPDIR
     output: "{}/{{task}}/{{dataset}}.json".format(tools.RESULTS_DIR)
@@ -41,7 +74,18 @@ rule collate_method:
     input:
         script = "collate_method.py",
         meta = "{tempdir}/{task}/{dataset}/{method}.meta.json",
-        metrics = tools.metrics,
+        metrics = lambda wildcards: [
+            "{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json".format(
+                tempdir=tools.TEMPDIR,
+                task=wildcards.task,
+                dataset=wildcards.dataset,
+                method=wildcards.method,
+                metric=metric
+            ) for metric in openproblems.api.main.main(
+                ['list', '--metrics', '--task', wildcards.task],
+                print=False
+            )
+        ],
     output: temp("{tempdir}/{task}/{dataset}/{method}.result.json")
     shell:
         """python3 {input.script} {wildcards.task} {input.meta} \
@@ -51,6 +95,7 @@ rule collate_method:
 rule evaluate_metric:
     input:
         script = "evaluate_metric.py",
+        code = "{tempdir}/{task}/{metric}.metrics.hash",
         data = "{tempdir}/{task}/{dataset}/{method}.method.h5ad",
         docker = tools.docker_push,
     output: temp("{tempdir}/{task}/{dataset}/{method}/{metric}.metric.json")
@@ -66,6 +111,7 @@ rule evaluate_metric:
 rule run_method:
     input:
         script = "run_method.py",
+        code = "{tempdir}/{task}/{method}.methods.hash",
         data = "{tempdir}/{task}/{dataset}.data.h5ad",
         docker = tools.docker_push,
     output:
@@ -83,7 +129,8 @@ rule run_method:
 rule load_dataset:
     input:
         script = "load_dataset.py",
-        code = "{}/../openproblems/version.py".format(tools.SCRIPTS_DIR),
+        version = "{}/../openproblems/version.py".format(tools.SCRIPTS_DIR),
+        code = "{tempdir}/{task}/{dataset}.datasets.hash",
         docker = tools.docker_push,
     output: temp("{tempdir}/{task}/{dataset}.data.h5ad")
     params:
@@ -93,6 +140,10 @@ rule load_dataset:
     shell: """{params.docker} {params.workdir} {input.script} {wildcards.task} \
            {wildcards.dataset} {output} && \
            docker stop $CONTAINER'"""
+
+rule hash_code:
+    output: "{tempdir}/{task}/{function}.{function_type}.hash"
+    shell: "openproblems-cli hash --task {wildcards.task} --{wildcards.function_type} {wildcards.function} > {output}"
 
 rule build_docker:
     input:

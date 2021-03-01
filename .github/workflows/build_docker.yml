@@ -104,7 +104,7 @@ jobs:
         delete-branch: true
         base: master
         title: '[auto] Update .docker_push'
-        reviewers: scottgigante, dburkhardt, singlecellopenproblems
+        reviewers: scottgigante, dburkhardt
 
     - name: Upload check results on fail
       if: failure()

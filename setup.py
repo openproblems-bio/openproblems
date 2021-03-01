@@ -1,5 +1,7 @@
+from setuptools import find_packages
+from setuptools import setup
+
 import os
-from setuptools import setup, find_packages
 
 install_requires = [
     "numpy>=1.17.0",
@@ -12,15 +14,14 @@ install_requires = [
     "decorator",
     "memory-profiler",
     "umap-learn<0.5",
+    "colorama>=0.3.9",
+    "packaging",
 ]
 
 r_requires = [
     "rpy2",
-    "scIB @ git+https://github.com/theislab/scib@master",
     "anndata2ri>=1.0.6",
 ]
-
-evaluate_requires = ["snakemake"]
 
 test_requires = [
     "pytest",
@@ -55,7 +56,9 @@ setup(
         "test": test_requires + r_requires,
         "doc": doc_requires,
         "r": r_requires,
-        "evaluate": evaluate_requires + r_requires,
+    },
+    entry_points={
+        "console_scripts": ["openproblems-cli=openproblems.api.main:main"],
     },
     test_suite="nose2.collector.collector",
     long_description=readme,

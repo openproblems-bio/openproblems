@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - 'test_docker'
       - 'test_benchmark'
+      - 'infrastructure/nextflow'
   pull_request:
     branches:
       - '*'
@@ -96,7 +97,7 @@ jobs:
       run: |
         python -m pip install --upgrade "pip<=21.0"
         pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U .[test,r]
+        pip install --use-deprecated=legacy-resolver -U --editable .[test,r]
         python -c "import openproblems"
 
     - name: Cache R packages
