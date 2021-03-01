@@ -70,10 +70,11 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        sudo apt install s3fs
+        sudo apt-get install s3fs
         echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY | sudo tee /etc/passwd-s3fs
         sudo chmod 600 /etc/passwd-s3fs
-        s3fs openproblems-nextflow /mnt/openproblems-nextflow
+        sudo mkdir -p /mnt/openproblems-nextflow
+        sudo s3fs openproblems-nextflow /mnt/openproblems-nextflow
 
     - name: Install package & dependencies
       run: |
