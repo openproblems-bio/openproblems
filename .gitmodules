@@ -1,0 +1,3 @@
+[submodule "nf-openproblems"]
+	path = nf-openproblems
+	url = git@github.com:singlecellopenproblems/nf-openproblems

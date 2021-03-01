@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - 'test_docker'
       - 'test_benchmark'
+      - 'infrastructure/nextflow'
   pull_request:
     branches:
       - '*'
