@@ -25,13 +25,8 @@ except KeyError:
 
 def _images(filename):
     docker_dir = os.path.join("..", "docker")
-    if not callable(filename):
-
-        def filename(image):
-            return os.path.join(docker_dir, image, filename)
-
     return [
-        filename(image)
+        os.path.join(docker_dir, image, filename)
         for image in os.listdir(docker_dir)
         if os.path.isdir(os.path.join(docker_dir, image))
     ]
