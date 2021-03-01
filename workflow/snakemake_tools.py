@@ -26,10 +26,10 @@ def _images(filename):
     if not callable(filename):
 
         def filename(image):
-            return filename
+            return os.path.join(docker_dir, image, filename)
 
     return [
-        os.path.join(docker_dir, image, filename(image))
+        filename(image)
         for image in os.listdir(docker_dir)
         if os.path.isdir(os.path.join(docker_dir, image))
     ]
@@ -46,7 +46,7 @@ def build_images(wildcards):
 
 
 def image_markers(wildcards):
-    """Get timestamp to ensure existenc for all images."""
+    """Get timestamp to ensure existence for all images."""
     return _images(docker_image_marker)
 
 
