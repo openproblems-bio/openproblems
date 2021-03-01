@@ -96,8 +96,7 @@ jobs:
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
           docker login --username AWS --password-stdin $ECR_ENDPOINT
-        cd docker
-        for image in $(ls -1d */ | sed 's:/$::'); do
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
           docker pull singlecellopenproblems/${image}
           IMAGE_PUSH_DATE=$(date --date=$(docker inspect -f="{{.Created}}" singlecellopenproblems/${image}) +%s)
           IMAGE_MODIFIED_DATE=$(git log -1 --format="%ad" --date=unix -- docker/${image}/*)
