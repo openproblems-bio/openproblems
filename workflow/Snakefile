@@ -22,6 +22,9 @@ rule docker:
 rule docker_build:
     input: tools.build_images
 
+rule docker_pull:
+    input: tools.pull_images
+
 rule build_docker_image:
     input:
         dockerfile = "../docker/{image}/Dockerfile",

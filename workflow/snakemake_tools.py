@@ -1,6 +1,8 @@
+import dateutil.parser
 import multiprocessing
 import openproblems
 import os
+import subprocess
 
 N_THREADS = multiprocessing.cpu_count()
 TEMPDIR = ".evaluate"
@@ -45,6 +47,11 @@ def build_images(wildcards):
     return _images(".docker_build")
 
 
+def pull_images(wildcards):
+    """Get Docker pull timestamp for all images."""
+    return _images(".docker_pull")
+
+
 def docker_image_name(wildcards):
     """Get the name of the Docker image required for a task and method/metric."""
     task = getattr(openproblems.tasks, wildcards.task)
@@ -57,6 +64,40 @@ def docker_image_name(wildcards):
     return fun.metadata["image"]
 
 
+def docker_image_age(image):
+    """Get the age of a Docker image."""
+    proc = subprocess.run(
+        [
+            "docker",
+            "inspect",
+            '-f="{{.Created}}"',
+            "singlecellopenproblems/{}".format(image),
+        ],
+        stdout=subprocess.PIPE,
+    )
+    date_string = proc.stdout.decode().strip()
+    datetime = dateutil.parser.parse(date_string)
+    return int(datetime.timestamp())
+
+
+def docker_file_age(image):
+    """Get the age of a Dockerfile."""
+    docker_path = "../docker/{}".format(image)
+    proc = subprocess.run(
+        [
+            "git",
+            "log",
+            "-1",
+            '--format="%ad"',
+            "--date=unix",
+            "--",
+            "{}/*".format(docker_path),
+        ],
+        stdout=subprocess.PIPE,
+    )
+    return int(proc.stdout.decode().strip())
+
+
 def docker_image_marker(image):
     """Get the file to be created to ensure Docker image exists from the image name."""
     docker_path = "../docker/{}".format(image)
@@ -64,7 +105,7 @@ def docker_image_marker(image):
     docker_pull = os.path.join(docker_path, ".docker_pull")
     docker_build = os.path.join(docker_path, ".docker_build")
     dockerfile = os.path.join(docker_path, "Dockerfile")
-    if os.path.getmtime(docker_push) > os.path.getmtime(dockerfile):
+    if docker_file_age(docker_push) > docker_image_age(dockerfile):
         # Dockerfile hasn't been changed since last push, pull it
         return docker_pull
     elif DOCKER_PASSWORD:
