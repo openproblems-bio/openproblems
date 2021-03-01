@@ -11,7 +11,6 @@ import tempfile
 import time
 import warnings
 
-
 TESTDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASEDIR = os.path.dirname(TESTDIR)
 CACHEDIR = os.path.join(os.environ["HOME"], ".singularity")

@@ -1,8 +1,13 @@
 from .. import data
+from . import evaluate  # noqa
+from . import hash
+from . import image
+from . import list
+from . import load
 from . import parser
+from . import run
+from . import tasks
 from . import utils
-
-from . import tasks, list, image, load, run, evaluate, hash  # noqa
 
 SUBCOMMANDS = {
     utils.module_to_str(module): module
