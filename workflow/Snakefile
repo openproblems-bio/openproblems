@@ -19,9 +19,6 @@ rule website:
 rule docker:
     input: tools.push_images
 
-rule docker_pull_or_build:
-    input: tools.image_markers
-
 rule docker_build:
     input: tools.build_images
 

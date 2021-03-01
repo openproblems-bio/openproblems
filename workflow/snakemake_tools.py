@@ -45,11 +45,6 @@ def build_images(wildcards):
     return _images(".docker_build")
 
 
-def image_markers(wildcards):
-    """Get timestamp to ensure existence for all images."""
-    return _images(docker_image_marker)
-
-
 def docker_image_name(wildcards):
     """Get the name of the Docker image required for a task and method/metric."""
     task = getattr(openproblems.tasks, wildcards.task)

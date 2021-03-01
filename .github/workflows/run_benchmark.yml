@@ -87,12 +87,6 @@ jobs:
         pip install --use-deprecated=legacy-resolver -U . snakemake
         python -c "import openproblems"
 
-    - name: Update Docker images
-      run: |
-        cd workflow
-        snakemake -j 4 docker_pull_or_build
-        cd ..
-
     - name: Upload Docker images
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -104,6 +98,14 @@ jobs:
           docker login --username AWS --password-stdin $ECR_ENDPOINT
         cd docker
         for image in $(ls -1d */ | sed 's:/$::'); do
+          docker pull singlecellopenproblems/${image}
+          IMAGE_PUSH_DATE=$(date --date=$(docker inspect -f="{{.Created}}" singlecellopenproblems/${image}) +%s)
+          IMAGE_MODIFIED_DATE=$(git log -1 --format="%ad" --date=unix -- docker/${image}/*)
+          if [[ $IMAGE_PUSH_DATE -lt $IMAGE_MODIFIED_DATE ]]; then
+            cd workflow
+            snakemake -j 1 ../docker/${image}/.docker_build
+            cd ..
+          fi
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${image}
           docker push ${ECR_ENDPOINT}/openproblems:${image}
         done
