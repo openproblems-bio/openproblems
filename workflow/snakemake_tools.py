@@ -23,8 +23,13 @@ except KeyError:
 
 def _images(filename):
     docker_dir = os.path.join("..", "docker")
+    if not callable(filename):
+
+        def filename(image):
+            return filename
+
     return [
-        os.path.join(docker_dir, image, filename)
+        os.path.join(docker_dir, image, filename(image))
         for image in os.listdir(docker_dir)
         if os.path.isdir(os.path.join(docker_dir, image))
     ]
@@ -38,6 +43,11 @@ def push_images(wildcards):
 def build_images(wildcards):
     """Get Docker build timestamp for all images."""
     return _images(".docker_build")
+
+
+def image_markers(wildcards):
+    """Get timestamp to ensure existenc for all images."""
+    return _images(docker_image_marker)
 
 
 def docker_image_name(wildcards):

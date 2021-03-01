@@ -83,7 +83,7 @@ jobs:
     - name: Update Docker images
       run: |
         cd workflow
-        snakemake -j 4 docker
+        snakemake -j 4 docker_pull_or_build
         cd ..
 
     - name: Upload Docker images
