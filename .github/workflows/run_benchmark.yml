@@ -85,8 +85,15 @@ jobs:
       run: |
         python -m pip install --upgrade "pip<=21.0"
         pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U .
+        pip install --use-deprecated=legacy-resolver -U . snakemake
         python -c "import openproblems"
+
+    - name: Update Docker images
+      run: |
+        cd workflow
+        snakemake -j 4 docker_pull
+        snakemake -j 4 docker
+        cd ..
 
     - name: Upload Docker images
       env:
@@ -98,12 +105,6 @@ jobs:
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
           docker login --username AWS --password-stdin $ECR_ENDPOINT
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          docker pull singlecellopenproblems/${image}
-          IMAGE_PUSH_DATE=$(date --date=$(docker inspect -f="{{.Created}}" singlecellopenproblems/${image}) +%s)
-          IMAGE_MODIFIED_DATE=$(git log -1 --format="%ad" --date=unix -- docker/${image}/*)
-          if [[ ! -z IMAGE_MODIFIED_DATE || $IMAGE_PUSH_DATE -lt $IMAGE_MODIFIED_DATE ]]; then
-            docker build -f docker/${image}/.docker_build -t singlecellopenproblems/${image}
-          fi
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${image}
           docker push ${ECR_ENDPOINT}/openproblems:${image}
         done
