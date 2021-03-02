@@ -47,7 +47,7 @@ subtitle = ""
 
 
 +++
-## About Open Problems in Single Cell Analysis
+# Benchmarking formalized challenges in single-cell analysis
 
 The Open Problems effort is inspired by the progress in machine learning driven by researchers aiming to maximize the performance of their algorithms against standardized, well-defined computational tasks (e.g. [Papers with Code State-of-the-art Leaderboards](https://paperswithcode.com/sota)). Several [Grand Challenges](https://doi.org/10.1186/s13059-020-1926-6) have been identified for single cell analysis, but these challenges require formalization before method developers can attempt to solve them. Our goal is to formalize challenges such as these and create a living community-driven state-of-the-art benchmarking platform to facilitate development of single-cell methods.
 
