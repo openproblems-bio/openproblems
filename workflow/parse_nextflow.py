@@ -101,7 +101,7 @@ def parse_metric_results(results):
             result = float(handle.read().strip())
         task_name, metric_name, method_name, dataset_name = filename.replace(
             ".metric.txt", ""
-        ).split("-")
+        ).split(".")
         results[task_name][dataset_name][method_name]["metrics"][metric_name] = result
     return results
 
