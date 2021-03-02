@@ -152,6 +152,7 @@ jobs:
         reviewers: scottgigante, dburkhardt
 
     - name: Upload results
+      if: always()
       uses: actions/upload-artifact@master
       with:
         name: ${{ matrix.config.name }}_results
