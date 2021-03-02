@@ -1,10 +1,10 @@
 import collections
+import json
 import numpy as np
 import numpyencoder
 import openproblems.api.utils as utils
 import os
 import pandas as pd
-import json
 
 
 def dump_json(obj, fp):
