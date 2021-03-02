@@ -1,13 +1,14 @@
-import numpy as np
 from ....data.zebrafish import load_zebrafish
 from ....tools.decorators import dataset
+
+import numpy as np
 
 
 @dataset("Zebrafish (by labels)")
 def zebrafish_labels(test=False):
     adata = load_zebrafish(test=test)
     adata.obs["labels"] = adata.obs["cell_type"]
-    adata.obs["is_train"] = adata.obs["lab"] == "Schier"
+    adata.obs["is_train"] = adata.obs["lab"] == adata.obs["lab"][0]
     return adata
 
 

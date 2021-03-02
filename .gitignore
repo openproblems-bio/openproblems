@@ -134,3 +134,10 @@ resources/
 
 # macOS
 .DS_Store
+
+# Snakemake
+.snakemake/
+.evaluate/
+.r_packages/
+.docker_pull
+.docker_build

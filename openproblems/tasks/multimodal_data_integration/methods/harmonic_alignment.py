@@ -1,23 +1,22 @@
-import numpy as np
-from sklearn.decomposition import TruncatedSVD
-from ....tools.normalize import sqrt_cpm, log_cpm, log_scran_pooling
 from ....tools.decorators import method
+from ....tools.normalize import log_cpm
+from ....tools.normalize import log_scran_pooling
+from ....tools.normalize import sqrt_cpm
 from ....tools.utils import check_version
+
+import sklearn.decomposition
 
 
 def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
     import harmonicalignment
 
-    if min(adata.X.shape) <= n_svd:
-        n_svd = min(adata.X.shape) - 1
-    if min(adata.obsm["mode2"].shape) <= n_svd:
-        n_svd = min(adata.obsm["mode2"].shape) - 1
+    n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
     if adata.X.shape[0] <= n_eigenvectors:
         n_eigenvectors = None
     if adata.X.shape[0] <= n_pca_XY:
         n_pca_XY = None
-    X_pca = TruncatedSVD(n_svd).fit_transform(adata.X)
-    Y_pca = TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
+    X_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
+    Y_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
     ha_op = harmonicalignment.HarmonicAlignment(
         n_filters=8, n_pca_XY=n_pca_XY, n_eigenvectors=n_eigenvectors
     )
@@ -25,6 +24,7 @@ def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
     XY_aligned = ha_op.diffusion_map(n_eigenvectors=n_eigenvectors)
     adata.obsm["aligned"] = XY_aligned[: X_pca.shape[0]]
     adata.obsm["mode2_aligned"] = XY_aligned[X_pca.shape[0] :]
+    return adata
 
 
 @method(
@@ -34,11 +34,13 @@ def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
     paper_year=2020,
     code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
     code_version=check_version("harmonicalignment"),
+    image="openproblems-python-extras",
 )
 def harmonic_alignment_sqrt_cpm(adata, n_svd=100):
     sqrt_cpm(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _harmonic_alignment(adata, n_svd=n_svd)
+    return adata
 
 
 @method(
@@ -48,8 +50,10 @@ def harmonic_alignment_sqrt_cpm(adata, n_svd=100):
     paper_year=2020,
     code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
     code_version=check_version("harmonicalignment"),
+    image="openproblems-r-extras",
 )
 def harmonic_alignment_log_scran_pooling(adata, n_svd=100):
     log_scran_pooling(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _harmonic_alignment(adata, n_svd=n_svd)
+    return adata
