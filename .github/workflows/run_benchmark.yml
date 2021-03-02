@@ -85,7 +85,7 @@ jobs:
       run: |
         python -m pip install --upgrade "pip<=21.0"
         pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U . snakemake
+        pip install --use-deprecated=legacy-resolver -U .[evaluate]
         python -c "import openproblems"
 
     - name: Update Docker images
@@ -116,7 +116,12 @@ jobs:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        nextflow run singlecellopenproblems/nf-openproblems -with-tower -profile aws -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}" -bucket-dir s3://openproblems-nextflow/benchmark
+        nextflow run \
+        -with-tower \
+        -profile aws \
+        -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}" \
+        -bucket-dir s3://openproblems-nextflow/benchmark
+        singlecellopenproblems/nf-openproblems
 
     - name: Remove working directory
       if: always()
@@ -127,6 +132,9 @@ jobs:
       run: |
         aws s3 rm "s3://openproblems-nextflow/work${RUN_ID}"
 
+    - name: Parse results
+      run: python workflow/parse_nextflow.py
+
     - name: Commit result
       if: startsWith(github.ref, 'refs/tags')
       uses: EndBug/add-and-commit@v6
@@ -136,7 +144,7 @@ jobs:
         message: 'Update benchmark results # ci skip'
         add:
          - 'website/data/results'
-         - 'results.md'
+         - 'results.json'
         branch: auto_update
         push: false
 
