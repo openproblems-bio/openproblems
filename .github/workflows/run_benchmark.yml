@@ -142,9 +142,7 @@ jobs:
         author_name: SingleCellOpenProblems
         author_email: singlecellopenproblems@protonmail.com
         message: 'Update benchmark results # ci skip'
-        add:
-         - 'website/data/results'
-         - 'results.json'
+        add: "['website/data/results', 'results.json']"
         branch: auto_update
         push: false
 
