@@ -7208,7 +7208,7 @@ ul.task-list li input[type="checkbox"] {
 
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Amiri", sans-serif;
   font-weight: 400;
   margin-top: 1rem;
   margin-bottom: .5rem;
@@ -9191,12 +9191,17 @@ html[dir="rtl"] body {
 .contributing-hero section {
   filter: blur(8px); }
 
-.frontpage-banner {
-  width: 800px;
-  text-align: center; }
-
 .frontpage-hero {
-  height: 500px; }
+  height: 30em; }
+
+.banner-container {
+  height: 30em;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.banner-container img {
+  margin: 0; }
 
 @media screen and (max-width: 575.98px) {
   .frontpage-hero {

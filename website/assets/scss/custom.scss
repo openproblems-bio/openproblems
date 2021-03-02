@@ -1,5 +1,4 @@
-.hero{
-
+.hero {
 }
 
 .hero h1{
@@ -14,7 +13,6 @@
   max-height: 400px;
   max-width: 300px;
   background: #ffffff;
-
   width: 100%;
   min-width: 240px;
   margin-left: 10px;
@@ -35,13 +33,24 @@
 }
 
 .frontpage-banner {
-  width: 800px;
-  text-align: center;
+
 }
 
 .frontpage-hero {
-  height: 500px;
+  height: 30em;
 }
+
+.banner-container {
+  height: 30em;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.banner-container img{
+    margin: 0
+}
+
 
 @media screen and (max-width: 575.98px) {
   .frontpage-hero {
