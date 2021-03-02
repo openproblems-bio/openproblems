@@ -60,11 +60,19 @@ def read_trace(filename):
     df = pd.read_csv(filename, sep="\t", index_col=0)
     df = df.loc[df["name"].str.startswith("run_method")]
     df = df.loc[df["exit"] == 0]
-    df["tag"] = df["name"].str.replace(r"^.*\(", "").str.replace(r"\)$", "")
-    df["task"] = df["tag"].str.replace(":.*", "")
-    df["method-dataset"] = df["tag"].str.replace("^.*?:", "").str.replace(":.*$", "")
-    df["method"] = df["method-dataset"].str.replace(r"\-.*$", "")
-    df["dataset"] = df["method-dataset"].str.replace(r"^.*\-", "")
+    df["tag"] = (
+        df["name"]
+        .str.replace(r"^.*\(", "", regex=True)
+        .str.replace(r"\)$", "", regex=True)
+    )
+    df["task"] = df["tag"].str.replace(":.*", "", regex=True)
+    df["method-dataset"] = (
+        df["tag"]
+        .str.replace("^.*?:", "", regex=True)
+        .str.replace(":.*$", "", regex=True)
+    )
+    df["method"] = df["method-dataset"].str.replace(r"\-.*$", "", regex=True)
+    df["dataset"] = df["method-dataset"].str.replace(r"^.*\-", "", regex=True)
     for k in ["method-dataset", "native_id", "hash", "exit", "status", "tag", "name"]:
         del df[k]
     return df
