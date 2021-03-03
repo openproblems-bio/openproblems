@@ -159,8 +159,9 @@ jobs:
         nextflow run
         -with-tower
         -resume
-        -profile docker,test
+        -profile test,aws
         -work-dir "/mnt/openproblems-nextflow/test/${{ github.ref }}"
+        -bucket-dir "s3://openproblems-nextflow/test/${{ github.ref }}"
         singlecellopenproblems/nf-openproblems
 
     - name: Run tests
