@@ -1,0 +1,3 @@
+git+git://github.com/theislab/scib
+scanpy==1.4.6
+bbknn==1.3.9
