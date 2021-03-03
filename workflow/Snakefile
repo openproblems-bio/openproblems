@@ -1,0 +1,61 @@
+import os
+import snakemake_tools as tools
+
+rule docker:
+    input: tools.push_images
+    params:
+        version = tools.VERSION_FILE
+    shell: "openproblems-cli --version > {params.version}"
+
+rule docker_build:
+    input: tools.build_images
+    params:
+        version = tools.VERSION_FILE
+    shell: "openproblems-cli --version > {params.version}"
+
+rule docker_pull:
+    input: tools.pull_images
+
+rule build_docker_image:
+    input:
+        dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
+        requirements = tools.docker_requirements,
+    output:
+        "{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)
+    params:
+        sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
+        user = "singlecellopenproblems"
+    shell:
+        """docker build -f {input.dockerfile} -t {params.user}/{wildcards.image} .. \
+        && touch {output}"""
+
+rule password_docker:
+    output:
+        filename = temp(".docker_password")
+    run:
+        with open(output.filename, 'w') as handle:
+            handle.write(tools.DOCKER_PASSWORD)
+
+rule login_docker:
+    input:
+        ".docker_password"
+    output:
+        temp(".docker_login")
+    shell:
+        """docker login --username=singlecellopenproblems --password=$(cat {input}) && \
+        touch {output}"""
+
+rule push_docker_image:
+    input:
+        build = "{}/{{image}}/.docker_build".format(tools.IMAGES_DIR),
+        login = ".docker_login",
+    output:
+        "{}/{{image}}/.docker_push".format(tools.IMAGES_DIR)
+    shell:
+        "docker push singlecellopenproblems/{wildcards.image} && date +%s > {output}"
+
+rule pull_docker_image:
+    output:
+        temp("{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR))
+    shell:
+        "docker pull singlecellopenproblems/{wildcards.image} && touch {output}"

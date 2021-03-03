@@ -51,12 +51,12 @@ subtitle = ""
 
 The Open Problems effort is inspired by the progress in machine learning driven by researchers aiming to maximize the performance of their algorithms against standardized, well-defined computational tasks (e.g. [Papers with Code State-of-the-art Leaderboards](https://paperswithcode.com/sota)). Several [Grand Challenges](https://doi.org/10.1186/s13059-020-1926-6) have been identified for single cell analysis, but these challenges require formalization before method developers can attempt to solve them. Our goal is to formalize challenges such as these and create a living community-driven state-of-the-art benchmarking platform to facilitate development of single-cell methods.
 
-We identify several traits that allow these benchmarks to serve as Open Problems that drive innovation:  
-* Tasks are formally defined with a clear mathematical interpretation  
-* Easily accessible gold-standard datasets are publicly available in a ready-to-go standardized format  
-* One or more quantitative metrics are defined for each task to judge success  
-* State-of-the-art methods are ranked in a continuously updated leaderboard  
+We identify several traits that allow these benchmarks to serve as Open Problems that drive innovation:
+* Tasks are formally defined with a clear mathematical interpretation
+* Easily accessible gold-standard datasets are publicly available in a ready-to-go standardized format
+* One or more quantitative metrics are defined for each task to judge success
+* State-of-the-art methods are ranked in a continuously updated leaderboard
 
 This project is sponsored by the [Chan Zuckerberg Initiative](https://chanzuckerberg.com/science/), and we are looking for broad input from the scientific community.
 
-If you'd like to learn more, click here: <a href="/contributing"><button type="button" class="btn btn-primary btn-lg">**Get Involved**</button></a>  
+If you'd like to learn more, click here: <a href="/contributing"><button type="button" class="btn btn-primary btn-lg">**Get Involved**</button></a>

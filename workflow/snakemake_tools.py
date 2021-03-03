@@ -1,12 +1,17 @@
+import dateutil.parser
 import multiprocessing
 import openproblems
 import os
+import packaging.version
+import subprocess
 
 N_THREADS = multiprocessing.cpu_count()
 TEMPDIR = ".evaluate"
 SCRIPTS_DIR = os.getcwd()
 DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
+IMAGES_DIR = os.path.join(SCRIPTS_DIR, "..", "docker")
+VERSION_FILE = os.path.join(IMAGES_DIR, ".version")
 DOCKER_EXEC = (
     "CONTAINER=$("
     "  docker run -dt --rm"
@@ -22,22 +27,27 @@ except KeyError:
 
 
 def _images(filename):
-    docker_dir = os.path.join("..", "docker")
     return [
-        os.path.join(docker_dir, image, filename)
-        for image in os.listdir(docker_dir)
-        if os.path.isdir(os.path.join(docker_dir, image))
+        os.path.join(IMAGES_DIR, image, filename)
+        for image in os.listdir(IMAGES_DIR)
+        if os.path.isdir(os.path.join(IMAGES_DIR, image))
     ]
 
 
 def push_images(wildcards):
     """Get Docker push timestamp for all images."""
-    return _images(".docker_push")
+    images = _images(".docker_push")
+    return images
 
 
 def build_images(wildcards):
     """Get Docker build timestamp for all images."""
     return _images(".docker_build")
+
+
+def pull_images(wildcards):
+    """Get Docker pull timestamp for all images."""
+    return _images(".docker_pull")
 
 
 def docker_image_name(wildcards):
@@ -52,14 +62,65 @@ def docker_image_name(wildcards):
     return fun.metadata["image"]
 
 
+def docker_image_age(image):
+    """Get the age of a Docker image."""
+    proc = subprocess.run(
+        [
+            "docker",
+            "inspect",
+            '-f="{{.Created}}"',
+            "singlecellopenproblems/{}".format(image),
+        ],
+        stdout=subprocess.PIPE,
+    )
+    date_string = proc.stdout.decode().strip()
+    datetime = dateutil.parser.parse(date_string)
+    return int(datetime.timestamp())
+
+
+def docker_file_age(image):
+    """Get the age of a Dockerfile."""
+    docker_path = os.path.join(IMAGES_DIR, image)
+    proc = subprocess.run(
+        [
+            "git",
+            "log",
+            "-1",
+            '--format="%ad"',
+            "--date=unix",
+            "--",
+            "{}/*".format(docker_path),
+        ],
+        stdout=subprocess.PIPE,
+    )
+    return int(proc.stdout.decode().strip())
+
+
+def version_not_changed():
+    """Check that openproblems has not changed version since last build."""
+    try:
+        with open(VERSION_FILE, "r") as handle:
+            build_version = handle.read().strip()
+    except FileNotFoundError:
+        return False
+    build_version = packaging.version.parse(build_version)
+    curr_version = packaging.version.parse(openproblems.__version__)
+    if curr_version > build_version:
+        return False
+    else:
+        return True
+
+
 def docker_image_marker(image):
     """Get the file to be created to ensure Docker image exists from the image name."""
-    docker_path = "../docker/{}".format(image)
+    docker_path = os.path.join(IMAGES_DIR, image)
     docker_push = os.path.join(docker_path, ".docker_push")
     docker_pull = os.path.join(docker_path, ".docker_pull")
     docker_build = os.path.join(docker_path, ".docker_build")
     dockerfile = os.path.join(docker_path, "Dockerfile")
-    if os.path.getmtime(docker_push) > os.path.getmtime(dockerfile):
+    if version_not_changed() and docker_file_age(docker_push) > docker_image_age(
+        dockerfile
+    ):
         # Dockerfile hasn't been changed since last push, pull it
         return docker_pull
     elif DOCKER_PASSWORD:
@@ -72,7 +133,7 @@ def docker_image_marker(image):
 
 def _docker_requirements(image, include_push=False):
     """Get all files to ensure a Docker image is up to date from the image name."""
-    docker_dir = "../docker/{}/".format(image)
+    docker_dir = os.path.join(IMAGES_DIR, image)
     dockerfile = os.path.join(docker_dir, "Dockerfile")
     requirements = [dockerfile]
     requirements.extend(
@@ -106,3 +167,12 @@ def docker_command(wildcards, output):
     """Get the Docker command to be run given a set of wildcards."""
     image = docker_image_name(wildcards)
     return DOCKER_EXEC.format(image=image)
+
+
+if not version_not_changed():
+    for image in _images(""):
+        for filename in [".docker_push", ".docker_pull", ".docker_build"]:
+            try:
+                os.remove(os.path.join(image, filename))
+            except FileNotFoundError:
+                pass
