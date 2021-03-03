@@ -116,7 +116,9 @@ def docker_image_marker(image):
     docker_pull = os.path.join(docker_path, ".docker_pull")
     docker_build = os.path.join(docker_path, ".docker_build")
     dockerfile = os.path.join(docker_path, "Dockerfile")
-    if version_not_changed() and docker_file_age(docker_push) > docker_image_age(dockerfile):
+    if version_not_changed() and docker_file_age(docker_push) > docker_image_age(
+        dockerfile
+    ):
         # Dockerfile hasn't been changed since last push, pull it
         return docker_pull
     elif DOCKER_PASSWORD:
@@ -164,9 +166,10 @@ def docker_command(wildcards, output):
     image = docker_image_name(wildcards)
     return DOCKER_EXEC.format(image=image)
 
+
 if not version_not_changed():
     for image in _images(""):
-        for filename in ['.docker_push', '.docker_pull', '.docker_build']:
+        for filename in [".docker_push", ".docker_pull", ".docker_build"]:
             try:
                 os.remove(os.path.join(image, filename))
             except FileNotFoundError:

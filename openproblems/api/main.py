@@ -1,4 +1,5 @@
-from .. import data, __version__
+from .. import __version__
+from .. import data
 from . import evaluate
 from . import hash
 from . import image
@@ -18,7 +19,7 @@ SUBCOMMANDS = {
 def _main(args=None):
     argparser = parser.create_parser()
     args = argparser.parse_args(args=args)
-    
+
     if args.version:
         return __version__
 
@@ -31,6 +32,7 @@ def _main(args=None):
         return SUBCOMMANDS[args.subcommand].main(args)
     else:
         raise NotImplementedError
+
 
 def main(args=None, print=True):
     """Run the command-line interface."""
