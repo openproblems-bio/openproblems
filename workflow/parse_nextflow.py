@@ -99,7 +99,7 @@ def parse_metric_results(results):
     for filename in os.listdir("results/metrics"):
         with open(os.path.join("results/metrics", filename), "r") as handle:
             result = float(handle.read().strip())
-        task_name, metric_name, method_name, dataset_name = filename.replace(
+        task_name, dataset_name, method_name, metric_name = filename.replace(
             ".metric.txt", ""
         ).split(".")
         results[task_name][dataset_name][method_name]["metrics"][metric_name] = result
