@@ -10,6 +10,8 @@ TEMPDIR = ".evaluate"
 SCRIPTS_DIR = os.getcwd()
 DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
+IMAGES_DIR = os.path.join(SCRIPTS_DIR, "..", "docker")
+VERSION_FILE = os.path.join(IMAGES_DIR, ".version")
 DOCKER_EXEC = (
     "CONTAINER=$("
     "  docker run -dt --rm"
@@ -25,17 +27,17 @@ except KeyError:
 
 
 def _images(filename):
-    docker_dir = os.path.join("..", "docker")
     return [
-        os.path.join(docker_dir, image, filename)
-        for image in os.listdir(docker_dir)
-        if os.path.isdir(os.path.join(docker_dir, image))
+        os.path.join(IMAGES_DIR, image, filename)
+        for image in os.listdir(IMAGES_DIR)
+        if os.path.isdir(os.path.join(IMAGES_DIR, image))
     ]
 
 
 def push_images(wildcards):
     """Get Docker push timestamp for all images."""
-    return _images(".docker_push")
+    images = _images(".docker_push")
+    return images
 
 
 def build_images(wildcards):
@@ -78,7 +80,7 @@ def docker_image_age(image):
 
 def docker_file_age(image):
     """Get the age of a Dockerfile."""
-    docker_path = "../docker/{}".format(image)
+    docker_path = os.path.join(IMAGES_DIR, image)
     proc = subprocess.run(
         [
             "git",
@@ -97,7 +99,7 @@ def docker_file_age(image):
 def version_not_changed():
     """Check that openproblems has not changed version since last build."""
     try:
-        with open("../docker/.version", "r") as handle:
+        with open(VERSION_FILE, "r") as handle:
             build_version = handle.read().strip()
     except FileNotFoundError:
         return False
@@ -111,7 +113,7 @@ def version_not_changed():
 
 def docker_image_marker(image):
     """Get the file to be created to ensure Docker image exists from the image name."""
-    docker_path = "../docker/{}".format(image)
+    docker_path = os.path.join(IMAGES_DIR, image)
     docker_push = os.path.join(docker_path, ".docker_push")
     docker_pull = os.path.join(docker_path, ".docker_pull")
     docker_build = os.path.join(docker_path, ".docker_build")
@@ -131,7 +133,7 @@ def docker_image_marker(image):
 
 def _docker_requirements(image, include_push=False):
     """Get all files to ensure a Docker image is up to date from the image name."""
-    docker_dir = "../docker/{}/".format(image)
+    docker_dir = os.path.join(IMAGES_DIR, image)
     dockerfile = os.path.join(docker_dir, "Dockerfile")
     requirements = [dockerfile]
     requirements.extend(
