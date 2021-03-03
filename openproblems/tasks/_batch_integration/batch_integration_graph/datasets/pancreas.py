@@ -8,7 +8,9 @@ import scanpy as sc
 # from scIB.preprocessing import normalize, hvg_batch
 
 
-@dataset("Pancreas (by batch)")
+@dataset(
+    dataset_name="Pancreas (by batch)",
+    image="openproblems-r-base")
 def pancreas_batch(test=False):
     adata = load_pancreas(test=test)
     adata.obs["labels"] = adata.obs["celltype"]
