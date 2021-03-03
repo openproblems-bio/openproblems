@@ -1,6 +1,7 @@
 from . import utils
 
 import importlib
+import os
 import subprocess
 
 
@@ -17,6 +18,7 @@ def git_hash(file):
         ["git", "log", "-n", "1", "--pretty=format:%H", "--", file],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        cwd=os.path.dirname(__file__),
     )
     if p.returncode != 0:
         raise RuntimeError(p.stderr.decode())

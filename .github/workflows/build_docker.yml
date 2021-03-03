@@ -61,13 +61,13 @@ jobs:
         pip install --use-deprecated=legacy-resolver -U snakemake
         python -c "import openproblems"
 
-    - name: Build images
+    - name: Pull images
       if: |
         (steps.cache-result.outputs.cache-hit != 'true') ||
         startsWith(github.ref, 'refs/heads/test_docker')
       run: |
-        cd scripts
-        snakemake -j $(grep -c processor /proc/cpuinfo) docker_build
+        cd workflow
+        snakemake -j $(grep -c processor /proc/cpuinfo) docker_pull
         cd ..
 
     - name: Push images
@@ -77,7 +77,7 @@ jobs:
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
-        cd scripts
+        cd workflow
         snakemake -j $(grep -c processor /proc/cpuinfo) docker
         cd ..
 
@@ -90,7 +90,7 @@ jobs:
         author_name: SingleCellOpenProblems
         author_email: singlecellopenproblems@protonmail.com
         message: 'Push Docker images # ci skip'
-        add: 'docker/*/.docker_push'
+        add: "['docker/*/.docker_push', 'docker/.version']"
         branch: auto_update
         push: false
 
