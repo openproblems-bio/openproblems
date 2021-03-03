@@ -1,9 +1,6 @@
 # from ....tools.normalize import log_cpm
 from .....tools.decorators import method
 from .....tools.utils import check_version
-from scIB.integration import runBBKNN
-from scIB.preprocessing import hvg_batch
-from scIB.preprocessing import scale_batch
 
 
 @method(
@@ -17,6 +14,7 @@ from scIB.preprocessing import scale_batch
 )
 def bbknn_full_unscaled(adata):
     # Normalize the data
+    from scIB.integration import runBBKNN
 
     runBBKNN(adata, "batch")
     # Complete the result in-place
@@ -24,6 +22,8 @@ def bbknn_full_unscaled(adata):
 
 
 def bbknn_hvg_unscaled(adata):
+    from scIB.integration import runBBKNN
+    from scIB.preprocessing import hvg_batch
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     runBBKNN(adata, "batch")
     # Complete the result in-place
@@ -31,6 +31,9 @@ def bbknn_hvg_unscaled(adata):
 
 
 def bbknn_hvg_scaled(adata):
+    from scIB.integration import runBBKNN
+    from scIB.preprocessing import hvg_batch
+    from scIB.preprocessing import scale_batch
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     runBBKNN(adata, "batch")
@@ -39,6 +42,8 @@ def bbknn_hvg_scaled(adata):
 
 
 def bbknn_full_scaled(adata):
+    from scIB.integration import runBBKNN
+    from scIB.preprocessing import scale_batch
     adata = scale_batch(adata, "batch")
     runBBKNN(adata, "batch")
     # Complete the result in-place
