@@ -18,23 +18,25 @@ rule website:
 
 rule docker:
     input: tools.push_images
-    output: "../docker/.version"
-    shell: "openproblems-cli --version > {output}"
+    params:
+        version = tools.VERSION_FILE
+    shell: "openproblems-cli --version > {params.version}"
 
 rule docker_build:
     input: tools.build_images
-    output: "../docker/.version"
-    shell: "openproblems-cli --version > {output}"
+    params:
+        version = tools.VERSION_FILE
+    shell: "openproblems-cli --version > {params.version}"
 
 rule docker_pull:
     input: tools.pull_images
 
 rule build_docker_image:
     input:
-        dockerfile = "../docker/{image}/Dockerfile",
+        dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_requirements,
     output:
-        "../docker/{image}/.docker_build"
+        "{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems"
@@ -60,15 +62,15 @@ rule login_docker:
 
 rule push_docker_image:
     input:
-        build = "../docker/{image}/.docker_build",
+        build = "{}/{{image}}/.docker_build".format(tools.IMAGES_DIR),
         login = ".docker_login",
     output:
-        "../docker/{image}/.docker_push"
+        "{}/{{image}}/.docker_push".format(tools.IMAGES_DIR)
     shell:
         "docker push singlecellopenproblems/{wildcards.image} && date +%s > {output}"
 
 rule pull_docker_image:
     output:
-        temp("../docker/{image}/.docker_pull")
+        temp("{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR))
     shell:
         "docker pull singlecellopenproblems/{wildcards.image} && touch {output}"
