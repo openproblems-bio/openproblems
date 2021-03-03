@@ -1,5 +1,6 @@
+from .. import __version__
 from .. import data
-from . import evaluate  # noqa
+from . import evaluate
 from . import hash
 from . import image
 from . import list
@@ -15,10 +16,12 @@ SUBCOMMANDS = {
 }
 
 
-def main(args=None, print=True):
-    """Run the command-line interface."""
+def _main(args=None):
     argparser = parser.create_parser()
     args = argparser.parse_args(args=args)
+
+    if args.version:
+        return __version__
 
     if args.parallel:
         data.no_cleanup()
@@ -26,11 +29,16 @@ def main(args=None, print=True):
     if args.subcommand is None:
         argparser.print_help()
     elif args.subcommand in SUBCOMMANDS:
-        output = SUBCOMMANDS[args.subcommand].main(args)
-        if print:
-            utils.print_output(output)
-            return 0
-        else:
-            return output
+        return SUBCOMMANDS[args.subcommand].main(args)
     else:
         raise NotImplementedError
+
+
+def main(args=None, print=True):
+    """Run the command-line interface."""
+    output = _main(args)
+    if print and output:
+        utils.print_output(output)
+        return 0
+    else:
+        return output

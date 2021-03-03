@@ -173,6 +173,12 @@ def create_parser():
         action="store_true",
         help="Run tasks in parallel. This prevents deletion of the cache",
     )
+    parser.add_argument(
+        "--version",
+        "-v",
+        action="store_true",
+        help="Print version and exit",
+    )
     subparsers = parser.add_subparsers(dest="subcommand")
 
     for create_subparser in [

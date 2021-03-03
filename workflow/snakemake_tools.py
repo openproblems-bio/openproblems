@@ -2,6 +2,7 @@ import dateutil.parser
 import multiprocessing
 import openproblems
 import os
+import packaging.version
 import subprocess
 
 N_THREADS = multiprocessing.cpu_count()
@@ -93,6 +94,21 @@ def docker_file_age(image):
     return int(proc.stdout.decode().strip())
 
 
+def version_not_changed():
+    """Check that openproblems has not changed version since last build."""
+    try:
+        with open("../docker/.version", "r") as handle:
+            build_version = handle.read().strip()
+    except FileNotFoundError:
+        return False
+    build_version = packaging.version.parse(build_version)
+    curr_version = packaging.version.parse(openproblems.__version__)
+    if curr_version > build_version:
+        return False
+    else:
+        return True
+
+
 def docker_image_marker(image):
     """Get the file to be created to ensure Docker image exists from the image name."""
     docker_path = "../docker/{}".format(image)
@@ -100,7 +116,9 @@ def docker_image_marker(image):
     docker_pull = os.path.join(docker_path, ".docker_pull")
     docker_build = os.path.join(docker_path, ".docker_build")
     dockerfile = os.path.join(docker_path, "Dockerfile")
-    if docker_file_age(docker_push) > docker_image_age(dockerfile):
+    if version_not_changed() and docker_file_age(docker_push) > docker_image_age(
+        dockerfile
+    ):
         # Dockerfile hasn't been changed since last push, pull it
         return docker_pull
     elif DOCKER_PASSWORD:
@@ -147,3 +165,12 @@ def docker_command(wildcards, output):
     """Get the Docker command to be run given a set of wildcards."""
     image = docker_image_name(wildcards)
     return DOCKER_EXEC.format(image=image)
+
+
+if not version_not_changed():
+    for image in _images(""):
+        for filename in [".docker_push", ".docker_pull", ".docker_build"]:
+            try:
+                os.remove(os.path.join(image, filename))
+            except FileNotFoundError:
+                pass

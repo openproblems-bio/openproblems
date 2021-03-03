@@ -18,9 +18,13 @@ rule website:
 
 rule docker:
     input: tools.push_images
+    output: "../docker/.version"
+    shell: "openproblems-cli --version > {output}"
 
 rule docker_build:
     input: tools.build_images
+    output: "../docker/.version"
+    shell: "openproblems-cli --version > {output}"
 
 rule docker_pull:
     input: tools.pull_images
