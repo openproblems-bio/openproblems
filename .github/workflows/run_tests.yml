@@ -160,8 +160,8 @@ jobs:
         -with-tower
         -resume
         -profile test,aws
-        -work-dir "/mnt/openproblems-nextflow/test/${{ github.ref }}"
-        -bucket-dir "s3://openproblems-nextflow/test/${{ github.ref }}"
+        -work-dir "/mnt/openproblems-nextflow/test/${{ github.ref }}/${{ matrix.config.name }}"
+        -bucket-dir "s3://openproblems-nextflow/test/${{ github.ref }}/${{ matrix.config.name }}"
         singlecellopenproblems/nf-openproblems
 
     - name: Run tests
