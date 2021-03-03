@@ -8,7 +8,7 @@ headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
 weight = 20  # Order that this section will appear.
 
-title = "**Single Cell Open Problems**"
+title = ""
 subtitle = ""
 
 [design]
@@ -47,13 +47,16 @@ subtitle = ""
 
 
 +++
-## Integrating the Human Cell Atlas
+# Benchmarking formalized challenges in single-cell analysis
 
-Thanks to recent advances in single cell technologies, we now have the opportunity to profile the state of millions of cells an unprecedented resolution. Using off-the-shelf reagents and protocols, individual laboratories can measure global gene expression, DNA accessibility, and high dimensional proteomic data. These innovations promise to reveal new levels of biological heterogeneity across tissues, developmental stages, and organisms. Is is the goal of [the Human Cell Atlas](https://www.humancellatlas.org/) to push these boundaries and characterize the complete cellular diversity in the trillions of cells in the human body.
+The Open Problems effort is inspired by the progress in machine learning driven by researchers aiming to maximize the performance of their algorithms against standardized, well-defined computational tasks (e.g. [Papers with Code State-of-the-art Leaderboards](https://paperswithcode.com/sota)). Several [Grand Challenges](https://doi.org/10.1186/s13059-020-1926-6) have been identified for single cell analysis, but these challenges require formalization before method developers can attempt to solve them. Our goal is to formalize challenges such as these and create a living community-driven state-of-the-art benchmarking platform to facilitate development of single-cell methods.
 
-Assembling a Human Cell Atlas will require development of [new computational methods](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-1926-6) by groups spanning computational and biological sciences. To facilitate these collaborations, we are aggregating formalized open problems with standardized datasets and test metrics. This approach is inspired by similar challenges in computer science such as the [ImageNet Challenge](http://www.image-net.org/challenges/LSVRC/) or the [Netflix Prize](https://www.netflixprize.com/) that drive innovation in algorithm development for computationally important tasks. However, with a few notable [exceptions](https://predictioncenter.org/), these challenges do not exist for biological problems.
+We identify several traits that allow these benchmarks to serve as Open Problems that drive innovation:
+* Tasks are formally defined with a clear mathematical interpretation
+* Easily accessible gold-standard datasets are publicly available in a ready-to-go standardized format
+* One or more quantitative metrics are defined for each task to judge success
+* State-of-the-art methods are ranked in a continuously updated leaderboard
 
-## Our mission
-Our goal is to facilitate the development of novel computational methods to address open problems in integrating the [Human Cell Atlas](https://www.humancellatlas.org/). We are focused on bridging the gap between experts in computer science and machine learning and the biological problems associated with the single cell data. We want to identify important problems, aggregate standardized datasets, and create a platform to benchmark novel methods against the current state of the art using a common set of test metrics.
+This project is sponsored by the [Chan Zuckerberg Initiative](https://chanzuckerberg.com/science/), and we are looking for broad input from the scientific community.
 
-This project is sponsored by the [Chan Zuckerberg Initiative](https://chanzuckerberg.com/science/), and we are looking for broad input from the scientific community. If you'd like to learn more, click here: <a href="/contributing"><button type="button" class="btn btn-primary btn-lg">**Get Involved**</button></a>
+If you'd like to learn more, click here: <a href="/contributing"><button type="button" class="btn btn-primary btn-lg">**Get Involved**</button></a>

@@ -23,6 +23,8 @@ r_requires = [
     "anndata2ri>=1.0.6",
 ]
 
+evaluate_requires = ["snakemake", "numpyencoder"]
+
 test_requires = [
     "pytest",
     "pytest-cov",
@@ -56,6 +58,7 @@ setup(
         "test": test_requires + r_requires,
         "doc": doc_requires,
         "r": r_requires,
+        "evaluate": evaluate_requires,
     },
     entry_points={
         "console_scripts": ["openproblems-cli=openproblems.api.main:main"],
