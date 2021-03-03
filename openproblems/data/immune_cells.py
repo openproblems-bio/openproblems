@@ -22,7 +22,9 @@ def load_immune(test=False):
         keep_final_annotations = adata.obs["final_annotation"].dtype.categories[[0, 3]]
         keep_batchs = adata.obs["batch"].dtype.categories[[0, -3, -2]]
         keep_batch_idx = adata.obs["batch"].isin(keep_batchs)
-        keep_final_annotation_idx = adata.obs["final_annotation"].isin(keep_final_annotations)
+        keep_final_annotation_idx = adata.obs["final_annotation"].isin(
+            keep_final_annotations
+        )
         adata = adata[keep_batch_idx & keep_final_annotation_idx].copy()
 
         sc.pp.subsample(adata, n_obs=500)
