@@ -179,6 +179,11 @@ def create_parser():
         action="store_true",
         help="Print version and exit",
     )
+    parser.add_argument(
+        "--test-hash",
+        action="store_true",
+        help="Test that `openproblems-cli hash` works",
+    )
     subparsers = parser.add_subparsers(dest="subcommand")
 
     for create_subparser in [

@@ -84,8 +84,10 @@ jobs:
       run: |
         python -m pip install --upgrade "pip<=21.0"
         pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U .[evaluate]
+        pip install --use-deprecated=legacy-resolver -U --editable .[evaluate]
         python -c "import openproblems"
+        openproblems-cli --version
+        openproblems-cli --test-hash
 
     - name: Update Docker images
       run: |

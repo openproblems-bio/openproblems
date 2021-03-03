@@ -22,6 +22,9 @@ def _main(args=None):
 
     if args.version:
         return __version__
+    elif args.test_hash:
+        hash.git_hash(__file__)
+        return
 
     if args.parallel:
         data.no_cleanup()
