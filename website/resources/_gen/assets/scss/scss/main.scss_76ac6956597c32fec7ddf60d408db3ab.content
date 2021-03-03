@@ -9200,7 +9200,6 @@ nav#navbar-main li.nav-item {
   height: 30em; }
 
 .banner-container {
-  height: 30em;
   display: flex;
   align-items: center;
   justify-content: center; }
