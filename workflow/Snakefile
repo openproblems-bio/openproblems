@@ -1,20 +1,5 @@
 import os
 import snakemake_tools as tools
-import openproblems.api.main
-
-rule all:
-    input:
-        summary = "{}/../results.json".format(tools.SCRIPTS_DIR),
-        website = "{}/website.complete.temp".format(tools.TEMPDIR),
-
-rule website:
-    input:
-        tasks = [
-            "{tempdir}/{task}.task.json".format(tempdir=tools.TEMPDIR, task=task)
-            for task in openproblems.api.main.main(['tasks'], print=False)
-        ]
-    output: temp("{}/website.complete.temp".format(tools.TEMPDIR))
-    shell: "touch {output}"
 
 rule docker:
     input: tools.push_images

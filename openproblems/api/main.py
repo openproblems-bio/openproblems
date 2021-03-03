@@ -34,10 +34,10 @@ def _main(args=None):
         raise NotImplementedError
 
 
-def main(args=None, print=True):
+def main(args=None, do_print=True):
     """Run the command-line interface."""
     output = _main(args)
-    if print and output:
+    if do_print and output:
         utils.print_output(output)
         return 0
     else:
