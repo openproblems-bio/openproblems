@@ -11,6 +11,9 @@ jobs:
     runs-on: ${{ matrix.config.os }}
     if: "!contains(github.event.head_commit.message, 'ci skip')"
 
+    env:
+      BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
+
     strategy:
       fail-fast: false
       matrix:
@@ -40,6 +43,10 @@ jobs:
       with:
         python-version: ${{ matrix.config.python }}
 
+    - name: Check Ubuntu version
+      run: |
+        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+
     - name: Cache Python packages
       if: |
         (steps.cache-result.outputs.cache-hit != 'true') ||
@@ -47,8 +54,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
+        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
       if: |
@@ -81,6 +88,11 @@ jobs:
         snakemake -j $(grep -c processor /proc/cpuinfo) docker
         cd ..
 
+    - name: Set up Git branch
+      run: |
+        git checkout -b $BRANCH_NAME
+        git push -u origin $BRANCH_NAME
+
     - name: Commit result
       if: |
         (steps.cache-result.outputs.cache-hit != 'true') &&
@@ -91,7 +103,7 @@ jobs:
         author_email: singlecellopenproblems@protonmail.com
         message: 'Push Docker images # ci skip'
         add: "['docker/*/.docker_push', 'docker/.version']"
-        branch: auto_update
+        branch: ${{ env.BRANCH_NAME }}
         push: false
 
     - name: Create Pull Request
@@ -100,8 +112,8 @@ jobs:
         startsWith(github.ref, 'refs/heads/master')
       uses: peter-evans/create-pull-request@v3
       with:
-        branch: auto_update
-        delete-branch: true
+        branch: ${{ env.BRANCH_NAME }}
+        delete-branch: false
         base: master
         title: '[auto] Update .docker_push'
         reviewers: scottgigante, dburkhardt
