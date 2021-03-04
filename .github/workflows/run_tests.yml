@@ -66,10 +66,7 @@ jobs:
 
     - name: Check Ubuntu version
       run: |
-        grep DISTRIB_RELEASE /etc/lsb-release
-        grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'
-        UBUNTU_VERSION=${grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'}
-        echo "UBUNTU_VERSION=$UBUNTU_VERSION" >> $GITHUB_ENV
+        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
 
     - uses: actions/checkout@v2
       with:
