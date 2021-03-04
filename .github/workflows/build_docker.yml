@@ -99,7 +99,7 @@ jobs:
         author_email: singlecellopenproblems@protonmail.com
         message: 'Push Docker images # ci skip'
         add: "['docker/*/.docker_push', 'docker/.version']"
-        branch: ${{ env.$BRANCH_NAME }}
+        branch: ${{ env.BRANCH_NAME }}
         push: false
 
     - name: Create Pull Request
@@ -108,7 +108,7 @@ jobs:
         startsWith(github.ref, 'refs/heads/master')
       uses: peter-evans/create-pull-request@v3
       with:
-        branch: ${{ env.$BRANCH_NAME }}
+        branch: ${{ env.BRANCH_NAME }}
         delete-branch: false
         base: master
         title: '[auto] Update .docker_push'
