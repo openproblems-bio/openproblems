@@ -195,8 +195,6 @@ def main():
     results_to_json(results)
     with open("results.json", "w") as handle:
         dump_json(results, handle)
-        # add newline
-        print(file=handle)
     return 0
 
 
