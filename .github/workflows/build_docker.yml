@@ -43,6 +43,10 @@ jobs:
       with:
         python-version: ${{ matrix.config.python }}
 
+    - name: Check Ubuntu version
+      run: |
+        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+
     - name: Cache Python packages
       if: |
         (steps.cache-result.outputs.cache-hit != 'true') ||
@@ -50,8 +54,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
+        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
       if: |
