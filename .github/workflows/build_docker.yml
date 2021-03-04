@@ -28,17 +28,7 @@ jobs:
 
     - uses: actions/checkout@v2
 
-    - name: Cache result
-      uses: actions/cache@v2
-      id: cache-result
-      with:
-        path: ~/.docker_cache
-        key: ${{ hashFiles('docker/**/*requirements.txt') }}-${{ hashFiles('docker/**/Dockerfile') }}-${{ hashFiles('setup.py') }}
-
     - name: Set up Python
-      if: |
-        (steps.cache-result.outputs.cache-hit != 'true') ||
-        startsWith(github.ref, 'refs/heads/test_docker')
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.config.python }}
@@ -48,9 +38,6 @@ jobs:
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
 
     - name: Cache Python packages
-      if: |
-        (steps.cache-result.outputs.cache-hit != 'true') ||
-        startsWith(github.ref, 'refs/heads/test_docker')
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
@@ -58,9 +45,6 @@ jobs:
         restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
-      if: |
-        (steps.cache-result.outputs.cache-hit != 'true') ||
-        startsWith(github.ref, 'refs/heads/test_docker')
       run: |
         python -m pip install --upgrade "pip<=21.0"
         pip install --use-deprecated=legacy-resolver -U wheel setuptools
@@ -69,37 +53,36 @@ jobs:
         python -c "import openproblems"
 
     - name: Pull images
-      if: |
-        (steps.cache-result.outputs.cache-hit != 'true') ||
-        startsWith(github.ref, 'refs/heads/test_docker')
       run: |
         cd workflow
         snakemake -j $(grep -c processor /proc/cpuinfo) docker_pull
         cd ..
 
+    - name: Build images
+      run: |
+        cd workflow
+        snakemake -j $(grep -c processor /proc/cpuinfo) docker
+        cd ..
+
     - name: Push images
-      if: |
-        (steps.cache-result.outputs.cache-hit != 'true') &&
-        startsWith(github.ref, 'refs/heads/master')
+      if: startsWith(github.ref, 'refs/heads/master')
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         cd workflow
         snakemake -j $(grep -c processor /proc/cpuinfo) docker
         cd ..
+        echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
+
 
     - name: Set up Git branch
-      if: |
-        (steps.cache-result.outputs.cache-hit != 'true') &&
-        startsWith(github.ref, 'refs/heads/master')
+      if: env.CHANGED && startsWith(github.ref, 'refs/heads/master')
       run: |
         git checkout -b $BRANCH_NAME
         git push -u origin $BRANCH_NAME
 
     - name: Commit result
-      if: |
-        (steps.cache-result.outputs.cache-hit != 'true') &&
-        startsWith(github.ref, 'refs/heads/master')
+      if: env.CHANGED && startsWith(github.ref, 'refs/heads/master')
       uses: EndBug/add-and-commit@v6
       with:
         author_name: SingleCellOpenProblems
@@ -110,9 +93,7 @@ jobs:
         push: false
 
     - name: Create Pull Request
-      if: |
-        (steps.cache-result.outputs.cache-hit != 'true') &&
-        startsWith(github.ref, 'refs/heads/master')
+      if: env.CHANGED && startsWith(github.ref, 'refs/heads/master')
       uses: peter-evans/create-pull-request@v3
       with:
         branch: ${{ env.BRANCH_NAME }}
