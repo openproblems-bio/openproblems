@@ -138,6 +138,10 @@ jobs:
         python workflow/parse_nextflow.py
         rm -r results
 
+    - name: Pre-commit
+      uses: pre-commit/action@v2.0.0
+      continue-on-error: true
+
     - name: Set up Git branch
       run: |
         git checkout -b $BRANCH_NAME
