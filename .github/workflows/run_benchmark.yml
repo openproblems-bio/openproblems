@@ -114,7 +114,7 @@ jobs:
           docker login --username AWS --password-stdin $ECR_ENDPOINT
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-          docker push ${ECR_ENDPOINT}/openproblems:${image}
+          docker push ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
         done
 
     - name: Run benchmark
