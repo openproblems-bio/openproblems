@@ -49,6 +49,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip')"
     env:
       RENV_PATHS_ROOT: ~/.local/share/renv
+      UBUNTU_VERSION: ${cat /etc/lsb-release | grep DISTRIB_RELEASE | sed "s/.*=//g"}
 
     strategy:
       fail-fast: false
@@ -89,8 +90,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
+        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
 
     - name: Install Nextflow
       env:
@@ -127,9 +128,9 @@ jobs:
       if: startsWith(runner.os, 'Linux')
       with:
         path: ${{ env.RENV_PATHS_ROOT }}
-        key: ${{ runner.os }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-${{ hashFiles('**/renv.lock') }}
+        key: ${{ env.UBUNTU_VERSION }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-${{ hashFiles('**/renv.lock') }}
         restore-keys: |
-          ${{ runner.os }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-
+          ${{ env.UBUNTU_VERSION }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-
 
     - name: Install R packages
       run: |
@@ -147,7 +148,22 @@ jobs:
       run: |
         cd workflow
         snakemake -j 4 docker_pull
+        snakemake -j 4 docker
         cd ..
+
+    - name: Upload Docker images
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+          docker login --username AWS --password-stdin $ECR_ENDPOINT
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${image}
+          docker push ${ECR_ENDPOINT}/openproblems:${image}
+        done
 
     - name: Run benchmark
       env:
