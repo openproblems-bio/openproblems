@@ -10,7 +10,7 @@ from .....tools.utils import check_version
     paper_year=2020,
     code_url="",
     code_version=check_version("bbknn"),
-    image="openproblems-python-batch-integration" # only if required
+    image="openproblems-python-batch-integration",  # only if required
 )
 def bbknn_full_unscaled(adata):
     # Normalize the data
