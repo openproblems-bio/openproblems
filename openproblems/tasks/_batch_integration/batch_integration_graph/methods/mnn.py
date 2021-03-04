@@ -5,7 +5,7 @@ from .....tools.utils import check_version
 
 @method(
     method_name="MNN",
-    paper_name="Sc"
+    paper_name="Sc",
     paper_url="temp",
     paper_year=2020,
     code_url="",
