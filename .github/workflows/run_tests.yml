@@ -38,7 +38,7 @@ jobs:
 
     - name: Lint with Black
       run: |
-        black . --check --diff
+        black . --check --diff --target-version py36
 
     - name: Lint with flake8
       run: |
@@ -88,6 +88,10 @@ jobs:
       uses: r-lib/actions/setup-r@v1
       with:
         r-version: ${{ matrix.config.r }}
+
+    - name: Check Ubuntu version
+      run: |
+        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
 
     - name: Cache Python packages
       uses: actions/cache@v2
