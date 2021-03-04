@@ -1,0 +1,118 @@
+digraph "pipeline_dag" {
+p0 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.empty"];
+p1 [shape=point];
+p0 -> p1 [label="ch_multiqc_custom_config"];
+
+p2 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.from"];
+p3 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+p2 -> p3;
+
+p3 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+p4 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="reduce"];
+p3 -> p4;
+
+p4 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="reduce"];
+p5 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+p4 -> p5;
+
+p5 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+p6 [shape=point];
+p5 -> p6 [label="ch_workflow_summary"];
+
+p7 [label="get_software_versions"];
+p8 [shape=point];
+p7 -> p8 [label="ch_software_versions_yaml"];
+
+p9 [label="list_tasks"];
+p10 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="splitText"];
+p9 -> p10 [label="ch_list_tasks"];
+
+p10 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="splitText"];
+p11 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="into"];
+p10 -> p11;
+
+p11 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="into"];
+p18 [label="list_methods"];
+p11 -> p18 [label="ch_task_names_for_list_methods"];
+
+p11 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="into"];
+p12 [label="list_datasets"];
+p11 -> p12 [label="ch_task_names_for_list_datasets"];
+
+p11 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="into"];
+p24 [label="list_metrics"];
+p11 -> p24 [label="ch_task_names_for_list_metrics"];
+
+p12 [label="list_datasets"];
+p13 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+p12 -> p13 [label="ch_list_datasets"];
+
+p13 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+p14 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="transpose"];
+p13 -> p14;
+
+p14 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="transpose"];
+p15 [label="dataset_images"];
+p14 -> p15 [label="ch_task_dataset_pairs"];
+
+p15 [label="dataset_images"];
+p16 [label="load_dataset"];
+p15 -> p16 [label="ch_task_dataset_image_hash"];
+
+p16 [label="load_dataset"];
+p22 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
+p16 -> p22 [label="ch_loaded_datasets"];
+
+p16 [label="load_dataset"];
+p17 [shape=point];
+p16 -> p17 [label="ch_loaded_datasets_to_print"];
+
+p18 [label="list_methods"];
+p19 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+p18 -> p19 [label="ch_list_methods"];
+
+p19 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+p20 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="transpose"];
+p19 -> p20;
+
+p20 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="transpose"];
+p21 [label="method_images"];
+p20 -> p21 [label="ch_task_method_pairs"];
+
+p21 [label="method_images"];
+p22 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
+p21 -> p22 [label="ch_task_method_image_hash"];
+
+p22 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
+p23 [label="run_method"];
+p22 -> p23 [label="ch_dataset_methods"];
+
+p23 [label="run_method"];
+p28 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
+p23 -> p28 [label="ch_ran_methods"];
+
+p24 [label="list_metrics"];
+p25 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+p24 -> p25 [label="ch_list_metrics"];
+
+p25 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+p26 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="transpose"];
+p25 -> p26;
+
+p26 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="transpose"];
+p27 [label="metric_images"];
+p26 -> p27 [label="ch_task_metric_pairs"];
+
+p27 [label="metric_images"];
+p28 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
+p27 -> p28 [label="ch_task_metric_image_hash"];
+
+p28 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="combine"];
+p29 [label="run_metric"];
+p28 -> p29 [label="ch_dataset_method_metrics"];
+
+p29 [label="run_metric"];
+p30 [shape=point];
+p29 -> p30 [label="ch_evaluated_metrics"];
+
+}

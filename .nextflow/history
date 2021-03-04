@@ -1,0 +1,1 @@
+2021-03-04 21:05:54	1h 9m 52s	loving_blackwell	OK	5794756a4c71733a7b9184e393fe2d4487df488a	5477e033-04ee-44f1-81c9-a72a7f1508c2	nextflow run -with-tower -profile aws -work-dir '/mnt/openproblems-nextflow/workRun Benchmark_77' -bucket-dir 's3://openproblems-nextflow/benchmark' singlecellopenproblems/nf-openproblems
