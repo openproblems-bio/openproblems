@@ -134,7 +134,9 @@ jobs:
         aws s3 rm "s3://openproblems-nextflow/work${RUN_ID}"
 
     - name: Parse results
-      run: python workflow/parse_nextflow.py
+      run: |
+        python workflow/parse_nextflow.py
+        rm -r results
 
     - name: Set up Git branch
       run: |
