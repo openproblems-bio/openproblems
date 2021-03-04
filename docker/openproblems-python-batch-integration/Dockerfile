@@ -1,6 +1,5 @@
-FROM singlecellopenproblems/openproblems:latest
+FROM singlecellopenproblems/openproblems-r-base:latest
 
-# Install pybedtools dependency
 RUN apt-get update && apt-get -y install gcc
 
 # Install Python packages
