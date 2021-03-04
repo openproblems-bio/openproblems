@@ -164,11 +164,13 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
+        BRANCH=$(echo ${{ github.ref }} | sed 's:^.*/::')
+        echo "BRANCH=$BRANCH" >> $GITHUB_ENV
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
           docker login --username AWS --password-stdin $ECR_ENDPOINT
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${image}
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
           docker push ${ECR_ENDPOINT}/openproblems:${image}
         done
 
@@ -186,6 +188,7 @@ jobs:
         -work-dir "/mnt/openproblems-nextflow/test/${{ github.ref }}/${{ matrix.config.name }}"
         -bucket-dir "s3://openproblems-nextflow/test/${{ github.ref }}/${{ matrix.config.name }}"
         singlecellopenproblems/nf-openproblems
+        --branch $BRANCH
 
     - name: Run tests
       run: pytest --cov=openproblems -v
