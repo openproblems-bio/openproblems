@@ -85,12 +85,16 @@ jobs:
       with:
         r-version: ${{ matrix.config.r }}
 
+    - name: Check Ubuntu version
+      run: |
+        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+
     - name: Cache Python packages
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
+        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
       run: |
@@ -104,9 +108,9 @@ jobs:
       if: startsWith(runner.os, 'Linux')
       with:
         path: ${{ env.RENV_PATHS_ROOT }}
-        key: ${{ runner.os }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-${{ hashFiles('**/renv.lock') }}
+        key: ${{env.UBUNTU_VERSION}}-renv-${{ steps.setup-r.outputs.installed-r-version }}-${{ hashFiles('**/renv.lock') }}
         restore-keys: |
-          ${{ runner.os }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-
+          ${{env.UBUNTU_VERSION}}-renv-${{ steps.setup-r.outputs.installed-r-version }}-
 
     - name: Install R packages
       run: |

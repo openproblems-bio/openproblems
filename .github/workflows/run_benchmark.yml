@@ -13,6 +13,7 @@ jobs:
 
     env:
       RUN_ID: "${{ github.workflow}}_${{ github.run_number }}"
+      BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
 
     strategy:
       fail-fast: false
@@ -43,12 +44,16 @@ jobs:
         java-version: ${{matrix.config.java_version}}
         architecture: x64
 
+    - name: Check Ubuntu version
+      run: |
+        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+
     - name: Cache Python packages
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
+        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
 
     - name: Install Nextflow
       env:
@@ -131,6 +136,11 @@ jobs:
     - name: Parse results
       run: python workflow/parse_nextflow.py
 
+    - name: Set up Git branch
+      run: |
+        git checkout -b $BRANCH_NAME
+        git push -u origin $BRANCH_NAME
+
     - name: Commit result
       if: startsWith(github.ref, 'refs/tags')
       uses: EndBug/add-and-commit@v6
@@ -139,14 +149,14 @@ jobs:
         author_email: singlecellopenproblems@protonmail.com
         message: 'Update benchmark results # ci skip'
         add: "['website/data/results', 'results.json']"
-        branch: auto_update
+        branch: ${{ env.BRANCH_NAME }}
         push: false
 
     - name: Create Pull Request
       if: startsWith(github.ref, 'refs/tags')
       uses: peter-evans/create-pull-request@v3
       with:
-        branch: auto_update
+        branch: ${{ env.BRANCH_NAME }}
         delete-branch: true
         base: master
         title: '[auto] Update benchmark results'
