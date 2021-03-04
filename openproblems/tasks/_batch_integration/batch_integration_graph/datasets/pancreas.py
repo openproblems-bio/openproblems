@@ -8,9 +8,7 @@ import scanpy as sc
 # from scIB.preprocessing import normalize, hvg_batch
 
 
-@dataset(
-    dataset_name="Pancreas (by batch)",
-    image="openproblems-r-base")
+@dataset(dataset_name="Pancreas (by batch)", image="openproblems-r-base")
 def pancreas_batch(test=False):
     adata = load_pancreas(test=test)
     from_cache = adata.__from_cache__
