@@ -38,7 +38,7 @@ jobs:
 
     - name: Lint with Black
       run: |
-        black . --check --diff
+        black . --check --diff --target-version py36
 
     - name: Lint with flake8
       run: |
