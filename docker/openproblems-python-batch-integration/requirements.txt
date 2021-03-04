@@ -1,2 +1,4 @@
 git+git://github.com/theislab/scib@scanpy17
 bbknn
+desc
+mnnpy

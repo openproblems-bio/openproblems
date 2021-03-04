@@ -16,7 +16,7 @@ def bbknn_full_unscaled(adata):
     # Normalize the data
     from scIB.integration import runBBKNN
 
-    runBBKNN(adata, "batch")
+    adata = runBBKNN(adata, "batch")
     # Complete the result in-place
     return adata
 
@@ -26,7 +26,7 @@ def bbknn_hvg_unscaled(adata):
     from scIB.preprocessing import hvg_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    runBBKNN(adata, "batch")
+    adata = runBBKNN(adata, "batch")
     # Complete the result in-place
     return adata
 
@@ -38,7 +38,7 @@ def bbknn_hvg_scaled(adata):
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
-    runBBKNN(adata, "batch")
+    adata = runBBKNN(adata, "batch")
     # Complete the result in-place
     return adata
 
@@ -48,6 +48,6 @@ def bbknn_full_scaled(adata):
     from scIB.preprocessing import scale_batch
 
     adata = scale_batch(adata, "batch")
-    runBBKNN(adata, "batch")
+    adata = runBBKNN(adata, "batch")
     # Complete the result in-place
     return adata

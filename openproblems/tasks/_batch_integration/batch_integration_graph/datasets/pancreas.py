@@ -16,6 +16,7 @@ def pancreas_batch(test=False):
 
     adata.obs["batch"] = adata.obs["tech"]
 
+    sc.pp.filter_genes(adata, min_counts=1)
     log_scran_pooling(adata)
     adata.layers["normalized"] = adata.X
 

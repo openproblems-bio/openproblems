@@ -16,9 +16,7 @@ def nmi(adata):
         adata,
         label_key="labels",
         cluster_key="cluster",
-        function=nmi,
         plot=False,
-        verbose=verbose,
         inplace=True,
         force=True,
     )
