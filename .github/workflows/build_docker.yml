@@ -89,6 +89,9 @@ jobs:
         cd ..
 
     - name: Set up Git branch
+      if: |
+        (steps.cache-result.outputs.cache-hit != 'true') &&
+        startsWith(github.ref, 'refs/heads/master')
       run: |
         git checkout -b $BRANCH_NAME
         git push -u origin $BRANCH_NAME
