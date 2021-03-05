@@ -9,6 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RENV_PATHS_ROOT: ~/.local/share/renv
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {name: 'commit', continue: true}
+        - {name: 'check', continue: false}
+
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
@@ -58,9 +66,10 @@ jobs:
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}-
 
       - uses: pre-commit/action@v2.0.0
-        continue-on-error: true
+        continue-on-error: ${{ matrix.config.continue }}
 
       - name: Commit files
+        if: ${{ matrix.config.continue }}
         run: |
           if [[ `git status --porcelain --untracked-files=no` ]]; then
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -70,6 +79,7 @@ jobs:
           fi
 
       - name: Push changes
+        if: ${{ matrix.config.continue }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
