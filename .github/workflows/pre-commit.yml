@@ -16,10 +16,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
           python-version: "3.8"
           architecture: "x64"
+
+      - name: Set up R
+        id: setup-r
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: "release"
 
       - uses: actions/cache@v2
         with:
