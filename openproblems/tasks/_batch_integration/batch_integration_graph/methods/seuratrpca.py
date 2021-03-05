@@ -3,9 +3,6 @@ from .....tools.decorators import method
 from .....tools.utils import check_version
 
 #from scIB.integration import _seurat
-from scIB.preprocessing import hvg_batch
-from scIB.preprocessing import reduce_data
-from scIB.preprocessing import scale_batch
 
 import scprep
 
@@ -14,7 +11,7 @@ _seurat = scprep.run.RFunction(
             library(SingleCellExperiment)
             library(Seurat)
         """,
-    args="sce, batch, hvg=2000"
+    args="sce, batch, hvg=2000",
     body="""
             batch_list = SplitObject(data, split.by = batch)
 
@@ -57,14 +54,17 @@ _seurat = scprep.run.RFunction(
 
 @method(
     method_name="Seurat RPCA",
-    paper_name="Sc"
+    paper_name="Sc",
     paper_url="temp",
     paper_year=2020,
     code_url="",
-    code_version=check_version("seurat"),
-    # image="openproblems-template-image" # only if required
+    code_version=check_version("scprep"),
+    image="openproblems-r-scib" # only if required
 )
 def seuratrpca_full_unscaled(adata):
+    from scIB.preprocessing import hvg_batch
+    from scIB.preprocessing import reduce_data
+    from scIB.preprocessing import scale_batch
     adata = _seurat(adata, "batch")
     reduce_data(adata)
     # Complete the result in-place
@@ -72,6 +72,9 @@ def seuratrpca_full_unscaled(adata):
 
 
 def seuratrpca_hvg_unscaled(adata):
+    from scIB.preprocessing import hvg_batch
+    from scIB.preprocessing import reduce_data
+    from scIB.preprocessing import scale_batch
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _seurat(adata, "batch")
     reduce_data(adata)
@@ -79,6 +82,9 @@ def seuratrpca_hvg_unscaled(adata):
 
 
 def seuratrpca_hvg_scaled(adata):
+    from scIB.preprocessing import hvg_batch
+    from scIB.preprocessing import reduce_data
+    from scIB.preprocessing import scale_batch
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, 'batch')
     adata = _seurat(adata, "batch")
@@ -87,6 +93,9 @@ def seuratrpca_hvg_scaled(adata):
 
 
 def seuratrpca_full_scaled(adata):
+    from scIB.preprocessing import hvg_batch
+    from scIB.preprocessing import reduce_data
+    from scIB.preprocessing import scale_batch
     adata = scale_batch(adata, 'batch')
     adata = _seurat(adata, "batch")
     reduce_data(adata)

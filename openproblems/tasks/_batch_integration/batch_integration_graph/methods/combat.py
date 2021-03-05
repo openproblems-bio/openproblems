@@ -10,7 +10,7 @@ from .....tools.utils import check_version
     paper_year=2020,
     code_url="",
     code_version=check_version("mnnpy"),
-    # image="openproblems-template-image" # only if required
+    image="openproblems-r-scib" # only if required
 )
 def mnn_full_unscaled(adata):
     from scIB.integration import runMNN

@@ -3,9 +3,6 @@ from .....tools.decorators import method
 from .....tools.utils import check_version
 
 #from scIB.integration import _liger
-from scIB.preprocessing import hvg_batch
-from scIB.preprocessing import reduce_data
-from scIB.preprocessing import scale_batch
 
 import scprep
 
@@ -52,14 +49,17 @@ _liger = scprep.run.RFunction(
 
 @method(
     method_name="Liger",
-    paper_name="Sc"
+    paper_name="Sc",
     paper_url="temp",
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    # image="openproblems-template-image" # only if required
+    image="openproblems-r-scib" # only if required
 )
 def liger_full_unscaled(adata):
+    from scIB.preprocessing import hvg_batch
+    from scIB.preprocessing import reduce_data
+    from scIB.preprocessing import scale_batch
     adata = _liger(adata, "batch")
     reduce_data(adata, use_emb="X_emb")
     # Complete the result in-place
@@ -67,6 +67,9 @@ def liger_full_unscaled(adata):
 
 
 def liger_hvg_unscaled(adata):
+    from scIB.preprocessing import hvg_batch
+    from scIB.preprocessing import reduce_data
+    from scIB.preprocessing import scale_batch
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _liger(adata, "batch")
     reduce_data(adata, use_emb="X_emb")
@@ -74,6 +77,9 @@ def liger_hvg_unscaled(adata):
 
 
 def liger_hvg_scaled(adata):
+    from scIB.preprocessing import hvg_batch
+    from scIB.preprocessing import reduce_data
+    from scIB.preprocessing import scale_batch
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = _liger(adata, "batch")
@@ -82,6 +88,9 @@ def liger_hvg_scaled(adata):
 
 
 def liger_full_scaled(adata):
+    from scIB.preprocessing import hvg_batch
+    from scIB.preprocessing import reduce_data
+    from scIB.preprocessing import scale_batch
     adata = scale_batch(adata, "batch")
     adata = _liger(adata, "batch")
     reduce_data(adata, use_emb="X_emb")

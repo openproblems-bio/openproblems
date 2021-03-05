@@ -2,3 +2,5 @@ git+git://github.com/theislab/scib@scanpy17
 bbknn
 desc
 mnnpy
+scvi==0.6.7
+scanorama

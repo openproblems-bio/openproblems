@@ -1,5 +1,16 @@
-# TODO: update
 from .bbknn import *
 from .combat import *
 from .desc import *
 from .mnn import *
+from .saucie_embed import *
+from .saucie_full import *
+from .scanorama_embed import *
+from .scanorama_full import *
+#from .scgen import *
+from .scvi import *
+from .fastmnn_embed import *
+from .fastmnn_feature import *
+from .harmony import *
+from .liger import *
+from .seurat_full import *
+from .seuratrpca import *
