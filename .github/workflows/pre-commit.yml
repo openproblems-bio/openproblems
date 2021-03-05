@@ -30,6 +30,10 @@ jobs:
           python-version: "3.8"
           architecture: "x64"
 
+      - name: Check Ubuntu version
+        run: |
+          echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+
       - name: Cache R packages
         uses: actions/cache@v2
         if: startsWith(runner.os, 'Linux')
@@ -47,7 +51,8 @@ jobs:
           renv::install(c('docopt', 'styler', 'git2r', 'lintr'))
         shell: sudo Rscript {0}
 
-      - uses: actions/cache@v2
+      - name: Cache pre-commit
+        uses: actions/cache@v2
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}-
