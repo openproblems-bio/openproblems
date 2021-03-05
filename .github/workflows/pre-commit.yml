@@ -7,6 +7,8 @@ on:
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
+    env:
+      RENV_PATHS_ROOT: ~/.local/share/renv
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
@@ -22,10 +24,22 @@ jobs:
           python-version: "3.8"
           architecture: "x64"
 
+      - name: Cache R packages
+        uses: actions/cache@v2
+        if: startsWith(runner.os, 'Linux')
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{env.UBUNTU_VERSION}}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{env.UBUNTU_VERSION}}-renv-
+
       - name: Set up R
         id: setup-r
         run: |
-          sudo R -e "install.packages(c('docopt', 'styler', 'git2r'))"
+          install.packages('renv')
+          renv::restore()
+          renv::install(c('docopt', 'styler', 'git2r', 'lintr'))
+        shell: sudo Rscript {0}
 
       - uses: actions/cache@v2
         with:
