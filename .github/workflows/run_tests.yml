@@ -121,7 +121,9 @@ jobs:
         sudo mkdir -p /mnt/openproblems-nextflow
         sudo chown $USER /mnt/openproblems-nextflow
         s3fs openproblems-nextflow /mnt/openproblems-nextflow
-        mkdir -p /mnt/openproblems-nextflow/test/${{ github.ref }}
+        mkdir -p /mnt/openproblems-nextflow/test/bucket/${{ github.ref }}
+        mkdir -p /mnt/openproblems-nextflow/test/work/${{ github.ref }}
+        mkdir -p /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}
 
     - name: Install package & dependencies
       run: |
@@ -181,12 +183,13 @@ jobs:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: >-
+        cd /mnt/openproblems-nextflow/test/cwd/${{ github.ref }} &&
         nextflow run
         -with-tower
         -resume
         -profile test,aws
         -work-dir "/mnt/openproblems-nextflow/test/work/${{ github.ref }}/${{ matrix.config.name }}"
-        -bucket-dir "s3://openproblems-nextflow/test/${{ github.ref }}/${{ matrix.config.name }}"
+        -bucket-dir "s3://openproblems-nextflow/test/bucket/${{ github.ref }}/${{ matrix.config.name }}"
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
 
