@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          
+
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
@@ -60,6 +60,7 @@ jobs:
           if [[ `git status --porcelain --untracked-files=no` ]]; then
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
+            git checkout -- .github/workflows
             git commit -m "pre-commit" -a
           fi
 
