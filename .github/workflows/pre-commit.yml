@@ -60,7 +60,7 @@ jobs:
           renv::install('styler')
           renv::install('git2r')
           renv::install('lintr')
-        shell: sudo Rscript {0}
+        shell: Rscript {0}
 
       - name: Cache pre-commit
         uses: actions/cache@v2
