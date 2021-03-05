@@ -4,7 +4,7 @@ from ....tools.normalize import log_scran_pooling
 from ....tools.utils import check_version
 from ....tools.conversion import r_function
 
-_mnn = r_function("mnn.R")
+_mnn = r_function("mnn.R", __file__)
 
 
 @method(
