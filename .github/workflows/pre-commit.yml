@@ -25,7 +25,7 @@ jobs:
       - name: Set up R
         id: setup-r
         run: |
-          R -e "install.packages('docopt')"
+          sudo R -e "install.packages('docopt')"
 
       - uses: actions/cache@v2
         with:
