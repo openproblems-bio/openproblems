@@ -23,7 +23,7 @@ def r_function(filename, caller):
     """
     assert filename.endswith(".R")
     filepath = os.path.join(os.path.dirname(caller), filename)
-    with open(filename, "w") as handle:
+    with open(filepath, "w") as handle:
         r_code = handle.read()
 
     r_fun = "function evaluate(sce) {{ {code} }}".format(code=r_code)
