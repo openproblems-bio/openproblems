@@ -1,7 +1,8 @@
+import os
 import scprep
 
 
-def r_function(filename):
+def r_function(filename, caller):
     """Convert a .R file to a Python function.
 
     This code takes a .R file written as the body of a function.
@@ -12,6 +13,8 @@ def r_function(filename):
     ----------
     filename : str
         Name of the .R file
+    caller : str
+        Path to the calling .py file (obtained with ``__file__``)
 
     Returns
     -------
@@ -19,6 +22,7 @@ def r_function(filename):
         Python callable evaluating the R code
     """
     assert filename.endswith(".R")
+    filepath = os.path.join(os.path.dirname(caller), filename)
     with open(filename, "w") as handle:
         r_code = handle.read()
 
