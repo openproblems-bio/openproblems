@@ -53,7 +53,6 @@ jobs:
 
       - name: Install R packages
         run: |
-          print(.libPaths())
           install.packages("renv")
           con = file(".pre-commit.r_requirements.txt", "r")
           while ( length(pkg <- readLines(con, n = 1)) > 0 ) {
