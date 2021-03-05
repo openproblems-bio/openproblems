@@ -23,26 +23,46 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install system dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y libcurl4-openssl-dev
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.config.python }}
 
-    - name: Install tools
+    - name: Check Ubuntu version
       run: |
-        python -m pip install --upgrade "pip<=21.0"
-        pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U black
-        pip install --use-deprecated=legacy-resolver -U flake8
-        pip install --use-deprecated=legacy-resolver -U hacking
+        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
 
-    - name: Lint with Black
-      run: |
-        black . --check --diff --target-version py36
+    - name: Cache R packages
+      uses: actions/cache@v2
+      if: startsWith(runner.os, 'Linux')
+      with:
+        path: ${{ env.RENV_PATHS_ROOT }}
+        key: ${{env.UBUNTU_VERSION}}-renv-${{ hashFiles('**/renv.lock') }}
+        restore-keys: |
+          ${{env.UBUNTU_VERSION}}-renv-
 
-    - name: Lint with flake8
+    - name: Set up R
+      id: setup-r
       run: |
-        flake8 openproblems
+        install.packages('renv')
+        renv::restore()
+        renv::install(c('docopt', 'styler', 'git2r', 'lintr'))
+      shell: sudo Rscript {0}
+
+    - name: Cache pre-commit
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pre-commit
+        key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}-
+
+    - name: Run pre-commit
+      uses: pre-commit/action@v2.0.0
 
   run_tester:
     runs-on: ${{ matrix.config.os }}
