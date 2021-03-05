@@ -42,7 +42,15 @@ def harmony_full_unscaled(adata):
     # Complete the result in-place
     return adata
 
-
+@method(
+    method_name="Harmony (hvg/unscaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("scprep"),
+    image="openproblems-r-scib" # only if required
+)
 def harmony_hvg_unscaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
@@ -52,7 +60,15 @@ def harmony_hvg_unscaled(adata):
     reduce_data(adata, use_emb='X_emb')
     return adata
 
-
+@method(
+    method_name="Harmony (hvg/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("scprep"),
+    image="openproblems-r-scib" # only if required
+)
 def harmony_hvg_scaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
@@ -63,7 +79,15 @@ def harmony_hvg_scaled(adata):
     reduce_data(adata, use_emb='X_emb')
     return adata
 
-
+@method(
+    method_name="Harmony(full/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("scprep"),
+    image="openproblems-r-scib" # only if required
+)
 def harmony_full_scaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data

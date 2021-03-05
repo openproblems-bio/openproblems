@@ -64,6 +64,15 @@ def seurat_full_unscaled(adata):
     return adata
 
 
+@method(
+    method_name="Seurat CCA (hvg/unscaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("seurat"),
+    image="openproblems-r-scib" # only if required
+)
 def seurat_hvg_unscaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
@@ -74,6 +83,15 @@ def seurat_hvg_unscaled(adata):
     return adata
 
 
+@method(
+    method_name="Seurat CCA (hvg/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("seurat"),
+    image="openproblems-r-scib" # only if required
+)
 def seurat_hvg_scaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
@@ -85,6 +103,15 @@ def seurat_hvg_scaled(adata):
     return adata
 
 
+@method(
+    method_name="Seurat CCA (full/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("seurat"),
+    image="openproblems-r-scib" # only if required
+)
 def seurat_full_scaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data

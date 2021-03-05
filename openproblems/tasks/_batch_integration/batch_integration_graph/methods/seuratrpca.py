@@ -71,6 +71,15 @@ def seuratrpca_full_unscaled(adata):
     return adata
 
 
+@method(
+    method_name="Seurat RPCA (hvg/unscaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("scprep"),
+    image="openproblems-r-scib" # only if required
+)
 def seuratrpca_hvg_unscaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
@@ -81,6 +90,15 @@ def seuratrpca_hvg_unscaled(adata):
     return adata
 
 
+@method(
+    method_name="Seurat RPCA (hvg/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("scprep"),
+    image="openproblems-r-scib" # only if required
+)
 def seuratrpca_hvg_scaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
@@ -92,6 +110,15 @@ def seuratrpca_hvg_scaled(adata):
     return adata
 
 
+@method(
+    method_name="Seurat RPCA (full/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("scprep"),
+    image="openproblems-r-scib" # only if required
+)
 def seuratrpca_full_scaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data

@@ -22,7 +22,15 @@ def saucie_embed_full_unscaled(adata):
     # Complete the result in-place
     return adata
 
-
+@method(
+    method_name="Saucie embedding output (hvg/unscaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("saucie"),
+    image="openproblems-r-scib" # only if required
+)
 def saucie_embed_hvg_unscaled(adata):
     from scIB.integration import runSaucie
     from scIB.preprocessing import hvg_batch
@@ -33,7 +41,15 @@ def saucie_embed_hvg_unscaled(adata):
     reduce_data(adata, use_rep="X_emb")
     return adata
 
-
+@method(
+    method_name="Saucie embedding output (hvg/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("saucie"),
+    image="openproblems-r-scib" # only if required
+)
 def saucie_embed_hvg_scaled(adata):
     from scIB.integration import runSaucie
     from scIB.preprocessing import hvg_batch
@@ -45,7 +61,15 @@ def saucie_embed_hvg_scaled(adata):
     reduce_data(adata, use_rep="X_emb")
     return adata
 
-
+@method(
+    method_name="Saucie embedding output (full/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("saucie"),
+    image="openproblems-r-scib" # only if required
+)
 def saucie_embed_full_scaled(adata):
     from scIB.integration import runSaucie
     from scIB.preprocessing import hvg_batch

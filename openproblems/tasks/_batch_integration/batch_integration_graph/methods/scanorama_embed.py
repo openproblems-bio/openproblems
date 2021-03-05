@@ -23,6 +23,15 @@ def scanorama_embed_full_unscaled(adata):
     return adata
 
 
+@method(
+    method_name="Scanorama (hvg/unscaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("scanorama"),
+    image="openproblems-python-batch-integration" # only if required
+)
 def scanorama_embed_hvg_unscaled(adata):
     from scIB.integration import runScanorama
     from scIB.preprocessing import hvg_batch
@@ -34,6 +43,15 @@ def scanorama_embed_hvg_unscaled(adata):
     return adata
 
 
+@method(
+    method_name="Scanorama (hvg/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("scanorama"),
+    image="openproblems-python-batch-integration" # only if required
+)
 def scanorama_embed_hvg_scaled(adata):
     from scIB.integration import runScanorama
     from scIB.preprocessing import hvg_batch
@@ -46,6 +64,15 @@ def scanorama_embed_hvg_scaled(adata):
     return adata
 
 
+@method(
+    method_name="Scanorama (full/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("scanorama"),
+    image="openproblems-python-batch-integration" # only if required
+)
 def scanorama_embed_full_scaled(adata):
     from scIB.integration import runScanorama
     from scIB.preprocessing import hvg_batch

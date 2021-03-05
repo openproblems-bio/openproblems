@@ -4,54 +4,78 @@ from .....tools.utils import check_version
 
 
 @method(
-    method_name="MNN",
+    method_name="Combat",
     paper_name="Sc",
     paper_url="temp",
     paper_year=2020,
     code_url="",
-    code_version=check_version("mnnpy"),
-    image="openproblems-r-scib" # only if required
+    code_version=check_version("scanpy"),
+    image="openproblems-python-batch-integration" # only if required
 )
-def mnn_full_unscaled(adata):
-    from scIB.integration import runMNN
+def combat_full_unscaled(adata):
+    from scIB.integration import runCombat
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
-    adata = runMNN(adata, "batch")
+    adata = runCombat(adata, "batch")
     reduce_data(adata)
     # Complete the result in-place
     return adata
 
-
-def mnn_hvg_unscaled(adata):
-    from scIB.integration import runMNN
+@method(
+    method_name="Combat (hvg/unscaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("combatpy"),
+    image="openproblems-python-batch-integration" # only if required
+)
+def combat_hvg_unscaled(adata):
+    from scIB.integration import runCombat
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = runMNN(adata, "batch")
+    adata = runCombat(adata, "batch")
     reduce_data(adata)
     return adata
 
-
-def mnn_hvg_scaled(adata):
-    from scIB.integration import runMNN
+@method(
+    method_name="Combat (hvg/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("combatpy"),
+    image="openproblems-python-batch-integration" # only if required
+)
+def combat_hvg_scaled(adata):
+    from scIB.integration import runCombat
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, 'batch')
-    adata = runMNN(adata, "batch")
+    adata = runCombat(adata, "batch")
     reduce_data(adata)
     return adata
 
-
-def mnn_full_scaled(adata):
-    from scIB.integration import runMNN
+@method(
+    method_name="Combat (full/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("combatpy"),
+    image="openproblems-python-batch-integration" # only if required
+)
+def combat_full_scaled(adata):
+    from scIB.integration import runCombat
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
     adata = scale_batch(adata, 'batch')
-    adata = runMNN(adata, "batch")
+    adata = runCombat(adata, "batch")
     reduce_data(adata)
     return adata

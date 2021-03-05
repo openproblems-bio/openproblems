@@ -21,6 +21,15 @@ def bbknn_full_unscaled(adata):
     return adata
 
 
+@method(
+    method_name="BBKNN (hvg,unscaled)",
+    paper_name="BBKNN: fast batch alignment of single cell transcriptomes",
+    paper_url="https://academic.oup.com/bioinformatics/article/36/3/964/5545955",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("bbknn"),
+    image="openproblems-python-batch-integration",  # only if required
+)
 def bbknn_hvg_unscaled(adata):
     from scIB.integration import runBBKNN
     from scIB.preprocessing import hvg_batch
@@ -31,6 +40,15 @@ def bbknn_hvg_unscaled(adata):
     return adata
 
 
+@method(
+    method_name="BBKNN (hvg,scaled)",
+    paper_name="BBKNN: fast batch alignment of single cell transcriptomes",
+    paper_url="https://academic.oup.com/bioinformatics/article/36/3/964/5545955",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("bbknn"),
+    image="openproblems-python-batch-integration",  # only if required
+)
 def bbknn_hvg_scaled(adata):
     from scIB.integration import runBBKNN
     from scIB.preprocessing import hvg_batch
@@ -43,6 +61,15 @@ def bbknn_hvg_scaled(adata):
     return adata
 
 
+@method(
+    method_name="BBKNN (full/scaled)",
+    paper_name="BBKNN: fast batch alignment of single cell transcriptomes",
+    paper_url="https://academic.oup.com/bioinformatics/article/36/3/964/5545955",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("bbknn"),
+    image="openproblems-python-batch-integration",  # only if required
+)
 def bbknn_full_scaled(adata):
     from scIB.integration import runBBKNN
     from scIB.preprocessing import scale_batch

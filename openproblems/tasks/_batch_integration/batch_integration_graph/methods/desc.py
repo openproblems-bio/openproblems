@@ -10,7 +10,7 @@ from .....tools.utils import check_version
     paper_year=2020,
     code_url="",
     code_version=check_version("desc"),
-    # image="openproblems-template-image" # only if required
+    # image="openproblems-python-batch-integration" # only if required
 )
 def desc_full_unscaled(adata):
     from scIB.integration import runDESC
@@ -22,7 +22,15 @@ def desc_full_unscaled(adata):
     # Complete the result in-place
     return adata
 
-
+@method(
+    method_name="DESC (hvg/unscaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("desc"),
+    # image="openproblems-python-batch-integration" # only if required
+)
 def desc_hvg_unscaled(adata):
     from scIB.integration import runDESC
     from scIB.preprocessing import hvg_batch
@@ -33,7 +41,15 @@ def desc_hvg_unscaled(adata):
     reduce_data(adata, use_rep="X_emb")
     return adata
 
-
+@method(
+    method_name="DESC (hvg/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("desc"),
+    # image="openproblems-python-batch-integration" # only if required
+)
 def desc_hvg_scaled(adata):
     from scIB.integration import runDESC
     from scIB.preprocessing import hvg_batch
@@ -45,7 +61,15 @@ def desc_hvg_scaled(adata):
     reduce_data(adata, use_rep="X_emb")
     return adata
 
-
+@method(
+    method_name="DESC (full/scaled)",
+    paper_name="Sc",
+    paper_url="temp",
+    paper_year=2020,
+    code_url="",
+    code_version=check_version("desc"),
+    # image="openproblems-python-batch-integration" # only if required
+)
 def desc_full_scaled(adata):
     from scIB.integration import runDESC
     from scIB.preprocessing import hvg_batch
