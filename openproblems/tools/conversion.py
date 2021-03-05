@@ -1,6 +1,6 @@
+import inspect
 import os
 import scprep
-import inspect
 
 
 def r_function(filename):
