@@ -4,7 +4,7 @@ from ....tools.normalize import log_cpm
 from ....tools.normalize import log_scran_pooling
 from ....tools.utils import check_version
 
-_mnn = r_function("mnn.R", __file__)
+_mnn = r_function("mnn.R")
 
 
 @method(
