@@ -25,9 +25,10 @@ mode2_svd <- sparsesvd(reducedDim(sce, "mode2"), n_svd)
 mode2_svd <- mode2_svd[[2]] %*% diag(mode2_svd[[1]])
 combined_svd <- rbind(mode1_svd, mode2_svd)
 batch <- c(rep(1, nrow(mode1_svd)), rep(2, nrow(mode2_svd)))
-combined_recons <- t(assay(fastMNN(t(combined_svd), batch = batch), "reconstructed"))
-mode1_recons <- combined_recons[seq_len(mode1_svd), ]
-mode2_recons <- combined_recons[(nrow(mode1_svd) + 1):nrow(combined_svd), ]
+sce_mnn <- fastMNN(t(combined_svd), batch = batch)
+combined_recons <- t(assay(sce_mnn, "reconstructed"))
+mode1_recons <- combined_recons[seq_len(nrow(mode1_svd)), ]
+mode2_recons <- combined_recons[seq(nrow(mode1_svd) + 1, nrow(combined_svd)), ]
 reducedDim(sce, "aligned") <- as.matrix(mode1_recons)
 reducedDim(sce, "mode2_aligned") <- as.matrix(mode2_recons)
 
