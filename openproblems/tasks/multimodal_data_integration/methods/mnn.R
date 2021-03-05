@@ -19,17 +19,17 @@ n_svd <- min(
   dim(assay(sce, "X")),
   dim(reducedDim(sce, "mode2"))
 )
-X_svd <- sparsesvd(t(assay(sce, "X")), n_svd)
-X_svd <- X_svd[[2]] %*% diag(X_svd[[1]])
-Y_svd <- sparsesvd(reducedDim(sce, "mode2"), n_svd)
-Y_svd <- Y_svd[[2]] %*% diag(Y_svd[[1]])
-XY_svd <- rbind(X_svd, Y_svd)
-batch <- c(rep(1, nrow(X_svd)), rep(2, nrow(Y_svd)))
-XY_recons <- t(assay(fastMNN(t(XY_svd), batch = batch), "reconstructed"))
-X_recons <- XY_recons[1:nrow(X_svd), ]
-Y_recons <- XY_recons[(nrow(X_svd) + 1):nrow(XY_svd), ]
-reducedDim(sce, "aligned") <- as.matrix(X_recons)
-reducedDim(sce, "mode2_aligned") <- as.matrix(Y_recons)
+mode1_svd <- sparsesvd(t(assay(sce, "X")), n_svd)
+mode1_svd <- mode1_svd[[2]] %*% diag(mode1_svd[[1]])
+mode2_svd <- sparsesvd(reducedDim(sce, "mode2"), n_svd)
+mode2_svd <- mode2_svd[[2]] %*% diag(mode2_svd[[1]])
+combined_svd <- rbind(mode1_svd, mode2_svd)
+batch <- c(rep(1, nrow(mode1_svd)), rep(2, nrow(mode2_svd)))
+combined_recons <- t(assay(fastMNN(t(combined_svd), batch = batch), "reconstructed"))
+mode1_recons <- combined_recons[seq_len(mode1_svd), ]
+mode2_recons <- combined_recons[(nrow(mode1_svd) + 1):nrow(combined_svd), ]
+reducedDim(sce, "aligned") <- as.matrix(mode1_recons)
+reducedDim(sce, "mode2_aligned") <- as.matrix(mode2_recons)
 
 # Return
 sce
