@@ -58,7 +58,6 @@ jobs:
             ${{env.UBUNTU_VERSION}}-renv-${{ steps.setup-r.outputs.installed-r-version }}-
 
       - name: Install R packages
-        id: setup-r
         run: |
           install.packages('renv')
           renv::restore()
