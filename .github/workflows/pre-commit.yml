@@ -8,7 +8,7 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     env:
-      RENV_PATHS_ROOT: ~/.local/share/renv
+      R_LIBS_USER: ~/.local/R/site-packages
 
     strategy:
       fail-fast: false
@@ -46,7 +46,7 @@ jobs:
         uses: actions/cache@v2
         if: startsWith(runner.os, 'Linux')
         with:
-          path: /usr/local/lib/R/site-library
+          path: ${{env.R_LIBS_USER}}
           key: precommit-${{env.UBUNTU_VERSION}}-renv-${{ hashFiles('.pre-commit.r_requirements.txt') }}-
           restore-keys: |
             precommit-${{env.UBUNTU_VERSION}}-renv-
@@ -59,7 +59,7 @@ jobs:
             renv::install(pkg)
           }
           close(con)
-        shell: sudo Rscript {0}
+        shell: Rscript {0}
 
       - name: Cache pre-commit
         uses: actions/cache@v2
