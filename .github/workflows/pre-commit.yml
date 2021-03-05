@@ -42,27 +42,23 @@ jobs:
         run: |
           echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
 
-      - name: Set up R
-        id: setup-r
-        uses: r-lib/actions/setup-r@v1
-        with:
-          r-version: 'release'
-
       - name: Cache R packages
         uses: actions/cache@v2
         if: startsWith(runner.os, 'Linux')
         with:
-          path: ${{ env.RENV_PATHS_ROOT }}
-          key: ${{env.UBUNTU_VERSION}}-renv-${{ steps.setup-r.outputs.installed-r-version }}-${{ hashFiles('**/renv.lock') }}
+          path: /usr/local/lib/R/site-library
+          key: precommit-${{env.UBUNTU_VERSION}}-renv-${{ hashFiles('.pre-commit.r_requirements.txt') }}-
           restore-keys: |
-            ${{env.UBUNTU_VERSION}}-renv-${{ steps.setup-r.outputs.installed-r-version }}-
+            precommit-${{env.UBUNTU_VERSION}}-renv-
 
       - name: Install R packages
         run: |
-          install.packages('renv')
-          renv::restore()
-          renv::install(c('docopt', 'styler', 'git2r', 'lintr'))
-        shell: Rscript {0}
+          con = file(".pre-commit.r_requirements.txt", "r")
+          while ( length(pkg <- readLines(con, n = 1)) > 0 ) {
+            renv::install(pkg)
+          }
+          close(con)
+        shell: sudo Rscript {0}
 
       - name: Cache pre-commit
         uses: actions/cache@v2
