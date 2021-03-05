@@ -25,7 +25,7 @@ jobs:
       - name: Set up R
         id: setup-r
         run: |
-          sudo R -e "install.packages(c('docopt', 'styler'))"
+          sudo R -e "install.packages(c('docopt', 'styler', 'git2r'))"
 
       - uses: actions/cache@v2
         with:
