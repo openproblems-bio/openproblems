@@ -24,9 +24,8 @@ jobs:
 
       - name: Set up R
         id: setup-r
-        uses: r-lib/actions/setup-r@v1
-        with:
-          r-version: "release"
+        run: |
+          R -e "install.packages('docopt')"
 
       - uses: actions/cache@v2
         with:
