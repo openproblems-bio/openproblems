@@ -56,7 +56,10 @@ jobs:
         run: |
           install.packages('renv')
           renv::restore()
-          renv::install(c('docopt', 'styler', 'git2r', 'lintr'))
+          renv::install('docopt')
+          renv::install('styler')
+          renv::install('git2r')
+          renv::install('lintr')
         shell: sudo Rscript {0}
 
       - name: Cache pre-commit
