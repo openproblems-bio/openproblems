@@ -77,25 +77,30 @@ Task-specific APIs are described in the README for each task.
 
 ### Writing functions in R
 
-Metrics and methods can also be written in R, using [`scprep`'s `RFunction`](https://scprep.readthedocs.io/en/stable/reference.html#scprep.run.RFunction) class. AnnData Python objects are converted to and from `SingleCellExperiment` R objects using [`anndata2ri`](https://icb-anndata2ri.readthedocs-hosted.com/en/latest/). A simple method implemented in R could be written as follows:
+Metrics and methods can also be written in R. AnnData Python objects are converted to and from `SingleCellExperiment` R objects using [`anndata2ri`](https://icb-anndata2ri.readthedocs-hosted.com/en/latest/). R methods should be written in a `.R` file which assumes the existence of a `SingleCellExperiment` object called `sce`, and should return the same object. A simple method implemented in R could be written as follows:
+
+```{R}
+### tasks/<task_name>/methods/pca.R
+# Dependencies
+library(SingleCellExperiment)
+library(stats)
+
+# Method body
+n_pca <- 10
+counts <- t(assay(sce, "X"))
+reducedDim(sce, "pca") <- prcomp(counts)[,1:n_pca]
+
+# Return
+sce
+```
 
 ```{python}
+### tasks/<task_name>/methods/pca.py
+from ....tools.conversion import r_function
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
-import scprep
-
-_pca = scprep.run.RFunction(
-    setup="""
-        library(SingleCellExperiment)
-        library(stats)
-    """,
-    args="sce, n_pca=10",
-    body="""
-        reducedDim(sce, "pca") <- prcomp(t(assay(sce, "X")))[,1:n_pca]
-        sce
-    """,
-)
+_pca = r_function("pca.R")
 
 
 @method(
@@ -107,11 +112,11 @@ _pca = scprep.run.RFunction(
     code_version=check_version("rpy2"),
     image="openproblems-r-base",
 )
-def pca(adata, n_pca=10):
-    return _pca(adata, n_pca=n_pca)
+def pca(adata):
+    return _pca(adata)
 ```
 
-See the [`anndata2ri` docs](https://icb-anndata2ri.readthedocs-hosted.com/en/latest/) for API details. For a more detailed example of how to use this functionality, see our implementation of [fastMNN batch correction](openproblems/tasks/multimodal_data_integration/methods/mnn.py).
+See the [`anndata2ri` docs](https://icb-anndata2ri.readthedocs-hosted.com/en/latest/) for API details. For a more detailed example of how to use this functionality, see our implementation of fastMNN batch correction ([mnn.R](openproblems/tasks/multimodal_data_integration/methods/mnn.R), [mnn.py](openproblems/tasks/multimodal_data_integration/methods/mnn.py)).
 
 ### Adding package dependencies
 
