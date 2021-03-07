@@ -4,6 +4,7 @@ from . import utils
 import hashlib
 import importlib
 import os
+import scprep
 import subprocess
 
 _MODULE = type(os)
@@ -31,11 +32,30 @@ def git_hash(file):
 
 
 def get_context(obj, context=None):
+    """Return a dictionary describing the context of an object.
+
+    Parameters
+    ----------
+    obj : callable or module
+    context : dict or None
+        If not None, adds to the existing dictionary
+
+    Returns
+    -------
+    context : dict
+        Key is a module, value is a hash (internal modules)
+        or package version (external modules)
+    """
     if context is None:
         context = dict()
     if isinstance(obj, _MODULE):
         module_name = obj.__name__
     else:
+        if isinstance(obj, scprep.run.RFunction):
+            try:
+                context[obj.__r_file__] = git_hash(obj.__r_file__)
+            except AttributeError:
+                pass
         try:
             module_name = get_module(obj)
         except AttributeError:
