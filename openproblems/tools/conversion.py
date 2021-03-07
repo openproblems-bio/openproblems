@@ -31,4 +31,6 @@ def r_function(filename):
 
     r_fun = "function evaluate(sce) {{ {code} }}".format(code=r_code)
 
-    return scprep.run.RFunction(setup="", args="sce", body=r_fun)
+    out_fun = scprep.run.RFunction(setup="", args="sce", body=r_fun)
+    out_fun.__r_file__ = filepath
+    return out_fun
