@@ -15,8 +15,7 @@ def share_mouse_skin(test=False):
 
 
 @dataset(
-    "SHARE-seq mouse brain data with cell clusters",
-    "image='openproblems-python-extras'",
+    "SHARE-seq mouse brain data with cell clusters", image="openproblems-python-extras"
 )
 def share_mouse_brain(test=False):
     adata = share.load_share_mouse_brain(test=test)
