@@ -29,6 +29,4 @@ def r_function(filename):
     with open(filepath, "r") as handle:
         r_code = handle.read()
 
-    r_fun = "function evaluate(sce) {{ {code} }}".format(code=r_code)
-
-    return scprep.run.RFunction(setup="", args="sce", body=r_fun)
+    return scprep.run.RFunction(setup="", args="sce", body=r_code)
