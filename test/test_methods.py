@@ -1,6 +1,5 @@
 import openproblems
 import parameterized
-import pytest
 import utils
 import utils.docker
 import utils.name
@@ -24,7 +23,6 @@ utils.warnings.ignore_warnings()
     ],
     name_func=utils.name.name_test,
 )
-@utils.docker.docker_test(timeout=600, retries=2)
 def test_method(task_name, dataset_name, method_name, tempdir, image):
     """Test application of a method."""
     import anndata
@@ -37,8 +35,9 @@ def test_method(task_name, dataset_name, method_name, tempdir, image):
         adata = utils.cache.load(
             tempdir, task, dataset, test=True, dependency="test_load_dataset"
         )
-    except AssertionError as e:
-        pytest.skip(str(e))
+    except AssertionError:
+        # TODO: use pytest.skip instead of just return
+        return
     openproblems.log.debug(
         "Testing {} method on {} dataset from {} task".format(
             method.__name__, dataset.__name__, task.__name__
@@ -81,8 +80,9 @@ def test_metric(task_name, dataset_name, method_name, metric_name, tempdir, imag
         adata = utils.cache.load(
             tempdir, task, dataset, method=method, dependency="test_method"
         )
-    except AssertionError as e:
-        pytest.skip(str(e))
+    except AssertionError:
+        # TODO: use pytest.skip instead of just return
+        return
     openproblems.log.debug(
         "Testing {} metric on {} method applied to {} dataset from {} task".format(
             metric.__name__, method.__name__, dataset.__name__, task.__name__
