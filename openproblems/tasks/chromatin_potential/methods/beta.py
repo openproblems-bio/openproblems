@@ -227,9 +227,7 @@ def _archr_model21(tss_to_peaks, adata):
 
 
 def _marge(tss_to_peaks, adata):
-    """
-    https://www.archrproject.com/bookdown/calculating-gene-scores-in-archr.html
-    """
+    """https://genome.cshlp.org/content/26/10/1417.long"""
     alpha = -np.log(1.0 / 3.0) * 1e5 / 1e4
     tss_to_peaks["distance"] = tss_to_peaks.apply(
         lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 1e5, axis=1
