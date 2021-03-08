@@ -118,11 +118,11 @@ def test_image_metrics(task, metric):
 def test_hash(task, function_type, function_name):
     """Test git hash function."""
     h1 = main(
-        ["hash", "--task", function_type, function_type, function_name],
+        ["hash", "--task", task, function_type, function_name],
         do_print=False,
     )
     h2 = main(
-        ["hash", "--task", function_type, function_type, function_name],
+        ["hash", "--task", task, function_type, function_name],
         do_print=False,
     )
     assert h1 == h2
