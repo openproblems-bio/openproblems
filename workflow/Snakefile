@@ -16,6 +16,35 @@ rule docker_build:
 rule docker_pull:
     input: tools.pull_images
 
+rule docker_update:
+    input: tools.update_images
+
+rule update_docker_image:
+    input:
+        dockerfile = "{}/{{image}}/update.Dockerfile".format(tools.IMAGES_DIR),
+    output:
+        "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)
+    params:
+        sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
+        user = "singlecellopenproblems"
+    shell:
+        """docker build -f {input.dockerfile} -t {params.user}/{wildcards.image} .. \
+        && touch {output}"""
+
+rule update_dockerfile:
+    input:
+        docker_pull = "{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR),
+    output:
+        "{}/{{image}}/update.Dockerfile".format(tools.IMAGES_DIR)
+    shell:
+        """cat <<EOF > {output}}
+FROM singlecellopenproblems/{wildcards.image}:latest
+# Install single-cell open problems
+COPY . /usr/src/singlecellopenproblems
+RUN cd /usr/src/singlecellopenproblems && git clean -fxd
+RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
+EOF"""
+
 rule build_docker_image:
     input:
         dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),

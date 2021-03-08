@@ -50,6 +50,11 @@ def pull_images(wildcards):
     return _images(".docker_pull")
 
 
+def update_images(wildcards):
+    """Get Docker update timestamp for all images."""
+    return _images(".docker_update")
+
+
 def docker_image_name(wildcards):
     """Get the name of the Docker image required for a task and method/metric."""
     task = getattr(openproblems.tasks, wildcards.task)
