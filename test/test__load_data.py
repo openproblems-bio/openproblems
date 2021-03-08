@@ -9,6 +9,18 @@ utils.warnings.ignore_warnings()
 
 
 @parameterized.parameterized.expand(
+    [(dataset,) for task in openproblems.TASKS for dataset in task.DATASETS],
+    name_func=utils.name.name_test,
+)
+def test__dataset_metadata(dataset):
+    """Test for existence of dataset metadata."""
+    assert hasattr(dataset, "metadata")
+    for attr in ["dataset_name", "image"]:
+        assert attr in dataset.metadata
+    assert utils.docker.image_exists(dataset.metadata["image"])
+
+
+@parameterized.parameterized.expand(
     [
         (
             task.__name__.split(".")[-1],

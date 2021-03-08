@@ -18,6 +18,12 @@ os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
 os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
 
 
+def image_exists(image):
+    """Check if a Docker image exists."""
+    dockerfile = os.path.join(BASEDIR, "docker", image, "Dockerfile")
+    return os.path.isfile(dockerfile)
+
+
 def docker_paths(image):
     """Get relevant paths for a Docker image."""
     docker_path = os.path.join(BASEDIR, "docker", image)

@@ -1,5 +1,6 @@
 import openproblems
 import parameterized
+import pytest
 import utils
 import utils.docker
 import utils.name
@@ -32,9 +33,12 @@ def test_method(task_name, dataset_name, method_name, tempdir, image):
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     method = getattr(task.methods, method_name)
-    adata = utils.cache.load(
-        tempdir, task, dataset, test=True, dependency="test_load_dataset"
-    )
+    try:
+        adata = utils.cache.load(
+            tempdir, task, dataset, test=True, dependency="test_load_dataset"
+        )
+    except AssertionError as e:
+        pytest.skip(str(e))
     openproblems.log.debug(
         "Testing {} method on {} dataset from {} task".format(
             method.__name__, dataset.__name__, task.__name__
@@ -73,9 +77,12 @@ def test_metric(task_name, dataset_name, method_name, metric_name, tempdir, imag
     dataset = getattr(task.datasets, dataset_name)
     method = getattr(task.methods, method_name)
     metric = getattr(task.metrics, metric_name)
-    adata = utils.cache.load(
-        tempdir, task, dataset, method=method, dependency="test_method"
-    )
+    try:
+        adata = utils.cache.load(
+            tempdir, task, dataset, method=method, dependency="test_method"
+        )
+    except AssertionError as e:
+        pytest.skip(str(e))
     openproblems.log.debug(
         "Testing {} metric on {} method applied to {} dataset from {} task".format(
             metric.__name__, method.__name__, dataset.__name__, task.__name__
@@ -102,3 +109,4 @@ def test_method_metadata(method):
         "image",
     ]:
         assert attr in method.metadata
+    assert utils.docker.image_exists(method.metadata["image"])

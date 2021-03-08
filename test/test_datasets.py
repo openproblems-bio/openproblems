@@ -2,6 +2,7 @@ import anndata
 import openproblems
 import pandas as pd
 import parameterized
+import pytest
 import scipy.sparse
 import unittest
 import utils
@@ -48,13 +49,16 @@ class TestDataset(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Load data."""
-        cls.adata = utils.cache.load(
-            cls.tempdir,
-            cls.task,
-            cls.dataset,
-            test=cls.test,
-            dependency="test_load_dataset",
-        )
+        try:
+            cls.adata = utils.cache.load(
+                cls.tempdir,
+                cls.task,
+                cls.dataset,
+                test=cls.test,
+                dependency="test_load_dataset",
+            )
+        except AssertionError as e:
+            pytest.skip(str(e))
 
     def test_adata_class(self):
         """Ensure output is AnnData."""
@@ -108,11 +112,3 @@ class TestDataset(unittest.TestCase):
             adata = self.adata.copy()
             normalizer(adata)
             utils.asserts.assert_finite(adata.X)
-
-    def test_metadata(self):
-        """Test for existence of dataset metadata."""
-        assert hasattr(self.dataset, "metadata")
-        for attr in [
-            "dataset_name",
-        ]:
-            assert attr in self.dataset.metadata
