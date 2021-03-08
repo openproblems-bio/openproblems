@@ -5,20 +5,27 @@ on:
     tags:
       - '*'
     branches:
-      - test_benchmark
+      - 'test_benchmark'
 
 jobs:
   run_benchmark:
     runs-on: ${{ matrix.config.os }}
 
+    env:
+      RUN_ID: "${{ github.workflow}}_${{ github.run_number }}"
+      BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
+
     strategy:
       fail-fast: false
       matrix:
         config:
-        - {name: 'current', os: ubuntu-latest, python: '3.8' }
+        - {name: 'current', os: ubuntu-latest, python: '3.8', java_version: 15 }
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+        fetch-depth: 1000
 
     - name: Install system dependencies
       if: runner.os == 'Linux'
@@ -31,44 +38,139 @@ jobs:
       with:
         python-version: ${{ matrix.config.python }}
 
+    - name: Set up Java ${{ matrix.java_version }}
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{matrix.config.java_version}}
+        architecture: x64
+
+    - name: Check Ubuntu version
+      run: |
+        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+
     - name: Cache Python packages
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{runner.os}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{runner.os}}-pip-${{ env.pythonLocation }}-
+        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
+
+    - name: Install Nextflow
+      env:
+          CAPSULE_LOG: none
+      run: |
+        mkdir /tmp/nextflow
+        cd /tmp/nextflow
+        wget -qO- get.nextflow.io | bash
+        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
+
+    - name: Install AWS CLI
+      run: |
+        mkdir /tmp/awscli
+        cd /tmp/awscli
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install || sudo ./aws/install --update
+
+    - name: Set up S3FS
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        sudo apt-get install s3fs
+        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
+        chmod 600 ~/.passwd-s3fs
+        sudo mkdir -p /mnt/openproblems-nextflow
+        sudo chown $USER /mnt/openproblems-nextflow
+        s3fs openproblems-nextflow /mnt/openproblems-nextflow
 
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade "pip<=21.0"
         pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U .[evaluate]
+        pip install --use-deprecated=legacy-resolver -U --editable .[evaluate]
         python -c "import openproblems"
+        openproblems-cli --version
+        openproblems-cli --test-hash
 
-    - name: Run benchmark
+    - name: Update Docker images
       run: |
-        cd scripts
-        snakemake -j $(grep -c processor /proc/cpuinfo) all
+        cd workflow
+        snakemake -j 4 docker_pull
+        snakemake -j 4 docker
         cd ..
 
-    - name: Upload results on success
+    - name: Upload Docker images
       env:
-        GH_USERNAME: ${{ secrets.GH_USERNAME }}
-        GH_PASSWORD: ${{ secrets.GH_PASSWORD }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
       run: |
-        git remote set-url origin https://${GH_USERNAME}:${GH_PASSWORD}@github.com/${GITHUB_REPOSITORY}.git
-        git checkout -B master
-        git pull origin master
-        git add results.md
-        git add website/data/results
-        git config user.name "Github Actions"
-        git config user.email "singlecellopenproblems@protonmail.com"
-        git commit -m "Update results for ${GITHUB_REF} - ci skip"
-        git push origin master
+        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+          docker login --username AWS --password-stdin $ECR_ENDPOINT
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${image}
+          docker push ${ECR_ENDPOINT}/openproblems:${image}
+        done
 
-    - name: Upload check results on fail
-      if: failure()
+    - name: Run benchmark
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        nextflow run -with-tower -profile aws -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}" -bucket-dir s3://openproblems-nextflow/benchmark singlecellopenproblems/nf-openproblems
+
+    - name: Remove working directory
+      if: always()
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        aws s3 rm "s3://openproblems-nextflow/work${RUN_ID}"
+
+    - name: Parse results
+      run: |
+        python workflow/parse_nextflow.py
+        rm -r results
+
+    - name: Pre-commit
+      uses: pre-commit/action@v2.0.0
+      continue-on-error: true
+
+    - name: Set up Git branch
+      run: |
+        git checkout -b $BRANCH_NAME
+        git push -u origin $BRANCH_NAME
+
+    - name: Commit result
+      if: startsWith(github.ref, 'refs/tags')
+      uses: EndBug/add-and-commit@v6
+      with:
+        author_name: SingleCellOpenProblems
+        author_email: singlecellopenproblems@protonmail.com
+        message: 'Update benchmark results # ci skip'
+        add: "['website/data/results', 'results.json']"
+        branch: ${{ env.BRANCH_NAME }}
+        push: false
+
+    - name: Create Pull Request
+      if: startsWith(github.ref, 'refs/tags')
+      uses: peter-evans/create-pull-request@v3
+      with:
+        branch: ${{ env.BRANCH_NAME }}
+        delete-branch: true
+        base: master
+        title: '[auto] Update benchmark results'
+        reviewers: scottgigante, dburkhardt
+
+    - name: Upload results
+      if: always()
       uses: actions/upload-artifact@master
       with:
         name: ${{ matrix.config.name }}_results
-        path: check
+        path: results

@@ -15,15 +15,15 @@ install_requires = [
     "memory-profiler",
     "umap-learn<0.5",
     "colorama>=0.3.9",
+    "packaging",
 ]
 
 r_requires = [
     "rpy2",
-    "scIB @ git+https://github.com/theislab/scib@master",
     "anndata2ri>=1.0.6",
 ]
 
-evaluate_requires = ["snakemake"]
+evaluate_requires = ["snakemake", "numpyencoder"]
 
 test_requires = [
     "pytest",
@@ -58,7 +58,7 @@ setup(
         "test": test_requires + r_requires,
         "doc": doc_requires,
         "r": r_requires,
-        "evaluate": evaluate_requires + r_requires,
+        "evaluate": evaluate_requires,
     },
     entry_points={
         "console_scripts": ["openproblems-cli=openproblems.api.main:main"],
