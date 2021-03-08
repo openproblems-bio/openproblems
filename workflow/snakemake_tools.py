@@ -10,7 +10,7 @@ TEMPDIR = ".evaluate"
 SCRIPTS_DIR = os.getcwd()
 DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
-IMAGES_DIR = os.path.join(SCRIPTS_DIR, "..", "docker")
+IMAGES_DIR = os.path.join("..", "docker")
 VERSION_FILE = os.path.join(IMAGES_DIR, ".version")
 DOCKER_EXEC = (
     "CONTAINER=$("
@@ -48,6 +48,11 @@ def build_images(wildcards):
 def pull_images(wildcards):
     """Get Docker pull timestamp for all images."""
     return _images(".docker_pull")
+
+
+def update_images(wildcards):
+    """Get Docker update timestamp for all images."""
+    return _images(".docker_update")
 
 
 def docker_image_name(wildcards):
