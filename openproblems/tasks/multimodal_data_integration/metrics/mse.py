@@ -1,7 +1,8 @@
-import numpy as np
-from scipy import sparse
-import scprep
 from ....tools.decorators import metric
+from scipy import sparse
+
+import numpy as np
+import scprep
 
 
 def _square(X):

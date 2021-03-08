@@ -45,10 +45,10 @@ local_business_type = ""
 
 # Organization name (optional)
 # Enter an organization or project name. Defaults to the site title from `config.toml`.
-org_name = "Single Cell Open Problems"
+org_name = "Open Problems in Single Cell Analysis"
 
 # Description for social sharing and search engines. If undefined, superuser role is used in place.
-description = "Aggregating and Benchmarking Open Problems for the Human Cell Atlas"
+description = "Aggregating and Benchmarking Open Problems in Single Cell Analysis"
 
 ############################
 ## Site Features
@@ -124,7 +124,7 @@ show_related = {docs = true, page = false, post = true, project = true, publicat
 ############################
 
 # Default image for social sharing and search engines. Place image in `static/img/` folder and specify image name here.
-sharing_image = "social.png"
+sharing_image = "social.jpg"
 
 # Twitter username (without @). Used when a visitor shares your site on Twitter.
 twitter = "@dbburkhardt"

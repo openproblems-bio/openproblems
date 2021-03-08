@@ -1,1 +1,7 @@
 git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python
+magic-impute
+MulticoreTSNE
+phate
+pyensembl
+pybedtools
+git+https://github.com/czbiohub/molecular-cross-validation

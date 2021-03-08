@@ -1,7 +1,10 @@
 from ... import utils
-from . import datasets, methods, metrics, checks
+from . import checks
+from . import datasets
+from . import methods
+from . import metrics
 
-_task_name = "Link gene expression with chromatin accessibility"
+_task_name = "Regulatory effect prediction"
 
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)
