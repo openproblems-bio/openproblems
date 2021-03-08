@@ -35,7 +35,7 @@ rule update_dockerfile:
     input:
         docker_pull = "{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR),
     output:
-        "{}/{{image}}/update.Dockerfile".format(tools.IMAGES_DIR)
+        temp("{}/{{image}}/update.Dockerfile".format(tools.IMAGES_DIR))
     shell:
         r"""echo '
 FROM singlecellopenproblems/{wildcards.image}:latest AS base
