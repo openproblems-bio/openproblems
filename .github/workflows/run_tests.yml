@@ -124,6 +124,7 @@ jobs:
         cd workflow
         snakemake -j 4 docker_pull
         snakemake -j 4 docker
+        snakemake -j 4 docker_update
         cd ..
 
     - name: Upload Docker images
