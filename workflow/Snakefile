@@ -23,12 +23,19 @@ rule update_docker_image:
     input:
         dockerfile = "{}/{{image}}/update.Dockerfile".format(tools.IMAGES_DIR),
     output:
-        "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)
+        temp("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR))
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
-        user = "singlecellopenproblems"
+        user = "singlecellopenproblems",
+        build_arg_python = "--build-arg py_requirements=true" if os.path.isfile("{}/{{image}}/requirements.txt".format(tools.IMAGES_DIR)) else "",
+        build_arg_r = "--build-arg r_requirements=true" if os.path.isfile("{}/{{image}}/r_requirements.txt".format(tools.IMAGES_DIR)) else "",
     shell:
-        """docker build -f {input.dockerfile} -t {params.user}/{wildcards.image} .. \
+        """docker build \
+        -f {input.dockerfile} \
+        -t {params.user}/{wildcards.image} \
+        {params.build_arg_python} \
+        {params.build_arg_r} \
+        .. \
         && touch {output}"""
 
 rule update_dockerfile:
@@ -37,8 +44,31 @@ rule update_dockerfile:
     output:
         "{}/{{image}}/update.Dockerfile".format(tools.IMAGES_DIR)
     shell:
-        """cat <<EOF > {output}}
-FROM singlecellopenproblems/{wildcards.image}:latest
+        """cat <<EOF > {output}
+ARG py_requirements=false
+ARG r_requirements=false
+
+FROM singlecellopenproblems/{wildcards.image}:latest AS base
+
+FROM base AS py_requirements_true
+# Install Python packages
+COPY ./docker/{wildcards.image}/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -U -r requirements.txt
+
+FROM base AS py_requirements_false
+RUN echo "Not installing Python requirements"
+
+FROM py_requirements_${{py_requirements}} AS r_requirements_true
+# Install R packages
+RUN R -e "install.packages('renv'); renv::consent(TRUE)"
+COPY ./docker/{wildcards.image}/r_requirements.txt ./r_requirements.txt
+# Install r_requirements.txt
+RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install('${{pkg}}')"; done
+
+FROM py_requirements_${{py_requirements}} AS r_requirements_false
+RUN echo "Not installing R requirements"
+
+FROM r_requirements_${{r_requirements}} AS r_requirements
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
 RUN cd /usr/src/singlecellopenproblems && git clean -fxd
