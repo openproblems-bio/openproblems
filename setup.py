@@ -10,7 +10,7 @@ install_requires = [
     "scprep>=1.0.10",
     "scipy",
     "scanpy>=1.6",
-    "louvain>=0.6,<0.7",
+    "louvain>=0.7",
     "decorator",
     "memory-profiler",
     "umap-learn<0.5",
@@ -66,6 +66,7 @@ setup(
     test_suite="nose2.collector.collector",
     long_description=readme,
     long_description_content_type="text/markdown",
+    include_package_data=True,
     keywords=[
         "computational-biology",
     ],

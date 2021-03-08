@@ -99,6 +99,7 @@ jobs:
         cd workflow
         snakemake -j 4 docker_pull
         snakemake -j 4 docker
+        snakemake -j 4 docker_update
         cd ..
 
     - name: Upload Docker images
@@ -107,12 +108,14 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
+        BRANCH=$(echo ${{ github.ref }} | sed 's:^.*/::')
+        echo "BRANCH=$BRANCH" >> $GITHUB_ENV
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
           docker login --username AWS --password-stdin $ECR_ENDPOINT
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${image}
-          docker push ${ECR_ENDPOINT}/openproblems:${image}
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+          docker push ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
         done
 
     - name: Run benchmark
@@ -121,8 +124,14 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
-      run: |
-        nextflow run -with-tower -profile aws -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}" -bucket-dir s3://openproblems-nextflow/benchmark singlecellopenproblems/nf-openproblems
+      run: >-
+        nextflow run
+        -with-tower
+        -profile aws
+        -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}"
+        -bucket-dir s3://openproblems-nextflow/benchmark
+        singlecellopenproblems/nf-openproblems
+        --branch $BRANCH
 
     - name: Remove working directory
       if: always()
@@ -143,6 +152,7 @@ jobs:
       continue-on-error: true
 
     - name: Set up Git branch
+      if: startsWith(github.ref, 'refs/tags')
       run: |
         git checkout -b $BRANCH_NAME
         git push -u origin $BRANCH_NAME
