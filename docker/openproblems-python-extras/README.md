@@ -9,3 +9,5 @@ Python: 3.7
 Python packages:
 
 * harmonic-alignment
+* pybedtools
+* pyensembl

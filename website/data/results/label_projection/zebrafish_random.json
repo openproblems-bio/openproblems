@@ -3,10 +3,12 @@
     "headers": {
         "names": [
             "Rank",
-            "Accuracy",
+            "Micro F1 score",
             "F1 score",
+            "Accuracy",
             "Memory (GB)",
             "Runtime (min)",
+            "CPU (%)",
             "Name",
             "Paper",
             "Code",
@@ -26,25 +28,14 @@
             "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-            "Version": "0.23.2",
-            "Memory (GB)": 1.6748313903808594,
-            "Runtime (min)": 0.6284185575476537,
-            "Accuracy": 0.8308133674497945,
-            "F1 score": 0.8289151800060621,
-            "Rank": 4
-        },
-        {
-            "Name": "Logistic regression (log scran)",
-            "Paper": "Applied Logistic Regression",
-            "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
-            "Year": 2013,
-            "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-            "Version": "0.23.2",
-            "Memory (GB)": 12.933002471923828,
-            "Runtime (min)": 7.4605532487660335,
-            "Accuracy": 0.8420562921609677,
-            "F1 score": 0.8406642317107845,
-            "Rank": 1
+            "Version": "0.24.1",
+            "Runtime (min)": 23.4,
+            "CPU (%)": 257.5,
+            "Memory (GB)": 1.8,
+            "Rank": 3,
+            "Micro F1 score": 0.8290743457114182,
+            "F1 score": 0.8267636381587593,
+            "Accuracy": 0.8290743457114182
         },
         {
             "Name": "Multilayer perceptron (log CPM)",
@@ -52,12 +43,29 @@
             "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-            "Version": "0.23.2",
-            "Memory (GB)": 1.6696243286132812,
-            "Runtime (min)": 0.6333092868987781,
-            "Accuracy": 0.831433666744204,
-            "F1 score": 0.8312446399796503,
-            "Rank": 3
+            "Version": "0.24.1",
+            "Runtime (min)": 27.25,
+            "CPU (%)": 499.1,
+            "Memory (GB)": 1.8,
+            "Rank": 4,
+            "Micro F1 score": 0.8259090558171852,
+            "Accuracy": 0.8259090558171852,
+            "F1 score": 0.8257495117301303
+        },
+        {
+            "Name": "Logistic regression (log scran)",
+            "Paper": "Applied Logistic Regression",
+            "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
+            "Year": 2013,
+            "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
+            "Version": "0.24.1",
+            "Runtime (min)": 35.25,
+            "CPU (%)": 137.6,
+            "Memory (GB)": 6.1,
+            "Rank": 1,
+            "F1 score": 0.8333648682960864,
+            "Micro F1 score": 0.8346329035744615,
+            "Accuracy": 0.8346329035744615
         },
         {
             "Name": "Multilayer perceptron (log scran)",
@@ -65,12 +73,14 @@
             "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-            "Version": "0.23.2",
-            "Memory (GB)": 12.051559448242188,
-            "Runtime (min)": 7.67292711068488,
-            "Accuracy": 0.833837326510041,
-            "F1 score": 0.834245979766217,
-            "Rank": 2
+            "Version": "0.24.1",
+            "Runtime (min)": 36.583333333333336,
+            "CPU (%)": 263.1,
+            "Memory (GB)": 6.1,
+            "Rank": 2,
+            "Micro F1 score": 0.8323940399907357,
+            "Accuracy": 0.8323940399907357,
+            "F1 score": 0.8327246237061383
         }
     ]
 }

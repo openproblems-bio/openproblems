@@ -1,14 +1,20 @@
-import functools
-from memory_profiler import memory_usage
-import time
-import anndata
-
 from . import utils
+
+import anndata
+import functools
+import logging
+import memory_profiler
+import time
+
+log = logging.getLogger("openproblems")
 
 
 def normalizer(func, *args, **kwargs):
+    """Decorate a normalization function."""
+
     @functools.wraps(func)
     def normalize(adata, *args, obsm=None, obs=None, var=None, **kwargs):
+        log.debug("Running {} normalization".format(func.__name__))
         assert isinstance(adata, anndata.AnnData)
 
         if obsm is not None:
@@ -40,9 +46,28 @@ def method(
     code_version,
     image="openproblems",
 ):
+    """Decorate a method function.
+
+    Parameters
+    ----------
+    method_name : str
+        Unique human readable name of the method
+    paper_name : str
+        Title of the seminal paper describing the method
+    paper_url : str
+        Link to the paper, preferably a DOI URL
+    paper_year : int
+        Year the paper was published
+    code_url : str
+        Link to the code base providing the canonical implementation
+    image : str, optional (default: "openproblems")
+        Name of the Docker image to be used for this method
+    """
+
     def decorator(func):
         @functools.wraps(func)
         def apply_method(*args, **kwargs):
+            log.debug("Running {} method".format(func.__name__))
             return func(*args, **kwargs)
 
         apply_method.metadata = dict(
@@ -60,9 +85,27 @@ def method(
 
 
 def metric(metric_name, maximize, image="openproblems"):
+    """Decorate a metric function.
+
+    Parameters
+    ----------
+    dataset_name : str
+        Unique human readable name of the dataset
+
+    Parameters
+    ----------
+    metric_name : str
+        Unique human readable name of the metric
+    maximize : bool
+        If True, the metric should be maximized. If False, it should be minimized.
+    image : str, optional (default: "openproblems")
+        Name of the Docker image to be used for this metric
+    """
+
     def decorator(func):
         @functools.wraps(func)
         def apply_metric(*args, **kwargs):
+            log.debug("Running {} metric".format(func.__name__))
             return func(*args, **kwargs)
 
         apply_metric.metadata = dict(
@@ -73,19 +116,38 @@ def metric(metric_name, maximize, image="openproblems"):
     return decorator
 
 
-def dataset(dataset_name):
+def dataset(dataset_name, image="openproblems"):
+    """Decorate a dataset function.
+
+    Parameters
+    ----------
+    dataset_name : str
+        Unique human readable name of the dataset
+    image : str, optional (default: "openproblems")
+        Name of the Docker image to be used for this dataset
+    """
+
     def decorator(func):
         @functools.wraps(func)
         def apply_func(*args, **kwargs):
+            log.debug("Loading {} dataset".format(func.__name__))
             return func(*args, **kwargs)
 
-        apply_func.metadata = dict(dataset_name=dataset_name)
+        apply_func.metadata = dict(dataset_name=dataset_name, image=image)
         return apply_func
 
     return decorator
 
 
 def profile(func):
+    """Decorate a function for performance profiling.
+
+    Returns
+    -------
+    result : dict
+        Contains 'result', 'runtime_s', 'memory_mb', 'memory_leaked_mb'
+    """
+
     @functools.wraps(func)
     def decorated(*args, **kwargs):
         output = dict()
@@ -94,19 +156,20 @@ def profile(func):
         def dummy():
             pass
 
-        base_memory = memory_usage(
+        base_memory = memory_profiler.memory_usage(
             (dummy, tuple(), dict()),
             interval=0.1,
             max_usage=True,
         )
 
         def apply_func(*args, **kwargs):
+            log.debug("Profiling {} function".format(func.__name__))
             start_time = time.perf_counter()
             output["result"] = func(*args, **kwargs)
             end_time = time.perf_counter()
             output["runtime_s"] = end_time - start_time
 
-        peak_memory = memory_usage(
+        peak_memory = memory_profiler.memory_usage(
             (apply_func, args, kwargs),
             multiprocess=True,
             include_children=True,
@@ -116,12 +179,12 @@ def profile(func):
         output["memory_mb"] = peak_memory - base_memory
         utils.garbage_collection()
 
-        post_memory = memory_usage(
+        post_memory = memory_profiler.memory_usage(
             (dummy, tuple(), dict()),
             interval=0.1,
             max_usage=True,
         )
-        output["memory_leaked_mb"] = post_memory - base_memory
+        output["memory_leaked_mb"] = max(0.0, post_memory - base_memory)
         return output
 
     return decorated

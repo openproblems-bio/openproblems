@@ -52,16 +52,16 @@
   <tr>
     {{ range $attr := $dataFile.headers.names }}
       {{ $val := index $method $attr }}
-      {{ if or (eq $attr "Paper") (eq $attr "Name") }}
+      {{ if (eq $attr "Name") }}
       <td>
       {{ else }}
       <td class="text-center">
       {{ end }}
         {{ if (eq $attr "Paper" )}}
-          <a href='{{ index $method "Paper URL"}}'>{{ substr $val 0 20 }}...</a>
+          <a href='{{ index $method "Paper URL"}}'> <i class="fas fa-file-alt"></i></a>
 
         {{ else if (eq $attr "Code")}}
-          <a href='{{ $val }}'><i class="fas fa-code"></i></a>
+          <a href='{{ $val }}'><p>v{{ index $method "Version"}}</p></a>
         {{ else if (eq $attr "Rank")}}
           <strong>{{ $val }}</strong>
         {{ else if not (in "Name Paper Code Year" $attr) }}

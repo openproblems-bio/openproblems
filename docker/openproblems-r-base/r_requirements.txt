@@ -1,1 +1,2 @@
-scran
+RcppAnnoy
+bioc::scran

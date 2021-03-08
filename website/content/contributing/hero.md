@@ -9,7 +9,7 @@ active = true  # Activate this widget? true/false
 weight = 15  # Order that this section will appear.
 
 title = "**Get involved**"
-subtitle = "[Join Us on Slack!](https://join-cziscience-slack.herokuapp.com/) <br> Look for #hca-open-problems"
+subtitle = "[Join Us on Slack!](https://join-cziscience-slack.herokuapp.com/) <br> Look for #open-problems-sca"
 
 [design]
   # Choose how many columns the section has. Valid values: 1 or 2.

@@ -1,1 +1,1 @@
-from .linear_regression import linear_regression_expotential_decay
+from .beta import beta

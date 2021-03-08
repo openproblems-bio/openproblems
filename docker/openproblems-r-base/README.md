@@ -14,6 +14,9 @@ apt packages:
 * ca-certificates
 * gnupg
 * gpgv
+* gfortran
+* libblas-dev
+* liblapack-dev
 * r-base-core=3.6
 
 R packages:
@@ -23,6 +26,5 @@ R packages:
 
 Python packages:
 
-* rpy2
-* scIB
+* rpy2<3.4.0
 * anndata2ri

@@ -1,32 +1,41 @@
+import anndata
 import numpy as np
 import pandas as pd
 import scanpy as sc
 import scprep
-import anndata
 
-from ..utils import filter_genes_cells
+
+def subset_mode2_genes(adata, keep_genes):
+    """Randomly subset genes from adata.obsm["mode2"]."""
+    adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes]
+    adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes]
+    if "mode2_varnames" in adata.uns:
+        for varname in adata.uns["mode2_varnames"]:
+            adata.uns[varname] = adata.uns[varname][keep_genes]
+    return adata
 
 
 def filter_joint_data_empty_cells(adata):
+    """Remove empty cells and genes from a multimodal dataset."""
     assert np.all(adata.uns["mode2_obs"] == adata.obs.index)
     # filter cells
     n_cells_mode1 = scprep.utils.toarray(adata.X.sum(axis=1)).flatten()
     n_cells_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=1)).flatten()
-    keep_cells = np.minimum(n_cells_mode1, n_cells_mode2) > 0
+    keep_cells = np.minimum(n_cells_mode1, n_cells_mode2) > 1
     adata.uns["mode2_obs"] = adata.uns["mode2_obs"][keep_cells]
     adata = adata[keep_cells, :].copy()
     # filter genes
     sc.pp.filter_genes(adata, min_counts=1)
     n_genes_mode2 = scprep.utils.toarray(adata.obsm["mode2"].sum(axis=0)).flatten()
     keep_genes_mode2 = n_genes_mode2 > 0
-    adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes_mode2]
-    adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes_mode2]
+    adata = subset_mode2_genes(adata, keep_genes_mode2)
     return adata
 
 
 def create_joint_adata(
     X, Y, X_index=None, X_columns=None, Y_index=None, Y_columns=None
 ):
+    """Create a multimodal dataset."""
     if X_index is None:
         X_index = X.index
     if X_columns is None:
@@ -66,7 +75,8 @@ def create_joint_adata(
     return adata
 
 
-def subset_joint_data(adata, n_cells=500, n_genes=1000):
+def subset_joint_data(adata, n_cells=600, n_genes=1500):
+    """Randomly subset a multimodal dataset."""
     if adata.shape[0] > n_cells:
         keep_cells = np.random.choice(adata.shape[0], n_cells, replace=False)
         adata = adata[keep_cells].copy()
@@ -78,11 +88,10 @@ def subset_joint_data(adata, n_cells=500, n_genes=1000):
         adata = adata[:, keep_mode1_genes].copy()
 
     if adata.obsm["mode2"].shape[1] > n_genes:
-        keep_mode2_genes = np.random.choice(
+        keep_genes_mode2 = np.random.choice(
             adata.obsm["mode2"].shape[1], n_genes, replace=False
         )
-        adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_mode2_genes]
-        adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_mode2_genes]
+        adata = subset_mode2_genes(adata, keep_genes_mode2)
 
     adata = filter_joint_data_empty_cells(adata)
     return adata
