@@ -13,24 +13,23 @@ def r_function(filename):
     Parameters
     ----------
     filename : str
-        Name of the .R file
-    caller : str
-        Path to the calling .py file (obtained with ``__file__``)
+        Path to the .R file relative to the calling .py file
 
     Returns
     -------
     fun : scprep.run.RFunction
         Python callable evaluating the R code
     """
+    assert filename.endswith(".R")
+
+    # get the path to the module that called `r_function`
     curr_frame = inspect.currentframe()
     prev_frame = inspect.getframeinfo(curr_frame.f_back)
-    assert filename.endswith(".R")
     filepath = os.path.join(os.path.dirname(prev_frame.filename), filename)
+
     with open(filepath, "r") as handle:
         r_code = handle.read()
 
-    r_fun = "function evaluate(sce) {{ {code} }}".format(code=r_code)
-
-    out_fun = scprep.run.RFunction(setup="", args="sce", body=r_fun)
+    out_fun = scprep.run.RFunction(setup="", args="sce", body=r_code)
     out_fun.__r_file__ = filepath
     return out_fun
