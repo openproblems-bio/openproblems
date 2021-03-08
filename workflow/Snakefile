@@ -44,7 +44,7 @@ rule update_dockerfile:
     output:
         "{}/{{image}}/update.Dockerfile".format(tools.IMAGES_DIR)
     shell:
-        """cat <<EOF > {output}
+        r"""echo '
 ARG py_requirements=false
 ARG r_requirements=false
 
@@ -60,10 +60,10 @@ RUN echo "Not installing Python requirements"
 
 FROM py_requirements_${{py_requirements}} AS r_requirements_true
 # Install R packages
-RUN R -e "install.packages('renv'); renv::consent(TRUE)"
+RUN R -e "install.packages(\"renv\"); renv::consent(TRUE)"
 COPY ./docker/{wildcards.image}/r_requirements.txt ./r_requirements.txt
 # Install r_requirements.txt
-RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install('${{pkg}}')"; done
+RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install(\"${{pkg}}\")"; done
 
 FROM py_requirements_${{py_requirements}} AS r_requirements_false
 RUN echo "Not installing R requirements"
@@ -73,7 +73,7 @@ FROM r_requirements_${{r_requirements}} AS r_requirements
 COPY . /usr/src/singlecellopenproblems
 RUN cd /usr/src/singlecellopenproblems && git clean -fxd
 RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
-EOF"""
+' > {output}"""
 
 rule build_docker_image:
     input:
