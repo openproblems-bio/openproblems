@@ -17,10 +17,10 @@ _mnn = r_function("mnn.R")
     code_version=check_version("rpy2"),
     image="openproblems-r-extras",
 )
-def mnn_log_cpm(adata, n_svd=100):
+def mnn_log_cpm(adata):
     log_cpm(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    return _mnn(adata, n_svd=n_svd)
+    return _mnn(adata)
 
 
 @method(
@@ -33,7 +33,7 @@ def mnn_log_cpm(adata, n_svd=100):
     code_version=check_version("rpy2"),
     image="openproblems-r-extras",
 )
-def mnn_log_scran_pooling(adata, n_svd=100):
+def mnn_log_scran_pooling(adata):
     log_scran_pooling(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    return _mnn(adata, n_svd=n_svd)
+    return _mnn(adata)
