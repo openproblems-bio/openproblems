@@ -126,6 +126,7 @@ jobs:
       run: >-
         nextflow run
         -with-tower
+        -ansi-log false
         -profile aws
         -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}"
         -bucket-dir s3://openproblems-nextflow/benchmark

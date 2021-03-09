@@ -163,6 +163,7 @@ jobs:
         cd /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}//${{ matrix.config.name }} &&
         nextflow run
         -with-tower
+        -ansi-log false
         -resume
         -profile test,aws
         -work-dir "/mnt/openproblems-nextflow/test/work/${{ github.ref }}/${{ matrix.config.name }}"
