@@ -89,7 +89,6 @@ def docker_image_age(image):
         stdout=subprocess.PIPE,
     )
     date_string = proc.stdout.decode().strip()
-    print(date_string)
     datetime = dateutil.parser.parse(date_string)
     return int(datetime.timestamp())
 
