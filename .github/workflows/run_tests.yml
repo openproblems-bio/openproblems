@@ -119,11 +119,21 @@ jobs:
         close(con)
       shell: Rscript {0}
 
-    - name: Update Docker images
+    - name: Pull Docker images
       run: |
         cd workflow
         snakemake -j 4 docker_pull
+        cd ..
+
+    - name: Build Docker images
+      run: |
+        cd workflow
         snakemake -j 4 docker
+        cd ..
+
+    - name: Update Docker images
+      run: |
+        cd workflow
         snakemake -j 4 docker_update
         cd ..
 
@@ -133,14 +143,14 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        BRANCH=$(echo ${{ github.ref }} | sed 's:^.*/::')
+        BRANCH=$(echo ${{ github.ref }} | sed 's:/:_:g')_${{ matrix.config.name }}
         echo "BRANCH=$BRANCH" >> $GITHUB_ENV
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
           docker login --username AWS --password-stdin $ECR_ENDPOINT
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-          docker push ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
         done
 
     - name: Run benchmark
@@ -153,6 +163,7 @@ jobs:
         cd /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}//${{ matrix.config.name }} &&
         nextflow run
         -with-tower
+        -ansi-log false
         -resume
         -profile test,aws
         -work-dir "/mnt/openproblems-nextflow/test/work/${{ github.ref }}/${{ matrix.config.name }}"
