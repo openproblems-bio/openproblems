@@ -24,7 +24,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        submodules: 'true'
         fetch-depth: 1000
 
     - name: Install system dependencies
