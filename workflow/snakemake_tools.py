@@ -1,4 +1,4 @@
-import dateutil.parser
+import datetime
 import multiprocessing
 import openproblems
 import os
@@ -88,15 +88,15 @@ def docker_image_age(image):
         ],
         stdout=subprocess.PIPE,
     )
-    date_string = proc.stdout.decode().strip()[:19]
+    date_string = proc.stdout.decode().strip().split(".")[0]
     try:
-        datetime = dateutil.parser.isoparse(date_string)
+        date_datetime = datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S")
     except ValueError:
         import sys
 
         print("Datetime {} not recognized".format(date_string), file=sys.stderr)
         raise
-    return int(datetime.timestamp())
+    return int(date_datetime.timestamp())
 
 
 def docker_file_age(image):
