@@ -51,8 +51,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
+        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
 
     - name: Install Nextflow
       env:
@@ -86,19 +86,23 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        python -m pip install --upgrade "pip<=21.0"
-        pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U --editable .[evaluate]
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools
+        pip install -U --editable .[evaluate]
         python -c "import openproblems"
         openproblems-cli --version
         openproblems-cli --test-hash
 
-    - name: Update Docker images
+    - name: Pull Docker images
       run: |
         cd workflow
         snakemake -j 4 docker_pull
+        cd ..
+
+    - name: Build Docker images
+      run: |
+        cd workflow
         snakemake -j 4 docker
-        snakemake -j 4 docker_update
         cd ..
 
     - name: Upload Docker images

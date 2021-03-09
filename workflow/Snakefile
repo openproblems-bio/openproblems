@@ -2,6 +2,12 @@ import os
 import snakemake_tools as tools
 
 rule docker:
+    input: tools.image_markers
+    params:
+        version = tools.VERSION_FILE
+    shell: "openproblems-cli --version > {params.version}"
+
+rule docker_push:
     input: tools.push_images
     params:
         version = tools.VERSION_FILE
