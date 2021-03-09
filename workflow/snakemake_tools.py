@@ -114,7 +114,7 @@ def docker_file_age(image):
         ],
         stdout=subprocess.PIPE,
     )
-    result = proc.stdout.decode().strip()
+    result = proc.stdout.decode().strip().replace('"', "")
     try:
         return int(result)
     except ValueError:
