@@ -1,6 +1,9 @@
-from ....tools.normalize import log_cpm
+from ....tools.conversion import r_function
 from ....tools.decorators import method
 from ....tools.utils import check_version
+
+
+_template_method = r_function("template_r_method.R")
 
 
 @method(
@@ -9,14 +12,9 @@ from ....tools.utils import check_version
     paper_url="https://www.andrew.cmu.edu/user/twildenh/PowerPointTM/Paper.pdf",
     paper_year=2017,
     code_url="http://tomwildenhain.com/PowerPointTM/PowerPointTM.pptx",
-    code_version=check_version("numpy"),
-    # image="openproblems-template-image" # only if required
+    code_version=check_version("rpy2"),
+    image="openproblems-r-base",
 )
 def template_method(adata):
     # TODO: update
-    # Normalize the data
-    log_cpm(adata)
-    # Compute the result
-    adata.obs["template_output"] = 0
-    # Return `adata`
-    return adata
+    return _template_method(adata)
