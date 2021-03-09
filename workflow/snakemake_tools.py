@@ -34,6 +34,15 @@ def _images(filename):
     ]
 
 
+def image_markers(wildcards):
+    """Get the appropriate marker for each image."""
+    return [
+        docker_image_marker(image)
+        for image in os.listdir(IMAGES_DIR)
+        if os.path.isdir(os.path.join(IMAGES_DIR, image))
+    ]
+
+
 def push_images(wildcards):
     """Get Docker push timestamp for all images."""
     images = _images(".docker_push")
@@ -128,7 +137,7 @@ def docker_image_marker(image):
     ):
         # Dockerfile hasn't been changed since last push, pull it
         return docker_pull
-    elif DOCKER_PASSWORD:
+    elif DOCKER_PASSWORD is not None:
         # we have the password, let's push it
         return docker_push
     else:
