@@ -1,6 +1,6 @@
 # SingleCellOpenProblems
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/singlecellopenproblems/singlecellopenproblems/Run%20Tests/master?label=Github%20Actions)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/singlecellopenproblems/singlecellopenproblems/Run%20Tests/master?label=Github%20Actions)](https://github.com/singlecellopenproblems/SingleCellOpenProblems/actions)
 [![Coverage Status](https://coveralls.io/repos/github/singlecellopenproblems/SingleCellOpenProblems/badge.svg?branch=master)](https://coveralls.io/github/singlecellopenproblems/SingleCellOpenProblems?branch=master)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/83b92388-53c7-4fef-9003-e14d94c6ac6f/deploy-status)](https://app.netlify.com/sites/openproblems/deploys)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
