@@ -94,7 +94,7 @@ def docker_image_age(image):
     except ValueError:
         import sys
 
-        print("Datetime {} not recognized".format(datetime), file=sys.stderr)
+        print("Datetime {} not recognized".format(date_string), file=sys.stderr)
         raise
     return int(datetime.timestamp())
 
