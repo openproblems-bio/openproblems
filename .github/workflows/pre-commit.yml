@@ -8,13 +8,6 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - {name: 'commit', continue: true}
-        - {name: 'check', continue: false}
-
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
@@ -67,11 +60,11 @@ jobs:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}-
 
-      - uses: pre-commit/action@v2.0.0
-        continue-on-error: ${{ matrix.config.continue }}
+      - name: Run pre-commit
+        uses: pre-commit/action@v2.0.0
 
       - name: Commit files
-        if: ${{ matrix.config.continue }}
+        if: failure()
         run: |
           if [[ `git status --porcelain --untracked-files=no` ]]; then
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -81,7 +74,7 @@ jobs:
           fi
 
       - name: Push changes
-        if: ${{ matrix.config.continue }}
+        if: failure()
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
