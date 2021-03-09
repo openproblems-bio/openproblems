@@ -4,6 +4,7 @@ import openproblems
 import os
 import packaging.version
 import subprocess
+import warnings
 
 N_THREADS = multiprocessing.cpu_count()
 TEMPDIR = ".evaluate"
@@ -107,7 +108,14 @@ def docker_file_age(image):
         ],
         stdout=subprocess.PIPE,
     )
-    return int(proc.stdout.decode().strip())
+    result = proc.stdout.decode().strip()
+    try:
+        return int(result)
+    except ValueError:
+        warnings.warn(
+            "Files {}/* not found on git; assuming unchanged.".format(docker_path)
+        )
+        return 0
 
 
 def version_not_changed():
