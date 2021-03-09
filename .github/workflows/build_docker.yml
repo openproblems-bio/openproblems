@@ -27,6 +27,8 @@ jobs:
         access_token: ${{ github.token }}
 
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1000
 
     - name: Set up Python
       uses: actions/setup-python@v2
