@@ -1,5 +1,5 @@
-import warnings
 import packaging.version
+import warnings
 
 
 def future_warning(msg, error_version, error_category, warning_category=FutureWarning):

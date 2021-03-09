@@ -1,5 +1,7 @@
+from setuptools import find_packages
+from setuptools import setup
+
 import os
-from setuptools import setup, find_packages
 
 install_requires = [
     "numpy>=1.17.0",
@@ -8,26 +10,28 @@ install_requires = [
     "scprep>=1.0.10",
     "scipy",
     "scanpy>=1.6",
-    "louvain>=0.6,<0.7",
+    "louvain>=0.7",
     "decorator",
     "memory-profiler",
-    "molecular-cross-validation @ git+https://github.com/czbiohub/molecular-cross-validation",
-    "parameterized",
+    "umap-learn<0.5",
+    "colorama>=0.3.9",
+    "packaging",
 ]
 
 r_requires = [
     "rpy2",
-    "scIB @ git+https://github.com/theislab/scib@master",
-    "anndata2ri>=1.0.4",
+    "anndata2ri>=1.0.6",
 ]
 
-evaluate_requires = ["snakemake"]
+evaluate_requires = ["snakemake", "numpyencoder"]
 
 test_requires = [
-    "nose2",
+    "pytest",
+    "pytest-cov",
     "black",
     "coverage",
     "coveralls",
+    "parameterized>=0.7.4",
 ]
 
 doc_requires = [
@@ -54,11 +58,15 @@ setup(
         "test": test_requires + r_requires,
         "doc": doc_requires,
         "r": r_requires,
-        "evaluate": evaluate_requires + r_requires,
+        "evaluate": evaluate_requires,
+    },
+    entry_points={
+        "console_scripts": ["openproblems-cli=openproblems.api.main:main"],
     },
     test_suite="nose2.collector.collector",
     long_description=readme,
     long_description_content_type="text/markdown",
+    include_package_data=True,
     keywords=[
         "computational-biology",
     ],

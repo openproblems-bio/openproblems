@@ -26,6 +26,5 @@ R packages:
 
 Python packages:
 
-* rpy2
-* scIB
+* rpy2<3.4.0
 * anndata2ri

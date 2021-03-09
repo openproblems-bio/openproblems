@@ -48,8 +48,4 @@ Metrics for multimodal data integration aim to characterize how well the aligned
 
 ## The results
 
-{{< table_json task="multimodal_data_integration" dataset="scicar_cell_lines" id="scicar_cell_lines">}}
-
-<br>
-
-{{< table_json task="multimodal_data_integration" dataset="scicar_mouse_kidney" id="scicar_mouse_kidney">}}
+{{< task_tables task="multimodal_data_integration" >}}

@@ -48,16 +48,4 @@ Metrics for label projection aim to characterize how well each classifer correct
 
 ## The results
 
-{{< table_json task="label_projection" dataset="pancreas_batch" >}}
-
-<br>
-
-{{< table_json task="label_projection" dataset="pancreas_random">}}
-
-<br>
-
-{{< table_json task="label_projection" dataset="zebrafish_labels">}}
-
-<br>
-
-{{< table_json task="label_projection" dataset="zebrafish_random">}}
+{{< task_tables task="label_projection" >}}

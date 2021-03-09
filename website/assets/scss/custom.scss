@@ -1,5 +1,4 @@
-.hero{
-
+.hero {
 }
 
 .hero h1{
@@ -10,11 +9,17 @@
   font-size: 1rem;
 }
 
+.dropdown-menu,
+nav#navbar-main li.nav-item {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
 .task-card{
   max-height: 400px;
   max-width: 300px;
   background: #ffffff;
-
   width: 100%;
   min-width: 240px;
   margin-left: 10px;
@@ -35,13 +40,24 @@
 }
 
 .frontpage-banner {
-  width: 800px;
-  text-align: center;
+
 }
 
 .frontpage-hero {
-  height: 500px;
+  height: 30em;
 }
+
+.banner-container {
+  height: 30em;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.banner-container img{
+    margin: 0
+}
+
 
 @media screen and (max-width: 575.98px) {
   .frontpage-hero {
@@ -53,4 +69,47 @@
   .frontpage-hero {
     height: 350px;
   }
+}
+
+
+
+@font-face {
+  font-family: 'hk_groteskbold';
+  src: url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-bold.eot'); /* IE9 Compat Modes */
+  src: url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-bold.woff2') format('woff2'), /* Super Modern Browsers */
+       url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-bold.woff') format('woff'), /* Pretty Modern Browsers */
+       url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-bold.ttf')  format('truetype'), /* Safari, Android, iOS */
+}
+
+
+@font-face {
+  font-family: 'hk_grotesksemibold';
+  src: url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-semibold.eot'); /* IE9 Compat Modes */
+  src: url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-semibold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-semibold.woff2') format('woff2'), /* Super Modern Browsers */
+       url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-semibold.woff') format('woff'), /* Pretty Modern Browsers */
+       url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-semibold.ttf')  format('truetype'), /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'hk_groteskmedium';
+  src: url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-medium.eot'); /* IE9 Compat Modes */
+  src: url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-medium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-medium.woff2') format('woff2'), /* Super Modern Browsers */
+       url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-medium.woff') format('woff'), /* Pretty Modern Browsers */
+       url('https://chanzuckerberg.com/wp-content/themes/czi/fonts/HK-Grotesk/hkgrotesk-medium.ttf')  format('truetype'), /* Safari, Android, iOS */
+}
+
+p {
+  font-family: 'hk_groteskmedium', Fallback, sans-serif;
+}
+
+
+a {
+  font-family: 'hk_groteskmedium', Fallback, sans-serif;
+}
+
+span {
+  font-family: 'hk_groteskmedium', Fallback, sans-serif;
 }

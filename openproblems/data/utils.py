@@ -7,7 +7,6 @@ import logging
 import os
 import scanpy as sc
 
-
 log = logging.getLogger("openproblems")
 
 
@@ -27,11 +26,17 @@ def _hash_function(func, *args, **kwargs):
     return hash.hexdigest()
 
 
+def _cache_path(func, *args, **kwargs):
+    if hasattr(func, "__wrapped__"):
+        func = func.__wrapped__
+    filename = "openproblems_{}.h5ad".format(_hash_function(func, *args, **kwargs))
+    return os.path.join(TEMPDIR, filename)
+
+
 @decorator.decorator
 def loader(func, *args, **kwargs):
     """Decorate a data loader function."""
-    filename = "openproblems_{}.h5ad".format(_hash_function(func, *args, **kwargs))
-    filepath = os.path.join(TEMPDIR, filename)
+    filepath = _cache_path(func, *args, **kwargs)
     if os.path.isfile(filepath):
         log.debug(
             "Loading cached {}({}, {}) dataset".format(func.__name__, args, kwargs)
@@ -54,7 +59,7 @@ def loader(func, *args, **kwargs):
 def filter_genes_cells(adata):
     """Remove empty cells and genes."""
     sc.pp.filter_genes(adata, min_cells=1)
-    sc.pp.filter_cells(adata, min_genes=1)
+    sc.pp.filter_cells(adata, min_counts=2)
 
 
 def subsample_even(adata, n_obs, even_obs):
