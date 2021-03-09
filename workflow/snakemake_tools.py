@@ -89,7 +89,13 @@ def docker_image_age(image):
         stdout=subprocess.PIPE,
     )
     date_string = proc.stdout.decode().strip()
-    datetime = dateutil.parser.isoparse(date_string)
+    try:
+        datetime = dateutil.parser.isoparse(date_string)
+    except ValueError:
+        import sys
+
+        print("Datetime {} not recognized".format(datetime), file=sys.stderr)
+        raise
     return int(datetime.timestamp())
 
 
