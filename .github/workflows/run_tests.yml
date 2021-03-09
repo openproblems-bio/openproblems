@@ -129,6 +129,7 @@ jobs:
         cd ..
 
     - name: Upload Docker images
+      if: github.repository == 'singlecellopenproblems/singlecellopenproblems'
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -145,6 +146,7 @@ jobs:
         done
 
     - name: Run benchmark
+      if: github.repository == 'singlecellopenproblems/singlecellopenproblems'
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -165,6 +167,7 @@ jobs:
       run: pytest --cov=openproblems -v
 
     - name: Upload coverage
+      if: github.repository == 'singlecellopenproblems/singlecellopenproblems'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_SERVICE_NAME: github
