@@ -88,7 +88,7 @@ def docker_image_age(image):
         ],
         stdout=subprocess.PIPE,
     )
-    date_string = proc.stdout.decode().strip()
+    date_string = proc.stdout.decode().strip()[:19]
     try:
         datetime = dateutil.parser.isoparse(date_string)
     except ValueError:
