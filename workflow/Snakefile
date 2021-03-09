@@ -95,10 +95,10 @@ rule push_docker_image:
     output:
         "{}/{{image}}/.docker_push".format(tools.IMAGES_DIR)
     shell:
-        "docker push singlecellopenproblems/{wildcards.image} && date +%s > {output}"
+        "docker push --quiet singlecellopenproblems/{wildcards.image} && date +%s > {output}"
 
 rule pull_docker_image:
     output:
         temp("{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR))
     shell:
-        "docker pull singlecellopenproblems/{wildcards.image} && touch {output}"
+        "docker pull --quiet singlecellopenproblems/{wildcards.image} && touch {output}"
