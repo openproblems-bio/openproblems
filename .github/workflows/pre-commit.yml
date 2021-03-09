@@ -66,10 +66,10 @@ jobs:
       - name: Commit files
         if: failure()
         run: |
+          git checkout -- .github/workflows
           if [[ `git status --porcelain --untracked-files=no` ]]; then
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
-            git checkout -- .github/workflows
             git commit -m "pre-commit" -a
           fi
 
