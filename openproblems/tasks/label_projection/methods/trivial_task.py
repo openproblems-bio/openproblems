@@ -2,6 +2,7 @@ from ....tools.decorators import method
 
 import numpy as np
 
+
 @method(
     method_name="Trivial test method",
     paper_name="N/A",
@@ -11,6 +12,5 @@ import numpy as np
     code_version="1.0.2",
 )
 def trivial_method(adata):
-    adata.obs["labels_pred"] = np.full(shape=adata.n_obs, fill_value='unknown')
+    adata.obs["labels_pred"] = np.full(shape=adata.n_obs, fill_value="unknown")
     return adata
-
