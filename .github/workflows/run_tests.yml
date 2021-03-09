@@ -133,7 +133,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        BRANCH=$(echo ${{ github.ref }} | sed 's:^.*/::')
+        BRANCH=$(echo ${{ github.ref }} | sed 's:/:_:g')_${{ matrix.config.name }}
         echo "BRANCH=$BRANCH" >> $GITHUB_ENV
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
