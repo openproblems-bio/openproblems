@@ -2,7 +2,6 @@ from ....tools.conversion import r_function
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
-
 _template_method = r_function("template_r_method.R")
 
 

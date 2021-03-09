@@ -1,7 +1,7 @@
-import numpy as np
-import anndata
-
 from .utils import loader
+
+import anndata
+import numpy as np
 
 
 @loader

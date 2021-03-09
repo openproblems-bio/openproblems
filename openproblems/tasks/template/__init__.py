@@ -1,5 +1,8 @@
 from ... import utils
-from . import datasets, methods, metrics, checks
+from . import checks
+from . import datasets
+from . import methods
+from . import metrics
 
 # TODO: update
 _task_name = "Template Task"

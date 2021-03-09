@@ -6,7 +6,7 @@ library(scuttle)
 counts <- assay(sce, "X")
 
 # Normalize
-logNormCounts(sce, assay.type="X")
+logNormCounts(sce, assay.type = "X")
 
 # TODO: update
 colData(sce)$template_output <- 0
