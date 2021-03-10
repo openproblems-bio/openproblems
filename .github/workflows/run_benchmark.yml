@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     env:
-      RUN_ID: "${{ github.workflow}}_${{ github.run_number }}"
+      RUN_ID: "${{ github.workflow }}_${{ github.run_number }}"
       BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
 
     strategy:
@@ -24,7 +24,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        submodules: 'true'
         fetch-depth: 1000
 
     - name: Install system dependencies
@@ -52,8 +51,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
+        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
 
     - name: Install Nextflow
       env:
@@ -87,17 +86,22 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        python -m pip install --upgrade "pip<=21.0"
-        pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U --editable .[evaluate]
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools
+        pip install -U --editable .[evaluate]
         python -c "import openproblems"
         openproblems-cli --version
         openproblems-cli --test-hash
 
-    - name: Update Docker images
+    - name: Pull Docker images
       run: |
         cd workflow
         snakemake -j 4 docker_pull
+        cd ..
+
+    - name: Build Docker images
+      run: |
+        cd workflow
         snakemake -j 4 docker
         cd ..
 
@@ -107,12 +111,14 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
+        BRANCH=$(echo ${{ github.ref }} | sed 's:/:_:g')
+        echo "BRANCH=$BRANCH" >> $GITHUB_ENV
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
           docker login --username AWS --password-stdin $ECR_ENDPOINT
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${image}
-          docker push ${ECR_ENDPOINT}/openproblems:${image}
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+          docker push ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
         done
 
     - name: Run benchmark
@@ -121,8 +127,15 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
-      run: |
-        nextflow run -with-tower -profile aws -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}" -bucket-dir s3://openproblems-nextflow/benchmark singlecellopenproblems/nf-openproblems
+      run: >-
+        nextflow run
+        -with-tower
+        -ansi-log false
+        -profile aws
+        -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}"
+        -bucket-dir s3://openproblems-nextflow/benchmark
+        singlecellopenproblems/nf-openproblems
+        --branch $BRANCH
 
     - name: Remove working directory
       if: always()
@@ -143,6 +156,7 @@ jobs:
       continue-on-error: true
 
     - name: Set up Git branch
+      if: startsWith(github.ref, 'refs/tags')
       run: |
         git checkout -b $BRANCH_NAME
         git push -u origin $BRANCH_NAME

@@ -108,14 +108,21 @@ def test_image_metrics(task, metric):
     _test_image(task, "--metrics", metric)
 
 
-def test_hash():
+@parameterized.parameterized.expand(
+    [
+        ("label_projection", "--datasets", "pancreas_batch"),
+        ("multimodal_data_integration", "--methods", "mnn_log_scran_pooling"),
+    ],
+    name_func=utils.name.name_test,
+)
+def test_hash(task, function_type, function_name):
     """Test git hash function."""
     h1 = main(
-        ["hash", "--task", "label_projection", "--datasets", "pancreas_batch"],
+        ["hash", "--task", task, function_type, function_name],
         do_print=False,
     )
     h2 = main(
-        ["hash", "--task", "label_projection", "--datasets", "pancreas_batch"],
+        ["hash", "--task", task, function_type, function_name],
         do_print=False,
     )
     assert h1 == h2
