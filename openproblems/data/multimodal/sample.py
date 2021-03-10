@@ -26,10 +26,10 @@ def load_sample_data(test=True):
     atac_cells = atac_cells.loc[keep_cells]
 
     rna_data = scipy.sparse.csr_matrix(
-        np.random.poisson(3, (len(keep_cells), len(rna_genes))).astype(int)
+        np.random.poisson(3, (len(keep_cells), len(rna_genes)))
     )
     atac_data = scipy.sparse.csr_matrix(
-        np.random.poisson(2.5, (len(keep_cells), len(atac_genes))).astype(int)
+        np.random.poisson(2.5, (len(keep_cells), len(atac_genes)))
     )
 
     adata = create_joint_adata(
