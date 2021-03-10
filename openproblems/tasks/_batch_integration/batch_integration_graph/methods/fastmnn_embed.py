@@ -13,12 +13,11 @@ _fastmnn_embed = scprep.run.RFunction(
         """,
     args="sobj, batch, hvg=2000",
     body="""
-            expr <- sobj@assays$RNA@data
+            expr <- assay(sobj, 'counts')
 
-	        sce <- fastMNN(expr, batch = sobj@meta.data[[batch]])
+	        sce <- fastMNN(expr, batch = colData(sobj)[[batch]])
 
-	        sobj@assays$RNA <- CreateAssayObject(assay(sce, "reconstructed"))
-	        sobj[['X_emb']] <- CreateDimReducObject(reducedDim(sce, "corrected"), key='fastmnn_')
+	        reducedDim(sobj, 'X_emb') <- reducedDim(sce, "corrected")
 
 	        return(sobj)
         """
@@ -32,7 +31,7 @@ _fastmnn_embed = scprep.run.RFunction(
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    # image="openproblems-template-image" # only if required
+    image="openproblems-r-extras" # only if required
 )
 def fastmnn_embed_full_unscaled(adata):
     from scIB.preprocessing import hvg_batch

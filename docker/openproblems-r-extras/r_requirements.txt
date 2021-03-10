@@ -1,2 +1,5 @@
 bioc::batchelor
 sparsesvd
+Seurat
+conos
+rliger
