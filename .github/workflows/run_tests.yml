@@ -66,31 +66,6 @@ jobs:
         key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
         restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
 
-    - name: Install Nextflow
-      env:
-          CAPSULE_LOG: none
-      run: |
-        mkdir /tmp/nextflow
-        cd /tmp/nextflow
-        wget -qO- get.nextflow.io | bash
-        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
-
-    - name: Set up S3FS
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        sudo apt-get install s3fs
-        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
-        chmod 600 ~/.passwd-s3fs
-        sudo mkdir -p /mnt/openproblems-nextflow
-        sudo chown $USER /mnt/openproblems-nextflow
-        s3fs openproblems-nextflow /mnt/openproblems-nextflow
-        mkdir -p /mnt/openproblems-nextflow/test/bucket/${{ github.ref }}
-        mkdir -p /mnt/openproblems-nextflow/test/work/${{ github.ref }}
-        mkdir -p /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}//${{ matrix.config.name }}
-
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade "pip<=21.0"
@@ -119,9 +94,6 @@ jobs:
         close(con)
       shell: Rscript {0}
 
-    - name: Run tests
-      run: pytest --cov=openproblems -v
-
     - name: Pull Docker images
       run: |
         cd workflow
@@ -139,6 +111,34 @@ jobs:
         cd workflow
         snakemake -j 4 docker_update
         cd ..
+
+    - name: Run tests
+      run: pytest --cov=openproblems -v
+
+    - name: Install Nextflow
+      env:
+          CAPSULE_LOG: none
+      run: |
+        mkdir /tmp/nextflow
+        cd /tmp/nextflow
+        wget -qO- get.nextflow.io | bash
+        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
+
+    - name: Set up S3FS
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        sudo apt-get install s3fs
+        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
+        chmod 600 ~/.passwd-s3fs
+        sudo mkdir -p /mnt/openproblems-nextflow
+        sudo chown $USER /mnt/openproblems-nextflow
+        s3fs openproblems-nextflow /mnt/openproblems-nextflow
+        mkdir -p /mnt/openproblems-nextflow/test/bucket/${{ github.ref }}
+        mkdir -p /mnt/openproblems-nextflow/test/work/${{ github.ref }}
+        mkdir -p /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}//${{ matrix.config.name }}
 
     - name: Upload Docker images
       env:
