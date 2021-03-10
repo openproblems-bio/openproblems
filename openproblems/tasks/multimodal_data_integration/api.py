@@ -1,3 +1,4 @@
+from ...data.multimodal.sample import load_sample_data
 import numpy as np
 
 
@@ -19,3 +20,19 @@ def check_method(adata):
     assert adata.obsm["mode2_aligned"].shape[0] == adata.obsm["mode2"].shape[0]
     assert adata.obsm["aligned"].shape[1] == adata.obsm["mode2_aligned"].shape[1]
     return True
+
+
+def sample_dataset():
+    """Create a simple dataset to use for testing methods in this task."""
+    return load_sample_data()
+
+
+def sample_method(adata):
+    """Create sample method output for testing metrics in this task."""
+    adata.obsm["aligned"] = adata.X / adata.X.max() + np.random.normal(
+        0, 0.1, adata.X.shape
+    )
+    adata.obsm["mode2_aligned"] = adata.X / adata.X.max() + np.random.normal(
+        0, 0.1, adata.X.shape
+    )
+    return adata
