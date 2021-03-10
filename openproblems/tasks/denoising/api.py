@@ -24,12 +24,12 @@ def sample_dataset():
     adata = load_sample_data()
     adata.obsm["train"] = adata.X.toarray()
     adata.obsm["train"] = np.random.binomial(
-        n=adata.obsm["train"], p=0.8, size=adata.obsm["train"].shape
-    )
+        n=adata.obsm["train"].astype(int), p=0.8, size=adata.obsm["train"].shape
+    ).astype(float)
     adata.obsm["test"] = adata.X.toarray()
     adata.obsm["test"].data = np.random.binomial(
-        n=adata.obsm["test"], p=0.2, size=adata.obsm["test"].shape
-    )
+        n=adata.obsm["test"].astype(int), p=0.2, size=adata.obsm["test"].shape
+    ).astype(float)
     return adata
 
 
