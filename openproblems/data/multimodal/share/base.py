@@ -54,8 +54,8 @@ def load_share(
     )
 
     adata.uns["mode2_var_chr"] = adata.uns["mode2_var"][:, 0]
-    adata.uns["mode2_var_start"] = adata.uns["mode2_var"][:, 1]
-    adata.uns["mode2_var_end"] = adata.uns["mode2_var"][:, 2]
+    adata.uns["mode2_var_start"] = adata.uns["mode2_var"][:, 1].astype(str)
+    adata.uns["mode2_var_end"] = adata.uns["mode2_var"][:, 2].astype(str)
 
     adata.var["gene_short_name"] = adata.var.index
     adata = filter_joint_data_empty_cells(adata)
