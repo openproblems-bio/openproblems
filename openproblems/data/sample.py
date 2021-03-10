@@ -1,0 +1,24 @@
+from .utils import loader
+from .multimodal.scicar.cell_lines import (
+    rna_cells_url,
+    rna_genes_url,
+)
+
+import pandas as pd
+import numpy as np
+import scipy.sparse
+import anndata
+
+
+@loader
+def load_sample_data(test=True):
+    """Create a simple dataset to use for testing in multimodal applications."""
+    assert test
+
+    genes = pd.read_csv(rna_genes_url, low_memory=False, index_col=0).index[:500]
+    cells = pd.read_csv(rna_cells_url, low_memory=False, index_col=0).index
+
+    rna_data = scipy.sparse.csr_matrix(np.random.poisson(2, (len(cells), len(genes))))
+
+    adata = anndata.AnnData(rna_data, index=cells, columns=genes)
+    return adata
