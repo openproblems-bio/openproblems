@@ -32,20 +32,16 @@ def test_metric_metadata(metric):
     name_func=utils.name.name_test,
 )
 @utils.docker.docker_test
-def test_metric(task_name, dataset_name, method_name, metric_name, tempdir, image):
+def test_metric(task_name, metric_name, tempdir, image):
     """Test computation of a metric."""
     import numbers
 
     task = getattr(openproblems.tasks, task_name)
-    dataset = getattr(task.datasets, dataset_name)
-    method = getattr(task.methods, method_name)
     metric = getattr(task.metrics, metric_name)
     adata = task.api.sample_dataset()
     adata = task.api.sample_method(adata)
     openproblems.log.debug(
-        "Testing {} metric on {} method applied to {} dataset from {} task".format(
-            metric.__name__, method.__name__, dataset.__name__, task.__name__
-        )
+        "Testing {} metric from {} task".format(metric.__name__, task.__name__)
     )
     m = metric(adata)
     assert isinstance(m, numbers.Number)
