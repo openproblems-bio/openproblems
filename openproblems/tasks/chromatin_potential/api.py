@@ -45,7 +45,7 @@ def sample_dataset():
 
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
-    adata.obsm["gene_score"] = adata.X / adata.X.max() + np.random.normal(
+    adata.obsm["gene_score"] = adata.X.toarray() / adata.X.max() + np.random.normal(
         0, 0.1, adata.X.shape
     )
     return adata
