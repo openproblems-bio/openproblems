@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {name: 'current', os: ubuntu-latest, python: '3.8', r: 'release' }
+        - {name: 'curr', os: ubuntu-latest, python: '3.8', r: 'release' }
         - {name: 'prev', os: ubuntu-latest, python: '3.7', r: 'release' }
         - {name: 'old', os: ubuntu-latest, python: '3.6', r: 'release' }
 
@@ -143,7 +143,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        BRANCH=$(echo ${{ github.ref }} | sed 's:/:_:g')_${{ matrix.config.name }}
+        BRANCH=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:/:_:g')_${{ matrix.config.name }}
         echo "BRANCH=$BRANCH" >> $GITHUB_ENV
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
