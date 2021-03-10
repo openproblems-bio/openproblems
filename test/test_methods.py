@@ -22,18 +22,15 @@ utils.warnings.ignore_warnings()
     name_func=utils.name.name_test,
 )
 @utils.docker.docker_test(timeout=600, retries=2)
-def test_method(task_name, dataset_name, method_name, tempdir, image):
+def test_method(task_name, method_name, tempdir, image):
     """Test application of a method."""
     import anndata
 
     task = getattr(openproblems.tasks, task_name)
-    dataset = getattr(task.datasets, dataset_name)
     method = getattr(task.methods, method_name)
     adata = task.api.sample_dataset()
     openproblems.log.debug(
-        "Testing {} method on {} dataset from {} task".format(
-            method.__name__, dataset.__name__, task.__name__
-        )
+        "Testing {} method from {} task".format(method.__name__, task.__name__)
     )
     adata = method(adata)
     assert isinstance(adata, anndata.AnnData)
