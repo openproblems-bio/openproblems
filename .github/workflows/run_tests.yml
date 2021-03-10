@@ -119,6 +119,61 @@ jobs:
         close(con)
       shell: Rscript {0}
 
+    - name: Run tests
+      run: pytest --cov=openproblems -v
+
+    - name: Pull Docker images
+      run: |
+        cd workflow
+        snakemake -j 4 docker_pull
+        cd ..
+
+    - name: Build Docker images
+      run: |
+        cd workflow
+        snakemake -j 4 docker
+        cd ..
+
+    - name: Update Docker images
+      run: |
+        cd workflow
+        snakemake -j 4 docker_update
+        cd ..
+
+    - name: Upload Docker images
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        BRANCH=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:/:_:g')_${{ matrix.config.name }}
+        echo "BRANCH=$BRANCH" >> $GITHUB_ENV
+        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+          docker login --username AWS --password-stdin $ECR_ENDPOINT
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+        done
+
+    - name: Run benchmark
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: >-
+        cd /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}//${{ matrix.config.name }} &&
+        nextflow run
+        -with-tower
+        -ansi-log false
+        -resume
+        -profile test,aws
+        -work-dir "/mnt/openproblems-nextflow/test/work/${{ github.ref }}/${{ matrix.config.name }}"
+        -bucket-dir "s3://openproblems-nextflow/test/bucket/${{ github.ref }}/${{ matrix.config.name }}"
+        singlecellopenproblems/nf-openproblems
+        --branch $BRANCH
+
     - name: Upload coverage
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
