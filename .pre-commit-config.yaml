@@ -25,3 +25,10 @@ repos:
       - id: flake8
         args: [openproblems]
         additional_dependencies: ['hacking']
+  - repo: https://github.com/lorenzwalthert/precommit
+    rev: v0.1.3
+    hooks:
+    -   id: parsable-R
+    -   id: style-files
+    -   id: lintr
+        verbose: true
