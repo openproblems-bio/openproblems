@@ -119,6 +119,9 @@ jobs:
         close(con)
       shell: Rscript {0}
 
+    - name: Run tests
+      run: pytest --cov=openproblems -v
+
     - name: Pull Docker images
       run: |
         cd workflow
@@ -170,9 +173,6 @@ jobs:
         -bucket-dir "s3://openproblems-nextflow/test/bucket/${{ github.ref }}/${{ matrix.config.name }}"
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
-
-    - name: Run tests
-      run: pytest --cov=openproblems -v
 
     - name: Upload coverage
       env:
