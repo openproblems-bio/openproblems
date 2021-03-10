@@ -1,5 +1,6 @@
-import parameterized
 from . import TEMPDIR
+
+import parameterized
 
 
 def object_name(x):
