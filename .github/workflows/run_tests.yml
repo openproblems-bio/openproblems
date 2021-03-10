@@ -116,6 +116,7 @@ jobs:
       run: pytest --cov=openproblems -v
 
     - name: Install Nextflow
+      if: ${{ matrix.config.python }} == 'current'
       env:
           CAPSULE_LOG: none
       run: |
@@ -125,6 +126,7 @@ jobs:
         sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
 
     - name: Set up S3FS
+      if: ${{ matrix.config.python }} == 'current'
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -136,17 +138,19 @@ jobs:
         sudo mkdir -p /mnt/openproblems-nextflow
         sudo chown $USER /mnt/openproblems-nextflow
         s3fs openproblems-nextflow /mnt/openproblems-nextflow
-        mkdir -p /mnt/openproblems-nextflow/test/bucket/${{ github.ref }}
-        mkdir -p /mnt/openproblems-nextflow/test/work/${{ github.ref }}
-        mkdir -p /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}//${{ matrix.config.name }}
+        for dir in bucket work "cwd/${{ matrix.config.name }}"; do
+          mkdir -p /mnt/openproblems-nextflow/test/${dir}/${{ github.ref }}
+          rm -rf /mnt/openproblems-nextflow/test/${dir}/${{ github.ref }}/*
+        done
 
     - name: Upload Docker images
+      if: ${{ matrix.config.python }} == 'current'
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        BRANCH=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:/:_:g')_${{ matrix.config.name }}
+        BRANCH=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:/:_:g')
         echo "BRANCH=$BRANCH" >> $GITHUB_ENV
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
@@ -157,6 +161,7 @@ jobs:
         done
 
     - name: Run benchmark
+      if: ${{ matrix.config.python }} == 'current'
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
