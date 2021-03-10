@@ -1,4 +1,5 @@
 from ...data.multimodal.sample import load_sample_data
+
 import numpy as np
 
 
