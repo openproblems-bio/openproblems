@@ -75,22 +75,24 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
 
     # get annotation for TSS
     _get_annotation(adata)
+
     # basic quality control
-    if adata.shape[0] >= 600:
-        sc.pp.filter_cells(adata, min_genes=200)
-        sc.pp.filter_genes(adata, min_cells=5)
-
     adata = adata[:, ~pd.isnull(adata.var.loc[:, "chr"])].copy()
-    adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
-        "mt-"
-    )  # annotate the group of mitochondrial genes as 'mt'
-    sc.pp.calculate_qc_metrics(
-        adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
-    )
+    if adata.uns["species"] in ["mus_musculus", "homo_sapiens"]:
+        adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
+            "mt-"
+        )  # annotate the group of mitochondrial genes as 'mt'
+        sc.pp.calculate_qc_metrics(
+            adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
+        )
 
-    adata = adata[
-        (adata.obs.n_genes_by_counts < 2000) & (adata.obs.pct_counts_mt < 10), :
-    ].copy()
+        adata_filter = adata[
+            (adata.obs.n_genes_by_counts <= 2000) & (adata.obs.pct_counts_mt <= 10), :
+        ].copy()
+        sc.pp.filter_cells(adata_filter, min_genes=200)
+        sc.pp.filter_genes(adata_filter, min_cells=5)
+        if adata_filter.shape[0] > 100:
+            adata = adata_filter.copy()
 
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
