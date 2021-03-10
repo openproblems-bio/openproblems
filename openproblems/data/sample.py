@@ -1,13 +1,11 @@
+from .multimodal.scicar.cell_lines import rna_cells_url
+from .multimodal.scicar.cell_lines import rna_genes_url
 from .utils import loader
-from .multimodal.scicar.cell_lines import (
-    rna_cells_url,
-    rna_genes_url,
-)
 
-import pandas as pd
-import numpy as np
-import scipy.sparse
 import anndata
+import numpy as np
+import pandas as pd
+import scipy.sparse
 
 
 @loader
