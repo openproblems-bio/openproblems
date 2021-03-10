@@ -22,18 +22,18 @@ def check_method(adata):
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()
-    adata.obsm["train"] = adata.X.copy()
-    adata.obsm["train"].data = np.random.binomial(
-        n=adata.X.data.astype(int), p=0.8, size=len(adata.X.data)
+    adata.obsm["train"] = adata.X.toarray()
+    adata.obsm["train"] = np.random.binomial(
+        n=adata.obsm["train"], p=0.8, size=adata.obsm["train"].shape
     )
-    adata.obsm["test"] = adata.X.copy()
+    adata.obsm["test"] = adata.X.toarray()
     adata.obsm["test"].data = np.random.binomial(
-        n=adata.X.data.astype(int), p=0.2, size=len(adata.X.data)
+        n=adata.obsm["test"], p=0.2, size=adata.obsm["test"].shape
     )
     return adata
 
 
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
-    adata.obsm["denoised"] = adata.X * 0.2
+    adata.obsm["denoised"] = adata.X.toarray() * 0.2
     return adata
