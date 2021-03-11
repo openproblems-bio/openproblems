@@ -146,3 +146,6 @@ resources/
 # Nextflow
 results
 nf-openproblems
+
+# Docker testing container
+docker/scib-python/
