@@ -2,3 +2,4 @@ pip
 wheel
 setuptools
 cmake
+jupyter

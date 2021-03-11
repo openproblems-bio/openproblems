@@ -9,7 +9,7 @@
 
 Formalizing and benchmarking open problems in single-cell genomics.
 
-[**Visit the Open Problems Website**](https://openproblems.netlify.app/)
+Results at https://openproblems.bio
 
 ## Table of contents
 
