@@ -29,6 +29,12 @@ def test_method(task_name, method_name, tempdir, image):
     task = getattr(openproblems.tasks, task_name)
     method = getattr(task.methods, method_name)
     adata = task.api.sample_dataset()
+    print("Sample data dtypes:")
+    print(adata.X.dtype)
+    try:
+        print(adata.obsm["mode2"].dtype)
+    except KeyError:
+        pass
     openproblems.log.debug(
         "Testing {} method from {} task".format(method.__name__, task.__name__)
     )
