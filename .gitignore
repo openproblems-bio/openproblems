@@ -144,8 +144,8 @@ resources/
 .docker_login
 
 # Nextflow
-results
 nf-openproblems
+.nextflow
 
 # Docker testing container
 docker/scib-python/

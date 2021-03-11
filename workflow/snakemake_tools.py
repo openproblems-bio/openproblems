@@ -1,16 +1,17 @@
-import dateutil.parser
+import datetime
 import multiprocessing
 import openproblems
 import os
 import packaging.version
 import subprocess
+import warnings
 
 N_THREADS = multiprocessing.cpu_count()
 TEMPDIR = ".evaluate"
 SCRIPTS_DIR = os.getcwd()
 DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
-IMAGES_DIR = os.path.join(SCRIPTS_DIR, "..", "docker")
+IMAGES_DIR = os.path.join("..", "docker")
 VERSION_FILE = os.path.join(IMAGES_DIR, ".version")
 DOCKER_EXEC = (
     "CONTAINER=$("
@@ -34,6 +35,15 @@ def _images(filename):
     ]
 
 
+def image_markers(wildcards):
+    """Get the appropriate marker for each image."""
+    return [
+        docker_image_marker(image)
+        for image in os.listdir(IMAGES_DIR)
+        if os.path.isdir(os.path.join(IMAGES_DIR, image))
+    ]
+
+
 def push_images(wildcards):
     """Get Docker push timestamp for all images."""
     images = _images(".docker_push")
@@ -48,6 +58,11 @@ def build_images(wildcards):
 def pull_images(wildcards):
     """Get Docker pull timestamp for all images."""
     return _images(".docker_pull")
+
+
+def update_images(wildcards):
+    """Get Docker update timestamp for all images."""
+    return _images(".docker_update")
 
 
 def docker_image_name(wildcards):
@@ -73,9 +88,9 @@ def docker_image_age(image):
         ],
         stdout=subprocess.PIPE,
     )
-    date_string = proc.stdout.decode().strip()
-    datetime = dateutil.parser.parse(date_string)
-    return int(datetime.timestamp())
+    date_string = proc.stdout.decode().strip().replace('"', "").split(".")[0]
+    date_datetime = datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S")
+    return int(date_datetime.timestamp())
 
 
 def docker_file_age(image):
@@ -93,7 +108,14 @@ def docker_file_age(image):
         ],
         stdout=subprocess.PIPE,
     )
-    return int(proc.stdout.decode().strip())
+    result = proc.stdout.decode().strip()
+    try:
+        return int(result)
+    except ValueError:
+        warnings.warn(
+            "Files {}/* not found on git; assuming unchanged.".format(docker_path)
+        )
+        return 0
 
 
 def version_not_changed():
@@ -117,13 +139,10 @@ def docker_image_marker(image):
     docker_push = os.path.join(docker_path, ".docker_push")
     docker_pull = os.path.join(docker_path, ".docker_pull")
     docker_build = os.path.join(docker_path, ".docker_build")
-    dockerfile = os.path.join(docker_path, "Dockerfile")
-    if version_not_changed() and docker_file_age(docker_push) > docker_image_age(
-        dockerfile
-    ):
+    if version_not_changed() and docker_file_age(image) < docker_image_age(image):
         # Dockerfile hasn't been changed since last push, pull it
         return docker_pull
-    elif DOCKER_PASSWORD:
+    elif DOCKER_PASSWORD is not None:
         # we have the password, let's push it
         return docker_push
     else:
