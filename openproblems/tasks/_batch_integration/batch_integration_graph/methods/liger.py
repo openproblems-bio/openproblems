@@ -32,10 +32,10 @@ _liger = scprep.run.RFunction(
             lobj <- scaleNotCenter(lobj, remove.missing=F)
 
             # Use tutorial coarse k suggests of 20.
-            lobj <- optimizeALS(lobj, k=k, thresh=5e-5, nrep=3)
+            lobj <- optimizeALS(lobj, k=20, thresh=5e-5, nrep=3)
 
-            lobj <- quantileAlignSNF(lobj, resolution=res,
-                 small.clust.thresh=small.clust.thresh)
+            lobj <- quantileAlignSNF(lobj, resolution=0.4,
+                 small.clust.thresh=20)
 
             # Store embedding in initial Seurat object
             # Code taken from ligerToSeurat() function from LIGER
@@ -63,6 +63,7 @@ def liger_full_unscaled(adata):
     from scIB.preprocessing import reduce_data
 
     adata = _liger(adata, "batch")
+    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
     reduce_data(adata, use_rep="X_emb")
     # Complete the result in-place
     return adata
@@ -83,6 +84,7 @@ def liger_hvg_unscaled(adata):
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _liger(adata, "batch")
+    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
     reduce_data(adata, use_rep="X_emb")
     return adata
 
@@ -104,6 +106,7 @@ def liger_hvg_scaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = _liger(adata, "batch")
+    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
     reduce_data(adata, use_rep="X_emb")
     return adata
 
@@ -124,4 +127,5 @@ def liger_full_scaled(adata):
     adata = scale_batch(adata, "batch")
     adata = _liger(adata, "batch")
     reduce_data(adata, use_rep="X_emb")
+    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
     return adata

@@ -42,13 +42,27 @@ from .scanorama_full import (
     scanorama_feature_full_scaled,
 )
 
-# from .scgen import *
+from .scgen import (
+    scgen_full_scaled,
+    scgen_full_unscaled,
+    scgen_hvg_scaled,
+    scgen_hvg_unscaled,
+)
+
 from .scvi import (
     scvi_full_unscaled,
     scvi_full_scaled,
     scvi_hvg_unscaled,
     scvi_hvg_scaled,
 )
+
+from .scanvi import (
+    scanvi_full_scaled,
+    scanvi_full_unscaled,
+    scanvi_hvg_scaled,
+    scanvi_hvg_unscaled,
+)
+
 from .fastmnn_embed import (
     fastmnn_embed_full_unscaled,
     fastmnn_embed_full_scaled,
