@@ -16,12 +16,12 @@ def load_sample_data(test=True):
     """Create a simple dataset to use for testing in multimodal applications."""
     assert test
 
-    rna_genes = pd.read_csv(rna_genes_url, low_memory=False, index_col=0).iloc[:500]
-    atac_genes = pd.read_csv(atac_genes_url, low_memory=False, index_col=1).iloc[:400]
+    rna_genes = pd.read_csv(rna_genes_url, low_memory=False, index_col=0)
+    atac_genes = pd.read_csv(atac_genes_url, low_memory=False, index_col=1)
     rna_cells = pd.read_csv(rna_cells_url, low_memory=False, index_col=0)
     atac_cells = pd.read_csv(atac_cells_url, low_memory=False, index_col=0)
 
-    keep_cells = np.intersect1d(rna_cells.index, atac_cells.index)[:200]
+    keep_cells = np.intersect1d(rna_cells.index, atac_cells.index)[:100]
     rna_cells = rna_cells.loc[keep_cells]
     atac_cells = atac_cells.loc[keep_cells]
 
