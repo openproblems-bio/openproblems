@@ -53,4 +53,6 @@ def load_sample_data(test=True):
         adata.uns["mode2_varnames"].append(varname)
 
     adata = filter_joint_data_empty_cells(adata)
+    adata.X = adata.X.astype(np.float64)
+    adata.obsm["mode2"] = adata.obsm["mode2"].astype(np.float64)
     return adata
