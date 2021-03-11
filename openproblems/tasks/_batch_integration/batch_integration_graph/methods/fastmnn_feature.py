@@ -2,9 +2,10 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
+import scprep
+
 # from scIB.integration import _fastmnn_feature
 
-import scprep
 
 _fastmnn_feature = scprep.run.RFunction(
     setup="""

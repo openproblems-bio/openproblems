@@ -2,9 +2,10 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
+import scprep
+
 # from scIB.integration import _harmony
 
-import scprep
 
 _harmony = scprep.run.RFunction(
     setup="""

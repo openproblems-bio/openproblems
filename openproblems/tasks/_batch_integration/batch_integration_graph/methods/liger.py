@@ -2,9 +2,10 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
+import scprep
+
 # from scIB.integration import _liger
 
-import scprep
 
 _liger = scprep.run.RFunction(
     setup="""
