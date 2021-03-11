@@ -36,9 +36,9 @@ def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()
 
-    adata.uns["species"] = "homo_sapiens"
-    adata.uns["version"] = "GRCh37"
-    adata.uns["release"] = "75"
+    adata.uns["species"] = "mus_musculus"
+    adata.uns["version"] = "GRCm38"
+    adata.uns["release"] = "100"
 
     return adata
 
