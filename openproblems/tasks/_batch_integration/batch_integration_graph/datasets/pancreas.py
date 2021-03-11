@@ -18,7 +18,7 @@ def pancreas_batch(test=False):
 
     sc.pp.filter_genes(adata, min_counts=1)
     log_scran_pooling(adata)
-    adata.layers["normalized"] = adata.X
+    adata.layers["logcounts"] = adata.X
 
     sc.tl.pca(
         adata,
