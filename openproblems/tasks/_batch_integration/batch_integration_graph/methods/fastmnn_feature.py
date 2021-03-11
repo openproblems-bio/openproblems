@@ -32,7 +32,7 @@ _fastmnn_feature = scprep.run.RFunction(
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib" # only if required
+    image="openproblems-r-extras" # only if required
 )
 def fastmnn_feature_full_unscaled(adata):
     from scIB.preprocessing import hvg_batch

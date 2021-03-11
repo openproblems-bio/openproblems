@@ -10,17 +10,18 @@ from .....tools.utils import check_version
     paper_year=2020,
     code_url="",
     code_version=check_version("scanpy"),
-    image="openproblems-python-batch-integration" # only if required
+    image="openproblems-python-batch-integration",  # only if required
 )
 def combat_full_unscaled(adata):
     from scIB.integration import runCombat
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+
     adata = runCombat(adata, "batch")
     reduce_data(adata)
     # Complete the result in-place
     return adata
+
 
 @method(
     method_name="Combat (hvg/unscaled)",
@@ -29,17 +30,18 @@ def combat_full_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("combatpy"),
-    image="openproblems-python-batch-integration" # only if required
+    image="openproblems-python-batch-integration",  # only if required
 )
 def combat_hvg_unscaled(adata):
     from scIB.integration import runCombat
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runCombat(adata, "batch")
     reduce_data(adata)
     return adata
+
 
 @method(
     method_name="Combat (hvg/scaled)",
@@ -48,18 +50,20 @@ def combat_hvg_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("combatpy"),
-    image="openproblems-python-batch-integration" # only if required
+    image="openproblems-python-batch-integration",  # only if required
 )
 def combat_hvg_scaled(adata):
     from scIB.integration import runCombat
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
+
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = scale_batch(adata, 'batch')
+    adata = scale_batch(adata, "batch")
     adata = runCombat(adata, "batch")
     reduce_data(adata)
     return adata
+
 
 @method(
     method_name="Combat (full/scaled)",
@@ -68,14 +72,14 @@ def combat_hvg_scaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("combatpy"),
-    image="openproblems-python-batch-integration" # only if required
+    image="openproblems-python-batch-integration",  # only if required
 )
 def combat_full_scaled(adata):
     from scIB.integration import runCombat
-    from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
-    adata = scale_batch(adata, 'batch')
+
+    adata = scale_batch(adata, "batch")
     adata = runCombat(adata, "batch")
     reduce_data(adata)
     return adata

@@ -2,7 +2,7 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
-#from scIB.integration import _fastmnn_embed
+# from scIB.integration import _fastmnn_embed
 
 import scprep
 
@@ -20,7 +20,7 @@ _fastmnn_embed = scprep.run.RFunction(
 	        reducedDim(sobj, 'X_emb') <- reducedDim(sce, "corrected")
 
 	        return(sobj)
-        """
+        """,
 )
 
 
@@ -31,16 +31,18 @@ _fastmnn_embed = scprep.run.RFunction(
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-extras" # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def fastmnn_embed_full_unscaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
+
     adata = _fastmnn_embed(adata, "batch")
-    reduce_data(adata, use_emb='X_emb')
+    reduce_data(adata, use_rep="X_emb")
     # Complete the result in-place
     return adata
+
 
 @method(
     method_name="FastMNN feature (hvg/unscaled)",
@@ -55,10 +57,12 @@ def fastmnn_embed_hvg_unscaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
+
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _fastmnn_embed(adata, "batch")
-    reduce_data(adata, use_emb='X_emb')
+    reduce_data(adata, use_rep="X_emb")
     return adata
+
 
 @method(
     method_name="FastMNN feature (hvg/scaled)",
@@ -73,11 +77,13 @@ def fastmnn_embed_hvg_scaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
+
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = scale_batch(adata, 'batch')
+    adata = scale_batch(adata, "batch")
     adata = _fastmnn_embed(adata, "batch")
-    reduce_data(adata, use_emb='X_emb')
+    reduce_data(adata, use_rep="X_emb")
     return adata
+
 
 @method(
     method_name="FastMNN feature (full/scaled)",
@@ -92,7 +98,8 @@ def fastmnn_embed_full_scaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
-    adata = scale_batch(adata, 'batch')
+
+    adata = scale_batch(adata, "batch")
     adata = _fastmnn_embed(adata, "batch")
-    reduce_data(adata, use_emb='X_emb')
+    reduce_data(adata, use_rep="X_emb")
     return adata

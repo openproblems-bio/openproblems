@@ -2,7 +2,7 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
-#from scIB.integration import _harmony
+# from scIB.integration import _harmony
 
 import scprep
 
@@ -14,13 +14,14 @@ _harmony = scprep.run.RFunction(
         """,
     args="sobj, batch",
     body="""
-            sobj <- ScaleData(sobj)
-	        sobj <- RunPCA(sobj, features=rownames(sobj@assays$RNA))
-	        sobj <- RunHarmony(sobj, batch)
-	        sobj[['X_emb']] <- sobj[['harmony']]
+            seu <- as.Seurat(sobj)
+            seu <- ScaleData(seu)
+	        seu <- RunPCA(seu, features=rownames(seu@assays$RNA))
+	        seu <- RunHarmony(seu, batch)
+            seu <- as.SingleCellExperiment(seu)
+	        reducedDim(sobj,'X_emb') <- reducedDim(seu, 'harmony')
 
-           return(sobj)
-        """
+        """,
 )
 
 
@@ -31,16 +32,18 @@ _harmony = scprep.run.RFunction(
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib" # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def harmony_full_unscaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
+
     adata = _harmony(adata, "batch")
-    reduce_data(adata, use_emb='X_emb')
+    reduce_data(adata, use_rep="X_emb")
     # Complete the result in-place
     return adata
+
 
 @method(
     method_name="Harmony (hvg/unscaled)",
@@ -49,16 +52,18 @@ def harmony_full_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib" # only if required
+    image="openproblems-r-scib",  # only if required
 )
 def harmony_hvg_unscaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
+
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _harmony(adata, "batch")
-    reduce_data(adata, use_emb='X_emb')
+    reduce_data(adata, use_rep="X_emb")
     return adata
+
 
 @method(
     method_name="Harmony (hvg/scaled)",
@@ -67,17 +72,19 @@ def harmony_hvg_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib" # only if required
+    image="openproblems-r-scib",  # only if required
 )
 def harmony_hvg_scaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
+
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = scale_batch(adata, 'batch')
+    adata = scale_batch(adata, "batch")
     adata = _harmony(adata, "batch")
-    reduce_data(adata, use_emb='X_emb')
+    reduce_data(adata, use_rep="X_emb")
     return adata
+
 
 @method(
     method_name="Harmony(full/scaled)",
@@ -86,13 +93,14 @@ def harmony_hvg_scaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib" # only if required
+    image="openproblems-r-scib",  # only if required
 )
 def harmony_full_scaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
-    adata = scale_batch(adata, 'batch')
+
+    adata = scale_batch(adata, "batch")
     adata = _harmony(adata, "batch")
-    reduce_data(adata, use_emb='X_emb')
+    reduce_data(adata, use_rep="X_emb")
     return adata
