@@ -5,7 +5,6 @@ from .scicar.mouse_kidney import rna_cells_url
 from .scicar.mouse_kidney import rna_genes_url
 from .utils import create_joint_adata
 from .utils import filter_joint_data_empty_cells
-from .utils import subset_joint_data
 
 import numpy as np
 import pandas as pd
