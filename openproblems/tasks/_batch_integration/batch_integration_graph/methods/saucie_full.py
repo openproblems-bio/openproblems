@@ -10,17 +10,17 @@ from .....tools.utils import check_version
     paper_year=2020,
     code_url="",
     code_version=check_version("saucie"),
-    image="openproblems-python-batch-integration" # only if required
+    image="openproblems-python-batch-integration",  # only if required
 )
 def saucie_feature_full_unscaled(adata):
     from scIB.integration import runSaucie
-    from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+
     adata = runSaucie(adata, "batch")
     reduce_data(adata)
     # Complete the result in-place
     return adata
+
 
 @method(
     method_name="Saucie gene output (hvg/unscaled)",
@@ -29,17 +29,18 @@ def saucie_feature_full_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("saucie"),
-    image="openproblems-python-batch-integration" # only if required
+    image="openproblems-python-batch-integration",  # only if required
 )
 def saucie_feature_hvg_unscaled(adata):
     from scIB.integration import runSaucie
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runSaucie(adata, "batch")
     reduce_data(adata)
     return adata
+
 
 @method(
     method_name="Saucie gene output (hvg/scaled)",
@@ -48,18 +49,20 @@ def saucie_feature_hvg_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("saucie"),
-    image="openproblems-python-batch-integration" # only if required
+    image="openproblems-python-batch-integration",  # only if required
 )
 def saucie_feature_hvg_scaled(adata):
     from scIB.integration import runSaucie
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
+
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = runSaucie(adata, "batch")
     reduce_data(adata)
     return adata
+
 
 @method(
     method_name="Saucie gene output (full/scaled)",
@@ -68,13 +71,13 @@ def saucie_feature_hvg_scaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("saucie"),
-    image="openproblems-python-batch-integration" # only if required
+    image="openproblems-python-batch-integration",  # only if required
 )
 def saucie_feature_full_scaled(adata):
     from scIB.integration import runSaucie
-    from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
+
     adata = scale_batch(adata, "batch")
     adata = runSaucie(adata, "batch")
     reduce_data(adata)

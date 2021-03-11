@@ -2,7 +2,7 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
-#from scIB.integration import _seurat
+# from scIB.integration import _seurat
 
 import scprep
 
@@ -13,6 +13,7 @@ _seurat = scprep.run.RFunction(
         """,
     args="sce, batch, hvg=2000",
     body="""
+            data <- as.Seurat(sce)
             batch_list = SplitObject(data, split.by = batch)
 
             batch_list <- lapply(X = batch_list, FUN = function(x) {
@@ -47,8 +48,8 @@ _seurat = scprep.run.RFunction(
         	    do.cpp = T,
         	    eps = 0,
         	    verbose = T)
-	        return(integrated)
-      """
+	        as.SingleCellExperiment(integrated)
+      """,
 )
 
 
@@ -59,12 +60,11 @@ _seurat = scprep.run.RFunction(
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib" # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def seuratrpca_full_unscaled(adata):
-    from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+
     adata = _seurat(adata, "batch")
     reduce_data(adata)
     # Complete the result in-place
@@ -78,12 +78,12 @@ def seuratrpca_full_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib" # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def seuratrpca_hvg_unscaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _seurat(adata, "batch")
     reduce_data(adata)
@@ -97,14 +97,15 @@ def seuratrpca_hvg_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib" # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def seuratrpca_hvg_scaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
+
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = scale_batch(adata, 'batch')
+    adata = scale_batch(adata, "batch")
     adata = _seurat(adata, "batch")
     reduce_data(adata)
     return adata
@@ -117,13 +118,13 @@ def seuratrpca_hvg_scaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib" # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def seuratrpca_full_scaled(adata):
-    from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
-    adata = scale_batch(adata, 'batch')
+
+    adata = scale_batch(adata, "batch")
     adata = _seurat(adata, "batch")
     reduce_data(adata)
     return adata
