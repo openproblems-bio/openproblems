@@ -96,7 +96,7 @@ class TestDataset(unittest.TestCase):
 
     def test_task_checks(self):
         """Run task-specific tests."""
-        assert self.task.checks.check_dataset(self.adata)
+        assert self.task.api.check_dataset(self.adata)
 
     @parameterized.parameterized.expand(
         [

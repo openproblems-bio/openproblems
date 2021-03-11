@@ -168,11 +168,13 @@ opensproblems/
 
 `task_name/__init__.py` can be copied from an existing task.
 
-`checks.py` should implement the following functions:
+`api.py` should implement the following functions:
 
 ```
 check_dataset(AnnData adata) -> bool # checks that a dataset fits the task-specific schema
 check_method(AnnData adata) -> bool # checks that the output from a method fits the task-specific schema
+sample_dataset() -> AnnData adata # generates a simple dataset the fits the expected API
+sample_method(AnnData adata) -> AnnData adata # applies a simple modification that fits the method API
 ```
 
 For adding datasets, methods and metrics, see above.
