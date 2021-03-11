@@ -112,9 +112,6 @@ jobs:
         snakemake -j 4 docker_update
         cd ..
 
-    - name: Run tests
-      run: pytest --cov=openproblems -v
-
     - name: Install Nextflow
       if: ${{ matrix.config.python }} == 'current'
       env:
@@ -178,6 +175,9 @@ jobs:
         -bucket-dir "s3://openproblems-nextflow/test/bucket/${{ github.ref }}/${{ matrix.config.name }}"
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
+
+    - name: Run tests
+      run: pytest --cov=openproblems -v
 
     - name: Upload coverage
       env:
