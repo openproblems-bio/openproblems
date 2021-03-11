@@ -15,9 +15,9 @@ _fastmnn_feature = scprep.run.RFunction(
     body="""
         expr <- assay(sobj, 'counts')
         sce <- fastMNN(expr, batch = colData(sobj)[[batch]])
-        assay(sobj, "counts") <- assay(sce, "reconstructed"))
+        assay(sobj, "counts") <- assay(sce, "reconstructed")
         sobj
-        """,
+        """
 )
 
 

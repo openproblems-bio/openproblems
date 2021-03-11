@@ -18,9 +18,9 @@ _harmony = scprep.run.RFunction(
             seu <- ScaleData(seu)
             seu <- RunPCA(seu, features=rownames(seu@assays$RNA))
             seu <- RunHarmony(seu, batch)
+            seu[['X_emb']] <- sobj[['harmony']]
             seu <- as.SingleCellExperiment(seu)
-            reducedDim(sobj,'X_emb') <- reducedDim(seu, 'harmony')
-            sobj
+            seu
         """,
 )
 

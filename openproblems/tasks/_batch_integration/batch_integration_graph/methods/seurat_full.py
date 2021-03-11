@@ -38,7 +38,6 @@ _seurat = scprep.run.RFunction(
                 sd.weight = 1,
                 sample.tree = NULL,
                 preserve.order = F,
-                do.cpp = T,
                 eps = 0,
                 verbose = T)
             as.SingleCellExperiment(integrated)
