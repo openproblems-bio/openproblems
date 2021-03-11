@@ -1,8 +1,8 @@
 from ..utils import loader
-from .scicar.cell_lines import atac_cells_url
-from .scicar.cell_lines import atac_genes_url
-from .scicar.cell_lines import rna_cells_url
-from .scicar.cell_lines import rna_genes_url
+from .scicar.mouse_kidney import atac_cells_url
+from .scicar.mouse_kidney import atac_genes_url
+from .scicar.mouse_kidney import rna_cells_url
+from .scicar.mouse_kidney import rna_genes_url
 from .utils import create_joint_adata
 from .utils import filter_joint_data_empty_cells
 
