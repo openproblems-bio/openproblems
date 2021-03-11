@@ -1,7 +1,5 @@
 from .....tools.decorators import metric
 
-import numpy as np
-
 
 @metric(
     metric_name="Isolated label F1",
@@ -12,5 +10,10 @@ def isolated_labels_f1(adata):
     from scIB.metrics import isolated_labels
 
     return isolated_labels(
-        adata, label_key="labels", batch_key="batch", cluster=True, verbose=False
+        adata,
+        label_key="labels",
+        batch_key="batch",
+        embed="X_pca",
+        cluster=True,
+        verbose=False,
     )

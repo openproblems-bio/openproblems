@@ -13,13 +13,13 @@ _fastmnn_embed = scprep.run.RFunction(
         """,
     args="sobj, batch, hvg=2000",
     body="""
-            expr <- assay(sobj, 'counts')
+        expr <- assay(sobj, 'counts')
 
-	        sce <- fastMNN(expr, batch = colData(sobj)[[batch]])
+        sce <- fastMNN(expr, batch = colData(sobj)[[batch]])
 
-	        reducedDim(sobj, 'X_emb') <- reducedDim(sce, "corrected")
+        reducedDim(sobj, 'X_emb') <- reducedDim(sce, "corrected")
 
-	        return(sobj)
+        return(sobj)
         """,
 )
 
@@ -34,9 +34,7 @@ _fastmnn_embed = scprep.run.RFunction(
     image="openproblems-r-extras",  # only if required
 )
 def fastmnn_embed_full_unscaled(adata):
-    from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
 
     adata = _fastmnn_embed(adata, "batch")
     reduce_data(adata, use_rep="X_emb")
@@ -56,7 +54,6 @@ def fastmnn_embed_full_unscaled(adata):
 def fastmnn_embed_hvg_unscaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _fastmnn_embed(adata, "batch")
@@ -95,7 +92,6 @@ def fastmnn_embed_hvg_scaled(adata):
     # image="openproblems-template-image" # only if required
 )
 def fastmnn_embed_full_scaled(adata):
-    from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 

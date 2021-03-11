@@ -2,7 +2,6 @@ from .....data.pancreas import load_pancreas
 from .....tools.decorators import dataset
 from .....tools.normalize import log_scran_pooling
 
-import numpy as np
 import scanpy as sc
 
 # from scIB.preprocessing import normalize, hvg_batch

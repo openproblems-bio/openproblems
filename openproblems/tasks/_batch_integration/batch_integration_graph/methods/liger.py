@@ -28,12 +28,13 @@ _liger = scprep.run.RFunction(
             # Assign hvgs
             lobj@var.genes <- hvg
 
-            lobj <- scaleNotCenter(lobj, remove.missing=F) # Can"t do our own scaling atm
+            lobj <- scaleNotCenter(lobj, remove.missing=F)
 
             # Use tutorial coarse k suggests of 20.
             lobj <- optimizeALS(lobj, k=k, thresh=5e-5, nrep=3)
 
-            lobj <- quantileAlignSNF(lobj, resolution=res, small.clust.thresh=small.clust.thresh)
+            lobj <- quantileAlignSNF(lobj, resolution=res,
+                 small.clust.thresh=small.clust.thresh)
 
             # Store embedding in initial Seurat object
             # Code taken from ligerToSeurat() function from LIGER
@@ -57,9 +58,7 @@ _liger = scprep.run.RFunction(
     image="openproblems-r-extras",  # only if required
 )
 def liger_full_unscaled(adata):
-    from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
 
     adata = _liger(adata, "batch")
     reduce_data(adata, use_rep="X_emb")
@@ -79,7 +78,6 @@ def liger_full_unscaled(adata):
 def liger_hvg_unscaled(adata):
     from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _liger(adata, "batch")
@@ -118,7 +116,6 @@ def liger_hvg_scaled(adata):
     image="openproblems-r-extras",  # only if required
 )
 def liger_full_scaled(adata):
-    from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 

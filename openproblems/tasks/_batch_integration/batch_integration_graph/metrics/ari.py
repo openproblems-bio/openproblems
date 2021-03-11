@@ -1,7 +1,5 @@
 from .....tools.decorators import metric
 
-import numpy as np
-
 
 @metric(
     metric_name="ARI",
@@ -12,7 +10,7 @@ def ari(adata):
     from scIB.clustering import opt_louvain
     from scIB.metrics import ari
 
-    res_max, nmi_max, nmi_all = opt_louvain(
+    opt_louvain(
         adata,
         label_key="labels",
         cluster_key="cluster",

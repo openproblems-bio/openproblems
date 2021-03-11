@@ -1,7 +1,5 @@
 from .....tools.decorators import metric
 
-import numpy as np
-
 
 @metric(
     metric_name="Graph connectivity",

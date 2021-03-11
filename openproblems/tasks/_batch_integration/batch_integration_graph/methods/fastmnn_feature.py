@@ -13,14 +13,10 @@ _fastmnn_feature = scprep.run.RFunction(
         """,
     args="sobj, batch, hvg=2000",
     body="""
-            expr <- sobj@assays$RNA@data
-
-	        sce <- fastMNN(expr, batch = sobj@meta.data[[batch]])
-
-	        sobj@assays$RNA <- CreateAssayObject(assay(sce, "reconstructed"))
-	        sobj[['X_emb']] <- CreateDimReducObject(reducedDim(sce, "corrected"), key='fastmnn_')
-
-	        return(sobj)
+        expr <- assay(sobj, 'counts')
+        sce <- fastMNN(expr, batch = colData(sobj)[[batch]])
+        assay(sobj, "counts") <- assay(sce, "reconstructed"))
+        sobj
         """,
 )
 
@@ -35,7 +31,6 @@ _fastmnn_feature = scprep.run.RFunction(
     image="openproblems-r-extras",  # only if required
 )
 def fastmnn_feature_full_unscaled(adata):
-    from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
 
     adata = _fastmnn_feature(adata, "batch")

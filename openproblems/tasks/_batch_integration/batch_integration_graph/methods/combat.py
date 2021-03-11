@@ -14,7 +14,6 @@ from .....tools.utils import check_version
 )
 def combat_full_unscaled(adata):
     from scIB.integration import runCombat
-    from scIB.preprocessing import hvg_batch
     from scIB.preprocessing import reduce_data
 
     adata = runCombat(adata, "batch")

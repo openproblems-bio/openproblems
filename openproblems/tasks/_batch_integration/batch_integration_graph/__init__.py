@@ -4,7 +4,6 @@ from . import datasets
 from . import methods
 from . import metrics
 
-# TODO: update
 _task_name = "Batch integration graph"
 
 DATASETS = utils.get_callable_members(datasets)
