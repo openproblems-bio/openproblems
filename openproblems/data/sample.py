@@ -18,7 +18,8 @@ def load_sample_data(test=True):
 
     rna_data = scipy.sparse.csr_matrix(
         np.random.poisson(2, (cells.shape[0], genes.shape[0]))
-    ).astype(float)
+    )
 
     adata = anndata.AnnData(rna_data, obs=cells, var=genes)
+    adata.X = adata.X.astype(np.float64)
     return adata
