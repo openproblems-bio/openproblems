@@ -25,12 +25,8 @@ def load_sample_data(test=True):
     rna_cells = rna_cells.loc[keep_cells]
     atac_cells = atac_cells.loc[keep_cells]
 
-    rna_data = scipy.sparse.csr_matrix(
-        (len(keep_cells), len(rna_genes))
-    )
-    atac_data = scipy.sparse.csr_matrix(
-        (len(keep_cells), len(atac_genes))
-    )
+    rna_data = scipy.sparse.csr_matrix((len(keep_cells), len(rna_genes)))
+    atac_data = scipy.sparse.csr_matrix((len(keep_cells), len(atac_genes)))
 
     adata = create_joint_adata(
         rna_data,
@@ -54,9 +50,9 @@ def load_sample_data(test=True):
 
     adata = subset_joint_data(adata, n_cells=200, n_genes=600)
 
-    adata.X = scipy.sparse.csr_matrix(
-        np.random.poisson(3, adata.X.shape)
-    ).astype(np.float64)
+    adata.X = scipy.sparse.csr_matrix(np.random.poisson(3, adata.X.shape)).astype(
+        np.float64
+    )
     adata.obsm["mode2"] = scipy.sparse.csr_matrix(
         np.random.poisson(2.5, adata.obsm["mode2"].shape)
     ).astype(np.float64)
