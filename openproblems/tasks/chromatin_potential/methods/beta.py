@@ -160,8 +160,7 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     extend_tss = pd.concat(
         [
             adata.var.loc[:, "chr"],
-            extend_tss.map(lambda x: x[0]).astype("int32"),
-            extend_tss.map(lambda x: x[1]).astype("int32"),
+            extend_tss[["start", "end"]].astype("int32"),
             pd.Series(np.arange(adata.shape[1]), index=adata.var_names),
         ],
         axis=1,
