@@ -31,3 +31,10 @@ To add a new image, create a new folder containing the following files:
 * `README.md`
 
 The easiest way to do this is to copy the `openproblems-python-extras` folder.
+
+## Building Docker image locally
+
+If you have docker installed, you can build containers locally for prototyping. For example, to install the openproblems base container, you can run the following.
+```
+docker build -f docker/openproblems/Dockerfile -t openproblems .
+```
