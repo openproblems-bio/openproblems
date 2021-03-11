@@ -8,6 +8,7 @@ COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
 RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install('${pkg}')"; done
 RUN R -e 'install.packages("devtools")'
 RUN R -e 'devtools::install_github("immunogenomics/harmony")'
+RUN R -e 'devtools::install_github("welch-lab/liger@v0.5.0")'
 
 # Install Python packages
 COPY ./docker/openproblems-r-extras/requirements.txt ./requirements.txt

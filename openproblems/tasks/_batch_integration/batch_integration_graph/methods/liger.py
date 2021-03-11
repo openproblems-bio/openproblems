@@ -12,10 +12,11 @@ _liger = scprep.run.RFunction(
             library(liger)
             library(Seurat)
         """,
-    args="sobj, batch",
+    args="sobj_uni, batch",
     body="""
             # Only counts is converted to liger object. To pass our own normalized data,
             # store it in the "counts" slot
+            sobj <- as.Seurat(sobj_uni)
             sobj@assays$RNA@counts = sobj@assays$RNA@data
 
             # Create Liger object
@@ -26,7 +27,7 @@ _liger = scprep.run.RFunction(
             lobj@norm.data <- lobj@raw.data
 
             # Assign hvgs
-            lobj@var.genes <- hvg
+            lobj@var.genes <- rownames(sobj@assays$RNA)
 
             lobj <- scaleNotCenter(lobj, remove.missing=F)
 
@@ -43,6 +44,7 @@ _liger = scprep.run.RFunction(
                 cell.embeddings = lobj@H.norm, key = "X_emb"
             )
             sobj@reductions["X_emb"] <- inmf.obj
+            sobj <- as.SingleCellExperiment(sobj)
             return(sobj)
         """,
 )
