@@ -139,7 +139,7 @@ def docker_image_marker(image):
     docker_push = os.path.join(docker_path, ".docker_push")
     docker_pull = os.path.join(docker_path, ".docker_pull")
     docker_build = os.path.join(docker_path, ".docker_build")
-    if version_not_changed() and docker_file_age(image) > docker_image_age(image):
+    if version_not_changed() and docker_file_age(image) < docker_image_age(image):
         # Dockerfile hasn't been changed since last push, pull it
         return docker_pull
     elif DOCKER_PASSWORD is not None:
