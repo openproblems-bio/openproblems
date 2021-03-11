@@ -10,5 +10,6 @@ import numpy as np
 )
 def graph_connectivity(adata):
     import scIB.metrics
+
     adata.obs["labels"] = adata.obs["labels"].astype("category")
     return scIB.metrics.graph_connectivity(adata, "labels")
