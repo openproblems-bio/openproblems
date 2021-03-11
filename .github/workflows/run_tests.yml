@@ -116,7 +116,7 @@ jobs:
       run: pytest --cov=openproblems -v
 
     - name: Install Nextflow
-      if: ${{ matrix.config.python }} == 'current'
+      if: startsWith(matrix.config.name, 'curr')
       env:
           CAPSULE_LOG: none
       run: |
@@ -126,7 +126,7 @@ jobs:
         sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
 
     - name: Set up S3FS
-      if: ${{ matrix.config.python }} == 'current'
+      if: startsWith(matrix.config.name, 'curr')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -138,13 +138,13 @@ jobs:
         sudo mkdir -p /mnt/openproblems-nextflow
         sudo chown $USER /mnt/openproblems-nextflow
         s3fs openproblems-nextflow /mnt/openproblems-nextflow
-        for dir in bucket work "cwd/${{ matrix.config.name }}"; do
+        for dir in bucket work cwd; do
           mkdir -p /mnt/openproblems-nextflow/test/${dir}/${{ github.ref }}
           rm -rf /mnt/openproblems-nextflow/test/${dir}/${{ github.ref }}/*
         done
 
     - name: Upload Docker images
-      if: ${{ matrix.config.python }} == 'current'
+      if: startsWith(matrix.config.name, 'curr')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -161,21 +161,21 @@ jobs:
         done
 
     - name: Run benchmark
-      if: ${{ matrix.config.python }} == 'current'
+      if: startsWith(matrix.config.name, 'curr')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: >-
-        cd /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}//${{ matrix.config.name }} &&
+        cd /mnt/openproblems-nextflow/test/cwd/${{ github.ref }} &&
         nextflow run
         -with-tower
         -ansi-log false
         -resume
         -profile test,aws
-        -work-dir "/mnt/openproblems-nextflow/test/work/${{ github.ref }}/${{ matrix.config.name }}"
-        -bucket-dir "s3://openproblems-nextflow/test/bucket/${{ github.ref }}/${{ matrix.config.name }}"
+        -work-dir "/mnt/openproblems-nextflow/test/work/${{ github.ref }}"
+        -bucket-dir "s3://openproblems-nextflow/test/bucket/${{ github.ref }}"
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
 
