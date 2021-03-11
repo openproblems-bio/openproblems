@@ -22,7 +22,7 @@ def load_sample_data(test=True):
     rna_cells = pd.read_csv(rna_cells_url, low_memory=False, index_col=0)
     atac_cells = pd.read_csv(atac_cells_url, low_memory=False, index_col=0)
 
-    keep_cells = np.intersect1d(rna_cells.index, atac_cells.index)
+    keep_cells = np.intersect1d(rna_cells.index, atac_cells.index)[:200]
     rna_cells = rna_cells.loc[keep_cells]
     atac_cells = atac_cells.loc[keep_cells]
 
@@ -49,13 +49,13 @@ def load_sample_data(test=True):
         adata.uns[varname] = atac_genes[key].values
         adata.uns["mode2_varnames"].append(varname)
 
-    adata = subset_joint_data(adata, n_cells=200, n_genes=600)
+    # adata = subset_joint_data(adata, n_cells=200, n_genes=5000)
 
-    adata.X = scipy.sparse.csr_matrix(np.random.poisson(3, adata.X.shape)).astype(
+    adata.X = scipy.sparse.csr_matrix(np.random.poisson(0.1, adata.X.shape)).astype(
         np.float64
     )
     adata.obsm["mode2"] = scipy.sparse.csr_matrix(
-        np.random.poisson(2.5, adata.obsm["mode2"].shape)
+        np.random.poisson(0.1, adata.obsm["mode2"].shape)
     ).astype(np.float64)
 
     adata = filter_joint_data_empty_cells(adata)
