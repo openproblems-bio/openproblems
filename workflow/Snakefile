@@ -65,7 +65,7 @@ rule build_docker_image:
         dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_requirements,
     output:
-        temp("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR))
+        temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)))
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems"
