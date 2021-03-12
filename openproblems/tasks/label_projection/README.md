@@ -1,6 +1,8 @@
 # Label Projection
 
-Label projection refers to the automatic identification of cell identity labels in a test or query dataset based on a reference dataset that typically contains curated, manually labeled cells. Label projection methods can choose to take into account batch information, or choose to ignore it. For a review, see [Abdelaal et al. (2019)](https://doi.org/10.1186/s13059-019-1795-z).
+Label projection refers to the automatic identification of cell identity labels in a test or query dataset based on a reference dataset (or datasets) that typically contains curated, manually labeled cells. This process enables the rapid annotation of new datasets, which is becoming increasingly important as data generation becomes easier and larger in scale.
+
+Label projection methods range from logistic regression which ignores batch information, to methods that perform projection based on a batch-integrated embedding. For a review, see [Abdelaal et al. (2019)]{https://doi.org/10.1186/s13059-019-1795-z}.
 
 ## API
 
