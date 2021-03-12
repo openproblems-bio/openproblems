@@ -2,7 +2,7 @@
 
 Batch (or data) integration methods integrate datasets across batches that arise from various biological (e.g., tissue, location, individual, species) and technical (e.g., ambient RNA, lab, protocol) sources. The goal of a batch integration method is to remove unwanted batch effects in the data, while retaining biologically-meaningful variation that can help us to detect cell identities, fit cellular trajectories, or understand patterns of gene or pathway activity.
 
-Methods that integrate batches typically have one of three different types of output: a corrected feature matrix, a joint embedding across batches, and/or an integrated cell-cell similarity graph (e.g., a kNN graph). In order to define a consistent input ant output for each method and metric, we have divided the batch integration task into three sub-tasks. These subtasks are:
+Methods that integrate batches typically have one of three different types of output: a corrected feature matrix, a joint embedding across batches, and/or an integrated cell-cell similarity graph (e.g., a kNN graph). In order to define a consistent input and output for each method and metric, we have divided the batch integration task into three sub-tasks. These subtasks are:
 
 * [Batch integration graphs](batch_integration_graph/),
 * [Batch integration embeddings](batch_integration_embed/), and
