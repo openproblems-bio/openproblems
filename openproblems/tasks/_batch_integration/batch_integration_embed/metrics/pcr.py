@@ -7,7 +7,7 @@ from .....tools.decorators import metric
     image="openproblems-python-batch-integration",  # only if required
 )
 def pcr(adata):
-    from scIB.metrics import pcr_comparison
     from ._utils import _get_split
+    from scIB.metrics import pcr_comparison
 
     return pcr_comparison(*_get_split(adata), "batch", embed="X_emb")
