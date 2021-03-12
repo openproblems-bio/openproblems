@@ -21,6 +21,11 @@ jobs:
         - {name: 'current', os: ubuntu-latest, python: '3.8', java_version: 15 }
 
     steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.6.0
+      with:
+        access_token: ${{ github.token }}
+        
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1000
