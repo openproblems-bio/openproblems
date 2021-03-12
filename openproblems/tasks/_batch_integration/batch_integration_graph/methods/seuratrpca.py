@@ -80,7 +80,7 @@ def seuratrpca_full_unscaled(adata):
     image="openproblems-r-extras",  # only if required
 )
 def seuratrpca_hvg_unscaled(adata):
-    from _hvg import hvg_batch
+    from ._hvg import hvg_batch
     from scIB.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
@@ -99,7 +99,7 @@ def seuratrpca_hvg_unscaled(adata):
     image="openproblems-r-extras",  # only if required
 )
 def seuratrpca_hvg_scaled(adata):
-    from _hvg import hvg_batch
+    from ._hvg import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
