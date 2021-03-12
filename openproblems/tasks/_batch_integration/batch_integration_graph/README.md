@@ -14,8 +14,10 @@ This sub-task was taken from a [benchmarking study of data integration methods](
 
 Datasets should contain the following attributes:
 
-* `adata.obs["batch"]` with the batch covariate, and
-* `adata.obs["label"]` with the cell identity label
+* `adata.obs["batch"]` with the batch covariate,
+* `adata.obs["label"]` with the cell identity label,
+* `adata.layers['counts']` with raw, integer UMI count data, and
+* `adata.X` with log-normalized data
 
 Methods should assign output to:
 * `adata.obsp['connectivities']` and `adata.obsp['distances']`, or
