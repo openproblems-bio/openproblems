@@ -35,7 +35,7 @@ def scvi_full_unscaled(adata):
 )
 def scvi_hvg_unscaled(adata):
     from scIB.integration import runScvi
-    from scIB.preprocessing import hvg_batch
+    from _hvg import hvg_batch
     from scIB.preprocessing import reduce_data
 
     adata.obs.rename(columns={"labels": "lab"})  # ugly fix for scvi conversion error
@@ -57,7 +57,7 @@ def scvi_hvg_unscaled(adata):
 )
 def scvi_hvg_scaled(adata):
     from scIB.integration import runScvi
-    from scIB.preprocessing import hvg_batch
+    from _hvg import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 

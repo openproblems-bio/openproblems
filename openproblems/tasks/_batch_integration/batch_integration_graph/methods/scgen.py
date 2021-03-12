@@ -32,10 +32,10 @@ def scgen_full_unscaled(adata):
 )
 def scgen_hvg_unscaled(adata):
     from scIB.integration import runScGen
-    from scIB.preprocessing import hvg_batch
+    from _hvg import hvg_batch
     from scIB.preprocessing import reduce_data
 
-    adata = hvg_batch(adata, batch_key="batch")
+    adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runScGen(adata, "batch", "labels")
     reduce_data(adata)
     return adata
@@ -72,11 +72,11 @@ def scgen_full_scaled(adata):
 )
 def scgen_hvg_scaled(adata):
     from scIB.integration import runScGen
-    from scIB.preprocessing import hvg_batch
+    from _hvg import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
-    adata = hvg_batch(adata, "batch")
+    adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = runScGen(adata, "batch", "labels")
     reduce_data(adata)

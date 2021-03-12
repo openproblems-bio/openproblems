@@ -33,7 +33,7 @@ def scanorama_feature_full_unscaled(adata):
 )
 def scanorama_feature_hvg_unscaled(adata):
     from scIB.integration import runScanorama
-    from scIB.preprocessing import hvg_batch
+    from _hvg import hvg_batch
     from scIB.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
@@ -53,7 +53,7 @@ def scanorama_feature_hvg_unscaled(adata):
 )
 def scanorama_feature_hvg_scaled(adata):
     from scIB.integration import runScanorama
-    from scIB.preprocessing import hvg_batch
+    from _hvg import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
