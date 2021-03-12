@@ -4,8 +4,8 @@ on:
   push:
     tags:
       - '*'
-    branches:
-      - '*'
+    branches-ignore:
+      - 'test_docker'
 
 jobs:
   run_benchmark:
