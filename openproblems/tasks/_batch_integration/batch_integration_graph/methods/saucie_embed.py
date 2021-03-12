@@ -32,8 +32,13 @@ def saucie_embed_full_unscaled(adata):
     image="openproblems-r-scib",  # only if required
 )
 def saucie_embed_hvg_unscaled(adata):
+<<<<<<< HEAD
     from scIB.integration import runSaucie
     from ._hvg import hvg_batch
+=======
+    from _hvg import hvg_batch
+    from scIB.integration import runSaucie
+>>>>>>> e8516528a5b0d05e063df8d4a219be965fdc52a0
     from scIB.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
@@ -52,8 +57,13 @@ def saucie_embed_hvg_unscaled(adata):
     image="openproblems-r-scib",  # only if required
 )
 def saucie_embed_hvg_scaled(adata):
+<<<<<<< HEAD
     from scIB.integration import runSaucie
     from ._hvg import hvg_batch
+=======
+    from _hvg import hvg_batch
+    from scIB.integration import runSaucie
+>>>>>>> e8516528a5b0d05e063df8d4a219be965fdc52a0
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
