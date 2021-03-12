@@ -100,8 +100,7 @@ rule push_docker_image:
 
 rule pull_docker_image:
     output:
-        temp("{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR))
+        temp(touch("{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR)))
     shell:
-        "DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect singlecellopenproblems/{wildcards.image} > /dev/null || \
-        docker pull --quiet singlecellopenproblems/{wildcards.image} && \
-        touch {output}"
+        "DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect singlecellopenproblems/{wildcards.image} > /dev/null && \
+        docker pull --quiet singlecellopenproblems/{wildcards.image} || true"
