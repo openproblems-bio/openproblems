@@ -2,9 +2,10 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
+import scprep
+
 # from scIB.integration import _harmony
 
-import scprep
 
 _harmony = scprep.run.RFunction(
     setup="""
@@ -53,7 +54,7 @@ def harmony_full_unscaled(adata):
     image="openproblems-r-scib",  # only if required
 )
 def harmony_hvg_unscaled(adata):
-    from scIB.preprocessing import hvg_batch
+    from ._hvg import hvg_batch
     from scIB.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
@@ -73,7 +74,7 @@ def harmony_hvg_unscaled(adata):
     image="openproblems-r-scib",  # only if required
 )
 def harmony_hvg_scaled(adata):
-    from scIB.preprocessing import hvg_batch
+    from ._hvg import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 

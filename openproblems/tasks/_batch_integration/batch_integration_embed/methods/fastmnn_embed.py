@@ -4,10 +4,10 @@ from .....tools.utils import check_version
 
 import scprep
 
-# from scIB.integration import _fastmnn_feature
+# from scIB.integration import _fastmnn_embed
 
 
-_fastmnn_feature = scprep.run.RFunction(
+_fastmnn_embed = scprep.run.RFunction(
     setup="""
             library(SingleCellExperiment)
             library(batchelor)
@@ -15,9 +15,12 @@ _fastmnn_feature = scprep.run.RFunction(
     args="sobj, batch, hvg=2000",
     body="""
         expr <- assay(sobj, 'counts')
+
         sce <- fastMNN(expr, batch = colData(sobj)[[batch]])
-        assay(sobj, "counts") <- assay(sce, "reconstructed")
-        sobj
+
+        reducedDim(sobj, 'X_emb') <- reducedDim(sce, "corrected")
+
+        return(sobj)
         """,
 )
 
@@ -31,11 +34,10 @@ _fastmnn_feature = scprep.run.RFunction(
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def fastmnn_feature_full_unscaled(adata):
-    from scIB.preprocessing import reduce_data
+def fastmnn_embed_full_unscaled(adata):
 
-    adata = _fastmnn_feature(adata, "batch")
-    reduce_data(adata)
+    corrected = _fastmnn_embed(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["X_emb"]
     # Complete the result in-place
     return adata
 
@@ -47,15 +49,14 @@ def fastmnn_feature_full_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib",  # only if required
+    # image="openproblems-template-image" # only if required
 )
-def fastmnn_feature_hvg_unscaled(adata):
+def fastmnn_embed_hvg_unscaled(adata):
     from ._hvg import hvg_batch
-    from scIB.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = _fastmnn_feature(adata, "batch")
-    reduce_data(adata)
+    corrected = _fastmnn_embed(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["X_emb"]
     return adata
 
 
@@ -66,17 +67,16 @@ def fastmnn_feature_hvg_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib",  # only if required
+    # image="openproblems-template-image" # only if required
 )
-def fastmnn_feature_hvg_scaled(adata):
+def fastmnn_embed_hvg_scaled(adata):
     from ._hvg import hvg_batch
-    from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
-    adata = _fastmnn_feature(adata, "batch")
-    reduce_data(adata)
+    corrected = _fastmnn_embed(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["X_emb"]
     return adata
 
 
@@ -87,13 +87,12 @@ def fastmnn_feature_hvg_scaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib",  # only if required
+    # image="openproblems-template-image" # only if required
 )
-def fastmnn_feature_full_scaled(adata):
-    from scIB.preprocessing import reduce_data
+def fastmnn_embed_full_scaled(adata):
     from scIB.preprocessing import scale_batch
 
     adata = scale_batch(adata, "batch")
-    adata = _fastmnn_feature(adata, "batch")
-    reduce_data(adata)
+    corrected = _fastmnn_embed(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["X_emb"]
     return adata

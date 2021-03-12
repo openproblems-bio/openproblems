@@ -10,7 +10,7 @@ from .....tools.utils import check_version
     paper_year=2020,
     code_url="",
     code_version=check_version("mnnpy"),
-    # image="openproblems-template-image" # only if required
+    image="openproblems-python-batch-integration",
 )
 def mnn_full_unscaled(adata):
     from scIB.integration import runMNN
@@ -29,7 +29,7 @@ def mnn_full_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("mnnpy"),
-    # image="openproblems-template-image" # only if required
+    image="openproblems-python-batch-integration",
 )
 def mnn_hvg_unscaled(adata):
     from _hvg import hvg_batch
@@ -49,7 +49,7 @@ def mnn_hvg_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("mnnpy"),
-    # image="openproblems-template-image" # only if required
+    image="openproblems-python-batch-integration",
 )
 def mnn_hvg_scaled(adata):
     from _hvg import hvg_batch
@@ -71,7 +71,7 @@ def mnn_hvg_scaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("mnnpy"),
-    # image="openproblems-template-image" # only if required
+    image="openproblems-python-batch-integration",
 )
 def mnn_full_scaled(adata):
     from scIB.integration import runMNN

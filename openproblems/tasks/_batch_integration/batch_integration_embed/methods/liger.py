@@ -61,11 +61,8 @@ _liger = scprep.run.RFunction(
     image="openproblems-r-extras",  # only if required
 )
 def liger_full_unscaled(adata):
-    from scIB.preprocessing import reduce_data
-
-    adata = _liger(adata, "batch")
-    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
-    reduce_data(adata, use_rep="X_emb")
+    corrected = _liger(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["X_EMB"]
     # Complete the result in-place
     return adata
 
@@ -81,12 +78,10 @@ def liger_full_unscaled(adata):
 )
 def liger_hvg_unscaled(adata):
     from ._hvg import hvg_batch
-    from scIB.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = _liger(adata, "batch")
-    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
-    reduce_data(adata, use_rep="X_emb")
+    corrected = _liger(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["X_EMB"]
     return adata
 
 
@@ -101,14 +96,12 @@ def liger_hvg_unscaled(adata):
 )
 def liger_hvg_scaled(adata):
     from ._hvg import hvg_batch
-    from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
-    adata = _liger(adata, "batch")
-    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
-    reduce_data(adata, use_rep="X_emb")
+    corrected = _liger(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["X_EMB"]
     return adata
 
 
@@ -122,11 +115,9 @@ def liger_hvg_scaled(adata):
     image="openproblems-r-extras",  # only if required
 )
 def liger_full_scaled(adata):
-    from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
     adata = scale_batch(adata, "batch")
-    adata = _liger(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
-    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
+    corrected = _liger(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["X_EMB"]
     return adata

@@ -4,26 +4,29 @@ from .....tools.utils import check_version
 
 import scprep
 
-# from scIB.integration import _fastmnn_feature
+# from scIB.integration import _harmony
 
 
-_fastmnn_feature = scprep.run.RFunction(
+_harmony = scprep.run.RFunction(
     setup="""
             library(SingleCellExperiment)
-            library(batchelor)
+            library(harmony)
+            library(Seurat)
         """,
-    args="sobj, batch, hvg=2000",
+    args="sobj, batch",
     body="""
-        expr <- assay(sobj, 'counts')
-        sce <- fastMNN(expr, batch = colData(sobj)[[batch]])
-        assay(sobj, "counts") <- assay(sce, "reconstructed")
-        sobj
+            seu <- as.Seurat(sobj)
+            seu <- ScaleData(seu)
+            seu <- RunPCA(seu, features=rownames(seu@assays$RNA))
+            seu <- RunHarmony(seu, batch)
+            seu <- as.SingleCellExperiment(seu)
+            seu
         """,
 )
 
 
 @method(
-    method_name="FastMNN feature",
+    method_name="Harmony",
     paper_name="Sc",
     paper_url="temp",
     paper_year=2020,
@@ -31,17 +34,14 @@ _fastmnn_feature = scprep.run.RFunction(
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def fastmnn_feature_full_unscaled(adata):
-    from scIB.preprocessing import reduce_data
-
-    adata = _fastmnn_feature(adata, "batch")
-    reduce_data(adata)
-    # Complete the result in-place
+def harmony_full_unscaled(adata):
+    corrected = _harmony(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["HARMONY"]
     return adata
 
 
 @method(
-    method_name="FastMNN feature (hvg/unscaled)",
+    method_name="Harmony (hvg/unscaled)",
     paper_name="Sc",
     paper_url="temp",
     paper_year=2020,
@@ -49,18 +49,17 @@ def fastmnn_feature_full_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-scib",  # only if required
 )
-def fastmnn_feature_hvg_unscaled(adata):
+def harmony_hvg_unscaled(adata):
     from ._hvg import hvg_batch
-    from scIB.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = _fastmnn_feature(adata, "batch")
-    reduce_data(adata)
+    corrected = _harmony(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["HARMONY"]
     return adata
 
 
 @method(
-    method_name="FastMNN feature (hvg/scaled)",
+    method_name="Harmony (hvg/scaled)",
     paper_name="Sc",
     paper_url="temp",
     paper_year=2020,
@@ -68,20 +67,19 @@ def fastmnn_feature_hvg_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-scib",  # only if required
 )
-def fastmnn_feature_hvg_scaled(adata):
+def harmony_hvg_scaled(adata):
     from ._hvg import hvg_batch
-    from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
-    adata = _fastmnn_feature(adata, "batch")
-    reduce_data(adata)
+    corrected = _harmony(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["HARMONY"]
     return adata
 
 
 @method(
-    method_name="FastMNN feature (full/scaled)",
+    method_name="Harmony(full/scaled)",
     paper_name="Sc",
     paper_url="temp",
     paper_year=2020,
@@ -89,11 +87,10 @@ def fastmnn_feature_hvg_scaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-scib",  # only if required
 )
-def fastmnn_feature_full_scaled(adata):
-    from scIB.preprocessing import reduce_data
+def harmony_full_scaled(adata):
     from scIB.preprocessing import scale_batch
 
     adata = scale_batch(adata, "batch")
-    adata = _fastmnn_feature(adata, "batch")
-    reduce_data(adata)
+    corrected = _harmony(adata, "batch")
+    adata.obsm["X_emb"] = corrected.obsm["HARMONY"]
     return adata

@@ -2,9 +2,10 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
+import scprep
+
 # from scIB.integration import _fastmnn_embed
 
-import scprep
 
 _fastmnn_embed = scprep.run.RFunction(
     setup="""
@@ -52,7 +53,7 @@ def fastmnn_embed_full_unscaled(adata):
     # image="openproblems-template-image" # only if required
 )
 def fastmnn_embed_hvg_unscaled(adata):
-    from scIB.preprocessing import hvg_batch
+    from ._hvg import hvg_batch
     from scIB.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
@@ -71,7 +72,7 @@ def fastmnn_embed_hvg_unscaled(adata):
     # image="openproblems-template-image" # only if required
 )
 def fastmnn_embed_hvg_scaled(adata):
-    from scIB.preprocessing import hvg_batch
+    from ._hvg import hvg_batch
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
