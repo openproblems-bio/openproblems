@@ -165,6 +165,12 @@ jobs:
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
 
+    - name: Parse results
+      run: |
+        cp -r /mnt/openproblems-nextflow/cwd/${{ github.ref }}/results .
+        python workflow/parse_nextflow.py
+        rm -r results
+
     - name: Remove working directory
       if: always() && startsWith(github.ref, 'refs/tags')
       env:
@@ -175,11 +181,6 @@ jobs:
         aws s3 rm "s3://openproblems-nextflow/work/${{ github.ref }}"
         aws s3 rm "s3://openproblems-nextflow/bucket/${{ github.ref }}"
         aws s3 rm "s3://openproblems-nextflow/cwd/${{ github.ref }}"
-
-    - name: Parse results
-      run: |
-        python workflow/parse_nextflow.py
-        rm -r results
 
     - name: Pre-commit
       uses: pre-commit/action@v2.0.0
