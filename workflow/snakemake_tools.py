@@ -89,8 +89,15 @@ def docker_image_age(image):
         stdout=subprocess.PIPE,
     )
     date_string = proc.stdout.decode().strip().replace('"', "").split(".")[0]
-    date_datetime = datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S")
-    return int(date_datetime.timestamp())
+    try:
+        date_datetime = datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S")
+        return int(date_datetime.timestamp())
+    except ValueError:
+        warnings.warn(
+            "Docker image singlecellopenproblems/{} not found; "
+            "assuming needs rebuild.".format(image)
+        )
+        return -1
 
 
 def docker_file_age(image):
@@ -113,7 +120,9 @@ def docker_file_age(image):
         return int(result)
     except ValueError:
         warnings.warn(
-            "Files {}/* not found on git; assuming unchanged.".format(docker_path)
+            "Files {}/{}/* not found on git; assuming unchanged.".format(
+                os.getcwd(), docker_path
+            )
         )
         return 0
 
