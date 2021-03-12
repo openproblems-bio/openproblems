@@ -24,4 +24,4 @@ Metrics can compare:
 * `adata.obsm['X_emb']` to `adata.obs['label']`, and/or
 * `adata.obsm['X_emb']` to `adata.obs['batch']`.
 
-To reuse metrics functions from `scIB`, [`.metrics._utils._get_split`](.metrics._utils.py) separates the combined anndata into an integrated and an unintegrated anndata object.
+To reuse metrics functions from `scIB`, [`metrics._utils._get_split`](metrics/_utils.py) separates the combined anndata into an integrated and an unintegrated anndata object.
