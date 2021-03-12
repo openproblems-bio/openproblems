@@ -17,9 +17,21 @@ Datasets should contain the following attributes:
 * `adata.obs["batch"]`
 * `adata.obs["label"]`
 
-Methods should assign output to `adata.obsp['connectivities']`.
+Methods should assign output to `adata.obsp['connectivities']` `adata.obsp['distances']` and `adata.uns['neighbors']`.
+
+The `openproblems-python-batch-integration` docker container is used for the methods that
+can be installed without package conflicts. For R methods, the `openproblems-r-extras`
+container is used.
+Methods are run in four different scenarios that include scaling and highly variable gene selection:
+* `full_unscaled`
+* `hvg_unscaled`
+* `full_scaled`
+* `hvg_scaled`
+
+An example script can be found [here](methods/_example.py)
+Functions for scaling and highly variable gene selection per batch are reused from [`scIB`](https://github.com/theislab/scib). Additionally, method wrappers are reused from there where possible.
 
 Metrics can compare:
-* `adata.obsp['connectivities']` to `adata.obs['unintegrated_connectivies']`,
+* `adata.obsp['connectivities']` to `adata.obs['uni_connectivies']`,
 * `adata.obsp['connectivities']` to `adata.obs['label']`, and/or
 * `adata.obsp['connectivities']` to `adata.obs['batch']`.
