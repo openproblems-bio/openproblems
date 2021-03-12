@@ -33,8 +33,8 @@ def scanvi_full_unscaled(adata):
     image="openproblems-python-batch-integration",  # only if required
 )
 def scanvi_hvg_unscaled(adata):
-    from scIB.integration import runScanvi
     from _hvg import hvg_batch
+    from scIB.integration import runScanvi
     from scIB.preprocessing import reduce_data
 
     adata.obs.rename(columns={"labels": "lab"})  # ugly fix for scvi conversion error
@@ -55,8 +55,8 @@ def scanvi_hvg_unscaled(adata):
     image="openproblems-python-batch-integration",  # only if required
 )
 def scanvi_hvg_scaled(adata):
-    from scIB.integration import runScanvi
     from _hvg import hvg_batch
+    from scIB.integration import runScanvi
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
