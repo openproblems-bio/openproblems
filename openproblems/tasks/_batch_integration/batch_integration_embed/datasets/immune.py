@@ -20,7 +20,9 @@ def immune_batch(test=False):
     adata.layers["logcounts"] = adata.X
 
     sc.tl.pca(
-        adata, svd_solver="arpack", return_info=True,
+        adata,
+        svd_solver="arpack",
+        return_info=True,
     )
     adata.obsm["X_uni"] = adata.obsm["X_pca"]
 
