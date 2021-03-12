@@ -53,10 +53,10 @@ def load_share(
         Y_columns=atac_genes.iloc[:, 0:3].values,
     )
 
-    adata.uns["mode2_var"] = adata.uns["mode2_var"].astype(str)
     adata.uns["mode2_var_chr"] = adata.uns["mode2_var"][:, 0]
     adata.uns["mode2_var_start"] = adata.uns["mode2_var"][:, 1].astype(str)
     adata.uns["mode2_var_end"] = adata.uns["mode2_var"][:, 2].astype(str)
+    adata.uns["mode2_var"] = adata.uns["mode2_var"].astype(str)
 
     adata.var["gene_short_name"] = adata.var.index
     adata = filter_joint_data_empty_cells(adata)
