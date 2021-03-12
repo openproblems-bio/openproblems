@@ -4,6 +4,7 @@ from ....tools.utils import check_version
 import numpy as np
 import scprep
 
+
 def _magic(adata, solver):
     from magic import MAGIC
 
@@ -17,6 +18,7 @@ def _magic(adata, solver):
     adata.obsm["denoised"] = Y
     return adata
 
+
 @method(
     method_name="MAGIC",
     paper_name="Recovering Gene Interactions from Single-Cell Data "
@@ -29,6 +31,7 @@ def _magic(adata, solver):
 )
 def magic(adata):
     return _magic(adata, solver="exact")
+
 
 @method(
     method_name="MAGIC (approximate)",
