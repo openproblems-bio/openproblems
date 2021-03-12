@@ -121,7 +121,7 @@ def docker_file_age(image):
     except ValueError:
         warnings.warn(
             "Files {}/{}/* not found on git; assuming unchanged.".format(
-                os.cwd(), docker_path
+                os.getcwd(), docker_path
             )
         )
         return 0
