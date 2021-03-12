@@ -3,4 +3,3 @@ include README.md
 recursive-include scripts *.sh *.py *.R Snakefile .Rprofile
 include openproblems/test/singularity_run.sh
 include openproblems/data/multimodal/sample.h5ad
-
