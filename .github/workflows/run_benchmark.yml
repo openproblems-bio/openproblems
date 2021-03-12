@@ -12,7 +12,6 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     env:
-      RUN_ID: "${{ github.workflow }}_${{ github.run_number }}"
       BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
 
     strategy:
