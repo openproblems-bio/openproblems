@@ -25,7 +25,7 @@ jobs:
       uses: styfle/cancel-workflow-action@0.6.0
       with:
         access_token: ${{ github.token }}
-        
+
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1000
@@ -54,7 +54,7 @@ jobs:
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:/:_:g'`" >> $GITHUB_ENV
         # don't use tower if the env var is not set
-        echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "with-tower"; else echo; fi`" >> $GITHUB_ENV
+        echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
         if [ $(echo ${{ github.ref }} | grep -E -e "^refs/heads/(master|test_benchmark)" -e "^refs/tags") ]; then
           PROFILE="aws"
           RESUME=""
