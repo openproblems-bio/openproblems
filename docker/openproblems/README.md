@@ -1,10 +1,10 @@
 # openproblems Docker image
 
-Base image: rackspacedot/python37
+Base image: rackspacedot/python38
 
 OS: Debian Stretch
 
-Python: 3.7
+Python: 3.8
 
 Python packages:
 
@@ -13,3 +13,4 @@ Python packages:
 * setuptools
 * cmake
 * openproblems
+* jupyter
