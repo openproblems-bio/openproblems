@@ -1,7 +1,8 @@
-import sklearn.preprocessing
-import sklearn.pipeline
 from .utils import pca_op
+
 import numpy as np
+import sklearn.pipeline
+import sklearn.preprocessing
 
 
 def classifier(adata, estimator, n_pca=100, **kwargs):
