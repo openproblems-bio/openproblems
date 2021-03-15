@@ -2,9 +2,9 @@ from ....tools.decorators import method
 from ....tools.normalize import log_cpm
 from ....tools.normalize import log_scran_pooling
 from ....tools.utils import check_version
+from .sklearn import classifier
 
 import sklearn.neighbors
-from .sklearn import classifier
 
 
 @method(
