@@ -1,439 +1,684 @@
 {
+    "denoising": {
+        "pbmc": {
+            "no_denoising": {
+                "submit": "2021-03-04 21:22:42.957",
+                "duration": "7m 49s",
+                "realtime": "6s",
+                "%cpu": "75.5%",
+                "peak_rss": "541.4 MB",
+                "peak_vmem": "1.7 GB",
+                "rchar": "346.8 MB",
+                "wchar": "440.3 MB",
+                "metrics": {
+                    "poisson": 0.3011988118677921,
+                    "mse": 0.012549637
+                }
+            },
+            "magic": {
+                "submit": "2021-03-04 21:22:43.333",
+                "duration": "7m 49s",
+                "realtime": "27.3s",
+                "%cpu": "148.9%",
+                "peak_rss": "867.1 MB",
+                "peak_vmem": "2.2 GB",
+                "rchar": "347.6 MB",
+                "wchar": "440.3 MB",
+                "metrics": {
+                    "mse": 0.0118303355,
+                    "poisson": 0.16191240032487758
+                }
+            }
+        }
+    },
+    "dimensional_reduction": {
+        "human_blood_nestorowa2016": {
+            "pca": {
+                "submit": "2021-03-04 21:23:02.711",
+                "duration": "8m 59s",
+                "realtime": "28.1s",
+                "%cpu": "171.0%",
+                "peak_rss": "1.2 GB",
+                "peak_vmem": "2.5 GB",
+                "rchar": "366.2 MB",
+                "wchar": "342.6 MB",
+                "metrics": {
+                    "rmse": 48617.16431730181
+                }
+            },
+            "phate": {
+                "submit": "2021-03-04 21:23:02.867",
+                "duration": "10m 55s",
+                "realtime": "1m 8s",
+                "%cpu": "173.3%",
+                "peak_rss": "1.6 GB",
+                "peak_vmem": "3.1 GB",
+                "rchar": "367.1 MB",
+                "wchar": "967.7 MB",
+                "metrics": {
+                    "rmse": 512.4515203460434
+                }
+            },
+            "umap": {
+                "submit": "2021-03-04 21:23:03.560",
+                "duration": "10m 55s",
+                "realtime": "41.3s",
+                "%cpu": "279.4%",
+                "peak_rss": "1.2 GB",
+                "peak_vmem": "3.6 GB",
+                "rchar": "367.6 MB",
+                "wchar": "335 MB",
+                "metrics": {
+                    "rmse": 520089.23402196984
+                }
+            },
+            "tsne": {
+                "submit": "2021-03-04 21:23:03.072",
+                "duration": "11m 45s",
+                "realtime": "50.5s",
+                "%cpu": "162.6%",
+                "peak_rss": "1.2 GB",
+                "peak_vmem": "3.1 GB",
+                "rchar": "366.5 MB",
+                "wchar": "342.6 MB",
+                "metrics": {
+                    "rmse": 520080.8776462019
+                }
+            }
+        },
+        "tenx_5k_pbmc": {
+            "pca": {
+                "submit": "2021-03-04 21:23:52.803",
+                "duration": "10m 6s",
+                "realtime": "56.1s",
+                "%cpu": "2003.5%",
+                "peak_rss": "453 MB",
+                "peak_vmem": "6.1 GB",
+                "rchar": "107.2 MB",
+                "wchar": "83.7 MB",
+                "metrics": {
+                    "rmse": 163.1872507596069
+                }
+            },
+            "umap": {
+                "submit": "2021-03-04 21:23:53.149",
+                "duration": "13m 5s",
+                "realtime": "4m 4s",
+                "%cpu": "336.1%",
+                "peak_rss": "663.7 MB",
+                "peak_vmem": "10.6 GB",
+                "rchar": "108 MB",
+                "wchar": "77.5 MB",
+                "metrics": {
+                    "rmse": 484.8312913792426
+                }
+            },
+            "tsne": {
+                "submit": "2021-03-04 21:23:52.859",
+                "duration": "14m 55s",
+                "realtime": "4m 54s",
+                "%cpu": "190.7%",
+                "peak_rss": "453.6 MB",
+                "peak_vmem": "6.1 GB",
+                "rchar": "107.3 MB",
+                "wchar": "83.8 MB",
+                "metrics": {
+                    "rmse": 452.9771862355844
+                }
+            },
+            "phate": {
+                "submit": "2021-03-04 21:23:53.161",
+                "duration": "17m 25s",
+                "realtime": "7m 25s",
+                "%cpu": "392.5%",
+                "peak_rss": "862.5 MB",
+                "peak_vmem": "11.9 GB",
+                "rchar": "107.4 MB",
+                "wchar": "216.2 MB",
+                "metrics": {
+                    "rmse": 580.2593474772534
+                }
+            }
+        },
+        "citeseq_cbmc": {
+            "pca": {
+                "submit": "2021-03-04 21:29:52.897",
+                "duration": "10m 35s",
+                "realtime": "51.9s",
+                "%cpu": "205.4%",
+                "peak_rss": "515.1 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "128.1 MB",
+                "wchar": "111.2 MB",
+                "metrics": {
+                    "rmse": 157.7575041333448
+                }
+            },
+            "umap": {
+                "submit": "2021-03-04 21:29:53.292",
+                "duration": "11m 15s",
+                "realtime": "1m 30s",
+                "%cpu": "165.2%",
+                "peak_rss": "517.3 MB",
+                "peak_vmem": "2.4 GB",
+                "rchar": "129 MB",
+                "wchar": "105.5 MB",
+                "metrics": {
+                    "rmse": 700.772661068127
+                }
+            },
+            "tsne": {
+                "submit": "2021-03-04 21:29:52.936",
+                "duration": "12m 5s",
+                "realtime": "2m 25s",
+                "%cpu": "137.8%",
+                "peak_rss": "514.2 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "128.2 MB",
+                "wchar": "111.4 MB",
+                "metrics": {
+                    "rmse": 683.9766772189781
+                }
+            },
+            "phate": {
+                "submit": "2021-03-04 21:29:53.235",
+                "duration": "19m 6s",
+                "realtime": "9m 12s",
+                "%cpu": "383.3%",
+                "peak_rss": "948.4 MB",
+                "peak_vmem": "12.2 GB",
+                "rchar": "128.3 MB",
+                "wchar": "275.5 MB",
+                "metrics": {
+                    "rmse": 651.6614455288459
+                }
+            }
+        }
+    },
     "label_projection": {
-        "pancreas_batch": [
-            {
-                "Name": "Logistic regression (log CPM)",
-                "Paper": "Applied Logistic Regression",
-                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
-                "Year": 2013,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 5.700954437255859,
-                "Memory leaked (GB)": 1.2015953063964844,
-                "Runtime (min)": 0.20866485165121654,
-                "Accuracy": 0.9599675412496619,
-                "F1 score": 0.960194921134344,
-                "Micro F1 score": 0.9599675412496619
+        "pancreas_batch": {
+            "logistic_regression_log_cpm": {
+                "submit": "2021-03-04 21:25:13.062",
+                "duration": "11m 5s",
+                "realtime": "1m 26s",
+                "%cpu": "222.0%",
+                "peak_rss": "6 GB",
+                "peak_vmem": "7.3 GB",
+                "rchar": "1.2 GB",
+                "wchar": "3.4 GB",
+                "metrics": {
+                    "f1_micro": 0.9621314579388693,
+                    "f1": 0.9625176164840247,
+                    "accuracy": 0.9621314579388693
+                }
             },
-            {
-                "Name": "Logistic regression (log scran)",
-                "Paper": "Applied Logistic Regression",
-                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
-                "Year": 2013,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 7.520092010498047,
-                "Memory leaked (GB)": 1.5965461730957031,
-                "Runtime (min)": 4.66631585053013,
-                "Accuracy": 0.9561806870435489,
-                "F1 score": 0.9566200591930137,
-                "Micro F1 score": 0.9561806870435489
+            "mlp_log_cpm": {
+                "submit": "2021-03-04 21:25:13.476",
+                "duration": "11m 54s",
+                "realtime": "1m 49s",
+                "%cpu": "444.0%",
+                "peak_rss": "6 GB",
+                "peak_vmem": "7.9 GB",
+                "rchar": "1.2 GB",
+                "wchar": "3.4 GB",
+                "metrics": {
+                    "accuracy": 0.9659183121449825,
+                    "f1": 0.9660429385302881,
+                    "f1_micro": 0.9659183121449825
+                }
             },
-            {
-                "Name": "Multilayer perceptron (log CPM)",
-                "Paper": "Connectionist learning procedures",
-                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
-                "Year": 1990,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 5.009269714355469,
-                "Memory leaked (GB)": 1.2130699157714844,
-                "Runtime (min)": 0.22916519918944686,
-                "Accuracy": 0.9618609683527184,
-                "F1 score": 0.9622789080210892,
-                "Micro F1 score": 0.9618609683527184
+            "mlp_scran": {
+                "submit": "2021-03-04 21:55:40.397",
+                "duration": "11m 43s",
+                "realtime": "10m 13s",
+                "%cpu": "231.2%",
+                "peak_rss": "16.8 GB",
+                "peak_vmem": "18.8 GB",
+                "rchar": "1.2 GB",
+                "wchar": "4.6 GB",
+                "metrics": {
+                    "f1_micro": 0.9193941033270219,
+                    "f1": 0.9183557604871944,
+                    "accuracy": 0.9193941033270219
+                }
             },
-            {
-                "Name": "Multilayer perceptron (log scran)",
-                "Paper": "Connectionist learning procedures",
-                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
-                "Year": 1990,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 7.760185241699219,
-                "Memory leaked (GB)": 1.6299705505371094,
-                "Runtime (min)": 5.002540404768661,
-                "Accuracy": 0.9637543954557749,
-                "F1 score": 0.9645666665214839,
-                "Micro F1 score": 0.9637543954557749
+            "logistic_regression_scran": {
+                "submit": "2021-03-04 22:01:54.067",
+                "duration": "11m 49s",
+                "realtime": "9m 52s",
+                "%cpu": "306.1%",
+                "peak_rss": "15 GB",
+                "peak_vmem": "20.7 GB",
+                "rchar": "1.2 GB",
+                "wchar": "4.6 GB",
+                "metrics": {
+                    "f1_micro": 0.9464430619421152,
+                    "f1": 0.9446969346485843,
+                    "accuracy": 0.9464430619421152
+                }
             }
-        ],
-        "pancreas_random": [
-            {
-                "Name": "Logistic regression (log CPM)",
-                "Paper": "Applied Logistic Regression",
-                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
-                "Year": 2013,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 4.981151580810547,
-                "Memory leaked (GB)": 1.2022209167480469,
-                "Runtime (min)": 0.2174978520643587,
-                "Accuracy": 0.9866342648845686,
-                "F1 score": 0.9865321442355197,
-                "Micro F1 score": 0.9866342648845686
+        },
+        "pancreas_random": {
+            "logistic_regression_log_cpm": {
+                "submit": "2021-03-04 21:24:45.639",
+                "duration": "12m 42s",
+                "realtime": "1m 19s",
+                "%cpu": "92.4%",
+                "peak_rss": "6 GB",
+                "peak_vmem": "6.8 GB",
+                "rchar": "1.2 GB",
+                "wchar": "3.4 GB",
+                "metrics": {
+                    "accuracy": 0.9836552748885586,
+                    "f1": 0.9834564209847434,
+                    "f1_micro": 0.9836552748885586
+                }
             },
-            {
-                "Name": "Logistic regression (log scran)",
-                "Paper": "Applied Logistic Regression",
-                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
-                "Year": 2013,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 8.060546875,
-                "Memory leaked (GB)": 1.6349449157714844,
-                "Runtime (min)": 4.772908641421236,
-                "Accuracy": 0.9869380315917375,
-                "F1 score": 0.9868719555155361,
-                "Micro F1 score": 0.9869380315917375
+            "mlp_log_cpm": {
+                "submit": "2021-03-04 21:24:45.415",
+                "duration": "16m 53s",
+                "realtime": "7m 40s",
+                "%cpu": "412.6%",
+                "peak_rss": "6 GB",
+                "peak_vmem": "11.7 GB",
+                "rchar": "1.2 GB",
+                "wchar": "3.4 GB",
+                "metrics": {
+                    "f1": 0.9868810025295252,
+                    "f1_micro": 0.986924219910847,
+                    "accuracy": 0.986924219910847
+                }
             },
-            {
-                "Name": "Multilayer perceptron (log CPM)",
-                "Paper": "Connectionist learning procedures",
-                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
-                "Year": 1990,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 5.898853302001953,
-                "Memory leaked (GB)": 1.2123260498046875,
-                "Runtime (min)": 0.2284146731486544,
-                "Accuracy": 0.9872417982989065,
-                "F1 score": 0.9872083972332211,
-                "Micro F1 score": 0.9872417982989065
+            "logistic_regression_scran": {
+                "submit": "2021-03-04 21:56:20.259",
+                "duration": "12m 3s",
+                "realtime": "10m 43s",
+                "%cpu": "175.6%",
+                "peak_rss": "15 GB",
+                "peak_vmem": "17 GB",
+                "rchar": "1.2 GB",
+                "wchar": "4.6 GB",
+                "metrics": {
+                    "accuracy": 0.9393759286775631,
+                    "f1": 0.9314710362304858,
+                    "f1_micro": 0.9393759286775631
+                }
             },
-            {
-                "Name": "Multilayer perceptron (log scran)",
-                "Paper": "Connectionist learning procedures",
-                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
-                "Year": 1990,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 7.490489959716797,
-                "Memory leaked (GB)": 1.5597305297851562,
-                "Runtime (min)": 4.747239233320579,
-                "Accuracy": 0.988456865127582,
-                "F1 score": 0.9884498204894728,
-                "Micro F1 score": 0.988456865127582
+            "mlp_scran": {
+                "submit": "2021-03-04 22:00:50.315",
+                "duration": "11m 33s",
+                "realtime": "10m 6s",
+                "%cpu": "707.1%",
+                "peak_rss": "16.8 GB",
+                "peak_vmem": "22.6 GB",
+                "rchar": "1.2 GB",
+                "wchar": "4.6 GB",
+                "metrics": {
+                    "f1": 0.9757964787128773,
+                    "accuracy": 0.97592867756315,
+                    "f1_micro": 0.97592867756315
+                }
             }
-        ],
-        "zebrafish_labels": [
-            {
-                "Name": "Logistic regression (log CPM)",
-                "Paper": "Applied Logistic Regression",
-                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
-                "Year": 2013,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 1.7698707580566406,
-                "Memory leaked (GB)": 0.4065208435058594,
-                "Runtime (min)": 0.6399566968514895,
-                "Accuracy": 0.23485143376151552,
-                "F1 score": 0.27757245753160237,
-                "Micro F1 score": 0.23485143376151552
+        },
+        "zebrafish_labels": {
+            "logistic_regression_log_cpm": {
+                "submit": "2021-03-04 21:24:02.990",
+                "duration": "22m 45s",
+                "realtime": "13m 39s",
+                "%cpu": "261.6%",
+                "peak_rss": "1.9 GB",
+                "peak_vmem": "7.6 GB",
+                "rchar": "413.8 MB",
+                "wchar": "1.1 GB",
+                "metrics": {
+                    "f1": 0.25314180004077963,
+                    "accuracy": 0.20688984040482677,
+                    "f1_micro": 0.20688984040482677
+                }
             },
-            {
-                "Name": "Logistic regression (log scran)",
-                "Paper": "Applied Logistic Regression",
-                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
-                "Year": 2013,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 11.943897247314453,
-                "Memory leaked (GB)": 1.9750823974609375,
-                "Runtime (min)": 7.759680753240051,
-                "Accuracy": 0.2403659011288439,
-                "F1 score": 0.2817802652828652,
-                "Micro F1 score": 0.2403659011288439
+            "mlp_log_cpm": {
+                "submit": "2021-03-04 21:24:03.543",
+                "duration": "26m 36s",
+                "realtime": "17m 27s",
+                "%cpu": "478.4%",
+                "peak_rss": "1.9 GB",
+                "peak_vmem": "7.6 GB",
+                "rchar": "413.8 MB",
+                "wchar": "1.1 GB",
+                "metrics": {
+                    "f1_micro": 0.22797456857402362,
+                    "f1": 0.2553562224649691,
+                    "accuracy": 0.22797456857402362
+                }
             },
-            {
-                "Name": "Multilayer perceptron (log CPM)",
-                "Paper": "Connectionist learning procedures",
-                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
-                "Year": 1990,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 1.7593994140625,
-                "Memory leaked (GB)": 0.4033699035644531,
-                "Runtime (min)": 0.4515685135032982,
-                "Accuracy": 0.2022836382509407,
-                "F1 score": 0.21518377000309918,
-                "Micro F1 score": 0.2022836382509407
+            "logistic_regression_scran": {
+                "submit": "2021-03-04 21:24:03.139",
+                "duration": "34m 26s",
+                "realtime": "24m 12s",
+                "%cpu": "132.2%",
+                "peak_rss": "6.1 GB",
+                "peak_vmem": "11.1 GB",
+                "rchar": "447.1 MB",
+                "wchar": "1.1 GB",
+                "metrics": {
+                    "accuracy": 0.2407551576488906,
+                    "f1": 0.2940364054990422,
+                    "f1_micro": 0.2407551576488906
+                }
             },
-            {
-                "Name": "Multilayer perceptron (log scran)",
-                "Paper": "Connectionist learning procedures",
-                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
-                "Year": 1990,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 10.497447967529297,
-                "Memory leaked (GB)": 1.9385337829589844,
-                "Runtime (min)": 7.6507362990407275,
-                "Accuracy": 0.21739976644608797,
-                "F1 score": 0.2562282392809992,
-                "Micro F1 score": 0.21739976644608797
+            "mlp_scran": {
+                "submit": "2021-03-04 21:24:03.657",
+                "duration": "36m 16s",
+                "realtime": "25m 59s",
+                "%cpu": "246.5%",
+                "peak_rss": "6.1 GB",
+                "peak_vmem": "11.1 GB",
+                "rchar": "447.2 MB",
+                "wchar": "1.1 GB",
+                "metrics": {
+                    "f1": 0.21410854007941685,
+                    "accuracy": 0.1943687556766576,
+                    "f1_micro": 0.1943687556766576
+                }
             }
-        ],
-        "zebrafish_random": [
-            {
-                "Name": "Logistic regression (log CPM)",
-                "Paper": "Applied Logistic Regression",
-                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
-                "Year": 2013,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 1.6777687072753906,
-                "Memory leaked (GB)": 0.4014549255371094,
-                "Runtime (min)": 0.7674388997489586,
-                "Accuracy": 0.8270526960784313,
-                "F1 score": 0.8240915932859854,
-                "Micro F1 score": 0.8270526960784313
+        },
+        "zebrafish_random": {
+            "logistic_regression_log_cpm": {
+                "submit": "2021-03-04 21:24:04.103",
+                "duration": "23m 24s",
+                "realtime": "14m 17s",
+                "%cpu": "257.5%",
+                "peak_rss": "1.8 GB",
+                "peak_vmem": "7.5 GB",
+                "rchar": "413.8 MB",
+                "wchar": "1.1 GB",
+                "metrics": {
+                    "f1_micro": 0.8290743457114182,
+                    "f1": 0.8267636381587593,
+                    "accuracy": 0.8290743457114182
+                }
             },
-            {
-                "Name": "Logistic regression (log scran)",
-                "Paper": "Applied Logistic Regression",
-                "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
-                "Year": 2013,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 11.053783416748047,
-                "Memory leaked (GB)": 1.8948287963867188,
-                "Runtime (min)": 7.977429020986892,
-                "Accuracy": 0.8380821078431373,
-                "F1 score": 0.8361124612983362,
-                "Micro F1 score": 0.8380821078431373
+            "mlp_log_cpm": {
+                "submit": "2021-03-04 21:24:04.239",
+                "duration": "27m 15s",
+                "realtime": "18m 5s",
+                "%cpu": "499.1%",
+                "peak_rss": "1.8 GB",
+                "peak_vmem": "7.5 GB",
+                "rchar": "413.8 MB",
+                "wchar": "1.1 GB",
+                "metrics": {
+                    "f1_micro": 0.8259090558171852,
+                    "accuracy": 0.8259090558171852,
+                    "f1": 0.8257495117301303
+                }
             },
-            {
-                "Name": "Multilayer perceptron (log CPM)",
-                "Paper": "Connectionist learning procedures",
-                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
-                "Year": 1990,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 1.6613960266113281,
-                "Memory leaked (GB)": 0.4024696350097656,
-                "Runtime (min)": 0.5258183833444491,
-                "Accuracy": 0.8241421568627451,
-                "F1 score": 0.8228996586304657,
-                "Micro F1 score": 0.8241421568627451
+            "logistic_regression_scran": {
+                "submit": "2021-03-04 21:24:03.983",
+                "duration": "35m 15s",
+                "realtime": "24m 56s",
+                "%cpu": "137.6%",
+                "peak_rss": "6.1 GB",
+                "peak_vmem": "11.1 GB",
+                "rchar": "447.1 MB",
+                "wchar": "1.1 GB",
+                "metrics": {
+                    "f1": 0.8333648682960864,
+                    "f1_micro": 0.8346329035744615,
+                    "accuracy": 0.8346329035744615
+                }
             },
-            {
-                "Name": "Multilayer perceptron (log scran)",
-                "Paper": "Connectionist learning procedures",
-                "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
-                "Year": 1990,
-                "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-                "Version": "0.23.2",
-                "Memory (GB)": 10.590446472167969,
-                "Memory leaked (GB)": 1.7847976684570312,
-                "Runtime (min)": 7.760708172316663,
-                "Accuracy": 0.8338694852941176,
-                "F1 score": 0.8329496564286063,
-                "Micro F1 score": 0.8338694852941176
+            "mlp_scran": {
+                "submit": "2021-03-04 21:24:04.272",
+                "duration": "36m 35s",
+                "realtime": "26m 27s",
+                "%cpu": "263.1%",
+                "peak_rss": "6.1 GB",
+                "peak_vmem": "11.1 GB",
+                "rchar": "447.2 MB",
+                "wchar": "1.1 GB",
+                "metrics": {
+                    "f1_micro": 0.8323940399907357,
+                    "accuracy": 0.8323940399907357,
+                    "f1": 0.8327246237061383
+                }
             }
-        ]
+        }
     },
     "multimodal_data_integration": {
-        "citeseq_cbmc": [
-            {
-                "Name": "Harmonic Alignment (log scran)",
-                "Paper": "Harmonic Alignment",
-                "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
-                "Year": 2020,
-                "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
-                "Version": "0.0",
-                "Memory (GB)": 4.162391662597656,
-                "Memory leaked (GB)": 1.0101966857910156,
-                "Runtime (min)": 2.716457477413739,
-                "kNN Area Under the Curve": 0.03894453538154758,
-                "Mean squared error": 1.0000082282396225
+        "scicar_cell_lines": {
+            "procrustes": {
+                "submit": "2021-03-04 21:25:53.669",
+                "duration": "10m 34s",
+                "realtime": "59.8s",
+                "%cpu": "213.5%",
+                "peak_rss": "657.7 MB",
+                "peak_vmem": "2.6 GB",
+                "rchar": "137.3 MB",
+                "wchar": "231.2 MB",
+                "metrics": {
+                    "mse": 0.891899390146861,
+                    "knn_auc": 0.08461663911753058
+                }
             },
-            {
-                "Name": "Harmonic Alignment (sqrt CPM)",
-                "Paper": "Harmonic Alignment",
-                "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
-                "Year": 2020,
-                "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
-                "Version": "0.0",
-                "Memory (GB)": 0.5083847045898438,
-                "Memory leaked (GB)": 0.24002838134765625,
-                "Runtime (min)": 0.9965652265430739,
-                "kNN Area Under the Curve": 0.05725691476290225,
-                "Mean squared error": 1.0000443241992736
+            "mnn_log_cpm": {
+                "submit": "2021-03-04 21:25:53.325",
+                "duration": "12m 25s",
+                "realtime": "2m 34s",
+                "%cpu": "100.8%",
+                "peak_rss": "1.8 GB",
+                "peak_vmem": "3.6 GB",
+                "rchar": "169.4 MB",
+                "wchar": "298.3 MB",
+                "metrics": {
+                    "knn_auc": 0.07263442202790513,
+                    "mse": 0.9004864521626151
+                }
             },
-            {
-                "Name": "Mutual Nearest Neighbors (log CPM)",
-                "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
-                "Paper URL": "https://www.nature.com/articles/nbt.4091",
-                "Year": 2018,
-                "Code": "https://github.com/LTLA/batchelor",
-                "Version": "3.3.6",
-                "Memory (GB)": 0.8699569702148438,
-                "Memory leaked (GB)": 0.6475181579589844,
-                "Runtime (min)": 0.14972959206594774,
-                "kNN Area Under the Curve": 0.04593519874202547,
-                "Mean squared error": 1.0848770850280005
+            "harmonic_alignment_log_scran_pooling": {
+                "submit": "2021-03-04 21:25:53.529",
+                "duration": "12m 34s",
+                "realtime": "3m 35s",
+                "%cpu": "160.0%",
+                "peak_rss": "3.1 GB",
+                "peak_vmem": "4.4 GB",
+                "rchar": "171.6 MB",
+                "wchar": "231 MB",
+                "metrics": {
+                    "mse": 0.9997865770066218,
+                    "knn_auc": 0.057258766351050594
+                }
             },
-            {
-                "Name": "Mutual Nearest Neighbors (log scran)",
-                "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
-                "Paper URL": "https://www.nature.com/articles/nbt.4091",
-                "Year": 2018,
-                "Code": "https://github.com/LTLA/batchelor",
-                "Version": "3.3.6",
-                "Memory (GB)": 4.1711578369140625,
-                "Memory leaked (GB)": 0.9763755798339844,
-                "Runtime (min)": 1.8411024707757557,
-                "kNN Area Under the Curve": 0.026736106294247924,
-                "Mean squared error": 1.0039821836809701
+            "mnn_log_scran_pooling": {
+                "submit": "2021-03-04 21:25:53.421",
+                "duration": "13m 45s",
+                "realtime": "3m 54s",
+                "%cpu": "100.6%",
+                "peak_rss": "3.1 GB",
+                "peak_vmem": "4.9 GB",
+                "rchar": "171.7 MB",
+                "wchar": "213.8 MB",
+                "metrics": {
+                    "mse": 0.7183128214268304,
+                    "knn_auc": 0.09922987851758912
+                }
             },
-            {
-                "Name": "Procrustes",
-                "Paper": "Generalized Procrustes analysis",
-                "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
-                "Year": 1975,
-                "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
-                "Version": "1.5.3",
-                "Memory (GB)": 0.3254737854003906,
-                "Memory leaked (GB)": 0.101806640625,
-                "Runtime (min)": 0.03788838076870889,
-                "kNN Area Under the Curve": 0.20326888624564204,
-                "Mean squared error": 0.5792371399693139
+            "harmonic_alignment_sqrt_cpm": {
+                "submit": "2021-03-04 21:25:52.733",
+                "duration": "17m 26s",
+                "realtime": "8m 26s",
+                "%cpu": "326.0%",
+                "peak_rss": "878.1 MB",
+                "peak_vmem": "6.6 GB",
+                "rchar": "138.2 MB",
+                "wchar": "231.1 MB",
+                "metrics": {
+                    "mse": 1.0002956775371725,
+                    "knn_auc": 0.042812224585726685
+                }
             }
-        ],
-        "scicar_cell_lines": [
-            {
-                "Name": "Harmonic Alignment (log scran)",
-                "Paper": "Harmonic Alignment",
-                "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
-                "Year": 2020,
-                "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
-                "Version": "0.0",
-                "Memory (GB)": 3.5957260131835938,
-                "Memory leaked (GB)": 1.2374229431152344,
-                "Runtime (min)": 1.6215764140632625,
-                "kNN Area Under the Curve": 0.07139300416686455,
-                "Mean squared error": 1.000047262230058
+        },
+        "scicar_mouse_kidney": {
+            "procrustes": {
+                "submit": "2021-03-04 21:26:03.592",
+                "duration": "10m 55s",
+                "realtime": "1m 19s",
+                "%cpu": "191.4%",
+                "peak_rss": "916.5 MB",
+                "peak_vmem": "2.8 GB",
+                "rchar": "212.8 MB",
+                "wchar": "318.3 MB",
+                "metrics": {
+                    "knn_auc": 0.07354859707962316,
+                    "mse": 0.942859287503803
+                }
             },
-            {
-                "Name": "Harmonic Alignment (sqrt CPM)",
-                "Paper": "Harmonic Alignment",
-                "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
-                "Year": 2020,
-                "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
-                "Version": "0.0",
-                "Memory (GB)": 0.6153831481933594,
-                "Memory leaked (GB)": 0.29885101318359375,
-                "Runtime (min)": 0.6635952787163357,
-                "kNN Area Under the Curve": 0.03757061336719472,
-                "Mean squared error": 1.0003742483694247
+            "mnn_log_cpm": {
+                "submit": "2021-03-04 21:26:03.076",
+                "duration": "13m 15s",
+                "realtime": "3m 14s",
+                "%cpu": "98.3%",
+                "peak_rss": "2.2 GB",
+                "peak_vmem": "3.1 GB",
+                "rchar": "244.9 MB",
+                "wchar": "423 MB",
+                "metrics": {
+                    "knn_auc": 0.04677325525086198,
+                    "mse": 0.972709614543941
+                }
             },
-            {
-                "Name": "Mutual Nearest Neighbors (log CPM)",
-                "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
-                "Paper URL": "https://www.nature.com/articles/nbt.4091",
-                "Year": 2018,
-                "Code": "https://github.com/LTLA/batchelor",
-                "Version": "3.3.6",
-                "Memory (GB)": 0.9922714233398438,
-                "Memory leaked (GB)": 0.7531585693359375,
-                "Runtime (min)": 0.399182583965982,
-                "kNN Area Under the Curve": 0.04935508792558289,
-                "Mean squared error": 0.9215429041428809
+            "harmonic_alignment_sqrt_cpm": {
+                "submit": "2021-03-04 21:26:02.995",
+                "duration": "20m 25s",
+                "realtime": "10m 48s",
+                "%cpu": "208.7%",
+                "peak_rss": "2 GB",
+                "peak_vmem": "3.9 GB",
+                "rchar": "213.6 MB",
+                "wchar": "318.2 MB",
+                "metrics": {
+                    "knn_auc": 0.054056992030766374,
+                    "mse": 0.9997191859050766
+                }
             },
-            {
-                "Name": "Mutual Nearest Neighbors (log scran)",
-                "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
-                "Paper URL": "https://www.nature.com/articles/nbt.4091",
-                "Year": 2018,
-                "Code": "https://github.com/LTLA/batchelor",
-                "Version": "3.3.6",
-                "Memory (GB)": 3.5932655334472656,
-                "Memory leaked (GB)": 1.4032745361328125,
-                "Runtime (min)": 1.2653425173989186,
-                "kNN Area Under the Curve": 0.06715762795027001,
-                "Mean squared error": 1.0138226542945634
+            "mnn_log_scran_pooling": {
+                "submit": "2021-03-04 21:26:03.760",
+                "duration": "22m 25s",
+                "realtime": "12m 18s",
+                "%cpu": "96.9%",
+                "peak_rss": "3.9 GB",
+                "peak_vmem": "8.7 GB",
+                "rchar": "247.2 MB",
+                "wchar": "355.5 MB",
+                "metrics": {
+                    "mse": 0.9655991210278567,
+                    "knn_auc": 0.07595255344692427
+                }
             },
-            {
-                "Name": "Procrustes",
-                "Paper": "Generalized Procrustes analysis",
-                "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
-                "Year": 1975,
-                "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
-                "Version": "1.5.3",
-                "Memory (GB)": 0.5012435913085938,
-                "Memory leaked (GB)": 0.17230224609375,
-                "Runtime (min)": 0.21943396599963308,
-                "kNN Area Under the Curve": 0.08426042716589172,
-                "Mean squared error": 0.8897414061813376
+            "harmonic_alignment_log_scran_pooling": {
+                "submit": "2021-03-04 21:26:03.071",
+                "duration": "24m 26s",
+                "realtime": "14m 25s",
+                "%cpu": "178.0%",
+                "peak_rss": "3.9 GB",
+                "peak_vmem": "5.7 GB",
+                "rchar": "247 MB",
+                "wchar": "318.2 MB",
+                "metrics": {
+                    "knn_auc": 0.06614289049695495,
+                    "mse": 1.0001757070152824
+                }
             }
-        ],
-        "scicar_mouse_kidney": [
-            {
-                "Name": "Harmonic Alignment (log scran)",
-                "Paper": "Harmonic Alignment",
-                "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
-                "Year": 2020,
-                "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
-                "Version": "0.0",
-                "Memory (GB)": 4.064502716064453,
-                "Memory leaked (GB)": 1.0870552062988281,
-                "Runtime (min)": 5.36290024445237,
-                "kNN Area Under the Curve": 0.046253999730665095,
-                "Mean squared error": 1.0001023740218118
+        },
+        "citeseq_cbmc": {
+            "procrustes": {
+                "submit": "2021-03-04 21:29:23.512",
+                "duration": "9m 45s",
+                "realtime": "9.7s",
+                "%cpu": "187.0%",
+                "peak_rss": "465.2 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "127.3 MB",
+                "wchar": "277.4 MB",
+                "metrics": {
+                    "knn_auc": 0.20491679717697295,
+                    "mse": 0.5769372711424743
+                }
             },
-            {
-                "Name": "Harmonic Alignment (sqrt CPM)",
-                "Paper": "Harmonic Alignment",
-                "Paper URL": "https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
-                "Year": 2020,
-                "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
-                "Version": "0.0",
-                "Memory (GB)": 1.4668998718261719,
-                "Memory leaked (GB)": 0.7270278930664062,
-                "Runtime (min)": 3.4337769398931415,
-                "kNN Area Under the Curve": 0.05465530907925562,
-                "Mean squared error": 0.9997785204256074
+            "mnn_log_cpm": {
+                "submit": "2021-03-04 21:29:23.644",
+                "duration": "11m 24s",
+                "realtime": "1m 31s",
+                "%cpu": "89.7%",
+                "peak_rss": "2 GB",
+                "peak_vmem": "6.8 GB",
+                "rchar": "159.4 MB",
+                "wchar": "368.2 MB",
+                "metrics": {
+                    "mse": 0.8830204084575638,
+                    "knn_auc": 0.057077188983207044
+                }
             },
-            {
-                "Name": "Mutual Nearest Neighbors (log CPM)",
-                "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
-                "Paper URL": "https://www.nature.com/articles/nbt.4091",
-                "Year": 2018,
-                "Code": "https://github.com/LTLA/batchelor",
-                "Version": "3.3.6",
-                "Memory (GB)": 1.1754798889160156,
-                "Memory leaked (GB)": 0.8836097717285156,
-                "Runtime (min)": 0.728043926297687,
-                "kNN Area Under the Curve": 0.04928770170971893,
-                "Mean squared error": 1.0098765242970988
+            "harmonic_alignment_sqrt_cpm": {
+                "submit": "2021-03-04 21:29:22.875",
+                "duration": "12m 5s",
+                "realtime": "2m 58s",
+                "%cpu": "291.4%",
+                "peak_rss": "625.6 MB",
+                "peak_vmem": "2.6 GB",
+                "rchar": "128.2 MB",
+                "wchar": "288.8 MB",
+                "metrics": {
+                    "mse": 0.999967234804162,
+                    "knn_auc": 0.04851319326290829
+                }
             },
-            {
-                "Name": "Mutual Nearest Neighbors (log scran)",
-                "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
-                "Paper URL": "https://www.nature.com/articles/nbt.4091",
-                "Year": 2018,
-                "Code": "https://github.com/LTLA/batchelor",
-                "Version": "3.3.6",
-                "Memory (GB)": 4.039081573486328,
-                "Memory leaked (GB)": 1.3976516723632812,
-                "Runtime (min)": 2.517510076231944,
-                "kNN Area Under the Curve": 0.05900694134916547,
-                "Mean squared error": 1.0608849487245942
+            "mnn_log_scran_pooling": {
+                "submit": "2021-03-04 21:29:23.620",
+                "duration": "13m 44s",
+                "realtime": "4m 5s",
+                "%cpu": "101.5%",
+                "peak_rss": "4 GB",
+                "peak_vmem": "5.2 GB",
+                "rchar": "161.7 MB",
+                "wchar": "233.5 MB",
+                "metrics": {
+                    "mse": 1.0133557567534281,
+                    "knn_auc": 0.04365446679458453
+                }
             },
-            {
-                "Name": "Procrustes",
-                "Paper": "Generalized Procrustes analysis",
-                "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
-                "Year": 1975,
-                "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
-                "Version": "1.5.3",
-                "Memory (GB)": 0.7563667297363281,
-                "Memory leaked (GB)": 0.1953582763671875,
-                "Runtime (min)": 0.383237151747259,
-                "kNN Area Under the Curve": 0.07382223181435377,
-                "Mean squared error": 0.9423514041303667
+            "harmonic_alignment_log_scran_pooling": {
+                "submit": "2021-03-04 21:29:23.201",
+                "duration": "17m 45s",
+                "realtime": "7m 53s",
+                "%cpu": "206.2%",
+                "peak_rss": "4 GB",
+                "peak_vmem": "5.7 GB",
+                "rchar": "161.6 MB",
+                "wchar": "288.7 MB",
+                "metrics": {
+                    "mse": 1.0000147592153776,
+                    "knn_auc": 0.05666649818966917
+                }
             }
-        ]
+        }
+    },
+    "chromatin_potential": {
+        "scicar_mouse_kidney": {
+            "beta": {
+                "submit": "2021-03-04 21:23:32.563",
+                "duration": "34m 47s",
+                "realtime": "24m 9s",
+                "%cpu": "1383.6%",
+                "peak_rss": "4.5 GB",
+                "peak_vmem": "10.2 GB",
+                "rchar": "2.5 GB",
+                "wchar": "2.1 GB",
+                "metrics": {
+                    "pearson_correlation": 0.0008601744523791411,
+                    "spearman_correlation": -0.01564197504392305
+                }
+            }
+        }
     }
 }

@@ -69,34 +69,72 @@ def _get_annotation(adata, retries=3):
     )
 
 
+def _filter_mitochondrial(adata):
+    if adata.uns["species"] in ["mus_musculus", "homo_sapiens"]:
+        adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
+            "mt-"
+        )  # annotate the group of mitochondrial genes as 'mt'
+        sc.pp.calculate_qc_metrics(
+            adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
+        )
+
+        adata_filter = adata[adata.obs.pct_counts_mt <= 10]
+        if adata_filter.shape[0] > 100:
+            adata = adata_filter.copy()
+    return adata
+
+
+def _filter_n_genes_max(adata):
+    adata_filter = adata[adata.obs.n_genes_by_counts <= 2000]
+    if adata_filter.shape[0] > 100:
+        adata = adata_filter.copy()
+    return adata
+
+
+def _filter_n_genes_min(adata):
+    adata_filter = adata.copy()
+    sc.pp.filter_cells(adata_filter, min_genes=200)
+    if adata_filter.shape[0] > 100:
+        adata = adata_filter
+    return adata
+
+
+def _filter_n_cells(adata):
+    adata_filter = adata.copy()
+    sc.pp.filter_genes(adata_filter, min_cells=5)
+    if adata_filter.shape[1] > 100:
+        adata = adata_filter
+    return adata
+
+
+def _filter_has_chr(adata):
+    adata_filter = adata[:, ~pd.isnull(adata.var.loc[:, "chr"])].copy()
+    if adata_filter.shape[1] > 100:
+        adata = adata_filter
+    return adata
+
+
 def _atac_genes_score(adata, top_genes=500, threshold=1):
     """Calculate gene scores and insert into .obsm."""
     import pybedtools
 
     # get annotation for TSS
     _get_annotation(adata)
+
     # basic quality control
-    if adata.shape[0] >= 600:
-        sc.pp.filter_cells(adata, min_genes=200)
-        sc.pp.filter_genes(adata, min_cells=5)
-
-    adata = adata[:, ~pd.isnull(adata.var.loc[:, "chr"])].copy()
-    adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
-        "mt-"
-    )  # annotate the group of mitochondrial genes as 'mt'
-    sc.pp.calculate_qc_metrics(
-        adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True
-    )
-
-    adata = adata[
-        (adata.obs.n_genes_by_counts < 2000) & (adata.obs.pct_counts_mt < 10), :
-    ].copy()
+    adata = _filter_has_chr(adata)
+    adata = _filter_mitochondrial(adata)
+    adata = _filter_n_genes_max(adata)
+    adata = _filter_n_genes_min(adata)
+    adata = _filter_n_cells(adata)
 
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
-    sc.pp.highly_variable_genes(adata, n_top_genes=top_genes)
 
-    adata = adata[:, adata.var.highly_variable].copy()
+    if top_genes > adata.shape[1]:
+        sc.pp.highly_variable_genes(adata, n_top_genes=top_genes)
+        adata = adata[:, adata.var.highly_variable].copy()
+
     sc.pp.regress_out(adata, ["total_counts", "pct_counts_mt"])
     sc.pp.scale(adata, max_value=10)
 
@@ -118,6 +156,9 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     extend_tss = adata.var.loc[:, ["start", "end", "strand"]].apply(
         _chrom_limit, axis=1
     )
+    if isinstance(extend_tss, pd.DataFrame):
+        # should be a series
+        extend_tss = extend_tss.iloc[:, 0]
 
     extend_tss = pd.concat(
         [

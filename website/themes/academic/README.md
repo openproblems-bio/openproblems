@@ -88,7 +88,7 @@ You can choose from one of the following four methods to install:
   - Perform the steps in the [*Install with Git*](#install-with-git) section below
 
 Once you have followed the link above to automatically install Academic, head on over to your new `academic-kickstart` repository in your GitHub (or GitLab) account and [personalize your site by editing the files in](https://sourcethemes.com/academic/docs/get-started/) `config/_default/`. Shortly after saving (i.e. *committing* a file), your site will automatically update.
-   
+
 View the [Homepage Builder](https://sourcethemes.com/academic/docs/page-builder/) and [Content](https://sourcethemes.com/academic/docs/managing-content/) guides to learn how to add widgets and content. For inspiration, refer to the [Markdown content](https://github.com/gcushen/hugo-academic/tree/master/exampleSite) which powers the [Demo](https://academic-demo.netlify.app).
 
 ### Install with Git
@@ -102,12 +102,12 @@ Install:
 
 1. [Fork](https://github.com/sourcethemes/academic-kickstart#fork-destination-box) the *Academic Kickstart* repository to create a new website
    * If you already created your site with **Netlify**, then skip this step
-2. Clone your fork to your computer with Git, replacing `sourcethemes` in the command below with your GitHub username: 
+2. Clone your fork to your computer with Git, replacing `sourcethemes` in the command below with your GitHub username:
 
     ```bash
     git clone https://github.com/sourcethemes/academic-kickstart.git My_Website
     ```
-    
+
 3. Initialize the theme:
 
     ```bash

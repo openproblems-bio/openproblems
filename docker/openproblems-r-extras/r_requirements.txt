@@ -1,3 +1,4 @@
-batchelor
+bioc::batchelor
 sparsesvd
 rsvd
+dplyr

@@ -1,12 +1,7 @@
+from openproblems.tools.utils import assert_finite  # noqa
+
 import numpy as np
 import scipy.sparse
-
-
-def assert_finite(X):
-    """Assert numpy or scipy matrix is finite."""
-    X = X.data if scipy.sparse.issparse(X) else X
-    assert np.all(np.isfinite(X))
-    return True
 
 
 def assert_array_equal(X, Y):

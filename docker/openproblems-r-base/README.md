@@ -4,9 +4,9 @@ Base image: singlecellopenproblems/openproblems
 
 OS: Debian Stretch
 
-Python: 3.7
+Python: 3.8
 
-R: 3.6
+R: 4.0
 
 apt packages:
 
@@ -17,15 +17,15 @@ apt packages:
 * gfortran
 * libblas-dev
 * liblapack-dev
-* r-base-core=3.6
+* r-base-core=4.0
 
 R packages:
 
 * BiocManager
 * scran
+* IRKernel
 
 Python packages:
 
 * rpy2
-* scIB
-* anndata2ri
+* anndata2ri>=1.0.6

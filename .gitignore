@@ -141,3 +141,8 @@ resources/
 .r_packages/
 .docker_pull
 .docker_build
+.docker_login
+
+# Nextflow
+nf-openproblems
+.nextflow

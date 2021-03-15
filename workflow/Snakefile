@@ -1,0 +1,104 @@
+import os
+import snakemake_tools as tools
+
+rule docker:
+    input: tools.image_markers
+    params:
+        version = tools.VERSION_FILE
+    shell: "openproblems-cli --version > {params.version}"
+
+rule docker_push:
+    input: tools.push_images
+    params:
+        version = tools.VERSION_FILE
+    shell: "openproblems-cli --version > {params.version}"
+
+rule docker_build:
+    input: tools.build_images
+    params:
+        version = tools.VERSION_FILE
+    shell: "openproblems-cli --version > {params.version}"
+
+rule docker_pull:
+    input: tools.pull_images
+
+rule docker_update:
+    input: tools.update_images
+
+rule update_docker_image:
+    input:
+        dockerfile = "{}/{{image}}/update.Dockerfile".format(tools.IMAGES_DIR),
+    output:
+        temp("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR))
+    params:
+        sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
+        user = "singlecellopenproblems",
+    shell:
+        """docker build -f {input.dockerfile} -t {params.user}/{wildcards.image} .. \
+        && touch {output}"""
+
+rule update_dockerfile:
+    input:
+        docker_pull = "{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR),
+    output:
+        temp("{}/{{image}}/update.Dockerfile".format(tools.IMAGES_DIR))
+    shell:
+        r"""echo '
+FROM singlecellopenproblems/{wildcards.image}:latest AS base
+# Copy requirements files
+COPY ./docker/{wildcards.image}/* ./
+
+# Install Python packages
+RUN if [ -f requirements.txt ]; then pip install --no-cache-dir -U -r requirements.txt; fi
+
+# Install R packages
+RUN if [ -f r_requirements.txt ]; then for pkg in $(cat r_requirements.txt); do R -e "renv::install(\"${{pkg}}\")"; done; fi
+
+# Install single-cell open problems
+COPY . /usr/src/singlecellopenproblems
+RUN cd /usr/src/singlecellopenproblems && git clean -fxd
+RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
+' > {output}"""
+
+rule build_docker_image:
+    input:
+        dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
+        requirements = tools.docker_requirements,
+    output:
+        temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)))
+    params:
+        sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
+        user = "singlecellopenproblems"
+    shell:
+        "docker build -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+
+rule password_docker:
+    output:
+        filename = temp(".docker_password")
+    run:
+        with open(output.filename, 'w') as handle:
+            handle.write(tools.DOCKER_PASSWORD)
+
+rule login_docker:
+    input:
+        ".docker_password"
+    output:
+        temp(touch(".docker_login"))
+    shell:
+        "docker login --username=singlecellopenproblems --password=$(cat {input})"
+
+rule push_docker_image:
+    input:
+        build = "{}/{{image}}/.docker_build".format(tools.IMAGES_DIR),
+        login = ".docker_login",
+    output:
+        temp(touch("{}/{{image}}/.docker_push".format(tools.IMAGES_DIR)))
+    shell:
+        "docker push --quiet singlecellopenproblems/{wildcards.image}"
+
+rule pull_docker_image:
+    output:
+        temp(touch("{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR)))
+    shell:
+        "DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect singlecellopenproblems/{wildcards.image} > /dev/null && \
+        docker pull --quiet singlecellopenproblems/{wildcards.image} || true"

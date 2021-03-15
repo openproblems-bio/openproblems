@@ -1,2 +1,3 @@
-scran
-SingleCellExperiment
+RcppAnnoy
+bioc::scran
+IRkernel
