@@ -20,9 +20,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {name: 'curr', os: ubuntu-latest, python: '3.8', r: 'release' }
-        - {name: 'prev', os: ubuntu-latest, python: '3.7', r: 'release' }
-        - {name: 'old', os: ubuntu-latest, python: '3.6', r: 'release' }
+        - {name: 'curr', os: ubuntu-18.04, python: '3.8', r: 'release' }
+        - {name: 'prev', os: ubuntu-18.04, python: '3.7', r: 'release' }
+        - {name: 'old', os: ubuntu-18.04, python: '3.6', r: 'release' }
 
     steps:
     - name: Cancel Previous Runs
