@@ -103,7 +103,6 @@ jobs:
         s3fs openproblems-nextflow /mnt/openproblems-nextflow
         for dir in bucket work cwd; do
           mkdir -p /mnt/openproblems-nextflow/${dir}/${{ github.ref }}
-          rm -rf /mnt/openproblems-nextflow/${dir}/${{ github.ref }}/*
         done
 
     - name: Install package & dependencies
