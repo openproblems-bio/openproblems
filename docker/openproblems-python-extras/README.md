@@ -4,7 +4,7 @@ Base image: singlecellopenproblems/openproblems
 
 OS: Debian Stretch
 
-Python: 3.7
+Python: 3.8
 
 Python packages:
 
@@ -12,3 +12,7 @@ Python packages:
 * pybedtools
 * pyensembl
 * datatable
+* magic-impute
+* molecular-cross-validation
+* MulticoreTSNE
+* phate
