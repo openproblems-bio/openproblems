@@ -1,9 +1,9 @@
 from .... import utils
+from . import api
 from . import checks
 from . import datasets
 from . import methods
 from . import metrics
-from . import api
 
 _task_name = "Batch integration graph"
 
