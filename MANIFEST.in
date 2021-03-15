@@ -1,4 +1,3 @@
 include LICENSE
 include README.md
 recursive-include scripts *.sh *.py *.R Snakefile .Rprofile
-include openproblems/test/singularity_run.sh
