@@ -3,3 +3,4 @@ sparsesvd
 Seurat
 conos
 rliger
+dplyr
