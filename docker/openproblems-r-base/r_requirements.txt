@@ -1,2 +1,3 @@
 RcppAnnoy
 bioc::scran
+IRkernel
