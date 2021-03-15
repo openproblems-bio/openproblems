@@ -8,7 +8,7 @@ import numpy as np
 def zebrafish_labels(test=False):
     adata = load_zebrafish(test=test)
     adata.obs["labels"] = adata.obs["cell_type"]
-    adata.obs["batch"] = [0 for i in adata.n_obs]
+    adata.obs["batch"] = [0 for i in range(adata.n_obs)]
     adata.obs["is_train"] = adata.obs["lab"] == adata.obs["lab"][0]
     return adata
 
