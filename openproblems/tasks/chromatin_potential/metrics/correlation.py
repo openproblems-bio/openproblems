@@ -11,7 +11,6 @@ def _correlation(adata, method="pearson"):
     else:
         method = scipy.stats.spearmanr
 
-    print(adata.X.shape, adata.obsm["gene_score"].shape)
     cors = []
     for i in range(adata.shape[0]):
         x = (
