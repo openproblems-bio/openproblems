@@ -4,15 +4,14 @@ on:
   push:
     tags:
       - '*'
-    branches:
-      - 'test_benchmark'
+    branches-ignore:
+      - 'test_docker'
 
 jobs:
   run_benchmark:
     runs-on: ${{ matrix.config.os }}
 
     env:
-      RUN_ID: "${{ github.workflow }}_${{ github.run_number }}"
       BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
 
     strategy:
@@ -22,6 +21,11 @@ jobs:
         - {name: 'current', os: ubuntu-latest, python: '3.8', java_version: 15 }
 
     steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.6.0
+      with:
+        access_token: ${{ github.token }}
+
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1000
@@ -43,9 +47,23 @@ jobs:
         java-version: ${{matrix.config.java_version}}
         architecture: x64
 
-    - name: Check Ubuntu version
+    - name: Set up environment
+      env:
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
       run: |
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+        echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:/:_:g'| head -c 40`" >> $GITHUB_ENV
+        # don't use tower if the env var is not set
+        echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
+        if [ $(echo ${{ github.ref }} | grep -E -e "^refs/heads/(master|test_benchmark)" -e "^refs/tags") ]; then
+          PROFILE="aws"
+          RESUME=""
+        else
+          PROFILE="test,aws"
+          RESUME="-resume"
+        fi
+        echo "PROFILE=$PROFILE" >> $GITHUB_ENV
+        echo "RESUME=$RESUME" >> $GITHUB_ENV
 
     - name: Cache Python packages
       uses: actions/cache@v2
@@ -83,6 +101,10 @@ jobs:
         sudo mkdir -p /mnt/openproblems-nextflow
         sudo chown $USER /mnt/openproblems-nextflow
         s3fs openproblems-nextflow /mnt/openproblems-nextflow
+        for dir in bucket work cwd; do
+          mkdir -p /mnt/openproblems-nextflow/${dir}/${{ github.ref }}
+          rm -rf /mnt/openproblems-nextflow/${dir}/${{ github.ref }}/*
+        done
 
     - name: Install package & dependencies
       run: |
@@ -105,20 +127,24 @@ jobs:
         snakemake -j 4 docker
         cd ..
 
+    - name: Update Docker images
+      run: |
+        cd workflow
+        snakemake -j 4 docker_update
+        cd ..
+
     - name: Upload Docker images
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        BRANCH=$(echo ${{ github.ref }} | sed 's:/:_:g')
-        echo "BRANCH=$BRANCH" >> $GITHUB_ENV
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
           docker login --username AWS --password-stdin $ECR_ENDPOINT
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-          docker push ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
         done
 
     - name: Run benchmark
@@ -128,28 +154,33 @@ jobs:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: >-
+        cd /mnt/openproblems-nextflow/cwd/${{ github.ref }} &&
         nextflow run
-        -with-tower
+        $WITH_TOWER
         -ansi-log false
-        -profile aws
-        -work-dir "/mnt/openproblems-nextflow/work${RUN_ID}"
-        -bucket-dir s3://openproblems-nextflow/benchmark
+        $RESUME
+        -profile $PROFILE
+        -work-dir "/mnt/openproblems-nextflow/work/${{ github.ref }}"
+        -bucket-dir "s3://openproblems-nextflow/bucket/${{ github.ref }}"
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
 
+    - name: Parse results
+      run: |
+        cp -r /mnt/openproblems-nextflow/cwd/${{ github.ref }}/results .
+        python workflow/parse_nextflow.py
+        rm -r results
+
     - name: Remove working directory
-      if: always()
+      if: always() && startsWith(github.ref, 'refs/tags')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        aws s3 rm "s3://openproblems-nextflow/work${RUN_ID}"
-
-    - name: Parse results
-      run: |
-        python workflow/parse_nextflow.py
-        rm -r results
+        aws s3 rm "s3://openproblems-nextflow/work/${{ github.ref }}"
+        aws s3 rm "s3://openproblems-nextflow/bucket/${{ github.ref }}"
+        aws s3 rm "s3://openproblems-nextflow/cwd/${{ github.ref }}"
 
     - name: Pre-commit
       uses: pre-commit/action@v2.0.0
