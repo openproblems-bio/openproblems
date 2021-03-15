@@ -1,2 +1,0 @@
-bioc::batchelor
-sparsesvd
