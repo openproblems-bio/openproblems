@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {name: 'current', os: ubuntu-latest, python: '3.8', r: 'release' }
+        - {name: 'curr', os: ubuntu-latest, python: '3.8', r: 'release' }
         - {name: 'prev', os: ubuntu-latest, python: '3.7', r: 'release' }
         - {name: 'old', os: ubuntu-latest, python: '3.6', r: 'release' }
 
@@ -65,31 +65,6 @@ jobs:
         path: ${{ env.pythonLocation }}
         key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
         restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
-
-    - name: Install Nextflow
-      env:
-          CAPSULE_LOG: none
-      run: |
-        mkdir /tmp/nextflow
-        cd /tmp/nextflow
-        wget -qO- get.nextflow.io | bash
-        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
-
-    - name: Set up S3FS
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        sudo apt-get install s3fs
-        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
-        chmod 600 ~/.passwd-s3fs
-        sudo mkdir -p /mnt/openproblems-nextflow
-        sudo chown $USER /mnt/openproblems-nextflow
-        s3fs openproblems-nextflow /mnt/openproblems-nextflow
-        mkdir -p /mnt/openproblems-nextflow/test/bucket/${{ github.ref }}
-        mkdir -p /mnt/openproblems-nextflow/test/work/${{ github.ref }}
-        mkdir -p /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}//${{ matrix.config.name }}
 
     - name: Install package & dependencies
       run: |
@@ -137,13 +112,42 @@ jobs:
         snakemake -j 4 docker_update
         cd ..
 
-    - name: Upload Docker images
+    - name: Install Nextflow
+      if: startsWith(matrix.config.name, 'curr')
+      env:
+          CAPSULE_LOG: none
+      run: |
+        mkdir /tmp/nextflow
+        cd /tmp/nextflow
+        wget -qO- get.nextflow.io | bash
+        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
+
+    - name: Set up S3FS
+      if: startsWith(matrix.config.name, 'curr')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        BRANCH=$(echo ${{ github.ref }} | sed 's:/:_:g')_${{ matrix.config.name }}
+        sudo apt-get install s3fs
+        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
+        chmod 600 ~/.passwd-s3fs
+        sudo mkdir -p /mnt/openproblems-nextflow
+        sudo chown $USER /mnt/openproblems-nextflow
+        s3fs openproblems-nextflow /mnt/openproblems-nextflow
+        for dir in bucket work cwd; do
+          mkdir -p /mnt/openproblems-nextflow/test/${dir}/${{ github.ref }}
+          rm -rf /mnt/openproblems-nextflow/test/${dir}/${{ github.ref }}/*
+        done
+
+    - name: Upload Docker images
+      if: startsWith(matrix.config.name, 'curr')
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        BRANCH=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:/:_:g')
         echo "BRANCH=$BRANCH" >> $GITHUB_ENV
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
@@ -154,20 +158,21 @@ jobs:
         done
 
     - name: Run benchmark
+      if: startsWith(matrix.config.name, 'curr')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: >-
-        cd /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}//${{ matrix.config.name }} &&
+        cd /mnt/openproblems-nextflow/test/cwd/${{ github.ref }} &&
         nextflow run
         -with-tower
         -ansi-log false
         -resume
         -profile test,aws
-        -work-dir "/mnt/openproblems-nextflow/test/work/${{ github.ref }}/${{ matrix.config.name }}"
-        -bucket-dir "s3://openproblems-nextflow/test/bucket/${{ github.ref }}/${{ matrix.config.name }}"
+        -work-dir "/mnt/openproblems-nextflow/test/work/${{ github.ref }}"
+        -bucket-dir "s3://openproblems-nextflow/test/bucket/${{ github.ref }}"
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
 

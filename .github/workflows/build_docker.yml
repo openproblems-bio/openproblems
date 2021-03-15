@@ -66,7 +66,7 @@ jobs:
         cd ..
 
     - name: Push images
-      if: startsWith(github.ref, 'refs/heads/master')
+      if: startsWith(github.ref, 'refs/heads/master') && env.CHANGED
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
@@ -87,8 +87,8 @@ jobs:
       with:
         author_name: SingleCellOpenProblems
         author_email: singlecellopenproblems@protonmail.com
-        message: 'Push Docker images # ci skip'
-        add: "['docker/*/.docker_push', 'docker/.version']"
+        message: 'Update docker version # ci skip'
+        add: "docker/.version"
         branch: ${{ env.BRANCH_NAME }}
         push: false
 
@@ -97,9 +97,9 @@ jobs:
       uses: peter-evans/create-pull-request@v3
       with:
         branch: ${{ env.BRANCH_NAME }}
-        delete-branch: false
+        delete-branch: true
         base: master
-        title: '[auto] Update .docker_push'
+        title: '[auto] Update docker version'
         reviewers: scottgigante, dburkhardt
 
     - name: Upload check results on fail
