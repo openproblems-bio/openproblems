@@ -17,6 +17,9 @@ COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
 # Install r_requirements.txt
 RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install('${pkg}')"; done
 
+# Install R kernel
+RUN echo 'IRkernel::installspec()' > /tmp/temp.R && Rscript /tmp/temp.R
+
 # Install Python packages
 COPY ./docker/openproblems-r-base/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -U -r requirements.txt
