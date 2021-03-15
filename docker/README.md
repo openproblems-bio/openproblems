@@ -34,7 +34,11 @@ The easiest way to do this is to copy the `openproblems-python-extras` folder.
 
 ## Building Docker image locally
 
-If you have docker installed, you can build containers locally for prototyping. For example, to install the openproblems base container, you can run the following.
+If you have Docker installed, you can build containers locally for prototyping. For example, to install the `openproblems` base container, you can run the following.
 ```
-docker build -f docker/openproblems/Dockerfile -t openproblems .
+docker build -f docker/openproblems/Dockerfile -t singlecellopenproblems/openproblems .
+```
+or to build all available Docker images:
+```
+cd workflow && snakemake -j 1 docker
 ```
