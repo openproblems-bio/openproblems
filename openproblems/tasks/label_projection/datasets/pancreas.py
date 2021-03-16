@@ -8,11 +8,12 @@ import numpy as np
 def pancreas_batch(test=False):
     adata = load_pancreas(test=test)
     adata.obs["labels"] = adata.obs["celltype"]
+    adata.obs["batch"] = adata.obs["tech"]
 
     # Assign training/test
-    test_batches = adata.obs["tech"].dtype.categories[[-3, -1]]
+    test_batches = adata.obs["batch"].dtype.categories[[-3, -1]]
     adata.obs["is_train"] = [
-        False if adata.obs["tech"][idx] in test_batches else True
+        False if adata.obs["batch"][idx] in test_batches else True
         for idx in adata.obs_names
     ]
 
