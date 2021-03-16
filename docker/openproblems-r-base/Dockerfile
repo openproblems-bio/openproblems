@@ -6,18 +6,6 @@ ARG NB_GID="100"
 
 USER root
 
-# Setup the "sagemaker-user" user with root privileges.
-RUN \
-    apt-get update && \
-    apt-get install -y sudo && \
-    useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
-    chmod g+w /etc/passwd && \
-    echo "${NB_USER}    ALL=(ALL)    NOPASSWD:    ALL" >> /etc/sudoers && \
-    # Prevent apt-get cache from being persisted to this layer.
-    rm -rf /var/lib/apt/lists/*
-
-USER $NB_UID
-
 # Make the default shell bash (vs "sh") for a better Jupyter terminal UX
 ENV SHELL=/bin/bash \
     NB_USER=$NB_USER \
