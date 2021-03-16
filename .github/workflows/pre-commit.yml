@@ -13,7 +13,7 @@ jobs:
       !contains(github.event.head_commit.message, 'ci skip') &&
       (
         startsWith(github.ref, 'refs/heads') ||
-        github.event.pull_request.draft == 'false'
+        github.event.pull_request.draft == false
       )
 
     steps:
