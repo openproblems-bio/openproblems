@@ -139,9 +139,6 @@ resources/
 .snakemake/
 .evaluate/
 .r_packages/
-.docker_pull
-.docker_build
-.docker_login
 
 # Nextflow
 nf-openproblems
