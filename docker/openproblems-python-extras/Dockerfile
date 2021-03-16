@@ -4,6 +4,8 @@ ARG NB_USER="sagemaker-user"
 ARG NB_UID="1000"
 ARG NB_GID="100"
 
+USER root
+
 # Install pybedtools dependency
 ARG BUILD_PACKAGES=""
 ARG PACKAGE_VERSION=2.27.1
