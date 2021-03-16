@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {name: 'current', os: ubuntu-latest, python: '3.8', java_version: 15 }
+        - {name: 'current', os: ubuntu-18.04, python: '3.8', java_version: 15 }
 
     steps:
     - name: Cancel Previous Runs
@@ -33,7 +33,7 @@ jobs:
     - name: Install system dependencies
       if: runner.os == 'Linux'
       run: |
-        sudo apt-get update -qq
+        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
         sudo apt-get install -y libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
 
     - name: Set up Python
@@ -103,7 +103,6 @@ jobs:
         s3fs openproblems-nextflow /mnt/openproblems-nextflow
         for dir in bucket work cwd; do
           mkdir -p /mnt/openproblems-nextflow/${dir}/${{ github.ref }}
-          rm -rf /mnt/openproblems-nextflow/${dir}/${{ github.ref }}/*
         done
 
     - name: Install package & dependencies

@@ -8,6 +8,7 @@ import numpy as np
 def zebrafish_labels(test=False):
     adata = load_zebrafish(test=test)
     adata.obs["labels"] = adata.obs["cell_type"]
+    adata.obs["batch"] = adata.obs["lab"]
     adata.obs["is_train"] = adata.obs["lab"] == adata.obs["lab"][0]
     return adata
 
@@ -16,6 +17,7 @@ def zebrafish_labels(test=False):
 def zebrafish_random(test=False):
     adata = load_zebrafish(test=test)
     adata.obs["labels"] = adata.obs["cell_type"]
+    adata.obs["batch"] = adata.obs["lab"]
     adata.obs["is_train"] = np.random.choice(
         [True, False], adata.shape[0], replace=True
     )
