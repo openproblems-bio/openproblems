@@ -4,6 +4,8 @@ ARG NB_USER="sagemaker-user"
 ARG NB_UID="1000"
 ARG NB_GID="100"
 
+USER root
+
 # Setup the "sagemaker-user" user with root privileges.
 RUN \
     apt-get update && \
