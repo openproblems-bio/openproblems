@@ -4,7 +4,7 @@ ARG NB_USER="sagemaker-user"
 ARG NB_UID="1000"
 ARG NB_GID="100"
 
-USER root
+USER $NB_UID
 
 # Make the default shell bash (vs "sh") for a better Jupyter terminal UX
 ENV SHELL=/bin/bash \
