@@ -51,10 +51,10 @@ RUN apt-get update && \
 USER $NB_UID
 
 # Install R packages
-#RUN R -e "install.packages('renv'); renv::consent(TRUE)"
-#COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
+# RUN R -e "install.packages('renv'); renv::consent(TRUE)"
+# COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
 # Install r_requirements.txt
-#RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install('${pkg}')"; done
+# RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install('${pkg}')"; done
 
 
 ENV PATH=$CONDA_DIR/bin:${PATH}
@@ -93,9 +93,9 @@ RUN conda install --quiet --yes \
     'unixodbc=2.3.*' \
     'r-tidymodels=0.1*' \
     'r-reticulate=1.*' \
-    'RcppAnnoy'
-    'bioc::scran'
-    'IRkernel'
+    'RcppAnnoy' \
+    'bioc::scran' \
+    'IRkernel' \
     && \
     pip install --quiet --no-cache-dir \
     'rpy2' \
