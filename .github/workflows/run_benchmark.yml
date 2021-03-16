@@ -33,7 +33,7 @@ jobs:
     - name: Install system dependencies
       if: runner.os == 'Linux'
       run: |
-        sudo apt-get update -qq
+        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
         sudo apt-get install -y libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
 
     - name: Set up Python
