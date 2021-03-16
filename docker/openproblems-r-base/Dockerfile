@@ -1,5 +1,37 @@
 FROM singlecellopenproblems/openproblems:latest
 
+ARG NB_USER="sagemaker-user"
+ARG NB_UID="1000"
+ARG NB_GID="100"
+
+# Setup the "sagemaker-user" user with root privileges.
+RUN \
+    apt-get update && \
+    apt-get install -y sudo && \
+    useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+    chmod g+w /etc/passwd && \
+    echo "${NB_USER}    ALL=(ALL)    NOPASSWD:    ALL" >> /etc/sudoers && \
+    # Prevent apt-get cache from being persisted to this layer.
+    rm -rf /var/lib/apt/lists/*
+
+USER $NB_UID
+
+# Make the default shell bash (vs "sh") for a better Jupyter terminal UX
+ENV SHELL=/bin/bash \
+    NB_USER=$NB_USER \
+    NB_UID=$NB_UID \
+    NB_GID=$NB_GID \
+    HOME=/home/$NB_USER \
+    MINICONDA_VERSION=4.6.14 \
+    CONDA_VERSION=4.6.14 \
+    MINICONDA_MD5=718259965f234088d785cad1fbd7de03 \
+    CONDA_DIR=/opt/conda \
+    PATH=$CONDA_DIR/bin:${PATH}
+
+# Heavily inspired from https://github.com/jupyter/docker-stacks/blob/master/r-notebook/Dockerfile
+
+USER root
+
 # Install R
 RUN apt-get update -qq
 RUN apt-get -yq --no-install-suggests --no-install-recommends --allow-unauthenticated install dirmngr ca-certificates gnupg gpgv gfortran libblas-dev liblapack-dev
@@ -23,3 +55,5 @@ RUN echo 'IRkernel::installspec()' > /tmp/temp.R && Rscript /tmp/temp.R
 # Install Python packages
 COPY ./docker/openproblems-r-base/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -U -r requirements.txt
+
+USER $NB_UID
