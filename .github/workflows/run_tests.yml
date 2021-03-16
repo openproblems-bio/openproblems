@@ -6,13 +6,18 @@ on:
       - 'test_docker'
       - 'test_benchmark'
   pull_request:
-    branches:
-      - '*'
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   run_tester:
     runs-on: ${{ matrix.config.os }}
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    if: >-
+      !contains(github.event.head_commit.message, 'ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads') ||
+        github.event.pull_request.draft == false
+      )
+
     env:
       RENV_PATHS_ROOT: ~/.local/share/renv
 
@@ -20,9 +25,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {name: 'curr', os: ubuntu-latest, python: '3.8', r: 'release' }
-        - {name: 'prev', os: ubuntu-latest, python: '3.7', r: 'release' }
-        - {name: 'old', os: ubuntu-latest, python: '3.6', r: 'release' }
+        - {name: 'curr', os: ubuntu-18.04, python: '3.8', r: 'release' }
+        - {name: 'prev', os: ubuntu-18.04, python: '3.7', r: 'release' }
+        - {name: 'old', os: ubuntu-18.04, python: '3.6', r: 'release' }
 
     steps:
     - name: Cancel Previous Runs
@@ -41,7 +46,7 @@ jobs:
     - name: Install system dependencies
       if: runner.os == 'Linux'
       run: |
-        sudo apt-get update -qq
+        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
         sudo apt-get install -y libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev libcurl4-openssl-dev
 
     - name: Set up Python
@@ -111,70 +116,6 @@ jobs:
         cd workflow
         snakemake -j 4 docker_update
         cd ..
-
-    - name: Install Nextflow
-      if: startsWith(matrix.config.name, 'curr')
-      env:
-          CAPSULE_LOG: none
-      run: |
-        mkdir /tmp/nextflow
-        cd /tmp/nextflow
-        wget -qO- get.nextflow.io | bash
-        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
-
-    - name: Set up S3FS
-      if: startsWith(matrix.config.name, 'curr')
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        sudo apt-get install s3fs
-        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
-        chmod 600 ~/.passwd-s3fs
-        sudo mkdir -p /mnt/openproblems-nextflow
-        sudo chown $USER /mnt/openproblems-nextflow
-        s3fs openproblems-nextflow /mnt/openproblems-nextflow
-        for dir in bucket work cwd; do
-          mkdir -p /mnt/openproblems-nextflow/test/${dir}/${{ github.ref }}
-          rm -rf /mnt/openproblems-nextflow/test/${dir}/${{ github.ref }}/*
-        done
-
-    - name: Upload Docker images
-      if: startsWith(matrix.config.name, 'curr')
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        BRANCH=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:/:_:g')
-        echo "BRANCH=$BRANCH" >> $GITHUB_ENV
-        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
-          docker login --username AWS --password-stdin $ECR_ENDPOINT
-        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-        done
-
-    - name: Run benchmark
-      if: startsWith(matrix.config.name, 'curr')
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: >-
-        cd /mnt/openproblems-nextflow/test/cwd/${{ github.ref }} &&
-        nextflow run
-        -with-tower
-        -ansi-log false
-        -resume
-        -profile test,aws
-        -work-dir "/mnt/openproblems-nextflow/test/work/${{ github.ref }}"
-        -bucket-dir "s3://openproblems-nextflow/test/bucket/${{ github.ref }}"
-        singlecellopenproblems/nf-openproblems
-        --branch $BRANCH
 
     - name: Run tests
       run: pytest --cov=openproblems -v
