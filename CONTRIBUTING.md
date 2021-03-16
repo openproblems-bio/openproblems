@@ -35,7 +35,7 @@ link to it from your website, or simply star it in GitHub to say "I use it".
 
 ## Submitting New Features
 
-To submit new features to Open Problems for Single Cell Analysis, follow the steps below:
+To submit new features to Open Problems for Single Cell Analysis, follow the steps below: 
 
 * Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems
 * Create repository secrets at [https://github.com/<username>/SingleCellOpenProblems/settings/secrets](https://github.com/<username>/SingleCellOpenProblems/settings/secrets):
@@ -50,6 +50,9 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
 ```
 git clone git@github.com:<username>/SingleCellOpenProblems.git
 cd SingleCellOpenProblems
+git remote add base git@github.com:singlecellopenproblems/SingleCellOpenProblems.git
+git branch --set-upstream-to base/master
+git pull
 # IMPORTANT: choose a new branch name, e.g.
 git checkout -b task/new_task_name # or metric/new_metric_name, etc
 git push -u origin task/new_task_name
