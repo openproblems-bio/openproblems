@@ -66,7 +66,7 @@ jobs:
         cd ..
 
     - name: Push images
-      if: startsWith(github.ref, 'refs/heads/master') && env.CHANGED
+      if: startsWith(github.ref, 'refs/heads/master')
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
