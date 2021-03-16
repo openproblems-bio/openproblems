@@ -12,7 +12,7 @@
 
 ### Submission guidelines
 
-* [ ] This submission follows the guidelines in our [Contributing](../CONTRIBUTING.md) document
+* [ ] This submission follows the guidelines in our [Contributing](../blob/master/CONTRIBUTING.md) document
 * [ ] I have checked to ensure there aren't other open [Pull Requests](../pulls) for the same update/change
 
 ### Testing
