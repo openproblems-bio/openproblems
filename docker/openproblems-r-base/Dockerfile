@@ -11,7 +11,7 @@ ENV SHELL=/bin/bash \
     NB_USER=$NB_USER \
     NB_UID=$NB_UID \
     NB_GID=$NB_GID \
-    HOME=/home/$NB_USER \
+    HOME=/home/$NB_USER
 
 USER root
 
