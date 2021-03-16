@@ -1,7 +1,7 @@
 FROM python:3.8-buster
 
 # Removing on 3/16 to see if essential
-# ENV DEBIAN_FRONTEND=noninteractive
+#ENV DEBIAN_FRONTEND=noninteractive
 
 # Setting up Sagemaker Studio Image from example
 # https://github.com/aws-samples/sagemaker-studio-custom-image-samples/blob/main/examples/echo-kernel-image/Dockerfile
