@@ -6,13 +6,18 @@ on:
       - 'test_docker'
       - 'test_benchmark'
   pull_request:
-    branches:
-      - '*'
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   run_tester:
     runs-on: ${{ matrix.config.os }}
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    if: >-
+      !contains(github.event.head_commit.message, 'ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads') ||
+        github.event.pull_request.draft == false
+      )
+
     env:
       RENV_PATHS_ROOT: ~/.local/share/renv
 
