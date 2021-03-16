@@ -59,7 +59,7 @@ def read_trace(filename):
     """Read the execution trace from nextflow."""
     df = pd.read_csv(filename, sep="\t", index_col=0)
     df = df.loc[df["name"].str.startswith("run_method")]
-    df = df.loc[df["exit"] == 0]
+    df = df.loc[df["exit"].astype(int) == 0]
     df["tag"] = (
         df["name"]
         .str.replace(r"^.*\(", "", regex=True)
