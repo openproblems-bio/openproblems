@@ -50,6 +50,9 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
 ```
 git clone git@github.com:<username>/SingleCellOpenProblems.git
 cd SingleCellOpenProblems
+git remote add base git@github.com:singlecellopenproblems/SingleCellOpenProblems.git
+git branch --set-upstream-to base/master
+git pull
 # IMPORTANT: choose a new branch name, e.g.
 git checkout -b task/new_task_name # or metric/new_metric_name, etc
 git push -u origin task/new_task_name
