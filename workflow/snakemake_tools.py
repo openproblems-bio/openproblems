@@ -95,7 +95,8 @@ def docker_image_age(image):
     except ValueError:
         warnings.warn(
             "Docker image singlecellopenproblems/{} not found; "
-            "assuming needs rebuild.".format(image)
+            "assuming needs rebuild. If you think this message is in error, "
+            "you can fix this by running `snakemake -j 1 docker_pull`".format(image)
         )
         return -1
 
