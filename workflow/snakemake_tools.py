@@ -1,10 +1,10 @@
 import datetime
 import multiprocessing
-import numpy as np
 import openproblems
 import os
 import packaging.version
 import subprocess
+import time
 import warnings
 
 N_THREADS = multiprocessing.cpu_count()
@@ -78,7 +78,36 @@ def docker_image_name(wildcards):
     return fun.metadata["image"]
 
 
-def docker_image_age(image):
+def docker_image_exists(image, local=True):
+    """Check if a Docker image exists."""
+    if local:
+        proc = subprocess.run(
+            [
+                "docker",
+                "inspect",
+                "singlecellopenproblems/{}".format(image),
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    else:
+        env = os.environ.copy()
+        env["DOCKER_CLI_EXPERIMENTAL"] = "enabled"
+        proc = subprocess.run(
+            [
+                "docker",
+                "manifest",
+                "inspect",
+                "singlecellopenproblems/{}".format(image),
+            ],
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    return proc.returncode == 0
+
+
+def docker_image_age(image, pull_on_error=True):
     """Get the age of a Docker image."""
     proc = subprocess.run(
         [
@@ -88,23 +117,54 @@ def docker_image_age(image):
             "singlecellopenproblems/{}".format(image),
         ],
         stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
     date_string = proc.stdout.decode().strip().replace('"', "").split(".")[0]
     try:
         date_datetime = datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S")
         return int(date_datetime.timestamp())
     except ValueError:
-        warnings.warn(
-            "Docker image singlecellopenproblems/{} not found; "
-            "assuming needs rebuild. If you think this message is in error, "
-            "you can fix this by running `snakemake -j 1 docker_pull`".format(image)
-        )
-        return -1
+        if pull_on_error and docker_image_exists(image, local=False):
+            subprocess.run(
+                [
+                    "docker",
+                    "pull",
+                    "--quiet",
+                    "singlecellopenproblems/{}".format(image),
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            return docker_image_age(image, pull_on_error=False)
+        elif date_string == "":
+            warnings.warn(
+                "Docker image singlecellopenproblems/{} not found; "
+                "assuming needs rebuild. If you think this message is in error, "
+                "you can fix this by running `snakemake -j 1 docker_pull`".format(image)
+            )
+            return -1
+        else:
+            raise
 
 
 def docker_file_age(image):
     """Get the age of a Dockerfile."""
     docker_path = os.path.join(IMAGES_DIR, image)
+    # check if there are unstaged changes
+    proc = subprocess.run(
+        [
+            "git",
+            "status",
+            "--porcelain",
+            "--untracked-files=no",
+            "{}/*".format(docker_path),
+        ],
+        stdout=subprocess.PIPE,
+    )
+    result = proc.stdout.decode().strip()
+    if result != "":
+        return int(time.time())
+    # check when the last committed changes occurred
     proc = subprocess.run(
         [
             "git",
@@ -150,17 +210,29 @@ def version_not_changed():
 def docker_image_marker(image):
     """Get the file to be created to ensure Docker image exists from the image name."""
     docker_path = os.path.join(IMAGES_DIR, image)
-    docker_push = os.path.join(docker_path, ".docker_push")
+    # possible outputs
     docker_pull = os.path.join(docker_path, ".docker_pull")
-    docker_build = os.path.join(docker_path, ".docker_build")
-    if version_not_changed() and docker_file_age(image) < docker_image_age(image):
-        # Dockerfile hasn't been changed since last push, pull it
-        return docker_pull
-    elif DOCKER_PASSWORD is not None:
-        # we have the password, let's push it
-        return docker_push
+    dockerfile = os.path.join(docker_path, "Dockerfile")
+    if DOCKER_PASSWORD is not None:
+        # if we need to build and we have the password, we should push
+        docker_build = os.path.join(docker_path, ".docker_push")
     else:
-        # new image and we don't have the password, build locally
+        docker_build = os.path.join(docker_path, ".docker_build")
+
+    # inputs to conditional logic
+    local_imagespec_changed = docker_file_age(image) < docker_image_age(image)
+    local_codespec_changed = version_not_changed()
+    if local_imagespec_changed or local_codespec_changed:
+        # spec has changed, let's rebuild
+        return docker_build
+    elif docker_image_exists(image, local=True):
+        # existing image is newer than any changes, don't need anything
+        return dockerfile
+    elif docker_image_exists(image, local=False):
+        # docker exists on dockerhub and no changes required
+        return docker_pull
+    else:
+        # image doesn't exist anywhere, need to build it
         return docker_build
 
 
