@@ -1,5 +1,6 @@
 import datetime
 import multiprocessing
+import numpy as np
 import openproblems
 import os
 import packaging.version
@@ -115,16 +116,19 @@ def docker_file_age(image):
         ],
         stdout=subprocess.PIPE,
     )
-    result = proc.stdout.decode().strip()
+    result = proc.stdout.decode().strip().replace('"', "")
     try:
         return int(result)
     except ValueError:
-        warnings.warn(
-            "Files {}/{}/* not found on git; assuming unchanged.".format(
-                os.getcwd(), docker_path
+        if result == "":
+            warnings.warn(
+                "Files {}/{}/* not found on git; assuming unchanged.".format(
+                    os.getcwd(), docker_path
+                )
             )
-        )
-        return 0
+            return 0
+        else:
+            raise
 
 
 def version_not_changed():
