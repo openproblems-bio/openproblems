@@ -195,12 +195,3 @@ def docker_command(wildcards, output):
     """Get the Docker command to be run given a set of wildcards."""
     image = docker_image_name(wildcards)
     return DOCKER_EXEC.format(image=image)
-
-
-if not version_not_changed():
-    for image in _images(""):
-        for filename in [".docker_push", ".docker_pull", ".docker_build"]:
-            try:
-                os.remove(os.path.join(image, filename))
-            except FileNotFoundError:
-                pass
