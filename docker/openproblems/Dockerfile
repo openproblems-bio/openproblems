@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.8-buster
 
 # Removing on 3/16 to see if essential
 # ENV DEBIAN_FRONTEND=noninteractive
