@@ -1,6 +1,5 @@
 import datetime
 import multiprocessing
-import numpy as np
 import openproblems
 import os
 import packaging.version
