@@ -4,12 +4,17 @@ on:
     branches-ignore:
       - 'master'
   pull_request:
-    branches:
-      - '*'
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   pre-commit:
     runs-on: ubuntu-18.04
+    if: >-
+      !contains(github.event.head_commit.message, 'ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads') ||
+        github.event.pull_request.draft == false
+      )
 
     steps:
       - name: Cancel Previous Runs
