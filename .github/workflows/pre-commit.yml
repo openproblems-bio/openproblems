@@ -28,7 +28,7 @@ jobs:
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get update -qq
+          sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
           sudo apt-get install -y libcurl4-openssl-dev
 
       - name: Set up Python
