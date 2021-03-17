@@ -109,6 +109,18 @@ def docker_image_exists(image, local=True):
     return proc.returncode == 0
 
 
+def _docker_base(image):
+    """Get the base image from a Dockerfile."""
+    dockerfile = os.path.join(IMAGES_DIR, image, "Dockerfile")
+    with open(dockerfile, "r") as handle:
+        base_image = next(handle).replace("FROM ", "")
+        if base_image.startswith("singlecellopenproblems"):
+            base_image = base_image.split(":")[0].split("/")[1]
+            return base_image
+        else:
+            return None
+
+
 def docker_image_age(image, pull_on_error=True):
     """Get the age of a Docker image."""
     proc = subprocess.run(
@@ -165,33 +177,40 @@ def docker_file_age(image):
     )
     result = proc.stdout.decode().strip()
     if result != "":
-        return int(time.time())
-    # check when the last committed changes occurred
-    proc = subprocess.run(
-        [
-            "git",
-            "log",
-            "-1",
-            '--format="%ad"',
-            "--date=unix",
-            "--",
-            "{}/*".format(docker_path),
-        ],
-        stdout=subprocess.PIPE,
-    )
-    result = proc.stdout.decode().strip().replace('"', "")
-    try:
-        return int(result)
-    except ValueError:
-        if result == "":
-            warnings.warn(
-                "Files {}/{}/* not found on git; assuming unchanged.".format(
-                    os.getcwd(), docker_path
+        result = int(time.time())
+    else:
+        # check when the last committed changes occurred
+        proc = subprocess.run(
+            [
+                "git",
+                "log",
+                "-1",
+                '--format="%ad"',
+                "--date=unix",
+                "--",
+                "{}/*".format(docker_path),
+            ],
+            stdout=subprocess.PIPE,
+        )
+        result = proc.stdout.decode().strip().replace('"', "")
+        try:
+            result = int(result)
+        except ValueError:
+            if result == "":
+                warnings.warn(
+                    "Files {}/{}/* not found on git; assuming unchanged.".format(
+                        os.getcwd(), docker_path
+                    )
                 )
-            )
-            return 0
-        else:
-            raise
+                result = 0
+            else:
+                raise
+
+    # check for changes to base image
+    base_image = _docker_base(image)
+    if base_image is not None:
+        result = max(result, docker_file_age(base_image))
+    return result
 
 
 def version_not_changed():
@@ -270,11 +289,9 @@ def _docker_requirements(image, include_push=False):
     )
     if include_push:
         requirements.append(docker_image_marker(image))
-    with open(dockerfile, "r") as handle:
-        base_image = next(handle).replace("FROM ", "")
-        if base_image.startswith("singlecellopenproblems"):
-            base_image = base_image.split(":")[0].split("/")[1]
-            requirements.extend(_docker_requirements(base_image, include_push=True))
+    base_image = _docker_base(image)
+    if base_image is not None:
+        requirements.extend(_docker_requirements(base_image, include_push=True))
     return requirements
 
 
