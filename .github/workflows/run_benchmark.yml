@@ -34,7 +34,7 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-        sudo apt-get install -y libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -80,6 +80,7 @@ jobs:
         cd /tmp/nextflow
         wget -qO- get.nextflow.io | bash
         sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
+        nextflow -version
 
     - name: Install AWS CLI
       run: |
@@ -88,6 +89,7 @@ jobs:
         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
         unzip -q awscliv2.zip
         sudo ./aws/install || sudo ./aws/install --update
+        aws --version
 
     - name: Set up S3FS
       env:
@@ -95,15 +97,16 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        sudo apt-get install s3fs
+        sudo apt-get install -qy s3fs
         echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
         chmod 600 ~/.passwd-s3fs
         sudo mkdir -p /mnt/openproblems-nextflow
         sudo chown $USER /mnt/openproblems-nextflow
-        s3fs openproblems-nextflow /mnt/openproblems-nextflow
+        s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
         for dir in bucket work cwd; do
           mkdir -p /mnt/openproblems-nextflow/${dir}/${{ github.ref }}
         done
+        ls -l /mnt/openproblems-nextflow/*/${{ github.ref }}
 
     - name: Install package & dependencies
       run: |
