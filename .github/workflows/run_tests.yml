@@ -99,22 +99,10 @@ jobs:
         close(con)
       shell: Rscript {0}
 
-    - name: Pull Docker images
-      run: |
-        cd workflow
-        snakemake -j 4 docker_pull
-        cd ..
-
     - name: Build Docker images
       run: |
         cd workflow
         snakemake -j 4 docker
-        cd ..
-
-    - name: Update Docker images
-      run: |
-        cd workflow
-        snakemake -j 4 docker_update
         cd ..
 
     - name: Run tests
