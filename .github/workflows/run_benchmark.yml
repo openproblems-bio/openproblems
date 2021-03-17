@@ -101,6 +101,7 @@ jobs:
         sudo mkdir -p /mnt/openproblems-nextflow
         sudo chown $USER /mnt/openproblems-nextflow
         s3fs openproblems-nextflow /mnt/openproblems-nextflow
+        sudo chown -R $USER /mnt/openproblems-nextflow
         for dir in bucket work cwd; do
           mkdir -p /mnt/openproblems-nextflow/${dir}/${{ github.ref }}
         done
