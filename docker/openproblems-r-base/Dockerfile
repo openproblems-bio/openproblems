@@ -11,7 +11,7 @@ ENV SHELL=/bin/bash \
     NB_USER=$NB_USER \
     NB_UID=$NB_UID \
     NB_GID=$NB_GID \
-    HOME=/home/$NB_USER \
+    HOME=/home/$NB_USER
 
 USER root
 
@@ -26,16 +26,15 @@ RUN apt-get update -qq
 RUN apt-get install -yq --no-install-suggests --no-install-recommends r-base-dev=4.0\*
 RUN apt-get clean -y && apt-get autoremove -y
 
-USER $NB_UID
-
 # Install R packages
 RUN R -e "install.packages('renv'); renv::consent(TRUE)"
 COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
-Install r_requirements.txt
+# Install r_requirements.txt
 RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install('${pkg}')"; done
 
 # Install Python packages
 COPY ./docker/openproblems-python-extras/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+USER $NB_UID
 WORKDIR $HOME

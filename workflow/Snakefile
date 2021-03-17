@@ -56,7 +56,7 @@ RUN if [ -f r_requirements.txt ]; then for pkg in $(cat r_requirements.txt); do 
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
-RUN cd /usr/src/singlecellopenproblems && git clean -fxd
+RUN cd /usr/src/singlecellopenproblems && git clean -fxdq
 RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
 ' > {output}"""
 
