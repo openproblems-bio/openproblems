@@ -219,8 +219,7 @@ def docker_image_marker(image):
     """Get the file to be created to ensure Docker image exists from the image name."""
     docker_path = os.path.join(IMAGES_DIR, image)
     # possible outputs
-    docker_pull = os.path.join(docker_path, ".docker_pull")
-    dockerfile = os.path.join(docker_path, "Dockerfile")
+    docker_update = os.path.join(docker_path, ".docker_update")
     if DOCKER_PASSWORD is not None:
         # if we need to build and we have the password, we should push
         docker_build = os.path.join(docker_path, ".docker_push")
@@ -243,14 +242,12 @@ def docker_image_marker(image):
         # spec has changed, let's rebuild
         print("{}: rebuilding".format(image))
         requirement_file = docker_build
-    elif docker_image_exists(image, local=True):
+    elif docker_image_exists(image, local=True) or docker_image_exists(
+        image, local=False
+    ):
         # existing image is newer than any changes, don't need anything
-        print("{}: no change".format(image))
-        requirement_file = dockerfile
-    elif docker_image_exists(image, local=False):
-        # docker exists on dockerhub and no changes required
-        print("{}: pulling".format(image))
-        requirement_file = docker_pull
+        print("{}: refreshing source code only".format(image))
+        requirement_file = docker_update
     else:
         # image doesn't exist anywhere, need to build it
         print("{}: building".format(image))

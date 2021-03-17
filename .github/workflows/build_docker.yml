@@ -53,12 +53,6 @@ jobs:
         pip install --editable .[evaluate]
         python -c "import openproblems"
 
-    - name: Pull images
-      run: |
-        cd workflow
-        snakemake -j $(grep -c processor /proc/cpuinfo) docker_pull
-        cd ..
-
     - name: Build images
       run: |
         cd workflow
