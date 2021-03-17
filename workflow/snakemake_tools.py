@@ -1,4 +1,5 @@
 import datetime
+import functools
 import multiprocessing
 import openproblems
 import os
@@ -207,6 +208,12 @@ def version_not_changed():
         return True
 
 
+def format_timestamp(ts):
+    """Format a unix timestamp as a string."""
+    return datetime.datetime.fromtimestamp(ts).isoformat()
+
+
+@functools.lru_cache(maxsize=None)
 def docker_image_marker(image):
     """Get the file to be created to ensure Docker image exists from the image name."""
     docker_path = os.path.join(IMAGES_DIR, image)
@@ -220,19 +227,32 @@ def docker_image_marker(image):
         docker_build = os.path.join(docker_path, ".docker_build")
 
     # inputs to conditional logic
-    local_imagespec_changed = docker_file_age(image) < docker_image_age(image)
+    dockerfile_timestamp = docker_file_age(image)
+    docker_image_timestamp = docker_image_age(image)
+    print(
+        "{}: Dockerfile changed {}; Docker image updated {}".format(
+            image,
+            format_timestamp(dockerfile_timestamp),
+            format_timestamp(docker_image_timestamp),
+        )
+    )
+    local_imagespec_changed = dockerfile_timestamp < docker_image_timestamp
     local_codespec_changed = version_not_changed()
     if local_imagespec_changed or local_codespec_changed:
         # spec has changed, let's rebuild
+        print("{}: rebuilding".format(image))
         return docker_build
     elif docker_image_exists(image, local=True):
         # existing image is newer than any changes, don't need anything
+        print("{}: no change".format(image))
         return dockerfile
     elif docker_image_exists(image, local=False):
         # docker exists on dockerhub and no changes required
+        print("{}: pulling".format(image))
         return docker_pull
     else:
         # image doesn't exist anywhere, need to build it
+        print("{}: building".format(image))
         return docker_build
 
 
