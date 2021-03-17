@@ -253,25 +253,26 @@ def docker_image_marker(image):
             image,
             format_timestamp(dockerfile_timestamp),
             format_timestamp(docker_image_timestamp),
-        )
+        ),
+        file=sys.stderr,
     )
     local_imagespec_changed = dockerfile_timestamp < docker_image_timestamp
     local_codespec_changed = version_not_changed()
     if local_imagespec_changed or local_codespec_changed:
         # spec has changed, let's rebuild
-        print("{}: rebuilding".format(image))
+        print("{}: rebuilding".format(image), file=sys.stderr)
         requirement_file = docker_build
     elif docker_image_exists(image, local=True) or docker_image_exists(
         image, local=False
     ):
         # existing image is newer than any changes, don't need anything
-        print("{}: refreshing source code only".format(image))
+        print("{}: refreshing source code only".format(image), file=sys.stderr)
         requirement_file = docker_update
     else:
         # image doesn't exist anywhere, need to build it
-        print("{}: building".format(image))
+        print("{}: building".format(image), file=sys.stderr)
         requirement_file = docker_build
-    sys.stdout.flush()
+    sys.stderr.flush()
     return requirement_file
 
 
