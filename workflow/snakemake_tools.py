@@ -5,6 +5,7 @@ import openproblems
 import os
 import packaging.version
 import subprocess
+import sys
 import time
 import warnings
 
@@ -241,19 +242,21 @@ def docker_image_marker(image):
     if local_imagespec_changed or local_codespec_changed:
         # spec has changed, let's rebuild
         print("{}: rebuilding".format(image))
-        return docker_build
+        requirement_file = docker_build
     elif docker_image_exists(image, local=True):
         # existing image is newer than any changes, don't need anything
         print("{}: no change".format(image))
-        return dockerfile
+        requirement_file = dockerfile
     elif docker_image_exists(image, local=False):
         # docker exists on dockerhub and no changes required
         print("{}: pulling".format(image))
-        return docker_pull
+        requirement_file = docker_pull
     else:
         # image doesn't exist anywhere, need to build it
         print("{}: building".format(image))
-        return docker_build
+        requirement_file = docker_build
+    sys.stdout.flush()
+    return requirement_file
 
 
 def _docker_requirements(image, include_push=False):
