@@ -80,7 +80,7 @@ jobs:
         cd /tmp/nextflow
         wget -qO- get.nextflow.io | bash
         sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
-        nextflow --version
+        nextflow -version
 
     - name: Install AWS CLI
       run: |
