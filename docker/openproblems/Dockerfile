@@ -12,7 +12,7 @@ ARG NB_GID="100"
 # Setup the "sagemaker-user" user with root privileges.
 RUN \
    apt-get update && \
-   apt-get install -y sudo && \
+   apt-get install -qy sudo && \
    useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
    chmod g+w /etc/passwd && \
    echo "${NB_USER}    ALL=(ALL)    NOPASSWD:    ALL" >> /etc/sudoers
