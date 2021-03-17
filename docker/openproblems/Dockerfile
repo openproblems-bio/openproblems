@@ -16,5 +16,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
-RUN cd /usr/src/singlecellopenproblems && git clean -fxd
+RUN cd /usr/src/singlecellopenproblems && git clean -fxdq
 RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
