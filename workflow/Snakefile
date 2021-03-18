@@ -61,7 +61,7 @@ RUN \
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
-RUN cd /usr/src/singlecellopenproblems && git clean -fxd
+RUN cd /usr/src/singlecellopenproblems && git clean -fxdq
 RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
 ' > {output}"""
 
@@ -94,7 +94,7 @@ rule login_docker:
 
 rule push_docker_image:
     input:
-        build = "{}/{{image}}/.docker_build".format(tools.IMAGES_DIR),
+        build = tools.docker_push_requirements,
         login = ".docker_login",
     output:
         temp(touch("{}/{{image}}/.docker_push".format(tools.IMAGES_DIR)))
