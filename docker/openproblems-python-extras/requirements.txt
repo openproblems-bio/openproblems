@@ -5,3 +5,5 @@ phate
 pyensembl
 pybedtools
 git+https://github.com/czbiohub/molecular-cross-validation
+umap-learn
+numba<0.53
