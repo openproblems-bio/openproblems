@@ -13,7 +13,6 @@ install_requires = [
     "louvain>=0.7",
     "decorator",
     "memory-profiler",
-    "umap-learn<0.5",
     "colorama>=0.3.9",
     "packaging",
 ]
