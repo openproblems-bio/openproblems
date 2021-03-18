@@ -24,10 +24,6 @@ DOCKER_EXEC = (
     ") bash -c '"
     "  docker exec $CONTAINER /bin/bash /opt/openproblems/scripts/docker_run.sh"
 ).format(mountdir=os.path.dirname(SCRIPTS_DIR))
-try:
-    DOCKER_PASSWORD = os.environ["DOCKER_PASSWORD"]
-except KeyError:
-    DOCKER_PASSWORD = None
 
 
 def _images(filename):
@@ -221,11 +217,7 @@ def docker_image_marker(image):
     # possible outputs
     docker_pull = os.path.join(docker_path, ".docker_pull")
     dockerfile = os.path.join(docker_path, "Dockerfile")
-    if DOCKER_PASSWORD is not None:
-        # if we need to build and we have the password, we should push
-        docker_build = os.path.join(docker_path, ".docker_push")
-    else:
-        docker_build = os.path.join(docker_path, ".docker_build")
+    docker_build = os.path.join(docker_path, ".docker_build")
 
     # inputs to conditional logic
     dockerfile_timestamp = docker_file_age(image)
@@ -259,7 +251,7 @@ def docker_image_marker(image):
     return requirement_file
 
 
-def _docker_requirements(image, include_push=False):
+def _docker_requirements(image, include_self=False):
     """Get all files to ensure a Docker image is up to date from the image name."""
     docker_dir = os.path.join(IMAGES_DIR, image)
     dockerfile = os.path.join(docker_dir, "Dockerfile")
@@ -271,19 +263,24 @@ def _docker_requirements(image, include_push=False):
             if f.endswith("requirements.txt")
         ]
     )
-    if include_push:
+    if include_self:
         requirements.append(docker_image_marker(image))
     with open(dockerfile, "r") as handle:
         base_image = next(handle).replace("FROM ", "")
         if base_image.startswith("singlecellopenproblems"):
             base_image = base_image.split(":")[0].split("/")[1]
-            requirements.extend(_docker_requirements(base_image, include_push=True))
+            requirements.extend(_docker_requirements(base_image, include_self=True))
     return requirements
 
 
 def docker_requirements(wildcards):
     """Get all files to ensure a Docker image is up to date from wildcards."""
     return _docker_requirements(wildcards.image)
+
+
+def docker_push_requirements(wildcards):
+    """Get all files to ensure a Docker image is built and up to date from wildcards."""
+    return _docker_requirements(wildcards.image, include_self=True)
 
 
 def docker_push(wildcards):
