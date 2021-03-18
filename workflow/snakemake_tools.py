@@ -24,6 +24,10 @@ DOCKER_EXEC = (
     ") bash -c '"
     "  docker exec $CONTAINER /bin/bash /opt/openproblems/scripts/docker_run.sh"
 ).format(mountdir=os.path.dirname(SCRIPTS_DIR))
+try:
+    DOCKER_PASSWORD = os.environ["DOCKER_PASSWORD"]
+except KeyError:
+    DOCKER_PASSWORD = None
 
 
 def _images(filename):
