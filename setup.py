@@ -15,6 +15,7 @@ install_requires = [
     "memory-profiler",
     "colorama>=0.3.9",
     "packaging",
+    "umap-learn>=0.5.1",
 ]
 
 r_requires = [
