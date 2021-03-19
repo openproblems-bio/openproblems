@@ -2,3 +2,6 @@ pip
 wheel
 setuptools
 cmake
+tensorflow<2.0
+scgen
+git+git://github.com/theislab/scib@scanpy17
