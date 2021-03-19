@@ -149,22 +149,26 @@ def docker_image_age(image, pull_on_error=True):
             raise
 
 
-def docker_file_age(image):
-    """Get the age of a Dockerfile."""
-    docker_path = os.path.join(IMAGES_DIR, image)
-    # check if there are unstaged changes
+def git_file_diff(filename):
+    """Check if there are (un)staged changes to a file."""
     proc = subprocess.run(
         [
             "git",
             "status",
             "--porcelain",
             "--untracked-files=no",
-            "{}/*".format(docker_path),
+            filename,
         ],
         stdout=subprocess.PIPE,
     )
     result = proc.stdout.decode().strip()
-    if result != "":
+    return result != ""
+
+
+def git_file_age(filename):
+    """Get the age of a file on git."""
+    if git_file_diff(filename):
+        # there exist (un)staged changes, modified now
         return int(time.time())
     # check when the last committed changes occurred
     proc = subprocess.run(
@@ -175,7 +179,7 @@ def docker_file_age(image):
             '--format="%ad"',
             "--date=unix",
             "--",
-            "{}/*".format(docker_path),
+            filename,
         ],
         stdout=subprocess.PIPE,
     )
@@ -185,13 +189,22 @@ def docker_file_age(image):
     except ValueError:
         if result == "":
             warnings.warn(
-                "Files {}/{}/* not found on git; assuming unchanged.".format(
-                    os.getcwd(), docker_path
+                "Files {}/{} not found on git; assuming unchanged.".format(
+                    os.getcwd(), filename
                 )
             )
             return 0
         else:
             raise
+
+
+def docker_file_age(image):
+    """Get the age of a Dockerfile."""
+    docker_path = os.path.join(IMAGES_DIR, image)
+    docker_timestamp = git_file_age("{}/*".format(docker_path))
+    # if setup.py has changed, update everything
+    setup_timestamp = git_file_age("../setup.py")
+    return max(docker_timestamp, setup_timestamp)
 
 
 def version_not_changed():
@@ -221,11 +234,7 @@ def docker_image_marker(image):
     # possible outputs
     docker_pull = os.path.join(docker_path, ".docker_pull")
     dockerfile = os.path.join(docker_path, "Dockerfile")
-    if DOCKER_PASSWORD is not None:
-        # if we need to build and we have the password, we should push
-        docker_build = os.path.join(docker_path, ".docker_push")
-    else:
-        docker_build = os.path.join(docker_path, ".docker_build")
+    docker_build = os.path.join(docker_path, ".docker_build")
 
     # inputs to conditional logic
     dockerfile_timestamp = docker_file_age(image)
@@ -259,7 +268,7 @@ def docker_image_marker(image):
     return requirement_file
 
 
-def _docker_requirements(image, include_push=False):
+def _docker_requirements(image, include_self=False):
     """Get all files to ensure a Docker image is up to date from the image name."""
     docker_dir = os.path.join(IMAGES_DIR, image)
     dockerfile = os.path.join(docker_dir, "Dockerfile")
@@ -271,19 +280,24 @@ def _docker_requirements(image, include_push=False):
             if f.endswith("requirements.txt")
         ]
     )
-    if include_push:
+    if include_self:
         requirements.append(docker_image_marker(image))
     with open(dockerfile, "r") as handle:
         base_image = next(handle).replace("FROM ", "")
         if base_image.startswith("singlecellopenproblems"):
             base_image = base_image.split(":")[0].split("/")[1]
-            requirements.extend(_docker_requirements(base_image, include_push=True))
+            requirements.extend(_docker_requirements(base_image, include_self=True))
     return requirements
 
 
 def docker_requirements(wildcards):
     """Get all files to ensure a Docker image is up to date from wildcards."""
     return _docker_requirements(wildcards.image)
+
+
+def docker_push_requirements(wildcards):
+    """Get all files to ensure a Docker image is built and up to date from wildcards."""
+    return _docker_requirements(wildcards.image, include_self=True)
 
 
 def docker_push(wildcards):
