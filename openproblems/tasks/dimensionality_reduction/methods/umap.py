@@ -12,7 +12,6 @@ import scanpy as sc
     paper_year=2018,
     code_url="https://github.com/lmcinnes/umap",
     code_version=check_version("umap-learn"),
-    image="openproblems-python-extras",
 )
 def umap(adata):
     sc.pp.neighbors(adata)
