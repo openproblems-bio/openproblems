@@ -1,9 +1,12 @@
 import datetime
+import functools
 import multiprocessing
 import openproblems
 import os
 import packaging.version
 import subprocess
+import sys
+import time
 import warnings
 
 N_THREADS = multiprocessing.cpu_count()
@@ -77,7 +80,36 @@ def docker_image_name(wildcards):
     return fun.metadata["image"]
 
 
-def docker_image_age(image):
+def docker_image_exists(image, local=True):
+    """Check if a Docker image exists."""
+    if local:
+        proc = subprocess.run(
+            [
+                "docker",
+                "inspect",
+                "singlecellopenproblems/{}".format(image),
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    else:
+        env = os.environ.copy()
+        env["DOCKER_CLI_EXPERIMENTAL"] = "enabled"
+        proc = subprocess.run(
+            [
+                "docker",
+                "manifest",
+                "inspect",
+                "singlecellopenproblems/{}".format(image),
+            ],
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    return proc.returncode == 0
+
+
+def docker_image_age(image, pull_on_error=True):
     """Get the age of a Docker image."""
     proc = subprocess.run(
         [
@@ -87,22 +119,54 @@ def docker_image_age(image):
             "singlecellopenproblems/{}".format(image),
         ],
         stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
     date_string = proc.stdout.decode().strip().replace('"', "").split(".")[0]
     try:
         date_datetime = datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S")
         return int(date_datetime.timestamp())
     except ValueError:
-        warnings.warn(
-            "Docker image singlecellopenproblems/{} not found; "
-            "assuming needs rebuild.".format(image)
-        )
-        return -1
+        if pull_on_error and docker_image_exists(image, local=False):
+            subprocess.run(
+                [
+                    "docker",
+                    "pull",
+                    "--quiet",
+                    "singlecellopenproblems/{}".format(image),
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            return docker_image_age(image, pull_on_error=False)
+        elif date_string == "":
+            warnings.warn(
+                "Docker image singlecellopenproblems/{} not found; "
+                "assuming needs rebuild. If you think this message is in error, "
+                "you can fix this by running `snakemake -j 1 docker_pull`".format(image)
+            )
+            return -1
+        else:
+            raise
 
 
 def docker_file_age(image):
     """Get the age of a Dockerfile."""
     docker_path = os.path.join(IMAGES_DIR, image)
+    # check if there are unstaged changes
+    proc = subprocess.run(
+        [
+            "git",
+            "status",
+            "--porcelain",
+            "--untracked-files=no",
+            "{}/*".format(docker_path),
+        ],
+        stdout=subprocess.PIPE,
+    )
+    result = proc.stdout.decode().strip()
+    if result != "":
+        return int(time.time())
+    # check when the last committed changes occurred
     proc = subprocess.run(
         [
             "git",
@@ -115,16 +179,19 @@ def docker_file_age(image):
         ],
         stdout=subprocess.PIPE,
     )
-    result = proc.stdout.decode().strip()
+    result = proc.stdout.decode().strip().replace('"', "")
     try:
         return int(result)
     except ValueError:
-        warnings.warn(
-            "Files {}/{}/* not found on git; assuming unchanged.".format(
-                os.getcwd(), docker_path
+        if result == "":
+            warnings.warn(
+                "Files {}/{}/* not found on git; assuming unchanged.".format(
+                    os.getcwd(), docker_path
+                )
             )
-        )
-        return 0
+            return 0
+        else:
+            raise
 
 
 def version_not_changed():
@@ -142,24 +209,53 @@ def version_not_changed():
         return True
 
 
+def format_timestamp(ts):
+    """Format a unix timestamp as a string."""
+    return datetime.datetime.fromtimestamp(ts).isoformat()
+
+
+@functools.lru_cache(maxsize=None)
 def docker_image_marker(image):
     """Get the file to be created to ensure Docker image exists from the image name."""
     docker_path = os.path.join(IMAGES_DIR, image)
-    docker_push = os.path.join(docker_path, ".docker_push")
+    # possible outputs
     docker_pull = os.path.join(docker_path, ".docker_pull")
+    dockerfile = os.path.join(docker_path, "Dockerfile")
     docker_build = os.path.join(docker_path, ".docker_build")
-    if version_not_changed() and docker_file_age(image) < docker_image_age(image):
-        # Dockerfile hasn't been changed since last push, pull it
-        return docker_pull
-    elif DOCKER_PASSWORD is not None:
-        # we have the password, let's push it
-        return docker_push
+
+    # inputs to conditional logic
+    dockerfile_timestamp = docker_file_age(image)
+    docker_image_timestamp = docker_image_age(image)
+    print(
+        "{}: Dockerfile changed {}; Docker image updated {}".format(
+            image,
+            format_timestamp(dockerfile_timestamp),
+            format_timestamp(docker_image_timestamp),
+        )
+    )
+    local_imagespec_changed = dockerfile_timestamp > docker_image_timestamp
+    local_codespec_changed = not version_not_changed()
+    if local_imagespec_changed or local_codespec_changed:
+        # spec has changed, let's rebuild
+        print("{}: rebuilding".format(image))
+        requirement_file = docker_build
+    elif docker_image_exists(image, local=True):
+        # existing image is newer than any changes, don't need anything
+        print("{}: no change".format(image))
+        requirement_file = dockerfile
+    elif docker_image_exists(image, local=False):
+        # docker exists on dockerhub and no changes required
+        print("{}: pulling".format(image))
+        requirement_file = docker_pull
     else:
-        # new image and we don't have the password, build locally
-        return docker_build
+        # image doesn't exist anywhere, need to build it
+        print("{}: building".format(image))
+        requirement_file = docker_build
+    sys.stdout.flush()
+    return requirement_file
 
 
-def _docker_requirements(image, include_push=False):
+def _docker_requirements(image, include_self=False):
     """Get all files to ensure a Docker image is up to date from the image name."""
     docker_dir = os.path.join(IMAGES_DIR, image)
     dockerfile = os.path.join(docker_dir, "Dockerfile")
@@ -171,19 +267,24 @@ def _docker_requirements(image, include_push=False):
             if f.endswith("requirements.txt")
         ]
     )
-    if include_push:
+    if include_self:
         requirements.append(docker_image_marker(image))
     with open(dockerfile, "r") as handle:
         base_image = next(handle).replace("FROM ", "")
         if base_image.startswith("singlecellopenproblems"):
             base_image = base_image.split(":")[0].split("/")[1]
-            requirements.extend(_docker_requirements(base_image, include_push=True))
+            requirements.extend(_docker_requirements(base_image, include_self=True))
     return requirements
 
 
 def docker_requirements(wildcards):
     """Get all files to ensure a Docker image is up to date from wildcards."""
     return _docker_requirements(wildcards.image)
+
+
+def docker_push_requirements(wildcards):
+    """Get all files to ensure a Docker image is built and up to date from wildcards."""
+    return _docker_requirements(wildcards.image, include_self=True)
 
 
 def docker_push(wildcards):
