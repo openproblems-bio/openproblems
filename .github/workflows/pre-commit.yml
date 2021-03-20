@@ -3,17 +3,18 @@ on:
   push:
     branches-ignore:
       - 'master'
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   pre-commit:
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - {name: 'commit', continue: true}
-        - {name: 'check', continue: false}
+    runs-on: ubuntu-18.04
+    if: >-
+      !contains(github.event.head_commit.message, 'ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads') ||
+        github.event.pull_request.draft == false
+      )
 
     steps:
       - name: Cancel Previous Runs
@@ -27,7 +28,7 @@ jobs:
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get update -qq
+          sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
           sudo apt-get install -y libcurl4-openssl-dev
 
       - name: Set up Python
@@ -67,11 +68,11 @@ jobs:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}-
 
-      - uses: pre-commit/action@v2.0.0
-        continue-on-error: ${{ matrix.config.continue }}
+      - name: Run pre-commit
+        uses: pre-commit/action@v2.0.0
 
       - name: Commit files
-        if: ${{ matrix.config.continue }}
+        if: failure() && startsWith(github.ref, 'refs/heads')
         run: |
           if [[ `git status --porcelain --untracked-files=no` ]]; then
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -81,7 +82,7 @@ jobs:
           fi
 
       - name: Push changes
-        if: ${{ matrix.config.continue }}
+        if: failure() && startsWith(github.ref, 'refs/heads')
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

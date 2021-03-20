@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {name: 'current', os: ubuntu-latest, python: '3.8' }
+        - {name: 'current', os: ubuntu-18.04, python: '3.8' }
 
     steps:
     - name: Cancel Previous Runs
@@ -27,6 +27,8 @@ jobs:
         access_token: ${{ github.token }}
 
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1000
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -46,17 +48,10 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        python -m pip install --upgrade "pip<=21.0"
-        pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U .
-        pip install --use-deprecated=legacy-resolver -U snakemake
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools
+        pip install --editable .[evaluate]
         python -c "import openproblems"
-
-    - name: Pull images
-      run: |
-        cd workflow
-        snakemake -j $(grep -c processor /proc/cpuinfo) docker_pull
-        cd ..
 
     - name: Build images
       run: |
@@ -70,36 +65,35 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         cd workflow
-        snakemake -j $(grep -c processor /proc/cpuinfo) docker
+        snakemake -j $(grep -c processor /proc/cpuinfo) docker_push
         cd ..
         echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
 
-
     - name: Set up Git branch
-      if: env.CHANGED && startsWith(github.ref, 'refs/heads/master')
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/master')
       run: |
         git checkout -b $BRANCH_NAME
         git push -u origin $BRANCH_NAME
 
     - name: Commit result
-      if: env.CHANGED && startsWith(github.ref, 'refs/heads/master')
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/master')
       uses: EndBug/add-and-commit@v6
       with:
         author_name: SingleCellOpenProblems
         author_email: singlecellopenproblems@protonmail.com
-        message: 'Push Docker images # ci skip'
-        add: "['docker/*/.docker_push', 'docker/.version']"
+        message: 'Update docker version # ci skip'
+        add: "docker/.version"
         branch: ${{ env.BRANCH_NAME }}
         push: false
 
     - name: Create Pull Request
-      if: env.CHANGED && startsWith(github.ref, 'refs/heads/master')
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/master')
       uses: peter-evans/create-pull-request@v3
       with:
         branch: ${{ env.BRANCH_NAME }}
-        delete-branch: false
+        delete-branch: true
         base: master
-        title: '[auto] Update .docker_push'
+        title: '[auto] Update docker version'
         reviewers: scottgigante, dburkhardt
 
     - name: Upload check results on fail

@@ -6,13 +6,18 @@ on:
       - 'test_docker'
       - 'test_benchmark'
   pull_request:
-    branches:
-      - '*'
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   run_tester:
     runs-on: ${{ matrix.config.os }}
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    if: >-
+      !contains(github.event.head_commit.message, 'ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads') ||
+        github.event.pull_request.draft == false
+      )
+
     env:
       RENV_PATHS_ROOT: ~/.local/share/renv
 
@@ -20,9 +25,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {name: 'current', os: ubuntu-latest, python: '3.8', r: 'release' }
-        - {name: 'prev', os: ubuntu-latest, python: '3.7', r: 'release' }
-        - {name: 'old', os: ubuntu-latest, python: '3.6', r: 'release' }
+        - {name: 'curr', os: ubuntu-18.04, python: '3.8', r: 'release' }
+        - {name: 'prev', os: ubuntu-18.04, python: '3.7', r: 'release' }
+        - {name: 'old', os: ubuntu-18.04, python: '3.6', r: 'release' }
 
     steps:
     - name: Cancel Previous Runs
@@ -41,7 +46,7 @@ jobs:
     - name: Install system dependencies
       if: runner.os == 'Linux'
       run: |
-        sudo apt-get update -qq
+        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
         sudo apt-get install -y libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev libcurl4-openssl-dev
 
     - name: Set up Python
@@ -65,31 +70,6 @@ jobs:
         path: ${{ env.pythonLocation }}
         key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
         restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
-
-    - name: Install Nextflow
-      env:
-          CAPSULE_LOG: none
-      run: |
-        mkdir /tmp/nextflow
-        cd /tmp/nextflow
-        wget -qO- get.nextflow.io | bash
-        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
-
-    - name: Set up S3FS
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        sudo apt-get install s3fs
-        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
-        chmod 600 ~/.passwd-s3fs
-        sudo mkdir -p /mnt/openproblems-nextflow
-        sudo chown $USER /mnt/openproblems-nextflow
-        s3fs openproblems-nextflow /mnt/openproblems-nextflow
-        mkdir -p /mnt/openproblems-nextflow/test/bucket/${{ github.ref }}
-        mkdir -p /mnt/openproblems-nextflow/test/work/${{ github.ref }}
-        mkdir -p /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}//${{ matrix.config.name }}
 
     - name: Install package & dependencies
       run: |
@@ -119,46 +99,11 @@ jobs:
         close(con)
       shell: Rscript {0}
 
-    - name: Update Docker images
+    - name: Build Docker images
       run: |
         cd workflow
-        snakemake -j 4 docker_pull
         snakemake -j 4 docker
-        snakemake -j 4 docker_update
         cd ..
-
-    - name: Upload Docker images
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        BRANCH=$(echo ${{ github.ref }} | sed 's:^.*/::')
-        echo "BRANCH=$BRANCH" >> $GITHUB_ENV
-        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
-          docker login --username AWS --password-stdin $ECR_ENDPOINT
-        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-          docker push ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-        done
-
-    - name: Run benchmark
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: >-
-        cd /mnt/openproblems-nextflow/test/cwd/${{ github.ref }}//${{ matrix.config.name }} &&
-        nextflow run
-        -with-tower
-        -resume
-        -profile test,aws
-        -work-dir "/mnt/openproblems-nextflow/test/work/${{ github.ref }}/${{ matrix.config.name }}"
-        -bucket-dir "s3://openproblems-nextflow/test/bucket/${{ github.ref }}/${{ matrix.config.name }}"
-        singlecellopenproblems/nf-openproblems
-        --branch $BRANCH
 
     - name: Run tests
       run: pytest --cov=openproblems -v

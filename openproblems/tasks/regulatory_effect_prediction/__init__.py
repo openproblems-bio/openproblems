@@ -1,10 +1,10 @@
 from ... import utils
-from . import checks
+from . import api
 from . import datasets
 from . import methods
 from . import metrics
 
-_task_name = "Dimensionality reduction manifold preservation"
+_task_name = "Regulatory effect prediction"
 
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)
