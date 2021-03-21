@@ -1,30 +1,39 @@
-FROM python:3.6
+FROM python:3.8
+
+# Setting up Sagemaker Studio Image from example
+# https://github.com/aws-samples/sagemaker-studio-custom-image-samples/blob/main/examples/echo-kernel-image/Dockerfile
 
 ARG NB_USER="sagemaker-user"
 ARG NB_UID="1000"
 ARG NB_GID="100"
 
-
-######################
-# OVERVIEW
-# 1. Creates the `sagemaker-user` user with UID/GID 1000/100.
-# 2. Ensures this user can `sudo` by default.
-# 3. Install the echo kernel from PyPI and install its dependencies.
-# 4. Make the default shell `bash`. This enhances the experience inside a Jupyter terminal as otherwise Jupyter defaults to `sh`
-######################
-
 # Setup the "sagemaker-user" user with root privileges.
 RUN \
-    apt-get update && \
-    apt-get install -y sudo && \
-    useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
-    chmod g+w /etc/passwd && \
-    echo "${NB_USER}    ALL=(ALL)    NOPASSWD:    ALL" >> /etc/sudoers && \
-    # Prevent apt-get cache from being persisted to this layer.
-    rm -rf /var/lib/apt/lists/*
+   apt-get update && \
+   apt-get install -qy sudo && \
+   useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+   chmod g+w /etc/passwd && \
+   echo "${NB_USER}    ALL=(ALL)    NOPASSWD:    ALL" >> /etc/sudoers
 
-# Install and configure the kernel.
-RUN pip install jupyter scprep
+# update pip
+RUN python3 -m pip install --no-cache-dir -U pip
+
+# install AWS CLI
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip -q awscliv2.zip
+RUN ./aws/install
+
+# install dependencies
+COPY ./docker/sagemaker-example-python-3.8/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install single-cell open problems
+COPY . /usr/src/singlecellopenproblems
+RUN cd /usr/src/singlecellopenproblems && git clean -fxdq
+RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
+
+# Overwrite kernelspec
+COPY ./docker/sagemaker-example-python-3.8/kernelspec.json /usr/local/share/jupyter/kernels/python3/kernel.json
 
 # Make the default shell bash (vs "sh") for a better Jupyter terminal UX
 ENV SHELL=/bin/bash
