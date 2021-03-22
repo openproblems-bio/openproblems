@@ -19,7 +19,7 @@ install_requires = [
 ]
 
 r_requires = [
-    "rpy2",
+    "rpy2<3.4.3",
     "anndata2ri>=1.0.6",
 ]
 
