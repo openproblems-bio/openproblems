@@ -24,7 +24,7 @@ RUN unzip -q awscliv2.zip
 RUN ./aws/install
 
 # install dependencies
-COPY ./docker/sagemaker-example-python-3.8/requirements.txt ./requirements.txt
+COPY ./docker/openproblems/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install single-cell open problems
