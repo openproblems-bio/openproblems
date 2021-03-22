@@ -108,3 +108,38 @@ Before the Jamboree:
 2. Create a GitHub account: https://github.com/join
 3. Go through the Hello World tutorial on GitHub: https://guides.github.com/activities/hello-world/
 4. Read through the [CONTRIBUTING.md](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/CONTRIBUTING.md) file that describes the process for adding code to the GitHub repository.
+
+## Community Participation Guidelines
+
+**Be Direct and Kind** – We speak directly when we disagree and when we think we need to improve. We are kind in these interactions and communications. We aim to be direct, constructive and positive. One way to achieve being direct and kind is to assume good intent and listen actively before responding. We listen with our head and heart, and assure the head-heart connection before we speak.
+
+**Make Space** – We value each other’s ideas, styles and viewpoints. We seek diverse perspectives. Diversity of views powers innovation. We are aware of how much time is taken up by dominant members of the group. If we find ourselves dominating a discussion, we recognize the need to step back and encourage other voices to join in. “Winning” is when different perspectives make our work richer and stronger.
+
+**Be Inclusive** – Community members come from many races, ethnicities, cultures and backgrounds. We are respectful of people with different cultural practices, attitudes, political affiliations and beliefs. We work to eliminate our own biases and prejudices. We think of others’ needs from their point of view. We create an environment where we can bring our whole self to our work – our professional self as well as much of our personal self as we each desire.
+
+**Take Responsibility & Stay Curious** – We assume best intentions and take responsibility for our impact. We are aware of how intense interactions may affect other people. We do our best to stay curious and ask questions, and are open to the fact that we may not have all the information. If we have harmed someone through our words or actions, we listen carefully, apologize sincerely, and correct the behavior going forward.
+
+**Bring Solutions & Lead by Example** – Our words and actions matter. By matching our actions with our words, we become examples others want to follow. When frustrations arise, we see it as our responsibility to be part of creating solutions. We design our community and our work for positive behavior and hold others accountable.
+
+### Behavior That Will Not Be Tolerated
+**Personal Attacks** – Conflicts will inevitably arise, but frustration should never turn into a personal attack. It is not okay to insult, demean or belittle others. Attacking someone for their opinions, beliefs and ideas is not acceptable. This includes sustained “talking over” or “heckling” of speakers.
+
+**Derogatory Language** – Hurtful or harmful language, or using vulgar, discriminating, intimidating, threatening or harassing language is not acceptable. Using derogatory language based on someone’s race, color, religion, national origin, age, sex, marital status, ancestry, physical or mental disability, veteran status, gender identity, sexual orientation, or any other protected class will not be tolerated. If you’re unsure if a word is derogatory, don’t use it. See also CZI’s EEO, Harassment & Retaliation Policy.
+
+**Sexual Attention or Unwelcome Physical Contact** – Sexual attention or unwelcome physical contact is not acceptable. This includes sexualized comments, jokes or imagery in interactions, communications or written materials, as well as inappropriate touching or sexual advances. See also CZI’s EEO, Harassment & Retaliation Policy.
+
+**Breach of Confidentiality Obligations** – Trust is at the core of our ability to collaborate and to advance our work. Improper access, use, disclosure, or sharing of confidential information will not be tolerated. If unsure, the expectation is that you ask before disclosing or using!
+
+**Violence, Threats of Violence** – Violence and threats of violence are not acceptable – online or offline. This includes incitement of violence toward any individual, including encouraging a person to commit self-harm.
+
+**Intoxication** – Drinking alcohol in excess or misuse of prescription drugs (or use of illegal drugs) while working or participating in CZI communities, or pushing others to do so, or making derogatory comments about those who abstain from alcohol or other substances is not acceptable.
+
+### Consequences of Unacceptable Behavior
+
+Obviously, we can’t outline every positive or unacceptable behavior or action. Please use good judgement and be professional, even in stressful situations. Inappropriate behavior will not be tolerated and violation can result in you being asked to leave an event or online space, either temporarily or for the duration of the event, or being banned from future events and activities. For non-CZI employees, inappropriate behavior may be reported to your organization. For CZI employees, violation may lead to disciplinary action, up to and including termination of employment.
+
+### Reporting
+
+Your notification of any concerns is essential to us. We cannot help resolve a problem unless we know about it. Fiona Griffin from CZI has kindly agreed to be our point of contact for reporting. Therefore, please bring any concerns to Fiona Griffin (fiona.griffin@chanzuckerberg.com) as soon as possible so that we can take whatever steps are necessary to address the situation.
+
+*Guidelines inspired by CZI's [Our Values and Approach for Supporting Science](https://chanzuckerberg.com/science/our-values-approach/)*
