@@ -204,10 +204,15 @@ def git_file_age(filename):
                 "Files {}/{} not found on git; assuming unchanged.".format(
                     os.getcwd(), filename
                 )
-            )
-            return 0
-        else:
-            raise
+                result = 0
+            else:
+                raise
+
+    # check for changes to base image
+    base_image = _docker_base(image)
+    if base_image is not None:
+        result = max(result, docker_file_age(base_image))
+    return result
 
 
 def docker_file_age(image):
@@ -248,6 +253,7 @@ def docker_image_marker(image):
     # possible outputs
     docker_update = os.path.join(docker_path, ".docker_update")
     docker_build = os.path.join(docker_path, ".docker_build")
+
 
     # inputs to conditional logic
     dockerfile_timestamp = docker_file_age(image)
