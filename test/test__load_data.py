@@ -29,6 +29,7 @@ def test_load_dataset(task_name, dataset_name, test, tempdir, image):
     import utils.asserts
     import utils.cache
 
+    raise AssertionError
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     adata = dataset(test=test)
