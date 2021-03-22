@@ -2,6 +2,8 @@ FROM rackspacedot/python37:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN apt update && apt install -y python3-llvmlite
+
 # update pip
 RUN python3 -m pip install --no-cache-dir -U pip
 

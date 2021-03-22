@@ -1,6 +1,6 @@
 FROM singlecellopenproblems/openproblems-r-base:latest
 
-RUN apt-get update && apt-get -y install gcc git
+RUN apt-get update && apt-get -y install gcc git python3-llvmlite
 
 # Install Python packages
 COPY ./docker/openproblems-python-batch-integration/requirements.txt ./requirements.txt
