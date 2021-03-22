@@ -147,3 +147,6 @@ nf-openproblems
 # Docker testing container
 docker/scib-python/
 docker/openproblems-r-extras/Dockerfile_up
+
+# Vscode
+.vscode/
