@@ -10,7 +10,7 @@ _alra = scprep.run.RFunction(
     library(Matrix)
     library(rsvd)
     source('https://raw.githubusercontent.com/KlugerLab/ALRA/master/alra.R')
-    
+
     """,
     args="sce",
     body="""
@@ -23,6 +23,7 @@ _alra = scprep.run.RFunction(
     """,
 )
 
+
 @method(
     method_name="ALRA",
     paper_name="Zero-preserving imputation of scRNA-seq data using low-rank approximation",
@@ -32,16 +33,19 @@ _alra = scprep.run.RFunction(
     code_version=check_version("scprep"),
     image="openproblems-r-extras",
 )
-
 def alra(adata):
     X, libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
     )
-    X = scprep.transform.sqrt(X) #note that log transform is used in the examples of alra on github
-    adata.obsm['train']=X #we know that the scprep's .run.Rfunction uses anndata.2ri, where reducedDim(d, "PCA")=adata.obsm["X_PCA"], but that these dim-reduction equivalents 
-    #do not encompass any given key hold true across all contexts. Thus, we use X_PCA for now to ensure compatability. 
+    X = scprep.transform.sqrt(
+        X
+    )  # note that log transform is used in the examples of alra on github
+    adata.obsm[
+        "train"
+    ] = X  # we know that the scprep's .run.Rfunction uses anndata.2ri, where reducedDim(d, "PCA")=adata.obsm["X_PCA"], but that these dim-reduction equivalents
+    # do not encompass any given key hold true across all contexts. Thus, we use X_PCA for now to ensure compatability.
     Y = _alra(X)
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
-    adata.obsm["denoised"]=Y
+    adata.obsm["denoised"] = Y
     return adata
