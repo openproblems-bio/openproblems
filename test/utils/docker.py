@@ -175,6 +175,7 @@ def cache_docker_image(image):
             "-dt",
             "--rm",
             "--mount",
+            "--user=root",
             "type=bind,source={0},target={0}".format(BASEDIR),
             "--mount",
             "type=bind,source=/tmp,target=/tmp",
