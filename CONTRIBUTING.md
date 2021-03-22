@@ -38,13 +38,13 @@ link to it from your website, or simply star it in GitHub to say "I use it".
 To submit new features to Open Problems for Single Cell Analysis, follow the steps below:
 
 * Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems
-* Create repository secrets at [https://github.com/<username>/SingleCellOpenProblems/settings/secrets](https://github.com/<username>/SingleCellOpenProblems/settings/secrets):
+* Create repository secrets at [https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets](https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets):
 
 *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login details. If you do not have these, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
 
 *TOWER_ACCESS_KEY (optional): log in with GitHub to https://tower.nf and create a token at https://tower.nf/tokens.*
 
-* Enable workflows at [https://github.com/<username>/SingleCellOpenProblems/actions](https://github.com/<username>/SingleCellOpenProblems/actions)
+* Enable workflows at [https://github.com/USERNAME/SingleCellOpenProblems/actions](https://github.com/USERNAME/SingleCellOpenProblems/actions)
 * Set up your git repository:
 
 ```
