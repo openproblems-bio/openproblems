@@ -15,7 +15,7 @@ RUN apt-get clean -y && apt-get autoremove -y
 RUN R -e "install.packages('renv'); renv::consent(TRUE)"
 COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
 # Install r_requirements.txt
-RUN renv::install(scan('r_requirements.txt', sep='\n', what=character()))
+RUN R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))"
 
 # Install R kernel
 RUN echo 'IRkernel::installspec()' > /tmp/temp.R && Rscript /tmp/temp.R
