@@ -35,16 +35,20 @@ subtitle = ""
 +++
 # Spring Jamboree 2021
 
-The Open Problems for Single-Cell Analysis project is a community effort to standardize benchmarking for single-cell analysis. We aim to hold a remote Jamboree in the Spring of 2021 to bring together and expand the Open Problems Community as we build a resource to drive innovation in single-cell analytics. To learn more about the project, [click here](/).
+The Open Problems for Single-Cell Analysis project is a community effort to standardize benchmarking for single-cell analysis. We aim to hold a remote Jamboree in the Spring of 2021 to bring together and expand the Open Problems Community as we build a resource to drive innovation in single-cell analytics. To learn more about the project, [click here.](/)
 
 ## Schedule
 
 We have groups joining the jamboree from the Americas and from Europe, so we'll have a schedule to accomodate multiple time zones. We request that everyone join for the introductory session on Day 1 (3/29/21), but starting on Day 2 (3/30/21) we'll have an earlier session for folks joining from Europe.
 
+The event will start with a presentation to introduce the Open Problems effort at 8am PT / 4pm GMT. We will then break out into coding sessions punctuated by breaks. On Days 2 and 3, we will have group discussions around the infrastructure and long-term plans for Open Problems.
+
+Here's the full schedule broken down by day:
+
 ### Day 1
 
 
-Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Task
+Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Activity
 -- | -- | -- | -- | -- |
 8:00am | 9:00am | 4:00pm | 5:00pm | Welcome, introduce the day, answer questions about infrastructure
 9:00am | 10:30am | 5:00pm | 6:30pm | Divide people into pre-selected teams of 5, work for 90 minutes
@@ -53,7 +57,7 @@ Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Task
 12:30pm | 13:00pm | 9:30pm | 10:00pm | Regroup, relax for 30 minutes (optional for EU/Afr)
 
 ### Day 2
-Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Task
+Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Activity
 -- | -- | -- | -- | -- |
 😴 | 😴 | 2:00pm | 2:15pm | Welcome, introduce the day for Europe / Africa
 😴 | 😴 | 2:15pm | 3:45pm | Break out into groups
@@ -65,7 +69,7 @@ Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Task
 12:30pm | 13:00pm | 9:30pm | 10:00pm | Regroup, relax for 30 minutes
 
 ### Day 3
-Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Task
+Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Activity
 -- | -- | -- | -- | -- |
 😴 | 😴 | 2:00pm | 2:15pm | Welcome, introduce the day for Europe / Africa
 😴 | 😴 | 2:15pm | 3:45pm | Break out into groups
@@ -76,21 +80,10 @@ Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Task
 11:00am | 12:30pm | 7:00pm | 9:30pm | Work for 90 minutes
 12:30pm | 13:00pm | 9:30pm | 10:00pm | Regroup, relax for 30 minutes
 
-### Goal for the Jamboree
-
-The goal of the jamboree is to introduce the Open Problems framework to the wider computational biology community and advance 7 tasks under development. We’re currently working on:
-
-- [Predicting gene expression from chromatin accessibility](#Predicting-gene-expression-from-chromatin-accessibility)
-- Data denoising and imputation - Wes
-- [Dimensionality reduction for visualization](#Dimensionality-reduction-for-visualization)
-- [Cell type label projection from a reference atlas](#Cell-type-label-projection-from-a-reference-atlas)
-- [Multimodal data integration (e.g. combining CITE-seq with RNA-seq)](#Multimodal-data-integration)
-- Differential abundance from experimental perturbations - Dan/Emma
-- [Data integration and batch normalization](#Data-integration-and-batch-normalization)
 
 ### Discord
 
-Ahead of the event, we wanted to share some details on logistics for the event. To encourage communication and collaboration during the event, we’re going to use Discord. Discord is a chat and video client that combines the text channels of Slack with video channels that users can freely join and leave to talk and share content. We highly recommend downloading the Discord client for your computer because it’s more reliable than using a browser.
+To encourage communication and collaboration during the event, we’re going to use Discord. Discord is a chat and video client that combines the text channels of Slack with video channels that users can freely join and leave to talk and share content. We highly recommend downloading the Discord client for your computer because it’s more reliable than using a browser.
 
 Before the jamboree:  
 1. If you don’t already have one, create a Discord account
