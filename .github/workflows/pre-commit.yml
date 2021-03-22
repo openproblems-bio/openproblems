@@ -55,11 +55,8 @@ jobs:
       - name: Install R packages
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-          con = file(".pre-commit.r_requirements.txt", "r")
-          while ( length(pkg <- readLines(con, n = 1)) > 0 ) {
-            renv::install(pkg)
-          }
-          close(con)
+          renv::restore()
+          renv::install(scan(".pre-commit.r_requirements.txt", what=character(), sep="\n"))
         shell: Rscript {0}
 
       - name: Cache pre-commit

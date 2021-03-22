@@ -2,6 +2,7 @@ import anndata
 import openproblems
 import pandas as pd
 import parameterized
+import pytest
 import scipy.sparse
 import unittest
 import utils
@@ -48,13 +49,19 @@ class TestDataset(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Load data."""
-        cls.adata = utils.cache.load(
-            cls.tempdir,
-            cls.task,
-            cls.dataset,
-            test=cls.test,
-            dependency="test_load_dataset",
-        )
+        try:
+            cls.adata = utils.cache.load(
+                cls.tempdir,
+                cls.task,
+                cls.dataset,
+                test=cls.test,
+                dependency="test_load_dataset",
+            )
+        except AssertionError as e:
+            if str(e) == "Intermediate file missing. Did test_load_dataset fail?":
+                pytest.skip("Dataset not loaded successfully")
+            else:
+                raise
 
     def test_adata_class(self):
         """Ensure output is AnnData."""
