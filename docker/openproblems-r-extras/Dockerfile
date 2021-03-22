@@ -8,7 +8,7 @@ USER root
 
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
-RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install('${pkg}')"; done
+RUN R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))"
 
 # Install Python packages
 COPY ./docker/openproblems-r-extras/requirements.txt ./requirements.txt

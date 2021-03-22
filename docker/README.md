@@ -16,29 +16,38 @@ Our base R image. Do not add dependencies unless you know what you are doing.
 
 ### openproblems-r-extras
 
-Our R image that accepts additional dependencies. To add R packages (CRAN or Bioc), add them to `r_requirements.txt`. To add Python packages (PyPi or Github), add them to `requirements.txt`.
+Our R image that accepts additional dependencies.
+
+To add R packages (CRAN or Bioc), add them to `r_requirements.txt`. Syntax is dictated by [`renv`](https://rstudio.github.io/renv/reference/install.html#examples).
+
+To add Python packages (PyPi or Github), add them to `requirements.txt`. Syntax is dictated by [`pip`](https://packaging.python.org/tutorials/installing-packages/).
 
 ### openproblems-python-extras
 
-Our Python image that accepts additional dependencies. To add Python packages (PyPi or Github), add them to `requirements.txt`.
+To add Python packages (PyPi or Github), add them to `requirements.txt`. Syntax is dictated by [`pip`](https://packaging.python.org/tutorials/installing-packages/).
 
 ## Adding new images
 
 To add a new image, create a new folder containing the following files:
 
 * `Dockerfile`
-* `requirements.txt`
 * `README.md`
+* `requirements.txt` (optional)
+* `r_requirements.txt` (optional)
 
-The easiest way to do this is to copy the `openproblems-python-extras` folder.
+The easiest way to do this is to copy the `openproblems-python-extras` or `openproblems-r-extras` folder.
 
-## Building Docker image locally
+## Building Docker images locally
 
 If you have Docker installed, you can build containers locally for prototyping. For example, to install the `openproblems` base container, you can run the following.
 ```
 docker build -f docker/openproblems/Dockerfile -t singlecellopenproblems/openproblems .
 ```
-or to build all available Docker images:
+or to update all available Docker images:
 ```
-cd workflow && snakemake -j 1 docker
+cd workflow && snakemake -j 10 docker
+```
+or if you wish to override the automatic change detection,
+```
+cd workflow && snakemake -j 10 docker_build
 ```
