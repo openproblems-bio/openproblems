@@ -51,7 +51,7 @@ COPY ./docker/{wildcards.image}/* ./
 RUN if [ -f requirements.txt ]; then pip install --no-cache-dir -U -r requirements.txt; fi
 
 # Install R packages
-RUN if [ -f r_requirements.txt ]; then R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))"; fi
+RUN if [ -f r_requirements.txt ]; then R -e "renv::install(scan(\"r_requirements.txt\", sep=\"\n\", what=character()))"; fi
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
