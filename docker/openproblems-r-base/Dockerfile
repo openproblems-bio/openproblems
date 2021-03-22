@@ -15,11 +15,12 @@ RUN apt-get clean -y && apt-get autoremove -y
 RUN R -e "install.packages('renv'); renv::consent(TRUE)"
 COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
 # Install r_requirements.txt
-RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install('${pkg}')"; done
+RUN renv::install(scan('r_requirements.txt', sep='\n', what=character()))
 
 # Install R kernel
 RUN echo 'IRkernel::installspec()' > /tmp/temp.R && Rscript /tmp/temp.R
 
-# Install Python packages
-COPY ./docker/openproblems-r-base/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -U -r requirements.txt
+# Install single-cell open problems with R requirements
+COPY . /usr/src/singlecellopenproblems
+RUN cd /usr/src/singlecellopenproblems && git clean -fxdq
+RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems[r]
