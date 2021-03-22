@@ -159,7 +159,6 @@ jobs:
       run: |
         cp -r /mnt/openproblems-nextflow/cwd/${{ github.ref }}/results .
         python workflow/parse_nextflow.py
-        rm -r results
 
     - name: Remove working directory
       if: always() && startsWith(github.ref, 'refs/tags')
