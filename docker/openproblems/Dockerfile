@@ -1,6 +1,4 @@
-FROM python:3.8-buster
-
-# Removing on 3/16 to see if essential
+FROM python:3.8
 
 # Setting up Sagemaker Studio Image from example
 # https://github.com/aws-samples/sagemaker-studio-custom-image-samples/blob/main/examples/echo-kernel-image/Dockerfile
@@ -26,13 +24,16 @@ RUN unzip -q awscliv2.zip
 RUN ./aws/install
 
 # install dependencies
-COPY ./docker/openproblems/requirements.txt ./requirements.txt
+COPY ./docker/sagemaker-example-python-3.8/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
 RUN cd /usr/src/singlecellopenproblems && git clean -fxdq
 RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
+
+# Overwrite kernelspec
+COPY ./docker/openproblems/kernelspec.json /usr/local/share/jupyter/kernels/python3/kernel.json
 
 # Make the default shell bash (vs "sh") for a better Jupyter terminal UX
 ENV SHELL=/bin/bash
