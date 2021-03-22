@@ -31,13 +31,15 @@ RUN R -e "install.packages('renv'); renv::consent(TRUE)"
 COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
 # Install r_requirements.txt
 RUN for pkg in $(cat r_requirements.txt); do R -e "renv::install('${pkg}')"; done
-
 #Install kernelspec
 RUN R -e "IRkernel::installspec(user = FALSE);"
 
 # Install Python packages
 COPY ./docker/openproblems-python-extras/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Fix permissions
+RUN chown -R $NB_USER:$NB_GID /home/$NB_USER
 
 USER $NB_UID
 WORKDIR $HOME
