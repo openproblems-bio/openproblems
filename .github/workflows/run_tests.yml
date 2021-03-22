@@ -91,12 +91,7 @@ jobs:
       run: |
         if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
         renv::restore()
-
-        con = file("docker/openproblems-r-base/r_requirements.txt", "r")
-        while ( length(pkg <- readLines(con, n = 1)) > 0 ) {
-          renv::install(pkg)
-        }
-        close(con)
+        renv::install(scan("docker/openproblems-r-base/r_requirements.txt", what=character(), sep="\n"))
       shell: Rscript {0}
 
     - name: Build Docker images
