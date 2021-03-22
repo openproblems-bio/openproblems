@@ -1,4 +1,4 @@
-git+git://github.com/theislab/scib
+git+git://github.com/theislab/scib@unlock-llvmlite
 bbknn
 desc
 mnnpy
