@@ -111,6 +111,8 @@ Before the Jamboree:
 
 ## Community Participation Guidelines
 
+We want to make sure this event is inclusive and that all attendees are respected. Here are some guidelines to make sure that we can be as productive and successful as possible.
+
 **Be Direct and Kind** – We speak directly when we disagree and when we think we need to improve. We are kind in these interactions and communications. We aim to be direct, constructive and positive. One way to achieve being direct and kind is to assume good intent and listen actively before responding. We listen with our head and heart, and assure the head-heart connection before we speak.
 
 **Make Space** – We value each other’s ideas, styles and viewpoints. We seek diverse perspectives. Diversity of views powers innovation. We are aware of how much time is taken up by dominant members of the group. If we find ourselves dominating a discussion, we recognize the need to step back and encourage other voices to join in. “Winning” is when different perspectives make our work richer and stronger.
