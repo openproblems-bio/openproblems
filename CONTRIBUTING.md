@@ -37,28 +37,31 @@ link to it from your website, or simply star it in GitHub to say "I use it".
 
 To submit new features to Open Problems for Single Cell Analysis, follow the steps below:
 
-* Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems
-* Create repository secrets at [https://github.com/<username>/SingleCellOpenProblems/settings/secrets](https://github.com/<username>/SingleCellOpenProblems/settings/secrets):
+1. Search through the [GitHub Issues](https://github.com/singlecellopenproblems/SingleCellOpenProblems/issues) tracker to make sure there isn't someone already working on the feature you'd like to add. If someone is working on this, post in that issue that you'd like to help or reach out to one of the contributors working on the issue directly.
+2. If there isn't an existing issue tracking this feature, create one! There are several templates you can choose one depending on what type of feature you'd like to add.
+3. Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems
+4. Create repository secrets (*not environment secrets*) at [https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets](https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets)
+    * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login details. If you do not have these, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
+    * *TOWER_ACCESS_KEY (optional): log in with GitHub to https://tower.nf and create a token at https://tower.nf/tokens.*
+    * When you are done with this step, your page should look like this:
+    ![AWS secrets success](website/static/img/AWS_secret.png)
 
-*AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login details. If you do not have these, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
+5. Enable workflows at [https://github.com/USERNAME/SingleCellOpenProblems/actions](https://github.com/USERNAME/SingleCellOpenProblems/actions)
+6. Set up your git repository:
 
-*TOWER_ACCESS_KEY (optional): log in with GitHub to https://tower.nf and create a token at https://tower.nf/tokens.*
+  ```
+  git clone git@github.com:<username>/SingleCellOpenProblems.git
+  cd SingleCellOpenProblems
+  git remote add base git@github.com:singlecellopenproblems/SingleCellOpenProblems.git
+  git fetch --all
+  git branch --set-upstream-to base/master
+  git pull
+  # IMPORTANT: choose a new branch name, e.g.
+  git checkout -b task/new_task_name # or metric/new_metric_name, etc
+  git push -u origin task/new_task_name
+  ```
 
-* Enable workflows at [https://github.com/<username>/SingleCellOpenProblems/actions](https://github.com/<username>/SingleCellOpenProblems/actions)
-* Set up your git repository:
-
-```
-git clone git@github.com:<username>/SingleCellOpenProblems.git
-cd SingleCellOpenProblems
-git remote add base git@github.com:singlecellopenproblems/SingleCellOpenProblems.git
-git branch --set-upstream-to base/master
-git pull
-# IMPORTANT: choose a new branch name, e.g.
-git checkout -b task/new_task_name # or metric/new_metric_name, etc
-git push -u origin task/new_task_name
-```
-
-* Allow tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
+7. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
 
 ## API
 
@@ -193,6 +196,15 @@ For adding datasets, methods and metrics, see above.
 ## Code Style and Testing
 
 `singlecellopenproblems` is maintained at close to 100% code coverage. For datasets, methods, and metrics, tests are generated automatically. For additions outside this core functionality, contributors are encouraged to write tests for their code -- but if you do not know how to do so, please do not feel discouraged from contributing code! Others can always help you test your contribution.
+
+Code is tested by GitHub Actions when you push your changes. However, if you wish to test locally, you can do so with the following command:
+```
+cd SingleCellOpenProblems
+pip install --editable .[test,r]
+pytest -v
+```
+
+The test suite also requires Python>=3.7, R>=4.0, and Docker to be installed.
 
 Code style is dictated by [`black`](https://pypi.org/project/black/#installation-and-usage) and [`flake8`](https://flake8.pycqa.org/en/latest/) with [`hacking`](https://github.com/openstack/hacking). Code is automatically reformatted by [`pre-commit`](https://pre-commit.com/) when you push to GitHub.
 
