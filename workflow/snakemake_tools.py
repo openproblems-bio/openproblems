@@ -63,6 +63,11 @@ def pull_images(wildcards):
     return _images(".docker_pull")
 
 
+def refresh_images(wildcards):
+    """Get Docker refresh timestamp for all images."""
+    return _images(".docker_refresh")
+
+
 def update_images(wildcards):
     """Get Docker update timestamp for all images."""
     return _images(".docker_update")
@@ -242,20 +247,20 @@ def format_timestamp(ts):
 
 
 @functools.lru_cache(maxsize=None)
-def docker_image_marker(image, update=True):
+def docker_image_marker(image, refresh=True):
     """Get the file to be created to ensure Docker image exists from the image name."""
     docker_path = os.path.join(IMAGES_DIR, image)
     # possible outputs
-    docker_update = os.path.join(docker_path, ".docker_update")
+    docker_refresh = os.path.join(docker_path, ".docker_refresh")
     dockerfile = os.path.join(docker_path, "Dockerfile")
-    no_change = docker_update if update else dockerfile
+    no_change = docker_refresh if refresh else dockerfile
     docker_build = os.path.join(docker_path, ".docker_build")
 
     # inputs to conditional logic
     dockerfile_timestamp = docker_file_age(image)
     docker_image_timestamp = docker_image_age(image)
     print(
-        "{}: Dockerfile changed {}; Docker image updated {}".format(
+        "{}: Dockerfile changed {}; Docker image refreshed {}".format(
             image,
             format_timestamp(dockerfile_timestamp),
             format_timestamp(docker_image_timestamp),
@@ -264,6 +269,8 @@ def docker_image_marker(image, update=True):
     )
     local_imagespec_changed = dockerfile_timestamp > docker_image_timestamp
     local_codespec_changed = not version_not_changed()
+    if local_codespec_changed:
+        print("Code version changed: {}".format(openproblems.__version__), file=sys.stderr)
     if local_imagespec_changed or local_codespec_changed:
         # spec has changed, let's rebuild
         print("{}: rebuilding".format(image), file=sys.stderr)
@@ -282,7 +289,7 @@ def docker_image_marker(image, update=True):
     return requirement_file
 
 
-def _docker_requirements(image, include_self=False, update=True):
+def _docker_requirements(image, include_self=False, refresh=True):
     """Get all files to ensure a Docker image is up to date from the image name."""
     docker_dir = os.path.join(IMAGES_DIR, image)
     dockerfile = os.path.join(docker_dir, "Dockerfile")
@@ -295,11 +302,11 @@ def _docker_requirements(image, include_self=False, update=True):
         ]
     )
     if include_self:
-        requirements.append(docker_image_marker(image, update=update))
+        requirements.append(docker_image_marker(image, refresh=refresh))
     base_image = _docker_base(image)
     if base_image is not None:
         requirements.extend(
-            _docker_requirements(base_image, include_self=True, update=update)
+            _docker_requirements(base_image, include_self=True, refresh=refresh)
         )
     return requirements
 
@@ -309,9 +316,14 @@ def docker_requirements(wildcards):
     return _docker_requirements(wildcards.image)
 
 
-def docker_push_requirements(wildcards):
+def docker_update_requirements(wildcards):
     """Get all files to ensure a Docker image is built and up to date from wildcards."""
-    return _docker_requirements(wildcards.image, include_self=True, update=False)
+    return _docker_requirements(wildcards.image, include_self=True, refresh=True)
+
+
+def docker_push_requirements(wildcards):
+    """Get all files to ensure a Docker image is ready to push from wildcards."""
+    return _docker_requirements(wildcards.image, include_self=True, refresh=False)
 
 
 def docker_push(wildcards):
@@ -326,7 +338,12 @@ def docker_command(wildcards, output):
 
 
 for image in _images(""):
-    for filename in [".docker_push", ".docker_pull", ".docker_build", ".docker_update"]:
+    for filename in [
+        ".docker_push",
+        ".docker_pull",
+        ".docker_build",
+        ".docker_refresh",
+    ]:
         try:
             os.remove(os.path.join(image, filename))
         except FileNotFoundError:
