@@ -27,6 +27,7 @@ link to it from your website, or simply star it in GitHub to say "I use it".
   + [Adding a new dataset](#adding-a-new-dataset)
   + [Adding a dataset / method / metric to a task](#adding-a-dataset---method---metric-to-a-task)
   + [Adding a new task](#adding-a-new-task)
+  + [Adding a new Docker container](#adding-a-new-container)
 * [Code Style and Testing](#code-style-and-testing)
 * [Code of Conduct](#code-of-conduct)
 * [Attribution](#attribution)
@@ -193,6 +194,10 @@ sample_method(AnnData adata) -> AnnData adata # applies a simple modification th
 
 For adding datasets, methods and metrics, see above.
 
+### Adding a new Docker container
+
+Datasets, methods and metrics run inside Docker containers. We provide a few to start with, but if you have specific requirements, you may need to modify an existing image or add a new one. See the [Docker README](docker/README.md) for details.
+
 ## Code Style and Testing
 
 `singlecellopenproblems` is maintained at close to 100% code coverage. For datasets, methods, and metrics, tests are generated automatically. For additions outside this core functionality, contributors are encouraged to write tests for their code -- but if you do not know how to do so, please do not feel discouraged from contributing code! Others can always help you test your contribution.
@@ -205,6 +210,16 @@ pytest -v
 ```
 
 The test suite also requires Python>=3.7, R>=4.0, and Docker to be installed.
+
+The benchmarking suite is tested by GitHub Actions when you push your changes. However, if you wish to test locally, you can do so with the following command:
+```
+cd workflow
+snakemake -j 4 docker
+cd ..
+nextflow run -resume -profile test,docker singlecellopenproblems/nf-openproblems
+```
+
+The benchmarking suite also requires Python>=3.7, snakemake, nextflow, and Docker to be installed.
 
 Code style is dictated by [`black`](https://pypi.org/project/black/#installation-and-usage) and [`flake8`](https://flake8.pycqa.org/en/latest/) with [`hacking`](https://github.com/openstack/hacking). Code is automatically reformatted by [`pre-commit`](https://pre-commit.com/) when you push to GitHub.
 
