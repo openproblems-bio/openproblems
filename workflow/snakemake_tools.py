@@ -269,7 +269,8 @@ def docker_image_marker(image, refresh=True):
     )
     local_imagespec_changed = dockerfile_timestamp > docker_image_timestamp
     local_codespec_changed = not version_not_changed()
-    print("Codespec changed: {}".format(local_codespec_changed))
+    if local_codespec_changed:
+        print("Code version changed: {}".format(openproblems.__version__))
     if local_imagespec_changed or local_codespec_changed:
         # spec has changed, let's rebuild
         print("{}: rebuilding".format(image), file=sys.stderr)
@@ -315,8 +316,13 @@ def docker_requirements(wildcards):
     return _docker_requirements(wildcards.image)
 
 
-def docker_push_requirements(wildcards):
+def docker_update_requirements(wildcards):
     """Get all files to ensure a Docker image is built and up to date from wildcards."""
+    return _docker_requirements(wildcards.image, include_self=True, refresh=True)
+
+
+def docker_push_requirements(wildcards):
+    """Get all files to ensure a Docker image is ready to push from wildcards."""
     return _docker_requirements(wildcards.image, include_self=True, refresh=False)
 
 
