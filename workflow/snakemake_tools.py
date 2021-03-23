@@ -270,7 +270,9 @@ def docker_image_marker(image, refresh=True):
     local_imagespec_changed = dockerfile_timestamp > docker_image_timestamp
     local_codespec_changed = not version_not_changed()
     if local_codespec_changed:
-        print("Code version changed: {}".format(openproblems.__version__), file=sys.stderr)
+        print(
+            "Code version changed: {}".format(openproblems.__version__), file=sys.stderr
+        )
     if local_imagespec_changed or local_codespec_changed:
         # spec has changed, let's rebuild
         print("{}: rebuilding".format(image), file=sys.stderr)
