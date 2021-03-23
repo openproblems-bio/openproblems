@@ -35,17 +35,6 @@ jobs:
       with:
         python-version: ${{ matrix.config.python }}
 
-    - name: Check Ubuntu version
-      run: |
-        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
-
-    - name: Cache Python packages
-      uses: actions/cache@v2
-      with:
-        path: ${{ env.pythonLocation }}
-        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
-
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade pip
@@ -53,13 +42,13 @@ jobs:
         pip install --editable .[evaluate]
         python -c "import openproblems"
 
-    - name: Build images
+    - name: Build Docker images
       run: |
         cd workflow
         snakemake -j $(grep -c processor /proc/cpuinfo) docker
         cd ..
 
-    - name: Push images
+    - name: Push Docker images
       if: startsWith(github.ref, 'refs/heads/master')
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
