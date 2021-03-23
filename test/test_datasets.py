@@ -71,7 +71,6 @@ class TestDataset(unittest.TestCase):
             cls.task,
             cls.dataset,
             test=cls.test,
-            dependency="test_load_dataset",
         )
 
     def test_adata_class(self):
