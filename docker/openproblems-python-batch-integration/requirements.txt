@@ -1,4 +1,4 @@
-git+git://github.com/theislab/scib@unlock-llvmlite
+git+git://github.com/theislab/scib
 bbknn
 # desc
 git+git://github.com/pinin4fjords/mnnpy@fix_for_numba_jit
