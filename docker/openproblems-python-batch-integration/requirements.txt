@@ -1,6 +1,6 @@
 git+git://github.com/theislab/scib@unlock-llvmlite
 bbknn
-desc
-mnnpy
+# desc
+git+git://github.com/pinin4fjords/mnnpy@fix_for_numba_jit
 scvi==0.6.7
 scanorama
