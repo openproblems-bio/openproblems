@@ -139,6 +139,9 @@ def docker_image_age(image, pull_on_error=True):
         return int(date_datetime.timestamp())
     except ValueError:
         if pull_on_error and docker_image_exists(image, local=False):
+            print(
+                "Pulling image singlecellopenproblems/{}".format(image), file=sys.stderr
+            )
             subprocess.run(
                 [
                     "docker",
