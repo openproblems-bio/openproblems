@@ -260,7 +260,7 @@ def docker_image_marker(image, refresh=True):
     dockerfile_timestamp = docker_file_age(image)
     docker_image_timestamp = docker_image_age(image)
     print(
-        "{}: Dockerfile changed {}; Docker image refreshd {}".format(
+        "{}: Dockerfile changed {}; Docker image refreshed {}".format(
             image,
             format_timestamp(dockerfile_timestamp),
             format_timestamp(docker_image_timestamp),
