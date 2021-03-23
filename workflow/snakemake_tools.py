@@ -257,6 +257,7 @@ def docker_image_marker(image, refresh=True):
     docker_refresh = os.path.join(docker_path, ".docker_refresh")
     dockerfile = os.path.join(docker_path, "Dockerfile")
     no_change = docker_refresh if refresh else dockerfile
+    no_change_text = "refreshing source code only" if refresh else "no change"
     docker_build = os.path.join(docker_path, ".docker_build")
 
     # inputs to conditional logic
