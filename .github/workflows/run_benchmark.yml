@@ -160,16 +160,30 @@ jobs:
         cp -r /mnt/openproblems-nextflow/cwd/${{ github.ref }}/results .
         python workflow/parse_nextflow.py
 
-    - name: Remove working directory
-      if: always() && startsWith(github.ref, 'refs/tags')
+    - name: AWS cleanup
+      if: always() && (startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/pull') || startsWith(github.ref, 'refs/heads/master'))
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
+        done
         aws s3 rm "s3://openproblems-nextflow/work/${{ github.ref }}"
         aws s3 rm "s3://openproblems-nextflow/bucket/${{ github.ref }}"
         aws s3 rm "s3://openproblems-nextflow/cwd/${{ github.ref }}"
+
+    - name: Remove untagged images
+      if: startsWith(github.ref, 'refs/heads/master')
+      continue-on-error: true
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
+        aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
 
     - name: Pre-commit
       uses: pre-commit/action@v2.0.0
