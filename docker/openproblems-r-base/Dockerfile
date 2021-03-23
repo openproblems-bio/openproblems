@@ -14,6 +14,7 @@ RUN apt-get clean -y && apt-get autoremove -y
 # Install R packages
 RUN R -e "install.packages('renv'); renv::consent(TRUE)"
 COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
+
 # Install r_requirements.txt
 RUN R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))"
 

@@ -19,7 +19,7 @@ utils.warnings.ignore_warnings()
         )
         for task in openproblems.TASKS
         for dataset in task.DATASETS
-        for test in [True, False]
+        for test in [True]
     ],
     name_func=utils.name.name_test,
 )
