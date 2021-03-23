@@ -1,4 +1,4 @@
-from .datasets.pancreas import load_pancreas
+from .datasets.pancreas import pancreas_batch
 
 
 def check_dataset(adata):
@@ -19,8 +19,8 @@ def check_method(adata):
 
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
-    adata = load_pancreas(True)
-    print(adata.obs.columns)
+    adata = pancreas_batch(True)
+    # print(adata.obs.columns)
 
     return adata
 
