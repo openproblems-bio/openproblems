@@ -63,6 +63,17 @@ class TestDataset(unittest.TestCase):
             else:
                 raise
 
+    @classmethod
+    def tearDownClass(cls):
+        """Remove data."""
+        utils.cache.delete(
+            cls.tempdir,
+            cls.task,
+            cls.dataset,
+            test=cls.test,
+            dependency="test_load_dataset",
+        )
+
     def test_adata_class(self):
         """Ensure output is AnnData."""
         assert isinstance(self.adata, anndata.AnnData)
