@@ -53,13 +53,13 @@ jobs:
         pip install --editable .[evaluate]
         python -c "import openproblems"
 
-    - name: Build images
+    - name: Build Docker images
       run: |
         cd workflow
         snakemake -j $(grep -c processor /proc/cpuinfo) docker
         cd ..
 
-    - name: Push images
+    - name: Push Docker images
       if: startsWith(github.ref, 'refs/heads/master')
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

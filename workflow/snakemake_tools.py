@@ -213,7 +213,7 @@ def git_file_age(filename):
 def docker_file_age(image):
     """Get the age of a Dockerfile."""
     docker_path = os.path.join(IMAGES_DIR, image)
-    result = git_file_age("{}/*".format(docker_path))
+    result = git_file_age("{}/Dockerfile".format(docker_path))
     # check for changes to base image
     base_image = _docker_base(image)
     if base_image is not None:
@@ -242,11 +242,13 @@ def format_timestamp(ts):
 
 
 @functools.lru_cache(maxsize=None)
-def docker_image_marker(image):
+def docker_image_marker(image, update=True):
     """Get the file to be created to ensure Docker image exists from the image name."""
     docker_path = os.path.join(IMAGES_DIR, image)
     # possible outputs
     docker_update = os.path.join(docker_path, ".docker_update")
+    dockerfile = os.path.join(docker_path, "Dockerfile")
+    no_change = docker_update if update else dockerfile
     docker_build = os.path.join(docker_path, ".docker_build")
 
     # inputs to conditional logic
@@ -271,7 +273,7 @@ def docker_image_marker(image):
     ):
         # docker exists on dockerhub and no changes required
         print("{}: refreshing source code only".format(image), file=sys.stderr)
-        requirement_file = docker_update
+        requirement_file = no_change
     else:
         # image doesn't exist anywhere, need to build it
         print("{}: building".format(image), file=sys.stderr)
@@ -280,7 +282,7 @@ def docker_image_marker(image):
     return requirement_file
 
 
-def _docker_requirements(image, include_self=False):
+def _docker_requirements(image, include_self=False, update=True):
     """Get all files to ensure a Docker image is up to date from the image name."""
     docker_dir = os.path.join(IMAGES_DIR, image)
     dockerfile = os.path.join(docker_dir, "Dockerfile")
@@ -293,10 +295,12 @@ def _docker_requirements(image, include_self=False):
         ]
     )
     if include_self:
-        requirements.append(docker_image_marker(image))
+        requirements.append(docker_image_marker(image, update=update))
     base_image = _docker_base(image)
     if base_image is not None:
-        requirements.extend(_docker_requirements(base_image, include_self=True))
+        requirements.extend(
+            _docker_requirements(base_image, include_self=True, update=update)
+        )
     return requirements
 
 
@@ -307,7 +311,7 @@ def docker_requirements(wildcards):
 
 def docker_push_requirements(wildcards):
     """Get all files to ensure a Docker image is built and up to date from wildcards."""
-    return _docker_requirements(wildcards.image, include_self=True)
+    return _docker_requirements(wildcards.image, include_self=True, update=False)
 
 
 def docker_push(wildcards):
