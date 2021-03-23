@@ -39,7 +39,7 @@ def _assert_not_bytes(X):
         (staticmethod(dataset), task, test, utils.TEMPDIR.name)
         for task in openproblems.TASKS
         for dataset in task.DATASETS
-        for test in [True, False]
+        for test in [True]
     ],
     class_name_func=utils.name.name_test,
 )
@@ -62,6 +62,17 @@ class TestDataset(unittest.TestCase):
                 pytest.skip("Dataset not loaded successfully")
             else:
                 raise
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove data."""
+        utils.cache.delete(
+            cls.tempdir,
+            cls.task,
+            cls.dataset,
+            test=cls.test,
+            dependency="test_load_dataset",
+        )
 
     def test_adata_class(self):
         """Ensure output is AnnData."""
