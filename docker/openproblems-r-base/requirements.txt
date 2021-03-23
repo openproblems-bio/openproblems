@@ -1,2 +1,0 @@
-rpy2
-anndata2ri>=1.0.6
