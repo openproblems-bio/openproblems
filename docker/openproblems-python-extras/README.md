@@ -12,6 +12,7 @@ Python packages:
 * pybedtools
 * pyensembl
 * magic-impute
+* meld
 * molecular-cross-validation
 * MulticoreTSNE
 * phate
