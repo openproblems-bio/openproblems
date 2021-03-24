@@ -148,7 +148,6 @@ jobs:
         nextflow run
         $WITH_TOWER
         -ansi-log false
-        $RESUME
         -profile $PROFILE
         -work-dir "/mnt/openproblems-nextflow/work/${{ github.ref }}"
         -bucket-dir "s3://openproblems-nextflow/bucket/${{ github.ref }}"
