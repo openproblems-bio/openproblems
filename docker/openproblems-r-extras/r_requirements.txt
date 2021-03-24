@@ -1,3 +1,7 @@
 bioc::batchelor
+bioc::ComplexHeatmap
 sparsesvd
+Seurat
+conos
+rliger
 dplyr
