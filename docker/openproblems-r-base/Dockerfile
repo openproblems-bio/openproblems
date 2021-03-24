@@ -14,6 +14,7 @@ ENV SHELL=/bin/bash \
     HOME=/home/$NB_USER
 
 USER root
+WORKDIR /
 
 # Install R
 RUN apt-get update -qq

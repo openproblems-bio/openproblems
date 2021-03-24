@@ -5,6 +5,7 @@ ARG NB_UID="1000"
 ARG NB_GID="100"
 
 USER root
+WORKDIR /
 
 # Install pybedtools dependency
 ARG BUILD_PACKAGES=""
