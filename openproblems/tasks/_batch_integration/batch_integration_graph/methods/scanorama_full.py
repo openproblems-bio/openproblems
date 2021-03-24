@@ -32,7 +32,7 @@ def scanorama_feature_full_unscaled(adata):
     image="openproblems-python-batch-integration",  # only if required
 )
 def scanorama_feature_hvg_unscaled(adata):
-    from _hvg import hvg_batch
+    from ._hvg import hvg_batch
     from scIB.integration import runScanorama
     from scIB.preprocessing import reduce_data
 
@@ -52,7 +52,7 @@ def scanorama_feature_hvg_unscaled(adata):
     image="openproblems-python-batch-integration",  # only if required
 )
 def scanorama_feature_hvg_scaled(adata):
-    from _hvg import hvg_batch
+    from ._hvg import hvg_batch
     from scIB.integration import runScanorama
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
