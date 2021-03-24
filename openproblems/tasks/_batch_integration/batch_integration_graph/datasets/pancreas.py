@@ -9,7 +9,7 @@ import scanpy as sc
 
 @dataset(dataset_name="Pancreas (by batch)", image="openproblems-r-base")
 def pancreas_batch(test=False):
-    adata = load_pancreas(test=True)
+    adata = load_pancreas(test)
     from_cache = adata.__from_cache__
     adata.obs["labels"] = adata.obs["celltype"]
 
@@ -17,6 +17,7 @@ def pancreas_batch(test=False):
     adata.layers["counts"] = adata.X
 
     sc.pp.filter_genes(adata, min_counts=1)
+    sc.pp.subsample(adata, n_obs=2000)
     log_scran_pooling(adata)
     adata.layers["logcounts"] = adata.X
     sc.pp.filter_genes(adata, min_cells=1)

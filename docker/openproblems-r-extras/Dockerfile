@@ -15,4 +15,4 @@ RUN R -e 'devtools::install_github("welch-lab/liger@v0.5.0")'
 COPY ./docker/openproblems-r-extras/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN R -e 'BiocManager::install("SingleCellExperiment")'
+# RUN R -e 'BiocManager::install("SingleCellExperiment")'
