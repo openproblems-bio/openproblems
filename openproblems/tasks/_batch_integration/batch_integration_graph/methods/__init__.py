@@ -2,11 +2,11 @@ from .bbknn import bbknn_full_scaled
 from .bbknn import bbknn_full_unscaled
 from .bbknn import bbknn_hvg_scaled
 from .bbknn import bbknn_hvg_unscaled
-
 from .combat import combat_full_scaled
 from .combat import combat_full_unscaled
 from .combat import combat_hvg_scaled
 from .combat import combat_hvg_unscaled
+
 # from .desc import desc_full_scaled
 # from .desc import desc_full_unscaled
 # from .desc import desc_hvg_scaled
@@ -31,6 +31,7 @@ from .mnn import mnn_full_scaled
 from .mnn import mnn_full_unscaled
 from .mnn import mnn_hvg_scaled
 from .mnn import mnn_hvg_unscaled
+
 # from .saucie_embed import saucie_embed_full_scaled
 # from .saucie_embed import saucie_embed_full_unscaled
 # from .saucie_embed import saucie_embed_hvg_scaled
@@ -55,6 +56,7 @@ from .scgen import scgen_full_scaled
 from .scgen import scgen_full_unscaled
 from .scgen import scgen_hvg_scaled
 from .scgen import scgen_hvg_unscaled
+
 # from .scvi import scvi_full_scaled
 # from .scvi import scvi_full_unscaled
 # from .scvi import scvi_hvg_scaled
