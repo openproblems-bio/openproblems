@@ -39,3 +39,4 @@ COPY ./docker/openproblems/kernelspec.json /usr/local/share/jupyter/kernels/pyth
 ENV SHELL=/bin/bash
 
 USER $NB_UID
+WORKDIR /home/$NB_UID
