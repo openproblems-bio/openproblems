@@ -17,7 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Saucie
 RUN git clone https://github.com/KrishnaswamyLab/SAUCIE
-RUN mv SAUCIE /usr/local/lib/python3.8/site-packages/
+RUN mv SAUCIE /usr/local/lib/python3.7/site-packages/
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
