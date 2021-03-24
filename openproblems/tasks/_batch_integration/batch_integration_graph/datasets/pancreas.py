@@ -24,7 +24,9 @@ def pancreas_batch(test=False):
     sc.pp.filter_genes(adata, min_cells=1)
 
     sc.tl.pca(
-        adata, svd_solver="arpack", return_info=True,
+        adata,
+        svd_solver="arpack",
+        return_info=True,
     )
     adata.obsm["X_uni"] = adata.obsm["X_pca"]
 
