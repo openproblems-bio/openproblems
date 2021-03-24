@@ -11,3 +11,10 @@ def hvg_batch(adata, batch_key, target_genes, adataOut):
             flavor="cell_ranger",
             adataOut=adataOut,
         )
+
+
+def scale_batch(adata, batch_key):
+    from scIB.preprocessing import scale_batch
+    tmp = scale_batch(adata, batch_key)
+    tmp.var = tmp.var.iloc[:, :-6]
+    return tmp

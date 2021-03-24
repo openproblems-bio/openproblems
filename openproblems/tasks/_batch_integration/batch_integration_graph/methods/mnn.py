@@ -55,7 +55,7 @@ def mnn_hvg_scaled(adata):
     from ._hvg import hvg_batch
     from scIB.integration import runMNN
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+    from ._hvg import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
@@ -76,7 +76,7 @@ def mnn_hvg_scaled(adata):
 def mnn_full_scaled(adata):
     from scIB.integration import runMNN
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+    from ._hvg import scale_batch
 
     adata = scale_batch(adata, "batch")
     adata = runMNN(adata, "batch")
