@@ -5,6 +5,7 @@ ARG NB_UID="1000"
 ARG NB_GID="100"
 
 USER root
+WORKDIR /
 
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
