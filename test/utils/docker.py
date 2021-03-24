@@ -38,6 +38,7 @@ def build_docker(image):
         [
             "docker",
             "build",
+            "--no-cache",
             "-f",
             dockerfile,
             "-t",
