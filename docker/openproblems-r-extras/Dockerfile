@@ -16,4 +16,4 @@ COPY ./docker/openproblems-r-extras/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 USER $NB_UID
-WORKDIR /home/$NB_UID
+WORKDIR /home/$NB_USER
