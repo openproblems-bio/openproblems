@@ -4,7 +4,6 @@ from .....tools.utils import check_version
 
 import scprep
 
-
 _fastmnn_embed = scprep.run.RFunction(
     setup="""
             library(SingleCellExperiment)
