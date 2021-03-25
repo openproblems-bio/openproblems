@@ -102,12 +102,7 @@ def parse_metric_results(results):
         task_name, dataset_name, method_name, metric_name = filename.replace(
             ".metric.txt", ""
         ).split(".")
-        try:
-            results[task_name][dataset_name][method_name]["metrics"][
-                metric_name
-            ] = result
-        except KeyError:
-            pass
+        results[task_name][dataset_name][method_name]["metrics"][metric_name] = result
     return results
 
 
