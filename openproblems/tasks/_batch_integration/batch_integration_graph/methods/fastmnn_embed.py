@@ -4,8 +4,6 @@ from .....tools.utils import check_version
 
 import scprep
 
-# from scIB.integration import _fastmnn_embed
-
 
 _fastmnn_embed = scprep.run.RFunction(
     setup="""
@@ -50,7 +48,7 @@ def fastmnn_embed_full_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    # image="openproblems-template-image" # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def fastmnn_embed_hvg_unscaled(adata):
     from ._hvg import hvg_batch
@@ -69,7 +67,7 @@ def fastmnn_embed_hvg_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    # image="openproblems-template-image" # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def fastmnn_embed_hvg_scaled(adata):
     from ._hvg import hvg_batch
@@ -90,7 +88,7 @@ def fastmnn_embed_hvg_scaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    # image="openproblems-template-image" # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def fastmnn_embed_full_scaled(adata):
     from ._hvg import scale_batch

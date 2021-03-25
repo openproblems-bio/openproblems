@@ -51,7 +51,7 @@ def harmony_full_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib",  # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def harmony_hvg_unscaled(adata):
     from ._hvg import hvg_batch
@@ -71,7 +71,7 @@ def harmony_hvg_unscaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib",  # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def harmony_hvg_scaled(adata):
     from ._hvg import hvg_batch
@@ -93,7 +93,7 @@ def harmony_hvg_scaled(adata):
     paper_year=2020,
     code_url="",
     code_version=check_version("scprep"),
-    image="openproblems-r-scib",  # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def harmony_full_scaled(adata):
     from ._hvg import scale_batch

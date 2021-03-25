@@ -127,6 +127,6 @@ def liger_full_scaled(adata):
 
     adata = scale_batch(adata, "batch")
     adata = _liger(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
     adata.obsm["X_emb"] = adata.obsm["X_EMB"]
+    reduce_data(adata, use_rep="X_emb")
     return adata
