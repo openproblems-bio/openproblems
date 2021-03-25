@@ -1,4 +1,4 @@
-FROM python3.7:latest
+FROM python:3.7
 
 ENV DEBIAN_FRONTEND=noninteractive
 ARG NB_USER="sagemaker-user"
