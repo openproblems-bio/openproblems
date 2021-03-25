@@ -1,5 +1,6 @@
 [run]
 parallel = true
+branch = true
 source = openproblems
 omit = */__init__.py
 
