@@ -1,4 +1,4 @@
-# SingleCellOpenProblems
+# Open Problems in Single-Cell Analysis
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/singlecellopenproblems/singlecellopenproblems/Run%20Tests/master?label=Github%20Actions)
 [![Coverage Status](https://coveralls.io/repos/github/singlecellopenproblems/SingleCellOpenProblems/badge.svg?branch=master)](https://coveralls.io/github/singlecellopenproblems/SingleCellOpenProblems?branch=master)
