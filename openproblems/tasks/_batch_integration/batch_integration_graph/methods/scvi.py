@@ -19,7 +19,7 @@ def scvi_full_unscaled(adata):
     adata.obs.rename(columns={"labels": "lab"}, inplace=True)  # ugly fix for scvi conversion error
     adata = runScvi(adata, "batch")
     reduce_data(adata, use_rep="X_emb")
-    adata.obs.rename(columns={"lab": "labels"}), inplace=True  # ugly fix for scvi conversion error
+    adata.obs.rename(columns={"lab": "labels"}, inplace=True)  # ugly fix for scvi conversion error
     # Complete the result in-place
     return adata
 

@@ -95,7 +95,7 @@ def seurat_hvg_unscaled(adata):
 def seurat_hvg_scaled(adata):
     from ._hvg import hvg_batch
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+    from ._hvg import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
@@ -115,7 +115,7 @@ def seurat_hvg_scaled(adata):
 )
 def seurat_full_scaled(adata):
     from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+    from ._hvg import scale_batch
 
     adata = scale_batch(adata, "batch")
     adata = _seurat(adata, "batch")
