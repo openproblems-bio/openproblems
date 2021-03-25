@@ -101,8 +101,8 @@ jobs:
         cd ..
 
     - name: Run tests
-      run: pytest --cov=openproblems --cov-branch --cov-report=term-missing:skip-covered --cov-report=xml -vv
- 
+      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
+
     - name: Upload coverage
       if: success()
       env:
