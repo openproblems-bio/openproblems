@@ -1,6 +1,9 @@
 FROM rackspacedot/python37:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
+ARG NB_USER="sagemaker-user"
+ARG NB_UID="1000"
+ARG NB_GID="100"
 
 RUN \
     apt-get update && \
