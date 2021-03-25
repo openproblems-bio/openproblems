@@ -1,11 +1,11 @@
 FROM singlecellopenproblems/openproblems-r-base:latest
 
+USER root
+WORKDIR /
+
 ARG NB_USER="sagemaker-user"
 ARG NB_UID="1000"
 ARG NB_GID="100"
-
-USER root
-WORKDIR /
 
 RUN apt-get update && apt-get -y install gcc git python3-llvmlite
 
