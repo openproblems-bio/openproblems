@@ -144,6 +144,9 @@ def docker_image_age(image, pull_on_error=True):
         return int(date_datetime.timestamp())
     except ValueError:
         if pull_on_error and docker_image_exists(image, local=False):
+            print(
+                "Pulling image singlecellopenproblems/{}".format(image), file=sys.stderr
+            )
             subprocess.run(
                 [
                     "docker",
@@ -254,6 +257,7 @@ def docker_image_marker(image, refresh=True):
     docker_refresh = os.path.join(docker_path, ".docker_refresh")
     dockerfile = os.path.join(docker_path, "Dockerfile")
     no_change = docker_refresh if refresh else dockerfile
+    no_change_text = "refreshing source code only" if refresh else "no change"
     docker_build = os.path.join(docker_path, ".docker_build")
 
     # inputs to conditional logic
@@ -281,7 +285,7 @@ def docker_image_marker(image, refresh=True):
         image, local=False
     ):
         # docker exists on dockerhub and no changes required
-        print("{}: refreshing source code only".format(image), file=sys.stderr)
+        print("{}: {}".format(image, no_change_text), file=sys.stderr)
         requirement_file = no_change
     else:
         # image doesn't exist anywhere, need to build it
