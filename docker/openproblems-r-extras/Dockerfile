@@ -1,9 +1,6 @@
 FROM singlecellopenproblems/openproblems-r-base:latest
 
 
-RUN apt-get update
-RUN apt-get install -y libhdf5-dev
-
 ARG NB_USER="sagemaker-user"
 ARG NB_UID="1000"
 ARG NB_GID="100"
@@ -11,6 +8,7 @@ ARG NB_GID="100"
 USER root
 WORKDIR /
 
+RUN sudo apt-get update && sudo apt-get install -y libhdf5-dev
 
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
