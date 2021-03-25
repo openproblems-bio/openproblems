@@ -160,7 +160,7 @@ jobs:
         python workflow/parse_nextflow.py
 
     - name: AWS cleanup
-      if: always() && (startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/pull') || startsWith(github.ref, 'refs/heads/master'))
+      if: always() && (startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/pull'))
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
