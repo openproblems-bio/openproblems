@@ -78,4 +78,4 @@ Open Problems is hosted on GitHub. Benchmarks are evaluated using AWS thanks to 
 
 # Join us!
 
-We'd love for you to get involved.  You can start by reading our [Contribution Guidelines](/contibuting) page for an explanation of our backend framework. You can see our work-in-progress leaderboards on the [Results](/results) page. You can also check out our code on [GitHub](https://github.com/singlecellopenproblems/SingleCellOpenProblems). Finally, introduce yourself by giving us a 👋 on the [CZI Science Slack](https://join-cziscience-slack.herokuapp.com/) (we're in #open-problems-sca)!
+We'd love for you to get involved.  You can start by reading our [Contribution Guidelines](/contibuting) page for an explanation of our backend framework. You can see our work-in-progress leaderboards on the [Results](/results) page. You can also check out our code on [GitHub](https://github.com/singlecellopenproblems/SingleCellOpenProblems). Finally, introduce yourself by giving us a 👋 on our [Discord Server](https://discord.gg/sDE7cM4PN7)!

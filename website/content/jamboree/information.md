@@ -88,7 +88,7 @@ To encourage communication and collaboration during the event, we’re going to 
 Before the jamboree:  
 1. If you don’t already have one, create a Discord account
 2. Download Discord desktop client (required for video calling): https://discord.com/
-3. Join our server: https://discord.gg/9JxVEghvJQ
+3. Join our server: https://discord.gg/sDE7cM4PN7
 4. Introduce yourself with a 👋in the #introductions channel
 
 ### Introductory videos
