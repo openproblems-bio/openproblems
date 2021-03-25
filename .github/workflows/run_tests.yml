@@ -107,7 +107,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_SERVICE_NAME: github
-      run: coveralls
+      run: coveralls debug
 
     - name: Upload check results on fail
       if: failure()
