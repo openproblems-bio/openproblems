@@ -73,8 +73,8 @@ def fastmnn_embed_hvg_unscaled(adata):
 )
 def fastmnn_embed_hvg_scaled(adata):
     from ._hvg import hvg_batch
-    from scIB.preprocessing import reduce_data
     from ._hvg import scale_batch
+    from scIB.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
@@ -93,8 +93,8 @@ def fastmnn_embed_hvg_scaled(adata):
     # image="openproblems-template-image" # only if required
 )
 def fastmnn_embed_full_scaled(adata):
-    from scIB.preprocessing import reduce_data
     from ._hvg import scale_batch
+    from scIB.preprocessing import reduce_data
 
     adata = scale_batch(adata, "batch")
     adata = _fastmnn_embed(adata, "batch")
