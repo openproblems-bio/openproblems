@@ -16,10 +16,14 @@ def scvi_full_unscaled(adata):
     from scIB.integration import runScvi
     from scIB.preprocessing import reduce_data
 
-    adata.obs.rename(columns={"labels": "lab"}, inplace=True)  # ugly fix for scvi conversion error
+    adata.obs.rename(
+        columns={"labels": "lab"}, inplace=True
+    )  # ugly fix for scvi conversion error
     adata = runScvi(adata, "batch")
     reduce_data(adata, use_rep="X_emb")
-    adata.obs.rename(columns={"lab": "labels"}, inplace=True)  # ugly fix for scvi conversion error
+    adata.obs.rename(
+        columns={"lab": "labels"}, inplace=True
+    )  # ugly fix for scvi conversion error
     # Complete the result in-place
     return adata
 
@@ -38,11 +42,15 @@ def scvi_hvg_unscaled(adata):
     from scIB.integration import runScvi
     from scIB.preprocessing import reduce_data
 
-    adata.obs.rename(columns={"labels": "lab"}, inplace=True)  # ugly fix for scvi conversion error
+    adata.obs.rename(
+        columns={"labels": "lab"}, inplace=True
+    )  # ugly fix for scvi conversion error
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runScvi(adata, "batch")
     reduce_data(adata, use_rep="X_emb")
-    adata.obs.rename(columns={"lab": "labels"}, inplace=True)  # ugly fix for scvi conversion error
+    adata.obs.rename(
+        columns={"lab": "labels"}, inplace=True
+    )  # ugly fix for scvi conversion error
     return adata
 
 
@@ -61,12 +69,16 @@ def scvi_hvg_scaled(adata):
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
-    adata.obs.rename(columns={"labels": "lab"}, inplace=True)  # ugly fix for scvi conversion error
+    adata.obs.rename(
+        columns={"labels": "lab"}, inplace=True
+    )  # ugly fix for scvi conversion error
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = runScvi(adata, "batch")
     reduce_data(adata, use_rep="X_emb")
-    adata.obs.rename(columns={"lab": "labels"}, inplace=True)  # ugly fix for scvi conversion error
+    adata.obs.rename(
+        columns={"lab": "labels"}, inplace=True
+    )  # ugly fix for scvi conversion error
     return adata
 
 
@@ -84,9 +96,13 @@ def scvi_full_scaled(adata):
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch
 
-    adata.obs.rename(columns={"labels": "lab"}, inplace=True)  # ugly fix for scvi conversion error
+    adata.obs.rename(
+        columns={"labels": "lab"}, inplace=True
+    )  # ugly fix for scvi conversion error
     adata = scale_batch(adata, "batch")
     adata = runScvi(adata, "batch")
     reduce_data(adata, use_rep="X_emb")
-    adata.obs.rename(columns={"lab": "labels"}, inplace=True)  # ugly fix for scvi conversion error
+    adata.obs.rename(
+        columns={"lab": "labels"}, inplace=True
+    )  # ugly fix for scvi conversion error
     return adata
