@@ -62,7 +62,7 @@ RUN if [ -f r_requirements.txt ]; then sudo R -e "renv::install(scan(\"r_require
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
-RUN cd /usr/src/singlecellopenproblems && git clean -fxdq
+RUN cd /usr/src/singlecellopenproblems && sudo git clean -fxdq
 RUN sudo pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
 ' > {output}"""
 
