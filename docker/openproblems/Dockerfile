@@ -13,7 +13,9 @@ RUN \
    apt-get install -qy sudo && \
    useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
    chmod g+w /etc/passwd && \
-   echo "${NB_USER}    ALL=(ALL)    NOPASSWD:    ALL" >> /etc/sudoers
+   echo "${NB_USER}    ALL=(ALL)    NOPASSWD:    ALL" >> /etc/sudoers && \
+       # Prevent apt-get cache from being persisted to this layer.
+   find /var/lib/apt/lists/ ! -type d -exec rm '{}' \;
 
 # update pip
 RUN python3 -m pip install --no-cache-dir -U pip

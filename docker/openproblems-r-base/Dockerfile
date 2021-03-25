@@ -35,10 +35,6 @@ RUN R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))"
 # Install kernelspec
 RUN R -e "IRkernel::installspec(user = FALSE);"
 
-# Install Python packages
-COPY ./docker/openproblems-python-extras/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
 # Install single-cell open problems with R requirements
 COPY . /usr/src/singlecellopenproblems
 RUN cd /usr/src/singlecellopenproblems && git clean -fxdq
