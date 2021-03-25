@@ -1,4 +1,4 @@
-FROM rackspacedot/python37:latest
+FROM python3.7:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 ARG NB_USER="sagemaker-user"
