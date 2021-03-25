@@ -1,7 +1,18 @@
-FROM rackspacedot/python37:latest
+FROM python:3.7
 
 ENV DEBIAN_FRONTEND=noninteractive
+ARG NB_USER="sagemaker-user"
+ARG NB_UID="1000"
+ARG NB_GID="100"
 
+RUN \
+    apt-get update && \
+    apt-get install -qy sudo && \
+    useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+    chmod g+w /etc/passwd && \
+    echo "${NB_USER}    ALL=(ALL)    NOPASSWD:    ALL" >> /etc/sudoers && \
+    # Prevent apt-get cache from being persisted to this layer.
+    find /var/lib/apt/lists/ ! -type d -exec rm '{}' \;
 
 # update pip
 RUN python3 -m pip install --no-cache-dir -U pip
@@ -21,5 +32,14 @@ RUN mv SAUCIE /usr/local/lib/python3.7/site-packages/
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
-RUN cd /usr/src/singlecellopenproblems && git clean -fxd
+RUN cd /usr/src/singlecellopenproblems && git clean -fxdq
 RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
+
+# Overwrite kernel.json to use system Python install
+COPY ./docker/openproblems/kernelspec.json /usr/local/share/jupyter/kernels/python3/kernel.json
+
+# Make the default shell bash (vs "sh") for a better Jupyter terminal UX
+ENV SHELL=/bin/bash
+
+USER $NB_UID
+WORKDIR /home/$NB_USER

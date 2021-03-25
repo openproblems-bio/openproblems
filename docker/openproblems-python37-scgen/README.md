@@ -13,3 +13,6 @@ Python packages:
 * setuptools
 * cmake
 * openproblems
+* scgen
+* Saucie
+* scIB

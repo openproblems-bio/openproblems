@@ -1,13 +1,15 @@
 # openproblems-python-extras Docker image
 
-Base image: singlecellopenproblems/openproblems
+Base image: singlecellopenproblems/openproblems-r-base
 
 OS: Debian Stretch
 
-Python: 3.7
+Python: 3.8
 
 Python packages:
 
-* harmonic-alignment
-* pybedtools
-* pyensembl
+* scIB
+* mnnpy
+* scanorama
+* bbknn
+* scVI
