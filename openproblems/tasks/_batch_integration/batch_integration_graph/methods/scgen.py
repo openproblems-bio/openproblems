@@ -10,7 +10,7 @@ from .....tools.utils import check_version
     paper_year=0,
     code_url="",
     code_version=check_version("scgen"),
-    image="openproblems-python-scgen",  # only if required
+    image="openproblems-python37-scgen",  # only if required
 )
 def scgen_full_unscaled(adata):
     from scIB.integration import runScGen
@@ -28,7 +28,7 @@ def scgen_full_unscaled(adata):
     paper_year=0,
     code_url="",
     code_version=check_version("scgen"),
-    image="openproblems-python-scgen",  # only if required
+    image="openproblems-python37-scgen",  # only if required
 )
 def scgen_hvg_unscaled(adata):
     from _hvg import hvg_batch
@@ -48,7 +48,7 @@ def scgen_hvg_unscaled(adata):
     paper_year=0,
     code_url="",
     code_version=check_version("scgen"),
-    image="openproblems-python-scgen",  # only if required
+    image="openproblems-python37-scgen",  # only if required
 )
 def scgen_full_scaled(adata):
     from scIB.integration import runScGen
@@ -68,7 +68,7 @@ def scgen_full_scaled(adata):
     paper_year=0,
     code_url="",
     code_version=check_version("scgen"),
-    image="openproblems-python-scgen",  # only if required
+    image="openproblems-python37-scgen",  # only if required
 )
 def scgen_hvg_scaled(adata):
     from _hvg import hvg_batch
