@@ -74,7 +74,7 @@ jobs:
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -U wheel setuptools
+        pip install -U wheel setuptools codecov
         pip install -U --editable .[test,r,evaluate]
         python -c "import openproblems"
 
@@ -101,13 +101,13 @@ jobs:
         cd ..
 
     - name: Run tests
-      run: pytest --cov=openproblems -v
- 
+      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
+
     - name: Upload coverage
+      if: success() && ${{ github.repository == 'SingleCellOpenProblems/singlecellopenproblems' }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COVERALLS_SERVICE_NAME: github
-      run: coveralls debug
+        CODECOV_NAME: ${{ runner.os }}-${{ matrix.name }}
+      run: codecov --no-color --required --flags unittests
 
     - name: Upload check results on fail
       if: failure()
