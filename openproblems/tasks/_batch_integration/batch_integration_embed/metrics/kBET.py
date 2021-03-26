@@ -8,6 +8,7 @@ from .....tools.decorators import metric
 )
 def kBET(adata):
     from scIB.metrics import kBET
+
     import numpy as np
 
     return 1 - np.nanmean(
