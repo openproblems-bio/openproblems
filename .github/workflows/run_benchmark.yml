@@ -51,8 +51,14 @@ jobs:
       env:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
       run: |
+        echo ${{ github.repository }}
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
-        echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:/:_:g'| head -c 40`" >> $GITHUB_ENV
+        # If not on the base repository, append first 6 characters of username to the image name
+        # to avoid clashes on ECR
+        if [[ "${{ github.repository }}" == "singlecellopenproblems/SingleCellOpenProblems" ]]; \
+          then echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
+          else echo "BRANCH=`echo ${{ github.repository }} | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
+        fi >> $GITHUB_ENV
         # don't use tower if the env var is not set
         echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
         if [ $(echo ${{ github.ref }} | grep -E -e "^refs/heads/(master|test_benchmark)" -e "^refs/tags") ]; then
@@ -157,7 +163,7 @@ jobs:
 
     - name: Parse results
       # There's a bug with the results getting pulled from Netflow with caching, but
-      # this doesn't happen on master, which is the only place `Parse results` is needed 
+      # this doesn't happen on master, which is the only place `Parse results` is needed
       if: startsWith(github.ref, 'refs/heads/master')
       run: |
         cp -r /mnt/openproblems-nextflow/cwd/${{ github.ref }}/results .
