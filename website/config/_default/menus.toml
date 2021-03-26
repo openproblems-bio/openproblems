@@ -22,3 +22,8 @@
   name = "Contributing"
   url = "/contributing"
   weight = 40
+
+[[main]]
+  name = "Code"
+  url = "https://github.com/singlecellopenproblems/SingleCellOpenProblems"
+  weight = 100
