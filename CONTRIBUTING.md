@@ -48,7 +48,7 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     ![AWS secrets success](website/static/img/AWS_secret.png)
 
 5. Enable workflows at [https://github.com/USERNAME/SingleCellOpenProblems/actions](https://github.com/USERNAME/SingleCellOpenProblems/actions)
-6. Set up your git repository:
+6. Set up your git repository to fetch branches from `base` at `singlecellopenproblems/SingleCellOpenProblems`
 
   ```
   git clone git@github.com:<username>/SingleCellOpenProblems.git
@@ -57,12 +57,16 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
   git fetch --all
   git branch --set-upstream-to base/master
   git pull
+  ```
+  
+7. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here's we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`. 
+  ```
   # IMPORTANT: choose a new branch name, e.g.
-  git checkout -b task/new_task_name # or metric/new_metric_name, etc
+  git checkout -b method-method-name-task-name # or metric-new-metric-name, etc
   git push -u origin task/new_task_name
   ```
 
-7. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
+8. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
 
 ## API
 
