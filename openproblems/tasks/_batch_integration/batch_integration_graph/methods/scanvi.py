@@ -64,9 +64,9 @@ def scanvi_hvg_unscaled(adata):
 )
 def scanvi_hvg_scaled(adata):
     from ._hvg import hvg_batch
+    from ._hvg import scale_batch
     from scIB.integration import runScanvi
     from scIB.preprocessing import reduce_data
-    from ._hvg import scale_batch
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
@@ -91,9 +91,9 @@ def scanvi_hvg_scaled(adata):
     image="openproblems-python-batch-integration",  # only if required
 )
 def scanvi_full_scaled(adata):
+    from ._hvg import scale_batch
     from scIB.integration import runScanvi
     from scIB.preprocessing import reduce_data
-    from ._hvg import scale_batch
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
