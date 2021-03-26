@@ -9,7 +9,7 @@ import scanpy as sc
 @dataset(dataset_name="Immune (by batch)", image="openproblems-r-base")
 def immune_batch(test=False):
     from .....tools.normalize import log_scran_pooling
-    
+
     adata = load_immune(test)
     from_cache = adata.__from_cache__
     adata.obs["labels"] = adata.obs["final_annotation"]
