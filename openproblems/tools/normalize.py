@@ -10,7 +10,11 @@ _scran = scprep.run.RFunction(
         """,
     args="sce, min.mean=0.1",
     body="""
-    sce <- computeSumFactors(sce, min.mean=min.mean, assay.type="X", BPPARAM=MulticoreParam())
+    sce <- computeSumFactors(
+           sce, min.mean=min.mean,
+           assay.type="X",
+           BPPARAM=MulticoreParam()
+           )
     sizeFactors(sce)
     """,
 )
