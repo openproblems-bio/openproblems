@@ -48,21 +48,36 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     ![AWS secrets success](website/static/img/AWS_secret.png)
 
 5. Enable workflows at [https://github.com/USERNAME/SingleCellOpenProblems/actions](https://github.com/USERNAME/SingleCellOpenProblems/actions)
-6. Set up your git repository:
+6. Set up your git repository to fetch branches from `base` at `singlecellopenproblems/SingleCellOpenProblems`
 
-  ```
-  git clone git@github.com:<username>/SingleCellOpenProblems.git
-  cd SingleCellOpenProblems
-  git remote add base git@github.com:singlecellopenproblems/SingleCellOpenProblems.git
-  git fetch --all
-  git branch --set-upstream-to base/master
-  git pull
-  # IMPORTANT: choose a new branch name, e.g.
-  git checkout -b task/new_task_name # or metric/new_metric_name, etc
-  git push -u origin task/new_task_name
-  ```
+    ```
+    git clone git@github.com:<username>/SingleCellOpenProblems.git
+    cd SingleCellOpenProblems
+    git remote add base git@github.com:singlecellopenproblems/SingleCellOpenProblems.git
+    git fetch --all
+    git branch --set-upstream-to base/master
+    git pull
+    ```
+    **Note:** If you haven't set up SSH keys with your GitHub account, you may see this error message when adding `base` to your repository:
+    ```
+    git@github.com: Permission denied (publickey).
+    fatal: Could not read from remote repository.
+    Please make sure you have the correct access rights
+    ```
+    To generate an SSH key and add it to your GitHub account, follow [this tutorial from GitHub](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
 
-7. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
+7. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here's we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`.
+
+    **Note:** This pushes the branch to your fork, _not to_ `base`. You will create a PR to merge your branch to `base` only after all tests are passing.
+
+    **Warning:** Do not edit the `master` branch on your fork! This will not work as expected, and will never pass tests.
+    ```
+    # IMPORTANT: choose a new branch name, e.g.
+    git checkout -b method-method-name-task-name # or metric-new-metric-name, etc
+    git push -u origin method-method-name-task-name
+    ```
+
+8. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
 
 ## API
 
