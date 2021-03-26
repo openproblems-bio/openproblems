@@ -1,4 +1,4 @@
-from .....data.pancreas import load_pancreas
+from .....data.immune_cells import load_immune
 from .....tools.decorators import dataset
 
 import scanpy as sc
@@ -6,15 +6,14 @@ import scanpy as sc
 # from scIB.preprocessing import normalize, hvg_batch
 
 
-@dataset(dataset_name="Pancreas (by batch)", image="openproblems-r-base")
-def pancreas_batch(test=False):
+@dataset(dataset_name="Immune (by batch)", image="openproblems-r-base")
+def immune_batch(test=False):
     from .....tools.normalize import log_scran_pooling
     
-    adata = load_pancreas(test)
+    adata = load_immune(test)
     from_cache = adata.__from_cache__
-    adata.obs["labels"] = adata.obs["celltype"]
+    adata.obs["labels"] = adata.obs["final_annotation"]
 
-    adata.obs["batch"] = adata.obs["tech"]
     adata.layers["counts"] = adata.X
 
     sc.pp.filter_genes(adata, min_counts=1)
