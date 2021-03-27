@@ -41,14 +41,14 @@ The Open Problems for Single-Cell Analysis project is a community effort to stan
 
 We have groups joining the jamboree from the Americas and from Europe, so we'll have a schedule to accomodate multiple time zones. We request that everyone join for the introductory session on Day 1 (3/29/21), but starting on Day 2 (3/30/21) we'll have an earlier session for folks joining from Europe.
 
-The event will start with a presentation to introduce the Open Problems effort at 8am PT / 4pm GMT. We will then break out into coding sessions punctuated by breaks. On Days 2 and 3, we will have group discussions around the infrastructure and long-term plans for Open Problems.
+The event will start with a presentation to introduce the Open Problems effort at 8am PT / 4pm GMT+1. We will then break out into coding sessions punctuated by breaks. On Days 2 and 3, we will have group discussions around the infrastructure and long-term plans for Open Problems.
 
 Here's the full schedule broken down by day:
 
 ### Day 1
 
 
-Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Activity
+Start (PT) | Stop (PT) | Start (GMT+1) | Stop (GMT+1) | Activity
 -- | -- | -- | -- | -- |
 8:00am | 9:00am | 4:00pm | 5:00pm | Welcome, introduce the day, answer questions about infrastructure
 9:00am | 10:30am | 5:00pm | 6:30pm | Divide people into pre-selected teams of 5, work for 90 minutes
@@ -57,7 +57,7 @@ Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Activity
 12:30pm | 13:00pm | 9:30pm | 10:00pm | Regroup, relax for 30 minutes (optional for EU/Afr)
 
 ### Day 2
-Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Activity
+Start (PT) | Stop (PT) | Start (GMT+1) | Stop (GMT+1) | Activity
 -- | -- | -- | -- | -- |
 😴 | 😴 | 2:00pm | 2:15pm | Welcome, introduce the day for Europe / Africa
 😴 | 😴 | 2:15pm | 3:45pm | Break out into groups
@@ -69,7 +69,7 @@ Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Activity
 12:30pm | 13:00pm | 9:30pm | 10:00pm | Regroup, relax for 30 minutes
 
 ### Day 3
-Start (PT) | Stop (PT) | Start (GMT) | Stop (GMT) | Activity
+Start (PT) | Stop (PT) | Start (GMT+1) | Stop (GMT+1) | Activity
 -- | -- | -- | -- | -- |
 😴 | 😴 | 2:00pm | 2:15pm | Welcome, introduce the day for Europe / Africa
 😴 | 😴 | 2:15pm | 3:45pm | Break out into groups
