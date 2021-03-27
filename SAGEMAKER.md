@@ -1,6 +1,6 @@
 # Guide to GitHub and AWS SageMaker for the Open Problems Jamboree
 
-[![Video](https://img.shields.io/static/v1?label=YouTube&message=Watch%20tutorial&color=red&logo=youtube)](https://youtu.be/PlVk1Pe0SkQ)
+[![Video](https://img.shields.io/static/v1?label=YouTube&message=Watch%20tutorial&color=red&logo=youtube)](https://www.youtube.com/watch?v=mNu8-KR7UFY)
 
 This document is a guide to using the Open Problems in Single-Cell Analysis GitHub repository to edit Docker containers and prototype code in AWS SageMaker. In this guide, you will perform the following steps
 
