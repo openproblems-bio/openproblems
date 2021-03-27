@@ -18,6 +18,8 @@ up" on issues that others reported and that are relevant to you. It also helps
 us if you spread the word: reference the project from your blog and articles,
 link to it from your website, or simply star it in GitHub to say "I use it".
 
+<img src="https://i.imgur.com/dIuJF2e.png" width=400px>
+
 ### Table of Contents
 
 * [Submitting New Features](#submitting-new-features)
@@ -40,7 +42,8 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
 
 1. Search through the [GitHub Issues](https://github.com/singlecellopenproblems/SingleCellOpenProblems/issues) tracker to make sure there isn't someone already working on the feature you'd like to add. If someone is working on this, post in that issue that you'd like to help or reach out to one of the contributors working on the issue directly.
 2. If there isn't an existing issue tracking this feature, create one! There are several templates you can choose one depending on what type of feature you'd like to add.
-3. Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems
+3. Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems  
+    <img src="https://i.imgur.com/fUcpLYl.png" width=400px>
 4. Create repository secrets (*not environment secrets*) at [https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets](https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets)
     * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login details. If you do not have these, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
     * *TOWER_ACCESS_KEY (optional): log in with GitHub to https://tower.nf and create a token at https://tower.nf/tokens.*
@@ -66,7 +69,7 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     ```
     To generate an SSH key and add it to your GitHub account, follow [this tutorial from GitHub](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
 
-7. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here's we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`.
+7. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`.
 
     **Note:** This pushes the branch to your fork, _not to_ `base`. You will create a PR to merge your branch to `base` only after all tests are passing.
 

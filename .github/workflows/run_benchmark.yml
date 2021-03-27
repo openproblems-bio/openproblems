@@ -161,12 +161,15 @@ jobs:
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
 
+    - name: Copy results
+      run: |
+        cp -r /mnt/openproblems-nextflow/cwd/${{ github.ref }}/results .
+        
     - name: Parse results
       # There's a bug with the results getting pulled from Netflow with caching, but
       # this doesn't happen on master, which is the only place `Parse results` is needed
       if: startsWith(github.ref, 'refs/heads/master')
       run: |
-        cp -r /mnt/openproblems-nextflow/cwd/${{ github.ref }}/results .
         python workflow/parse_nextflow.py
 
     - name: AWS cleanup
