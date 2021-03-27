@@ -42,7 +42,7 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
 
 1. Search through the [GitHub Issues](https://github.com/singlecellopenproblems/SingleCellOpenProblems/issues) tracker to make sure there isn't someone already working on the feature you'd like to add. If someone is working on this, post in that issue that you'd like to help or reach out to one of the contributors working on the issue directly.
 2. If there isn't an existing issue tracking this feature, create one! There are several templates you can choose one depending on what type of feature you'd like to add.
-3. Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems  
+3. Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems
     <img src="https://i.imgur.com/fUcpLYl.png" width=400px>
 4. Create repository secrets (*not environment secrets*) at [https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets](https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets)
     * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login details. If you do not have these, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
