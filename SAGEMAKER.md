@@ -1,5 +1,7 @@
 # Guide to GitHub and AWS SageMaker for the Open Problems Jamboree
 
+[![Video](https://img.shields.io/static/v1?label=YouTube&message=Watch%20tutorial&color=red&logo=youtube)](https://youtu.be/PlVk1Pe0SkQ)
+
 This document is a guide to using the Open Problems in Single-Cell Analysis GitHub repository to edit Docker containers and prototype code in AWS SageMaker. In this guide, you will perform the following steps
 
 ### Steps
@@ -10,7 +12,7 @@ This document is a guide to using the Open Problems in Single-Cell Analysis GitH
 4. Attach this image to an AWS SageMaker Studio domain
 5. Launch a notebook using the custom image
 
-In addition to this guide, we've produced a [Video Tutorial](https://www.youtube.com/watch?v=mNu8-KR7UFY) walking through every step of the process. In the video, we provide details that are helpful for troubleshooting if you're having issues. The video also performs all of the steps in the process from start to finish so you can see what needs to happen at each step. However, because of the troubleshooting tips and included wait times, the video is 40 minutes long. To make it quicker to get started, we've written out the steps in the process here and included time-stamped links to the video in case you'd like to see a specific step performed live. 
+In addition to this guide, we've produced a video tutorial, [**Using GitHub and AWS for Open Problems in Single-Cell Analysis**](https://www.youtube.com/watch?v=mNu8-KR7UFY), which walks through every step of the process. In the video, we provide details that are helpful for troubleshooting if you're having issues. The video also performs all of the steps in the process from start to finish so you can see what needs to happen at each step. However, because of the troubleshooting tips and included wait times, the video is 40 minutes long. To make it quicker to get started, we've written out the steps in the process here and included time-stamped links to the video in case you'd like to see a specific step performed live. 
 
 You also might find it helpful to consult AWS Documentation for bringing your own image to AWS SageMaker. You have two options using either the command-line interface (CLI) or a web interface (Console):
 * [Custom Image with SageMaker Studio (CLI)](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi-create-sdk.html)
