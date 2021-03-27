@@ -24,9 +24,7 @@ from .harmony import harmony_full_scaled
 from .harmony import harmony_full_unscaled
 from .harmony import harmony_hvg_scaled
 from .harmony import harmony_hvg_unscaled
-from .liger import liger_full_scaled
 from .liger import liger_full_unscaled
-from .liger import liger_hvg_scaled
 from .liger import liger_hvg_unscaled
 from .mnn import mnn_full_scaled
 from .mnn import mnn_full_unscaled
@@ -49,18 +47,14 @@ from .scanorama_full import scanorama_feature_full_scaled
 from .scanorama_full import scanorama_feature_full_unscaled
 from .scanorama_full import scanorama_feature_hvg_scaled
 from .scanorama_full import scanorama_feature_hvg_unscaled
-from .scanvi import scanvi_full_scaled
 from .scanvi import scanvi_full_unscaled
-from .scanvi import scanvi_hvg_scaled
 from .scanvi import scanvi_hvg_unscaled
 
 # from .scgen import scgen_full_scaled
 # from .scgen import scgen_full_unscaled
 # from .scgen import scgen_hvg_scaled
 # from .scgen import scgen_hvg_unscaled
-from .scvi import scvi_full_scaled
 from .scvi import scvi_full_unscaled
-from .scvi import scvi_hvg_scaled
 from .scvi import scvi_hvg_unscaled
 
 # from .seurat_full import seurat_full_scaled
