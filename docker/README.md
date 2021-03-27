@@ -51,3 +51,31 @@ or if you wish to override the automatic change detection,
 ```
 cd workflow && snakemake -j 10 docker_build
 ```
+
+## Building Docker images through GitHub Actions workflows
+
+Docker images are built by the `run_benchmarks` GitHub Actions workflow on both the base repository and on forks. As long as you have AWS secrets configured properly for your repository (see our [Contributing Guide](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/CONTRIBUTING.md#submitting-new-features)), these images will be uploaded to Amazon Web Services [Elastic Container Registry](https://aws.amazon.com/ecr/) (ECR). You can then download the image locally or attach to AWS SageMaker Studio.
+
+Once your Run Benchmark has completed successfully, you should see a pane in the GitHub Actions tab of your fork that looks like this:
+
+<img width="800" alt="image" src="https://user-images.githubusercontent.com/8322751/112719533-c508e100-8ecf-11eb-91b0-6f99ccee2e3f.png">
+
+If that workflow failed, you should look at the workflow logs to find the error.
+
+You can find your successfully uploaded images on the ECR. To navigate to the ECR, search the AWS console for "ECR" and click on "Repositories" and then click on `openproblems`. You should also see a `nextflow` repository that's used for your benchmarking backend, but you can ignore that for now.
+
+As you can see below, images uploaded to the ECR have Image Tags in the following format `openproblems:[first 6 characters of username]-[branch name]-[image name]`. For example, `danielStrobel` recently pushed his `batch-integration` branch containing a `openproblems-python37-scgen` image. This is converted to an Image Tag `daniel-batch-integration-openproblems-python37-scgen`. 
+
+
+<img width="800" alt="Untitled" src="https://user-images.githubusercontent.com/8322751/112719414-43b14e80-8ecf-11eb-8fe2-5588e42c77c5.png">
+
+To pull images from the ECR using `docker pull`, first download and setup the [`amazon-ecr-credential-helper`](https://github.com/awslabs/amazon-ecr-credential-helper) using the same AWS secrets that you used to set up your fork repository. With that set up you can use the following command to pull the image:
+
+```
+docker pull <aws_account_id>.dkr.ecr.us-west-2.amazonaws.com/openproblems:<Image Tag>
+```
+
+If you would like to attach this image to AWS SageMaker, you can follow our [SageMaker and ECR tutorial.](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/SAGEMAKER.md)
+
+
+
