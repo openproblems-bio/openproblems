@@ -152,18 +152,22 @@ If you see the following error:
 
 Don't fret! This means that the image you were using has been deleted from ECR. We do this when new images are uploaded with the same tag to save space. 
 
-To add the new image version
-1. Go back to the ECR, and find the URI for the newest version of the image that you want to work on. 
-2. From the SageMaker Studio Control Panel, find the attached image that you'd like to revise at the bottom of the window.
-3. Click on "Attach version" next to the image. 
-<img src="https://user-images.githubusercontent.com/8322751/112722273-e9b88500-8ede-11eb-9279-988c5a9e02d0.png" width="600px">
-4. Select "New Image Version"
-5. Copy the URI into the textbox
-<img src="https://user-images.githubusercontent.com/8322751/112722358-69465400-8edf-11eb-9f08-8bf1af4de2a7.png" width="600px">
+To add the new image version  
+1. Go back to the ECR, and find the URI for the newest version of the image that you want to work on.  
+2. From the SageMaker Studio Control Panel, find the attached image that you'd like to revise at the bottom of the window.  
+3. Click on "Attach version" next to the image.  
+
+    <img src="https://user-images.githubusercontent.com/8322751/112722273-e9b88500-8ede-11eb-9279-988c5a9e02d0.png" width="600px">  
+
+4. Select "New Image Version"  
+5. Copy the URI into the textbox  
+
+    <img src="https://user-images.githubusercontent.com/8322751/112722358-69465400-8edf-11eb-9f08-8bf1af4de2a7.png" width="600px">
+
 6. Click "Next"
-7. Don't change anything on the Image properties or Studio configuration pages (unless the new image has new configurations you need to update)
-8. Submit the new version
-9. You should now see the "Latest version attached" number increase by 1 on the "Custom images attached to domain" box. 
+7. Don't change anything on the Image properties or Studio configuration pages (unless the new image has new configurations you need to update)    
+8. Submit the new version  
+9. You should now see the "Latest version attached" number increase by 1 on the "Custom images attached to domain" box.   
 
 
 
