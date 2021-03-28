@@ -85,7 +85,7 @@ Start (PT) | Stop (PT) | Start (GMT+1) | Stop (GMT+1) | Activity
 
 To encourage communication and collaboration during the event, we’re going to use Discord. Discord is a chat and video client that combines the text channels of Slack with video channels that users can freely join and leave to talk and share content. We highly recommend downloading the Discord client for your computer because it’s more reliable than using a browser.
 
-Before the jamboree:  
+Before the jamboree:
 1. If you don’t already have one, create a Discord account
 2. Download Discord desktop client (required for video calling): https://discord.com/
 3. Join our server: https://discord.gg/sDE7cM4PN7
@@ -96,7 +96,7 @@ Before the jamboree:
 To help orient you to our codebase on GitHub, we’ve created two introductory videos. The first is an overall introduction to the GitHub code and the second is an instructional video on adding a new task. We’ve tried onboarding a few different ways and it’s been clear that pre-recorded videos are the best way to get new contributors up and running quickly.
 
 Before the Jamboree:
-1. Watch the Open Problems Repository introduction: https://www.youtube.com/watch?v=tHempZCdXyA  
+1. Watch the Open Problems Repository introduction: https://www.youtube.com/watch?v=tHempZCdXyA
 2. Watch the tutorial on adding a new task: https://www.youtube.com/watch?v=tgVG3Hp6mBc
 
 ### GitHub and Amazon Web Services (AWS)

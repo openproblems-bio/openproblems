@@ -68,11 +68,11 @@ These challenges provide both direction for methods developers and provide a str
 We want to leverage the strengths of these machine learning challenges to drive innovation in computational biology for single-cell analysis.
 
 # Our approach
-We think there are four key traits that allow these challenges to drive innovation:  
- 1. Tasks are formally defined with a clear mathematical interpretation  
- 2. Easily accessible gold-standard datasets are publicly available in a ready-to-go standardized format  
- 3. One or more quantitative metrics are defined for each task to judge success  
- 4. State-of-the-art methods are ranked in a continuously updated leaderboard  
+We think there are four key traits that allow these challenges to drive innovation:
+ 1. Tasks are formally defined with a clear mathematical interpretation
+ 2. Easily accessible gold-standard datasets are publicly available in a ready-to-go standardized format
+ 3. One or more quantitative metrics are defined for each task to judge success
+ 4. State-of-the-art methods are ranked in a continuously updated leaderboard
 
 Our goal is to provide an open source, community driven, extensible platform for continuously updated benchmarking of formalized tasks in single-cell analysis. For example, we're interested in ranking dimensionality reduction methods based on their ability to preserve global distances and comparing data denoising methods based on their ability to recover simulated mRNA undercounting.
 
