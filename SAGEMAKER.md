@@ -173,7 +173,7 @@ Note, you can also start up R notebooks by selecting an image using the R ipytho
 
 ### Selecting an instance type
 
-When you open a new notebook for the first time, you are assigned a default Amazon Elastic Compute Cloud (Amazon EC2) instance type to run the notebook. When you open additional notebooks on the same instance type, the notebooks run on the same instance as the first notebook, even if the notebooks use different kernels. 
+When you open a new notebook for the first time, you are assigned a default Amazon Elastic Compute Cloud (Amazon EC2) instance type to run the notebook. When you open additional notebooks on the same instance type, the notebooks run on the same instance as the first notebook, even if the notebooks use different kernels.
 
 We've selected three instances to use during the Jamboree. Note, it is possible to select any kind of instance, but please only select from the following instances. If you need access to a different instance type, please contact an `@organizer` on Discord.
 
@@ -188,7 +188,7 @@ To change your instance, follow the [Change Instance Type](https://docs.aws.amaz
 
 ### Kernel not found error
 
-If you see the following error:  
+If you see the following error:
 
 <img src="https://user-images.githubusercontent.com/8322751/112722196-65fe9880-8ede-11eb-83bb-72716866b411.png" width="600px">
 
