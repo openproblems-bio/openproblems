@@ -20,6 +20,20 @@ You also might find it helpful to consult AWS Documentation for bringing your ow
 
 There is a 1:1 correspondence between the steps to set up SageMaker using the CLI and the Console UI. We use the Console in our video and this guide, but feel free to use the CLI if you are more comfortable with it.
 
+**Table of Contents**
+  * [Introduction to the GitHub repository](#introduction-to-the-github-repository)
+    + [Why Docker containers?](#why-docker-containers)
+    + [Prototyping within Docker containers](#prototyping-within-docker-containers)
+  * [Getting started and forking the GitHub repository](#getting-started-and-forking-the-github-repository)
+  * [Editing a Dockerfile](#editing-a-dockerfile)
+  * [Find your Docker container on the Elastic Container Registry](#find-your-docker-container-on-the-elastic-container-registry)
+  * [Attach your Image to SageMaker Studio](#attach-your-image-to-sagemaker-studio)
+  * [Add user to SageMaker Studio](#add-user-to-sagemaker-studio)
+  * [Open SageMaker Studio and Launch a Notebook using a Custom Image](#open-sagemaker-studio-and-launch-a-notebook-using-a-custom-image)
+
+<!-- Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
+
+
 ## Introduction to the GitHub repository
 [Watch this section of the tutorial starting at [0:00]](https://www.youtube.com/watch?v=mNu8-KR7UFY&t=0s)
 
