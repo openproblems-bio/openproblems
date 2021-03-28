@@ -20,7 +20,7 @@ You also might find it helpful to consult AWS Documentation for bringing your ow
 
 There is a 1:1 correspondence between the steps to set up SageMaker using the CLI and the Console UI. We use the Console in our video and this guide, but feel free to use the CLI if you are more comfortable with it.
 
-**Table of Contents**
+### Table of Contents
   * [Introduction to the GitHub repository](#introduction-to-the-github-repository)
     + [Why Docker containers?](#why-docker-containers)
     + [Prototyping within Docker containers](#prototyping-within-docker-containers)
