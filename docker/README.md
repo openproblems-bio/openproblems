@@ -1,3 +1,26 @@
+This guide provides instructions on editing the Docker images used to run `methods`, `metrics`, and load `datasets` for the Open Problems benchmarking infrastructure.
+
+Note, all images must comply to the [AWS SageMaker Custom Image Specifications](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi-specs.html).
+
+**Table of Contents**
+- [Docker images](#docker-images)
+  * [Available images](#available-images)
+    + [openproblems](#openproblems)
+    + [openproblems-r-base](#openproblems-r-base)
+    + [openproblems-r-extras](#openproblems-r-extras)
+    + [openproblems-python-extras](#openproblems-python-extras)
+  * [Adding a package to the available images](#adding-a-package-to-the-available-images)
+  * [Adding new images](#adding-new-images)
+  * [Building Docker images locally](#building-docker-images-locally)
+  * [Building Docker images through GitHub Actions workflows](#building-docker-images-through-github-actions-workflows)
+  * [Pulling images from the ECR to your local machine](#pulling-images-from-the-ecr-to-your-local-machine)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+**Additional resources**
+* [Dockerfile Reference](https://docs.docker.com/engine/reference/builder/) - Documentation from Docker on how to write Dockerfiles
+* [SageMaker Studio Custom Image Samples](https://github.com/aws-samples/sagemaker-studio-custom-image-samples/) - Example images from AWS designed for compatibility with SageMaker
+
 # Docker images
 
 By default, all methods and metrics run in the `openproblems` docker image. If you require additional dependencies, you can either add them to an existing docker image, or if this is not possible due to conflicts, add a new one.
@@ -92,6 +115,8 @@ As you can see below, images uploaded to the ECR have Image Tags in the followin
 
 
 <img width="800" alt="Untitled" src="https://user-images.githubusercontent.com/8322751/112719414-43b14e80-8ecf-11eb-8fe2-5588e42c77c5.png">
+
+## Pulling images from the ECR to your local machine
 
 To pull images from the ECR using `docker pull`, first download and setup the [`amazon-ecr-credential-helper`](https://github.com/awslabs/amazon-ecr-credential-helper) using the same AWS secrets that you used to set up your fork repository. With that set up you can use the following command to pull the image:
 
