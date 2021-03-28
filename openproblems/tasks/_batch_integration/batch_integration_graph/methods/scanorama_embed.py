@@ -5,10 +5,11 @@ from .....tools.utils import check_version
 
 @method(
     method_name="Scanorama",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Efficient integration of heterogeneous single-cell
+               transcriptomes using Scanorama""",
+    paper_url="https://www.nature.com/articles/s41587-019-0113-3",
+    paper_year=2019,
+    code_url="https://github.com/brianhie/scanorama",
     code_version=check_version("scanorama"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -17,17 +18,18 @@ def scanorama_embed_full_unscaled(adata):
     from scIB.preprocessing import reduce_data
 
     adata = runScanorama(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     # Complete the result in-place
     return adata
 
 
 @method(
     method_name="Scanorama (hvg/unscaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Efficient integration of heterogeneous single-cell
+               transcriptomes using Scanorama""",
+    paper_url="https://www.nature.com/articles/s41587-019-0113-3",
+    paper_year=2019,
+    code_url="https://github.com/brianhie/scanorama",
     code_version=check_version("scanorama"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -38,16 +40,17 @@ def scanorama_embed_hvg_unscaled(adata):
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runScanorama(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     return adata
 
 
 @method(
     method_name="Scanorama (hvg/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Efficient integration of heterogeneous single-cell
+               transcriptomes using Scanorama""",
+    paper_url="https://www.nature.com/articles/s41587-019-0113-3",
+    paper_year=2019,
+    code_url="https://github.com/brianhie/scanorama",
     code_version=check_version("scanorama"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -60,16 +63,17 @@ def scanorama_embed_hvg_scaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = runScanorama(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     return adata
 
 
 @method(
     method_name="Scanorama (full/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Efficient integration of heterogeneous single-cell
+               transcriptomes using Scanorama""",
+    paper_url="https://www.nature.com/articles/s41587-019-0113-3",
+    paper_year=2019,
+    code_url="https://github.com/brianhie/scanorama",
     code_version=check_version("scanorama"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -80,5 +84,5 @@ def scanorama_embed_full_scaled(adata):
 
     adata = scale_batch(adata, "batch")
     adata = runScanorama(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     return adata

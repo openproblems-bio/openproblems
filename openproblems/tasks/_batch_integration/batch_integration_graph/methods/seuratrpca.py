@@ -54,10 +54,10 @@ _seurat = scprep.run.RFunction(
 
 @method(
     method_name="Seurat RPCA",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Comprehensive Integration of Single-Cell Data",
+    paper_url="https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8",
+    paper_year=2019,
+    code_url="https://satijalab.org/seurat/",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -65,17 +65,17 @@ def seuratrpca_full_unscaled(adata):
     from scIB.preprocessing import reduce_data
 
     adata = _seurat(adata, "batch")
-    reduce_data(adata)
+    reduce_data(adata, umap=False)
     # Complete the result in-place
     return adata
 
 
 @method(
     method_name="Seurat RPCA (hvg/unscaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Comprehensive Integration of Single-Cell Data",
+    paper_url="https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8",
+    paper_year=2019,
+    code_url="https://satijalab.org/seurat/",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -85,16 +85,16 @@ def seuratrpca_hvg_unscaled(adata):
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _seurat(adata, "batch")
-    reduce_data(adata)
+    reduce_data(adata, umap=False)
     return adata
 
 
 @method(
     method_name="Seurat RPCA (hvg/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Comprehensive Integration of Single-Cell Data",
+    paper_url="https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8",
+    paper_year=2019,
+    code_url="https://satijalab.org/seurat/",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -106,16 +106,16 @@ def seuratrpca_hvg_scaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = _seurat(adata, "batch")
-    reduce_data(adata)
+    reduce_data(adata, umap=False)
     return adata
 
 
 @method(
     method_name="Seurat RPCA (full/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Comprehensive Integration of Single-Cell Data",
+    paper_url="https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8",
+    paper_year=2019,
+    code_url="https://satijalab.org/seurat/",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -125,5 +125,5 @@ def seuratrpca_full_scaled(adata):
 
     adata = scale_batch(adata, "batch")
     adata = _seurat(adata, "batch")
-    reduce_data(adata)
+    reduce_data(adata, umap=False)
     return adata

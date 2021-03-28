@@ -53,10 +53,11 @@ _liger = scprep.run.RFunction(
 
 @method(
     method_name="Liger",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Single-Cell Multi-omic Integration Compares and
+                  Contrasts Features of Brain Cell Identity""",
+    paper_url="https://www.cell.com/cell/fulltext/S0092-8674%2819%2930504-5",
+    paper_year=2019,
+    code_url="https://github.com/welch-lab/liger",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -65,17 +66,18 @@ def liger_full_unscaled(adata):
 
     adata = _liger(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["X_EMB"]
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     # Complete the result in-place
     return adata
 
 
 @method(
     method_name="Liger (hvg/unscaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Single-Cell Multi-omic Integration Compares and
+                  Contrasts Features of Brain Cell Identity""",
+    paper_url="https://www.cell.com/cell/fulltext/S0092-8674%2819%2930504-5",
+    paper_year=2019,
+    code_url="https://github.com/welch-lab/liger",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -86,16 +88,17 @@ def liger_hvg_unscaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _liger(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["X_EMB"]
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     return adata
 
 
 @method(
     method_name="Liger (hvg scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Single-Cell Multi-omic Integration Compares and
+                  Contrasts Features of Brain Cell Identity""",
+    paper_url="https://www.cell.com/cell/fulltext/S0092-8674%2819%2930504-5",
+    paper_year=2019,
+    code_url="https://github.com/welch-lab/liger",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -108,16 +111,17 @@ def liger_hvg_scaled(adata):
     adata = scale_batch(adata, "batch")
     adata = _liger(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["X_EMB"]
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     return adata
 
 
 @method(
     method_name="Liger (full/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Single-Cell Multi-omic Integration Compares and
+                  Contrasts Features of Brain Cell Identity""",
+    paper_url="https://www.cell.com/cell/fulltext/S0092-8674%2819%2930504-5",
+    paper_year=2019,
+    code_url="https://github.com/welch-lab/liger",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -128,5 +132,5 @@ def liger_full_scaled(adata):
     adata = scale_batch(adata, "batch")
     adata = _liger(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["X_EMB"]
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     return adata

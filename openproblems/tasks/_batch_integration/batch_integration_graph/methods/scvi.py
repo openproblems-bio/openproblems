@@ -5,10 +5,10 @@ from .....tools.utils import check_version
 
 @method(
     method_name="Scvi",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Deep generative modeling for single-cell transcriptomics",
+    paper_url="https://www.nature.com/articles/s41592-018-0229-2",
+    paper_year=2018,
+    code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -20,7 +20,7 @@ def scvi_full_unscaled(adata):
         columns={"labels": "lab"}, inplace=True
     )  # ugly fix for scvi conversion error
     adata = runScvi(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -30,10 +30,10 @@ def scvi_full_unscaled(adata):
 
 @method(
     method_name="Scvi (hvg/unscaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Deep generative modeling for single-cell transcriptomics",
+    paper_url="https://www.nature.com/articles/s41592-018-0229-2",
+    paper_year=2018,
+    code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -47,7 +47,7 @@ def scvi_hvg_unscaled(adata):
     )  # ugly fix for scvi conversion error
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runScvi(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -56,10 +56,10 @@ def scvi_hvg_unscaled(adata):
 
 @method(
     method_name="Scvi (hvg/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Deep generative modeling for single-cell transcriptomics",
+    paper_url="https://www.nature.com/articles/s41592-018-0229-2",
+    paper_year=2018,
+    code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -75,7 +75,7 @@ def scvi_hvg_scaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = runScvi(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -84,10 +84,10 @@ def scvi_hvg_scaled(adata):
 
 @method(
     method_name="Scvi (full/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Deep generative modeling for single-cell transcriptomics",
+    paper_url="https://www.nature.com/articles/s41592-018-0229-2",
+    paper_year=2018,
+    code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -101,7 +101,7 @@ def scvi_full_scaled(adata):
     )  # ugly fix for scvi conversion error
     adata = scale_batch(adata, "batch")
     adata = runScvi(adata, "batch")
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error

@@ -17,6 +17,8 @@ Datasets should contain the following attributes:
 * `adata.obs["batch"]` with the batch covariate,
 * `adata.obs["label"]` with the cell identity label,
 * `adata.layers['counts']` with raw, integer UMI count data, and
+* `adata.obsp['uni_connectivities']` with an unintegrated connectivity matrix generated
+  by  `scanpy.pp.neighbors()`
 * `adata.X` with log-normalized data
 
 Methods should assign output to:

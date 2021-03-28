@@ -27,10 +27,11 @@ _harmony = scprep.run.RFunction(
 
 @method(
     method_name="Harmony",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Fast, sensitive and accurate integration
+                  of single-cell data with Harmony""",
+    paper_url="https://www.nature.com/articles/s41592-019-0619-0",
+    paper_year=2019,
+    code_url="https://github.com/immunogenomics/harmony",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -39,17 +40,18 @@ def harmony_full_unscaled(adata):
 
     adata = _harmony(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["HARMONY"]
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     # Complete the result in-place
     return adata
 
 
 @method(
     method_name="Harmony (hvg/unscaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Fast, sensitive and accurate integration
+                  of single-cell data with Harmony""",
+    paper_url="https://www.nature.com/articles/s41592-019-0619-0",
+    paper_year=2019,
+    code_url="https://github.com/immunogenomics/harmony",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -60,16 +62,17 @@ def harmony_hvg_unscaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _harmony(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["HARMONY"]
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     return adata
 
 
 @method(
     method_name="Harmony (hvg/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Fast, sensitive and accurate integration
+                  of single-cell data with Harmony""",
+    paper_url="https://www.nature.com/articles/s41592-019-0619-0",
+    paper_year=2019,
+    code_url="https://github.com/immunogenomics/harmony",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -82,16 +85,17 @@ def harmony_hvg_scaled(adata):
     adata = scale_batch(adata, "batch")
     adata = _harmony(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["HARMONY"]
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     return adata
 
 
 @method(
     method_name="Harmony(full/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="""Fast, sensitive and accurate integration
+                  of single-cell data with Harmony""",
+    paper_url="https://www.nature.com/articles/s41592-019-0619-0",
+    paper_year=2019,
+    code_url="https://github.com/immunogenomics/harmony",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -102,5 +106,5 @@ def harmony_full_scaled(adata):
     adata = scale_batch(adata, "batch")
     adata = _harmony(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["HARMONY"]
-    reduce_data(adata, use_rep="X_emb")
+    reduce_data(adata, umap=False, use_rep="X_emb")
     return adata

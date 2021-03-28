@@ -17,7 +17,7 @@ def saucie_feature_full_unscaled(adata):
     from scIB.preprocessing import reduce_data
 
     adata = runSaucie(adata, "batch")
-    reduce_data(adata)
+    reduce_data(adata, umap=False)
     # Complete the result in-place
     return adata
 
@@ -38,7 +38,7 @@ def saucie_feature_hvg_unscaled(adata):
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runSaucie(adata, "batch")
-    reduce_data(adata)
+    reduce_data(adata, umap=False)
     return adata
 
 
@@ -60,7 +60,7 @@ def saucie_feature_hvg_scaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = runSaucie(adata, "batch")
-    reduce_data(adata)
+    reduce_data(adata, umap=False)
     return adata
 
 
@@ -80,5 +80,5 @@ def saucie_feature_full_scaled(adata):
 
     adata = scale_batch(adata, "batch")
     adata = runSaucie(adata, "batch")
-    reduce_data(adata)
+    reduce_data(adata, umap=False)
     return adata
