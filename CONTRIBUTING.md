@@ -42,7 +42,7 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
 
 1. Search through the [GitHub Issues](https://github.com/singlecellopenproblems/SingleCellOpenProblems/issues) tracker to make sure there isn't someone already working on the feature you'd like to add. If someone is working on this, post in that issue that you'd like to help or reach out to one of the contributors working on the issue directly.
 2. If there isn't an existing issue tracking this feature, create one! There are several templates you can choose one depending on what type of feature you'd like to add.
-3. Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems into your account. If you're new to `git`, you might find the [Fork a repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) documentation helpful.  
+3. Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems into your account. If you're new to `git`, you might find the [Fork a repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) documentation helpful.
     <img src="https://i.imgur.com/fUcpLYl.png" width=400px>
 4. Create repository secrets (*not environment secrets*) at [https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets](https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets)
     * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login details. If you do not have these, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
@@ -68,7 +68,7 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     Please make sure you have the correct access rights
     ```
     To generate an SSH key and add it to your GitHub account, follow [this tutorial from GitHub](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
-    
+
 
 7. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`.
 
@@ -80,18 +80,18 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     git checkout -b method-method-name-task-name # or metric-new-metric-name, etc
     git push -u origin method-method-name-task-name
     ```
-    
+
 8. Sometimes, changes might be made to the SingleCellOpenProblems `base` repository that you want to incorporate into your fork. To sync your fork from `base`, use the following code adapted from the [Syncing a Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) tutorial from GitHub.
     ```
     # Fetch the branches and their respective commits from the upstream repository
     git fetch base
-    
+
     # Check out your fork's local default branch
     git checkout master
-    
+
     # Merge the changes from the upstream default branch
     git merge base/master
-    
+
     # Push the changes to your fork
     git push -u origin
     ```
