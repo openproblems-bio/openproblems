@@ -1,3 +1,25 @@
+This guide provides instructions on editing the Docker images used to run `methods`, `metrics`, and load `datasets` for the Open Problems benchmarking infrastructure.
+
+Note, all images must comply to the [AWS SageMaker Custom Image Specifications](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi-specs.html).
+
+**Table of Contents**
+- [Docker images](#docker-images)
+  - [Available images](#available-images)
+    - [openproblems](#openproblems)
+    - [openproblems-r-base](#openproblems-r-base)
+    - [openproblems-r-extras](#openproblems-r-extras)
+    - [openproblems-python-extras](#openproblems-python-extras)
+  - [Adding a package to the available images](#adding-a-package-to-the-available-images)
+  - [Adding new images](#adding-new-images)
+  - [Building Docker images locally](#building-docker-images-locally)
+  - [Building Docker images through GitHub Actions workflows](#building-docker-images-through-github-actions-workflows)
+  - [Pulling images from the ECR to your local machine](#pulling-images-from-the-ecr-to-your-local-machine)
+<!-- Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
+
+**Additional resources**
+* [Dockerfile Reference](https://docs.docker.com/engine/reference/builder/) - Documentation from Docker on how to write Dockerfiles
+* [SageMaker Studio Custom Image Samples](https://github.com/aws-samples/sagemaker-studio-custom-image-samples/) - Example images from AWS designed for compatibility with SageMaker
+
 # Docker images
 
 By default, all methods and metrics run in the `openproblems` docker image. If you require additional dependencies, you can either add them to an existing docker image, or if this is not possible due to conflicts, add a new one.
@@ -25,6 +47,30 @@ To add Python packages (PyPi or Github), add them to `requirements.txt`. Syntax 
 ### openproblems-python-extras
 
 To add Python packages (PyPi or Github), add them to `requirements.txt`. Syntax is dictated by [`pip`](https://packaging.python.org/tutorials/installing-packages/).
+
+## Adding a package to the available images
+
+Most packages should be able to be added in the Open Problems by editing one of the available images listed above. If there are conflicting dependencies between the package you would like to add and the packages already in the available images, follow the [Adding new images](#adding-new-images) steps below.
+
+Assuming there are no conflicting dependencies, you can simply amend the relevant `requirements.txt` file in the directory for the Docker image you would like to edit.
+
+1. Select a Docker image to edit. If you're adding a Python package, start with `openproblems-python-extras`. If you're adding an R package, start with the `openproblems-r-extras`.
+2. Edit the relevant `requirements.txt` file.
+    * Adding an R package:
+        * Edit the `r_requirements.txt` file.
+        * The syntax to add a package is defined by [renv](https://rstudio.github.io/renv/reference/install.html#examples).
+            * Packages from Bioconductor: `bioc::packagename`
+            * Packages from CRAN: `packagename@<version-tag>`
+            * Packages from Git: `username/packagename`
+        * More complex package installation will require editing the `Dockerfile`.
+    * Adding a Python package:
+        * Edit the `requirements.txt` file.
+        * The syntax to add a package is defined by `pip`
+            * Packages from PyPI: `packagename==version`
+            * Packages from Git: `git+https://github.com/username/repositoryname`
+        * More complex package installation will require editing the `Dockerfile`.
+3. Add the `packagename` to the `README.md` file in the directory specifying the Docker image. This helps keep track of which packages and versions are installed in each Docker image.
+4. Commit your changes to the Docker image and push to your fork following the instructions in the [Contributing Guide](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/CONTRIBUTING.md).
 
 ## Adding new images
 
@@ -68,6 +114,8 @@ As you can see below, images uploaded to the ECR have Image Tags in the followin
 
 
 <img width="800" alt="Untitled" src="https://user-images.githubusercontent.com/8322751/112719414-43b14e80-8ecf-11eb-8fe2-5588e42c77c5.png">
+
+## Pulling images from the ECR to your local machine
 
 To pull images from the ECR using `docker pull`, first download and setup the [`amazon-ecr-credential-helper`](https://github.com/awslabs/amazon-ecr-credential-helper) using the same AWS secrets that you used to set up your fork repository. With that set up you can use the following command to pull the image:
 

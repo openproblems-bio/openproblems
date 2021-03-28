@@ -20,6 +20,22 @@ You also might find it helpful to consult AWS Documentation for bringing your ow
 
 There is a 1:1 correspondence between the steps to set up SageMaker using the CLI and the Console UI. We use the Console in our video and this guide, but feel free to use the CLI if you are more comfortable with it.
 
+### Table of Contents
+- [Introduction to the GitHub repository](#introduction-to-the-github-repository)
+  * [Why Docker containers?](#why-docker-containers)
+  * [Prototyping within Docker containers](#prototyping-within-docker-containers)
+- [Getting started and forking the GitHub repository](#getting-started-and-forking-the-github-repository)
+- [Editing a Dockerfile](#editing-a-dockerfile)
+- [Find your Docker container on the Elastic Container Registry](#find-your-docker-container-on-the-elastic-container-registry)
+- [Attach your Image to SageMaker Studio](#attach-your-image-to-sagemaker-studio)
+- [Add user to SageMaker Studio](#add-user-to-sagemaker-studio)
+- [Open SageMaker Studio and Launch a Notebook using a Custom Image](#open-sagemaker-studio-and-launch-a-notebook-using-a-custom-image)
+  * [Selecting an instance type](#selecting-an-instance-type)
+  * [Kernel not found error](#kernel-not-found-error)
+
+<!-- Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
+
+
 ## Introduction to the GitHub repository
 [Watch this section of the tutorial starting at [0:00]](https://www.youtube.com/watch?v=mNu8-KR7UFY&t=0s)
 
@@ -79,7 +95,7 @@ First, navigate to the SageMaker Studio control panel from the AWS Console. You 
 
 Next, follow the steps in the AWS Documentation to [Attach a Custom Image to an Existing SageMaker Studio Domain](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi-attach.html).
 
-If you have already launch SageMaker Studio, you will need to restart your SageMaker Studio app so it can see the new image:
+If you have already launched SageMaker Studio, you will need to restart your SageMaker Studio app so it can see the new image:
 1. Follow the steps in the [Shut Down SageMaker Resources](https://docs.aws.amazon.com/sagemaker/latest/dg/notebooks-run-and-manage-shut-down.html) tutorial.
 2. Follow the steps below to [Open SageMaker Studio](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/SAGEMAKER.md#open-sagemaker-studio-and-launch-a-notebook-using-a-custom-image).
 
@@ -153,9 +169,27 @@ Note, you can also start up R notebooks by selecting an image using the R ipytho
 
 <img src="https://user-images.githubusercontent.com/8322751/112722393-af031c80-8edf-11eb-9a65-3233ffe88fd7.png" width="600px">
 
-**Kernel not found error**
+8. When you're done, be sure to [Shut Down SageMaker Resources](https://docs.aws.amazon.com/sagemaker/latest/dg/notebooks-run-and-manage-shut-down.html) to avoid incurring excess costs.
+
+### Selecting an instance type
+
+When you open a new notebook for the first time, you are assigned a default Amazon Elastic Compute Cloud (Amazon EC2) instance type to run the notebook. When you open additional notebooks on the same instance type, the notebooks run on the same instance as the first notebook, even if the notebooks use different kernels.
+
+We've selected three instances to use during the Jamboree. Note, it is possible to select any kind of instance, but please only select from the following instances. If you need access to a different instance type, please contact an `@organizer` on Discord.
+
+|   Instance Type   | vCPU   | Memory    | GPU  |  $/hr     | Intended Use                              |
+|-------------------|:------:|:---------:|:----:|:---------:|-------------------------------------------|
+|    `ml.t3.medium` |   `2`  |  `4 GiB`  |  `0` | `$0.0582` | General prototyping with test datasets    |
+|   `ml.t3.2xlarge` |   `8`  |  `32 GiB` |  `0` | `$0.4659` | Production prototyping with full datasets |
+| `ml.g4dn.2xlarge` |   `8`  |  `32 GiB` |  `1` | `$1.0528` | Prototyping requiring a GPU               |
+
+To change your instance, follow the [Change Instance Type](https://docs.aws.amazon.com/sagemaker/latest/dg/notebooks-run-and-manage-switch-instance-type.html) tutorial from AWS.
+
+
+### Kernel not found error
 
 If you see the following error:
+
 <img src="https://user-images.githubusercontent.com/8322751/112722196-65fe9880-8ede-11eb-83bb-72716866b411.png" width="600px">
 
 Don't fret! This means that the image you were using has been deleted from ECR. We do this when new images are uploaded with the same tag to save space.
