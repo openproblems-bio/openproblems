@@ -15,8 +15,6 @@ Note, all images must comply to the [AWS SageMaker Custom Image Specifications](
   * [Building Docker images through GitHub Actions workflows](#building-docker-images-through-github-actions-workflows)
   * [Pulling images from the ECR to your local machine](#pulling-images-from-the-ecr-to-your-local-machine)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
 **Additional resources**
 * [Dockerfile Reference](https://docs.docker.com/engine/reference/builder/) - Documentation from Docker on how to write Dockerfiles
 * [SageMaker Studio Custom Image Samples](https://github.com/aws-samples/sagemaker-studio-custom-image-samples/) - Example images from AWS designed for compatibility with SageMaker
