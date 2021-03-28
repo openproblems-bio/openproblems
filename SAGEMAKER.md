@@ -189,6 +189,7 @@ To change your instance, follow the [Change Instance Type](https://docs.aws.amaz
 ### Kernel not found error
 
 If you see the following error:  
+
 <img src="https://user-images.githubusercontent.com/8322751/112722196-65fe9880-8ede-11eb-83bb-72716866b411.png" width="600px">
 
 Don't fret! This means that the image you were using has been deleted from ECR. We do this when new images are uploaded with the same tag to save space.
