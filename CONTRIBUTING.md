@@ -68,6 +68,7 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     Please make sure you have the correct access rights
     ```
     To generate an SSH key and add it to your GitHub account, follow [this tutorial from GitHub](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
+    
 
 7. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`.
 
@@ -79,6 +80,22 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     git checkout -b method-method-name-task-name # or metric-new-metric-name, etc
     git push -u origin method-method-name-task-name
     ```
+    
+8. Sometimes, changes might be made to the SingleCellOpenProblems `base` repository that you want to incorporate into your fork. To sync your fork from `base`, use the following code adapted from the [Syncing a Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) tutorial from GitHub.
+    ```
+    # Fetch the branches and their respective commits from the upstream repository
+    git fetch base
+    
+    # Check out your fork's local default branch
+    git checkout master
+    
+    # Merge the changes from the upstream default branch
+    git merge base/master
+    
+    # Push the changes to your fork
+    git push -u origin
+    ```
+    You can now create a [Pull Request](https://guides.github.com/activities/hello-world/#pr) from the default branch on your fork, `master`, into your working branch, e.g. `method-method-name-task-name`.
 
 8. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
 
