@@ -9200,7 +9200,6 @@ nav#navbar-main li.nav-item {
   height: 30em; }
 
 .banner-container {
-  height: 30em;
   display: flex;
   align-items: center;
   justify-content: center; }
@@ -9238,7 +9237,9 @@ p {
   font-family: 'hk_groteskmedium', Fallback, sans-serif; }
 
 a {
-  font-family: 'hk_groteskmedium', Fallback, sans-serif; }
+  font-family: 'hk_groteskmedium', Fallback, sans-serif;
+  color: #404040;
+  font-weight: bold; }
 
 span {
   font-family: 'hk_groteskmedium', Fallback, sans-serif; }

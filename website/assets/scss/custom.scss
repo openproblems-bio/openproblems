@@ -43,12 +43,12 @@ nav#navbar-main li.nav-item {
 
 }
 
+
 .frontpage-hero {
   height: 30em;
 }
 
 .banner-container {
-  height: 30em;
   display: flex;
   align-items: center;
   justify-content: center
@@ -63,12 +63,14 @@ nav#navbar-main li.nav-item {
   .frontpage-hero {
     height: 325px;
   }
+
 }
 
 @media screen and (min-width: 576px) and (max-width: 767.98px) {
   .frontpage-hero {
     height: 350px;
   }
+
 }
 
 
@@ -108,6 +110,8 @@ p {
 
 a {
   font-family: 'hk_groteskmedium', Fallback, sans-serif;
+  color: #404040;
+    font-weight: bold;
 }
 
 span {
