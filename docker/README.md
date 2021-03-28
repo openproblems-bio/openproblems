@@ -14,6 +14,7 @@ Note, all images must comply to the [AWS SageMaker Custom Image Specifications](
   * [Building Docker images locally](#building-docker-images-locally)
   * [Building Docker images through GitHub Actions workflows](#building-docker-images-through-github-actions-workflows)
   * [Pulling images from the ECR to your local machine](#pulling-images-from-the-ecr-to-your-local-machine)
+<!-- Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
 
 **Additional resources**
 * [Dockerfile Reference](https://docs.docker.com/engine/reference/builder/) - Documentation from Docker on how to write Dockerfiles
