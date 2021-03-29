@@ -4,17 +4,18 @@ This guide provides instructions on editing the Docker images used to run `metho
 Note, all images must comply to the [AWS SageMaker Custom Image Specifications](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi-specs.html).
 
 **Table of Contents**
-- [Docker images](#docker-images)
-  * [Available images](#available-images)
-    + [openproblems](#openproblems)
-    + [openproblems-r-base](#openproblems-r-base)
-    + [openproblems-r-extras](#openproblems-r-extras)
-    + [openproblems-python-extras](#openproblems-python-extras)
-  * [Adding a package to the available images](#adding-a-package-to-the-available-images)
-  * [Adding new images](#adding-new-images)
-  * [Building Docker images locally](#building-docker-images-locally)
-  * [Building Docker images through GitHub Actions workflows](#building-docker-images-through-github-actions-workflows)
-  * [Pulling images from the ECR to your local machine](#pulling-images-from-the-ecr-to-your-local-machine)
+- [About Docker images](#about-docker-images)
+- [Available images](#available-images)
+  * [openproblems](#openproblems)
+  * [openproblems-r-base](#openproblems-r-base)
+  * [openproblems-r-extras](#openproblems-r-extras)
+  * [openproblems-python-extras](#openproblems-python-extras)
+- [Adding a package to the available images](#adding-a-package-to-the-available-images)
+- [Adding new images](#adding-new-images)
+- [Building Docker images locally](#building-docker-images-locally)
+- [Building Docker images through GitHub Actions workflows](#building-docker-images-through-github-actions-workflows)
+- [Pulling images from the ECR to your local machine](#pulling-images-from-the-ecr-to-your-local-machine)
+
 <!-- Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
 
 **Additional resources**
