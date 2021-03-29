@@ -6,13 +6,16 @@ import scvi
 
 
 def _scanvi(adata):
-    adata_train = adata[adata.obs["is_train"]].copy()
-    scvi.data.setup_anndata(adata_train, batch_key="batch", labels_key="labels")
-    scvi_model = scvi.model.SCVI(adata_train, n_latent=30, n_layers=2)
+    scanvi_labels = adata.obs["labels"].to_numpy()
+    # test set labels masked
+    scanvi_labels[~adata.obs["is_train"].to_numpy()] = "Unknown"
+    adata.obs["scanvi_labels"] = scanvi_labels
+    scvi.data.setup_anndata(adata, batch_key="batch", labels_key="scanvi_labels")
+    scvi_model = scvi.model.SCVI(adata, n_latent=30, n_layers=2)
     scvi_model.train(train_size=1.0)
-    # all cells treated as labeled
     model = scvi.model.SCANVI.from_scvi_model(scvi_model, unlabeled_category="Unknown")
     model.train(train_size=1.0)
+    del adata.obs["scanvi_labels"]
     # predictions for train and test
     return model.predict(adata)
 
