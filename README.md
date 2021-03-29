@@ -6,6 +6,7 @@
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Style Guide: OpenStack](https://img.shields.io/badge/style%20guide-openstack-eb1a32.svg)](https://docs.openstack.org/hacking/latest/user/hacking.html#styleguide)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Video](https://img.shields.io/static/v1?label=YouTube&message=Visit%20channel&color=red&logo=youtube)](https://www.youtube.com/channel/UCJpqxlzxRamcA3Pv3KlYZHg)
 
 Formalizing and benchmarking open problems in single-cell genomics.
 
@@ -17,6 +18,8 @@ Formalizing and benchmarking open problems in single-cell genomics.
 * For instructions on editing Docker images, see [docker/README.md](docker/README.md)  
 * For a walkthrough of the GitHub Actions workflows and AWS Sagemaker, see [SAGEMAKER.md](SAGEMAKER.md)  
 * For a description of existing an proposed tasks, see [TASKS.md](TASKS.md)  
+* For a video introduction to this GitHub repository, watch our [Repository introduction](https://www.youtube.com/watch?v=tHempZCdXyA)
+* For a video tutorial on adding new tasks, watch our [How to add a new task tutorial](https://www.youtube.com/watch?v=tgVG3Hp6mBc)
 
 ## The team
 
