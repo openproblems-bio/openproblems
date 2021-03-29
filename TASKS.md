@@ -1,4 +1,4 @@
-## Single-Cell Analysis Benchmarking Tasks
+# Benchmarking Task Descriptions
 
 Table of Contents
   * [Predicting gene expression from chromatin accessibility](#predicting-gene-expression-from-chromatin-accessibility)
