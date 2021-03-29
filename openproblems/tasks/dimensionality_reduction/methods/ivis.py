@@ -1,7 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 from anndata import AnnData
-from ivis import Ivis
 
 import scanpy as sc
 
@@ -28,6 +27,8 @@ def _ivis_preprocess(adata: AnnData) -> AnnData:
     image="openproblems-python-extras",
 )
 def ivis(adata: AnnData) -> AnnData:
+    from ivis import Ivis
+
     adata = _ivis_preprocess(adata)
 
     # parameters taken from:
