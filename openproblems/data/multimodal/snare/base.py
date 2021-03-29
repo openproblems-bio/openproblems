@@ -1,6 +1,5 @@
 from ..utils import create_joint_adata
 from ..utils import filter_joint_data_empty_cells
-from scipy import sparse
 
 import numpy as np
 import os
