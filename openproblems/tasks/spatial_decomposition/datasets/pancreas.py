@@ -3,6 +3,7 @@ from ....tools.decorators import dataset
 
 import numpy as np
 
+# all the data generation needs to be added here
 
 @dataset("Pancreas (by batch)")
 def pancreas_batch(test=False):
