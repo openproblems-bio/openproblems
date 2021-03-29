@@ -5,6 +5,7 @@ import numpy as np
 
 # all the data generation needs to be added here
 
+
 @dataset("Pancreas (by batch)")
 def pancreas_batch(test=False):
     adata = load_pancreas(test=test)
