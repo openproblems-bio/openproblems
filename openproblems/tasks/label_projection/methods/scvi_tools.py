@@ -1,11 +1,10 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
-import scanpy as sc
-import scvi
-
 
 def _scanvi(adata):
+    import scvi
+
     scanvi_labels = adata.obs["labels"].to_numpy()
     # test set labels masked
     scanvi_labels[~adata.obs["is_train"].to_numpy()] = "Unknown"
@@ -46,6 +45,8 @@ def scanvi_all_genes(adata):
     image="openproblems-python-scvi",
 )
 def scanvi_hvg(adata):
+    import scanpy as sc
+
     bdata = adata.copy()
     bdata = sc.pp.highly_variable_genes(
         bdata, flavor="seurat_v3", subset=True, n_top_genes=2000
