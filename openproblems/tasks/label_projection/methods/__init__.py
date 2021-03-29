@@ -6,3 +6,5 @@ from .mlp import mlp_log_cpm
 from .mlp import mlp_scran
 from .scvi_tools import scanvi_all_genes
 from .scvi_tools import scanvi_hvg
+from .scvi_tools import scarches_scanvi_all_genes
+from .scvi_tools import scarches_scanvi_hvg
