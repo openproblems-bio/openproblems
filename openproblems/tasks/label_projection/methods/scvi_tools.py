@@ -8,11 +8,11 @@ import scvi
 def _scanvi(adata):
     adata_train = adata[adata.obs["is_train"]].copy()
     scvi.data.setup_anndata(adata_train, batch_key="batch", labels_key="labels")
-    scvi_model = scvi.model.SCVI(adata_train, n_latent=30, n_layers=2, train_size=1.0)
-    scvi_model.train()
+    scvi_model = scvi.model.SCVI(adata_train, n_latent=30, n_layers=2)
+    scvi_model.train(train_size=1.0)
     # all cells treated as labeled
     model = scvi.model.SCANVI.from_scvi_model(scvi_model, unlabeled_category="Unknown")
-    model.train()
+    model.train(train_size=1.0)
     # predictions for train and test
     return model.predict(adata)
 
