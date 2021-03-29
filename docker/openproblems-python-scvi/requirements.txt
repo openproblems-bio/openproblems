@@ -1,1 +1,1 @@
-scvi-tools
+scvi-tools[tutorials]>=0.9.1

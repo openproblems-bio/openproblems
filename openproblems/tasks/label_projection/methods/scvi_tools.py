@@ -25,6 +25,7 @@ def _scanvi(adata):
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi"),
+    image="openproblems-python-scvi",
 )
 def scanvi_all_genes(adata):
     adata.obs["labels_pred"] = _scanvi(adata)
@@ -39,6 +40,7 @@ def scanvi_all_genes(adata):
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi"),
+    image="openproblems-python-scvi",
 )
 def scanvi_hvg(adata):
     bdata = adata.copy()
