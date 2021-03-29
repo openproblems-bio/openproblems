@@ -15,10 +15,11 @@ install_requires = [
     "memory-profiler",
     "colorama>=0.3.9",
     "packaging",
+    "umap-learn>=0.5.1",
 ]
 
 r_requires = [
-    "rpy2",
+    "rpy2<3.4.3",
     "anndata2ri>=1.0.6",
 ]
 
@@ -29,7 +30,6 @@ test_requires = [
     "pytest-cov",
     "black",
     "coverage",
-    "coveralls",
     "parameterized>=0.7.4",
 ]
 

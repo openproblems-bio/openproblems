@@ -63,6 +63,11 @@ def pull_images(wildcards):
     return _images(".docker_pull")
 
 
+def refresh_images(wildcards):
+    """Get Docker refresh timestamp for all images."""
+    return _images(".docker_refresh")
+
+
 def update_images(wildcards):
     """Get Docker update timestamp for all images."""
     return _images(".docker_update")
@@ -109,6 +114,18 @@ def docker_image_exists(image, local=True):
     return proc.returncode == 0
 
 
+def _docker_base(image):
+    """Get the base image from a Dockerfile."""
+    dockerfile = os.path.join(IMAGES_DIR, image, "Dockerfile")
+    with open(dockerfile, "r") as handle:
+        base_image = next(handle).replace("FROM ", "")
+        if base_image.startswith("singlecellopenproblems"):
+            base_image = base_image.split(":")[0].split("/")[1]
+            return base_image
+        else:
+            return None
+
+
 def docker_image_age(image, pull_on_error=True):
     """Get the age of a Docker image."""
     proc = subprocess.run(
@@ -127,6 +144,9 @@ def docker_image_age(image, pull_on_error=True):
         return int(date_datetime.timestamp())
     except ValueError:
         if pull_on_error and docker_image_exists(image, local=False):
+            print(
+                "Pulling image singlecellopenproblems/{}".format(image), file=sys.stderr
+            )
             subprocess.run(
                 [
                     "docker",
@@ -149,22 +169,26 @@ def docker_image_age(image, pull_on_error=True):
             raise
 
 
-def docker_file_age(image):
-    """Get the age of a Dockerfile."""
-    docker_path = os.path.join(IMAGES_DIR, image)
-    # check if there are unstaged changes
+def git_file_diff(filename):
+    """Check if there are (un)staged changes to a file."""
     proc = subprocess.run(
         [
             "git",
             "status",
             "--porcelain",
             "--untracked-files=no",
-            "{}/*".format(docker_path),
+            filename,
         ],
         stdout=subprocess.PIPE,
     )
     result = proc.stdout.decode().strip()
-    if result != "":
+    return result != ""
+
+
+def git_file_age(filename):
+    """Get the age of a file on git."""
+    if git_file_diff(filename):
+        # there exist (un)staged changes, modified now
         return int(time.time())
     # check when the last committed changes occurred
     proc = subprocess.run(
@@ -175,7 +199,7 @@ def docker_file_age(image):
             '--format="%ad"',
             "--date=unix",
             "--",
-            "{}/*".format(docker_path),
+            filename,
         ],
         stdout=subprocess.PIPE,
     )
@@ -185,13 +209,24 @@ def docker_file_age(image):
     except ValueError:
         if result == "":
             warnings.warn(
-                "Files {}/{}/* not found on git; assuming unchanged.".format(
-                    os.getcwd(), docker_path
+                "Files {}/{} not found on git; assuming unchanged.".format(
+                    os.getcwd(), filename
                 )
             )
             return 0
         else:
             raise
+
+
+def docker_file_age(image):
+    """Get the age of a Dockerfile."""
+    docker_path = os.path.join(IMAGES_DIR, image)
+    result = git_file_age("{}/Dockerfile".format(docker_path))
+    # check for changes to base image
+    base_image = _docker_base(image)
+    if base_image is not None:
+        result = max(result, docker_file_age(base_image))
+    return result
 
 
 def version_not_changed():
@@ -215,47 +250,52 @@ def format_timestamp(ts):
 
 
 @functools.lru_cache(maxsize=None)
-def docker_image_marker(image):
+def docker_image_marker(image, refresh=True):
     """Get the file to be created to ensure Docker image exists from the image name."""
     docker_path = os.path.join(IMAGES_DIR, image)
     # possible outputs
-    docker_pull = os.path.join(docker_path, ".docker_pull")
+    docker_refresh = os.path.join(docker_path, ".docker_refresh")
     dockerfile = os.path.join(docker_path, "Dockerfile")
+    no_change = docker_refresh if refresh else dockerfile
+    no_change_text = "refreshing source code only" if refresh else "no change"
     docker_build = os.path.join(docker_path, ".docker_build")
 
     # inputs to conditional logic
     dockerfile_timestamp = docker_file_age(image)
     docker_image_timestamp = docker_image_age(image)
     print(
-        "{}: Dockerfile changed {}; Docker image updated {}".format(
+        "{}: Dockerfile changed {}; Docker image refreshed {}".format(
             image,
             format_timestamp(dockerfile_timestamp),
             format_timestamp(docker_image_timestamp),
-        )
+        ),
+        file=sys.stderr,
     )
     local_imagespec_changed = dockerfile_timestamp > docker_image_timestamp
     local_codespec_changed = not version_not_changed()
+    if local_codespec_changed:
+        print(
+            "Code version changed: {}".format(openproblems.__version__), file=sys.stderr
+        )
     if local_imagespec_changed or local_codespec_changed:
         # spec has changed, let's rebuild
-        print("{}: rebuilding".format(image))
+        print("{}: rebuilding".format(image), file=sys.stderr)
         requirement_file = docker_build
-    elif docker_image_exists(image, local=True):
-        # existing image is newer than any changes, don't need anything
-        print("{}: no change".format(image))
-        requirement_file = dockerfile
-    elif docker_image_exists(image, local=False):
+    elif docker_image_exists(image, local=True) or docker_image_exists(
+        image, local=False
+    ):
         # docker exists on dockerhub and no changes required
-        print("{}: pulling".format(image))
-        requirement_file = docker_pull
+        print("{}: {}".format(image, no_change_text), file=sys.stderr)
+        requirement_file = no_change
     else:
         # image doesn't exist anywhere, need to build it
-        print("{}: building".format(image))
+        print("{}: building".format(image), file=sys.stderr)
         requirement_file = docker_build
-    sys.stdout.flush()
+    sys.stderr.flush()
     return requirement_file
 
 
-def _docker_requirements(image, include_self=False):
+def _docker_requirements(image, include_self=False, refresh=True):
     """Get all files to ensure a Docker image is up to date from the image name."""
     docker_dir = os.path.join(IMAGES_DIR, image)
     dockerfile = os.path.join(docker_dir, "Dockerfile")
@@ -268,12 +308,12 @@ def _docker_requirements(image, include_self=False):
         ]
     )
     if include_self:
-        requirements.append(docker_image_marker(image))
-    with open(dockerfile, "r") as handle:
-        base_image = next(handle).replace("FROM ", "")
-        if base_image.startswith("singlecellopenproblems"):
-            base_image = base_image.split(":")[0].split("/")[1]
-            requirements.extend(_docker_requirements(base_image, include_self=True))
+        requirements.append(docker_image_marker(image, refresh=refresh))
+    base_image = _docker_base(image)
+    if base_image is not None:
+        requirements.extend(
+            _docker_requirements(base_image, include_self=True, refresh=refresh)
+        )
     return requirements
 
 
@@ -282,9 +322,14 @@ def docker_requirements(wildcards):
     return _docker_requirements(wildcards.image)
 
 
-def docker_push_requirements(wildcards):
+def docker_update_requirements(wildcards):
     """Get all files to ensure a Docker image is built and up to date from wildcards."""
-    return _docker_requirements(wildcards.image, include_self=True)
+    return _docker_requirements(wildcards.image, include_self=True, refresh=True)
+
+
+def docker_push_requirements(wildcards):
+    """Get all files to ensure a Docker image is ready to push from wildcards."""
+    return _docker_requirements(wildcards.image, include_self=True, refresh=False)
 
 
 def docker_push(wildcards):
@@ -298,10 +343,14 @@ def docker_command(wildcards, output):
     return DOCKER_EXEC.format(image=image)
 
 
-if not version_not_changed():
-    for image in _images(""):
-        for filename in [".docker_push", ".docker_pull", ".docker_build"]:
-            try:
-                os.remove(os.path.join(image, filename))
-            except FileNotFoundError:
-                pass
+for image in _images(""):
+    for filename in [
+        ".docker_push",
+        ".docker_pull",
+        ".docker_build",
+        ".docker_refresh",
+    ]:
+        try:
+            os.remove(os.path.join(image, filename))
+        except FileNotFoundError:
+            pass

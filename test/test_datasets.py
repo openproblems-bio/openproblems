@@ -39,7 +39,7 @@ def _assert_not_bytes(X):
         (staticmethod(dataset), task, test, utils.TEMPDIR.name)
         for task in openproblems.TASKS
         for dataset in task.DATASETS
-        for test in [True, False]
+        for test in [True]
     ],
     class_name_func=utils.name.name_test,
 )
@@ -58,7 +58,20 @@ class TestDataset(unittest.TestCase):
                 dependency="test_load_dataset",
             )
         except AssertionError as e:
-            pytest.skip(str(e))
+            if str(e) == "Intermediate file missing. Did test_load_dataset fail?":
+                pytest.skip("Dataset not loaded successfully")
+            else:
+                raise
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove data."""
+        utils.cache.delete(
+            cls.tempdir,
+            cls.task,
+            cls.dataset,
+            test=cls.test,
+        )
 
     def test_adata_class(self):
         """Ensure output is AnnData."""
@@ -112,3 +125,11 @@ class TestDataset(unittest.TestCase):
             adata = self.adata.copy()
             normalizer(adata)
             utils.asserts.assert_finite(adata.X)
+
+    def test_metadata(self):
+        """Test for existence of dataset metadata."""
+        assert hasattr(self.dataset, "metadata")
+        for attr in [
+            "dataset_name",
+        ]:
+            assert attr in self.dataset.metadata

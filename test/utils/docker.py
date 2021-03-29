@@ -180,6 +180,7 @@ def cache_docker_image(image):
             "run",
             "-dt",
             "--rm",
+            "--user=root",
             "--mount",
             "type=bind,source={0},target={0}".format(BASEDIR),
             "--mount",
@@ -262,7 +263,6 @@ def docker_test(func, timeout=None, retries=0, *args, **kwargs):
             handle.write("\n")
             handle.write("if __name__ == '__main__':\n")
             handle.write("    import openproblems\n")
-            handle.write("    openproblems.data.no_cleanup()\n")
             handle.write("    import sys\n")
             handle.write("    sys.path.append('{}')\n".format(TESTDIR))
             handle.write("    {}(*{}, **{})\n".format(func.__name__, args, kwargs))

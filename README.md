@@ -1,7 +1,7 @@
-# SingleCellOpenProblems
+# Open Problems in Single-Cell Analysis
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/singlecellopenproblems/singlecellopenproblems/Run%20Tests/master?label=Github%20Actions)](https://github.com/singlecellopenproblems/SingleCellOpenProblems/actions)
-[![Coverage Status](https://coveralls.io/repos/github/singlecellopenproblems/SingleCellOpenProblems/badge.svg?branch=master)](https://coveralls.io/github/singlecellopenproblems/SingleCellOpenProblems?branch=master)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/singlecellopenproblems/singlecellopenproblems/Run%20Tests/master?label=Github%20Actions)
+![Coverage Status](https://img.shields.io/codecov/c/github/singlecellopenproblems/SingleCellOpenProblems/master)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/83b92388-53c7-4fef-9003-e14d94c6ac6f/deploy-status)](https://app.netlify.com/sites/openproblems/deploys)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Style Guide: OpenStack](https://img.shields.io/badge/style%20guide-openstack-eb1a32.svg)](https://docs.openstack.org/hacking/latest/user/hacking.html#styleguide)

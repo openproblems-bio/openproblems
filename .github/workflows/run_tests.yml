@@ -73,9 +73,9 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        python -m pip install --upgrade "pip<=21.0"
-        pip install --use-deprecated=legacy-resolver -U wheel setuptools
-        pip install --use-deprecated=legacy-resolver -U --editable .[test,r,evaluate]
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools codecov
+        pip install -U --editable .[test,r,evaluate]
         python -c "import openproblems"
 
     - name: Cache R packages
@@ -91,19 +91,8 @@ jobs:
       run: |
         if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
         renv::restore()
-
-        con = file("docker/openproblems-r-base/r_requirements.txt", "r")
-        while ( length(pkg <- readLines(con, n = 1)) > 0 ) {
-          renv::install(pkg)
-        }
-        close(con)
+        renv::install(scan("docker/openproblems-r-base/r_requirements.txt", what=character(), sep="\n"))
       shell: Rscript {0}
-
-    - name: Pull Docker images
-      run: |
-        cd workflow
-        snakemake -j 4 docker_pull
-        cd ..
 
     - name: Build Docker images
       run: |
@@ -111,20 +100,14 @@ jobs:
         snakemake -j 4 docker
         cd ..
 
-    - name: Update Docker images
-      run: |
-        cd workflow
-        snakemake -j 4 docker_update
-        cd ..
-
     - name: Run tests
-      run: pytest --cov=openproblems -v
+      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
 
     - name: Upload coverage
+      if: success() && ${{ github.repository == 'SingleCellOpenProblems/singlecellopenproblems' }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COVERALLS_SERVICE_NAME: github
-      run: coveralls
+        CODECOV_NAME: ${{ runner.os }}-${{ matrix.name }}
+      run: codecov --no-color --required --flags unittests
 
     - name: Upload check results on fail
       if: failure()

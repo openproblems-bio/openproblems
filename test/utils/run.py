@@ -50,6 +50,10 @@ def git_file_age(filename):
         return int(git_age)
 
 
+def _run_failed(process, error_raises, format_error):
+    raise error_raises(format_error(process))
+
+
 def run(
     command,
     shell=False,
@@ -124,6 +128,6 @@ def run(
     if return_code:
         output.append(p.returncode)
     if not return_code and not p.returncode == 0:
-        raise error_raises(format_error(p))
+        _run_failed(p, error_raises, format_error)
     if output:
         return output[0] if len(output) == 1 else tuple(output)

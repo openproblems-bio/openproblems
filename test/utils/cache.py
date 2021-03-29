@@ -28,3 +28,12 @@ def save(adata, tempdir, task, dataset, test=None, method=None):
     """Save an AnnData object to h5ad."""
     data_path = _cache_name(tempdir, task, dataset, test=test, method=method)
     adata.write_h5ad(data_path)
+
+
+def delete(tempdir, task, dataset, test=None, method=None):
+    """Delete a cached AnnData object."""
+    data_path = _cache_name(tempdir, task, dataset, test=test, method=method)
+    try:
+        os.remove(data_path)
+    except FileNotFoundError:
+        pass
