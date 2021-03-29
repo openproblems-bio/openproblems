@@ -21,7 +21,7 @@ def _ivis_preprocess(adata: AnnData) -> AnnData:
 
 
 @method(
-    method_name="Ivis",
+    method_name="Ivis (CPU)",
     paper_name="Structure-preserving visualisation of "
     "high dimensional single-cell datasets",
     paper_url="https://www.nature.com/articles/s41598-019-45301-0",
