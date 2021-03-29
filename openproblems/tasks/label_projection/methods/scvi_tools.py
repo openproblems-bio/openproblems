@@ -42,6 +42,8 @@ def scanvi_all_genes(adata):
 )
 def scanvi_hvg(adata):
     bdata = adata.copy()
-    bdata = sc.pp.highly_variable_genes(bdata, flavor="seurat_v3", subset=True)
+    bdata = sc.pp.highly_variable_genes(
+        bdata, flavor="seurat_v3", subset=True, n_top_genes=2000
+    )
     adata.obs["labels_pred"] = _scanvi(bdata)
     return adata
