@@ -57,7 +57,7 @@ jobs:
         # to avoid clashes on ECR
         if [[ "${{ github.repository }}" == "singlecellopenproblems/SingleCellOpenProblems" ]]; \
           then echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
-          else echo "BRANCH=`echo ${{ github.repository }} | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
+          else echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
         fi >> $GITHUB_ENV
         # don't use tower if the env var is not set
         echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
