@@ -231,6 +231,7 @@ def _atac_genes_score(adata, top_genes=2000, threshold=1, method="beta"):
 
 def _beta(tss_to_peaks, adata, threshold=1):
     import scipy
+
     tss_to_peaks["distance"] = tss_to_peaks.apply(
         lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 1e5, axis=1
     )
@@ -248,6 +249,7 @@ def _beta(tss_to_peaks, adata, threshold=1):
 def _archr_model21(tss_to_peaks, adata):
     """https://www.archrproject.com/bookdown/calculating-gene-scores-in-archr.html"""
     import scipy
+
     tss_to_peaks["distance"] = tss_to_peaks.apply(
         lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 5000, axis=1
     )
@@ -265,6 +267,7 @@ def _archr_model21(tss_to_peaks, adata):
 def _marge(tss_to_peaks, adata):
     """https://genome.cshlp.org/content/26/10/1417.long"""
     import scipy
+
     alpha = -np.log(1.0 / 3.0) * 1e5 / 1e4
     tss_to_peaks["distance"] = tss_to_peaks.apply(
         lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 1e5, axis=1
@@ -298,29 +301,31 @@ def beta(adata, n_top_genes=500, threshold=1):
     return adata
 
 
-@method(method_name="MARGE",
-        paper_name="""Modeling cis-regulation with a compendium of
+@method(
+    method_name="MARGE",
+    paper_name="""Modeling cis-regulation with a compendium of
                    genome-wide histone H3K27ac profiles""",
-        paper_url="https://genome.cshlp.org/content/26/10/1417.long",
-        paper_year=2016,
-        code_version="1.0",
-        code_url="https://github.com/suwangbio/MARGE",
-        image="openproblems-python-extras",
-        )
+    paper_url="https://genome.cshlp.org/content/26/10/1417.long",
+    paper_year=2016,
+    code_version="1.0",
+    code_url="https://github.com/suwangbio/MARGE",
+    image="openproblems-python-extras",
+)
 def marge(adata, n_top_genes=500):
     adata = _atac_genes_score(adata, top_genes=n_top_genes, method="marge")
     return adata
 
 
-@method(method_name="ArchR",
-        paper_name="""ArchR: An integrative and scalable software
+@method(
+    method_name="ArchR",
+    paper_name="""ArchR: An integrative and scalable software
                    package for single-cell chromatin accessibility analysis""",
-        paper_url="https://www.biorxiv.org/content/10.1101/2020.04.28.066498v1",
-        paper_year=2020,
-        code_version="1.0",
-        code_url="https://github.com/GreenleafLab/ArchR",
-        image="openproblems-python-extras",
-        )
+    paper_url="https://www.biorxiv.org/content/10.1101/2020.04.28.066498v1",
+    paper_year=2020,
+    code_version="1.0",
+    code_url="https://github.com/GreenleafLab/ArchR",
+    image="openproblems-python-extras",
+)
 def archr_model21(adata, n_top_genes=500):
     adata = _atac_genes_score(adata, top_genes=n_top_genes, method="archr_model21")
     return adata
