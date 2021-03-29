@@ -47,9 +47,13 @@ def scanvi_all_genes(adata):
 def scanvi_hvg(adata):
     import scanpy as sc
 
-    bdata = adata.copy()
-    bdata = sc.pp.highly_variable_genes(
-        bdata, flavor="seurat_v3", subset=True, n_top_genes=2000
+    hvg_df = sc.pp.highly_variable_genes(
+        adata[adata.obs["is_train"]],
+        flavor="seurat_v3",
+        inplace=False,
+        n_top_genes=2000,
+        batch_key="batch",
     )
+    bdata = adata[:, hvg_df.highly_variable].copy()
     adata.obs["labels_pred"] = _scanvi(bdata)
     return adata
