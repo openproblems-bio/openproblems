@@ -21,7 +21,7 @@ def check_method(adata):
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()
-    adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True)
+    adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
     adata.obs["is_train"] = np.random.choice(
         [True, False], adata.shape[0], replace=True, p=[0.8, 0.2]
     )
@@ -33,5 +33,5 @@ def sample_method(adata):
     adata.obs["labels_pred"] = adata.obs["labels"]
     adata.obs["labels_pred"][::5] = np.random.choice(
         5, len(adata.obs["labels_pred"][::5]), replace=True
-    )
+    ).astype(str)
     return adata
