@@ -7,9 +7,6 @@ import scanpy as sc
 
 
 def _ivis_preprocess(adata: AnnData) -> AnnData:
-    sc.pp.filter_cells(adata, min_genes=0)
-    sc.pp.filter_genes(adata, min_cells=0)
-
     sc.pp.normalize_per_cell(adata)
     sc.pp.log1p(adata)
 
