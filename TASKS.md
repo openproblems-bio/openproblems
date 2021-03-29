@@ -3,7 +3,6 @@
 Table of Contents
   * [Predicting gene expression from chromatin accessibility](#predicting-gene-expression-from-chromatin-accessibility)
   * [Data denoising and imputation](#data-denoising-and-imputation)
-    + [The metrics](#the-metrics)
   * [Dimensionality reduction for visualization](#dimensionality-reduction-for-visualization)
   * [Cell type label projection from a reference atlas](#cell-type-label-projection-from-a-reference-atlas)
   * [Multimodal data integration (e.g. combining CITE-seq with RNA-seq)](#multimodal-data-integration--eg-combining-cite-seq-with-rna-seq-)
