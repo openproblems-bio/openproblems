@@ -14,5 +14,7 @@ from ....tools.decorators import method
 def densmap(adata):
     import umap
 
-    adata.obsm["X_emb"] = umap.UMAP(densmap=True, random_state=42).fit_transform(adata.X)
+    adata.obsm["X_emb"] = umap.UMAP(densmap=True, random_state=42).fit_transform(
+        adata.X
+    )
     return adata  # return with embedding
