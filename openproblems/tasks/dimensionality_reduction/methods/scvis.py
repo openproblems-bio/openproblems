@@ -7,12 +7,13 @@ from typing import Dict
 from typing import Tuple
 
 import numpy as np
+import scanpy as sc
 
 _CFG = {
     "hyperparameter": {
         "optimization": {"method": "Adam", "learning_rate": 0.01},
-        "batch_size": 256,  # original 512
-        "max_epoch": 20,  # original 100
+        "batch_size": 512,
+        "max_epoch": 20,  # original: 100
         "regularizer_l2": 0.001,
         "perplexity": 10,
         "seed": 1,
@@ -67,14 +68,14 @@ def _fit(data: np.ndarray):
 
     iter_per_epoch = round(x.shape[0] / hyperparameter["batch_size"])
     max_iter = int(iter_per_epoch * hyperparameter["max_epoch"])
-    # limit the max_iter because CI...
+    # limit the max_iter because of CI
     max_iter = min(max_iter, 100)
 
     _ = model.train(
         data=train_data,
         batch_size=hyperparameter["batch_size"],
-        verbose=True,
-        verbose_interval=1,
+        verbose=False,
+        verbose_interval=max_iter,
         show_plot=False,
         plot_dir=None,
         max_iter=max_iter,
@@ -83,6 +84,15 @@ def _fit(data: np.ndarray):
     model.set_normalizer(normalizer)
 
     return model, x
+
+
+def _preprocess(adata: AnnData) -> AnnData:
+    adata.var_names_make_unique()
+    sc.pp.normalize_per_cell(adata)
+    sc.pp.log1p(adata)
+
+    sc.pp.highly_variable_genes(adata, n_top_genes=3000)
+    return adata[:, adata.var["highly_variable"]]
 
 
 @method(
@@ -96,7 +106,7 @@ def _fit(data: np.ndarray):
     image="openproblems-python-method-scvis",
 )
 def scvis(adata: AnnData) -> AnnData:
-    # TODO(preprocess)
+    adata = _preprocess(adata)
     model, x = _fit(adata.X.A if issparse(adata.X) else adata.X)
     emb, _ = model.encode(x)
 
