@@ -45,7 +45,7 @@ jobs:
     - name: Build Docker images
       run: |
         cd workflow
-        snakemake -j $(grep -c processor /proc/cpuinfo) docker
+        snakemake -j $(grep -c processor /proc/cpuinfo) docker_build
         cd ..
 
     - name: Push Docker images
