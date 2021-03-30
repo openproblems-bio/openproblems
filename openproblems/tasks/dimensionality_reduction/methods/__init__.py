@@ -1,3 +1,4 @@
+from .neuralee import neuralee
 from .pca import pca
 from .phate import phate
 from .tsne import tsne
