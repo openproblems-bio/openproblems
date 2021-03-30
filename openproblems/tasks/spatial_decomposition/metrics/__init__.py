@@ -1,3 +1,1 @@
-from .accuracy import accuracy
-from .f1 import f1
-from .f1 import f1_micro
+from .R2 import R2

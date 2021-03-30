@@ -1,21 +1,39 @@
-# Label Projection
+# Spatial Decomposition/Deconvolution
 
-Label projection refers to the automatic identification of cell identity labels in a test or query dataset based on a reference dataset (or datasets) that typically contains curated, manually labeled cells. This process enables the rapid annotation of new datasets, which is becoming increasingly important as data generation becomes easier and larger in scale.
+Spatial decomposition (also often referred to as Spatial deconvolution) is
+applicable to spatial transcriptomics data where the transcription profile of
+each capture location (spot, voxel, bead, etc.) do not share a bijective
+relationship with the cells in the tissue, i.e., multiple cells may contribute
+to the same capture location. The task of spatial decomposition then refers to
+estimating the composition of cell types/states that are present at each capture
+location. The cell type/states estimates are presented as proportion values,
+representing the proportion of the cells at each capture location that belong to
+a given cell type.
 
-Label projection methods range from logistic regression which ignores batch information, to methods that perform projection based on a batch-integrated embedding. For a review, see [Abdelaal et al. (2019)]{https://doi.org/10.1186/s13059-019-1795-z}.
+
+We distinguish between _reference-based_ decomposition and _de novo_
+decomposition, where the former leverage external data (e.g., scRNA-seq or
+scNuc-seq) to guide the inference process, while the latter only work with the
+spatial data. We require that all datasets have an associated reference single
+cell data set, but methods are free to ignore this information.
+
 
 ## API
 
 Datasets should contain the following attributes:
 
-* `adata.obs["labels"]` with ground truth celltype labels,
-* `adata.obs["batch"]` with information of batches in the data, and
-* `adata.obs["is_train"]` with a train vs. test split
 
-It should be noted that datasets may only contain a single batch, or not contain discriminative batch information.
+* `adata.obsm["proportions_true"]` ground truth proportion estimates 
+* `adata.obsm["spatial"]` array with spatial coordinates (x,y)
+* `adata.uns["sc_reference"]` an `anndata` object that holds the single cell reference data
+* `adata.uns["sc_reference"].obs["label"]` cell type/state/cluster of associated cell
 
-Methods should assign output celltype labels to `adata.obs['labels_pred']` using only the labels from the training data.
 
-Note that the true labels are contained in `adata['labels']`.
 
-Metrics can compare `adata['labels']` to `adata.obs['labels_pred']` using only the labels from the test data.
+Note that the entries of the label column in the single cell `anndata` object must agree with the columns of the columns in the `obsm["proportions_true"]` attribute of the spatial data.
+
+Methods should store estimates of the cell type proportions in `adata.obsm["proportions_pred"]` 
+
+Single cell annotations are found in `adata.uns["sc_reference"].obs['labels']`.
+
+Metrics shall compare `adata.obsm['proportions_pred']` to `adata.obsm['proportions_true']`.
