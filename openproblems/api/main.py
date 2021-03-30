@@ -40,7 +40,7 @@ def _main(args=None):
 def main(args=None, do_print=True):
     """Run the command-line interface."""
     output = _main(args)
-    if do_print and output:
+    if do_print:
         utils.print_output(output)
         return 0
     else:
