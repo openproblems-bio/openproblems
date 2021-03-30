@@ -1,5 +1,8 @@
 from ....tools.decorators import method
 
+import numpy as np
+import pandas as pd
+
 
 @method(
     method_name="Random assignment of porportion values. For baseline reference.",

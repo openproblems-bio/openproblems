@@ -1,7 +1,5 @@
 from ....tools.decorators import metric
 
-import anndata
-import numpy as np
 import sklearn.metrics
 
 
