@@ -43,11 +43,15 @@ def loader(func, *args, **kwargs):
         )
         adata = anndata.read_h5ad(filepath)
         adata.__from_cache__ = True
+        if kwargs.get("test"):
+            adata.__is_test__ = True
         return adata
     else:
         log.debug("Downloading {}({}, {}) dataset".format(func.__name__, args, kwargs))
         adata = func(*args, **kwargs)
         adata.__from_cache__ = False
+        if kwargs.get("test"):
+            adata.__is_test__ = True
         try:
             os.mkdir(TEMPDIR)
         except OSError:
