@@ -15,4 +15,5 @@ Python packages:
 * molecular-cross-validation
 * MulticoreTSNE
 * phate
-* ivis[cpu]
+* tensorflow-cpu
+* ivis

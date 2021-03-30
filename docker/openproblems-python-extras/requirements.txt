@@ -4,5 +4,6 @@ MulticoreTSNE
 phate
 pyensembl
 pybedtools
-ivis[cpu]
+tensorflow-cpu==2.4.1
+ivis
 git+https://github.com/czbiohub/molecular-cross-validation
