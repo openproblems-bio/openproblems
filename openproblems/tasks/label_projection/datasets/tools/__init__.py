@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 
 
 def add_label_noise(adata, noise_prob):
