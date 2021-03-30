@@ -1,7 +1,5 @@
 from ....tools.decorators import method
 
-import densmap as dens
-
 
 @method(
     method_name="densMAP",
@@ -14,5 +12,6 @@ import densmap as dens
     image="openproblems-python-extras",
 )
 def densmap(adata):
+    import densmap as dens
     adata.obsm["X_emb"] = dens.densMAP(final_dens=False).fit_transform(adata.X)
     return adata  # return with embedding
