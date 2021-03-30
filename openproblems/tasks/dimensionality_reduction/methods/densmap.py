@@ -1,7 +1,6 @@
 from ....tools.decorators import method
-from ....tools.utils import check_version
 
-import densmap as dens_map
+import densmap as dens
 
 
 @method(
@@ -14,5 +13,5 @@ import densmap as dens_map
     code_version="8efe0a2",
 )
 def densmap(adata):
-    adata.obsm["X_emb"] = dens_map.densMAP(final_dens=False).fit_transform(adata.X)
+    adata.obsm["X_emb"] = dens.densMAP(final_dens=False).fit_transform(adata.X)
     return adata
