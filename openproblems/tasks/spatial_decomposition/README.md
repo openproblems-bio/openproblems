@@ -23,20 +23,17 @@ Datasets should contain the following attributes:
 
 ### Reference-based
 
-*Spatial Data*
 
 * `adata.obsm["proportions_true"]` ground truth proportion estimates 
 * `adata.obsm["spatial"]` array with spatial coordinates (x,y)
-
-*Single cell data*
-
-* `adata.obs["label"]` cell type/state/cluster of associated cell
+* `adata.uns["sc_reference"]` an `anndata` object that holds the single cell reference data
+* `adata.uns["sc_reference"].obs["label"]` cell type/state/cluster of associated cell
 
 
-Note that the entries of the label column in the single cell `anndata` object must agree with the columns of the columns in the `obsm["proportions"]` attribute of the spatial data.
+Note that the entries of the label column in the single cell `anndata` object must agree with the columns of the columns in the `obsm["proportions_true"]` attribute of the spatial data.
 
 Methods should store estimates of the cell type proportions in `adata.obsm["proportions_pred"]` 
 
-True estimates are contained in `adata['labels']`.
+Single cell annotations are found in `adata.uns["sc_reference"].obs['labels']`.
 
 Metrics shall compare `adata.obsm['proportions_pred']` to `adata.obsm['proportions_true']`.
