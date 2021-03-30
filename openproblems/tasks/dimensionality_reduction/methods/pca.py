@@ -14,5 +14,5 @@ import scanpy as sc
     code_version=check_version("scikit-learn"),
 )
 def pca(adata):
-    adata.obsm["X_emb"] = adata.obsm["X_pca"][:, :2]
+    adata.obsm["X_emb"] = adata.obsm["X_input"][:, :2]
     return adata
