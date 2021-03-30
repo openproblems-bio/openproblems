@@ -36,3 +36,8 @@ def add_label_noise(adata, noise_prob):
         new_labels[label_indices] = np.random.choice(
             label_names, label_indices.shape[0], p=reassign_probs[:, k]
         )
+
+    new_adata = adata.copy()
+    new_adata.obs["labels"] = new_labels
+
+    return new_adata
