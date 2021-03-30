@@ -47,6 +47,17 @@ def test_metric(task_name, metric_name, tempdir, image):
     assert isinstance(m, numbers.Number)
 
 
+@parameterized.parameterized.expand(
+    [
+        (
+            utils.TEMPDIR.name,
+            openproblems.tasks.dimensionality_reduction.metrics.trustworthiness.metadata[  # noqa: E501
+                "image"
+            ],
+        )
+    ],
+    name_func=utils.name.name_test,
+)
 @utils.docker.docker_test
 def test_trustworthiness_sparse(tempdir, image):
     from scipy.sparse import csr_matrix
