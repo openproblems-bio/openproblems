@@ -11,23 +11,23 @@ representing the proportion of the cells at each capture location that belong to
 a given cell type.
 
 
-We distinguish between _reference-based_ decomposition and _uninformed_
+We distinguish between _reference-based_ decomposition and _de novo_
 decomposition, where the former leverage external data (e.g., scRNA-seq or
 scNuc-seq) to guide the inference process, while the latter only work with the
-spatial data.
+spatial data. We require that all datasets have an associated reference single
+cell data set, but methods are free to ignore this information.
 
 
 ## API
 
 Datasets should contain the following attributes:
 
-### Reference-based
-
 
 * `adata.obsm["proportions_true"]` ground truth proportion estimates 
 * `adata.obsm["spatial"]` array with spatial coordinates (x,y)
 * `adata.uns["sc_reference"]` an `anndata` object that holds the single cell reference data
 * `adata.uns["sc_reference"].obs["label"]` cell type/state/cluster of associated cell
+
 
 
 Note that the entries of the label column in the single cell `anndata` object must agree with the columns of the columns in the `obsm["proportions_true"]` attribute of the spatial data.
