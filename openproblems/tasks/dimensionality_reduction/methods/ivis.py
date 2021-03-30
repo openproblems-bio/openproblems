@@ -6,6 +6,7 @@ import scanpy as sc
 
 
 def _ivis_preprocess(adata: AnnData) -> AnnData:
+    adata.var_names_make_unique()
     sc.pp.normalize_per_cell(adata)
     sc.pp.log1p(adata)
 
@@ -38,7 +39,7 @@ def ivis(adata: AnnData) -> AnnData:
         k=15,
         model="maaten",
         n_epochs_without_progress=5,
-        verbose=False,
+        verbose=0,
         embedding_dims=2,
     )
     adata.obsm["X_emb"] = ivis.fit_transform(adata.obsm["X_pca"])
