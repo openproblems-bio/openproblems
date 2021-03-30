@@ -1,28 +1,30 @@
+# Guide to Docker images
 This guide provides instructions on editing the Docker images used to run `methods`, `metrics`, and load `datasets` for the Open Problems benchmarking infrastructure.
 
 Note, all images must comply to the [AWS SageMaker Custom Image Specifications](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi-specs.html).
 
 **Table of Contents**
-- [Docker images](#docker-images)
-  * [Available images](#available-images)
-    + [openproblems](#openproblems)
-    + [openproblems-r-base](#openproblems-r-base)
-    + [openproblems-r-extras](#openproblems-r-extras)
-    + [openproblems-python-extras](#openproblems-python-extras)
-  * [Adding a package to the available images](#adding-a-package-to-the-available-images)
-  * [Adding new images](#adding-new-images)
-  * [Building Docker images locally](#building-docker-images-locally)
-  * [Building Docker images through GitHub Actions workflows](#building-docker-images-through-github-actions-workflows)
-  * [Pulling images from the ECR to your local machine](#pulling-images-from-the-ecr-to-your-local-machine)
+- [About Docker images](#about-docker-images)
+- [Available images](#available-images)
+  * [openproblems](#openproblems)
+  * [openproblems-r-base](#openproblems-r-base)
+  * [openproblems-r-extras](#openproblems-r-extras)
+  * [openproblems-python-extras](#openproblems-python-extras)
+- [Adding a package to the available images](#adding-a-package-to-the-available-images)
+- [Adding new images](#adding-new-images)
+- [Building Docker images locally](#building-docker-images-locally)
+- [Building Docker images through GitHub Actions workflows](#building-docker-images-through-github-actions-workflows)
+- [Pulling images from the ECR to your local machine](#pulling-images-from-the-ecr-to-your-local-machine)
+
 <!-- Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
 
 **Additional resources**
 * [Dockerfile Reference](https://docs.docker.com/engine/reference/builder/) - Documentation from Docker on how to write Dockerfiles
 * [SageMaker Studio Custom Image Samples](https://github.com/aws-samples/sagemaker-studio-custom-image-samples/) - Example images from AWS designed for compatibility with SageMaker
 
-# Docker images
+## About Docker images
 
-By default, all methods and metrics run in the `openproblems` docker image. If you require additional dependencies, you can either add them to an existing docker image, or if this is not possible due to conflicts, add a new one.
+By default, all methods, metrics, and dataset loaders run in the `openproblems` docker image. If you require additional dependencies, you can either add them to an existing docker image, or if this is not possible due to conflicts, add a new one.
 
 To define which image is to be used in a method or metric, simply set the `image` parameter in the method decorator to match the name of the folder containing the Dockerfile (e.g., `image="openproblems-r-base"`).
 

@@ -31,7 +31,7 @@ There is a 1:1 correspondence between the steps to set up SageMaker using the CL
 - [Add user to SageMaker Studio](#add-user-to-sagemaker-studio)
 - [Open SageMaker Studio and Launch a Notebook using a Custom Image](#open-sagemaker-studio-and-launch-a-notebook-using-a-custom-image)
   * [Selecting an instance type](#selecting-an-instance-type)
-  * [Kernel not found error](#kernel-not-found-error)
+  * [Failed to start kernel (image does not exist)](#failed-to-start-kernel-image-does-not-exist)
 
 <!-- Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
 
@@ -186,7 +186,7 @@ We've selected three instances to use during the Jamboree. Note, it is possible 
 To change your instance, follow the [Change Instance Type](https://docs.aws.amazon.com/sagemaker/latest/dg/notebooks-run-and-manage-switch-instance-type.html) tutorial from AWS.
 
 
-### Kernel not found error
+### Failed to start kernel (image does not exist)
 
 If you see the following error:
 
