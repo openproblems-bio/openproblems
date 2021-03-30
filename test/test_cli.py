@@ -128,6 +128,33 @@ def test_hash(task, function_type, function_name):
     assert h1 == h2
 
 
+def test_zero_metric():
+    def __zero_metric(*args):
+        return 0.0
+
+    metric_name = utils.name.object_name(__zero_metric)
+    task = openproblems.TASKS[0]
+    setattr(task.metrics, metric_name, __zero_metric)
+    adata = task.api.sample_dataset()
+    with tempfile.TemporaryDirectory() as tempdir:
+        dataset_file = os.path.join(tempdir, "dataset.h5ad")
+        adata.write_h5ad(dataset_file)
+
+        result = main(
+            [
+                "evaluate",
+                "--task",
+                task.__name__.split(".")[-1],
+                "--input",
+                dataset_file,
+                metric_name,
+            ],
+            do_print=True,
+        )
+        assert result == 0
+        assert isinstance(result, int)
+
+
 def test_pipeline():
     """Test evaluation pipeline."""
     with tempfile.TemporaryDirectory() as tempdir:
