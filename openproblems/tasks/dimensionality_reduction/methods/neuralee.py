@@ -26,8 +26,8 @@ def neuralee(adata: AnnData) -> AnnData:
     dataset.log_shift()  # log(x + 1)
     dataset.subsample_genes(500)  # filter genes according to variance
     dataset.standardscale()
-    # 10% of cells as batch to the estimate affinity matrix
-    dataset.affinity_split(N_small=0.1)
+    # 1000 cells as a batch to estimate the affinity matrix
+    dataset.affinity_split(N_small=min(1000, adata.n_obs))
 
     NEE = NeuralEE(dataset, d=2, device=torch.device("cpu"))
     res = NEE.fine_tune(verbose=False)
