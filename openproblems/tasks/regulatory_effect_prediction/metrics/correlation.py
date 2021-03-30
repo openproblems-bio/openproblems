@@ -5,6 +5,7 @@ import numpy as np
 import scipy.sparse
 import scipy.stats
 
+
 def _metric(adata, method="pearson", modality="global"):
     if modality == "median":
         if method == "pearson":
