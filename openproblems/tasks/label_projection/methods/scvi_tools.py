@@ -38,7 +38,7 @@ def _scanvi_scarches(adata):
         n_layers=2,
         n_latent=30,
     )
-    scvi_model = scvi.model.SCVI(adata, **arches_params)
+    scvi_model = scvi.model.SCVI(adata_train, **arches_params)
     scvi_model.train(train_size=1.0)
     model = scvi.model.SCANVI.from_scvi_model(scvi_model, unlabeled_category="Unknown")
     model.train(train_size=1.0)
