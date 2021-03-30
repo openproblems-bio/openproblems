@@ -1,8 +1,8 @@
 from ....tools.decorators import metric
 
-import sklearn.metrics
 import anndata
 import numpy as np
+import sklearn.metrics
 
 
 @metric(metric_name="R2", maximize=True)
