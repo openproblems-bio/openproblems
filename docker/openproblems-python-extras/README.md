@@ -16,4 +16,4 @@ Python packages:
 * MulticoreTSNE
 * phate
 * neuralee
-* pytorch
+* torch

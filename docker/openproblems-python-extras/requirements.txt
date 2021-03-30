@@ -4,6 +4,6 @@ MulticoreTSNE
 phate
 pyensembl
 pybedtools
-pytorch
+torch
 git+https://github.com/michalk8/neuralee@master  # contains gradient error fix
 git+https://github.com/czbiohub/molecular-cross-validation
