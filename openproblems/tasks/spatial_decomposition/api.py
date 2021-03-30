@@ -43,8 +43,11 @@ def sample_dataset():
     # set spatial coordinates
     adata.obsm["spatial"] = np.random.random((adata.shape[0], 2))
     # generate proportion values
-    props = pd.DataFrame(np.random.dirichlet(alpha=np.ones(n_types), size=adata.shape[0]),
-                         columns=np.arange(n_types), index=adata.obs.index)
+    props = pd.DataFrame(
+        np.random.dirichlet(alpha=np.ones(n_types), size=adata.shape[0]),
+        columns=np.arange(n_types),
+        index=adata.obs.index,
+    )
     adata.obsm["proportions_true"] = props
     # get anndata for single cell reference
     sc_adata = load_sample_data()
@@ -61,7 +64,10 @@ def sample_method(adata):
     # get number of cell types
     n_types = adata.obsm["proportions_true"].shape[1]
     # generate predicted proportions
-    props = pd.DataFrame(np.random.dirichlet(alpha=np.ones(n_types), size=adata.shape[0]),
-                         columns=np.arange(n_types), index=adata.obs.index)
+    props = pd.DataFrame(
+        np.random.dirichlet(alpha=np.ones(n_types), size=adata.shape[0]),
+        columns=np.arange(n_types),
+        index=adata.obs.index,
+    )
     adata.obsm["proportions_pred"] = props
     return adata
