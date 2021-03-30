@@ -32,6 +32,6 @@ def neuralee(adata: AnnData) -> AnnData:
     NEE = NeuralEE(dataset, d=2, device=torch.device("cpu"))
     res = NEE.fine_tune(verbose=False)
 
-    adata.obsm["X_emb"] = res["X"]
+    adata.obsm["X_emb"] = res["X"].detach().cpu().numpy()
 
     return adata
