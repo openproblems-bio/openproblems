@@ -2,21 +2,25 @@ import numpy as np
 
 
 def add_label_noise(adata, noise_prob):
-    """Inject random label noise in the dataset by permuting a fraction
-    of the labels in the training set.
+    """Inject random label noise in the dataset .
+
+    This is done by permuting a fraction of the labels in the training set.
 
     By adding different levels of label noise metrics can be evaluated to show
     generalization trends from training data even if ground truth is uncertain.
 
-    Params
+    Parameters
     -------
-    adata: AnnData, a dataset with the required fields for the label_projection task.
+    adata : AnnData
+        A dataset with the required fields for the label_projection task.
 
-    noise_prob: Float, the probability of label noise in the training data.
+    noise_prob : Float
+        The probability of label noise in the training data.
 
     Returns
     -------
-    AnnData: dataset where training labels have been permuted by specified probability.
+    new_adata : AnnData
+        Dataset where training labels have been permuted by specified probability.
     """
 
     old_labels = adata.obs["labels"].pipe(np.array)
