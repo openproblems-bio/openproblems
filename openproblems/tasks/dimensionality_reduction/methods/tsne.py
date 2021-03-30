@@ -15,7 +15,6 @@ import scanpy as sc
     image="openproblems-python-extras",
 )
 def tsne(adata):
-    sc.pp.pca(adata)
-    sc.tl.tsne(adata)
+    sc.tl.tsne(adata, use_rep="X_pca", n_pcs=50)
     adata.obsm["X_emb"] = adata.obsm["X_tsne"]
     return adata
