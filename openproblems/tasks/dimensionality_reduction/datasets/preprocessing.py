@@ -1,5 +1,6 @@
 import scanpy as sc
 
+
 def preprocess_scanpy(adata):
 
     sc.pp.normalize_total(adata)
