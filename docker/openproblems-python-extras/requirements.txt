@@ -5,4 +5,3 @@ phate
 pyensembl
 pybedtools
 git+https://github.com/czbiohub/molecular-cross-validation
-densmap-learn

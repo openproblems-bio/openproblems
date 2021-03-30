@@ -15,4 +15,3 @@ Python packages:
 * molecular-cross-validation
 * MulticoreTSNE
 * phate
-* densmap-learn
