@@ -10,13 +10,15 @@ from ....tools.decorators import method
 )
 def random_proportion_assignment(adata):
     n_types = adata.obsm["proportions_true"].size[1]
-    props = np.random.dirichlet(np.ones(n_types),
-                                size=adata.shape[0],
-                                )
-    props = pd.DataFrame(props,
-                         columns=adata.obsm["proportions_true"].columns,
-                         index=adata.obs.index,
-                         )
+    props = np.random.dirichlet(
+        np.ones(n_types),
+        size=adata.shape[0],
+    )
+    props = pd.DataFrame(
+        props,
+        columns=adata.obsm["proportions_true"].columns,
+        index=adata.obs.index,
+    )
 
     adata["proportions_pred"] = props
 
