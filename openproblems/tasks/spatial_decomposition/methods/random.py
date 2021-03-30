@@ -7,6 +7,7 @@ from ....tools.decorators import method
     paper_url="NA",
     paper_year="NA",
     code_url="NA",
+    code_version="NA",
 )
 def random_proportion_assignment(adata):
     n_types = adata.obsm["proportions_true"].size[1]

@@ -6,7 +6,7 @@ import numpy as np
 
 
 @metric(metric_name="R2", maximize=True)
-def r2(adata):
+def R2(adata):
 
     prop_true = adata.obsm["proportions_true"].values
     prop_pred = adata.obsm["proportions_pred"].values
