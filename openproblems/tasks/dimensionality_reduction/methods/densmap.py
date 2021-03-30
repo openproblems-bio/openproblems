@@ -11,6 +11,7 @@ import densmap as dens
     paper_year=2021,
     code_url="https://github.com/hhcho/densvis",
     code_version="8efe0a2",
+    image="openproblems-python-extras"
 )
 def densmap(adata):
     adata.obsm["X_emb"] = dens.densMAP(final_dens=False).fit_transform(adata.X)
