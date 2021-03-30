@@ -35,7 +35,7 @@ def test_method(task_name, method_name, tempdir, image):
         "Testing {} method from {} task".format(method.__name__, task.__name__)
     )
     # use test mode of method for speed increase
-    kwargs = {"test_mode": True} if "test_mode" in signature(method).parameters else {}
+    kwargs = {"test": True} if "test" in signature(method).parameters else {}
     adata = method(adata, **kwargs)
     assert isinstance(adata, anndata.AnnData)
     assert task.api.check_method(adata)

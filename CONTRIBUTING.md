@@ -109,10 +109,10 @@ Datasets should take no arguments and return an AnnData object. If `test is True
 function dataset(bool test=False) -> AnnData adata
 ```
 
-Methods should take an AnnData object and store the output in `adata.obs` according to the specification of the task.
+Methods should take an AnnData object and store the output in `adata.obs` according to the specification of the task. If `test is True`, then the method's hyperparameters may be changed to speed up runtime in a testing environment (e.g., number of epochs for deep learning methods).
 
 ```
-function method(AnnData adata) -> AnnData adata
+function method(AnnData adata, test=False) -> AnnData adata
 ```
 
 Metrics should take an AnnData object and return a `float`.
