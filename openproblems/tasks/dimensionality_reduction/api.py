@@ -5,6 +5,7 @@ import scanpy as sc
 
 def check_dataset(adata):
     """Check that dataset output fits expected API."""
+    assert "X_input" in adata.obsm
     return True
 
 

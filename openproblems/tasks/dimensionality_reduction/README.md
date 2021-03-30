@@ -36,7 +36,7 @@ We can make this comparison across multiple dimensionality reduction methods. We
 
 ## API
 
-**Methods** should assign dimensionally-reduced 2D embedding coordinates to `adata.obsm['X_emb']` as well as the method of choice, i.e., `adata.obsm['X_pca']` or `adata.obsm['X_tsne']`.
+**Methods** should assign dimensionally-reduced 2D embedding coordinates to `adata.obsm['X_emb']` as well as the method of choice, i.e., `adata.obsm['X_pca']` or `adata.obsm['X_tsne']`. For most methods the input should be a pre-computed higher-dimensional embedding created as part of the data loader and stored in `adata.obsm['X_input']`.
 
 **Metrics** should calculate the quality or "goodness of fit" of a dimensional reduction **method**.
 
