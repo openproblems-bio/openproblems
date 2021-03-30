@@ -21,9 +21,10 @@ def add_label_noise(adata, noise_prob):
     """
 
     old_labels = adata.obs["labels"].pipe(np.array)
-    new_labels = adata.obs["labels"].pipe(np.array)
+    old_labels_train = old_labels[adata.obs["is_train"]].copy()
+    new_labels_train = old_labels_train.copy()
 
-    label_names = np.unique(new_labels)
+    label_names = np.unique(new_labels_train)
 
     n_labels = label_names.shape[0]
 
@@ -32,12 +33,12 @@ def add_label_noise(adata, noise_prob):
     np.fill_diagonal(reassign_probs, 1 - noise_prob)
 
     for k, label in enumerate(label_names):
-        label_indices = np.where(old_labels == label)[0]
-        new_labels[label_indices] = np.random.choice(
+        label_indices = np.where(old_labels_train == label)[0]
+        new_labels_train[label_indices] = np.random.choice(
             label_names, label_indices.shape[0], p=reassign_probs[:, k]
         )
 
     new_adata = adata.copy()
-    new_adata.obs["labels"] = new_labels
+    new_adata.obs.loc[adata.obs["is_train"], "labels"] = new_labels_train
 
     return new_adata
