@@ -177,6 +177,10 @@ If you are unable to write your method using our base dependencies, you may add 
 
 Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader` in order to cache the result.
 
+To see a gold standard loader, look at [openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py)
+
+This file name should match `[First Author Last Name]_[Year Published]_short_Description_of_data.py`. E.g. the dataset of zebrafish embryos perturbed with CRISPR published in 2018 by Wagner _et al._ becomes `Wagner_2018_zebrafish_embryo_CRISPR.py`
+
 ### Adding a dataset / method / metric to a task
 
 To add a dataset, method, or metric to a task, simply create a new `.py` file corresponding to your proposed new functionality and import the main function in the corresponding `__init__.py`. E.g., to add a "F2" metric to the label projection task, we would create `openproblems/tasks/label_projection/metrics/f2.py` and add a line
