@@ -15,4 +15,4 @@ import densmap as dens
 )
 def densmap(adata):
     adata.obsm["X_emb"] = dens.densMAP(final_dens=False).fit_transform(adata.X)
-    return adata
+    return adata  # return with embedding
