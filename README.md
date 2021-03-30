@@ -35,7 +35,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
 * Wes Lewis (@weslewis) - Differential Abundance and Data Denoising
 * Mohammad Lotfallahi (@M0hammadL) - Label projection task
 * Qian Qin (@qinqian) - Predicting gene expression from chromatin accessibility
-* Daniel Strobel (@danielStrobel) - Batch integration
+* Daniel Strobl (@danielStrobl) - Batch integration
 * Michael Vinyard (@mvinyard) - Stress preservation in Dimensionality Reduction
 * Florian Wagner (@flo-compbio) - Data denoising
 
