@@ -13,5 +13,6 @@ from ....tools.decorators import method
 )
 def densmap(adata):
     import densmap as dens
+
     adata.obsm["X_emb"] = dens.densMAP(final_dens=False).fit_transform(adata.X)
     return adata  # return with embedding
