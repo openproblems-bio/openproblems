@@ -1,6 +1,7 @@
 from ....tools.decorators import metric
 
-import sklearn.metrics
 import numpy as np
+import sklearn.metrics
+
 
 @metric(metric_name="bhattacharyya coefficient")
