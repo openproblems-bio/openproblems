@@ -18,6 +18,8 @@ up" on issues that others reported and that are relevant to you. It also helps
 us if you spread the word: reference the project from your blog and articles,
 link to it from your website, or simply star it in GitHub to say "I use it".
 
+<img src="https://i.imgur.com/dIuJF2e.png" width=400px>
+
 ### Table of Contents
 
 * [Submitting New Features](#submitting-new-features)
@@ -25,9 +27,9 @@ link to it from your website, or simply star it in GitHub to say "I use it".
   + [Writing functions in R](#writing-functions-in-r)
   + [Adding package dependencies](#adding-package-dependencies)
   + [Adding a new dataset](#adding-a-new-dataset)
-  + [Adding a dataset / method / metric to a task](#adding-a-dataset---method---metric-to-a-task)
+  + [Adding a dataset / method / metric to a task](#adding-a-dataset--method--metric-to-a-task)
   + [Adding a new task](#adding-a-new-task)
-  + [Adding a new Docker container](#adding-a-new-container)
+  + [Adding a new Docker container](#adding-a-new-docker-container)
 * [Code Style and Testing](#code-style-and-testing)
 * [Code of Conduct](#code-of-conduct)
 * [Attribution](#attribution)
@@ -40,7 +42,8 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
 
 1. Search through the [GitHub Issues](https://github.com/singlecellopenproblems/SingleCellOpenProblems/issues) tracker to make sure there isn't someone already working on the feature you'd like to add. If someone is working on this, post in that issue that you'd like to help or reach out to one of the contributors working on the issue directly.
 2. If there isn't an existing issue tracking this feature, create one! There are several templates you can choose one depending on what type of feature you'd like to add.
-3. Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems
+3. Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems into your account. If you're new to `git`, you might find the [Fork a repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) documentation helpful.
+    <img src="https://i.imgur.com/fUcpLYl.png" width=400px>
 4. Create repository secrets (*not environment secrets*) at [https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets](https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets)
     * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login details. If you do not have these, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
     * *TOWER_ACCESS_KEY (optional): log in with GitHub to https://tower.nf and create a token at https://tower.nf/tokens.*
@@ -66,7 +69,8 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     ```
     To generate an SSH key and add it to your GitHub account, follow [this tutorial from GitHub](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
 
-7. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here's we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`.
+
+7. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`.
 
     **Note:** This pushes the branch to your fork, _not to_ `base`. You will create a PR to merge your branch to `base` only after all tests are passing.
 
@@ -76,6 +80,22 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     git checkout -b method-method-name-task-name # or metric-new-metric-name, etc
     git push -u origin method-method-name-task-name
     ```
+
+8. Sometimes, changes might be made to the SingleCellOpenProblems `base` repository that you want to incorporate into your fork. To sync your fork from `base`, use the following code adapted from the [Syncing a Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) tutorial from GitHub.
+    ```
+    # Fetch the branches and their respective commits from the upstream repository
+    git fetch base
+
+    # Check out your fork's local default branch
+    git checkout master
+
+    # Merge the changes from the upstream default branch
+    git merge base/master
+
+    # Push the changes to your fork
+    git push -u origin
+    ```
+    You can now create a [Pull Request](https://guides.github.com/activities/hello-world/#pr) from the default branch on your fork, `master`, into your working branch, e.g. `method-method-name-task-name`.
 
 8. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
 
@@ -157,6 +177,10 @@ If you are unable to write your method using our base dependencies, you may add 
 
 Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader` in order to cache the result.
 
+To see a gold standard loader, look at [openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py)
+
+This file name should match `[First Author Last Name]_[Year Published]_short_Description_of_data.py`. E.g. the dataset of zebrafish embryos perturbed with CRISPR published in 2018 by Wagner _et al._ becomes `Wagner_2018_zebrafish_embryo_CRISPR.py`
+
 ### Adding a dataset / method / metric to a task
 
 To add a dataset, method, or metric to a task, simply create a new `.py` file corresponding to your proposed new functionality and import the main function in the corresponding `__init__.py`. E.g., to add a "F2" metric to the label projection task, we would create `openproblems/tasks/label_projection/metrics/f2.py` and add a line
@@ -215,7 +239,9 @@ Datasets, methods and metrics run inside Docker containers. We provide a few to 
 
 ## Code Style and Testing
 
-`singlecellopenproblems` is maintained at close to 100% code coverage. For datasets, methods, and metrics, tests are generated automatically. For additions outside this core functionality, contributors are encouraged to write tests for their code -- but if you do not know how to do so, please do not feel discouraged from contributing code! Others can always help you test your contribution.
+`singlecellopenproblems` is maintained at close to 100% code coverage. For datasets, methods, and metrics, tests are generated programatically from each task's `api.py`. See the [Adding a new task](#adding-a-new-task) section for instructions on creating this file.
+
+For additions outside this core functionality, contributors are encouraged to write tests for their code -- but if you do not know how to do so, please do not feel discouraged from contributing code! Others can always help you test your contribution.
 
 Code is tested by GitHub Actions when you push your changes. However, if you wish to test locally, you can do so with the following command:
 ```

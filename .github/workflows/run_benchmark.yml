@@ -57,7 +57,7 @@ jobs:
         # to avoid clashes on ECR
         if [[ "${{ github.repository }}" == "singlecellopenproblems/SingleCellOpenProblems" ]]; \
           then echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
-          else echo "BRANCH=`echo ${{ github.repository }} | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
+          else echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
         fi >> $GITHUB_ENV
         # don't use tower if the env var is not set
         echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
@@ -161,12 +161,15 @@ jobs:
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
 
+    - name: Copy results
+      run: |
+        cp -r /mnt/openproblems-nextflow/cwd/${{ github.ref }}/results .
+
     - name: Parse results
       # There's a bug with the results getting pulled from Netflow with caching, but
       # this doesn't happen on master, which is the only place `Parse results` is needed
       if: startsWith(github.ref, 'refs/heads/master')
       run: |
-        cp -r /mnt/openproblems-nextflow/cwd/${{ github.ref }}/results .
         python workflow/parse_nextflow.py
 
     - name: AWS cleanup
