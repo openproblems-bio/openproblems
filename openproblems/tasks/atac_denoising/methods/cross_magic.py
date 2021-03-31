@@ -4,6 +4,11 @@ from ....tools.decorators import method
 @method(
     method_name="Cross-Magic-Imputation",
     image="openproblems-python-extras",
+    paper_name=None,
+    paper_url=None,
+    paper_year=None,
+    code_url=None,
+    code_version="1.0",
 )
 def cross_magic(adata, n_steps=3, tol=1e-2):
     """
