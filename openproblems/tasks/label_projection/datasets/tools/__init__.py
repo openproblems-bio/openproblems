@@ -41,7 +41,6 @@ def add_label_noise(adata, noise_prob):
             label_names, label_indices.shape[0], p=reassign_probs[:, k]
         )
 
-    new_adata = adata.copy()
-    new_adata.obs.loc[adata.obs["is_train"], "labels"] = new_labels_train
+    adata.obs.loc[adata.obs["is_train"], "labels"] = new_labels_train
 
-    return new_adata
+    return adata
