@@ -1,5 +1,7 @@
 FROM python:3.8
 
+# Adding this comment as a temporary bugfix on 3/30
+
 # Setting up Sagemaker Studio Image from example
 # https://github.com/aws-samples/sagemaker-studio-custom-image-samples/blob/main/examples/echo-kernel-image/Dockerfile
 
