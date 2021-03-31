@@ -99,6 +99,7 @@ def _metrics(
 
 
 def _high_dim(adata: AnnData) -> np.ndarray:
+    # TODO(incorporate Luke's preprocessing)
     high_dim = adata.X
     return high_dim.A if issparse(high_dim) else high_dim
 
@@ -106,12 +107,15 @@ def _high_dim(adata: AnnData) -> np.ndarray:
 def _fit(
     X: np.ndarray, E: np.ndarray
 ) -> Tuple[float, float, float, float, float, float]:
+    if np.any(np.isnan(E)):
+        return 0.0, 0.0, 0.0, 0.5, -np.inf, -np.inf, -np.inf
+
     Dx = pairwise_distances(X)
     De = pairwise_distances(E)
     Rx, Re = _ranking_matrix(Dx), _ranking_matrix(De)
     Q = _coranking_matrix(Rx, Re)
 
-    T, C, QNN, AUC, LCMC, _, Qlocal, Qglobal = _metrics(Q)
+    T, C, QNN, AUC, LCMC, _kmax, Qlocal, Qglobal = _metrics(Q)
 
     return T[_K], C[_K], QNN[_K], AUC, LCMC[_K], Qlocal, Qglobal
 
@@ -143,9 +147,8 @@ def lcmc(adata: AnnData) -> float:
 
 @metric("local property", maximize=True)
 def qlocal(adata: AnnData) -> float:
-    # according to authors, this is preferred to
-    # qglobal, because human are more sensitive to
-    # nearer neighbors
+    # according to authors, this is usually preferred to
+    # qglobal, because human are more sensitive to nearer neighbors
     *_, Qlocal, _ = _fit(_high_dim(adata), adata.obsm["X_emb"])
     return Qlocal
 
