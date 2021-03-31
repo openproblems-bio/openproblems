@@ -1,10 +1,11 @@
-from ....patch import patch_datacache
+from .archr import _archr_model21
+from .marge import _marge
+from .pyensembl_api import _get_annotation
 from ....tools.decorators import method
 
 import numpy as np
 import pandas as pd
 import scanpy as sc
-import warnings
 
 
 def _chrom_limit(x, tss_size=2e5):
@@ -26,68 +27,6 @@ def _chrom_limit(x, tss_size=2e5):
         return [gene_start - tss_size // 2, gene_start + tss_size // 2]
     else:
         return [gene_end - tss_size // 2, gene_end + tss_size // 2]
-
-
-def _get_annotation(adata, retries=3):
-    """Insert meta data into adata.obs."""
-    from pyensembl import EnsemblRelease
-
-    data = EnsemblRelease(
-        adata.uns["release"],
-        adata.uns["species"],
-    )
-    for _ in range(retries):
-        try:
-            with patch_datacache():
-                data.download(overwrite=False)
-                data.index(overwrite=False)
-            break
-        except TimeoutError:
-            pass
-
-    # get ensemble gene coordinate
-    genes = []
-    for i in adata.var.index.map(lambda x: x.split(".")[0]):
-        try:
-            with warnings.catch_warnings():
-                warnings.filterwarnings(
-                    action="ignore", message="No results found for query"
-                )
-                gene = data.gene_by_id(i)
-            genes.append(
-                [
-                    "chr%s" % gene.contig,
-                    gene.start,
-                    gene.end,
-                    gene.strand,
-                ]
-            )
-        except ValueError:
-            try:
-                with warnings.catch_warnings():
-                    warnings.filterwarnings(
-                        action="ignore", message="No results found for query"
-                    )
-                    i = data.gene_ids_of_gene_name(i)[0]
-                gene = data.gene_by_id(i)
-                genes.append(
-                    [
-                        "chr%s" % gene.contig,
-                        gene.start,
-                        gene.end,
-                        gene.strand,
-                    ]
-                )
-            except (IndexError, ValueError) as e:
-                print(e)
-                genes.append([np.nan, np.nan, np.nan, np.nan])
-    old_col = adata.var.columns.values
-    adata.var = pd.concat(
-        [adata.var, pd.DataFrame(genes, index=adata.var_names)], axis=1
-    )
-    adata.var.columns = np.hstack(
-        [old_col, np.array(["chr", "start", "end", "strand"])]
-    )
 
 
 def _filter_mitochondrial(adata):
@@ -213,12 +152,22 @@ def _atac_genes_score(adata, top_genes=2000, threshold=1, method="beta"):
     # overlap TSS bins with peaks
     x = pybedtools.BedTool.from_dataframe(summits)
     y = pybedtools.BedTool.from_dataframe(extend_tss)
-    tss_to_peaks = x.intersect(y, wb=True, wa=True, loj=True).to_dataframe()
+    tss_to_peaks = x.intersect(y, wb=True, wa=True, loj=True).to_dataframe(
+        disable_auto_names=True, header=0,
+        names=["peak_chr",
+               "peak_summit_left",
+               "peak_summit_right",
+               "peak_index",
+               "gene_chr",
+               "gene_bin_start",
+               "gene_bin_end",
+               "gene_index"]
+    )
 
     # remove non-overlapped TSS and peaks
     tss_to_peaks = tss_to_peaks.loc[
-        (tss_to_peaks.thickEnd != ".") | (tss_to_peaks.score != "."), :
-    ]
+                   (tss_to_peaks.gene_chr != ".") | (tss_to_peaks.gene_index != "."), :
+                   ]
 
     if method == "beta":
         _beta(tss_to_peaks, adata, threshold)
@@ -239,49 +188,11 @@ def _beta(tss_to_peaks, adata, threshold=1):
     gene_peak_weight = scipy.sparse.csr_matrix(
         (
             tss_to_peaks.weight.values,
-            (tss_to_peaks.thickEnd.astype("int32").values, tss_to_peaks.name.values),
+            (tss_to_peaks.gene_index.astype("int32").values, tss_to_peaks.peak_index),
         ),
         shape=(adata.shape[1], adata.uns["mode2_var"].shape[0]),
     )
     adata.obsm["gene_score"] = (adata.obsm["mode2"] >= threshold) @ gene_peak_weight.T
-
-
-def _archr_model21(tss_to_peaks, adata):
-    """https://www.archrproject.com/bookdown/calculating-gene-scores-in-archr.html"""
-    import scipy
-
-    tss_to_peaks["distance"] = tss_to_peaks.apply(
-        lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 5000, axis=1
-    )
-    tss_to_peaks["weight"] = np.exp(tss_to_peaks["distance"].values)
-    gene_peak_weight = scipy.sparse.csr_matrix(
-        (
-            tss_to_peaks.weight.values,
-            (tss_to_peaks.thickEnd.astype("int32").values, tss_to_peaks.name.values),
-        ),
-        shape=(adata.shape[1], adata.uns["mode2_var"].shape[0]),
-    )
-    adata.obsm["gene_score"] = adata.obsm["mode2"] @ gene_peak_weight.T
-
-
-def _marge(tss_to_peaks, adata):
-    """https://genome.cshlp.org/content/26/10/1417.long"""
-    import scipy
-
-    alpha = -np.log(1.0 / 3.0) * 1e5 / 1e4
-    tss_to_peaks["distance"] = tss_to_peaks.apply(
-        lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 1e5, axis=1
-    )
-    decay_score = np.exp(-alpha * tss_to_peaks["distance"].values)
-    tss_to_peaks["weight"] = 2.0 * decay_score / (1.0 + decay_score)
-    gene_peak_weight = scipy.sparse.csr_matrix(
-        (
-            tss_to_peaks.weight.values,
-            (tss_to_peaks.thickEnd.astype("int32").values, tss_to_peaks.name.values),
-        ),
-        shape=(adata.shape[1], adata.uns["mode2_var"].shape[0]),
-    )
-    adata.obsm["gene_score"] = adata.obsm["mode2"] @ gene_peak_weight.T
 
 
 @method(
@@ -298,34 +209,4 @@ def beta(adata, n_top_genes=500, threshold=1):
     adata = _atac_genes_score(
         adata, top_genes=n_top_genes, threshold=threshold, method="beta"
     )
-    return adata
-
-
-@method(
-    method_name="MARGE",
-    paper_name="""Modeling cis-regulation with a compendium of
-                   genome-wide histone H3K27ac profiles""",
-    paper_url="https://genome.cshlp.org/content/26/10/1417.long",
-    paper_year=2016,
-    code_version="1.0",
-    code_url="https://github.com/suwangbio/MARGE",
-    image="openproblems-python-extras",
-)
-def marge(adata, n_top_genes=500):
-    adata = _atac_genes_score(adata, top_genes=n_top_genes, method="marge")
-    return adata
-
-
-@method(
-    method_name="ArchR",
-    paper_name="""ArchR: An integrative and scalable software
-                   package for single-cell chromatin accessibility analysis""",
-    paper_url="https://www.biorxiv.org/content/10.1101/2020.04.28.066498v1",
-    paper_year=2020,
-    code_version="1.0",
-    code_url="https://github.com/GreenleafLab/ArchR",
-    image="openproblems-python-extras",
-)
-def archr_model21(adata, n_top_genes=500):
-    adata = _atac_genes_score(adata, top_genes=n_top_genes, method="archr_model21")
     return adata
