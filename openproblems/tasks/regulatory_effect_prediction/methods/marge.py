@@ -3,8 +3,8 @@ from ....tools.decorators import method
 
 def _marge(tss_to_peaks, adata):
     """https://genome.cshlp.org/content/26/10/1417.long"""
-    import scipy
     import numpy as np
+    import scipy
 
     alpha = -np.log(1.0 / 3.0) * 1e5 / 1e4
     tss_to_peaks["distance"] = tss_to_peaks.apply(
@@ -34,5 +34,6 @@ def _marge(tss_to_peaks, adata):
 )
 def marge(adata, n_top_genes=500):
     from .beta import _atac_genes_score
+
     adata = _atac_genes_score(adata, top_genes=n_top_genes, method="marge")
     return adata

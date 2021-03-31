@@ -1,7 +1,8 @@
 from ....patch import patch_datacache
-import warnings
+
 import numpy as np
 import pandas as pd
+import warnings
 
 
 def _get_annotation(adata, retries=3):
@@ -36,7 +37,7 @@ def _get_annotation(adata, retries=3):
                     gene.start,
                     gene.end,
                     gene.strand,
-                    ]
+                ]
             )
         except ValueError:
             try:
@@ -52,7 +53,7 @@ def _get_annotation(adata, retries=3):
                         gene.start,
                         gene.end,
                         gene.strand,
-                        ]
+                    ]
                 )
             except (IndexError, ValueError) as e:
                 print(e)

@@ -3,8 +3,8 @@ from ....tools.decorators import method
 
 def _archr_model21(tss_to_peaks, adata):
     """https://www.archrproject.com/bookdown/calculating-gene-scores-in-archr.html"""
-    import scipy
     import numpy as np
+    import scipy
 
     tss_to_peaks["distance"] = tss_to_peaks.apply(
         lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 5000, axis=1
@@ -36,5 +36,6 @@ def _archr_model42(tss_to_peaks, adata):
 )
 def archr_model21(adata, n_top_genes=500):
     from .beta import _atac_genes_score
+
     adata = _atac_genes_score(adata, top_genes=n_top_genes, method="archr_model21")
     return adata

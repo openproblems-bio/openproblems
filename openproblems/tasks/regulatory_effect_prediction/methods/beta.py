@@ -1,7 +1,7 @@
+from ....tools.decorators import method
 from .archr import _archr_model21
 from .marge import _marge
 from .pyensembl_api import _get_annotation
-from ....tools.decorators import method
 
 import numpy as np
 import pandas as pd
@@ -153,21 +153,24 @@ def _atac_genes_score(adata, top_genes=2000, threshold=1, method="beta"):
     x = pybedtools.BedTool.from_dataframe(summits)
     y = pybedtools.BedTool.from_dataframe(extend_tss)
     tss_to_peaks = x.intersect(y, wb=True, wa=True, loj=True).to_dataframe(
-        disable_auto_names=True, header=0,
-        names=["peak_chr",
-               "peak_summit_left",
-               "peak_summit_right",
-               "peak_index",
-               "gene_chr",
-               "gene_bin_start",
-               "gene_bin_end",
-               "gene_index"]
+        disable_auto_names=True,
+        header=0,
+        names=[
+            "peak_chr",
+            "peak_summit_left",
+            "peak_summit_right",
+            "peak_index",
+            "gene_chr",
+            "gene_bin_start",
+            "gene_bin_end",
+            "gene_index",
+        ],
     )
 
     # remove non-overlapped TSS and peaks
     tss_to_peaks = tss_to_peaks.loc[
-                   (tss_to_peaks.gene_chr != ".") | (tss_to_peaks.gene_index != "."), :
-                   ]
+        (tss_to_peaks.gene_chr != ".") | (tss_to_peaks.gene_index != "."), :
+    ]
 
     if method == "beta":
         _beta(tss_to_peaks, adata, threshold)
