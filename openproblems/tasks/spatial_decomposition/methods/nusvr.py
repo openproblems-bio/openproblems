@@ -1,7 +1,7 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
-from ._utils import normalize_coefficients
-from ._utils import obs_means
+from .._utils import normalize_coefficients
+from .._utils import obs_means
 from scipy.sparse import issparse
 from sklearn.svm import NuSVR
 
