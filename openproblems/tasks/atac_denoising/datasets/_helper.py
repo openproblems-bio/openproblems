@@ -2,9 +2,7 @@ import numpy as np
 
 
 def _do_dropout(adata, seed, dropout_rate=0.2, cell_fraction=0.8):
-    """
-
-    Set counts to 0 for `dropout_rate` many peaks.
+    """Set counts to 0 for `dropout_rate` many peaks.
     """
     np.random.seed(seed)
 
