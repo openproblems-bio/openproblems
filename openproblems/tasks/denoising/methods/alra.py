@@ -3,12 +3,12 @@ from ....tools.decorators import method
 from ....tools.normalize import log_cpm
 from ....tools.normalize import log_scran_pooling
 from ....tools.utils import check_version
-#should be imported by docker
+
+# should be imported by docker
 import numpy as np
 import scprep
 
 _alra = r_function("alra.R")
-
 
 
 @method(
@@ -21,8 +21,8 @@ _alra = r_function("alra.R")
     image="openproblems-r-extras",
 )
 def alra(adata):
-    #libsize and sqrt norm
-    #overwrite obsm['train'] with normalized version
+    # libsize and sqrt norm
+    # overwrite obsm['train'] with normalized version
     adata.obsm["train"], libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
     )
