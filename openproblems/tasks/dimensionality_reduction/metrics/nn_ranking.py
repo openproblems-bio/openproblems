@@ -1,0 +1,115 @@
+"""
+This file is uses slightly modified code from pyDRMetrics, see:
+https://www.sciencedirect.com/science/article/pii/S2405844021003042.
+
+The following changes have been made:
+
+    - :mod:`numba` JIT for performance reasons
+    - use broadcasting instead of a 3rd loop in :func:`_ranking_matrix`
+
+Additional explanation of the metrics:
+
+    - https://perso.uclouvain.be/michel.verleysen/papers/fsdm08jl.pdf
+    - https://core.ac.uk/download/pdf/148668147.pdf
+"""
+
+from anndata import AnnData
+from numba import njit
+from typing import Tuple
+
+import numpy as np
+
+__author__ = "Yinsheng Zhang"
+__author_email__ = "zhangys@illinois.edu"
+
+_K = 30
+
+
+@njit(cache=True, fastmath=True)
+def _ranking_matrix(D: np.ndarray) -> np.ndarray:
+    assert D.shape[0] == D.shape[1]
+    R = np.zeros(D.shape)
+    m = len(R)
+    ks = np.arange(m)
+
+    for i in range(m):
+        for j in range(m):
+            R[i, j] = np.sum(
+                (D[i, :] < D[i, j]) | ((ks < j) & (np.abs(D[i, :] - D[i, j]) <= 1e-12))
+            )
+
+    return R
+
+
+@njit(cache=True, fastmath=True)
+def _coranking_matrix(R1: np.ndarray, R2: np.ndarray) -> np.ndarray:
+    assert R1.shape == R2.shape
+    Q = np.zeros(R1.shape, dtype=np.int32)
+    m = len(Q)
+    for i in range(m):
+        for j in range(m):
+            k = int(R1[i, j])
+            l = int(R2[i, j])  # noqa: E741
+            Q[k, l] += 1
+
+    return Q
+
+
+@njit(cache=True, fastmath=True)
+def _metrics(
+    Q: np.ndarray,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, int, float, float]:
+    Q = Q[1:, 1:]
+    m = len(Q)
+
+    T = np.zeros(m - 1)  # trustworthiness
+    C = np.zeros(m - 1)  # continuity
+    QNN = np.zeros(m)  # Co-k-nearest neighbor size
+    LCMC = np.zeros(m)  # Local Continuity Meta Criterion
+
+    for k in range(m - 1):
+        Qs = Q[k:, :k]
+        # a column vector of weights. weight = rank error = actual_rank - k
+        W = np.arange(Qs.shape[0]).reshape(-1, 1)
+        # 1 - normalized hard-k-intrusions. lower-left region.
+        # weighted by rank error (rank - k)
+        T[k] = 1 - np.sum(Qs * W) / (k + 1) / m / (m - 1 - k)
+        Qs = Q[:k, k:]
+        # a row vector of weights. weight = rank error = actual_rank - k
+        W = np.arange(Qs.shape[1]).reshape(1, -1)
+        # 1 - normalized hard-k-extrusions. upper-right region
+        C[k] = 1 - np.sum(Qs * W) / (k + 1) / m / (m - 1 - k)
+
+    for k in range(m):
+        # Q[0,0] is always m. 0-th nearest neighbor is always the point itself.
+        # Exclude Q[0,0]
+        QNN[k] = np.sum(Q[: k + 1, : k + 1]) / ((k + 1) * m)
+        LCMC[k] = QNN[k] - (k + 1) / (m - 1)
+
+    kmax = np.argmax(LCMC)
+    Qlocal = np.sum(QNN[: kmax + 1]) / (kmax + 1)
+    # skip the last. The last is (m-1)-nearest neighbor, including all samples.
+    Qglobal = np.sum(QNN[kmax:-1]) / (m - kmax - 1)
+    AUC = np.mean(QNN)
+
+    return T, C, QNN, AUC, LCMC, kmax, Qlocal, Qglobal
+
+
+def qnn(_adata: AnnData) -> float:
+    pass
+
+
+def qnn_auc(_adata: AnnData) -> float:
+    pass
+
+
+def lcmc(_adata: AnnData) -> float:
+    pass
+
+
+def qlocal(_adata: AnnData) -> float:
+    pass
+
+
+def qglobal(_adata: AnnData) -> float:
+    pass
