@@ -4,8 +4,7 @@ from ._helper import _do_dropout
 
 
 @dataset(
-    "SNARE-seq P0 brain cortex data with evenly distributed dropout in\
-    the postive peak counts",
+    "SNARE-seq P0 brain cortex data with more peak count dropouts",
     image="openproblems-python-extras",
 )
 def snare_p0_braincortex_dropout(

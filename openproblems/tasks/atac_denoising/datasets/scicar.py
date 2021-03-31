@@ -4,8 +4,7 @@ from ._helper import _do_dropout
 
 
 @dataset(
-    "sciCAR Mouse Kidney data with evenly distributed dropout in\
-    the postive peak counts",
+    "sciCAR mouse kidney data with more peak count dropouts",
     image="openproblems-python-extras",
 )
 def scicar_mouse_kidney_dropout(
