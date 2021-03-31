@@ -6,5 +6,7 @@ phate
 pyensembl
 pybedtools
 git+https://github.com/czbiohub/molecular-cross-validation
+palantir
+harmonypy
 PhenoGraph
 git+https://github.com/dpeerlab/Palantir
