@@ -70,7 +70,7 @@ def combine_anndata(anndata_list):
 
 
 @utils.loader
-def load_tabula_muris_senis(method_list, organ_list):
+def load_tabula_muris_senis(test=False, method_list, organ_list):
     """
     Input which methods and organs to create anndata object from.
     Returns a single anndata object with specified methods and organs.
