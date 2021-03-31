@@ -1,5 +1,6 @@
-import scanpy as sc
 from ....tools.normalize import log_cpm
+
+import scanpy as sc
 
 
 def preprocess_scanpy(adata):
