@@ -1,9 +1,8 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
 from ....tools.utils import check_version
-
-# from scvi.external import SpatialStereoscope
-# from scvi.external import RNAStereoscope
+from scvi.data import setup_anndata
+from scvi.external.stereoscope import RNAStereoscope
+from scvi.external.stereoscope import SpatialStereoscope
 
 
 @method(
@@ -14,7 +13,14 @@ from ....tools.utils import check_version
     code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi-tools"),
 )
-def stereoscope_log_cpm(adata):
-    log_cpm(adata)
-    # do something
-    return
+def stereoscope_raw(adata):
+    adata_sc = adata.uns["sc_reference"].copy()
+    setup_anndata(adata_sc, labels_key="label", layer=None)
+    sc_model = RNAStereoscope(adata_sc)
+    sc_model.train()
+    setup_anndata(adata, layer=None)
+
+    stereo = SpatialStereoscope.from_rna_model(adata, sc_model)
+    stereo.train()
+    adata.obsm["proportions_pred"] = stereo.get_proportions()
+    return adata
