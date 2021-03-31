@@ -17,3 +17,4 @@ Python packages:
 * MulticoreTSNE
 * phate
 * harmonypy
+* palantir
