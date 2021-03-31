@@ -36,6 +36,7 @@ def rctd(adata):
     # remove appended subsetting name from index names
     new_idx = pd.Index([x.rstrip("-sp") for x in adata.obs.index], name="sample")
     adata.obs_names = new_idx
+    adata.obsm.dim_names = new_idx
 
     # get predicted cell type proportions from obs
     cell_type_names = [x for x in adata.obs.columns if "xCT_" in x[0:4]]
@@ -43,17 +44,9 @@ def rctd(adata):
     proportions_pred.columns = pd.Index([x.lstrip("xCT_") for x in cell_type_names])
     # make sure true proportions are concurrently ordered with predicted
     proportions_true = proportions_true.loc[new_idx, :]
-    # get spatial coordinates
-    spatial = adata.obsm["spatial"].copy()
 
-    # delete obsm to avoid error:
-    # "ValueError: value.index does not match parent’s axis 0 names"
-    # origin of error unknown, but is raised even
-    # though perfect overlap between indices
-    del adata.obsm
-    # add new attributes to obsm
+    # add proportions
     adata.obsm["proportions_pred"] = proportions_pred
     adata.obsm["proportions_true"] = proportions_true
-    adata.obsm["spatial"] = spatial
 
     return adata
