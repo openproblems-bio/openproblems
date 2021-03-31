@@ -1,16 +1,17 @@
 from ....data.multimodal import scicar
 from ....tools.decorators import dataset
 
-def _do_dropout(adata, seed, dropout_rate=.3, cell_fraction=.8):
-    '''
+
+def _do_dropout(adata, seed, dropout_rate=0.3, cell_fraction=0.8):
+    """
     Substract `dropout_rate` many atac reads from the positive
     peak counts.
-    '''
+    """
     np.random.seed(seed)
 
     n_cells = int(cell_fraction * adata.n_obs)
     affected_cells = np.random.choice(adata.n_obs, n_cells)
-    X = adata.obsm['mode2'].copy()
+    X = adata.obsm["mode2"].copy()
     atac_subset = X[affected_cells, :]
 
     positive = atac_subset.data > 0
@@ -22,29 +23,24 @@ def _do_dropout(adata, seed, dropout_rate=.3, cell_fraction=.8):
 
     atac_subset.data[idx] -= diff
     X[affected_cells, :] = atac_subset
-    adata.obsm['mode2_noisy'] = X
+    adata.obsm["mode2_noisy"] = X
     return adata
+
 
 @dataset(
     "sciCAR Mouse Kidney data with evenly distributed dropout in\
     the postive peak counts",
-    image="openproblems-python-extras"
+    image="openproblems-python-extras",
 )
 def scicar_mouse_kidney_dropout(
-        test = False,
-        seed = 234978,
-        dropout_rate = .3,
-        cell_fraction = .8):
+    test=False, seed=234978, dropout_rate=0.3, cell_fraction=0.8
+):
     adata = snare.scicar.load_scicar_mouse_kidney(test=test)
 
     adata.uns["species"] = "mus_musculus"
     adata.uns["version"] = "GRCm38"
     adata.uns["release"] = "100"
     adata = _do_dropout(
-        adata,
-        seed,
-        dropout_rate = dropout_rate,
-        cell_fraction = cell_fraction
+        adata, seed, dropout_rate=dropout_rate, cell_fraction=cell_fraction
     )
     return adata
-

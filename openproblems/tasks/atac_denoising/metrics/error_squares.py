@@ -4,4 +4,6 @@ from sklearn.metrics import mean_squared_error
 
 @metric(metric_name="Mean error squares", maximize=False)
 def mean_error_squares(adata):
-    return mean_squared_error(adata.obsm['mode2_denoise'].data, adata.obsm['mode2'].data)
+    return mean_squared_error(
+        adata.obsm["mode2_denoise"].data, adata.obsm["mode2"].data
+    )
