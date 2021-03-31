@@ -44,6 +44,7 @@ def scot_sqrt_cpm_unbalanced(adata, n_svd=100, balanced=False):
     _scot(adata, n_svd=n_svd, balanced=balanced)
     return adata
 
+
 @method(
     method_name="Single Cell Optimal Transport (sqrt CPM balanced)",
     paper_name="Gromov-Wasserstein optimal transport to align single-cell multi-omics data",
