@@ -14,6 +14,7 @@ R packages:
 * sparsesvd
 * dplyr
 * RCTD
+* Seurat
 
 Python packages:
 

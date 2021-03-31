@@ -5,25 +5,27 @@ from ....tools.utils import check_version
 import numpy as np
 import pandas as pd
 
-_rctd = r_function("rctd.R")
+_seuratv3 = r_function("seuratv3.R")
 
 
 @method(
-    method_name="RCTD",
-    paper_name="Robust decomposition of cell type mixtures in spatial transcriptomics",
-    paper_url="https://www.nature.com/articles/s41587-021-00830-w",
-    paper_year=2020,
-    code_url="https://github.com/almaan/RCTD",
-    code_version=check_version("rctd"),
+    method_name="SeuratV3",
+    paper_name="Comprehensive Integration of Single-Cell Data",
+    paper_url="https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8",
+    paper_year=2019,
+    code_url="https://satijalab.org/seurat/archive/v3.2/spatial_vignette.html",
+    code_version=check_version("seuratv3"),
     image="openproblems-r-extras",
 )
-def rctd(adata):
+def seuratv3(adata):
     # exctract single cell reference data
     sc_adata = adata.uns["sc_reference"].copy()
     # remove single cell reference from original anndata
     del adata.uns["sc_reference"]
     # set spatial coordinates for the single cell data
     sc_adata.obsm["spatial"] = np.ones((sc_adata.shape[0], 2))
+    # add labels to spatial data to avoid NaN's in Seurat conversion
+    adata.obs["label"] = -1 * np.ones(adata.shape[0])
     # store true proportions, due to error when passing DataFrame in obsm
     proportions_true = adata.obsm["proportions_true"]
     # concatenate single cell and spatial data, r_function only accepts one argument
@@ -32,8 +34,8 @@ def rctd(adata):
     )
     # remove single cell reference anndata to reduce memory use
     del sc_adata
-    # run RCTD
-    adata = _rctd(adata)
+    # run SeuratV3
+    adata = _seuratv3(adata)
     # remove appended subsetting name from index names
     new_idx = pd.Index([x.rstrip("-sp") for x in adata.obs.index], name="sample")
     adata.obs_names = new_idx
