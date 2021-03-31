@@ -25,10 +25,10 @@ def alra(adata):
     adata.obsm["train"], libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
     )
-    #run alra
-    #_alra takes adata returns adata, edits "train"
+    # run alra
+    # _alra takes adata returns adata, edits "train"
     Y = _alra(adata)["train"]
-    #transform back into original space
+    # transform back into original space
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
