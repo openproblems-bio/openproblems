@@ -1,5 +1,6 @@
 from ....data.multimodal import scicar
 from ....tools.decorators import dataset
+import numpy as np
 
 
 def _do_dropout(adata, seed, dropout_rate=0.3, cell_fraction=0.8):
