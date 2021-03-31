@@ -3,6 +3,7 @@ from ....tools.decorators import method
 from ....tools.utils import check_version
 
 import numpy as np
+import pandas as pd
 
 _rctd = r_function("rctd.R")
 
@@ -22,6 +23,8 @@ def rctd(adata):
     del adata.uns["sc_reference"]
     # set spatial coordinates for the single cell data
     sc_adata.obsm["spatial"] = np.ones((sc_adata.shape[0], 2))
+    # store true proportions, due to error when passing DataFrame in obsm
+    proportions_true = adata.obsm["proportions_true"]
     # concatenate single cell and spatial data, r_function only accepts one argument
     adata = adata.concatenate(
         sc_adata, batch_key="modality", batch_categories=["sp", "sc"]
@@ -30,4 +33,27 @@ def rctd(adata):
     del sc_adata
     # run RCTD
     adata = _rctd(adata)
+    # remove appended subsetting name from index names
+    new_idx = pd.Index([x.rstrip("-sp") for x in adata.obs.index], name="sample")
+    adata.obs_names = new_idx
+
+    # get predicted cell type proportions from obs
+    cell_type_names = [x for x in adata.obs.columns if "xCT_" in x[0:4]]
+    proportions_pred = adata.obs[cell_type_names]
+    proportions_pred.columns = pd.Index([x.lstrip("xCT_") for x in cell_type_names])
+    # make sure true proportions are concurrently ordered with predicted
+    proportions_true = proportions_true.loc[new_idx, :]
+    # get spatial coordinates
+    spatial = adata.obsm["spatial"].copy()
+
+    # delete obsm to avoid error:
+    # "ValueError: value.index does not match parent’s axis 0 names"
+    # origin of error unknown, but is raised even
+    # though perfect overlap between indices
+    del adata.obsm
+    # add new attributes to obsm
+    adata.obsm["proportions_pred"] = proportions_pred
+    adata.obsm["proportions_true"] = proportions_true
+    adata.obsm["spatial"] = spatial
+
     return adata
