@@ -2,8 +2,6 @@ from ....tools.decorators import method
 from ....tools.utils import check_version
 from .preprocessing import preprocess_scanpy
 
-import scanpy as sc
-
 
 @method(
     method_name="Principle Component Analysis (PCA)",
