@@ -1,10 +1,11 @@
 from ....tools.conversion import r_function
 from ....tools.decorators import method
-#from ....tools.utils import check_version
+
+# from ....tools.utils import check_version
 
 # should be imported by docker
-#import numpy as np
-#import scprep
+# import numpy as np
+# import scprep
 
 _alra = r_function("alra.R")
 
@@ -15,7 +16,7 @@ _alra = r_function("alra.R")
     paper_url="https://www.biorxiv.org/content/10.1101/397588v1",
     paper_year=2018,
     code_url="https://github.com/KlugerLab/ALRA",
-    #code_version=check_version("scprep"),
+    # code_version=check_version("scprep"),
     image="openproblems-r-extras",
 )
 def alra(adata):
