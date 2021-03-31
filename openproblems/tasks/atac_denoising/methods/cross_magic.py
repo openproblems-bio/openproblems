@@ -11,10 +11,14 @@ from ....tools.decorators import method
     code_version="1.0",
 )
 def cross_magic(adata, n_steps=3, tol=1e-2):
+
     """The tool uses the neighborhhod of cells inferred from RNA-Seq to
     stabalize the ATAC signal through a weighted average among neighbors.
     It calculates the MAGIC kernel using the palantir
     diffusion maps. The kernel is applied to impute the ATAC signal.
+
+    Parameters
+    ----------
     adata: An AnnData Object with the ATAC peack counts in adata.obsm['mode2']
     n_steps: The number of times the smoothening kernel is applied.
     tol: The tolerance below which imputed counts are regarded as zeros.
