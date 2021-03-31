@@ -22,6 +22,7 @@ def cross_magic(adata, n_steps=3, tol=1e-2):
     n_steps: The number of times the smoothening kernel is applied.
     tol: The tolerance below which imputed counts are regarded as zeros.
     """
+
     import numpy as np
     import palantir
     import pandas as pd
