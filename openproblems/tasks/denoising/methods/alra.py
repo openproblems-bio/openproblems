@@ -4,8 +4,8 @@ from ....tools.decorators import method
 # from ....tools.utils import check_version
 
 # should be imported by docker
-# import numpy as np
-# import scprep
+import numpy as np
+import scprep
 
 _alra = r_function("alra.R")
 
