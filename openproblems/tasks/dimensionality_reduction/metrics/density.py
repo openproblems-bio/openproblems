@@ -6,6 +6,9 @@ from typing import Optional
 
 import numpy as np
 
+_K = 30  # number of neighbors
+_SEED = 42
+
 
 def _calculate_radii(
     X: np.ndarray, n_neighbors: int = 30, random_state: Optional[int] = None
@@ -66,14 +69,18 @@ def _calculate_radii(
 
 @metric("density preservation", maximize=True, image="openproblems-python-extras")
 def density_preservation(adata: AnnData) -> float:
+    from umap import UMAP
+
     emb = adata.obsm["X_emb"]
     if np.any(np.isnan(emb)):
         return 0.0
 
-    k, seed = 30, 42
-
     high_dim = adata.X.A if issparse(adata.X) else adata.X
-    ro = _calculate_radii(high_dim, n_neighbors=k, random_state=seed)
-    re = _calculate_radii(emb, n_neighbors=k, random_state=seed)
+    _, ro, _ = UMAP(
+        n_neighbors=_K, random_state=_SEED, densmap=True, output_dens=True
+    ).fit_transform(high_dim)
+    # in principle, we could just call _calculate_radii(high_dim, ...)
+    # this is made sure that the test pass (otherwise, there was .02 difference in corr)
+    re = _calculate_radii(emb, n_neighbors=_K, random_state=_SEED)
 
     return pearsonr(ro, re)[0]
