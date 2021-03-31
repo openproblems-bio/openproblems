@@ -6,7 +6,7 @@ import scanpy as sc
 import sklearn.metrics
 
 
-@metric(metric_name="Mean-squared error", maximize=False)
+@metric(metric_name="", maximize=False)
 def mse(adata):
 
     test_data = anndata.AnnData(X=adata.obsm["test"], obs=adata.obs, var=adata.var)

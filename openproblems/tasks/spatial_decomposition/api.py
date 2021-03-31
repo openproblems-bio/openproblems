@@ -31,6 +31,7 @@ def check_dataset(adata):
 def check_method(adata):
     """Check that method output fits expected API."""
     assert "proportions_pred" in adata.obsm
+    assert "proportions_true" in adata.obsm
     return True
 
 
@@ -52,7 +53,7 @@ def sample_dataset():
     # get anndata for single cell reference
     sc_adata = load_sample_data()
     # set labels for single cell data
-    sc_adata.obs["label"] = np.random.randint(0, n_types + 1, size=sc_adata.shape[0])
+    sc_adata.obs["label"] = np.random.randint(0, n_types, size=sc_adata.shape[0])
     # bind single cell reference to spatial anndata
     adata.uns["sc_reference"] = sc_adata
 
