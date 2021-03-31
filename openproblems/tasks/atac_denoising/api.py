@@ -31,6 +31,7 @@ def check_dataset(adata):
 def check_method(adata):
     """Check that method output fits expected API."""
     assert "gene_score" in adata.obsm
+    assert "mode2_denoised" in adata.obsm
     assert adata.obsm["mode2_denoised"].shape == adata.obsm["mode2_noisy"].shape
     return True
 

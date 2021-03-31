@@ -15,7 +15,6 @@ def cross_magic(adata, n_steps=3, tol=1e-2):
     stabalize the ATAC signal through a weighted average among neighbors.
     It calculates the MAGIC kernel using the palantir
     diffusion maps. The kernel is applied to impute the ATAC signal.
-    === Parameters ===
     adata: An AnnData Object with the ATAC peack counts in adata.obsm['mode2']
     n_steps: The number of times the smoothening kernel is applied.
     tol: The tolerance below which imputed counts are regarded as zeros.
@@ -34,5 +33,5 @@ def cross_magic(adata, n_steps=3, tol=1e-2):
     imputed_atac = np.dot(T_steps, adata.obsm["mode2"])
     imputed_atac.data[imputed_atac.data < tol] = 0
     imputed_atac.eliminate_zeros()
-    adata.obsm["mode2"] = imputed_atac
+    adata.obsm["mode2_denoised"] = imputed_atac
     return adata
