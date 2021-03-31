@@ -27,9 +27,9 @@ link to it from your website, or simply star it in GitHub to say "I use it".
   + [Writing functions in R](#writing-functions-in-r)
   + [Adding package dependencies](#adding-package-dependencies)
   + [Adding a new dataset](#adding-a-new-dataset)
-  + [Adding a dataset / method / metric to a task](#adding-a-dataset---method---metric-to-a-task)
+  + [Adding a dataset / method / metric to a task](#adding-a-dataset--method--metric-to-a-task)
   + [Adding a new task](#adding-a-new-task)
-  + [Adding a new Docker container](#adding-a-new-container)
+  + [Adding a new Docker container](#adding-a-new-docker-container)
 * [Code Style and Testing](#code-style-and-testing)
 * [Code of Conduct](#code-of-conduct)
 * [Attribution](#attribution)
@@ -177,6 +177,10 @@ If you are unable to write your method using our base dependencies, you may add 
 
 Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader` in order to cache the result.
 
+To see a gold standard loader, look at [openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py)
+
+This file name should match `[First Author Last Name]_[Year Published]_short_Description_of_data.py`. E.g. the dataset of zebrafish embryos perturbed with CRISPR published in 2018 by Wagner _et al._ becomes `Wagner_2018_zebrafish_embryo_CRISPR.py`
+
 ### Adding a dataset / method / metric to a task
 
 To add a dataset, method, or metric to a task, simply create a new `.py` file corresponding to your proposed new functionality and import the main function in the corresponding `__init__.py`. E.g., to add a "F2" metric to the label projection task, we would create `openproblems/tasks/label_projection/metrics/f2.py` and add a line
@@ -235,7 +239,9 @@ Datasets, methods and metrics run inside Docker containers. We provide a few to 
 
 ## Code Style and Testing
 
-`singlecellopenproblems` is maintained at close to 100% code coverage. For datasets, methods, and metrics, tests are generated automatically. For additions outside this core functionality, contributors are encouraged to write tests for their code -- but if you do not know how to do so, please do not feel discouraged from contributing code! Others can always help you test your contribution.
+`singlecellopenproblems` is maintained at close to 100% code coverage. For datasets, methods, and metrics, tests are generated programatically from each task's `api.py`. See the [Adding a new task](#adding-a-new-task) section for instructions on creating this file.
+
+For additions outside this core functionality, contributors are encouraged to write tests for their code -- but if you do not know how to do so, please do not feel discouraged from contributing code! Others can always help you test your contribution.
 
 Code is tested by GitHub Actions when you push your changes. However, if you wish to test locally, you can do so with the following command:
 ```
