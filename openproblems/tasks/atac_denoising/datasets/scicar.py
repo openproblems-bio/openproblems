@@ -36,7 +36,7 @@ def _do_dropout(adata, seed, dropout_rate=0.3, cell_fraction=0.8):
 def scicar_mouse_kidney_dropout(
     test=False, seed=234978, dropout_rate=0.3, cell_fraction=0.8
 ):
-    adata = snare.scicar.load_scicar_mouse_kidney(test=test)
+    adata = scicar.load_scicar_mouse_kidney(test=test)
 
     adata.uns["species"] = "mus_musculus"
     adata.uns["version"] = "GRCm38"
