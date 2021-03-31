@@ -24,9 +24,9 @@ def cross_magic(adata, n_steps=3, tol=1e-2):
     tol: The tolerance below which imputed counts are regarded as zeros.
     """
     import numpy as np
+    import palantir
     import pandas as pd
     import scanpy as sc
-    import palantir
 
     sc.pp.pca(adata, n_comps=50)
     dm_res = palantir.utils.run_diffusion_maps(
