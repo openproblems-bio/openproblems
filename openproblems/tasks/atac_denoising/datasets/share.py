@@ -9,7 +9,7 @@ from ._helper import _do_dropout
     image="openproblems-python-extras",
 )
 def share_mouse_skin_dropout(
-    test=False, seed=683 dropout_rate=0.3, cell_fraction=0.8
+    test=False, seed=683, dropout_rate=0.3, cell_fraction=0.8
 ):
     adata = share.load_share_mouse_skin(test=test)
 

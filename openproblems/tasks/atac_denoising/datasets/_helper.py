@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def _do_dropout(adata, seed, dropout_rate=0.3, cell_fraction=0.8):
     """
     Substract `dropout_rate` many atac reads from the positive
@@ -23,5 +24,3 @@ def _do_dropout(adata, seed, dropout_rate=0.3, cell_fraction=0.8):
     X[affected_cells, :] = atac_subset
     adata.obsm["mode2_noisy"] = X
     return adata
-
-
