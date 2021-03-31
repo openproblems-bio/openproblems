@@ -1,11 +1,12 @@
 from ....tools.conversion import r_function
 from ....tools.decorators import method
 
-# from ....tools.utils import check_version
-
 # should be imported by docker
 import numpy as np
 import scprep
+
+# from ....tools.utils import check_version
+
 
 _alra = r_function("alra.R")
 
