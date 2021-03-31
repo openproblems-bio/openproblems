@@ -13,8 +13,11 @@ Additional explanation of the metrics:
     - https://core.ac.uk/download/pdf/148668147.pdf
 """
 
+from ....tools.decorators import metric
 from anndata import AnnData
 from numba import njit
+from scipy.sparse import issparse
+from sklearn.metrics import pairwise_distances
 from typing import Tuple
 
 import numpy as np
@@ -95,21 +98,59 @@ def _metrics(
     return T, C, QNN, AUC, LCMC, kmax, Qlocal, Qglobal
 
 
-def qnn(_adata: AnnData) -> float:
-    pass
+def _high_dim(adata: AnnData) -> np.ndarray:
+    high_dim = adata.X
+    return high_dim.A if issparse(high_dim) else high_dim
 
 
-def qnn_auc(_adata: AnnData) -> float:
-    pass
+def _fit(
+    X: np.ndarray, E: np.ndarray
+) -> Tuple[float, float, float, float, float, float]:
+    Dx = pairwise_distances(X)
+    De = pairwise_distances(E)
+    Rx, Re = _ranking_matrix(Dx), _ranking_matrix(De)
+    Q = _coranking_matrix(Rx, Re)
+
+    T, C, QNN, AUC, LCMC, _, Qlocal, Qglobal = _metrics(Q)
+
+    return T[_K], C[_K], QNN[_K], AUC, LCMC[_K], Qlocal, Qglobal
 
 
-def lcmc(_adata: AnnData) -> float:
-    pass
+@metric("continuity", maximize=True)
+def continuity(adata: AnnData) -> float:
+    _, C, _, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    return float(np.clip(C, 0.0, 1.0))  # in [0, 1]
 
 
-def qlocal(_adata: AnnData) -> float:
-    pass
+@metric("co-KNN size", maximize=True)
+def qnn(adata: AnnData) -> float:
+    _, _, QNN, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    # normalized in the code to [0, 1]
+    return float(np.clip(QNN, 0.0, 1.0))
 
 
-def qglobal(_adata: AnnData) -> float:
-    pass
+@metric("co-KNN AUC", maximize=True)
+def qnn_auc(adata: AnnData) -> float:
+    _, _, _, AUC, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    return float(np.clip(AUC, 0.5, 1.0))  # in [0.5, 1]
+
+
+@metric("local continuity meta criterion", maximize=True)
+def lcmc(adata: AnnData) -> float:
+    *_, LCMC, _, _ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    return LCMC
+
+
+@metric("local property", maximize=True)
+def qlocal(adata: AnnData) -> float:
+    # according to authors, this is preferred to
+    # qglobal, because human are more sensitive to
+    # nearer neighbors
+    *_, Qlocal, _ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    return Qlocal
+
+
+@metric("global property", maximize=True)
+def qglobal(adata: AnnData) -> float:
+    *_, Qglobal = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    return Qglobal
