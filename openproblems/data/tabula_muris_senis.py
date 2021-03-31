@@ -44,7 +44,7 @@ def make_anndata_from_filename_and_url(filename, url, test=False):
     return adata
 
 
-def make_anndata_list(subset_df):
+def make_anndata_list(subset_df, test):
     """
     Input dataframe that contains filenames and urls to make anndatas from.
     Returns a list of anndata objects.
@@ -55,7 +55,10 @@ def make_anndata_list(subset_df):
         adata_list.append(
             make_anndata_from_filename_and_url(row.filename, row.figshare_url)
         )
-    return adata_list
+    if test == True:
+        return adata_list[0]
+    else:
+        return adata_list
 
 
 def combine_anndata(anndata_list):
@@ -70,7 +73,7 @@ def combine_anndata(anndata_list):
 
 
 @utils.loader
-def load_tabula_muris_senis(test=False, method_list, organ_list):
+def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
     """
     Input which methods and organs to create anndata object from.
     Returns a single anndata object with specified methods and organs.
@@ -85,6 +88,6 @@ def load_tabula_muris_senis(test=False, method_list, organ_list):
     )
 
     subset_df = get_filenames_and_urls(url_df, method_list, organ_list)
-    adata_list = make_anndata_list(subset_df)
+    adata_list = make_anndata_list(subset_df, test)
     adata_final = combine_anndata(adata_list)
     return adata_final
