@@ -7,7 +7,7 @@ library(rsvd)
 
 train_matrix <- reducedDim(sce, "train")
 
-# this is the format used in the alraSeurat2.R example script on the https://github.com/KlugerLab/ALRA/ repo
+# this is the format used in the alraSeurat2.R example on KlugerLab/ALRA/ repo
 reducedDim(sce, "train") <- Matrix(t(alra(t(as.matrix(train_matrix)))[[3]]))
 
 # return
