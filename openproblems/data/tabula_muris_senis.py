@@ -10,7 +10,7 @@ import tempfile
 def get_filenames_and_urls(url_df, method_list=None, organ_list=None):
     """Takes in dataframe and returns corresponding filename(s) and url(s).
 
-    Takes in dataframe (with sample information stored), a list of methods, 
+    Takes in dataframe (with sample information stored), a list of methods,
     and a list of organs.
     Returns filenames and figshare URLs associated with inputs.
     If method_list or organ_list are None, do not filter based on that argument.
@@ -77,12 +77,12 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
 
     Input which methods and organs to create anndata object from.
     Returns a single anndata object with specified methods and organs.
-    EX: load_tabula_muris_senis(method_list = ['facs', 'droplet'], 
-    organ_list = ['Skin', 'Fat']), and returns anndata for facs-skin, droplet-skin, 
+    EX: load_tabula_muris_senis(method_list = ['facs', 'droplet'],
+    organ_list = ['Skin', 'Fat']), and returns anndata for facs-skin, droplet-skin,
     and droplet-fat anndata sets. (no facs-fat dataset available)
     """
 
-    # df containing figshare links, method of collection, and organ for each 
+    # df containing figshare links, method of collection, and organ for each
     # tabula muris dataset
     url_df = pd.read_csv(
         "./tabula_muris_senis_data_objects/tabula_muris_senis_data_objects.csv",
