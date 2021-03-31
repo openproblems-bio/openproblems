@@ -1,7 +1,5 @@
 from ....tools.conversion import r_function
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
-from ....tools.normalize import log_scran_pooling
 from ....tools.utils import check_version
 
 # should be imported by docker
@@ -13,7 +11,7 @@ _alra = r_function("alra.R")
 
 @method(
     method_name="ALRA",
-    paper_name="Zero-preserving imputation of scRNA-seq data using low-rank approximation",
+    paper_name="Zero-preserving imputation of scRNA-seq...",
     paper_url="https://www.biorxiv.org/content/10.1101/397588v1",
     paper_year=2018,
     code_url="https://github.com/KlugerLab/ALRA",
