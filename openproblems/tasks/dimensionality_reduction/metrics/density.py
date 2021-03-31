@@ -64,16 +64,16 @@ def _calculate_radii(
     return np.log(epsilon + (re / mu_sum))
 
 
-@metric("density preservation", maximize=True)
+@metric("density preservation", maximize=True, image="openproblems-python-extras")
 def density_preservation(adata: AnnData) -> float:
     emb = adata.obsm["X_emb"]
     if np.any(np.isnan(emb)):
         return 0.0
 
     k, seed = 30, 42
-    ro = _calculate_radii(
-        adata.X.A if issparse(adata.X) else adata.X, n_neighbors=k, random_state=seed
-    )
+
+    high_dim = adata.X.A if issparse(adata.X) else adata.X
+    ro = _calculate_radii(high_dim, n_neighbors=k, random_state=seed)
     re = _calculate_radii(emb, n_neighbors=k, random_state=seed)
 
     return pearsonr(ro, re)[0]
