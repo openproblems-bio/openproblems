@@ -18,7 +18,10 @@ def label_transfer_dist(adata):
     sc.tl.pca(adata_merge)
     sc.external.pp.harmony_integrate(adata_merge, "batch")
     # Compute distance in batch-corrected PCA embedding
-    dist = sklearn.metrics.pairwise.euclidean_distances(adata_merge[adata_merge.obs.batch == "val"].obsm["X_pca_harmony"],adata_merge[adata_merge.obs.batch == "test"].obsm["X_pca_harmony"])
+    dist = sklearn.metrics.pairwise.euclidean_distances(
+        adata_merge[adata_merge.obs.batch == "val"].obsm["X_pca_harmony"],
+        adata_merge[adata_merge.obs.batch == "test"].obsm["X_pca_harmony"],
+    )
     # Mean distance between cell pairs
     result = np.mean(np.triu(dist))
     return result
