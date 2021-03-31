@@ -2,10 +2,11 @@ from ....tools.decorators import method
 from ....tools.normalize import sqrt_cpm
 from ....tools.utils import check_version
 from .preprocessing import preprocess_scanpy
-from phate import PHATE
 
 
 def _phate(adata):
+    from phate import PHATE
+
     phate_op = PHATE(verbose=False, n_jobs=-1)
     adata.obsm["X_emb"] = phate_op.fit_transform(adata.X)
     return adata
