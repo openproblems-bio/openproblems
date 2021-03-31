@@ -15,7 +15,6 @@ def _do_dropout(adata, seed, dropout_rate=0.2, cell_fraction=0.8):
 
     atac_subset[dropouts] = 0
     X[affected_cells, :].data = atac_subset
-    X.eliminate_zeros()
     adata.obsm["mode2_noisy"] = X
 
     return adata
