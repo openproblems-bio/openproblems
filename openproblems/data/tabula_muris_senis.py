@@ -7,6 +7,7 @@ import scanpy as sc
 import scprep
 import tempfile
 
+
 def get_filenames_and_urls(url_df, method_list=None, organ_list=None):
     """
     Takes in dataframe (with sample information stored), a list of methods, and a list of organs.
@@ -22,6 +23,7 @@ def get_filenames_and_urls(url_df, method_list=None, organ_list=None):
         subset_df = subset_df.loc[subset_df.organ.isin(organ_list)]
 
     return subset_df
+
 
 def make_anndata_from_filename_and_url(filename, url, test=False):
     """
@@ -41,6 +43,7 @@ def make_anndata_from_filename_and_url(filename, url, test=False):
 
     return adata
 
+
 def make_anndata_list(subset_df):
     """
     Input dataframe that contains filenames and urls to make anndatas from.
@@ -49,31 +52,38 @@ def make_anndata_list(subset_df):
     adata_list = []
     for i in range(len(subset_df)):
         row = subset_df.iloc[i]
-        adata_list.append(make_anndata_from_filename_and_url(row.filename, row.figshare_url))
+        adata_list.append(
+            make_anndata_from_filename_and_url(row.filename, row.figshare_url)
+        )
     return adata_list
+
 
 def combine_anndata(anndata_list):
     """
     Takes in a list of anndata objects.
     Returns 1 anndata with all anndata objects combined.
     """
-    
-   # if anndata_list only contains 1 anndata object, will return that object
+
+    # if anndata_list only contains 1 anndata object, will return that object
     anndata_concat = anndata_list[0].concatenate(anndata_list[1:])
     return anndata_concat
+
 
 @utils.loader
 def load_tabula_muris_senis(method_list, organ_list):
     """
     Input which methods and organs to create anndata object from.
     Returns a single anndata object with specified methods and organs.
-    EX: load_tabula_muris_senis(method_list = ['facs', 'droplet'], organ_list = ['Skin', 'Fat']) returns anndata for 
+    EX: load_tabula_muris_senis(method_list = ['facs', 'droplet'], organ_list = ['Skin', 'Fat']) returns anndata for
     facs-skin, droplet-skin, and droplet-fat anndata sets. (no facs-fat dataset available)
     """
-    
-    #df containing figshare links, method of collection, and organ for each tabula muris dataset 
-    url_df = pd.read_csv('./tabula_muris_senis_data_objects/tabula_muris_senis_data_objects.csv', header=0)
-    
+
+    # df containing figshare links, method of collection, and organ for each tabula muris dataset
+    url_df = pd.read_csv(
+        "./tabula_muris_senis_data_objects/tabula_muris_senis_data_objects.csv",
+        header=0,
+    )
+
     subset_df = get_filenames_and_urls(url_df, method_list, organ_list)
     adata_list = make_anndata_list(subset_df)
     adata_final = combine_anndata(adata_list)
