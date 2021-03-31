@@ -36,5 +36,6 @@ def cross_magic(adata, n_steps=3, tol=1e-2):
     T_steps = T_steps.astype(np.float32)
     imputed_atac = np.dot(T_steps, adata.obsm["mode2"])
     imputed_atac.data[imputed_atac.data < tol] = 0
+    imputed_atac.eliminate_zeros()
     adata.obsm["mode2_denoised"] = imputed_atac
     return adata
