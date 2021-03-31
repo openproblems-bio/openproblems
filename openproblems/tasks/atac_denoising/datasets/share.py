@@ -35,7 +35,7 @@ def _do_dropout(adata, seed, dropout_rate=0.3, cell_fraction=0.8):
     image="openproblems-python-extras",
 )
 def share_mouse_skin_dropout(
-    test=False, seed=234978, dropout_rate=0.3, cell_fraction=0.8
+    test=False, seed=683 dropout_rate=0.3, cell_fraction=0.8
 ):
     adata = share.load_share_mouse_skin(test=test)
 
@@ -72,7 +72,7 @@ def share_mouse_brain_dropout(
     the postive peak counts",
     image="openproblems-python-extras",
 )
-def share_mouse_brain(test=False, seed=98712, dropout_rate=0.3, cell_fraction=0.8):
+def share_mouse_brain(test=False, seed=28479, dropout_rate=0.3, cell_fraction=0.8):
     adata = share.load_share_mouse_brain(test=test)
 
     adata.uns["species"] = "mus_musculus"
@@ -89,7 +89,7 @@ def share_mouse_brain(test=False, seed=98712, dropout_rate=0.3, cell_fraction=0.
     the postive peak counts",
     image="openproblems-python-extras",
 )
-def share_mouse_lung(test=False, seed=98712, dropout_rate=0.3, cell_fraction=0.8):
+def share_mouse_lung(test=False, seed=17973, dropout_rate=0.3, cell_fraction=0.8):
     adata = share.load_share_mouse_lung(test=test)
 
     adata.uns["species"] = "mus_musculus"
@@ -106,7 +106,7 @@ def share_mouse_lung(test=False, seed=98712, dropout_rate=0.3, cell_fraction=0.8
     the postive peak counts",
     image="openproblems-python-extras",
 )
-def share_gm12878_rep1(test=False, seed=98712, dropout_rate=0.3, cell_fraction=0.8):
+def share_gm12878_rep1(test=False, seed=346332, dropout_rate=0.3, cell_fraction=0.8):
     adata = share.load_share_gm12878_rep1(test=test)
 
     adata.uns["species"] = "homo_sapiens"
@@ -123,7 +123,7 @@ def share_gm12878_rep1(test=False, seed=98712, dropout_rate=0.3, cell_fraction=0
     the postive peak counts",
     image="openproblems-python-extras",
 )
-def share_gm12878_rep2(test=False, seed=98712, dropout_rate=0.3, cell_fraction=0.8):
+def share_gm12878_rep2(test=False, seed=34637, dropout_rate=0.3, cell_fraction=0.8):
     adata = share.load_share_gm12878_rep2(test=test)
 
     adata.uns["species"] = "homo_sapiens"
@@ -140,7 +140,7 @@ def share_gm12878_rep2(test=False, seed=98712, dropout_rate=0.3, cell_fraction=0
     the postive peak counts",
     image="openproblems-python-extras",
 )
-def share_gm12878_rep3(test=False, seed=98712, dropout_rate=0.3, cell_fraction=0.8):
+def share_gm12878_rep3(test=False, seed=368342, dropout_rate=0.3, cell_fraction=0.8):
     adata = share.load_share_gm12878_rep3(test=test)
 
     adata.uns["species"] = "homo_sapiens"

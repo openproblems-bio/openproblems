@@ -35,7 +35,7 @@ def _do_dropout(adata, seed, dropout_rate=0.3, cell_fraction=0.8):
     image="openproblems-python-extras",
 )
 def scicar_mouse_kidney_dropout(
-    test=False, seed=234978, dropout_rate=0.3, cell_fraction=0.8
+    test=False, seed=6721, dropout_rate=0.3, cell_fraction=0.8
 ):
     adata = scicar.load_scicar_mouse_kidney(test=test)
 

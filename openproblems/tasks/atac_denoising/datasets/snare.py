@@ -35,7 +35,7 @@ def _do_dropout(adata, seed, dropout_rate=0.3, cell_fraction=0.8):
     image="openproblems-python-extras",
 )
 def snare_p0_braincortex_dropout(
-    test=False, seed=234978, dropout_rate=0.3, cell_fraction=0.8
+    test=False, seed=243287, dropout_rate=0.3, cell_fraction=0.8
 ):
     adata = snare.load_p0_braincortex(test=test)
 
