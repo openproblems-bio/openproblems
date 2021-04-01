@@ -24,6 +24,7 @@ def split_data(
     adata: anndata.AnnData, train_frac: float = 0.9, seed: int = 0
 ) -> anndata.AnnData:
     """Split data using molecular cross-validation."""
+    import anndata
     import molecular_cross_validation.util
 
     random_state = np.random.RandomState(seed)
