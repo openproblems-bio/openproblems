@@ -20,6 +20,7 @@ def do_dropout(adata, seed, dropout_rate=0.2, cell_fraction=0.8):
 
     return adata
 
+
 def split_data(
     adata: anndata.AnnData, train_frac: float = 0.9, seed: int = 0
 ) -> anndata.AnnData:
