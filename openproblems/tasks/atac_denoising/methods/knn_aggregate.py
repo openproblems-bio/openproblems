@@ -10,7 +10,7 @@ from ....tools.decorators import method
     code_url=None,
     code_version="1.0",
 )
-def knn_aggrate(adata, n_neighbors=10):
+def knn_aggregate(adata, n_neighbors=10):
     """Stabilize the ATAC profile by adding the signal of n_neighbors
     nearest neighbors for each cell.
     """
