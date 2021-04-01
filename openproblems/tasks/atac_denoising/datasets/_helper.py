@@ -10,7 +10,7 @@ def _do_dropout(adata, seed, dropout_rate=0.2, cell_fraction=0.8):
 
     X = adata.obsm["mode2"].copy()
     atac_subset = X[affected_cells, :]
-    n_effects = int(noise_ratio * len(atac_subset.data))
+    n_effects = int(dropout_rate * len(atac_subset.data))
     dropouts = np.random.choice(len(atac_subset.data), n_effects)
 
     atac_subset.data[dropouts] = 0
