@@ -1,1 +1,1 @@
-from .error_squares import mean_error_squares
+from .mse import mse
