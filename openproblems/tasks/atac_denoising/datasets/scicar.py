@@ -1,6 +1,6 @@
 from ....data.multimodal import scicar
 from ....tools.decorators import dataset
-from ._helper import _do_dropout
+from .utils import _do_dropout
 
 
 @dataset(

@@ -1,6 +1,6 @@
 from ....data.multimodal import share
 from ....tools.decorators import dataset
-from .utils import _do_dropout
+from ._helper import _do_dropout
 
 
 @dataset(
