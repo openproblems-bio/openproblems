@@ -1,5 +1,5 @@
-import numpy as np
 import anndata
+import numpy as np
 
 
 def do_dropout(adata, seed, dropout_rate=0.2, cell_fraction=0.8):
