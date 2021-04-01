@@ -1,6 +1,6 @@
 from ....data.multimodal import share
 from ....tools.decorators import dataset
-from .utils import _do_dropout
+from .utils import do_dropout
 
 
 @dataset(
@@ -13,7 +13,7 @@ def share_mouse_skin_dropout(test=False, seed=683, dropout_rate=0.3, cell_fracti
     adata.uns["species"] = "mus_musculus"
     adata.uns["version"] = "GRCm38"
     adata.uns["release"] = "100"
-    adata = _do_dropout(
+    adata = do_dropout(
         adata, seed, dropout_rate=dropout_rate, cell_fraction=cell_fraction
     )
     return adata
@@ -31,7 +31,7 @@ def share_mouse_brain_dropout(
     adata.uns["species"] = "mus_musculus"
     adata.uns["version"] = "GRCm38"
     adata.uns["release"] = "100"
-    adata = _do_dropout(
+    adata = do_dropout(
         adata, seed, dropout_rate=dropout_rate, cell_fraction=cell_fraction
     )
     return adata
@@ -49,7 +49,7 @@ def share_mouse_lung_dropout(
     adata.uns["species"] = "mus_musculus"
     adata.uns["version"] = "GRCm38"
     adata.uns["release"] = "100"
-    adata = _do_dropout(
+    adata = do_dropout(
         adata, seed, dropout_rate=dropout_rate, cell_fraction=cell_fraction
     )
     return adata
@@ -67,7 +67,7 @@ def share_gm12878_rep1_dropout(
     adata.uns["species"] = "homo_sapiens"
     adata.uns["version"] = "GRCh38"
     adata.uns["release"] = "97"
-    adata = _do_dropout(
+    adata = do_dropout(
         adata, seed, dropout_rate=dropout_rate, cell_fraction=cell_fraction
     )
     return adata
@@ -85,7 +85,7 @@ def share_gm12878_rep2_dropout(
     adata.uns["species"] = "homo_sapiens"
     adata.uns["version"] = "GRCh38"
     adata.uns["release"] = "97"
-    adata = _do_dropout(
+    adata = do_dropout(
         adata, seed, dropout_rate=dropout_rate, cell_fraction=cell_fraction
     )
     return adata
@@ -103,7 +103,7 @@ def share_gm12878_rep3_dropout(
     adata.uns["species"] = "homo_sapiens"
     adata.uns["version"] = "GRCh38"
     adata.uns["release"] = "97"
-    adata = _do_dropout(
+    adata = do_dropout(
         adata, seed, dropout_rate=dropout_rate, cell_fraction=cell_fraction
     )
     return adata

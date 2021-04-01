@@ -1,6 +1,6 @@
 from ....data.multimodal import snare
 from ....tools.decorators import dataset
-from .utils import _do_dropout
+from .utils import do_dropout
 
 
 @dataset(
@@ -15,7 +15,7 @@ def snare_p0_braincortex_dropout(
     adata.uns["species"] = "mus_musculus"
     adata.uns["version"] = "GRCm38"
     adata.uns["release"] = "100"
-    adata = _do_dropout(
+    adata = do_dropout(
         adata, seed, dropout_rate=dropout_rate, cell_fraction=cell_fraction
     )
     return adata
