@@ -1,4 +1,5 @@
 import numpy as np
+import anndata
 
 
 def do_dropout(adata, seed, dropout_rate=0.2, cell_fraction=0.8):
@@ -25,8 +26,8 @@ def split_data(
     adata: anndata.AnnData, train_frac: float = 0.9, seed: int = 0
 ) -> anndata.AnnData:
     """Split data using molecular cross-validation."""
-    import anndata
     import molecular_cross_validation.util
+    import scipy
 
     random_state = np.random.RandomState(seed)
 
