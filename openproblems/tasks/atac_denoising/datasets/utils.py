@@ -41,5 +41,4 @@ def split_data(
         X, 0.9, 0.0, random_state
     )
     adata.obsm["mode2_noisy"] = X_train
-    adata.obsm["mode2"] = X_test
     return adata
