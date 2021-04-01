@@ -19,3 +19,27 @@ def _do_dropout(adata, seed, dropout_rate=0.2, cell_fraction=0.8):
     adata.obsm["mode2_noisy"] = X
 
     return adata
+
+def split_data(
+    adata: anndata.AnnData, train_frac: float = 0.9, seed: int = 0
+) -> anndata.AnnData:
+    """Split data using molecular cross-validation."""
+    import molecular_cross_validation.util
+
+    random_state = np.random.RandomState(seed)
+
+    X = adata.obsm["mode2"]
+
+    if scipy.sparse.issparse(X):
+        X = np.array(X.todense())
+    if np.allclose(X, X.astype(np.int)):
+        X = X.astype(np.int)
+    else:
+        raise TypeError("Molecular cross-validation requires integer count data.")
+
+    X_train, X_test = molecular_cross_validation.util.split_molecules(
+        X, 0.9, 0.0, random_state
+    )
+    adata.obsm["mode2_noisy"] = X_train
+    adata.obsm["mode2"] = X_test
+    return adata
