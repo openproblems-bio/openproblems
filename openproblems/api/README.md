@@ -26,16 +26,51 @@ optional arguments:
 ```
 
 ## Example (without docker)
+Running the CLI requires commands to be run in a specific order: `load` -> `run` -> `evaluate`.
 
+For example:
 ```
-openproblems-cli tasks
-openproblems-cli list --datasets --task label_projection
+# Download a task-specific dataset and save it to `dataset.h5ad`
 openproblems-cli load --task label_projection --output dataset.h5ad pancreas_batch
-openproblems-cli list --methods --task label_projection
+# Run a method on a datasets and save output to `method.h5ad`
 openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cpm
-openproblems-cli list --metrics --task label_projection
+# Evaluate the performance of a previously run method using the `accuracy` metric
 openproblems-cli evaluate --task label_projection --input method.h5ad accuracy
 ```
+
+You can list available tasks using `openproblems-cli tasks`
+```
+> openproblems-cli tasks
+denoising
+dimensionality_reduction
+label_projection
+multimodal_data_integration
+regulatory_effect_prediction
+```
+
+You can then list the avaiable datasets, methods, and metrics for a partiular task using `openproblems-cli list --[datasets|methods|metrics] --task [task_name]`
+```
+> openproblems-cli list --datasets --task label_projection
+pancreas_batch
+pancreas_random
+zebrafish_labels
+zebrafish_random
+
+> openproblems-cli list --methods --task label_projection
+knn_classifier_log_cpm
+knn_classifier_scran
+logistic_regression_log_cpm
+logistic_regression_scran
+mlp_log_cpm
+mlp_scran
+
+> openproblems-cli list --metrics --task label_projection
+accuracy
+f1
+f1_micro
+```
+
+The output of these commands are allowable arguments to the respective `load`, `run`, and `evaluate` commands.
 
 ### Sample output
 
