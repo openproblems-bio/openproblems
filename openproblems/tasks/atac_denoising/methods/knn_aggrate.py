@@ -19,7 +19,7 @@ def knn_aggrate(adata, n_neighbors=10):
     import scanpy as sc
 
     sc.pp.neighbors(adata, use_rep="mode2_noisy", n_neighbors=n_neighbors)
-    kernel = adata.obsp['distances'] > 0
+    kernel = adata.obsp["distances"] > 0
     adata.obsm["mode2_denoised"] = np.dot(kernel, adata.obsm["mode2_noisy"])
 
     return adata
