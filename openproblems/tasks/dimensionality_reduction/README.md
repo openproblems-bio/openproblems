@@ -22,7 +22,7 @@ Where $y_i$ is the sum of pairwise euclidian distances between each value embedd
 ### Trustworthiness
 ---
 
-Adapted from the [sklearn documentation.](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.trustworthiness.html)
+_Adapted from the [sklearn documentation.](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.trustworthiness.html)_
 
 Trustworthiness expresses to what extent the local structure in an embedding is retained. The trustworthiness is within [0, 1]. It is defined as
 
