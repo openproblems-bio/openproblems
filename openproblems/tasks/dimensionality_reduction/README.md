@@ -31,7 +31,7 @@ $$
     \sum_{j \in \mathcal{N}_{i}^{k}} \max(0, (r(i, j) - k)) 
 $$
 
-where for each sample i, :math:`\mathcal{N}_{i}^{k}` are its k nearest neighbors in the output space, and every sample j is its $r(i, j)$-th nearest neighbor in the input space. In other words, any unexpected nearest neighbors in the output space are penalised in proportion to their rank in the input space.
+where for each sample i, $\mathcal{N}_{i}^{k}$ are its k nearest neighbors in the output space, and every sample j is its $r(i, j)$-th nearest neighbor in the input space. In other words, any unexpected nearest neighbors in the output space are penalised in proportion to their rank in the input space.
 
 References:
     * "Neighborhood Preservation in Nonlinear Projection Methods: An Experimental Study" J. Venna, S. Kaski
