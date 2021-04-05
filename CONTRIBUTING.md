@@ -27,9 +27,9 @@ link to it from your website, or simply star it in GitHub to say "I use it".
   + [Writing functions in R](#writing-functions-in-r)
   + [Adding package dependencies](#adding-package-dependencies)
   + [Adding a new dataset](#adding-a-new-dataset)
-  + [Adding a dataset / method / metric to a task](#adding-a-dataset---method---metric-to-a-task)
+  + [Adding a dataset / method / metric to a task](#adding-a-dataset--method--metric-to-a-task)
   + [Adding a new task](#adding-a-new-task)
-  + [Adding a new Docker container](#adding-a-new-container)
+  + [Adding a new Docker container](#adding-a-new-docker-container)
 * [Code Style and Testing](#code-style-and-testing)
 * [Code of Conduct](#code-of-conduct)
 * [Attribution](#attribution)
@@ -239,7 +239,9 @@ Datasets, methods and metrics run inside Docker containers. We provide a few to 
 
 ## Code Style and Testing
 
-`singlecellopenproblems` is maintained at close to 100% code coverage. For datasets, methods, and metrics, tests are generated automatically. For additions outside this core functionality, contributors are encouraged to write tests for their code -- but if you do not know how to do so, please do not feel discouraged from contributing code! Others can always help you test your contribution.
+`singlecellopenproblems` is maintained at close to 100% code coverage. For datasets, methods, and metrics, tests are generated programatically from each task's `api.py`. See the [Adding a new task](#adding-a-new-task) section for instructions on creating this file.
+
+For additions outside this core functionality, contributors are encouraged to write tests for their code -- but if you do not know how to do so, please do not feel discouraged from contributing code! Others can always help you test your contribution.
 
 Code is tested by GitHub Actions when you push your changes. However, if you wish to test locally, you can do so with the following command:
 ```
