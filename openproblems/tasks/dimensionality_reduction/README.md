@@ -33,9 +33,9 @@ $$
 
 where for each sample i, $\mathcal{N}_{i}^{k}$ are its k nearest neighbors in the output space, and every sample j is its $r(i, j)$-th nearest neighbor in the input space. In other words, any unexpected nearest neighbors in the output space are penalised in proportion to their rank in the input space.
 
-References:
-    * "Neighborhood Preservation in Nonlinear Projection Methods: An Experimental Study" J. Venna, S. Kaski
-    * "Learning a Parametric Embedding by Preserving Local Structure" L.J.P. van der Maaten
+References:  
+    * "Neighborhood Preservation in Nonlinear Projection Methods: An Experimental Study" J. Venna, S. Kaski  
+    * "Learning a Parametric Embedding by Preserving Local Structure" L.J.P. van der Maaten  
 
 ## The results
 
