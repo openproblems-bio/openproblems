@@ -45,4 +45,4 @@ if par["test"]:
     adata.uns["dataset_name"] = "citeseq_cbmc_test"
 
 print("Writing adata to file")
-adata.write(par["output"])
+adata.write(par["output"], compression = "gzip")

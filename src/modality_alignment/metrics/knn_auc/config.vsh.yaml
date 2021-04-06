@@ -14,6 +14,7 @@ functionality:
           * ad.obsm["aligned"]
           * ad.obsm["mode2_aligned"]
     - name: "--output"
+      alternatives: ["-o"]
       type: "file"
       direction: "output"
       default: "output.h5ad"

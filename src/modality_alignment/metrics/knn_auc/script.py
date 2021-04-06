@@ -62,4 +62,4 @@ adata.uns["metric_name"] = "knn_auc"
 adata.uns["metric_value"] = area_under_curve
 
 print("Writing adata to file")
-adata.write(par["output"])
+adata.write(par["output"], compression = "gzip")

@@ -48,4 +48,4 @@ adata$obsm[["mode2_aligned"]] <- as.matrix(mode2_recons)
 
 cat("Writing to file\n")
 adata$uns["method_name"] = "mnn"
-zzz <- adata$write_h5ad(par$output)
+zzz <- adata$write_h5ad(par$output, compression = "gzip")
