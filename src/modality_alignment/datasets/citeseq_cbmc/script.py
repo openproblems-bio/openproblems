@@ -1,5 +1,5 @@
 ## VIASH START
-# The code between the 'VIASH START' and 'VIASH END' gets stripped away before 
+# The code between the the comments above and below gets stripped away before 
 # execution. Here you can put anything that helps the prototyping of your script.
 par = {
     "input_rna": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz",
