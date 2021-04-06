@@ -14,6 +14,8 @@ print("Importing libraries")
 import scprep
 
 # adding resources dir to system path
+# the resources dir contains all files listed in the '.functionality.resources' part of the
+# viash config, amongst which is the 'utils.py' file we need.
 import sys
 sys.path.append(resources_dir)
 
