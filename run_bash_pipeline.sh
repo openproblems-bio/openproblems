@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Run 'bin/project_build' prior to executing this script
+# Run this prior to executing this script:
+# bin/project_build
 
 TARGET=target/docker/modality_alignment
 OUTPUT=out_bash/modality_alignment
@@ -9,11 +10,12 @@ mkdir -p $OUTPUT/datasets
 mkdir -p $OUTPUT/methods
 mkdir -p $OUTPUT/metrics
 
-if [ ! -f "$OUTPUT/dataset/citeseq_cbmc.h5ad" ]; then
-  "$TARGET/datasets/citeseq_cbmc/citeseq_cbmc" --output "$OUTPUT/dataset/citeseq_cbmc.h5ad"
+# generate datasets
+if [ ! -f "$OUTPUT/datasets/citeseq_cbmc.h5ad" ]; then
+  "$TARGET/datasets/citeseq_cbmc/citeseq_cbmc" --output "$OUTPUT/datasets/citeseq_cbmc.h5ad"
 fi
 
-
+# run all methods on all datasets
 for meth in `ls "$TARGET/methods"`; do
   for dat in `ls "$OUTPUT/datasets"`; do
     dat_id="${dat%.*}"
@@ -26,15 +28,15 @@ for meth in `ls "$TARGET/methods"`; do
   done
 done
 
-
+# run all metrics on all outputs
 for met in `ls $TARGET/metrics`; do
   for outp in `ls $OUTPUT/methods`; do
     out_id="${outp%.*}"
     input_h5ad="$OUTPUT/methods/$out_id.h5ad"
     output_h5ad="$OUTPUT/metrics/${out_id}_$met.h5ad"
     if [ ! -f "$output_h5ad" ]; then
-      echo "> $TARGET/metric/$met/$met" -i "$input_h5ad" -o "$output_h5ad"
-      "$TARGET/metric/$met/$met" -i "$input_h5ad" -o "$output_h5ad"
+      echo "> $TARGET/metrics/$met/$met" -i "$input_h5ad" -o "$output_h5ad"
+      "$TARGET/metrics/$met/$met" -i "$input_h5ad" -o "$output_h5ad"
     fi
   done
 done
