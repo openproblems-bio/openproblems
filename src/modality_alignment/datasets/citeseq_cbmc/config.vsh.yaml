@@ -1,0 +1,37 @@
+functionality:
+  name: "citeseq_cbmc"
+  namespace: "modality_alignment/datasets"
+  version: "dev"
+  description: "Download a modality alignment dataset from GEO"
+  arguments: 
+    - name: "--input_rna"
+      type: "string"
+      default: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz"
+      description: "RNA file as a GZ-compressed csv file."
+    - name: "--input_adt"
+      type: "string"
+      default: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DADT%5Fumi%2Ecsv%2Egz"
+      description: "RNA file as a GZ-compressed csv file."
+    - name: "--test"
+      type: "boolean_true"
+      description: "Subset the dataset"
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file containing both RNA and ADT data"
+  resources:
+    - type: python_script
+      path: ./script.py
+    - path: "../../resources/utils.py"
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages: 
+          - scprep
+          - anndata # utils.py
+          - pandas # utils.py
+          - scanpy # utils.py
+          - numpy # utils.py
