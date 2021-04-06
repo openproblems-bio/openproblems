@@ -1,2 +1,7 @@
 *.class
 *.log
+.Rproj.user
+*.Rproj
+target
+log.txt
+out_bash
