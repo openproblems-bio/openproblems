@@ -16,6 +16,7 @@ functionality:
       type: "boolean_true"
       description: "Subset the dataset"
     - name: "--output"
+      alternatives: ["-o"]
       type: "file"
       direction: "output"
       default: "output.h5ad"

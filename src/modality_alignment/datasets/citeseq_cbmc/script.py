@@ -22,7 +22,7 @@ from utils import create_joint_adata
 from utils import filter_joint_data_empty_cells
 from utils import subset_joint_data
 
-print("(Down)loading expression datasets from GEO")
+print("Downloading expression datasets from GEO (this might take a while)") 
 sys.stdout.flush()
 
 # par["input_rna"] can be the path to a local file, or a url
@@ -37,9 +37,12 @@ print("Transforming into adata")
 adata = create_joint_adata(rna_data, adt_data)
 adata = filter_joint_data_empty_cells(adata)
 
+adata.uns["dataset_name"] = "citeseq_cbmc"
+
 if par["test"]:
     print("Subsetting dataset")
     adata = subset_joint_data(adata)
+    adata.uns["dataset_name"] = "citeseq_cbmc_test"
 
 print("Writing adata to file")
 adata.write(par["output"])
