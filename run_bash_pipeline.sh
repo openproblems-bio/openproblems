@@ -29,8 +29,8 @@ for meth in `ls "$TARGET/methods"`; do
 done
 
 # run all metrics on all outputs
-for met in `ls $TARGET/metrics`; do
-  for outp in `ls $OUTPUT/methods`; do
+for met in `ls "$TARGET/metrics"`; do
+  for outp in `ls "$OUTPUT/methods"`; do
     out_id="${outp%.*}"
     input_h5ad="$OUTPUT/methods/$out_id.h5ad"
     output_h5ad="$OUTPUT/metrics/${out_id}_$met.h5ad"
@@ -40,3 +40,7 @@ for met in `ls $TARGET/metrics`; do
     fi
   done
 done
+
+# concatenate all scores into one tsv
+INPUTS=$(ls -1 "$OUTPUT/metrics" | sed "s#.*#-i '$OUTPUT/metrics/&'#" | tr '\n' ' ')
+eval "$TARGET/utils/docker/utils/extract_scores" $INPUTS -o "$OUTPUT/scores.tsv"

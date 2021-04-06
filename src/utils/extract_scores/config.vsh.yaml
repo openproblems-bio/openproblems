@@ -1,0 +1,24 @@
+functionality:
+  name: "extract_scores"
+  namespace: "utils"
+  version: "dev"
+  description: "Extract evaluation data frame on output"
+  arguments:
+    - name: "--input"
+      alternatives: ["-i"]
+      type: "file"
+      multiple: true
+      default: "input.h5ad"
+      description: "Input h5ad files containing metadata and metrics in adata.uns"
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.tsv"
+      description: "Output tsv"
+  resources:
+    - type: r_script
+      path: ./script.R
+platforms:
+  - type: docker
+    image: "dataintuitive/randpy:r4.0_bioc3.12" # contains a few bioconductor and the 'anndata' package
