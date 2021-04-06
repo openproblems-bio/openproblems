@@ -36,3 +36,4 @@ platforms:
           - pandas # needed by utils.py
           - scanpy # needed by utils.py
           - numpy # needed by utils.py
+  - type: nextflow

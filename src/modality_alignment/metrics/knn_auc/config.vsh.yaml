@@ -8,11 +8,7 @@ functionality:
       alternatives: ["-i"]
       type: "file"
       default: "input.h5ad"
-      description: |
-        File to input h5ad containing:
-          * ad.X
-          * ad.obsm["aligned"]
-          * ad.obsm["mode2_aligned"]
+      description: "File to input h5ad containing: `ad.X`, `ad.obsm['aligned']`, `ad.obsm['mode2_aligned']`"
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
@@ -39,3 +35,4 @@ platforms:
           - anndata
           - numpy
           - sklearn
+  - type: nextflow

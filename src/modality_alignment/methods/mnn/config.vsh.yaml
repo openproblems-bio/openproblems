@@ -8,7 +8,7 @@ functionality:
       alternatives: ["-i"]
       type: "file"
       default: "input.h5ad"
-      description: "Input h5ad file containing at least `ad$X` and `ad$obsm['mode2']`."
+      description: "Input h5ad file containing at least `ad.X` and `ad.obsm['mode2']`."
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
@@ -18,7 +18,7 @@ functionality:
     - name: "--n_svd"
       type: "integer"
       default: 100
-      description: "Number of SVDs to use. Bounded by the number of columns in `ad$X` and `ad$obsm['mode2']`."
+      description: "Number of SVDs to use. Bounded by the number of columns in `ad.X` and `ad.obsm['mode2']`."
   resources:
     - type: r_script
       path: ./script.R
@@ -33,3 +33,4 @@ platforms:
           - sparsesvd
         bioc:
           - batchelor
+  - type: nextflow
