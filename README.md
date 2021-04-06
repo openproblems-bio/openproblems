@@ -57,44 +57,32 @@ A tutorial on how to create components with viash can be found at
 More documentation is available at
 [data-intuitive.com/viash\_docs](https://www.data-intuitive.com/viash_docs) (WIP).
 
-### Creating a new component
+### Common commands
+Create a new component by writing a viash config file and an R/Python script.
 
-<!-- todo: expand documentation -->
-
-Create a viash config file and write a script.
-
-### View help of a component
+View help of a component:
 
 ``` bash
 viash run src/modality_alignment/methods/mnn/config.vsh.yaml -- -h
 ```
 
-Or if you’ve already built the component (see below)
-
-``` bash
-target/docker/modality_alignment/methods/mnn/mnn -h
-```
-
-### Build a component
-
-``` bash
-viash build src/modality_alignment/methods/mnn/config.vsh.yaml -p docker -o target/docker/modality_alignment/methods/mnn --setup
-```
-
-### Test a component
-
-``` bash
-viash test src/modality_alignment/methods/mnn/config.vsh.yaml
-```
-
-### Run a component
+Run a component:
 
 ``` bash
 viash run src/modality_alignment/methods/mnn/config.vsh.yaml -- [... arguments for the component ...]
 ```
 
-Or if you’ve already built the component
+Test a component (provided that you wrote tests, of course):
 
 ``` bash
+viash test src/modality_alignment/methods/mnn/config.vsh.yaml
+```
+
+Build a component:
+
+``` bash
+viash build src/modality_alignment/methods/mnn/config.vsh.yaml -p docker -o target/docker/modality_alignment/methods/mnn --setup
+
+target/docker/modality_alignment/methods/mnn/mnn -h
 target/docker/modality_alignment/methods/mnn/mnn [... arguments for the component ...]
 ```
