@@ -1,0 +1,35 @@
+functionality:
+  name: "mnn"
+  namespace: "modality_alignment/methods"
+  version: "dev"
+  description: "Run Mutual Nearest Neighbours"
+  arguments:
+    - name: "--input"
+      alternatives: ["-i"]
+      type: "file"
+      default: "input.h5ad"
+      description: "Input h5ad file containing at least `ad$X` and `ad$obsm['mode2']`."
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file containing both RNA and ADT data"
+    - name: "--n_svd"
+      type: "integer"
+      default: 100
+      description: "Number of SVDs to use. Bounded by the number of columns in `ad$X` and `ad$obsm['mode2']`."
+  resources:
+    - type: r_script
+      path: ./script.R
+platforms:
+  - type: docker
+    image: "dataintuitive/randpy:r4.0_bioc3.12" # already includes some R, bioconductor & anndata packages
+    setup:
+      - type: r
+        cran:
+          - anndata
+          - Matrix
+          - sparsesvd
+        bioc:
+          - batchelor
