@@ -3,7 +3,7 @@ functionality:
   namespace: "modality_alignment/datasets"
   version: "dev"
   description: "Download a modality alignment dataset from GEO"
-  arguments: 
+  arguments:
     - name: "--input_rna"
       type: "file"
       default: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz"
@@ -29,9 +29,9 @@ platforms:
     image: "python:3.8"
     setup:
       - type: python
-        packages: 
+        packages:
           - scprep
-          - anndata # utils.py
-          - pandas # utils.py
-          - scanpy # utils.py
-          - numpy # utils.py
+          - anndata # needed by utils.py
+          - pandas # needed by utils.py
+          - scanpy # needed by utils.py
+          - numpy # needed by utils.py
