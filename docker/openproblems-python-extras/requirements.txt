@@ -6,3 +6,4 @@ pyensembl
 pybedtools
 git+https://github.com/czbiohub/molecular-cross-validation
 scvi-tools>=0.9.1
+git+https://github.com/atong01/SCOT
