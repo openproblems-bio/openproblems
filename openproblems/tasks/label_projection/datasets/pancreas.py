@@ -24,6 +24,7 @@ def pancreas_batch(test=False):
 def pancreas_random(test=False):
     adata = load_pancreas(test=test)
     adata.obs["labels"] = adata.obs["celltype"]
+    adata.obs["batch"] = adata.obs["tech"]
 
     # Assign training/test
     adata.obs["is_train"] = np.random.choice(
