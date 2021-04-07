@@ -1,9 +1,9 @@
+git+https://github.com/atong01/SCOT
+git+https://github.com/czbiohub/molecular-cross-validation
 git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python
 magic-impute
 MulticoreTSNE
 phate
 pyensembl
 pybedtools
-git+https://github.com/czbiohub/molecular-cross-validation
 scvi-tools>=0.9.1
-git+https://github.com/atong01/SCOT
