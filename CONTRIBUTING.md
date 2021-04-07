@@ -115,6 +115,12 @@ Methods should take an AnnData object and store the output in `adata.obs` accord
 function method(AnnData adata) -> AnnData adata
 ```
 
+Methods can optionally be written with a `test` parameter. If `test is True`, then the method's hyperparameters may be changed to speed up runtime in a testing environment (e.g., number of epochs for deep learning methods).
+
+```
+function method(AnnData adata, test=False) -> AnnData adata
+```
+
 Metrics should take an AnnData object and return a `float`.
 
 ```
