@@ -2,7 +2,7 @@ from ....tools.decorators import method
 from ....tools.utils import check_version
 
 
-def _scanvi(adata):
+def _scanvi(adata, test=False):
     import scvi
 
     scanvi_labels = adata.obs["labels"].to_numpy()
@@ -11,16 +11,19 @@ def _scanvi(adata):
     adata.obs["scanvi_labels"] = scanvi_labels
     scvi.data.setup_anndata(adata, batch_key="batch", labels_key="scanvi_labels")
     scvi_model = scvi.model.SCVI(adata, n_latent=30, n_layers=2)
-    scvi_model.train(train_size=1.0)
+    train_kwargs = dict(train_size=1.0)
+    if test:
+        train_kwargs["max_epochs"] = 1
+    scvi_model.train(**train_kwargs)
     model = scvi.model.SCANVI.from_scvi_model(scvi_model, unlabeled_category="Unknown")
-    model.train(train_size=1.0)
+    model.train(**train_kwargs)
     preds = model.predict(adata)
     del adata.obs["scanvi_labels"]
     # predictions for train and test
     return preds
 
 
-def _scanvi_scarches(adata):
+def _scanvi_scarches(adata, test=False):
     import scvi
 
     # new obs labels to mask test set
@@ -40,12 +43,18 @@ def _scanvi_scarches(adata):
         n_latent=30,
     )
     scvi_model = scvi.model.SCVI(adata_train, **arches_params)
-    scvi_model.train(train_size=1.0)
+    train_kwargs = dict(train_size=1.0)
+    if test:
+        train_kwargs["max_epochs"] = 1
+    scvi_model.train(**train_kwargs)
     model = scvi.model.SCANVI.from_scvi_model(scvi_model, unlabeled_category="Unknown")
-    model.train(train_size=1.0)
+    model.train(**train_kwargs)
 
     query_model = scvi.model.SCANVI.load_query_data(adata_test, model)
-    query_model.train(max_epochs=200, plan_kwargs=dict(weight_decay=0.0))
+    train_kwargs = dict(max_epochs=200)
+    if test:
+        train_kwargs["max_epochs"] = 1
+    query_model.train(plan_kwargs=dict(weight_decay=0.0), **train_kwargs)
 
     # this is temporary and won't be used
     adata.obs["scanvi_labels"] = "Unknown"
@@ -65,8 +74,8 @@ def _scanvi_scarches(adata):
     code_version=check_version("scvi"),
     image="openproblems-python-scvi",
 )
-def scanvi_all_genes(adata):
-    adata.obs["labels_pred"] = _scanvi(adata)
+def scanvi_all_genes(adata, test=False):
+    adata.obs["labels_pred"] = _scanvi(adata, test=test)
     return adata
 
 
@@ -80,7 +89,7 @@ def scanvi_all_genes(adata):
     code_version=check_version("scvi"),
     image="openproblems-python-scvi",
 )
-def scanvi_hvg(adata):
+def scanvi_hvg(adata, test=False):
     import scanpy as sc
 
     hvg_df = sc.pp.highly_variable_genes(
@@ -91,7 +100,7 @@ def scanvi_hvg(adata):
         batch_key="batch",
     )
     bdata = adata[:, hvg_df.highly_variable].copy()
-    adata.obs["labels_pred"] = _scanvi(bdata)
+    adata.obs["labels_pred"] = _scanvi(bdata, test=test)
     return adata
 
 
@@ -104,8 +113,8 @@ def scanvi_hvg(adata):
     code_version=check_version("scvi"),
     image="openproblems-python-scvi",
 )
-def scarches_scanvi_all_genes(adata):
-    adata.obs["labels_pred"] = _scanvi_scarches(adata)
+def scarches_scanvi_all_genes(adata, test=False):
+    adata.obs["labels_pred"] = _scanvi_scarches(adata, test=test)
     return adata
 
 
@@ -118,7 +127,7 @@ def scarches_scanvi_all_genes(adata):
     code_version=check_version("scvi"),
     image="openproblems-python-scvi",
 )
-def scarches_scanvi_hvg(adata):
+def scarches_scanvi_hvg(adata, test=False):
     import scanpy as sc
 
     hvg_df = sc.pp.highly_variable_genes(
@@ -129,5 +138,5 @@ def scarches_scanvi_hvg(adata):
         batch_key="batch",
     )
     bdata = adata[:, hvg_df.highly_variable].copy()
-    adata.obs["labels_pred"] = _scanvi_scarches(bdata)
+    adata.obs["labels_pred"] = _scanvi_scarches(bdata, test=test)
     return adata
