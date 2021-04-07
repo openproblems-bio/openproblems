@@ -237,7 +237,6 @@ def docker_test(timeout=None, retries=0):
     """
 
     def decorator(func):
-        @functools.wraps
         def inner(*args, **kwargs):
             image = args[-1]
             if not image.startswith("openproblems"):
