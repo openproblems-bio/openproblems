@@ -32,6 +32,7 @@ def test_load_dataset(task_name, dataset_name, test, tempdir, image):
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
     adata = dataset(test=test)
+    assert adata.uns.get("__is_test__", False) == test
     utils.asserts.assert_finite(adata.X)
     adata2 = dataset(test=test)
     assert adata2.shape == adata.shape

@@ -2,6 +2,7 @@ from . import utils
 
 import anndata
 import functools
+import inspect
 import logging
 import memory_profiler
 import time
@@ -68,6 +69,10 @@ def method(
         @functools.wraps(func)
         def apply_method(*args, **kwargs):
             log.debug("Running {} method".format(func.__name__))
+            if "test" in inspect.signature(func).parameters and "test" not in kwargs:
+                if args and isinstance(args[0], anndata.AnnData):
+                    is_test = args[0].uns.get("__is_test__", False)
+                    kwargs["test"] = is_test
             return func(*args, **kwargs)
 
         apply_method.metadata = dict(
