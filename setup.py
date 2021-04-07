@@ -11,7 +11,7 @@ install_requires = [
     "scipy",
     "scanpy>=1.6",
     "louvain>=0.7",
-    "decorator",
+    "decorator<5.0.0",
     "memory-profiler",
     "colorama>=0.3.9",
     "packaging",
