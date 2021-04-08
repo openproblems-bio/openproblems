@@ -264,6 +264,6 @@ def docker_test(timeout=None, retries=0):
 
                 run_image(image, f, timeout=timeout, retries=retries)
 
-        return inner
+        return functools.update_wrapper(inner, func)
 
     return decorator
