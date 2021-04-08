@@ -103,6 +103,10 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
+        if [[ "${{ github.repository }}" == "singlecellopenproblems/SingleCellOpenProblems" ]]; \
+          then echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
+          else echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
+        fi
         sudo apt-get install -qy s3fs
         echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
         chmod 600 ~/.passwd-s3fs
