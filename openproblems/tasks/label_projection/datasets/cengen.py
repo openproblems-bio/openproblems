@@ -24,6 +24,7 @@ def cengen_batch(test=False):
 def cengen_random(test=False):
     adata = load_cengen(test=test)
     adata.obs["labels"] = adata.obs["cell_type"]
+    adata.obs["batch"] = adata.obs["experiment_code"]
 
     # Assign training/test
     adata.obs["is_train"] = np.random.choice(
