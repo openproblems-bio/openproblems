@@ -26,6 +26,8 @@ def load_cengen(test=False):
         utils.filter_genes_cells(adata)
 
     if test:
+        batches = adata.obs.experiment_code.cat.categories[:3]
+        adata = adata[adata.obs.experiment_code.isin(batches), :]
         sc.pp.subsample(adata, n_obs=500)
         adata = adata[:, :1000]
         utils.filter_genes_cells(adata)
