@@ -1,5 +1,7 @@
 # Spatial Decomposition/Deconvolution
 
+## The task
+
 Spatial decomposition (also often referred to as Spatial deconvolution) is
 applicable to spatial transcriptomics data where the transcription profile of
 each capture location (spot, voxel, bead, etc.) do not share a bijective
@@ -37,3 +39,9 @@ Methods should store estimates of the cell type proportions in `adata.obsm["prop
 Single cell annotations are found in `adata.uns["sc_reference"].obs['labels']`.
 
 Metrics shall compare `adata.obsm['proportions_pred']` to `adata.obsm['proportions_true']`.
+
+## Metrics
+
+### R2
+
+R2 pronounced as "R squared", also known as the "coefficient of determination". R2 reports the fraction of the true proportion values' (`adata.obsm["proportions_true"]`) variance that can be explained by the predicted proportion values (`adata.obsm["proportion_pred"]`). The **best score**, and upper bound, is 1.0. There is no fixed lower bound for the metric. The _uniform/non-weighted average_ across all cell types/states is used to summarize performance. See the [sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html) documentation for details on the implementation and the [wikipedia](https://en.wikipedia.org/wiki/Coefficient_of_determination) site for more general information regarding the metric.
