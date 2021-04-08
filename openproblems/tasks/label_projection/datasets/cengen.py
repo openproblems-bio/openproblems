@@ -11,7 +11,7 @@ def cengen_batch(test=False):
     adata.obs["batch"] = adata.obs["experiment_code"]
 
     # Assign training/test
-    test_batches = adata.obs["batch"].dtype.categories[-1]
+    test_batches = [adata.obs.batch.value_counts().index[-1]]
     adata.obs["is_train"] = [
         False if adata.obs["batch"][idx] in test_batches else True
         for idx in adata.obs_names

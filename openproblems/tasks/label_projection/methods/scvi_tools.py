@@ -95,6 +95,7 @@ def scanvi_hvg(adata, test=False):
     hvg_df = sc.pp.highly_variable_genes(
         adata[adata.obs["is_train"]],
         flavor="seurat_v3",
+        span=0.8,
         inplace=False,
         n_top_genes=2000,
         batch_key="batch",
@@ -133,6 +134,7 @@ def scarches_scanvi_hvg(adata, test=False):
     hvg_df = sc.pp.highly_variable_genes(
         adata[adata.obs["is_train"]],
         flavor="seurat_v3",
+        span=0.8,
         inplace=False,
         n_top_genes=2000,
         batch_key="batch",
