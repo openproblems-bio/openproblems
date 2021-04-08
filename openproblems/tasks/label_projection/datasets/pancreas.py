@@ -39,6 +39,7 @@ def pancreas_random(test=False):
 def pancreas_random_label_noise(test=False):
     adata = load_pancreas(test=test)
     adata.obs["labels"] = adata.obs["celltype"]
+    adata.obs["batch"] = adata.obs["tech"]
 
     # Assign trainin/test
     adata.obs["is_train"] = np.random.choice(
