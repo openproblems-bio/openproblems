@@ -149,9 +149,9 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
+        AWS_DEFAULT_REGION: us-west-2 s
       run: >-
-        cd /mnt/openproblems-nextflow/cwd/${{ github.ref }} &&
+        cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }} &&
         nextflow run
         $WITH_TOWER
         -ansi-log false
