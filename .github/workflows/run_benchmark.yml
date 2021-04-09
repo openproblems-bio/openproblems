@@ -103,10 +103,6 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        if [[ "${{ github.repository }}" == "singlecellopenproblems/SingleCellOpenProblems" ]]; \
-          then WKDIR=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`; \
-          else WKDIR=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`; \
-        fi
         sudo apt-get install -qy s3fs
         echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
         chmod 600 ~/.passwd-s3fs
@@ -115,9 +111,9 @@ jobs:
         s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
         # Create bucket/ work/ and cwd/
         for dir in bucket work cwd; do
-          mkdir -p /mnt/openproblems-nextflow/${dir}/${WKDIR}
+          mkdir -p /mnt/openproblems-nextflow/${dir}/${{ env.BRANCH }}
         done
-        ls -l /mnt/openproblems-nextflow/*/${WKDIR}
+        ls -l /mnt/openproblems-nextflow/*/${{ env.BRANCH }}
 
     - name: Install package & dependencies
       run: |
@@ -161,14 +157,14 @@ jobs:
         -ansi-log false
         $RESUME
         -profile $PROFILE
-        -work-dir "/mnt/openproblems-nextflow/work/${WKDIR}"
-        -bucket-dir "s3://openproblems-nextflow/bucket/${WKDIR}"
+        -work-dir "/mnt/openproblems-nextflow/work/${{ env.BRANCH }}"
+        -bucket-dir "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
 
     - name: Copy results
       run: |
-        cp -r /mnt/openproblems-nextflow/cwd/${WKDIR}/results .
+        cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results .
 
     - name: Parse results
       # There's a bug with the results getting pulled from Netflow with caching, but
@@ -187,9 +183,9 @@ jobs:
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
         done
-        aws s3 rm "s3://openproblems-nextflow/work/${WKDIR}"
-        aws s3 rm "s3://openproblems-nextflow/bucket/${WKDIR}"
-        aws s3 rm "s3://openproblems-nextflow/cwd/${WKDIR}"
+        aws s3 rm "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
+        aws s3 rm "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
+        aws s3 rm "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
 
     - name: Remove untagged images
       if: startsWith(github.ref, 'refs/heads/master')
