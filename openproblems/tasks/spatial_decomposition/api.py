@@ -24,7 +24,6 @@ def check_dataset(adata):
         label_names = np.unique(adata.uns["sc_reference"].obs["label"])
         name_match = [ct in prop_names for ct in label_names]
         assert np.all(name_match)
-
     return True
 
 

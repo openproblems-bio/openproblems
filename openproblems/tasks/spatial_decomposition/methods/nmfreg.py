@@ -17,7 +17,20 @@ import numpy as np
     code_version=check_version("nmf-reg"),
 )
 def nmfreg(adata):
-    """NMF-reg re-implementation from https://github.com/tudaga/NMFreg_tutorial."""
+    """NMF-reg: NMF regression for array-based spatial transcriptomics data.
+
+    Re-implementation from https://github.com/tudaga/NMFreg_tutorial.
+    Originally developed for Slide-seq data.
+
+    Parameters
+    ----------
+    adata : AnnData
+        Adata with true proportions and signature matrix.
+
+    Returns
+    -------
+    Adata with predicted proportions saved in `adata.obsm["proportions_pred"]`.
+    """
 
     adata_sc = adata.uns["sc_reference"].copy()
 
