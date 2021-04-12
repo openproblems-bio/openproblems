@@ -7,7 +7,7 @@ par = {
     "output": "output.h5ad",
     "test": False
 }
-resources_dir = "../../resources/utils.py"
+resources_dir = "../../resources/"
 ## VIASH END
 
 print("Importing libraries")

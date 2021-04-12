@@ -2,7 +2,13 @@ functionality:
   name: "citeseq_cbmc"
   namespace: "modality_alignment/datasets"
   version: "dev"
-  description: "Download a modality alignment dataset from GEO"
+  description: "CITE-seq Cord Blood Mononuclear Cells"
+  info:
+    accession_id: "GSE100866"
+    doi: "10.1038/nmeth.4380"
+    organism: "human"
+    cell_types: "CL:2000001" # peripheral blood mononuclear cells
+    technology: "dropseq"
   arguments:
     - name: "--input_rna"
       type: "string"
