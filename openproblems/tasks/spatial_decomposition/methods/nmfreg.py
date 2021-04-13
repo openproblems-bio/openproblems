@@ -1,9 +1,5 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
-from scipy.optimize import nnls
-from scipy.sparse import issparse
-from sklearn.decomposition import NMF
-from sklearn.preprocessing import StandardScaler
 
 import numpy as np
 
@@ -31,6 +27,10 @@ def nmfreg(adata):
     -------
     Adata with predicted proportions saved in `adata.obsm["proportions_pred"]`.
     """
+    from scipy.optimize import nnls
+    from scipy.sparse import issparse
+    from sklearn.decomposition import NMF
+    from sklearn.preprocessing import StandardScaler
 
     adata_sc = adata.uns["sc_reference"].copy()
 

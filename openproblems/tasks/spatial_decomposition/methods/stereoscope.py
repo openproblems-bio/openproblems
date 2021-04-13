@@ -1,8 +1,5 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
-from scvi.data import setup_anndata
-from scvi.external.stereoscope import RNAStereoscope
-from scvi.external.stereoscope import SpatialStereoscope
 
 
 @method(
@@ -14,6 +11,10 @@ from scvi.external.stereoscope import SpatialStereoscope
     code_version=check_version("scvi-tools"),
 )
 def stereoscope_raw(adata):
+    from scvi.data import setup_anndata
+    from scvi.external.stereoscope import RNAStereoscope
+    from scvi.external.stereoscope import SpatialStereoscope
+
     adata_sc = adata.uns["sc_reference"].copy()
     setup_anndata(adata_sc, labels_key="label", layer=None)
     sc_model = RNAStereoscope(adata_sc)

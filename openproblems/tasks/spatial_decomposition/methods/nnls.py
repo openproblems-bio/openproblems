@@ -2,8 +2,6 @@ from ....tools.decorators import method
 from ....tools.utils import check_version
 from .._utils import normalize_coefficients
 from .._utils import obs_means
-from scipy.optimize import nnls
-from scipy.sparse import issparse
 
 import numpy as np
 import pandas as pd
@@ -18,6 +16,9 @@ import pandas as pd
     code_version=check_version("scipy"),
 )
 def nnls_scipy(adata):
+    from scipy.optimize import nnls
+    from scipy.sparse import issparse
+
     adata_sc = adata.uns["sc_reference"].copy()
     labels = adata_sc.obs["label"].cat.categories
     adata_means = obs_means(adata_sc, "label")

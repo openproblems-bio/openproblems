@@ -1,10 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 from .._utils import obs_means
-from scipy.sparse import issparse
-from sklearn.decomposition import NMF
-
-import numpy as np
 
 
 @method(
@@ -17,6 +13,10 @@ import numpy as np
 )
 def nmf(adata):
     """NMF for spatial deconvolution."""
+    from scipy.sparse import issparse
+    from sklearn.decomposition import NMF
+
+    import numpy as np
 
     adata_sc = adata.uns["sc_reference"].copy()
     n_types = adata_sc.obs["label"].cat.categories.shape[0]
