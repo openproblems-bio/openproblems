@@ -6,6 +6,7 @@ from ._utils import generate_synthetic_dataset
 @dataset("Pancreas (average)")
 def pancreas_average(test=False):
     adata = load_pancreas(test=test)
+    adata.obs["labels"] = adata.obs["celltype"]
 
     adata_spatial = generate_synthetic_dataset(adata, sim_type="avg")
     return adata_spatial
@@ -14,6 +15,7 @@ def pancreas_average(test=False):
 @dataset("Pancreas (cell)")
 def pancreas_cell(test=False):
     adata = load_pancreas(test=test)
+    adata.obs["labels"] = adata.obs["celltype"]
 
     adata_spatial = generate_synthetic_dataset(adata, sim_type="cell")
     return adata_spatial
