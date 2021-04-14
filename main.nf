@@ -1,45 +1,47 @@
-nextflow.preview.dsl=2
+nextflow.enable.dsl=2
 
 moduleRoot="./target/nextflow/modality_alignment/"
 
-include  { citeseq_cbmc }  from moduleRoot + 'datasets/citeseq_cbmc/main.nf'     params(params)
-include  { mnn }           from moduleRoot + 'methods/mnn/main.nf'               params(params)
-include  { knn_auc }       from moduleRoot + 'metrics/knn_auc/main.nf'           params(params)
-
+include  { citeseq_cbmc }   from moduleRoot + 'datasets/citeseq_cbmc/main.nf'     params(params)
+include  { mnn }            from moduleRoot + 'methods/mnn/main.nf'               params(params)
+include  { scot }           from moduleRoot + 'methods/scot/main.nf'              params(params)
+include  { knn_auc }        from moduleRoot + 'metrics/knn_auc/main.nf'           params(params)
+include  { extract_scores } from './target/nextflow/utils/extract_scores/main.nf' params(params)
 
 workflow {
-    // fetch datasets
-    data_citeseq_cbmc = Channel.fromPath( "dummy" ) \
-        | map{ [ "dyngen", it, params] } \
-        | citeseq_cbmc
+    // helper functions
+    // set id of event to basename of input file
+    def updateID = { [ it[1].baseName, it[1], it[2] ] }
+    // turn list of triplets into triplet of list
+    def combineResults = { it -> [ "combined", it.collect{ a -> a[1] }, params ] }
 
-    // add more datasets here
-    // data_... = ...
+    // idea: use tsv? -> https://github.com/biocorecrg/master_of_pores/blob/master/NanoMod/nanomod.nf#L80
+
+    // fetch datasets
+    data_citeseq_cbmc = Channel.fromPath( "citeseq_cbmc" ) \
+        | map{ [ "citeseq_cbmc", it, params] } \
+        | citeseq_cbmc
 
     // combine datasets in one channel
     datasets = data_citeseq_cbmc
-    // when more datasets are available:
-    // datasets = data_citeseq_cbmc.mix(data_..., data_...)
 
-    // apply methods to datasets
-    method_outputs = datasets \
-        | mnn
-    /*
-    method_outputs = datasets \
-        | (mnn & method2 & method3) \
-        | mix
-    */
+    // when more datasets are available, replace the code above with:
+    // datasets = data_citeseq_cbmc.mix(data_2, data_3)
 
-    // apply metrics to outputs
-    method_evals = method_outputs \
-        | knn_auc
-    /*
-    method_evals = method_outputs \
+    datasets \
+        | (mnn & scot) \
+        | mix \
+        | map(updateID) \
+        | knn_auc \
+        | map(updateID) \
+        | toSortedList \
+        | map( combineResults ) \
+        | extract_scores
+
+
+        /* When more metrics become available, replace '| knn_auc \' with the following:
         | (knn_auc & metric2 & metric3) \
-        | mix
-    */
-
-    // TODO: do something with 'method_evals'
-    method_evals \
-        | view{ [ it[0], it[1] ] }
+        | mix \
+        */
+    
 }
