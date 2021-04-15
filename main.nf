@@ -18,8 +18,14 @@ workflow {
     // idea: use tsv? -> https://github.com/biocorecrg/master_of_pores/blob/master/NanoMod/nanomod.nf#L80
 
     // fetch datasets
-    data_citeseq_cbmc = Channel.fromPath( "citeseq_cbmc" ) \
-        | map{ [ "citeseq_cbmc", it, params] } \
+    data_citeseq_cbmc = Channel.fromList( [
+        [
+            "citeseq_cbmc", 
+            "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz",
+            "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DADT%5Fumi%2Ecsv%2Egz"
+        ]
+    ] ) \
+        | map { [ it[0], [ "input1": file(it[1]), "input2": file(it[2]) ], params ]} \
         | citeseq_cbmc
 
     // combine datasets in one channel
