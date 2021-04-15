@@ -2,6 +2,7 @@
 # The code between the the comments above and below gets stripped away before 
 # execution. Here you can put anything that helps the prototyping of your script.
 par = {
+    "id": "citeseq_cbmc",
     "input1": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz",
     "input2": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DADT%5Fumi%2Ecsv%2Egz",
     "output": "output.h5ad",
@@ -39,12 +40,12 @@ print("Transforming into adata")
 adata = create_joint_adata(adata1, adata2)
 adata = filter_joint_data_empty_cells(adata)
 
-adata.uns["dataset_name"] = "citeseq_cbmc"
+adata.uns["dataset_name"] = par["id"]
 
 if par["test"]:
     print("Subsetting dataset")
     adata = subset_joint_data(adata)
-    adata.uns["dataset_name"] = "citeseq_cbmc_test"
+    adata.uns["dataset_name"] = par["id"] + "_test"
 
 print("Writing adata to file")
 adata.write(par["output"], compression = "gzip")

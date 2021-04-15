@@ -10,6 +10,10 @@ functionality:
     cell_types: "CL:2000001" # peripheral blood mononuclear cells
     technology: "dropseq"
   arguments:
+    - name: "--id"
+      type: "string"
+      default: "citeseq_cbmc"
+      description: "The id of the output dataset id"
     - name: "--input1"
       type: "file"
       default: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz"
