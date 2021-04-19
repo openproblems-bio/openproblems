@@ -11,5 +11,6 @@ cd "$REPO_ROOT"
 
 NXF_VER=20.10.0 nextflow run src/modality_alignment/workflows/main.nf \
   -resume \
+  --datasets src/modality_alignment/datasets/datasets.tsv \
   --output output/modality_alignment
 
