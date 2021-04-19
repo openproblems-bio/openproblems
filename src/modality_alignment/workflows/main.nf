@@ -15,16 +15,15 @@ include { extract_scores } from "$targetDir/utils/extract_scores/main.nf"       
 // import helper functions
 include { overrideOptionValue; overrideParams } from "$launchDir/src/utils/workflows/utils.nf"
 
-def updateID = { [ it[1].baseName, it[1], it[2] ] }
-def combineResults = { it -> [ "combined", it.collect{ a -> a[1] }, params ] }
+def renameID = { [ it[1].baseName, it[1], it[2] ] }
 
-workflow multiMerge {
+workflow combineResults {
     take:
         input_
     main:
         output_ = input_ \
-        | mix \
-        | map{ [ it[1].baseName, it[1], it[2] ] }
+        | toSortedList \
+        | map{ it -> [ "combined", it.collect{ a -> a[1] }, params ] }
     emit:
         output_
 }
@@ -44,47 +43,13 @@ workflow get_scprep_csv_datasets {
         output_
 }
 
-workflow processDatasets {
-    take: 
-        dataset_info_
-    main:
-        // read 
-        datasets = dataset_info_ \
-            | splitCsv(header: true, sep: "\t") \
-            | map { row -> 
-                files = [ "input1": file(row.input1), "input2": file(row.input2) ]
-                newParams = overrideParams(params, row.processor, "id", row.id)
-                [ row.id, files, newParams, row ] 
-            } \
-            | branch {
-                data_scprep_csv: it[3].processor == "scprep_csv"
-                data_notscprep_csv: it[3].processor == "notscprep_csv"
-            }
-
-        // add extra scprep_csv parameters from tsv rows
-        out_scprep_csv = datasets.data_scprep_csv \
-            | map{ overrideOptionValue(it, "scprep_csv", "compression", it[3].compression)}
-            | scprep_csv
-
-        // process other data loaders
-        out_notscprep_csv = datasets.data_notscprep_csv | notscprep_csv
-
-        // combine multiple data loaders into a single channel
-        output_ = out_scprep_csv.mix(out_notscprep_csv)
-    emit:
-        output_
-}
-
 workflow {
     get_scprep_csv_datasets \
         | (mnn & scot) \
-        | mix \
-        | map(updateID) \
+        | mix | map(renameID) \
         | (knn_auc & mse) \
-        | mix \
-        | map(updateID) \
-        | toSortedList \
-        | map(combineResults) \
+        | mix | map(renameID) \
+        | combineResults \
         | extract_scores
     
 }
