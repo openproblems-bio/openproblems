@@ -8,13 +8,19 @@ To use this repository, make sure you have Bash, Java, and Docker installed. If 
 
 Running the modality alignment pipeline requires two simple steps.
 
-First, by running the command below, viash will build all the components in the `src/` folder as executables in the `target/` folder.
+First, by running the command below, viash will **build all the components** in the `src/` folder as executables in the `target/` folder. 
 
 ```bash
-bin/project_build
+$ bin/project_build
+Exporting src/modality_alignment/metrics/knn_auc/ (modality_alignment/metrics) =nextflow=> target/nextflow/modality_alignment/metrics/knn_auc
+Exporting src/modality_alignment/methods/scot/ (modality_alignment/methods) =nextflow=> target/nextflow/modality_alignment/methods/scot
+Exporting src/modality_alignment/methods/mnn/ (modality_alignment/methods) =docker=> target/docker/modality_alignment/methods/mnn
+...
 ```
 
-Next, to run the pipeline with nextflow, run the bash script located at `src/modality_alignment/workflows/run_nextflow.sh`:
+This might take a while. If you're interested in building only a subset of components, you can apply a regex to the selected components by for example using the `bin/project_build -q 'utils|modality_alignment'` command.
+
+Next, to **run the pipeline with nextflow**, run the bash script located at `src/modality_alignment/workflows/run_nextflow.sh`:
 
 ```
 $ src/modality_alignment/workflows/run_nextflow.sh 
