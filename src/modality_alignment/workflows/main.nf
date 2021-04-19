@@ -1,50 +1,23 @@
 nextflow.enable.dsl=2
 
-opscaRoot = "../../../"
-targetDir = opscaRoot + "target/nextflow/"
-taskDir = targetDir + "modality_alignment/"
+println "projectDir : $projectDir"
+println "launchDir : $launchDir"
 
-println(baseDir)
+targetDir = "$launchDir/target/nextflow"
 
-include  { scprep_csv }     from '../../../target/nextflow/modality_alignment/datasets/scprep_csv/main.nf'       params(params)
-// include  { scprep_csv }     from taskDir + 'datasets/scprep_csv/main.nf'       params(params)
-include  { mnn }            from taskDir + 'methods/mnn/main.nf'               params(params)
-include  { scot }           from taskDir + 'methods/scot/main.nf'              params(params)
-include  { knn_auc }        from taskDir + 'metrics/knn_auc/main.nf'           params(params)
-include  { extract_scores } from targetDir + 'utils/extract_scores/main.nf'    params(params)
+include { scprep_csv }     from "$targetDir/modality_alignment/datasets/scprep_csv/main.nf"       params(params)
+include { mnn }            from "$targetDir/modality_alignment/methods/mnn/main.nf"               params(params)
+include { scot }           from "$targetDir/modality_alignment/methods/scot/main.nf"              params(params)
+include { knn_auc }        from "$targetDir/modality_alignment/metrics/knn_auc/main.nf"           params(params)
+include { extract_scores } from "$targetDir/utils/extract_scores/main.nf"                         params(params)
 
-// helper functions
-// set id of event to basename of input file
+// import helper functions
+include { overrideOptionValue } from "../../../src/utils/workflows/utils.nf"
+
 def updateID = { [ it[1].baseName, it[1], it[2] ] }
-// turn list of triplets into triplet of list
 def combineResults = { it -> [ "combined", it.collect{ a -> a[1] }, params ] }
-// A functional approach to 'updating' a value for an option in the params Map.
-def overrideOptionValue(triplet, _key, _option, _value) {
-    mapCopy = triplet[2].toConfigObject().toMap() // As mentioned on https://github.com/nextflow-io/nextflow/blob/master/modules/nextflow/src/main/groovy/nextflow/config/CascadingConfig.groovy
-
-    return [
-        triplet[0],
-        triplet[1],
-        triplet[2].collectEntries{ function, v1 ->
-        (function == _key)
-            ? [ (function) : v1.collectEntries{ k2, v2 ->
-                (k2 == "arguments")
-                    ? [ (k2) : v2.collectEntries{ k3, v3 ->
-                        (k3 == _option)
-                            ? [ (k3) : v3 + [ "value" : _value ] ]
-                            : [ (k3) : v3 ]
-                    } ]
-                    : [ (k2) : v2 ]
-            } ]
-            : [ (function), v1 ]
-        }
-    ]
-}
-
 
 workflow {
-
-
     // idea: use tsv? -> https://github.com/biocorecrg/master_of_pores/blob/master/NanoMod/nanomod.nf#L80
 
     // fetch datasets
