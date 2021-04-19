@@ -1,2 +1,0 @@
-processor	id	input1	input2	compression	accession_id	doi	organism	cell_types	technology
-scprep_csv	CBMC_8K_13AB_10x	https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz	https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DADT%5Fumi%2Ecsv%2Egz	gzip	GSE100866	10.1038/nmeth.4380	human	CL:2000001	dropseq
