@@ -6,7 +6,8 @@ par = {
     "input1": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz",
     "input2": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DADT%5Fumi%2Ecsv%2Egz",
     "output": "output.h5ad",
-    "test": False
+    "test": False,
+    "compression" = "gzip"
 }
 resources_dir = "../../resources/"
 ## VIASH END
@@ -30,10 +31,10 @@ sys.stdout.flush()
 
 # par["input1"] can be the path to a local file, or a url
 adata1 = scprep.io.load_csv(
-    par["input1"], cell_axis="col", compression="gzip", sparse=True, chunksize=1000
+    par["input1"], cell_axis="col", compression=par["compression"], sparse=True, chunksize=1000
 )
 adata2 = scprep.io.load_csv(
-    par["input2"], cell_axis="col", compression="gzip", sparse=True, chunksize=1000
+    par["input2"], cell_axis="col", compression=par["compression"], sparse=True, chunksize=1000
 )
 
 print("Transforming into adata")
