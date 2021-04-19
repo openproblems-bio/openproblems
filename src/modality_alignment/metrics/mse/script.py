@@ -28,13 +28,13 @@ X = scprep.utils.toarray(adata.obsm["aligned"])
 Y = scprep.utils.toarray(adata.obsm["mode2_aligned"])
 
 X_shuffled = X[np.random.permutation(np.arange(X.shape[0])), :]
-error_random = np.mean(np.sum(_square(X_shuffled, Y)))
+error_random = np.mean(np.sum(_square(X_shuffled - Y)))
 error_abs = np.mean(np.sum(_square(X - Y)))
 metric_value = error_abs / error_random
 
 print("Store metic value")
 adata.uns["metric_name"] = "mse"
-adata.uns["metric_value"] = area_under_curve
+adata.uns["metric_value"] = metric_value
 
 print("Writing adata to file")
 adata.write(par["output"], compression = "gzip")
