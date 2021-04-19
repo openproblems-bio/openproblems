@@ -1,32 +1,36 @@
 nextflow.enable.dsl=2
 
-println "projectDir : $projectDir"
-println "launchDir : $launchDir"
+// This workflow assumes that the directory from which the 
+// pipeline is launched is the root of the opsca repository.
+
+/*******************************************************
+*                 Import viash modules                 *
+*******************************************************/
 
 targetDir = "$launchDir/target/nextflow"
 
-include { scprep_csv; scprep_csv as notscprep_csv }     from "$targetDir/modality_alignment/datasets/scprep_csv/main.nf"       params(params)
+include { scprep_csv }     from "$targetDir/modality_alignment/datasets/scprep_csv/main.nf"       params(params)
 include { mnn }            from "$targetDir/modality_alignment/methods/mnn/main.nf"               params(params)
 include { scot }           from "$targetDir/modality_alignment/methods/scot/main.nf"              params(params)
 include { knn_auc }        from "$targetDir/modality_alignment/metrics/knn_auc/main.nf"           params(params)
 include { mse }            from "$targetDir/modality_alignment/metrics/mse/main.nf"               params(params)
 include { extract_scores } from "$targetDir/utils/extract_scores/main.nf"                         params(params)
 
-// import helper functions
 include { overrideOptionValue; overrideParams } from "$launchDir/src/utils/workflows/utils.nf"
 
+// Helper function for redefining the ids of elements in a channel 
+// based on its files.
 def renameID = { [ it[1].baseName, it[1], it[2] ] }
 
-workflow combineResults {
-    take:
-        input_
-    main:
-        output_ = input_ \
-        | toSortedList \
-        | map{ it -> [ "combined", it.collect{ a -> a[1] }, params ] }
-    emit:
-        output_
-}
+/*******************************************************
+*             Dataset processor workflows              *
+*******************************************************/
+// This workflow reads in a tsv containing some metadata about each dataset.
+// For each entry in the metadata, a dataset is generated, usually by downloading
+// and processing some files. The end result of each of these workflows
+// should be simply a channel of [id, h5adfile, params] triplets.
+//
+// If the need arises, these workflows could be split off into a separate file.
 
 workflow get_scprep_csv_datasets {
     main:
@@ -43,13 +47,18 @@ workflow get_scprep_csv_datasets {
         output_
 }
 
+/*******************************************************
+*                    Main workflow                     *
+*******************************************************/
+
 workflow {
     get_scprep_csv_datasets \
         | (mnn & scot) \
         | mix | map(renameID) \
         | (knn_auc & mse) \
         | mix | map(renameID) \
-        | combineResults \
+        | toSortedList \
+        | map{ it -> [ "combined", it.collect{ a -> a[1] }, params ] }
         | extract_scores
     
 }
