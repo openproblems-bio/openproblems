@@ -174,3 +174,71 @@ Or when working with `viash run`:
 ```
 $ viash run src/modality_alignment/methods/mnn/config.vsh.yaml -- ---setup
 ```
+
+### My component doesn't work!
+
+Debugging your component based on the output from a Nextflow pipeline is easier than you might realise. For example, the error message below tells you that the 'mse' component failed:
+
+```
+$ src/modality_alignment/workflows/run_nextflow.sh 
+N E X T F L O W  ~  version 20.10.0
+[f8/2acb9f] process > get_scprep_csv_datasets:scprep_csv:scprep_csv_process (CBMC_8K_13AB_10x) [100%] 1 of 1 ✔
+[6e/0cb81b] process > mnn:mnn_process (CBMC_8K_13AB_10x)                                       [100%] 1 of 1 ✔
+[43/edc9a1] process > scot:scot_process (CBMC_8K_13AB_10x)                                     [100%] 1 of 1 ✔
+[00/41ee55] process > knn_auc:knn_auc_process (CBMC_8K_13AB_10x.scot)                          [100%] 2 of 2 ✔
+[3d/0d6afe] process > mse:mse_process (CBMC_8K_13AB_10x.scot)                                  [100%] 2 of 2, failed: 2 ✔
+[22/5899a9] process > extract_scores:extract_scores_process (combined)                         [100%] 1 of 1 ✔
+[3d/0d6afe] NOTE: Process `mse:mse_process (CBMC_8K_13AB_10x.scot)` terminated with an error exit status (1) -- Error is ignored
+Completed at: 19-Apr-2021 20:09:22
+Duration    : 3m 46s
+CPU hours   : 0.1 (2.7% failed)
+Succeeded   : 6
+Ignored     : 2
+Failed      : 2
+```
+
+Looking at this output reveals in which step of the pipeline the 'mse' component failed, namely `3d/0d6afe`. This means we should check a folder called `work/3d/0d6afe...`:
+
+```
+$ ls -la work/3d/0d6afe9c27ab68d3f10551c3d3104c/
+total 28
+drwxrwxr-x. 1 rcannood rcannood  216 Apr 19 20:09 .
+drwxrwxr-x. 1 rcannood rcannood   60 Apr 19 20:09 ..
+lrwxrwxrwx. 1 rcannood rcannood  108 Apr 19 20:09 CBMC_8K_13AB_10x.scot.h5ad
+-rw-rw-r--. 1 rcannood rcannood    0 Apr 19 20:09 .command.begin
+-rw-rw-r--. 1 rcannood rcannood  191 Apr 19 20:09 .command.err
+-rw-rw-r--. 1 rcannood rcannood  262 Apr 19 20:09 .command.log
+-rw-rw-r--. 1 rcannood rcannood   71 Apr 19 20:09 .command.out
+-rw-rw-r--. 1 rcannood rcannood 3224 Apr 19 20:09 .command.run
+-rw-rw-r--. 1 rcannood rcannood  463 Apr 19 20:09 .command.sh
+-rw-rw-r--. 1 rcannood rcannood    1 Apr 19 20:09 .exitcode
+
+$ cat work/3d/0d6afe9c27ab68d3f10551c3d3104c/.command.err 
+Traceback (most recent call last):
+  File "/tmp/viash-run-mse-WausLu", line 39, in <module>
+    adata.uns["metric_value"] = area_under_curve
+NameError: name 'area_under_curve' is not defined
+```
+
+It seems that some error occurred within the Python script. Luckiky, the input file of this process is in this directory. We can manually run the component by running:
+
+```
+viash run src/modality_alignment/metrics/mse/config.vsh.yaml -- -i work/3d/0d6afe9c27ab68d3f10551c3d3104c/CBMC_8K_13AB_10x.scot.h5ad -o test.h5ad
+```
+
+Alternatively, you can edit `src/modality_alignment/metrics/mse/script.py` and replace the header by:
+```python
+## VIASH START
+# The code between the the comments above and below gets stripped away before 
+# execution. Here you can put anything that helps the prototyping of your script.
+par = {
+    "input": "work/3d/0d6afe9c27ab68d3f10551c3d3104c/CBMC_8K_13AB_10x.scot.h5ad",
+    "output": "test.h5ad"
+}
+## VIASH END
+
+## ... the rest of the script ...
+```
+
+Now you can work on the `script.py` file in your preferred editor (vim?). For easy prototyping, viash will automatically strip
+away anything between the `## VIASH START` and `## VIASH END` codeblock at runtime.
