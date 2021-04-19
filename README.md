@@ -77,20 +77,28 @@ test.py                  A python script with which you can start unit testing y
 The [Getting started](http://www.data-intuitive.com/viash_docs/) page on the viash documentation site
 provides some information on how a basic viash component works, or on the specifications of the `config.vsh.yaml` [config file](http://www.data-intuitive.com/viash_docs/config/).
 
-### Trying out the component
+### Building a component
 
 `viash` has several helper functions to help you quickly develop a component.
 
 With **`viash build`**, you can turn the component into a standalone executable. 
 This standalone executable you can give to somebody else, and they will be able to 
 run it, provided that they have Bash and Docker installed.
+
 ```
 viash build src/modality_alignment/methods/foo/config.vsh.yaml \
   -o target/docker/modality_alignment/methods/foo \
   --setup
 ```
 
-**Command-line interface**: You can view the interface of the executable by running the executable with the `-h` parameter.
+Note that the `bin/project_build` component does a much better job of setting up 
+a collection of components. You can filter which components will be built by 
+providing a regex to the `-q` parameter, e.g. `bin/project_build -q 'utils|modality_alignment'`.
+
+### Running a component from CLI
+
+You can view the interface of the executable by running the executable with the `-h` parameter.
+
 ```
 $ target/docker/modality_alignment/methods/foo/foo -h
 Replace this with a (multiline) description of your component.
@@ -125,6 +133,7 @@ Alternatively, you can run the component straight from the viash config by using
 viash build src/modality_alignment/methods/foo/config.vsh.yaml -- -i LICENSE -o output.txt
 ```
 
+### Unit testing a component
 Provided that you wrote a script that allows you to test the functionality of a component, 
 you can run the tests by using the **`viash test`** command.
 
@@ -145,6 +154,8 @@ OK
 SUCCESS! All 1 out of 1 test scripts succeeded!
 Cleaning up temporary directory
 ```
+
+To run all the unit tests of all the components in the repository, use `bin/project_test`. 
 
 ## Frequently asked questions
 
