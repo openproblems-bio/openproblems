@@ -1,5 +1,5 @@
 # repo specific ignores
-out_bash
+output_bash
 *.h5ad
 
 # R specific ignores
@@ -14,4 +14,4 @@ log.txt
 # nextflow specific ignores
 .nextflow*
 work
-out_nxf
+output
