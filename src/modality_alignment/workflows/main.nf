@@ -1,12 +1,17 @@
 nextflow.enable.dsl=2
 
-moduleRoot="./target/nextflow/modality_alignment/"
+opscaRoot = "../../../"
+targetDir = opscaRoot + "target/nextflow/"
+taskDir = targetDir + "modality_alignment/"
 
-include  { citeseq_cbmc }   from moduleRoot + 'datasets/citeseq_cbmc/main.nf'     params(params)
-include  { mnn }            from moduleRoot + 'methods/mnn/main.nf'               params(params)
-include  { scot }           from moduleRoot + 'methods/scot/main.nf'              params(params)
-include  { knn_auc }        from moduleRoot + 'metrics/knn_auc/main.nf'           params(params)
-include  { extract_scores } from './target/nextflow/utils/extract_scores/main.nf' params(params)
+println(baseDir)
+
+include  { scprep_csv }     from '../../../target/nextflow/modality_alignment/datasets/scprep_csv/main.nf'       params(params)
+// include  { scprep_csv }     from taskDir + 'datasets/scprep_csv/main.nf'       params(params)
+include  { mnn }            from taskDir + 'methods/mnn/main.nf'               params(params)
+include  { scot }           from taskDir + 'methods/scot/main.nf'              params(params)
+include  { knn_auc }        from taskDir + 'metrics/knn_auc/main.nf'           params(params)
+include  { extract_scores } from targetDir + 'utils/extract_scores/main.nf'    params(params)
 
 // helper functions
 // set id of event to basename of input file
@@ -43,19 +48,19 @@ workflow {
     // idea: use tsv? -> https://github.com/biocorecrg/master_of_pores/blob/master/NanoMod/nanomod.nf#L80
 
     // fetch datasets
-    data_citeseq_cbmc = Channel.fromList( [
+    data_scprep_csv = Channel.fromList( [
         [
-            "citeseq_cbmc", 
+            "CBMC_8K_13AB_10x", 
             "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz",
             "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DADT%5Fumi%2Ecsv%2Egz"
         ]
     ] ) \
         | map { [ it[0], [ "input1": file(it[1]), "input2": file(it[2]) ], params ]} \
-        | map { overrideOptionValue(it, "citeseq_cbmc", "id", it[0]) } \
-        | citeseq_cbmc
+        | map { overrideOptionValue(it, "scprep_csv", "id", it[0]) } \
+        | scprep_csv
 
     // combine datasets in one channel
-    datasets = data_citeseq_cbmc
+    datasets = data_scprep_csv
 
     // when more datasets are available, replace the code above with:
     // datasets = data_citeseq_cbmc.mix(data_2, data_3)

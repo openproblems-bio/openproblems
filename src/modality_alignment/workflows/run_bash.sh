@@ -1,10 +1,16 @@
 #!/bin/bash
 
 # Run this prior to executing this script:
-# bin/project_build
+# bin/project_build -q 'modality_alignment|utils'
+
+# get the root of the directory
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+# ensure that the command below is run from the root of the repository
+cd "$REPO_ROOT"
 
 TARGET=target/docker/modality_alignment
-OUTPUT=out_bash/modality_alignment
+OUTPUT=output_bash/modality_alignment
 
 mkdir -p $OUTPUT/datasets
 mkdir -p $OUTPUT/methods
@@ -12,7 +18,8 @@ mkdir -p $OUTPUT/metrics
 
 # generate datasets
 if [ ! -f "$OUTPUT/datasets/citeseq_cbmc.h5ad" ]; then
-  "$TARGET/datasets/citeseq_cbmc/citeseq_cbmc" --output "$OUTPUT/datasets/citeseq_cbmc.h5ad"
+  "$TARGET/datasets/data_scprep_csv/data_scprep_csv" \
+    --output "$OUTPUT/datasets/citeseq_cbmc.h5ad"
 fi
 
 # run all methods on all datasets
@@ -43,4 +50,4 @@ done
 
 # concatenate all scores into one tsv
 INPUTS=$(ls -1 "$OUTPUT/metrics" | sed "s#.*#-i '$OUTPUT/metrics/&'#" | tr '\n' ' ')
-eval "$TARGET/utils/docker/utils/extract_scores" $INPUTS -o "$OUTPUT/scores.tsv"
+eval "$TARGET/../utils/extract_scores" $INPUTS -o "$OUTPUT/scores.tsv"
