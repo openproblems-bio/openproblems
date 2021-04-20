@@ -271,10 +271,14 @@ cp target/docker/modality_alignment/methods/foo/foo foo_by_email
 
 # build container
 ./foo_by_email ---setup
+```
 
+```{bash}
 # view help
 ./foo_by_email -h
+```
 
+```{bash}
 # run component
 ./foo_by_email -i LICENSE -o foo_output.txt
 ```
@@ -315,7 +319,7 @@ Using version 0.1.0 to tag containers
     > singlecellopenproblems/modality_alignment_datasets_scprep_csv:0.1.0 does not exist, try pushing ... OK!
     > singlecellopenproblems/utils_extract_scores:0.1.0 does not exist, try pushing ... OK!
     > singlecellopenproblems/modality_alignment_methods_mnn:0.1.0 does not exist, try pushing ... OK!
-    
+
 <!-- cleaning up temporary files -->
 
 ```{bash, echo=FALSE}

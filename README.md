@@ -126,7 +126,7 @@ viash build src/modality_alignment/methods/foo/config.vsh.yaml \
   --setup
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-0Cq825
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-eH7f4N
 
 Note that the `bin/project_build` component does a much better job of
 setting up a collection of components. You can filter which components
@@ -192,15 +192,15 @@ functionality of a component, you can run the tests by using the
 viash test src/modality_alignment/methods/foo/config.vsh.yaml
 ```
 
-    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo13438869660876872777'
+    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo2584360881202159571'
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo13438869660876872777/build_executable/foo ---setup
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-otrw1O
+    +/home/rcannood/workspace/viash_temp/viash_test_foo2584360881202159571/build_executable/foo ---setup
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-9YuZJq
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo13438869660876872777/test_test.py/test.py
+    +/home/rcannood/workspace/viash_temp/viash_test_foo2584360881202159571/test_test.py/test.py
     .
     ----------------------------------------------------------------------
-    Ran 1 test in 0.018s
+    Ran 1 test in 0.017s
 
     OK
     ====================================================================
@@ -224,7 +224,7 @@ This will automatically build the Docker container for you.
 target/docker/modality_alignment/methods/foo/foo ---setup
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-NroSjh
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-AXbMHW
 
 Or when working with `viash run`:
 
@@ -232,7 +232,7 @@ Or when working with `viash run`:
 viash run src/modality_alignment/methods/foo/config.vsh.yaml -- ---setup
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-tnOQs8
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-Rwww1W
 
 ### My component doesn’t work!
 
@@ -355,15 +355,15 @@ cp target/docker/modality_alignment/methods/foo/foo foo_by_email
 
 # build container
 ./foo_by_email ---setup
-
-# view help
-./foo_by_email -h
-
-# run component
-./foo_by_email -i LICENSE -o foo_output.txt
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-201YUb
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-M31xzb
+
+``` bash
+# view help
+./foo_by_email -h
+```
+
     Replace this with a (multiline) description of your component.
 
     Options:
@@ -378,6 +378,11 @@ cp target/docker/modality_alignment/methods/foo/foo foo_by_email
         --option=string
             type: string, default: default-
             Describe an optional parameter.
+
+``` bash
+# run component
+./foo_by_email -i LICENSE -o foo_output.txt
+```
 
     This is a skeleton component
     The arguments are:
