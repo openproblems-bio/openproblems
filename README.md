@@ -9,6 +9,8 @@ opsca-viash
 -   [Running a component from CLI](#running-a-component-from-cli)
 -   [Unit testing a component](#unit-testing-a-component)
 -   [Frequently asked questions](#frequently-asked-questions)
+-   [Benefits of using Nextflow +
+    viash](#benefits-of-using-nextflow--viash)
 
 Proof Of Concept in adapting [Open Problems for Single Cell Analysis
 repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems)
@@ -124,7 +126,7 @@ viash build src/modality_alignment/methods/foo/config.vsh.yaml \
   --setup
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-LkUMAr
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-MDmQNu
 
 Note that the `bin/project_build` component does a much better job of
 setting up a collection of components. You can filter which components
@@ -190,12 +192,12 @@ functionality of a component, you can run the tests by using the
 viash test src/modality_alignment/methods/foo/config.vsh.yaml
 ```
 
-    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo10681448973463170040'
+    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo5732704703787235780'
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo10681448973463170040/build_executable/foo ---setup
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-xcKqcl
+    +/home/rcannood/workspace/viash_temp/viash_test_foo5732704703787235780/build_executable/foo ---setup
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-58B3Jr
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo10681448973463170040/test_test.py/test.py
+    +/home/rcannood/workspace/viash_temp/viash_test_foo5732704703787235780/test_test.py/test.py
     .
     ----------------------------------------------------------------------
     Ran 1 test in 0.016s
@@ -222,7 +224,7 @@ This will automatically build the Docker container for you.
 target/docker/modality_alignment/methods/foo/foo ---setup
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-wmpR2g
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-KFChia
 
 Or when working with `viash run`:
 
@@ -230,7 +232,7 @@ Or when working with `viash run`:
 viash run src/modality_alignment/methods/foo/config.vsh.yaml -- ---setup
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-Ku7ZNt
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-YpI0FX
 
 ### My component doesn’t work!
 
@@ -277,7 +279,10 @@ ls -la work/3d/0d6afe9c27ab68d3f10551c3d3104c/
     -rw-rw-r--. 1 rcannood rcannood  463 Apr 19 20:09 .command.sh
     -rw-rw-r--. 1 rcannood rcannood    1 Apr 19 20:09 .exitcode
 
-    $ cat work/3d/0d6afe9c27ab68d3f10551c3d3104c/.command.err 
+``` bash
+cat work/3d/0d6afe9c27ab68d3f10551c3d3104c/.command.err 
+```
+
     Traceback (most recent call last):
       File "/tmp/viash-run-mse-WausLu", line 39, in <module>
         adata.uns["metric_value"] = area_under_curve
@@ -313,5 +318,20 @@ Now you can work on the `script.py` file in your preferred editor
 (vim?). For easy prototyping, viash will automatically strip away
 anything between the `## VIASH START` and `## VIASH END` codeblock at
 runtime.
+
+## Benefits of using Nextflow + viash
+
+### The pipeline is **language-agnostic**
+
+This means that each component can be written in whatever scripting
+language the user desires. Here are examples of a
+[Python](src/modality_alignment/methods/scot/) and an
+[R](src/modality_alignment/methods/mnn) component.
+
+By default, viash supports wrapping the following scripting languages:
+Bash, Python, R, JavaScript, and Scala. If viash doesn’t support your
+preferred scripting language, feel free to ask the developers to [add
+it](https://github.com/data-intuitive/viash/issues). Alternatively, you
+can write a Bash script which calls your desired programming language.
 
 <!-- cleaning up temporary files -->

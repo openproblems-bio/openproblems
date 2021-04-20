@@ -210,7 +210,10 @@ ls -la work/3d/0d6afe9c27ab68d3f10551c3d3104c/
     -rw-rw-r--. 1 rcannood rcannood  463 Apr 19 20:09 .command.sh
     -rw-rw-r--. 1 rcannood rcannood    1 Apr 19 20:09 .exitcode
 
-    $ cat work/3d/0d6afe9c27ab68d3f10551c3d3104c/.command.err 
+```bash
+cat work/3d/0d6afe9c27ab68d3f10551c3d3104c/.command.err 
+```
+
     Traceback (most recent call last):
       File "/tmp/viash-run-mse-WausLu", line 39, in <module>
         adata.uns["metric_value"] = area_under_curve
@@ -239,6 +242,19 @@ par = {
 
 Now you can work on the `script.py` file in your preferred editor (vim?). For easy prototyping, viash will automatically strip
 away anything between the `## VIASH START` and `## VIASH END` codeblock at runtime.
+
+
+## Benefits of using Nextflow + viash
+
+### The pipeline is **language-agnostic**
+
+This means that each component can be written in whatever scripting language the user desires. 
+Here are examples of a [Python](src/modality_alignment/methods/scot/) and an [R](src/modality_alignment/methods/mnn) component.
+
+By default, viash supports wrapping the following scripting languages: Bash, Python, R, JavaScript, and Scala. 
+If viash doesn't support your preferred scripting language, feel free to ask the developers to [add it](https://github.com/data-intuitive/viash/issues).
+Alternatively, you can write a Bash script which calls your desired programming language.
+
 
 <!-- cleaning up temporary files -->
 
