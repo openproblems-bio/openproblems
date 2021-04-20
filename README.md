@@ -1,8 +1,13 @@
 # opsca-viash
-Proof Of Concept in adapting Open Problems to use viash.
+Proof Of Concept in adapting [Open Problems for Single Cell Analysis repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems) with Nextflow and viash.
 
 ## Requirements
-To use this repository, make sure you have Bash, Java, and Docker installed. If you wish to use Nextflow, install that too.
+
+To use this repository, please install the following dependencies:
+* Bash
+* Java (Java 8 or higher)
+* Docker (Instructions [here](https://docs.docker.com/get-docker/))
+* Nextflow (Optional, though [very easy to install](https://www.nextflow.io/index.html#GetStarted))
 
 ## Quick start
 
