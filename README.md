@@ -126,7 +126,7 @@ viash build src/modality_alignment/methods/foo/config.vsh.yaml \
   --setup
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-MDmQNu
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-0Cq825
 
 Note that the `bin/project_build` component does a much better job of
 setting up a collection of components. You can filter which components
@@ -192,15 +192,15 @@ functionality of a component, you can run the tests by using the
 viash test src/modality_alignment/methods/foo/config.vsh.yaml
 ```
 
-    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo5732704703787235780'
+    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo13438869660876872777'
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo5732704703787235780/build_executable/foo ---setup
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-58B3Jr
+    +/home/rcannood/workspace/viash_temp/viash_test_foo13438869660876872777/build_executable/foo ---setup
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-otrw1O
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo5732704703787235780/test_test.py/test.py
+    +/home/rcannood/workspace/viash_temp/viash_test_foo13438869660876872777/test_test.py/test.py
     .
     ----------------------------------------------------------------------
-    Ran 1 test in 0.016s
+    Ran 1 test in 0.018s
 
     OK
     ====================================================================
@@ -224,7 +224,7 @@ This will automatically build the Docker container for you.
 target/docker/modality_alignment/methods/foo/foo ---setup
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-KFChia
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-NroSjh
 
 Or when working with `viash run`:
 
@@ -232,7 +232,7 @@ Or when working with `viash run`:
 viash run src/modality_alignment/methods/foo/config.vsh.yaml -- ---setup
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-YpI0FX
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-tnOQs8
 
 ### My component doesn’t work!
 
@@ -333,5 +333,101 @@ Bash, Python, R, JavaScript, and Scala. If viash doesn’t support your
 preferred scripting language, feel free to ask the developers to [add
 it](https://github.com/data-intuitive/viash/issues). Alternatively, you
 can write a Bash script which calls your desired programming language.
+
+### One Docker container per component
+
+By running the `bin/project_build` command, viash will build one Docker
+container per component. While this results in some initial
+computational overhead, this makes it a lot easier to add a new
+component to the pipeline with dependencies which might conflict with
+those of other components.
+
+### Reproducible components
+
+A component built by viash is meant to be reproducible. If you send the
+`target/docker/modality_alignment/methods/foo/foo` file to someone, they
+can run `./foo ---setup` and then will be able to use the `foo`
+component however they like.
+
+``` bash
+# pretend to send the component to someone through 'cp'
+cp target/docker/modality_alignment/methods/foo/foo foo_by_email
+
+# build container
+./foo_by_email ---setup
+
+# view help
+./foo_by_email -h
+
+# run component
+./foo_by_email -i LICENSE -o foo_output.txt
+```
+
+    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-201YUb
+    Replace this with a (multiline) description of your component.
+
+    Options:
+        -i file, --input=file
+            type: file, required parameter
+            Describe the input file.
+
+        -o file, --output=file
+            type: file, required parameter
+            Describe the output file.
+
+        --option=string
+            type: string, default: default-
+            Describe an optional parameter.
+
+    This is a skeleton component
+    The arguments are:
+     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
+     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
+     - option:  default-
+
+### Reprodicible components on Docker Hub
+
+You might notice that the `---setup` builds the docker container from
+scratch, rather than pulling it from Docker hub.
+
+With `bin/project_build`, you can build a versioned release of all the
+components in the repository and push it to Docker hub.
+
+``` bash
+bin/project_build -m release -v '0.1.0' -r singlecellopenproblems
+```
+
+    In release mode...
+    Exporting src/modality_alignment/methods/mnn/ (modality_alignment/methods) =docker=> target/docker/modality_alignment/methods/mnn
+    Exporting src/modality_alignment/methods/scot/ (modality_alignment/methods) =docker=> target/docker/modality_alignment/methods/scot
+    Exporting src/utils/extract_scores/ (utils) =docker=> target/docker/utils/extract_scores
+    Exporting src/modality_alignment/metrics/knn_auc/ (modality_alignment/metrics) =docker=> target/docker/modality_alignment/metrics/knn_auc
+    Exporting src/modality_alignment/datasets/scprep_csv/ (modality_alignment/datasets) =docker=> target/docker/modality_alignment/datasets/scprep_csv
+    Exporting src/modality_alignment/metrics/mse/ (modality_alignment/metrics) =docker=> target/docker/modality_alignment/metrics/mse
+    > docker build -t singlecellopenproblems/utils_extract_scores:0.1.0 --no-cache /home/rcannood/workspace/viash_temp/viashsetupdocker-extract_scores-FyHtgS
+    > docker build -t singlecellopenproblems/modality_alignment/metrics_mse:0.1.0 --no-cache /home/rcannood/workspace/viash_temp/viashsetupdocker-mse-r2LSpO
+    > docker build -t singlecellopenproblems/modality_alignment/metrics_knn_auc:0.1.0 --no-cache /home/rcannood/workspace/viash_temp/viashsetupdocker-knn_auc-S8dJP5
+    > docker build -t singlecellopenproblems/modality_alignment/datasets_scprep_csv:0.1.0 --no-cache /home/rcannood/workspace/viash_temp/viashsetupdocker-scprep_csv-lItAG1
+    > docker build -t singlecellopenproblems/modality_alignment/methods_scot:0.1.0 --no-cache /home/rcannood/workspace/viash_temp/viashsetupdocker-scot-xUKof3
+    > docker build -t singlecellopenproblems/modality_alignment/methods_mnn:0.1.0 --no-cache /home/rcannood/workspace/viash_temp/viashsetupdocker-mnn-0rjhKc
+
+The images themselves can be pushed to Docker Hub with the
+`bin/project_push` command. I’d have to make a small change to viash to
+ensure that the component names don’t contain any slashes because the
+images listed above can’t be pushed to Docker hub. However, the output
+would look something like this:
+
+``` bash
+bin/project_push -m release -v '0.1.0' -r singlecellopenproblems
+In release mode...
+Using version 0.1.0 to tag containers
+```
+
+    > singlecellopenproblems/modality_alignment_metrics_knn_auc:0.1.0 does not exist, try pushing ... OK!
+    > singlecellopenproblems/modality_alignment_methods_scot:0.1.0 does not exist, try pushing ... OK!
+    > singlecellopenproblems/modality_alignment_metrics_mse:0.1.0 does not exist, try pushing ... OK!
+    > singlecellopenproblems/modality_alignment_datasets_scprep_csv:0.1.0 does not exist, try pushing ... OK!
+    > singlecellopenproblems/utils_extract_scores:0.1.0 does not exist, try pushing ... OK!
+    > singlecellopenproblems/modality_alignment_methods_mnn:0.1.0 does not exist, try pushing ... OK!
 
 <!-- cleaning up temporary files -->
