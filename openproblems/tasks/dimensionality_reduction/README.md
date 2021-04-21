@@ -19,6 +19,24 @@ Where $y_i$ is the sum of pairwise euclidian distances between each value embedd
 
 <a href = "http://cda.psych.uiuc.edu/psychometrika_highly_cited_articles/kruskal_1964a.pdf">Kruskel's stress</a> uses the RMSE, more or less in the now commonly-used MDS (multi-dimensional scaling). We can calculate and plot Kruskel's stress to get an idea where the majority of distortion of the ***topography*** of the data in high-dimensional space.
 
+### Trustworthiness
+---
+
+_Adapted from the [sklearn documentation.](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.trustworthiness.html)_
+
+Trustworthiness expresses to what extent the local structure in an embedding is retained. The trustworthiness is within [0, 1]. It is defined as
+
+$$
+    T(k) = 1 - \frac{2}{nk (2n - 3k - 1)} \sum^n_{i=1}
+    \sum_{j \in \mathcal{N}_{i}^{k}} \max(0, (r(i, j) - k)) 
+$$
+
+where for each sample i, $\mathcal{N}_{i}^{k}$ are its k nearest neighbors in the output space, and every sample j is its $r(i, j)$-th nearest neighbor in the input space. In other words, any unexpected nearest neighbors in the output space are penalised in proportion to their rank in the input space.
+
+References:  
+    * "Neighborhood Preservation in Nonlinear Projection Methods: An Experimental Study" J. Venna, S. Kaski  
+    * "Learning a Parametric Embedding by Preserving Local Structure" L.J.P. van der Maaten  
+
 ## The results
 
 ![Stress-plot RMASE CITE-seq](https://i.imgur.com/ulyAF9j.png)
@@ -39,5 +57,9 @@ We can make this comparison across multiple dimensionality reduction methods. We
 **Methods** should assign dimensionally-reduced 2D embedding coordinates to `adata.obsm['X_emb']` as well as the method of choice, i.e., `adata.obsm['X_pca']` or `adata.obsm['X_tsne']`.
 
 **Metrics** should calculate the quality or "goodness of fit" of a dimensional reduction **method**.
+
+## Pre-processing
+
+There is a `preprocessing.py` function which contains a set of standard pre-processing functions. These perform steps such as transforming the raw data, selecting features and summarising dimensionality reduction. Where possible each **method** should first call one of these functions and use the processed `adata.X` or `adata.obsm['X_input']` slot as the input to the method. Variants of methods can be created by applying different pre-processing prior to the method itself (see `phate.py` for an example).
 
 1. Raimundo, F., Vallot, C. & Vert, J. Tuning parameters of dimensionality reduction methods for single-cell RNA-seq analysis. Genome Biol 21, 212 (2020). https://doi.org/10.1186/s13059-020-02128-7
