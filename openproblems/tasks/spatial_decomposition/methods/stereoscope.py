@@ -9,6 +9,7 @@ from ....tools.utils import check_version
     paper_year=2020,
     code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi-tools"),
+    image="openproblems-python-extras",
 )
 def stereoscope_raw(adata):
     from scvi.data import setup_anndata
