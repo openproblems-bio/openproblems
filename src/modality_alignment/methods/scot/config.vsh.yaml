@@ -25,7 +25,7 @@ functionality:
   resources:
     - type: python_script
       path: ./scot.py
-    - path: "../../resources/preprocessing.py"
+    - path: "../../utils/preprocessing.py"
 
 platforms:
   - type: docker

@@ -9,7 +9,7 @@ par = {
     "test": False,
     "compression" = "gzip"
 }
-resources_dir = "../../resources/"
+resources_dir = "../../utils/"
 ## VIASH END
 
 print("Importing libraries")

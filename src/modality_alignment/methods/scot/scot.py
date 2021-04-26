@@ -5,7 +5,7 @@ par = {
   n_svd = 100,
   balanced=False,
 }
-resources_dir = "../../resources/utils.py"
+resources_dir = "../../utils/"
 ## VIASH END
 
 print("Loading dependencies")
