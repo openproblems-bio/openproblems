@@ -18,7 +18,11 @@ mkdir -p $OUTPUT/metrics
 
 # generate datasets
 if [ ! -f "$OUTPUT/datasets/citeseq_cbmc.h5ad" ]; then
-  "$TARGET/datasets/data_scprep_csv/data_scprep_csv" \
+  wget 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz' -O "$OUTPUT/datasets/citeseq_cbmc_input1.csv.gz"
+  wget 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DADT%5Fumi%2Ecsv%2Egz' -O "$OUTPUT/datasets/citeseq_cbmc_input2.csv.gz"
+  "$TARGET/datasets/scprep_csv/scprep_csv" \
+    --input1 "$OUTPUT/datasets/citeseq_cbmc_input1.csv.gz" \
+    --input2 "$OUTPUT/datasets/citeseq_cbmc_input2.csv.gz" \
     --output "$OUTPUT/datasets/citeseq_cbmc.h5ad"
 fi
 
@@ -50,4 +54,4 @@ done
 
 # concatenate all scores into one tsv
 INPUTS=$(ls -1 "$OUTPUT/metrics" | sed "s#.*#-i '$OUTPUT/metrics/&'#" | tr '\n' ' ')
-eval "$TARGET/../utils/extract_scores" $INPUTS -o "$OUTPUT/scores.tsv"
+eval "$TARGET/../utils/extract_scores/extract_scores" $INPUTS -o "$OUTPUT/scores.tsv"
