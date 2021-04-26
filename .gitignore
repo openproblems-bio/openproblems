@@ -1,6 +1,5 @@
 # repo specific ignores
 output_bash
-*.h5ad
 
 # R specific ignores
 .Rhistory

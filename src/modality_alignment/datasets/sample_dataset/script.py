@@ -76,7 +76,7 @@ adata.obsm["mode2"] = scipy.sparse.csr_matrix(
 adata = filter_joint_data_empty_cells(adata)
 
 print("Subsetting dataset")
-adata = subset_joint_data(adata)
+adata = subset_joint_data(adata, n_cells = par["n_cells"], n_genes = par["n_genes"])
 
 adata.uns["dataset_id"] = "sample_dataset_test"
 
