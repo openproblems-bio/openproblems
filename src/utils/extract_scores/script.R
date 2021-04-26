@@ -17,10 +17,12 @@ scores <- map_df(par$input, function(inp) {
   cat("Reading '", inp, "'\n", sep = "")
   ad <- read_h5ad(inp)
 
-  assert_that("dataset_name" %in% names(ad$uns))
-  assert_that("method_name" %in% names(ad$uns))
-  assert_that("metric_name" %in% names(ad$uns))
-  assert_that("metric_value" %in% names(ad$uns))
+  for (uns_name in c("dataset_name", "method_name", "metric_name", "metric_value")) {
+    assert_that(
+      uns_name %in% names(ad$uns), 
+      msg = paste0("File ", inp, " must contain `uns['", uns_name, "']`")
+    )
+  }
 
   as_tibble(ad$uns[c("dataset_name", "method_name", "metric_name", "metric_value")])
 })
