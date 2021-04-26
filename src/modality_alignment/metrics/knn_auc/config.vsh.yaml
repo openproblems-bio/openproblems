@@ -33,7 +33,11 @@ functionality:
       description: The maximum number of SVDs to use.
   resources:
     - type: python_script
-      path: ./script.py
+      path: script.py
+  tests:
+    - type: python_script
+      path: test.py
+    - path: ../../resources/sample_output.h5ad
 platforms:
   - type: docker
     image: "python:3.8"
@@ -43,4 +47,5 @@ platforms:
           - anndata
           - numpy
           - sklearn
+          - scanpy
   - type: nextflow

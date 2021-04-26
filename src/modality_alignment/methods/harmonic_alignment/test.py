@@ -14,7 +14,7 @@ out = subprocess.check_output([
 print(">> Checking whether file exists")
 assert path.exists("output.h5ad")
 
-print(">> Check that dataset output fits expected API")
+print(">> Check that output fits expected API")
 adata = sc.read_h5ad("output.h5ad")
 
 assert "aligned" in adata.obsm
