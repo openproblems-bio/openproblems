@@ -7,7 +7,7 @@ functionality:
     - name: "Scott Gigante"
       roles: [ maintainer, author ]
       props: { github: scottgigante }
-    arguments:
+  arguments:
     - name: "--id"
       type: "string"
       default: "citeseq_cbmc"
