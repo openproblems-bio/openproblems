@@ -1,0 +1,36 @@
+functionality:
+  name: "sample_dataset"
+  namespace: "modality_alignment/datasets"
+  version: "dev"
+  description: "Sample dataset for testing purposes"
+  authors:
+    - name: "Scott Gigante"
+      roles: [ maintainer, author ]
+      props: { github: scottgigante }
+  arguments:
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file containing both input matrices data"
+      required: true
+  resources:
+    - type: python_script
+      path: script.py
+    - path: "../../utils/utils.py"
+  tests:
+    - type: python_script
+      path: test.py
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - scprep
+          - anndata # needed by utils.py
+          - pandas # needed by utils.py
+          - scanpy # needed by utils.py
+          - numpy # needed by utils.py
+  - type: nextflow
