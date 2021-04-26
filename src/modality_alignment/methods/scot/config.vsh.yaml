@@ -36,7 +36,7 @@ functionality:
       description: "Determines whether balanced or unbalanced optimal transport. In the balanced case, the target and source distributions are assumed to have equal mass."
   resources:
     - type: python_script
-      path: ./scot.py
+      path: ./script.py
     - path: "../../utils/preprocessing.py"
 
 platforms:
