@@ -18,12 +18,15 @@ mkdir -p $OUTPUT/metrics
 
 # generate datasets
 if [ ! -f "$OUTPUT/datasets/citeseq_cbmc.h5ad" ]; then
-  wget 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz' -O "$OUTPUT/datasets/citeseq_cbmc_input1.csv.gz"
-  wget 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DADT%5Fumi%2Ecsv%2Egz' -O "$OUTPUT/datasets/citeseq_cbmc_input2.csv.gz"
+  tmp1=`tempfile`
+  tmp2=`tempfile`
+  wget 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz' -O "$tmp1"
+  wget 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DADT%5Fumi%2Ecsv%2Egz' -O "$tmp2"
   "$TARGET/datasets/scprep_csv/scprep_csv" \
-    --input1 "$OUTPUT/datasets/citeseq_cbmc_input1.csv.gz" \
-    --input2 "$OUTPUT/datasets/citeseq_cbmc_input2.csv.gz" \
+    --input1 "$tmp1" \
+    --input2 "$tmp2" \
     --output "$OUTPUT/datasets/citeseq_cbmc.h5ad"
+  rm "$tmp1" "$tmp2"
 fi
 
 # run all methods on all datasets
