@@ -58,7 +58,7 @@ neighbors_match_curve = neighbors_match / (
 area_under_curve = np.mean(neighbors_match_curve)
 
 print("Store metic value")
-adata.uns["metric_name"] = "knn_auc"
+adata.uns["metric_id"] = "knn_auc"
 adata.uns["metric_value"] = area_under_curve
 
 print("Writing adata to file")

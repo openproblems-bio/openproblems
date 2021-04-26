@@ -41,12 +41,12 @@ print("Transforming into adata")
 adata = create_joint_adata(adata1, adata2)
 adata = filter_joint_data_empty_cells(adata)
 
-adata.uns["dataset_name"] = par["id"]
+adata.uns["dataset_id"] = par["id"]
 
 if par["test"]:
     print("Subsetting dataset")
     adata = subset_joint_data(adata)
-    adata.uns["dataset_name"] = par["id"] + "_test"
+    adata.uns["dataset_id"] = par["id"] + "_test"
 
 print("Writing adata to file")
 adata.write(par["output"], compression = "gzip")

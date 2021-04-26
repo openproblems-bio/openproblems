@@ -33,7 +33,7 @@ error_abs = np.mean(np.sum(_square(X - Y)))
 metric_value = error_abs / error_random
 
 print("Store metic value")
-adata.uns["metric_name"] = "mse"
+adata.uns["metric_id"] = "mse"
 adata.uns["metric_value"] = metric_value
 
 print("Writing adata to file")

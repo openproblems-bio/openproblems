@@ -49,5 +49,5 @@ adata.obsm["aligned"] = X_new_unbal
 adata.obsm["mode2_aligned"] = y_new_unbal
 
 print("Write output to file")
-adata.uns["method_name"] = "scot"
+adata.uns["method_id"] = "scot"
 adata.write(par["output"], compression="gzip")

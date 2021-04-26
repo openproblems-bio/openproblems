@@ -4,8 +4,8 @@ Modality alignment refers to the task of combining together two datasets of diff
 
 ## API
 
-Datasets should include matched measurements from two modalities, which are contained in `adata` and `adata.obsm["mode2"]`. The task is to align these two modalities as closely as possible, without using the known bijection between the datasets. The dataset identifier should be stored in `adata.uns["dataset_name"]`.
+Datasets should include matched measurements from two modalities, which are contained in `adata` and `adata.obsm["mode2"]`. The task is to align these two modalities as closely as possible, without using the known bijection between the datasets. The dataset identifier should be stored in `adata.uns["dataset_id"]`.
 
-Methods should create joint matrices `adata.obsm["aligned"]` and `adata.obsm["mode2_aligned"]` which reside in a joint space. The method identifier should be stored in `adata.uns["method_name"]`.
+Methods should create joint matrices `adata.obsm["aligned"]` and `adata.obsm["mode2_aligned"]` which reside in a joint space. The method identifier should be stored in `adata.uns["method_id"]`.
 
-Metrics should evaluate how well the cells which are known to be equivalent are aligned in the joint space. The metric identifier should be stored in `adata.uns["metric_name"]`. The metric value should be stored in `adata.uns["metric_value"]`.
+Metrics should evaluate how well the cells which are known to be equivalent are aligned in the joint space. The metric identifier should be stored in `adata.uns["metric_id"]`. The metric value should be stored in `adata.uns["metric_value"]`.
