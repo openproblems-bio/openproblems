@@ -3,6 +3,18 @@ functionality:
   namespace: "modality_alignment/methods"
   version: "dev"
   description: "Run Single Cell Optimal Transport"
+  authors:
+    - name: "Alex Tong"
+      roles: [ maintainer, author ]
+      props: { github: atong01 }
+  info:
+    method_label: "SCOT"
+    method_name: "Single Cell Optimal Transport"
+    paper_name: "Gromov-Wasserstein optimal transport to align single-cell multi-omics data"
+    paper_doi: "10.1101/2020.04.28.066787"
+    paper_year: "2020"
+    code_url: "https://github.com/rsinghlab/SCOT"
+    code_version: "0.2.0"
   arguments:
     - name: "--input"
       alternatives: ["-i"]

@@ -3,7 +3,11 @@ functionality:
   namespace: "modality_alignment/datasets"
   version: "dev"
   description: "Create a modality alignment dataset from CSV using scprep."
-  arguments:
+  authors:
+    - name: "Scott Gigante"
+      roles: [ maintainer, author ]
+      props: { github: scottgigante }
+    arguments:
     - name: "--id"
       type: "string"
       default: "citeseq_cbmc"

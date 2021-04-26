@@ -3,6 +3,14 @@ functionality:
   namespace: "modality_alignment/metrics"
   version: "dev"
   description: "Compute the mean squared error"
+  authors:
+    - name: "Scott Gigante"
+      roles: [ maintainer, author ]
+      props: { github: scottgigante }
+  info:
+    method_label: "MSE"
+    metric_name: "Mean Squared Error"
+    maximise: true
   arguments:
     - name: "--input"
       alternatives: ["-i"]
