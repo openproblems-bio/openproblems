@@ -17,7 +17,7 @@ print(">> Running scprep_csv")
 out = subprocess.check_output([
     "./scprep_csv",
     "--id", "footest",
-    "--input1",  "adt_umi.csv.gz",
+    "--input1", "adt_umi.csv.gz",
     "--input2", "adt_umi.csv.gz",
     "--output", "output.h5ad"
 ]).decode("utf-8")
