@@ -9,7 +9,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
-NXF_VER=20.10.0 nextflow run src/modality_alignment/workflows/test.nf \
+NXF_VER=20.10.0 bin/nextflow run src/modality_alignment/workflows/test.nf \
   -resume \
   --output output/modality_alignment/test
 
