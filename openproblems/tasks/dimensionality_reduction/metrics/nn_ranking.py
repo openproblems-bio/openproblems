@@ -1,18 +1,20 @@
 """
-This file is uses slightly modified code from pyDRMetrics, see:
-https://www.sciencedirect.com/science/article/pii/S2405844021003042.
+This file is uses slightly modified code from pyDRMetrics [1]_, see:
+
+    - https://doi.org/10.1016/j.heliyon.2021.e06199 - the article.
+    - https://data.mendeley.com/datasets/jbjd5fmggh/1 - the supplementary files.
 
 The following changes have been made:
 
     - :mod:`numba` JIT for performance reasons
     - use broadcasting instead of a 3rd loop in :func:`_ranking_matrix`
 
-Additional explanation of the metrics:
-
-    - https://perso.uclouvain.be/michel.verleysen/papers/fsdm08jl.pdf
-    - https://core.ac.uk/download/pdf/148668147.pdf
+[1] Zhang, Yinsheng (2021),
+  “Source code, sample data, and case study report for pyDRMetrics”,
+  Mendeley Data, V1, doi: 10.17632/jbjd5fmggh.1
 """
 
+from ....tasks.dimensionality_reduction.methods.preprocessing import preprocess_scanpy
 from ....tools.decorators import metric
 from anndata import AnnData
 from numba import njit
@@ -22,8 +24,14 @@ from typing import Tuple
 
 import numpy as np
 
-__author__ = "Yinsheng Zhang"
-__author_email__ = "zhangys@illinois.edu"
+__original_author__ = "Yinsheng Zhang"
+__original_author_email__ = "zhangys@illinois.edu"
+__license__ = "CC BY 4.0"
+__license_link__ = (
+    "https://data.mendeley.com/datasets/"
+    "jbjd5fmggh/1/files/da1bca42-c4da-4376-9177-bd2d9a308108"
+)
+
 
 _K = 30
 
@@ -61,7 +69,7 @@ def _coranking_matrix(R1: np.ndarray, R2: np.ndarray) -> np.ndarray:
 @njit(cache=True, fastmath=True)
 def _metrics(
     Q: np.ndarray,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, int, float, float]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, float, np.ndarray, int, float, float]:
     Q = Q[1:, 1:]
     m = len(Q)
 
@@ -99,14 +107,14 @@ def _metrics(
 
 
 def _high_dim(adata: AnnData) -> np.ndarray:
-    # TODO(incorporate Luke's preprocessing)
+    adata = preprocess_scanpy(adata)
     high_dim = adata.X
     return high_dim.A if issparse(high_dim) else high_dim
 
 
 def _fit(
     X: np.ndarray, E: np.ndarray
-) -> Tuple[float, float, float, float, float, float]:
+) -> Tuple[float, float, float, float, float, float, float]:
     if np.any(np.isnan(E)):
         return 0.0, 0.0, 0.0, 0.5, -np.inf, -np.inf, -np.inf
 
