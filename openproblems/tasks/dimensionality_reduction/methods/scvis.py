@@ -1,5 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
+from .preprocessing import preprocess_scanpy
 from anndata import AnnData
 from scipy.sparse import issparse
 from typing import Any
@@ -7,7 +8,6 @@ from typing import Dict
 from typing import Tuple
 
 import numpy as np
-import scanpy as sc
 
 _CFG = {
     "hyperparameter": {
@@ -86,15 +86,6 @@ def _fit(data: np.ndarray):
     return model, x
 
 
-def _preprocess(adata: AnnData) -> AnnData:
-    adata.var_names_make_unique()
-    sc.pp.normalize_per_cell(adata)
-    sc.pp.log1p(adata)
-
-    sc.pp.highly_variable_genes(adata, n_top_genes=3000)
-    return adata[:, adata.var["highly_variable"]]
-
-
 @method(
     method_name="scvis (CPU)",
     paper_name="Interpretable dimensionality reduction "
@@ -106,7 +97,9 @@ def _preprocess(adata: AnnData) -> AnnData:
     image="openproblems-python-method-scvis",
 )
 def scvis(adata: AnnData) -> AnnData:
-    adata = _preprocess(adata)
+    adata = preprocess_scanpy(adata)
+    adata = adata[:, adata.var["highly_variable"]]
+
     model, x = _fit(adata.X.A if issparse(adata.X) else adata.X)
     emb, _ = model.encode(x)
 
