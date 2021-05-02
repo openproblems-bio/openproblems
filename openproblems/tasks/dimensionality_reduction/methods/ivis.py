@@ -1,20 +1,7 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
+from .preprocessing import preprocess_scanpy
 from anndata import AnnData
-
-import scanpy as sc
-
-
-def _ivis_preprocess(adata: AnnData) -> AnnData:
-    adata.var_names_make_unique()
-    sc.pp.normalize_per_cell(adata)
-    sc.pp.log1p(adata)
-
-    sc.pp.highly_variable_genes(adata, n_top_genes=3000)
-    adata = adata[:, adata.var["highly_variable"]].copy()
-    sc.tl.pca(adata)
-
-    return adata
 
 
 @method(
@@ -30,7 +17,7 @@ def _ivis_preprocess(adata: AnnData) -> AnnData:
 def ivis(adata: AnnData) -> AnnData:
     from ivis import Ivis
 
-    adata = _ivis_preprocess(adata)
+    adata = preprocess_scanpy(adata)
 
     # parameters taken from:
     # https://bering-ivis.readthedocs.io/en/latest/
