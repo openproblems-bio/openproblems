@@ -17,7 +17,7 @@ from anndata import AnnData
 def ivis(adata: AnnData) -> AnnData:
     from ivis import Ivis
 
-    adata = preprocess_scanpy(adata)
+    preprocess_scanpy(adata)
 
     # parameters taken from:
     # https://bering-ivis.readthedocs.io/en/latest/
