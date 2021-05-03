@@ -97,7 +97,7 @@ def _fit(data: np.ndarray):
     image="openproblems-python-method-scvis",
 )
 def scvis(adata: AnnData) -> AnnData:
-    adata = preprocess_scanpy(adata)
+    preprocess_scanpy(adata)
     adata = adata[:, adata.var["highly_variable"]]
 
     model, x = _fit(adata.X.A if issparse(adata.X) else adata.X)
