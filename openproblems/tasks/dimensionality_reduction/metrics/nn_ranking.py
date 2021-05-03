@@ -107,7 +107,7 @@ def _metrics(
 
 
 def _high_dim(adata: AnnData) -> np.ndarray:
-    adata = preprocess_scanpy(adata)
+    preprocess_scanpy(adata)
     high_dim = adata.X
     return high_dim.A if issparse(high_dim) else high_dim
 
