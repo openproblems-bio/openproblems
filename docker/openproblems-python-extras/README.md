@@ -17,3 +17,5 @@ Python packages:
 * phate
 * neuralee
 * torch
+* tensorflow-cpu
+* ivis

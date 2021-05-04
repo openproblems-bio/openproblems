@@ -1,6 +1,4 @@
-FROM python:3.8
-
-# Adding this comment as a temporary bugfix on 3/30
+FROM python:3.6
 
 # Setting up Sagemaker Studio Image from example
 # https://github.com/aws-samples/sagemaker-studio-custom-image-samples/blob/main/examples/echo-kernel-image/Dockerfile
@@ -28,7 +26,7 @@ RUN unzip -q awscliv2.zip
 RUN ./aws/install
 
 # install dependencies
-COPY ./docker/openproblems/requirements.txt ./requirements.txt
+COPY ./docker/openproblems-python-method-scvis/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install single-cell open problems

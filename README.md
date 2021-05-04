@@ -16,6 +16,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
 ## Guides
 * For contributing guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md)  
 * For instructions on editing Docker images, see [docker/README.md](docker/README.md)  
+* For instructions on using the `openproblems-cli`, see [openproblems/api/README.md](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/api)
 * For a walkthrough of the GitHub Actions workflows and AWS Sagemaker, see [SAGEMAKER.md](SAGEMAKER.md)  
 * For a description of existing an proposed tasks, see [TASKS.md](TASKS.md)  
 * For a video introduction to this GitHub repository, watch our [Repository introduction](https://www.youtube.com/watch?v=tHempZCdXyA)
@@ -35,7 +36,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
 * Wes Lewis (@weslewis) - Differential Abundance and Data Denoising
 * Mohammad Lotfallahi (@M0hammadL) - Label projection task
 * Qian Qin (@qinqian) - Predicting gene expression from chromatin accessibility
-* Daniel Strobel (@danielStrobel) - Batch integration
+* Daniel Strobl (@danielStrobl) - Batch integration
 * Michael Vinyard (@mvinyard) - Stress preservation in Dimensionality Reduction
 * Florian Wagner (@flo-compbio) - Data denoising
 
