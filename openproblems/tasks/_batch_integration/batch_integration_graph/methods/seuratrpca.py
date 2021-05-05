@@ -64,7 +64,8 @@ _seurat = scprep.run.RFunction(
 def seuratrpca_full_unscaled(adata):
     from scIB.preprocessing import reduce_data
 
-    adata = _seurat(adata, "batch")
+    hvgs = adata.var.index
+    adata = _seurat(adata, "batch", hvgs)
     reduce_data(adata, umap=False)
     # Complete the result in-place
     return adata
@@ -83,8 +84,8 @@ def seuratrpca_hvg_unscaled(adata):
     from ._hvg import hvg_batch
     from scIB.preprocessing import reduce_data
 
-    adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = _seurat(adata, "batch")
+    hvgs = hvg_batch(adata, "batch", target_genes=2000, adataOut=False)
+    adata = _seurat(adata, "batch", hvgs)
     reduce_data(adata, umap=False)
     return adata
 
@@ -103,9 +104,9 @@ def seuratrpca_hvg_scaled(adata):
     from ._hvg import scale_batch
     from scIB.preprocessing import reduce_data
 
-    adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
+    hvgs = hvg_batch(adata, "batch", target_genes=2000, adataOut=False)
     adata = scale_batch(adata, "batch")
-    adata = _seurat(adata, "batch")
+    adata = _seurat(adata, "batch", hvgs)
     reduce_data(adata, umap=False)
     return adata
 
@@ -123,7 +124,8 @@ def seuratrpca_full_scaled(adata):
     from ._hvg import scale_batch
     from scIB.preprocessing import reduce_data
 
+    hvgs = adata.var.index
     adata = scale_batch(adata, "batch")
-    adata = _seurat(adata, "batch")
+    adata = _seurat(adata, "batch", hvgs)
     reduce_data(adata, umap=False)
     return adata
