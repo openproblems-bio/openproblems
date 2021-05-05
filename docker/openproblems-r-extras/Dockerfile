@@ -10,6 +10,8 @@ WORKDIR /
 
 RUN sudo apt-get update && sudo apt-get install -y libhdf5-dev hdf5-tools
 
+RUN sudo apt-get clean autoclean && sudo apt-get autoremove --yes && sudo rm -rf /var/lib/{apt,dpkg,cache,log}/
+
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
 RUN sudo R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))"
