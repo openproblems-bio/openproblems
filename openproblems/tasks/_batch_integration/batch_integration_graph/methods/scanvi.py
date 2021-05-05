@@ -5,9 +5,10 @@ from .....tools.utils import check_version
 
 @method(
     method_name="scanvi",
-    paper_name="Deep generative modeling for single-cell transcriptomics",
-    paper_url="https://www.nature.com/articles/s41592-018-0229-2",
-    paper_year=2018,
+    paper_name="Probabilistic harmonization and annotation of single‐cell\
+                transcriptomics data with deep generative models",
+    paper_url="https://www.embopress.org/doi/full/10.15252/msb.20209620",
+    paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
@@ -29,9 +30,10 @@ def scanvi_full_unscaled(adata):
 
 @method(
     method_name="Scanvi (hvg/unscaled)",
-    paper_name="Deep generative modeling for single-cell transcriptomics",
-    paper_url="https://www.nature.com/articles/s41592-018-0229-2",
-    paper_year=2018,
+    paper_name="Probabilistic harmonization and annotation of single‐cell\
+                transcriptomics data with deep generative models",
+    paper_url="https://www.embopress.org/doi/full/10.15252/msb.20209620",
+    paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
@@ -55,9 +57,10 @@ def scanvi_hvg_unscaled(adata):
 
 @method(
     method_name="Scanvi (hvg/scaled)",
-    paper_name="Deep generative modeling for single-cell transcriptomics",
-    paper_url="https://www.nature.com/articles/s41592-018-0229-2",
-    paper_year=2018,
+    paper_name="Probabilistic harmonization and annotation of single‐cell\
+                transcriptomics data with deep generative models",
+    paper_url="https://www.embopress.org/doi/full/10.15252/msb.20209620",
+    paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
@@ -83,9 +86,10 @@ def scanvi_hvg_scaled(adata):
 
 @method(
     method_name="Scanvi (full/scaled)",
-    paper_name="Deep generative modeling for single-cell transcriptomics",
-    paper_url="https://www.nature.com/articles/s41592-018-0229-2",
-    paper_year=2018,
+    paper_name="Probabilistic harmonization and annotation of single‐cell\
+                transcriptomics data with deep generative models",
+    paper_url="https://www.embopress.org/doi/full/10.15252/msb.20209620",
+    paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
