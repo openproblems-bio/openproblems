@@ -56,8 +56,8 @@ _seurat = scprep.run.RFunction(
     image="openproblems-r-extras",  # only if required
 )
 def seurat_full_unscaled(adata):
-    from scIB.preprocessing import reduce_data
     from ._hvg import hvg_batch
+    from scIB.preprocessing import reduce_data
 
     hvgs = hvg_batch(adata, batch_key="batch", target_genes=2000, adataOut=False)
     adata = _seurat(adata, "batch", hvgs)
@@ -119,9 +119,9 @@ def seurat_hvg_scaled(adata):
     image="openproblems-r-extras",  # only if required
 )
 def seurat_full_scaled(adata):
+    from ._hvg import hvg_batch
     from ._hvg import scale_batch
     from scIB.preprocessing import reduce_data
-    from ._hvg import hvg_batch
 
     hvgs = hvg_batch(adata, batch_key="batch", target_genes=2000, adataOut=False)
     adata = _seurat(adata, "batch", hvgs)
