@@ -45,7 +45,10 @@ def load_immune(test=False):
             scprep.io.download.download_url(URL, filepath)
             adata = sc.read(filepath)
 
-            # Remove preprocessing
+            # Remove preprocessing and Villani et al data,
+            # as it is TPM instead of counts
+
+            adata = adata[adata.obs.study != "Villani"]
             adata.X = adata.layers["counts"]
             del adata.layers["counts"]
 
