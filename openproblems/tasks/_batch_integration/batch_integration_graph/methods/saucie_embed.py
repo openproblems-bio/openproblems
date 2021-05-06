@@ -5,10 +5,10 @@ from .....tools.utils import check_version
 
 @method(
     method_name="Saucie embedding output",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Exploring single-cell data with deep multitasking neural networks",
+    paper_url="https://www.nature.com/articles/s41592-019-0576-7",
+    paper_year=2019,
+    code_url="https://github.com/KrishnaswamyLab/SAUCIE",
     code_version=check_version("saucie"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -24,10 +24,10 @@ def saucie_embed_full_unscaled(adata):
 
 @method(
     method_name="Saucie embedding output (hvg/unscaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Exploring single-cell data with deep multitasking neural networks",
+    paper_url="https://www.nature.com/articles/s41592-019-0576-7",
+    paper_year=2019,
+    code_url="https://github.com/KrishnaswamyLab/SAUCIE",
     code_version=check_version("saucie"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -44,10 +44,10 @@ def saucie_embed_hvg_unscaled(adata):
 
 @method(
     method_name="Saucie embedding output (hvg/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Exploring single-cell data with deep multitasking neural networks",
+    paper_url="https://www.nature.com/articles/s41592-019-0576-7",
+    paper_year=2019,
+    code_url="https://github.com/KrishnaswamyLab/SAUCIE",
     code_version=check_version("saucie"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -66,10 +66,10 @@ def saucie_embed_hvg_scaled(adata):
 
 @method(
     method_name="Saucie embedding output (full/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="Exploring single-cell data with deep multitasking neural networks",
+    paper_url="https://www.nature.com/articles/s41592-019-0576-7",
+    paper_year=2019,
+    code_url="https://github.com/KrishnaswamyLab/SAUCIE",
     code_version=check_version("saucie"),
     image="openproblems-python-batch-integration",  # only if required
 )
