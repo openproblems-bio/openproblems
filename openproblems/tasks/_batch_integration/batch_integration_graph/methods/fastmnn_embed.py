@@ -24,10 +24,10 @@ _fastmnn_embed = scprep.run.RFunction(
 
 @method(
     method_name="FastMNN feature",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="A description of the theory behind the fastMNN algorithm",
+    paper_url="https://marionilab.github.io/FurtherMNN2018/theory/description.html",
+    paper_year=2019,
+    code_url="https://rdrr.io/github/LTLA/batchelor/man/fastMNN.html",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -43,10 +43,10 @@ def fastmnn_embed_full_unscaled(adata):
 
 @method(
     method_name="FastMNN feature (hvg/unscaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="A description of the theory behind the fastMNN algorithm",
+    paper_url="https://marionilab.github.io/FurtherMNN2018/theory/description.html",
+    paper_year=2019,
+    code_url="https://rdrr.io/github/LTLA/batchelor/man/fastMNN.html",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -63,10 +63,10 @@ def fastmnn_embed_hvg_unscaled(adata):
 
 @method(
     method_name="FastMNN feature (hvg/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="A description of the theory behind the fastMNN algorithm",
+    paper_url="https://marionilab.github.io/FurtherMNN2018/theory/description.html",
+    paper_year=2019,
+    code_url="https://rdrr.io/github/LTLA/batchelor/man/fastMNN.html",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
@@ -85,10 +85,10 @@ def fastmnn_embed_hvg_scaled(adata):
 
 @method(
     method_name="FastMNN feature (full/scaled)",
-    paper_name="Sc",
-    paper_url="temp",
-    paper_year=2020,
-    code_url="",
+    paper_name="A description of the theory behind the fastMNN algorithm",
+    paper_url="https://marionilab.github.io/FurtherMNN2018/theory/description.html",
+    paper_year=2019,
+    code_url="https://rdrr.io/github/LTLA/batchelor/man/fastMNN.html",
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
