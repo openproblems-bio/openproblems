@@ -8,7 +8,7 @@ from .....tools.utils import check_version
     paper_name="Adjusting batch effects in microarray expression data using\
                 empirical Bayes methods",
     paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
-    paper_year=2006,
+    paper_year=2007,
     code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
@@ -28,7 +28,7 @@ def combat_full_unscaled(adata):
     paper_name="Adjusting batch effects in microarray expression data using\
                 empirical Bayes methods",
     paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
-    paper_year=2006,
+    paper_year=2007,
     code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
@@ -49,7 +49,7 @@ def combat_utils_unscaled(adata):
     paper_name="Adjusting batch effects in microarray expression data using\
                 empirical Bayes methods",
     paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
-    paper_year=2006,
+    paper_year=2007,
     code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
@@ -72,7 +72,7 @@ def combat_utils_scaled(adata):
     paper_name="Adjusting batch effects in microarray expression data using\
                 empirical Bayes methods",
     paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
-    paper_year=2006,
+    paper_year=2007,
     code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
