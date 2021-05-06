@@ -55,8 +55,8 @@ def harmony_full_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def harmony_hvg_unscaled(adata):
-    from ._hvg import hvg_batch
+def harmony_utils_unscaled(adata):
+    from ._utils import hvg_batch
     from scIB.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
@@ -76,9 +76,9 @@ def harmony_hvg_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def harmony_hvg_scaled(adata):
-    from ._hvg import hvg_batch
-    from ._hvg import scale_batch
+def harmony_utils_scaled(adata):
+    from ._utils import hvg_batch
+    from ._utils import scale_batch
     from scIB.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
@@ -100,7 +100,7 @@ def harmony_hvg_scaled(adata):
     image="openproblems-r-extras",  # only if required
 )
 def harmony_full_scaled(adata):
-    from ._hvg import scale_batch
+    from ._utils import scale_batch
     from scIB.preprocessing import reduce_data
 
     adata = scale_batch(adata, "batch")

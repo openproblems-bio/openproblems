@@ -29,8 +29,8 @@ def scgen_full_unscaled(adata):
     code_version=check_version("scgen"),
     image="openproblems-python37-scgen",  # only if required
 )
-def scgen_hvg_unscaled(adata):
-    from _hvg import hvg_batch
+def scgen_utils_unscaled(adata):
+    from _utils import hvg_batch
     from scIB.integration import runScGen
     from scIB.preprocessing import reduce_data
 
@@ -69,8 +69,8 @@ def scgen_full_scaled(adata):
     code_version=check_version("scgen"),
     image="openproblems-python37-scgen",  # only if required
 )
-def scgen_hvg_scaled(adata):
-    from _hvg import hvg_batch
+def scgen_utils_scaled(adata):
+    from _utils import hvg_batch
     from scIB.integration import runScGen
     from scIB.preprocessing import reduce_data
     from scIB.preprocessing import scale_batch

@@ -33,8 +33,8 @@ def combat_full_unscaled(adata):
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def combat_hvg_unscaled(adata):
-    from ._hvg import hvg_batch
+def combat_utils_unscaled(adata):
+    from ._utils import hvg_batch
     from scIB.integration import runCombat
     from scIB.preprocessing import reduce_data
 
@@ -54,9 +54,9 @@ def combat_hvg_unscaled(adata):
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def combat_hvg_scaled(adata):
-    from ._hvg import hvg_batch
-    from ._hvg import scale_batch
+def combat_utils_scaled(adata):
+    from ._utils import hvg_batch
+    from ._utils import scale_batch
     from scIB.integration import runCombat
     from scIB.preprocessing import reduce_data
 
@@ -78,7 +78,7 @@ def combat_hvg_scaled(adata):
     image="openproblems-python-batch-integration",  # only if required
 )
 def combat_full_scaled(adata):
-    from ._hvg import scale_batch
+    from ._utils import scale_batch
     from scIB.integration import runCombat
     from scIB.preprocessing import reduce_data
 

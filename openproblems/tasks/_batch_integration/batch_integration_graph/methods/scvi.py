@@ -37,8 +37,8 @@ def scvi_full_unscaled(adata):
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def scvi_hvg_unscaled(adata):
-    from ._hvg import hvg_batch
+def scvi_utils_unscaled(adata):
+    from ._utils import hvg_batch
     from scIB.integration import runScvi
     from scIB.preprocessing import reduce_data
 
@@ -63,9 +63,9 @@ def scvi_hvg_unscaled(adata):
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def scvi_hvg_scaled(adata):
-    from ._hvg import hvg_batch
-    from ._hvg import scale_batch
+def scvi_utils_scaled(adata):
+    from ._utils import hvg_batch
+    from ._utils import scale_batch
     from scIB.integration import runScvi
     from scIB.preprocessing import reduce_data
 
@@ -92,7 +92,7 @@ def scvi_hvg_scaled(adata):
     image="openproblems-python-batch-integration",  # only if required
 )
 def scvi_full_scaled(adata):
-    from ._hvg import scale_batch
+    from ._utils import scale_batch
     from scIB.integration import runScvi
     from scIB.preprocessing import reduce_data
 

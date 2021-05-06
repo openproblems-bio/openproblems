@@ -30,8 +30,8 @@ def bbknn_full_unscaled(adata):
     code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def bbknn_hvg_unscaled(adata):
-    from ._hvg import hvg_batch
+def bbknn_utils_unscaled(adata):
+    from ._utils import hvg_batch
     from scIB.integration import runBBKNN
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
@@ -49,9 +49,9 @@ def bbknn_hvg_unscaled(adata):
     code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def bbknn_hvg_scaled(adata):
-    from ._hvg import hvg_batch
-    from ._hvg import scale_batch
+def bbknn_utils_scaled(adata):
+    from ._utils import hvg_batch
+    from ._utils import scale_batch
     from scIB.integration import runBBKNN
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
@@ -71,7 +71,7 @@ def bbknn_hvg_scaled(adata):
     image="openproblems-python-batch-integration",  # only if required
 )
 def bbknn_full_scaled(adata):
-    from ._hvg import scale_batch
+    from ._utils import scale_batch
     from scIB.integration import runBBKNN
 
     adata = scale_batch(adata, "batch")
