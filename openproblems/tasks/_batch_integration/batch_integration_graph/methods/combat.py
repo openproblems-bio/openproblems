@@ -5,9 +5,10 @@ from .....tools.utils import check_version
 
 @method(
     method_name="Combat",
-    paper_name="A test metric for assessing single-cell RNA-seq batch correction",
-    paper_url="https://www.nature.com/articles/s41592-018-0254-1",
-    paper_year=2018,
+    paper_name="Adjusting batch effects in microarray expression data using\
+                empirical Bayes methods",
+    paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
+    paper_year=2006,
     code_url="github.com/theislab/scanpy",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
@@ -24,9 +25,10 @@ def combat_full_unscaled(adata):
 
 @method(
     method_name="Combat (hvg/unscaled)",
-    paper_name="A test metric for assessing single-cell RNA-seq batch correction",
-    paper_url="https://www.nature.com/articles/s41592-018-0254-1",
-    paper_year=2018,
+    paper_name="Adjusting batch effects in microarray expression data using\
+                empirical Bayes methods",
+    paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
+    paper_year=2006,
     code_url="github.com/theislab/scanpy",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
@@ -44,9 +46,10 @@ def combat_hvg_unscaled(adata):
 
 @method(
     method_name="Combat (hvg/scaled)",
-    paper_name="A test metric for assessing single-cell RNA-seq batch correction",
-    paper_url="https://www.nature.com/articles/s41592-018-0254-1",
-    paper_year=2018,
+    paper_name="Adjusting batch effects in microarray expression data using\
+                empirical Bayes methods",
+    paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
+    paper_year=2006,
     code_url="github.com/theislab/scanpy",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
@@ -66,9 +69,10 @@ def combat_hvg_scaled(adata):
 
 @method(
     method_name="Combat (full/scaled)",
-    paper_name="A test metric for assessing single-cell RNA-seq batch correction",
-    paper_url="https://www.nature.com/articles/s41592-018-0254-1",
-    paper_year=2018,
+    paper_name="Adjusting batch effects in microarray expression data using\
+                empirical Bayes methods",
+    paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
+    paper_year=2006,
     code_url="github.com/theislab/scanpy",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
