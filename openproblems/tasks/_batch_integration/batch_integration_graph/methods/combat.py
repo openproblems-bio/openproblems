@@ -9,7 +9,7 @@ from .....tools.utils import check_version
                 empirical Bayes methods",
     paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
     paper_year=2006,
-    code_url="github.com/theislab/scanpy",
+    code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -29,7 +29,7 @@ def combat_full_unscaled(adata):
                 empirical Bayes methods",
     paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
     paper_year=2006,
-    code_url="github.com/theislab/scanpy",
+    code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -50,7 +50,7 @@ def combat_hvg_unscaled(adata):
                 empirical Bayes methods",
     paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
     paper_year=2006,
-    code_url="github.com/theislab/scanpy",
+    code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
 )
@@ -73,7 +73,7 @@ def combat_hvg_scaled(adata):
                 empirical Bayes methods",
     paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
     paper_year=2006,
-    code_url="github.com/theislab/scanpy",
+    code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",
     code_version=check_version("scanpy"),
     image="openproblems-python-batch-integration",  # only if required
 )
