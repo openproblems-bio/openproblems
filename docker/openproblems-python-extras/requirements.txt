@@ -8,3 +8,4 @@ pybedtools
 git+https://github.com/czbiohub/molecular-cross-validation
 PhenoGraph
 git+https://github.com/dpeerlab/Palantir
+git+https://github.com/atong01/SCOT
