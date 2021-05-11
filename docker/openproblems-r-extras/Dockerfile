@@ -14,6 +14,7 @@ RUN sudo apt-get clean autoclean && sudo apt-get autoremove --yes && sudo rm -rf
 
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
+RUN sudo R -e "install.packages('Matrix')"
 RUN sudo R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))"
 RUN sudo R -e 'install.packages("devtools")'
 RUN sudo R -e 'devtools::install_github("immunogenomics/harmony")'
