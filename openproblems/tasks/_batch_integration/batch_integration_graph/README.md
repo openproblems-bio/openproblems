@@ -21,9 +21,11 @@ Datasets should contain the following attributes:
   by  `scanpy.pp.neighbors()`
 * `adata.X` with log-normalized data
 
-Methods should assign output to:
+Methods can take anything from datasets as input and should assign output to:
 * `adata.obsp['connectivities']` and `adata.obsp['distances']`, or
 * `adata.uns['neighbors']['connectivities']` and  `adata.uns['neighbors']['distances']`, and
+
+Please note, that most methods do not use cell type labels, which improves their usability.
 
 The `openproblems-python-batch-integration` docker container is used for the methods that
 can be installed without package conflicts. For R methods, the `openproblems-r-extras`
