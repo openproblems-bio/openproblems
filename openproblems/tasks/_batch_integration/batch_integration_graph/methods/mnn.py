@@ -33,7 +33,7 @@ def mnn_full_unscaled(adata):
     code_version=check_version("mnnpy"),
     image="openproblems-python-batch-integration",
 )
-def mnn_utils_unscaled(adata):
+def mnn_hvg_unscaled(adata):
     from ._utils import hvg_batch
     from scIB.integration import runMNN
     from scIB.preprocessing import reduce_data
@@ -54,7 +54,7 @@ def mnn_utils_unscaled(adata):
     code_version=check_version("mnnpy"),
     image="openproblems-python-batch-integration",
 )
-def mnn_utils_scaled(adata):
+def mnn_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
     from scIB.integration import runMNN

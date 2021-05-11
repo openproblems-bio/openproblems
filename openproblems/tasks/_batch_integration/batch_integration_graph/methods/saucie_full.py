@@ -31,7 +31,7 @@ def saucie_feature_full_unscaled(adata):
     code_version=check_version("saucie"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def saucie_feature_utils_unscaled(adata):
+def saucie_feature_hvg_unscaled(adata):
     from ._utils import hvg_batch
     from scIB.integration import runSaucie
     from scIB.preprocessing import reduce_data
@@ -51,7 +51,7 @@ def saucie_feature_utils_unscaled(adata):
     code_version=check_version("saucie"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def saucie_feature_utils_scaled(adata):
+def saucie_feature_hvg_scaled(adata):
     from ._utils import hvg_batch
     from scIB.integration import runSaucie
     from scIB.preprocessing import reduce_data

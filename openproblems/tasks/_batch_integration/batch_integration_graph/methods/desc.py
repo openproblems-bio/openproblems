@@ -33,7 +33,7 @@ def desc_full_unscaled(adata):
     code_version=check_version("desc"),
     # image="openproblems-python-batch-integration" # only if required
 )
-def desc_utils_unscaled(adata):
+def desc_hvg_unscaled(adata):
     from _utils import hvg_batch
     from scIB.integration import runDESC
     from scIB.preprocessing import reduce_data
@@ -54,7 +54,7 @@ def desc_utils_unscaled(adata):
     code_version=check_version("desc"),
     # image="openproblems-python-batch-integration" # only if required
 )
-def desc_utils_scaled(adata):
+def desc_hvg_scaled(adata):
     from _utils import hvg_batch
     from scIB.integration import runDESC
     from scIB.preprocessing import reduce_data

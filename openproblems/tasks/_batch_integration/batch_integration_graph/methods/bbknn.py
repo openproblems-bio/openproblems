@@ -30,7 +30,7 @@ def bbknn_full_unscaled(adata):
     code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def bbknn_utils_unscaled(adata):
+def bbknn_hvg_unscaled(adata):
     from ._utils import hvg_batch
     from scIB.integration import runBBKNN
 
@@ -49,7 +49,7 @@ def bbknn_utils_unscaled(adata):
     code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def bbknn_utils_scaled(adata):
+def bbknn_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
     from scIB.integration import runBBKNN

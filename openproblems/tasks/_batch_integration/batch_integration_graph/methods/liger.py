@@ -81,7 +81,7 @@ def liger_full_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def liger_utils_unscaled(adata):
+def liger_hvg_unscaled(adata):
     from ._utils import hvg_batch
     from scIB.preprocessing import reduce_data
 
@@ -102,7 +102,7 @@ def liger_utils_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def liger_utils_scaled(adata):
+def liger_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
     from scIB.preprocessing import reduce_data

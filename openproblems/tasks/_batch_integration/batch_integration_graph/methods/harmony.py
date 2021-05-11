@@ -55,7 +55,7 @@ def harmony_full_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def harmony_utils_unscaled(adata):
+def harmony_hvg_unscaled(adata):
     from ._utils import hvg_batch
     from scIB.preprocessing import reduce_data
 
@@ -76,7 +76,7 @@ def harmony_utils_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def harmony_utils_scaled(adata):
+def harmony_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
     from scIB.preprocessing import reduce_data
