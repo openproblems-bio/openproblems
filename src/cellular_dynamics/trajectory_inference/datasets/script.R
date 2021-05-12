@@ -13,7 +13,8 @@ dir.create(output_dir)
 
 tmp <- tempfile()
 on.exit(file.remove(tmp))
-download.file(files$links.download[[i]], tmp, quiet = TRUE)
+
+download.file(download_link, tmp, quiet = TRUE)
 
 ds <- read_rds(tmp)
 ad <- to_h5ad(ds)

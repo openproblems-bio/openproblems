@@ -8,6 +8,13 @@ functionality:
       roles: [ maintainer, author ]
       props: { github: LouiseDck }
   arguments:
+    - name: "--download_link"
+      alternatives: ["-d"]
+      type: "string"
+      direction: "input"
+      default: ""
+      description: "Input download link for the dataset"
+      required: true
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
