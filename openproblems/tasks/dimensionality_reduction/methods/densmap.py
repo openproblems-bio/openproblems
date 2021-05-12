@@ -1,4 +1,6 @@
 from ....tools.decorators import method
+from ....tools.utils import check_version
+from .preprocessing import preprocess_scanpy
 
 
 @method(
@@ -8,13 +10,12 @@ from ....tools.decorators import method
     paper_url="https://www.nature.com/articles/s41587-020-00801-7",
     paper_year=2021,
     code_url="https://github.com/lmcinnes/umap",
-    code_version="8efe0a2",
+    code_version=check_version("umap-learn"),
     image="openproblems-python-extras",
 )
 def densmap(adata):
-    import umap
+    from umap import UMAP
 
-    adata.obsm["X_emb"] = umap.UMAP(densmap=True, random_state=42).fit_transform(
-        adata.X
-    )
-    return adata  # return with embedding
+    preprocess_scanpy(adata)
+    adata.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(adata.X)
+    return adata
