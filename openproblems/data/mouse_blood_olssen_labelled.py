@@ -37,4 +37,3 @@ def load_olsson_2016_mouse_blood(test=False):
             utils.filter_genes_cells(adata)
 
         return adata
-
