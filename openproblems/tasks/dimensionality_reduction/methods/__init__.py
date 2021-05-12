@@ -1,3 +1,4 @@
+from .densmap import densmap
 from .ivis import ivis
 from .neuralee import neuralee
 from .pca import pca
