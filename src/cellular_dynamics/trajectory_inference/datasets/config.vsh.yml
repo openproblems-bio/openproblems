@@ -1,0 +1,29 @@
+functionality:
+  name: "download datasets"
+  namespace: "cellular_dynamics/trajectory_inference/datasets"
+  version: "dev"
+  description: "Download datasets to use for TI, mix of real and synthetic"
+  authors:
+    - name: "Louise Deconinck"
+      roles: [ maintainer, author ]
+      props: { github: LouiseDck }
+  arguments:
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file containing input matrices data"
+      required: true
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: "rocker/tidyverse:4.0.4"
+    setup:
+      - type: R
+        packages:
+          - httr
+          - anndata # needed by utils.py
+  - type: nextflow
