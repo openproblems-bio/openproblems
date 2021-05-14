@@ -7,6 +7,7 @@ def check_dataset(adata):
     assert "X_uni" in adata.obsm
     assert "batch" in adata.obs
     assert "labels" in adata.obs
+    assert "uni_connectivities" in adata.obsp
 
     return True
 
