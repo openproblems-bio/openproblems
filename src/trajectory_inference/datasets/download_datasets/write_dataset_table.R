@@ -7,7 +7,7 @@ dir.create(output_dir)
 # config
 deposit_id <- 1443566
 
-print("Retrieveing metadata") 
+cat("Retrieving metadata\n")
 
 # retrieve file metadata from zenodo
 files <-
@@ -17,14 +17,15 @@ files <-
   map_df(function(l) {
     as_tibble(t(unlist(l)))
   }) %>%
-  filter(grepl("^real/", filename)) %>% 
-  mutate(
-    name = filename %>% str_replace_all("\\.rds$", "") %>% str_replace_all("/", "_") %>% paste0("zenodo_", deposit_id, "_", .),
-    url = paste0("https://github.com/dynverse/dyngen/raw/data_files/", name, ".rds"),
-    local_out = paste0(output_dir, "/", name, ".rds")
+  transmute(
+    id = filename %>% str_replace_all("\\.rds$", "") %>% str_replace_all("/", "_") %>% paste0("zenodo_", deposit_id, "_", .),
+    url = links.download,
+    checksum,
+    filesize
   )
 
-files <- files[1,]
+# subsample dataset
+files <- files %>% slice(1:10)
 
-# TODO rename links.download as heasder to links_download
+# TODO rename links.download as header to links_download
 write_tsv(files, "src/trajectory_inference/datasets/download_datasets/datasets.tsv")
