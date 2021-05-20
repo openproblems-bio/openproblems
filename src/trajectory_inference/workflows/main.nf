@@ -24,7 +24,7 @@ workflow {
             | splitCsv(header: true, sep: "\t") \
             | map { row ->
                 newParams = overrideParams(params, "download_datasets", "id", row.id)
-                [ row.name, file(row.url), newParams]
+                [ row.id, file(row.url), newParams]
             } \
             | download_datasets
     emit:
