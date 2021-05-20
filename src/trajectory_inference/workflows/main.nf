@@ -23,9 +23,8 @@ workflow {
         output_ = Channel.fromPath(file("$launchDir/src/trajectory_inference/datasets/download_datasets/datasets.tsv")) \
             | splitCsv(header: true, sep: "\t") \
             | map { row ->
-                files = [ "input1": file(row.links_download)]
-                newParams = overrideParams(params, "download_datasets", "id", row.name)
-                [ row.name, files, newParams]
+                newParams = overrideParams(params, "download_datasets", "id", row.id)
+                [ row.name, file(row.url), newParams]
             } \
             | download_datasets
     emit:

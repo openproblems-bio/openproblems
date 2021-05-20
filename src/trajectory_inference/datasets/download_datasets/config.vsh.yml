@@ -12,8 +12,8 @@ functionality:
       type: "string"
       default: "ti_dataset"
       description: "The id of the output dataset id"
-    - name: "--input1"
-      alternatives: ["-d"]
+    - name: "--input"
+      alternatives: ["-i"]
       type: "file"
       direction: "input"
       default: ""
@@ -38,6 +38,11 @@ platforms:
           - anndata # needed by utils.py
         github:
           - dynverse/dynio
+      - type: apt
+        packages:
+          - python3
+          - pip
       - type: python
-          
+        packages:
+          - anndata
   - type: nextflow
