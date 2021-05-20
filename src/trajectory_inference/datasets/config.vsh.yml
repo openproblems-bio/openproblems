@@ -1,5 +1,5 @@
 functionality:
-  name: "download datasets"
+  name: "download_datasets"
   namespace: "cellular_dynamics/trajectory_inference/datasets"
   version: "dev"
   description: "Download datasets to use for TI, mix of real and synthetic"
@@ -8,6 +8,10 @@ functionality:
       roles: [ maintainer, author ]
       props: { github: LouiseDck }
   arguments:
+    - name: "--id"
+      type: "string"
+      default: "ti_dataset"
+      description: "The id of the output dataset id"
     - name: "--download_link"
       alternatives: ["-d"]
       type: "string"
@@ -29,7 +33,7 @@ platforms:
   - type: docker
     image: "rocker/tidyverse:4.0.4"
     setup:
-      - type: R
+      - type: r
         packages:
           - httr
           - anndata # needed by utils.py
