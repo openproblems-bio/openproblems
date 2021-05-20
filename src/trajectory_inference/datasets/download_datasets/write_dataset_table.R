@@ -24,4 +24,5 @@ files <-
     local_out = paste0(output_dir, "/", name, ".rds")
   )
 
-write.table(files, "src/cellular_dynamics/trajectory_inference/datasets/datasets.tsv")
+# TODO rename links.download as heasder to links_download
+write_tsv(files, "src/trajectory_inference/datasets/download_datasets/datasets.tsv")

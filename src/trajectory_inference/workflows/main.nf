@@ -18,16 +18,17 @@ include { download_datasets }       from "$targetDir/trajectory_inference/datase
 //
 // If the need arises, these workflows could be split off into a separate file.
 
-workflow get_dynverse_datasets {
+workflow {
     main:
-        output_ = Channel.fromPath(file("$launchDir/src/trajectory_inference/datasets/datasets.tsv")) \
+        output_ = Channel.fromPath(file("$launchDir/src/trajectory_inference/datasets/download_datasets/datasets.tsv")) \
             | splitCsv(header: true, sep: "\t") \
             | map { row ->
-                files =  file(row.links.download)
-                newParams = overrideParams(params, "download_datasets", "id", row.id)
+                files =  file(row.links_download)
+                newParams = overrideParams(params, "download_datasets", "id", row.name)
                 [ row.id, files, newParams ]
             } \
             | download_datasets
     emit:
         output_
 }
+
