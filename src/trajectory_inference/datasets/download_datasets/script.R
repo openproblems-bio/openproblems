@@ -6,31 +6,35 @@ par <- list(
 )
 ## VIASH END
 
-print("1")
+print("> Loading dependencies")
 
-library(httr)
+options(tidyverse.quiet = TRUE) # make sure tidyverse is quiet
 library(tidyverse)
-library(dynio)
-library(anndata)
+requireNamespace("dynio", quietly = TRUE)
+requireNamespace("anndata", quietly = TRUE)
 
 output_dir <- tempfile()
 dir.create(output_dir)
 
-print("2")
+cat("> Checking input parameter\n")
 
-if(par$input1 %>% startsWith("http://") || par$input1 %>% startsWith("https://")){
-  # Check if link or local file
-  tmp <- tempfile()
-  on.exit(file.remove(tmp))
-  
-  download.file(par$input1, tmp, quiet = TRUE)
-  
-} else {
-  print("3")
-  tmp <- par$input1
-}
+input_path <-
+  if (grepl("^https?://", par$input)) {
+    cat("> Downloading file from remote\n")
+    # Check if link or local file
+    tmp <- tempfile()
+    on.exit(file.remove(tmp))
+    utils::download.file(par$input, tmp, quiet = TRUE)
+    tmp
+  } else {
+    par$input
+  }
 
-ds <- read_rds(tmp)
-ad <- to_h5ad(ds)
-print("Here")
+cat("> Reading file\n")
+ds <- read_rds(input_path)
+
+cat("> Converting RDS to h5ad\n")
+ad <- dynio::to_h5ad(ds)
+
+cat("> Writing to h5ad\n")
 ad$write_h5ad(paste0(par$output))
