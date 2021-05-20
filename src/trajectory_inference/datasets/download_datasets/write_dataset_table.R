@@ -24,5 +24,7 @@ files <-
     local_out = paste0(output_dir, "/", name, ".rds")
   )
 
+files <- files[1,]
+
 # TODO rename links.download as heasder to links_download
 write_tsv(files, "src/trajectory_inference/datasets/download_datasets/datasets.tsv")

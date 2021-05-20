@@ -12,13 +12,12 @@ functionality:
       type: "string"
       default: "ti_dataset"
       description: "The id of the output dataset id"
-    - name: "--download_link"
+    - name: "--input1"
       alternatives: ["-d"]
-      type: "string"
+      type: "file"
       direction: "input"
       default: ""
       description: "Input download link for the dataset"
-      required: true
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
@@ -37,4 +36,8 @@ platforms:
         packages:
           - httr
           - anndata # needed by utils.py
+        github:
+          - dynverse/dynio
+      - type: python
+          
   - type: nextflow
