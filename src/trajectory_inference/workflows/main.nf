@@ -4,7 +4,7 @@ targetDir = "$launchDir/target/nextflow"
 
 include { overrideOptionValue; overrideParams } from "$launchDir/src/utils/workflows/utils.nf"
 
-include { download_datasets }       from "$targetDir/cellular_dynamics/trajectory_inference/datasets/main.nf"     params(params)
+include { download_datasets }       from "$targetDir/trajectory_inference/datasets/download_datasets/main.nf"     params(params)
 
 
 
@@ -20,7 +20,7 @@ include { download_datasets }       from "$targetDir/cellular_dynamics/trajector
 
 workflow get_dynverse_datasets {
     main:
-        output_ = Channel.fromPath(file("$launchDir/src/cellular_dynamics/trajectory_inference/datasets/datasets.tsv")) \
+        output_ = Channel.fromPath(file("$launchDir/src/trajectory_inference/datasets/datasets.tsv")) \
             | splitCsv(header: true, sep: "\t") \
             | map { row ->
                 files =  file(row.links.download)
