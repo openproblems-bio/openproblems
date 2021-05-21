@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 - [ ] I have checked that this issue has not already been reported.
-- [ ] I have confirmed this bug exists on the master branch of openproblems.
+- [ ] I have confirmed this bug exists on the main branch of openproblems.
 
 ---
 

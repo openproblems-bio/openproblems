@@ -3,7 +3,7 @@
 """Sync Language Packs.
 
 Script to synchronize each language pack's items against
-Academic's master pack (English). https://sourcethemes.com/academic/
+Academic's main pack (English). https://sourcethemes.com/academic/
 
 Prerequisites: pip3 install PyYAML
 
@@ -20,11 +20,11 @@ I18N_PATH = Path(__file__).resolve().parent.parent.joinpath("i18n")
 MASTER_PACK = I18N_PATH.joinpath("en.yaml")
 
 
-# Load master language pack (English).
+# Load main language pack (English).
 with open(MASTER_PACK) as f:
-    master_map = yaml.safe_load(f)
+    main_map = yaml.safe_load(f)
     # if (DEBUG)
-    #   print(master_map)
+    #   print(main_map)
 
 # Iterate over each child language pack.
 cnt = 0
@@ -37,22 +37,22 @@ for filename in Path(I18N_PATH).glob("*.yaml"):
         with open(i18n_file) as f:
             child_map = yaml.safe_load(f)
 
-        # Synchronize the language pack's structure against the master language pack.
+        # Synchronize the language pack's structure against the main language pack.
         tmp_map = copy.deepcopy(
-            master_map
-        )  # Make a temporary deep copy of the master map (list of objects).
-        master_index = 0
-        for master_item in master_map:
+            main_map
+        )  # Make a temporary deep copy of the main map (list of objects).
+        main_index = 0
+        for main_item in main_map:
             translation = next(
                 (
                     item["translation"]
                     for item in child_map
-                    if item["id"] == master_item["id"]
+                    if item["id"] == main_item["id"]
                 ),
-                master_item["translation"],
+                main_item["translation"],
             )
-            tmp_map[master_index]["translation"] = translation
-            master_index += 1
+            tmp_map[main_index]["translation"] = translation
+            main_index += 1
 
         # Write the synced language pack to file.
         with open(i18n_file, "w") as f:

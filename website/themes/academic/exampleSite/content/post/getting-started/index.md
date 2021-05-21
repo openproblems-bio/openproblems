@@ -52,7 +52,7 @@ projects: []
   - 👕 [Wear the **T-shirt**](https://academic.threadless.com/)
   - :woman_technologist: [**Contribute**](https://sourcethemes.com/academic/docs/contribute/)
 
-{{< figure src="https://raw.githubusercontent.com/gcushen/hugo-academic/master/academic.png" title="Academic is mobile first with a responsive design to ensure that your site looks stunning on every device." >}}
+{{< figure src="https://raw.githubusercontent.com/gcushen/hugo-academic/main/academic.png" title="Academic is mobile first with a responsive design to ensure that your site looks stunning on every device." >}}
 
 **Key features:**
 
@@ -104,4 +104,4 @@ Feel free to *star* the project on [Github](https://github.com/gcushen/hugo-acad
 
 Copyright 2016-present [George Cushen](https://georgecushen.com).
 
-Released under the [MIT](https://github.com/gcushen/hugo-academic/blob/master/LICENSE.md) license.
+Released under the [MIT](https://github.com/gcushen/hugo-academic/blob/main/LICENSE.md) license.

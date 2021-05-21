@@ -2,7 +2,7 @@ name: pre-commit
 on:
   push:
     branches-ignore:
-      - 'master'
+      - 'main'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
@@ -80,7 +80,7 @@ jobs:
 
       - name: Push changes
         if: failure() && startsWith(github.ref, 'refs/heads')
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}

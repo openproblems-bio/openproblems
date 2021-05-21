@@ -19,7 +19,7 @@
   - 👕 [Wear the **T-shirt**](https://academic.threadless.com/)
   - :woman_technologist: [**Contribute**](https://sourcethemes.com/academic/docs/contribute/)
 
-[![Screenshot](https://raw.githubusercontent.com/gcushen/hugo-academic/master/academic.png)](https://github.com/gcushen/hugo-academic/)
+[![Screenshot](https://raw.githubusercontent.com/gcushen/hugo-academic/main/academic.png)](https://github.com/gcushen/hugo-academic/)
 
 ## Install
 
@@ -41,6 +41,6 @@ Then [personalize your new site](https://sourcethemes.com/academic/docs/get-star
 
 Copyright 2017-present [George Cushen](https://georgecushen.com).
 
-Released under the [MIT](https://github.com/sourcethemes/academic-kickstart/blob/master/LICENSE.md) license.
+Released under the [MIT](https://github.com/sourcethemes/academic-kickstart/blob/main/LICENSE.md) license.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-78646709-2/academic-kickstart/readme?pixel)](https://github.com/igrigorik/ga-beacon)

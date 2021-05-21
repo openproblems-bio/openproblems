@@ -8,8 +8,8 @@ find a typo in the documentation, or have made improvements, do not hesitate to
 submit a GitHub pull request.
 
 But there are many other ways to help. In particular answering queries on the
-[issue tracker](https://github.com/KrishnaswamyLab/singlecellopenproblems/issues),
-investigating bugs, and [reviewing other developers' pull requests](https://github.com/KrishnaswamyLab/singlecellopenproblems/pulls)
+[issue tracker](https://github.com/openproblems-bio/openproblems/issues),
+investigating bugs, and [reviewing other developers' pull requests](https://github.com/openproblems-bio/openproblems/pulls)
 are very valuable contributions that decrease the burden on the project
 maintainers.
 
@@ -44,21 +44,21 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
 2. If there isn't an existing issue tracking this feature, create one! There are several templates you can choose one depending on what type of feature you'd like to add.
 3. Fork https://github.com/openproblems-bio/openproblems into your account. If you're new to `git`, you might find the [Fork a repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) documentation helpful.
     <img src="https://i.imgur.com/fUcpLYl.png" width=400px>
-4. Create repository secrets (*not environment secrets*) at [https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets](https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets)
+4. Create repository secrets (*not environment secrets*) at [https://github.com/USERNAME/openproblems/settings/secrets](https://github.com/USERNAME/openproblems/settings/secrets)
     * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login details. If you do not have these, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
     * *TOWER_ACCESS_KEY (optional): log in with GitHub to https://tower.nf and create a token at https://tower.nf/tokens.*
     * When you are done with this step, your page should look like this:
     ![AWS secrets success](website/static/img/AWS_secret.png)
 
-5. Enable workflows at [https://github.com/USERNAME/SingleCellOpenProblems/actions](https://github.com/USERNAME/SingleCellOpenProblems/actions)
+5. Enable workflows at [https://github.com/USERNAME/openproblems/actions](https://github.com/USERNAME/openproblems/actions)
 6. Set up your git repository to fetch branches from `base` at `openproblems-bio/openproblems`
 
     ```
-    git clone git@github.com:<username>/SingleCellOpenProblems.git
-    cd SingleCellOpenProblems
+    git clone git@github.com:<username>/openproblems.git
+    cd openproblems
     git remote add base git@github.com:openproblems-bio/openproblems.git
     git fetch --all
-    git branch --set-upstream-to base/master
+    git branch --set-upstream-to base/main
     git pull
     ```
     **Note:** If you haven't set up SSH keys with your GitHub account, you may see this error message when adding `base` to your repository:
@@ -74,28 +74,28 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
 
     **Note:** This pushes the branch to your fork, _not to_ `base`. You will create a PR to merge your branch to `base` only after all tests are passing.
 
-    **Warning:** Do not edit the `master` branch on your fork! This will not work as expected, and will never pass tests.
+    **Warning:** Do not edit the `main` branch on your fork! This will not work as expected, and will never pass tests.
     ```
     # IMPORTANT: choose a new branch name, e.g.
     git checkout -b method-method-name-task-name # or metric-new-metric-name, etc
     git push -u origin method-method-name-task-name
     ```
 
-8. Sometimes, changes might be made to the SingleCellOpenProblems `base` repository that you want to incorporate into your fork. To sync your fork from `base`, use the following code adapted from the [Syncing a Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) tutorial from GitHub.
+8. Sometimes, changes might be made to the openproblems `base` repository that you want to incorporate into your fork. To sync your fork from `base`, use the following code adapted from the [Syncing a Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) tutorial from GitHub.
     ```
     # Fetch the branches and their respective commits from the upstream repository
     git fetch base
 
     # Check out your fork's local default branch
-    git checkout master
+    git checkout main
 
     # Merge the changes from the upstream default branch
-    git merge base/master
+    git merge base/main
 
     # Push the changes to your fork
     git push -u origin
     ```
-    You can now create a [Pull Request](https://guides.github.com/activities/hello-world/#pr) from the default branch on your fork, `master`, into your working branch, e.g. `method-method-name-task-name`.
+    You can now create a [Pull Request](https://guides.github.com/activities/hello-world/#pr) from the default branch on your fork, `main`, into your working branch, e.g. `method-method-name-task-name`.
 
 8. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
 
@@ -177,7 +177,7 @@ If you are unable to write your method using our base dependencies, you may add 
 
 Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader` in order to cache the result.
 
-To see a gold standard loader, look at [openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](https://github.com/openproblems-bio/openproblems/blob/master/openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py)
+To see a gold standard loader, look at [openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](https://github.com/openproblems-bio/openproblems/blob/main/openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py)
 
 This file name should match `[First Author Last Name]_[Year Published]_short_Description_of_data.py`. E.g. the dataset of zebrafish embryos perturbed with CRISPR published in 2018 by Wagner _et al._ becomes `Wagner_2018_zebrafish_embryo_CRISPR.py`
 
@@ -245,7 +245,7 @@ For additions outside this core functionality, contributors are encouraged to wr
 
 Code is tested by GitHub Actions when you push your changes. However, if you wish to test locally, you can do so with the following command:
 ```
-cd SingleCellOpenProblems
+cd openproblems
 pip install --editable .[test,r]
 pytest -v
 ```
@@ -272,4 +272,4 @@ the Contributor Covenant. See our [Code of Conduct](CODE_OF_CONDUCT.md) for deta
 
 ## Attribution
 
-This `CONTRIBUTING.md` was adapted from [scikit-learn](https://github.com/scikit-learn/scikit-learn/blob/master/CONTRIBUTING.md).
+This `CONTRIBUTING.md` was adapted from [scikit-learn](https://github.com/scikit-learn/scikit-learn/blob/main/CONTRIBUTING.md).

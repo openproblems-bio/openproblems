@@ -16,7 +16,7 @@ function view_update () {
   echo -e "Checking for updates...\n"
   cd themes/academic
   git fetch
-  git log --pretty=oneline --abbrev-commit --decorate HEAD..origin/master
+  git log --pretty=oneline --abbrev-commit --decorate HEAD..origin/main
   cd ../../
 }
 
@@ -40,7 +40,7 @@ function do_update () {
   "may need upgrading by following the steps in the release notes."
 }
 
-# Display currently installed version (although could be between versions if updated to master rather than tag)
+# Display currently installed version (although could be between versions if updated to main rather than tag)
 version=$(sed -n 's/^version = "//p' themes/academic/data/academic.toml)
 echo -e "Source Themes Academic v$version\n"
 

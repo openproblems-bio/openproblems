@@ -45,9 +45,9 @@ To facilitate comparing methods designed for a particular task, we've created a 
 
 ### Why Docker containers?
 
-Because methods developers use different packages with their own sets dependencies and language requirements, we run each method, metric, and dataset loader in a Docker container. You can configure these containers to use a specific operating system, programming language, and any dependencies needed for a method. Each Docker containers is specified by a `Dockerfile` within the [`docker/`](https://github.com/openproblems-bio/openproblems/tree/master/docker) directory of the Open Problems GitHub repository. Consult the [Docker documentation](https://docs.docker.com/engine/reference/builder/) for guidance on creating a `Dockerfile`.
+Because methods developers use different packages with their own sets dependencies and language requirements, we run each method, metric, and dataset loader in a Docker container. You can configure these containers to use a specific operating system, programming language, and any dependencies needed for a method. Each Docker containers is specified by a `Dockerfile` within the [`docker/`](https://github.com/openproblems-bio/openproblems/tree/main/docker) directory of the Open Problems GitHub repository. Consult the [Docker documentation](https://docs.docker.com/engine/reference/builder/) for guidance on creating a `Dockerfile`.
 
-You can find instructions for adding a new Docker image in our [Docker README.md](https://github.com/openproblems-bio/openproblems/blob/master/docker/README.md).
+You can find instructions for adding a new Docker image in our [Docker README.md](https://github.com/openproblems-bio/openproblems/blob/main/docker/README.md).
 
 
 ### Prototyping within Docker containers
@@ -60,16 +60,16 @@ You can attach these Images to an AWS SageMaker Domain. From there, you can laun
 
 The goal for this section is to create a fork, activate GitHub Actions, configure your AWS secrets, edit the GitHub repository locally, and push to your fork.
 
-Before you get started, please read our [Contributor Guide](https://github.com/openproblems-bio/openproblems/blob/master/CONTRIBUTING.md). It contains important up-to-date information about how to best contribute to Open Problems.
+Before you get started, please read our [Contributor Guide](https://github.com/openproblems-bio/openproblems/blob/main/CONTRIBUTING.md). It contains important up-to-date information about how to best contribute to Open Problems.
 
-Detailed instructions for the forking process can be found in the [Submitting new features](https://github.com/openproblems-bio/openproblems/blob/master/CONTRIBUTING.md#submitting-new-features) section of our Contributor Guide.
+Detailed instructions for the forking process can be found in the [Submitting new features](https://github.com/openproblems-bio/openproblems/blob/main/CONTRIBUTING.md#submitting-new-features) section of our Contributor Guide.
 
 ## Editing a Dockerfile
 [Watch this section of the tutorial starting at [10:08]](https://youtu.be/mNu8-KR7UFY?t=607)
 
 All the Open Problems Docker containers are specified by Dockerfiles in the `docker/` folder.
 
-To edit your custom Docker image on your fork, follow the instructions for editing Docker images in our [Docker Guide](https://github.com/openproblems-bio/openproblems/blob/master/docker/README.md).
+To edit your custom Docker image on your fork, follow the instructions for editing Docker images in our [Docker Guide](https://github.com/openproblems-bio/openproblems/blob/main/docker/README.md).
 
 Note, if you're interested in creating a container for R, you need to inherit from the `openproblems-r-base` image.
 
@@ -84,7 +84,7 @@ Once the *Run Benchmarks* workflow has successfully completed the Upload Docker 
 
 You can navigate to the ECR from the AWS Console. You should have received an email with your AWS User Credentials that includes a Console Login URL. Enter your username and password to login. You can then search for the `Elastic Container Registry` service in the search bar at the top of the screen.
 
-Next, follow the steps to locate your image on the ECR in the [Building Docker Images using Github Actions workflows](https://github.com/openproblems-bio/openproblems/blob/master/docker/README.md#building-docker-images-through-github-actions-workflows) section of our Docker guide.
+Next, follow the steps to locate your image on the ECR in the [Building Docker Images using Github Actions workflows](https://github.com/openproblems-bio/openproblems/blob/main/docker/README.md#building-docker-images-through-github-actions-workflows) section of our Docker guide.
 
 ## Attach your Image to SageMaker Studio
 [Watch this section of the tutorial starting at [18:50]](https://www.youtube.com/watch?v=mNu8-KR7UFY&t=1130s)
@@ -97,7 +97,7 @@ Next, follow the steps in the AWS Documentation to [Attach a Custom Image to an 
 
 If you have already launched SageMaker Studio, you will need to restart your SageMaker Studio app so it can see the new image:
 1. Follow the steps in the [Shut Down SageMaker Resources](https://docs.aws.amazon.com/sagemaker/latest/dg/notebooks-run-and-manage-shut-down.html) tutorial.
-2. Follow the steps below to [Open SageMaker Studio](https://github.com/openproblems-bio/openproblems/blob/master/SAGEMAKER.md#open-sagemaker-studio-and-launch-a-notebook-using-a-custom-image).
+2. Follow the steps below to [Open SageMaker Studio](https://github.com/openproblems-bio/openproblems/blob/main/SAGEMAKER.md#open-sagemaker-studio-and-launch-a-notebook-using-a-custom-image).
 
 A few caveats to watch out for during this step:
 * The Image name should be the Image Tag from the ECR. **Use only lower case letters and dashes** (should match RegEx `[a-z\-]`). No underscores or other special characters are allowed.

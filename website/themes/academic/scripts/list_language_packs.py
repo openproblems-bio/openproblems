@@ -16,16 +16,16 @@ LANG_YAML = LANG_PATH.joinpath("languages.yaml")
 
 # Iterate over languages.
 with open(LANG_YAML) as f:
-    master_map = yaml.safe_load(f)
+    main_map = yaml.safe_load(f)
 
     # Print languages as a plaintext list.
-    # lang_list = [master_map[master_item] for master_item in master_map]
+    # lang_list = [main_map[main_item] for main_item in main_map]
     # print(', '.join(lang_list))
 
     # Print languages as a Markdown list.
     i = 0
-    for master_item in master_map:
-        print(f"- **{master_map[master_item]}** ({master_item})")
+    for main_item in main_map:
+        print(f"- **{main_map[main_item]}** ({main_item})")
         i += 1
 
 print("\n")

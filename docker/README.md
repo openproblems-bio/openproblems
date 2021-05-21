@@ -73,7 +73,7 @@ Assuming there are no conflicting dependencies, you can simply amend the relevan
             * Packages from Git: `git+https://github.com/username/repositoryname`
         * More complex package installation will require editing the `Dockerfile`.
 3. Add the `packagename` to the `README.md` file in the directory specifying the Docker image. This helps keep track of which packages and versions are installed in each Docker image.
-4. Commit your changes to the Docker image and push to your fork following the instructions in the [Contributing Guide](https://github.com/openproblems-bio/openproblems/blob/master/CONTRIBUTING.md).
+4. Commit your changes to the Docker image and push to your fork following the instructions in the [Contributing Guide](https://github.com/openproblems-bio/openproblems/blob/main/CONTRIBUTING.md).
 
 ## Adding new images
 
@@ -103,7 +103,7 @@ cd workflow && snakemake -j 10 docker_build
 
 ## Building Docker images through GitHub Actions workflows
 
-Docker images are built by the `run_benchmarks` GitHub Actions workflow on both the base repository and on forks. As long as you have AWS secrets configured properly for your repository (see our [Contributing Guide](https://github.com/openproblems-bio/openproblems/blob/master/CONTRIBUTING.md#submitting-new-features)), these images will be uploaded to Amazon Web Services [Elastic Container Registry](https://aws.amazon.com/ecr/) (ECR). You can then download the image locally or attach to AWS SageMaker Studio.
+Docker images are built by the `run_benchmarks` GitHub Actions workflow on both the base repository and on forks. As long as you have AWS secrets configured properly for your repository (see our [Contributing Guide](https://github.com/openproblems-bio/openproblems/blob/main/CONTRIBUTING.md#submitting-new-features)), these images will be uploaded to Amazon Web Services [Elastic Container Registry](https://aws.amazon.com/ecr/) (ECR). You can then download the image locally or attach to AWS SageMaker Studio.
 
 Once your Run Benchmark has completed successfully, you should see a pane in the GitHub Actions tab of your fork that looks like this:
 
@@ -126,7 +126,7 @@ To pull images from the ECR using `docker pull`, first download and setup the [`
 docker pull <aws_account_id>.dkr.ecr.us-west-2.amazonaws.com/openproblems:<Image Tag>
 ```
 
-If you would like to attach this image to AWS SageMaker, you can follow our [SageMaker and ECR tutorial.](https://github.com/openproblems-bio/openproblems/blob/master/SAGEMAKER.md)
+If you would like to attach this image to AWS SageMaker, you can follow our [SageMaker and ECR tutorial.](https://github.com/openproblems-bio/openproblems/blob/main/SAGEMAKER.md)
 
 You can also pull base images from [DockerHub](https://hub.docker.com/r/singlecellopenproblems/openproblems):
 ```

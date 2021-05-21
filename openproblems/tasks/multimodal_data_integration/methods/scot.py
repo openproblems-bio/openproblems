@@ -19,7 +19,7 @@ def _scot(adata, n_svd=100, balanced=False):
     scot = SCOT(X_pca, Y_pca)
 
     # call the unbalanced alignment
-    # From https://github.com/rsinghlab/SCOT/blob/master/examples/unbalanced_GW_SNAREseq.ipynb # noqa: 501
+    # From https://github.com/rsinghlab/SCOT/blob/main/examples/unbalanced_GW_SNAREseq.ipynb # noqa: 501
     X_new_unbal, y_new_unbal = scot.align(
         k=50, e=1e-3, rho=0.0005, normalize=True, balanced=balanced
     )

@@ -21,7 +21,7 @@
   - 👕 [Wear the **T-shirt**](https://academic.threadless.com/)
   - :woman_technologist: [**Contribute**](https://sourcethemes.com/academic/docs/contribute/)
 
-[![Screenshot](https://raw.githubusercontent.com/gcushen/hugo-academic/master/academic.png)](https://github.com/gcushen/hugo-academic/)
+[![Screenshot](https://raw.githubusercontent.com/gcushen/hugo-academic/main/academic.png)](https://github.com/gcushen/hugo-academic/)
 
 **Key features:**
 
@@ -47,7 +47,7 @@ Academic comes with **automatic day (light) and night (dark) mode** built-in. Al
 
 Choose a stunning theme for your site and [customize it](https://sourcethemes.com/academic/docs/customization/#custom-theme) to your liking:
 
-[![Themes](https://raw.githubusercontent.com/gcushen/hugo-academic/master/images/themes.png)](https://sourcethemes.com/academic/themes/)
+[![Themes](https://raw.githubusercontent.com/gcushen/hugo-academic/main/images/themes.png)](https://sourcethemes.com/academic/themes/)
 
 [Browse more themes...](https://sourcethemes.com/academic/themes/)
 
@@ -89,7 +89,7 @@ You can choose from one of the following four methods to install:
 
 Once you have followed the link above to automatically install Academic, head on over to your new `academic-kickstart` repository in your GitHub (or GitLab) account and [personalize your site by editing the files in](https://sourcethemes.com/academic/docs/get-started/) `config/_default/`. Shortly after saving (i.e. *committing* a file), your site will automatically update.
 
-View the [Homepage Builder](https://sourcethemes.com/academic/docs/page-builder/) and [Content](https://sourcethemes.com/academic/docs/managing-content/) guides to learn how to add widgets and content. For inspiration, refer to the [Markdown content](https://github.com/gcushen/hugo-academic/tree/master/exampleSite) which powers the [Demo](https://academic-demo.netlify.app).
+View the [Homepage Builder](https://sourcethemes.com/academic/docs/page-builder/) and [Content](https://sourcethemes.com/academic/docs/managing-content/) guides to learn how to add widgets and content. For inspiration, refer to the [Markdown content](https://github.com/gcushen/hugo-academic/tree/main/exampleSite) which powers the [Demo](https://academic-demo.netlify.app).
 
 ### Install with Git
 
@@ -123,8 +123,8 @@ Prerequisites:
 
 Install:
 
-1. [Download](https://github.com/sourcethemes/academic-kickstart/archive/master.zip) and extract *Academic Kickstart*
-2. [Download](https://github.com/gcushen/hugo-academic/archive/master.zip) and extract the *Academic theme* files from the `hugo-academic-master` folder to the `themes/academic/` folder in *Academic Kickstart*
+1. [Download](https://github.com/sourcethemes/academic-kickstart/archive/main.zip) and extract *Academic Kickstart*
+2. [Download](https://github.com/gcushen/hugo-academic/archive/main.zip) and extract the *Academic theme* files from the `hugo-academic-main` folder to the `themes/academic/` folder in *Academic Kickstart*
 
 ### Install with RStudio
 
@@ -132,7 +132,7 @@ Install:
 
 ## Demo content
 
-For inspiration, refer to the [Markdown content](https://github.com/gcushen/hugo-academic/tree/master/exampleSite) which powers the [Demo](https://academic-demo.netlify.app).
+For inspiration, refer to the [Markdown content](https://github.com/gcushen/hugo-academic/tree/main/exampleSite) which powers the [Demo](https://academic-demo.netlify.app).
 
 If you wish to initialise your site with the demo content, copy the contents of the `themes/academic/exampleSite/` folder to your website root folder, overwriting existing files if necessary. The `exampleSite` folder contains an example config file and content to help you get started. The following command can be used to accomplish this:
 
@@ -154,6 +154,6 @@ Feel free to *star* the project on [Github](https://github.com/gcushen/hugo-acad
 
 Copyright 2016-present [George Cushen](https://georgecushen.com).
 
-Released under the [MIT](https://github.com/gcushen/hugo-academic/blob/master/LICENSE.md) license.
+Released under the [MIT](https://github.com/gcushen/hugo-academic/blob/main/LICENSE.md) license.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-78646709-2/hugo-academic/readme?pixel)](https://github.com/igrigorik/ga-beacon)

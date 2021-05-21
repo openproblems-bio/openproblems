@@ -28,7 +28,7 @@ projects: []
 
 ```python
 from IPython.core.display import Image
-Image('https://www.python.org/static/community_logos/python-logo-master-v3-TM-flattened.png')
+Image('https://www.python.org/static/community_logos/python-logo-main-v3-TM-flattened.png')
 ```
 
 
@@ -93,4 +93,4 @@ jupyter nbconvert index.ipynb --to markdown --NbConvertApp.output_files_dir=.
 
 ## Example
 
-This post was created with Jupyter. The orginal files can be found at https://github.com/gcushen/hugo-academic/tree/master/exampleSite/content/post/jupyter
+This post was created with Jupyter. The orginal files can be found at https://github.com/gcushen/hugo-academic/tree/main/exampleSite/content/post/jupyter
