@@ -50,7 +50,7 @@ Each task is composed of three components:
 * **Metrics** - a set of quantitative measures that are used to rank methods
 * **Methods** - algorithms contributed by the community to perform the task
 
-All of the code for these tasks are hosted in an open source [GitHub repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems).
+All of the code for these tasks are hosted in an open source [GitHub repository](https://github.com/openproblems-bio/openproblems).
 
 ## Adding a dataset
 
@@ -111,14 +111,14 @@ The `_` precedes the method name because it is not intended to be called directl
 
 Preprocessing is a major factor affecting the output of a single cell analysis pipeline, yet there is [little consensus](https://doi.org/10.1186/s13059-020-02136-7) on the optimal set of preprocessing steps for any given single cell task. Our approach is to provide multiple preprocessing options that can be easily combined with any given method.
 
-Functions for normalization (accounting for varying UMIs per cell) and transformation (scaling for differences in average detection of each gene) can be found in [`openproblems/tools/normalize.py`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/tools/normalize.py).
+Functions for normalization (accounting for varying UMIs per cell) and transformation (scaling for differences in average detection of each gene) can be found in [`openproblems/tools/normalize.py`](https://github.com/openproblems-bio/openproblems/blob/master/openproblems/tools/normalize.py).
 
 We currently provide three flavors of normalization:
 * `log_cpm` - log-transformed, counts-per-million normalized
 * `sqrt_cpm` - sqrt-transformed, counts-per-million normalized
 * `log_scran_pooling` - log-transformed, [scran](https://doi.org/10.1186/s13059-016-0947-7) normalized
 
-To define a full method, we need to combine the base method above with a preprocessing function. For example, in the [`logistic_regression.py`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/tasks/label_projection/methods/logistic_regression.py) script, we define a `_logistic_regression()` base function and then combine it with preprocessing steps in the `logistic_regression_log_cpm()` and `logistic_regression_scran()` functions.
+To define a full method, we need to combine the base method above with a preprocessing function. For example, in the [`logistic_regression.py`](https://github.com/openproblems-bio/openproblems/blob/master/openproblems/tasks/label_projection/methods/logistic_regression.py) script, we define a `_logistic_regression()` base function and then combine it with preprocessing steps in the `logistic_regression_log_cpm()` and `logistic_regression_scran()` functions.
 
 ### Pull requests trigger benchmarking
 
@@ -132,7 +132,7 @@ To add a new task, you need to collect all three of the above components of a ta
 * One or more **metrics**
 * One or more **methods**
 
-We'd love to see new tasks added to the framework, and our core group of developers can help get new tasks off the ground. We already have some proposed tasks in our [GitHub Issues tracker](https://github.com/singlecellopenproblems/SingleCellOpenProblems/issues?q=is%3Aissue+is%3Aopen+label%3Atask). Join us on Slack to get started!
+We'd love to see new tasks added to the framework, and our core group of developers can help get new tasks off the ground. We already have some proposed tasks in our [GitHub Issues tracker](https://github.com/openproblems-bio/openproblems/issues?q=is%3Aissue+is%3Aopen+label%3Atask). Join us on Slack to get started!
 
 
 ## Join us on Slack

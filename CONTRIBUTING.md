@@ -40,9 +40,9 @@ link to it from your website, or simply star it in GitHub to say "I use it".
 
 To submit new features to Open Problems for Single Cell Analysis, follow the steps below:
 
-1. Search through the [GitHub Issues](https://github.com/singlecellopenproblems/SingleCellOpenProblems/issues) tracker to make sure there isn't someone already working on the feature you'd like to add. If someone is working on this, post in that issue that you'd like to help or reach out to one of the contributors working on the issue directly.
+1. Search through the [GitHub Issues](https://github.com/openproblems-bio/openproblems/issues) tracker to make sure there isn't someone already working on the feature you'd like to add. If someone is working on this, post in that issue that you'd like to help or reach out to one of the contributors working on the issue directly.
 2. If there isn't an existing issue tracking this feature, create one! There are several templates you can choose one depending on what type of feature you'd like to add.
-3. Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems into your account. If you're new to `git`, you might find the [Fork a repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) documentation helpful.
+3. Fork https://github.com/openproblems-bio/openproblems into your account. If you're new to `git`, you might find the [Fork a repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) documentation helpful.
     <img src="https://i.imgur.com/fUcpLYl.png" width=400px>
 4. Create repository secrets (*not environment secrets*) at [https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets](https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets)
     * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login details. If you do not have these, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
@@ -51,12 +51,12 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     ![AWS secrets success](website/static/img/AWS_secret.png)
 
 5. Enable workflows at [https://github.com/USERNAME/SingleCellOpenProblems/actions](https://github.com/USERNAME/SingleCellOpenProblems/actions)
-6. Set up your git repository to fetch branches from `base` at `singlecellopenproblems/SingleCellOpenProblems`
+6. Set up your git repository to fetch branches from `base` at `openproblems-bio/openproblems`
 
     ```
     git clone git@github.com:<username>/SingleCellOpenProblems.git
     cd SingleCellOpenProblems
-    git remote add base git@github.com:singlecellopenproblems/SingleCellOpenProblems.git
+    git remote add base git@github.com:openproblems-bio/openproblems.git
     git fetch --all
     git branch --set-upstream-to base/master
     git pull
@@ -177,7 +177,7 @@ If you are unable to write your method using our base dependencies, you may add 
 
 Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader` in order to cache the result.
 
-To see a gold standard loader, look at [openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py)
+To see a gold standard loader, look at [openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](https://github.com/openproblems-bio/openproblems/blob/master/openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py)
 
 This file name should match `[First Author Last Name]_[Year Published]_short_Description_of_data.py`. E.g. the dataset of zebrafish embryos perturbed with CRISPR published in 2018 by Wagner _et al._ becomes `Wagner_2018_zebrafish_embryo_CRISPR.py`
 

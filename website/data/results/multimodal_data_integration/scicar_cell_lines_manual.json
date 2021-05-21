@@ -39,7 +39,7 @@
             "Paper": "N/A",
             "Paper URL": "",
             "Year": 2020,
-            "Code": "https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/feature/method-metadata/openproblems/tasks/multimodal_data_integration/methods/procrustes.py",
+            "Code": "https://github.com/openproblems-bio/openproblems/blob/feature/method-metadata/openproblems/tasks/multimodal_data_integration/methods/procrustes.py",
             "Memory (MB)": 5452,
             "Runtime (sec)": 0.34375
         },

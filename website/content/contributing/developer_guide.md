@@ -48,7 +48,7 @@ Each task is composed of three components:
 * **Metrics** - a set of quantitative measures that are used to rank methods
 * **Methods** - algorithms contributed by the community to perform the task
 
-All of the code for these tasks are hosted in an open source [GitHub repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems). To understand how these components work together, let's examine the Multimodal Data Integration task.
+All of the code for these tasks are hosted in an open source [GitHub repository](https://github.com/openproblems-bio/openproblems). To understand how these components work together, let's examine the Multimodal Data Integration task.
 
 ## Multimodal Data Integration
 
@@ -57,7 +57,7 @@ Several recently described technologies allow for simultaneous measurement of di
 
 ### How's the GitHub organized?
 
-To get started let's look at the structure of the [OpenProblems GitHub repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems):
+To get started let's look at the structure of the [OpenProblems GitHub repository](https://github.com/openproblems-bio/openproblems):
 
 ```python
 openproblems/
@@ -88,11 +88,11 @@ openproblems/
 └── version.py
 ```
 
-There are a few other things in the repository, such as the [`website/`]((https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/website/)) directory that contains the files the build the website you're reading right now, but for the purposes of getting involved, the [`openproblems/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/) module is the most important.
+There are a few other things in the repository, such as the [`website/`]((https://github.com/openproblems-bio/openproblems/tree/master/website/)) directory that contains the files the build the website you're reading right now, but for the purposes of getting involved, the [`openproblems/`](https://github.com/openproblems-bio/openproblems/tree/master/openproblems/) module is the most important.
 
 The first thing that's important to note is that there is not necessarily a one-to-one correspondence between datasets and tasks. Intuitively, this makes sense if you consider that it may be useful to use a dataset both for data integration and visualization. Because of this, we separated the functions that download raw data from the code that prepares the data for a specific task.
 
-Next, we look at the [`tasks/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks) directory that contains the folder for the [`multimodal_data_integration/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration) task.
+Next, we look at the [`tasks/`](https://github.com/openproblems-bio/openproblems/tree/master/openproblems/tasks) directory that contains the folder for the [`multimodal_data_integration/`](https://github.com/openproblems-bio/openproblems/tree/master/openproblems/tasks/multimodal_data_integration) task.
 
 ```python
 tasks/multimodal_data_integration/
@@ -130,7 +130,7 @@ That is, a data loader function should take a single argument `test` and return 
 
 To benchmark multimodal integration methods, we use joint-profiling datasets where we have a one-to-one correspondence between measurements of each data type. These matched datasets provide ground truth that can be used to determine how accurately a method can align measurements of the same biological system. As of writing, we're using two datasets from the sci-CAR paper.
 
-These datasets are loaded by the [`scicar.py`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/tasks/multimodal_data_integration/datasets/scicar.py) file within the [`multimodal_data_integration`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration) directory. Let's look at that file:
+These datasets are loaded by the [`scicar.py`](https://github.com/openproblems-bio/openproblems/blob/master/openproblems/tasks/multimodal_data_integration/datasets/scicar.py) file within the [`multimodal_data_integration`](https://github.com/openproblems-bio/openproblems/tree/master/openproblems/tasks/multimodal_data_integration) directory. Let's look at that file:
 
 ```python
 # openproblems.tasks.multimodal_data_integration.datasets.scicar
@@ -146,7 +146,7 @@ def scicar_mouse_kidney(test=False):
     return load_scicar_mouse_kidney(test=test)
 ```
 
-This file outsources all the processing for data loading to the [`openproblems.data.scicar`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/data/scicar) submodule. Briefly, this submodule contains three files:
+This file outsources all the processing for data loading to the [`openproblems.data.scicar`](https://github.com/openproblems-bio/openproblems/tree/master/openproblems/data/scicar) submodule. Briefly, this submodule contains three files:
 
 ```
 openproblems/data/
@@ -174,7 +174,7 @@ In the `adata` object, the data from the gene expression profiles is stored in `
 
 ### Integration Methods
 
-Next, we look at the [`methods/`](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration/methods/) submodule within the [`multimodal_data_integration/`]((https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/tasks/multimodal_data_integration)) task.
+Next, we look at the [`methods/`](https://github.com/openproblems-bio/openproblems/tree/master/openproblems/tasks/multimodal_data_integration/methods/) submodule within the [`multimodal_data_integration/`]((https://github.com/openproblems-bio/openproblems/tree/master/openproblems/tasks/multimodal_data_integration)) task.
 
 The basis syntax of a **method** is
 
