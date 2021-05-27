@@ -27,6 +27,7 @@ jobs:
         
         # run tests and output results to check_results directory
         mkdir check_results
+        bin/project_build
         bin/project_test --append=false --log=check_results/results.tsv
 
     - name: Upload check results
