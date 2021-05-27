@@ -1,0 +1,39 @@
+name: viash build CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  viash-build:
+    runs-on: ${{ matrix.config.os }}
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {name: 'main', os: ubuntu-latest }
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build components
+      run: |
+        # allow publishing the target folder
+        sed -i '/^target\/$/d' .gitignore
+        
+        # skip docker builds
+        bin/project_build -c '.platforms[.type == "docker"].setup_strategy := "donothing"'
+
+    - name: Deploy to target branch
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .
+        publish_branch: target_main
+
+# todo: add build for tag
+# https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-create-git-tag
