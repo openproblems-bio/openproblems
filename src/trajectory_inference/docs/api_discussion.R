@@ -36,6 +36,7 @@ divergence_regions <- tribble(
 )
 
 library(dynwrap)
+library(dynplot)
 
 convert_milestone_percentages_to_progressions(
   cell_ids = cell_ids,
