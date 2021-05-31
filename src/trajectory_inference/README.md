@@ -26,7 +26,7 @@ The interface of the following files are as follows:
 
 **--output** is a dataset h5ad-file containing:
 
-* `ad.uns["dataset_id"]`: A unique identifier for the dataset.
+* `ad.uns["dataset_id"]`: A unique identifier for the dataset (Required).
 * `ad.X`: a normalised expression matrix (Required). A sparse, double/numeric, M-by-N matrix, where M is the number of cells and N is the number of features.
 * `ad.obsm["dimred"]`: a dimensionality reduction matrix (Optional). A dense, double/numeric, M-by-P matrix, where P << N. 
 * `ad.obs["clustering"]`: a clustering vector (Optional). an integer vector of length M.
@@ -39,9 +39,9 @@ The interface of the following files are as follows:
 
 **--output** is a prediction h5ad file containing:
 
-* `ad.uns["dataset_id"]`: The unique identifier for the dataset.
-* `ad.uns["method"]`: A unique identifier for the method.
-* `ad.uns["traj_milestone_network"]`: Predicted standard network of milestones (Required). A data frame with columns 'from', 'to', 'length' and 'directed'.
+* `ad.uns["dataset_id"]`: The unique identifier for the dataset (Required).
+* `ad.uns["method"]`: A unique identifier for the method (Required).
+* `ad.uns["traj_milestone_network"]`: Predicted network of milestones (Required). A data frame with columns 'from', 'to', 'length' and 'directed'.
 * `ad.uns["traj_progressions"]`: Predicted cell progressions (Required). A data frame with columns 'cell_id', 'from', 'to', 'percentage'.
  
 
