@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
   comment=""
 )
 ```
-Proof Of Concept in adapting [Open Problems for Single Cell Analysis repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems) with Nextflow and viash.
+Proof Of Concept in adapting [Open Problems for Single Cell Analysis repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems) with Nextflow and viash. Documentation for viash is available at [viash.io](https://viash.io).
 
 ## Requirements
 
@@ -33,7 +33,7 @@ The `src/` folder contains modular software components for running a modality al
 **Step 1, build all the components:** in the `src/` folder as standalone executables in the `target/` folder. 
 
 ```bash
-bin/project_build
+bin/viash_build
 ```
 
     Exporting src/modality_alignment/metrics/knn_auc/ (modality_alignment/metrics) =nextflow=> target/nextflow/modality_alignment/metrics/knn_auc
@@ -44,7 +44,7 @@ bin/project_build
 These standalone executables you can give to somebody else, and they will be able to run it, provided that they have Bash and Docker installed.
 The command might take a while to run, since it is building a docker container for each of the components. 
 If you're interested in building only a subset of components, you can apply a regex to the selected components. 
-For example: `bin/project_build -q 'utils|modality_alignment'`.
+For example: `bin/viash_build -q 'utils|modality_alignment'`.
 
 **Step 2, run the pipeline with nextflow.** To do so, run the bash script located at `src/modality_alignment/workflows/run_nextflow.sh`:
 
@@ -90,7 +90,7 @@ a new Python-based viash component in the `src/modality_alignment/methods/foo` f
 You can start creating a new component by using the `bin/skeleton` command:
 
 ```{bash}
-bin/skeleton --name foo --namespace "modality_alignment/methods" --language python
+bin/viash_skeleton --name foo --namespace "modality_alignment/methods" --language python
 ```
 
 This should create a few files in this folder:
@@ -102,6 +102,20 @@ This should create a few files in this folder:
 The [Getting started](http://www.data-intuitive.com/viash_docs/) page on the viash documentation site
 provides some information on how a basic viash component works, or on the specifications of the `config.vsh.yaml` [config file](http://www.data-intuitive.com/viash_docs/config/).
 
+## Running a component from CLI
+
+You can view the interface of the executable by running the executable with the `-h` parameter.
+
+```{bash}
+viash run src/modality_alignment/methods/foo/config.vsh.yaml -- -h
+```
+
+You can **run the component** as follows:
+
+```{bash}
+viash run src/modality_alignment/methods/foo/config.vsh.yaml -- -i LICENSE -o foo_output.txt
+```
+
 ## Building a component
 
 `viash` has several helper functions to help you quickly develop a component.
@@ -112,32 +126,25 @@ run it, provided that they have Bash and Docker installed.
 
 ```{bash}
 viash build src/modality_alignment/methods/foo/config.vsh.yaml \
-  -o target/docker/modality_alignment/methods/foo \
-  --setup
+  -o target/docker/modality_alignment/methods/foo
 ```
 
-Note that the `bin/project_build` component does a much better job of setting up 
+Note that the `bin/viash_build` component does a much better job of setting up 
 a collection of components. You can filter which components will be built by 
-providing a regex to the `-q` parameter, e.g. `bin/project_build -q 'utils|modality_alignment'`.
+providing a regex to the `-q` parameter, e.g. `bin/viash_build -q 'utils|modality_alignment'`.
 
-## Running a component from CLI
-
-You can view the interface of the executable by running the executable with the `-h` parameter.
+You can now view the same interface of the executable by running the executable with the `-h` parameter.
 
 ```{bash}
 target/docker/modality_alignment/methods/foo/foo -h
 ```
 
-You can **run the component** as follows:
+Or **run the component** as follows:
 
 ```{bash}
 target/docker/modality_alignment/methods/foo/foo -i LICENSE -o foo_output.txt
 ```
 
-Alternatively, you can run the component straight from the viash config by using the **`viash run`** command:
-```{bash}
-viash run src/modality_alignment/methods/foo/config.vsh.yaml -- -i LICENSE -o foo_output.txt
-```
 
 ## Unit testing a component
 Provided that you wrote a script that allows you to test the functionality of a component, 
@@ -147,26 +154,9 @@ you can run the tests by using the **`viash test`** command.
 viash test src/modality_alignment/methods/foo/config.vsh.yaml
 ```
 
-To run all the unit tests of all the components in the repository, use `bin/project_test`. 
+To run all the unit tests of all the components in the repository, use `bin/viash_test`. 
 
 ## Frequently asked questions
-
-### Running a component causes error 'Unable to find image'
-
-Depending on how an executable was created, a Docker container might not have been created. 
-
-To solve this issue, run the executable with a `---setup` flag attached. This will 
-automatically build the Docker container for you. 
-
-```{bash}
-target/docker/modality_alignment/methods/foo/foo ---setup
-```
-
-Or when working with `viash run`:
-
-```{bash}
-viash run src/modality_alignment/methods/foo/config.vsh.yaml -- ---setup
-```
 
 ### My component doesn't work!
 
@@ -257,20 +247,20 @@ Alternatively, you can write a Bash script which calls your desired programming 
 
 ### One Docker container per component
 
-By running the `bin/project_build` command, viash will build one Docker container per component. While this results in some initial computational overhead,
+By running the `bin/viash_build` command, viash will build one Docker container per component. While this results in some initial computational overhead,
 this makes it a lot easier to add a new component to the pipeline with dependencies which might conflict with those of other components.
 
 ### Reproducible components
 
 A component built by viash is meant to be reproducible. If you send the `target/docker/modality_alignment/methods/foo/foo` file to someone, 
-they can run `./foo ---setup` and then will be able to use the `foo` component however they like.
+they can run `./foo ---setup cachedbuild` and then will be able to use the `foo` component however they like.
 
 ```{bash}
 # pretend to send the component to someone through 'cp'
 cp target/docker/modality_alignment/methods/foo/foo foo_by_email
 
 # build container
-./foo_by_email ---setup
+./foo_by_email ---setup cachedbuild
 ```
 
 ```{bash}
@@ -284,12 +274,12 @@ cp target/docker/modality_alignment/methods/foo/foo foo_by_email
 ```
 
 ### Reprodicible components on Docker Hub
-You might notice that the `---setup` builds the docker container from scratch, rather than pulling it from Docker hub. 
+You might notice that the `---setup cachedbuild` builds the docker container from scratch, rather than pulling it from Docker hub. 
 
-With `bin/project_build`, you can build a versioned release of all the components in the repository and push it to Docker hub.
+With `bin/viash_build`, you can build a versioned release of all the components in the repository and push it to Docker hub.
 
 ```bash
-bin/project_build -m release -v '0.1.0' -r singlecellopenproblems
+bin/viash_build -m release -v '0.1.0' -r singlecellopenproblems
 ```
 
     In release mode...
@@ -306,10 +296,10 @@ bin/project_build -m release -v '0.1.0' -r singlecellopenproblems
     > docker build -t singlecellopenproblems/modality_alignment/methods_scot:0.1.0 --no-cache /home/rcannood/workspace/viash_temp/viashsetupdocker-scot-xUKof3
     > docker build -t singlecellopenproblems/modality_alignment/methods_mnn:0.1.0 --no-cache /home/rcannood/workspace/viash_temp/viashsetupdocker-mnn-0rjhKc
 
-The images themselves can be pushed to Docker Hub with the `bin/project_push` command. I'd have to make a small change to viash to ensure that the component names don't contain any slashes because the images listed above can't be pushed to Docker hub. However, the output would look something like this:
+The images themselves can be pushed to Docker Hub with the `bin/viash_push` command. I'd have to make a small change to viash to ensure that the component names don't contain any slashes because the images listed above can't be pushed to Docker hub. However, the output would look something like this:
 
 ```bash
-bin/project_push -m release -v '0.1.0' -r singlecellopenproblems
+bin/viash_push -m release -v '0.1.0' -r singlecellopenproblems
 In release mode...
 Using version 0.1.0 to tag containers
 ```
