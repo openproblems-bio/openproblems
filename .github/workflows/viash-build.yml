@@ -25,8 +25,8 @@ jobs:
         # allow publishing the target folder
         sed -i '/^target\/$/d' .gitignore
         
-        # skip docker builds
-        bin/viash_build -c '.platforms[.type == "docker"].setup_strategy := "donothing"'
+        # only build nextflow targets
+        bin/viash_build -m release -t latest -p nextflow
 
     - name: Deploy to target branch
       uses: peaceiris/actions-gh-pages@v3
