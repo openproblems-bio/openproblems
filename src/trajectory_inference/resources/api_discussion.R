@@ -55,3 +55,14 @@ traj <-
   )
 
 plot_graph(traj)
+
+traj$progressions
+
+
+
+
+
+
+
+
+
