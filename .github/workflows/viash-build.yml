@@ -20,6 +20,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Fetch viash
+      run: bin/viash -h
+
     - name: Build components
       run: |
         # allow publishing the target folder
