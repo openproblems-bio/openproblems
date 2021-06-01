@@ -5,8 +5,8 @@ opsca-viash
 -   [Quick start](#quick-start)
 -   [Project structure](#project-structure)
 -   [Adding a viash component](#adding-a-viash-component)
--   [Building a component](#building-a-component)
 -   [Running a component from CLI](#running-a-component-from-cli)
+-   [Building a component](#building-a-component)
 -   [Unit testing a component](#unit-testing-a-component)
 -   [Frequently asked questions](#frequently-asked-questions)
 -   [Benefits of using Nextflow +
@@ -14,7 +14,8 @@ opsca-viash
 
 Proof Of Concept in adapting [Open Problems for Single Cell Analysis
 repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems)
-with Nextflow and viash.
+with Nextflow and viash. Documentation for viash is available at
+[viash.io](https://viash.io).
 
 ## Requirements
 
@@ -35,7 +36,7 @@ modality alignment benchmark. Running the full pipeline is quite easy.
 executables in the `target/` folder.
 
 ``` bash
-bin/project_build
+bin/viash_build
 ```
 
     Exporting src/modality_alignment/metrics/knn_auc/ (modality_alignment/metrics) =nextflow=> target/nextflow/modality_alignment/metrics/knn_auc
@@ -49,7 +50,7 @@ installed. The command might take a while to run, since it is building a
 docker container for each of the components. If you’re interested in
 building only a subset of components, you can apply a regex to the
 selected components. For example:
-`bin/project_build -q 'utils|modality_alignment'`.
+`bin/viash_build -q 'utils|modality_alignment'`.
 
 **Step 2, run the pipeline with nextflow.** To do so, run the bash
 script located at `src/modality_alignment/workflows/run_nextflow.sh`:
@@ -96,7 +97,7 @@ in the `src/modality_alignment/methods/foo` folder, run: You can start
 creating a new component by using the `bin/skeleton` command:
 
 ``` bash
-bin/skeleton --name foo --namespace "modality_alignment/methods" --language python
+bin/viash_skeleton --name foo --namespace "modality_alignment/methods" --language python
 ```
 
 This should create a few files in this folder:
@@ -110,6 +111,44 @@ the viash documentation site provides some information on how a basic
 viash component works, or on the specifications of the `config.vsh.yaml`
 [config file](http://www.data-intuitive.com/viash_docs/config/).
 
+## Running a component from CLI
+
+You can view the interface of the executable by running the executable
+with the `-h` parameter.
+
+``` bash
+viash run src/modality_alignment/methods/foo/config.vsh.yaml -- -h
+```
+
+    foo 0.0.1
+    Replace this with a (multiline) description of your component.
+
+    Options:
+        -i, --input
+            type: file, required parameter
+            Describe the input file.
+
+        -o, --output
+            type: file, required parameter, output
+            Describe the output file.
+
+        --option
+            type: string
+            default: default-
+            Describe an optional parameter.
+
+You can **run the component** as follows:
+
+``` bash
+viash run src/modality_alignment/methods/foo/config.vsh.yaml -- -i LICENSE -o foo_output.txt
+```
+
+    This is a skeleton component
+    The arguments are:
+     - input:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/LICENSE
+     - output:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/foo_output.txt
+     - option:  default-
+
 ## Building a component
 
 `viash` has several helper functions to help you quickly develop a
@@ -122,42 +161,39 @@ installed.
 
 ``` bash
 viash build src/modality_alignment/methods/foo/config.vsh.yaml \
-  -o target/docker/modality_alignment/methods/foo \
-  --setup
+  -o target/docker/modality_alignment/methods/foo
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-6uqKl4
-
-Note that the `bin/project_build` component does a much better job of
+Note that the `bin/viash_build` component does a much better job of
 setting up a collection of components. You can filter which components
 will be built by providing a regex to the `-q` parameter,
-e.g. `bin/project_build -q 'utils|modality_alignment'`.
+e.g. `bin/viash_build -q 'utils|modality_alignment'`.
 
-## Running a component from CLI
-
-You can view the interface of the executable by running the executable
-with the `-h` parameter.
+You can now view the same interface of the executable by running the
+executable with the `-h` parameter.
 
 ``` bash
 target/docker/modality_alignment/methods/foo/foo -h
 ```
 
+    foo 0.0.1
     Replace this with a (multiline) description of your component.
 
     Options:
-        -i file, --input=file
+        -i, --input
             type: file, required parameter
             Describe the input file.
 
-        -o file, --output=file
-            type: file, required parameter
+        -o, --output
+            type: file, required parameter, output
             Describe the output file.
 
-        --option=string
-            type: string, default: default-
+        --option
+            type: string
+            default: default-
             Describe an optional parameter.
 
-You can **run the component** as follows:
+Or **run the component** as follows:
 
 ``` bash
 target/docker/modality_alignment/methods/foo/foo -i LICENSE -o foo_output.txt
@@ -165,33 +201,8 @@ target/docker/modality_alignment/methods/foo/foo -i LICENSE -o foo_output.txt
 
     This is a skeleton component
     The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
-     - option:  default-
-
-    This is a skeleton component
-    The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
-     - option:  default-
-
-Alternatively, you can run the component straight from the viash config
-by using the **`viash run`** command:
-
-``` bash
-viash run src/modality_alignment/methods/foo/config.vsh.yaml -- -i LICENSE -o foo_output.txt
-```
-
-    This is a skeleton component
-    The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
-     - option:  default-
-
-    This is a skeleton component
-    The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
+     - input:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/LICENSE
+     - output:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/foo_output.txt
      - option:  default-
 
 ## Unit testing a component
@@ -204,47 +215,34 @@ functionality of a component, you can run the tests by using the
 viash test src/modality_alignment/methods/foo/config.vsh.yaml
 ```
 
-    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo10112285657605906208'
+    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo8067684801221966654'
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo10112285657605906208/build_executable/foo ---setup
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-Md2dPC
-    ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo10112285657605906208/test_test.py/test.py
-    .
-    ----------------------------------------------------------------------
-    Ran 1 test in 0.017s
+    +/home/rcannood/workspace/viash_temp/viash_test_foo8067684801221966654/build_executable/foo --verbosity 6 ---setup cachedbuild
+    [notice] Running 'docker build -t modality_alignment/methods_foo:9rREBVaKbQTM /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-k8Idnc'
+    Sending build context to Docker daemon  22.53kB
 
-    OK
+    Step 1/2 : FROM python:3.9.3-buster
+     ---> 05034335a2e3
+    Step 2/2 : RUN pip install --upgrade pip &&   pip install --no-cache-dir "numpy"
+     ---> Using cache
+     ---> 45db33ebb9de
+    Successfully built 45db33ebb9de
+    Successfully tagged modality_alignment/methods_foo:9rREBVaKbQTM
+    ====================================================================
+    +/home/rcannood/workspace/viash_temp/viash_test_foo8067684801221966654/test_test.py/test.py
+    >> Writing test file
+    >> Running component
+    >> Checking whether output file exists
+    >> Checking contents of output file
+    >> All tests succeeded successfully!
     ====================================================================
     [32mSUCCESS! All 1 out of 1 test scripts succeeded![0m
     Cleaning up temporary directory
 
 To run all the unit tests of all the components in the repository, use
-`bin/project_test`.
+`bin/viash_test`.
 
 ## Frequently asked questions
-
-### Running a component causes error ‘Unable to find image’
-
-Depending on how an executable was created, a Docker container might not
-have been created.
-
-To solve this issue, run the executable with a `---setup` flag attached.
-This will automatically build the Docker container for you.
-
-``` bash
-target/docker/modality_alignment/methods/foo/foo ---setup
-```
-
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-E9IAUq
-
-Or when working with `viash run`:
-
-``` bash
-viash run src/modality_alignment/methods/foo/config.vsh.yaml -- ---setup
-```
-
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-fZUT3j
 
 ### My component doesn’t work!
 
@@ -348,7 +346,7 @@ can write a Bash script which calls your desired programming language.
 
 ### One Docker container per component
 
-By running the `bin/project_build` command, viash will build one Docker
+By running the `bin/viash_build` command, viash will build one Docker
 container per component. While this results in some initial
 computational overhead, this makes it a lot easier to add a new
 component to the pipeline with dependencies which might conflict with
@@ -358,37 +356,39 @@ those of other components.
 
 A component built by viash is meant to be reproducible. If you send the
 `target/docker/modality_alignment/methods/foo/foo` file to someone, they
-can run `./foo ---setup` and then will be able to use the `foo`
-component however they like.
+can run `./foo ---setup cachedbuild` and then will be able to use the
+`foo` component however they like.
 
 ``` bash
 # pretend to send the component to someone through 'cp'
 cp target/docker/modality_alignment/methods/foo/foo foo_by_email
 
 # build container
-./foo_by_email ---setup
+./foo_by_email ---setup cachedbuild
 ```
 
-    > docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-cgD19k
+    [notice] Running 'docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-kZ7Cn8'
 
 ``` bash
 # view help
 ./foo_by_email -h
 ```
 
+    foo 0.0.1
     Replace this with a (multiline) description of your component.
 
     Options:
-        -i file, --input=file
+        -i, --input
             type: file, required parameter
             Describe the input file.
 
-        -o file, --output=file
-            type: file, required parameter
+        -o, --output
+            type: file, required parameter, output
             Describe the output file.
 
-        --option=string
-            type: string, default: default-
+        --option
+            type: string
+            default: default-
             Describe an optional parameter.
 
 ``` bash
@@ -398,26 +398,20 @@ cp target/docker/modality_alignment/methods/foo/foo foo_by_email
 
     This is a skeleton component
     The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
-     - option:  default-
-
-    This is a skeleton component
-    The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
+     - input:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/LICENSE
+     - output:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/foo_output.txt
      - option:  default-
 
 ### Reprodicible components on Docker Hub
 
-You might notice that the `---setup` builds the docker container from
-scratch, rather than pulling it from Docker hub.
+You might notice that the `---setup cachedbuild` builds the docker
+container from scratch, rather than pulling it from Docker hub.
 
-With `bin/project_build`, you can build a versioned release of all the
+With `bin/viash_build`, you can build a versioned release of all the
 components in the repository and push it to Docker hub.
 
 ``` bash
-bin/project_build -m release -v '0.1.0' -r singlecellopenproblems
+bin/viash_build -m release -v '0.1.0' -r singlecellopenproblems
 ```
 
     In release mode...
@@ -435,13 +429,13 @@ bin/project_build -m release -v '0.1.0' -r singlecellopenproblems
     > docker build -t singlecellopenproblems/modality_alignment/methods_mnn:0.1.0 --no-cache /home/rcannood/workspace/viash_temp/viashsetupdocker-mnn-0rjhKc
 
 The images themselves can be pushed to Docker Hub with the
-`bin/project_push` command. I’d have to make a small change to viash to
+`bin/viash_push` command. I’d have to make a small change to viash to
 ensure that the component names don’t contain any slashes because the
 images listed above can’t be pushed to Docker hub. However, the output
 would look something like this:
 
 ``` bash
-bin/project_push -m release -v '0.1.0' -r singlecellopenproblems
+bin/viash_push -m release -v '0.1.0' -r singlecellopenproblems
 In release mode...
 Using version 0.1.0 to tag containers
 ```
