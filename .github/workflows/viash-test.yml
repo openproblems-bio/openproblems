@@ -1,0 +1,41 @@
+name: viash test CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  viash-test:
+    runs-on: ${{ matrix.config.os }}
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {name: 'main', os: ubuntu-latest }
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run build
+      run: |
+        bin/viash_build
+        
+    - name: Run tests
+      run: |
+        # create check_results folder
+        sed -i '/^check_results\/$/d' .gitignore 
+        mkdir check_results
+        
+        # run tests
+        bin/viash_test --append=false --log=check_results/results.tsv
+
+    - name: Upload check results
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{ matrix.config.name }}_results
+        path: check_results
+
