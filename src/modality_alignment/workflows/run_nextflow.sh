@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run this prior to executing this script:
-# bin/project_build -q 'modality_alignment|utils'
+# bin/viash_build -q 'modality_alignment|utils'
 
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -15,6 +15,8 @@ export NXF_VER=21.04.1
 bin/nextflow \
   run . \
   -main-script src/modality_alignment/workflows/main.nf \
-  -resume \
+  -c src/modality_alignment/workflows/nextflow.config \
   --output output/modality_alignment
+  
+# -resume \
 
