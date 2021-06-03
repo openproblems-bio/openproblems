@@ -13,7 +13,8 @@ cd "$REPO_ROOT"
 export NXF_VER=21.04.1
 
 bin/nextflow \
-  run . \
+  run https://github.com/openproblems-bio/opsca-viash.git \
+  -r main_build \
   -main-script src/modality_alignment/workflows/main.nf \
   -c src/modality_alignment/workflows/nextflow.config \
   --output output/modality_alignment \
