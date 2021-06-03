@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
   comment=""
 )
 ```
-Proof Of Concept in adapting [Open Problems for Single Cell Analysis repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems) with Nextflow and viash. Documentation for viash is available at [viash.io](https://viash.io).
+Proof Of Concept in adapting [Open Problems repository](https://github.com/openproblems-bio/openproblems) with Nextflow and viash. Documentation for viash is available at [viash.io](https://viash.io).
 
 ## Requirements
 
@@ -30,10 +30,24 @@ To use this repository, please install the following dependencies:
 
 The `src/` folder contains modular software components for running a modality alignment benchmark. Running the full pipeline is quite easy.
 
-**Step 1, build all the components:** in the `src/` folder as standalone executables in the `target/` folder. 
+**Step 0, fetch viash and nextflow:** run the `bin/init` executable.
 
 ```bash
-bin/viash_build
+bin/init
+```
+
+    > Using tag develop
+    > Cleanup
+    > Install viash develop under /viash_automount/home/rcannood/workspace/opsca/opsca-viash/bin/
+    > Fetching components sources (version develop)
+    > Building components
+    > Done, happy viash-ing!
+    > Nextflow installation completed.
+
+**Step 1, build all the components:** in the `src/` folder as standalone executables in the `target/` folder. Use the `-q 'xxx'` parameter to build only several components of the repository.
+
+```bash
+bin/viash_build -q 'modality_alignment|utils'
 ```
 
     Exporting src/modality_alignment/metrics/knn_auc/ (modality_alignment/metrics) =nextflow=> target/nextflow/modality_alignment/metrics/knn_auc
@@ -299,16 +313,16 @@ bin/viash_build -m release -v '0.1.0' -r singlecellopenproblems
 The images themselves can be pushed to Docker Hub with the `bin/viash_push` command. I'd have to make a small change to viash to ensure that the component names don't contain any slashes because the images listed above can't be pushed to Docker hub. However, the output would look something like this:
 
 ```bash
-bin/viash_push -m release -v '0.1.0' -r singlecellopenproblems
+bin/viash_push -m release -v '0.1.0' -r openproblems
 In release mode...
 Using version 0.1.0 to tag containers
 ```
-    > singlecellopenproblems/modality_alignment_metrics_knn_auc:0.1.0 does not exist, try pushing ... OK!
-    > singlecellopenproblems/modality_alignment_methods_scot:0.1.0 does not exist, try pushing ... OK!
-    > singlecellopenproblems/modality_alignment_metrics_mse:0.1.0 does not exist, try pushing ... OK!
-    > singlecellopenproblems/modality_alignment_datasets_scprep_csv:0.1.0 does not exist, try pushing ... OK!
-    > singlecellopenproblems/utils_extract_scores:0.1.0 does not exist, try pushing ... OK!
-    > singlecellopenproblems/modality_alignment_methods_mnn:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/modality_alignment_metrics_knn_auc:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/modality_alignment_methods_scot:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/modality_alignment_metrics_mse:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/modality_alignment_datasets_scprep_csv:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/utils_extract_scores:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/modality_alignment_methods_mnn:0.1.0 does not exist, try pushing ... OK!
 
 <!-- cleaning up temporary files -->
 

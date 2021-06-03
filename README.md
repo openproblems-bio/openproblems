@@ -12,9 +12,9 @@ opsca-viash
 -   [Benefits of using Nextflow +
     viash](#benefits-of-using-nextflow--viash)
 
-Proof Of Concept in adapting [Open Problems for Single Cell Analysis
-repository](https://github.com/singlecellopenproblems/SingleCellOpenProblems)
-with Nextflow and viash. Documentation for viash is available at
+Proof Of Concept in adapting [Open Problems
+repository](https://github.com/openproblems-bio/openproblems) with
+Nextflow and viash. Documentation for viash is available at
 [viash.io](https://viash.io).
 
 ## Requirements
@@ -32,11 +32,26 @@ To use this repository, please install the following dependencies:
 The `src/` folder contains modular software components for running a
 modality alignment benchmark. Running the full pipeline is quite easy.
 
-**Step 1, build all the components:** in the `src/` folder as standalone
-executables in the `target/` folder.
+**Step 0, fetch viash and nextflow:** run the `bin/init` executable.
 
 ``` bash
-bin/viash_build
+bin/init
+```
+
+    > Using tag develop
+    > Cleanup
+    > Install viash develop under /viash_automount/home/rcannood/workspace/opsca/opsca-viash/bin/
+    > Fetching components sources (version develop)
+    > Building components
+    > Done, happy viash-ing!
+    > Nextflow installation completed.
+
+**Step 1, build all the components:** in the `src/` folder as standalone
+executables in the `target/` folder. Use the `-q 'xxx'` parameter to
+build only several components of the repository.
+
+``` bash
+bin/viash_build -q 'modality_alignment|utils'
 ```
 
     Exporting src/modality_alignment/metrics/knn_auc/ (modality_alignment/metrics) =nextflow=> target/nextflow/modality_alignment/metrics/knn_auc
@@ -145,8 +160,8 @@ viash run src/modality_alignment/methods/foo/config.vsh.yaml -- -i LICENSE -o fo
 
     This is a skeleton component
     The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/foo_output.txt
+     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
+     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
      - option:  default-
 
 ## Building a component
@@ -201,8 +216,8 @@ target/docker/modality_alignment/methods/foo/foo -i LICENSE -o foo_output.txt
 
     This is a skeleton component
     The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/foo_output.txt
+     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
+     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
      - option:  default-
 
 ## Unit testing a component
@@ -215,10 +230,10 @@ functionality of a component, you can run the tests by using the
 viash test src/modality_alignment/methods/foo/config.vsh.yaml
 ```
 
-    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo8067684801221966654'
+    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo18431554913355206711'
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo8067684801221966654/build_executable/foo --verbosity 6 ---setup cachedbuild
-    [notice] Running 'docker build -t modality_alignment/methods_foo:9rREBVaKbQTM /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-k8Idnc'
+    +/home/rcannood/workspace/viash_temp/viash_test_foo18431554913355206711/build_executable/foo --verbosity 6 ---setup cachedbuild
+    [notice] Running 'docker build -t modality_alignment/methods_foo:da7Qhr5nLi6A /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-4h6urx'
     Sending build context to Docker daemon  22.53kB
 
     Step 1/2 : FROM python:3.9.3-buster
@@ -227,9 +242,9 @@ viash test src/modality_alignment/methods/foo/config.vsh.yaml
      ---> Using cache
      ---> 45db33ebb9de
     Successfully built 45db33ebb9de
-    Successfully tagged modality_alignment/methods_foo:9rREBVaKbQTM
+    Successfully tagged modality_alignment/methods_foo:da7Qhr5nLi6A
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo8067684801221966654/test_test.py/test.py
+    +/home/rcannood/workspace/viash_temp/viash_test_foo18431554913355206711/test_test.py/test.py
     >> Writing test file
     >> Running component
     >> Checking whether output file exists
@@ -367,7 +382,7 @@ cp target/docker/modality_alignment/methods/foo/foo foo_by_email
 ./foo_by_email ---setup cachedbuild
 ```
 
-    [notice] Running 'docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-kZ7Cn8'
+    [notice] Running 'docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-TsNVGL'
 
 ``` bash
 # view help
@@ -398,8 +413,8 @@ cp target/docker/modality_alignment/methods/foo/foo foo_by_email
 
     This is a skeleton component
     The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/vib/opsca-viash/foo_output.txt
+     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
+     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
      - option:  default-
 
 ### Reprodicible components on Docker Hub
@@ -435,16 +450,16 @@ images listed above can’t be pushed to Docker hub. However, the output
 would look something like this:
 
 ``` bash
-bin/viash_push -m release -v '0.1.0' -r singlecellopenproblems
+bin/viash_push -m release -v '0.1.0' -r openproblems
 In release mode...
 Using version 0.1.0 to tag containers
 ```
 
-    > singlecellopenproblems/modality_alignment_metrics_knn_auc:0.1.0 does not exist, try pushing ... OK!
-    > singlecellopenproblems/modality_alignment_methods_scot:0.1.0 does not exist, try pushing ... OK!
-    > singlecellopenproblems/modality_alignment_metrics_mse:0.1.0 does not exist, try pushing ... OK!
-    > singlecellopenproblems/modality_alignment_datasets_scprep_csv:0.1.0 does not exist, try pushing ... OK!
-    > singlecellopenproblems/utils_extract_scores:0.1.0 does not exist, try pushing ... OK!
-    > singlecellopenproblems/modality_alignment_methods_mnn:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/modality_alignment_metrics_knn_auc:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/modality_alignment_methods_scot:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/modality_alignment_metrics_mse:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/modality_alignment_datasets_scprep_csv:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/utils_extract_scores:0.1.0 does not exist, try pushing ... OK!
+    > openproblems/modality_alignment_methods_mnn:0.1.0 does not exist, try pushing ... OK!
 
 <!-- cleaning up temporary files -->
