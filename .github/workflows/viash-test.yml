@@ -2,9 +2,9 @@ name: viash test CI
 
 on:
   push:
-    branches: [ * ]
+    branches: [ '*' ]
   pull_request:
-    branches: [ * ]
+    branches: [ '*' ]
 
 jobs:
   viash-test:
