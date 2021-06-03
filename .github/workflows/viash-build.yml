@@ -37,7 +37,16 @@ jobs:
         sed -i '/^target\/$/d' .gitignore
         
         # only build nextflow targets
-        bin/viash_build -m release -t latest -p nextflow
+        bin/viash_build -m release -t main_build
+        
+    - name: Run tests
+      run: |
+        # create check_results folder
+        sed -i '/^check_results\/$/d' .gitignore
+        mkdir check_results
+
+        # run tests
+        bin/viash_test -m release -t main_build --append=false --log=check_results/results.tsv
 
     - name: Deploy to target branch
       uses: peaceiris/actions-gh-pages@v3
@@ -45,6 +54,25 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: .
         publish_branch: main_build
+        
+    - name: Login to Docker Hub
+      if: false
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push containers
+      if: false
+      run: |
+        bin/viash_push -m release -t main_build
+        
+    - name: Upload check results
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{ matrix.config.name }}_results
+        path: check_results
+
 
 # todo: add build for tag
 # https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-create-git-tag
