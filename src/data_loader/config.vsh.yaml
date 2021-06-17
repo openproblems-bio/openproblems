@@ -1,0 +1,32 @@
+functionality:
+  name: "data_loader"
+  namespace: "data_loader"
+  version: "dev"
+  description: "Load datasets"
+  arguments:
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      description: "Output h5ad file of the cleaned dataset"
+      required: true
+    - name: "--url"
+      type: "string"
+      description: "URL of dataset"
+  resources:
+    - type: python_script
+      path: script.py
+    - path: "./utils/utils.py"
+  tests:
+    - type: python_script
+      path: test.py
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - scprep
+  - type: native
+  - type: nextflow

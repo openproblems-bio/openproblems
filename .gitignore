@@ -1,3 +1,9 @@
+*__pycache__
+*.h5ad
+
+# IDE ignores
+.idea/
+
 # repo specific ignores
 output_bash
 
