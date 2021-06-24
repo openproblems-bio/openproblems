@@ -13,6 +13,7 @@ output_bash
 *.Rproj
 
 # viash specific ignores
+docker_output/
 target/
 check_results/
 log.txt
