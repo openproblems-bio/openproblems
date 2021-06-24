@@ -4,23 +4,15 @@ par = {
     "name": "pbmc",
     "output": "test_data.h5ad"
 }
-resources_dir = "../utils/"
 ## VIASH END
 
 print("Importing libraries")
+import sys
 import scanpy as sc
 import tempfile
 import os
 import scprep
 
-# # adding resources dir to system path
-# # the resources dir contains all files listed in the '.functionality.resources' part of the
-# # viash config, amongst which is the 'utils.py' file we need.
-import sys
-
-sys.path.append(resources_dir)
-# # importing helper functions from common utils.py file in resources dir
-from utils import filter_genes_cells
 
 with tempfile.TemporaryDirectory() as tempdir:
     URL = par['url']
@@ -39,7 +31,8 @@ with tempfile.TemporaryDirectory() as tempdir:
         del adata.layers["counts"]
 
     # Ensure there are no cells or genes with 0 counts
-    filter_genes_cells(adata)
+    sc.pp.filter_genes(adata, min_cells=1)
+    sc.pp.filter_cells(adata, min_counts=2)
 
 
 print("Writing adata to file")
