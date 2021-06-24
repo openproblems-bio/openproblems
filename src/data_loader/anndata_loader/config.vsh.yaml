@@ -3,6 +3,10 @@ functionality:
   namespace: "data_loader"
   version: "dev"
   description: "Load datasets"
+  authors:
+    - name: "Michaela Mueller "
+      roles: [ maintainer, author ]
+      props: { github: mumichae }
   arguments:
     - name: "--output"
       alternatives: ["-o"]
@@ -13,6 +17,11 @@ functionality:
     - name: "--url"
       type: "string"
       description: "URL of dataset"
+      required: true
+    - name: "--name"
+      type: "string"
+      description: "Name of dataset"
+      required: true
   resources:
     - type: python_script
       path: script.py

@@ -1,9 +1,10 @@
 ## VIASH START
 par = {
     "url": "https://ndownloader.figshare.com/files/24974582",  # PBMC data
+    "name": "pbmc",
     "output": "test_data.h5ad"
 }
-resources_dir = "./utils/"
+resources_dir = "../utils/"
 ## VIASH END
 
 print("Importing libraries")
@@ -30,6 +31,7 @@ with tempfile.TemporaryDirectory() as tempdir:
 
     print("Read file")
     adata = sc.read(filepath)
+    adata.uns["name"] = par["name"]
 
     # Remove preprocessing
     if "counts" in adata.layers:
