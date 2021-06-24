@@ -23,8 +23,8 @@ include { knn_auc }              from "$targetDir/modality_alignment/metrics/knn
 include { mse }                  from "$targetDir/modality_alignment/metrics/mse/main.nf"                 params(params)
 
 // import helper functions
-include { overrideOptionValue; overrideParams } from "$launchDir/src/utils/workflows/utils.nf"
-include { extract_scores }       from "$targetDir/utils/extract_scores/main.nf"                           params(params)
+include { overrideOptionValue; overrideParams } from "$launchDir/src/common/workflows/utils.nf"
+include { extract_scores }       from "$targetDir/common/extract_scores/main.nf"                           params(params)
 
 // Helper function for redefining the ids of elements in a channel
 // based on its files.
