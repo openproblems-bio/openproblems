@@ -35,7 +35,7 @@ jobs:
         sed -i '/^target\/$/d' .gitignore
         
         # only build nextflow targets
-        bin/viash_build -m release -t main_build -q 'utils|data_loader'
+        bin/viash_build -m release -t main_build
         
     - name: Run tests
       run: |

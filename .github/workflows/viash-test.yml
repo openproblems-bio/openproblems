@@ -33,7 +33,7 @@ jobs:
 
     - name: Run build
       run: |
-        bin/viash_build
+        bin/viash_build -q 'utils|data_loader'
 
     - name: Run tests
       run: |
