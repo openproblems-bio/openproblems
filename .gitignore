@@ -1,3 +1,9 @@
+*__pycache__
+*.h5ad
+
+# IDE ignores
+.idea/
+
 # repo specific ignores
 output_bash
 
@@ -7,6 +13,7 @@ output_bash
 *.Rproj
 
 # viash specific ignores
+docker_output/
 target/
 check_results/
 log.txt

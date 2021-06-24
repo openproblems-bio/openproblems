@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run this prior to executing this script:
-# bin/viash_build -q 'modality_alignment|utils'
+# bin/viash_build -q 'modality_alignment|common'
 
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -57,4 +57,4 @@ done
 
 # concatenate all scores into one tsv
 INPUTS=$(ls -1 "$OUTPUT/metrics" | sed "s#.*#-i '$OUTPUT/metrics/&'#" | tr '\n' ' ')
-eval "$TARGET/../utils/extract_scores/extract_scores" $INPUTS -o "$OUTPUT/scores.tsv"
+eval "$TARGET/../common/extract_scores/extract_scores" $INPUTS -o "$OUTPUT/scores.tsv"
