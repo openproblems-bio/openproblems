@@ -1,0 +1,41 @@
+functionality:
+  name: ari
+  namespace: feature
+  version: dev
+  description: Adjusted rand index (ARI)
+  authors:
+    - name: Michaela Mueller
+      roles: [ maintainer, author ]
+      props: { github: mumichae }
+  arguments:
+    - name: --output
+      alternatives: [ -o ]
+      type: file
+      direction: output
+      description: Output tsv file of the metric
+      required: true
+    - name: --adata
+      type: file
+      description: Anndata HDF5 file
+      required: true
+    - name: --hvgs
+      type: integer
+      description: Number of highly variable genes
+      default: 2000
+    - name: --debug
+      type: boolean
+      description: Verbose output for debugging
+      default: False
+      required: false
+  resources:
+    - type: python_script
+      path: script.py
+  tests:
+    - type: python_script
+      path: test.py
+    - path: '../../../resources/mnn.h5ad'
+platforms:
+  - type: docker
+    image: mumichae/scib-base:0.1
+  - type: native
+  - type: nextflow
