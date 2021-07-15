@@ -17,6 +17,7 @@ from scIB.metrics import ari
 if par['debug']:
     pprint.pprint(par)
 
+METRIC = 'ari'
 adata_file = par['adata']
 n_hvgs = par['hvgs']
 output = par['output']
@@ -49,6 +50,6 @@ score = ari(adata, group1='cluster', group2='label')
 
 with open(output, 'w') as file:
     header = ['dataset', 'output_type', 'hvg', 'metric', 'value']
-    entry = [name, 'feature', n_hvgs, 'ARI', score]
+    entry = [name, 'feature', n_hvgs, METRIC, score]
     file.write('\t'.join(header) + '\n')
     file.write('\t'.join([str(x) for x in entry]))
