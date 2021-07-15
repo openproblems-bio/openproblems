@@ -2,7 +2,7 @@
 par = {
     'adata': '../resources/mnn.h5ad',
     'hvgs': 2000,
-    'output': 'nmi.tsv',
+    'output': 'asw_batch.tsv',
     'debug': True
 }
 ## VIASH END
@@ -11,13 +11,12 @@ print('Importing libraries')
 import pprint
 import scanpy as sc
 from scIB.preprocessing import reduce_data
-from scIB.clustering import opt_louvain
-from scIB.metrics import nmi
+from scIB.metrics import silhouette_batch
 
 if par['debug']:
     pprint.pprint(par)
 
-METRIC = 'nmi'
+METRIC = 'asw_batch'
 EMBEDDING = 'X_pca'
 
 adata_file = par['adata']
@@ -34,24 +33,21 @@ print('preprocess adata')
 reduce_data(
     adata,
     n_top_genes=n_hvgs,
-    neighbors=True,
-    use_rep=EMBEDDING,
     pca=True,
+    neighbors=False,
+    use_rep=EMBEDDING,
     umap=False
 )
 
-print('clustering')
-opt_louvain(
-    adata,
-    label_key='label',
-    cluster_key='cluster',
-    plot=False,
-    inplace=True,
-    force=True
-)
-
 print('compute score')
-score = nmi(adata, group1='cluster', group2='label')
+_, sil_clus = silhouette_batch(
+    adata,
+    batch_key='batch',
+    group_key='label',
+    embed=EMBEDDING,
+    verbose=False
+)
+score = sil_clus['silhouette_score'].mean()
 
 with open(output, 'w') as file:
     header = ['dataset', 'output_type', 'hvg', 'metric', 'value']

@@ -18,8 +18,11 @@ if par['debug']:
     pprint.pprint(par)
 
 METRIC = 'ari'
+EMBEDDING = 'X_pca'
+
 adata_file = par['adata']
 n_hvgs = par['hvgs']
+n_hvgs = n_hvgs if n_hvgs > 0 else None
 output = par['output']
 
 print('Read adata')
@@ -32,12 +35,12 @@ reduce_data(
     adata,
     n_top_genes=n_hvgs,
     neighbors=True,
-    use_rep='X_pca',
+    use_rep=EMBEDDING,
     pca=True,
     umap=False
 )
 
-print('Clustering')
+print('clustering')
 opt_louvain(
     adata,
     label_key='label',
@@ -46,6 +49,8 @@ opt_louvain(
     inplace=True,
     force=True
 )
+
+print('compute score')
 score = ari(adata, group1='cluster', group2='label')
 
 with open(output, 'w') as file:
