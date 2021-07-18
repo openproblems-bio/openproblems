@@ -1,24 +1,40 @@
 ## VIASH START
+import os
+print(os.getcwd())
 par = {
-    'adata': '../resources/pancreas.h5ad',
-    'name': 'pancreas',
+    'adata': './src/batch_integration/resources/data_loader_pancreas.h5ad',
     'label': 'celltype',
     'batch': 'tech',
     'hvgs': 2000,
     'output': 'adata_out.h5ad',
     'debug': True
 }
-resources_dir = '../../common/utils/'
 ## VIASH END
 
 print('Importing libraries')
 import scanpy as sc
-import sys
-import os
+import scprep
 
-sys.path.append(os.path.abspath(resources_dir))
 
-from preprocessing import log_scran_pooling
+def log_scran_pooling(adata):
+    """Normalize data with scran via rpy2."""
+    _scran = scprep.run.RFunction(
+        setup="library('scran')",
+        args="sce, min.mean=0.1",
+        body="""
+        sce <- computeSumFactors(
+            sce, min.mean=min.mean,
+            assay.type="X"
+        )
+        sizeFactors(sce)
+        """,
+    )
+    adata.obs["size_factors"] = _scran(adata)
+    adata.X = scprep.utils.matrix_vector_elementwise_multiply(
+        adata.X, adata.obs["size_factors"], axis=0
+    )
+    sc.pp.log1p(adata)
+
 
 if par['debug']:
     import pprint
@@ -26,7 +42,6 @@ if par['debug']:
     pprint.pprint(par)
 
 adata_file = par['adata']
-name = par['name']
 label = par['label']
 batch = par['batch']
 hvgs = par['hvgs']
@@ -34,10 +49,9 @@ output = par['output']
 
 print('Read adata')
 adata = sc.read(adata_file)
-assert name == adata.uns['name']
 
 # Rename columns
-adata.obs['labels'] = adata.obs[label]
+adata.obs['label'] = adata.obs[label]
 adata.obs['batch'] = adata.obs[batch]
 adata.layers['counts'] = adata.X
 

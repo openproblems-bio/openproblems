@@ -18,10 +18,6 @@ functionality:
       type: file
       description: Anndata HDF5 file
       required: true
-    - name: --name
-      type: string
-      description: Name of dataset
-      required: true
     - name: --label
       type: string
       description: Cell annotation label in adata.obs
@@ -46,15 +42,15 @@ functionality:
   tests:
     - type: python_script
       path: test.py
+    - path: '../resources/data_loader_pancreas.h5ad'
 platforms:
   - type: docker
-    image: mambaorg/micromamba:0.14.0
+    image: mumichae/scanpy-r-micromamba:0.1.1
     setup:
       - type: docker
         run:
           - ls -la
-          - micromamba install -y -c conda-forge -c bioconda \
-            python=3.9.5 scprep scanpy r-base rpy2
+          - micromamba install -y -c conda-forge -c bioconda scprep bioconductor-scran
 #          - micromamba install -y -n base -f /root/env.yaml
           - micromamba clean --all --yes
 #        resources:
