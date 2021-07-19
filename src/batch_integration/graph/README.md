@@ -21,8 +21,7 @@ Datasets should contain the following attributes:
 
 Methods should assign output to:
 
-* `adata.obsp['connectivities']` and `adata.obsp['distances']`, or
-* `adata.uns['neighbors']['connectivities']` and  `adata.uns['neighbors']['distances']`, and
+* `adata.obsp['connectivities']` and `adata.obsp['distances']`
 
 Methods are run in four different scenarios that include scaling and highly variable gene selection:
 
