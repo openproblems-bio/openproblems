@@ -12,7 +12,7 @@ print(">> Running script")
 out = subprocess.check_output([
     "./" + metric,
     "--adata", 'mnn.h5ad',
-    '--hvgs', '2000',
+    '--hvgs', '100',
     "--output", metric_file
 ]).decode("utf-8")
 
