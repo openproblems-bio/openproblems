@@ -8,7 +8,7 @@ anndata_out = 'data_loader_pancreas.h5ad'
 
 print('>> Running script')
 out = subprocess.check_output([
-    './datasets',
+    './pancreas',
     '--adata', anndata_in,
     '--label', 'celltype',
     '--batch', 'tech',
