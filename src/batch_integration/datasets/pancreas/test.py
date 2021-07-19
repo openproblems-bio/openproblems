@@ -21,7 +21,6 @@ assert path.exists(anndata_in)
 
 print('>> Check that output fits expected API')
 adata = sc.read_h5ad(anndata_in)
-# TODO: complete with API checks
 assert 'label' in adata.obs.columns
 assert 'batch' in adata.obs.columns
 assert 'logcounts' in adata.layers

@@ -60,6 +60,7 @@ if adata.n_obs > hvgs:
     sc.pp.subsample(adata, n_obs=hvgs)
 
 print('Normalisation with scran')
+# only if "lognorm" exists in adata.layers
 log_scran_pooling(adata)
 adata.layers['logcounts'] = adata.X
 
