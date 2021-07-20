@@ -3,21 +3,21 @@ import os
 
 print(os.getcwd())
 par = {
-    'adata': './src/batch_integration/resources/data_loader_pancreas.h5ad',
+    'adata': './src/batch_integration/datasets/resources/data_loader_pancreas.h5ad',
     'label': 'celltype',
     'batch': 'tech',
     'hvgs': 2000,
-    'output': 'adata_out.h5ad',
+    'output': './src/batch_integration/datasets/resources/datasets_pancreas.h5ad',
     'debug': True
 }
-resources_dir = '../'
+resources_dir = './src/batch_integration/datasets'
 ## VIASH END
 
 print('Importing libraries')
 import scanpy as sc
-import sys
-sys.path.append(resources_dir)
-from utils import log_scran_pooling
+# import sys
+# sys.path.append(resources_dir)
+# from utils import log_scran_pooling
 
 if par['debug']:
     import pprint
@@ -34,17 +34,16 @@ print('Read adata')
 adata = sc.read(adata_file)
 
 # Rename columns
-adata.obs['label'] = adata.obs[label]
-adata.obs['batch'] = adata.obs[batch]
+adata.obs.rename(columns={label: 'label', batch: 'batch'}, inplace=True)
 adata.layers['counts'] = adata.X
 
 print(f'Select {hvgs} highly variable genes')
 if adata.n_obs > hvgs:
     sc.pp.subsample(adata, n_obs=hvgs)
 
-print('Normalisation with scran')
-log_scran_pooling(adata)
-adata.layers['logcounts'] = adata.X
+#print('Normalisation with scran')
+#log_scran_pooling(adata)
+#adata.layers['logcounts'] = adata.X
 
 print('Transformation: PCA')
 sc.tl.pca(
