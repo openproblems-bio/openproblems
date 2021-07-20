@@ -18,10 +18,6 @@ functionality:
       type: file
       description: Anndata HDF5 file
       required: true
-    - name: --hvgs
-      type: integer
-      description: Number of highly variable genes
-      default: 2000
     - name: --debug
       type: boolean
       description: Verbose output for debugging
@@ -33,7 +29,7 @@ functionality:
   tests:
     - type: python_script
       path: test.py
-    - path: '../../../resources/mnn.h5ad'
+    - path: '../../../resources/pancreas_mnn.h5ad'
 platforms:
   - type: docker
     image: mumichae/scib-base:0.1
