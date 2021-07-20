@@ -14,6 +14,7 @@ a [benchmarking study of data integration methods](https://www.biorxiv.org/conte
 
 Datasets should contain the following attributes:
 
+* `adata.uns['name']`: name of the dataset
 * `adata.obs['batch']` with the batch covariate,
 * `adata.obs['label']` with the cell identity label,
 * `adata.layers['counts']` with raw, integer UMI count data, and

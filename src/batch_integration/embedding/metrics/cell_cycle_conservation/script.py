@@ -1,7 +1,8 @@
 ## VIASH START
 par = {
     'adata': './src/batch_integration/embedding/resources/mnn_pancreas.h5ad',
-    'output': './src/batch_integration/embedding/resources/asw_label_pancreas_mnn.tsv',
+    'output': './src/batch_integration/embedding/resources/cc_score_pancreas_mnn.tsv',
+    'organism': 'human',
     'debug': True
 }
 ## VIASH END
@@ -9,23 +10,31 @@ par = {
 print('Importing libraries')
 import pprint
 import scanpy as sc
-from scIB.metrics import silhouette
+from scIB.metrics import cell_cycle
 
 if par['debug']:
     pprint.pprint(par)
 
 OUTPUT_TYPE = 'embedding'
-METRIC = 'asw_label'
+METRIC = 'cell_cycle_conservation'
 
 adata_file = par['adata']
+organism = par['organism']
 output = par['output']
 
 print('Read adata')
 adata = sc.read(adata_file)
+adata_int = adata.copy()
 name = adata.uns['name']
 
 print('compute score')
-score = silhouette(adata, group_key='label', embed='X_emb')
+score = cell_cycle(
+    adata,
+    adata_int,
+    batch_key='batch',
+    embed='X_emb',
+    organism=organism
+)
 
 with open(output, 'w') as file:
     header = ['dataset', 'output_type', 'metric', 'value']

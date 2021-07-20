@@ -11,6 +11,7 @@ Metrics on embedding output include:
 
 All datasets should contain the following attributes:
 
+* `adata.uns['name']`: name of the dataset
 * `adata.obs['batch']`: the batch covariate
 * `adata.obs['label']`: the cell identity label
 * `adata.obsm['X_pca']`: the PCA embedding before integration

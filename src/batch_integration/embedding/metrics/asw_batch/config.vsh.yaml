@@ -16,7 +16,7 @@ functionality:
       required: true
     - name: --adata
       type: file
-      description: Anndata HDF5 file before integration
+      description: Anndata HDF5 file with embedding in adata.obsm['X_emb']
       required: true
     - name: --debug
       type: boolean

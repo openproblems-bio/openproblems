@@ -2,7 +2,7 @@ functionality:
   name: asw_label
   namespace: batch_integration/embedding/metrics
   version: dev
-  description: Average silhouette of batches per label
+  description: Average silhouette of labels
   authors:
     - name: Michaela Mueller
       roles: [ maintainer, author ]
@@ -16,7 +16,7 @@ functionality:
       required: true
     - name: --adata
       type: file
-      description: Anndata HDF5 file before integration
+      description: Anndata HDF5 file with embedding in adata.obsm['X_emb']
       required: true
     - name: --debug
       type: boolean

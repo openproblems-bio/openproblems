@@ -1,8 +1,8 @@
 functionality:
-  name: ari
+  name: cell_cycle_conservation
   namespace: batch_integration/embedding/metrics
   version: dev
-  description: Adjusted rand index (ARI)
+  description: Cell cycle conservation score based on cell cycle gene scoring
   authors:
     - name: Michaela Mueller
       roles: [ maintainer, author ]
@@ -16,7 +16,11 @@ functionality:
       required: true
     - name: --adata
       type: file
-      description: Anndata HDF5 file with graph in adata.obsp['connectivities']
+      description: Anndata HDF5 file with embedding in adata.obsm['X_emb']
+      required: true
+    - name: --organism
+      type: string
+      description: Name of organism to compute cell cycle scores on
       required: true
     - name: --debug
       type: boolean
