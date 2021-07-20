@@ -6,6 +6,7 @@ Viash component for preparing data **before** running data integration methods.
 
 This script will write an adata object that contains:
 
+* `adata.uns['name']`: name of the dataset
 * `adata.obs['batch']`: batch covariate
 * `adata.obs['label']`: cell identity label
 * `adata.layers['counts']`: raw, integer UMI count data
