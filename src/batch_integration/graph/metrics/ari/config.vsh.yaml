@@ -1,6 +1,6 @@
 functionality:
   name: ari
-  namespace: feature
+  namespace: batch_integration
   version: dev
   description: Adjusted rand index (ARI)
   authors:
