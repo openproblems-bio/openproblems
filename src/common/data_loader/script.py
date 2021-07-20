@@ -1,8 +1,9 @@
 ## VIASH START
 par = {
-    "url": "https://ndownloader.figshare.com/files/24974582",  # PBMC data
-    "name": "pbmc",
-    "output": "test_data.h5ad"
+    "url": "https://ndownloader.figshare.com/files/24539828",  # pancreas data
+    "name": "pancreas",
+    "output": "./src/common/data_loader/resources/pancreas.h5ad",
+    "lognorm_available": "adata.X"
 }
 ## VIASH END
 
@@ -25,7 +26,11 @@ with tempfile.TemporaryDirectory() as tempdir:
     adata = sc.read(filepath)
     adata.uns["name"] = par["name"]
 
-    # Remove preprocessing
+    # Rearrange preprocessing
+    if par['lognorm_available'] == 'adata.X':
+        # save lognorm counts
+        adata.layers['logcounts'] = adata.X
+
     if "counts" in adata.layers:
         adata.X = adata.layers["counts"]
         del adata.layers["counts"]
