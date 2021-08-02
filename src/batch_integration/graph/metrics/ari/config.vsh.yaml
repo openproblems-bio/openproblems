@@ -1,6 +1,6 @@
 functionality:
   name: ari
-  namespace: batch_integration/embedding/metrics
+  namespace: batch_integration/graph/metrics
   version: dev
   description: Adjusted rand index (ARI)
   authors:
