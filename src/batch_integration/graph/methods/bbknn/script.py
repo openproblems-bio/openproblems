@@ -26,12 +26,14 @@ scaling = par['scaling']
 print('Read adata')
 adata = sc.read(adata_file)
 
-print('Prepare data')
 if hvg > 0:
+    print('Select HVGs')
     # TODO: check that hvg value makes sense on dataset
-    adata = hvg_batch(adata, batch_key='batch', target_genes=hvg, adataOut=True)
+    hvgs_list = hvg_batch(adata, batch_key='batch', target_genes=hvg, adataOut=False)
+    adata = adata[:, hvgs_list].copy()
 
 if scaling:
+    print('Scale')
     adata = scale_batch(adata, batch='batch')
 
 print('Integrate')
