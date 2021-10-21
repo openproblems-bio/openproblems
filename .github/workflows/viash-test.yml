@@ -11,7 +11,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {name: 'main', os: ubuntu-latest }
+        - {name: 'main_only_common', os: ubuntu-latest, query: 'common' }
+        - {name: 'main_only_MA', os: ubuntu-latest, query: 'modality_alignment' }
+        - {name: 'main_only_TI', os: ubuntu-latest, query: 'trajectory_inference' }
 
     steps:
     - uses: actions/checkout@v2
@@ -29,7 +31,7 @@ jobs:
 
     - name: Run build
       run: |
-        bin/viash_build
+        bin/viash_build -q '${{ matrix.config.query }}'
 
     - name: Run tests
       run: |
@@ -38,7 +40,7 @@ jobs:
         mkdir check_results
 
         # run tests
-        bin/viash_test --append=false --log=check_results/results.tsv
+        bin/viash_test -q '${{ matrix.config.query }}' --append=false --log=check_results/results.tsv
 
     - name: Upload check results
       uses: actions/upload-artifact@master
