@@ -14,6 +14,7 @@ jobs:
         - {name: 'main_only_common', os: ubuntu-latest, query: 'common' }
         - {name: 'main_only_MA', os: ubuntu-latest, query: 'modality_alignment' }
         - {name: 'main_only_TI', os: ubuntu-latest, query: 'trajectory_inference' }
+        - {name: 'main_only_BI', os: ubuntu-latest, query: 'batch_integration' }
 
     steps:
     - uses: actions/checkout@v2

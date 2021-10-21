@@ -1,0 +1,37 @@
+functionality:
+  name: asw_label
+  namespace: batch_integration/embedding/metrics
+  version: dev
+  description: Average silhouette of labels
+  authors:
+    - name: Michaela Mueller
+      roles: [ maintainer, author ]
+      props: { github: mumichae }
+  arguments:
+    - name: --output
+      alternatives: [ -o ]
+      type: file
+      direction: output
+      description: Output tsv file of the metric
+      required: true
+    - name: --adata
+      type: file
+      description: Anndata HDF5 file with embedding in adata.obsm['X_emb']
+      required: true
+    - name: --debug
+      type: boolean
+      description: Verbose output for debugging
+      default: False
+      required: false
+  resources:
+    - type: python_script
+      path: script.py
+  tests:
+    - type: python_script
+      path: test.py
+    - path: '../../../resources/pancreas_mnn.h5ad'
+platforms:
+  - type: docker
+    image: mumichae/scib-base:0.1
+  - type: native
+  - type: nextflow

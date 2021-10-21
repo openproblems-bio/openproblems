@@ -9,7 +9,7 @@ functionality:
       props: { github: mumichae }
   arguments:
     - name: "--output"
-      alternatives: ["-o"]
+      alternatives: [ "-o" ]
       type: "file"
       direction: "output"
       description: "Output h5ad file of the cleaned dataset"
@@ -21,6 +21,9 @@ functionality:
     - name: "--name"
       type: "string"
       description: "Name of dataset"
+    - name: "--lognorm_available"
+      type: "string"
+      description: "Location of lognorm counts if exists, else empty"
       required: true
   resources:
     - type: python_script
