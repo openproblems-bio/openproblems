@@ -5,8 +5,7 @@ nextflow.enable.dsl=2
  * (it's a nextflow limitation I'm trying to figure out 
  * how to resolve.) */
  
-rootDir = "$projectDir/../../.." 
-targetDir = "$rootDir/target/nextflow"
+targetDir = "${params.rootDir}/target/nextflow"
 
 // import dataset loaders
 include { sample_dataset }       from "$targetDir/modality_alignment/datasets/sample_dataset/main.nf"     params(params)
