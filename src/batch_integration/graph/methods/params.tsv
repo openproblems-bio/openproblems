@@ -1,10 +1,10 @@
 # HVG, scaling preprocessing setupts for integration methods
 hvg	scaling	method
-2000	True	bbknn
-2000	True	bbknn
-2000	False	bbknn
-2000	False	bbknn
-0	True	bbknn
-0	True	bbknn
-0	False	bbknn
-0	False	bbknn
+True	True	bbknn
+True	False	bbknn
+False	True	bbknn
+False	False	bbknn
+True	True	combat
+True	False	combat
+False	True	combat
+False	False	combat
