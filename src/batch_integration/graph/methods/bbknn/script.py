@@ -26,10 +26,7 @@ adata = sc.read(adata_file)
 
 if hvg:
     print('Select HVGs')
-    # TODO: check that hvg value makes sense on dataset
-    #hvgs_list = hvg_batch(adata, batch_key='batch', target_genes=hvg, adataOut=False)
     adata = adata[:, adata.var['hvg']]
-
 
 if scaling:
     print('Scale')

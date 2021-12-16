@@ -12,7 +12,7 @@ This module creates Anndata objects that contain:
 * `adata.var['hvg']`: label whether a gene is identified as highly variable
 * `adata.layers['counts']`: raw, integer UMI count data
 * `adata.layers['logcounts']`: log-normalized count data
-* `adata.layers['logcounts_scaled']`: scaled log-normalized count data
+* `adata.layers['logcounts_scaled']`: log-normalized count data scaled to unit variance and zero mean
 * `adata.X`: same as in `adata.layers['logcounts']`
 
 And transformations of the data:

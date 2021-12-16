@@ -4,9 +4,9 @@ SCRIPTPATH="$(
 )"
 
 bin/viash run ${SCRIPTPATH}/config.vsh.yaml -- \
-  --adata ${SCRIPTPATH}/../resources/data_loader_pancreas.h5ad \
+  --adata src/batch_integration/datasets/resources/data_loader_pancreas.h5ad \
   --label celltype \
   --batch tech \
   --hvgs 100 \
-  --output ${SCRIPTPATH}/../resources/datasets_pancreas.h5ad \
-  --debug
+  --output src/batch_integration/datasets/resources/datasets_pancreas.h5ad \
+  --debug true

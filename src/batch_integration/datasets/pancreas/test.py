@@ -1,6 +1,7 @@
 from os import path
 import subprocess
 import scanpy as sc
+import numpy as np
 
 name = 'pancreas'
 anndata_in = 'data_loader_pancreas.h5ad'
@@ -12,7 +13,7 @@ out = subprocess.check_output([
     '--adata', anndata_in,
     '--label', 'celltype',
     '--batch', 'tech',
-    '--hvgs', '2000',
+    '--hvgs', '100',
     '--output', anndata_out
 ]).decode('utf-8')
 
@@ -32,5 +33,10 @@ assert 'X_uni' in adata.obsm
 assert 'uni' in adata.uns
 assert 'uni_distances' in adata.obsp
 assert 'uni_connectivities' in adata.obsp
+
+assert adata.var['hvg'].dtype == 'bool'
+assert adata.var['hvg'].sum() == 100
+assert -0.0000001 <= np.mean(adata.layers['logcounts_scaled']) <= 0.0000001
+assert 0.8 <= np.var(adata.layers['logcounts_scaled']) <= 1
 
 print('>> All tests passed successfully')
