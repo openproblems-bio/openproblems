@@ -22,6 +22,7 @@ assert path.exists(anndata_in)
 
 print('>> Check that output fits expected API')
 adata = sc.read_h5ad(anndata_in)
+assert 'name' in adata.uns
 assert 'label' in adata.obs.columns
 assert 'batch' in adata.obs.columns
 assert 'hvg' in adata.var

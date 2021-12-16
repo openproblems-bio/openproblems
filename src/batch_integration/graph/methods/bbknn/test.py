@@ -22,6 +22,20 @@ assert path.exists(output_file)
 
 print('>> Checking API')
 adata = sc.read(output_file)
+
+assert 'name' in adata.uns
+assert 'label' in adata.obs.columns
+assert 'batch' in adata.obs.columns
+assert 'hvg' in adata.var
+assert 'counts' in adata.layers
+assert 'logcounts' in adata.layers
+assert 'logcounts_scaled' in adata.layers
+assert 'X_pca' in adata.obsm
+assert 'X_uni' in adata.obsm
+assert 'uni' in adata.uns
+assert 'uni_distances' in adata.obsp
+assert 'uni_connectivities' in adata.obsp
+
 assert 'connectivities' in adata.obsp
 assert 'distances' in adata.obsp
 assert 'hvg' in adata.uns
