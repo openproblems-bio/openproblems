@@ -2,7 +2,7 @@
 par = {
     'adata': './src/batch_integration/resources/datasets_pancreas.h5ad',
     'output': './src/batch_integration/resources/pancreas_bbknn.h5ad',
-    'hvgs': True,
+    'hvg': True,
     'scaling': True,
     'debug': True
 }
@@ -18,7 +18,7 @@ if par['debug']:
 
 adata_file = par['adata']
 output = par['output']
-hvg = par['hvgs']
+hvg = par['hvg']
 scaling = par['scaling']
 
 print('Read adata')

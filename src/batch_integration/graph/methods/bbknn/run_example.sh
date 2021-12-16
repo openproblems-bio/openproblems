@@ -8,7 +8,7 @@ bin/viash run ${SCRIPTPATH}/config.vsh.yaml -- \
   --adata src/batch_integration/datasets/resources/datasets_pancreas.h5ad \
   --label celltype \
   --batch tech \
-  --hvgs true \
+  --hvg true \
   --scaling true \
   --output src/batch_integration/resources/graph_bbknn_pancreas.h5ad \
   --debug true

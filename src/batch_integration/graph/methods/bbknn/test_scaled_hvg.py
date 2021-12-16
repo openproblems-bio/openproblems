@@ -12,7 +12,7 @@ print(">> Running script")
 out = subprocess.check_output([
     "./" + method,
     "--adata", 'datasets_pancreas.h5ad',
-    "--hvg", '100',
+    "--hvg", 'True',
     "--scaling", 'True',
     "--output", output_file
 ]).decode("utf-8")
@@ -25,10 +25,8 @@ adata = sc.read(output_file)
 assert 'connectivities' in adata.obsp
 assert 'distances' in adata.obsp
 assert 'hvg' in adata.uns
-assert adata.uns['hvg'] == 100
+assert adata.uns['hvg'] == True
 assert 'scaled' in adata.uns
-print(isinstance(adata.uns['scaled'], bool))
-print(type(adata.uns['scaled']).__name__())
 assert adata.uns['scaled'] == True
 
 print(">> All tests passed successfully")
