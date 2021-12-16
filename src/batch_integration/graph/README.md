@@ -17,8 +17,9 @@ a [benchmarking study of data integration methods](https://www.biorxiv.org/conte
 Datasets should contain the following attributes:
 
 * `adata.uns['name']`: name of the dataset
-* `adata.obs['batch']` with the batch covariate,
-* `adata.obs['label']` with the cell identity label,
+* `adata.obs['batch']` with the batch covariate
+* `adata.obs['label']` with the cell identity label
+  * `adata.var['highly_variable']`: label whether a gene is identified as highly variable
 * `adata.layers['counts']` with raw, integer UMI count data
 * `adata.layers['logcounts']`: log-normalized count data
 * `adata.layers['logcounts_scaled']`: scaled log-normalized count data

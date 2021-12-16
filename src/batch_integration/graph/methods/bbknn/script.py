@@ -26,7 +26,7 @@ adata = sc.read(adata_file)
 
 if hvg:
     print('Select HVGs')
-    adata = adata[:, adata.var['hvg']]
+    adata = adata[:, adata.var['highly_variable']]
 
 if scaling:
     print('Scale')
