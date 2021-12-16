@@ -23,7 +23,10 @@ print('>> Check that output fits expected API')
 adata = sc.read_h5ad(anndata_in)
 assert 'label' in adata.obs.columns
 assert 'batch' in adata.obs.columns
+assert 'hvg' in adata.var
+assert 'counts' in adata.layers
 assert 'logcounts' in adata.layers
+assert 'logcounts_scaled' in adata.layers
 assert 'X_pca' in adata.obsm
 assert 'X_uni' in adata.obsm
 assert 'uni' in adata.uns

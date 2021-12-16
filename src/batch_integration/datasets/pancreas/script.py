@@ -43,16 +43,16 @@ adata.var['hvg'] = adata.var_names.isin(hvg_list)
 print('Scaling')
 adata.layers['logcounts_scaled'] = scale_batch(adata, 'batch').X
 
-# print('Transformation: PCA')
-# sc.tl.pca(
-#     adata,
-#     svd_solver='arpack',
-#     return_info=True,
-# )
-# adata.obsm['X_uni'] = adata.obsm['X_pca']
-#
-# print('Transformation: kNN')
-# sc.pp.neighbors(adata, use_rep='X_uni', key_added='uni')
+print('Transformation: PCA')
+sc.tl.pca(
+    adata,
+    svd_solver='arpack',
+    return_info=True,
+)
+adata.obsm['X_uni'] = adata.obsm['X_pca']
+
+print('Transformation: kNN')
+sc.pp.neighbors(adata, use_rep='X_uni', key_added='uni')
 
 print('Writing adata to file')
 adata.write(output, compression='gzip')
