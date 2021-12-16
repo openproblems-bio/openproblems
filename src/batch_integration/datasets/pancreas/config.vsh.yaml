@@ -39,7 +39,7 @@ functionality:
   resources:
     - type: python_script
       path: script.py
-    - path: "../utils.py"
+    - path: "../utils/_hvg_batch.py"
   tests:
     - type: python_script
       path: test.py
@@ -47,10 +47,5 @@ functionality:
 platforms:
   - type: docker
     image: mumichae/scib-base:1.0.0
-    setup:
-      - type: docker
-        run:
-          - micromamba install -y -c conda-forge -c bioconda scprep bioconductor-scran
-          - micromamba clean --all --yes
   - type: native
   - type: nextflow

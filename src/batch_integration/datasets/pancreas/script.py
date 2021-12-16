@@ -15,10 +15,11 @@ resources_dir = './src/batch_integration/datasets'
 
 print('Importing libraries')
 import scanpy as sc
+import scib
 from pprint import pprint
 import sys
 sys.path.append(resources_dir)
-from utils import scale_batch, hvg_batch
+from _hvg_batch import hvg_batch
 
 if par['debug']:
     pprint(par)
@@ -38,10 +39,10 @@ adata.layers['counts'] = adata.X
 
 print(f'Select {hvgs} highly variable genes')
 hvg_list = hvg_batch(adata, 'batch', n_hvg=hvgs)
-adata.var['hvg'] = adata.var_names.isin(hvg_list)
+adata.var['highly_variable'] = adata.var_names.isin(hvg_list)
 
 print('Scaling')
-adata.layers['logcounts_scaled'] = scale_batch(adata, 'batch').X
+adata.layers['logcounts_scaled'] = scib.pp.scale_batch(adata, 'batch').X
 
 print('Transformation: PCA')
 sc.tl.pca(

@@ -9,7 +9,7 @@ This module creates Anndata objects that contain:
 * `adata.uns['name']`: name of the dataset
 * `adata.obs['batch']`: batch covariate
 * `adata.obs['label']`: cell identity label
-* `adata.var['hvg']`: label whether a gene is identified as highly variable
+* `adata.var['highly_variable']`: label whether a gene is identified as highly variable
 * `adata.layers['counts']`: raw, integer UMI count data
 * `adata.layers['logcounts']`: log-normalized count data
 * `adata.layers['logcounts_scaled']`: log-normalized count data scaled to unit variance and zero mean
