@@ -15,14 +15,13 @@ resources_dir = './src/batch_integration/datasets'
 
 print('Importing libraries')
 import scanpy as sc
-# import sys
-# sys.path.append(resources_dir)
-# from utils import log_scran_pooling
+from pprint import pprint
+import sys
+sys.path.append(resources_dir)
+from utils import scale_batch, hvg_batch
 
 if par['debug']:
-    import pprint
-
-    pprint.pprint(par)
+    pprint(par)
 
 adata_file = par['adata']
 label = par['label']
@@ -38,23 +37,22 @@ adata.obs.rename(columns={label: 'label', batch: 'batch'}, inplace=True)
 adata.layers['counts'] = adata.X
 
 print(f'Select {hvgs} highly variable genes')
-if adata.n_obs > hvgs:
-    sc.pp.subsample(adata, n_obs=hvgs)
+hvg_list = hvg_batch(adata, 'batch', n_hvg=hvgs)
+adata.var['hvg'] = adata.var_names.isin(hvg_list)
 
-#print('Normalisation with scran')
-#log_scran_pooling(adata)
-#adata.layers['logcounts'] = adata.X
+print('Scaling')
+adata.layers['logcounts_scaled'] = scale_batch(adata, 'batch').X
 
-print('Transformation: PCA')
-sc.tl.pca(
-    adata,
-    svd_solver='arpack',
-    return_info=True,
-)
-adata.obsm['X_uni'] = adata.obsm['X_pca']
-
-print('Transformation: kNN')
-sc.pp.neighbors(adata, use_rep='X_uni', key_added='uni')
+# print('Transformation: PCA')
+# sc.tl.pca(
+#     adata,
+#     svd_solver='arpack',
+#     return_info=True,
+# )
+# adata.obsm['X_uni'] = adata.obsm['X_pca']
+#
+# print('Transformation: kNN')
+# sc.pp.neighbors(adata, use_rep='X_uni', key_added='uni')
 
 print('Writing adata to file')
 adata.write(output, compression='gzip')

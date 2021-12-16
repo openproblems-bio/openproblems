@@ -46,15 +46,11 @@ functionality:
     - path: '../resources/data_loader_pancreas.h5ad'
 platforms:
   - type: docker
-    image: mumichae/scanpy-r-micromamba:0.1.1
+    image: mumichae/scib-base:1.0.0
     setup:
       - type: docker
         run:
-          - ls -la
           - micromamba install -y -c conda-forge -c bioconda scprep bioconductor-scran
-#          - micromamba install -y -n base -f /root/env.yaml
           - micromamba clean --all --yes
-#        resources:
-#          - envs/py_r.yaml /root/env.yaml
   - type: native
   - type: nextflow

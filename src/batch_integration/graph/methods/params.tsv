@@ -1,0 +1,10 @@
+# HVG, scaling preprocessing setupts for integration methods
+hvg	scaling	method
+2000	True	bbknn
+2000	True	bbknn
+2000	False	bbknn
+2000	False	bbknn
+0	True	bbknn
+0	True	bbknn
+0	False	bbknn
+0	False	bbknn

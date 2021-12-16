@@ -18,11 +18,9 @@ functionality:
       type: file
       description: Unintegrated anndata HDF5 file
       required: true
-    - name: --hvg
-      type: integer
-      description: |
-        Number of highly variable genes to select by.
-        If 0, no HVG selection will be performed.
+    - name: --hvgs
+      type: boolean
+      description: Whether to subset to highly variable genes
       required: true
     - name: --scaling
       type: boolean
@@ -44,7 +42,7 @@ functionality:
     - path: '../../../resources/datasets_pancreas.h5ad'
 platforms:
   - type: docker
-    image: mumichae/scib-base:0.1
+    image: mumichae/scib-base:1.0.0
     setup:
       - type: python
         packages:
