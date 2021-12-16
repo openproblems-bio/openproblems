@@ -9,9 +9,8 @@ par = {
 print('Importing libraries')
 import pprint
 import scanpy as sc
-from scIB.preprocessing import reduce_data
-from scIB.clustering import opt_louvain
-from scIB.metrics import nmi
+from scib.metrics.clustering import opt_louvain
+from scib.metrics import nmi
 
 if par['debug']:
     pprint.pprint(par)

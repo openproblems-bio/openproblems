@@ -29,9 +29,9 @@ functionality:
   tests:
     - type: python_script
       path: test.py
-    - path: '../../../resources/pancreas_mnn.h5ad'
+    - path: '../../../resources/graph_pancreas_bbknn.h5ad'
 platforms:
   - type: docker
-    image: mumichae/scib-base:0.1
+    image: mumichae/scib-base:1.0.0
   - type: native
   - type: nextflow
