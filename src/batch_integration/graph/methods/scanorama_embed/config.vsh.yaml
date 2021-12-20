@@ -1,8 +1,8 @@
 functionality:
-  name: scanorama_feature
+  name: scanorama_embed
   namespace: batch_integration/graph/methods
   version: dev
-  description: Run Scanorama on adata object, use full feature output
+  description: Run Scanorama on adata object, use embedding output
   authors:
     - name: Michaela Mueller
       roles: [ maintainer, author ]

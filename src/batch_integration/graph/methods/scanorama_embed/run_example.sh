@@ -10,5 +10,5 @@ bin/viash run ${SCRIPTPATH}/config.vsh.yaml -- \
   --batch tech \
   --hvg true \
   --scaling true \
-  --output src/batch_integration/resources/graph_pancreas_scanorama_feature.h5ad \
+  --output src/batch_integration/resources/graph_pancreas_scanorama_embed.h5ad \
   --debug true

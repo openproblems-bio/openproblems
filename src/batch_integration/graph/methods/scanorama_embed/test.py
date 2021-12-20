@@ -5,7 +5,7 @@ import scanpy as sc
 
 np.random.seed(42)
 
-method = 'scanorama_feature'
+method = 'scanorama_embed'
 output_file = method + '.h5ad'
 
 print(">> Running script")
