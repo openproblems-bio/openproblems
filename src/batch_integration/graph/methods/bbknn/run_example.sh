@@ -6,8 +6,6 @@ SCRIPTPATH="$(
 
 bin/viash run ${SCRIPTPATH}/config.vsh.yaml -- \
   --adata src/batch_integration/datasets/resources/datasets_pancreas.h5ad \
-  --label celltype \
-  --batch tech \
   --hvg true \
   --scaling true \
   --output src/batch_integration/resources/graph_pancreas_bbknn.h5ad \

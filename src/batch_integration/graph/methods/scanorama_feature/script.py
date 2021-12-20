@@ -35,7 +35,7 @@ else:
     adata.X = adata.layers['logcounts']
 
 print('Integrate')
-adata.X = scanorama(adata, batch='batch').X
+adata.X = scanorama(adata, batch='batch').X.todense()
 
 print('Postprocess data')
 sc.pp.pca(
