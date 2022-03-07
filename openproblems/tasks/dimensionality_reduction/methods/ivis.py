@@ -1,6 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
-from .preprocessing import preprocess_scanpy
+from .preprocessing import preprocess_logCPM_1kHVG
 from anndata import AnnData
 
 
@@ -17,7 +17,7 @@ from anndata import AnnData
 def ivis_logCPM_1kHVG(adata: AnnData) -> AnnData:
     from ivis import Ivis
 
-    preprocess_scanpy(adata)
+    preprocess_logCPM_1kHVG(adata)
 
     # parameters taken from:
     # https://bering-ivis.readthedocs.io/en/latest/
@@ -29,6 +29,6 @@ def ivis_logCPM_1kHVG(adata: AnnData) -> AnnData:
         verbose=0,
         embedding_dims=2,
     )
-    adata.obsm["X_emb"] = ivis.fit_transform(adata.obsm["X_pca"])
+    adata.obsm["X_emb"] = ivis.fit_transform(adata.obsm["X_input"])
 
     return adata
