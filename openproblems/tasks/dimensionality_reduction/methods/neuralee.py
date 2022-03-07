@@ -1,5 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
+from .preprocessing import preprocess_logCPM_1kHVG
 from anndata import AnnData
 
 
@@ -27,6 +28,36 @@ def neuralee_default(adata: AnnData) -> AnnData:
     dataset.subsample_genes(500)  # filter genes according to variance
     dataset.standardscale()
     # 1000 cells as a batch to estimate the affinity matrix
+    dataset.affinity_split(N_small=min(1000, adata.n_obs))
+
+    NEE = NeuralEE(dataset, d=2, device=torch.device("cpu"))
+    res = NEE.fine_tune(verbose=False)
+
+    adata.obsm["X_emb"] = res["X"].detach().cpu().numpy()
+
+    return adata
+
+
+@method(
+    method_name="NeuralEE (CPU) (logCPM, 1kHVG)",
+    paper_name=" NeuralEE: A GPU-Accelerated Elastic Embedding "
+    "Dimensionality Reduction Method for "
+    "Visualizing Large-Scale scRNA-Seq Data ",
+    paper_url="https://pubmed.ncbi.nlm.nih.gov/33193561/",
+    paper_year=2020,
+    code_url="https://github.com/HiBearME/NeuralEE",
+    code_version=check_version("neuralee"),
+    image="openproblems-python-extras",
+)
+def neuralee_logCPM_1kHVG(adata: AnnData) -> AnnData:
+    from neuralee.dataset import GeneExpressionDataset
+    from neuralee.embedding import NeuralEE
+
+    import torch
+
+    preprocess_logCPM_1kHVG(adata)
+
+    dataset = GeneExpressionDataset(adata.X)
     dataset.affinity_split(N_small=min(1000, adata.n_obs))
 
     NEE = NeuralEE(dataset, d=2, device=torch.device("cpu"))
