@@ -27,7 +27,7 @@ def phate_default(adata):
 
 
 @method(
-    method_name="PHATE (scanpy pre-processing)",
+    method_name="PHATE (logCPM, 1kHVG)",
     paper_name="Visualizing Transitions and Structure for Biological Data Exploration",
     paper_url="https://www.nature.com/articles/s41587-019-0336-3",
     paper_year=2019,
@@ -35,6 +35,6 @@ def phate_default(adata):
     code_version=check_version("phate"),
     image="openproblems-python-extras",
 )
-def phate_scanpy(adata):
+def phate_logCPM_1kHVG(adata):
     preprocess_logCPM_1kHVG(adata)
     return _phate(adata)

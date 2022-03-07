@@ -6,7 +6,7 @@ import scanpy as sc
 
 
 @method(
-    method_name="“t-Distributed Stochastic Neighbor Embedding (t-SNE)",
+    method_name="“t-Distributed Stochastic Neighbor Embedding (t-SNE) (logCPM, 1kHVG)",
     paper_name="Visualizing Data using t-SNE",
     paper_url="https://lvdmaaten.github.io/publications/papers/JMLR_2008.pdf",
     paper_year=2008,
@@ -15,7 +15,7 @@ import scanpy as sc
     code_version=check_version("MulticoreTSNE"),
     image="openproblems-python-extras",
 )
-def tsne(adata):
+def tsne_logCPM_1kHVG(adata):
     preprocess_logCPM_1kHVG(adata)
     sc.tl.tsne(adata, use_rep="X_input", n_pcs=50)
     adata.obsm["X_emb"] = adata.obsm["X_tsne"]

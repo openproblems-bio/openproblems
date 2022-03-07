@@ -1,6 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
-from .preprocessing import preprocess_scanpy
+from .preprocessing import preprocess_logCPM_1kHVG
 from anndata import AnnData
 from scipy.sparse import issparse
 from typing import Any
@@ -87,7 +87,7 @@ def _fit(data: np.ndarray):
 
 
 @method(
-    method_name="scvis (CPU)",
+    method_name="scvis (CPU) (logCPM, 1kHVG)",
     paper_name="Interpretable dimensionality reduction "
     "of single celltranscriptome data with deep generative models",
     paper_url="https://www.nature.com/articles/s41467-018-04368-5",
@@ -96,8 +96,8 @@ def _fit(data: np.ndarray):
     code_version=check_version("scvis"),
     image="openproblems-python-method-scvis",
 )
-def scvis(adata: AnnData) -> AnnData:
-    preprocess_scanpy(adata)
+def scvis_logCM_1kHVG(adata: AnnData) -> AnnData:
+    preprocess_logCPM_1kHVG(adata)
     adata = adata[:, adata.var["highly_variable"]]
 
     model, x = _fit(adata.X.A if issparse(adata.X) else adata.X)

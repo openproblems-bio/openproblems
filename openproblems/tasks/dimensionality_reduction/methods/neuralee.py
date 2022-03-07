@@ -4,7 +4,7 @@ from anndata import AnnData
 
 
 @method(
-    method_name="NeuralEE (CPU)",
+    method_name="NeuralEE (CPU) (Default)",
     paper_name=" NeuralEE: A GPU-Accelerated Elastic Embedding "
     "Dimensionality Reduction Method for "
     "Visualizing Large-Scale scRNA-Seq Data ",
@@ -14,7 +14,7 @@ from anndata import AnnData
     code_version=check_version("neuralee"),
     image="openproblems-python-extras",
 )
-def neuralee(adata: AnnData) -> AnnData:
+def neuralee_default(adata: AnnData) -> AnnData:
     from neuralee.dataset import GeneExpressionDataset
     from neuralee.embedding import NeuralEE
 

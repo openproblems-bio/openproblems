@@ -5,7 +5,7 @@ from anndata import AnnData
 
 
 @method(
-    method_name="Ivis (CPU)",
+    method_name="Ivis (CPU) (logCPM, 1kHVG)",
     paper_name="Structure-preserving visualisation of "
     "high dimensional single-cell datasets",
     paper_url="https://www.nature.com/articles/s41598-019-45301-0",
@@ -14,7 +14,7 @@ from anndata import AnnData
     code_version=check_version("ivis"),
     image="openproblems-python-extras",
 )
-def ivis(adata: AnnData) -> AnnData:
+def ivis_logCPM_1kHVG(adata: AnnData) -> AnnData:
     from ivis import Ivis
 
     preprocess_scanpy(adata)

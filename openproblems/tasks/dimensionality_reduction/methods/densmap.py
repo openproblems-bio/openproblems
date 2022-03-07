@@ -1,10 +1,10 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
-from .preprocessing import preprocess_scanpy
+from .preprocessing import preprocess_logCPM_1kHVG
 
 
 @method(
-    method_name="densMAP",
+    method_name="densMAP (logCPM, 1kHVG)",
     paper_name="Assessing single-cell transcriptomic variability through"
     " density-preserving data visualization",
     paper_url="https://www.nature.com/articles/s41587-020-00801-7",
@@ -13,9 +13,9 @@ from .preprocessing import preprocess_scanpy
     code_version=check_version("umap-learn"),
     image="openproblems-python-extras",
 )
-def densmap(adata):
+def densmap_logCPM_1kHVG(adata):
     from umap import UMAP
 
-    preprocess_scanpy(adata)
+    preprocess_logCPM_1kHVG(adata)
     adata.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(adata.X)
     return adata
