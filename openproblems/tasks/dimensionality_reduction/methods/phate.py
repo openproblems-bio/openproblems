@@ -1,7 +1,7 @@
 from ....tools.decorators import method
 from ....tools.normalize import sqrt_cpm
 from ....tools.utils import check_version
-from .preprocessing import preprocess_scanpy
+from .preprocessing import preprocess_logCPM_1kHVG
 
 
 def _phate(adata):
@@ -36,5 +36,5 @@ def phate_default(adata):
     image="openproblems-python-extras",
 )
 def phate_scanpy(adata):
-    preprocess_scanpy(adata)
+    preprocess_logCPM_1kHVG(adata)
     return _phate(adata)

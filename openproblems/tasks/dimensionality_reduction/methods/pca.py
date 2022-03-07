@@ -1,6 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
-from .preprocessing import preprocess_scanpy
+from .preprocessing import preprocess_logCPM_1kHVG
 
 
 @method(
@@ -13,6 +13,6 @@ from .preprocessing import preprocess_scanpy
     code_version=check_version("scikit-learn"),
 )
 def pca(adata):
-    preprocess_scanpy(adata)
+    preprocess_logCPM_1kHVG(adata)
     adata.obsm["X_emb"] = adata.obsm["X_input"][:, :2]
     return adata

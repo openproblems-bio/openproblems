@@ -4,7 +4,7 @@ from anndata import AnnData
 import scanpy as sc
 
 
-def preprocess_scanpy(adata: AnnData) -> None:
+def preprocess_logCPM_1kHVG(adata: AnnData) -> None:
 
     log_cpm(adata)
     sc.pp.highly_variable_genes(adata, n_top_genes=1000)

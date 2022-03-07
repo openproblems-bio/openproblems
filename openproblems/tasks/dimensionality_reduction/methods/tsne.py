@@ -1,6 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
-from .preprocessing import preprocess_scanpy
+from .preprocessing import preprocess_logCPM_1kHVG
 
 import scanpy as sc
 
@@ -16,7 +16,7 @@ import scanpy as sc
     image="openproblems-python-extras",
 )
 def tsne(adata):
-    preprocess_scanpy(adata)
+    preprocess_logCPM_1kHVG(adata)
     sc.tl.tsne(adata, use_rep="X_input", n_pcs=50)
     adata.obsm["X_emb"] = adata.obsm["X_tsne"]
     return adata
