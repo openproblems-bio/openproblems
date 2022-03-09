@@ -21,7 +21,7 @@ utils.warnings.ignore_warnings()
     ],
     name_func=utils.name.name_test,
 )
-@utils.docker.docker_test(timeout=600, retries=2)
+@utils.docker.docker_test
 def test_method(task_name, method_name, tempdir, image):
     """Test application of a method."""
     import anndata
@@ -54,3 +54,4 @@ def test_method_metadata(method):
         "image",
     ]:
         assert attr in method.metadata
+    assert utils.docker.image_exists(method.metadata["image"])

@@ -1,3 +1,4 @@
+from . import atac_denoising
 from . import denoising
 from . import dimensionality_reduction
 from . import label_projection

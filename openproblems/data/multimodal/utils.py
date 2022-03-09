@@ -9,6 +9,10 @@ def subset_mode2_genes(adata, keep_genes):
     """Randomly subset genes from adata.obsm["mode2"]."""
     adata.obsm["mode2"] = adata.obsm["mode2"][:, keep_genes]
     adata.uns["mode2_var"] = adata.uns["mode2_var"][keep_genes]
+    if len(adata.uns["mode2_var"].shape) > 1:
+        for i, element in enumerate(["chr", "start", "end"]):
+            if f"mode2_var_{element}" in adata.uns:
+                adata.uns[f"mode2_var_{element}"] = adata.uns["mode2_var"][:, i]
     if "mode2_varnames" in adata.uns:
         for varname in adata.uns["mode2_varnames"]:
             adata.uns[varname] = adata.uns[varname][keep_genes]
@@ -32,38 +36,99 @@ def filter_joint_data_empty_cells(adata):
     return adata
 
 
-def create_joint_adata(
-    X, Y, X_index=None, X_columns=None, Y_index=None, Y_columns=None
-):
-    """Create a multimodal dataset."""
-    if X_index is None:
-        X_index = X.index
-    if X_columns is None:
-        X_columns = X.columns
-    if Y_index is None:
-        Y_index = Y.index
-    if Y_columns is None:
-        Y_columns = Y.columns
-    joint_index = np.sort(np.intersect1d(X_index, Y_index))
+def _subset_index(X, X_index, keep_index):
+    """Keep only observations from `index` that exist in `keep_index`.
+
+    Parameters
+    ----------
+    X : array-like
+        Original data
+    X_index : list-like
+        Original index
+    keep_index : list-like
+        Index whose observations should be retained
+
+    Returns
+    -------
+    X_sub : array-like
+        Subset of `index` that exist in `keep_index`
+    """
     try:
-        X = X.loc[joint_index]
-        Y = Y.loc[joint_index]
+        X_sub = X.loc[keep_index]
     except AttributeError:
-        # keep only common observations
-        X_keep_idx = np.isin(X_index, joint_index)
-        Y_keep_idx = np.isin(Y_index, joint_index)
+        X_keep_idx = np.isin(X_index, keep_index)
+
         X = X[X_keep_idx]
-        Y = Y[Y_keep_idx]
 
         # reorder by alphabetical
         X_index_sub = scprep.utils.toarray(X_index[X_keep_idx])
-        Y_index_sub = scprep.utils.toarray(Y_index[Y_keep_idx])
-        X = X[np.argsort(X_index_sub)]
-        Y = Y[np.argsort(Y_index_sub)]
+        X_sub = X[np.argsort(X_index_sub)]
 
         # check order is correct
-        assert (X_index_sub[np.argsort(X_index_sub)] == joint_index).all()
-        assert (Y_index_sub[np.argsort(Y_index_sub)] == joint_index).all()
+        assert (X_index_sub[np.argsort(X_index_sub)] == keep_index).all()
+
+    return X_sub
+
+
+def _subset_indices(X, Y, X_index=None, Y_index=None):
+    """Keep only common observations.
+
+    Parameters
+    ----------
+    X : array-like
+    Y : array-like
+    X_index : list-like, optional (default: None)
+        If `None`, drawn from `X.index`
+    Y_index : list-like, optional (default: None)
+        If `None`, drawn from `Y.index`
+
+    Returns
+    -------
+    X_sub : array-like
+    Y_sub : array-like
+    joint_index : list-like
+    """
+    if X_index is None:
+        X_index = X.index
+    if Y_index is None:
+        Y_index = Y.index
+
+    joint_index = np.sort(np.intersect1d(X_index, Y_index))
+    X = _subset_index(X, X_index, joint_index)
+    Y = _subset_index(Y, Y_index, joint_index)
+
+    return X, Y, joint_index
+
+
+def create_joint_adata(
+    X, Y, X_index=None, X_columns=None, Y_index=None, Y_columns=None
+):
+    """Create a multimodal dataset.
+
+    Parameters
+    ----------
+    X : array-like
+    Y : array-like
+    X_index : list-like, optional (default: None)
+        If `None`, drawn from `X.index`
+    X_columns : list-like, optional (default: None)
+        If `None`, drawn from `X.columns`
+    Y_index : list-like, optional (default: None)
+        If `None`, drawn from `Y.index`
+    Y_columns : list-like, optional (default: None)
+        If `None`, drawn from `Y.columns`
+
+    Returns
+    -------
+    adata : AnnData
+    """
+    if X_columns is None:
+        X_columns = X.columns
+    if Y_columns is None:
+        Y_columns = Y.columns
+
+    X, Y, joint_index = _subset_indices(X, Y, X_index=X_index, Y_index=Y_index)
+
     adata = anndata.AnnData(
         scprep.utils.to_array_or_spmatrix(X).tocsr(),
         obs=pd.DataFrame(index=joint_index),

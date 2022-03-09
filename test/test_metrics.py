@@ -16,6 +16,7 @@ def test_metric_metadata(metric):
     for attr in ["metric_name", "maximize", "image"]:
         assert attr in metric.metadata
     assert isinstance(metric.metadata["maximize"], bool)
+    assert utils.docker.image_exists(metric.metadata["image"])
 
 
 @parameterized.parameterized.expand(
