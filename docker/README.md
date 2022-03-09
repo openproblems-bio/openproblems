@@ -4,6 +4,7 @@ This guide provides instructions on editing the Docker images used to run `metho
 Note, all images must comply to the [AWS SageMaker Custom Image Specifications](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi-specs.html).
 
 **Table of Contents**
+
 - [About Docker images](#about-docker-images)
 - [Available images](#available-images)
   * [openproblems](#openproblems)
@@ -113,7 +114,7 @@ If that workflow failed, you should look at the workflow logs to find the error.
 
 You can find your successfully uploaded images on the ECR. To navigate to the ECR, search the AWS console for "ECR" and click on "Repositories" and then click on `openproblems`. You should also see a `nextflow` repository that's used for your benchmarking backend, but you can ignore that for now.
 
-As you can see below, images uploaded to the ECR have Image Tags in the following format `openproblems:[first 6 characters of username]-[branch name]-[image name]`. For example, `danielStrobel` recently pushed his `batch-integration` branch containing a `openproblems-python37-scgen` image. This is converted to an Image Tag `daniel-batch-integration-openproblems-python37-scgen`.
+As you can see below, images uploaded to the ECR have Image Tags in the following format `openproblems:[first 6 characters of username]-[branch name]-[image name]`. For example, `danielStrobl` recently pushed his `batch-integration` branch containing a `openproblems-python37-scgen` image. This is converted to an Image Tag `daniel-batch-integration-openproblems-python37-scgen`.
 
 
 <img width="800" alt="Untitled" src="https://user-images.githubusercontent.com/8322751/112719414-43b14e80-8ecf-11eb-8fe2-5588e42c77c5.png">

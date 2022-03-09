@@ -1,0 +1,8 @@
+pip
+wheel
+setuptools
+cmake
+rpy2
+tensorflow<2.0
+scgen
+git+git://github.com/theislab/scib

@@ -1,5 +1,9 @@
 bioc::batchelor
+bioc::ComplexHeatmap
 sparsesvd
+Seurat
+conos
+rliger
 dplyr
 caret@6.0-86
 crayon@1.4.1
