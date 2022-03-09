@@ -57,7 +57,7 @@ jobs:
         # to avoid clashes on ECR
         if [[ "${{ github.repository }}" == "singlecellopenproblems/SingleCellOpenProblems" ]]; \
           then echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
-          else echo "BRANCH=`echo ${{ github.repository }} | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
+          else echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
         fi >> $GITHUB_ENV
         # don't use tower if the env var is not set
         echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
@@ -109,10 +109,11 @@ jobs:
         sudo mkdir -p /mnt/openproblems-nextflow
         sudo chown $USER /mnt/openproblems-nextflow
         s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
+        # Create bucket/ work/ and cwd/
         for dir in bucket work cwd; do
-          mkdir -p /mnt/openproblems-nextflow/${dir}/${{ github.ref }}
+          mkdir -p /mnt/openproblems-nextflow/${dir}/${{ env.BRANCH }}
         done
-        ls -l /mnt/openproblems-nextflow/*/${{ github.ref }}
+        ls -l /mnt/openproblems-nextflow/*/${{ env.BRANCH }}
 
     - name: Install package & dependencies
       run: |
@@ -150,20 +151,20 @@ jobs:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: >-
-        cd /mnt/openproblems-nextflow/cwd/${{ github.ref }} &&
+        cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }} &&
         nextflow run
         $WITH_TOWER
         -ansi-log false
         $RESUME
         -profile $PROFILE
-        -work-dir "/mnt/openproblems-nextflow/work/${{ github.ref }}"
-        -bucket-dir "s3://openproblems-nextflow/bucket/${{ github.ref }}"
+        -work-dir "/mnt/openproblems-nextflow/work/${{ env.BRANCH }}"
+        -bucket-dir "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
 
     - name: Copy results
       run: |
-        cp -r /mnt/openproblems-nextflow/cwd/${{ github.ref }}/results .
+        cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results .
 
     - name: Parse results
       # There's a bug with the results getting pulled from Netflow with caching, but
@@ -182,9 +183,9 @@ jobs:
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
         done
-        aws s3 rm "s3://openproblems-nextflow/work/${{ github.ref }}"
-        aws s3 rm "s3://openproblems-nextflow/bucket/${{ github.ref }}"
-        aws s3 rm "s3://openproblems-nextflow/cwd/${{ github.ref }}"
+        aws s3 rm "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
+        aws s3 rm "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
+        aws s3 rm "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
 
     - name: Remove untagged images
       if: startsWith(github.ref, 'refs/heads/master')

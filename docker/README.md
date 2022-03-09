@@ -1,28 +1,32 @@
+# Guide to Docker images
 This guide provides instructions on editing the Docker images used to run `methods`, `metrics`, and load `datasets` for the Open Problems benchmarking infrastructure.
 
 Note, all images must comply to the [AWS SageMaker Custom Image Specifications](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi-specs.html).
 
 **Table of Contents**
-- [Docker images](#docker-images)
-  - [Available images](#available-images)
-    - [openproblems](#openproblems)
-    - [openproblems-r-base](#openproblems-r-base)
-    - [openproblems-r-extras](#openproblems-r-extras)
-    - [openproblems-python-extras](#openproblems-python-extras)
-  - [Adding a package to the available images](#adding-a-package-to-the-available-images)
-  - [Adding new images](#adding-new-images)
-  - [Building Docker images locally](#building-docker-images-locally)
-  - [Building Docker images through GitHub Actions workflows](#building-docker-images-through-github-actions-workflows)
-  - [Pulling images from the ECR to your local machine](#pulling-images-from-the-ecr-to-your-local-machine)
+
+- [About Docker images](#about-docker-images)
+- [Available images](#available-images)
+  * [openproblems](#openproblems)
+  * [openproblems-r-base](#openproblems-r-base)
+  * [openproblems-r-extras](#openproblems-r-extras)
+  * [openproblems-python-extras](#openproblems-python-extras)
+- [Adding a package to the available images](#adding-a-package-to-the-available-images)
+- [Adding new images](#adding-new-images)
+- [Building Docker images locally](#building-docker-images-locally)
+- [Building Docker images through GitHub Actions workflows](#building-docker-images-through-github-actions-workflows)
+- [Pulling images from the ECR to your local machine](#pulling-images-from-the-ecr-to-your-local-machine)
+- [Running Docker images locally](#running-docker-images-locally)
+
 <!-- Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
 
 **Additional resources**
 * [Dockerfile Reference](https://docs.docker.com/engine/reference/builder/) - Documentation from Docker on how to write Dockerfiles
 * [SageMaker Studio Custom Image Samples](https://github.com/aws-samples/sagemaker-studio-custom-image-samples/) - Example images from AWS designed for compatibility with SageMaker
 
-# Docker images
+## About Docker images
 
-By default, all methods and metrics run in the `openproblems` docker image. If you require additional dependencies, you can either add them to an existing docker image, or if this is not possible due to conflicts, add a new one.
+By default, all methods, metrics, and dataset loaders run in the `openproblems` docker image. If you require additional dependencies, you can either add them to an existing docker image, or if this is not possible due to conflicts, add a new one.
 
 To define which image is to be used in a method or metric, simply set the `image` parameter in the method decorator to match the name of the folder containing the Dockerfile (e.g., `image="openproblems-r-base"`).
 
@@ -124,3 +128,38 @@ docker pull <aws_account_id>.dkr.ecr.us-west-2.amazonaws.com/openproblems:<Image
 ```
 
 If you would like to attach this image to AWS SageMaker, you can follow our [SageMaker and ECR tutorial.](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/SAGEMAKER.md)
+
+You can also pull base images from [DockerHub](https://hub.docker.com/r/singlecellopenproblems/openproblems):
+```
+docker pull singlecellopenproblems/openproblems-python-extras:latest
+```
+
+
+## Running Docker images locally
+
+To run Docker images on your local machine, you must have `docker` installed. Follow the Docker guide to [Install Docker](https://docs.docker.com/get-docker/).
+
+Once you've either built Docker images locally or pulled them from ECR or the [singlecellopenproblems DockerHub](https://hub.docker.com/r/singlecellopenproblems/openproblems), you can see installed images using `docker images`.
+
+```
+> docker images
+REPOSITORY                                                  TAG                                                 IMAGE ID       CREATED        SIZE
+singlecellopenproblems/openproblems-python-extras           latest                                              f86e1c5ce9d0   14 hours ago   3.94GB
+singlecellopenproblems/openproblems-r-base                  latest                                              f8908c9fb387   21 hours ago   6.36GB
+singlecellopenproblems/openproblems-r-extras                latest                                              7e15120bb7ce   5 days ago     4.89GB
+singlecellopenproblems/openproblems                         latest                                              14974cbd2f58   5 days ago     2.1GB
+490915662541.dkr.ecr.us-west-2.amazonaws.com/openproblems   batch_integration_docker-openproblems               3a1ce37e85f2   6 days ago     2.06GB
+```
+
+You can then run commands within a docker container using `docker run`. Consult the [Docker documentation](https://docs.docker.com/engine/reference/commandline/run/) to learn more about the `run` command.
+
+**Using `IMAGE ID`**
+```
+docker run -it 90a9110c7d69 /bin/bash
+```
+
+**Using `RESPOSITORY:TAG`**
+```
+docker run -it singlecellopenproblems/openproblems-python-extras:latest  /bin/bash
+
+```
