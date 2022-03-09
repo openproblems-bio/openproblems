@@ -18,6 +18,12 @@ os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
 os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
 
 
+def image_exists(image):
+    """Check if a Docker image exists."""
+    dockerfile = os.path.join(BASEDIR, "docker", image, "Dockerfile")
+    return os.path.isfile(dockerfile)
+
+
 def docker_paths(image):
     """Get relevant paths for a Docker image."""
     docker_path = os.path.join(BASEDIR, "docker", image)
@@ -238,10 +244,14 @@ def docker_test(func, timeout=None, retries=0, *args, **kwargs):
     (i.e. eval(str(args)) == args) and the final argument must be the Docker image.
     """
     image = args[-1]
-    if not image.startswith("openproblems"):
-        warnings.warn("Image {} expectd to begin with openproblems.".format(image))
-    assert eval(str(args)) == args
-    assert eval(str(kwargs)) == kwargs
+    if not image_exists(image):
+        raise RuntimeError(
+            "Image {0} not found. (Expected file docker/{0}/Dockerfile)".format(image)
+        )
+    elif not image.startswith("openproblems"):
+        warnings.warn("Image {} expected to begin with openproblems.".format(image))
+    assert eval(str(args)) == args, "docker_test can only handle simple args"
+    assert eval(str(kwargs)) == kwargs, "docker_test can only handle simple kwargs"
     with tempfile.TemporaryDirectory() as tempdir:
         f = os.path.join(tempdir, "{}.py".format(func.__name__))
         with open(f, "w") as handle:

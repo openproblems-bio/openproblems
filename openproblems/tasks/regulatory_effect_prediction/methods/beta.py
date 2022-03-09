@@ -1,10 +1,11 @@
-from ....patch import patch_datacache
 from ....tools.decorators import method
+from .archr import _archr_model21
+from .marge import _marge
+from .pyensembl_api import _get_annotation
 
 import numpy as np
 import pandas as pd
 import scanpy as sc
-import scipy.sparse
 
 
 def _chrom_limit(x, tss_size=2e5):
@@ -26,47 +27,6 @@ def _chrom_limit(x, tss_size=2e5):
         return [gene_start - tss_size // 2, gene_start + tss_size // 2]
     else:
         return [gene_end - tss_size // 2, gene_end + tss_size // 2]
-
-
-def _get_annotation(adata, retries=3):
-    """Insert meta data into adata.obs."""
-    from pyensembl import EnsemblRelease
-
-    data = EnsemblRelease(
-        adata.uns["release"],
-        adata.uns["species"],
-    )
-    for _ in range(retries):
-        try:
-            with patch_datacache():
-                data.download(overwrite=False)
-                data.index(overwrite=False)
-            break
-        except TimeoutError:
-            pass
-
-    # get ensemble gene coordinate
-    genes = []
-    for i in adata.var.index.map(lambda x: x.split(".")[0]):
-        try:
-            gene = data.gene_by_id(i)
-            genes.append(
-                [
-                    "chr%s" % gene.contig,
-                    gene.start,
-                    gene.end,
-                    gene.strand,
-                ]
-            )
-        except ValueError:
-            genes.append([np.nan, np.nan, np.nan, np.nan])
-    old_col = adata.var.columns.values
-    adata.var = pd.concat(
-        [adata.var, pd.DataFrame(genes, index=adata.var_names)], axis=1
-    )
-    adata.var.columns = np.hstack(
-        [old_col, np.array(["chr", "start", "end", "strand"])]
-    )
 
 
 def _filter_mitochondrial(adata):
@@ -114,7 +74,7 @@ def _filter_has_chr(adata):
     return adata
 
 
-def _atac_genes_score(adata, top_genes=500, threshold=1):
+def _atac_genes_score(adata, top_genes=2000, threshold=1, method="beta"):
     """Calculate gene scores and insert into .obsm."""
     import pybedtools
 
@@ -131,7 +91,7 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
 
-    if top_genes > adata.shape[1]:
+    if top_genes <= adata.shape[1]:
         sc.pp.highly_variable_genes(adata, n_top_genes=top_genes)
         adata = adata[:, adata.var.highly_variable].copy()
 
@@ -192,28 +152,50 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     # overlap TSS bins with peaks
     x = pybedtools.BedTool.from_dataframe(summits)
     y = pybedtools.BedTool.from_dataframe(extend_tss)
-    tss_to_peaks = x.intersect(y, wb=True, wa=True, loj=True).to_dataframe()
+    tss_to_peaks = x.intersect(y, wb=True, wa=True, loj=True).to_dataframe(
+        disable_auto_names=True,
+        header=0,
+        names=[
+            "peak_chr",
+            "peak_summit_left",
+            "peak_summit_right",
+            "peak_index",
+            "gene_chr",
+            "gene_bin_start",
+            "gene_bin_end",
+            "gene_index",
+        ],
+    )
 
     # remove non-overlapped TSS and peaks
     tss_to_peaks = tss_to_peaks.loc[
-        (tss_to_peaks.thickEnd != ".") | (tss_to_peaks.score != "."), :
+        (tss_to_peaks.gene_chr != ".") | (tss_to_peaks.gene_index != "."), :
     ]
 
-    # weight matrix by peak to TSS distances
+    if method == "beta":
+        _beta(tss_to_peaks, adata, threshold)
+    elif method == "archr_model21":
+        _archr_model21(tss_to_peaks, adata)
+    elif method == "marge":
+        _marge(tss_to_peaks, adata)
+    return adata
+
+
+def _beta(tss_to_peaks, adata, threshold=1):
+    import scipy
+
     tss_to_peaks["distance"] = tss_to_peaks.apply(
         lambda x: abs((int(x[5]) + int(x[6])) / 2 - int(x[1])) * 1.0 / 1e5, axis=1
     )
     tss_to_peaks["weight"] = np.exp(-0.5 - 4 * tss_to_peaks["distance"].values)
-
     gene_peak_weight = scipy.sparse.csr_matrix(
         (
             tss_to_peaks.weight.values,
-            (tss_to_peaks.thickEnd.astype("int32").values, tss_to_peaks.name.values),
+            (tss_to_peaks.gene_index.astype("int32").values, tss_to_peaks.peak_index),
         ),
         shape=(adata.shape[1], adata.uns["mode2_var"].shape[0]),
     )
     adata.obsm["gene_score"] = (adata.obsm["mode2"] >= threshold) @ gene_peak_weight.T
-    return adata
 
 
 @method(
@@ -227,5 +209,7 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     image="openproblems-python-extras",
 )
 def beta(adata, n_top_genes=500, threshold=1):
-    adata = _atac_genes_score(adata, top_genes=n_top_genes, threshold=threshold)
+    adata = _atac_genes_score(
+        adata, top_genes=n_top_genes, threshold=threshold, method="beta"
+    )
     return adata

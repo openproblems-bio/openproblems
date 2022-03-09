@@ -11,7 +11,10 @@ Python packages:
 * harmonic-alignment
 * pybedtools
 * pyensembl
+* datatable
 * magic-impute
 * molecular-cross-validation
 * MulticoreTSNE
 * phate
+* harmonypy
+* palantir
