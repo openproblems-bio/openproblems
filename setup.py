@@ -26,7 +26,7 @@ r_requires = [
 evaluate_requires = ["snakemake", "numpyencoder"]
 
 test_requires = [
-    "pytest<6.2.3",
+    "pytest",
     "pytest-cov",
     "black",
     "coverage",
