@@ -15,6 +15,7 @@ Note, all images must comply to the [AWS SageMaker Custom Image Specifications](
 - [Building Docker images locally](#building-docker-images-locally)
 - [Building Docker images through GitHub Actions workflows](#building-docker-images-through-github-actions-workflows)
 - [Pulling images from the ECR to your local machine](#pulling-images-from-the-ecr-to-your-local-machine)
+- [Running Docker images locally](#running-docker-images-locally)
 
 <!-- Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
 
@@ -126,3 +127,38 @@ docker pull <aws_account_id>.dkr.ecr.us-west-2.amazonaws.com/openproblems:<Image
 ```
 
 If you would like to attach this image to AWS SageMaker, you can follow our [SageMaker and ECR tutorial.](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/SAGEMAKER.md)
+
+You can also pull base images from [DockerHub](https://hub.docker.com/r/singlecellopenproblems/openproblems):
+```
+docker pull singlecellopenproblems/openproblems-python-extras:latest
+```
+
+
+## Running Docker images locally
+
+To run Docker images on your local machine, you must have `docker` installed. Follow the Docker guide to [Install Docker](https://docs.docker.com/get-docker/).
+
+Once you've either built Docker images locally or pulled them from ECR or the [singlecellopenproblems DockerHub](https://hub.docker.com/r/singlecellopenproblems/openproblems), you can see installed images using `docker images`.
+
+```
+> docker images
+REPOSITORY                                                  TAG                                                 IMAGE ID       CREATED        SIZE
+singlecellopenproblems/openproblems-python-extras           latest                                              f86e1c5ce9d0   14 hours ago   3.94GB
+singlecellopenproblems/openproblems-r-base                  latest                                              f8908c9fb387   21 hours ago   6.36GB
+singlecellopenproblems/openproblems-r-extras                latest                                              7e15120bb7ce   5 days ago     4.89GB
+singlecellopenproblems/openproblems                         latest                                              14974cbd2f58   5 days ago     2.1GB
+490915662541.dkr.ecr.us-west-2.amazonaws.com/openproblems   batch_integration_docker-openproblems               3a1ce37e85f2   6 days ago     2.06GB
+```
+
+You can then run commands within a docker container using `docker run`. Consult the [Docker documentation](https://docs.docker.com/engine/reference/commandline/run/) to learn more about the `run` command.
+
+**Using `IMAGE ID`**
+```
+docker run -it 90a9110c7d69 /bin/bash
+```
+
+**Using `RESPOSITORY:TAG`**
+```
+docker run -it singlecellopenproblems/openproblems-python-extras:latest  /bin/bash
+
+```
