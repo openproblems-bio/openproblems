@@ -1,5 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
+from .preprocessing import preprocess_scanpy
 
 import scanpy as sc
 
@@ -14,7 +15,8 @@ import scanpy as sc
     code_version=check_version("umap-learn"),
 )
 def umap(adata):
-    sc.pp.neighbors(adata)
+    preprocess_scanpy(adata)
+    sc.pp.neighbors(adata, use_rep="X_input", n_pcs=50)
     sc.tl.umap(adata)
     adata.obsm["X_emb"] = adata.obsm["X_umap"]
     return adata

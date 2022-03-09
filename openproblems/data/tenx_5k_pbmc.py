@@ -33,6 +33,8 @@ def load_tenx_5k_pbmc(test=False):
             scprep.io.download.download_url(URL, filepath)
             adata = sc.read(filepath)
 
+            adata.var_names_make_unique()
+
             # Ensure there are no cells or genes with 0 counts
             utils.filter_genes_cells(adata)
 
