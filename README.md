@@ -32,12 +32,12 @@ Formalizing and benchmarking open problems in single-cell genomics.
 * Olga Botvinnik (@olgabot)
 
 **Task authors** (_alphabetically_):
-* Emma Dann (@emdann) - Differential Abundance 
-* Wes Lewis (@weslewis) - Differential Abundance and Data Denoising
+* Emma Dann (@emdann) - Differential abundance 
+* Wes Lewis (@weslewis) - Differential abundance and data denoising
 * Mohammad Lotfallahi (@M0hammadL) - Label projection task
 * Qian Qin (@qinqian) - Predicting gene expression from chromatin accessibility
 * Daniel Strobl (@danielStrobl) - Batch integration
-* Michael Vinyard (@mvinyard) - Stress preservation in Dimensionality Reduction
+* Michael Vinyard (@mvinyard) - Stress preservation in dimensionality reduction
 * Florian Wagner (@flo-compbio) - Data denoising
 
 **Supervision** (_alphabetically_):
