@@ -7,7 +7,8 @@ ARG NB_USER="sagemaker-user"
 ARG NB_UID="1000"
 ARG NB_GID="100"
 
-RUN sudo apt-get update && apt-get -y install gcc git python3-llvmlite
+RUN sudo sed -i '$ d' /etc/apt/sources.list
+RUN sudo apt-get update --allow-releaseinfo-change && apt-get -y install gcc git python3-llvmlite
 
 # Install Python packages
 COPY ./docker/openproblems-python-batch-integration/requirements.txt ./requirements.txt

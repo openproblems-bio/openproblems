@@ -12,8 +12,8 @@ from .....tools.utils import check_version
     image="openproblems-python37-scgen",  # only if required
 )
 def scgen_full_unscaled(adata):
-    from scIB.integration import runScGen
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runScGen
+    from scib.preprocessing import reduce_data
 
     adata = runScGen(adata, "batch", "labels")
     reduce_data(adata, umap=False)
@@ -31,8 +31,8 @@ def scgen_full_unscaled(adata):
 )
 def scgen_hvg_unscaled(adata):
     from _utils import hvg_batch
-    from scIB.integration import runScGen
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runScGen
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runScGen(adata, "batch", "labels")
@@ -50,9 +50,9 @@ def scgen_hvg_unscaled(adata):
     image="openproblems-python37-scgen",  # only if required
 )
 def scgen_full_scaled(adata):
-    from scIB.integration import runScGen
-    from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+    from scib.integration import runScGen
+    from scib.preprocessing import reduce_data
+    from scib.preprocessing import scale_batch
 
     adata = scale_batch(adata, "batch")
     adata = runScGen(adata, "batch", "labels")
@@ -71,9 +71,9 @@ def scgen_full_scaled(adata):
 )
 def scgen_hvg_scaled(adata):
     from _utils import hvg_batch
-    from scIB.integration import runScGen
-    from scIB.preprocessing import reduce_data
-    from scIB.preprocessing import scale_batch
+    from scib.integration import runScGen
+    from scib.preprocessing import reduce_data
+    from scib.preprocessing import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")

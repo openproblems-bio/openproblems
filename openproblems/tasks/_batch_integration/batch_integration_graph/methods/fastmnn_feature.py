@@ -4,7 +4,7 @@ from .....tools.utils import check_version
 
 import scprep
 
-# from scIB.integration import _fastmnn_feature
+# from scib.integration import _fastmnn_feature
 
 
 _fastmnn_feature = scprep.run.RFunction(
@@ -32,7 +32,7 @@ _fastmnn_feature = scprep.run.RFunction(
     image="openproblems-r-extras",  # only if required
 )
 def fastmnn_feature_full_unscaled(adata):
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = _fastmnn_feature(adata, "batch")
     reduce_data(adata, umap=False)
@@ -51,7 +51,7 @@ def fastmnn_feature_full_unscaled(adata):
 )
 def fastmnn_feature_hvg_unscaled(adata):
     from ._utils import hvg_batch
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _fastmnn_feature(adata, "batch")
@@ -71,7 +71,7 @@ def fastmnn_feature_hvg_unscaled(adata):
 def fastmnn_feature_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
@@ -91,7 +91,7 @@ def fastmnn_feature_hvg_scaled(adata):
 )
 def fastmnn_feature_full_scaled(adata):
     from ._utils import scale_batch
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = scale_batch(adata, "batch")
     adata = _fastmnn_feature(adata, "batch")

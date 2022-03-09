@@ -14,8 +14,8 @@ from .....tools.utils import check_version
     image="openproblems-python-batch-integration",
 )
 def mnn_full_unscaled(adata):
-    from scIB.integration import runMNN
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runMNN
+    from scib.preprocessing import reduce_data
 
     adata = runMNN(adata, "batch")
     reduce_data(adata, umap=False)
@@ -35,8 +35,8 @@ def mnn_full_unscaled(adata):
 )
 def mnn_hvg_unscaled(adata):
     from ._utils import hvg_batch
-    from scIB.integration import runMNN
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runMNN
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runMNN(adata, "batch")
@@ -57,8 +57,8 @@ def mnn_hvg_unscaled(adata):
 def mnn_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
-    from scIB.integration import runMNN
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runMNN
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
@@ -79,8 +79,8 @@ def mnn_hvg_scaled(adata):
 )
 def mnn_full_scaled(adata):
     from ._utils import scale_batch
-    from scIB.integration import runMNN
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runMNN
+    from scib.preprocessing import reduce_data
 
     adata = scale_batch(adata, "batch")
     adata = runMNN(adata, "batch")

@@ -4,7 +4,7 @@ from .....tools.utils import check_version
 
 import scprep
 
-# from scIB.integration import _harmony
+# from scib.integration import _harmony
 
 
 _harmony = scprep.run.RFunction(
@@ -36,7 +36,7 @@ _harmony = scprep.run.RFunction(
     image="openproblems-r-extras",  # only if required
 )
 def harmony_full_unscaled(adata):
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = _harmony(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["HARMONY"]
@@ -57,7 +57,7 @@ def harmony_full_unscaled(adata):
 )
 def harmony_hvg_unscaled(adata):
     from ._utils import hvg_batch
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _harmony(adata, "batch")
@@ -79,7 +79,7 @@ def harmony_hvg_unscaled(adata):
 def harmony_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
@@ -101,7 +101,7 @@ def harmony_hvg_scaled(adata):
 )
 def harmony_full_scaled(adata):
     from ._utils import scale_batch
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = scale_batch(adata, "batch")
     adata = _harmony(adata, "batch")

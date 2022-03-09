@@ -14,8 +14,8 @@ from .....tools.utils import check_version
     image="openproblems-python-batch-integration",  # only if required
 )
 def scanorama_feature_full_unscaled(adata):
-    from scIB.integration import runScanorama
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runScanorama
+    from scib.preprocessing import reduce_data
 
     adata = runScanorama(adata, "batch")
     reduce_data(adata, umap=False)
@@ -35,8 +35,8 @@ def scanorama_feature_full_unscaled(adata):
 )
 def scanorama_feature_hvg_unscaled(adata):
     from ._utils import hvg_batch
-    from scIB.integration import runScanorama
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runScanorama
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runScanorama(adata, "batch")
@@ -57,8 +57,8 @@ def scanorama_feature_hvg_unscaled(adata):
 def scanorama_feature_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
-    from scIB.integration import runScanorama
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runScanorama
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
@@ -79,8 +79,8 @@ def scanorama_feature_hvg_scaled(adata):
 )
 def scanorama_feature_full_scaled(adata):
     from ._utils import scale_batch
-    from scIB.integration import runScanorama
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runScanorama
+    from scib.preprocessing import reduce_data
 
     adata = scale_batch(adata, "batch")
     adata = runScanorama(adata, "batch")

@@ -14,8 +14,8 @@ from .....tools.utils import check_version
     image="openproblems-python-batch-integration",  # only if required
 )
 def combat_full_unscaled(adata):
-    from scIB.integration import runCombat
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runCombat
+    from scib.preprocessing import reduce_data
 
     adata = runCombat(adata, "batch")
     reduce_data(adata, umap=False)
@@ -35,8 +35,8 @@ def combat_full_unscaled(adata):
 )
 def combat_hvg_unscaled(adata):
     from ._utils import hvg_batch
-    from scIB.integration import runCombat
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runCombat
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runCombat(adata, "batch")
@@ -57,8 +57,8 @@ def combat_hvg_unscaled(adata):
 def combat_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
-    from scIB.integration import runCombat
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runCombat
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
@@ -79,8 +79,8 @@ def combat_hvg_scaled(adata):
 )
 def combat_full_scaled(adata):
     from ._utils import scale_batch
-    from scIB.integration import runCombat
-    from scIB.preprocessing import reduce_data
+    from scib.integration import runCombat
+    from scib.preprocessing import reduce_data
 
     adata = scale_batch(adata, "batch")
     adata = runCombat(adata, "batch")

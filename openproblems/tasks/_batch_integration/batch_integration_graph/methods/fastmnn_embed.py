@@ -32,7 +32,7 @@ _fastmnn_embed = scprep.run.RFunction(
     image="openproblems-r-extras",  # only if required
 )
 def fastmnn_embed_full_unscaled(adata):
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = _fastmnn_embed(adata, "batch")
     adata.var.n_cells = adata.var.n_cells.astype(int)
@@ -52,7 +52,7 @@ def fastmnn_embed_full_unscaled(adata):
 )
 def fastmnn_embed_hvg_unscaled(adata):
     from ._utils import hvg_batch
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _fastmnn_embed(adata, "batch")
@@ -73,7 +73,7 @@ def fastmnn_embed_hvg_unscaled(adata):
 def fastmnn_embed_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
@@ -94,7 +94,7 @@ def fastmnn_embed_hvg_scaled(adata):
 )
 def fastmnn_embed_full_scaled(adata):
     from ._utils import scale_batch
-    from scIB.preprocessing import reduce_data
+    from scib.preprocessing import reduce_data
 
     adata = scale_batch(adata, "batch")
     adata = _fastmnn_embed(adata, "batch")
