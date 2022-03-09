@@ -14,7 +14,7 @@ from .....tools.utils import check_version
 )
 def bbknn_full_unscaled(adata):
     # Normalize the data
-    from scIB.integration import runBBKNN
+    from scib.integration import runBBKNN
 
     adata = runBBKNN(adata, "batch")
     # Complete the result in-place

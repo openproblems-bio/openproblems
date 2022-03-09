@@ -1,5 +1,5 @@
 def hvg_batch(adata, batch_key, target_genes, adataOut):
-    from scIB.preprocessing import hvg_batch
+    from scib.preprocessing import hvg_batch
 
     if adata.n_vars < 2000:
         return adata
@@ -14,7 +14,7 @@ def hvg_batch(adata, batch_key, target_genes, adataOut):
 
 
 def scale_batch(adata, batch_key):
-    from scIB.preprocessing import scale_batch
+    from scib.preprocessing import scale_batch
 
     tmp = scale_batch(adata, batch_key)
     tmp.var = tmp.var.iloc[:, :-6]
