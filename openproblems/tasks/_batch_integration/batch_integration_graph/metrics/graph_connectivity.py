@@ -25,7 +25,7 @@ on the kNN graph, it can be used to evaluate all integration outputs.
     image="openproblems-python-batch-integration",  # only if required
 )
 def graph_connectivity(adata):
-    import scIB.metrics
+    import scib.metrics
 
     adata.obs["labels"] = adata.obs["labels"].astype("category")
-    return scIB.metrics.graph_connectivity(adata, "labels")
+    return scib.metrics.graph_connectivity(adata, "labels")

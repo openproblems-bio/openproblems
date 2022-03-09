@@ -7,7 +7,7 @@ from .....tools.decorators import metric
     image="openproblems-python-batch-integration",  # only if required
 )
 def isolated_labels_f1(adata):
-    from scIB.metrics import isolated_labels
+    from scib.metrics import isolated_labels
 
     return isolated_labels(
         adata,
