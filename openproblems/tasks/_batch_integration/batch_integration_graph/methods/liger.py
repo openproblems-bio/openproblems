@@ -62,11 +62,11 @@ _liger = scprep.run.RFunction(
     image="openproblems-r-extras",  # only if required
 )
 def liger_full_unscaled(adata):
-    from scib.preprocessing import reduce_data
+    from scanpy.pp import neighbors
 
     adata = _liger(adata, "batch")
-    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
+    from scanpy.pp import neighbors
     # Complete the result in-place
     return adata
 
@@ -83,12 +83,11 @@ def liger_full_unscaled(adata):
 )
 def liger_hvg_unscaled(adata):
     from ._utils import hvg_batch
-    from scib.preprocessing import reduce_data
+    from scanpy.pp import neighbors
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _liger(adata, "batch")
-    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
     return adata
 
 
@@ -105,13 +104,12 @@ def liger_hvg_unscaled(adata):
 def liger_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
-    from scib.preprocessing import reduce_data
+    from scanpy.pp import neighbors
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = _liger(adata, "batch")
-    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
     return adata
 
 
@@ -127,10 +125,9 @@ def liger_hvg_scaled(adata):
 )
 def liger_full_scaled(adata):
     from ._utils import scale_batch
-    from scib.preprocessing import reduce_data
+    from scanpy.pp import neighbors
 
     adata = scale_batch(adata, "batch")
     adata = _liger(adata, "batch")
-    adata.obsm["X_emb"] = adata.obsm["X_EMB"]
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
     return adata
