@@ -45,9 +45,8 @@ _liger = scprep.run.RFunction(
                 Class = "DimReduc", feature.loadings = t(lobj@W),
                 cell.embeddings = lobj@H.norm, key = "X_emb"
             )
-            sobj@reductions["X_emb"] <- inmf.obj
-            sobj <- as.SingleCellExperiment(sobj)
-            return(sobj)
+            reducedDim(sobj_uni, 'X_emb') <- lobj@H.norm
+            return(sobj_uni)
         """,
 )
 
