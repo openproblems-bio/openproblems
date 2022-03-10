@@ -36,5 +36,5 @@ def phate_default(adata):
     image="openproblems-python-extras",
 )
 def phate_logCPM_1kHVG(adata):
-    preprocess_logCPM_1kHVG(adata)
+    adata = preprocess_logCPM_1kHVG(adata)
     return _phate(adata)

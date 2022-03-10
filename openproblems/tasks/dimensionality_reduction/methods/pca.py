@@ -13,6 +13,6 @@ from .preprocessing import preprocess_logCPM_1kHVG
     code_version=check_version("scikit-learn"),
 )
 def pca_logCPM_1kHVG(adata):
-    preprocess_logCPM_1kHVG(adata)
+    adata = preprocess_logCPM_1kHVG(adata)
     adata.obsm["X_emb"] = adata.obsm["X_input"][:, :2]
     return adata

@@ -16,7 +16,7 @@ from .preprocessing import preprocess_logCPM_1kHVG
 def densmap_logCPM_1kHVG(adata):
     from umap import UMAP
 
-    preprocess_logCPM_1kHVG(adata)
+    adata = preprocess_logCPM_1kHVG(adata)
     adata.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(adata.X)
     return adata
 
@@ -34,7 +34,7 @@ def densmap_logCPM_1kHVG(adata):
 def densmap_pca_logCPM_1kHVG(adata):
     from umap import UMAP
 
-    preprocess_logCPM_1kHVG(adata)
+    adata = preprocess_logCPM_1kHVG(adata)
     adata.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(
         adata.obsm["X_input"]
     )

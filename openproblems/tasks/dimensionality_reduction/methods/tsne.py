@@ -16,7 +16,7 @@ import scanpy as sc
     image="openproblems-python-extras",
 )
 def tsne_logCPM_1kHVG(adata):
-    preprocess_logCPM_1kHVG(adata)
+    adata = preprocess_logCPM_1kHVG(adata)
     sc.tl.tsne(adata, use_rep="X_input", n_pcs=50)
     adata.obsm["X_emb"] = adata.obsm["X_tsne"]
     return adata

@@ -55,7 +55,7 @@ def neuralee_logCPM_1kHVG(adata: AnnData) -> AnnData:
 
     import torch
 
-    preprocess_logCPM_1kHVG(adata)
+    adata = preprocess_logCPM_1kHVG(adata)
 
     dataset = GeneExpressionDataset(adata.X)
     dataset.affinity_split(N_small=min(1000, adata.n_obs))

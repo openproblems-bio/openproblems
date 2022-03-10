@@ -97,7 +97,7 @@ def _fit(data: np.ndarray):
     image="openproblems-python-method-scvis",
 )
 def scvis_logCM_1kHVG(adata: AnnData) -> AnnData:
-    preprocess_logCPM_1kHVG(adata)
+    adata = preprocess_logCPM_1kHVG(adata)
 
     model, x = _fit(adata.X.A if issparse(adata.X) else adata.X)
     emb, _ = model.encode(x)

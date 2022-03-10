@@ -17,7 +17,7 @@ from anndata import AnnData
 def ivis_logCPM_1kHVG(adata: AnnData) -> AnnData:
     from ivis import Ivis
 
-    preprocess_logCPM_1kHVG(adata)
+    adata = preprocess_logCPM_1kHVG(adata)
 
     # parameters taken from:
     # https://bering-ivis.readthedocs.io/en/latest/
