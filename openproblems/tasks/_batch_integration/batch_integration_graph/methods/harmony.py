@@ -17,7 +17,7 @@ _harmony = scprep.run.RFunction(
     body="""
             seu <- as.Seurat(sobj)
             seu <- ScaleData(seu)
-            seu <- RunPCA(seu, features=rownames(seu@assays$RNA))
+            seu <- RunPCA(seu, features=rownames(seu@assays$originalexp))
             seu <- RunHarmony(seu, batch)
             seu <- as.SingleCellExperiment(seu)
             seu
