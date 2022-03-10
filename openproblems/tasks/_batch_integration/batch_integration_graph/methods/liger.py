@@ -67,6 +67,7 @@ def liger_full_unscaled(adata):
     adata = _liger(adata, "batch")
     neighbors(adata, use_rep="X_emb")
     from scanpy.pp import neighbors
+
     # Complete the result in-place
     return adata
 
