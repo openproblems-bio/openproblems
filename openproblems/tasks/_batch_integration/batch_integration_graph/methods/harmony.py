@@ -36,7 +36,7 @@ _harmony = scprep.run.RFunction(
     image="openproblems-r-extras",  # only if required
 )
 def harmony_full_unscaled(adata):
-    from scib.preprocessing import neighbors
+    from scanpy.pp import neighbors
 
     adata = _harmony(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["HARMONY"]
@@ -79,7 +79,7 @@ def harmony_hvg_unscaled(adata):
 def harmony_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
-    from scib.preprocessing import neighbors
+    from scanpy.pp import neighbors
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
@@ -101,7 +101,7 @@ def harmony_hvg_scaled(adata):
 )
 def harmony_full_scaled(adata):
     from ._utils import scale_batch
-    from scib.preprocessing import neighbors
+    from scanpy.pp import neighbors
 
     adata = scale_batch(adata, "batch")
     adata = _harmony(adata, "batch")
