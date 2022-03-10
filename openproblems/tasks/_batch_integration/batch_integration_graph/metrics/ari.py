@@ -7,8 +7,8 @@ from .....tools.decorators import metric
     image="openproblems-python-batch-integration",  # only if required
 )
 def ari(adata):
-    from scib.metrics.clustering import opt_louvain
     from scib.metrics import ari
+    from scib.metrics.clustering import opt_louvain
 
     opt_louvain(
         adata,
