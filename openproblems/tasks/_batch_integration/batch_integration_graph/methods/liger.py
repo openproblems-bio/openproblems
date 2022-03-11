@@ -39,14 +39,8 @@ _liger = scprep.run.RFunction(
             lobj <- quantileAlignSNF(lobj, resolution=0.4,
                  small.clust.thresh=20)
 
-            # Store embedding in initial Seurat object
-            # Code taken from ligerToSeurat() function from LIGER
-            inmf.obj <- new(
-                Class = "DimReduc", feature.loadings = t(lobj@W),
-                cell.embeddings = lobj@H.norm, key = "X_emb"
-            )
-            reducedDim(sobj_uni, 'X_emb') <- lobj@H.norm
-            return(sobj_uni)
+            # Return embedding    
+            return(lobj@H.norm)
         """,
 )
 
@@ -64,7 +58,7 @@ _liger = scprep.run.RFunction(
 def liger_full_unscaled(adata):
     from scanpy.pp import neighbors
 
-    adata = _liger(adata, "batch")
+    adata.obsm['X_emb'] = _liger(adata, "batch")
     neighbors(adata, use_rep="X_emb")
     from scanpy.pp import neighbors
 
@@ -87,7 +81,7 @@ def liger_hvg_unscaled(adata):
     from scanpy.pp import neighbors
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = _liger(adata, "batch")
+    adata.obsm['X_emb'] = _liger(adata, "batch")
     neighbors(adata, use_rep="X_emb")
     return adata
 
@@ -109,7 +103,7 @@ def liger_hvg_scaled(adata):
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
-    adata = _liger(adata, "batch")
+    adata.obsm['X_emb'] = _liger(adata, "batch")
     neighbors(adata, use_rep="X_emb")
     return adata
 
@@ -129,6 +123,6 @@ def liger_full_scaled(adata):
     from scanpy.pp import neighbors
 
     adata = scale_batch(adata, "batch")
-    adata = _liger(adata, "batch")
+    adata.obsm['X_emb'] = _liger(adata, "batch")
     neighbors(adata, use_rep="X_emb")
     return adata
