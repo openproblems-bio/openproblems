@@ -41,6 +41,7 @@ def harmony_full_unscaled(adata):
     adata = _harmony(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["HARMONY"]
     neighbors(adata, use_rep="X_emb")
+    adata.obs.nFeature_originalexp = adata.obs.nFeature_originalexp.astype('int')
     # Complete the result in-place
     return adata
 
@@ -62,6 +63,7 @@ def harmony_hvg_unscaled(adata):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _harmony(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["HARMONY"]
+    adata.obs.nFeature_originalexp = adata.obs.nFeature_originalexp.astype('int')
     neighbors(adata, use_rep="X_emb")
     return adata
 
@@ -85,6 +87,7 @@ def harmony_hvg_scaled(adata):
     adata = scale_batch(adata, "batch")
     adata = _harmony(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["HARMONY"]
+    adata.obs.nFeature_originalexp = adata.obs.nFeature_originalexp.astype('int')
     neighbors(adata, use_rep="X_emb")
     return adata
 
@@ -106,5 +109,6 @@ def harmony_full_scaled(adata):
     adata = scale_batch(adata, "batch")
     adata = _harmony(adata, "batch")
     adata.obsm["X_emb"] = adata.obsm["HARMONY"]
+    adata.obs.nFeature_originalexp = adata.obs.nFeature_originalexp.astype('int')
     neighbors(adata, use_rep="X_emb")
     return adata
