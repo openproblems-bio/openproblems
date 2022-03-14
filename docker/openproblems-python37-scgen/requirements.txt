@@ -1,8 +1,3 @@
-pip
-wheel
-setuptools
-cmake
-rpy2
-tensorflow<2.0
+tensorflow==1.15.5
 scgen
-git+git://github.com/theislab/scib
+desc

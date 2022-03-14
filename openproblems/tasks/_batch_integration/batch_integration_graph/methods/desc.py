@@ -11,7 +11,7 @@ from .....tools.utils import check_version
     paper_year=2020,
     code_url="https://github.com/eleozzr/desc",
     code_version=check_version("desc"),
-    # image="openproblems-python-batch-integration" # only if required
+    image="openproblems-python37-scgen" # only if required
 )
 def desc_full_unscaled(adata):
     from scib.integration import runDESC
@@ -31,6 +31,7 @@ def desc_full_unscaled(adata):
     paper_year=2020,
     code_url="https://github.com/eleozzr/desc",
     code_version=check_version("desc"),
+    image="openproblems-python37-scgen" # only if required
     # image="openproblems-python-batch-integration" # only if required
 )
 def desc_hvg_unscaled(adata):
@@ -52,6 +53,7 @@ def desc_hvg_unscaled(adata):
     paper_year=2020,
     code_url="https://github.com/eleozzr/desc",
     code_version=check_version("desc"),
+    image="openproblems-python37-scgen" # only if required
     # image="openproblems-python-batch-integration" # only if required
 )
 def desc_hvg_scaled(adata):
@@ -75,6 +77,7 @@ def desc_hvg_scaled(adata):
     paper_year=2020,
     code_url="https://github.com/eleozzr/desc",
     code_version=check_version("desc"),
+    image="openproblems-python37-scgen" # only if required
     # image="openproblems-python-batch-integration" # only if required
 )
 def desc_full_scaled(adata):

@@ -15,7 +15,8 @@ RUN \
     find /var/lib/apt/lists/ ! -type d -exec rm '{}' \;
 
 RUN apt-get update -qq
-RUN apt-get clean -y && apt-get autoremove -y
+RUN apt-get clean -y && apt-get autoremove -y && apt-get install -y cmake r-base
+RUN apt-get install -y git
 
 # update pip
 RUN python3 -m pip install --no-cache-dir -U pip
@@ -26,7 +27,12 @@ RUN unzip -q awscliv2.zip
 RUN ./aws/install
 
 # install dependencies
-COPY ./docker/openproblems/requirements.txt ./requirements.txt
+COPY ./docker/openproblems-python37-scgen/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir "numpy==1.18.5"
+RUN pip install --no-cache-dir git+https://github.com/theislab/scib
+RUN pip install --no-cache-dir scgen
+RUN pip install --no-cache-dir desc
+#RUN pip install --no-cache-dir -r requirements.txt
 
 
 # Install single-cell open problems
