@@ -35,7 +35,7 @@ def desc_full_unscaled(adata):
     # image="openproblems-python-batch-integration" # only if required
 )
 def desc_hvg_unscaled(adata):
-    from _utils import hvg_batch
+    from ._utils import hvg_batch
     from scib.integration import runDESC
     from scib.preprocessing import reduce_data
 
@@ -57,7 +57,7 @@ def desc_hvg_unscaled(adata):
     # image="openproblems-python-batch-integration" # only if required
 )
 def desc_hvg_scaled(adata):
-    from _utils import hvg_batch
+    from ._utils import hvg_batch
     from scib.integration import runDESC
     from scib.preprocessing import reduce_data
     from scib.preprocessing import scale_batch

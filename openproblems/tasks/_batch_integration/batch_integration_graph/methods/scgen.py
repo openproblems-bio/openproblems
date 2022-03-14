@@ -30,7 +30,7 @@ def scgen_full_unscaled(adata):
     image="openproblems-python37-scgen",  # only if required
 )
 def scgen_hvg_unscaled(adata):
-    from _utils import hvg_batch
+    from ._utils import hvg_batch
     from scib.integration import runScGen
     from scib.preprocessing import reduce_data
 
@@ -70,7 +70,7 @@ def scgen_full_scaled(adata):
     image="openproblems-python37-scgen",  # only if required
 )
 def scgen_hvg_scaled(adata):
-    from _utils import hvg_batch
+    from ._utils import hvg_batch
     from scib.integration import runScGen
     from scib.preprocessing import reduce_data
     from scib.preprocessing import scale_batch
