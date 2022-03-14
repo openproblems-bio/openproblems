@@ -6,7 +6,6 @@ from .combat import combat_full_scaled
 from .combat import combat_full_unscaled
 from .combat import combat_hvg_scaled
 from .combat import combat_hvg_unscaled
-
 from .desc import desc_full_scaled
 from .desc import desc_full_unscaled
 from .desc import desc_hvg_scaled
@@ -47,10 +46,8 @@ from .scanorama_full import scanorama_feature_full_scaled
 from .scanorama_full import scanorama_feature_full_unscaled
 from .scanorama_full import scanorama_feature_hvg_scaled
 from .scanorama_full import scanorama_feature_hvg_unscaled
-
 from .scanvi import scanvi_full_unscaled
 from .scanvi import scanvi_hvg_unscaled
-
 from .scgen import scgen_full_scaled
 from .scgen import scgen_full_unscaled
 from .scgen import scgen_hvg_scaled
