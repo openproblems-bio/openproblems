@@ -9,8 +9,8 @@ from .....tools.utils import check_version
     paper_url="https://www.nature.com/articles/s41592-019-0576-7",
     paper_year=2019,
     code_url="https://github.com/KrishnaswamyLab/SAUCIE",
-    code_version=check_version("saucie"),
-    image="openproblems-python-batch-integration",  # only if required
+    code_version=check_version("SAUCIE"),
+    image="openproblems-python37-saucie",  # only if required
 )
 def saucie_feature_full_unscaled(adata):
     from scib.integration import runSaucie
@@ -28,8 +28,8 @@ def saucie_feature_full_unscaled(adata):
     paper_url="https://www.nature.com/articles/s41592-019-0576-7",
     paper_year=2019,
     code_url="https://github.com/KrishnaswamyLab/SAUCIE",
-    code_version=check_version("saucie"),
-    image="openproblems-python-batch-integration",  # only if required
+    code_version=check_version("SAUCIE"),
+    image="openproblems-python37-saucie",  # only if required
 )
 def saucie_feature_hvg_unscaled(adata):
     from ._utils import hvg_batch
@@ -48,8 +48,8 @@ def saucie_feature_hvg_unscaled(adata):
     paper_url="https://www.nature.com/articles/s41592-019-0576-7",
     paper_year=2019,
     code_url="https://github.com/KrishnaswamyLab/SAUCIE",
-    code_version=check_version("saucie"),
-    image="openproblems-python-batch-integration",  # only if required
+    code_version=check_version("SAUCIE"),
+    image="openproblems-python37-saucie",  # only if required
 )
 def saucie_feature_hvg_scaled(adata):
     from ._utils import hvg_batch
@@ -70,8 +70,8 @@ def saucie_feature_hvg_scaled(adata):
     paper_url="https://www.nature.com/articles/s41592-019-0576-7",
     paper_year=2019,
     code_url="https://github.com/KrishnaswamyLab/SAUCIE",
-    code_version=check_version("saucie"),
-    image="openproblems-python-batch-integration",  # only if required
+    code_version=check_version("SAUCIE"),
+    image="openproblems-python37-saucie",  # only if required
 )
 def saucie_feature_full_scaled(adata):
     from scib.integration import runSaucie
