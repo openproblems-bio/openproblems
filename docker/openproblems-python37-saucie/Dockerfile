@@ -31,6 +31,7 @@ COPY ./docker/openproblems-python37-saucie/requirements.txt requirements.txt
 RUN pip install --no-cache-dir git+https://github.com/theislab/scib
 RUN pip install --no-cache-dir -r requirements.txt
 RUN git clone https://github.com/KrishnaswamyLab/SAUCIE
+RUN cp -r SAUCIE /usr/local/lib/python3.7/site-packages/
 
 
 # Install single-cell open problems
