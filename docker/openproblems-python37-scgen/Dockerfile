@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM condaforge/mambaforge
 
 ENV DEBIAN_FRONTEND=noninteractive
 ARG NB_USER="sagemaker-user"
@@ -7,21 +7,14 @@ ARG NB_GID="100"
 
 RUN \
     apt-get update && \
-    apt-get install -qy sudo && \
+    apt-get install -qy sudo git unzip&& \
     useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
     chmod g+w /etc/passwd && \
     echo "${NB_USER}    ALL=(ALL)    NOPASSWD:    ALL" >> /etc/sudoers && \
     # Prevent apt-get cache from being persisted to this layer.
     find /var/lib/apt/lists/ ! -type d -exec rm '{}' \;
 
-RUN apt-get update -qq
-RUN apt-get clean -y && apt-get autoremove -y && apt-get install -y cmake
-RUN apt-get install -y git
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'
-RUN echo 'deb http://cloud.r-project.org/bin/linux/debian bullseye-cran40/' >> /etc/apt/sources.list
-RUN apt-get update -qq
-RUN apt-get install -yq --no-install-suggests --no-install-recommends r-base-dev=4.1\*
-RUN apt-get clean -y && apt-get autoremove -y
+RUN mamba install -y python=3.7 && mamba install -c bioconda -y bioconductor-scran
 
 # update pip
 RUN python3 -m pip install --no-cache-dir -U pip
@@ -39,8 +32,7 @@ RUN pip install --no-cache-dir scgen
 RUN pip install --no-cache-dir desc
 #RUN pip install --no-cache-dir -r requirements.txt
 
-RUN R -e 'install.packages("BiocManager", ncpus=4)'
-RUN R -e 'BiocManager::install("scran", ncpus=4)'
+
 
 
 # Install single-cell open problems
