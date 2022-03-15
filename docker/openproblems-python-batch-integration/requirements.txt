@@ -1,5 +1,5 @@
-git+git://github.com/theislab/scib
+git+https://github.com/theislab/scib
 bbknn
-git+git://github.com/pinin4fjords/mnnpy@fix_for_numba_jit
+git+https://github.com/pinin4fjords/mnnpy@fix_for_numba_jit
 scvi==0.6.7
 scanorama
