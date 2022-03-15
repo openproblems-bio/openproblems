@@ -34,6 +34,9 @@ RUN pip install --no-cache-dir scgen
 RUN pip install --no-cache-dir desc
 #RUN pip install --no-cache-dir -r requirements.txt
 
+RUN R -e 'install.packages("BiocManager", ncpus=4)'
+RUN R -e 'BiocManager::install("scran", ncpus=4)'
+
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems

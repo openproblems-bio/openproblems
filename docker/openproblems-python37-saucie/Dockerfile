@@ -33,6 +33,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN git clone https://github.com/KrishnaswamyLab/SAUCIE
 RUN cp -r SAUCIE /usr/local/lib/python3.7/site-packages/
 
+RUN R -e 'install.packages("BiocManager", ncpus=4)'
+RUN R -e 'BiocManager::install("scran", ncpus=4)'
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
