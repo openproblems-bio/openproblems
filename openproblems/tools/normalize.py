@@ -1,8 +1,8 @@
 from . import decorators
 
+import anndata as ad
 import scanpy as sc
 import scprep
-import anndata as ad
 
 _scran = scprep.run.RFunction(
     setup="library('scran')",
