@@ -33,7 +33,9 @@ def _mlp(adata, test=False, max_iter=None, hidden_layer_sizes=None):
 )
 def mlp_log_cpm(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     log_cpm(adata)
-    return _mlp(adata, test=test, max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes)
+    return _mlp(
+        adata, test=test, max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes
+    )
 
 
 @method(
@@ -48,4 +50,6 @@ def mlp_log_cpm(adata, test=False, max_iter=None, hidden_layer_sizes=None):
 )
 def mlp_scran(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     log_scran_pooling(adata)
-    return _mlp(adata, test=test, max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes)
+    return _mlp(
+        adata, test=test, max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes
+    )

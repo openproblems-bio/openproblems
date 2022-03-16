@@ -7,7 +7,9 @@ from ....tools.utils import check_version
 import sklearn.decomposition
 
 
-def _harmonic_alignment(adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None):
+def _harmonic_alignment(
+    adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
+):
     import harmonicalignment
 
     if test:
@@ -46,10 +48,19 @@ def _harmonic_alignment(adata, test=False, n_svd=None, n_eigenvectors=None, n_pc
     code_version=check_version("harmonicalignment"),
     image="openproblems-python-extras",
 )
-def harmonic_alignment_sqrt_cpm(adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None):
+def harmonic_alignment_sqrt_cpm(
+    adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
+):
     sqrt_cpm(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _harmonic_alignment(adata, test=test, n_svd=n_svd, n_eigenvectors=n_eigenvectors, n_pca_XY=n_pca_XY, n_filters=n_filters)
+    _harmonic_alignment(
+        adata,
+        test=test,
+        n_svd=n_svd,
+        n_eigenvectors=n_eigenvectors,
+        n_pca_XY=n_pca_XY,
+        n_filters=n_filters,
+    )
     return adata
 
 
@@ -62,8 +73,17 @@ def harmonic_alignment_sqrt_cpm(adata, test=False, n_svd=None, n_eigenvectors=No
     code_version=check_version("harmonicalignment"),
     image="openproblems-r-extras",
 )
-def harmonic_alignment_log_scran_pooling(adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None):
+def harmonic_alignment_log_scran_pooling(
+    adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
+):
     log_scran_pooling(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _harmonic_alignment(adata, test=test, n_svd=n_svd, n_eigenvectors=n_eigenvectors, n_pca_XY=n_pca_XY, n_filters=n_filters)
+    _harmonic_alignment(
+        adata,
+        test=test,
+        n_svd=n_svd,
+        n_eigenvectors=n_eigenvectors,
+        n_pca_XY=n_pca_XY,
+        n_filters=n_filters,
+    )
     return adata

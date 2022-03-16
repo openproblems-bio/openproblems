@@ -6,6 +6,7 @@ from .preprocessing import preprocess_scanpy
 
 def _phate(adata, test=False, n_pca=None):
     from phate import PHATE
+
     if test:
         n_pca = n_pca or 10
     else:
