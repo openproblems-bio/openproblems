@@ -4,12 +4,12 @@ from ....tools.utils import check_version
 from .preprocessing import preprocess_scanpy
 
 
-def _phate(adata, test=False):
+def _phate(adata, test=False, n_pca=None):
     from phate import PHATE
     if test:
-        n_pca = 10
+        n_pca = n_pca or 10
     else:
-        n_pca = 100
+        n_pca = n_pca or 100
 
     phate_op = PHATE(n_pca=n_pca, verbose=False, n_jobs=-1)
     adata.obsm["X_emb"] = phate_op.fit_transform(adata.X)
@@ -25,9 +25,9 @@ def _phate(adata, test=False):
     code_version=check_version("phate"),
     image="openproblems-python-extras",
 )
-def phate_default(adata, test=False):
+def phate_default(adata, test=False, n_pca=None):
     sqrt_cpm(adata)
-    return _phate(adata, test=test)
+    return _phate(adata, test=test, n_pca=n_pca)
 
 
 @method(
@@ -39,6 +39,6 @@ def phate_default(adata, test=False):
     code_version=check_version("phate"),
     image="openproblems-python-extras",
 )
-def phate_scanpy(adata, test=False):
+def phate_scanpy(adata, test=False, n_pca=None):
     preprocess_scanpy(adata)
-    return _phate(adata, test=test)
+    return _phate(adata, test=test, n_pca=n_pca)

@@ -226,6 +226,6 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     code_url="http://cistrome.org/BETA",
     image="openproblems-python-extras",
 )
-def beta(adata, test=False):
-    adata = _atac_genes_score(adata)
+def beta(adata, test=False, top_genes=500, threshold=1):
+    adata = _atac_genes_score(adata, top_genes=top_genes, threshold=threshold)
     return adata

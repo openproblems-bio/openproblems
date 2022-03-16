@@ -7,13 +7,13 @@ from .sklearn import classifier
 import sklearn.neural_network
 
 
-def _mlp(adata, test=False):
+def _mlp(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     if test:
-        hidden_layer_sizes = (20,)
-        max_iter = 100
+        hidden_layer_sizes = hidden_layer_sizes or (20,)
+        max_iter = max_iter or 100
     else:
-        hidden_layer_sizes = (100, 100)
-        max_iter = 1000
+        hidden_layer_sizes = hidden_layer_sizes or (100, 100)
+        max_iter = max_iter or 1000
     return classifier(
         adata,
         estimator=sklearn.neural_network.MLPClassifier,
@@ -31,9 +31,9 @@ def _mlp(adata, test=False):
     "sklearn.neural_network.MLPClassifier.html",
     code_version=check_version("scikit-learn"),
 )
-def mlp_log_cpm(adata, test=False):
+def mlp_log_cpm(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     log_cpm(adata)
-    return _mlp(adata, test=test)
+    return _mlp(adata, test=test, max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes)
 
 
 @method(
@@ -46,6 +46,6 @@ def mlp_log_cpm(adata, test=False):
     code_version=check_version("scikit-learn"),
     image="openproblems-r-base",
 )
-def mlp_scran(adata, test=False):
+def mlp_scran(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     log_scran_pooling(adata)
-    return _mlp(adata, test=test)
+    return _mlp(adata, test=test, max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes)

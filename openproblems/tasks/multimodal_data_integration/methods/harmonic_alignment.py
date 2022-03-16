@@ -7,19 +7,19 @@ from ....tools.utils import check_version
 import sklearn.decomposition
 
 
-def _harmonic_alignment(adata, test=False):
+def _harmonic_alignment(adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None):
     import harmonicalignment
 
     if test:
-        n_svd = 20
-        n_eigenvectors = 20
-        n_pca_XY = 20
-        n_filters = 4
+        n_svd = n_svd or 20
+        n_eigenvectors = n_eigenvectors or 20
+        n_pca_XY = n_pca_XY or 20
+        n_filters = n_filters or 4
     else:
-        n_svd = 100
-        n_eigenvectors = 100
-        n_pca_XY = 100
-        n_filters = 8
+        n_svd = n_svd or 100
+        n_eigenvectors = n_eigenvectors or 100
+        n_pca_XY = n_pca_XY or 100
+        n_filters = n_filters or 8
     n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
     if adata.X.shape[0] <= n_eigenvectors:
         n_eigenvectors = None
@@ -46,10 +46,10 @@ def _harmonic_alignment(adata, test=False):
     code_version=check_version("harmonicalignment"),
     image="openproblems-python-extras",
 )
-def harmonic_alignment_sqrt_cpm(adata, test=False):
+def harmonic_alignment_sqrt_cpm(adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None):
     sqrt_cpm(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _harmonic_alignment(adata, test=test)
+    _harmonic_alignment(adata, test=test, n_svd=n_svd, n_eigenvectors=n_eigenvectors, n_pca_XY=n_pca_XY, n_filters=n_filters)
     return adata
 
 
@@ -62,8 +62,8 @@ def harmonic_alignment_sqrt_cpm(adata, test=False):
     code_version=check_version("harmonicalignment"),
     image="openproblems-r-extras",
 )
-def harmonic_alignment_log_scran_pooling(adata, test=False):
+def harmonic_alignment_log_scran_pooling(adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None):
     log_scran_pooling(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _harmonic_alignment(adata, test=test)
+    _harmonic_alignment(adata, test=test, n_svd=n_svd, n_eigenvectors=n_eigenvectors, n_pca_XY=n_pca_XY, n_filters=n_filters)
     return adata

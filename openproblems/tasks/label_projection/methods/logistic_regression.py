@@ -7,11 +7,11 @@ from .sklearn import classifier
 import sklearn.linear_model
 
 
-def _logistic_regression(adata, test=False):
+def _logistic_regression(adata, test=False, max_iter=None):
     if test:
-        max_iter = 100
+        max_iter = max_iter or 100
     else:
-        max_iter = 1000
+        max_iter = max_iter or 1000
     return classifier(
         adata, estimator=sklearn.linear_model.LogisticRegression, max_iter=max_iter
     )
@@ -26,9 +26,9 @@ def _logistic_regression(adata, test=False):
     "sklearn.linear_model.LogisticRegression.html",
     code_version=check_version("scikit-learn"),
 )
-def logistic_regression_log_cpm(adata, test=False):
+def logistic_regression_log_cpm(adata, test=False, max_iter=None):
     log_cpm(adata)
-    return _logistic_regression(adata, test=test)
+    return _logistic_regression(adata, test=test, max_iter=max_iter)
 
 
 @method(
@@ -41,6 +41,6 @@ def logistic_regression_log_cpm(adata, test=False):
     code_version=check_version("scikit-learn"),
     image="openproblems-r-base",
 )
-def logistic_regression_scran(adata, test=False):
+def logistic_regression_scran(adata, test=False, max_iter=None):
     log_scran_pooling(adata)
-    return _logistic_regression(adata, test=test)
+    return _logistic_regression(adata, test=test, max_iter=max_iter)
