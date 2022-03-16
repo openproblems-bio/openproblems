@@ -1,7 +1,7 @@
 # from ....tools.normalize import log_cpm
-from re import U
 from .....tools.decorators import method
 from .....tools.utils import check_version
+from re import U
 
 
 @method(
@@ -15,11 +15,11 @@ from .....tools.utils import check_version
     image="openproblems-python37-scgen",  # only if required
 )
 def desc_full_unscaled(adata):
-    from scib.integration import runDESC
     from scanpy.pp import neighbors
+    from scib.integration import runDESC
 
-    adata.obsm['X_emb'] = runDESC(adata, "batch").obsm['X_emb']
-    neighbors(adata, use_rep='X_emb')
+    adata.obsm["X_emb"] = runDESC(adata, "batch").obsm["X_emb"]
+    neighbors(adata, use_rep="X_emb")
     # Complete the result in-place
     return adata
 
@@ -37,8 +37,8 @@ def desc_full_unscaled(adata):
 )
 def desc_hvg_unscaled(adata):
     from ._utils import hvg_batch
-    from scib.integration import runDESC
     from scanpy.pp import neighbors
+    from scib.integration import runDESC
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata.obsm['X_emb'] = runDESC(adata, "batch").obsm['X_emb']
@@ -59,8 +59,8 @@ def desc_hvg_unscaled(adata):
 )
 def desc_hvg_scaled(adata):
     from ._utils import hvg_batch
-    from scib.integration import runDESC
     from scanpy.pp import neighbors
+    from scib.integration import runDESC
     from scib.preprocessing import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
@@ -82,9 +82,9 @@ def desc_hvg_scaled(adata):
     # image="openproblems-python-batch-integration" # only if required
 )
 def desc_full_scaled(adata):
+    from scanpy.pp import neighbors
     from scib.integration import runDESC
     from scib.preprocessing import scale_batch
-    from scanpy.pp import neighbors
 
     adata = scale_batch(adata, "batch")
     adata.obsm['X_emb'] = runDESC(adata, "batch").obsm['X_emb']
