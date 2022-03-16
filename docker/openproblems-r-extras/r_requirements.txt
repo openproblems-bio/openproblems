@@ -4,6 +4,7 @@ caret@6.0-86
 crayon@1.4.1
 devtools@2.3.2
 dplyr
+ellipsis@0.3.2
 forecast@8.14
 hexbin@1.28.2
 htmltools@0.4.0
