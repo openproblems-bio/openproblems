@@ -15,7 +15,7 @@ import scanpy as sc
     code_version=check_version("MulticoreTSNE"),
     image="openproblems-python-extras",
 )
-def tsne(adata):
+def tsne(adata, test=False):
     preprocess_scanpy(adata)
     sc.tl.tsne(adata, use_rep="X_input", n_pcs=50)
     adata.obsm["X_emb"] = adata.obsm["X_tsne"]

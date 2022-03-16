@@ -7,8 +7,12 @@ from ....tools.utils import check_version
 import sklearn.decomposition
 
 
-def _scot(adata, n_svd=100, balanced=False):
+def _scot(adata, test=False, balanced=False):
     from SCOT import SCOT
+    if test:
+        n_svd = 20
+    else:
+        n_svd = 100
 
     # PCA reduction
     n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
@@ -39,10 +43,10 @@ def _scot(adata, n_svd=100, balanced=False):
     code_version=check_version("SCOT"),
     image="openproblems-python-extras",
 )
-def scot_sqrt_cpm_unbalanced(adata, n_svd=100, balanced=False):
+def scot_sqrt_cpm_unbalanced(adata, test=False, balanced=False):
     sqrt_cpm(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _scot(adata, n_svd=n_svd, balanced=balanced)
+    _scot(adata, test=test, balanced=balanced)
     return adata
 
 
@@ -56,10 +60,10 @@ def scot_sqrt_cpm_unbalanced(adata, n_svd=100, balanced=False):
     code_version=check_version("SCOT"),
     image="openproblems-python-extras",
 )
-def scot_sqrt_cpm_balanced(adata, n_svd=100, balanced=True):
+def scot_sqrt_cpm_balanced(adata, test=False, balanced=True):
     sqrt_cpm(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _scot(adata, n_svd=n_svd, balanced=balanced)
+    _scot(adata, test=test, balanced=balanced)
     return adata
 
 
@@ -73,10 +77,10 @@ def scot_sqrt_cpm_balanced(adata, n_svd=100, balanced=True):
     code_version=check_version("SCOT"),
     image="openproblems-python-extras",
 )
-def scot_log_scran_pooling_unbalanced(adata, n_svd=100, balanced=False):
+def scot_log_scran_pooling_unbalanced(adata, test=False, balanced=False):
     log_scran_pooling(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _scot(adata, n_svd=n_svd, balanced=balanced)
+    _scot(adata, test=test, balanced=balanced)
     return adata
 
 
@@ -90,8 +94,8 @@ def scot_log_scran_pooling_unbalanced(adata, n_svd=100, balanced=False):
     code_version=check_version("SCOT"),
     image="openproblems-python-extras",
 )
-def scot_log_scran_pooling_balanced(adata, n_svd=100, balanced=True):
+def scot_log_scran_pooling_balanced(adata, test=False, balanced=True):
     log_scran_pooling(adata)
     log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _scot(adata, n_svd=n_svd, balanced=balanced)
+    _scot(adata, test=test, balanced=balanced)
     return adata

@@ -21,7 +21,7 @@ def _phate(adata):
     code_version=check_version("phate"),
     image="openproblems-python-extras",
 )
-def phate_default(adata):
+def phate_default(adata, test=False):
     sqrt_cpm(adata)
     return _phate(adata)
 
