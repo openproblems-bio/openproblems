@@ -9,6 +9,7 @@ import sklearn.decomposition
 
 def _scot(adata, test=False, balanced=False):
     from SCOT import SCOT
+
     if test:
         n_svd = 20
     else:
