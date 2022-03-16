@@ -16,3 +16,4 @@ sparsesvd
 tidyverse@1.3.0
 tidymodels@0.1.2
 reticulate@1.18
+rlang@1.0.1
