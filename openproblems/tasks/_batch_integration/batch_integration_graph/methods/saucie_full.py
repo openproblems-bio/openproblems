@@ -16,8 +16,8 @@ def saucie_feature_full_unscaled(adata):
     from scib.integration import runSaucie
     from scib.preprocessing import reduce_data
 
-    adata = runSaucie(adata, "batch")
     adata.obs['batch']= adata.obs['batch'].astype('category')
+    adata = runSaucie(adata, "batch")
     reduce_data(adata, umap=False)
     # Complete the result in-place
     return adata
