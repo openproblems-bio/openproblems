@@ -41,7 +41,7 @@ def desc_hvg_unscaled(adata):
     from scanpy.pp import neighbors
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = runDESC(adata, "batch")
+    adata.obsm['X_emb'] = runDESC(adata, "batch").obsm['X_emb']
     neighbors(adata, use_rep='X_emb')
     return adata
 
@@ -65,7 +65,7 @@ def desc_hvg_scaled(adata):
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
-    adata = runDESC(adata, "batch")
+    adata.obsm['X_emb'] = runDESC(adata, "batch").obsm['X_emb']
     neighbors(adata, use_rep='X_emb')
     return adata
 
@@ -87,6 +87,6 @@ def desc_full_scaled(adata):
     from scanpy.pp import neighbors
 
     adata = scale_batch(adata, "batch")
-    adata = runDESC(adata, "batch")
+    adata.obsm['X_emb'] = runDESC(adata, "batch").obsm['X_emb']
     neighbors(adata, use_rep='X_emb')
     return adata
