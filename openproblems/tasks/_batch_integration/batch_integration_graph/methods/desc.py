@@ -1,4 +1,5 @@
 # from ....tools.normalize import log_cpm
+from re import U
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
@@ -15,10 +16,10 @@ from .....tools.utils import check_version
 )
 def desc_full_unscaled(adata):
     from scib.integration import runDESC
-    from scib.preprocessing import reduce_data
+    from scanpy.pp import neighbors
 
-    adata = runDESC(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    adata.obsm['X_emb'] = runDESC(adata, "batch").obsm['X_emb']
+    neighbors(adata, use_rep='X_emb')
     # Complete the result in-place
     return adata
 
@@ -37,11 +38,11 @@ def desc_full_unscaled(adata):
 def desc_hvg_unscaled(adata):
     from ._utils import hvg_batch
     from scib.integration import runDESC
-    from scib.preprocessing import reduce_data
+    from scanpy.pp import neighbors
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runDESC(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep='X_emb')
     return adata
 
 
@@ -59,13 +60,13 @@ def desc_hvg_unscaled(adata):
 def desc_hvg_scaled(adata):
     from ._utils import hvg_batch
     from scib.integration import runDESC
-    from scib.preprocessing import reduce_data
+    from scanpy.pp import neighbors
     from scib.preprocessing import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = runDESC(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep='X_emb')
     return adata
 
 
@@ -82,10 +83,10 @@ def desc_hvg_scaled(adata):
 )
 def desc_full_scaled(adata):
     from scib.integration import runDESC
-    from scib.preprocessing import reduce_data
     from scib.preprocessing import scale_batch
+    from scanpy.pp import neighbors
 
     adata = scale_batch(adata, "batch")
     adata = runDESC(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep='X_emb')
     return adata
