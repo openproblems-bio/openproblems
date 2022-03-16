@@ -19,7 +19,7 @@ def saucie_feature_full_unscaled(adata):
     adata.obs["batch"] = adata.obs["batch"].astype("category")
     adata = runSaucie(adata, "batch")
     reduce_data(adata, umap=False)
-    adata.var = adata.var.iloc[:,:2]
+    adata.var = adata.var.iloc[:, :2]
     # Complete the result in-place
     return adata
 
@@ -42,7 +42,7 @@ def saucie_feature_hvg_unscaled(adata):
     adata.obs["batch"] = adata.obs["batch"].astype("category")
     adata = runSaucie(adata, "batch")
     reduce_data(adata, umap=False)
-    adata.var = adata.var.iloc[:,:2]
+    adata.var = adata.var.iloc[:, :2]
     return adata
 
 
@@ -66,7 +66,7 @@ def saucie_feature_hvg_scaled(adata):
     adata.obs["batch"] = adata.obs["batch"].astype("category")
     adata = runSaucie(adata, "batch")
     reduce_data(adata, umap=False)
-    adata.var = adata.var.iloc[:,:2]
+    adata.var = adata.var.iloc[:, :2]
     return adata
 
 
@@ -88,5 +88,5 @@ def saucie_feature_full_scaled(adata):
     adata.obs["batch"] = adata.obs["batch"].astype("category")
     adata = runSaucie(adata, "batch")
     reduce_data(adata, umap=False)
-    adata.var = adata.var.iloc[:,:2]
+    adata.var = adata.var.iloc[:, :2]
     return adata
