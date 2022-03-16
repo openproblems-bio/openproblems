@@ -9,6 +9,7 @@ import sklearn.decomposition
 
 def _harmonic_alignment(adata, test=False):
     import harmonicalignment
+
     if test:
         n_svd = 20
         n_eigenvectors = 20

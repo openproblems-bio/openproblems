@@ -18,7 +18,7 @@ def _mlp(adata, test=False):
         adata,
         estimator=sklearn.neural_network.MLPClassifier,
         hidden_layer_sizes=hidden_layer_sizes,
-        max_iter=max_iter
+        max_iter=max_iter,
     )
 
 
