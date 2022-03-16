@@ -2,7 +2,7 @@ name: pre-commit
 on:
   push:
     branches-ignore:
-      - 'master'
+      - 'main'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
