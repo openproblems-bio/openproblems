@@ -40,8 +40,8 @@ def desc_hvg_unscaled(adata):
     from scib.integration import runDESC
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata.obsm['X_emb'] = runDESC(adata, "batch").obsm['X_emb']
-    neighbors(adata, use_rep='X_emb')
+    adata.obsm["X_emb"] = runDESC(adata, "batch").obsm["X_emb"]
+    neighbors(adata, use_rep="X_emb")
     return adata
 
 
@@ -64,8 +64,8 @@ def desc_hvg_scaled(adata):
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
-    adata.obsm['X_emb'] = runDESC(adata, "batch").obsm['X_emb']
-    neighbors(adata, use_rep='X_emb')
+    adata.obsm["X_emb"] = runDESC(adata, "batch").obsm["X_emb"]
+    neighbors(adata, use_rep="X_emb")
     return adata
 
 
@@ -86,6 +86,6 @@ def desc_full_scaled(adata):
     from scib.preprocessing import scale_batch
 
     adata = scale_batch(adata, "batch")
-    adata.obsm['X_emb'] = runDESC(adata, "batch").obsm['X_emb']
-    neighbors(adata, use_rep='X_emb')
+    adata.obsm["X_emb"] = runDESC(adata, "batch").obsm["X_emb"]
+    neighbors(adata, use_rep="X_emb")
     return adata
