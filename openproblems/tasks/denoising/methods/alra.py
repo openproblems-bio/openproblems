@@ -17,7 +17,7 @@ _alra = r_function("alra.R")
     paper_url="https://www.biorxiv.org/content/10.1101/397588v1",
     paper_year=2018,
     code_url="https://github.com/KlugerLab/ALRA",
-    # code_version=check_version("scprep"),
+    code_version="v1.0.0",
     image="openproblems-r-extras",
 )
 def alra(adata):
