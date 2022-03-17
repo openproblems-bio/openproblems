@@ -101,7 +101,7 @@ jobs:
         cd ..
 
     - name: Run tests
-      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
+      run: NUMBA_DISABLE_JIT=1 pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
 
     - name: Upload coverage
       if: success() && ${{ github.repository == 'SingleCellOpenProblems/singlecellopenproblems' }}
