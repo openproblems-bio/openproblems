@@ -71,7 +71,7 @@ def scot_sqrt_cpm_balanced(adata, n_svd=100, balanced=True):
     paper_year=2020,
     code_url="https://github.com/rsinghlab/SCOT",
     code_version=check_version("SCOT"),
-    image="openproblems-python-extras",
+    image="openproblems-r-extras",
 )
 def scot_log_scran_pooling_unbalanced(adata, n_svd=100, balanced=False):
     log_scran_pooling(adata)
@@ -88,7 +88,7 @@ def scot_log_scran_pooling_unbalanced(adata, n_svd=100, balanced=False):
     paper_year=2020,
     code_url="https://github.com/rsinghlab/SCOT",
     code_version=check_version("SCOT"),
-    image="openproblems-python-extras",
+    image="openproblems-r-extras",
 )
 def scot_log_scran_pooling_balanced(adata, n_svd=100, balanced=True):
     log_scran_pooling(adata)
