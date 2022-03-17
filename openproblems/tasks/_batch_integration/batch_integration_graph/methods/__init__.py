@@ -29,14 +29,15 @@ from .mnn import mnn_full_scaled
 from .mnn import mnn_full_unscaled
 from .mnn import mnn_hvg_scaled
 from .mnn import mnn_hvg_unscaled
-#from .saucie_embed import saucie_embed_full_scaled
-#from .saucie_embed import saucie_embed_full_unscaled
-#from .saucie_embed import saucie_embed_hvg_scaled
-#from .saucie_embed import saucie_embed_hvg_unscaled
-#from .saucie_full import saucie_feature_full_scaled
-#from .saucie_full import saucie_feature_full_unscaled
-#from .saucie_full import saucie_feature_hvg_scaled
-#from .saucie_full import saucie_feature_hvg_unscaled
+
+# from .saucie_embed import saucie_embed_full_scaled
+# from .saucie_embed import saucie_embed_full_unscaled
+# from .saucie_embed import saucie_embed_hvg_scaled
+# from .saucie_embed import saucie_embed_hvg_unscaled
+# from .saucie_full import saucie_feature_full_scaled
+# from .saucie_full import saucie_feature_full_unscaled
+# from .saucie_full import saucie_feature_hvg_scaled
+# from .saucie_full import saucie_feature_hvg_unscaled
 from .scanorama_embed import scanorama_embed_full_scaled
 from .scanorama_embed import scanorama_embed_full_unscaled
 from .scanorama_embed import scanorama_embed_hvg_scaled
