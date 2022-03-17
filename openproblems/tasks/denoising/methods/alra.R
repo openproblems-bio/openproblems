@@ -6,11 +6,11 @@ library(rsvd)
 # save the matrix of the obsm variable train
 
 train_matrix <- t(as.matrix(reducedDim(sce, "train")))
-print(str(train_matrix)
+print(str(train_matrix))
 
 alra_output <- alra(train_matrix)
 alra_mat <- alra_output$A_norm_rank_k_cor_sc
-print(str(alra_mat)
+print(str(alra_mat))
 
 reducedDim(sce, "train") <- Matrix(t(alra_mat))
 
