@@ -8,7 +8,8 @@ ARG NB_GID="100"
 USER root
 WORKDIR /
 
-RUN sudo apt-get update && sudo apt-get install -y libhdf5-dev hdf5-tools
+RUN sudo apt-get update 
+RUN sudo apt-get install -y libhdf5-dev hdf5-tools
 
 RUN sudo apt-get clean autoclean && sudo apt-get autoremove --yes && sudo rm -rf /var/lib/{apt,dpkg,cache,log}/
 
