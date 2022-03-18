@@ -50,9 +50,9 @@ def scgen_hvg_unscaled(adata):
     image="openproblems-python37-scgen",  # only if required
 )
 def scgen_full_scaled(adata):
+    from ._utils import scale_batch
     from scib.integration import runScGen
     from scib.preprocessing import reduce_data
-    from scib.preprocessing import scale_batch
 
     adata = scale_batch(adata, "batch")
     adata = runScGen(adata, "batch", "labels")
@@ -71,9 +71,9 @@ def scgen_full_scaled(adata):
 )
 def scgen_hvg_scaled(adata):
     from ._utils import hvg_batch
+    from ._utils import scale_batch
     from scib.integration import runScGen
     from scib.preprocessing import reduce_data
-    from scib.preprocessing import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")

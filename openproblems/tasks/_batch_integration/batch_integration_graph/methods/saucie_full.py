@@ -57,9 +57,9 @@ def saucie_feature_hvg_unscaled(adata):
 )
 def saucie_feature_hvg_scaled(adata):
     from ._utils import hvg_batch
+    from ._utils import scale_batch
     from scib.integration import runSaucie
     from scib.preprocessing import reduce_data
-    from scib.preprocessing import scale_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
@@ -80,9 +80,9 @@ def saucie_feature_hvg_scaled(adata):
     image="openproblems-python37-saucie",  # only if required
 )
 def saucie_feature_full_scaled(adata):
+    from ._utils import scale_batch
     from scib.integration import runSaucie
     from scib.preprocessing import reduce_data
-    from scib.preprocessing import scale_batch
 
     adata = scale_batch(adata, "batch")
     adata.obs["batch"] = adata.obs["batch"].astype("category")
