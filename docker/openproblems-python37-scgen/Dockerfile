@@ -14,7 +14,7 @@ RUN \
     # Prevent apt-get cache from being persisted to this layer.
     find /var/lib/apt/lists/ ! -type d -exec rm '{}' \;
 
-RUN mamba install -y python=3.7 && mamba install -c bioconda -y bioconductor-scran
+RUN mamba install -y python=3.7 && mamba install -c conda-forge r-biocmanager && mamba install -c bioconda -y bioconductor-scran
 
 # update pip
 RUN python3 -m pip install --no-cache-dir -U pip
