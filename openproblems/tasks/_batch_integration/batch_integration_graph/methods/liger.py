@@ -53,7 +53,7 @@ _liger = scprep.run.RFunction(
     paper_year=2019,
     code_url="https://github.com/welch-lab/liger",
     code_version=check_version("scprep"),
-    image="openproblems-r-batch-integration",  # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def liger_full_unscaled(adata):
     from scanpy.pp import neighbors
@@ -74,7 +74,7 @@ def liger_full_unscaled(adata):
     paper_year=2019,
     code_url="https://github.com/welch-lab/liger",
     code_version=check_version("scprep"),
-    image="openproblems-r-batch-integration",  # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def liger_hvg_unscaled(adata):
     from ._utils import hvg_batch
@@ -94,7 +94,7 @@ def liger_hvg_unscaled(adata):
     paper_year=2019,
     code_url="https://github.com/welch-lab/liger",
     code_version=check_version("scprep"),
-    image="openproblems-r-batch-integration",  # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def liger_hvg_scaled(adata):
     from ._utils import hvg_batch
@@ -116,7 +116,7 @@ def liger_hvg_scaled(adata):
     paper_year=2019,
     code_url="https://github.com/welch-lab/liger",
     code_version=check_version("scprep"),
-    image="openproblems-r-batch-integration",  # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def liger_full_scaled(adata):
     from ._utils import scale_batch

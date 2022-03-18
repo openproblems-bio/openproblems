@@ -53,7 +53,7 @@ _seurat = scprep.run.RFunction(
     paper_year=2019,
     code_url="https://satijalab.org/seurat/",
     code_version=check_version("scprep"),
-    image="openproblems-r-batch-integration",  # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def seurat_full_unscaled(adata):
     from scib.preprocessing import reduce_data
@@ -73,7 +73,7 @@ def seurat_full_unscaled(adata):
     paper_year=2019,
     code_url="https://satijalab.org/seurat/",
     code_version=check_version("scprep"),
-    image="openproblems-r-batch-integration",  # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def seurat_hvg_unscaled(adata):
     from ._utils import hvg_batch
@@ -92,7 +92,7 @@ def seurat_hvg_unscaled(adata):
     paper_year=2019,
     code_url="https://satijalab.org/seurat/",
     code_version=check_version("scprep"),
-    image="openproblems-r-batch-integration",  # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def seurat_hvg_scaled(adata):
     from ._utils import hvg_batch
@@ -113,7 +113,7 @@ def seurat_hvg_scaled(adata):
     paper_year=2019,
     code_url="https://satijalab.org/seurat/",
     code_version=check_version("scprep"),
-    image="openproblems-r-batch-integration",  # only if required
+    image="openproblems-r-extras",  # only if required
 )
 def seurat_full_scaled(adata):
     from ._utils import scale_batch
