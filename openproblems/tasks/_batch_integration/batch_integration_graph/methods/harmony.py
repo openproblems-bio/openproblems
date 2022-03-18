@@ -33,7 +33,7 @@ _harmony = scprep.run.RFunction(
     paper_year=2019,
     code_url="https://github.com/immunogenomics/harmony",
     code_version=check_version("scprep"),
-    image="openproblems-r-extras",  # only if required
+    image="openproblems-r-batch-integration",  # only if required
 )
 def harmony_full_unscaled(adata):
     from scanpy.pp import neighbors
@@ -54,7 +54,7 @@ def harmony_full_unscaled(adata):
     paper_year=2019,
     code_url="https://github.com/immunogenomics/harmony",
     code_version=check_version("scprep"),
-    image="openproblems-r-extras",  # only if required
+    image="openproblems-r-batch-integration",  # only if required
 )
 def harmony_hvg_unscaled(adata):
     from ._utils import hvg_batch
@@ -76,7 +76,7 @@ def harmony_hvg_unscaled(adata):
     paper_year=2019,
     code_url="https://github.com/immunogenomics/harmony",
     code_version=check_version("scprep"),
-    image="openproblems-r-extras",  # only if required
+    image="openproblems-r-batch-integration",  # only if required
 )
 def harmony_hvg_scaled(adata):
     from ._utils import hvg_batch
@@ -100,7 +100,7 @@ def harmony_hvg_scaled(adata):
     paper_year=2019,
     code_url="https://github.com/immunogenomics/harmony",
     code_version=check_version("scprep"),
-    image="openproblems-r-extras",  # only if required
+    image="openproblems-r-batch-integration",  # only if required
 )
 def harmony_full_scaled(adata):
     from ._utils import scale_batch

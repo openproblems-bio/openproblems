@@ -29,7 +29,7 @@ _fastmnn_embed = scprep.run.RFunction(
     paper_year=2019,
     code_url="https://rdrr.io/github/LTLA/batchelor/man/fastMNN.html",
     code_version=check_version("scprep"),
-    image="openproblems-r-extras",  # only if required
+    image="openproblems-r-batch-integration",  # only if required
 )
 def fastmnn_embed_full_unscaled(adata):
     from scib.preprocessing import reduce_data
@@ -48,7 +48,7 @@ def fastmnn_embed_full_unscaled(adata):
     paper_year=2019,
     code_url="https://rdrr.io/github/LTLA/batchelor/man/fastMNN.html",
     code_version=check_version("scprep"),
-    image="openproblems-r-extras",  # only if required
+    image="openproblems-r-batch-integration",  # only if required
 )
 def fastmnn_embed_hvg_unscaled(adata):
     from ._utils import hvg_batch
@@ -68,7 +68,7 @@ def fastmnn_embed_hvg_unscaled(adata):
     paper_year=2019,
     code_url="https://rdrr.io/github/LTLA/batchelor/man/fastMNN.html",
     code_version=check_version("scprep"),
-    image="openproblems-r-extras",  # only if required
+    image="openproblems-r-batch-integration",  # only if required
 )
 def fastmnn_embed_hvg_scaled(adata):
     from ._utils import hvg_batch
@@ -90,7 +90,7 @@ def fastmnn_embed_hvg_scaled(adata):
     paper_year=2019,
     code_url="https://rdrr.io/github/LTLA/batchelor/man/fastMNN.html",
     code_version=check_version("scprep"),
-    image="openproblems-r-extras",  # only if required
+    image="openproblems-r-batch-integration",  # only if required
 )
 def fastmnn_embed_full_scaled(adata):
     from ._utils import scale_batch
