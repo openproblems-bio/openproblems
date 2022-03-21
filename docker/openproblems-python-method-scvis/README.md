@@ -1,4 +1,4 @@
-# openproblems Docker image
+# openproblems-python-method-scvis Docker image
 
 Base image: rackspacedot/python36
 
