@@ -34,7 +34,7 @@ _fastmnn_feature = scprep.run.RFunction(
 def fastmnn_feature_full_unscaled(adata):
     from scib.preprocessing import reduce_data
 
-    adata.X = _fastmnn_feature(adata, "batch")
+    adata.X = _fastmnn_feature(adata, "batch").T
     reduce_data(adata, umap=False)
     # Complete the result in-place
     return adata
@@ -54,7 +54,7 @@ def fastmnn_feature_hvg_unscaled(adata):
     from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata.X = _fastmnn_feature(adata, "batch")
+    adata.X = _fastmnn_feature(adata, "batch").T
     reduce_data(adata, umap=False)
     return adata
 
@@ -75,7 +75,7 @@ def fastmnn_feature_hvg_scaled(adata):
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
-    adata.X = _fastmnn_feature(adata, "batch")
+    adata.X = _fastmnn_feature(adata, "batch").T
     reduce_data(adata, umap=False)
     return adata
 
@@ -94,6 +94,6 @@ def fastmnn_feature_full_scaled(adata):
     from scib.preprocessing import reduce_data
 
     adata = scale_batch(adata, "batch")
-    adata.X = _fastmnn_feature(adata, "batch")
+    adata.X = _fastmnn_feature(adata, "batch").T
     reduce_data(adata, umap=False)
     return adata
