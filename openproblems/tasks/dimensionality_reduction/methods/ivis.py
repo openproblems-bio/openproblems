@@ -14,7 +14,7 @@ from anndata import AnnData
     code_version=check_version("ivis"),
     image="openproblems-python-extras",
 )
-def ivis_logCPM_1kHVG(adata: AnnData) -> AnnData:
+def ivis_logCPM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
     from ivis import Ivis
 
     adata = preprocess_logCPM_1kHVG(adata)

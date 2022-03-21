@@ -13,7 +13,7 @@ from .preprocessing import preprocess_logCPM_1kHVG
     code_version=check_version("umap-learn"),
     image="openproblems-python-extras",
 )
-def densmap_logCPM_1kHVG(adata):
+def densmap_logCPM_1kHVG(adata, test: bool = False):
     from umap import UMAP
 
     adata = preprocess_logCPM_1kHVG(adata)
@@ -31,7 +31,7 @@ def densmap_logCPM_1kHVG(adata):
     code_version=check_version("umap-learn"),
     image="openproblems-python-extras",
 )
-def densmap_pca_logCPM_1kHVG(adata):
+def densmap_pca_logCPM_1kHVG(adata, test: bool = False):
     from umap import UMAP
 
     adata = preprocess_logCPM_1kHVG(adata)

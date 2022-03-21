@@ -96,7 +96,7 @@ def _fit(data: np.ndarray):
     code_version=check_version("scvis"),
     image="openproblems-python-method-scvis",
 )
-def scvis_logCM_1kHVG(adata: AnnData) -> AnnData:
+def scvis_logCM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
     adata = preprocess_logCPM_1kHVG(adata)
 
     model, x = _fit(adata.X.A if issparse(adata.X) else adata.X)

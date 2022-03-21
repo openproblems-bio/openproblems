@@ -21,7 +21,7 @@ def _phate(adata):
     code_version=check_version("phate"),
     image="openproblems-python-extras",
 )
-def phate_default(adata):
+def phate_default(adata, test: bool = False):
     sqrt_cpm(adata)
     return _phate(adata)
 
@@ -35,6 +35,6 @@ def phate_default(adata):
     code_version=check_version("phate"),
     image="openproblems-python-extras",
 )
-def phate_logCPM_1kHVG(adata):
+def phate_logCPM_1kHVG(adata, test: bool = False):
     adata = preprocess_logCPM_1kHVG(adata)
     return _phate(adata)
