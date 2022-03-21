@@ -7,8 +7,8 @@ from .....tools.decorators import metric
     image="openproblems-python-batch-integration",  # only if required
 )
 def nmi(adata):
-    from scib.metrics import nmi
     from scib.metrics.clustering import opt_louvain
+    from scib.metrics import nmi # isort:skip
 
     opt_louvain(
         adata,
