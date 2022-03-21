@@ -1,4 +1,5 @@
 from . import decorators
+from anndata import AnnData
 
 import scanpy as sc
 import scprep
@@ -47,3 +48,15 @@ def sqrt_cpm(adata):
     """Normalize data to sqrt counts per million."""
     _cpm(adata)
     adata.X = scprep.transform.sqrt(adata.X)
+
+
+@decorators.normalizer
+def preprocess_logCPM_1kHVG(adata: AnnData) -> AnnData:
+
+    log_cpm(adata)
+    sc.pp.highly_variable_genes(adata, n_top_genes=1000, flavor="cell_ranger")
+    adata = adata[:, adata.var["highly_variable"]]
+    sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
+    adata.obsm["X_input"] = adata.obsm["X_pca"]
+
+    return adata

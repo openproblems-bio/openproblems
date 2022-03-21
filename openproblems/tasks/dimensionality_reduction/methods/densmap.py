@@ -1,6 +1,6 @@
 from ....tools.decorators import method
+from ....tools.normalize import preprocess_logCPM_1kHVG
 from ....tools.utils import check_version
-from .preprocessing import preprocess_logCPM_1kHVG
 
 
 @method(
