@@ -8,7 +8,8 @@ from .....tools.decorators import metric
 )
 def nmi(adata):
     from scib.metrics.clustering import opt_louvain
-    from scib.metrics import nmi # isort:skip
+
+    from scib.metrics import nmi  # isort:skip
 
     opt_louvain(
         adata,
