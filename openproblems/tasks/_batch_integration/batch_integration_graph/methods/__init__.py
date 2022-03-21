@@ -6,6 +6,7 @@ from .combat import combat_full_scaled
 from .combat import combat_full_unscaled
 from .combat import combat_hvg_scaled
 from .combat import combat_hvg_unscaled
+
 # from .desc import desc_full_scaled
 # from .desc import desc_full_unscaled
 # from .desc import desc_hvg_scaled
@@ -14,7 +15,6 @@ from .fastmnn_embed import fastmnn_embed_full_scaled
 from .fastmnn_embed import fastmnn_embed_full_unscaled
 from .fastmnn_embed import fastmnn_embed_hvg_scaled
 from .fastmnn_embed import fastmnn_embed_hvg_unscaled
-
 from .fastmnn_feature import fastmnn_feature_full_scaled
 from .fastmnn_feature import fastmnn_feature_full_unscaled
 from .fastmnn_feature import fastmnn_feature_hvg_scaled
