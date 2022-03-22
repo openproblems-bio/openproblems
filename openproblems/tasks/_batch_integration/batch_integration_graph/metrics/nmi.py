@@ -4,7 +4,7 @@ from .....tools.decorators import metric
 @metric(
     metric_name="NMI",
     maximize=True,
-    image="openproblems-python-batch-integration",  # only if required
+    image="openproblems-python-batch-integration",
 )
 def nmi(adata):
     from scib.metrics.clustering import opt_louvain  # isort:skip
