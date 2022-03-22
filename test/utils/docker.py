@@ -2,6 +2,7 @@ from . import run
 
 import atexit
 import datetime
+import decorator
 import functools
 import inspect
 import json
@@ -229,41 +230,31 @@ def run_image(image, script, *args, timeout=None, retries=0):
                 raise
 
 
-def docker_test(timeout=None, retries=0):
+@decorator.decorator
+def docker_test(func, timeout=None, retries=0, *args, **kwargs):
     """Run a test function in Docker.
 
     The function must take only simple objects as arguments
     (i.e. eval(str(args)) == args) and the final argument must be the Docker image.
     """
+    image = args[-1]
+    if not image.startswith("openproblems"):
+        warnings.warn("Image {} expectd to begin with openproblems.".format(image))
+    assert eval(str(args)) == args
+    assert eval(str(kwargs)) == kwargs
+    with tempfile.TemporaryDirectory() as tempdir:
+        f = os.path.join(tempdir, "{}.py".format(func.__name__))
+        with open(f, "w") as handle:
+            in_func = False
+            for line in inspect.getsource(func).split("\n"):
+                if in_func or line.startswith("def {}(".format(func.__name__)):
+                    in_func = True
+                    handle.write(line + "\n")
+            handle.write("\n")
+            handle.write("if __name__ == '__main__':\n")
+            handle.write("    import openproblems\n")
+            handle.write("    import sys\n")
+            handle.write("    sys.path.append('{}')\n".format(TESTDIR))
+            handle.write("    {}(*{}, **{})\n".format(func.__name__, args, kwargs))
 
-    def decorator(func):
-        def inner(*args, **kwargs):
-            image = args[-1]
-            if not image.startswith("openproblems"):
-                warnings.warn(
-                    "Image {} expectd to begin with openproblems.".format(image)
-                )
-            assert eval(str(args)) == args
-            assert eval(str(kwargs)) == kwargs
-            with tempfile.TemporaryDirectory() as tempdir:
-                f = os.path.join(tempdir, "{}.py".format(func.__name__))
-                with open(f, "w") as handle:
-                    in_func = False
-                    for line in inspect.getsource(func).split("\n"):
-                        if in_func or line.startswith("def {}(".format(func.__name__)):
-                            in_func = True
-                            handle.write(line + "\n")
-                    handle.write("\n")
-                    handle.write("if __name__ == '__main__':\n")
-                    handle.write("    import openproblems\n")
-                    handle.write("    import sys\n")
-                    handle.write("    sys.path.append('{}')\n".format(TESTDIR))
-                    handle.write(
-                        "    {}(*{}, **{})\n".format(func.__name__, args, kwargs)
-                    )
-
-                run_image(image, f, timeout=timeout, retries=retries)
-
-        return functools.update_wrapper(inner, func)
-
-    return decorator
+        run_image(image, f, timeout=timeout, retries=retries)
