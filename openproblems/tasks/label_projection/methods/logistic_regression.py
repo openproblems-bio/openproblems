@@ -17,7 +17,7 @@ import sklearn.linear_model
     code_version=check_version("scikit-learn"),
 )
 def logistic_regression_log_cpm(adata, max_iter=1000):
-    log_cpm(adata)
+    adata = log_cpm(adata)
     return classifier(
         adata, estimator=sklearn.linear_model.LogisticRegression, max_iter=max_iter
     )
@@ -34,7 +34,7 @@ def logistic_regression_log_cpm(adata, max_iter=1000):
     image="openproblems-r-base",
 )
 def logistic_regression_scran(adata, max_iter=1000):
-    log_scran_pooling(adata)
+    adata = log_scran_pooling(adata)
     return classifier(
         adata, estimator=sklearn.linear_model.LogisticRegression, max_iter=max_iter
     )

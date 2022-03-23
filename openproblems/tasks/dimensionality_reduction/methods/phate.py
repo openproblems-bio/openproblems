@@ -22,7 +22,7 @@ def _phate(adata):
     image="openproblems-python-extras",
 )
 def phate_default(adata):
-    sqrt_cpm(adata)
+    adata = sqrt_cpm(adata)
     return _phate(adata)
 
 
