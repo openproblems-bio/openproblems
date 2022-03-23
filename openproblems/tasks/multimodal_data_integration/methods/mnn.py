@@ -18,8 +18,8 @@ _mnn = r_function("mnn.R")
     image="openproblems-r-extras",
 )
 def mnn_log_cpm(adata, test=False):
-    log_cpm(adata)
-    log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
+    adata = log_cpm(adata)
+    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     return _mnn(adata)
 
 
@@ -34,6 +34,6 @@ def mnn_log_cpm(adata, test=False):
     image="openproblems-r-extras",
 )
 def mnn_log_scran_pooling(adata, test=False):
-    log_scran_pooling(adata)
-    log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
+    adata = log_scran_pooling(adata)
+    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     return _mnn(adata)

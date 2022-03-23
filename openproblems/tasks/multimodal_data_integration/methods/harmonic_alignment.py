@@ -51,8 +51,8 @@ def _harmonic_alignment(
 def harmonic_alignment_sqrt_cpm(
     adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
 ):
-    sqrt_cpm(adata)
-    log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
+    adata = sqrt_cpm(adata)
+    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _harmonic_alignment(
         adata,
         test=test,
@@ -76,8 +76,8 @@ def harmonic_alignment_sqrt_cpm(
 def harmonic_alignment_log_scran_pooling(
     adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
 ):
-    log_scran_pooling(adata)
-    log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
+    adata = log_scran_pooling(adata)
+    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _harmonic_alignment(
         adata,
         test=test,

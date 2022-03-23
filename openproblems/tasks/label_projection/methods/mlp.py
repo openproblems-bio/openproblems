@@ -32,7 +32,7 @@ def _mlp(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     code_version=check_version("scikit-learn"),
 )
 def mlp_log_cpm(adata, test=False, max_iter=None, hidden_layer_sizes=None):
-    log_cpm(adata)
+    adata = log_cpm(adata)
     return _mlp(
         adata, test=test, max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes
     )
@@ -49,7 +49,7 @@ def mlp_log_cpm(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     image="openproblems-r-base",
 )
 def mlp_scran(adata, test=False, max_iter=None, hidden_layer_sizes=None):
-    log_scran_pooling(adata)
+    adata = log_scran_pooling(adata)
     return _mlp(
         adata, test=test, max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes
     )

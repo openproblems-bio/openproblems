@@ -27,7 +27,7 @@ def _phate(adata, test=False, n_pca=None):
     image="openproblems-python-extras",
 )
 def phate_default(adata, test=False, n_pca=None):
-    sqrt_cpm(adata)
+    adata = sqrt_cpm(adata)
     return _phate(adata, test=test, n_pca=n_pca)
 
 

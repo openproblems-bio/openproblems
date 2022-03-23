@@ -27,7 +27,7 @@ def _logistic_regression(adata, test=False, max_iter=None):
     code_version=check_version("scikit-learn"),
 )
 def logistic_regression_log_cpm(adata, test=False, max_iter=None):
-    log_cpm(adata)
+    adata = log_cpm(adata)
     return _logistic_regression(adata, test=test, max_iter=max_iter)
 
 
@@ -42,5 +42,5 @@ def logistic_regression_log_cpm(adata, test=False, max_iter=None):
     image="openproblems-r-base",
 )
 def logistic_regression_scran(adata, test=False, max_iter=None):
-    log_scran_pooling(adata)
+    adata = log_scran_pooling(adata)
     return _logistic_regression(adata, test=test, max_iter=max_iter)
