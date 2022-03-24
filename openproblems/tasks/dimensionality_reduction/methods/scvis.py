@@ -94,7 +94,7 @@ def _fit(data: np.ndarray):
     paper_year=2018,
     code_url="https://bitbucket.org/jerry00/scvis-dev/",
     code_version=check_version("scvis"),
-    image="openproblems-python-method-scvis",
+    image="openproblems-python36",
 )
 def scvis_logCM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
     adata = preprocess_logCPM_1kHVG(adata)
