@@ -117,7 +117,7 @@ def _filter_has_chr(adata):
 def _beta(adata, test=False, top_genes=None, threshold=1):
     """Calculate gene scores and insert into .obsm."""
     import pybedtools
-    
+
     if test:
         top_genes = top_genes or 100
     else:
