@@ -37,8 +37,8 @@ def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
     image="openproblems-python-extras",
 )
 def harmonic_alignment_sqrt_cpm(adata, n_svd=100):
-    sqrt_cpm(adata)
-    log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
+    adata = sqrt_cpm(adata)
+    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _harmonic_alignment(adata, n_svd=n_svd)
     return adata
 
@@ -53,7 +53,7 @@ def harmonic_alignment_sqrt_cpm(adata, n_svd=100):
     image="openproblems-r-extras",
 )
 def harmonic_alignment_log_scran_pooling(adata, n_svd=100):
-    log_scran_pooling(adata)
-    log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
+    adata = log_scran_pooling(adata)
+    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _harmonic_alignment(adata, n_svd=n_svd)
     return adata

@@ -17,7 +17,7 @@ import sklearn.neural_network
     code_version=check_version("scikit-learn"),
 )
 def mlp_log_cpm(adata):
-    log_cpm(adata)
+    adata = log_cpm(adata)
     return classifier(adata, estimator=sklearn.neural_network.MLPClassifier)
 
 
@@ -32,5 +32,5 @@ def mlp_log_cpm(adata):
     image="openproblems-r-base",
 )
 def mlp_scran(adata):
-    log_scran_pooling(adata)
+    adata = log_scran_pooling(adata)
     return classifier(adata, estimator=sklearn.neural_network.MLPClassifier)

@@ -19,3 +19,4 @@ Python packages:
 * torch
 * tensorflow-cpu
 * ivis
+* umap-learn

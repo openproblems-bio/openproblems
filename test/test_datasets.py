@@ -123,7 +123,7 @@ class TestDataset(unittest.TestCase):
         """Test that normalizations can be safely applied."""
         if self.test:
             adata = self.adata.copy()
-            normalizer(adata)
+            adata = normalizer(adata)
             utils.asserts.assert_finite(adata.X)
 
     def test_metadata(self):
