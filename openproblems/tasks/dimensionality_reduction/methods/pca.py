@@ -12,7 +12,7 @@ from .preprocessing import preprocess_scanpy
     "sklearn.decomposition.PCA.html",
     code_version=check_version("scikit-learn"),
 )
-def pca(adata):
+def pca(adata, test=False):
     preprocess_scanpy(adata)
     adata.obsm["X_emb"] = adata.obsm["X_input"][:, :2]
     return adata
