@@ -14,11 +14,13 @@ RUN apt-get clean autoclean && apt-get autoremove --yes && rm -rf /var/lib/{apt,
 
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
-RUN R -e "install.packages('Matrix')"
-RUN R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))"
-RUN R -e 'install.packages("devtools")'
-RUN R -e 'devtools::install_github("immunogenomics/harmony")'
-RUN R -e 'devtools::install_github("welch-lab/liger@v0.5.0")'
+RUN \
+    R -e "install.packages('Matrix')" \
+    R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))" \
+    R -e 'install.packages("devtools")' \
+    R -e 'devtools::install_github("immunogenomics/harmony")' \
+    R -e 'devtools::install_github("welch-lab/liger@v0.5.0")'
+
 
 
 # Install Python packages
