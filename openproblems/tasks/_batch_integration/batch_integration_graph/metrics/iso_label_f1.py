@@ -21,6 +21,7 @@ on the PCA embedding (ASW metric above) and scale this score to be between 0 and
 The final score for each metric version consists of the mean isolated score of all isolated labels.
 """
 
+
 @metric(
     metric_name="Isolated label F1",
     maximize=True,

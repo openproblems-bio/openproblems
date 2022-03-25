@@ -9,6 +9,7 @@ Louvain clustering was performed at a resolution range of 0.1 to 2 in steps of 0
 with the highest NMI with the label set was used. We used the scikit-learn27 (v.0.22.1) implementation of NMI.
 """
 
+
 @metric(
     metric_name="NMI",
     maximize=True,
