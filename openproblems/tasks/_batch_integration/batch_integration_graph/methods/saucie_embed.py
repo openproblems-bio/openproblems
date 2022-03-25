@@ -1,4 +1,3 @@
-# from ....tools.normalize import log_cpm
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
@@ -19,7 +18,6 @@ def saucie_embed_full_unscaled(adata):
     adata.obs["batch"] = adata.obs["batch"].astype("category")
     adata = runSaucie(adata, "batch")
     reduce_data(adata, umap=False, use_rep="X_emb")
-    # Complete the result in-place
     adata.var = adata.var.iloc[:, :2]
     return adata
 

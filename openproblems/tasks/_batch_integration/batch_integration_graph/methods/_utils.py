@@ -4,7 +4,7 @@ def hvg_batch(adata, batch_key, target_genes, adataOut):
     if adata.n_vars < 2000:
         return adata
     else:
-        hvg_batch(
+        return hvg_batch(
             adata,
             batch_key=batch_key,
             target_genes=target_genes,

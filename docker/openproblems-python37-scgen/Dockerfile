@@ -27,6 +27,7 @@ RUN ./aws/install
 # install dependencies
 COPY ./docker/openproblems-python37-scgen/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir "numpy==1.18.5"
+RUN pip install "rpy2<3.4.3"
 RUN pip install --no-cache-dir git+https://github.com/theislab/scib
 RUN pip install --no-cache-dir scgen
 RUN pip install --no-cache-dir desc
