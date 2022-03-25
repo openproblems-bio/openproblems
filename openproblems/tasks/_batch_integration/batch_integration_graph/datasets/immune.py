@@ -17,8 +17,6 @@ def immune_batch(test=False):
     adata.layers["counts"] = adata.X
 
     sc.pp.filter_genes(adata, min_counts=1)
-    if adata.n_obs > 2000:
-        sc.pp.subsample(adata, n_obs=2000)
     log_scran_pooling(adata)
     adata.layers["logcounts"] = adata.X
     sc.pp.filter_genes(adata, min_cells=1)
