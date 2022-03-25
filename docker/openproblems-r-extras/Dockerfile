@@ -8,9 +8,8 @@ ARG NB_GID="100"
 USER root
 WORKDIR /
 
-RUN apt-get update && apt-get install -y libhdf5-dev hdf5-tools
-
-RUN apt-get clean autoclean && apt-get autoremove --yes && rm -rf /var/lib/{apt,dpkg,cache,log}/
+RUN apt-get update && apt-get install -y libhdf5-dev hdf5-tools \
+&& apt-get clean autoclean && apt-get autoremove --yes && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt

@@ -8,7 +8,9 @@ ARG NB_UID="1000"
 ARG NB_GID="100"
 
 RUN sed -i '$ d' /etc/apt/sources.list
-RUN apt-get update --allow-releaseinfo-change && apt-get -y install gcc git python3-llvmlite && apt-get autoremove -y
+RUN \
+apt-get update --allow-releaseinfo-change && apt-get -y install gcc git python3-llvmlite && apt-get autoremove -y \
+&& rm -rf /var/lib/apt/lists/*
 
 # Install Python packages
 COPY ./docker/openproblems-python-batch-integration/requirements.txt ./requirements.txt
