@@ -7,7 +7,7 @@ identity label. For each cell identity label c, we created the subset kNN
 graph G(Nc;Ec) to contain only cells from a given label. Using these subset
 kNN graphs, we computed the graph connectivity score using the equation:
 
-gc =1|C|cC |LCC(G(Nc;Ec))||Nc|.
+gc =1/|C| Σc∈C |LCC(G(Nc;Ec))|/|Nc|.
 
 Here, C represents the set of cell identity labels, |LCC()| is the number
 of nodes in the largest connected component of the graph, and |Nc| is the
