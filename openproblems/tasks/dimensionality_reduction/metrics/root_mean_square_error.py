@@ -26,9 +26,9 @@ def calculate_rmse(adata, n_svd=200):
 
     diff = high_dimensional_distance_matrix - low_dimensional_distance_matrix
 
-    kruskel_matrix = np.sqrt(diff ** 2 / sum(low_dimensional_distance_matrix ** 2))
+    kruskel_matrix = np.sqrt(diff**2 / sum(low_dimensional_distance_matrix**2))
 
-    kruskel_score = np.sqrt(sum(diff ** 2) / sum(low_dimensional_distance_matrix ** 2))
+    kruskel_score = np.sqrt(sum(diff**2) / sum(low_dimensional_distance_matrix**2))
 
     y_actual = high_dimensional_distance_matrix
     y_predic = low_dimensional_distance_matrix
