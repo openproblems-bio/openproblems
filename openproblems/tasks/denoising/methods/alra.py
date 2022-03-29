@@ -20,7 +20,7 @@ _alra = r_function("alra.R")
     # code_version=check_version("scprep"),
     image="openproblems-r-extras",
 )
-def alra(adata):
+def alra(adata, test=False):
     # libsize and sqrt norm
     # overwrite obsm['train'] with normalized version
     adata.obsm["train"] = scprep.utils.matrix_transform(adata.obsm["train"], np.sqrt)
