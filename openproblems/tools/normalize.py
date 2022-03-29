@@ -1,5 +1,4 @@
 from . import decorators
-from anndata import AnnData
 
 import anndata as ad
 import scanpy as sc
@@ -56,7 +55,7 @@ def sqrt_cpm(adata: ad.AnnData) -> ad.AnnData:
 
 
 @decorators.normalizer
-def preprocess_logCPM_1kHVG(adata: AnnData) -> AnnData:
+def preprocess_logCPM_1kHVG(adata: ad.AnnData) -> ad.AnnData:
 
     log_cpm(adata)
     sc.pp.highly_variable_genes(adata, n_top_genes=1000, flavor="cell_ranger")
