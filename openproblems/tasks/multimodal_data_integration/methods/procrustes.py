@@ -15,7 +15,11 @@ import sklearn.decomposition
     "scipy.spatial.procrustes.html",
     code_version=check_version("scipy"),
 )
-def procrustes(adata, n_svd=100):
+def procrustes(adata, test=False, n_svd=None):
+    if test:
+        n_svd = n_svd or 20
+    else:
+        n_svd = n_svd or 100
     n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
     adata = log_cpm(adata)
     adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")

@@ -15,9 +15,9 @@ import scanpy as sc
     code_url="https://github.com/lmcinnes/umap",
     code_version=check_version("umap-learn"),
 )
-def umap_logCPM_1kHVG(adata, test: bool = False):
+def umap_logCPM_1kHVG(adata, test: bool = False, n_pca=50):
     adata = preprocess_logCPM_1kHVG(adata)
-    sc.pp.neighbors(adata, use_rep="X_input", n_pcs=50)
+    sc.pp.neighbors(adata, use_rep="X_input", n_pcs=n_pca)
     sc.tl.umap(adata)
     adata.obsm["X_emb"] = adata.obsm["X_umap"]
     return adata
