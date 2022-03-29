@@ -6,6 +6,7 @@ LEN=${#ARRAY[@]}
 ARGS=${ARRAY[@]:2:$LEN}
 CODEDIR=$(dirname $WORKDIR)
 export PYTHONPATH=$WORKDIR
+export NUMBA_DISABLE_JIT
 
 if [ ! -f ~/.install_complete ]; then
   python3 -m pip install --upgrade "pip<=21.0"
