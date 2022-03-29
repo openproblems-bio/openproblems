@@ -1,7 +1,7 @@
 from ...data.sample import load_sample_data
 
-import scanpy as sc
 import numpy as np
+import scanpy as sc
 
 
 def check_dataset(adata):
