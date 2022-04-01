@@ -36,7 +36,7 @@ def get_ecr_password() -> str:
 if __name__ == "__main__":
 
     get_public_key = requests.get(
-        "https://api.github.com/repos/ORG/REPOSITORY/actions/secrets/public-key",
+        f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/actions/secrets/public-key",
         headers={
             "Accept": "application/vnd.github.v3+json",
             "Authorization": "token " + os.environ["GH_API_ACCESS_TOKEN"],
@@ -53,10 +53,10 @@ if __name__ == "__main__":
     password = get_ecr_password()
     encrypted_password = encrypt(public_key_value, password)
     update_password = requests.put(
-        "https://api.github.com/repos/ORG/REPOSITORY/actions/secrets/ECR_PASSWORD",
+        f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/actions/secrets/ECR_PASSWORD",
         headers={
             "Accept": "application/vnd.github.v3+json",
-            "Authorization": "token " + os.environ["GH_API_ACCESS_TOKEN"],
+            "Authorization": f"token {os.environ['GH_API_ACCESS_TOKEN']}",
         },
         data=json.dumps(
             {
