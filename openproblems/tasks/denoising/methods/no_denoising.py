@@ -10,7 +10,7 @@ from ....tools.utils import check_version
     code_url="https://github.com/czbiohub/molecular-cross-validation",
     code_version=check_version("scanpy"),
 )
-def no_denoising(adata):
+def no_denoising(adata, test=False):
     """Do nothing."""
     adata.obsm["denoised"] = adata.obsm["train"]
     return adata
