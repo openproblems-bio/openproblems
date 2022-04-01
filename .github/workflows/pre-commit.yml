@@ -9,6 +9,13 @@ on:
 jobs:
   pre-commit:
     runs-on: ubuntu-18.04
+
+    container:
+      image: 490915662541.dkr.ecr.us-west-2.amazonaws.com/openproblems:openproblems-r-base
+      credentials:
+        username: AWS
+        password: ${{ secrets.ECR_PASSWORD }}
+
     if: >-
       !contains(github.event.head_commit.message, 'ci skip') &&
       (
