@@ -18,7 +18,7 @@ import sklearn.decomposition
 def procrustes(adata, test=False, n_svd=None):
     if test:
         n_svd = n_svd or 20
-    else:
+    else:  # pragma: no cover
         n_svd = n_svd or 100
     n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
     adata = log_cpm(adata)

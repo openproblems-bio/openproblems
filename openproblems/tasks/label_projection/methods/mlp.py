@@ -11,7 +11,7 @@ def _mlp(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     if test:
         hidden_layer_sizes = hidden_layer_sizes or (20,)
         max_iter = max_iter or 100
-    else:
+    else:  # pragma: no cover
         hidden_layer_sizes = hidden_layer_sizes or (100, 100)
         max_iter = max_iter or 1000
     return classifier(
