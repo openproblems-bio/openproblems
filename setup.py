@@ -28,7 +28,7 @@ evaluate_requires = ["snakemake", "numpyencoder"]
 test_requires = [
     "pytest",
     "pytest-cov",
-    "black",
+    "black==22.3.0",
     "coverage",
     "parameterized>=0.7.4",
 ]
