@@ -110,11 +110,13 @@ Datasets should take no arguments and return an AnnData object. If `test is True
 function dataset(bool test=False) -> AnnData adata
 ```
 
-Methods should take an AnnData object and store the output in `adata.obs` according to the specification of the task.
+Methods should take an AnnData object and store the output in `adata.obs` according to the specification of the task. If `test is True`, you may modify hyperparameters (e.g. number of iterations) to make the method run faster.
 
 ```
-function method(AnnData adata) -> AnnData adata
+function method(AnnData adata, bool test=False) -> AnnData adata
 ```
+
+If your method takes hyperparameters, set them as keyword arguments in the method definition. If the hyperparameters change depending on the value of `test`, set the keyword argument to `None` and set them to your chosen defaults only if the passed value is `None`. For an example, see [harmonic alignment](openproblems/tasks/multimodal_data_integration/methods/harmonic_alignment.py).
 
 Metrics should take an AnnData object and return a `float`.
 

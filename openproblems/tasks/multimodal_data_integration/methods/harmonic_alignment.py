@@ -7,9 +7,21 @@ from ....tools.utils import check_version
 import sklearn.decomposition
 
 
-def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
+def _harmonic_alignment(
+    adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
+):
     import harmonicalignment
 
+    if test:
+        n_svd = n_svd or 20
+        n_eigenvectors = n_eigenvectors or 20
+        n_pca_XY = n_pca_XY or 20
+        n_filters = n_filters or 4
+    else:  # pragma: no cover
+        n_svd = n_svd or 100
+        n_eigenvectors = n_eigenvectors or 100
+        n_pca_XY = n_pca_XY or 100
+        n_filters = n_filters or 8
     n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
     if adata.X.shape[0] <= n_eigenvectors:
         n_eigenvectors = None
@@ -18,7 +30,7 @@ def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
     X_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
     Y_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
     ha_op = harmonicalignment.HarmonicAlignment(
-        n_filters=8, n_pca_XY=n_pca_XY, n_eigenvectors=n_eigenvectors
+        n_filters=n_filters, n_pca_XY=n_pca_XY, n_eigenvectors=n_eigenvectors
     )
     ha_op.align(X_pca, Y_pca)
     XY_aligned = ha_op.diffusion_map(n_eigenvectors=n_eigenvectors)
@@ -36,10 +48,19 @@ def _harmonic_alignment(adata, n_svd=100, n_eigenvectors=100, n_pca_XY=100):
     code_version=check_version("harmonicalignment"),
     image="openproblems-python-extras",
 )
-def harmonic_alignment_sqrt_cpm(adata, n_svd=100):
-    sqrt_cpm(adata)
-    log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _harmonic_alignment(adata, n_svd=n_svd)
+def harmonic_alignment_sqrt_cpm(
+    adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
+):
+    adata = sqrt_cpm(adata)
+    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
+    _harmonic_alignment(
+        adata,
+        test=test,
+        n_svd=n_svd,
+        n_eigenvectors=n_eigenvectors,
+        n_pca_XY=n_pca_XY,
+        n_filters=n_filters,
+    )
     return adata
 
 
@@ -52,8 +73,17 @@ def harmonic_alignment_sqrt_cpm(adata, n_svd=100):
     code_version=check_version("harmonicalignment"),
     image="openproblems-r-extras",
 )
-def harmonic_alignment_log_scran_pooling(adata, n_svd=100):
-    log_scran_pooling(adata)
-    log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _harmonic_alignment(adata, n_svd=n_svd)
+def harmonic_alignment_log_scran_pooling(
+    adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
+):
+    adata = log_scran_pooling(adata)
+    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
+    _harmonic_alignment(
+        adata,
+        test=test,
+        n_svd=n_svd,
+        n_eigenvectors=n_eigenvectors,
+        n_pca_XY=n_pca_XY,
+        n_filters=n_filters,
+    )
     return adata
