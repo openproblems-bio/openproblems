@@ -96,8 +96,9 @@ def run(
             format_error = format_error_stdout
 
     log.debug("Running subprocess: {}".format(command))
-    p = subprocess.Popen(command, shell=shell, stdout=subprocess.PIPE,
-                         stderr=stderr, env=os.environ)
+    p = subprocess.Popen(
+        command, shell=shell, stdout=subprocess.PIPE, stderr=stderr, env=os.environ
+    )
     if timeout is not None:
         runtime = 0
         if p.poll() is None:
