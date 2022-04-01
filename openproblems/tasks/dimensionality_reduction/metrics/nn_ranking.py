@@ -69,7 +69,9 @@ def _coranking_matrix(R1: np.ndarray, R2: np.ndarray) -> np.ndarray:  # pragma: 
 @njit(cache=True, fastmath=True)
 def _metrics(
     Q: np.ndarray,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, float, np.ndarray, int, float, float]:  # pragma: no cover
+) -> Tuple[
+    np.ndarray, np.ndarray, np.ndarray, float, np.ndarray, int, float, float
+]:  # pragma: no cover
     Q = Q[1:, 1:]
     m = len(Q)
 
