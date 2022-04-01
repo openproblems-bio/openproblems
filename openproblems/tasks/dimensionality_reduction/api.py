@@ -1,5 +1,6 @@
 from ...data.sample import load_sample_data
 
+import numpy as np
 import scanpy as sc
 
 
@@ -12,6 +13,7 @@ def check_method(adata):
     """Check that method output fits expected API."""
     assert "X_emb" in adata.obsm
     assert adata.obsm["X_emb"].shape[1] == 2
+    assert np.all(np.isfinite(adata.obsm["X_emb"]))
     return True
 
 
