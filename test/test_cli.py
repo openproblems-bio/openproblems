@@ -120,7 +120,9 @@ def test_help(capsys):
     assert main([], do_print=False) is None
     captured = capsys.readouterr()
     assert len(captured.out) > 0
-    assert "Open Problems for Single Cell Analysis command-line interface" in captured.out
+    assert (
+        "Open Problems for Single Cell Analysis command-line interface" in captured.out
+    )
 
 
 @parameterized.parameterized.expand(
