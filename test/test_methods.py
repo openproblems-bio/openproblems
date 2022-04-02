@@ -1,5 +1,3 @@
-from inspect import signature
-
 import openproblems
 import parameterized
 import utils
