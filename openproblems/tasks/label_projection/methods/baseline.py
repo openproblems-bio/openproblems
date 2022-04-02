@@ -11,7 +11,7 @@ import numpy as np
     code_url="",
     code_version="1.0",
 )
-def majority_vote(adata):
+def majority_vote(adata, test=False):
     majority = adata.obs.labels[adata.obs.is_train].value_counts().index[0]
     adata.obs["labels_pred"] = np.nan
     adata.obs.loc[~adata.obs.is_train, "labels_pred"] = majority
@@ -26,7 +26,7 @@ def majority_vote(adata):
     code_url="",
     code_version="1.0",
 )
-def random_labels(adata):
+def random_labels(adata, test=False):
     label_distribution = adata.obs.labels[adata.obs.is_train].value_counts()
     label_distribution = label_distribution / label_distribution.sum()
     adata.obs["labels_pred"] = np.nan
