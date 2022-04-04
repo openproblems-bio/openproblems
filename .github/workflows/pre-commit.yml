@@ -12,24 +12,15 @@ jobs:
     outputs:
       ecr_password: ${{ steps.retrieve_password.outputs.ecr_password }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-          architecture: "x64"
       - name: Set up AWS CLI
         uses: chrislennon/action-aws-cli@1.1
-      - name: Install PyPi requirements
-        run: pip3 install boto3==1.17.107
       - id: retrieve_password
         name: Retrieve ecr password and store as secret
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-west-2
-        run: echo "::set-output name=ecr_password::$(python3 scripts/ecr_password_updater.py)"
+        run: echo "::set-output name=ecr_password::$(aws ecr get-login-password --region region)"
 
   pre-commit:
     needs: ecr_login
