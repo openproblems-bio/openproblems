@@ -61,7 +61,7 @@ jobs:
     - name: Cache Python packages
       uses: actions/cache@v2
       with:
-        path: ${{ env.pythonLocation }}
+        path: ${{ env.PYTHON_VERSION }}
         key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
         restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
 
@@ -77,9 +77,9 @@ jobs:
       if: startsWith(runner.os, 'Linux')
       with:
         path: /usr/local/lib/R/site-library
-        key: ${{ env.UBUNTU_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
+        key: ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
         restore-keys: |
-          ${{ env.UBUNTU_VERSION }}-renv-${{ env.R_VERSION }}-
+          ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
 
     - name: Install R packages
       run: |
