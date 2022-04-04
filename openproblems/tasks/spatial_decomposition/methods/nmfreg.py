@@ -78,7 +78,7 @@ def nmfreg(adata):
 
     Ha_norm = StandardScaler(with_mean=False).fit_transform(Ha)
     if projection_type == "l2":
-        sc_deconv = np.dot(Ha_norm ** 2, factor_to_best_celltype_matrix)
+        sc_deconv = np.dot(Ha_norm**2, factor_to_best_celltype_matrix)
     else:
         sc_deconv = np.dot(Ha_norm, factor_to_best_celltype_matrix)
 
