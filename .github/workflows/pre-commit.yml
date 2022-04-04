@@ -55,17 +55,9 @@ jobs:
           sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
           sudo apt-get install -y libcurl4-openssl-dev
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-          architecture: "x64"
-
       - name: Set up environment
         run: |
           echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
-          mkdir -p .local/R/site-packages
-          echo "R_LIBS_USER=`pwd`/.local/R/site-packages" >> $GITHUB_ENV
 
       - name: Cache R packages
         uses: actions/cache@v2
