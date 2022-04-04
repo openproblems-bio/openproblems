@@ -52,6 +52,8 @@ jobs:
       with:
         fetch-depth: 0
 
+    - uses: docker-practice/actions-setup-docker@master
+
     - name: Set up environment
       run: |
         echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
