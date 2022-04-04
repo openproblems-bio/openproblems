@@ -30,7 +30,7 @@ jobs:
 
   run_tester:
     needs: ecr_login
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-latest
 
     container:
       image: 490915662541.dkr.ecr.us-west-2.amazonaws.com/openproblems:openproblems-r-base
@@ -45,9 +45,6 @@ jobs:
         startsWith(github.ref, 'refs/heads') ||
         github.event.pull_request.draft == false
       )
-
-    env:
-      RENV_PATHS_ROOT: ~/.local/share/renv
 
     steps:
 
