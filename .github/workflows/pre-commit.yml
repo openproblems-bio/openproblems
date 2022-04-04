@@ -12,10 +12,14 @@ jobs:
     outputs:
       ecr_password: ${{ steps.retrieve_password.outputs.ecr_password }}
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
       - name: Set up AWS CLI
         uses: chrislennon/action-aws-cli@1.1
       - id: retrieve_password
-        name: Retrieve ecr password and store as secret
+        name: Retrieve ECR password and store as secret
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -31,6 +35,7 @@ jobs:
       credentials:
         username: AWS
         password: ${{ needs.ecr_login.outputs.ecr_password }}
+      options: --user root
 
     if: >-
       !contains(github.event.head_commit.message, 'ci skip') &&
@@ -40,10 +45,6 @@ jobs:
       )
 
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
-        with:
-          access_token: ${{ github.token }}
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
