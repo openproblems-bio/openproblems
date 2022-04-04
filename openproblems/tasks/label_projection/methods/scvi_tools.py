@@ -9,7 +9,7 @@ def _scanvi(adata, test=False):
     # test set labels masked
     scanvi_labels[~adata.obs["is_train"].to_numpy()] = "Unknown"
     adata.obs["scanvi_labels"] = scanvi_labels
-    scvi.data.setup_anndata(adata, batch_key="batch", labels_key="scanvi_labels")
+    scvi.model.SCVI.setup_anndata(adata, batch_key="batch", labels_key="scanvi_labels")
     scvi_model = scvi.model.SCVI(adata, n_latent=30, n_layers=2)
     train_kwargs = dict(train_size=1.0)
     if test:
@@ -31,7 +31,7 @@ def _scanvi_scarches(adata, test=False):
     adata_train.obs["scanvi_labels"] = adata_train.obs["labels"].copy()
     adata_test = adata[~adata.obs["is_train"]].copy()
     adata_test.obs["scanvi_labels"] = "Unknown"
-    scvi.data.setup_anndata(adata_train, batch_key="batch", labels_key="scanvi_labels")
+    scvi.model.SCVI.setup_anndata(adata_train, batch_key="batch", labels_key="scanvi_labels")
 
     # specific scArches parameters
     arches_params = dict(
