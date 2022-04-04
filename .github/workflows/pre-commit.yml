@@ -22,7 +22,7 @@ jobs:
       - name: Set up AWS CLI
         uses: chrislennon/action-aws-cli@1.1
       - name: Install PyPi requirements
-        run: pip3 install pynacl==1.4.0 requests==2.25.1 boto3==1.17.107
+        run: pip3 install boto3==1.17.107
       - id: retrieve_password
         name: Retrieve ecr password and store as secret
         env:
