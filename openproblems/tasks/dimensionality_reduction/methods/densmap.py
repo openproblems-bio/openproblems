@@ -2,6 +2,8 @@ from ....tools.decorators import method
 from ....tools.normalize import preprocess_logCPM_1kHVG
 from ....tools.utils import check_version
 
+import scanpy as sc
+
 
 @method(
     method_name="densMAP (logCPM, 1kHVG)",
@@ -35,7 +37,8 @@ def densmap_pca_logCPM_1kHVG(adata, test: bool = False):
     from umap import UMAP
 
     adata = preprocess_logCPM_1kHVG(adata)
+    sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
     adata.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(
-        adata.obsm["X_input"]
+        adata.obsm["X_pca"]
     )
     return adata

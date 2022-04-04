@@ -17,6 +17,7 @@ import scanpy as sc
 )
 def tsne_logCPM_1kHVG(adata, test: bool = False, n_pca=50):
     adata = preprocess_logCPM_1kHVG(adata)
-    sc.tl.tsne(adata, use_rep="X_input", n_pcs=n_pca)
+    sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
+    sc.tl.tsne(adata, use_rep="X_pca", n_pcs=n_pca)
     adata.obsm["X_emb"] = adata.obsm["X_tsne"]
     return adata

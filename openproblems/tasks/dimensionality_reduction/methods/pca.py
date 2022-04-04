@@ -2,6 +2,8 @@ from ....tools.decorators import method
 from ....tools.normalize import preprocess_logCPM_1kHVG
 from ....tools.utils import check_version
 
+import scanpy as sc
+
 
 @method(
     method_name="Principle Component Analysis (PCA) (logCPM, 1kHVG)",
@@ -14,5 +16,6 @@ from ....tools.utils import check_version
 )
 def pca_logCPM_1kHVG(adata, test: bool = False):
     adata = preprocess_logCPM_1kHVG(adata)
-    adata.obsm["X_emb"] = adata.obsm["X_input"][:, :2]
+    sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
+    adata.obsm["X_emb"] = adata.obsm["X_pca"][:, :2]
     return adata

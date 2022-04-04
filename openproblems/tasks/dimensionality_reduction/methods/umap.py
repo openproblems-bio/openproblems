@@ -17,7 +17,8 @@ import scanpy as sc
 )
 def umap_logCPM_1kHVG(adata, test: bool = False, n_pca=50):
     adata = preprocess_logCPM_1kHVG(adata)
-    sc.pp.neighbors(adata, use_rep="X_input", n_pcs=n_pca)
+    sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
+    sc.pp.neighbors(adata, use_rep="X_pca", n_pcs=n_pca)
     sc.tl.umap(adata)
     adata.obsm["X_emb"] = adata.obsm["X_umap"]
     return adata
