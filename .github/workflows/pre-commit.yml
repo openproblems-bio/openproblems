@@ -57,16 +57,16 @@ jobs:
 
       - name: Set up environment
         run: |
-          echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+          echo "LINUX_VERSION=`uname -a" >> $GITHUB_ENV
 
       - name: Cache R packages
         uses: actions/cache@v2
         if: startsWith(runner.os, 'Linux')
         with:
-          path: ${{env.R_LIBS_USER}}
-          key: precommit-${{env.UBUNTU_VERSION}}-renv-${{ hashFiles('.pre-commit.r_requirements.txt') }}-
+          path: /usr/local/lib/R/site-library
+          key: precommit-${{env.LINUX_VERSION}}-renv-${{ hashFiles('.pre-commit.r_requirements.txt') }}-
           restore-keys: |
-            precommit-${{env.UBUNTU_VERSION}}-renv-
+            precommit-${{env.LINUX_VERSION}}-renv-
 
       - name: Install R packages
         run: |
