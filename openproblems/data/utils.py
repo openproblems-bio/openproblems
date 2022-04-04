@@ -48,6 +48,8 @@ def loader(func, *args, **kwargs):
         log.debug("Downloading {}({}, {}) dataset".format(func.__name__, args, kwargs))
         adata = func(*args, **kwargs)
         adata.__from_cache__ = False
+        if "counts" not in adata.layers:
+            adata.layers["counts"] = adata.X
         try:
             os.mkdir(TEMPDIR)
         except OSError:

@@ -9,7 +9,7 @@ def _phate(adata, test=False, n_pca=None):
 
     if test:
         n_pca = n_pca or 10
-    else:
+    else:  # pragma: no cover
         n_pca = n_pca or 100
 
     phate_op = PHATE(n_pca=n_pca, verbose=False, n_jobs=-1)
