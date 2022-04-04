@@ -52,6 +52,9 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Install system packages
+      run: sudo apt-get install ca-certificates curl gnupg lsb-release
+
     - uses: docker-practice/actions-setup-docker@master
 
     - name: Set up environment
