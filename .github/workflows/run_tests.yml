@@ -52,8 +52,10 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Install system packages
-      run: sudo apt-get install ca-certificates curl gnupg lsb-release
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
+        sudo apt-get install -y ca-certificates curl gnupg lsb-release
 
     - uses: docker-practice/actions-setup-docker@master
 
