@@ -57,7 +57,7 @@ jobs:
 
       - name: Set up environment
         run: |
-          echo "LINUX_VERSION=`uname -a" >> $GITHUB_ENV
+          echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
 
       - name: Cache R packages
         uses: actions/cache@v2
