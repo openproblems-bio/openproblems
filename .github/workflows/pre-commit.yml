@@ -58,19 +58,19 @@ jobs:
       - name: Set up environment
         run: |
           echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
+          echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
 
       - name: Cache R packages
         uses: actions/cache@v2
         if: startsWith(runner.os, 'Linux')
         with:
           path: /usr/local/lib/R/site-library
-          key: precommit-${{env.LINUX_VERSION}}-renv-${{ hashFiles('.pre-commit.r_requirements.txt') }}-
+          key: precommit-${{env.LINUX_VERSION}}-${{env.R_VERSION}}-renv-${{ hashFiles('.pre-commit.r_requirements.txt') }}-
           restore-keys: |
-            precommit-${{env.LINUX_VERSION}}-renv-
+            precommit-${{env.LINUX_VERSION}}-${{env.R_VERSION}}-renv-
 
       - name: Install R packages
         run: |
-          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
           renv::install(scan(".pre-commit.r_requirements.txt", what=character(), sep="\n"))
         shell: Rscript {0}
