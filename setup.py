@@ -6,7 +6,7 @@ import os
 install_requires = [
     "numpy>=1.17.0",
     "scikit-learn>=0.19.1",
-    "anndata>=0.7.5",
+    "anndata>=0.7.5,<0.8",
     "scprep>=1.0.10",
     "scipy",
     "scanpy>=1.6",
@@ -28,7 +28,7 @@ evaluate_requires = ["snakemake", "numpyencoder"]
 test_requires = [
     "pytest",
     "pytest-cov",
-    "black",
+    "black==22.3.0",
     "coverage",
     "parameterized>=0.7.4",
 ]

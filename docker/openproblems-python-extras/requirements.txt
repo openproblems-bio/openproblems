@@ -2,7 +2,9 @@ git+https://github.com/atong01/SCOT
 git+https://github.com/czbiohub/molecular-cross-validation
 git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python
 magic-impute
+cmake==3.18.4
 MulticoreTSNE
+umap-learn
 phate
 pyensembl
 pybedtools

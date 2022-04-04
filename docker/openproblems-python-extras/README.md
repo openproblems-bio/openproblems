@@ -16,3 +16,4 @@ Python packages:
 * MulticoreTSNE
 * phate
 * scvi-tools
+* umap-learn

@@ -29,7 +29,7 @@ def _magic(adata, solver):
     code_version=check_version("magic-impute"),
     image="openproblems-python-extras",
 )
-def magic(adata):
+def magic(adata, test=False):
     return _magic(adata, solver="exact")
 
 
@@ -43,5 +43,5 @@ def magic(adata):
     code_version=check_version("magic-impute"),
     image="openproblems-python-extras",
 )
-def magic_approx(adata):
+def magic_approx(adata, test=False):
     return _magic(adata, solver="approximate")
