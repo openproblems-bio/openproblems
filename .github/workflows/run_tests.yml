@@ -48,6 +48,9 @@ jobs:
         github.event.pull_request.draft == false
       )
 
+    env:
+      GITHUB_WORKSPACE: /opt/runner
+
     steps:
 
     - uses: actions/checkout@v2
