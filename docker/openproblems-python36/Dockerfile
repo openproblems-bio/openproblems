@@ -26,7 +26,7 @@ RUN unzip -q awscliv2.zip
 RUN ./aws/install
 
 # install dependencies
-COPY ./docker/openproblems-python-method-scvis/requirements.txt ./requirements.txt
+COPY ./docker/openproblems-python36/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install single-cell open problems
