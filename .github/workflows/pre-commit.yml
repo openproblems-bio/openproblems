@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-18.04
 
     container:
-      image: singlecellopenproblems:openproblems-r-base
+      image: singlecellopenproblems/openproblems-r-base:latest
       options: --user root
 
     if: >-
