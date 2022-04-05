@@ -83,7 +83,7 @@ jobs:
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -U wheel setuptools codecov
+        pip install -U wheel setuptools
         pip install -U --editable .[test,r,evaluate]
         python -c "import openproblems"
 
