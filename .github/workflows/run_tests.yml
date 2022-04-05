@@ -48,8 +48,9 @@ jobs:
         github.event.pull_request.draft == false
       )
 
-    env:
-      GITHUB_WORKSPACE: /opt/runner
+    defaults:
+      run:
+        working-directory: /opt/runner
 
     steps:
 
