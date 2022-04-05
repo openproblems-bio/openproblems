@@ -12,7 +12,8 @@ import time
 import warnings
 
 TESTDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASEDIR = "/usr/src/singlecellopenproblems"
+BASEDIR = os.path.dirname(TESTDIR)
+DOCKER_BASEDIR = "/usr/src/singlecellopenproblems"
 CACHEDIR = os.path.join(os.environ["HOME"], ".singularity")
 os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
 os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
@@ -199,8 +200,8 @@ def docker_command(image, script, *args):
         "exec",
         container,
         "/bin/bash",
-        f"{BASEDIR}/test/docker_run.sh",
-        f"{BASEDIR}/test/",
+        f"{DOCKER_BASEDIR}/test/docker_run.sh",
+        f"{DOCKER_BASEDIR}/test/",
         script,
     ] + list(args)
     return run_command
