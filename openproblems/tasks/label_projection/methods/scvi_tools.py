@@ -32,7 +32,8 @@ def _scanvi_scarches(adata, test=False):
     adata_test = adata[~adata.obs["is_train"]].copy()
     adata_test.obs["scanvi_labels"] = "Unknown"
     scvi.model.SCVI.setup_anndata(
-        adata_train, batch_key="batch", labels_key="scanvi_labels")
+        adata_train, batch_key="batch", labels_key="scanvi_labels"
+    )
 
     # specific scArches parameters
     arches_params = dict(
