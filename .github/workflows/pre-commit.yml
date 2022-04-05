@@ -66,10 +66,12 @@ jobs:
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}-
 
       - name: Run pre-commit
+        id: precommit
         uses: pre-commit/action@v2.0.0
+        continue-on-error: true
 
       - name: Commit files
-        if: failure() && startsWith(github.ref, 'refs/heads')
+        if: steps.precommit.outcome == 'failure' && startsWith(github.ref, 'refs/heads')
         run: |
           if [[ `git status --porcelain --untracked-files=no` ]]; then
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -79,8 +81,11 @@ jobs:
           fi
 
       - name: Push changes
-        if: failure() && startsWith(github.ref, 'refs/heads')
+        if: steps.precommit.outcome == 'failure' && startsWith(github.ref, 'refs/heads')
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+
+      - name: Check pre-commit
+        uses: pre-commit/action@v2.0.0
