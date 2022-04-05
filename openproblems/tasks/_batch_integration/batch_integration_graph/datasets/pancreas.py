@@ -8,19 +8,11 @@ import scanpy as sc
 
 @dataset(dataset_name="Pancreas (by batch)", image="openproblems-r-base")
 def pancreas_batch(test=False):
-    from .....tools.normalize import log_scran_pooling
-
     adata = load_pancreas(test)
     from_cache = adata.__from_cache__
     adata.obs["labels"] = adata.obs["celltype"]
 
     adata.obs["batch"] = adata.obs["tech"]
-    adata.layers["counts"] = adata.X
-
-    sc.pp.filter_genes(adata, min_counts=1)
-    log_scran_pooling(adata)
-    adata.layers["logcounts"] = adata.X
-    sc.pp.filter_genes(adata, min_cells=1)
 
     sc.tl.pca(
         adata,

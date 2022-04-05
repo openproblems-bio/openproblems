@@ -45,12 +45,9 @@ def load_immune(test=False):
             scprep.io.download.download_url(URL, filepath)
             adata = sc.read(filepath)
 
-            # Remove preprocessing and Villani et al data,
-            # as it is TPM instead of counts
+            # Note: anndata.X contains scran normalized data, so we're storing it in layers['log_scran']
+            adata.layers['log_scran'] = adata.X
 
-            adata = adata[adata.obs.study != "Villani"]
-            adata.X = adata.layers["counts"]
-            del adata.layers["counts"]
 
             # Ensure there are no cells or genes with 0 counts
             utils.filter_genes_cells(adata)
