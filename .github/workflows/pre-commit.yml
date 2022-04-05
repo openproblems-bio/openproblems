@@ -88,4 +88,5 @@ jobs:
           branch: ${{ github.ref }}
 
       - name: Check pre-commit
+        if: steps.precommit.outcome == 'failure'
         uses: pre-commit/action@v2.0.0
