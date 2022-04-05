@@ -113,10 +113,11 @@ jobs:
       run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
 
     - name: Upload coverage
-      if: success() && ${{ github.repository == 'SingleCellOpenProblems/singlecellopenproblems' }}
-      env:
-        CODECOV_NAME: ${{ runner.os }}-${{ matrix.name }}
-      run: codecov --no-color --required --flags unittests
+      uses: codecov/codecov-action@v2
+      with:
+        flags: unittests
+        fail_ci_if_error: ${{ github.repository == 'openproblems-bio/openproblems' }}
+        verbose: true
 
     - name: Upload check results on fail
       if: failure()
