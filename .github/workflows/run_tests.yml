@@ -39,6 +39,7 @@ jobs:
         password: ${{ needs.ecr_login.outputs.ecr_password }}
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
+        - /tmp:/tmp
       options: --user root
 
     if: >-
