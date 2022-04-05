@@ -1,4 +1,4 @@
-from .datasets.pancreas import pancreas_batch
+from .datasets.immune import immune_batch
 
 
 def check_dataset(adata):
@@ -20,7 +20,7 @@ def check_method(adata):
 
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
-    adata = pancreas_batch(True)
+    adata = immune_batch(True)
     # print(adata.obs.columns)
 
     return adata
