@@ -15,4 +15,5 @@ if [ ! -f ~/.install_complete ]; then
 fi
 
 cd ${CODEDIR}
+ls -lrt $(dirname $SCRIPT)
 python3 -m coverage run --parallel --source=openproblems ${SCRIPT} ${ARGS}
