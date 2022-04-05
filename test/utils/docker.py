@@ -12,7 +12,7 @@ import time
 import warnings
 
 TESTDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASEDIR = os.path.dirname(TESTDIR)
+BASEDIR = "/usr/src/singlecellopenproblems"
 CACHEDIR = os.path.join(os.environ["HOME"], ".singularity")
 os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
 os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
@@ -166,16 +166,8 @@ def singularity_command(image, script, *args):
 
 
 @functools.lru_cache(maxsize=None)
-def sync_base_dir():
-    """Copy the repository directory to /tmp."""
-    run.run(["cp", "-r", os.path.join(BASEDIR, "*"), os.path.join(tempfile.gettempdir(), "openproblems_source")])
-    return os.path.join(tempfile.gettempdir(), "openproblems_source")
-
-
-@functools.lru_cache(maxsize=None)
 def cache_docker_image(image):
     """Run a Docker image and get the machine ID."""
-    sync_base_dir()
     tempdir = tempfile.gettempdir()
     hash = run.run(
         [
@@ -202,14 +194,13 @@ def cache_docker_image(image):
 def docker_command(image, script, *args):
     """Get the Docker command to run a script."""
     container = cache_docker_image(image)
-    basedir = sync_base_dir()
     run_command = [
         "docker",
         "exec",
         container,
         "/bin/bash",
-        f"{basedir}/test/docker_run.sh",
-        f"{basedir}/test/",
+        f"{BASEDIR}/test/docker_run.sh",
+        f"{BASEDIR}/test/",
         script,
     ] + list(args)
     return run_command
@@ -247,7 +238,7 @@ def docker_test(func, timeout=None, retries=0, *args, **kwargs):
     """
     image = args[-1]
     if not image.startswith("openproblems"):
-        warnings.warn("Image {} expectd to begin with openproblems.".format(image))
+        warnings.warn("Image {} expected to begin with openproblems.".format(image))
     assert eval(str(args)) == args
     assert eval(str(kwargs)) == kwargs
     with tempfile.TemporaryDirectory() as tempdir:
