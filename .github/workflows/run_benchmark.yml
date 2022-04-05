@@ -6,6 +6,7 @@ on:
       - '*'
     branches-ignore:
       - 'test_docker'
+      - 'scottgigante/ci/ecr_container'
 
 jobs:
   run_benchmark:
