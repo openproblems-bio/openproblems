@@ -179,7 +179,9 @@ If you are unable to write your method using our base dependencies, you may add 
 
 Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader` in order to cache the result.
 
-To see a gold standard loader, look at [openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](https://github.com/singlecellopenproblems/SingleCellOpenProblems/blob/master/openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py)
+Data should be provided in a raw count format. We assume that `adata.X` contains the raw (count) data for the primary modality; this will also be copied to `adata.layers["counts"]` for permanent access to the raw data. Additional modalities should be stored in `adata.obsm`. Prenormalized data (if available) can be stored in `adata.layers`, preferably using a name corresponding to the equivalent [normalization function](./openproblems/tools/normalize.py) (e.g., `adata.layers["log_scran_pooling"]`). 
+
+To see a gold standard loader, look at [openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](./openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py)
 
 This file name should match `[First Author Last Name]_[Year Published]_short_Description_of_data.py`. E.g. the dataset of zebrafish embryos perturbed with CRISPR published in 2018 by Wagner _et al._ becomes `Wagner_2018_zebrafish_embryo_CRISPR.py`
 
@@ -195,7 +197,7 @@ For datasets in particular, these should be loaded using a `loader` function fro
 
 For methods and metrics, they should be decorated with the appropriate function in `openproblems.tools.decorators` to include metadata required for the evaluation and presentation of results.
 
-Note that data is not normalized in the data loader; normalization should be performed as part of each method. For ease of use, we provide a collection of common normalization functions in [`openproblems.tools.normalize`](openproblems/tools/normalize.py).
+Note that data is not normalized in the data loader; normalization should be performed as part of each method or in the task dataset function if stated in the task API. For ease of use, we provide a collection of common normalization functions in [`openproblems.tools.normalize`](openproblems/tools/normalize.py). The original data stored in `adata.X` is automatically stored in `adata.layers["counts"]` for later reference in the case the a metric needs to access the unnormalized data.
 
 ### Adding a new task
 
