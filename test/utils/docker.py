@@ -166,8 +166,17 @@ def singularity_command(image, script, *args):
 
 
 @functools.lru_cache(maxsize=None)
+def sync_base_dir():
+    """Copy the repository directory to /tmp."""
+    run.run(["cp", "-r", os.path.join(BASEDIR, "*"), os.path.join(tempfile.gettempdir(), "openproblems_source")])
+    return os.path.join(tempfile.gettempdir(), "openproblems_source")
+
+
+@functools.lru_cache(maxsize=None)
 def cache_docker_image(image):
     """Run a Docker image and get the machine ID."""
+    sync_base_dir()
+    tempdir = tempfile.gettempdir()
     hash = run.run(
         [
             "docker",
@@ -176,10 +185,8 @@ def cache_docker_image(image):
             "--rm",
             "--user=root",
             "--mount",
-            "type=bind,source={0},target={0}".format(BASEDIR),
-            "--mount",
-            "type=bind,source=/tmp,target=/tmp",
-            "singlecellopenproblems/{}".format(image),
+            f"type=bind,source={tempdir},target={tempdir}",
+            f"singlecellopenproblems/{image}",
         ],
         return_stdout=True,
     )
@@ -195,13 +202,14 @@ def cache_docker_image(image):
 def docker_command(image, script, *args):
     """Get the Docker command to run a script."""
     container = cache_docker_image(image)
+    basedir = sync_base_dir()
     run_command = [
         "docker",
         "exec",
         container,
         "/bin/bash",
-        "{}/test/docker_run.sh".format(BASEDIR),
-        "{}/test/".format(BASEDIR),
+        f"{basedir}/test/docker_run.sh",
+        f"{basedir}/test/",
         script,
     ] + list(args)
     return run_command

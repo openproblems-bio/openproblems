@@ -48,16 +48,11 @@ jobs:
         github.event.pull_request.draft == false
       )
 
-    defaults:
-      run:
-        working-directory: /opt/runner
-
     steps:
 
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-        path: /opt/runner
 
     - name: Install system dependencies
       run: |
