@@ -16,20 +16,23 @@ compare_version <- function(v1, v2) {
 
 check_available <- function(remote) {
   remote <- renv:::renv_remotes_resolve(remote)
-  tryCatch({
-    version <- packageVersion(remote$Package)
-        if (!is.null(remote$Version)) {
-          compare_version(version, numeric_version(remote$Version))
-        } else {
-          TRUE
-        }
-  }, error = function(...) {
-    FALSE
-  })
+  tryCatch(
+    {
+      version <- packageVersion(remote$Package)
+      if (!is.null(remote$Version)) {
+        compare_version(version, numeric_version(remote$Version))
+      } else {
+        TRUE
+      }
+    },
+    error = function(...) {
+      FALSE
+    }
+  )
 }
 
 install_renv <- function(requirements_file, ...) {
-  remotes <- scan(requirements_file, what=character(), sep="\n")
+  remotes <- scan(requirements_file, what = character(), sep = "\n")
   remotes_installed <- sapply(remotes, check_available)
   remotes <- remotes[!remotes_installed]
   if (length(remotes) > 0) {
