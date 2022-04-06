@@ -17,7 +17,6 @@ jobs:
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - /tmp:/tmp
-        - /__w:/__w
       options: --user root
 
     if: >-
