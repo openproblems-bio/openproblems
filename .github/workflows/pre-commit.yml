@@ -49,7 +49,8 @@ jobs:
       - name: Install R packages
         run: |
           renv::restore()
-          renv::install(scan(".pre-commit.r_requirements.txt", what=character(), sep="\n"))
+          source("./scripts/install_renv.R")
+          install_renv(".pre-commit.r_requirements.txt")
         shell: Rscript {0}
 
       - name: Cache pre-commit
@@ -72,6 +73,7 @@ jobs:
             git checkout -- .github/workflows
             git commit -m "pre-commit" -a
           fi
+        shell: bash -e {0}
 
       - name: Push changes
         if: steps.precommit.outcome == 'failure' && startsWith(github.ref, 'refs/heads')
