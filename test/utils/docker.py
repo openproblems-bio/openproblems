@@ -178,6 +178,8 @@ def cache_docker_image(image):
             "--rm",
             "--user=root",
             "--mount",
+            f"type=bind,source={DOCKER_BASEDIR},target={DOCKER_BASEDIR}",
+            "--mount",
             f"type=bind,source={tempdir},target={tempdir}",
             f"singlecellopenproblems/{image}",
         ],
