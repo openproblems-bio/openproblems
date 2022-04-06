@@ -2,6 +2,7 @@ bioc::batchelor
 bioc::ComplexHeatmap
 sparsesvd
 Seurat
+igraph@1.2.11
 conos
 rliger
 dplyr
