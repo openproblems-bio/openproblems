@@ -1,3 +1,4 @@
+from . import git
 from . import run
 
 import atexit
@@ -93,9 +94,9 @@ def image_requires_docker(image):
     """
     docker_push, dockerfile, requirements = docker_paths(image)
     push_timestamp = docker_push_age(docker_push)
-    git_file_age = run.git_file_age(dockerfile)
+    git_file_age = git.git_file_age(dockerfile)
     for req in requirements:
-        req_age = run.git_file_age(req)
+        req_age = git.git_file_age(req)
         git_file_age = max(git_file_age, req_age)
     if push_timestamp > git_file_age:
         return False
