@@ -1,0 +1,1 @@
+linters: with_defaults(open_curly_linter = NULL)

@@ -17,7 +17,7 @@ def _harmonic_alignment(
         n_eigenvectors = n_eigenvectors or 20
         n_pca_XY = n_pca_XY or 20
         n_filters = n_filters or 4
-    else:
+    else:  # pragma: no cover
         n_svd = n_svd or 100
         n_eigenvectors = n_eigenvectors or 100
         n_pca_XY = n_pca_XY or 100
