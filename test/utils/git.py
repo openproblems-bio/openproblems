@@ -4,6 +4,9 @@ import functools
 import openproblems
 import os
 
+TESTDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASEDIR = os.path.dirname(TESTDIR)
+
 
 def git_file_age(filename):
     """Get the age of a file's last git commit."""
@@ -53,7 +56,7 @@ def git_has_diff(filename):
 
 def task_dir(task):
     """Get the base directory of a task"""
-    return os.path.dirname(task.__file__)
+    return os.path.relpath(os.path.dirname(task.__file__), BASEDIR)
 
 
 def task_modified(task):
