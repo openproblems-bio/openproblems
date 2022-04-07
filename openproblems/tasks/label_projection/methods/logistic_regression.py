@@ -10,7 +10,7 @@ import sklearn.linear_model
 def _logistic_regression(adata, test=False, max_iter=None):
     if test:
         max_iter = max_iter or 100
-    else:
+    else:  # pragma: no cover
         max_iter = max_iter or 1000
     return classifier(
         adata, estimator=sklearn.linear_model.LogisticRegression, max_iter=max_iter

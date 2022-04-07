@@ -55,7 +55,7 @@ jobs:
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
-        if [[ "${{ github.repository }}" == "singlecellopenproblems/SingleCellOpenProblems" ]]; \
+        if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; \
           then echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
           else echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
         fi >> $GITHUB_ENV

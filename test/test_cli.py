@@ -108,6 +108,23 @@ def test_image_metrics(task, metric):
     _test_image(task, "--metrics", metric)
 
 
+def test_hash_basic():
+    assert main(["--test-hash"], do_print=False) is None
+
+
+def test_version():
+    assert main(["--version"], do_print=False) == openproblems.__version__
+
+
+def test_help(capsys):
+    assert main([], do_print=False) is None
+    captured = capsys.readouterr()
+    assert len(captured.out) > 0
+    assert (
+        "Open Problems for Single Cell Analysis command-line interface" in captured.out
+    )
+
+
 @parameterized.parameterized.expand(
     [
         ("label_projection", "--datasets", "pancreas_batch"),
