@@ -178,7 +178,7 @@ def cache_docker_image(image):
             "--rm",
             "--user=root",
             "--mount",
-            f"type=bind,source={DOCKER_BASEDIR},target={DOCKER_BASEDIR}",
+            f"type=bind,source={DOCKER_BASEDIR},target={BASEDIR}",
             "--mount",
             f"type=bind,source={tempdir},target={tempdir}",
             f"singlecellopenproblems/{image}",
@@ -202,8 +202,8 @@ def docker_command(image, script, *args):
         "exec",
         container,
         "/bin/bash",
-        f"{DOCKER_BASEDIR}/test/docker_run.sh",
-        f"{DOCKER_BASEDIR}/test/",
+        f"{BASEDIR}/test/docker_run.sh",
+        f"{BASEDIR}/test/",
         script,
     ] + list(args)
     return run_command
