@@ -34,22 +34,6 @@ def format_error_stdout(process):
     return _format_error(process, process.stdout)
 
 
-def git_file_age(filename):
-    """Get the age of a file's last git commit."""
-    git_age = (
-        run(
-            ["git", "log", "-1", '--format="%ad"', "--date=unix", "--", filename],
-            return_stdout=True,
-        )
-        .strip()
-        .replace('"', "")
-    )
-    if git_age == "":
-        return 0
-    else:
-        return int(git_age)
-
-
 def _run_failed(process, error_raises, format_error):
     raise error_raises(format_error(process))
 
