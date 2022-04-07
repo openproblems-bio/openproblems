@@ -269,8 +269,8 @@ def docker_imagespec_changed(image, dockerfile):
         ],
         stdout=subprocess.PIPE,
     )
-    build_type = proc.stdout.strip()
-    if build_type in ["github_actions", ""]:
+    build_type = proc.stdout.decode().strip()
+    if build_type == "github_actions":
         import utils.git
 
         has_diff = utils.git.git_has_diff(dockerfile)
