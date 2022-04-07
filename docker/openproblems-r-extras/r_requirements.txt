@@ -20,4 +20,4 @@ Rcpp@1.0.7
 reticulate@1.18
 almaan/RCTD
 Seurat@4.0.1
-rlang@1.0.1
+rlang@1.0.2
