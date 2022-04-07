@@ -84,6 +84,13 @@ def is_main_head():
     return git_rev_parse("base/main") == git_rev_parse("HEAD")
 
 
+def is_pull_request():
+    """Check if we are running in a PR"""
+    if "GITHUB_EVENT_NAME" in os.environ:
+        return os.environ["GITHUB_EVENT_NAME"] == "pull_request"
+    return False
+
+
 @functools.lru_cache(None)
 def list_modified_tasks():
     """List tasks for which testing must be run.
@@ -91,9 +98,9 @@ def list_modified_tasks():
     Return all tasks if the core repo has changed,
     otherwise just those that have changed relative to base/main.
 
-    If we are currently at the HEAD of base/main, test all tasks.
+    If we are currently in a pull request or at the HEAD of base/main, test all tasks.
     """
-    if core_modified() or is_main_head():
+    if is_pull_request() or core_modified() or is_main_head():
         return openproblems.TASKS
 
     return [task for task in openproblems.TASKS if task_modified(task)]
