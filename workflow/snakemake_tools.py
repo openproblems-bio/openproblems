@@ -260,7 +260,7 @@ def docker_imagespec_changed(image, dockerfile):
     If working with a github actions-built image, check if there is any diff
     between the Dockerfile and base/main
     """
-    with subprocess.run(
+    proc = subprocess.run(
         [
             "docker",
             "inspect",
@@ -268,9 +268,9 @@ def docker_imagespec_changed(image, dockerfile):
             "singlecellopenproblems/{}".format(image),
         ],
         stdout=subprocess.PIPE,
-    ) as proc:
-        build_type = proc.stdout.strip()
-    if build_type == "github_actions":
+    )
+    build_type = proc.stdout.strip()
+    if build_type in ["github_actions", ""]:
         import utils.git
 
         has_diff = utils.git.git_has_diff(dockerfile)
