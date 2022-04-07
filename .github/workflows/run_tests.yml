@@ -10,7 +10,15 @@ on:
 
 jobs:
   run_tester:
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-latest
+
+    container:
+      image: singlecellopenproblems/openproblems-github-actions:latest
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /tmp:/tmp
+      options: --user root
+
     if: >-
       !contains(github.event.head_commit.message, 'ci skip') &&
       (
@@ -18,63 +26,33 @@ jobs:
         github.event.pull_request.draft == false
       )
 
-    env:
-      RENV_PATHS_ROOT: ~/.local/share/renv
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - {name: 'curr', os: ubuntu-18.04, python: '3.8', r: 'release' }
-        - {name: 'prev', os: ubuntu-18.04, python: '3.7', r: 'release' }
-        - {name: 'old', os: ubuntu-18.04, python: '3.6', r: 'release' }
-
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.6.0
       with:
         access_token: ${{ github.token }}
 
-    - name: Check Ubuntu version
-      run: |
-        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
-
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
 
-    - name: Install system dependencies
-      if: runner.os == 'Linux'
+    - name: Set up environment
       run: |
-        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-        sudo apt-get install -y libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev libcurl4-openssl-dev
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.config.python }}
-
-    - name: Set up R
-      id: setup-r
-      uses: r-lib/actions/setup-r@v1
-      with:
-        r-version: ${{ matrix.config.r }}
-
-    - name: Check Ubuntu version
-      run: |
-        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
+        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
+        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
 
     - name: Cache Python packages
       uses: actions/cache@v2
       with:
-        path: ${{ env.pythonLocation }}
-        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
+        path: ${{ env.PYTHON_VERSION }}
+        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
 
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -U wheel setuptools codecov
+        pip install -U wheel setuptools
         pip install -U --editable .[test,r,evaluate]
         python -c "import openproblems"
 
@@ -82,16 +60,17 @@ jobs:
       uses: actions/cache@v2
       if: startsWith(runner.os, 'Linux')
       with:
-        path: ${{ env.RENV_PATHS_ROOT }}
-        key: ${{ env.UBUNTU_VERSION }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-${{ hashFiles('**/renv.lock') }}
+        path: /usr/local/lib/R/site-library
+        key: ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
         restore-keys: |
-          ${{ env.UBUNTU_VERSION }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-
+          ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
 
     - name: Install R packages
       run: |
         if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
         renv::restore()
-        renv::install(scan("docker/openproblems-r-base/r_requirements.txt", what=character(), sep="\n"))
+        source("./scripts/install_renv.R")
+        install_renv("docker/openproblems-r-base/r_requirements.txt")
       shell: Rscript {0}
 
     - name: Build Docker images
@@ -104,9 +83,7 @@ jobs:
       run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
 
     - name: Upload coverage
-      if: success() && ${{ github.repository == 'SingleCellOpenProblems/singlecellopenproblems' }}
-      env:
-        CODECOV_NAME: ${{ runner.os }}-${{ matrix.name }}
+      if: success() && ${{ github.repository == 'openproblems-bio/openproblems' }}
       run: codecov --no-color --required --flags unittests
 
     - name: Upload check results on fail

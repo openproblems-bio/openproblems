@@ -8,6 +8,7 @@ import unittest
 import utils
 import utils.asserts
 import utils.cache
+import utils.git
 import utils.name
 import utils.warnings
 
@@ -37,7 +38,7 @@ def _assert_not_bytes(X):
     ("dataset", "task", "test", "tempdir"),
     [
         (staticmethod(dataset), task, test, utils.TEMPDIR.name)
-        for task in openproblems.TASKS
+        for task in utils.git.list_modified_tasks()
         for dataset in task.DATASETS
         for test in [True]
     ],
