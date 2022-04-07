@@ -50,18 +50,23 @@ def git_has_diff(filename):
     return len(diffstat) > 0
 
 
+def task_dir(task):
+    """Get the base directory of a task"""
+    return os.path.dirname(task.__file__)
+
+
 def task_modified(task):
     """Check if the task has changed relative to base/main."""
-    task_dir = os.path.dirname(task.__file__)
-    return git_has_diff(task_dir)
+    return git_has_diff(task_dir(task))
 
 
 def core_modified():
     """Check if the core repo has changed relative to base/main.
 
-    We exclude openproblems/tasks as well as any md files and the website.
+    We exclude all task directories as well as any md files and the website.
     """
-    return git_has_diff([".", ":^openproblems/tasks", ":^*.md", ":^website"])
+    task_exclusions = [f":^{task_dir(task)}" for task in openproblems.TASKS]
+    return git_has_diff([".", ":^*.md", ":^website"] + task_exclusions)
 
 
 @functools.lru_cache(None)
