@@ -76,8 +76,8 @@ rule build_docker_image:
         temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)))
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
-        user = "singlecellopenproblems"
-        label = "github_actions" if "GITHUB_ACTIONS" in os.environ else "local"
+        user = "singlecellopenproblems",
+        label = tools.build_type
     shell:
         "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
