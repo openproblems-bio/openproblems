@@ -57,8 +57,11 @@ def task_modified(task):
 
 
 def core_modified():
-    """Check if anything outside `tasks` has changed relative to base/main."""
-    return git_has_diff([".", ":^openproblems/tasks"])
+    """Check if the core repo has changed relative to base/main.
+
+    We exclude openproblems/tasks as well as any md files and the website.
+    """
+    return git_has_diff([".", ":^openproblems/tasks", ":^*.md", ":^website"])
 
 
 @functools.lru_cache(None)
