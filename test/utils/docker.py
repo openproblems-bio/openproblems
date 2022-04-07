@@ -14,6 +14,7 @@ import warnings
 
 TESTDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASEDIR = os.path.dirname(TESTDIR)
+DOCKER_BASEDIR = BASEDIR.replace("/__w", "/home/runner/work")
 CACHEDIR = os.path.join(os.environ["HOME"], ".singularity")
 os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
 os.environ["SINGULARITY_PULLFOLDER"] = CACHEDIR
@@ -169,6 +170,7 @@ def singularity_command(image, script, *args):
 @functools.lru_cache(maxsize=None)
 def cache_docker_image(image):
     """Run a Docker image and get the machine ID."""
+    tempdir = tempfile.gettempdir()
     hash = run.run(
         [
             "docker",
@@ -177,10 +179,10 @@ def cache_docker_image(image):
             "--rm",
             "--user=root",
             "--mount",
-            "type=bind,source={0},target={0}".format(BASEDIR),
+            f"type=bind,source={DOCKER_BASEDIR},target={BASEDIR}",
             "--mount",
-            "type=bind,source=/tmp,target=/tmp",
-            "singlecellopenproblems/{}".format(image),
+            f"type=bind,source={tempdir},target={tempdir}",
+            f"singlecellopenproblems/{image}",
         ],
         return_stdout=True,
     )
@@ -201,8 +203,8 @@ def docker_command(image, script, *args):
         "exec",
         container,
         "/bin/bash",
-        "{}/test/docker_run.sh".format(BASEDIR),
-        "{}/test/".format(BASEDIR),
+        f"{BASEDIR}/test/docker_run.sh",
+        f"{BASEDIR}/test/",
         script,
     ] + list(args)
     return run_command
@@ -240,7 +242,7 @@ def docker_test(func, timeout=None, retries=0, *args, **kwargs):
     """
     image = args[-1]
     if not image.startswith("openproblems"):
-        warnings.warn("Image {} expectd to begin with openproblems.".format(image))
+        warnings.warn("Image {} expected to begin with openproblems.".format(image))
     assert eval(str(args)) == args
     assert eval(str(kwargs)) == kwargs
     with tempfile.TemporaryDirectory() as tempdir:
@@ -255,7 +257,11 @@ def docker_test(func, timeout=None, retries=0, *args, **kwargs):
             handle.write("if __name__ == '__main__':\n")
             handle.write("    import openproblems\n")
             handle.write("    import sys\n")
-            handle.write("    sys.path.append('{}')\n".format(TESTDIR))
+            handle.write(
+                "    sys.path.append('{}')\n".format(
+                    os.path.join(DOCKER_BASEDIR, "test")
+                )
+            )
             handle.write("    {}(*{}, **{})\n".format(func.__name__, args, kwargs))
 
         run_image(image, f, timeout=timeout, retries=retries)

@@ -30,6 +30,7 @@ test_requires = [
     "pytest-cov",
     "black==22.3.0",
     "coverage",
+    "codecov",
     "parameterized>=0.7.4",
 ]
 
