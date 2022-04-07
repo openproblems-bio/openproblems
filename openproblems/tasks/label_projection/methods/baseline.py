@@ -1,4 +1,5 @@
 from ....tools.decorators import method
+from ....tools.utils import check_version
 
 import numpy as np
 
@@ -8,8 +9,8 @@ import numpy as np
     paper_name="Majority Vote Dummy",
     paper_url="",
     paper_year=2000,
-    code_url="",
-    code_version="1.0",
+    code_url="https://github.com/openproblems-bio/openproblems",
+    code_version=check_version("openproblems"),
 )
 def majority_vote(adata, test=False):
     majority = adata.obs.labels[adata.obs.is_train].value_counts().index[0]
@@ -23,8 +24,8 @@ def majority_vote(adata, test=False):
     paper_name="Random Labels Dummy",
     paper_url="",
     paper_year=2000,
-    code_url="",
-    code_version="1.0",
+    code_url="https://github.com/openproblems-bio/openproblems",
+    code_version=check_version("openproblems"),
 )
 def random_labels(adata, test=False):
     label_distribution = adata.obs.labels[adata.obs.is_train].value_counts()
