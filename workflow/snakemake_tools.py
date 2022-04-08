@@ -40,6 +40,14 @@ def _images(filename):
     ]
 
 
+def build_type(wildcards):
+    """Define the build type
+
+    local or github_actions
+    """
+    return "github_actions" if "GITHUB_ACTIONS" in os.environ else "local"
+
+
 def image_markers(wildcards):
     """Get the appropriate marker for each image."""
     return [
