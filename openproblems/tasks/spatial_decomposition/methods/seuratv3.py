@@ -17,7 +17,7 @@ _seuratv3 = r_function("seuratv3.R")
     code_version=check_version("seuratv3"),
     image="openproblems-r-extras",
 )
-def seuratv3(adata):
+def seuratv3(adata, test=False):
     # exctract single cell reference data
     sc_adata = adata.uns["sc_reference"].copy()
     # remove single cell reference from original anndata

@@ -15,7 +15,7 @@ import pandas as pd
     code_url="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.nnls.html",  # noqa: E501
     code_version=check_version("scipy"),
 )
-def nnls_scipy(adata):
+def nnls_scipy(adata, test=False):
     from scipy.optimize import nnls
     from scipy.sparse import issparse
 

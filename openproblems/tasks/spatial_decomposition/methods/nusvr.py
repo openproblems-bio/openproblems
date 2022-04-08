@@ -15,7 +15,7 @@ import pandas as pd
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.svm.NuSVR.html",
     code_version=check_version("scikit-learn"),
 )
-def nusvr_sklearn(adata):
+def nusvr_sklearn(adata, test=False):
     from scipy.sparse import issparse
     from sklearn.svm import NuSVR
 

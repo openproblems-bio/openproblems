@@ -12,7 +12,7 @@ import numpy as np
     code_url="https://github.com/tudaga/NMFreg_tutorial",
     code_version=check_version("nmf-reg"),
 )
-def nmfreg(adata):
+def nmfreg(adata, test=False):
     """NMF-reg: NMF regression for array-based spatial transcriptomics data.
 
     Re-implementation from https://github.com/tudaga/NMFreg_tutorial.

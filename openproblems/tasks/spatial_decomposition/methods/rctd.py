@@ -17,7 +17,7 @@ _rctd = r_function("rctd.R")
     code_version=check_version("rctd"),
     image="openproblems-r-extras",
 )
-def rctd(adata):
+def rctd(adata, test=False):
     # exctract single cell reference data
     sc_adata = adata.uns["sc_reference"].copy()
     # remove single cell reference from original anndata

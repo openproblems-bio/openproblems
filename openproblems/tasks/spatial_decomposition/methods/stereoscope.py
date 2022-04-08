@@ -11,7 +11,7 @@ from ....tools.utils import check_version
     code_version=check_version("scvi-tools"),
     image="openproblems-python-extras",
 )
-def stereoscope_raw(adata):
+def stereoscope_raw(adata, test=False):
     from scvi.data import setup_anndata
     from scvi.external.stereoscope import RNAStereoscope
     from scvi.external.stereoscope import SpatialStereoscope

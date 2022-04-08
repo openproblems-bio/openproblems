@@ -11,7 +11,7 @@ from .._utils import obs_means
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html",  # noqa: E501
     code_version=check_version("scikit-learn"),
 )
-def nmf(adata):
+def nmf(adata, test=False):
     """NMF for spatial deconvolution."""
     from scipy.sparse import issparse
     from sklearn.decomposition import NMF

@@ -12,7 +12,7 @@ import pandas as pd
     code_url="NA",
     code_version="NA",
 )
-def random_proportion_assignment(adata):
+def random_proportion_assignment(adata, test=False):
     n_types = adata.obsm["proportions_true"].shape[1]
     props = np.random.dirichlet(
         np.ones(n_types),
