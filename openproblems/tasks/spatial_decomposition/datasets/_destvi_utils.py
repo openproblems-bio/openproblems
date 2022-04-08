@@ -176,12 +176,14 @@ def generate_synthetic_dataset(
         freq_df = pd.DataFrame(
             altered_freq, index=st_anndata.obs.index, columns=columns
         )
-        st_anndata.obsm["cell_type"] = freq_df
+        # st_anndata.obsm["cell_type"] = freq_df
+        st_anndata.obsm["proportions_true"] = freq_df
         st_anndata.obsm["gamma"] = gamma
         st_anndata.obsm["locations"] = locations
         st_anndata.obsm["n_counts"] = np.sum(st_anndata.X, axis=1)
         st_anndata.uns["key_clustering"] = key_list
         st_anndata.uns["target_list"] = [1] + target_list
+        st_anndata.uns["sc_reference"] = sc_anndata
         # st_anndata.write(output_dir + file_name[i], compression="gzip")
         if i == 0:
             plt.figure(figsize=(5, 5))
@@ -191,6 +193,7 @@ def generate_synthetic_dataset(
             plt.title(f"bin-sampling={bin_sampling}")
             plt.tight_layout()
             # plt.savefig(output_dir+"lib.png")
+    return st_anndata
 
 
 def generate_spatial_information(
