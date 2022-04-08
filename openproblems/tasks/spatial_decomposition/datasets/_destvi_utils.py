@@ -1,4 +1,3 @@
-from logzero import logger
 from scipy.sparse import csr_matrix
 from scipy.spatial.distance import pdist
 from scipy.spatial.distance import squareform
@@ -42,7 +41,7 @@ def generate_synthetic_dataset(
 
     C = components_.shape[0]
     D = components_.shape[1]
-    logger.info("get spatial patterns")
+
     locations, freq_sample, gamma = generate_spatial_information(
         C=C,
         D=D,
@@ -91,7 +90,6 @@ def generate_synthetic_dataset(
 
     samples = np.random.poisson(lam=transformed_mean)
 
-    logger.info("dump scRNA-seq")
     sc_anndata = anndata.AnnData(
         X=csr_matrix(samples[:, :K_sampled].reshape((-1, samples.shape[-1])))
     )
@@ -150,10 +148,10 @@ def generate_synthetic_dataset(
     transformed_mean_st_partial /= np.sum(cell_types_sc != C - 1, 1)[:, np.newaxis]
 
     if ct_study == 1:
-        logger.info("dump spatial (full and partial)")
+
         list_transformed = [transformed_mean_st_full, transformed_mean_st_partial]
     elif ct_study == 0:
-        logger.info("dump spatial (full only)")
+
         list_transformed = [transformed_mean_st_full]
     # file_name = ["st_simu.h5ad", "st_simu_partial.h5ad"]
     for i, transformed_mean_st in enumerate(list_transformed):
