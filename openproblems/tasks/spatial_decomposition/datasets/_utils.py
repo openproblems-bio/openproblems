@@ -25,6 +25,8 @@ def generate_synthetic_dataset(adata: AnnData, sim_type: str = "avg", seed: int 
         - `adata_spatial.obsm["proportions_true"]`: true proportion values.
         - `adata_spatial.X`: simulated counts (aggregate of sc dataset).
         - `adata_spatial.uns["sc_reference"]`: original sc adata for reference.
+
+    The cell type labels are stored in adata_sc.obs["label"]
     """
 
     rng = np.random.default_rng(seed)

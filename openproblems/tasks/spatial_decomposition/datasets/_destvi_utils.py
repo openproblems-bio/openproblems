@@ -94,6 +94,9 @@ def generate_synthetic_dataset(
         X=csr_matrix(samples[:, :K_sampled].reshape((-1, samples.shape[-1])))
     )
     sc_anndata.obs["cell_type"] = cell_types_sc[:, :K_sampled].reshape(-1, 1)
+    sc_anndata.obs["label"] = pd.Categorical(
+        sc_anndata.obs["cell_type"].values.astype(str)
+    )
     sc_anndata.obs["n_counts"] = np.sum(sc_anndata.X.A, axis=1)
     sc_anndata.obsm["gamma"] = gamma_sc[:, :K_sampled].reshape(-1, gamma.shape[-1])
     sc_anndata.obsm["locations"] = location_sc[:, :K_sampled].reshape(-1, 2)
