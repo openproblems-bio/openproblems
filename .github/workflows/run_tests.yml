@@ -254,7 +254,7 @@ jobs:
         cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results .
 
     - name: Parse results
-      # There's a bug with the results getting pulled from Netflow with caching, but
+      # There's a bug with the results getting pulled from Nextflow with caching, but
       # this doesn't happen on main, which is the only place `Parse results` is needed
       if: startsWith(github.ref, 'refs/heads/main')
       run: |
@@ -286,6 +286,7 @@ jobs:
         aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
 
     - name: Pre-commit
+      if: startsWith(github.ref, 'refs/tags')
       uses: pre-commit/action@v2.0.0
       continue-on-error: true
 
