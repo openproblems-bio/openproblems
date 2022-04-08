@@ -28,11 +28,11 @@ def generate_synthetic_dataset(
     sf_gam: float = 15.0,
     bin_sampling: float = 1.0,
     ct_study: int = 1,
+    grid_size: int = 10,
 ):
     # parameters
     K = 100
     K_sampled = 20
-    grid_size = 10
 
     grtruth_PCA = np.load(f"{input_file}grtruth_PCA.npz")
     mean_, components_ = grtruth_PCA["mean_"], grtruth_PCA["components_"]
