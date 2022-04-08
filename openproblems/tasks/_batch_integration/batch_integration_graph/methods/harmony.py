@@ -15,7 +15,7 @@ _harmony = scprep.run.RFunction(
         """,
     args="sobj, batch",
     body="""
-            seu <- as.Seurat(sobj)
+            seu <- as.Seurat(sobj, data=NULL)
             seu <- ScaleData(seu)
             seu <- RunPCA(seu, features=rownames(seu@assays$originalexp))
             seu <- RunHarmony(seu, batch)
