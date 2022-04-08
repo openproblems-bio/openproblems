@@ -270,7 +270,10 @@ def docker_image_label(image, label):
         ],
         stdout=subprocess.PIPE,
     )
-    return proc.stdout.decode().strip()
+    output = proc.stdout.decode().strip()
+    # remove quotes either side
+    output = output[1:-1]
+    return output
 
 
 def docker_imagespec_changed(image, dockerfile):
