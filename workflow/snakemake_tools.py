@@ -259,6 +259,20 @@ def format_timestamp(ts):
     return datetime.datetime.fromtimestamp(ts).isoformat()
 
 
+def docker_image_label(image, label):
+    """Get a label from a docker image config"""
+    proc = subprocess.run(
+        [
+            "docker",
+            "inspect",
+            "-f='{{ index .Config.Labels \"" + label + "\"}}'",
+            "singlecellopenproblems/{}".format(image),
+        ],
+        stdout=subprocess.PIPE,
+    )
+    return proc.stdout.decode().strip()
+
+
 def docker_imagespec_changed(image, dockerfile):
     """Check if the Dockerfile has changed
 
@@ -268,16 +282,11 @@ def docker_imagespec_changed(image, dockerfile):
     If working with a github actions-built image, check if there is any diff
     between the Dockerfile and base/main
     """
-    proc = subprocess.run(
-        [
-            "docker",
-            "inspect",
-            "-f='{{ index .Config.Labels \"bio.openproblems.build\"}}'",
-            "singlecellopenproblems/{}".format(image),
-        ],
-        stdout=subprocess.PIPE,
-    )
-    build_type = proc.stdout.decode().strip()
+    if not docker_image_exists(image):
+        # will be downloaded from dockerhub
+        build_type = "github_actions"
+    else:
+        build_type = docker_image_label(image, "bio.openproblems.build")
     if build_type == "github_actions":
         import utils.git
 
