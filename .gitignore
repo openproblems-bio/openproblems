@@ -143,3 +143,6 @@ resources/
 # Nextflow
 nf-openproblems
 .nextflow
+
+# Editor
+.idea

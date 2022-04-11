@@ -1,7 +1,7 @@
 import openproblems
 import parameterized
-import utils
 import utils.docker
+import utils.git
 import utils.name
 import utils.warnings
 
@@ -16,7 +16,7 @@ utils.warnings.ignore_warnings()
             utils.TEMPDIR.name,
             method.metadata["image"],
         )
-        for task in openproblems.TASKS
+        for task in utils.git.list_modified_tasks()
         for method in task.METHODS
     ],
     name_func=utils.name.name_test,
@@ -32,7 +32,7 @@ def test_method(task_name, method_name, tempdir, image):
     openproblems.log.debug(
         "Testing {} method from {} task".format(method.__name__, task.__name__)
     )
-    adata = method(adata)
+    adata = method(adata, test=True)
     assert isinstance(adata, anndata.AnnData)
     assert task.api.check_method(adata)
 

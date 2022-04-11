@@ -2,11 +2,13 @@ import anndata
 import openproblems
 import pandas as pd
 import parameterized
+import pytest
 import scipy.sparse
 import unittest
 import utils
 import utils.asserts
 import utils.cache
+import utils.git
 import utils.name
 import utils.warnings
 
@@ -36,9 +38,9 @@ def _assert_not_bytes(X):
     ("dataset", "task", "test", "tempdir"),
     [
         (staticmethod(dataset), task, test, utils.TEMPDIR.name)
-        for task in openproblems.TASKS
+        for task in utils.git.list_modified_tasks()
         for dataset in task.DATASETS
-        for test in [True, False]
+        for test in [True]
     ],
     class_name_func=utils.name.name_test,
 )
@@ -48,12 +50,28 @@ class TestDataset(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Load data."""
-        cls.adata = utils.cache.load(
+        try:
+            cls.adata = utils.cache.load(
+                cls.tempdir,
+                cls.task,
+                cls.dataset,
+                test=cls.test,
+                dependency="test_load_dataset",
+            )
+        except AssertionError as e:
+            if str(e) == "Intermediate file missing. Did test_load_dataset fail?":
+                pytest.skip("Dataset not loaded successfully")
+            else:
+                raise
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove data."""
+        utils.cache.delete(
             cls.tempdir,
             cls.task,
             cls.dataset,
             test=cls.test,
-            dependency="test_load_dataset",
         )
 
     def test_adata_class(self):
@@ -106,7 +124,7 @@ class TestDataset(unittest.TestCase):
         """Test that normalizations can be safely applied."""
         if self.test:
             adata = self.adata.copy()
-            normalizer(adata)
+            adata = normalizer(adata)
             utils.asserts.assert_finite(adata.X)
 
     def test_metadata(self):

@@ -51,11 +51,17 @@ jobs:
       env:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
       run: |
+        echo ${{ github.repository }}
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
-        echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:/:_:g'| head -c 40`" >> $GITHUB_ENV
+        # If not on the base repository, append first 6 characters of username to the image name
+        # to avoid clashes on ECR
+        if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; \
+          then echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
+          else echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
+        fi >> $GITHUB_ENV
         # don't use tower if the env var is not set
         echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
-        if [ $(echo ${{ github.ref }} | grep -E -e "^refs/heads/(master|test_benchmark)" -e "^refs/tags") ]; then
+        if [ $(echo ${{ github.ref }} | grep -E -e "^refs/heads/(main|test_benchmark)" -e "^refs/tags") ]; then
           PROFILE="aws"
           RESUME=""
         else
@@ -103,10 +109,11 @@ jobs:
         sudo mkdir -p /mnt/openproblems-nextflow
         sudo chown $USER /mnt/openproblems-nextflow
         s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
+        # Create bucket/ work/ and cwd/
         for dir in bucket work cwd; do
-          mkdir -p /mnt/openproblems-nextflow/${dir}/${{ github.ref }}
+          mkdir -p /mnt/openproblems-nextflow/${dir}/${{ env.BRANCH }}
         done
-        ls -l /mnt/openproblems-nextflow/*/${{ github.ref }}
+        ls -l /mnt/openproblems-nextflow/*/${{ env.BRANCH }}
 
     - name: Install package & dependencies
       run: |
@@ -144,32 +151,52 @@ jobs:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: >-
-        cd /mnt/openproblems-nextflow/cwd/${{ github.ref }} &&
+        cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }} &&
         nextflow run
         $WITH_TOWER
         -ansi-log false
         $RESUME
         -profile $PROFILE
-        -work-dir "/mnt/openproblems-nextflow/work/${{ github.ref }}"
-        -bucket-dir "s3://openproblems-nextflow/bucket/${{ github.ref }}"
+        -work-dir "/mnt/openproblems-nextflow/work/${{ env.BRANCH }}"
+        -bucket-dir "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
         singlecellopenproblems/nf-openproblems
         --branch $BRANCH
 
-    - name: Parse results
+    - name: Copy results
       run: |
-        cp -r /mnt/openproblems-nextflow/cwd/${{ github.ref }}/results .
+        cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results .
+
+    - name: Parse results
+      # There's a bug with the results getting pulled from Netflow with caching, but
+      # this doesn't happen on main, which is the only place `Parse results` is needed
+      if: startsWith(github.ref, 'refs/heads/main')
+      run: |
         python workflow/parse_nextflow.py
 
-    - name: Remove working directory
-      if: always() && startsWith(github.ref, 'refs/tags')
+    - name: AWS cleanup
+      if: always() && (startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/pull'))
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        aws s3 rm "s3://openproblems-nextflow/work/${{ github.ref }}"
-        aws s3 rm "s3://openproblems-nextflow/bucket/${{ github.ref }}"
-        aws s3 rm "s3://openproblems-nextflow/cwd/${{ github.ref }}"
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
+        done
+        aws s3 rm "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
+        aws s3 rm "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
+        aws s3 rm "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
+
+    - name: Remove untagged images
+      if: startsWith(github.ref, 'refs/heads/main')
+      continue-on-error: true
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
+        aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
 
     - name: Pre-commit
       uses: pre-commit/action@v2.0.0
@@ -198,13 +225,13 @@ jobs:
       with:
         branch: ${{ env.BRANCH_NAME }}
         delete-branch: true
-        base: master
+        base: main
         title: '[auto] Update benchmark results'
         reviewers: scottgigante, dburkhardt
 
     - name: Upload results
       if: always()
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       with:
         name: ${{ matrix.config.name }}_results
         path: results

@@ -10,5 +10,3 @@ _logging.basicConfig()
 log = _logging.getLogger("openproblems")
 
 TASKS = utils.get_members(tasks)
-
-patch.patch_anndata()

@@ -39,7 +39,7 @@ class TestNormalizeX(unittest.TestCase):
         cls.cache_name = cls.normalizer.__name__
         assert utils.asserts.assert_finite(cls.adata.X)
         assert cls.cache_name not in cls.adata.layers
-        cls.normalizer(cls.adata)
+        cls.adata = cls.normalizer(cls.adata)
 
     def test_finite(self):
         """Test that normalized data is finite."""
@@ -63,7 +63,7 @@ class TestNormalizeX(unittest.TestCase):
         assert np.all(current_data != _dense_data(self.adata.layers[self.cache_name]))
 
         # use cached
-        self.normalizer(self.adata)
+        self.adata = self.normalizer(self.adata)
         utils.asserts.assert_array_equal(
             self.adata.X, self.adata.layers[self.cache_name]
         )
@@ -90,7 +90,7 @@ class TestNormalizeObsM(unittest.TestCase):
         cls.cache_name = "{}_{}".format(cls.obsm, cls.normalizer.__name__)
         assert utils.asserts.assert_finite(cls.adata.obsm[cls.obsm])
         assert cls.cache_name not in cls.adata.obsm
-        cls.normalizer(cls.adata, obsm=cls.obsm)
+        cls.adata = cls.normalizer(cls.adata, obsm=cls.obsm)
 
     def test_finite(self):
         """Test that normalized data is finite."""
@@ -114,7 +114,7 @@ class TestNormalizeObsM(unittest.TestCase):
         assert np.all(current_data != _dense_data(self.adata.obsm[self.cache_name]))
 
         # use cached
-        self.normalizer(self.adata, obsm=self.obsm)
+        self.adata = self.normalizer(self.adata, obsm=self.obsm)
         utils.asserts.assert_array_equal(
             self.adata.obsm[self.obsm], self.adata.obsm[self.cache_name]
         )

@@ -15,7 +15,7 @@ def _write_h5ad_patch(self, *args, **kwargs):
     self._write_h5ad(*args, **kwargs)
 
 
-@utils.temporary(version="0.3.2")
+@utils.temporary(version="0.5.0")
 def patch_anndata():
     """Temporary fix for https://github.com/theislab/anndata/pull/457."""
     log.debug("Patching AnnData.write_h5ad")

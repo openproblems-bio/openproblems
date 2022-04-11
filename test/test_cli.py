@@ -108,6 +108,23 @@ def test_image_metrics(task, metric):
     _test_image(task, "--metrics", metric)
 
 
+def test_hash_basic():
+    assert main(["--test-hash"], do_print=False) is None
+
+
+def test_version():
+    assert main(["--version"], do_print=False) == openproblems.__version__
+
+
+def test_help(capsys):
+    assert main([], do_print=False) is None
+    captured = capsys.readouterr()
+    assert len(captured.out) > 0
+    assert (
+        "Open Problems for Single Cell Analysis command-line interface" in captured.out
+    )
+
+
 @parameterized.parameterized.expand(
     [
         ("label_projection", "--datasets", "pancreas_batch"),
@@ -126,6 +143,33 @@ def test_hash(task, function_type, function_name):
         do_print=False,
     )
     assert h1 == h2
+
+
+def test_zero_metric():
+    def __zero_metric(*args):
+        return 0.0
+
+    metric_name = utils.name.object_name(__zero_metric)
+    task = openproblems.TASKS[0]
+    setattr(task.metrics, metric_name, __zero_metric)
+    adata = task.api.sample_dataset()
+    with tempfile.TemporaryDirectory() as tempdir:
+        dataset_file = os.path.join(tempdir, "dataset.h5ad")
+        adata.write_h5ad(dataset_file)
+
+        result = main(
+            [
+                "evaluate",
+                "--task",
+                task.__name__.split(".")[-1],
+                "--input",
+                dataset_file,
+                metric_name,
+            ],
+            do_print=True,
+        )
+        assert result == 0
+        assert isinstance(result, int)
 
 
 def test_pipeline():

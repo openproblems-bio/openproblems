@@ -114,9 +114,14 @@ def _filter_has_chr(adata):
     return adata
 
 
-def _atac_genes_score(adata, top_genes=500, threshold=1):
+def _beta(adata, test=False, top_genes=None, threshold=1):
     """Calculate gene scores and insert into .obsm."""
     import pybedtools
+
+    if test:
+        top_genes = top_genes or 100
+    else:  # pragma: no cover
+        top_genes = top_genes or 500
 
     # get annotation for TSS
     _get_annotation(adata)
@@ -226,6 +231,6 @@ def _atac_genes_score(adata, top_genes=500, threshold=1):
     code_url="http://cistrome.org/BETA",
     image="openproblems-python-extras",
 )
-def beta(adata, n_top_genes=500, threshold=1):
-    adata = _atac_genes_score(adata, top_genes=n_top_genes, threshold=threshold)
+def beta(adata, test=False, top_genes=None, threshold=1):
+    adata = _beta(adata, test=test, top_genes=top_genes, threshold=threshold)
     return adata

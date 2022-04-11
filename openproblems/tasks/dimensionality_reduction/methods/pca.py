@@ -1,7 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
-
-import scanpy as sc
+from .preprocessing import preprocess_scanpy
 
 
 @method(
@@ -13,7 +12,7 @@ import scanpy as sc
     "sklearn.decomposition.PCA.html",
     code_version=check_version("scikit-learn"),
 )
-def pca(adata):
-    sc.tl.pca(adata)
-    adata.obsm["X_emb"] = adata.obsm["X_pca"][:, :2]
+def pca(adata, test=False):
+    preprocess_scanpy(adata)
+    adata.obsm["X_emb"] = adata.obsm["X_input"][:, :2]
     return adata

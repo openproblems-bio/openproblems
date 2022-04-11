@@ -2,7 +2,7 @@ import os
 import snakemake_tools as tools
 
 rule docker:
-    input: tools.image_markers
+    input: tools.update_images
     params:
         version = tools.VERSION_FILE
     shell: "openproblems-cli --version > {params.version}"
@@ -22,41 +22,49 @@ rule docker_build:
 rule docker_pull:
     input: tools.pull_images
 
-rule docker_update:
-    input: tools.update_images
+rule docker_refresh:
+    input: tools.refresh_images
 
 rule update_docker_image:
     input:
-        dockerfile = "{}/{{image}}/update.Dockerfile".format(tools.IMAGES_DIR),
+        dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
+        requirements = tools.docker_update_requirements,
     output:
         temp(touch("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)))
+
+rule refresh_docker_image:
+    input:
+        dockerfile = "{}/{{image}}/refresh.Dockerfile".format(tools.IMAGES_DIR),
+    output:
+        temp(touch("{}/{{image}}/.docker_refresh".format(tools.IMAGES_DIR)))
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
     shell:
         "docker build -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
-rule update_dockerfile:
+rule refresh_dockerfile:
     input:
         docker_pull = "{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR),
     output:
-        temp("{}/{{image}}/update.Dockerfile".format(tools.IMAGES_DIR))
+        temp("{}/{{image}}/refresh.Dockerfile".format(tools.IMAGES_DIR))
     shell:
         r"""echo '
 FROM singlecellopenproblems/{wildcards.image}:latest AS base
 # Copy requirements files
 COPY ./docker/{wildcards.image}/* ./
+COPY ./scripts/install_renv.R ./
 
 # Install Python packages
-RUN if [ -f requirements.txt ]; then pip install --no-cache-dir -U -r requirements.txt; fi
+RUN if [ -f requirements.txt ]; then sudo pip install --no-cache-dir -U -r requirements.txt; fi
 
 # Install R packages
-RUN if [ -f r_requirements.txt ]; then for pkg in $(cat r_requirements.txt); do R -e "renv::install(\"${{pkg}}\")"; done; fi
+RUN if [ -f r_requirements.txt ]; then sudo R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"; fi
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
-RUN cd /usr/src/singlecellopenproblems && git clean -fxdq
-RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
+RUN cd /usr/src/singlecellopenproblems && sudo git clean -fxdq
+RUN sudo pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
 ' > {output}"""
 
 rule build_docker_image:

@@ -3,7 +3,7 @@ name: Build Docker images
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
       - 'test_docker'
 
 jobs:
@@ -35,17 +35,6 @@ jobs:
       with:
         python-version: ${{ matrix.config.python }}
 
-    - name: Check Ubuntu version
-      run: |
-        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
-
-    - name: Cache Python packages
-      uses: actions/cache@v2
-      with:
-        path: ${{ env.pythonLocation }}
-        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
-
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade pip
@@ -53,14 +42,14 @@ jobs:
         pip install --editable .[evaluate]
         python -c "import openproblems"
 
-    - name: Build images
+    - name: Build Docker images
       run: |
         cd workflow
-        snakemake -j $(grep -c processor /proc/cpuinfo) docker
+        snakemake -j $(grep -c processor /proc/cpuinfo) docker_build
         cd ..
 
-    - name: Push images
-      if: startsWith(github.ref, 'refs/heads/master')
+    - name: Push Docker images
+      if: startsWith(github.ref, 'refs/heads/main')
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
@@ -70,13 +59,13 @@ jobs:
         echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
 
     - name: Set up Git branch
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/master')
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
       run: |
         git checkout -b $BRANCH_NAME
         git push -u origin $BRANCH_NAME
 
     - name: Commit result
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/master')
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
       uses: EndBug/add-and-commit@v6
       with:
         author_name: SingleCellOpenProblems
@@ -87,18 +76,18 @@ jobs:
         push: false
 
     - name: Create Pull Request
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/master')
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
       uses: peter-evans/create-pull-request@v3
       with:
         branch: ${{ env.BRANCH_NAME }}
         delete-branch: true
-        base: master
+        base: main
         title: '[auto] Update docker version'
         reviewers: scottgigante, dburkhardt
 
     - name: Upload check results on fail
       if: failure()
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       with:
         name: ${{ matrix.config.name }}_results
         path: check

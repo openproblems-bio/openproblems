@@ -6,12 +6,12 @@ import os
 install_requires = [
     "numpy>=1.17.0",
     "scikit-learn>=0.19.1",
-    "anndata>=0.7.5",
+    "anndata>=0.7.5,<0.8",
     "scprep>=1.0.10",
     "scipy",
     "scanpy>=1.6",
     "louvain>=0.7",
-    "decorator",
+    "decorator<5.0",
     "memory-profiler",
     "colorama>=0.3.9",
     "packaging",
@@ -19,7 +19,7 @@ install_requires = [
 ]
 
 r_requires = [
-    "rpy2",
+    "rpy2<3.4.3",
     "anndata2ri>=1.0.6",
 ]
 
@@ -28,9 +28,9 @@ evaluate_requires = ["snakemake", "numpyencoder"]
 test_requires = [
     "pytest",
     "pytest-cov",
-    "black",
+    "black==22.3.0",
     "coverage",
-    "coveralls",
+    "codecov",
     "parameterized>=0.7.4",
 ]
 

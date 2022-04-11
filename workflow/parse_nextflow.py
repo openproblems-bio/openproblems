@@ -20,7 +20,7 @@ def dump_json(obj, fp):
     )
 
 
-size_units = {"B": 1, "KB": 10 ** 3, "MB": 10 ** 6, "GB": 10 ** 9, "TB": 10 ** 12}
+size_units = {"B": 1, "KB": 10**3, "MB": 10**6, "GB": 10**9, "TB": 10**12}
 
 
 def parse_size_to_gb(size):
@@ -96,13 +96,26 @@ def parse_trace_to_dict(df):
 
 def parse_metric_results(results):
     """Add metric results to the trace output."""
+    missing_traces = []
     for filename in os.listdir("results/metrics"):
         with open(os.path.join("results/metrics", filename), "r") as handle:
             result = float(handle.read().strip())
         task_name, dataset_name, method_name, metric_name = filename.replace(
             ".metric.txt", ""
         ).split(".")
-        results[task_name][dataset_name][method_name]["metrics"][metric_name] = result
+        try:
+            results[task_name][dataset_name][method_name]["metrics"][
+                metric_name
+            ] = result
+        except KeyError:
+            missing_traces.append(filename)
+    if len(missing_traces) > 0:
+        print("Missing execution trace for: ")
+        for filename in missing_traces:
+            print("    {}".format(filename))
+        raise ValueError(
+            "Missing execution traces for {} results.".format(len(missing_traces))
+        )
     return results
 
 

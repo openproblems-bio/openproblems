@@ -5,13 +5,13 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
-        exclude: \.(ai|gz)$
+        exclude: \.(ai|gz|md)$
   - repo: https://github.com/timothycrosley/isort
     rev: 5.6.4
     hooks:
       - id: isort
   - repo: https://github.com/psf/black
-    rev: 20.8b1
+    rev: 22.3.0
     hooks:
       - id: black
         args: ['--target-version', 'py36']
