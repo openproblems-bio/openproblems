@@ -3,6 +3,7 @@ from . import decorators
 import anndata as ad
 import scanpy as sc
 import scprep
+import warnings
 
 _scran = scprep.run.RFunction(
     setup="library('scran')",
@@ -57,8 +58,14 @@ def sqrt_cpm(adata: ad.AnnData) -> ad.AnnData:
 @decorators.normalizer
 def preprocess_logCPM_1kHVG(adata: ad.AnnData) -> ad.AnnData:
 
-    log_cpm(adata)
-    sc.pp.highly_variable_genes(adata, n_top_genes=1000, flavor="cell_ranger")
+    adata = log_cpm(adata)
+    n_top = 1000
+    if adata.n_vars < n_top:
+        new_n_top = int(adata.n_vars * 0.5)
+        warnings.warn(f"Less than {n_top} genes, setting 'n_top_genes' to {new_n_top}")
+        n_top = new_n_top
+
+    sc.pp.highly_variable_genes(adata, n_top_genes=n_top, flavor="cell_ranger")
     adata = adata[:, adata.var["highly_variable"]].copy()
 
     return adata
