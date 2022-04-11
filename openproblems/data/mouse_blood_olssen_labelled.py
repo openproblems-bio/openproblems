@@ -14,6 +14,7 @@ def load_olsson_2016_mouse_blood(test=False):
     if test:
         # load full data first, cached if available
         adata = load_olsson_2016_mouse_blood(test=False)
+        utils.filter_genes_cells(adata)
 
         # Subsample data
         adata = adata[:, :500].copy()
