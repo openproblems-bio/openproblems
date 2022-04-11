@@ -15,7 +15,7 @@ from anndata import AnnData
     code_version=check_version("neuralee"),
     image="openproblems-python-extras",
 )
-def neuralee_default(adata: AnnData) -> AnnData:
+def neuralee_default(adata: AnnData, test: bool = False) -> AnnData:
     from neuralee.dataset import GeneExpressionDataset
     from neuralee.embedding import NeuralEE
 
