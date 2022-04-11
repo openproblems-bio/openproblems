@@ -1,3 +1,4 @@
+
 from ....tools.conversion import r_function
 from ....tools.decorators import method
 
@@ -9,6 +10,7 @@ import scprep
 
 
 _alra = r_function("alra.R")
+
 
 
 @method(
@@ -31,6 +33,7 @@ def alra(adata, test=False):
     # _alra takes adata returns adata, edits "train"
     Y = _alra(adata).obsm["train"]
     # transform back into original space
+
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
