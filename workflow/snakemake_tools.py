@@ -12,8 +12,8 @@ import warnings
 N_THREADS = multiprocessing.cpu_count()
 TEMPDIR = ".evaluate"
 SCRIPTS_DIR = os.getcwd()
-DOCKER_DIR = "/opt/openproblems/scripts/"
 RESULTS_DIR = os.path.join(SCRIPTS_DIR, "..", "website", "data", "results")
+TEST_DIR = os.path.join(SCRIPTS_DIR, "..", "test")
 IMAGES_DIR = os.path.join("..", "docker")
 VERSION_FILE = os.path.join(IMAGES_DIR, ".version")
 DOCKER_EXEC = (
@@ -29,6 +29,8 @@ try:
 except KeyError:
     DOCKER_PASSWORD = None
 
+sys.path.append(TEST_DIR)
+
 
 def _images(filename):
     return [
@@ -36,6 +38,14 @@ def _images(filename):
         for image in os.listdir(IMAGES_DIR)
         if os.path.isdir(os.path.join(IMAGES_DIR, image))
     ]
+
+
+def build_type(wildcards):
+    """Define the build type
+
+    local or github_actions
+    """
+    return "github_actions" if "GITHUB_ACTIONS" in os.environ else "local"
 
 
 def image_markers(wildcards):
@@ -249,6 +259,63 @@ def format_timestamp(ts):
     return datetime.datetime.fromtimestamp(ts).isoformat()
 
 
+def docker_image_label(image, label):
+    """Get a label from a docker image config"""
+    proc = subprocess.run(
+        [
+            "docker",
+            "inspect",
+            "-f='{{ index .Config.Labels \"" + label + "\"}}'",
+            "singlecellopenproblems/{}".format(image),
+        ],
+        stdout=subprocess.PIPE,
+    )
+    output = proc.stdout.decode().strip()
+    # remove quotes either side
+    output = output[1:-1]
+    return output
+
+
+def docker_imagespec_changed(image, dockerfile):
+    """Check if the Dockerfile has changed
+
+    If working with a locally built image, simply check if the local image
+    was built more recently than the dockerfile changed.
+
+    If working with a github actions-built image, check if there is any diff
+    between the Dockerfile and base/main
+    """
+    if not docker_image_exists(image):
+        # will be downloaded from dockerhub
+        build_type = "github_actions"
+    else:
+        build_type = docker_image_label(image, "bio.openproblems.build")
+    if build_type == "github_actions":
+        import utils.git
+
+        has_diff = utils.git.git_has_diff(dockerfile)
+        msg = "changed with respect" if has_diff else "identical"
+        print(
+            "{}: Dockerfile {} to base/main".format(image, msg),
+            file=sys.stderr,
+        )
+        return has_diff
+    elif build_type == "local":
+        dockerfile_timestamp = docker_file_age(image)
+        docker_image_timestamp = docker_image_age(image)
+        print(
+            "{}: Dockerfile changed {}; Docker image refreshed {}".format(
+                image,
+                format_timestamp(dockerfile_timestamp),
+                format_timestamp(docker_image_timestamp),
+            ),
+            file=sys.stderr,
+        )
+        return dockerfile_timestamp > docker_image_timestamp
+    else:
+        raise NotImplementedError(f"Unrecognized build type {build_type}")
+
+
 @functools.lru_cache(maxsize=None)
 def docker_image_marker(image, refresh=True):
     """Get the file to be created to ensure Docker image exists from the image name."""
@@ -261,17 +328,7 @@ def docker_image_marker(image, refresh=True):
     docker_build = os.path.join(docker_path, ".docker_build")
 
     # inputs to conditional logic
-    dockerfile_timestamp = docker_file_age(image)
-    docker_image_timestamp = docker_image_age(image)
-    print(
-        "{}: Dockerfile changed {}; Docker image refreshed {}".format(
-            image,
-            format_timestamp(dockerfile_timestamp),
-            format_timestamp(docker_image_timestamp),
-        ),
-        file=sys.stderr,
-    )
-    local_imagespec_changed = dockerfile_timestamp > docker_image_timestamp
+    local_imagespec_changed = docker_imagespec_changed(image, dockerfile)
     local_codespec_changed = not version_not_changed()
     if local_codespec_changed:
         print(
