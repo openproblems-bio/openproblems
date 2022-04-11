@@ -13,7 +13,7 @@ _liger = scprep.run.RFunction(
     body="""
             # Only counts is converted to liger object. To pass our own normalized data,
             # store it in the "counts" slot
-            sobj <- as.Seurat(sobj_uni)
+            sobj <- as.Seurat(sobj_uni, data=NULL)
             sobj@assays$RNA <- sobj@assays$originalexp
             sobj@assays$RNA@counts = sobj@assays$RNA@data
 
