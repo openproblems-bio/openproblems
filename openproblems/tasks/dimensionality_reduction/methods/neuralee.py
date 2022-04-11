@@ -9,7 +9,7 @@ from anndata import AnnData
     paper_name=" NeuralEE: A GPU-Accelerated Elastic Embedding "
     "Dimensionality Reduction Method for "
     "Visualizing Large-Scale scRNA-Seq Data ",
-    paper_url="https://pubmed.ncbi.nlm.nih.gov/33193561/",
+    paper_url="https://www.frontiersin.org/articles/10.3389/fgene.2020.00786/full",
     paper_year=2020,
     code_url="https://github.com/HiBearME/NeuralEE",
     code_version=check_version("neuralee"),
@@ -20,6 +20,9 @@ def neuralee_default(adata: AnnData, test: bool = False) -> AnnData:
     from neuralee.embedding import NeuralEE
 
     import torch
+
+    # Store raw counts for use by metrics
+    adata.layers["counts"] = adata.X.copy()
 
     dataset = GeneExpressionDataset(adata.X)
     # this follows "recommended" preprocessing taken from example notebooks, e.g.:
