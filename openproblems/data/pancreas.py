@@ -39,10 +39,8 @@ def load_pancreas(test=False):
             scprep.io.download.download_url(URL, filepath)
             adata = sc.read(filepath)
 
-            # Remove preprocessing
-            adata.X = adata.layers["counts"]
-            del adata.layers["counts"]
-
+            # NOTE: X contains counts that are normalized with scran
+            adata.layers["log_scran"] = adata.X
             # Ensure there are no cells or genes with 0 counts
             utils.filter_genes_cells(adata)
 
