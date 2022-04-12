@@ -48,6 +48,7 @@ def load_immune(test=False):
             # Note: anndata.X contains scran normalized data, 
             # so we're storing it in layers['log_scran']
             adata.layers["log_scran"] = adata.X
+            adata.X = adata.layers["counts"]
 
             # Ensure there are no cells or genes with 0 counts
             utils.filter_genes_cells(adata)
