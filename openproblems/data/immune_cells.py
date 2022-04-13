@@ -31,7 +31,7 @@ def load_immune(test=False):
             scprep.io.download.download_url(URL, filepath)
             adata = sc.read(filepath)
 
-            # Note: anndata.X contains scran normalized data,
+            # Note: anndata.X contains scran log-normalized data,
             # so we're storing it in layers['log_scran']
             adata.layers["log_scran"] = adata.X
             adata.X = adata.layers["counts"]
