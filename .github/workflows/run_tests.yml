@@ -28,6 +28,11 @@ jobs:
       )
 
     steps:
+    - name: Set Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 10
+
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.6.0
       with:
@@ -42,11 +47,6 @@ jobs:
         echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
         echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
         echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
-
-    - name: Set Swap Space
-      uses: pierotofy/set-swap-space@master
-      with:
-        swap-size-gb: 10
 
     - name: Cache Python packages
       uses: actions/cache@v2
