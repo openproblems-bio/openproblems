@@ -43,6 +43,11 @@ jobs:
         echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
         echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
 
+    - name: Set Swap Space
+        uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 10
+
     - name: Cache Python packages
       uses: actions/cache@v2
       with:
@@ -82,8 +87,6 @@ jobs:
 
     - name: Run tests
       run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv --maxfail=2
-      with:
-        swap-size-gb: 10
 
     - name: Upload coverage
       if: success() && ${{ github.repository == 'openproblems-bio/openproblems' }}
