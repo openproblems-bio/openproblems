@@ -104,6 +104,7 @@ jobs:
 
     env:
       BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
+      RESULTS_PATH: "/tmp/${{ github.ref_name }}_results"
 
     strategy:
       fail-fast: false
@@ -251,14 +252,15 @@ jobs:
 
     - name: Copy results
       run: |
-        cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results .
+        mkdir -p "${RESULTS_PATH}"
+        cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results "${RESULTS_PATH}"
 
     - name: Parse results
       # There's a bug with the results getting pulled from Nextflow with caching, but
       # this doesn't happen on main, which is the only place `Parse results` is needed
       if: startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
       run: |
-        python workflow/parse_nextflow.py
+        python workflow/parse_nextflow.py "${RESULTS_PATH}"
 
     - name: AWS cleanup
       if: always()
@@ -324,4 +326,4 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         name: ${{ matrix.config.name }}_results
-        path: results
+        path: ${{ env.RESULTS_PATH }}
