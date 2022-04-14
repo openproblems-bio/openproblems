@@ -120,7 +120,7 @@ def _beta(adata, test=False, top_genes=None, threshold=1):
 
     if test:
         top_genes = top_genes or 100
-    else:
+    else:  # pragma: no cover
         top_genes = top_genes or 500
 
     # get annotation for TSS

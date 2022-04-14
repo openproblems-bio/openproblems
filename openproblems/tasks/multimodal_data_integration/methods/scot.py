@@ -12,7 +12,7 @@ def _scot(adata, test=False, n_svd=None, balanced=False):
 
     if test:
         n_svd = n_svd or 20
-    else:
+    else:  # pragma: no cover
         n_svd = n_svd or 100
 
     # PCA reduction
