@@ -15,9 +15,7 @@ RUN apt-get install -y libhdf5-dev=1.10.6+repack-4+deb11u1
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
 RUN \
-    R -e "install.packages('Matrix')" \
-    && R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))" \
-    && R -e 'install.packages("devtools")' \
+    R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))" \
     && R -e 'devtools::install_github("immunogenomics/harmony")' \
     && R -e 'devtools::install_github("welch-lab/liger@v0.5.0")'
 
