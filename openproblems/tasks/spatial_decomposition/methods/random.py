@@ -24,6 +24,6 @@ def random_proportion_assignment(adata, test=False):
         index=adata.obs.index,
     )
 
-    adata["proportions_pred"] = props
+    adata.obsm["proportions_pred"] = props
 
     return adata
