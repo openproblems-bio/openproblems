@@ -43,6 +43,7 @@ def _assert_not_bytes(X):
         for test in [True]
     ],
     class_name_func=utils.name.name_test,
+    skip_on_empty=True,
 )
 class TestDataset(unittest.TestCase):
     """Test cached dataset characteristics."""
