@@ -35,23 +35,6 @@ def _scot(adata, test=False, n_svd=None, balanced=False):
 
 
 @method(
-    method_name="Single Cell Optimal Transport (sqrt CPM unbalanced)",
-    paper_name="Gromov-Wasserstein optimal transport"
-    "to align single-cell multi-omics data",
-    paper_url="https://www.biorxiv.org/content/10.1101/2020.04.28.066787",
-    paper_year=2020,
-    code_url="https://github.com/rsinghlab/SCOT",
-    code_version=check_version("SCOT"),
-    image="openproblems-python-extras",
-)
-def scot_sqrt_cpm_unbalanced(adata, test=False, n_svd=None, balanced=False):
-    adata = sqrt_cpm(adata)
-    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _scot(adata, test=test, n_svd=n_svd, balanced=balanced)
-    return adata
-
-
-@method(
     method_name="Single Cell Optimal Transport (sqrt CPM balanced)",
     paper_name="Gromov-Wasserstein optimal transport to "
     "align single-cell multi-omics data",
@@ -63,23 +46,6 @@ def scot_sqrt_cpm_unbalanced(adata, test=False, n_svd=None, balanced=False):
 )
 def scot_sqrt_cpm_balanced(adata, test=False, n_svd=None, balanced=True):
     adata = sqrt_cpm(adata)
-    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    _scot(adata, test=test, n_svd=n_svd, balanced=balanced)
-    return adata
-
-
-@method(
-    method_name="Single Cell Optimal Transport (log scran unbalanced)",
-    paper_name="Gromov-Wasserstein optimal transport to "
-    "align single-cell multi-omics data",
-    paper_url="https://www.biorxiv.org/content/10.1101/2020.04.28.066787",
-    paper_year=2020,
-    code_url="https://github.com/rsinghlab/SCOT",
-    code_version=check_version("SCOT"),
-    image="openproblems-r-extras",
-)
-def scot_log_scran_pooling_unbalanced(adata, test=False, n_svd=None, balanced=False):
-    adata = log_scran_pooling(adata)
     adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _scot(adata, test=test, n_svd=n_svd, balanced=balanced)
     return adata
