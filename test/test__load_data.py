@@ -22,6 +22,7 @@ utils.warnings.ignore_warnings()
         for test in [True]
     ],
     name_func=utils.name.name_test,
+    skip_on_empty=True,
 )
 @utils.docker.docker_test(retries=2)
 def test_load_dataset(task_name, dataset_name, test, tempdir, image):
