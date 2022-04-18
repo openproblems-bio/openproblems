@@ -23,10 +23,13 @@ def _hvg(adata, test=False, n_top_genes=2000):
         normdata = adata.copy()
         sc.pp.normalize_total(normdata, target_sum=1e4)
         sc.pp.log1p(normdata)
-        normdata = sc.pp.highly_variable_genes(normdata[normdata.obs["is_train"]], **hvg_kwargs)
+        normdata = sc.pp.highly_variable_genes(
+            normdata[normdata.obs["is_train"]], **hvg_kwargs
+        )
         adata = adata.copy()
         adata.var = normdata.var.copy()
         return adata
+
 
 def _scanvi(adata, test=False):
     import scvi
