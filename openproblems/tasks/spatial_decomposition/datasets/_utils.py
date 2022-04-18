@@ -26,12 +26,11 @@ def generate_synthetic_dataset(adata: AnnData, sim_type: str = "avg", seed: int 
         - `adata_spatial.X`: simulated counts (aggregate of sc dataset).
         - `adata_spatial.uns["sc_reference"]`: original sc adata for reference.
 
-    The cell type labels are stored in adata_sc.obs["label"]
+    The cell type labels are stored in adata_sc.obs["label"].
     """
 
     rng = np.random.default_rng(seed)
 
-    print(type(adata.X))
     adata.obs["label"] = adata.obs.label.astype("category")
 
     if isinstance(adata.X, csr_matrix):
@@ -57,9 +56,12 @@ def generate_synthetic_dataset(adata: AnnData, sim_type: str = "avg", seed: int 
         sc.pp.normalize_total(profile_mean, target_sum=1, inplace=True)
         # run for each bead
         for bead_index in range(num_of_beads):
-            allocation = rng.multinomial(bead_depth, props[bead_index, :], size=1)[0]
+            allocation = rng.multinomial(bead_depth, props[bead_index, :], size=1)
             true_proportion[bead_index, :] = allocation.copy()
             for j in range(n_types):
+                profile_mean.X[j, :] /= (
+                    profile_mean.X[j, :].sum() + 1e-5
+                )  # trick to make sum(arr) < 1.0
                 gene_exp = rng.multinomial(allocation[j], profile_mean.X[j, :], size=1)[
                     0
                 ]
