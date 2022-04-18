@@ -121,8 +121,6 @@ def scanvi_all_genes(adata, test=False):
     image="openproblems-python-scvi",
 )
 def scanvi_hvg(adata, test=False):
-    import scanpy as sc
-
     hvg_df = _hvg(adata, test)
     bdata = adata[:, hvg_df.highly_variable].copy()
     adata.obs["labels_pred"] = _scanvi(bdata, test=test)
@@ -153,8 +151,6 @@ def scarches_scanvi_all_genes(adata, test=False):
     image="openproblems-python-scvi",
 )
 def scarches_scanvi_hvg(adata, test=False):
-    import scanpy as sc
-
     hvg_df = _hvg(adata, test)
     bdata = adata[:, hvg_df.highly_variable].copy()
     adata.obs["labels_pred"] = _scanvi_scarches(bdata, test=test)
