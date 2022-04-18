@@ -2,6 +2,32 @@ from ....tools.decorators import method
 from ....tools.utils import check_version
 
 
+def _hvg(adata, test=False, n_top_genes=2000):
+    import scanpy as sc
+
+    hvg_kwargs = dict(
+        flavor="seurat_v3",
+        inplace=False,
+        n_top_genes=n_top_genes,
+        batch_key="batch",
+    )
+    if test:
+        hvg_kwargs["span"] = 0.8
+    try:
+        return sc.pp.highly_variable_genes(adata[adata.obs["is_train"]], **hvg_kwargs)
+    except ValueError:  # loess estimation can fail on small data with seurat_v3 flavor
+        # in this case we try seurat flavor
+        # and copy the data because it needs normalized counts
+        # but later we need raw counts
+        hvg_kwargs["flavor"] = "seurat"
+        normdata = adata.copy()
+        sc.pp.normalize_total(normdata, target_sum=1e4)
+        sc.pp.log1p(normdata)
+        normdata = sc.pp.highly_variable_genes(normdata[normdata.obs["is_train"]], **hvg_kwargs)
+        adata = adata.copy()
+        adata.var = normdata.var.copy()
+        return adata
+
 def _scanvi(adata, test=False):
     import scvi
 
@@ -94,15 +120,7 @@ def scanvi_all_genes(adata, test=False):
 def scanvi_hvg(adata, test=False):
     import scanpy as sc
 
-    hvg_kwargs = dict(
-        flavor="seurat_v3",
-        inplace=False,
-        n_top_genes=2000,
-        batch_key="batch",
-    )
-    if test:
-        hvg_kwargs["span"] = 0.8
-    hvg_df = sc.pp.highly_variable_genes(adata[adata.obs["is_train"]], **hvg_kwargs)
+    hvg_df = _hvg(adata, test)
     bdata = adata[:, hvg_df.highly_variable].copy()
     adata.obs["labels_pred"] = _scanvi(bdata, test=test)
     return adata
@@ -134,15 +152,7 @@ def scarches_scanvi_all_genes(adata, test=False):
 def scarches_scanvi_hvg(adata, test=False):
     import scanpy as sc
 
-    hvg_kwargs = dict(
-        flavor="seurat_v3",
-        inplace=False,
-        n_top_genes=2000,
-        batch_key="batch",
-    )
-    if test:
-        hvg_kwargs["span"] = 0.8
-    hvg_df = sc.pp.highly_variable_genes(adata[adata.obs["is_train"]], **hvg_kwargs)
+    hvg_df = _hvg(adata, test)
     bdata = adata[:, hvg_df.highly_variable].copy()
     adata.obs["labels_pred"] = _scanvi_scarches(bdata, test=test)
     return adata
