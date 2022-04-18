@@ -56,7 +56,7 @@ def generate_synthetic_dataset(adata: AnnData, sim_type: str = "avg", seed: int 
         sc.pp.normalize_total(profile_mean, target_sum=1, inplace=True)
         # run for each bead
         for bead_index in range(num_of_beads):
-            allocation = rng.multinomial(bead_depth, props[bead_index, :], size=1)
+            allocation = rng.multinomial(bead_depth, props[bead_index, :], size=1)[0]
             true_proportion[bead_index, :] = allocation.copy()
             for j in range(n_types):
                 profile_mean.X[j, :] /= (
