@@ -12,17 +12,16 @@ from ....tools.utils import check_version
     image="openproblems-python-extras",
 )
 def stereoscope_raw(adata, test=False):
-    from scvi.data import setup_anndata
-    from scvi.external.stereoscope import RNAStereoscope
-    from scvi.external.stereoscope import SpatialStereoscope
+    from scvi.external import RNAStereoscope
+    from scvi.external import SpatialStereoscope
 
     adata_sc = adata.uns["sc_reference"].copy()
-    setup_anndata(adata_sc, labels_key="label", layer=None)
+    RNAStereoscope.setup_anndata(adata_sc, labels_key="label", layer=None)
     sc_model = RNAStereoscope(adata_sc)
-    sc_model.train()
-    setup_anndata(adata, layer=None)
+    sc_model.train(max_epochs=100)
+    SpatialStereoscope.setup_anndata(adata, layer=None)
 
     stereo = SpatialStereoscope.from_rna_model(adata, sc_model)
-    stereo.train()
+    stereo.train(max_epochs=1000)
     adata.obsm["proportions_pred"] = stereo.get_proportions()
     return adata
