@@ -107,7 +107,6 @@ A neural network generative model that uses the t-SNE objective as a constraint 
 ## The metrics
 
 ### Root mean square error
----
 
 $$
     RMSE = \sqrt{ \sum_{i=1}^{n} \frac{(\hat{y}_i - y_i)^2}{n} }
@@ -121,7 +120,6 @@ Finding the root-mean of the square of all differences (Root mean square error o
 We can calculate and plot Kruskel's stress to get an idea where the majority of distortion of the ***topography*** of the data in high-dimensional space.
 
 ### Trustworthiness
----
 
 _Adapted from the [sklearn documentation.](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.trustworthiness.html)_
 
