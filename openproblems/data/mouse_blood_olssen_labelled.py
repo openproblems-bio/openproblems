@@ -14,16 +14,15 @@ def load_olsson_2016_mouse_blood(test=False):
     if test:
         # load full data first, cached if available
         adata = load_olsson_2016_mouse_blood(test=False)
+
+        # Select 700 genes expressed on most cells
+        sc.pp.calculate_qc_metrics(adata, inplace=True)
+        top = list(adata.var.nlargest(700, "mean_counts").index.values)
+        adata = adata[:, top].copy()
         utils.filter_genes_cells(adata)
 
-        # Subsample data
-        adata = adata[:, :500].copy()
-        utils.filter_genes_cells(adata)
-
-        sc.pp.subsample(adata, n_obs=500)
-        # Note: could also use 200-500 HVGs rather than 200 random genes
-
-        # Ensure there are no cells or genes with 0 counts
+        # Subsample to 300 cells
+        sc.pp.subsample(adata, n_obs=300)
         utils.filter_genes_cells(adata)
 
         return adata
