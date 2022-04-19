@@ -94,9 +94,35 @@ jobs:
         name: ${{ matrix.config.name }}_results
         path: results
 
+  start_runner:
+    name: Start self-hosted EC2 runner
+    needs: run_tester # no need to start the runner if tests fail
+    runs-on: ubuntu-latest
+    outputs:
+      label: ${{ steps.start-ec2-runner.outputs.label }}
+      ec2-instance-id: ${{ steps.start-ec2-runner.outputs.ec2-instance-id }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+      - name: Start EC2 runner
+        id: start-ec2-runner
+        uses: machulav/ec2-github-runner@v2
+        with:
+          mode: start
+          github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          ec2-image-id: ami-0e49a4311399fec5e
+          ec2-instance-type: t2.micro
+          subnet-id: subnet-043507c50393bc702
+          security-group-id: sg-09681ada07da5b6c0
 
   run_benchmark:
-    needs: run_tester
+    needs:
+    - run_tester
+    - start_runner
     runs-on: ${{ matrix.config.os }}
     if: >-
       !contains(github.event.head_commit.message, 'ci skip') &&
@@ -118,12 +144,6 @@ jobs:
       with:
         fetch-depth: 1000
 
-    - name: Install system dependencies
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
-
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -139,8 +159,7 @@ jobs:
       env:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
       run: |
-        echo ${{ github.repository }}
-        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
         if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; \
@@ -163,8 +182,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
+        key: ${{ env.LINUX_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{ env.LINUX_VERSION}}-pip-${{ env.pythonLocation }}-
 
     - name: Install Nextflow
       env:
@@ -191,7 +210,6 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        sudo apt-get install -qy s3fs
         echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
         chmod 600 ~/.passwd-s3fs
         sudo mkdir -p /mnt/openproblems-nextflow
@@ -327,3 +345,25 @@ jobs:
       with:
         name: ${{ matrix.config.name }}_results
         path: ${{ env.RESULTS_PATH }}
+
+  stop_runner:
+    name: Stop self-hosted EC2 runner
+    needs:
+      - start_runner # required to get output from the start-runner job
+      - run_benchmark # required to wait when the main job is done
+    runs-on: ubuntu-latest
+    if: ${{ always() }} # required to stop the runner even if the error happened in the previous jobs
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+      - name: Stop EC2 runner
+        uses: machulav/ec2-github-runner@v2
+        with:
+          mode: stop
+          github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          label: ${{ needs.start_runner.outputs.label }}
+          ec2-instance-id: ${{ needs.start_runner.outputs.ec2-instance-id }}
