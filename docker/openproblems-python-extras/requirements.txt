@@ -7,4 +7,3 @@ phate
 pyensembl
 pybedtools
 git+https://github.com/czbiohub/molecular-cross-validation
-git+https://github.com/atong01/SCOT
