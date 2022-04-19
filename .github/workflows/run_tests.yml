@@ -80,12 +80,12 @@ jobs:
         snakemake -j 4 docker
         cd ..
 
-    - name: Run tests
-      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
-
-    - name: Upload coverage
-      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
-      run: codecov --no-color --required --flags unittests
+#    - name: Run tests
+#      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
+#
+#    - name: Upload coverage
+#      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
+#      run: codecov --no-color --required --flags unittests
 
     - name: Upload check results on fail
       if: failure()
