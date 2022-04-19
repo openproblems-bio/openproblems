@@ -9,3 +9,4 @@ phate
 pyensembl
 pybedtools
 scvi-tools>=0.9.1
+git+https://github.com/czbiohub/molecular-cross-validation

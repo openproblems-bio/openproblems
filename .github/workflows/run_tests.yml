@@ -2,9 +2,10 @@ name: Run Tests
 
 on:
   push:
+    tags:
+      - '*'
     branches-ignore:
       - 'test_docker'
-      - 'test_benchmark'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
@@ -92,3 +93,237 @@ jobs:
       with:
         name: ${{ matrix.config.name }}_results
         path: results
+
+
+  run_benchmark:
+    needs: run_tester
+    runs-on: ${{ matrix.config.os }}
+    if: >-
+      !contains(github.event.head_commit.message, 'ci skip') &&
+      github.event_name == 'push'
+
+    env:
+      BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
+      RESULTS_PATH: "/tmp/${{ github.ref_name }}_results"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {name: 'current', os: ubuntu-18.04, python: '3.8', java_version: 15 }
+
+    steps:
+
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1000
+
+    - name: Install system dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
+        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config.python }}
+
+    - name: Set up Java ${{ matrix.java_version }}
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{matrix.config.java_version}}
+        architecture: x64
+
+    - name: Set up environment
+      env:
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+      run: |
+        echo ${{ github.repository }}
+        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+        # If not on the base repository, append first 6 characters of username to the image name
+        # to avoid clashes on ECR
+        if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; \
+          then echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
+          else echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
+        fi >> $GITHUB_ENV
+        # don't use tower if the env var is not set
+        echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
+        if [ $(echo ${{ github.ref }} | grep -E -e "^refs/heads/(main|test_benchmark)" -e "^refs/tags") ]; then
+          PROFILE="aws"
+          RESUME=""
+        else
+          PROFILE="test,aws"
+          RESUME="-resume"
+        fi
+        echo "PROFILE=$PROFILE" >> $GITHUB_ENV
+        echo "RESUME=$RESUME" >> $GITHUB_ENV
+
+    - name: Cache Python packages
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.pythonLocation }}
+        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
+
+    - name: Install Nextflow
+      env:
+          CAPSULE_LOG: none
+      run: |
+        mkdir /tmp/nextflow
+        cd /tmp/nextflow
+        wget -qO- get.nextflow.io | bash
+        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
+        nextflow -version
+
+    - name: Install AWS CLI
+      run: |
+        mkdir /tmp/awscli
+        cd /tmp/awscli
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip -q awscliv2.zip
+        sudo ./aws/install || sudo ./aws/install --update
+        aws --version
+
+    - name: Set up S3FS
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        sudo apt-get install -qy s3fs
+        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
+        chmod 600 ~/.passwd-s3fs
+        sudo mkdir -p /mnt/openproblems-nextflow
+        sudo chown $USER /mnt/openproblems-nextflow
+        s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
+        # Create bucket/ work/ and cwd/
+        for dir in bucket work cwd; do
+          mkdir -p /mnt/openproblems-nextflow/${dir}/${{ env.BRANCH }}
+        done
+        ls -l /mnt/openproblems-nextflow/*/${{ env.BRANCH }}
+
+    - name: Install package & dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools
+        pip install -U --editable .[evaluate]
+        python -c "import openproblems"
+        openproblems-cli --version
+        openproblems-cli --test-hash
+
+    - name: Build Docker images
+      run: |
+        cd workflow
+        snakemake -j 4 docker
+        cd ..
+
+    - name: Upload Docker images
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+          docker login --username AWS --password-stdin $ECR_ENDPOINT
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+        done
+
+    - name: Run benchmark
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: >-
+        cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }} &&
+        nextflow run
+        $WITH_TOWER
+        -ansi-log false
+        $RESUME
+        -profile $PROFILE
+        -work-dir "/mnt/openproblems-nextflow/work/${{ env.BRANCH }}"
+        -bucket-dir "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
+        singlecellopenproblems/nf-openproblems
+        --branch $BRANCH
+
+    - name: Copy results
+      run: |
+        mkdir -p "${RESULTS_PATH}"
+        cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results "${RESULTS_PATH}"
+
+    - name: Parse results
+      # There's a bug with the results getting pulled from Nextflow with caching, but
+      # this doesn't happen on main, which is the only place `Parse results` is needed
+      if: startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
+      run: |
+        python workflow/parse_nextflow.py "${RESULTS_PATH}"
+
+    - name: AWS cleanup
+      if: always()
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
+        done
+        aws s3 rm "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
+        aws s3 rm "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
+        aws s3 rm "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
+
+    - name: Remove untagged images
+      if: startsWith(github.ref, 'refs/heads/main')
+      continue-on-error: true
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
+        aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
+
+    - name: Pre-commit
+      if: startsWith(github.ref, 'refs/tags')
+      uses: pre-commit/action@v2.0.0
+      continue-on-error: true
+      env:
+        SKIP: style-files,lintr
+
+    - name: Set up Git branch
+      if: startsWith(github.ref, 'refs/tags')
+      run: |
+        git checkout -b $BRANCH_NAME
+        git push -u origin $BRANCH_NAME
+
+    - name: Commit result
+      if: startsWith(github.ref, 'refs/tags')
+      uses: EndBug/add-and-commit@v6
+      with:
+        author_name: SingleCellOpenProblems
+        author_email: singlecellopenproblems@protonmail.com
+        message: 'Update benchmark results # ci skip'
+        add: "['website/data/results', 'results.json']"
+        branch: ${{ env.BRANCH_NAME }}
+        push: false
+
+    - name: Create Pull Request
+      if: startsWith(github.ref, 'refs/tags')
+      uses: peter-evans/create-pull-request@v3
+      with:
+        branch: ${{ env.BRANCH_NAME }}
+        delete-branch: true
+        base: main
+        title: '[auto] Update benchmark results'
+        reviewers: scottgigante, dburkhardt
+
+    - name: Upload results
+      if: always()
+      uses: actions/upload-artifact@main
+      with:
+        name: ${{ matrix.config.name }}_results
+        path: ${{ env.RESULTS_PATH }}

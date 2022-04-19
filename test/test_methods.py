@@ -20,6 +20,7 @@ utils.warnings.ignore_warnings()
         for method in task.METHODS
     ],
     name_func=utils.name.name_test,
+    skip_on_empty=True,
 )
 @utils.docker.docker_test(timeout=600, retries=2)
 def test_method(task_name, method_name, tempdir, image):
