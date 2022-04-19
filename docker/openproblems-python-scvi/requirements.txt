@@ -1,1 +1,2 @@
-scvi-tools~=0.15.5
+scvi-tools~=0.16
+jax==0.3.6
