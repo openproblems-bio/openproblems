@@ -34,5 +34,5 @@ def alra(adata, test=False):
 
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
-    adata.obsm["denoised"] = Y.to_csr()
+    adata.obsm["denoised"] = Y.tocsr()
     return adata
