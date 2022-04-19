@@ -8,4 +8,4 @@ umap-learn
 phate
 pyensembl
 pybedtools
-scvi-tools>=0.9.1
+scvi-tools>=0.16.0
