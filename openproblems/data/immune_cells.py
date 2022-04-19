@@ -15,8 +15,10 @@ def load_immune(test=False):
         # load full data first, cached if available
         adata = load_immune(test=False)
 
+
         # Subsample immune data
         adata = adata[:, :500].copy()
+
         sc.pp.subsample(adata, n_obs=500)
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
