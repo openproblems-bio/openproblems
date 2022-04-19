@@ -81,7 +81,7 @@ jobs:
         cd ..
 
     - name: Run tests
-      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
+      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv --maxfail=2
 
     - name: Upload coverage
       if: success() && ${{ github.repository == 'openproblems-bio/openproblems' }}

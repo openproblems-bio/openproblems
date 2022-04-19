@@ -41,6 +41,9 @@ def load_pancreas(test=False):
 
             # NOTE: X contains counts that are normalized with scran
             adata.layers["log_scran"] = adata.X
+
+            adata.X = adata.layers["counts"]
+            del adata.layers["counts"]
             # Ensure there are no cells or genes with 0 counts
             utils.filter_genes_cells(adata)
 
