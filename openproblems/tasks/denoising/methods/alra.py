@@ -34,5 +34,7 @@ def alra(adata, test=False):
 
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
+    if np.shape(adata.obsm["train"]) != np.shape(Y.tocsr()):
+        raise ValueError(('The dimensions are not the same. Train is of shape'+str(np.shape(adata.obsm["train"])) + ' and denoised is of shape '+str(np.shape(Y.tocsr())))
     adata.obsm["denoised"] = Y.tocsr()
     return adata
