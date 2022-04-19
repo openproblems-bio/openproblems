@@ -8,7 +8,7 @@ import numpy as np
     method_name="Majority Vote",
     paper_name="Majority Vote Dummy",
     paper_url="",
-    paper_year=2000,
+    paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     code_version=check_version("openproblems"),
 )
@@ -23,7 +23,7 @@ def majority_vote(adata, test=False):
     method_name="Random Labels",
     paper_name="Random Labels Dummy",
     paper_url="",
-    paper_year=2000,
+    paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     code_version=check_version("openproblems"),
 )
