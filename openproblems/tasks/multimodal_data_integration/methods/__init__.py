@@ -3,5 +3,3 @@ from .harmonic_alignment import harmonic_alignment_sqrt_cpm
 from .mnn import mnn_log_cpm
 from .mnn import mnn_log_scran_pooling
 from .procrustes import procrustes
-from .scot import scot_log_scran_pooling_balanced
-from .scot import scot_sqrt_cpm_balanced
