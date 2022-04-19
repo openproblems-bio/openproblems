@@ -1,2 +1,3 @@
 scvi-tools~=0.16
+scikit-misc
 jax==0.3.6
