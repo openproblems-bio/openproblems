@@ -74,11 +74,11 @@ jobs:
         install_renv("docker/openproblems-r-base/r_requirements.txt")
       shell: Rscript {0}
 
-    - name: Build Docker images
-      run: |
-        cd workflow
-        snakemake -j 4 docker
-        cd ..
+#    - name: Build Docker images
+#      run: |
+#        cd workflow
+#        snakemake -j 4 docker
+#        cd ..
 
 #    - name: Run tests
 #      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
