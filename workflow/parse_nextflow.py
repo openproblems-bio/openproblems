@@ -5,6 +5,7 @@ import numpyencoder
 import openproblems.api.utils as utils
 import os
 import pandas as pd
+import sys
 
 
 def dump_json(obj, fp):
@@ -94,11 +95,13 @@ def parse_trace_to_dict(df):
     return results
 
 
-def parse_metric_results(results):
+def parse_metric_results(results_path, results):
     """Add metric results to the trace output."""
     missing_traces = []
-    for filename in os.listdir("results/metrics"):
-        with open(os.path.join("results/metrics", filename), "r") as handle:
+    for filename in os.listdir(os.path.join(results_path, "results/metrics")):
+        with open(
+            os.path.join(results_path, "results/metrics", filename), "r"
+        ) as handle:
             result = float(handle.read().strip())
         task_name, dataset_name, method_name, metric_name = filename.replace(
             ".metric.txt", ""
@@ -200,11 +203,13 @@ def results_to_json(results):
                 )
 
 
-def main():
+def main(results_path):
     """Parse the nextflow output."""
-    df = read_trace("results/pipeline_info/execution_trace.txt")
+    df = read_trace(
+        os.path.join(results_path, "results/pipeline_info/execution_trace.txt")
+    )
     results = parse_trace_to_dict(df)
-    results = parse_metric_results(results)
+    results = parse_metric_results(results_path, results)
     results_to_json(results)
     with open("results.json", "w") as handle:
         dump_json(results, handle)
@@ -212,4 +217,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1])
