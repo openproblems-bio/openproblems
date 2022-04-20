@@ -17,8 +17,8 @@ def load_immune(test=False):
 
         # Subsample immune data to two batches with 250 cells each
         adata = adata[:, :500].copy()
-        batch1 = adata[adata.obs.batch=='Oetjen_A'][:250]
-        batch2 = adata[adata.obs.batch=='Freytag'][:250]
+        batch1 = adata[adata.obs.batch == "Oetjen_A"][:250]
+        batch2 = adata[adata.obs.batch == "Freytag"][:250]
         adata = batch1.concatenate(batch2)
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
