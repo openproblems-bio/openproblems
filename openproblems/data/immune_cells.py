@@ -15,9 +15,11 @@ def load_immune(test=False):
         # load full data first, cached if available
         adata = load_immune(test=False)
 
-        # Subsample immune data
+        # Subsample immune data to two batches with 250 cells each
         adata = adata[:, :500].copy()
-        sc.pp.subsample(adata, n_obs=500)
+        batch1 = adata[adata.obs.batch=='Oetjen_A'][:250]
+        batch2 = adata[adata.obs.batch=='Freytag'][:250]
+        adata = batch1.concatenate(batch2)
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
         # Ensure there are no cells or genes with 0 counts
