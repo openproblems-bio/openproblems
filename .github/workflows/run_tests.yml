@@ -272,9 +272,9 @@ jobs:
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
         done
-        aws s3 rm "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
-        aws s3 rm "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-        aws s3 rm "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
 
     - name: Remove untagged images
       if: startsWith(github.ref, 'refs/heads/main')
