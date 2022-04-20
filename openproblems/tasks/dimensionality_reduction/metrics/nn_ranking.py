@@ -15,7 +15,7 @@ The following changes have been made:
 """
 
 from ....tools.decorators import metric
-from ....tools.normalize import preprocess_logCPM_1kHVG
+from ....tools.normalize import log_cpm_hvg
 from anndata import AnnData
 from numba import njit
 from scipy.sparse import issparse
@@ -110,7 +110,7 @@ def _metrics(
 
 def _high_dim(adata: AnnData) -> np.ndarray:
     adata.X = adata.layers["counts"]
-    adata = preprocess_logCPM_1kHVG(adata)
+    adata = log_cpm_hvg(adata)
     high_dim = adata.X
     return high_dim.A if issparse(high_dim) else high_dim
 

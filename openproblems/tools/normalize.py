@@ -56,16 +56,22 @@ def sqrt_cpm(adata: ad.AnnData) -> ad.AnnData:
 
 
 @decorators.normalizer
-def preprocess_logCPM_1kHVG(adata: ad.AnnData) -> ad.AnnData:
+def log_cpm_hvg(adata: ad.AnnData, n_genes: int = 1000) -> ad.AnnData:
+    """Normalize logCPM HVG
+
+    Normalize data to log counts per million and select n_genes highly
+    variable genes
+    """
 
     adata = log_cpm(adata)
-    n_top = 1000
-    if adata.n_vars < n_top:
-        new_n_top = int(adata.n_vars * 0.5)
-        warnings.warn(f"Less than {n_top} genes, setting 'n_top_genes' to {new_n_top}")
-        n_top = new_n_top
 
-    sc.pp.highly_variable_genes(adata, n_top_genes=n_top, flavor="cell_ranger")
+    if adata.n_vars < n_genes:
+        warnings.warn(
+            f"Less than {n_genes} genes, setting 'n_genes' to {int(adata.n_vars * 0.5)}"
+        )
+        n_genes = int(adata.n_vars * 0.5)
+
+    sc.pp.highly_variable_genes(adata, n_top_genes=n_genes, flavor="cell_ranger")
     adata = adata[:, adata.var["highly_variable"]].copy()
 
     return adata

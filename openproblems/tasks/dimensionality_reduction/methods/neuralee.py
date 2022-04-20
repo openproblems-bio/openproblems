@@ -1,5 +1,5 @@
 from ....tools.decorators import method
-from ....tools.normalize import preprocess_logCPM_1kHVG
+from ....tools.normalize import log_cpm_hvg
 from ....tools.utils import check_version
 from anndata import AnnData
 
@@ -58,7 +58,7 @@ def neuralee_logCPM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
 
     import torch
 
-    adata = preprocess_logCPM_1kHVG(adata)
+    adata = log_cpm_hvg(adata)
 
     dataset = GeneExpressionDataset(adata.X)
     dataset.affinity_split(N_small=min(1000, adata.n_obs))

@@ -193,7 +193,7 @@ Different methods can require different pre-processing of the data.
 Standard pre-processing functions are available as part of the `tools` module.
 Where possible each **method** should first call one of these functions and use the processed `adata.X` slot as the input to the method.
 Raw counts are also stored in `adata.layers["counts"]` by the standard pre-processing functions, if a method performs its own pre-processing it should also do this for use by metrics.
-For most methods a standard pre-processing is used which normalizes the expression matrix to counts per million (CPM), performs a log transformation and subsets the data to 1000 highly-variable genes (HVGs) scanpy's `high_variable_genes(adata, n_top_genes=1000, flavor="cell_ranger")`.
+For most methods a standard pre-processing with the `log_cpm_hvg()` function is used which normalizes the expression matrix to counts per million (CPM), performs a log transformation and subsets the data to highly-variable genes (HVGs) as selected by scanpy's `high_variable_genes(adata, n_top_genes=n_genes, flavor="cell_ranger")` (1000 genes by default).
 Variants of methods can be created by applying different pre-processing prior to the method itself (see `phate.py` for an example).
 
 1. Raimundo, F., Vallot, C. & Vert, J. Tuning parameters of dimensionality reduction methods for single-cell RNA-seq analysis. Genome Biol 21, 212 (2020). https://doi.org/10.1186/s13059-020-02128-7

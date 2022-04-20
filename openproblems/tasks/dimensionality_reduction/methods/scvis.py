@@ -1,5 +1,5 @@
 from ....tools.decorators import method
-from ....tools.normalize import preprocess_logCPM_1kHVG
+from ....tools.normalize import log_cpm_hvg
 from ....tools.utils import check_version
 from anndata import AnnData
 from scipy.sparse import issparse
@@ -97,7 +97,7 @@ def _fit(data: np.ndarray):
     image="openproblems-python36",
 )
 def scvis_logCM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
-    adata = preprocess_logCPM_1kHVG(adata)
+    adata = log_cpm_hvg(adata)
 
     model, x = _fit(adata.X.A if issparse(adata.X) else adata.X)
     emb, _ = model.encode(x)

@@ -1,5 +1,5 @@
 from ....tools.decorators import method
-from ....tools.normalize import preprocess_logCPM_1kHVG
+from ....tools.normalize import log_cpm_hvg
 from ....tools.normalize import sqrt_cpm
 from ....tools.utils import check_version
 
@@ -41,5 +41,5 @@ def phate_default(adata, test: bool = False, n_pca=None):
     image="openproblems-python-extras",
 )
 def phate_logCPM_1kHVG(adata, test: bool = False, n_pca=None):
-    adata = preprocess_logCPM_1kHVG(adata)
+    adata = log_cpm_hvg(adata)
     return _phate(adata, n_pca=n_pca)

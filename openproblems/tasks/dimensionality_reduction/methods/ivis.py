@@ -1,5 +1,5 @@
 from ....tools.decorators import method
-from ....tools.normalize import preprocess_logCPM_1kHVG
+from ....tools.normalize import log_cpm_hvg
 from ....tools.utils import check_version
 from anndata import AnnData
 
@@ -19,7 +19,7 @@ import scanpy as sc
 def ivis_logCPM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
     from ivis import Ivis
 
-    adata = preprocess_logCPM_1kHVG(adata)
+    adata = log_cpm_hvg(adata)
     sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
 
     # parameters taken from:
