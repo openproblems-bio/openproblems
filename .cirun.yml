@@ -8,6 +8,7 @@ runners:
     instance_type: t2.nano
     # Ubuntu-20.4, ami image
     machine_image: ami-06fd8a495a537da8b
+    region: us-west-2
     # preemptible instances seems quite less reliable.
     preemptible: false
     # Path of the relevant workflow file

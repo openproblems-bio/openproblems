@@ -51,14 +51,15 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     ![AWS secrets success](website/static/img/AWS_secret.png)
 
 5. Enable workflows at [https://github.com/USERNAME/SingleCellOpenProblems/actions](https://github.com/USERNAME/SingleCellOpenProblems/actions)
-6. Set up your git repository to fetch branches from `base` at `singlecellopenproblems/SingleCellOpenProblems`
+6. Set up [Cirun.io](https://docs.cirun.io/quickstart.html) with your fork of the repository, and add your AWS credentials in the Cirun console. 
+7. Set up your git repository to fetch branches from `base` at `singlecellopenproblems/SingleCellOpenProblems`
 
     ```
     git clone git@github.com:<username>/SingleCellOpenProblems.git
     cd SingleCellOpenProblems
     git remote add base git@github.com:singlecellopenproblems/SingleCellOpenProblems.git
     git fetch --all
-    git branch --set-upstream-to base/master
+    git branch --set-upstream-to base/main
     git pull
     ```
     **Note:** If you haven't set up SSH keys with your GitHub account, you may see this error message when adding `base` to your repository:
@@ -70,34 +71,34 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     To generate an SSH key and add it to your GitHub account, follow [this tutorial from GitHub](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
 
 
-7. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`.
+8. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`.
 
     **Note:** This pushes the branch to your fork, _not to_ `base`. You will create a PR to merge your branch to `base` only after all tests are passing.
 
-    **Warning:** Do not edit the `master` branch on your fork! This will not work as expected, and will never pass tests.
+    **Warning:** Do not edit the `main` branch on your fork! This will not work as expected, and will never pass tests.
     ```
     # IMPORTANT: choose a new branch name, e.g.
     git checkout -b method-method-name-task-name # or metric-new-metric-name, etc
     git push -u origin method-method-name-task-name
     ```
 
-8. Sometimes, changes might be made to the SingleCellOpenProblems `base` repository that you want to incorporate into your fork. To sync your fork from `base`, use the following code adapted from the [Syncing a Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) tutorial from GitHub.
+9. Sometimes, changes might be made to the SingleCellOpenProblems `base` repository that you want to incorporate into your fork. To sync your fork from `base`, use the following code adapted from the [Syncing a Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) tutorial from GitHub.
     ```
     # Fetch the branches and their respective commits from the upstream repository
     git fetch base
 
     # Check out your fork's local default branch
-    git checkout master
+    git checkout main
 
     # Merge the changes from the upstream default branch
-    git merge base/master
+    git merge base/main
 
     # Push the changes to your fork
     git push -u origin
     ```
-    You can now create a [Pull Request](https://guides.github.com/activities/hello-world/#pr) from the default branch on your fork, `master`, into your working branch, e.g. `method-method-name-task-name`.
+    You can now create a [Pull Request](https://guides.github.com/activities/hello-world/#pr) from the default branch on your fork, `main`, into your working branch, e.g. `method-method-name-task-name`.
 
-8. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
+10. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
 
 ## API
 
