@@ -1,10 +1,12 @@
 from ....tools.decorators import method
+from ....tools.normalize import log_cpm_hvg
 from ....tools.utils import check_version
-from .preprocessing import preprocess_scanpy
+
+import scanpy as sc
 
 
 @method(
-    method_name="Principle Component Analysis (PCA)",
+    method_name="Principle Component Analysis (PCA) (logCPM, 1kHVG)",
     paper_name="On lines and planes of closest fit to systems of points in space",
     paper_url="https://www.tandfonline.com/doi/abs/10.1080/14786440109462720",
     paper_year=1901,
@@ -12,7 +14,8 @@ from .preprocessing import preprocess_scanpy
     "sklearn.decomposition.PCA.html",
     code_version=check_version("scikit-learn"),
 )
-def pca(adata, test=False):
-    preprocess_scanpy(adata)
-    adata.obsm["X_emb"] = adata.obsm["X_input"][:, :2]
+def pca_logCPM_1kHVG(adata, test: bool = False):
+    adata = log_cpm_hvg(adata)
+    sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
+    adata.obsm["X_emb"] = adata.obsm["X_pca"][:, :2]
     return adata
