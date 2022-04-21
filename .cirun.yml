@@ -1,0 +1,14 @@
+# Self-Hosted Github Action Runners on AWS via Cirun.io
+# Reference: https://docs.cirun.io/reference/yaml.html
+runners:
+  - name: aws-runner
+    # Cloud Provider: AWS
+    cloud: aws
+    # Cheapest VM on AWS
+    instance_type: t2.nano
+    # Ubuntu-20.4, ami image
+    machine_image: ami-0e49a4311399fec5e
+    # preemptible instances seems quite less reliable.
+    preemptible: false
+    # Path of the relevant workflow file
+    workflow: .github/workflows/run_tests.yml
