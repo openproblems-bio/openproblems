@@ -7,7 +7,7 @@ import scanpy as sc
 
 
 @method(
-    method_name="Ivis (CPU) (logCPM, 1kHVG)",
+    method_name="ivis (CPU) (logCPM, 1kHVG)",
     paper_name="Structure-preserving visualisation of "
     "high dimensional single-cell datasets",
     paper_url="https://www.nature.com/articles/s41598-019-45301-0",
