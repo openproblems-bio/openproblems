@@ -82,12 +82,6 @@ This implementation is from the [phate package](https://phate.readthedocs.io/en/
 * The square-root CPM transformed expression matrix
 * 50 principal components of the logCPM-normalised, 1000 HVG expression matrix
 
-### ivis
-
-[Reference](https://www.nature.com/articles/s41598-019-45301-0)
-
-[ivis](https://bering-ivis.readthedocs.io/en/latest/) is a machine learning library for reducing dimensionality of very large datasets using Siamese Neural Networks.
-
 ### NeuralEE
 
 [Reference](https://www.frontiersin.org/articles/10.3389/fgene.2020.00786/full)
