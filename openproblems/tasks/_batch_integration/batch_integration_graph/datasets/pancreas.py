@@ -5,7 +5,7 @@ import scanpy as sc
 
 
 @dataset(dataset_name="Pancreas (by batch)", image="openproblems")
-def immune_batch(test=False):
+def pancreas_batch(test=False):
     adata = load_pancreas(test)
     from_cache = adata.__from_cache__
     adata.obs["labels"] = adata.obs["final_annotation"]
