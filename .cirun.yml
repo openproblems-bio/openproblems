@@ -7,7 +7,7 @@ runners:
     # Cheapest VM on AWS
     instance_type: t2.nano
     # Ubuntu-20.4, ami image
-    machine_image: ami-0e49a4311399fec5e
+    machine_image: ami-06fd8a495a537da8b
     # preemptible instances seems quite less reliable.
     preemptible: false
     # Path of the relevant workflow file
