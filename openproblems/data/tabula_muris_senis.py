@@ -59,18 +59,6 @@ def make_anndata_list(subset_df, test):
     return adata_list
 
 
-def combine_anndata(anndata_list):
-    """Combines list of anndata objects and returns 1 anndata object.
-
-    Takes in a list of anndata objects.
-    Returns 1 anndata with all anndata objects combined.
-    """
-
-    # if anndata_list only contains 1 anndata object, will return that object
-    anndata_concat = anndata_list[0].concatenate(anndata_list[1:])
-    return anndata_concat
-
-
 @utils.loader
 def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
     """Load tubula_muris_senis datasets into 1 anndata object based on user input.
@@ -95,5 +83,9 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
 
     subset_df = get_filenames_and_urls(url_df, method_list, organ_list)
     adata_list = make_anndata_list(subset_df, test)
-    adata_final = combine_anndata(adata_list)
-    return adata_final
+    adata = adata_list[0].concatenate(adata_list[1:])
+    if test:
+        sc.pp.subsample(adata, n_obs=500)
+        adata = adata[:, :1000]
+        utils.filter_genes_cells(adata)
+    return adata
