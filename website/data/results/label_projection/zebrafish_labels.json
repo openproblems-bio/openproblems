@@ -23,19 +23,34 @@
     },
     "results": [
         {
+            "Name": "K-neighbors classifier (log CPM)",
+            "Paper": "Nearest neighbor pattern classification",
+            "Paper URL": "https://doi.org/10.1109/TIT.1967.1053964",
+            "Year": 1967,
+            "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html",
+            "Version": "1.0.2",
+            "Runtime (min)": 8.283333333333333,
+            "CPU (%)": 113.4,
+            "Memory (GB)": 3.3,
+            "Rank": 6,
+            "F1 score": 0.22139966259940333,
+            "Micro F1 score": 0.18989230569612042,
+            "Accuracy": 0.18989230569612042
+        },
+        {
             "Name": "Logistic regression (log CPM)",
             "Paper": "Applied Logistic Regression",
             "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-            "Version": "0.24.1",
-            "Runtime (min)": 22.75,
-            "CPU (%)": 261.6,
+            "Version": "1.0.2",
+            "Runtime (min)": 9.583333333333334,
+            "CPU (%)": 188.4,
             "Memory (GB)": 1.9,
-            "Rank": 3,
-            "F1 score": 0.25314180004077963,
-            "Accuracy": 0.20688984040482677,
-            "Micro F1 score": 0.20688984040482677
+            "Rank": 2,
+            "Accuracy": 0.22375762294018425,
+            "F1 score": 0.2607469614462019,
+            "Micro F1 score": 0.22375762294018425
         },
         {
             "Name": "Multilayer perceptron (log CPM)",
@@ -43,14 +58,14 @@
             "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-            "Version": "0.24.1",
-            "Runtime (min)": 26.6,
-            "CPU (%)": 478.4,
+            "Version": "1.0.2",
+            "Runtime (min)": 12.5,
+            "CPU (%)": 719.3,
             "Memory (GB)": 1.9,
-            "Rank": 2,
-            "Micro F1 score": 0.22797456857402362,
-            "F1 score": 0.2553562224649691,
-            "Accuracy": 0.22797456857402362
+            "Rank": 3,
+            "Micro F1 score": 0.22226547294667184,
+            "F1 score": 0.27416813241605453,
+            "Accuracy": 0.22226547294667184
         },
         {
             "Name": "Logistic regression (log scran)",
@@ -58,14 +73,29 @@
             "Paper URL": "https://books.google.com/books?id=64JYAwAAQBAJ",
             "Year": 2013,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html",
-            "Version": "0.24.1",
-            "Runtime (min)": 34.43333333333333,
-            "CPU (%)": 132.2,
-            "Memory (GB)": 6.1,
+            "Version": "1.0.2",
+            "Runtime (min)": 12.283333333333333,
+            "CPU (%)": 118.0,
+            "Memory (GB)": 8.8,
             "Rank": 1,
-            "Accuracy": 0.2407551576488906,
-            "F1 score": 0.2940364054990422,
-            "Micro F1 score": 0.2407551576488906
+            "F1 score": 0.27731889386814906,
+            "Accuracy": 0.22914233813416374,
+            "Micro F1 score": 0.22914233813416374
+        },
+        {
+            "Name": "K-neighbors classifier (log scran)",
+            "Paper": "Nearest neighbor pattern classification",
+            "Paper URL": "https://doi.org/10.1109/TIT.1967.1053964",
+            "Year": 1967,
+            "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html",
+            "Version": "1.0.2",
+            "Runtime (min)": 12.816666666666666,
+            "CPU (%)": 118.8,
+            "Memory (GB)": 8.8,
+            "Rank": 5,
+            "Micro F1 score": 0.19482288828337874,
+            "Accuracy": 0.19482288828337874,
+            "F1 score": 0.20424421195342124
         },
         {
             "Name": "Multilayer perceptron (log scran)",
@@ -73,14 +103,14 @@
             "Paper URL": "https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
             "Year": 1990,
             "Code": "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html",
-            "Version": "0.24.1",
-            "Runtime (min)": 36.266666666666666,
-            "CPU (%)": 246.5,
-            "Memory (GB)": 6.1,
+            "Version": "1.0.2",
+            "Runtime (min)": 13.766666666666667,
+            "CPU (%)": 352.0,
+            "Memory (GB)": 8.8,
             "Rank": 4,
-            "F1 score": 0.21410854007941685,
-            "Accuracy": 0.1943687556766576,
-            "Micro F1 score": 0.1943687556766576
+            "Accuracy": 0.2129233164655508,
+            "F1 score": 0.24399530652811688,
+            "Micro F1 score": 0.2129233164655508
         }
     ]
 }
