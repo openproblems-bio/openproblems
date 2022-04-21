@@ -84,11 +84,14 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
 
     # df containing figshare links, method of collection, and organ for each
     # tabula muris dataset
-    url_df = pd.read_csv(os.path.join(
-        os.path.dirname(__file__),
-        "tabula_muris_senis_data_objects",
-        "tabula_muris_senis_data_objects.csv"
-    ), header=0)
+    url_df = pd.read_csv(
+        os.path.join(
+            os.path.dirname(__file__),
+            "tabula_muris_senis_data_objects",
+            "tabula_muris_senis_data_objects.csv",
+        ),
+        header=0,
+    )
 
     subset_df = get_filenames_and_urls(url_df, method_list, organ_list)
     adata_list = make_anndata_list(subset_df, test)
