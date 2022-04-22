@@ -233,7 +233,6 @@ jobs:
         AWS_DEFAULT_REGION: us-west-2
       run: |
         set -eou pipefail
-        sudo chmod 755 /usr/local/bin/nextflow
         cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}
         nextflow run $WITH_TOWER \
         -ansi-log false $RESUME \
