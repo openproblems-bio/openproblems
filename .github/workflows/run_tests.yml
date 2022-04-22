@@ -74,18 +74,18 @@ jobs:
         install_renv("docker/openproblems-r-base/r_requirements.txt")
       shell: Rscript {0}
 
-    - name: Build Docker images
-      run: |
-        cd workflow
-        snakemake -j 4 docker
-        cd ..
-
-    - name: Run tests
-      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
-
-    - name: Upload coverage
-      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
-      run: codecov --no-color --required --flags unittests
+#    - name: Build Docker images
+#      run: |
+#        cd workflow
+#        snakemake -j 4 docker
+#        cd ..
+#
+#    - name: Run tests
+#      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
+#
+#    - name: Upload coverage
+#      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
+#      run: codecov --no-color --required --flags unittests
 
     - name: Upload check results on fail
       if: failure()
@@ -122,7 +122,7 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev unzip
 
     - name: Set up Python
       uses: actions/setup-python@v2
