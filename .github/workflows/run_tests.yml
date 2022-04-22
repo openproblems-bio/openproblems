@@ -231,8 +231,10 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
+        TOWER_WORKSPACE_ID: 53907369739130
       run: |
         set -eou pipefail
+        nextflow run hello > /dev/null
         cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}
         nextflow run $WITH_TOWER \
         -ansi-log false $RESUME \
