@@ -33,46 +33,46 @@ jobs:
       with:
         access_token: ${{ github.token }}
 
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-
-    - name: Set up environment
-      run: |
-        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
-        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
-        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
-
-    - name: Cache Python packages
-      uses: actions/cache@v2
-      with:
-        path: ${{ env.PYTHON_VERSION }}
-        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
-
-    - name: Install package & dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -U wheel setuptools
-        pip install -U --editable .[test,r,evaluate]
-        python -c "import openproblems"
-
-    - name: Cache R packages
-      uses: actions/cache@v2
-      if: startsWith(runner.os, 'Linux')
-      with:
-        path: /usr/local/lib/R/site-library
-        key: ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
-        restore-keys: |
-          ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
-
-    - name: Install R packages
-      run: |
-        if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-        renv::restore()
-        source("./scripts/install_renv.R")
-        install_renv("docker/openproblems-r-base/r_requirements.txt")
-      shell: Rscript {0}
+#    - uses: actions/checkout@v2
+#      with:
+#        fetch-depth: 0
+#
+#    - name: Set up environment
+#      run: |
+#        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
+#        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
+#        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
+#
+#    - name: Cache Python packages
+#      uses: actions/cache@v2
+#      with:
+#        path: ${{ env.PYTHON_VERSION }}
+#        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
+#        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
+#
+#    - name: Install package & dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install -U wheel setuptools
+#        pip install -U --editable .[test,r,evaluate]
+#        python -c "import openproblems"
+#
+#    - name: Cache R packages
+#      uses: actions/cache@v2
+#      if: startsWith(runner.os, 'Linux')
+#      with:
+#        path: /usr/local/lib/R/site-library
+#        key: ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
+#        restore-keys: |
+#          ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
+#
+#    - name: Install R packages
+#      run: |
+#        if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+#        renv::restore()
+#        source("./scripts/install_renv.R")
+#        install_renv("docker/openproblems-r-base/r_requirements.txt")
+#      shell: Rscript {0}
 
 #    - name: Build Docker images
 #      run: |
@@ -134,6 +134,9 @@ jobs:
       with:
         java-version: ${{matrix.config.java_version}}
         architecture: x64
+
+    - name: Set up Docker
+      uses: docker-practice/actions-setup-docker@v1
 
     - name: Set up environment
       env:
