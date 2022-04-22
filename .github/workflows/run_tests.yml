@@ -91,7 +91,7 @@ jobs:
       if: failure()
       uses: actions/upload-artifact@main
       with:
-        name: ${{ matrix.config.name }}_results
+        name: results
         path: results
 
 
@@ -105,12 +105,6 @@ jobs:
     env:
       BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
       RESULTS_PATH: "/tmp/${{ github.ref_name }}_results"
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - {name: 'current', os: ubuntu-18.04, python: '3.8', java_version: 15 }
 
     steps:
 
@@ -156,7 +150,7 @@ jobs:
       env:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
       run: |
-        echo ${{ github.repository }}
+        echo "PYTHON_LOCATION=$(which python3)" >> $GITHUB_ENV
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
@@ -179,9 +173,9 @@ jobs:
     - name: Cache Python packages
       uses: actions/cache@v2
       with:
-        path: ${{ env.pythonLocation }}
-        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
+        path: ${{ env.PYTHON_LOCATION }}
+        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.PYTHON_LOCATION }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.PYTHON_LOCATION }}-
 
     - name: Set up S3FS
       env:
@@ -320,5 +314,5 @@ jobs:
       if: always()
       uses: actions/upload-artifact@main
       with:
-        name: ${{ matrix.config.name }}_results
+        name: results
         path: ${{ env.RESULTS_PATH }}
