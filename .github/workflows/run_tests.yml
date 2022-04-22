@@ -130,10 +130,10 @@ jobs:
         mkdir /tmp/nextflow
         cd /tmp/nextflow
         wget -qO- get.nextflow.io | bash
-        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
+        sudo mv /tmp/nextflow/nextflow /usr/local/bin/nextflow
         nextflow -version
         # Install AWS & S3FS
-        sudo apt-get install -qy s3fs
+        sudo apt-get install -y s3fs
         mkdir /tmp/awscli
         cd /tmp/awscli
         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -142,8 +142,8 @@ jobs:
         aws --version
         # Install Python dependencies
         sudo pip3 install -U wheel setuptools
-        sudo pip3 install --ignore-installed --upgrade PyYAML
-        sudo pip3 install --editable "openproblems[evaluate] @ git+https://github.com/openproblems-bio/openproblems"
+        sudo pip3 install --ignore-installed --upgrade PyYAML packaging
+        sudo pip3 install "openproblems[evaluate] @ git+https://github.com/openproblems-bio/openproblems"
         sudo pip3 uninstall -y openproblems
 
     - name: Set up environment
