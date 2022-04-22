@@ -2,14 +2,11 @@
 # Reference: https://docs.cirun.io/reference/yaml.html
 runners:
   - name: aws-runner
-    # Cloud Provider: AWS
     cloud: aws
-    # Cheapest VM on AWS
     instance_type: t2.micro
-    # Ubuntu-20.4, ami image
-    machine_image: ami-0892d3c7ee96c0bf7
+    # Custom Ubuntu 20.04 image
+    machine_image: ami-04a6a1f247fc964ca
     region: us-west-2
     # preemptible instances seems quite less reliable.
     preemptible: false
-    # Path of the relevant workflow file
     workflow: .github/workflows/run_tests.yml
