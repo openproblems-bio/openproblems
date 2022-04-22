@@ -122,7 +122,7 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev unzip
+        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev unzip curl
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -136,7 +136,9 @@ jobs:
         architecture: x64
 
     - name: Set up Docker
-      uses: docker-practice/actions-setup-docker@v1
+      run: |
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sh get-docker.sh
 
     - name: Set up environment
       env:
