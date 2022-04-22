@@ -5,7 +5,7 @@ runners:
     cloud: aws
     instance_type: t3a.micro
     # Custom Ubuntu 20.04 image
-    machine_image: ami-0f30fa24d35b99a02
+    machine_image: ami-0e11cafd3dd80c226
     region: us-west-2
     # preemptible instances seems quite less reliable.
     preemptible: false
