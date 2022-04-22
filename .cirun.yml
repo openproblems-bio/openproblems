@@ -7,7 +7,7 @@ runners:
     # Cheapest VM on AWS
     instance_type: t2.nano
     # Ubuntu-20.4, ami image
-    machine_image: ami-06fd8a495a537da8b
+    machine_image: ami-0892d3c7ee96c0bf7
     region: us-west-2
     # preemptible instances seems quite less reliable.
     preemptible: false
