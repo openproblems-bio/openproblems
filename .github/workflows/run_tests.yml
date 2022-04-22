@@ -150,6 +150,8 @@ jobs:
       env:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
       run: |
+        SCRIPTS_PATH=$(python3 -c 'import os, sysconfig; print(sysconfig.get_path("scripts",f"{os.name}_user"))')
+        echo "PATH=${SCRIPTS_PATH}:${PATH}" >> $GITHUB_ENV
         echo "PYTHON_LOCATION=$(which python3)" >> $GITHUB_ENV
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
@@ -196,7 +198,7 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        pip install -U --editable .[evaluate]
+        pip3 install -U --editable .[evaluate]
         python3 -c "import openproblems"
         openproblems-cli --version
         openproblems-cli --test-hash
