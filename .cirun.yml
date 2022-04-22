@@ -5,7 +5,7 @@ runners:
     # Cloud Provider: AWS
     cloud: aws
     # Cheapest VM on AWS
-    instance_type: t2.nano
+    instance_type: t2.micro
     # Ubuntu-20.4, ami image
     machine_image: ami-0892d3c7ee96c0bf7
     region: us-west-2
