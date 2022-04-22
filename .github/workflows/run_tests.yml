@@ -131,6 +131,7 @@ jobs:
         cd /tmp/nextflow
         wget -qO- get.nextflow.io | bash
         sudo mv /tmp/nextflow/nextflow /usr/local/bin/nextflow
+        sudo chmod +x /usr/local/bin/nextflow
         nextflow -version
         # Install AWS & S3FS
         sudo apt-get install -y s3fs
@@ -206,7 +207,7 @@ jobs:
     - name: Build Docker images
       run: |
         cd workflow
-        snakemake -j 4 docker
+        snakemake -j 4 docker_pull
         cd ..
 
     - name: Upload Docker images
@@ -229,17 +230,18 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
-      run: >-
-        cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }} &&
-        nextflow run
-        $WITH_TOWER
-        -ansi-log false
-        $RESUME
-        -profile $PROFILE
-        -work-dir "/mnt/openproblems-nextflow/work/${{ env.BRANCH }}"
-        -bucket-dir "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-        singlecellopenproblems/nf-openproblems
-        --branch $BRANCH 2>&1 | grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
+      run: |
+        set -eou pipefail
+        sudo chmod +x /usr/local/bin/nextflow
+        cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}
+        nextflow run $WITH_TOWER \
+        -ansi-log false $RESUME \
+        -profile $PROFILE \
+        -work-dir "/mnt/openproblems-nextflow/work/${{ env.BRANCH }}" \
+        -bucket-dir "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}" \
+        singlecellopenproblems/nf-openproblems \
+        --branch $BRANCH 2>&1 | \
+        grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
 
     - name: Copy results
       run: |
