@@ -240,13 +240,14 @@ jobs:
         TOWER_WORKSPACE_ID: 53907369739130
       run: |
         set -eou pipefail
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g')_$(git rev-parse --short HEAD)"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run $WITH_TOWER \
         -ansi-log false $RESUME \
         -profile $PROFILE \
         -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
         -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
-        -name "${BRANCH}_$(git rev-parse --short HEAD)" \
+        -name "${RUN_NAME}" \
         singlecellopenproblems/nf-openproblems \
         --branch ${BRANCH} 2>&1 | \
         grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
