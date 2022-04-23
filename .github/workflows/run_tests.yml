@@ -170,6 +170,7 @@ jobs:
         else
           PROFILE="test,aws"
           RESUME="-resume"
+          RESUME_JSON=", {'resume':true}"
         fi
         echo "PROFILE=$PROFILE" >> $GITHUB_ENV
         echo "RESUME=$RESUME" >> $GITHUB_ENV
@@ -245,6 +246,25 @@ jobs:
         singlecellopenproblems/nf-openproblems \
         --branch $BRANCH 2>&1 | \
         grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
+
+    - uses: nf-core/tower-action@v2
+      # Use repository secrets for sensitive fields
+      with:
+        workspace_id: 53907369739130
+        access_token: ${{ secrets.TOWER_ACCESS_KEY }}
+        compute_env: AWS
+        pipeline: openproblems-bio/nf-openproblems
+        revision: master
+        workdir: s3://openproblems-nextflow/work/${{ env.BRANCH }}
+        # Set any custom pipeline params here - JSON object as a string
+        parameters: |
+          {
+              "branch": "${{ env.BRANCH }}",
+              "bucket-dir": "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"{{env.RESUME_JSON}},
+              "outdir": "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
+          }
+        # List of pipeline config profiles to use - comma separated list as a string
+        profiles: ${{ env.PROFILE }}
 
     - name: Copy results
       run: |

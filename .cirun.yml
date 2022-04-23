@@ -3,7 +3,7 @@
 runners:
   - name: aws-runner
     cloud: aws
-    instance_type: t3a.micro
+    instance_type: t3a.small
     # Custom Ubuntu 20.04 image
     machine_image: ami-099541f93b78767e9
     region: us-west-2
