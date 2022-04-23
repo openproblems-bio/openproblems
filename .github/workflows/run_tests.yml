@@ -201,9 +201,10 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        pip3 install -U --editable .[evaluate]
+        sudo pip3 install -U --editable .[evaluate]
+        export PYTHONPATH="$(pwd)"
         python3 -c "import openproblems"
-        echo "PYTHONPATH='$(pwd)'" >> $GITHUB_ENV
+        echo "PYTHONPATH=${PYTHONPATH}" >> $GITHUB_ENV
 
     - name: Test install
       run: |
@@ -252,7 +253,6 @@ jobs:
         -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
         -name "${RUN_NAME}" \
         -e.PYTHONPATH="${PYTHONPATH}" \
-        -e.PYTHONNOUSERSITE="" \
         singlecellopenproblems/nf-openproblems \
         --branch ${BRANCH} 2>&1 | \
         grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
