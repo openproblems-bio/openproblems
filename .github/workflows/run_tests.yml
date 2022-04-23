@@ -207,11 +207,12 @@ jobs:
 
     - name: Test install
       run: |
-        pushd
+        CWD=$(pwd)
+        cd /tmp
         openproblems-cli --version
         openproblems-cli --test-hash
         nextflow -version 2> /dev/null
-        popd
+        cd "${CWD}"
 
 #    - name: Build Docker images
 #      run: |
