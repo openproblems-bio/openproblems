@@ -203,13 +203,15 @@ jobs:
       run: |
         pip3 install -U --editable .[evaluate]
         python3 -c "import openproblems"
-        echo 'PYTHONPATH="$(pwd)"' >> $GITHUB_ENV
+        echo "PYTHONPATH='$(pwd)'" >> $GITHUB_ENV
 
     - name: Test install
       run: |
+        pushd
         openproblems-cli --version
         openproblems-cli --test-hash
         nextflow -version 2> /dev/null
+        popd
 
 #    - name: Build Docker images
 #      run: |
