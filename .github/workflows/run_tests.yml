@@ -201,7 +201,7 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        pip3 install --user -U --editable .[evaluate]
+        pip3 install -U --editable .[evaluate]
         python3 -c "import openproblems"
         echo 'PYTHONPATH="$(pwd)"' >> $GITHUB_ENV
 
@@ -248,7 +248,7 @@ jobs:
         -bucket-dir "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}" \
         -name "$BRANCH_$(git rev-parse --short HEAD)" \
         singlecellopenproblems/nf-openproblems \
-        --branch $BRANCH 2>&1 | \
+        --branch ${BRANCH} 2>&1 | \
         grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
 
 #    - uses: nf-core/tower-action@v2
