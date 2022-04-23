@@ -50,7 +50,7 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     * When you are done with this step, your page should look like this:
     ![AWS secrets success](website/static/img/AWS_secret.png)
 
-5. Enable workflows at [https://github.com/USERNAME/SingleCellOpenProblems/actions](https://github.com/USERNAME/SingleCellOpenProblems/actions)
+5. Enable workflows at [https://github.com/USERNAME/openproblems/actions](https://github.com/USERNAME/SingleCellOpenProblems/actions)
 6. Set up [Cirun.io](https://docs.cirun.io/quickstart.html) with your fork of the repository, and add your AWS credentials in the Cirun console. 
 7. Set up your git repository to fetch branches from `base` at `singlecellopenproblems/SingleCellOpenProblems`
 

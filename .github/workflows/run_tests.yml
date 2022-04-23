@@ -204,6 +204,7 @@ jobs:
         python3 -c "import openproblems"
         openproblems-cli --version
         openproblems-cli --test-hash
+        nextflow run hello > /dev/null
 
     - name: Build Docker images
       run: |
@@ -234,7 +235,6 @@ jobs:
         TOWER_WORKSPACE_ID: 53907369739130
       run: |
         set -eou pipefail
-        nextflow run hello > /dev/null
         cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}
         nextflow run $WITH_TOWER \
         -ansi-log false $RESUME \
