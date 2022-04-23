@@ -240,13 +240,13 @@ jobs:
         TOWER_WORKSPACE_ID: 53907369739130
       run: |
         set -eou pipefail
-        cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}
+        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run $WITH_TOWER \
         -ansi-log false $RESUME \
         -profile $PROFILE \
-        -work-dir "/mnt/openproblems-nextflow/work/${{ env.BRANCH }}" \
-        -bucket-dir "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}" \
-        -name "$BRANCH_$(git rev-parse --short HEAD)" \
+        -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
+        -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
+        -name "${BRANCH}_$(git rev-parse --short HEAD)" \
         singlecellopenproblems/nf-openproblems \
         --branch ${BRANCH} 2>&1 | \
         grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
