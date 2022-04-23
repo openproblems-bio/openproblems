@@ -201,31 +201,31 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        pip3 install -U --editable .[evaluate]
+        sudo pip3 install -U --editable .[evaluate]
         python3 -c "import openproblems"
         openproblems-cli --version
         openproblems-cli --test-hash
         nextflow -version 2> /dev/null
 
-    - name: Build Docker images
-      run: |
-        cd workflow
-        snakemake -j 4 docker_pull
-        cd ..
-
-    - name: Upload Docker images
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
-          docker login --username AWS --password-stdin $ECR_ENDPOINT
-        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-        done
+#    - name: Build Docker images
+#      run: |
+#        cd workflow
+#        snakemake -j 4 docker_pull
+#        cd ..
+#
+#    - name: Upload Docker images
+#      env:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        AWS_DEFAULT_REGION: us-west-2
+#      run: |
+#        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+#        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+#          docker login --username AWS --password-stdin $ECR_ENDPOINT
+#        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+#          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+#          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+#        done
 
     - name: Run benchmark
       env:
