@@ -251,6 +251,7 @@ jobs:
         -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
         -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
         -name "${RUN_NAME}" \
+        -e.PYTHONPATH="${PYTHONPATH}" \
         singlecellopenproblems/nf-openproblems \
         --branch ${BRANCH} 2>&1 | \
         grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
