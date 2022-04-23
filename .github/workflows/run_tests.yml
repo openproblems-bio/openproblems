@@ -204,7 +204,8 @@ jobs:
         python3 -c "import openproblems"
         openproblems-cli --version
         openproblems-cli --test-hash
-        nextflow -q run hello > /dev/null
+        nextflow -version
+        nextflow run hello 2> /dev/null
 
     - name: Build Docker images
       run: |
