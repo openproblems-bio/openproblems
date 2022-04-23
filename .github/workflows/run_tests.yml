@@ -13,12 +13,12 @@ jobs:
   run_tester:
     runs-on: ubuntu-latest
 
-    container:
-      image: singlecellopenproblems/openproblems-github-actions:latest
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /tmp:/tmp
-      options: --user root
+#    container:
+#      image: singlecellopenproblems/openproblems-github-actions:latest
+#      volumes:
+#        - /var/run/docker.sock:/var/run/docker.sock
+#        - /tmp:/tmp
+#      options: --user root
 
     if: >-
       !contains(github.event.head_commit.message, 'ci skip') &&
@@ -204,7 +204,7 @@ jobs:
         python3 -c "import openproblems"
         openproblems-cli --version
         openproblems-cli --test-hash
-        nextflow run hello > /dev/null
+        nextflow run -q hello > /dev/null
 
     - name: Build Docker images
       run: |
