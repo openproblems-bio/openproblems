@@ -201,8 +201,12 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        sudo pip3 install -U --editable .[evaluate]
+        pip3 install --user -U --editable .[evaluate]
         python3 -c "import openproblems"
+        echo 'PYTHONPATH="$(pwd)"' >> $GITHUB_ENV
+
+    - name: Test install
+      run: |
         openproblems-cli --version
         openproblems-cli --test-hash
         nextflow -version 2> /dev/null
