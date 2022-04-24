@@ -1,3 +1,4 @@
 include LICENSE
 include README.md
 recursive-include scripts *.sh *.py *.R Snakefile .Rprofile
+include openproblems/data/tabula_muris_senis_data_objects/*.csv

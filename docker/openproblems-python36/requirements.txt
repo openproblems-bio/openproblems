@@ -1,0 +1,9 @@
+pip
+wheel
+setuptools
+cmake
+jupyter
+boto3>1.0<2.0
+sagemaker>2.0<3.0
+tensorflow==1.1.0
+git+https://bitbucket.org/jerry00/scvis-dev@master

@@ -14,8 +14,8 @@ The following changes have been made:
   Mendeley Data, V1, doi: 10.17632/jbjd5fmggh.1
 """
 
-from ....tasks.dimensionality_reduction.methods.preprocessing import preprocess_scanpy
 from ....tools.decorators import metric
+from ....tools.normalize import log_cpm_hvg
 from anndata import AnnData
 from numba import njit
 from scipy.sparse import issparse
@@ -109,7 +109,8 @@ def _metrics(
 
 
 def _high_dim(adata: AnnData) -> np.ndarray:
-    preprocess_scanpy(adata)
+    adata.X = adata.layers["counts"]
+    adata = log_cpm_hvg(adata)
     high_dim = adata.X
     return high_dim.A if issparse(high_dim) else high_dim
 
