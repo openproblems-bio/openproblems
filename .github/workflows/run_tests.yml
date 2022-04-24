@@ -103,7 +103,7 @@ jobs:
       github.event_name == 'push'
 
     env:
-      BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
+      UPDATE_BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
       RESULTS_PATH: "/tmp/${{ github.ref_name }}_results"
 
     steps:
@@ -154,6 +154,7 @@ jobs:
       run: |
         SCRIPTS_PATH=$(python3 -c 'import os, sysconfig; print(sysconfig.get_path("scripts",f"{os.name}_user"))')
         echo "PATH=${SCRIPTS_PATH}:${PATH}" >> $GITHUB_ENV
+        echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
         echo "PYTHON_LOCATION=$(which python3)" >> $GITHUB_ENV
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
@@ -201,9 +202,7 @@ jobs:
     - name: Install package & dependencies
       run: |
         sudo pip3 install -U --editable .[evaluate]
-        export PYTHONPATH="$(pwd)"
         python3 -c "import openproblems"
-        echo "PYTHONPATH=${PYTHONPATH}" >> $GITHUB_ENV
 
     - name: Test install
       run: |
@@ -303,8 +302,8 @@ jobs:
     - name: Set up Git branch
       if: startsWith(github.ref, 'refs/tags')
       run: |
-        git checkout -b $BRANCH_NAME
-        git push -u origin $BRANCH_NAME
+        git checkout -b $UPDATE_BRANCH_NAME
+        git push -u origin $UPDATE_BRANCH_NAME
 
     - name: Commit result
       if: startsWith(github.ref, 'refs/tags')
@@ -314,14 +313,14 @@ jobs:
         author_email: singlecellopenproblems@protonmail.com
         message: 'Update benchmark results # ci skip'
         add: "['website/data/results', 'results.json']"
-        branch: ${{ env.BRANCH_NAME }}
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
         push: false
 
     - name: Create Pull Request
       if: startsWith(github.ref, 'refs/tags')
       uses: peter-evans/create-pull-request@v3
       with:
-        branch: ${{ env.BRANCH_NAME }}
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
         delete-branch: true
         base: main
         title: '[auto] Update benchmark results'
