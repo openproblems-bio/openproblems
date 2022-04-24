@@ -13,12 +13,12 @@ jobs:
   run_tester:
     runs-on: ubuntu-latest
 
-#    container:
-#      image: singlecellopenproblems/openproblems-github-actions:latest
-#      volumes:
-#        - /var/run/docker.sock:/var/run/docker.sock
-#        - /tmp:/tmp
-#      options: --user root
+    container:
+      image: singlecellopenproblems/openproblems-github-actions:latest
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /tmp:/tmp
+      options: --user root
 
     if: >-
       !contains(github.event.head_commit.message, 'ci skip') &&
@@ -33,59 +33,59 @@ jobs:
       with:
         access_token: ${{ github.token }}
 
-#    - uses: actions/checkout@v2
-#      with:
-#        fetch-depth: 0
-#
-#    - name: Set up environment
-#      run: |
-#        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
-#        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
-#        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
-#
-#    - name: Cache Python packages
-#      uses: actions/cache@v2
-#      with:
-#        path: ${{ env.PYTHON_VERSION }}
-#        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
-#        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
-#
-#    - name: Install package & dependencies
-#      run: |
-#        python -m pip install --upgrade pip
-#        pip install -U wheel setuptools
-#        pip install -U --editable .[test,r,evaluate]
-#        python -c "import openproblems"
-#
-#    - name: Cache R packages
-#      uses: actions/cache@v2
-#      if: startsWith(runner.os, 'Linux')
-#      with:
-#        path: /usr/local/lib/R/site-library
-#        key: ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
-#        restore-keys: |
-#          ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
-#
-#    - name: Install R packages
-#      run: |
-#        if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-#        renv::restore()
-#        source("./scripts/install_renv.R")
-#        install_renv("docker/openproblems-r-base/r_requirements.txt")
-#      shell: Rscript {0}
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
-#    - name: Build Docker images
-#      run: |
-#        cd workflow
-#        snakemake -j 4 docker
-#        cd ..
-#
-#    - name: Run tests
-#      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
-#
-#    - name: Upload coverage
-#      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
-#      run: codecov --no-color --required --flags unittests
+    - name: Set up environment
+      run: |
+        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
+        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
+        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
+
+    - name: Cache Python packages
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.PYTHON_VERSION }}
+        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
+
+    - name: Install package & dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools
+        pip install -U --editable .[test,r,evaluate]
+        python -c "import openproblems"
+
+    - name: Cache R packages
+      uses: actions/cache@v2
+      if: startsWith(runner.os, 'Linux')
+      with:
+        path: /usr/local/lib/R/site-library
+        key: ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
+        restore-keys: |
+          ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
+
+    - name: Install R packages
+      run: |
+        if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+        renv::restore()
+        source("./scripts/install_renv.R")
+        install_renv("docker/openproblems-r-base/r_requirements.txt")
+      shell: Rscript {0}
+
+    - name: Build Docker images
+      run: |
+        cd workflow
+        snakemake -j 4 docker
+        cd ..
+
+    - name: Run tests
+      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
+
+    - name: Upload coverage
+      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
+      run: codecov --no-color --required --flags unittests
 
     - name: Upload check results on fail
       if: failure()
@@ -170,7 +170,6 @@ jobs:
         else
           PROFILE="test,aws"
           RESUME="-resume"
-          RESUME_JSON=", {'resume':true}"
         fi
         echo "PROFILE=$PROFILE" >> $GITHUB_ENV
         echo "RESUME=$RESUME" >> $GITHUB_ENV
@@ -215,25 +214,25 @@ jobs:
         nextflow -version 2> /dev/null
         cd "${CWD}"
 
-#    - name: Build Docker images
-#      run: |
-#        cd workflow
-#        snakemake -j 4 docker_pull
-#        cd ..
-#
-#    - name: Upload Docker images
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        AWS_DEFAULT_REGION: us-west-2
-#      run: |
-#        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-#        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
-#          docker login --username AWS --password-stdin $ECR_ENDPOINT
-#        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-#          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-#          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-#        done
+    - name: Build Docker images
+      run: |
+        cd workflow
+        snakemake -j 4 docker
+        cd ..
+
+    - name: Upload Docker images
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+          docker login --username AWS --password-stdin $ECR_ENDPOINT
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+        done
 
     - name: Run benchmark
       env:
@@ -256,25 +255,6 @@ jobs:
         singlecellopenproblems/nf-openproblems \
         --branch ${BRANCH} 2>&1 | \
         grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
-
-#    - uses: nf-core/tower-action@v2
-#      # Use repository secrets for sensitive fields
-#      with:
-#        workspace_id: 53907369739130
-#        access_token: ${{ secrets.TOWER_ACCESS_KEY }}
-#        compute_env: AWS
-#        pipeline: openproblems-bio/nf-openproblems
-#        revision: master
-#        workdir: s3://openproblems-nextflow/work/${{ env.BRANCH }}
-#        # Set any custom pipeline params here - JSON object as a string
-#        parameters: |
-#          {
-#              "branch": "${{ env.BRANCH }}",
-#              "bucket-dir": "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"{{env.RESUME_JSON}},
-#              "outdir": "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
-#          }
-#        # List of pipeline config profiles to use - comma separated list as a string
-#        profiles: ${{ env.PROFILE }}
 
     - name: Copy results
       run: |
