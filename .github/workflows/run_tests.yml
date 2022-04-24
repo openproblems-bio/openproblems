@@ -207,7 +207,7 @@ jobs:
     - name: Test install
       run: |
         CWD=$(pwd)
-        cd /tmp
+        cd /tmp # Ensure import works from other directories
         openproblems-cli --version
         openproblems-cli --test-hash
         nextflow -version 2> /dev/null
@@ -241,7 +241,6 @@ jobs:
         AWS_DEFAULT_REGION: us-west-2
         TOWER_WORKSPACE_ID: 53907369739130
       run: |
-        set -eou pipefail
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run $WITH_TOWER \
@@ -254,6 +253,7 @@ jobs:
         singlecellopenproblems/nf-openproblems \
         --branch ${BRANCH} 2>&1 | \
         grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
+      shell: /usr/bin/bash -eou pipefail {0}
 
     - name: Copy results
       run: |
