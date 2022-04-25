@@ -8,7 +8,7 @@ import scanpy as sc
 def pancreas_batch(test=False):
     adata = load_pancreas(test)
     from_cache = adata.__from_cache__
-    adata.obs["labels"] = adata.obs["final_annotation"]
+    adata.obs["labels"] = adata.obs["celltype"]
 
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)
