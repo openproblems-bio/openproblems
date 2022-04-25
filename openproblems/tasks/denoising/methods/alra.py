@@ -29,7 +29,8 @@ def alra(adata, test=False):
     )
     # run alra
     # _alra takes adata returns adata, edits "train"
-    Y = _alra(adata).obsm["train"]
+    Y = _alra(adata)
+    Y = Y.obsm["train"]
     # transform back into original space
 
     Y = scprep.utils.matrix_transform(Y, np.square)
