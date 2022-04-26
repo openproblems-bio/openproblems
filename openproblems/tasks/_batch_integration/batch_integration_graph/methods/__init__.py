@@ -1,1 +1,1 @@
-from ..api import sample_method
+from .bbknn import bbknn_full_unscaled
