@@ -1,4 +1,3 @@
-from .citeseq import citeseq_cbmc
 from .human_blood_nestorowa2016 import human_blood_nestorowa2016
 from .mouse_blood_olssen_labelled import olsson_2016_mouse_blood
 from .tenx_5k_pbmc import tenx_5k_pbmc

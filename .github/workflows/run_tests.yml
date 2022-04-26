@@ -84,33 +84,27 @@ jobs:
       run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
 
     - name: Upload coverage
-      if: success() && ${{ github.repository == 'openproblems-bio/openproblems' }}
+      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
       run: codecov --no-color --required --flags unittests
 
     - name: Upload check results on fail
       if: failure()
       uses: actions/upload-artifact@main
       with:
-        name: ${{ matrix.config.name }}_results
+        name: results
         path: results
 
 
   run_benchmark:
     needs: run_tester
-    runs-on: ${{ matrix.config.os }}
+    runs-on: self-hosted
     if: >-
       !contains(github.event.head_commit.message, 'ci skip') &&
       github.event_name == 'push'
 
     env:
-      BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
+      UPDATE_BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
       RESULTS_PATH: "/tmp/${{ github.ref_name }}_results"
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - {name: 'current', os: ubuntu-18.04, python: '3.8', java_version: 15 }
 
     steps:
 
@@ -118,28 +112,14 @@ jobs:
       with:
         fetch-depth: 1000
 
-    - name: Install system dependencies
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.config.python }}
-
-    - name: Set up Java ${{ matrix.java_version }}
-      uses: actions/setup-java@v1
-      with:
-        java-version: ${{matrix.config.java_version}}
-        architecture: x64
-
     - name: Set up environment
       env:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
       run: |
-        echo ${{ github.repository }}
+        SCRIPTS_PATH=$(python3 -c 'import os, sysconfig; print(sysconfig.get_path("scripts",f"{os.name}_user"))')
+        echo "PATH=${SCRIPTS_PATH}:${PATH}" >> $GITHUB_ENV
+        echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+        echo "PYTHON_LOCATION=$(which python3)" >> $GITHUB_ENV
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
@@ -162,28 +142,9 @@ jobs:
     - name: Cache Python packages
       uses: actions/cache@v2
       with:
-        path: ${{ env.pythonLocation }}
-        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
-
-    - name: Install Nextflow
-      env:
-          CAPSULE_LOG: none
-      run: |
-        mkdir /tmp/nextflow
-        cd /tmp/nextflow
-        wget -qO- get.nextflow.io | bash
-        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
-        nextflow -version
-
-    - name: Install AWS CLI
-      run: |
-        mkdir /tmp/awscli
-        cd /tmp/awscli
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip -q awscliv2.zip
-        sudo ./aws/install || sudo ./aws/install --update
-        aws --version
+        path: ${{ env.PYTHON_LOCATION }}
+        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.PYTHON_LOCATION }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.PYTHON_LOCATION }}-
 
     - name: Set up S3FS
       env:
@@ -191,7 +152,6 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        sudo apt-get install -qy s3fs
         echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
         chmod 600 ~/.passwd-s3fs
         sudo mkdir -p /mnt/openproblems-nextflow
@@ -205,12 +165,17 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -U wheel setuptools
-        pip install -U --editable .[evaluate]
-        python -c "import openproblems"
+        sudo pip3 install -U --editable .[evaluate]
+        python3 -c "import openproblems"
+
+    - name: Test install
+      run: |
+        CWD=$(pwd)
+        cd /tmp # Ensure import works from other directories
         openproblems-cli --version
         openproblems-cli --test-hash
+        nextflow -version 2> /dev/null
+        cd "${CWD}"
 
     - name: Build Docker images
       run: |
@@ -238,17 +203,21 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
-      run: >-
-        cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }} &&
-        nextflow run
-        $WITH_TOWER
-        -ansi-log false
-        $RESUME
-        -profile $PROFILE
-        -work-dir "/mnt/openproblems-nextflow/work/${{ env.BRANCH }}"
-        -bucket-dir "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-        singlecellopenproblems/nf-openproblems
-        --branch $BRANCH
+        TOWER_WORKSPACE_ID: 53907369739130
+      run: |
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
+        nextflow run $WITH_TOWER \
+        -ansi-log false $RESUME \
+        -profile $PROFILE \
+        -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
+        -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
+        -name "${RUN_NAME}" \
+        -e.PYTHONPATH="${PYTHONPATH}" \
+        openproblems-bio/nf-openproblems \
+        --branch ${BRANCH} 2>&1 | \
+        grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
+      shell: /usr/bin/bash -eou pipefail {0}
 
     - name: Copy results
       run: |
@@ -263,7 +232,7 @@ jobs:
         python workflow/parse_nextflow.py "${RESULTS_PATH}"
 
     - name: AWS cleanup
-      if: always()
+      if: success() || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -272,9 +241,9 @@ jobs:
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
         done
-        aws s3 rm "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
-        aws s3 rm "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-        aws s3 rm "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
 
     - name: Remove untagged images
       if: startsWith(github.ref, 'refs/heads/main')
@@ -297,8 +266,8 @@ jobs:
     - name: Set up Git branch
       if: startsWith(github.ref, 'refs/tags')
       run: |
-        git checkout -b $BRANCH_NAME
-        git push -u origin $BRANCH_NAME
+        git checkout -b $UPDATE_BRANCH_NAME
+        git push -u origin $UPDATE_BRANCH_NAME
 
     - name: Commit result
       if: startsWith(github.ref, 'refs/tags')
@@ -308,14 +277,14 @@ jobs:
         author_email: singlecellopenproblems@protonmail.com
         message: 'Update benchmark results # ci skip'
         add: "['website/data/results', 'results.json']"
-        branch: ${{ env.BRANCH_NAME }}
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
         push: false
 
     - name: Create Pull Request
       if: startsWith(github.ref, 'refs/tags')
       uses: peter-evans/create-pull-request@v3
       with:
-        branch: ${{ env.BRANCH_NAME }}
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
         delete-branch: true
         base: main
         title: '[auto] Update benchmark results'
@@ -325,5 +294,5 @@ jobs:
       if: always()
       uses: actions/upload-artifact@main
       with:
-        name: ${{ matrix.config.name }}_results
+        name: results
         path: ${{ env.RESULTS_PATH }}
