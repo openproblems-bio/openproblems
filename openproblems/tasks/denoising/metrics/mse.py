@@ -24,8 +24,9 @@ def mse(adata):
     sc.pp.log1p(denoised_data)
     # trying to remove the error in line 26
     mse_res = sklearn.metrics.mean_squared_error(
-        #'numpy.ndarray' object has no attribute 'to_array'
-        #test_data.X.to_array(), denoised_data.X.to_array()
-        test_data.X, denoised_data.X
+        # 'numpy.ndarray' object has no attribute 'to_array'
+        # test_data.X.to_array(), denoised_data.X.to_array()
+        test_data.X,
+        denoised_data.X,
     )
     return mse_res
