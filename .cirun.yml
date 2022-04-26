@@ -1,0 +1,12 @@
+# Self-Hosted Github Action Runners on AWS via Cirun.io
+# Reference: https://docs.cirun.io/reference/yaml.html
+runners:
+  - name: aws-runner
+    cloud: aws
+    instance_type: t3a.small
+    # Custom Ubuntu 20.04 image defined by openproblems/scripts/setup_ubuntu_ami.sh
+    machine_image: ami-099541f93b78767e9
+    region: us-west-2
+    # preemptible instances seems quite less reliable.
+    preemptible: false
+    workflow: .github/workflows/run_tests.yml
