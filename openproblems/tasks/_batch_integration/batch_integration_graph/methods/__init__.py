@@ -1,1 +1,1 @@
-from ..api import  sample_method
+from ..api import sample_method
