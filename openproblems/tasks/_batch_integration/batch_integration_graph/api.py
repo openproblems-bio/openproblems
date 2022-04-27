@@ -11,6 +11,12 @@ def check_dataset(adata):
 
     return True
 
+def check_method(adata):
+    """Check that method output fits expected API."""
+    assert "connectivities" in adata.obsp
+    return True
+
+
 
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""

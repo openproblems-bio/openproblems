@@ -12,7 +12,7 @@ from .....tools.utils import check_version
     code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def bbknn_full_unscaled(adata):
+def bbknn_full_unscaled(adata, test):
     # Normalize the data
     from scib.integration import runBBKNN
 
