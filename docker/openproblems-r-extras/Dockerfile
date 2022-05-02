@@ -8,7 +8,7 @@ ARG NB_GID="100"
 USER root
 WORKDIR /
 
-RUN apt-get update && apt-get install -y libhdf5-dev hdf5-tools \
+RUN apt-get update && apt-get install -y libhdf5-dev hdf5-tools libgeos-dev \
 && apt-get clean autoclean && apt-get autoremove --yes && rm -rf /var/lib/{apt,dpkg,cache,log}/
 RUN apt-get install -y libhdf5-dev=1.10.6+repack-4+deb11u1
 
