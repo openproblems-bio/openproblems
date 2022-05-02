@@ -10,7 +10,7 @@ WORKDIR /
 
 RUN apt-get update && apt-get install -y libhdf5-dev hdf5-tools \
 && apt-get clean autoclean && apt-get autoremove --yes && rm -rf /var/lib/{apt,dpkg,cache,log}/
-RUN apt-get install -y libhdf5-dev=1.10.6+repack-4+deb11u1
+RUN apt-get install -y libhdf5-dev=1.10.6+repack-4+deb11u1 libgeos-dev
 
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
