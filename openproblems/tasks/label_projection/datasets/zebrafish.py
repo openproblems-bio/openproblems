@@ -19,6 +19,6 @@ def zebrafish_random(test=False):
     adata.obs["labels"] = adata.obs["cell_type"]
     adata.obs["batch"] = adata.obs["lab"]
     adata.obs["is_train"] = np.random.choice(
-        [True, False], adata.shape[0], replace=True
+        [True, False], adata.shape[0], replace=True, p=[0.8, 0.2]
     )
     return adata

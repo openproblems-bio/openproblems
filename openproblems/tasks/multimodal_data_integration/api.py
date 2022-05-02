@@ -20,6 +20,8 @@ def check_method(adata):
     assert adata.obsm["aligned"].shape[0] == adata.shape[0]
     assert adata.obsm["mode2_aligned"].shape[0] == adata.obsm["mode2"].shape[0]
     assert adata.obsm["aligned"].shape[1] == adata.obsm["mode2_aligned"].shape[1]
+    assert np.all(np.isfinite(adata.obsm["aligned"]))
+    assert np.all(np.isfinite(adata.obsm["mode2_aligned"]))
     return True
 
 

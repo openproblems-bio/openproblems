@@ -1,4 +1,13 @@
+Matrix
 bioc::batchelor
+bioc::ComplexHeatmap
+sparsesvd
+Seurat
+igraph@1.2.11
+conos
+rliger
+dplyr
+tibble@3.1.5
 cli@3.1.0
 caret@6.0-86
 crayon@1.4.1
@@ -19,3 +28,5 @@ tidymodels@0.1.2
 Rcpp@1.0.7
 reticulate@1.18
 rlang@1.0.2
+immunogenomics/harmony
+welch-lab/liger@v0.5.0
