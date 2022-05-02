@@ -31,6 +31,7 @@ def test_metric_metadata(metric):
         for metric in task.METRICS
     ],
     name_func=utils.name.name_test,
+    skip_on_empty=True,
 )
 @utils.docker.docker_test
 def test_metric(task_name, metric_name, tempdir, image):
