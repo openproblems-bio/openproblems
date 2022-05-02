@@ -1,15 +1,15 @@
 
 # Contributing to Open Problems for Single Cell Analysis
 
-There are many ways to contribute to `singlecellopenproblems`, with the most common ones
+There are many ways to contribute to `openproblems`, with the most common ones
 being contribution of datasets, methods, metrics, or new tasks. Improving the
 documentation is no less important than improving the library itself. If you
 find a typo in the documentation, or have made improvements, do not hesitate to
 submit a GitHub pull request.
 
 But there are many other ways to help. In particular answering queries on the
-[issue tracker](https://github.com/KrishnaswamyLab/singlecellopenproblems/issues),
-investigating bugs, and [reviewing other developers' pull requests](https://github.com/KrishnaswamyLab/singlecellopenproblems/pulls)
+[issue tracker](https://github.com/openproblems-bio/openproblems/issues),
+investigating bugs, and [reviewing other developers' pull requests](https://github.com/openproblems-bio/openproblems/pulls)
 are very valuable contributions that decrease the burden on the project
 maintainers.
 
@@ -40,25 +40,29 @@ link to it from your website, or simply star it in GitHub to say "I use it".
 
 To submit new features to Open Problems for Single Cell Analysis, follow the steps below:
 
-1. Search through the [GitHub Issues](https://github.com/singlecellopenproblems/SingleCellOpenProblems/issues) tracker to make sure there isn't someone already working on the feature you'd like to add. If someone is working on this, post in that issue that you'd like to help or reach out to one of the contributors working on the issue directly.
+1. Search through the [GitHub Issues](https://github.com/openproblems-bio/openproblems/issues) tracker to make sure there isn't someone already working on the feature you'd like to add. If someone is working on this, post in that issue that you'd like to help or reach out to one of the contributors working on the issue directly.
 2. If there isn't an existing issue tracking this feature, create one! There are several templates you can choose one depending on what type of feature you'd like to add.
-3. Fork https://github.com/singlecellopenproblems/SingleCellOpenProblems into your account. If you're new to `git`, you might find the [Fork a repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) documentation helpful.
+3. Fork https://github.com/openproblems-bio/openproblems into your account. If you're new to `git`, you might find the [Fork a repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) documentation helpful.
     <img src="https://i.imgur.com/fUcpLYl.png" width=400px>
-4. Create repository secrets (*not environment secrets*) at [https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets](https://github.com/USERNAME/SingleCellOpenProblems/settings/secrets)
+4. Set up [tower.nf](https://tower.nf) and make sure you have access to
+   [`openproblems-bio`](https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch). If you do not have
+   access, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).
+5. Create repository secrets (*not environment secrets*) at [https://github.com/USERNAME/openproblems/settings/secrets](https://github.com/USERNAME/openproblems/settings/secrets)
     * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login details. If you do not have these, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
-    * *TOWER_ACCESS_KEY (optional): log in with GitHub to https://tower.nf and create a token at https://tower.nf/tokens.*
+    * *TOWER_ACCESS_KEY: log in with GitHub to https://tower.nf and create a token at https://tower.nf/tokens.*
     * When you are done with this step, your page should look like this:
     ![AWS secrets success](website/static/img/AWS_secret.png)
-
-5. Enable workflows at [https://github.com/USERNAME/SingleCellOpenProblems/actions](https://github.com/USERNAME/SingleCellOpenProblems/actions)
-6. Set up your git repository to fetch branches from `base` at `singlecellopenproblems/SingleCellOpenProblems`
+      
+6. Enable workflows at [https://github.com/USERNAME/openproblems/actions](https://github.com/USERNAME/openproblems/actions).
+7. Set up [Cirun.io](https://docs.cirun.io/quickstart.html) with your fork of the repository, and add your AWS credentials in the Cirun console.
+8. Set up your git repository to fetch branches from `base` at `openproblems-bio/openproblems`
 
     ```
-    git clone git@github.com:<username>/SingleCellOpenProblems.git
-    cd SingleCellOpenProblems
-    git remote add base git@github.com:singlecellopenproblems/SingleCellOpenProblems.git
+    git clone git@github.com:<username>/openproblems.git
+    cd openproblems
+    git remote add base git@github.com:openproblems-bio/openproblems.git
     git fetch --all
-    git branch --set-upstream-to base/master
+    git branch --set-upstream-to base/main
     git pull
     ```
     **Note:** If you haven't set up SSH keys with your GitHub account, you may see this error message when adding `base` to your repository:
@@ -68,36 +72,35 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     Please make sure you have the correct access rights
     ```
     To generate an SSH key and add it to your GitHub account, follow [this tutorial from GitHub](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
-
-
-7. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`.
+   
+9. Create a new branch for your task (**no underscores or spaces allowed**). It is best to coordinate with other people working on the same feature as you so that there aren't clases in images uploaded to our ECR. Here we're creating a branch called `method-method-name-task-name`, but if you were creating a new metric you might use `metric-metric-name-task-name`. In practice you should actually use the name of your method or metric, like `method-meld-differential-abundance` or `metric-mse-label-projection`.
 
     **Note:** This pushes the branch to your fork, _not to_ `base`. You will create a PR to merge your branch to `base` only after all tests are passing.
 
-    **Warning:** Do not edit the `master` branch on your fork! This will not work as expected, and will never pass tests.
+    **Warning:** Do not edit the `main` branch on your fork! This will not work as expected, and will never pass tests.
     ```
     # IMPORTANT: choose a new branch name, e.g.
     git checkout -b method-method-name-task-name # or metric-new-metric-name, etc
     git push -u origin method-method-name-task-name
     ```
 
-8. Sometimes, changes might be made to the SingleCellOpenProblems `base` repository that you want to incorporate into your fork. To sync your fork from `base`, use the following code adapted from the [Syncing a Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) tutorial from GitHub.
+10. Sometimes, changes might be made to the openproblems `base` repository that you want to incorporate into your fork. To sync your fork from `base`, use the following code adapted from the [Syncing a Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) tutorial from GitHub.
     ```
     # Fetch the branches and their respective commits from the upstream repository
     git fetch base
 
     # Check out your fork's local default branch
-    git checkout master
+    git checkout main
 
     # Merge the changes from the upstream default branch
-    git merge base/master
+    git merge base/main
 
     # Push the changes to your fork
     git push -u origin
     ```
-    You can now create a [Pull Request](https://guides.github.com/activities/hello-world/#pr) from the default branch on your fork, `master`, into your working branch, e.g. `method-method-name-task-name`.
+    You can now create a [Pull Request](https://guides.github.com/activities/hello-world/#pr) from the default branch on your fork, `main`, into your working branch, e.g. `method-method-name-task-name`.
 
-8. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
+11. Wait for all tests to pass on your new branch before pushing changes (as this will allow GitHub Actions to cache the workflow setup, which speeds up testing.)
 
 ## API
 
@@ -243,13 +246,13 @@ Datasets, methods and metrics run inside Docker containers. We provide a few to 
 
 ## Code Style and Testing
 
-`singlecellopenproblems` is maintained at close to 100% code coverage. For datasets, methods, and metrics, tests are generated programatically from each task's `api.py`. See the [Adding a new task](#adding-a-new-task) section for instructions on creating this file.
+`openproblems` is maintained at close to 100% code coverage. For datasets, methods, and metrics, tests are generated programatically from each task's `api.py`. See the [Adding a new task](#adding-a-new-task) section for instructions on creating this file.
 
 For additions outside this core functionality, contributors are encouraged to write tests for their code -- but if you do not know how to do so, please do not feel discouraged from contributing code! Others can always help you test your contribution.
 
 Code is tested by GitHub Actions when you push your changes. However, if you wish to test locally, you can do so with the following command:
 ```
-cd SingleCellOpenProblems
+cd openproblems
 pip install --editable .[test,r]
 pytest -v
 ```
@@ -261,7 +264,7 @@ The benchmarking suite is tested by GitHub Actions when you push your changes. H
 cd workflow
 snakemake -j 4 docker
 cd ..
-nextflow run -resume -profile test,docker singlecellopenproblems/nf-openproblems
+nextflow run -resume -profile test,docker openproblems-bio/nf-openproblems
 ```
 
 The benchmarking suite also requires Python>=3.7, snakemake, nextflow, and Docker to be installed.
