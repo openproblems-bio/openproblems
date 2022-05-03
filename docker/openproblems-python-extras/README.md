@@ -18,4 +18,5 @@ Python packages:
 * neuralee
 * torch
 * tensorflow-cpu
+* ivis
 * umap-learn
