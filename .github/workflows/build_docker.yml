@@ -8,6 +8,7 @@ on:
 
 jobs:
   build_images:
+
     runs-on: ${{ matrix.config.os }}
     if: "!endsWith(github.event.head_commit.message, '# ci skip')"
 
