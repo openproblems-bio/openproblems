@@ -256,7 +256,7 @@ jobs:
         openproblems-bio/nf-openproblems \
         --branch ${BRANCH} 2>&1 | \
         grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
-      shell: /usr/bin/bash -eou pipefail {0}
+      shell: /usr/bin/bash -exou pipefail {0}
 
     - name: Copy results
       run: |
