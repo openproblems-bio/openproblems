@@ -19,101 +19,94 @@ def test_metric_metadata(metric):
     assert isinstance(metric.metadata["maximize"], bool)
 
 
-@parameterized.parameterized.expand(
-    [
-        (
-            task.__name__.split(".")[-1],
-            metric.__name__,
-            utils.TEMPDIR.name,
-            metric.metadata["image"],
-        )
-        for task in utils.git.list_modified_tasks()
-        for metric in task.METRICS
-    ],
-    name_func=utils.name.name_test,
-    skip_on_empty=True,
-)
-@utils.docker.docker_test
-def test_metric(task_name, metric_name, tempdir, image):
-    """Test computation of a metric."""
-    import numbers
+if len(utils.git.list_modified_tasks()) > 0:
 
-    task = getattr(openproblems.tasks, task_name)
-    metric = getattr(task.metrics, metric_name)
-    adata = task.api.sample_dataset()
-    adata = task.api.sample_method(adata)
-    openproblems.log.debug(
-        "Testing {} metric from {} task".format(metric.__name__, task.__name__)
+    @parameterized.parameterized.expand(
+        [
+            (
+                task.__name__.split(".")[-1],
+                metric.__name__,
+                metric.metadata["image"],
+            )
+            for task in utils.git.list_modified_tasks()
+            for metric in task.METRICS
+        ],
+        name_func=utils.name.name_test,
+        skip_on_empty=True,
     )
-    m = metric(adata)
-    assert isinstance(m, numbers.Number)
+    @utils.docker.docker_test
+    def test_metric(task_name, metric_name, image):
+        """Test computation of a metric."""
+        import numbers
 
-
-@parameterized.parameterized.expand(
-    [
-        (
-            utils.TEMPDIR.name,
-            openproblems.tasks.dimensionality_reduction.metrics.trustworthiness.metadata[  # noqa: E501
-                "image"
-            ],
+        task = getattr(openproblems.tasks, task_name)
+        metric = getattr(task.metrics, metric_name)
+        adata = task.api.sample_dataset()
+        adata = task.api.sample_method(adata)
+        openproblems.log.debug(
+            "Testing {} metric from {} task".format(metric.__name__, task.__name__)
         )
-    ],
-    name_func=utils.name.name_test,
-)
-@utils.docker.docker_test
-def test_trustworthiness_sparse(tempdir, image):
-    from scipy.sparse import csr_matrix
+        m = metric(adata)
+        assert isinstance(m, numbers.Number)
 
-    task = openproblems.tasks.dimensionality_reduction
-    metric = openproblems.tasks.dimensionality_reduction.metrics.trustworthiness
 
-    adata = task.api.sample_dataset()
-    adata = task.api.sample_method(adata)
-    openproblems.log.debug(
-        "Testing {} metric from {} task".format(metric.__name__, task.__name__)
+if openproblems.tasks.dimensionality_reduction in utils.git.list_modified_tasks():
+
+    @utils.docker.docker_test(
+        image=openproblems.tasks.dimensionality_reduction.metrics.trustworthiness.metadata[  # noqa: E501
+            "image"
+        ]
     )
-    adata.X = csr_matrix(adata.X)
-    m = metric(adata)
+    def test_trustworthiness_sparse():
+        from scipy.sparse import csr_matrix
 
-    assert isinstance(m, float)
-    assert 0 <= m <= 1
+        task = openproblems.tasks.dimensionality_reduction
+        metric = openproblems.tasks.dimensionality_reduction.metrics.trustworthiness
 
-
-@parameterized.parameterized.expand(
-    [
-        (
-            utils.TEMPDIR.name,
-            openproblems.tasks.dimensionality_reduction.metrics.density_preservation.metadata[  # noqa: E501
-                "image"
-            ],
+        adata = task.api.sample_dataset()
+        adata = task.api.sample_method(adata)
+        openproblems.log.debug(
+            "Testing {} metric from {} task".format(metric.__name__, task.__name__)
         )
-    ],
-    name_func=utils.name.name_test,
-)
-@utils.docker.docker_test
-def test_density_preservation_matches_densmap(tempdir, image):
-    from openproblems.tasks.dimensionality_reduction.metrics.density import _K
-    from openproblems.tasks.dimensionality_reduction.metrics.density import _SEED
-    from scipy.stats import pearsonr
-    from umap import UMAP
+        adata.X = csr_matrix(adata.X)
+        m = metric(adata)
 
-    import numpy as np
+        assert isinstance(m, float)
+        assert 0 <= m <= 1
 
-    task = openproblems.tasks.dimensionality_reduction
-    metric = openproblems.tasks.dimensionality_reduction.metrics.density_preservation
 
-    adata = task.api.sample_dataset()
-    adata = task.api.sample_method(adata)
-    openproblems.log.debug(
-        "Testing {} metric from {} task".format(metric.__name__, task.__name__)
+if openproblems.tasks.dimensionality_reduction in utils.git.list_modified_tasks():
+
+    @utils.docker.docker_test(
+        image=openproblems.tasks.dimensionality_reduction.metrics.density_preservation.metadata[  # noqa: E501
+            "image"
+        ]
     )
+    def test_density_preservation_matches_densmap():
+        from openproblems.tasks.dimensionality_reduction.metrics.density import _K
+        from openproblems.tasks.dimensionality_reduction.metrics.density import _SEED
+        from scipy.stats import pearsonr
+        from umap import UMAP
 
-    (emb, ro, re) = UMAP(
-        n_neighbors=_K, random_state=_SEED, densmap=True, output_dens=True
-    ).fit_transform(adata.X)
-    expected = pearsonr(ro, re)[0]
+        import numpy as np
 
-    adata.obsm["X_emb"] = emb
-    actual = metric(adata)
+        task = openproblems.tasks.dimensionality_reduction
+        metric = (
+            openproblems.tasks.dimensionality_reduction.metrics.density_preservation
+        )
 
-    np.testing.assert_allclose(expected, actual)
+        adata = task.api.sample_dataset()
+        adata = task.api.sample_method(adata)
+        openproblems.log.debug(
+            "Testing {} metric from {} task".format(metric.__name__, task.__name__)
+        )
+
+        (emb, ro, re) = UMAP(
+            n_neighbors=_K, random_state=_SEED, densmap=True, output_dens=True
+        ).fit_transform(adata.X)
+        expected = pearsonr(ro, re)[0]
+
+        adata.obsm["X_emb"] = emb
+        actual = metric(adata)
+
+        np.testing.assert_allclose(expected, actual)
