@@ -170,12 +170,14 @@ jobs:
         python3 -c "import openproblems"
 
     - name: Test install
+      env:
+        CAPSULE_LOG: none
       run: |
         CWD=$(pwd)
         cd /tmp # Ensure import works from other directories
         openproblems-cli --version
         openproblems-cli --test-hash
-        nextflow -version 2> /dev/null
+        nextflow -version
         cd "${CWD}"
 
     - name: Build Docker images
@@ -205,6 +207,7 @@ jobs:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
         TOWER_WORKSPACE_ID: 53907369739130
+        NXF_DEFAULT_DSL: 1
       run: |
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
