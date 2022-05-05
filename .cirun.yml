@@ -3,7 +3,7 @@
 runners:
   - name: aws-runner
     cloud: aws
-    instance_type: t3a.small
+    instance_type: t3a.medium
     # Custom Ubuntu 20.04 image defined by openproblems/scripts/setup_ubuntu_ami.sh
     machine_image: ami-01219569b1bbf9fb2
     region: us-west-2
