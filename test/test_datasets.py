@@ -34,105 +34,103 @@ def _assert_not_bytes(X):
     return True
 
 
-if len(utils.git.list_modified_tasks()) > 0:
+@parameterized.parameterized_class(
+    ("dataset", "task", "test", "tempdir"),
+    [
+        (staticmethod(dataset), task, test, utils.TEMPDIR.name)
+        for task in utils.git.list_modified_tasks()
+        for dataset in task.DATASETS
+        for test in [True]
+    ],
+    class_name_func=utils.name.name_test,
+)
+class TestDataset(unittest.TestCase):
+    """Test cached dataset characteristics."""
 
-    @parameterized.parameterized_class(
-        ("dataset", "task", "test", "tempdir"),
-        [
-            (staticmethod(dataset), task, test, utils.TEMPDIR.name)
-            for task in utils.git.list_modified_tasks()
-            for dataset in task.DATASETS
-            for test in [True]
-        ],
-        class_name_func=utils.name.name_test,
-    )
-    class TestDataset(unittest.TestCase):
-        """Test cached dataset characteristics."""
-
-        @classmethod
-        def setUpClass(cls):
-            """Load data."""
-            try:
-                cls.adata = utils.cache.load(
-                    cls.tempdir,
-                    cls.task,
-                    cls.dataset,
-                    test=cls.test,
-                    dependency="test_load_dataset",
-                )
-            except AssertionError as e:
-                if str(e) == "Intermediate file missing. Did test_load_dataset fail?":
-                    pytest.skip("Dataset not loaded successfully")
-                else:
-                    raise
-
-        @classmethod
-        def tearDownClass(cls):
-            """Remove data."""
-            utils.cache.delete(
+    @classmethod
+    def setUpClass(cls):
+        """Load data."""
+        try:
+            cls.adata = utils.cache.load(
                 cls.tempdir,
                 cls.task,
                 cls.dataset,
                 test=cls.test,
+                dependency="test_load_dataset",
+            )
+        except AssertionError as e:
+            if str(e) == "Intermediate file missing. Did test_load_dataset fail?":
+                pytest.skip("Dataset not loaded successfully")
+            else:
+                raise
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove data."""
+        utils.cache.delete(
+            cls.tempdir,
+            cls.task,
+            cls.dataset,
+            test=cls.test,
+        )
+
+    def test_adata_class(self):
+        """Ensure output is AnnData."""
+        assert isinstance(self.adata, anndata.AnnData)
+
+    def test_adata_shape(self):
+        """Ensure output is of appropriate size."""
+        assert self.adata.shape[0] > 0
+        assert self.adata.shape[1] > 0
+        if self.test:
+            assert self.adata.shape[0] <= 600
+            assert self.adata.shape[1] <= 1500
+
+    def test_sparse(self):
+        """Ensure output is sparse."""
+        if not scipy.sparse.issparse(self.adata.X):
+            utils.warnings.future_warning(
+                "{}-{}: self.adata.X is loaded as dense.".format(
+                    self.task.__name__.split(".")[-1], self.dataset.__name__
+                ),
+                error_version="1.0",
+                error_category=TypeError,
             )
 
-        def test_adata_class(self):
-            """Ensure output is AnnData."""
-            assert isinstance(self.adata, anndata.AnnData)
+    def test_not_bytes(self):
+        """Ensure output does not contain byte strings."""
+        assert _assert_not_bytes(self.adata.obs)
+        assert _assert_not_bytes(self.adata.var)
+        assert _assert_not_bytes(self.adata.uns)
 
-        def test_adata_shape(self):
-            """Ensure output is of appropriate size."""
-            assert self.adata.shape[0] > 0
-            assert self.adata.shape[1] > 0
-            if self.test:
-                assert self.adata.shape[0] <= 600
-                assert self.adata.shape[1] <= 1500
+    def test_not_empty(self):
+        """Ensure output does not have empty rows or columns."""
+        assert self.adata.X.sum(axis=0).min() > 0
+        assert self.adata.X.sum(axis=1).min() > 0
 
-        def test_sparse(self):
-            """Ensure output is sparse."""
-            if not scipy.sparse.issparse(self.adata.X):
-                utils.warnings.future_warning(
-                    "{}-{}: self.adata.X is loaded as dense.".format(
-                        self.task.__name__.split(".")[-1], self.dataset.__name__
-                    ),
-                    error_version="1.0",
-                    error_category=TypeError,
-                )
+    def test_task_checks(self):
+        """Run task-specific tests."""
+        assert self.task.api.check_dataset(self.adata)
 
-        def test_not_bytes(self):
-            """Ensure output does not contain byte strings."""
-            assert _assert_not_bytes(self.adata.obs)
-            assert _assert_not_bytes(self.adata.var)
-            assert _assert_not_bytes(self.adata.uns)
+    @parameterized.parameterized.expand(
+        [
+            (normalizer,)
+            for normalizer in openproblems.utils.get_callable_members(
+                openproblems.tools.normalize
+            )
+        ]
+    )
+    def test_normalize(self, normalizer):
+        """Test that normalizations can be safely applied."""
+        if self.test:
+            adata = self.adata.copy()
+            adata = normalizer(adata)
+            utils.asserts.assert_finite(adata.X)
 
-        def test_not_empty(self):
-            """Ensure output does not have empty rows or columns."""
-            assert self.adata.X.sum(axis=0).min() > 0
-            assert self.adata.X.sum(axis=1).min() > 0
-
-        def test_task_checks(self):
-            """Run task-specific tests."""
-            assert self.task.api.check_dataset(self.adata)
-
-        @parameterized.parameterized.expand(
-            [
-                (normalizer,)
-                for normalizer in openproblems.utils.get_callable_members(
-                    openproblems.tools.normalize
-                )
-            ]
-        )
-        def test_normalize(self, normalizer):
-            """Test that normalizations can be safely applied."""
-            if self.test:
-                adata = self.adata.copy()
-                adata = normalizer(adata)
-                utils.asserts.assert_finite(adata.X)
-
-        def test_metadata(self):
-            """Test for existence of dataset metadata."""
-            assert hasattr(self.dataset, "metadata")
-            for attr in [
-                "dataset_name",
-            ]:
-                assert attr in self.dataset.metadata
+    def test_metadata(self):
+        """Test for existence of dataset metadata."""
+        assert hasattr(self.dataset, "metadata")
+        for attr in [
+            "dataset_name",
+        ]:
+            assert attr in self.dataset.metadata

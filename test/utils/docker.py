@@ -234,14 +234,13 @@ def run_image(image, script, *args, timeout=None, retries=0):
 
 
 @decorator.decorator
-def docker_test(func, image=None, timeout=None, retries=0, *args, **kwargs):
+def docker_test(func, timeout=None, retries=0, *args, **kwargs):
     """Run a test function in Docker.
 
     The function must take only simple objects as arguments
     (i.e. eval(str(args)) == args) and the final argument must be the Docker image.
     """
-    if image is None:
-        image = args[-1]
+    image = args[-1]
     if not image.startswith("openproblems"):
         warnings.warn("Image {} expected to begin with openproblems.".format(image))
     assert eval(str(args)) == args
