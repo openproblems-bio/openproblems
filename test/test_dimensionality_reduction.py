@@ -6,7 +6,10 @@ import utils.git
 
 # global skip
 TASK = openproblems.tasks.dimensionality_reduction
-pytestmark = pytest.mark.skipif(TASK not in utils.git.list_modified_tasks())
+pytestmark = pytest.mark.skipif(
+    TASK not in utils.git.list_modified_tasks(),
+    reason="Relevant task has not been modified",
+)
 
 
 @utils.docker.docker_test(image=TASK.metrics.trustworthiness.metadata["image"])
