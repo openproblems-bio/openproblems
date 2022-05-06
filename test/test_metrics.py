@@ -26,7 +26,6 @@ def test_metric_metadata(metric):
         (
             task.__name__.split(".")[-1],
             metric.__name__,
-            utils.TEMPDIR.name,
             metric.metadata["image"],
         )
         for task in utils.git.list_modified_tasks()
@@ -36,7 +35,7 @@ def test_metric_metadata(metric):
     skip_on_empty=True,
 )
 @utils.docker.docker_test
-def test_metric(task_name, metric_name, tempdir, image):
+def test_metric(task_name, metric_name, image):
     """Test computation of a metric."""
     import numbers
 
