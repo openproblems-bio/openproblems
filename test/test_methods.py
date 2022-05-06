@@ -8,35 +8,34 @@ import utils.warnings
 utils.warnings.ignore_warnings()
 
 
-if len(utils.git.list_modified_tasks()) > 0:
-
-    @parameterized.parameterized.expand(
-        [
-            (
-                task.__name__.split(".")[-1],
-                method.__name__,
-                method.metadata["image"],
-            )
-            for task in utils.git.list_modified_tasks()
-            for method in task.METHODS
-        ],
-        name_func=utils.name.name_test,
-        skip_on_empty=True,
-    )
-    @utils.docker.docker_test(timeout=600, retries=2)
-    def test_method(task_name, method_name, image):
-        """Test application of a method."""
-        import anndata
-
-        task = getattr(openproblems.tasks, task_name)
-        method = getattr(task.methods, method_name)
-        adata = task.api.sample_dataset()
-        openproblems.log.debug(
-            "Testing {} method from {} task".format(method.__name__, task.__name__)
+@parameterized.parameterized.expand(
+    [
+        (
+            task.__name__.split(".")[-1],
+            method.__name__,
+            utils.TEMPDIR.name,
+            method.metadata["image"],
         )
-        adata = method(adata, test=True)
-        assert isinstance(adata, anndata.AnnData)
-        assert task.api.check_method(adata)
+        for task in utils.git.list_modified_tasks()
+        for method in task.METHODS
+    ],
+    name_func=utils.name.name_test,
+    skip_on_empty=True,
+)
+@utils.docker.docker_test(timeout=600, retries=2)
+def test_method(task_name, method_name, tempdir, image):
+    """Test application of a method."""
+    import anndata
+
+    task = getattr(openproblems.tasks, task_name)
+    method = getattr(task.methods, method_name)
+    adata = task.api.sample_dataset()
+    openproblems.log.debug(
+        "Testing {} method from {} task".format(method.__name__, task.__name__)
+    )
+    adata = method(adata, test=True)
+    assert isinstance(adata, anndata.AnnData)
+    assert task.api.check_method(adata)
 
 
 @parameterized.parameterized.expand(
