@@ -13,6 +13,7 @@ import utils.name
 import utils.warnings
 
 utils.warnings.ignore_warnings()
+pytestmark = pytest.mark.skipif(len(utils.git.list_modified_tasks()) == 0)
 
 
 def _assert_not_bytes(X):
