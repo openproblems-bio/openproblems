@@ -21,7 +21,7 @@ jobs:
       options: --user root
 
     if: >-
-      !contains(github.event.head_commit.message, 'ci skip') &&
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
         startsWith(github.ref, 'refs/heads') ||
         github.event.pull_request.draft == false
@@ -84,7 +84,7 @@ jobs:
       run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv --maxfail=2
 
     - name: Upload coverage
-      if: success() && ${{ github.repository == 'openproblems-bio/openproblems' }}
+      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
       run: codecov --no-color --required --flags unittests
 
     - name: Upload check results on fail
@@ -103,7 +103,8 @@ jobs:
       github.event_name == 'push'
 
     env:
-      BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
+      UPDATE_BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
+      RESULTS_PATH: "/tmp/${{ github.ref_name }}_results"
 
     strategy:
       fail-fast: false
@@ -138,7 +139,10 @@ jobs:
       env:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
       run: |
-        echo ${{ github.repository }}
+        SCRIPTS_PATH=$(python3 -c 'import os, sysconfig; print(sysconfig.get_path("scripts",f"{os.name}_user"))')
+        echo "PATH=${SCRIPTS_PATH}:${PATH}" >> $GITHUB_ENV
+        echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+        echo "PYTHON_LOCATION=$(which python3)" >> $GITHUB_ENV
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
@@ -237,31 +241,37 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
-      run: >-
-        cd /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }} &&
-        nextflow run
-        $WITH_TOWER
-        -ansi-log false
-        $RESUME
-        -profile $PROFILE
-        -work-dir "/mnt/openproblems-nextflow/work/${{ env.BRANCH }}"
-        -bucket-dir "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-        singlecellopenproblems/nf-openproblems
-        --branch $BRANCH
+        TOWER_WORKSPACE_ID: 53907369739130
+        NXF_DEFAULT_DSL: 1
+      run: |
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
+        nextflow run $WITH_TOWER \
+        -ansi-log false $RESUME \
+        -profile $PROFILE \
+        -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
+        -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
+        -name "${RUN_NAME}" \
+        -e.PYTHONPATH="${PYTHONPATH}" \
+        openproblems-bio/nf-openproblems \
+        --branch ${BRANCH} 2>&1 | \
+        grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
+      shell: /bin/bash -exou pipefail {0}
 
     - name: Copy results
       run: |
-        cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results .
+        mkdir -p "${RESULTS_PATH}"
+        cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results "${RESULTS_PATH}"
 
     - name: Parse results
       # There's a bug with the results getting pulled from Nextflow with caching, but
       # this doesn't happen on main, which is the only place `Parse results` is needed
-      if: startsWith(github.ref, 'refs/heads/main')
+      if: startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
       run: |
-        python workflow/parse_nextflow.py
+        python workflow/parse_nextflow.py "${RESULTS_PATH}"
 
     - name: AWS cleanup
-      if: always()
+      if: success() || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -270,9 +280,9 @@ jobs:
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
         done
-        aws s3 rm "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
-        aws s3 rm "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-        aws s3 rm "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
 
     - name: Remove untagged images
       if: startsWith(github.ref, 'refs/heads/main')
@@ -289,12 +299,14 @@ jobs:
       if: startsWith(github.ref, 'refs/tags')
       uses: pre-commit/action@v2.0.0
       continue-on-error: true
+      env:
+        SKIP: style-files,lintr
 
     - name: Set up Git branch
       if: startsWith(github.ref, 'refs/tags')
       run: |
-        git checkout -b $BRANCH_NAME
-        git push -u origin $BRANCH_NAME
+        git checkout -b $UPDATE_BRANCH_NAME
+        git push -u origin $UPDATE_BRANCH_NAME
 
     - name: Commit result
       if: startsWith(github.ref, 'refs/tags')
@@ -304,14 +316,14 @@ jobs:
         author_email: singlecellopenproblems@protonmail.com
         message: 'Update benchmark results # ci skip'
         add: "['website/data/results', 'results.json']"
-        branch: ${{ env.BRANCH_NAME }}
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
         push: false
 
     - name: Create Pull Request
       if: startsWith(github.ref, 'refs/tags')
       uses: peter-evans/create-pull-request@v3
       with:
-        branch: ${{ env.BRANCH_NAME }}
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
         delete-branch: true
         base: main
         title: '[auto] Update benchmark results'
@@ -322,4 +334,4 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         name: ${{ matrix.config.name }}_results
-        path: results
+        path: ${{ env.RESULTS_PATH }}
