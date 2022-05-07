@@ -321,7 +321,7 @@ def docker_image_marker(image, refresh=True):
     """Get the file to be created to ensure Docker image exists from the image name."""
     docker_path = os.path.join(IMAGES_DIR, image)
     # possible outputs
-    docker_refresh = os.path.join(docker_path, ".docker_refresh")
+    docker_refresh = os.path.join(docker_path, ".docker_update")
     dockerfile = os.path.join(docker_path, "Dockerfile")
     no_change = docker_refresh if refresh else dockerfile
     no_change_text = "refreshing source code only" if refresh else "no change"
