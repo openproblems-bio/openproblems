@@ -9,5 +9,4 @@ pybedtools
 torch
 git+https://github.com/michalk8/neuralee@master  # contains gradient error fix
 tensorflow-cpu==2.4.1
-ivis
 git+https://github.com/czbiohub/molecular-cross-validation
