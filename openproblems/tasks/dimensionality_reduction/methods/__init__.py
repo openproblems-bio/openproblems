@@ -1,6 +1,5 @@
 from .densmap import densmap_logCPM_1kHVG
 from .densmap import densmap_pca_logCPM_1kHVG
-from .ivis import ivis_logCPM_1kHVG
 from .neuralee import neuralee_default
 from .neuralee import neuralee_logCPM_1kHVG
 from .pca import pca_logCPM_1kHVG
