@@ -202,9 +202,9 @@ jobs:
         s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
         # Create bucket/ work/ and cwd/
         for dir in bucket work cwd; do
-          mkdir -p /mnt/openproblems-nextflow/${dir}/${{ env.BRANCH }}
+          mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
         done
-        ls -l /mnt/openproblems-nextflow/*/${{ env.BRANCH }}
+        ls -l /mnt/openproblems-nextflow/*/${BRANCH}
 
     - name: Install package & dependencies
       run: |
@@ -218,7 +218,7 @@ jobs:
     - name: Build Docker images
       run: |
         cd workflow
-        snakemake -j 4 docker
+        snakemake -j $(nproc) docker
         cd ..
 
     - name: Upload Docker images
