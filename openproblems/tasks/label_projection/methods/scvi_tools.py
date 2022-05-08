@@ -28,18 +28,31 @@ def _hvg(adata, test=False, n_top_genes=2000):
         )
 
 
-def _scanvi(adata, test=False):
+def _scanvi(adata, test=False, n_hidden=None, n_latent=None, n_layers=None):
     import scvi
+
+    if test:
+        n_latent = n_latent or 10
+        n_layers = n_layers or 1
+        n_hidden = n_hidden or 32
+    else:
+        n_latent = n_latent or 30
+        n_layers = n_layers or 2
+        n_hidden = n_hidden or 128
 
     scanvi_labels = adata.obs["labels"].to_numpy()
     # test set labels masked
     scanvi_labels[~adata.obs["is_train"].to_numpy()] = "Unknown"
     adata.obs["scanvi_labels"] = scanvi_labels
     scvi.model.SCVI.setup_anndata(adata, batch_key="batch", labels_key="scanvi_labels")
-    scvi_model = scvi.model.SCVI(adata, n_latent=30, n_layers=2)
+    scvi_model = scvi.model.SCVI(
+        adata, n_hidden=n_hidden, n_latent=n_latent, n_layers=n_layers
+    )
     train_kwargs = dict(train_size=1.0)
     if test:
         train_kwargs["max_epochs"] = 1
+        train_kwargs["limit_train_batches"] = 10
+        train_kwargs["limit_val_batches"] = 10
     scvi_model.train(**train_kwargs)
     model = scvi.model.SCANVI.from_scvi_model(scvi_model, unlabeled_category="Unknown")
     model.train(**train_kwargs)
@@ -49,8 +62,17 @@ def _scanvi(adata, test=False):
     return preds
 
 
-def _scanvi_scarches(adata, test=False):
+def _scanvi_scarches(adata, test=False, n_hidden=None, n_latent=None, n_layers=None):
     import scvi
+
+    if test:
+        n_latent = n_latent or 10
+        n_layers = n_layers or 1
+        n_hidden = n_hidden or 32
+    else:
+        n_latent = n_latent or 30
+        n_layers = n_layers or 2
+        n_hidden = n_hidden or 128
 
     # new obs labels to mask test set
     adata_train = adata[adata.obs["is_train"]].copy()
@@ -67,13 +89,16 @@ def _scanvi_scarches(adata, test=False):
         use_batch_norm="none",
         encode_covariates=True,
         dropout_rate=0.2,
-        n_layers=2,
-        n_latent=30,
+        n_hidden=n_hidden,
+        n_layers=n_layers,
+        n_latent=n_latent,
     )
     scvi_model = scvi.model.SCVI(adata_train, **arches_params)
     train_kwargs = dict(train_size=1.0)
     if test:
         train_kwargs["max_epochs"] = 1
+        train_kwargs["limit_train_batches"] = 10
+        train_kwargs["limit_val_batches"] = 10
     scvi_model.train(**train_kwargs)
     model = scvi.model.SCANVI.from_scvi_model(scvi_model, unlabeled_category="Unknown")
     model.train(**train_kwargs)
@@ -82,6 +107,8 @@ def _scanvi_scarches(adata, test=False):
     train_kwargs = dict(max_epochs=200)
     if test:
         train_kwargs["max_epochs"] = 1
+        train_kwargs["limit_train_batches"] = 10
+        train_kwargs["limit_val_batches"] = 10
     query_model.train(plan_kwargs=dict(weight_decay=0.0), **train_kwargs)
 
     # this is temporary and won't be used
