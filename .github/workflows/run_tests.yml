@@ -13,7 +13,7 @@ jobs:
   build_images:
 
     runs-on: ${{ matrix.config.os }}
-    if: >-
+    if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
         startsWith('refs/heads/test_docker') ||
@@ -114,7 +114,10 @@ jobs:
         - /tmp:/tmp
       options: --user root
 
-    if: >-
+    needs: build_images
+    if: |
+      always() &&
+      (needs.build_images.result == 'success' || needs.build_images.result == 'skipped') &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
         startsWith(github.ref, 'refs/heads') ||
