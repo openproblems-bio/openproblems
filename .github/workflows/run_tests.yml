@@ -16,11 +16,11 @@ jobs:
     if: >-
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
+        startsWith('refs/heads/test_docker') ||
         (
           startsWith('refs/heads/main') &&
           github.repository == 'openproblems-bio/openproblems'
-        ) ||
-        startsWith('refs/heads/test_docker')
+        )
       )
 
     env:
