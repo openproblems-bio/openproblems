@@ -15,13 +15,7 @@ jobs:
     runs-on: ${{ matrix.config.os }}
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
-      (
-        startsWith('refs/heads/test_docker') ||
-        (
-          startsWith('refs/heads/main') &&
-          github.repository == 'openproblems-bio/openproblems'
-        )
-      )
+      (startsWith('refs/heads/test_docker') || (startsWith('refs/heads/main') && github.repository == 'openproblems-bio/openproblems'))
 
     env:
       BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
