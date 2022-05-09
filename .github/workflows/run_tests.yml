@@ -198,8 +198,10 @@ jobs:
     needs: run_tester
     runs-on: ${{ matrix.config.os }}
     if: >-
+      always() &&
       !contains(github.event.head_commit.message, 'ci skip') &&
-      github.event_name == 'push'
+      github.event_name == 'push' &&
+      needs.run_tester.result == 'success'
 
     env:
       UPDATE_BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
