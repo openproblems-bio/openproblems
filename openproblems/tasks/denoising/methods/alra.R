@@ -1,6 +1,6 @@
 library(SingleCellExperiment)
 library(Matrix)
-source("https://raw.githubusercontent.com/KlugerLab/ALRA/v1.0.0/alra.R")
+source("https://github.com/wes-lewis/ALRA/blob/master/alra.R")
 library(rsvd)
 
 # save the matrix of the obsm variable train
