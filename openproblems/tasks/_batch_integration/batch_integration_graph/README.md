@@ -23,7 +23,7 @@ Datasets should contain the following attributes:
 
 Methods can take anything from datasets as input and should assign output to:
 * `adata.obsp['connectivities']` and `adata.obsp['distances']`, or
-* `adata.uns['neighbors']['connectivities']` and  `adata.uns['neighbors']['distances']`, and
+* `adata.uns['neighbors']['connectivities']` and  `adata.uns['neighbors']['distances']`.
 
 Please note, that most methods do not use cell type labels, which improves their usability.
 
