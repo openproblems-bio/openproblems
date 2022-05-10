@@ -15,7 +15,6 @@ def bbknn_full_unscaled(adata, test=False):
     from scib.integration import combat
     from scib.preprocessing import reduce_data
 
-
     adata = combat(adata, "batch")
     reduce_data(adata, umap=False)
     # Complete the result in-place
