@@ -1,14 +1,15 @@
-from .....data.immune_cells import load_immune
+from .....data.pancreas import load_pancreas
 from .....tools.decorators import dataset
 
 import scanpy as sc
 
 
-@dataset(dataset_name="Immune (by batch)", image="openproblems")
-def immune_batch(test=False):
-    adata = load_immune(test)
+@dataset(dataset_name="Pancreas (by batch)", image="openproblems")
+def pancreas_batch(test=False):
+    adata = load_pancreas(test)
     from_cache = adata.__from_cache__
-    adata.obs["labels"] = adata.obs["final_annotation"]
+    adata.obs["labels"] = adata.obs["celltype"]
+    adata.obs["batch"] = adata.obs["tech"]
 
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)

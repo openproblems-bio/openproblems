@@ -2,7 +2,6 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
-
 @method(
     method_name="BBKNN",
     paper_name="BBKNN: fast batch alignment of single cell transcriptomes",
