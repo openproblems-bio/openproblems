@@ -15,7 +15,6 @@ from .....tools.utils import check_version
 def bbknn_full_unscaled(adata, test=False):
     from scib.integration import combat
 
-
     adata = combat(adata, "batch")
     # Complete the result in-place
     return adata
