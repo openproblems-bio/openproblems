@@ -12,9 +12,10 @@ from .....tools.utils import check_version
     code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def bbknn_full_unscaled(adata, test):
-    from scib.integration import runBBKNN
+def bbknn_full_unscaled(adata, test=False):
+    from scib.integration import combat
 
-    adata = runBBKNN(adata, "batch")
+
+    adata = combat(adata, "batch")
     # Complete the result in-place
     return adata
