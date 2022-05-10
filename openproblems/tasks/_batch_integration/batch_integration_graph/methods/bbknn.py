@@ -1,8 +1,6 @@
 # from ....tools.normalize import log_cpm
 from .....tools.decorators import method
 from .....tools.utils import check_version
-from scib.pp import reduce_data
-
 
 @method(
     method_name="BBKNN",
@@ -15,6 +13,7 @@ from scib.pp import reduce_data
 )
 def bbknn_full_unscaled(adata, test=False):
     from scib.integration import combat
+    from scib.preprocessing import reduce_data
 
 
     adata = combat(adata, "batch")
