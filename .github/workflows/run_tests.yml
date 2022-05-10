@@ -316,7 +316,15 @@ jobs:
         openproblems-cli --version
         openproblems-cli --test-hash
 
+    - name: Pull Docker images
+      if: "(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker_pull
+        cd ..
+
     - name: Build Docker images
+      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
       run: |
         cd workflow
         snakemake -j $(nproc) docker
