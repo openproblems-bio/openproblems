@@ -15,6 +15,7 @@ def check_dataset(adata):
 def check_method(adata):
     """Check that method output fits expected API."""
     assert "denoised" in adata.obsm
+    assert isinstance(adata.obsm["denoised"], np.ndarray)
     assert adata.obsm["denoised"].shape == adata.X.shape
     return True
 
