@@ -17,7 +17,6 @@ jobs:
         uses: styfle/cancel-workflow-action@0.6.0
         with:
           access_token: ${{ github.token }}
-          workflow_id: "run_tests.yml"
 
   build_images:
 
@@ -215,27 +214,27 @@ jobs:
         - {name: 'current', os: ubuntu-18.04, python: '3.8', java_version: 15 }
 
     steps:
-
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 1000
-
-    - name: Install system dependencies
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.config.python }}
-
-    - name: Set up Java ${{ matrix.java_version }}
-      uses: actions/setup-java@v1
-      with:
-        java-version: ${{matrix.config.java_version}}
-        architecture: x64
+#
+#    - uses: actions/checkout@v2
+#      with:
+#        fetch-depth: 1000
+#
+#    - name: Install system dependencies
+#      if: runner.os == 'Linux'
+#      run: |
+#        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
+#        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+#
+#    - name: Set up Python
+#      uses: actions/setup-python@v2
+#      with:
+#        python-version: ${{ matrix.config.python }}
+#
+#    - name: Set up Java ${{ matrix.java_version }}
+#      uses: actions/setup-java@v1
+#      with:
+#        java-version: ${{matrix.config.java_version}}
+#        architecture: x64
 
     - name: Set up environment
       env:
@@ -263,87 +262,87 @@ jobs:
         fi
         echo "PROFILE=$PROFILE" >> $GITHUB_ENV
         echo "RESUME=$RESUME" >> $GITHUB_ENV
-
-    - name: Cache Python packages
-      uses: actions/cache@v2
-      with:
-        path: ${{ env.pythonLocation }}
-        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
-
-    - name: Install Nextflow
-      env:
-          CAPSULE_LOG: none
-      run: |
-        mkdir /tmp/nextflow
-        cd /tmp/nextflow
-        wget -qO- get.nextflow.io | bash
-        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
-        nextflow -version
-
-    - name: Install AWS CLI
-      run: |
-        mkdir /tmp/awscli
-        cd /tmp/awscli
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip -q awscliv2.zip
-        sudo ./aws/install || sudo ./aws/install --update
-        aws --version
-
-    - name: Set up S3FS
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        sudo apt-get install -qy s3fs
-        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
-        chmod 600 ~/.passwd-s3fs
-        sudo mkdir -p /mnt/openproblems-nextflow
-        sudo chown $USER /mnt/openproblems-nextflow
-        s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
-        # Create bucket/ work/ and cwd/
-        for dir in bucket work cwd; do
-          mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
-        done
-        ls -l /mnt/openproblems-nextflow/*/${BRANCH}
-
-    - name: Install package & dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -U wheel setuptools
-        pip install -U --editable .[evaluate]
-        python -c "import openproblems"
-        openproblems-cli --version
-        openproblems-cli --test-hash
-
-    - name: Pull Docker images
-      if: "(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker_pull
-        cd ..
-
-    - name: Build Docker images
-      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker
-        cd ..
-
-    - name: Upload Docker images
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
-          docker login --username AWS --password-stdin $ECR_ENDPOINT
-        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-        done
+#
+#    - name: Cache Python packages
+#      uses: actions/cache@v2
+#      with:
+#        path: ${{ env.pythonLocation }}
+#        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+#        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
+#
+#    - name: Install Nextflow
+#      env:
+#          CAPSULE_LOG: none
+#      run: |
+#        mkdir /tmp/nextflow
+#        cd /tmp/nextflow
+#        wget -qO- get.nextflow.io | bash
+#        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
+#        nextflow -version
+#
+#    - name: Install AWS CLI
+#      run: |
+#        mkdir /tmp/awscli
+#        cd /tmp/awscli
+#        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+#        unzip -q awscliv2.zip
+#        sudo ./aws/install || sudo ./aws/install --update
+#        aws --version
+#
+#    - name: Set up S3FS
+#      env:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        AWS_DEFAULT_REGION: us-west-2
+#      run: |
+#        sudo apt-get install -qy s3fs
+#        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
+#        chmod 600 ~/.passwd-s3fs
+#        sudo mkdir -p /mnt/openproblems-nextflow
+#        sudo chown $USER /mnt/openproblems-nextflow
+#        s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
+#        # Create bucket/ work/ and cwd/
+#        for dir in bucket work cwd; do
+#          mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
+#        done
+#        ls -l /mnt/openproblems-nextflow/*/${BRANCH}
+#
+#    - name: Install package & dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install -U wheel setuptools
+#        pip install -U --editable .[evaluate]
+#        python -c "import openproblems"
+#        openproblems-cli --version
+#        openproblems-cli --test-hash
+#
+#    - name: Pull Docker images
+#      if: "(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+#      run: |
+#        cd workflow
+#        snakemake -j $(nproc) docker_pull
+#        cd ..
+#
+#    - name: Build Docker images
+#      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+#      run: |
+#        cd workflow
+#        snakemake -j $(nproc) docker
+#        cd ..
+#
+#    - name: Upload Docker images
+#      env:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        AWS_DEFAULT_REGION: us-west-2
+#      run: |
+#        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+#        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+#          docker login --username AWS --password-stdin $ECR_ENDPOINT
+#        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+#          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+#          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+#        done
 
     - name: Run full benchmark
       uses: nf-core/tower-action@v2
