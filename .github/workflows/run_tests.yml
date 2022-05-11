@@ -349,7 +349,7 @@ jobs:
       with:
         workspace_id: 53907369739130
         access_token: ${{ secrets.TOWER_ACCESS_KEY }}
-        compute_env: AWS
+        compute_env: 7Eope60HGgsXoTcctcFdWw
         pipeline: openproblems-bio/nf-openproblems
         revision: v1.0
         workdir: s3://openproblems-nextflow/bucket/${{ env.BRANCH }}
