@@ -364,8 +364,7 @@ jobs:
         -e.PYTHONPATH="${PYTHONPATH}" \
         openproblems-bio/nf-openproblems \
         --branch ${BRANCH} | \
-        tee /dev/stdout | \
-        grep "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY
+        tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
       shell: /bin/bash -exou pipefail {0}
 
     - name: Copy results
