@@ -346,10 +346,19 @@ jobs:
 
     - name: Run full benchmark
       run: |
-        curl -X POST \
-             -H "Content-Type: application/json" \
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+        generate_parameters()
+        {
+          cat <<EOF
+        {
+          "runName": "$RUN_NAME"
+        }
+        EOF
+        }
+        curl -H "Content-Type: application/json" \
              -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
-             https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=53907369739130
+             https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=53907369739130 \
+             --data "$(generate_parameters)"
 
 
 #    - name: Run benchmark
@@ -408,82 +417,3 @@ jobs:
 #        tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
 #      shell: /bin/bash -exou pipefail {0}
 #
-
-
-#    - name: Copy results
-#      run: |
-#        mkdir -p "${RESULTS_PATH}"
-#        cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results "${RESULTS_PATH}"
-#
-#    - name: Parse results
-#      # There's a bug with the results getting pulled from Nextflow with caching, but
-#      # this doesn't happen on main, which is the only place `Parse results` is needed
-#      if: startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
-#      run: |
-#        python workflow/parse_nextflow.py "${RESULTS_PATH}"
-#
-#    - name: AWS cleanup
-#      if: success() || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        AWS_DEFAULT_REGION: us-west-2
-#      run: |
-#        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-#          aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
-#        done
-#        aws s3 rm --recursive "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
-#        aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-#        aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
-#
-#    - name: Remove untagged images
-#      if: startsWith(github.ref, 'refs/heads/main')
-#      continue-on-error: true
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        AWS_DEFAULT_REGION: us-west-2
-#      run: |
-#        IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
-#        aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
-#
-#    - name: Pre-commit
-#      if: startsWith(github.ref, 'refs/tags')
-#      uses: pre-commit/action@v2.0.0
-#      continue-on-error: true
-#      env:
-#        SKIP: style-files,lintr
-#
-#    - name: Set up Git branch
-#      if: startsWith(github.ref, 'refs/tags')
-#      run: |
-#        git checkout -b $UPDATE_BRANCH_NAME
-#        git push -u origin $UPDATE_BRANCH_NAME
-#
-#    - name: Commit result
-#      if: startsWith(github.ref, 'refs/tags')
-#      uses: EndBug/add-and-commit@v6
-#      with:
-#        author_name: SingleCellOpenProblems
-#        author_email: singlecellopenproblems@protonmail.com
-#        message: 'Update benchmark results # ci skip'
-#        add: "['website/data/results', 'results.json']"
-#        branch: ${{ env.UPDATE_BRANCH_NAME }}
-#        push: false
-#
-#    - name: Create Pull Request
-#      if: startsWith(github.ref, 'refs/tags')
-#      uses: peter-evans/create-pull-request@v3
-#      with:
-#        branch: ${{ env.UPDATE_BRANCH_NAME }}
-#        delete-branch: true
-#        base: main
-#        title: '[auto] Update benchmark results'
-#        reviewers: scottgigante, dburkhardt
-
-    - name: Upload results
-      if: always()
-      uses: actions/upload-artifact@main
-      with:
-        name: ${{ matrix.config.name }}_results
-        path: ${{ env.RESULTS_PATH }}
