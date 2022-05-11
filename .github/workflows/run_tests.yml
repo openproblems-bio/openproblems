@@ -345,9 +345,9 @@ jobs:
 #        done
 
     - name: Run full benchmark
-      run: >-
-        curl -H "Content-Type: application/json"
-             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}"
+      run: |
+        curl -H "Content-Type: application/json" \
+             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
              https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=53907369739130
 
 
