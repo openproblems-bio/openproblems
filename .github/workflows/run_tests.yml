@@ -344,28 +344,82 @@ jobs:
           docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
         done
 
-    - name: Run benchmark
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-        TOWER_WORKSPACE_ID: 53907369739130
-        NXF_DEFAULT_DSL: 1
-      run: |
-        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
-        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
-        nextflow run $WITH_TOWER \
-        -ansi-log false $RESUME \
-        -profile $PROFILE \
-        -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
-        -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
-        -name "${RUN_NAME}" \
-        -e.PYTHONPATH="${PYTHONPATH}" \
-        openproblems-bio/nf-openproblems \
-        --branch ${BRANCH} | \
-        tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
-      shell: /bin/bash -exou pipefail {0}
+    - name: Run full benchmark
+      uses: nf-core/tower-action@v2
+      with:
+        workspace_id: 53907369739130
+        access_token: ${{ secrets.TOWER_ACCESS_KEY }}
+        pipeline: openproblems-bio/nf-openproblems
+        revision: v1.0
+        workdir: s3://openproblems-nextflow/bucket/${{ env.BRANCH }}
+        pre_run_script: |
+          git clone https://github.com/openproblems-bio/openproblems
+          cd openproblems
+          pip install -e .
+          cd ..
+          export NXF_DEFAULT_DSL=1
+        parameters: |
+          {
+              "branch": "${{ env.BRANCH }}"
+          }
+        profiles: test,aws
+
+
+#    - name: Run benchmark
+#      env:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+#        AWS_DEFAULT_REGION: us-west-2
+#        TOWER_WORKSPACE_ID: 53907369739130
+#        NXF_DEFAULT_DSL: 1
+#      run: |
+#        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+#        generate_parameters()
+#        {
+#          cat <<EOF
+#        {
+#          "command": " \
+#            nextflow run $WITH_TOWER \
+#            -dsl1 \
+#            -ansi-log false $RESUME \
+#            -profile $PROFILE \
+#            -work-dir /mnt/openproblems-nextflow/work/${BRANCH} \
+#            -bucket-dir s3://openproblems-nextflow/bucket/${BRANCH} \
+#            -name ${RUN_NAME} \
+#            -e.PYTHONPATH='${PYTHONPATH}' \
+#            openproblems-bio/nf-openproblems \
+#            --branch ${BRANCH}",
+#          "image": "singlecellopenproblems/openproblems:latest",
+#          "resourceRequirements": [
+#            {"type": "VCPU", "value": "2"},
+#            {"type": "MEMORY", "value": "4096"}
+#          ],
+#          "environment": [
+#            {"name": "TOWER_WORKSPACE_ID", "value": "${TOWER_WORKSPACE_ID}"},
+#            {"name": "TOWER_ACCESS_TOKEN", "value": "1234"},
+#            {"name": "NXF_DEFAULT_DSL", "value": "1"}
+#          ]
+#        }
+#        EOF
+#        }
+#        aws batch register-job-definition \
+#        --job-definition-name nextflow-main \
+#        --type container \
+#        --parameters "$(generate_parameters)"
+#
+#        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
+#        nextflow run $WITH_TOWER \
+#        -ansi-log false $RESUME \
+#        -profile $PROFILE \
+#        -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
+#        -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
+#        -name "${RUN_NAME}" \
+#        -e.PYTHONPATH="${PYTHONPATH}" \
+#        openproblems-bio/nf-openproblems \
+#        --branch ${BRANCH} | \
+#        tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
+#      shell: /bin/bash -exou pipefail {0}
 
     - name: Copy results
       run: |
