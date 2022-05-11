@@ -17,6 +17,7 @@ Datasets should contain the following attributes:
 * `adata.obs["batch"]` with the batch covariate,
 * `adata.obs["label"]` with the cell identity label,
 * `adata.layers['counts']` with raw, integer UMI count data, and
+* `adata.obsm['X_uni']` with the PCA embedding of the unintegrated representation
 * `adata.obsp['uni_connectivities']` with an unintegrated connectivity matrix generated
   by  `scanpy.pp.neighbors()`
 * `adata.X` with log-normalized data
@@ -28,7 +29,8 @@ Methods can take anything from datasets as input and should assign output to:
 Please note, that most methods do not use cell type labels, which improves their usability.
 
 The `openproblems-python-batch-integration` docker container is used for the methods that
-can be installed without package conflicts. For R methods, the `openproblems-r-extras`
+can be installed without package conflicts. (NOTE: add additional containers here)
+For R methods, the `openproblems-r-extras`
 container is used.
 
 Methods are run in four different scenarios that include scaling and highly variable gene selection:
@@ -37,8 +39,7 @@ Methods are run in four different scenarios that include scaling and highly vari
 * `full_scaled`
 * `hvg_scaled`
 
-An example script can be found [here](methods/_example.py)
-Functions for scaling and highly variable gene selection per batch are reused from [`scIB`](https://github.com/theislab/scib). Additionally, method wrappers are reused from scIB where possible.
+Functions for scaling and highly variable gene selection per batch are reused from [`scib`](https://github.com/theislab/scib). Additionally, method wrappers are reused from scIB where possible.
 
 Metrics can compare:
 * `adata.obsp['connectivities']` to `adata.obs['uni_connectivies']`,
