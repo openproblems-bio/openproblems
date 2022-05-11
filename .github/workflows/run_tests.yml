@@ -346,7 +346,8 @@ jobs:
 
     - name: Run full benchmark
       run: |
-        curl -H "Content-Type: application/json" \
+        curl -X POST \
+             -H "Content-Type: application/json" \
              -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
              https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=53907369739130
 
@@ -407,6 +408,8 @@ jobs:
 #        tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
 #      shell: /bin/bash -exou pipefail {0}
 #
+
+
 #    - name: Copy results
 #      run: |
 #        mkdir -p "${RESULTS_PATH}"
