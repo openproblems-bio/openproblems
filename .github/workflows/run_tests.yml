@@ -345,25 +345,10 @@ jobs:
 #        done
 
     - name: Run full benchmark
-      uses: nf-core/tower-action@v2
-      with:
-        workspace_id: 53907369739130
-        access_token: ${{ secrets.TOWER_ACCESS_KEY }}
-        compute_env: AWS
-        pipeline: openproblems-bio/nf-openproblems
-        revision: v1.0
-        workdir: s3://openproblems-nextflow/bucket/${{ env.BRANCH }}
-        pre_run_script: |
-          git clone https://github.com/openproblems-bio/openproblems
-          cd openproblems
-          pip install -e .
-          cd ..
-          export NXF_DEFAULT_DSL=1
-        parameters: |
-          {
-              "branch": "${{ env.BRANCH }}"
-          }
-        profiles: test,aws
+      run: >-
+        curl -H "Content-Type: application/json"
+             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}"
+             https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=53907369739130
 
 
 #    - name: Run benchmark
