@@ -12,7 +12,7 @@ from .....tools.utils import check_version
     code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def bbknn_full_unscaled(adata):
+def bbknn_full_unscaled(adata, test=False):
     # Normalize the data
     from scib.integration import runBBKNN
 
@@ -30,7 +30,7 @@ def bbknn_full_unscaled(adata):
     code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def bbknn_hvg_unscaled(adata):
+def bbknn_hvg_unscaled(adata, test=False):
     from ._utils import hvg_batch
     from scib.integration import runBBKNN
 
@@ -49,7 +49,7 @@ def bbknn_hvg_unscaled(adata):
     code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def bbknn_hvg_scaled(adata):
+def bbknn_hvg_scaled(adata, test=False):
     from ._utils import hvg_batch
     from ._utils import scale_batch
     from scib.integration import runBBKNN
@@ -70,7 +70,7 @@ def bbknn_hvg_scaled(adata):
     code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def bbknn_full_scaled(adata):
+def bbknn_full_scaled(adata, test=False):
     from ._utils import scale_batch
     from scib.integration import runBBKNN
 

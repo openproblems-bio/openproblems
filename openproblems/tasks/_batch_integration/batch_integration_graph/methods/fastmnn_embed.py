@@ -31,7 +31,7 @@ _fastmnn_embed = scprep.run.RFunction(
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def fastmnn_embed_full_unscaled(adata):
+def fastmnn_embed_full_unscaled(adata, test=False):
     from scib.preprocessing import reduce_data
 
     adata = _fastmnn_embed(adata, "batch")
@@ -50,7 +50,7 @@ def fastmnn_embed_full_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def fastmnn_embed_hvg_unscaled(adata):
+def fastmnn_embed_hvg_unscaled(adata, test=False):
     from ._utils import hvg_batch
     from scib.preprocessing import reduce_data
 
@@ -70,7 +70,7 @@ def fastmnn_embed_hvg_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def fastmnn_embed_hvg_scaled(adata):
+def fastmnn_embed_hvg_scaled(adata, test=False):
     from ._utils import hvg_batch
     from ._utils import scale_batch
     from scib.preprocessing import reduce_data
@@ -92,7 +92,7 @@ def fastmnn_embed_hvg_scaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def fastmnn_embed_full_scaled(adata):
+def fastmnn_embed_full_scaled(adata, test=False):
     from ._utils import scale_batch
     from scib.preprocessing import reduce_data
 

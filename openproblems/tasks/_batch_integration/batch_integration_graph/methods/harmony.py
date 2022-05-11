@@ -35,7 +35,7 @@ _harmony = scprep.run.RFunction(
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def harmony_full_unscaled(adata):
+def harmony_full_unscaled(adata, test=False):
     from scanpy.pp import neighbors
 
     adata = _harmony(adata, "batch")
@@ -56,7 +56,7 @@ def harmony_full_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def harmony_hvg_unscaled(adata):
+def harmony_hvg_unscaled(adata, test=False):
     from ._utils import hvg_batch
     from scanpy.pp import neighbors
 
@@ -78,7 +78,7 @@ def harmony_hvg_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def harmony_hvg_scaled(adata):
+def harmony_hvg_scaled(adata, test=False):
     from ._utils import hvg_batch
     from ._utils import scale_batch
     from scanpy.pp import neighbors
@@ -102,7 +102,7 @@ def harmony_hvg_scaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def harmony_full_scaled(adata):
+def harmony_full_scaled(adata, test=False):
     from ._utils import scale_batch
     from scanpy.pp import neighbors
 

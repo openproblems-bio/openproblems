@@ -51,7 +51,7 @@ _liger = scprep.run.RFunction(
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def liger_full_unscaled(adata):
+def liger_full_unscaled(adata, test=False):
     from scanpy.pp import neighbors
 
     adata.obsm["X_emb"] = _liger(adata, "batch")
@@ -71,7 +71,7 @@ def liger_full_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def liger_hvg_unscaled(adata):
+def liger_hvg_unscaled(adata, test=False):
     from ._utils import hvg_batch
     from scanpy.pp import neighbors
 
@@ -91,7 +91,7 @@ def liger_hvg_unscaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def liger_hvg_scaled(adata):
+def liger_hvg_scaled(adata, test=False):
     from ._utils import hvg_batch
     from ._utils import scale_batch
     from scanpy.pp import neighbors
@@ -113,7 +113,7 @@ def liger_hvg_scaled(adata):
     code_version=check_version("scprep"),
     image="openproblems-r-extras",  # only if required
 )
-def liger_full_scaled(adata):
+def liger_full_scaled(adata, test=False):
     from ._utils import scale_batch
     from scanpy.pp import neighbors
 

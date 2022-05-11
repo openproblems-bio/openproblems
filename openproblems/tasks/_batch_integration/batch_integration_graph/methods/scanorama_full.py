@@ -13,7 +13,7 @@ from .....tools.utils import check_version
     code_version=check_version("scanorama"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def scanorama_feature_full_unscaled(adata):
+def scanorama_feature_full_unscaled(adata, test=False):
     from scib.integration import runScanorama
     from scib.preprocessing import reduce_data
 
@@ -33,7 +33,7 @@ def scanorama_feature_full_unscaled(adata):
     code_version=check_version("scanorama"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def scanorama_feature_hvg_unscaled(adata):
+def scanorama_feature_hvg_unscaled(adata, test=False):
     from ._utils import hvg_batch
     from scib.integration import runScanorama
     from scib.preprocessing import reduce_data
@@ -54,7 +54,7 @@ def scanorama_feature_hvg_unscaled(adata):
     code_version=check_version("scanorama"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def scanorama_feature_hvg_scaled(adata):
+def scanorama_feature_hvg_scaled(adata, test=False):
     from ._utils import hvg_batch
     from ._utils import scale_batch
     from scib.integration import runScanorama
@@ -77,7 +77,7 @@ def scanorama_feature_hvg_scaled(adata):
     code_version=check_version("scanorama"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def scanorama_feature_full_scaled(adata):
+def scanorama_feature_full_scaled(adata, test=False):
     from ._utils import scale_batch
     from scib.integration import runScanorama
     from scib.preprocessing import reduce_data
