@@ -346,7 +346,7 @@ jobs:
 
     - name: Run full benchmark
       run: |
-        RUN_NAME=test123${GITHUB_SHA}"
+        RUN_NAME=test123${GITHUB_SHA}
         generate_parameters()
         {
           cat <<EOF
