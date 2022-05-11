@@ -15,6 +15,7 @@ def check_dataset(adata):
 def check_method(adata):
     """Check that method output fits expected API."""
     assert "connectivities" in adata.obsp
+    assert "distances" in adata.obsp
     return True
 
 
