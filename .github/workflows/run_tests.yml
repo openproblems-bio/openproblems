@@ -363,7 +363,7 @@ jobs:
         -name "${RUN_NAME}" \
         -e.PYTHONPATH="${PYTHONPATH}" \
         openproblems-bio/nf-openproblems \
-        --branch ${BRANCH} 2>&1 | \
+        --branch ${BRANCH} | \
         tee /dev/stdout | \
         grep "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY
       shell: /bin/bash -exou pipefail {0}
