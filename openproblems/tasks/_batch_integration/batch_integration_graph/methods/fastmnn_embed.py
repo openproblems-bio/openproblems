@@ -32,10 +32,11 @@ _fastmnn_embed = scprep.run.RFunction(
     image="openproblems-r-extras",  # only if required
 )
 def fastmnn_embed_full_unscaled(adata, test=False):
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata = _fastmnn_embed(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
+    
     # Complete the result in-place
     return adata
 
@@ -51,11 +52,11 @@ def fastmnn_embed_full_unscaled(adata, test=False):
 )
 def fastmnn_embed_hvg_unscaled(adata, test=False):
     from ._utils import hvg_batch
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _fastmnn_embed(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
     return adata
 
 
@@ -71,12 +72,12 @@ def fastmnn_embed_hvg_unscaled(adata, test=False):
 def fastmnn_embed_hvg_scaled(adata, test=False):
     from ._utils import hvg_batch
     from ._utils import scale_batch
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = _fastmnn_embed(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
     return adata
 
 
@@ -91,9 +92,9 @@ def fastmnn_embed_hvg_scaled(adata, test=False):
 )
 def fastmnn_embed_full_scaled(adata, test=False):
     from ._utils import scale_batch
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata = scale_batch(adata, "batch")
     adata = _fastmnn_embed(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
     return adata
