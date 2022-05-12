@@ -14,8 +14,8 @@ The following changes have been made:
   Mendeley Data, V1, doi: 10.17632/jbjd5fmggh.1
 """
 
-from ....tasks.dimensionality_reduction.methods.preprocessing import preprocess_scanpy
 from ....tools.decorators import metric
+from ....tools.normalize import log_cpm_hvg
 from anndata import AnnData
 from numba import njit
 from scipy.sparse import issparse
@@ -37,7 +37,7 @@ _K = 30
 
 
 @njit(cache=True, fastmath=True)
-def _ranking_matrix(D: np.ndarray) -> np.ndarray:
+def _ranking_matrix(D: np.ndarray) -> np.ndarray:  # pragma: no cover
     assert D.shape[0] == D.shape[1]
     R = np.zeros(D.shape)
     m = len(R)
@@ -53,7 +53,7 @@ def _ranking_matrix(D: np.ndarray) -> np.ndarray:
 
 
 @njit(cache=True, fastmath=True)
-def _coranking_matrix(R1: np.ndarray, R2: np.ndarray) -> np.ndarray:
+def _coranking_matrix(R1: np.ndarray, R2: np.ndarray) -> np.ndarray:  # pragma: no cover
     assert R1.shape == R2.shape
     Q = np.zeros(R1.shape, dtype=np.int32)
     m = len(Q)
@@ -69,7 +69,9 @@ def _coranking_matrix(R1: np.ndarray, R2: np.ndarray) -> np.ndarray:
 @njit(cache=True, fastmath=True)
 def _metrics(
     Q: np.ndarray,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, float, np.ndarray, int, float, float]:
+) -> Tuple[
+    np.ndarray, np.ndarray, np.ndarray, float, np.ndarray, int, float, float
+]:  # pragma: no cover
     Q = Q[1:, 1:]
     m = len(Q)
 
@@ -107,7 +109,8 @@ def _metrics(
 
 
 def _high_dim(adata: AnnData) -> np.ndarray:
-    preprocess_scanpy(adata)
+    adata.X = adata.layers["counts"]
+    adata = log_cpm_hvg(adata)
     high_dim = adata.X
     return high_dim.A if issparse(high_dim) else high_dim
 

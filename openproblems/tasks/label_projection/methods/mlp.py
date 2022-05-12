@@ -7,6 +7,21 @@ from .sklearn import classifier
 import sklearn.neural_network
 
 
+def _mlp(adata, test=False, max_iter=None, hidden_layer_sizes=None):
+    if test:
+        hidden_layer_sizes = hidden_layer_sizes or (20,)
+        max_iter = max_iter or 100
+    else:  # pragma: no cover
+        hidden_layer_sizes = hidden_layer_sizes or (100, 100)
+        max_iter = max_iter or 1000
+    return classifier(
+        adata,
+        estimator=sklearn.neural_network.MLPClassifier,
+        hidden_layer_sizes=hidden_layer_sizes,
+        max_iter=max_iter,
+    )
+
+
 @method(
     method_name="Multilayer perceptron (log CPM)",
     paper_name="Connectionist learning procedures",
@@ -16,9 +31,11 @@ import sklearn.neural_network
     "sklearn.neural_network.MLPClassifier.html",
     code_version=check_version("scikit-learn"),
 )
-def mlp_log_cpm(adata):
-    log_cpm(adata)
-    return classifier(adata, estimator=sklearn.neural_network.MLPClassifier)
+def mlp_log_cpm(adata, test=False, max_iter=None, hidden_layer_sizes=None):
+    adata = log_cpm(adata)
+    return _mlp(
+        adata, test=test, max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes
+    )
 
 
 @method(
@@ -31,6 +48,8 @@ def mlp_log_cpm(adata):
     code_version=check_version("scikit-learn"),
     image="openproblems-r-base",
 )
-def mlp_scran(adata):
-    log_scran_pooling(adata)
-    return classifier(adata, estimator=sklearn.neural_network.MLPClassifier)
+def mlp_scran(adata, test=False, max_iter=None, hidden_layer_sizes=None):
+    adata = log_scran_pooling(adata)
+    return _mlp(
+        adata, test=test, max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes
+    )

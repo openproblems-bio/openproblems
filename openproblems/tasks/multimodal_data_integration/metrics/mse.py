@@ -7,7 +7,7 @@ import scprep
 
 def _square(X):
     if sparse.issparse(X):
-        X.data = X.data ** 2
+        X.data = X.data**2
         return X
     else:
         return scprep.utils.toarray(X) ** 2

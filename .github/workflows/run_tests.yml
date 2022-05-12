@@ -2,112 +2,189 @@ name: Run Tests
 
 on:
   push:
-    branches-ignore:
-      - 'test_docker'
-      - 'test_benchmark'
+    tags:
+      - '*'
+    branches:
+      - '**'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
-  run_tester:
+  cancel_previous_runs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
+
+  build_images:
+
+    needs: cancel_previous_runs
     runs-on: ${{ matrix.config.os }}
-    if: >-
-      !contains(github.event.head_commit.message, 'ci skip') &&
+    if: |
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
-        startsWith(github.ref, 'refs/heads') ||
-        github.event.pull_request.draft == false
+        startsWith(github.ref, 'refs/heads/test_docker') ||
+        (
+          startsWith(github.ref, 'refs/heads/main') &&
+          github.repository == 'openproblems-bio/openproblems'
+        )
       )
 
     env:
-      RENV_PATHS_ROOT: ~/.local/share/renv
+      BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
 
     strategy:
       fail-fast: false
       matrix:
         config:
-        - {name: 'curr', os: ubuntu-18.04, python: '3.8', r: 'release' }
-        - {name: 'prev', os: ubuntu-18.04, python: '3.7', r: 'release' }
-        - {name: 'old', os: ubuntu-18.04, python: '3.6', r: 'release' }
+        - {name: 'current', os: ubuntu-18.04, python: '3.8' }
 
     steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.6.0
-      with:
-        access_token: ${{ github.token }}
-
-    - name: Check Ubuntu version
-      run: |
-        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
-
     - uses: actions/checkout@v2
       with:
-        fetch-depth: 0
-
-    - name: Install system dependencies
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-        sudo apt-get install -y libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev libcurl4-openssl-dev
+        fetch-depth: 1000
 
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.config.python }}
 
-    - name: Set up R
-      id: setup-r
-      uses: r-lib/actions/setup-r@v1
-      with:
-        r-version: ${{ matrix.config.r }}
-
-    - name: Check Ubuntu version
-      run: |
-        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
-
-    - name: Cache Python packages
-      uses: actions/cache@v2
-      with:
-        path: ${{ env.pythonLocation }}
-        key: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
-
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -U wheel setuptools codecov
-        pip install -U --editable .[test,r,evaluate]
+        pip install -U wheel setuptools
+        pip install --editable .[evaluate]
         python -c "import openproblems"
-
-    - name: Cache R packages
-      uses: actions/cache@v2
-      if: startsWith(runner.os, 'Linux')
-      with:
-        path: ${{ env.RENV_PATHS_ROOT }}
-        key: ${{ env.UBUNTU_VERSION }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-${{ hashFiles('**/renv.lock') }}
-        restore-keys: |
-          ${{ env.UBUNTU_VERSION }}-renv-${{ steps.setup-r.outputs.installed-r-version }}-
-
-    - name: Install R packages
-      run: |
-        if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-        renv::restore()
-        renv::install(scan("docker/openproblems-r-base/r_requirements.txt", what=character(), sep="\n"))
-      shell: Rscript {0}
 
     - name: Build Docker images
       run: |
         cd workflow
-        snakemake -j 4 docker
+        snakemake -j $(grep -c processor /proc/cpuinfo) docker_build
         cd ..
 
-    - name: Run tests
-      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv
-
-    - name: Upload coverage
-      if: success() && ${{ github.repository == 'SingleCellOpenProblems/singlecellopenproblems' }}
+    - name: Push Docker images
+      if: startsWith(github.ref, 'refs/heads/main')
       env:
-        CODECOV_NAME: ${{ runner.os }}-${{ matrix.name }}
-      run: codecov --no-color --required --flags unittests
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        cd workflow
+        snakemake -j $(grep -c processor /proc/cpuinfo) docker_push
+        cd ..
+        echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
+
+    - name: Set up Git branch
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
+      run: |
+        git checkout -b $BRANCH_NAME
+        git push -u origin $BRANCH_NAME
+
+    - name: Commit result
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
+      uses: EndBug/add-and-commit@v6
+      with:
+        author_name: SingleCellOpenProblems
+        author_email: singlecellopenproblems@protonmail.com
+        message: 'Update docker version # ci skip'
+        add: "docker/.version"
+        branch: ${{ env.BRANCH_NAME }}
+        push: false
+
+    - name: Create Pull Request
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
+      uses: peter-evans/create-pull-request@v3
+      with:
+        branch: ${{ env.BRANCH_NAME }}
+        delete-branch: true
+        base: main
+        title: '[auto] Update docker version'
+        reviewers: scottgigante, dburkhardt
+
+    - name: Upload check results on fail
+      if: failure()
+      uses: actions/upload-artifact@main
+      with:
+        name: ${{ matrix.config.name }}_results
+        path: check
+
+  run_tester:
+    runs-on: ubuntu-latest
+
+#    container:
+#      image: singlecellopenproblems/openproblems-github-actions:latest
+#      volumes:
+#        - /var/run/docker.sock:/var/run/docker.sock
+#        - /tmp:/tmp
+#      options: --user root
+
+    needs: build_images
+    if: |
+      always() &&
+      (needs.build_images.result == 'success' || needs.build_images.result == 'skipped') &&
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads') ||
+        github.event.pull_request.draft == false &&
+        !startsWith(github.ref, 'refs/heads/test_docker')
+      )
+
+    steps:
+
+#    - uses: actions/checkout@v2
+#      with:
+#        fetch-depth: 0
+#
+#    - name: Set up environment
+#      run: |
+#        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
+#        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
+#        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
+#
+#    - name: Cache Python packages
+#      uses: actions/cache@v2
+#      with:
+#        path: ${{ env.PYTHON_VERSION }}
+#        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
+#        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
+#
+#    - name: Install package & dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install -U wheel setuptools
+#        pip install -U --editable .[test,r,evaluate]
+#        python -c "import openproblems"
+#
+#    - name: Cache R packages
+#      uses: actions/cache@v2
+#      if: startsWith(runner.os, 'Linux')
+#      with:
+#        path: /usr/local/lib/R/site-library
+#        key: ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
+#        restore-keys: |
+#          ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
+#
+#    - name: Install R packages
+#      run: |
+#        if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+#        renv::restore()
+#        source("./scripts/install_renv.R")
+#        install_renv("docker/openproblems-r-base/r_requirements.txt")
+#      shell: Rscript {0}
+#
+#    - name: Update Docker images
+#      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+#      run: |
+#        cd workflow
+#        snakemake -j $(nproc) docker
+#        cd ..
+#
+#    - name: Run tests
+#      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv --maxfail=2
+#
+#    - name: Upload coverage
+#      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
+#      run: codecov --no-color --required --flags unittests
 
     - name: Upload check results on fail
       if: failure()
@@ -115,3 +192,224 @@ jobs:
       with:
         name: ${{ matrix.config.name }}_results
         path: results
+
+
+  run_benchmark:
+    needs: run_tester
+    runs-on: ${{ matrix.config.os }}
+    if: >-
+      always() &&
+      !contains(github.event.head_commit.message, 'ci skip') &&
+      github.event_name == 'push' &&
+      needs.run_tester.result == 'success'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {name: 'current', os: ubuntu-18.04, python: '3.8', java_version: 15 }
+
+    steps:
+#
+#    - uses: actions/checkout@v2
+#      with:
+#        fetch-depth: 1000
+#
+#    - name: Install system dependencies
+#      if: runner.os == 'Linux'
+#      run: |
+#        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
+#        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+#
+#    - name: Set up Python
+#      uses: actions/setup-python@v2
+#      with:
+#        python-version: ${{ matrix.config.python }}
+#
+#    - name: Set up Java ${{ matrix.java_version }}
+#      uses: actions/setup-java@v1
+#      with:
+#        java-version: ${{matrix.config.java_version}}
+#        architecture: x64
+
+    - name: Set up environment
+      env:
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+      run: |
+        SCRIPTS_PATH=$(python3 -c 'import os, sysconfig; print(sysconfig.get_path("scripts",f"{os.name}_user"))')
+        echo "PATH=${SCRIPTS_PATH}:${PATH}" >> $GITHUB_ENV
+        echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+        echo "PYTHON_LOCATION=$(which python3)" >> $GITHUB_ENV
+        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
+        # If not on the base repository, append first 6 characters of username to the image name
+        # to avoid clashes on ECR
+        if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; \
+          then echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
+          else echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
+        fi >> $GITHUB_ENV
+        # don't use tower if the env var is not set
+        echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
+        if [ $(echo ${{ github.ref }} | grep -E -e "^refs/heads/(main|test_benchmark)" -e "^refs/tags") ]; then
+          PROFILE="aws"
+          RESUME=""
+        else
+          PROFILE="test,aws"
+          RESUME="-resume"
+        fi
+        echo "PROFILE=$PROFILE" >> $GITHUB_ENV
+        echo "RESUME=$RESUME" >> $GITHUB_ENV
+#
+#    - name: Cache Python packages
+#      uses: actions/cache@v2
+#      with:
+#        path: ${{ env.pythonLocation }}
+#        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+#        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
+#
+#    - name: Install Nextflow
+#      env:
+#          CAPSULE_LOG: none
+#      run: |
+#        mkdir /tmp/nextflow
+#        cd /tmp/nextflow
+#        wget -qO- get.nextflow.io | bash
+#        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
+#        nextflow -version
+#
+#    - name: Install AWS CLI
+#      run: |
+#        mkdir /tmp/awscli
+#        cd /tmp/awscli
+#        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+#        unzip -q awscliv2.zip
+#        sudo ./aws/install || sudo ./aws/install --update
+#        aws --version
+#
+#    - name: Set up S3FS
+#      env:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        AWS_DEFAULT_REGION: us-west-2
+#      run: |
+#        sudo apt-get install -qy s3fs
+#        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
+#        chmod 600 ~/.passwd-s3fs
+#        sudo mkdir -p /mnt/openproblems-nextflow
+#        sudo chown $USER /mnt/openproblems-nextflow
+#        s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
+#        # Create bucket/ work/ and cwd/
+#        for dir in bucket work cwd; do
+#          mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
+#        done
+#        ls -l /mnt/openproblems-nextflow/*/${BRANCH}
+#
+#    - name: Install package & dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install -U wheel setuptools
+#        pip install -U --editable .[evaluate]
+#        python -c "import openproblems"
+#        openproblems-cli --version
+#        openproblems-cli --test-hash
+#
+#    - name: Pull Docker images
+#      if: "(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+#      run: |
+#        cd workflow
+#        snakemake -j $(nproc) docker_pull
+#        cd ..
+#
+#    - name: Build Docker images
+#      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+#      run: |
+#        cd workflow
+#        snakemake -j $(nproc) docker
+#        cd ..
+#
+#    - name: Upload Docker images
+#      env:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        AWS_DEFAULT_REGION: us-west-2
+#      run: |
+#        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+#        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+#          docker login --username AWS --password-stdin $ECR_ENDPOINT
+#        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+#          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+#          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+#        done
+
+    - name: Run full benchmark
+      run: |
+        RUN_NAME=test123${GITHUB_SHA}
+        generate_parameters()
+        {
+          cat <<EOF
+        {
+          "runName": "$RUN_NAME"
+        }
+        EOF
+        }
+        curl -H "Content-Type: application/json" \
+             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
+             https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=53907369739130 \
+             --data "$(generate_parameters)"
+
+
+#    - name: Run benchmark
+#      env:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+#        AWS_DEFAULT_REGION: us-west-2
+#        TOWER_WORKSPACE_ID: 53907369739130
+#        NXF_DEFAULT_DSL: 1
+#      run: |
+#        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+#        generate_parameters()
+#        {
+#          cat <<EOF
+#        {
+#          "command": " \
+#            nextflow run $WITH_TOWER \
+#            -dsl1 \
+#            -ansi-log false $RESUME \
+#            -profile $PROFILE \
+#            -work-dir /mnt/openproblems-nextflow/work/${BRANCH} \
+#            -bucket-dir s3://openproblems-nextflow/bucket/${BRANCH} \
+#            -name ${RUN_NAME} \
+#            -e.PYTHONPATH='${PYTHONPATH}' \
+#            openproblems-bio/nf-openproblems \
+#            --branch ${BRANCH}",
+#          "image": "singlecellopenproblems/openproblems:latest",
+#          "resourceRequirements": [
+#            {"type": "VCPU", "value": "2"},
+#            {"type": "MEMORY", "value": "4096"}
+#          ],
+#          "environment": [
+#            {"name": "TOWER_WORKSPACE_ID", "value": "${TOWER_WORKSPACE_ID}"},
+#            {"name": "TOWER_ACCESS_TOKEN", "value": "1234"},
+#            {"name": "NXF_DEFAULT_DSL", "value": "1"}
+#          ]
+#        }
+#        EOF
+#        }
+#        aws batch register-job-definition \
+#        --job-definition-name nextflow-main \
+#        --type container \
+#        --parameters "$(generate_parameters)"
+#
+#        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
+#        nextflow run $WITH_TOWER \
+#        -ansi-log false $RESUME \
+#        -profile $PROFILE \
+#        -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
+#        -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
+#        -name "${RUN_NAME}" \
+#        -e.PYTHONPATH="${PYTHONPATH}" \
+#        openproblems-bio/nf-openproblems \
+#        --branch ${BRANCH} | \
+#        tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
+#      shell: /bin/bash -exou pipefail {0}
+#

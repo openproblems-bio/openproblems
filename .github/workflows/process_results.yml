@@ -1,0 +1,77 @@
+name: Process Nextflow results
+
+on:
+  repository_dispatch:
+    types: [benchmark_complete]
+
+jobs:
+  process_results:
+    runs-on: ubuntu-latest
+
+    env:
+      UPDATE_BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config.python }}
+
+    - name: Parse results
+      run: echo "${{ github.event.client_payload.execution_trace }}" | python workflow/parse_nextflow.py
+
+    - name: AWS cleanup
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        aws s3 rm --recursive "s3://openproblems-nextflow/work_main"
+
+    - name: Remove untagged images
+      continue-on-error: true
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
+        aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
+
+    - name: Pre-commit
+      if: startsWith(github.ref, 'refs/tags')
+      uses: pre-commit/action@v2.0.0
+      continue-on-error: true
+      env:
+        SKIP: style-files,lintr
+
+    - name: Set up Git branch
+      if: startsWith(github.ref, 'refs/tags')
+      run: |
+        git checkout -b $UPDATE_BRANCH_NAME
+        git push -u origin $UPDATE_BRANCH_NAME
+
+    - name: Commit result
+      if: startsWith(github.ref, 'refs/tags')
+      uses: EndBug/add-and-commit@v6
+      with:
+        author_name: SingleCellOpenProblems
+        author_email: singlecellopenproblems@protonmail.com
+        message: 'Update benchmark results # ci skip'
+        add: "['website/data/results', 'results.json']"
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
+        push: false
+
+    - name: Create Pull Request
+      if: startsWith(github.ref, 'refs/tags')
+      uses: peter-evans/create-pull-request@v3
+      with:
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
+        delete-branch: true
+        base: main
+        title: '[auto] Update benchmark results'
+        reviewers: scottgigante, dburkhardt

@@ -1,5 +1,6 @@
 import os
 import snakemake_tools as tools
+import sys
 
 rule docker:
     input: tools.update_images
@@ -25,23 +26,24 @@ rule docker_pull:
 rule docker_refresh:
     input: tools.refresh_images
 
-rule update_docker_image:
-    input:
-        dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
-        requirements = tools.docker_update_requirements,
-    output:
-        temp(touch("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)))
+# this is a dirty hack
+if "docker_build" in sys.argv:
+	ruleorder: build_docker_image > refresh_docker_image
+else:
+	ruleorder: refresh_docker_image > build_docker_image
 
 rule refresh_docker_image:
     input:
         dockerfile = "{}/{{image}}/refresh.Dockerfile".format(tools.IMAGES_DIR),
     output:
-        temp(touch("{}/{{image}}/.docker_refresh".format(tools.IMAGES_DIR)))
+        temp(touch("{}/{{image}}/.docker_refresh".format(tools.IMAGES_DIR))),
+        temp(touch("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)))
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
+        label = "github_actions" if "GITHUB_ACTIONS" in os.environ else "local"
     shell:
-        "docker build -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+        "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule refresh_dockerfile:
     input:
@@ -53,12 +55,13 @@ rule refresh_dockerfile:
 FROM singlecellopenproblems/{wildcards.image}:latest AS base
 # Copy requirements files
 COPY ./docker/{wildcards.image}/* ./
+COPY ./scripts/install_renv.R ./
 
 # Install Python packages
 RUN if [ -f requirements.txt ]; then sudo pip install --no-cache-dir -U -r requirements.txt; fi
 
 # Install R packages
-RUN if [ -f r_requirements.txt ]; then sudo R -e "renv::install(scan(\"r_requirements.txt\", sep=\"\n\", what=character()))"; fi
+RUN if [ -f r_requirements.txt ]; then sudo R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"; fi
 
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
@@ -71,12 +74,14 @@ rule build_docker_image:
         dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_requirements,
     output:
-        temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)))
+        temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR))),
+        temp(touch("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)))
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
-        user = "singlecellopenproblems"
+        user = "singlecellopenproblems",
+        label = tools.build_type
     shell:
-        "docker build -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+        "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule password_docker:
     output:

@@ -145,6 +145,9 @@ def create_run_parser(subparsers):
     parse_input(parser)
     parse_output(parser)
     parser.add_argument("name", type=str, help="Name of the selected method")
+    parser.add_argument(
+        "--test", action="store_true", help="Run the test version of the method"
+    )
 
 
 def create_evaluate_parser(subparsers):

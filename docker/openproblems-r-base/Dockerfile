@@ -19,8 +19,10 @@ WORKDIR /
 # Install R
 RUN apt-get update -qq
 RUN apt-get -yq --no-install-suggests --no-install-recommends --allow-unauthenticated install dirmngr ca-certificates gnupg gpgv gfortran libblas-dev liblapack-dev
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'
-RUN echo 'deb http://cloud.r-project.org/bin/linux/debian buster-cran40/' >> /etc/apt/sources.list
+RUN gpg --keyserver keyserver.ubuntu.com --recv-key '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'
+RUN gpg --output cran41.gpg --export '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'
+RUN cp cran41.gpg /etc/apt/trusted.gpg.d/
+RUN echo 'deb http://cloud.r-project.org/bin/linux/debian bullseye-cran40/' >> /etc/apt/sources.list
 RUN apt-get update -qq
 RUN apt-get install -yq --no-install-suggests --no-install-recommends r-base-dev=4.1\*
 RUN apt-get clean -y && apt-get autoremove -y

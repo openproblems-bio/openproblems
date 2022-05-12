@@ -16,8 +16,8 @@ import sklearn.neighbors
     "sklearn.neighbors.KNeighborsClassifier.html",
     code_version=check_version("scikit-learn"),
 )
-def knn_classifier_log_cpm(adata):
-    log_cpm(adata)
+def knn_classifier_log_cpm(adata, test=False):
+    adata = log_cpm(adata)
     return classifier(adata, estimator=sklearn.neighbors.KNeighborsClassifier)
 
 
@@ -31,6 +31,6 @@ def knn_classifier_log_cpm(adata):
     code_version=check_version("scikit-learn"),
     image="openproblems-r-base",
 )
-def knn_classifier_scran(adata):
-    log_scran_pooling(adata)
+def knn_classifier_scran(adata, test=False):
+    adata = log_scran_pooling(adata)
     return classifier(adata, estimator=sklearn.neighbors.KNeighborsClassifier)
