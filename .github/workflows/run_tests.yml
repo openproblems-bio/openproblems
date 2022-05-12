@@ -392,12 +392,12 @@ jobs:
       run: |
         generate_parameters()
         {
-          cat <<EOF
+          cat <<STOP
           {
             "branch": "main",
             "github_pat": "${{ secrets.GH_WORKFLOW_PAT }}"
           }
-          EOF
+          STOP
         }
         curl -H "Content-Type: application/json" \
              -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
