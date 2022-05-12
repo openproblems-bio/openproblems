@@ -35,7 +35,6 @@ def fastmnn_embed_full_unscaled(adata, test=False):
     from scib.preprocessing import reduce_data
 
     adata = _fastmnn_embed(adata, "batch")
-    adata.var.n_cells = adata.var.n_cells.astype(int)
     reduce_data(adata, umap=False, use_rep="X_emb")
     # Complete the result in-place
     return adata
@@ -56,7 +55,6 @@ def fastmnn_embed_hvg_unscaled(adata, test=False):
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = _fastmnn_embed(adata, "batch")
-    adata.var.n_cells = adata.var.n_cells.astype(int)
     reduce_data(adata, umap=False, use_rep="X_emb")
     return adata
 
@@ -78,7 +76,6 @@ def fastmnn_embed_hvg_scaled(adata, test=False):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = _fastmnn_embed(adata, "batch")
-    adata.var.n_cells = adata.var.n_cells.astype(int)
     reduce_data(adata, umap=False, use_rep="X_emb")
     return adata
 
@@ -98,6 +95,5 @@ def fastmnn_embed_full_scaled(adata, test=False):
 
     adata = scale_batch(adata, "batch")
     adata = _fastmnn_embed(adata, "batch")
-    adata.var.n_cells = adata.var.n_cells.astype(int)
     reduce_data(adata, umap=False, use_rep="X_emb")
     return adata
