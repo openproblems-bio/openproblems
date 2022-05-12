@@ -397,7 +397,7 @@ jobs:
 
   run_full_benchmark:
     needs: run_test_benchmark
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-latest
     if: >-
       always() &&
       (needs.run_test_benchmark.result == 'success' || needs.run_test_benchmark.result == 'skipped') &&
