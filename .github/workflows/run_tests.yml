@@ -393,12 +393,12 @@ jobs:
         generate_parameters()
         {
         cat <<EOF
-        {
-          "params" : {
-            "branch": "main",
-            "github_pat": "${{ secrets.GH_WORKFLOW_PAT }}"
+          {
+            "params" : {
+              "branch": "main",
+              "github_pat": "${{ secrets.GH_WORKFLOW_PAT }}"
+            }
           }
-        }
         EOF
         }
         WORKFLOW_ID=$(
