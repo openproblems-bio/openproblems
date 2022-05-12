@@ -2,18 +2,17 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
+
 def _run_bbknn(adata, batch):
-    import bbknn
     from scanpy.preprocessing import pca
+
+    import bbknn
 
     pca(adata, svd_solver="arpack")
     if adata.n_obs < 1e5:
         return bbknn.bbknn(adata, batch_key=batch, copy=True)
     if adata.n_obs >= 1e5:
-        return bbknn.bbknn(
-            adata, batch_key=batch, neighbors_within_batch=25, copy=True
-        )
-
+        return bbknn.bbknn(adata, batch_key=batch, neighbors_within_batch=25, copy=True)
 
 
 @method(
