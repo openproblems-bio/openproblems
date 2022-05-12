@@ -125,6 +125,7 @@ jobs:
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
         startsWith(github.ref, 'refs/heads') ||
+        startsWith(github.ref, 'refs/tags') ||
         github.event.pull_request.draft == false &&
         !startsWith(github.ref, 'refs/heads/test_docker')
       )
@@ -199,13 +200,9 @@ jobs:
     runs-on: ${{ matrix.config.os }}
     if: >-
       always() &&
-      !contains(github.event.head_commit.message, 'ci skip') &&
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
       github.event_name == 'push' &&
       needs.run_tester.result == 'success'
-
-    env:
-      UPDATE_BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
-      RESULTS_PATH: "/tmp/${{ github.ref_name }}_results"
 
     strategy:
       fail-fast: false
@@ -247,21 +244,13 @@ jobs:
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
-        if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; \
-          then echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
-          else echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
+        if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
+          echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
+        else
+          echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
         fi >> $GITHUB_ENV
         # don't use tower if the env var is not set
         echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
-        if [ $(echo ${{ github.ref }} | grep -E -e "^refs/heads/(main|test_benchmark)" -e "^refs/tags") ]; then
-          PROFILE="aws"
-          RESUME=""
-        else
-          PROFILE="test,aws"
-          RESUME="-resume"
-        fi
-        echo "PROFILE=$PROFILE" >> $GITHUB_ENV
-        echo "RESUME=$RESUME" >> $GITHUB_ENV
 
     - name: Cache Python packages
       uses: actions/cache@v2
@@ -344,7 +333,7 @@ jobs:
           docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
         done
 
-    - name: Run benchmark
+    - name: Run test benchmark
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -356,8 +345,8 @@ jobs:
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run $WITH_TOWER \
-        -ansi-log false $RESUME \
-        -profile $PROFILE \
+        -ansi-log false -resume \
+        -profile aws,test \
         -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
         -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
         -name "${RUN_NAME}" \
@@ -365,22 +354,17 @@ jobs:
         openproblems-bio/nf-openproblems \
         --branch ${BRANCH} | \
         tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
-      shell: /bin/bash -exou pipefail {0}
+      shell: /bin/bash -eou pipefail {0}
 
-    - name: Copy results
-      run: |
-        mkdir -p "${RESULTS_PATH}"
-        cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results "${RESULTS_PATH}"
+    - name: Upload nextflow log
+      if: always()
+      uses: actions/upload-artifact@main
+      with:
+        name: nextflow.log
+        path: /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log
 
-    - name: Parse results
-      # There's a bug with the results getting pulled from Nextflow with caching, but
-      # this doesn't happen on main, which is the only place `Parse results` is needed
-      if: startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
-      run: |
-        python workflow/parse_nextflow.py "${RESULTS_PATH}"
-
-    - name: AWS cleanup
-      if: success() || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
+    - name: AWS ECR cleanup
+      if: success() && !startsWith(github.ref, 'refs/heads/main')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -389,58 +373,33 @@ jobs:
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
         done
-        aws s3 rm --recursive "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
-        aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-        aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
 
-    - name: Remove untagged images
-      if: startsWith(github.ref, 'refs/heads/main')
-      continue-on-error: true
+    - name: AWS S3 cleanup
+      if: success() || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
-        aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
+        aws s3 rm --recursive "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
 
-    - name: Pre-commit
-      if: startsWith(github.ref, 'refs/tags')
-      uses: pre-commit/action@v2.0.0
-      continue-on-error: true
-      env:
-        SKIP: style-files,lintr
-
-    - name: Set up Git branch
-      if: startsWith(github.ref, 'refs/tags')
+    - name: Run full benchmark
+      if: |
+        (startsWith(github.ref, 'refs/heads/test_benchmark') || startsWith(github.ref, 'refs/tags')) &&
+        github.repository == 'openproblems-bio/openproblems'
       run: |
-        git checkout -b $UPDATE_BRANCH_NAME
-        git push -u origin $UPDATE_BRANCH_NAME
-
-    - name: Commit result
-      if: startsWith(github.ref, 'refs/tags')
-      uses: EndBug/add-and-commit@v6
-      with:
-        author_name: SingleCellOpenProblems
-        author_email: singlecellopenproblems@protonmail.com
-        message: 'Update benchmark results # ci skip'
-        add: "['website/data/results', 'results.json']"
-        branch: ${{ env.UPDATE_BRANCH_NAME }}
-        push: false
-
-    - name: Create Pull Request
-      if: startsWith(github.ref, 'refs/tags')
-      uses: peter-evans/create-pull-request@v3
-      with:
-        branch: ${{ env.UPDATE_BRANCH_NAME }}
-        delete-branch: true
-        base: main
-        title: '[auto] Update benchmark results'
-        reviewers: scottgigante, dburkhardt
-
-    - name: Upload results
-      if: always()
-      uses: actions/upload-artifact@main
-      with:
-        name: ${{ matrix.config.name }}_results
-        path: ${{ env.RESULTS_PATH }}
+        generate_parameters()
+        {
+          cat <<EOF
+          {
+            "branch": "main",
+            "github_pat": "${{ secrets.GH_WORKFLOW_PAT }}"
+          }
+          EOF
+        }
+        curl -H "Content-Type: application/json" \
+             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
+             https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=53907369739130 \
+             --data "$(generate_parameters)"
