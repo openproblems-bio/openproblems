@@ -36,7 +36,7 @@ def fastmnn_embed_full_unscaled(adata, test=False):
 
     adata = _fastmnn_embed(adata, "batch")
     neighbors(adata, use_rep="X_emb")
-    
+
     # Complete the result in-place
     return adata
 
