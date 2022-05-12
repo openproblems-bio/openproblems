@@ -203,10 +203,6 @@ jobs:
       github.event_name == 'push' &&
       needs.run_tester.result == 'success'
 
-    env:
-      UPDATE_BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
-      RESULTS_PATH: "/tmp/${{ github.ref_name }}_results"
-
     strategy:
       fail-fast: false
       matrix:

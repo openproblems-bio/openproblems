@@ -203,11 +203,15 @@ def results_to_json(results):
                 )
 
 
-def main(results_path):
+def main(results_path=None):
     """Parse the nextflow output."""
-    df = read_trace(
-        os.path.join(results_path, "results/pipeline_info/execution_trace.txt")
-    )
+    if results_path is None:
+        results_file = sys.stdin
+    else:
+        results_file = os.path.join(
+            results_path, "results/pipeline_info/execution_trace.txt"
+        )
+    df = read_trace(results_file)
     results = parse_trace_to_dict(df)
     results = parse_metric_results(results_path, results)
     results_to_json(results)
@@ -217,4 +221,7 @@ def main(results_path):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    if len(sys.argv) > 1:
+        main(sys.argv[1])
+    else:
+        main()
