@@ -66,20 +66,17 @@ jobs:
         aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
 
     - name: Pre-commit
-      if: startsWith(github.ref, 'refs/tags')
       uses: pre-commit/action@v2.0.0
       continue-on-error: true
       env:
         SKIP: style-files,lintr
 
     - name: Set up Git branch
-      if: startsWith(github.ref, 'refs/tags')
       run: |
         git checkout -b $UPDATE_BRANCH_NAME
         git push -u origin $UPDATE_BRANCH_NAME
 
     - name: Commit result
-      if: startsWith(github.ref, 'refs/tags')
       uses: EndBug/add-and-commit@v6
       with:
         author_name: SingleCellOpenProblems
@@ -90,7 +87,6 @@ jobs:
         push: false
 
     - name: Create Pull Request
-      if: startsWith(github.ref, 'refs/tags')
       uses: peter-evans/create-pull-request@v3
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}

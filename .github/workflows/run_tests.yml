@@ -111,12 +111,12 @@ jobs:
   run_tester:
     runs-on: ubuntu-latest
 
-#    container:
-#      image: singlecellopenproblems/openproblems-github-actions:latest
-#      volumes:
-#        - /var/run/docker.sock:/var/run/docker.sock
-#        - /tmp:/tmp
-#      options: --user root
+    container:
+      image: singlecellopenproblems/openproblems-github-actions:latest
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /tmp:/tmp
+      options: --user root
 
     needs: build_images
     if: |
@@ -131,60 +131,60 @@ jobs:
 
     steps:
 
-#    - uses: actions/checkout@v2
-#      with:
-#        fetch-depth: 0
-#
-#    - name: Set up environment
-#      run: |
-#        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
-#        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
-#        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
-#
-#    - name: Cache Python packages
-#      uses: actions/cache@v2
-#      with:
-#        path: ${{ env.PYTHON_VERSION }}
-#        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
-#        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
-#
-#    - name: Install package & dependencies
-#      run: |
-#        python -m pip install --upgrade pip
-#        pip install -U wheel setuptools
-#        pip install -U --editable .[test,r,evaluate]
-#        python -c "import openproblems"
-#
-#    - name: Cache R packages
-#      uses: actions/cache@v2
-#      if: startsWith(runner.os, 'Linux')
-#      with:
-#        path: /usr/local/lib/R/site-library
-#        key: ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
-#        restore-keys: |
-#          ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
-#
-#    - name: Install R packages
-#      run: |
-#        if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-#        renv::restore()
-#        source("./scripts/install_renv.R")
-#        install_renv("docker/openproblems-r-base/r_requirements.txt")
-#      shell: Rscript {0}
-#
-#    - name: Update Docker images
-#      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
-#      run: |
-#        cd workflow
-#        snakemake -j $(nproc) docker
-#        cd ..
-#
-#    - name: Run tests
-#      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv --maxfail=2
-#
-#    - name: Upload coverage
-#      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
-#      run: codecov --no-color --required --flags unittests
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up environment
+      run: |
+        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
+        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
+        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
+
+    - name: Cache Python packages
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.PYTHON_VERSION }}
+        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
+        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
+
+    - name: Install package & dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools
+        pip install -U --editable .[test,r,evaluate]
+        python -c "import openproblems"
+
+    - name: Cache R packages
+      uses: actions/cache@v2
+      if: startsWith(runner.os, 'Linux')
+      with:
+        path: /usr/local/lib/R/site-library
+        key: ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
+        restore-keys: |
+          ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
+
+    - name: Install R packages
+      run: |
+        if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+        renv::restore()
+        source("./scripts/install_renv.R")
+        install_renv("docker/openproblems-r-base/r_requirements.txt")
+      shell: Rscript {0}
+
+    - name: Update Docker images
+      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker
+        cd ..
+
+    - name: Run tests
+      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv --maxfail=2
+
+    - name: Upload coverage
+      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
+      run: codecov --no-color --required --flags unittests
 
     - name: Upload check results on fail
       if: failure()
@@ -210,27 +210,27 @@ jobs:
         - {name: 'current', os: ubuntu-18.04, python: '3.8', java_version: 15 }
 
     steps:
-#
-#    - uses: actions/checkout@v2
-#      with:
-#        fetch-depth: 1000
-#
-#    - name: Install system dependencies
-#      if: runner.os == 'Linux'
-#      run: |
-#        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-#        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
-#
-#    - name: Set up Python
-#      uses: actions/setup-python@v2
-#      with:
-#        python-version: ${{ matrix.config.python }}
-#
-#    - name: Set up Java ${{ matrix.java_version }}
-#      uses: actions/setup-java@v1
-#      with:
-#        java-version: ${{matrix.config.java_version}}
-#        architecture: x64
+
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1000
+
+    - name: Install system dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
+        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config.python }}
+
+    - name: Set up Java ${{ matrix.java_version }}
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{matrix.config.java_version}}
+        architecture: x64
 
     - name: Set up environment
       env:
@@ -249,167 +249,75 @@ jobs:
         fi >> $GITHUB_ENV
         # don't use tower if the env var is not set
         echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
-        if [ $(echo ${{ github.ref }} | grep -E -e "^refs/heads/(main|test_benchmark)" -e "^refs/tags") ]; then
-          PROFILE="aws"
-          RESUME=""
-        else
-          PROFILE="test,aws"
-          RESUME="-resume"
-        fi
-        echo "PROFILE=$PROFILE" >> $GITHUB_ENV
-        echo "RESUME=$RESUME" >> $GITHUB_ENV
-#
-#    - name: Cache Python packages
-#      uses: actions/cache@v2
-#      with:
-#        path: ${{ env.pythonLocation }}
-#        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-#        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
-#
-#    - name: Install Nextflow
-#      env:
-#          CAPSULE_LOG: none
-#      run: |
-#        mkdir /tmp/nextflow
-#        cd /tmp/nextflow
-#        wget -qO- get.nextflow.io | bash
-#        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
-#        nextflow -version
-#
-#    - name: Install AWS CLI
-#      run: |
-#        mkdir /tmp/awscli
-#        cd /tmp/awscli
-#        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-#        unzip -q awscliv2.zip
-#        sudo ./aws/install || sudo ./aws/install --update
-#        aws --version
-#
-#    - name: Set up S3FS
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        AWS_DEFAULT_REGION: us-west-2
-#      run: |
-#        sudo apt-get install -qy s3fs
-#        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
-#        chmod 600 ~/.passwd-s3fs
-#        sudo mkdir -p /mnt/openproblems-nextflow
-#        sudo chown $USER /mnt/openproblems-nextflow
-#        s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
-#        # Create bucket/ work/ and cwd/
-#        for dir in bucket work cwd; do
-#          mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
-#        done
-#        ls -l /mnt/openproblems-nextflow/*/${BRANCH}
-#
-#    - name: Install package & dependencies
-#      run: |
-#        python -m pip install --upgrade pip
-#        pip install -U wheel setuptools
-#        pip install -U --editable .[evaluate]
-#        python -c "import openproblems"
-#        openproblems-cli --version
-#        openproblems-cli --test-hash
-#
-#    - name: Pull Docker images
-#      if: "(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
-#      run: |
-#        cd workflow
-#        snakemake -j $(nproc) docker_pull
-#        cd ..
-#
-#    - name: Build Docker images
-#      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
-#      run: |
-#        cd workflow
-#        snakemake -j $(nproc) docker
-#        cd ..
-#
-#    - name: Upload Docker images
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        AWS_DEFAULT_REGION: us-west-2
-#      run: |
-#        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-#        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
-#          docker login --username AWS --password-stdin $ECR_ENDPOINT
-#        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-#          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-#          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-#        done
+
+    - name: Pull Docker images
+      if: "(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker_pull
+        cd ..
+
+    - name: Build Docker images
+      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker
+        cd ..
+
+    - name: Upload Docker images
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+          docker login --username AWS --password-stdin $ECR_ENDPOINT
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+        done
+
+    - name: Run test benchmark
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+        TOWER_WORKSPACE_ID: 53907369739130
+        NXF_DEFAULT_DSL: 1
+      run: |
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
+        nextflow run $WITH_TOWER \
+        -ansi-log false -resume \
+        -profile aws,test \
+        -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
+        -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
+        -name "${RUN_NAME}" \
+        -e.PYTHONPATH="${PYTHONPATH}" \
+        openproblems-bio/nf-openproblems \
+        --branch ${BRANCH} | \
+        tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
+      shell: /bin/bash -exou pipefail {0}
+
 
     - name: Run full benchmark
+      if: |
+        startsWith(github.ref, 'refs/heads/test_benchmark') || \
+        (startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')
       run: |
         RUN_NAME=test123${GITHUB_SHA}
         generate_parameters()
         {
           cat <<EOF
-        {
-          "runName": "$RUN_NAME"
-        }
-        EOF
+          {
+            "name": "$RUN_NAME",
+            "branch": "main
+          }
+          EOF
         }
         curl -H "Content-Type: application/json" \
              -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
              https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=53907369739130 \
              --data "$(generate_parameters)"
-
-
-#    - name: Run benchmark
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
-#        AWS_DEFAULT_REGION: us-west-2
-#        TOWER_WORKSPACE_ID: 53907369739130
-#        NXF_DEFAULT_DSL: 1
-#      run: |
-#        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
-#        generate_parameters()
-#        {
-#          cat <<EOF
-#        {
-#          "command": " \
-#            nextflow run $WITH_TOWER \
-#            -dsl1 \
-#            -ansi-log false $RESUME \
-#            -profile $PROFILE \
-#            -work-dir /mnt/openproblems-nextflow/work/${BRANCH} \
-#            -bucket-dir s3://openproblems-nextflow/bucket/${BRANCH} \
-#            -name ${RUN_NAME} \
-#            -e.PYTHONPATH='${PYTHONPATH}' \
-#            openproblems-bio/nf-openproblems \
-#            --branch ${BRANCH}",
-#          "image": "singlecellopenproblems/openproblems:latest",
-#          "resourceRequirements": [
-#            {"type": "VCPU", "value": "2"},
-#            {"type": "MEMORY", "value": "4096"}
-#          ],
-#          "environment": [
-#            {"name": "TOWER_WORKSPACE_ID", "value": "${TOWER_WORKSPACE_ID}"},
-#            {"name": "TOWER_ACCESS_TOKEN", "value": "1234"},
-#            {"name": "NXF_DEFAULT_DSL", "value": "1"}
-#          ]
-#        }
-#        EOF
-#        }
-#        aws batch register-job-definition \
-#        --job-definition-name nextflow-main \
-#        --type container \
-#        --parameters "$(generate_parameters)"
-#
-#        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
-#        nextflow run $WITH_TOWER \
-#        -ansi-log false $RESUME \
-#        -profile $PROFILE \
-#        -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
-#        -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
-#        -name "${RUN_NAME}" \
-#        -e.PYTHONPATH="${PYTHONPATH}" \
-#        openproblems-bio/nf-openproblems \
-#        --branch ${BRANCH} | \
-#        tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
-#      shell: /bin/bash -exou pipefail {0}
-#
