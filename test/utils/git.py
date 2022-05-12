@@ -70,7 +70,9 @@ def core_modified():
     We exclude all task directories as well as any md files and the website.
     """
     task_exclusions = [f":^{task_dir(task)}" for task in openproblems.TASKS]
-    return git_has_diff([".", ":^*.md", ":^website"] + task_exclusions)
+    return git_has_diff(
+        ["./openproblems", "./docker", ":^*.md", ":^website"] + task_exclusions
+    )
 
 
 def git_rev_parse(branch):
