@@ -111,12 +111,12 @@ jobs:
   run_tester:
     runs-on: ubuntu-latest
 
-#    container:
-#      image: singlecellopenproblems/openproblems-github-actions:latest
-#      volumes:
-#        - /var/run/docker.sock:/var/run/docker.sock
-#        - /tmp:/tmp
-#      options: --user root
+    container:
+      image: singlecellopenproblems/openproblems-github-actions:latest
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /tmp:/tmp
+      options: --user root
 
     needs: build_images
     if: |
@@ -126,10 +126,10 @@ jobs:
       (
         startsWith(github.ref, 'refs/heads') ||
         startsWith(github.ref, 'refs/tags') ||
-        github.event.pull_request.draft == false &&
-        !startsWith(github.ref, 'refs/heads/test_docker') &&
-        !startsWith(github.ref, 'refs/heads/test_benchmark')
-      )
+        github.event.pull_request.draft == false
+      ) &&
+      !startsWith(github.ref, 'refs/heads/test_docker') &&
+      !startsWith(github.ref, 'refs/heads/test_benchmark')
 
     steps:
 
