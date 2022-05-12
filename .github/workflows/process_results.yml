@@ -21,6 +21,13 @@ jobs:
       with:
         python-version: ${{ matrix.config.python }}
 
+    - name: Install package & dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools
+        pip install -U --editable .[process]
+        python -c "import openproblems"
+
     - name: Parse results
       run: echo "${{ github.event.client_payload.execution_trace }}" | python workflow/parse_nextflow.py
 
