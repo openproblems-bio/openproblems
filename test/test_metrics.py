@@ -1,10 +1,14 @@
 import openproblems
 import parameterized
+import pytest
 import utils.git
 import utils.name
 import utils.warnings
 
 utils.warnings.ignore_warnings()
+pytestmark = pytest.mark.skipif(
+    len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
+)
 
 
 @parameterized.parameterized.expand(
