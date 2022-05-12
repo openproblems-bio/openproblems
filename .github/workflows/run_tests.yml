@@ -415,8 +415,7 @@ jobs:
         cat <<EOF
           {
             "params" : {
-              "branch": "main",
-              "github_pat": "${{ secrets.GH_WORKFLOW_PAT }}"
+              "branch": "main"
             }
           }
         EOF
