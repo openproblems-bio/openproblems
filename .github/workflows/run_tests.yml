@@ -168,6 +168,13 @@ jobs:
         install_renv("docker/openproblems-r-base/r_requirements.txt")
       shell: Rscript {0}
 
+    - name: Pull Docker images
+      if: "startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems'"
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker_pull
+        cd ..
+
     - name: Update Docker images
       if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
       run: |
