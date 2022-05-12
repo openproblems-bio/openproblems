@@ -5,6 +5,7 @@ import numpyencoder
 import openproblems.api.utils as utils
 import os
 import pandas as pd
+import sys
 
 
 def dump_json(obj, fp):
@@ -216,4 +217,4 @@ def main(results_path):
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1])
