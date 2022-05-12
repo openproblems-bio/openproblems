@@ -21,7 +21,7 @@ jobs:
   build_images:
 
     needs: cancel_previous_runs
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-18.04
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
@@ -35,12 +35,6 @@ jobs:
     env:
       BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
 
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - {name: 'current', os: ubuntu-18.04, python: '3.8' }
-
     steps:
     - uses: actions/checkout@v2
       with:
@@ -49,7 +43,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.config.python }}
+        python-version: "3.8"
 
     - name: Install package & dependencies
       run: |
@@ -198,19 +192,13 @@ jobs:
 
   run_test_benchmark:
     needs: run_tester
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-18.04
     if: >-
       always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       github.event_name == 'push' &&
       needs.run_tester.result == 'success' ||
       !startsWith(github.ref, 'refs/heads/test_benchmark')
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - {name: 'current', os: ubuntu-18.04, python: '3.8', java_version: 15 }
 
     steps:
 
@@ -226,12 +214,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.config.python }}
+        python-version: "3.8"
 
     - name: Set up Java ${{ matrix.java_version }}
       uses: actions/setup-java@v1
       with:
-        java-version: ${{matrix.config.java_version}}
+        java-version: 15
         architecture: x64
 
     - name: Set up environment
