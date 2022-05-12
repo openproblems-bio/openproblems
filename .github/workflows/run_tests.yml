@@ -251,59 +251,59 @@ jobs:
         fi >> $GITHUB_ENV
         # don't use tower if the env var is not set
         echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
-
-    - name: Cache Python packages
-      uses: actions/cache@v2
-      with:
-        path: ${{ env.pythonLocation }}
-        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
-
-    - name: Install Nextflow
-      env:
-          CAPSULE_LOG: none
-      run: |
-        mkdir /tmp/nextflow
-        cd /tmp/nextflow
-        wget -qO- get.nextflow.io | bash
-        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
-        nextflow -version
-
-    - name: Install AWS CLI
-      run: |
-        mkdir /tmp/awscli
-        cd /tmp/awscli
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip -q awscliv2.zip
-        sudo ./aws/install || sudo ./aws/install --update
-        aws --version
-
-    - name: Set up S3FS
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        sudo apt-get install -qy s3fs
-        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
-        chmod 600 ~/.passwd-s3fs
-        sudo mkdir -p /mnt/openproblems-nextflow
-        sudo chown $USER /mnt/openproblems-nextflow
-        s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
-        # Create bucket/ work/ and cwd/
-        for dir in bucket work cwd; do
-          mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
-        done
-        ls -l /mnt/openproblems-nextflow/*/${BRANCH}
-
-    - name: Install package & dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -U wheel setuptools
-        pip install -U --editable .[evaluate]
-        python -c "import openproblems"
-        openproblems-cli --version
-        openproblems-cli --test-hash
+#
+#    - name: Cache Python packages
+#      uses: actions/cache@v2
+#      with:
+#        path: ${{ env.pythonLocation }}
+#        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+#        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
+#
+#    - name: Install Nextflow
+#      env:
+#          CAPSULE_LOG: none
+#      run: |
+#        mkdir /tmp/nextflow
+#        cd /tmp/nextflow
+#        wget -qO- get.nextflow.io | bash
+#        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
+#        nextflow -version
+#
+#    - name: Install AWS CLI
+#      run: |
+#        mkdir /tmp/awscli
+#        cd /tmp/awscli
+#        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+#        unzip -q awscliv2.zip
+#        sudo ./aws/install || sudo ./aws/install --update
+#        aws --version
+#
+#    - name: Set up S3FS
+#      env:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        AWS_DEFAULT_REGION: us-west-2
+#      run: |
+#        sudo apt-get install -qy s3fs
+#        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
+#        chmod 600 ~/.passwd-s3fs
+#        sudo mkdir -p /mnt/openproblems-nextflow
+#        sudo chown $USER /mnt/openproblems-nextflow
+#        s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
+#        # Create bucket/ work/ and cwd/
+#        for dir in bucket work cwd; do
+#          mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
+#        done
+#        ls -l /mnt/openproblems-nextflow/*/${BRANCH}
+#
+#    - name: Install package & dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install -U wheel setuptools
+#        pip install -U --editable .[evaluate]
+#        python -c "import openproblems"
+#        openproblems-cli --version
+#        openproblems-cli --test-hash
 #
 #    - name: Pull Docker images
 #      if: "(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
