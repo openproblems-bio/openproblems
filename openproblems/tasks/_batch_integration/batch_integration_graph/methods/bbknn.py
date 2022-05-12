@@ -2,6 +2,19 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 
+def _run_bbknn(adata, batch):
+    import bbknn
+    from scanpy.preprocessing import pca
+
+    pca(adata, svd_solver="arpack")
+    if adata.n_obs < 1e5:
+        return bbknn.bbknn(adata, batch_key=batch, copy=True)
+    if adata.n_obs >= 1e5:
+        return bbknn.bbknn(
+            adata, batch_key=batch, neighbors_within_batch=25, copy=True
+        )
+
+
 
 @method(
     method_name="BBKNN",
@@ -13,10 +26,8 @@ from .....tools.utils import check_version
     image="openproblems-python-batch-integration",  # only if required
 )
 def bbknn_full_unscaled(adata, test=False):
-    # Normalize the data
-    from scib.integration import runBBKNN
 
-    adata = runBBKNN(adata, "batch")
+    adata = _run_bbknn(adata, "batch")
     # Complete the result in-place
     return adata
 
@@ -32,10 +43,9 @@ def bbknn_full_unscaled(adata, test=False):
 )
 def bbknn_hvg_unscaled(adata, test=False):
     from ._utils import hvg_batch
-    from scib.integration import runBBKNN
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adata = runBBKNN(adata, "batch")
+    adata = _run_bbknn(adata, "batch")
     # Complete the result in-place
     return adata
 
@@ -52,11 +62,10 @@ def bbknn_hvg_unscaled(adata, test=False):
 def bbknn_hvg_scaled(adata, test=False):
     from ._utils import hvg_batch
     from ._utils import scale_batch
-    from scib.integration import runBBKNN
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
-    adata = runBBKNN(adata, "batch")
+    adata = _run_bbknn(adata, "batch")
     # Complete the result in-place
     return adata
 
@@ -72,9 +81,8 @@ def bbknn_hvg_scaled(adata, test=False):
 )
 def bbknn_full_scaled(adata, test=False):
     from ._utils import scale_batch
-    from scib.integration import runBBKNN
 
     adata = scale_batch(adata, "batch")
-    adata = runBBKNN(adata, "batch")
+    adata = _run_bbknn(adata, "batch")
     # Complete the result in-place
     return adata
