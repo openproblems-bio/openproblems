@@ -1,0 +1,96 @@
+name: Process Nextflow results
+
+on:
+  repository_dispatch:
+    types: [benchmark_complete]
+
+jobs:
+  process_results:
+    runs-on: ubuntu-latest
+
+    env:
+      UPDATE_BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config.python }}
+
+    - name: Install AWS CLI
+      run: |
+        mkdir /tmp/awscli
+        cd /tmp/awscli
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip -q awscliv2.zip
+        sudo ./aws/install || sudo ./aws/install --update
+        aws --version
+
+    - name: Install package & dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools
+        pip install -U --editable .[process]
+        python -c "import openproblems"
+
+    - name: Parse results
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        aws s3 cp --quiet --recursive "s3://openproblems-nextflow/cwd_main" results/
+        python workflow/parse_nextflow.py $(pwd)
+
+    - name: AWS S3 cleanup
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        aws s3 rm --recursive "s3://openproblems-nextflow/work_main"
+        aws s3 rm --recursive "s3://openproblems-nextflow/cwd_main"
+
+    - name: Remove untagged images
+      continue-on-error: true
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
+        aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
+
+    - name: Pre-commit
+      uses: pre-commit/action@v2.0.0
+      continue-on-error: true
+      env:
+        SKIP: style-files,lintr
+
+    - name: Set up Git branch
+      run: |
+        git checkout -b $UPDATE_BRANCH_NAME
+        git push -u origin $UPDATE_BRANCH_NAME
+
+    - name: Commit result
+      uses: EndBug/add-and-commit@v6
+      with:
+        author_name: SingleCellOpenProblems
+        author_email: singlecellopenproblems@protonmail.com
+        message: 'Update benchmark results # ci skip'
+        add: "['website/data/results', 'results.json']"
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
+        push: false
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
+        delete-branch: true
+        base: main
+        title: '[auto] Update benchmark results'
+        reviewers: scottgigante, dburkhardt
