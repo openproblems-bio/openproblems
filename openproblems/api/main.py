@@ -32,19 +32,17 @@ def _main(args=None):
     if args.subcommand is None:
         argparser.print_help()
     elif args.subcommand in SUBCOMMANDS:
-        return SUBCOMMANDS[args.subcommand].main(args)
+        # Since printing the output to stdout is important here,
+        # we redirect all other stdout to stderr.
+        with utils.RedirectStdout():
+            return SUBCOMMANDS[args.subcommand].main(args)
     else:
         raise NotImplementedError
 
 
 def main(args=None, do_print=True):
-    """Run the command-line interface.
-
-    Since printing the output to stdout is important here,
-    we redirect all other stdout to stderr.
-    """
-    with utils.RedirectStdout():
-        output = _main(args)
+    """Run the command-line interface."""
+    output = _main(args)
     if do_print:
         utils.print_output(output)
         return 0
