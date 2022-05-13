@@ -12,15 +12,15 @@ from .....tools.utils import check_version
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def scvi_full_unscaled(adata, test=False):
+def scvi_full_unscaled(adata):
     from scib.integration import runScvi
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
     )  # ugly fix for scvi conversion error
     adata = runScvi(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -37,17 +37,17 @@ def scvi_full_unscaled(adata, test=False):
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def scvi_hvg_unscaled(adata, test=False):
+def scvi_hvg_unscaled(adata):
     from ._utils import hvg_batch
     from scib.integration import runScvi
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
     )  # ugly fix for scvi conversion error
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runScvi(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -63,11 +63,11 @@ def scvi_hvg_unscaled(adata, test=False):
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def scvi_hvg_scaled(adata, test=False):
+def scvi_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
     from scib.integration import runScvi
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
@@ -75,7 +75,7 @@ def scvi_hvg_scaled(adata, test=False):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = runScvi(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -91,17 +91,17 @@ def scvi_hvg_scaled(adata, test=False):
     code_version=check_version("scvi"),
     image="openproblems-python-batch-integration",  # only if required
 )
-def scvi_full_scaled(adata, test=False):
+def scvi_full_scaled(adata):
     from ._utils import scale_batch
     from scib.integration import runScvi
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
     )  # ugly fix for scvi conversion error
     adata = scale_batch(adata, "batch")
     adata = runScvi(adata, "batch")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error

@@ -14,13 +14,13 @@ from .....tools.utils import check_version
 )
 def scanvi_full_unscaled(adata, test=False):
     from scib.integration import runScanvi
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
     )  # ugly fix for scvi conversion error
     adata = runScanvi(adata, "batch", "lab")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -40,14 +40,14 @@ def scanvi_full_unscaled(adata, test=False):
 def scanvi_hvg_unscaled(adata, test=False):
     from ._utils import hvg_batch
     from scib.integration import runScanvi
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
     )  # ugly fix for scvi conversion error
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runScanvi(adata, "batch", "lab")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -68,7 +68,7 @@ def scanvi_hvg_scaled(adata, test=False):
     from ._utils import hvg_batch
     from ._utils import scale_batch
     from scib.integration import runScanvi
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
@@ -76,7 +76,7 @@ def scanvi_hvg_scaled(adata, test=False):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = runScanvi(adata, "batch", "lab")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -96,14 +96,14 @@ def scanvi_hvg_scaled(adata, test=False):
 def scanvi_full_scaled(adata, test=False):
     from ._utils import scale_batch
     from scib.integration import runScanvi
-    from scib.preprocessing import reduce_data
+    from scanpy.preprocessing import neighbors
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
     )  # ugly fix for scvi conversion error
     adata = scale_batch(adata, "batch")
     adata = runScanvi(adata, "batch", "lab")
-    reduce_data(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, umap=False, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
