@@ -21,7 +21,7 @@ jobs:
   build_images:
 
     needs: cancel_previous_runs
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-18.04
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
@@ -35,12 +35,6 @@ jobs:
     env:
       BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
 
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - {name: 'current', os: ubuntu-18.04, python: '3.8' }
-
     steps:
     - uses: actions/checkout@v2
       with:
@@ -49,7 +43,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.config.python }}
+        python-version: "3.8"
 
     - name: Install package & dependencies
       run: |
@@ -126,9 +120,10 @@ jobs:
       (
         startsWith(github.ref, 'refs/heads') ||
         startsWith(github.ref, 'refs/tags') ||
-        github.event.pull_request.draft == false &&
-        !startsWith(github.ref, 'refs/heads/test_docker')
-      )
+        github.event.pull_request.draft == false
+      ) &&
+      !startsWith(github.ref, 'refs/heads/test_docker') &&
+      !startsWith(github.ref, 'refs/heads/test_benchmark')
 
     steps:
 
@@ -173,6 +168,13 @@ jobs:
         install_renv("docker/openproblems-r-base/r_requirements.txt")
       shell: Rscript {0}
 
+    - name: Pull Docker images
+      if: "startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems'"
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker_pull
+        cd ..
+
     - name: Update Docker images
       if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
       run: |
@@ -195,20 +197,15 @@ jobs:
         path: results
 
 
-  run_benchmark:
+  run_test_benchmark:
     needs: run_tester
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-18.04
     if: >-
       always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       github.event_name == 'push' &&
-      needs.run_tester.result == 'success'
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - {name: 'current', os: ubuntu-18.04, python: '3.8', java_version: 15 }
+      needs.run_tester.result == 'success' ||
+      !startsWith(github.ref, 'refs/heads/test_benchmark')
 
     steps:
 
@@ -217,7 +214,6 @@ jobs:
         fetch-depth: 1000
 
     - name: Install system dependencies
-      if: runner.os == 'Linux'
       run: |
         sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
         sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
@@ -225,17 +221,15 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.config.python }}
+        python-version: "3.8"
 
     - name: Set up Java ${{ matrix.java_version }}
       uses: actions/setup-java@v1
       with:
-        java-version: ${{matrix.config.java_version}}
+        java-version: 15
         architecture: x64
 
     - name: Set up environment
-      env:
-        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
       run: |
         SCRIPTS_PATH=$(python3 -c 'import os, sysconfig; print(sysconfig.get_path("scripts",f"{os.name}_user"))')
         echo "PATH=${SCRIPTS_PATH}:${PATH}" >> $GITHUB_ENV
@@ -249,8 +243,6 @@ jobs:
         else
           echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
         fi >> $GITHUB_ENV
-        # don't use tower if the env var is not set
-        echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
 
     - name: Cache Python packages
       uses: actions/cache@v2
@@ -306,14 +298,20 @@ jobs:
         openproblems-cli --test-hash
 
     - name: Pull Docker images
-      if: "(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+      if: |
+        startsWith(github.ref, 'refs/heads/main') &&
+        github.repository == 'openproblems-bio/openproblems'
       run: |
         cd workflow
         snakemake -j $(nproc) docker_pull
         cd ..
 
     - name: Build Docker images
-      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+      if: |
+        !(
+          startsWith(github.ref, 'refs/heads/main') &&
+          github.repository == 'openproblems-bio/openproblems'
+        )
       run: |
         cd workflow
         snakemake -j $(nproc) docker
@@ -338,13 +336,15 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
         TOWER_WORKSPACE_ID: 53907369739130
+        AWS_DEFAULT_REGION: us-west-2
         NXF_DEFAULT_DSL: 1
       run: |
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
-        nextflow run $WITH_TOWER \
+        nextflow run \
+        -revision v1.2 \
+        -with-tower \
         -ansi-log false -resume \
         -profile aws,test \
         -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
@@ -364,7 +364,11 @@ jobs:
         path: /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log
 
     - name: AWS ECR cleanup
-      if: success() && !startsWith(github.ref, 'refs/heads/main')
+      if: |
+        !(
+          startsWith(github.ref, 'refs/heads/main') &&
+          github.repository == 'openproblems-bio/openproblems'
+        )
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -375,7 +379,10 @@ jobs:
         done
 
     - name: AWS S3 cleanup
-      if: success() || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
+      if: |
+        success() ||
+        startsWith(github.ref, 'refs/heads/main') ||
+        startsWith(github.ref, 'refs/tags')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -385,21 +392,42 @@ jobs:
         aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
         aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
 
+  run_full_benchmark:
+    needs: run_test_benchmark
+    runs-on: ubuntu-latest
+    if: >-
+      always() &&
+      (needs.run_test_benchmark.result == 'success' || needs.run_test_benchmark.result == 'skipped') &&
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      github.event_name == 'push' &&
+      (
+        startsWith(github.ref, 'refs/tags') ||
+        startsWith(github.ref, 'refs/heads/test_benchmark')
+      )
+
+    steps:
+
     - name: Run full benchmark
-      if: |
-        (startsWith(github.ref, 'refs/heads/test_benchmark') || startsWith(github.ref, 'refs/tags')) &&
-        github.repository == 'openproblems-bio/openproblems'
+      env:
+        TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
+        TOWER_WORKSPACE_ID: 53907369739130
       run: |
         generate_parameters()
         {
-          cat <<EOF
+        cat <<EOF
           {
-            "branch": "main",
-            "github_pat": "${{ secrets.GH_WORKFLOW_PAT }}"
+            "params" : {
+              "branch": "main"
+            }
           }
-          EOF
+        EOF
         }
-        curl -H "Content-Type: application/json" \
-             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
-             https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=53907369739130 \
-             --data "$(generate_parameters)"
+        WORKFLOW_ID=$(
+            curl -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
+            https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=${TOWER_WORKSPACE_ID} \
+            --data "$(generate_parameters)" | \
+            tee /dev/stderr | \
+            sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
+        )
+        echo "Full benchmark running at ${TOWER_WATCH_URL}/${WORKFLOW_ID}" >> $GITHUB_STEP_SUMMARY
