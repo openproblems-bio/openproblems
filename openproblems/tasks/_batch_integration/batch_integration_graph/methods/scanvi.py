@@ -20,7 +20,7 @@ def scanvi_full_unscaled(adata, test=False):
         columns={"labels": "lab"}, inplace=True
     )  # ugly fix for scvi conversion error
     adata = runScanvi(adata, "batch", "lab")
-    neighbors(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -47,7 +47,7 @@ def scanvi_hvg_unscaled(adata, test=False):
     )  # ugly fix for scvi conversion error
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runScanvi(adata, "batch", "lab")
-    neighbors(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -76,7 +76,7 @@ def scanvi_hvg_scaled(adata, test=False):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
     adata = runScanvi(adata, "batch", "lab")
-    neighbors(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
@@ -103,7 +103,7 @@ def scanvi_full_scaled(adata, test=False):
     )  # ugly fix for scvi conversion error
     adata = scale_batch(adata, "batch")
     adata = runScanvi(adata, "batch", "lab")
-    neighbors(adata, umap=False, use_rep="X_emb")
+    neighbors(adata, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
