@@ -1,0 +1,40 @@
+functionality:
+  name: "load_pancreas"
+  namespace: "common/data/pancreas/load"
+  version: "dev"
+  description: "Common component to load pancreas data"
+  authors:
+    - name: "Scott Gigante"
+      roles: [ maintainer, author ]
+      props: { github: scottgigante }
+  arguments:
+    - name: "--url"
+      description: "Url where data should be download"
+      type: "string"
+      required: true
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file donwloaded from 'url' input"
+      required: true
+  resources:
+    - type: python_script
+      path: load_save.py
+  tests:
+    - type: python_script
+      path: load_save_test.py
+    - path: load_save.py
+    - path: fake_anndata.py
+platforms:
+  - type: native
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - scprep
+          - scanpy
+          - openpyxl # to tests
+  - type: nextflow
