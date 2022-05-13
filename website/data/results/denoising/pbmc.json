@@ -27,27 +27,13 @@
             "Paper URL": "https://www.biorxiv.org/content/10.1101/786269v1",
             "Year": 2019,
             "Code": "https://github.com/czbiohub/molecular-cross-validation",
-            "Version": "1.8.2",
-            "Runtime (min)": 3.1666666666666665,
-            "CPU (%)": 91.0,
-            "Memory (GB)": 0.6345,
+            "Version": "1.9.1",
+            "Runtime (min)": 4.333333333333333,
+            "CPU (%)": 19.9,
+            "Memory (GB)": 0.2344,
             "Rank": 3,
-            "Mean-squared error": 0.012549637,
-            "Poisson loss": 0.3011988118677921
-        },
-        {
-            "Name": "MAGIC (approximate)",
-            "Paper": "Recovering Gene Interactions from Single-Cell Data Using Data Diffusion",
-            "Paper URL": "https://www.cell.com/cell/abstract/S0092-8674(18)30724-4",
-            "Year": 2018,
-            "Code": "https://github.com/KrishnaswamyLab/MAGIC",
-            "Version": "ModuleNotFound",
-            "Runtime (min)": 4.0,
-            "CPU (%)": 480.9,
-            "Memory (GB)": 0.9574,
-            "Rank": 1,
-            "Mean-squared error": 0.011841768,
-            "Poisson loss": 0.16136920715121225
+            "Poisson loss": 0.07933265818672611,
+            "Mean-squared error": 0.0022524048
         },
         {
             "Name": "MAGIC",
@@ -56,12 +42,26 @@
             "Year": 2018,
             "Code": "https://github.com/KrishnaswamyLab/MAGIC",
             "Version": "ModuleNotFound",
-            "Runtime (min)": 5.15,
-            "CPU (%)": 168.5,
-            "Memory (GB)": 1.1,
+            "Runtime (min)": 4.55,
+            "CPU (%)": 63.9,
+            "Memory (GB)": 0.1887,
+            "Rank": 1,
+            "Poisson loss": 0.022561099800714423,
+            "Mean-squared error": 0.0021264523
+        },
+        {
+            "Name": "MAGIC (approximate)",
+            "Paper": "Recovering Gene Interactions from Single-Cell Data Using Data Diffusion",
+            "Paper URL": "https://www.cell.com/cell/abstract/S0092-8674(18)30724-4",
+            "Year": 2018,
+            "Code": "https://github.com/KrishnaswamyLab/MAGIC",
+            "Version": "ModuleNotFound",
+            "Runtime (min)": 4.55,
+            "CPU (%)": 75.2,
+            "Memory (GB)": 0.2326,
             "Rank": 2,
-            "Poisson loss": 0.16180731769725482,
-            "Mean-squared error": 0.011832307
+            "Mean-squared error": 0.0021264523,
+            "Poisson loss": 0.022561099800714423
         }
     ]
 }

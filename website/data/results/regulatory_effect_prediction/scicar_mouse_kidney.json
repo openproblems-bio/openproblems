@@ -28,12 +28,12 @@
             "Year": 2013,
             "Code": "http://cistrome.org/BETA",
             "Version": "1.0",
-            "Runtime (min)": 12.733333333333333,
-            "CPU (%)": 554.2,
-            "Memory (GB)": 4.7,
+            "Runtime (min)": 2.3333333333333335,
+            "CPU (%)": 80.9,
+            "Memory (GB)": 2.4,
             "Rank": 1,
-            "Median Pearson correlation": 0.000840363920114177,
-            "Median Spearman correlation": -0.013979251313609442
+            "Median Spearman correlation": 0.0045530557297523075,
+            "Median Pearson correlation": -0.005477142549534023
         }
     ]
 }

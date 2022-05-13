@@ -3,8 +3,8 @@
     "headers": {
         "names": [
             "Rank",
-            "Mean squared error",
             "kNN Area Under the Curve",
+            "Mean squared error",
             "Memory (GB)",
             "Runtime (min)",
             "CPU (%)",
@@ -28,12 +28,12 @@
             "Year": 1975,
             "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
             "Version": "1.8.0",
-            "Runtime (min)": 5.316666666666666,
-            "CPU (%)": 233.6,
-            "Memory (GB)": 0.6633,
-            "Rank": 2,
-            "kNN Area Under the Curve": 0.08528153752846637,
-            "Mean squared error": 0.8910277144503042
+            "Runtime (min)": 1.8666666666666667,
+            "CPU (%)": 103.5,
+            "Memory (GB)": 0.2621,
+            "Rank": 1,
+            "kNN Area Under the Curve": 0.07152827685886508,
+            "Mean squared error": 0.9186722112716819
         },
         {
             "Name": "Harmonic Alignment (sqrt CPM)",
@@ -42,40 +42,12 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "ModuleNotFound",
-            "Runtime (min)": 6.133333333333334,
-            "CPU (%)": 342.7,
-            "Memory (GB)": 0.9134,
-            "Rank": 5,
-            "kNN Area Under the Curve": 0.04195523142614167,
-            "Mean squared error": 1.0001525416100412
-        },
-        {
-            "Name": "Mutual Nearest Neighbors (log CPM)",
-            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
-            "Paper URL": "https://www.nature.com/articles/nbt.4091",
-            "Year": 2018,
-            "Code": "https://github.com/LTLA/batchelor",
-            "Version": "3.4.2",
-            "Runtime (min)": 9.05,
-            "CPU (%)": 92.2,
-            "Memory (GB)": 1.9,
-            "Rank": 3,
-            "kNN Area Under the Curve": 0.07306158980008651,
-            "Mean squared error": 0.8959746196573406
-        },
-        {
-            "Name": "Mutual Nearest Neighbors (log scran)",
-            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
-            "Paper URL": "https://www.nature.com/articles/nbt.4091",
-            "Year": 2018,
-            "Code": "https://github.com/LTLA/batchelor",
-            "Version": "3.4.2",
-            "Runtime (min)": 9.8,
-            "CPU (%)": 98.9,
-            "Memory (GB)": 3.3,
-            "Rank": 1,
-            "kNN Area Under the Curve": 0.0992268381002486,
-            "Mean squared error": 0.7179134875243371
+            "Runtime (min)": 3.3333333333333335,
+            "CPU (%)": 397.2,
+            "Memory (GB)": 0.2437,
+            "Rank": 4,
+            "kNN Area Under the Curve": 0.03681307542469857,
+            "Mean squared error": 1.00561479373368
         },
         {
             "Name": "Harmonic Alignment (log scran)",
@@ -84,12 +56,40 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "ModuleNotFound",
-            "Runtime (min)": 11.1,
-            "CPU (%)": 213.9,
-            "Memory (GB)": 3.3,
-            "Rank": 4,
-            "kNN Area Under the Curve": 0.060204439119965515,
-            "Mean squared error": 1.0000451844564988
+            "Runtime (min)": 3.5,
+            "CPU (%)": 107.9,
+            "Memory (GB)": 1.0148,
+            "Rank": 2,
+            "Mean squared error": 1.0050841208143002,
+            "kNN Area Under the Curve": 0.05557052650339931
+        },
+        {
+            "Name": "Mutual Nearest Neighbors (log scran)",
+            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+            "Paper URL": "https://www.nature.com/articles/nbt.4091",
+            "Year": 2018,
+            "Code": "https://github.com/LTLA/batchelor",
+            "Version": "ModuleNotFound",
+            "Runtime (min)": 3.5,
+            "CPU (%)": 86.0,
+            "Memory (GB)": 1.0085,
+            "Rank": 3,
+            "kNN Area Under the Curve": 0.029884118609119572,
+            "Mean squared error": 0.9823076519974231
+        },
+        {
+            "Name": "Mutual Nearest Neighbors (log CPM)",
+            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+            "Paper URL": "https://www.nature.com/articles/nbt.4091",
+            "Year": 2018,
+            "Code": "https://github.com/LTLA/batchelor",
+            "Version": "ModuleNotFound",
+            "Runtime (min)": 4.333333333333333,
+            "CPU (%)": 88.1,
+            "Memory (GB)": 0.9266,
+            "Rank": 5,
+            "kNN Area Under the Curve": 0.015121207913567313,
+            "Mean squared error": 1.0078745500657358
         }
     ]
 }
