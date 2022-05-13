@@ -38,8 +38,13 @@ def _main(args=None):
 
 
 def main(args=None, do_print=True):
-    """Run the command-line interface."""
-    output = _main(args)
+    """Run the command-line interface.
+
+    Since printing the output to stdout is important here,
+    we redirect all other stdout to stderr.
+    """
+    with utils.RedirectStdout():
+        output = _main(args)
     if do_print:
         utils.print_output(output)
         return 0
