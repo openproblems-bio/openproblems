@@ -13,8 +13,8 @@ from .....tools.utils import check_version
     image="openproblems-python-batch-integration",  # only if required
 )
 def scvi_full_unscaled(adata):
-    from scib.integration import runScvi
     from scanpy.preprocessing import neighbors
+    from scib.integration import runScvi
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
@@ -39,8 +39,8 @@ def scvi_full_unscaled(adata):
 )
 def scvi_hvg_unscaled(adata):
     from ._utils import hvg_batch
-    from scib.integration import runScvi
     from scanpy.preprocessing import neighbors
+    from scib.integration import runScvi
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
@@ -66,8 +66,8 @@ def scvi_hvg_unscaled(adata):
 def scvi_hvg_scaled(adata):
     from ._utils import hvg_batch
     from ._utils import scale_batch
-    from scib.integration import runScvi
     from scanpy.preprocessing import neighbors
+    from scib.integration import runScvi
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
@@ -93,8 +93,8 @@ def scvi_hvg_scaled(adata):
 )
 def scvi_full_scaled(adata):
     from ._utils import scale_batch
-    from scib.integration import runScvi
     from scanpy.preprocessing import neighbors
+    from scib.integration import runScvi
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
