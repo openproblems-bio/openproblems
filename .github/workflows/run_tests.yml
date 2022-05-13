@@ -204,8 +204,10 @@ jobs:
       always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       github.event_name == 'push' &&
-      needs.run_tester.result == 'success' ||
-      !startsWith(github.ref, 'refs/heads/test_benchmark')
+      (
+        needs.run_tester.result == 'success' ||
+        startsWith(github.ref, 'refs/heads/test_benchmark')
+      )
 
     steps:
 
