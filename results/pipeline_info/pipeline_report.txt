@@ -1,0 +1,51 @@
+----------------------------------------------------
+                                        ,--./,-.
+        ___     __   __   __   ___     /,-._.--~\
+  |\ | |__  __ /  ` /  \ |__) |__         }  {
+  | \| |       \__, \__/ |  \ |___     \`-._,-`-,
+                                        `._,._,'
+  nf-core/openproblems v1.2
+----------------------------------------------------
+
+Run Name: crazy_mestorf
+
+## nf-core/openproblems execution completed successfully! ##
+
+
+The workflow was completed at 2022-05-13T03:44:09.354417Z (duration: 41m 48s)
+
+The command used to launch the workflow was as follows:
+
+  nextflow run 'https://github.com/openproblems-bio/nf-openproblems' -name crazy_mestorf -params-file 'https://api.tower.nf/ephemeral/Q1iwpRgMfxXD_XMsuc6a9g.json' -with-tower -r master -profile aws,test -latest
+
+
+
+Pipeline Configuration:
+-----------------------
+ - Pipeline Release: master
+ - Run Name: crazy_mestorf
+ - Test: true
+ - Max Resources: 16 GB memory, 4 cpus, 1h time per job
+ - Output dir: ./results
+ - Launch dir: /
+ - Working dir: /openproblems-nextflow/work_main
+ - Script dir: /.nextflow/assets/openproblems-bio/nf-openproblems
+ - User: root
+ - Container host: 490915662541.dkr.ecr.us-west-2.amazonaws.com/openproblems:main-
+ - Config Profile: aws,test
+ - Config Profile Description: Minimal test dataset to check pipeline function
+ - Config Files: /.nextflow/assets/openproblems-bio/nf-openproblems/nextflow.config, /nextflow.config
+ - Date Started: 2022-05-13T03:02:20.944387Z
+ - Date Completed: 2022-05-13T03:44:09.354417Z
+ - Pipeline script file path: /.nextflow/assets/openproblems-bio/nf-openproblems/main.nf
+ - Pipeline script hash ID: 8b2a49d421ea070a946257a6c4effc19
+ - Pipeline repository Git URL: https://github.com/openproblems-bio/nf-openproblems
+ - Pipeline repository Git Commit: 8cbc57d57c6eb80892a5ab37623b0c1f7a91c7da
+ - Pipeline Git branch/tag: master
+ - Nextflow Version: 22.04.0
+ - Nextflow Build: 5697
+ - Nextflow Compile Timestamp: 23-04-2022 18:00 UTC
+
+--
+nf-core/openproblems
+https://github.com/nf-core/openproblems
