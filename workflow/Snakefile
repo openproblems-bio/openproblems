@@ -26,18 +26,12 @@ rule docker_pull:
 rule docker_refresh:
     input: tools.refresh_images
 
-# this is a dirty hack
-if "docker_build" in sys.argv:
-	ruleorder: build_docker_image > refresh_docker_image
-else:
-	ruleorder: refresh_docker_image > build_docker_image
-
 rule refresh_docker_image:
     input:
         dockerfile = "{}/{{image}}/refresh.Dockerfile".format(tools.IMAGES_DIR),
+        requirements = tools.docker_refresh_requirements,
     output:
-        temp(touch("{}/{{image}}/.docker_refresh".format(tools.IMAGES_DIR))),
-        temp(touch("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)))
+        temp(touch("{}/{{image}}/.docker_refresh".format(tools.IMAGES_DIR)))
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
@@ -69,13 +63,18 @@ RUN cd /usr/src/singlecellopenproblems && sudo git clean -fxdq
 RUN sudo pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
 ' > {output}"""
 
+rule update_docker_image:
+    input:
+        tools.docker_update_requirements
+    output:
+        temp(touch("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)))
+
 rule build_docker_image:
     input:
         dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
-        requirements = tools.docker_requirements,
+        requirements = tools.docker_build_requirements,
     output:
-        temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR))),
-        temp(touch("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)))
+        temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)))
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
@@ -100,7 +99,7 @@ rule login_docker:
 
 rule push_docker_image:
     input:
-        build = tools.docker_push_requirements,
+        build = "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR),
         login = ".docker_login",
     output:
         temp(touch("{}/{{image}}/.docker_push".format(tools.IMAGES_DIR)))
