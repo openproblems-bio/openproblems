@@ -34,6 +34,20 @@ def _create_neuralee_dataset(
     return dataset
 
 
+def _neuralee(dataset, d: int = 2, test: bool = False):
+    from neuralee.embedding import NeuralEE
+
+    import torch
+
+    NEE = NeuralEE(dataset, d=d, device=torch.device("cpu"))
+    fine_tune_kwargs = dict(verbose=False)
+    if test:
+        fine_tune_kwargs["maxit"] = 10
+    res = NEE.fine_tune(**fine_tune_kwargs)
+
+    return res["X"].detach().cpu().numpy()
+
+
 @method(
     method_name="NeuralEE (CPU) (Default)",
     paper_name=" NeuralEE: A GPU-Accelerated Elastic Embedding "
@@ -46,13 +60,6 @@ def _create_neuralee_dataset(
     image="openproblems-python-extras",
 )
 def neuralee_default(adata: AnnData, test: bool = False) -> AnnData:
-    from neuralee.embedding import NeuralEE
-
-    import torch
-
-    # Store raw counts for use by metrics
-    adata.layers["counts"] = adata.X.copy()
-
     # this can fail due to sparseness of data; if so, retry with more genes
     # note that this is a deviation from the true default behavior, which fails
     # see https://github.com/openproblems-bio/openproblems/issues/375
@@ -72,11 +79,7 @@ def neuralee_default(adata: AnnData, test: bool = False) -> AnnData:
         else:
             break
 
-    NEE = NeuralEE(dataset, d=2, device=torch.device("cpu"))
-    res = NEE.fine_tune(verbose=False)
-
-    adata.obsm["X_emb"] = res["X"].detach().cpu().numpy()
-
+    adata.obsm["X_emb"] = _neuralee(dataset, test=test)
     return adata
 
 
@@ -92,17 +95,7 @@ def neuralee_default(adata: AnnData, test: bool = False) -> AnnData:
     image="openproblems-python-extras",
 )
 def neuralee_logCPM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
-    from neuralee.embedding import NeuralEE
-
-    import torch
-
     adata = log_cpm_hvg(adata)
-
     dataset = _create_neuralee_dataset(adata, normalize=False, subsample_genes=None)
-
-    NEE = NeuralEE(dataset, d=2, device=torch.device("cpu"))
-    res = NEE.fine_tune(verbose=False)
-
-    adata.obsm["X_emb"] = res["X"].detach().cpu().numpy()
-
+    adata.obsm["X_emb"] = _neuralee(dataset, test=test)
     return adata
