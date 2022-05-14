@@ -31,7 +31,7 @@ rule refresh_docker_image:
         dockerfile = "{}/{{image}}/refresh.Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_refresh_requirements,
     output:
-        touch("{}/{{image}}/.docker_refresh".format(tools.IMAGES_DIR))
+        temp(touch("{}/{{image}}/.docker_refresh".format(tools.IMAGES_DIR)))
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
@@ -67,14 +67,16 @@ rule update_docker_image:
     input:
         tools.docker_update_requirements
     output:
-        touch("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR))
+        "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)
+		shell:
+        "touch {output}"
 
 rule build_docker_image:
     input:
         dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_build_requirements,
     output:
-        touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR))
+        temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)))
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
@@ -102,13 +104,13 @@ rule push_docker_image:
         build = "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR),
         login = ".docker_login",
     output:
-        touch("{}/{{image}}/.docker_push".format(tools.IMAGES_DIR))
+        temp(touch("{}/{{image}}/.docker_push".format(tools.IMAGES_DIR)))
     shell:
         "docker push --quiet singlecellopenproblems/{wildcards.image}"
 
 rule pull_docker_image:
     output:
-        touch("{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR))
+        temp(touch("{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR)))
     shell:
         "DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect singlecellopenproblems/{wildcards.image} > /dev/null && \
         docker pull --quiet singlecellopenproblems/{wildcards.image} || true"

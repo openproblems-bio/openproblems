@@ -148,8 +148,4 @@ nf-openproblems
 .idea
 
 # snakemake
-.docker_build
-.docker_pull
-.docker_refresh
 .docker_update
-.docker_push
