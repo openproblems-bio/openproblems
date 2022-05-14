@@ -11,7 +11,7 @@ train_matrix <- t(as.matrix(reducedDim(sce, "train_norm")))
 # sometimes ALRA randomly fails with a decomposition error; retry
 alra_output <- NULL
 attempt <- 0
-while( is.null(alra_output) && attempt <= 3 ) {
+while (is.null(alra_output) && attempt <= 3) {
   try(
     alra_output <- alra(train_matrix)
   )
