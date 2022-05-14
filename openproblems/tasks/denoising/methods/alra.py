@@ -19,10 +19,9 @@ def alra(adata, test=False):
     import scprep
 
     # libsize and sqrt norm
-    # overwrite obsm['train'] with normalized version
-    adata.obsm["train"] = scprep.utils.matrix_transform(adata.obsm["train"], np.sqrt)
-    adata.obsm["train"], libsize = scprep.normalize.library_size_normalize(
-        adata.obsm["train"], rescale=1, return_library_size=True
+    adata.obsm["train_norm"] = scprep.utils.matrix_transform(adata.obsm["train"], np.sqrt)
+    adata.obsm["train_norm"], libsize = scprep.normalize.library_size_normalize(
+        adata.obsm["train_norm"], rescale=1, return_library_size=True
     )
     # run alra
     # _alra takes adata returns adata, stores result in "denoised"
