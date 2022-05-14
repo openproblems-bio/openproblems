@@ -12,6 +12,8 @@ def check_dataset(adata):
     assert isinstance(adata.obsm["test"], scipy.sparse.spmatrix)
     assert adata.obsm["train"].shape == adata.X.shape
     assert adata.obsm["test"].shape == adata.X.shape
+    assert np.issubdtype(adata.obsm["train"].dtype, float)
+    assert np.issubdtype(adata.obsm["test"].dtype, float)
     # check train and test are non-overlapping
     assert (
         (adata.obsm["train"] + adata.obsm["test"]) != adata.layers["counts"]
