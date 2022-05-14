@@ -20,7 +20,7 @@ while (is.null(alra_output) && attempt <= 3) {
 
 alra_mat <- alra_output$A_norm_rank_k_cor_sc
 
-reducedDim(sce, "denoised") <- as.matrix(t(alra_mat))
+reducedDim(sce, "denoised") <- t(as.matrix(alra_mat))
 
 # return
 sce
