@@ -53,19 +53,18 @@ jobs:
         python -c "import openproblems"
 
     - name: Build Docker images
-      if: "!startsWith(github.ref, 'refs/heads/main')"
       run: |
         cd workflow
         snakemake -j $(nproc) docker_build
         cd ..
 
-    - name: Build and push Docker images
+    - name: Push Docker images
       if: "startsWith(github.ref, 'refs/heads/main')"
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         cd workflow
-        snakemake -j $(nproc) docker_build docker_push
+        snakemake -j $(nproc) docker_push
         cd ..
         echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
 
