@@ -1,6 +1,7 @@
 from ...data.sample import load_sample_data
 
 import numpy as np
+import scipy.sparse
 
 
 def _test_array_equal
@@ -10,10 +11,12 @@ def check_dataset(adata):
     """Check that dataset output fits expected API."""
     assert "train" in adata.obsm
     assert "test" in adata.obsm
+    assert isinstance(adata.obsm["train"], scipy.sparse.spmatrix)
+    assert isinstance(adata.obsm["test"], scipy.sparse.spmatrix)
     assert adata.obsm["train"].shape == adata.X.shape
     assert adata.obsm["test"].shape == adata.X.shape
     # check train and test are non-overlapping
-    np.testing.assert_array_equal(adata.obsm["train"] + adata.obsm["test"], adata.layers["counts"])
+    assert ((adata.obsm["train"] + adata.obsm["test"]) != adata.layers["counts"]).nnz == 0
     return True
 
 
@@ -23,7 +26,7 @@ def check_method(adata):
     assert isinstance(adata.obsm["denoised"], np.ndarray)
     assert adata.obsm["denoised"].shape == adata.X.shape
     # check train and test have not been edited
-    np.testing.assert_array_equal(adata.obsm["train"] + adata.obsm["test"], adata.layers["counts"])
+    assert ((adata.obsm["train"] + adata.obsm["test"]) != adata.layers["counts"]).nnz == 0
     return True
 
 
