@@ -5,7 +5,7 @@ library(rsvd)
 
 # save the matrix of the obsm variable train
 
-train_matrix <- t(as.matrix(reducedDim(sce, "train")))
+train_matrix <- t(as.matrix(reducedDim(sce, "train_norm")))
 
 # cast to as.matrix, so unless as.matrix fails we don't need ALRA to check
 # the class type of train_matrix. therefore, use version of ALRA that
