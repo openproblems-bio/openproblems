@@ -3,6 +3,9 @@ from ...data.sample import load_sample_data
 import numpy as np
 
 
+def _test_array_equal
+
+
 def check_dataset(adata):
     """Check that dataset output fits expected API."""
     assert "train" in adata.obsm
@@ -10,9 +13,7 @@ def check_dataset(adata):
     assert adata.obsm["train"].shape == adata.X.shape
     assert adata.obsm["test"].shape == adata.X.shape
     # check train and test are non-overlapping
-    assert (
-        (adata.obsm["train"] + adata.obsm["test"]) != adata.layers["counts"]
-    ).nnz == 0
+    np.testing.assert_array_equal(adata.obsm["train"] + adata.obsm["test"], adata.layers["counts"])
     return True
 
 
@@ -22,9 +23,7 @@ def check_method(adata):
     assert isinstance(adata.obsm["denoised"], np.ndarray)
     assert adata.obsm["denoised"].shape == adata.X.shape
     # check train and test have not been edited
-    assert (
-        (adata.obsm["train"] + adata.obsm["test"]) != adata.layers["counts"]
-    ).nnz == 0
+    np.testing.assert_array_equal(adata.obsm["train"] + adata.obsm["test"], adata.layers["counts"])
     return True
 
 
