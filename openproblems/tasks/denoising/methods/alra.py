@@ -15,6 +15,7 @@ _alra = r_function("alra.R")
 )
 def alra(adata, test=False):
     import numpy as np
+    import rpy2.rinterface_lib.embedded
     import scprep
 
     # libsize and sqrt norm
@@ -26,7 +27,16 @@ def alra(adata, test=False):
     )
     # run alra
     # _alra takes sparse array, returns dense array
-    Y = _alra(adata.obsm["train_norm"])
+    Y = None
+    attempts = 0
+    while Y is None:
+        try:
+            Y = _alra(adata.obsm["train_norm"])
+        except rpy2.rinterface_lib.embedded.RRuntimeError as e:
+            if "non-comfortable arguments" in str(e) and attempts < 5:
+                attempts += 1            
+            else:
+                raise
 
     # transform back into original space
     Y = scprep.utils.matrix_transform(Y, np.square)
