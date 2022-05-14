@@ -1,12 +1,10 @@
-library(SingleCellExperiment)
-
 # we explicitly cast to as.matrix, so unless as.matrix fails we don't need
 # ALRA to check the class type of train_matrix. therefore, use fork of
 # ALRA that doesn't check type:
 source("https://raw.githubusercontent.com/wes-lewis/ALRA/master/alra.R")
 
 # fetch the matrix of the obsm variable train_norm
-train_matrix <- t(as.matrix(reducedDim(sce, "train_norm")))
+train_matrix <- t(as.matrix(sce))
 
 # sometimes ALRA randomly fails with a decomposition error; retry
 alra_output <- NULL
@@ -20,7 +18,7 @@ while (is.null(alra_output) && attempt <= 3) {
 
 alra_mat <- alra_output$A_norm_rank_k_cor_sc
 
-reducedDim(sce, "denoised") <- t(as.matrix(alra_mat))
+out <- t(as.matrix(alra_mat))
 
 # return
-sce
+out
