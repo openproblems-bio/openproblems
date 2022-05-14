@@ -67,7 +67,7 @@ rule update_docker_image:
     input:
         tools.docker_update_requirements
     output:
-        temp("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR))
+        "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)
 		shell:
         "touch {output}"
 
