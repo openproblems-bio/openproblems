@@ -4,9 +4,6 @@ import numpy as np
 import scipy.sparse
 
 
-def _test_array_equal
-
-
 def check_dataset(adata):
     """Check that dataset output fits expected API."""
     assert "train" in adata.obsm
