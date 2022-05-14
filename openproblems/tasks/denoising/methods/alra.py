@@ -25,8 +25,8 @@ def alra(adata, test=False):
         adata.obsm["train_norm"], rescale=1, return_library_size=True
     )
     # run alra
-    # _alra takes adata returns adata, stores result in "denoised"
-    Y = _alra(adata).obsm["denoised"]
+    # _alra takes sparse array, returns dense array
+    Y = _alra(adata.obsm["train_norm"])
 
     # transform back into original space
     Y = scprep.utils.matrix_transform(Y, np.square)
