@@ -1,4 +1,4 @@
-glibrary(SingleCellExperiment)
+library(SingleCellExperiment)
 library(Matrix)
 source("https://raw.githubusercontent.com/wes-lewis/ALRA/master/alra.R")
 library(rsvd)
