@@ -1,7 +1,6 @@
 from ....tools.conversion import r_function
 from ....tools.decorators import method
 
-
 _alra = r_function("alra.R")
 
 
@@ -19,14 +18,16 @@ def alra(adata, test=False):
     import scprep
 
     # libsize and sqrt norm
-    adata.obsm["train_norm"] = scprep.utils.matrix_transform(adata.obsm["train"], np.sqrt)
+    adata.obsm["train_norm"] = scprep.utils.matrix_transform(
+        adata.obsm["train"], np.sqrt
+    )
     adata.obsm["train_norm"], libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train_norm"], rescale=1, return_library_size=True
     )
     # run alra
     # _alra takes adata returns adata, stores result in "denoised"
     Y = _alra(adata).obsm["denoised"]
-    
+
     # transform back into original space
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)

@@ -22,6 +22,6 @@ def mse(adata):
 
     sc.pp.normalize_total(denoised_data, target_sum)
     sc.pp.log1p(denoised_data)
-    
+
     error = sklearn.metrics.mean_squared_error(test_data.X, denoised_data.X)
     return error
