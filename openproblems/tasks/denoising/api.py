@@ -9,6 +9,8 @@ def check_dataset(adata):
     assert "test" in adata.obsm
     assert adata.obsm["train"].shape == adata.X.shape
     assert adata.obsm["test"].shape == adata.X.shape
+    # check train and test are non-overlapping
+    assert ((adata.obsm["train"] + adata.obsm["test"]) != adata.layers["counts"]).nnz == 0
     return True
 
 
@@ -17,6 +19,8 @@ def check_method(adata):
     assert "denoised" in adata.obsm
     assert isinstance(adata.obsm["denoised"], np.ndarray)
     assert adata.obsm["denoised"].shape == adata.X.shape
+    # check train and test have not been edited
+    assert ((adata.obsm["train"] + adata.obsm["test"]) != adata.layers["counts"]).nnz == 0
     return True
 
 
