@@ -1,12 +1,6 @@
 from ....tools.conversion import r_function
 from ....tools.decorators import method
 
-# should be imported by docker
-import numpy as np
-import scprep
-
-# from ....tools.utils import check_version
-
 
 _alra = r_function("alra.R")
 
@@ -21,6 +15,9 @@ _alra = r_function("alra.R")
     image="openproblems-r-extras",
 )
 def alra(adata, test=False):
+    import numpy as np
+    import scprep
+
     # libsize and sqrt norm
     # overwrite obsm['train'] with normalized version
     adata.obsm["train"] = scprep.utils.matrix_transform(adata.obsm["train"], np.sqrt)
@@ -28,11 +25,10 @@ def alra(adata, test=False):
         adata.obsm["train"], rescale=1, return_library_size=True
     )
     # run alra
-    # _alra takes adata returns adata, edits "train"
-    Y = _alra(adata)
-    Y = Y.obsm["train"]
+    # _alra takes adata returns adata, stores result in "denoised"
+    Y = _alra(adata).obsm["denoised"]
+    
     # transform back into original space
-
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
