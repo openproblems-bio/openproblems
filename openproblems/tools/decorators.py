@@ -45,7 +45,7 @@ def method(
     paper_url,
     paper_year,
     code_url,
-    code_version,
+    code_version=None,
     image="openproblems",
 ):
     """Decorate a method function.

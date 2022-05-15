@@ -122,6 +122,20 @@ def parse_metric_results(results_path, results):
     return results
 
 
+def parse_method_versions(results_path, results):
+    """Add method versions to the trace output."""
+    for filename in os.listdir(os.path.join(results_path, "results/methods")):
+        with open(
+            os.path.join(results_path, "results/methods", filename), "r"
+        ) as handle:
+            code_version = float(handle.read().strip())
+        task_name, dataset_name, method_name = filename.replace(
+            ".method.txt", ""
+        ).split(".")
+        results[task_name][dataset_name][method_name]["code_version"] = code_version
+    return results
+
+
 def compute_ranking(task_name, dataset_results):
     """Rank all methods on a specific dataset."""
     rankings = np.zeros(len(dataset_results))
@@ -162,7 +176,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             "Paper URL": method.metadata["paper_url"],
             "Year": method.metadata["paper_year"],
             "Code": method.metadata["code_url"],
-            "Version": method.metadata["code_version"],
+            "Version": method_results["code_version"],
             "Runtime (min)": parse_time_to_min(method_results["duration"]),
             "CPU (%)": float(method_results["%cpu"].replace("%", "")),
             "Memory (GB)": parse_size_to_gb(method_results["peak_rss"]),
@@ -210,6 +224,7 @@ def main(results_path):
     )
     results = parse_trace_to_dict(df)
     results = parse_metric_results(results_path, results)
+    results = parse_method_versions(results_path, results)
     results_to_json(results)
     with open("results.json", "w") as handle:
         dump_json(results, handle)

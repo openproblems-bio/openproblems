@@ -40,6 +40,14 @@ def test_method(task_name, method_name, tempdir, image):
     adata = method(adata, test=True)
     assert isinstance(adata, anndata.AnnData)
     assert task.api.check_method(adata)
+    if "method_code_version" not in adata.uns:
+        utils.warnings.future_warning(
+            "Setting code_version in the method decorator is deprecated. "
+            "Store code version in `adata.uns['method_code_version']` instead.",
+            error_version="1.0",
+            error_category=TypeError,
+        )
+        assert method.metadata["code_version"] is not None
 
 
 @parameterized.parameterized.expand(
@@ -55,7 +63,6 @@ def test_method_metadata(method):
         "paper_url",
         "paper_year",
         "code_url",
-        "code_version",
         "image",
     ]:
         assert attr in method.metadata
