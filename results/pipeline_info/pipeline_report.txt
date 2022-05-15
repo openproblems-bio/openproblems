@@ -1,0 +1,50 @@
+----------------------------------------------------
+                                        ,--./,-.
+        ___     __   __   __   ___     /,-._.--~\
+  |\ | |__  __ /  ` /  \ |__) |__         }  {
+  | \| |       \__, \__/ |  \ |___     \`-._,-`-,
+                                        `._,._,'
+  nf-core/openproblems v1.2
+----------------------------------------------------
+
+Run Name: nauseous_williams
+
+## nf-core/openproblems execution completed successfully! ##
+
+
+The workflow was completed at 2022-05-15T14:02:15.288008Z (duration: 18h 16m 56s)
+
+The command used to launch the workflow was as follows:
+
+  nextflow run 'https://github.com/openproblems-bio/nf-openproblems' -name nauseous_williams -params-file 'https://api.tower.nf/ephemeral/ZdpjAHP4SC4OMC0Aaq9IbA.json' -with-tower -r v1.2 -profile aws -latest
+
+
+
+Pipeline Configuration:
+-----------------------
+ - Pipeline Release: v1.2
+ - Run Name: nauseous_williams
+ - Test: false
+ - Max Resources: 32 GB memory, 16 cpus, 1d time per job
+ - Output dir: ./results
+ - Launch dir: /
+ - Working dir: /openproblems-nextflow/work_main
+ - Script dir: /.nextflow/assets/openproblems-bio/nf-openproblems
+ - User: root
+ - Container host: 490915662541.dkr.ecr.us-west-2.amazonaws.com/openproblems:main-
+ - Config Profile: aws
+ - Config Files: /.nextflow/assets/openproblems-bio/nf-openproblems/nextflow.config, /nextflow.config
+ - Date Started: 2022-05-14T19:45:19.692063Z
+ - Date Completed: 2022-05-15T14:02:15.288008Z
+ - Pipeline script file path: /.nextflow/assets/openproblems-bio/nf-openproblems/main.nf
+ - Pipeline script hash ID: 325de59666be7b1f2c67f17e1d117347
+ - Pipeline repository Git URL: https://github.com/openproblems-bio/nf-openproblems
+ - Pipeline repository Git Commit: f720fe97df80e3b4dcc798a5c24d03a0e881aff9
+ - Pipeline Git branch/tag: v1.2
+ - Nextflow Version: 22.04.0
+ - Nextflow Build: 5697
+ - Nextflow Compile Timestamp: 23-04-2022 18:00 UTC
+
+--
+nf-core/openproblems
+https://github.com/nf-core/openproblems
