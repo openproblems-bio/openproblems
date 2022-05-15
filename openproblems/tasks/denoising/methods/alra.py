@@ -3,6 +3,8 @@ from ....tools.decorators import method
 
 _alra = r_function("alra.R")
 
+log = logging.getLogger("openproblems")
+
 
 @method(
     method_name="ALRA",
@@ -34,6 +36,7 @@ def alra(adata, test=False):
             Y = _alra(adata.obsm["train_norm"])
         except rpy2.rinterface_lib.embedded.RRuntimeError as e:
             if "non-comfortable arguments" in str(e) and attempts < 5:
+                log.warning(str(e))
                 attempts += 1
             else:
                 raise
