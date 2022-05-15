@@ -4,6 +4,21 @@ import numpy as np
 import scipy.sparse
 
 
+def _check_matrix_equal(X, Y):
+    """Check equality independent of class"""
+    if isinstance(X, np.ndarray) and isinstance(Y, np.ndarray):
+        np.testing.assert_array_equal(X, Y)
+    elif isinstance(X, scipy.sparse.spmatrix) and isinstance(Y, scipy.sparse.spmatrix):
+        X = X.tocsr()
+        Y = Y.tocsr()
+        np.testing.assert_array_equal(X.data, Y.data)
+        np.testing.assert_array_equal(X.indices, Y.indices)
+        np.testing.assert_array_equal(X.indptr, Y.indptr)
+    else:
+        assert not np.any(np.asarray(X != Y))
+        
+
+
 def check_dataset(adata):
     """Check that dataset output fits expected API."""
     assert "train" in adata.obsm
@@ -15,10 +30,7 @@ def check_dataset(adata):
     assert np.issubdtype(adata.obsm["train"].dtype, float)
     assert np.issubdtype(adata.obsm["test"].dtype, float)
     # check train and test are non-overlapping
-    assert (
-        (adata.obsm["train"] + adata.obsm["test"])
-        != scipy.sparse.csr_matrix(adata.layers["counts"])
-    ).nnz == 0
+    _check_matrix_equal(adata.obsm["train"] + adata.obsm["test"], scipy.sparse.csr_matrix(adata.layers["counts"]))
     return True
 
 
@@ -28,10 +40,7 @@ def check_method(adata):
     assert isinstance(adata.obsm["denoised"], np.ndarray)
     assert adata.obsm["denoised"].shape == adata.X.shape
     # check train and test have not been edited
-    assert (
-        (adata.obsm["train"] + adata.obsm["test"])
-        != scipy.sparse.csr_matrix(adata.layers["counts"])
-    ).nnz == 0
+    _check_matrix_equal(adata.obsm["train"] + adata.obsm["test"], scipy.sparse.csr_matrix(adata.layers["counts"]))
     return True
 
 
