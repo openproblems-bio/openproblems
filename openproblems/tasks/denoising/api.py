@@ -2,6 +2,7 @@ from ...data.sample import load_sample_data
 
 import numpy as np
 import scipy.sparse
+import scprep
 
 
 def _check_matrix_equal(X, Y):
@@ -15,7 +16,7 @@ def _check_matrix_equal(X, Y):
         np.testing.assert_array_equal(X.indices, Y.indices)
         np.testing.assert_array_equal(X.indptr, Y.indptr)
     else:
-        _check_matrix_equal(np.asarray(X), np.asarray(Y))
+        _check_matrix_equal(scprep.utils.toarray(X), scprep.utils.toarray(Y))
 
 
 def check_dataset(adata):
