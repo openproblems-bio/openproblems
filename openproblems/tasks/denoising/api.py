@@ -30,7 +30,9 @@ def sample_dataset():
     adata = load_sample_data()
     adata.obsm["train"] = adata.X.copy()
     adata.obsm["train"].data = np.random.binomial(
-        n=adata.obsm["train"].data.astype(int), p=0.8, size=adata.obsm["train"].data.shape
+        n=adata.obsm["train"].data.astype(int),
+        p=0.8,
+        size=adata.obsm["train"].data.shape,
     ).astype(float)
     adata.obsm["test"] = adata.X.copy()
     adata.obsm["test"].data = np.random.binomial(
