@@ -256,6 +256,7 @@ jobs:
     - name: Install Nextflow
       env:
           CAPSULE_LOG: none
+          NXF_VER: 22.04.0
       run: |
         mkdir /tmp/nextflow
         cd /tmp/nextflow
