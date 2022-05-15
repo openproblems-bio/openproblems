@@ -28,12 +28,12 @@
             "Year": 1975,
             "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
             "Version": "1.8.0",
-            "Runtime (min)": 5.983333333333333,
-            "CPU (%)": 114.7,
-            "Memory (GB)": 0.5386,
+            "Runtime (min)": 3.6833333333333336,
+            "CPU (%)": 50.3,
+            "Memory (GB)": 0.5336,
             "Rank": 1,
-            "kNN Area Under the Curve": 0.2032384312048485,
-            "Mean squared error": 0.57318675394082
+            "kNN Area Under the Curve": 0.20257994858725295,
+            "Mean squared error": 0.577408589959979
         },
         {
             "Name": "Mutual Nearest Neighbors (log CPM)",
@@ -41,27 +41,13 @@
             "Paper URL": "https://www.nature.com/articles/nbt.4091",
             "Year": 2018,
             "Code": "https://github.com/LTLA/batchelor",
-            "Version": "3.4.2",
-            "Runtime (min)": 10.95,
-            "CPU (%)": 92.0,
-            "Memory (GB)": 2.1,
+            "Version": "ModuleNotFound",
+            "Runtime (min)": 5.5,
+            "CPU (%)": 69.9,
+            "Memory (GB)": 1.9,
             "Rank": 2,
-            "Mean squared error": 0.8857770266959669,
-            "kNN Area Under the Curve": 0.05646144886748678
-        },
-        {
-            "Name": "Mutual Nearest Neighbors (log scran)",
-            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
-            "Paper URL": "https://www.nature.com/articles/nbt.4091",
-            "Year": 2018,
-            "Code": "https://github.com/LTLA/batchelor",
-            "Version": "3.4.2",
-            "Runtime (min)": 12.016666666666667,
-            "CPU (%)": 98.6,
-            "Memory (GB)": 4.3,
-            "Rank": 5,
-            "Mean squared error": 1.013218397199596,
-            "kNN Area Under the Curve": 0.043665205276805376
+            "Mean squared error": 0.8795067358260276,
+            "kNN Area Under the Curve": 0.056330655596596474
         },
         {
             "Name": "Harmonic Alignment (sqrt CPM)",
@@ -70,12 +56,12 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "ModuleNotFound",
-            "Runtime (min)": 12.283333333333333,
-            "CPU (%)": 338.0,
-            "Memory (GB)": 0.6648,
+            "Runtime (min)": 6.333333333333333,
+            "CPU (%)": 684.1,
+            "Memory (GB)": 0.6528,
             "Rank": 3,
-            "kNN Area Under the Curve": 0.05117755572603043,
-            "Mean squared error": 1.0000279221079869
+            "kNN Area Under the Curve": 0.05590423984757746,
+            "Mean squared error": 1.0000395727060254
         },
         {
             "Name": "Harmonic Alignment (log scran)",
@@ -84,12 +70,26 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "ModuleNotFound",
-            "Runtime (min)": 16.566666666666666,
-            "CPU (%)": 275.3,
+            "Runtime (min)": 6.183333333333334,
+            "CPU (%)": 359.5,
             "Memory (GB)": 4.3,
             "Rank": 4,
-            "Mean squared error": 1.0001481797123197,
-            "kNN Area Under the Curve": 0.05622829667165311
+            "Mean squared error": 0.9999769756839966,
+            "kNN Area Under the Curve": 0.05564081338226551
+        },
+        {
+            "Name": "Mutual Nearest Neighbors (log scran)",
+            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+            "Paper URL": "https://www.nature.com/articles/nbt.4091",
+            "Year": 2018,
+            "Code": "https://github.com/LTLA/batchelor",
+            "Version": "ModuleNotFound",
+            "Runtime (min)": 6.5,
+            "CPU (%)": 97.2,
+            "Memory (GB)": 4.3,
+            "Rank": 5,
+            "Mean squared error": 1.0099293620879253,
+            "kNN Area Under the Curve": 0.043647209594847906
         }
     ]
 }

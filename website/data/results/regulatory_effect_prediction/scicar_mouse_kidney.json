@@ -3,8 +3,8 @@
     "headers": {
         "names": [
             "Rank",
-            "Median Pearson correlation",
             "Median Spearman correlation",
+            "Median Pearson correlation",
             "Memory (GB)",
             "Runtime (min)",
             "CPU (%)",
@@ -28,12 +28,12 @@
             "Year": 2013,
             "Code": "http://cistrome.org/BETA",
             "Version": "1.0",
-            "Runtime (min)": 12.733333333333333,
-            "CPU (%)": 554.2,
-            "Memory (GB)": 4.7,
+            "Runtime (min)": 15.316666666666666,
+            "CPU (%)": 1262.5,
+            "Memory (GB)": 4.5,
             "Rank": 1,
-            "Median Pearson correlation": 0.000840363920114177,
-            "Median Spearman correlation": -0.013979251313609442
+            "Median Spearman correlation": -0.013979251313609442,
+            "Median Pearson correlation": 0.000840363920114175
         }
     ]
 }

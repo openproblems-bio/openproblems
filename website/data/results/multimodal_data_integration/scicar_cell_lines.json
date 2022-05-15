@@ -28,12 +28,12 @@
             "Year": 1975,
             "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
             "Version": "1.8.0",
-            "Runtime (min)": 5.316666666666666,
-            "CPU (%)": 233.6,
-            "Memory (GB)": 0.6633,
+            "Runtime (min)": 2.1666666666666665,
+            "CPU (%)": 499.3,
+            "Memory (GB)": 0.6773,
             "Rank": 2,
-            "kNN Area Under the Curve": 0.08528153752846637,
-            "Mean squared error": 0.8910277144503042
+            "kNN Area Under the Curve": 0.08583152466931902,
+            "Mean squared error": 0.8894019366725628
         },
         {
             "Name": "Harmonic Alignment (sqrt CPM)",
@@ -42,12 +42,12 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "ModuleNotFound",
-            "Runtime (min)": 6.133333333333334,
-            "CPU (%)": 342.7,
-            "Memory (GB)": 0.9134,
-            "Rank": 5,
-            "kNN Area Under the Curve": 0.04195523142614167,
-            "Mean squared error": 1.0001525416100412
+            "Runtime (min)": 4.333333333333333,
+            "CPU (%)": 130.1,
+            "Memory (GB)": 0.9007,
+            "Rank": 4,
+            "kNN Area Under the Curve": 0.041966815491541715,
+            "Mean squared error": 0.9990935379807765
         },
         {
             "Name": "Mutual Nearest Neighbors (log CPM)",
@@ -55,27 +55,13 @@
             "Paper URL": "https://www.nature.com/articles/nbt.4091",
             "Year": 2018,
             "Code": "https://github.com/LTLA/batchelor",
-            "Version": "3.4.2",
-            "Runtime (min)": 9.05,
-            "CPU (%)": 92.2,
+            "Version": "ModuleNotFound",
+            "Runtime (min)": 4.5,
+            "CPU (%)": 89.5,
             "Memory (GB)": 1.9,
             "Rank": 3,
-            "kNN Area Under the Curve": 0.07306158980008651,
-            "Mean squared error": 0.8959746196573406
-        },
-        {
-            "Name": "Mutual Nearest Neighbors (log scran)",
-            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
-            "Paper URL": "https://www.nature.com/articles/nbt.4091",
-            "Year": 2018,
-            "Code": "https://github.com/LTLA/batchelor",
-            "Version": "3.4.2",
-            "Runtime (min)": 9.8,
-            "CPU (%)": 98.9,
-            "Memory (GB)": 3.3,
-            "Rank": 1,
-            "kNN Area Under the Curve": 0.0992268381002486,
-            "Mean squared error": 0.7179134875243371
+            "kNN Area Under the Curve": 0.07303429730949632,
+            "Mean squared error": 0.8933211421373201
         },
         {
             "Name": "Harmonic Alignment (log scran)",
@@ -84,12 +70,26 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "ModuleNotFound",
-            "Runtime (min)": 11.1,
-            "CPU (%)": 213.9,
+            "Runtime (min)": 3.3166666666666664,
+            "CPU (%)": 177.3,
             "Memory (GB)": 3.3,
-            "Rank": 4,
-            "kNN Area Under the Curve": 0.060204439119965515,
-            "Mean squared error": 1.0000451844564988
+            "Rank": 5,
+            "Mean squared error": 1.000037925705711,
+            "kNN Area Under the Curve": 0.053857693445576574
+        },
+        {
+            "Name": "Mutual Nearest Neighbors (log scran)",
+            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+            "Paper URL": "https://www.nature.com/articles/nbt.4091",
+            "Year": 2018,
+            "Code": "https://github.com/LTLA/batchelor",
+            "Version": "ModuleNotFound",
+            "Runtime (min)": 3.8333333333333335,
+            "CPU (%)": 97.6,
+            "Memory (GB)": 3.3,
+            "Rank": 1,
+            "kNN Area Under the Curve": 0.09922269005176731,
+            "Mean squared error": 0.7147774503165256
         }
     ]
 }

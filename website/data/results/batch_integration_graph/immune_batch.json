@@ -1,0 +1,37 @@
+{
+    "name": "Immune (by batch)", 
+    "headers": {
+        "names": [
+            "Rank", 
+            "ARI", 
+            "Memory (GB)", 
+            "Runtime (min)", 
+            "CPU (%)", 
+            "Name", 
+            "Paper", 
+            "Code", 
+            "Year"
+        ], 
+        "fixed": [
+            "Name", 
+            "Paper", 
+            "Website", 
+            "Code"
+        ]
+    }, 
+    "results": [
+        {
+            "Name": "BBKNN", 
+            "Paper": "BBKNN: fast batch alignment of single cell transcriptomes", 
+            "Paper URL": "https://academic.oup.com/bioinformatics/article/36/3/964/5545955", 
+            "Year": 2020, 
+            "Code": "https://github.com/Teichlab/bbknn", 
+            "Version": "ModuleNotFound", 
+            "Runtime (min)": 6.0, 
+            "CPU (%)": 319.1, 
+            "Memory (GB)": 21.2, 
+            "Rank": 1, 
+            "ARI": 0.4446290701807272
+        }
+    ]
+}
