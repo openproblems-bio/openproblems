@@ -43,8 +43,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        aws s3 cp --quiet --recursive "s3://openproblems-nextflow/cwd_main" results/
-        python workflow/parse_nextflow.py $(pwd)
+        aws s3 cp --quiet --recursive "s3://openproblems-nextflow/cwd_main" /tmp/results/
+        python workflow/parse_nextflow.py /tmp
 
     - name: AWS S3 cleanup
       env:
