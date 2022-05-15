@@ -15,7 +15,7 @@ def mse(adata):
     )
 
     # scaling and transformation
-    target_sum = np.median(test_data.X.sum(axis=1))
+    target_sum = 10000
 
     sc.pp.normalize_total(test_data, target_sum)
     sc.pp.log1p(test_data)
