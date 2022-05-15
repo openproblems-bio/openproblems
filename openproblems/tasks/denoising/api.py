@@ -16,7 +16,7 @@ def check_dataset(adata):
     assert np.issubdtype(adata.obsm["test"].dtype, float)
     # check train and test are non-overlapping
     assert (
-        (adata.obsm["train"] + adata.obsm["test"]) != adata.layers["counts"]
+        (adata.obsm["train"] + adata.obsm["test"]) != scipy.sparse.csr_matrix(adata.layers["counts"])
     ).nnz == 0
     return True
 
@@ -28,7 +28,7 @@ def check_method(adata):
     assert adata.obsm["denoised"].shape == adata.X.shape
     # check train and test have not been edited
     assert (
-        (adata.obsm["train"] + adata.obsm["test"]) != adata.layers["counts"]
+        (adata.obsm["train"] + adata.obsm["test"]) != scipy.sparse.csr_matrix(adata.layers["counts"])
     ).nnz == 0
     return True
 
