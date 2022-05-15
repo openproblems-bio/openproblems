@@ -7,15 +7,15 @@ import scipy.sparse
 def _check_matrix_equal(X, Y):
     """Check equality independent of class"""
     if isinstance(X, np.ndarray) and isinstance(Y, np.ndarray):
-        np.testing.assert_array_equal(X, Y)
+        np.testing.assert_allclose(X, Y)
     elif isinstance(X, scipy.sparse.spmatrix) and isinstance(Y, scipy.sparse.spmatrix):
         X = X.tocsr()
         Y = Y.tocsr()
-        np.testing.assert_array_equal(X.data, Y.data)
+        np.testing.assert_allclose(X.data, Y.data)
         np.testing.assert_array_equal(X.indices, Y.indices)
         np.testing.assert_array_equal(X.indptr, Y.indptr)
     else:
-        assert not np.any(np.asarray(X != Y))
+        _check_matrix_equal(np.asarray(X), np.asarray(Y))
 
 
 def check_dataset(adata):
