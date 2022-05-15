@@ -2,7 +2,6 @@ from ...data.sample import load_sample_data
 
 import numpy as np
 import scipy.sparse
-import scprep
 
 
 def check_dataset(adata):
