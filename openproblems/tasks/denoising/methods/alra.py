@@ -37,7 +37,8 @@ def alra(adata, test=False):
         try:
             Y = _alra(adata.obsm["train_norm"])
         except rpy2.rinterface_lib.embedded.RRuntimeError as e:
-            if "non-comfortable arguments" in str(e) and attempts < 5:
+            if attempts < 5:
+                log.warning("alra.R failed")
                 log.warning(str(e))
                 attempts += 1
             else:
