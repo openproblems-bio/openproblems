@@ -23,18 +23,17 @@ def alra(adata, test=False):
     import scprep
 
     # libsize and sqrt norm
-    data_norm = scprep.utils.matrix_transform(adata.obsm["train"], np.sqrt)
-    data_norm, libsize = scprep.normalize.library_size_normalize(
-        data_norm, rescale=1, return_library_size=True
+    adata.obsm["train_norm"] = scprep.utils.matrix_transform(adata.obsm["train"], np.sqrt)
+    adata.obsm["train_norm"], libsize = scprep.normalize.library_size_normalize(
+        adata.obsm["train_norm"], rescale=1, return_library_size=True
     )
-    data_norm = data_norm.tocsr()
     # run alra
     # _alra takes sparse array, returns dense array
     Y = None
     attempts = 0
     while Y is None:
         try:
-            Y = _alra(data_norm)
+            Y = _alra(adata)
         except rpy2.rinterface_lib.embedded.RRuntimeError as e:
             if attempts < 5:
                 log.warning("alra.R failed")
