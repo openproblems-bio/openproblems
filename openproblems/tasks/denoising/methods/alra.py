@@ -27,7 +27,7 @@ def alra(adata, test=False):
     data_norm, libsize = scprep.normalize.library_size_normalize(
         data_norm, rescale=1, return_library_size=True
     )
-    data_norm = data_norm.tocsc()
+    data_norm = data_norm.tocsr()
     # run alra
     # _alra takes sparse array, returns dense array
     Y = None
