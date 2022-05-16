@@ -11,7 +11,6 @@ from ....tools.utils import check_version
 )
 def no_denoising(adata, test=False):
     """Do nothing."""
-    adata.obsm["denoised"] = adata.obsm["train"]
-
+    adata.obsm["denoised"] = adata.obsm["train"].toarray()
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
