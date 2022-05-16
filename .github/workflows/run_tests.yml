@@ -346,7 +346,7 @@ jobs:
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run \
-        -revision master \
+        -revision v1.3 \
         -with-tower \
         -ansi-log false -resume \
         -profile aws,test \
