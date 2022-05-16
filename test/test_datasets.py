@@ -1,5 +1,6 @@
 import anndata
 import openproblems
+import openproblems.utils
 import pandas as pd
 import parameterized
 import pytest
@@ -92,7 +93,7 @@ class TestDataset(unittest.TestCase):
     def test_sparse(self):
         """Ensure output is sparse."""
         if not scipy.sparse.issparse(self.adata.X):
-            utils.warnings.future_warning(
+            openproblems.utils.future_warning(
                 "{}-{}: self.adata.X is loaded as dense.".format(
                     self.task.__name__.split(".")[-1], self.dataset.__name__
                 ),

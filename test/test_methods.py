@@ -30,6 +30,7 @@ pytestmark = pytest.mark.skipif(
 def test_method(task_name, method_name, tempdir, image):
     """Test application of a method."""
     import anndata
+    import openproblems.utils
 
     task = getattr(openproblems.tasks, task_name)
     method = getattr(task.methods, method_name)
@@ -41,7 +42,7 @@ def test_method(task_name, method_name, tempdir, image):
     assert isinstance(adata, anndata.AnnData)
     assert task.api.check_method(adata)
     if "method_code_version" not in adata.uns:
-        utils.warnings.future_warning(
+        openproblems.utils.future_warning(
             "Setting code_version in the method decorator is deprecated. "
             "Store code version in `adata.uns['method_code_version']` instead.",
             error_version="1.0",
