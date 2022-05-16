@@ -1,7 +1,6 @@
 import gc
 import numpy as np
 import pkg_resources
-import rpy2.rinterface_lib.embedded
 import scipy.sparse
 import scprep.run
 
@@ -20,6 +19,8 @@ def check_version(pkg):
 
 def check_r_version(pkg):
     """Get the version of an R package that may or may not be installed."""
+    import rpy2.rinterface_lib.embedded
+
     try:
         return _check_r_version(pkg)[0]
     except rpy2.rinterface_lib.embedded.RRuntimeError as e:
