@@ -5,27 +5,21 @@ import scanpy as sc
 import scprep
 import tempfile
 
-URL = "https://ndownloader.figshare.com/files/24539828"
+URL = "https://ndownloader.figshare.com/files/25717328"
 
 
 @utils.loader
-def load_pancreas(test=False):
-    """Download pancreas data from figshare."""
+def load_immune(test=False):
+    """Download immune human data from figshare."""
     if test:
         # load full data first, cached if available
-        adata = load_pancreas(test=False)
+        adata = load_immune(test=False)
 
-        # Subsample pancreas data
+        # Subsample immune data to two batches with 250 cells each
         adata = adata[:, :500].copy()
-        utils.filter_genes_cells(adata)
-
-        keep_celltypes = adata.obs["celltype"].dtype.categories[[0, 3]]
-        keep_techs = adata.obs["tech"].dtype.categories[[0, -3, -2]]
-        keep_tech_idx = adata.obs["tech"].isin(keep_techs)
-        keep_celltype_idx = adata.obs["celltype"].isin(keep_celltypes)
-        adata = adata[keep_tech_idx & keep_celltype_idx].copy()
-
-        sc.pp.subsample(adata, n_obs=500)
+        batch1 = adata[adata.obs.batch == "Oetjen_A"][:250]
+        batch2 = adata[adata.obs.batch == "Freytag"][:250]
+        adata = batch1.concatenate(batch2)
         # Note: could also use 200-500 HVGs rather than 200 random genes
 
         # Ensure there are no cells or genes with 0 counts
@@ -35,14 +29,16 @@ def load_pancreas(test=False):
 
     else:
         with tempfile.TemporaryDirectory() as tempdir:
-            filepath = os.path.join(tempdir, "pancreas.h5ad")
+            filepath = os.path.join(tempdir, "immune.h5ad")
             scprep.io.download.download_url(URL, filepath)
             adata = sc.read(filepath)
 
-            # NOTE: X contains counts that are normalized with scran
+            # Note: anndata.X contains scran log-normalized data,
+            # so we're storing it in layers['log_scran']
             adata.layers["log_scran"] = adata.X
             adata.X = adata.layers["counts"]
             del adata.layers["counts"]
+
             # Ensure there are no cells or genes with 0 counts
             utils.filter_genes_cells(adata)
 
