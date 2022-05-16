@@ -1,3 +1,4 @@
+from ..utils import temporary
 from . import utils
 
 import anndata
@@ -39,6 +40,12 @@ def normalizer(func, *args, **kwargs):
     return normalize
 
 
+@temporary(version="1.0")
+def _backport_code_version(apply_method, code_version):
+    apply_method.metadata["code_version"] = code_version
+    return apply_method
+
+
 def method(
     method_name,
     paper_name,
@@ -78,9 +85,9 @@ def method(
             paper_url=paper_url,
             paper_year=paper_year,
             code_url=code_url,
-            code_version=code_version,
             image=image,
         )
+        apply_method = _backport_code_version(apply_method, code_version)
         return apply_method
 
     return decorator
