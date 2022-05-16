@@ -32,7 +32,10 @@ def _main(args=None):
     if args.subcommand is None:
         argparser.print_help()
     elif args.subcommand in SUBCOMMANDS:
-        return SUBCOMMANDS[args.subcommand].main(args)
+        # Since printing the output to stdout is important here,
+        # we redirect all other stdout to stderr.
+        with utils.RedirectStdout():
+            return SUBCOMMANDS[args.subcommand].main(args)
     else:
         raise NotImplementedError
 

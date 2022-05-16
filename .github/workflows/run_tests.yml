@@ -4,12 +4,104 @@ on:
   push:
     tags:
       - '*'
-    branches-ignore:
-      - 'test_docker'
+    branches:
+      - '**'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
+  cancel_previous_runs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
+
+  build_images:
+
+    needs: cancel_previous_runs
+    runs-on: ubuntu-18.04
+    if: |
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads/test_docker') ||
+        (
+          startsWith(github.ref, 'refs/heads/main') &&
+          github.repository == 'openproblems-bio/openproblems'
+        )
+      )
+
+    env:
+      BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1000
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.8"
+
+    - name: Install package & dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools
+        pip install --editable .[evaluate]
+        python -c "import openproblems"
+
+    - name: Build Docker images
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker_build
+        cd ..
+
+    - name: Push Docker images
+      if: "startsWith(github.ref, 'refs/heads/main')"
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker_push
+        cd ..
+        echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
+
+    - name: Set up Git branch
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
+      run: |
+        git checkout -b $BRANCH_NAME
+        git push -u origin $BRANCH_NAME
+
+    - name: Commit result
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
+      uses: EndBug/add-and-commit@v6
+      with:
+        author_name: SingleCellOpenProblems
+        author_email: singlecellopenproblems@protonmail.com
+        message: 'Update docker version # ci skip'
+        add: "docker/.version"
+        branch: ${{ env.BRANCH_NAME }}
+        push: false
+
+    - name: Create Pull Request
+      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
+      uses: peter-evans/create-pull-request@v3
+      with:
+        branch: ${{ env.BRANCH_NAME }}
+        delete-branch: true
+        base: main
+        title: '[auto] Update docker version'
+        reviewers: scottgigante, dburkhardt
+
+    - name: Upload check results on fail
+      if: failure()
+      uses: actions/upload-artifact@main
+      with:
+        name: ${{ matrix.config.name }}_results
+        path: check
+
   run_tester:
     runs-on: ubuntu-latest
 
@@ -20,18 +112,20 @@ jobs:
         - /tmp:/tmp
       options: --user root
 
-    if: >-
+    needs: build_images
+    if: |
+      always() &&
+      (needs.build_images.result == 'success' || needs.build_images.result == 'skipped') &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
         startsWith(github.ref, 'refs/heads') ||
+        startsWith(github.ref, 'refs/tags') ||
         github.event.pull_request.draft == false
-      )
+      ) &&
+      !startsWith(github.ref, 'refs/heads/test_docker') &&
+      !startsWith(github.ref, 'refs/heads/test_benchmark')
 
     steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.6.0
-      with:
-        access_token: ${{ github.token }}
 
     - uses: actions/checkout@v2
       with:
@@ -74,10 +168,18 @@ jobs:
         install_renv("docker/openproblems-r-base/r_requirements.txt")
       shell: Rscript {0}
 
-    - name: Build Docker images
+    - name: Pull Docker images
+      if: "startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems'"
       run: |
         cd workflow
-        snakemake -j 4 docker
+        snakemake -j $(nproc) docker_pull
+        cd ..
+
+    - name: Update Docker images
+      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker
         cd ..
 
     - name: Run tests
@@ -95,22 +197,17 @@ jobs:
         path: results
 
 
-  run_benchmark:
+  run_test_benchmark:
     needs: run_tester
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-18.04
     if: >-
-      !contains(github.event.head_commit.message, 'ci skip') &&
-      github.event_name == 'push'
-
-    env:
-      UPDATE_BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
-      RESULTS_PATH: "/tmp/${{ github.ref_name }}_results"
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - {name: 'current', os: ubuntu-18.04, python: '3.8', java_version: 15 }
+      always() &&
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      github.event_name == 'push' &&
+      (
+        needs.run_tester.result == 'success' ||
+        startsWith(github.ref, 'refs/heads/test_benchmark')
+      )
 
     steps:
 
@@ -119,7 +216,6 @@ jobs:
         fetch-depth: 1000
 
     - name: Install system dependencies
-      if: runner.os == 'Linux'
       run: |
         sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
         sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
@@ -127,17 +223,15 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.config.python }}
+        python-version: "3.8"
 
     - name: Set up Java ${{ matrix.java_version }}
       uses: actions/setup-java@v1
       with:
-        java-version: ${{matrix.config.java_version}}
+        java-version: 15
         architecture: x64
 
     - name: Set up environment
-      env:
-        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
       run: |
         SCRIPTS_PATH=$(python3 -c 'import os, sysconfig; print(sysconfig.get_path("scripts",f"{os.name}_user"))')
         echo "PATH=${SCRIPTS_PATH}:${PATH}" >> $GITHUB_ENV
@@ -146,21 +240,11 @@ jobs:
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
-        if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; \
-          then echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
-          else echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
-        fi >> $GITHUB_ENV
-        # don't use tower if the env var is not set
-        echo "WITH_TOWER=`if [ $TOWER_ACCESS_TOKEN ]; then echo "-with-tower"; else echo; fi`" >> $GITHUB_ENV
-        if [ $(echo ${{ github.ref }} | grep -E -e "^refs/heads/(main|test_benchmark)" -e "^refs/tags") ]; then
-          PROFILE="aws"
-          RESUME=""
+        if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
+          echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
         else
-          PROFILE="test,aws"
-          RESUME="-resume"
-        fi
-        echo "PROFILE=$PROFILE" >> $GITHUB_ENV
-        echo "RESUME=$RESUME" >> $GITHUB_ENV
+          echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
+        fi >> $GITHUB_ENV
 
     - name: Cache Python packages
       uses: actions/cache@v2
@@ -172,6 +256,7 @@ jobs:
     - name: Install Nextflow
       env:
           CAPSULE_LOG: none
+          NXF_VER: 22.04.0
       run: |
         mkdir /tmp/nextflow
         cd /tmp/nextflow
@@ -215,7 +300,21 @@ jobs:
         openproblems-cli --version
         openproblems-cli --test-hash
 
+    - name: Pull Docker images
+      if: |
+        startsWith(github.ref, 'refs/heads/main') &&
+        github.repository == 'openproblems-bio/openproblems'
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker_pull
+        cd ..
+
     - name: Build Docker images
+      if: |
+        !(
+          startsWith(github.ref, 'refs/heads/main') &&
+          github.repository == 'openproblems-bio/openproblems'
+        )
       run: |
         cd workflow
         snakemake -j $(nproc) docker
@@ -235,43 +334,44 @@ jobs:
           docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
         done
 
-    - name: Run benchmark
+    - name: Run test benchmark
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
         TOWER_WORKSPACE_ID: 53907369739130
+        AWS_DEFAULT_REGION: us-west-2
         NXF_DEFAULT_DSL: 1
       run: |
-        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-z]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
-        nextflow run $WITH_TOWER \
-        -ansi-log false $RESUME \
-        -profile $PROFILE \
+        nextflow run \
+        -revision v1.2 \
+        -with-tower \
+        -ansi-log false -resume \
+        -profile aws,test \
         -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
         -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
         -name "${RUN_NAME}" \
         -e.PYTHONPATH="${PYTHONPATH}" \
         openproblems-bio/nf-openproblems \
-        --branch ${BRANCH} 2>&1 | \
-        grep -v "^WARN: Unable to retrieve AWS batch instance type.*Invalid identifier"
-      shell: /bin/bash -exou pipefail {0}
+        --branch ${BRANCH} | \
+        tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
+      shell: /bin/bash -eou pipefail {0}
 
-    - name: Copy results
-      run: |
-        mkdir -p "${RESULTS_PATH}"
-        cp -r /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/results "${RESULTS_PATH}"
+    - name: Upload nextflow log
+      if: always()
+      uses: actions/upload-artifact@main
+      with:
+        name: nextflow.log
+        path: /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log
 
-    - name: Parse results
-      # There's a bug with the results getting pulled from Nextflow with caching, but
-      # this doesn't happen on main, which is the only place `Parse results` is needed
-      if: startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
-      run: |
-        python workflow/parse_nextflow.py "${RESULTS_PATH}"
-
-    - name: AWS cleanup
-      if: success() || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags')
+    - name: AWS ECR cleanup
+      if: |
+        !(
+          startsWith(github.ref, 'refs/heads/main') &&
+          github.repository == 'openproblems-bio/openproblems'
+        )
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -280,58 +380,57 @@ jobs:
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
         done
-        aws s3 rm --recursive "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
-        aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-        aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
 
-    - name: Remove untagged images
-      if: startsWith(github.ref, 'refs/heads/main')
-      continue-on-error: true
+    - name: AWS S3 cleanup
+      if: |
+        success() ||
+        startsWith(github.ref, 'refs/heads/main') ||
+        startsWith(github.ref, 'refs/tags')
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
-        aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
+        aws s3 rm --recursive "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
+        aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
 
-    - name: Pre-commit
-      if: startsWith(github.ref, 'refs/tags')
-      uses: pre-commit/action@v2.0.0
-      continue-on-error: true
+  run_full_benchmark:
+    needs: run_test_benchmark
+    runs-on: ubuntu-latest
+    if: >-
+      always() &&
+      (needs.run_test_benchmark.result == 'success' || needs.run_test_benchmark.result == 'skipped') &&
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      github.event_name == 'push' &&
+      (
+        startsWith(github.ref, 'refs/tags') ||
+        startsWith(github.ref, 'refs/heads/test_benchmark')
+      )
+
+    steps:
+
+    - name: Run full benchmark
       env:
-        SKIP: style-files,lintr
-
-    - name: Set up Git branch
-      if: startsWith(github.ref, 'refs/tags')
+        TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
+        TOWER_WORKSPACE_ID: 53907369739130
       run: |
-        git checkout -b $UPDATE_BRANCH_NAME
-        git push -u origin $UPDATE_BRANCH_NAME
-
-    - name: Commit result
-      if: startsWith(github.ref, 'refs/tags')
-      uses: EndBug/add-and-commit@v6
-      with:
-        author_name: SingleCellOpenProblems
-        author_email: singlecellopenproblems@protonmail.com
-        message: 'Update benchmark results # ci skip'
-        add: "['website/data/results', 'results.json']"
-        branch: ${{ env.UPDATE_BRANCH_NAME }}
-        push: false
-
-    - name: Create Pull Request
-      if: startsWith(github.ref, 'refs/tags')
-      uses: peter-evans/create-pull-request@v3
-      with:
-        branch: ${{ env.UPDATE_BRANCH_NAME }}
-        delete-branch: true
-        base: main
-        title: '[auto] Update benchmark results'
-        reviewers: scottgigante, dburkhardt
-
-    - name: Upload results
-      if: always()
-      uses: actions/upload-artifact@main
-      with:
-        name: ${{ matrix.config.name }}_results
-        path: ${{ env.RESULTS_PATH }}
+        generate_parameters()
+        {
+        cat <<EOF
+          {
+            "params" : {
+              "branch": "main"
+            }
+          }
+        EOF
+        }
+        WORKFLOW_ID=$(
+            curl -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
+            https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=${TOWER_WORKSPACE_ID} \
+            --data "$(generate_parameters)" | \
+            tee /dev/stderr | \
+            sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
+        )
+        echo "Full benchmark running at ${TOWER_WATCH_URL}/${WORKFLOW_ID}" >> $GITHUB_STEP_SUMMARY
