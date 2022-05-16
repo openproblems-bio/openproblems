@@ -59,6 +59,8 @@ def _scanvi(adata, test=False, n_hidden=None, n_latent=None, n_layers=None):
     preds = model.predict(adata)
     del adata.obs["scanvi_labels"]
     # predictions for train and test
+
+    adata.uns["method_code_version"] = check_version("scvi-tools")
     return preds
 
 
@@ -116,6 +118,8 @@ def _scanvi_scarches(adata, test=False, n_hidden=None, n_latent=None, n_layers=N
     preds = query_model.predict(adata)
     del adata.obs["scanvi_labels"]
     # predictions for train and test
+
+    adata.uns["method_code_version"] = check_version("scvi-tools")
     return preds
 
 
@@ -126,7 +130,6 @@ def _scanvi_scarches(adata, test=False, n_hidden=None, n_latent=None, n_layers=N
     paper_url="https://www.embopress.org/doi/full/10.15252/msb.20209620",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    code_version=check_version("scvi"),
     image="openproblems-python-scvi",
 )
 def scanvi_all_genes(adata, test=False):
@@ -141,7 +144,6 @@ def scanvi_all_genes(adata, test=False):
     paper_url="https://www.embopress.org/doi/full/10.15252/msb.20209620",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    code_version=check_version("scvi"),
     image="openproblems-python-scvi",
 )
 def scanvi_hvg(adata, test=False):
@@ -171,7 +173,6 @@ def scarches_scanvi_all_genes(adata, test=False):
     paper_url="https://www.biorxiv.org/content/10.1101/2020.07.16.205997v1",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    code_version=check_version("scvi"),
     image="openproblems-python-scvi",
 )
 def scarches_scanvi_hvg(adata, test=False):

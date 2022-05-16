@@ -9,7 +9,6 @@ from .....tools.utils import check_version
     paper_url="https://academic.oup.com/bioinformatics/article/36/3/964/5545955",
     paper_year=2020,
     code_url="https://github.com/Teichlab/bbknn",
-    code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
 def bbknn_full_unscaled(adata, test=False):
@@ -19,4 +18,6 @@ def bbknn_full_unscaled(adata, test=False):
     adata = combat(adata, "batch")
     reduce_data(adata, umap=False)
     # Complete the result in-place
+
+    adata.uns["method_code_version"] = check_version("bbknn")
     return adata

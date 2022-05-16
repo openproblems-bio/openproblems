@@ -48,6 +48,8 @@ def test_method(task_name, method_name, tempdir, image):
             error_category=TypeError,
         )
         assert method.metadata["code_version"] is not None
+    else:
+        assert adata.uns["method_code_version"] != "ModuleNotFound"
 
 
 @parameterized.parameterized.expand(
