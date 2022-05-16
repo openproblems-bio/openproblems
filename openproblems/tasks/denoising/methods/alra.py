@@ -23,7 +23,9 @@ def alra(adata, test=False):
     import scprep
 
     # libsize and sqrt norm
-    adata.obsm["train_norm"] = scprep.utils.matrix_transform(adata.obsm["train"], np.sqrt)
+    adata.obsm["train_norm"] = scprep.utils.matrix_transform(
+        adata.obsm["train"], np.sqrt
+    )
     adata.obsm["train_norm"], libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train_norm"], rescale=1, return_library_size=True
     )
