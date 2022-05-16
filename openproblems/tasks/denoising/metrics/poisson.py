@@ -1,5 +1,7 @@
 from ....tools.decorators import metric
 
+import scprep
+
 
 @metric(metric_name="Poisson loss", maximize=False, image="openproblems-python-extras")
 def poisson(adata):
@@ -13,5 +15,5 @@ def poisson(adata):
     target_sum = test_data.sum()
     denoised_data = denoised_data * target_sum / initial_sum
 
-    error = poisson_nll_loss(test_data, denoised_data)
+    error = poisson_nll_loss(scprep.utils.toarray(test_data), denoised_data)
     return error

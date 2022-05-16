@@ -1,13 +1,13 @@
 from ....tools.decorators import metric
 
 import anndata
-import numpy as np
 import scanpy as sc
 import sklearn.metrics
 
 
 @metric(metric_name="Mean-squared error", maximize=False)
 def mse(adata):
+    import scprep
 
     test_data = anndata.AnnData(X=adata.obsm["test"], obs=adata.obs, var=adata.var)
     denoised_data = anndata.AnnData(
@@ -15,7 +15,7 @@ def mse(adata):
     )
 
     # scaling and transformation
-    target_sum = np.median(test_data.X.sum(axis=1))
+    target_sum = 10000
 
     sc.pp.normalize_total(test_data, target_sum)
     sc.pp.log1p(test_data)
@@ -23,5 +23,7 @@ def mse(adata):
     sc.pp.normalize_total(denoised_data, target_sum)
     sc.pp.log1p(denoised_data)
 
-    error = sklearn.metrics.mean_squared_error(test_data.X, denoised_data.X)
+    error = sklearn.metrics.mean_squared_error(
+        scprep.utils.toarray(test_data.X), denoised_data.X
+    )
     return error
