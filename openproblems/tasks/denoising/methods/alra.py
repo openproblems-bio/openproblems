@@ -29,6 +29,7 @@ def alra(adata, test=False):
     adata.obsm["train_norm"], libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train_norm"], rescale=1, return_library_size=True
     )
+    adata.obsm["train_norm"] = adata.obsm["train_norm"].tocsr()
     # run alra
     # _alra takes sparse array, returns dense array
     Y = None
@@ -37,7 +38,7 @@ def alra(adata, test=False):
         try:
             Y = _alra(adata)
         except rpy2.rinterface_lib.embedded.RRuntimeError as e:
-            if attempts < 5:
+            if attempts < 10:
                 log.warning("alra.R failed")
                 log.warning(str(e))
                 attempts += 1
