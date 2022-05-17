@@ -366,6 +366,10 @@ jobs:
         tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
       shell: /bin/bash -eou pipefail {0}
 
+    - name: Parse results
+      run: |
+        python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH}
+
     - name: Upload nextflow log
       if: always()
       uses: actions/upload-artifact@main
