@@ -1,14 +1,12 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
-import dca.api
+from dca.api import dca
 import numpy as np
 import scprep
 
 
 def _dca(adata):
-    from magic import MAGIC
-
     X, libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
     )
@@ -22,7 +20,7 @@ def _dca(adata):
 
 @method(
     method_name="DCA",
-    paper_name="Single-cell RNA-seq denoising using a deep count autoencoder"
+    paper_name="Single-cell RNA-seq denoising using..."
     paper_url="https://www.nature.com/articles/s41467-018-07931-2",
     paper_year=2019,
     code_url="https://github.com/theislab/dca",
