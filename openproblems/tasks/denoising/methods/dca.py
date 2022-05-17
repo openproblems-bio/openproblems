@@ -1,9 +1,9 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
-import dca.api
 import numpy as np
 import scprep
+import dca.api
 
 
 def _dca(adata):
@@ -43,5 +43,5 @@ def magic(adata, test=False):
     code_version=check_version("magic-impute"),
     image="openproblems-python-extras",
 )
-def dca_run(adata, test=False):
+def DCA(adata, test=False):
     return _dca(adata)
