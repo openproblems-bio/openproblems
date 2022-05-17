@@ -29,19 +29,6 @@ def _dca(adata):
     code_version=check_version("dca.api"),
     image="openproblems-python-extras",
 )
-def magic(adata, test=False):
-    return _magic(adata, solver="exact")
 
-
-@method(
-    method_name="MAGIC (approximate)",
-    paper_name="Recovering Gene Interactions from Single-Cell Data "
-    "Using Data Diffusion",
-    paper_url="https://www.cell.com/cell/abstract/S0092-8674(18)30724-4",
-    paper_year=2018,
-    code_url="https://github.com/KrishnaswamyLab/MAGIC",
-    code_version=check_version("magic-impute"),
-    image="openproblems-python-extras",
-)
 def DCA(adata, test=False):
     return _dca(adata)
