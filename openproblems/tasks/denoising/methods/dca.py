@@ -1,9 +1,9 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
+import dca.api
 import numpy as np
 import scprep
-import dca.api
 
 
 def _dca(adata):
