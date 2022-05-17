@@ -11,6 +11,13 @@ on:
 
 jobs:
   cancel_previous_runs:
+    if: |
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads') ||
+        startsWith(github.ref, 'refs/tags') ||
+        github.event.pull_request.draft == false
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
