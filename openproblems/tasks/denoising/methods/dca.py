@@ -20,7 +20,7 @@ def _dca(adata):
 
 @method(
     method_name="DCA",
-    paper_name="Single-cell RNA-seq denoising using..."
+    paper_name="Single-cell RNA-seq denoising using...",
     paper_url="https://www.nature.com/articles/s41467-018-07931-2",
     paper_year=2019,
     code_url="https://github.com/theislab/dca",
