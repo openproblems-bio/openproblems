@@ -11,7 +11,7 @@ def _dca(adata):
         adata.obsm["train"], rescale=1, return_library_size=True
     )
     X = scprep.transform.sqrt(X)
-    Y = dca(adata_ae, threads=1)
+    Y = dca(adata, threads=1)
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
