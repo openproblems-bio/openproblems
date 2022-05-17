@@ -7,8 +7,7 @@ install_requires = [
     "numpy>=1.17.0",
     "scikit-learn>=0.19.1",
     "anndata>=0.7.5,<0.8",
-    "scprep @ git+https://github.com/scottgigante-immunai/"
-    "scprep@scottgigante/rfunction/traceback",
+    "scprep>=1.2.0",
     "scipy",
     "scanpy>=1.6",
     "louvain>=0.7",
@@ -24,7 +23,9 @@ r_requires = [
     "anndata2ri>=1.0.6",
 ]
 
-evaluate_requires = ["snakemake", "numpyencoder"]
+evaluate_requires = ["snakemake"]
+
+process_requires = ["numpyencoder"]
 
 test_requires = [
     "pytest",
@@ -60,6 +61,7 @@ setup(
         "doc": doc_requires,
         "r": r_requires,
         "evaluate": evaluate_requires,
+        "process": process_requires,
     },
     entry_points={
         "console_scripts": ["openproblems-cli=openproblems.api.main:main"],
