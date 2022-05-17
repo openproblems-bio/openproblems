@@ -1,7 +1,7 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
-
 from dca.api import dca
+
 import numpy as np
 import scprep
 
@@ -27,6 +27,5 @@ def _dca(adata):
     code_version=check_version("dca.api"),
     image="openproblems-python-extras",
 )
-
 def DCA(adata, test=False):
     return _dca(adata)
