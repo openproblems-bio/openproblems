@@ -37,7 +37,6 @@ from ...batch_integration_graph.methods.scanorama_full import (
     scanorama_feature_hvg_unscaled,
 )
 
-
 # from ...batch_integration_graph.methods.scgen import scgen_full_scaled
 # from ...batch_integration_graph.methods.scgen import scgen_full_unscaled
 # from ...batch_integration_graph.methods.scgen import scgen_hvg_scaled
