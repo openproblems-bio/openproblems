@@ -7,7 +7,7 @@ disagreements between two clusterings.
 Similar to NMI, we compared the cell-type labels with the NMI-optimized
 Louvain clustering computed on the integrated dataset.
 The adjustment of the Rand index corrects for randomly correct labels.
-An ARI of 0 or 1 corresponds to random labeling or a perfect match, 
+An ARI of 0 or 1 corresponds to random labeling or a perfect match,
 respectively.
 We also used the scikit-learn (v.0.22.1) implementation of the ARI.
 """

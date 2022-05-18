@@ -163,7 +163,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             "Year": method.metadata["paper_year"],
             "Code": method.metadata["code_url"],
             "Version": method.metadata["code_version"],
-            "Runtime (min)": parse_time_to_min(method_results["duration"]),
+            "Runtime (min)": parse_time_to_min(method_results["realtime"]),
             "CPU (%)": float(method_results["%cpu"].replace("%", "")),
             "Memory (GB)": parse_size_to_gb(method_results["peak_rss"]),
             "Rank": ranking[method_name],
