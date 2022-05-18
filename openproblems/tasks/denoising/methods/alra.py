@@ -37,7 +37,7 @@ def alra(adata, test=False):
     while Y is None:
         try:
             Y = _alra(adata)
-        except rpy2.rinterface_lib.embedded.RRuntimeError as e:
+        except rpy2.rinterface_lib.embedded.RRuntimeError as e:  # pragma: no cover
             if attempts < 10:
                 log.warning("alra.R failed")
                 log.warning(str(e))

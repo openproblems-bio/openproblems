@@ -11,6 +11,13 @@ on:
 
 jobs:
   cancel_previous_runs:
+    if: |
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads') ||
+        startsWith(github.ref, 'refs/tags') ||
+        github.event.pull_request.draft == false
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
@@ -295,7 +302,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -U wheel setuptools
-        pip install -U --editable .[evaluate]
+        pip install -U --editable .[evaluate,process]
         python -c "import openproblems"
         openproblems-cli --version
         openproblems-cli --test-hash
@@ -358,6 +365,10 @@ jobs:
         --branch ${BRANCH} | \
         tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
       shell: /bin/bash -eou pipefail {0}
+
+    - name: Parse results
+      run: |
+        python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH}
 
     - name: Upload nextflow log
       if: always()
