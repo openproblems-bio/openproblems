@@ -1,14 +1,14 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
-import dca
+#import dca
 import numpy as np
 import scprep
 
-# from dca.api import dca
 
 
 def _dca(adata):
+    from dca.api import dca
     X, libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
     )
