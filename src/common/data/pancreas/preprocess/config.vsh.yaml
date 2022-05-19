@@ -1,0 +1,51 @@
+functionality:
+  name: "load_pancreas"
+  namespace: "common/data/pancreas/preprocess"
+  version: "dev"
+  description: "Common component to preprocess pancreas data"
+  authors:
+    - name: "Scott Gigante"
+      roles: [ maintainer, author ]
+      props: { github: scottgigante }
+  arguments:
+    - name: "--input"
+      type: "file"
+      description: "Input data to be preprocessed"
+      required: true
+    - name: "--test"
+      description: "Indicates if should be returned a test preprocessed data"
+      type: "boolean"
+      required: true
+    - name: "--method"
+      description: "The preprocess method to be used. Options: ['batch', 'random', 'random_with_noise']"
+      type: "string"
+      required: true
+      default: "batch"
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file donwloaded from 'url' input"
+      required: true
+  resources:
+    - type: python_script
+      path: preprocess.py
+    - path: noise.py
+    - path: "../../utils/"
+  tests:
+    - type: python_script
+      path: load_save_test.py
+    - path: load_save.py
+    - path: fake_anndata.py
+platforms:
+  - type: native
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - scprep
+          - scanpy
+          - openpyxl # to tests
+  - type: nextflow
