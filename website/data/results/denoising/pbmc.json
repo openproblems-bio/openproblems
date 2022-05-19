@@ -27,13 +27,13 @@
             "Paper URL": "https://www.biorxiv.org/content/10.1101/786269v1",
             "Year": 2019,
             "Code": "https://github.com/czbiohub/molecular-cross-validation",
-            "Version": "1.8.2",
-            "Runtime (min)": 3.1666666666666665,
-            "CPU (%)": 91.0,
-            "Memory (GB)": 0.6345,
-            "Rank": 3,
-            "Mean-squared error": 0.012549637,
-            "Poisson loss": 0.3011988118677921
+            "Version": "1.9.1",
+            "Runtime (min)": 1.25,
+            "CPU (%)": 20.7,
+            "Memory (GB)": 0.2269,
+            "Rank": 4,
+            "Poisson loss": 0.3011988118677921,
+            "Mean-squared error": 0.27097428
         },
         {
             "Name": "MAGIC (approximate)",
@@ -42,12 +42,12 @@
             "Year": 2018,
             "Code": "https://github.com/KrishnaswamyLab/MAGIC",
             "Version": "ModuleNotFound",
-            "Runtime (min)": 4.0,
-            "CPU (%)": 480.9,
-            "Memory (GB)": 0.9574,
+            "Runtime (min)": 0.7200000000000001,
+            "CPU (%)": 323.9,
+            "Memory (GB)": 0.7973,
             "Rank": 1,
-            "Mean-squared error": 0.011841768,
-            "Poisson loss": 0.16136920715121225
+            "Mean-squared error": 0.18850343,
+            "Poisson loss": 0.16140704236334177
         },
         {
             "Name": "MAGIC",
@@ -56,12 +56,26 @@
             "Year": 2018,
             "Code": "https://github.com/KrishnaswamyLab/MAGIC",
             "Version": "ModuleNotFound",
-            "Runtime (min)": 5.15,
-            "CPU (%)": 168.5,
-            "Memory (GB)": 1.1,
+            "Runtime (min)": 0.7083333333333334,
+            "CPU (%)": 377.8,
+            "Memory (GB)": 0.552,
+            "Rank": 3,
+            "Poisson loss": 0.16180691297676686,
+            "Mean-squared error": 0.1886401
+        },
+        {
+            "Name": "ALRA",
+            "Paper": "Zero-preserving imputation of scRNA-seq...",
+            "Paper URL": "https://www.biorxiv.org/content/10.1101/397588v1",
+            "Year": 2018,
+            "Code": "https://github.com/KlugerLab/ALRA",
+            "Version": "v1.0.0",
+            "Runtime (min)": 2.4,
+            "CPU (%)": 82.9,
+            "Memory (GB)": 2.6,
             "Rank": 2,
-            "Poisson loss": 0.16180731769725482,
-            "Mean-squared error": 0.011832307
+            "Poisson loss": 0.04970525261096118,
+            "Mean-squared error": 0.26365772
         }
     ]
 }
