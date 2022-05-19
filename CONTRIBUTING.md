@@ -200,6 +200,13 @@ For datasets in particular, these should be loaded using a `loader` function fro
 
 For methods and metrics, they should be decorated with the appropriate function in `openproblems.tools.decorators` to include metadata required for the evaluation and presentation of results.
 
+For methods and metrics requiring specific packages, one should first check if those packages are included in any of the existing Docker images, and should otherwise add their packages to the requirements.txt file associated with the relevant Docker image. Image-specific methods can then be imported in the method or metric python file (i.e. `f2.py`). Importantly, the import statement must be located in the function that calls the method or metric. If this is the `f2` function, the first few lines of the function may be structured as follows:
+```
+def f2(adata):
+  import package1
+  import package2
+```
+
 Note that data is not normalized in the data loader; normalization should be performed as part of each method or in the task dataset function if stated in the task API. For ease of use, we provide a collection of common normalization functions in [`openproblems.tools.normalize`](openproblems/tools/normalize.py). The original data stored in `adata.X` is automatically stored in `adata.layers["counts"]` for later reference in the case the a metric needs to access the unnormalized data.
 
 ### Adding a new task
