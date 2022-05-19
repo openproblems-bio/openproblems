@@ -3,8 +3,8 @@
     "headers": {
         "names": [
             "Rank",
-            "Mean squared error",
             "kNN Area Under the Curve",
+            "Mean squared error",
             "Memory (GB)",
             "Runtime (min)",
             "CPU (%)",
@@ -27,13 +27,27 @@
             "Paper URL": "https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
             "Year": 1975,
             "Code": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.procrustes.html",
-            "Version": "1.8.0",
-            "Runtime (min)": 5.316666666666666,
-            "CPU (%)": 233.6,
-            "Memory (GB)": 0.6633,
+            "Version": "1.8.1",
+            "Runtime (min)": 2.1333333333333333,
+            "CPU (%)": 424.9,
+            "Memory (GB)": 0.6748,
             "Rank": 2,
-            "kNN Area Under the Curve": 0.08528153752846637,
-            "Mean squared error": 0.8910277144503042
+            "kNN Area Under the Curve": 0.08452137353372531,
+            "Mean squared error": 0.8907390049561917
+        },
+        {
+            "Name": "Mutual Nearest Neighbors (log CPM)",
+            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
+            "Paper URL": "https://www.nature.com/articles/nbt.4091",
+            "Year": 2018,
+            "Code": "https://github.com/LTLA/batchelor",
+            "Version": "ModuleNotFound",
+            "Runtime (min)": 3.7,
+            "CPU (%)": 85.8,
+            "Memory (GB)": 1.9,
+            "Rank": 3,
+            "kNN Area Under the Curve": 0.07279219467155297,
+            "Mean squared error": 0.8983644163307505
         },
         {
             "Name": "Harmonic Alignment (sqrt CPM)",
@@ -42,26 +56,12 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "ModuleNotFound",
-            "Runtime (min)": 6.133333333333334,
-            "CPU (%)": 342.7,
-            "Memory (GB)": 0.9134,
-            "Rank": 5,
-            "kNN Area Under the Curve": 0.04195523142614167,
-            "Mean squared error": 1.0001525416100412
-        },
-        {
-            "Name": "Mutual Nearest Neighbors (log CPM)",
-            "Paper": "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors",
-            "Paper URL": "https://www.nature.com/articles/nbt.4091",
-            "Year": 2018,
-            "Code": "https://github.com/LTLA/batchelor",
-            "Version": "3.4.2",
-            "Runtime (min)": 9.05,
-            "CPU (%)": 92.2,
-            "Memory (GB)": 1.9,
-            "Rank": 3,
-            "kNN Area Under the Curve": 0.07306158980008651,
-            "Mean squared error": 0.8959746196573406
+            "Runtime (min)": 7.683333333333334,
+            "CPU (%)": 560.1,
+            "Memory (GB)": 0.8915,
+            "Rank": 4,
+            "kNN Area Under the Curve": 0.03911683119667607,
+            "Mean squared error": 0.9997591574474723
         },
         {
             "Name": "Mutual Nearest Neighbors (log scran)",
@@ -69,13 +69,13 @@
             "Paper URL": "https://www.nature.com/articles/nbt.4091",
             "Year": 2018,
             "Code": "https://github.com/LTLA/batchelor",
-            "Version": "3.4.2",
-            "Runtime (min)": 9.8,
-            "CPU (%)": 98.9,
-            "Memory (GB)": 3.3,
+            "Version": "ModuleNotFound",
+            "Runtime (min)": 4.183333333333334,
+            "CPU (%)": 87.7,
+            "Memory (GB)": 3.4,
             "Rank": 1,
-            "kNN Area Under the Curve": 0.0992268381002486,
-            "Mean squared error": 0.7179134875243371
+            "kNN Area Under the Curve": 0.09923162983366954,
+            "Mean squared error": 0.7173333624118253
         },
         {
             "Name": "Harmonic Alignment (log scran)",
@@ -84,12 +84,12 @@
             "Year": 2020,
             "Code": "https://github.com/KrishnaswamyLab/harmonic-alignment",
             "Version": "ModuleNotFound",
-            "Runtime (min)": 11.1,
-            "CPU (%)": 213.9,
+            "Runtime (min)": 7.033333333333333,
+            "CPU (%)": 1204.8,
             "Memory (GB)": 3.3,
-            "Rank": 4,
-            "kNN Area Under the Curve": 0.060204439119965515,
-            "Mean squared error": 1.0000451844564988
+            "Rank": 5,
+            "Mean squared error": 1.000029788857487,
+            "kNN Area Under the Curve": 0.05325471149605907
         }
     ]
 }
