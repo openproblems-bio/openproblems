@@ -26,7 +26,7 @@ def _dca(adata):
     paper_url="https://www.nature.com/articles/s41467-018-07931-2",
     paper_year=2019,
     code_url="https://github.com/theislab/dca",
-    code_version=check_version("dca.api"),
+    code_version=check_version("dca"),
     image="openproblems-python-extras",
 )
 def DCA(adata, test=False):
