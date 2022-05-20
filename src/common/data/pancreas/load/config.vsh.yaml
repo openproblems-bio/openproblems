@@ -21,12 +21,10 @@ functionality:
       required: true
   resources:
     - type: python_script
-      path: load_save.py
+      path: script.py
   tests:
     - type: python_script
-      path: load_save_test.py
-    - path: load_save.py
-    - path: fake_anndata.py
+      path: test_script.py
 platforms:
   - type: native
   - type: docker
