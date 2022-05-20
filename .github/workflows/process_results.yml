@@ -113,6 +113,7 @@ jobs:
         add: "['website/data/results', 'results.json']"
         branch: ${{ env.UPDATE_BRANCH_NAME }}
         push: false
+        cwd: './website'
 
     - name: Create Pull Request
       if: "github.event_name == 'repository_dispatch'"
@@ -123,3 +124,4 @@ jobs:
         base: main
         title: '[auto] Update benchmark results'
         reviewers: scottgigante, dburkhardt
+        path: './website'
