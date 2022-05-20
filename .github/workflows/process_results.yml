@@ -58,7 +58,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        if ${{ github.event_name }} == "repository_dispatch" ]]; then
+        if [[ ${{ github.event_name }} == "repository_dispatch" ]]; then
           S3_URI="s3://openproblems-nextflow/cwd_main"
         else
           S3_URI="s3://openproblems-nextflow/cwd_example"
