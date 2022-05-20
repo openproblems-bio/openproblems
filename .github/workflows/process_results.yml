@@ -27,6 +27,7 @@ jobs:
         path: website
 
     - name: Set up Git branch
+      working-directory: website
       run: |
         git checkout -b $UPDATE_BRANCH_NAME
 
@@ -89,6 +90,7 @@ jobs:
 
     - name: Push Git branch
       if: "github.event_name == 'repository_dispatch'"
+      working-directory: website
       run: |
         git push -u origin $UPDATE_BRANCH_NAME
 
