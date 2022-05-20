@@ -30,7 +30,6 @@ jobs:
       working-directory: website
       run: |
         git checkout -b $UPDATE_BRANCH_NAME
-        git branch --set-upstream-to=origin/$UPDATE_BRANCH_NAME $UPDATE_BRANCH_NAME
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -107,6 +106,7 @@ jobs:
 
     - name: Commit result
       uses: EndBug/add-and-commit@v6
+      if: "github.event_name == 'repository_dispatch'"
       with:
         author_name: SingleCellOpenProblems
         author_email: singlecellopenproblems@protonmail.com
