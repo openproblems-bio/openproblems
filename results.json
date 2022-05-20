@@ -1,2424 +1,2774 @@
 {
-    "dimensionality_reduction": {
-        "tenx_5k_pbmc": {
-            "pca_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:26.761",
-                "duration": "1m 29s",
+    "batch_integration_graph": {
+        "pancreas_batch": {
+            "bbknn_full_unscaled": {
+                "submit": "2022-05-19 22:03:09.837",
+                "duration": "2m 18s",
+                "realtime": "23.4s",
+                "%cpu": "89.7%",
+                "peak_rss": "314.3 MB",
+                "peak_vmem": "1.6 GB",
+                "rchar": "43.3 MB",
+                "wchar": "4 MB",
+                "metrics": {
+                    "graph_connectivity": 0.743421052631579,
+                    "ari": 0.053745996621476604,
+                    "isolated_labels_f1": 0.5806451612903226
+                }
+            },
+            "bbknn_hvg_scaled": {
+                "submit": "2022-05-19 22:03:09.878",
+                "duration": "3m 48s",
                 "realtime": "27s",
-                "%cpu": "150.5%",
-                "peak_rss": "474 MB",
-                "peak_vmem": "3.5 GB",
-                "rchar": "183.5 MB",
-                "wchar": "12.9 MB",
+                "%cpu": "79.6%",
+                "peak_rss": "381 MB",
+                "peak_vmem": "932 MB",
+                "rchar": "56.4 MB",
+                "wchar": "3.8 MB",
                 "metrics": {
-                    "trustworthiness": 0.8357411337799387,
-                    "qnn_auc": 0.7521450519995782,
-                    "density_preservation": 0.38068640604711046,
-                    "continuity": 0.7961312652637014,
-                    "lcmc": 0.038264587322345125,
-                    "rmse": 27.746500112142662,
-                    "qglobal": 0.878327962548692,
-                    "qnn": 0.0441749781707722,
-                    "qlocal": 0.44634270306821117
+                    "graph_connectivity": 0.993421052631579,
+                    "ari": 0.005889774251053289,
+                    "isolated_labels_f1": 0.32669322709163345
                 }
             },
-            "umap_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:26.864",
-                "duration": "1m 39s",
-                "realtime": "1m 9s",
-                "%cpu": "110.8%",
-                "peak_rss": "783.4 MB",
-                "peak_vmem": "6.7 GB",
-                "rchar": "184.5 MB",
-                "wchar": "15.6 MB",
+            "bbknn_full_scaled": {
+                "submit": "2022-05-19 22:03:09.644",
+                "duration": "2m 58s",
+                "realtime": "25s",
+                "%cpu": "80.3%",
+                "peak_rss": "370.5 MB",
+                "peak_vmem": "987.6 MB",
+                "rchar": "56.4 MB",
+                "wchar": "3.8 MB",
                 "metrics": {
-                    "density_preservation": 0.03875223710695861,
-                    "qnn": 0.08224392163614674,
-                    "rmse": 39.781376868249644,
-                    "qglobal": 0.826407499067112,
-                    "qnn_auc": 0.7226289110928831,
-                    "qlocal": 0.4774596233565599,
-                    "trustworthiness": 0.8727833197277561,
-                    "lcmc": 0.07633353078771968,
-                    "continuity": 0.7995303059296723
+                    "isolated_labels_f1": 0.33333333333333337,
+                    "graph_connectivity": 0.993421052631579,
+                    "ari": -0.020321757143723893
                 }
             },
-            "phate_default": {
-                "submit": "2022-05-17 21:37:26.610",
-                "duration": "2m 49s",
-                "realtime": "45.1s",
-                "%cpu": "218.8%",
-                "peak_rss": "711.7 MB",
+            "bbknn_hvg_unscaled": {
+                "submit": "2022-05-19 22:03:10.105",
+                "duration": "2m 58s",
+                "realtime": "25.2s",
+                "%cpu": "78.8%",
+                "peak_rss": "363.8 MB",
+                "peak_vmem": "981.9 MB",
+                "rchar": "56.2 MB",
+                "wchar": "4 MB",
+                "metrics": {
+                    "isolated_labels_f1": 0.5333333333333333,
+                    "ari": 0.05008359183721146,
+                    "graph_connectivity": 0.743421052631579
+                }
+            },
+            "combat_full_scaled": {
+                "submit": "2022-05-19 22:03:10.024",
+                "duration": "2m 18s",
+                "realtime": "26s",
+                "%cpu": "96.5%",
+                "peak_rss": "390 MB",
+                "peak_vmem": "1.9 GB",
+                "rchar": "56.8 MB",
+                "wchar": "5.7 MB",
+                "metrics": {
+                    "isolated_labels_f1": 0.4705882352941176,
+                    "ari": 0.003336887226909134,
+                    "graph_connectivity": 1.0
+                }
+            },
+            "combat_full_unscaled": {
+                "submit": "2022-05-19 22:03:10.183",
+                "duration": "2m 18s",
+                "realtime": "27s",
+                "%cpu": "90.7%",
+                "peak_rss": "383.3 MB",
+                "peak_vmem": "1.4 GB",
+                "rchar": "56.6 MB",
+                "wchar": "5.9 MB",
+                "metrics": {
+                    "isolated_labels_f1": 0.3283582089552239,
+                    "ari": 0.006440600457413177,
+                    "graph_connectivity": 1.0
+                }
+            },
+            "combat_hvg_scaled": {
+                "submit": "2022-05-19 22:03:10.225",
+                "duration": "2m 37s",
+                "realtime": "24.1s",
+                "%cpu": "93.8%",
+                "peak_rss": "380.9 MB",
+                "peak_vmem": "1.4 GB",
+                "rchar": "56.8 MB",
+                "wchar": "5.7 MB",
+                "metrics": {
+                    "graph_connectivity": 1.0,
+                    "ari": 0.003336887226909134,
+                    "isolated_labels_f1": 0.4705882352941176
+                }
+            },
+            "fastmnn_embed_full_scaled": {
+                "submit": "2022-05-19 22:03:10.392",
+                "duration": "2m 38s",
+                "realtime": "38.8s",
+                "%cpu": "86.0%",
+                "peak_rss": "967.9 MB",
+                "peak_vmem": "1.9 GB",
+                "rchar": "84.2 MB",
+                "wchar": "4 MB",
+                "metrics": {
+                    "isolated_labels_f1": 0.738255033557047,
+                    "ari": 0.6184223757791134,
+                    "graph_connectivity": 1.0
+                }
+            },
+            "combat_hvg_unscaled": {
+                "submit": "2022-05-19 22:03:10.363",
+                "duration": "2m 38s",
+                "realtime": "24.2s",
+                "%cpu": "89.9%",
+                "peak_rss": "379.8 MB",
+                "peak_vmem": "1.4 GB",
+                "rchar": "56.6 MB",
+                "wchar": "5.9 MB",
+                "metrics": {
+                    "ari": 0.006440600457413177,
+                    "isolated_labels_f1": 0.3283582089552239,
+                    "graph_connectivity": 1.0
+                }
+            },
+            "fastmnn_embed_full_unscaled": {
+                "submit": "2022-05-19 22:03:10.612",
+                "duration": "1m 38s",
+                "realtime": "1m 11s",
+                "%cpu": "54.8%",
+                "peak_rss": "948.9 MB",
+                "peak_vmem": "1.9 GB",
+                "rchar": "82.5 MB",
+                "wchar": "4.3 MB",
+                "metrics": {
+                    "isolated_labels_f1": 0.738255033557047,
+                    "ari": 0.6184223757791134,
+                    "graph_connectivity": 1.0
+                }
+            },
+            "fastmnn_embed_hvg_scaled": {
+                "submit": "2022-05-19 22:03:10.571",
+                "duration": "1m 37s",
+                "realtime": "1m 10s",
+                "%cpu": "55.3%",
+                "peak_rss": "1022.1 MB",
+                "peak_vmem": "2 GB",
+                "rchar": "84.2 MB",
+                "wchar": "4 MB",
+                "metrics": {
+                    "isolated_labels_f1": 0.738255033557047,
+                    "ari": 0.6184223757791134,
+                    "graph_connectivity": 1.0
+                }
+            },
+            "fastmnn_feature_full_scaled": {
+                "submit": "2022-05-19 22:03:11.379",
+                "duration": "3m 56s",
+                "realtime": "1m 49s",
+                "%cpu": "66.9%",
+                "peak_rss": "1.1 GB",
+                "peak_vmem": "11 GB",
+                "rchar": "101.9 MB",
+                "wchar": "5.7 MB",
+                "metrics": {
+                    "graph_connectivity": 1.0,
+                    "ari": 0.6184223757791134,
+                    "isolated_labels_f1": 0.738255033557047
+                }
+            },
+            "fastmnn_embed_hvg_unscaled": {
+                "submit": "2022-05-19 22:03:10.790",
+                "duration": "3m 37s",
+                "realtime": "1m 39s",
+                "%cpu": "59.9%",
+                "peak_rss": "1019.2 MB",
+                "peak_vmem": "10.3 GB",
+                "rchar": "84 MB",
+                "wchar": "4.3 MB",
+                "metrics": {
+                    "graph_connectivity": 1.0,
+                    "isolated_labels_f1": 0.738255033557047,
+                    "ari": 0.6184223757791134
+                }
+            },
+            "fastmnn_feature_hvg_scaled": {
+                "submit": "2022-05-19 22:03:10.931",
+                "duration": "2m 38s",
+                "realtime": "44.2s",
+                "%cpu": "89.2%",
+                "peak_rss": "1.1 GB",
                 "peak_vmem": "2.2 GB",
-                "rchar": "183.9 MB",
-                "wchar": "215.2 MB",
+                "rchar": "101.9 MB",
+                "wchar": "5.7 MB",
                 "metrics": {
-                    "qglobal": 0.7599466514505637,
-                    "density_preservation": 0.22723701241049749,
-                    "qnn": 0.06308954287752266,
-                    "continuity": 0.691996404551997,
-                    "trustworthiness": 0.890750527805918,
-                    "lcmc": 0.05717915202909559,
-                    "rmse": 580.2578346083504,
-                    "qnn_auc": 0.673510270270688,
-                    "qlocal": 0.35649124718373537
+                    "isolated_labels_f1": 0.738255033557047,
+                    "ari": 0.6184223757791134,
+                    "graph_connectivity": 1.0
                 }
             },
-            "densmap_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:26.855",
-                "duration": "3m 9s",
-                "realtime": "2m 41s",
-                "%cpu": "108.6%",
-                "peak_rss": "819.4 MB",
-                "peak_vmem": "10.8 GB",
-                "rchar": "207.1 MB",
-                "wchar": "14.1 MB",
+            "fastmnn_feature_hvg_unscaled": {
+                "submit": "2022-05-19 22:03:11.495",
+                "duration": "3m 56s",
+                "realtime": "1m 48s",
+                "%cpu": "77.4%",
+                "peak_rss": "1.1 GB",
+                "peak_vmem": "11.1 GB",
+                "rchar": "101.7 MB",
+                "wchar": "5.9 MB",
                 "metrics": {
-                    "lcmc": 0.058808657766185594,
-                    "qnn_auc": 0.7417636403159125,
-                    "trustworthiness": 0.8187700660373953,
-                    "qnn": 0.06471904861461267,
-                    "continuity": 0.8692906813613798,
-                    "density_preservation": 0.7437490729364455,
-                    "rmse": 41.28791879822772,
-                    "qlocal": 0.4553719771486469,
-                    "qglobal": 0.8553008824867461
+                    "graph_connectivity": 1.0,
+                    "isolated_labels_f1": 0.738255033557047,
+                    "ari": 0.6184223757791134
                 }
             },
-            "densmap_pca_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:26.617",
-                "duration": "3m 49s",
-                "realtime": "2m 47s",
-                "%cpu": "162.6%",
-                "peak_rss": "771.5 MB",
-                "peak_vmem": "11.2 GB",
-                "rchar": "207.2 MB",
-                "wchar": "14.9 MB",
+            "fastmnn_feature_full_unscaled": {
+                "submit": "2022-05-19 22:03:10.810",
+                "duration": "1m 47s",
+                "realtime": "1m 22s",
+                "%cpu": "56.2%",
+                "peak_rss": "1.1 GB",
+                "peak_vmem": "2.7 GB",
+                "rchar": "101.7 MB",
+                "wchar": "5.9 MB",
                 "metrics": {
-                    "lcmc": 0.07019675069105616,
-                    "qlocal": 0.4909161764698766,
-                    "qglobal": 0.8224010498393796,
-                    "continuity": 0.8352917084402107,
-                    "trustworthiness": 0.8666078883356181,
-                    "qnn": 0.07610714153948323,
-                    "rmse": 37.746642524089545,
-                    "density_preservation": 0.7650814724739414,
-                    "qnn_auc": 0.7249537663547728
+                    "graph_connectivity": 1.0,
+                    "ari": 0.6184223757791134,
+                    "isolated_labels_f1": 0.738255033557047
                 }
             },
-            "tsne_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:26.967",
-                "duration": "4m 19s",
-                "realtime": "3m 52s",
-                "%cpu": "447.1%",
-                "peak_rss": "790.5 MB",
-                "peak_vmem": "10.5 GB",
-                "rchar": "184.1 MB",
-                "wchar": "12.9 MB",
+            "harmony_full_scaled": {
+                "submit": "2022-05-19 22:03:11.740",
+                "duration": "4m 6s",
+                "realtime": "2m 2s",
+                "%cpu": "69.4%",
+                "peak_rss": "1.1 GB",
+                "peak_vmem": "6 GB",
+                "rchar": "107.3 MB",
+                "wchar": "4.3 MB",
                 "metrics": {
-                    "qglobal": 0.8414389679630284,
-                    "rmse": 23.108584462782687,
-                    "trustworthiness": 0.8925470671736094,
-                    "continuity": 0.8357145810822824,
-                    "lcmc": 0.09218585452439154,
-                    "density_preservation": 0.10561082633503852,
-                    "qnn": 0.09809624537281861,
-                    "qlocal": 0.4639056958617545,
-                    "qnn_auc": 0.7349891829229804
+                    "ari": 0.20441647688901873,
+                    "graph_connectivity": 0.9988207547169812,
+                    "isolated_labels_f1": 0.736842105263158
                 }
             },
-            "scvis_logCM_1kHVG": {
-                "submit": "2022-05-17 21:37:26.744",
-                "duration": "6m 59s",
-                "realtime": "5m 16s",
-                "%cpu": "116.5%",
-                "peak_rss": "821.4 MB",
-                "peak_vmem": "14.4 GB",
-                "rchar": "192 MB",
-                "wchar": "11.5 MB",
+            "harmony_full_unscaled": {
+                "submit": "2022-05-19 22:03:11.574",
+                "duration": "3m 57s",
+                "realtime": "1m 55s",
+                "%cpu": "69.9%",
+                "peak_rss": "1 GB",
+                "peak_vmem": "5.9 GB",
+                "rchar": "105.6 MB",
+                "wchar": "4.3 MB",
                 "metrics": {
-                    "lcmc": 0.022412263585673255,
-                    "rmse": 49.85700926528965,
-                    "qnn": 0.028322654434100328,
-                    "continuity": 0.6815309245163326,
-                    "qglobal": 0.8169169005758268,
-                    "trustworthiness": 0.7432845799340064,
-                    "qnn_auc": 0.6813812990994542,
-                    "density_preservation": 0.5440114512005277,
-                    "qlocal": 0.3597198969825378
+                    "graph_connectivity": 0.9988207547169812,
+                    "ari": 0.20441647688901873,
+                    "isolated_labels_f1": 0.736842105263158
                 }
             },
-            "phate_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:26.859",
-                "duration": "7m 19s",
-                "realtime": "5m 46s",
-                "%cpu": "586.1%",
-                "peak_rss": "802.7 MB",
-                "peak_vmem": "14 GB",
-                "rchar": "184.8 MB",
-                "wchar": "11.6 MB",
+            "harmony_hvg_unscaled": {
+                "submit": "2022-05-19 22:03:11.989",
+                "duration": "4m 6s",
+                "realtime": "2m",
+                "%cpu": "69.5%",
+                "peak_rss": "1 GB",
+                "peak_vmem": "10.4 GB",
+                "rchar": "107.2 MB",
+                "wchar": "4.3 MB",
                 "metrics": {
-                    "qnn_auc": 0.7398394645867759,
-                    "qlocal": 0.4545790784950421,
-                    "lcmc": 0.06129288538046621,
-                    "qglobal": 0.8642677789341977,
-                    "density_preservation": 0.16943646640339532,
-                    "continuity": 0.8006904984501788,
-                    "rmse": 50.63757700235294,
-                    "qnn": 0.06720327622889329,
-                    "trustworthiness": 0.8620199437234024
+                    "graph_connectivity": 0.9988207547169812,
+                    "isolated_labels_f1": 0.736842105263158,
+                    "ari": 0.20441647688901873
                 }
             },
-            "neuralee_default": {
-                "submit": "2022-05-17 21:43:56.190",
-                "duration": "31m 10s",
-                "realtime": "28m 33s",
-                "%cpu": "1037.1%",
+            "liger_full_unscaled": {
+                "submit": "2022-05-19 22:03:11.837",
+                "duration": "9m 59s",
+                "realtime": "7m 57s",
+                "%cpu": "92.6%",
+                "peak_rss": "1 GB",
+                "peak_vmem": "5.9 GB",
+                "rchar": "100.7 MB",
+                "wchar": "4.2 MB",
+                "metrics": {
+                    "graph_connectivity": 0.9671052631578947,
+                    "isolated_labels_f1": 0.2711864406779661,
+                    "ari": 2.6898511410132963e-06
+                }
+            },
+            "harmony_hvg_scaled": {
+                "submit": "2022-05-19 22:03:11.650",
+                "duration": "4m 6s",
+                "realtime": "1m 58s",
+                "%cpu": "69.8%",
+                "peak_rss": "1.1 GB",
+                "peak_vmem": "10.4 GB",
+                "rchar": "107.3 MB",
+                "wchar": "4.3 MB",
+                "metrics": {
+                    "ari": 0.20441647688901873,
+                    "graph_connectivity": 0.9988207547169812,
+                    "isolated_labels_f1": 0.736842105263158
+                }
+            },
+            "liger_hvg_unscaled": {
+                "submit": "2022-05-19 22:03:11.956",
+                "duration": "9m 39s",
+                "realtime": "7m 34s",
+                "%cpu": "93.0%",
+                "peak_rss": "1 GB",
+                "peak_vmem": "5.9 GB",
+                "rchar": "102.2 MB",
+                "wchar": "4.2 MB",
+                "metrics": {
+                    "isolated_labels_f1": 0.2711864406779661,
+                    "graph_connectivity": 0.9671052631578947,
+                    "ari": 2.6898511410132963e-06
+                }
+            },
+            "mnn_full_unscaled": {
+                "submit": "2022-05-19 22:03:12.170",
+                "duration": "3m 46s",
+                "realtime": "1m 39s",
+                "%cpu": "76.8%",
+                "peak_rss": "4.3 GB",
+                "peak_vmem": "84.8 GB",
+                "rchar": "61.7 MB",
+                "wchar": "9.4 MB",
+                "metrics": {
+                    "isolated_labels_f1": 0.7540983606557378,
+                    "ari": 0.3915928512582261,
+                    "graph_connectivity": 1.0
+                }
+            },
+            "mnn_full_scaled": {
+                "submit": "2022-05-19 22:03:12.222",
+                "duration": "4m 6s",
+                "realtime": "1m 51s",
+                "%cpu": "220.9%",
                 "peak_rss": "2.7 GB",
-                "peak_vmem": "29.2 GB",
-                "rchar": "190 MB",
-                "wchar": "144.5 MB",
+                "peak_vmem": "53.2 GB",
+                "rchar": "61.7 MB",
+                "wchar": "9.8 MB",
                 "metrics": {
-                    "trustworthiness": 0.8917313697717639,
-                    "rmse": 491.8262536062811,
-                    "qnn_auc": 0.6671889177933379,
-                    "qlocal": 0.3657297404378757,
-                    "qnn": 0.04647473343745773,
-                    "continuity": 0.6983770831505953,
-                    "density_preservation": 0.46810307099857174,
-                    "lcmc": 0.040564342589030654,
-                    "qglobal": 0.7619766368746969
+                    "isolated_labels_f1": 0.603448275862069,
+                    "graph_connectivity": 0.993421052631579,
+                    "ari": 0.36194842090982077
                 }
             },
-            "neuralee_logCPM_1kHVG": {
-                "submit": "2022-05-17 22:38:16.507",
-                "duration": "3m 59s",
-                "realtime": "43.4s",
-                "%cpu": "174.3%",
-                "peak_rss": "763.6 MB",
-                "peak_vmem": "3.3 GB",
-                "rchar": "189.4 MB",
-                "wchar": "11.5 MB",
+            "mnn_hvg_scaled": {
+                "submit": "2022-05-19 22:03:12.345",
+                "duration": "3m 56s",
+                "realtime": "1m 43s",
+                "%cpu": "139.7%",
+                "peak_rss": "3 GB",
+                "peak_vmem": "58.1 GB",
+                "rchar": "61.7 MB",
+                "wchar": "9.8 MB",
                 "metrics": {
-                    "rmse": 49.11243941754741,
-                    "qglobal": 0.8736432676941748,
-                    "density_preservation": 0.5083269602486166,
-                    "qnn_auc": 0.7614198563387775,
-                    "trustworthiness": 0.8499524388520026,
-                    "qlocal": 0.48995994711456353,
-                    "continuity": 0.8660208857127599,
-                    "qnn": 0.0549235669573131,
-                    "lcmc": 0.049013176108886024
-                }
-            }
-        },
-        "human_blood_nestorowa2016": {
-            "pca_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:36.456",
-                "duration": "2m 19s",
-                "realtime": "25.1s",
-                "%cpu": "73.2%",
-                "peak_rss": "1.2 GB",
-                "peak_vmem": "4 GB",
-                "rchar": "685.2 MB",
-                "wchar": "30.5 MB",
-                "metrics": {
-                    "rmse": 10.879254637646152,
-                    "density_preservation": 0.5627479010316309,
-                    "qnn": 0.0644152700499252,
-                    "continuity": 0.7836067862994753,
-                    "trustworthiness": 0.6408790195044807,
-                    "qlocal": 0.2647066638922816,
-                    "qnn_auc": 0.5934589520711139,
-                    "qglobal": 0.7281769024021939,
-                    "lcmc": 0.04825260060258422
+                    "ari": 0.36194842090982077,
+                    "isolated_labels_f1": 0.603448275862069,
+                    "graph_connectivity": 0.993421052631579
                 }
             },
-            "densmap_pca_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:36.287",
-                "duration": "2m 50s",
-                "realtime": "1m 26s",
-                "%cpu": "103.7%",
-                "peak_rss": "1.4 GB",
-                "peak_vmem": "11.5 GB",
-                "rchar": "710.3 MB",
-                "wchar": "31.3 MB",
+            "scanorama_embed_full_scaled": {
+                "submit": "2022-05-19 22:03:12.561",
+                "duration": "3m 56s",
+                "realtime": "1m 41s",
+                "%cpu": "184.9%",
+                "peak_rss": "383.5 MB",
+                "peak_vmem": "7.3 GB",
+                "rchar": "56.8 MB",
+                "wchar": "4 MB",
                 "metrics": {
-                    "density_preservation": 0.7951588647114611,
-                    "continuity": 0.782348728977384,
-                    "qlocal": 0.2486366191523776,
-                    "qnn_auc": 0.595699097137767,
-                    "trustworthiness": 0.7076944956949569,
-                    "qglobal": 0.6835339480617932,
-                    "lcmc": 0.09585804026369804,
-                    "rmse": 12.068146507780895,
-                    "qnn": 0.11202070971103902
+                    "graph_connectivity": 0.7171052631578947,
+                    "ari": -0.0019188641468457276,
+                    "isolated_labels_f1": 0.32926829268292684
                 }
             },
-            "umap_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:36.522",
-                "duration": "4m 49s",
-                "realtime": "1m 18s",
-                "%cpu": "107.9%",
-                "peak_rss": "1.2 GB",
-                "peak_vmem": "7.2 GB",
-                "rchar": "687.7 MB",
-                "wchar": "32 MB",
+            "mnn_hvg_unscaled": {
+                "submit": "2022-05-19 22:03:12.431",
+                "duration": "3m 46s",
+                "realtime": "1m 43s",
+                "%cpu": "69.2%",
+                "peak_rss": "5 GB",
+                "peak_vmem": "101.4 GB",
+                "rchar": "61.7 MB",
+                "wchar": "9.4 MB",
                 "metrics": {
-                    "qglobal": 0.629729023435004,
-                    "qnn_auc": 0.5621833551598714,
-                    "rmse": 12.089376369328132,
-                    "trustworthiness": 0.7038563997247116,
-                    "qnn": 0.11225604733648238,
-                    "lcmc": 0.09609337788914141,
-                    "density_preservation": 0.05817599773688983,
-                    "continuity": 0.7659930845354974,
-                    "qlocal": 0.20799988783003964
+                    "graph_connectivity": 1.0,
+                    "isolated_labels_f1": 0.7540983606557378,
+                    "ari": 0.3915928512582261
                 }
             },
-            "densmap_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:36.511",
-                "duration": "5m 9s",
+            "scanorama_embed_full_unscaled": {
+                "submit": "2022-05-19 22:03:12.603",
+                "duration": "3m 46s",
                 "realtime": "1m 38s",
-                "%cpu": "76.7%",
-                "peak_rss": "1.4 GB",
-                "peak_vmem": "11.1 GB",
-                "rchar": "710.3 MB",
-                "wchar": "30.6 MB",
+                "%cpu": "164.6%",
+                "peak_rss": "382.5 MB",
+                "peak_vmem": "6.8 GB",
+                "rchar": "56.8 MB",
+                "wchar": "4 MB",
                 "metrics": {
-                    "qnn": 0.08981492376741919,
-                    "qglobal": 0.7352876384256094,
-                    "rmse": 13.41469748580766,
-                    "trustworthiness": 0.6579615474726176,
-                    "qlocal": 0.2824117934749094,
-                    "continuity": 0.8229923346461145,
-                    "lcmc": 0.07365225432007821,
-                    "density_preservation": 0.8312631196581389,
-                    "qnn_auc": 0.6241821770341289
+                    "ari": 0.08302500163245974,
+                    "graph_connectivity": 1.0,
+                    "isolated_labels_f1": 0.7166666666666667
                 }
             },
-            "phate_default": {
-                "submit": "2022-05-17 21:37:36.161",
-                "duration": "5m 50s",
-                "realtime": "4m 16s",
-                "%cpu": "738.7%",
-                "peak_rss": "1.3 GB",
-                "peak_vmem": "11.1 GB",
-                "rchar": "689.7 MB",
-                "wchar": "966.8 MB",
+            "scanorama_embed_hvg_scaled": {
+                "submit": "2022-05-19 22:03:12.840",
+                "duration": "3m 46s",
+                "realtime": "1m 38s",
+                "%cpu": "141.5%",
+                "peak_rss": "382.3 MB",
+                "peak_vmem": "6.4 GB",
+                "rchar": "56.8 MB",
+                "wchar": "4 MB",
                 "metrics": {
-                    "rmse": 512.5254376360178,
-                    "density_preservation": -0.3703165359933262,
-                    "qglobal": 0.5981180521230757,
-                    "continuity": 0.5969772737503671,
-                    "lcmc": 0.030568659033554643,
-                    "qlocal": 0.1476136137299157,
-                    "qnn_auc": 0.5257342046476899,
-                    "trustworthiness": 0.7338872049434779,
-                    "qnn": 0.046731328480895624
+                    "graph_connectivity": 0.7171052631578947,
+                    "ari": -0.0019188641468457276,
+                    "isolated_labels_f1": 0.32926829268292684
                 }
             },
-            "phate_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:36.508",
-                "duration": "5m 50s",
-                "realtime": "3m 23s",
-                "%cpu": "506.8%",
-                "peak_rss": "1.2 GB",
-                "peak_vmem": "11.1 GB",
-                "rchar": "686.5 MB",
-                "wchar": "29.8 MB",
+            "scanorama_embed_hvg_unscaled": {
+                "submit": "2022-05-19 22:03:12.643",
+                "duration": "3m 46s",
+                "realtime": "1m 35s",
+                "%cpu": "168.9%",
+                "peak_rss": "385.9 MB",
+                "peak_vmem": "6.4 GB",
+                "rchar": "56.8 MB",
+                "wchar": "4 MB",
                 "metrics": {
-                    "continuity": 0.7725685417272699,
-                    "qnn": 0.09270621459429475,
-                    "lcmc": 0.07654354514695377,
-                    "qglobal": 0.6468745286203064,
-                    "qnn_auc": 0.5686753336194764,
-                    "qlocal": 0.21121615682711628,
-                    "trustworthiness": 0.666735873162303,
-                    "density_preservation": 0.029286732808170568,
-                    "rmse": 16.555363177350007
+                    "isolated_labels_f1": 0.7166666666666667,
+                    "ari": 0.08302500163245974,
+                    "graph_connectivity": 1.0
                 }
             },
-            "scvis_logCM_1kHVG": {
-                "submit": "2022-05-17 21:37:36.366",
-                "duration": "6m 40s",
-                "realtime": "4m 47s",
-                "%cpu": "112.0%",
-                "peak_rss": "1.3 GB",
-                "peak_vmem": "14.9 GB",
-                "rchar": "694.5 MB",
-                "wchar": "29.8 MB",
+            "scanorama_feature_full_scaled": {
+                "submit": "2022-05-19 22:03:13.025",
+                "duration": "3m 56s",
+                "realtime": "1m 39s",
+                "%cpu": "179.9%",
+                "peak_rss": "390.2 MB",
+                "peak_vmem": "10.1 GB",
+                "rchar": "56.8 MB",
+                "wchar": "4 MB",
                 "metrics": {
-                    "continuity": 0.6318697983903021,
-                    "qlocal": 0.35829286668970994,
-                    "qnn_auc": 0.569770022357286,
-                    "density_preservation": 0.4571683606362641,
-                    "lcmc": 0.014700179146516706,
-                    "trustworthiness": 0.5506261348327769,
-                    "rmse": 1.2195405982768042,
-                    "qnn": 0.030862848593857687,
-                    "qglobal": 0.859550661983283
+                    "isolated_labels_f1": 0.31460674157303375,
+                    "ari": 0.05151536268238542,
+                    "graph_connectivity": 0.7171052631578947
                 }
             },
-            "tsne_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:36.849",
-                "duration": "11m 39s",
-                "realtime": "8m 9s",
-                "%cpu": "213.8%",
-                "peak_rss": "1.2 GB",
-                "peak_vmem": "10.9 GB",
-                "rchar": "685.8 MB",
-                "wchar": "30.5 MB",
+            "scanorama_feature_full_unscaled": {
+                "submit": "2022-05-19 22:03:12.868",
+                "duration": "3m 47s",
+                "realtime": "1m 36s",
+                "%cpu": "168.4%",
+                "peak_rss": "384.1 MB",
+                "peak_vmem": "6.7 GB",
+                "rchar": "56.8 MB",
+                "wchar": "4 MB",
                 "metrics": {
-                    "qlocal": 0.2255258326493061,
-                    "qglobal": 0.6444693244597587,
-                    "qnn": 0.13271361091966583,
-                    "trustworthiness": 0.7488363571135711,
-                    "continuity": 0.7697837636127574,
-                    "lcmc": 0.11655094147232485,
-                    "qnn_auc": 0.5771451101151263,
-                    "density_preservation": 0.3537251299565939,
-                    "rmse": 29.47438610654853
+                    "isolated_labels_f1": 0.7058823529411765,
+                    "ari": 0.09475256820347772,
+                    "graph_connectivity": 0.993421052631579
                 }
             },
-            "neuralee_default": {
-                "submit": "2022-05-17 21:44:16.993",
-                "duration": "9m 59s",
-                "realtime": "7m 7s",
-                "%cpu": "1404.8%",
-                "peak_rss": "2.7 GB",
-                "peak_vmem": "45.8 GB",
-                "rchar": "695.9 MB",
-                "wchar": "649.9 MB",
+            "scanorama_feature_hvg_scaled": {
+                "submit": "2022-05-19 22:03:13.191",
+                "duration": "3m 47s",
+                "realtime": "1m 39s",
+                "%cpu": "188.9%",
+                "peak_rss": "384.5 MB",
+                "peak_vmem": "10.2 GB",
+                "rchar": "56.8 MB",
+                "wchar": "4 MB",
                 "metrics": {
-                    "continuity": 0.5754442460662861,
-                    "density_preservation": 0.2755772814351421,
-                    "lcmc": 0.018179814037000662,
-                    "qglobal": 0.5820886217666097,
-                    "qnn_auc": 0.5139223967536302,
-                    "rmse": 520091.19782715413,
-                    "trustworthiness": 0.7251545569027118,
-                    "qnn": 0.03434248348434164,
-                    "qlocal": 0.11539933055747922
+                    "ari": 0.05151536268238542,
+                    "graph_connectivity": 0.7171052631578947,
+                    "isolated_labels_f1": 0.31460674157303375
                 }
             },
-            "neuralee_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:36.329",
-                "duration": "26m 20s",
-                "realtime": "24m 28s",
-                "%cpu": "340.6%",
-                "peak_rss": "1.2 GB",
-                "peak_vmem": "29.8 GB",
-                "rchar": "692.7 MB",
-                "wchar": "29.8 MB",
+            "scanorama_feature_hvg_unscaled": {
+                "submit": "2022-05-19 22:03:13.051",
+                "duration": "3m 47s",
+                "realtime": "1m 35s",
+                "%cpu": "147.9%",
+                "peak_rss": "385.8 MB",
+                "peak_vmem": "6.8 GB",
+                "rchar": "56.8 MB",
+                "wchar": "4 MB",
                 "metrics": {
-                    "qlocal": 0.27538300447688496,
-                    "lcmc": 0.054942913097331146,
-                    "qnn": 0.07110558254467213,
-                    "continuity": 0.8297001870592228,
-                    "qnn_auc": 0.6156484930229184,
-                    "density_preservation": 0.6926011494285029,
-                    "qglobal": 0.732581370934353,
-                    "rmse": 15.67006569943997,
-                    "trustworthiness": 0.6430172091899491
-                }
-            }
-        },
-        "olsson_2016_mouse_blood": {
-            "pca_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:56.849",
-                "duration": "6m 50s",
-                "realtime": "1m 29s",
-                "%cpu": "42.7%",
-                "peak_rss": "1.1 GB",
-                "peak_vmem": "6.2 GB",
-                "rchar": "633 MB",
-                "wchar": "11 MB",
-                "metrics": {
-                    "trustworthiness": 0.8724347081489938,
-                    "qnn_auc": 0.7786231463072955,
-                    "qnn": 0.38156542170443974,
-                    "qlocal": 0.34534844465937775,
-                    "rmse": 26.164835997907254,
-                    "qglobal": 0.8220269976230151,
-                    "continuity": 0.9242132842876977,
-                    "lcmc": 0.3344529596983607,
-                    "density_preservation": 0.6049855001266974
-                }
-            },
-            "umap_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:56.933",
-                "duration": "7m 19s",
-                "realtime": "2m 1s",
-                "%cpu": "53.0%",
-                "peak_rss": "1.1 GB",
-                "peak_vmem": "10.7 GB",
-                "rchar": "635.5 MB",
-                "wchar": "11.8 MB",
-                "metrics": {
-                    "lcmc": 0.35481616886180484,
-                    "density_preservation": -0.07428046715390953,
-                    "qlocal": 0.38635210453463525,
-                    "trustworthiness": 0.8872416472416472,
-                    "continuity": 0.9042203960711528,
-                    "qglobal": 0.7167787329229379,
-                    "rmse": 56.88564567509814,
-                    "qnn": 0.4019286308678839,
-                    "qnn_auc": 0.6859194375901211
-                }
-            },
-            "densmap_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:56.791",
-                "duration": "9m 59s",
-                "realtime": "2m 50s",
-                "%cpu": "42.7%",
-                "peak_rss": "1.3 GB",
-                "peak_vmem": "16.1 GB",
-                "rchar": "658.1 MB",
-                "wchar": "11.4 MB",
-                "metrics": {
-                    "density_preservation": 0.8647832379352887,
-                    "continuity": 0.9302366312657198,
-                    "qnn_auc": 0.6548223689296035,
-                    "trustworthiness": 0.8472210329353187,
-                    "qglobal": 0.6934413671827565,
-                    "qlocal": 0.3427459464379199,
-                    "rmse": 52.317907552335775,
-                    "lcmc": 0.26954523048988255,
-                    "qnn": 0.3166576924959616
-                }
-            },
-            "phate_default": {
-                "submit": "2022-05-17 21:37:56.494",
-                "duration": "10m 39s",
-                "realtime": "3m 12s",
-                "%cpu": "532.0%",
-                "peak_rss": "1.4 GB",
-                "peak_vmem": "17 GB",
-                "rchar": "636 MB",
-                "wchar": "890.9 MB",
-                "metrics": {
-                    "lcmc": 0.29759359311164574,
-                    "density_preservation": -0.3648187834726749,
-                    "continuity": 0.7962886373903963,
-                    "qnn": 0.3447060551177248,
-                    "qglobal": 0.5813765640651625,
-                    "trustworthiness": 0.9575234289520004,
-                    "qnn_auc": 0.5573467981239524,
-                    "qlocal": 0.31807356542467535,
-                    "rmse": 1199.759686595803
-                }
-            },
-            "densmap_pca_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:56.591",
-                "duration": "10m 39s",
-                "realtime": "3m 25s",
-                "%cpu": "121.9%",
-                "peak_rss": "1.3 GB",
-                "peak_vmem": "17.2 GB",
-                "rchar": "658.1 MB",
-                "wchar": "11.8 MB",
-                "metrics": {
-                    "qlocal": 0.3709609442826595,
-                    "density_preservation": 0.5970790838818133,
-                    "lcmc": 0.3303411578480499,
-                    "qnn": 0.37745361985412895,
-                    "qglobal": 0.6949880953260039,
-                    "continuity": 0.8930674297465855,
-                    "trustworthiness": 0.8798785341642484,
-                    "rmse": 56.96348285989637,
-                    "qnn_auc": 0.6647670118684632
-                }
-            },
-            "phate_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:56.905",
-                "duration": "10m 49s",
-                "realtime": "3m 38s",
-                "%cpu": "392.5%",
-                "peak_rss": "1.1 GB",
-                "peak_vmem": "24.8 GB",
-                "rchar": "634.3 MB",
-                "wchar": "10.6 MB",
-                "metrics": {
-                    "density_preservation": 0.825031977048151,
-                    "continuity": 0.9225057235670661,
-                    "qnn_auc": 0.6757021453610269,
-                    "trustworthiness": 0.8843456543456544,
-                    "rmse": 70.18024403476089,
-                    "qnn": 0.5311077389984825,
-                    "qglobal": 0.6911058427055873,
-                    "qlocal": 0.5244644312026501,
-                    "lcmc": 0.48399527699240347
-                }
-            },
-            "scvis_logCM_1kHVG": {
-                "submit": "2022-05-17 21:37:56.655",
-                "duration": "11m 20s",
-                "realtime": "2m 31s",
-                "%cpu": "88.6%",
-                "peak_rss": "1.2 GB",
-                "peak_vmem": "22.2 GB",
-                "rchar": "642.3 MB",
-                "wchar": "10.6 MB",
-                "metrics": {
-                    "rmse": 4.729915892094315,
-                    "continuity": 0.9782313484047437,
-                    "qlocal": 0.6724685085804643,
-                    "qglobal": 0.8219362466833795,
-                    "lcmc": 0.7004033243760249,
-                    "qnn": 0.7475157863821039,
-                    "density_preservation": 0.7944108088902683,
-                    "qnn_auc": 0.8117908724355508,
-                    "trustworthiness": 0.8396126096126096
-                }
-            },
-            "tsne_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:56.971",
-                "duration": "15m 49s",
-                "realtime": "8m 39s",
-                "%cpu": "297.6%",
-                "peak_rss": "1.1 GB",
-                "peak_vmem": "16.7 GB",
-                "rchar": "633.6 MB",
-                "wchar": "11 MB",
-                "metrics": {
-                    "qlocal": 0.37738759022354423,
-                    "trustworthiness": 0.8933951762523191,
-                    "continuity": 0.914803967633123,
-                    "qnn_auc": 0.7082515361285648,
-                    "rmse": 37.907267093470374,
-                    "density_preservation": 0.20886685931681112,
-                    "qglobal": 0.732271843374733,
-                    "qnn": 0.43433354545009545,
-                    "lcmc": 0.3872210834440164
-                }
-            },
-            "neuralee_default": {
-                "submit": "2022-05-17 21:52:36.392",
-                "duration": "8m 10s",
-                "realtime": "7m 33s",
-                "%cpu": "986.8%",
-                "peak_rss": "2.6 GB",
-                "peak_vmem": "29.6 GB",
-                "rchar": "642.2 MB",
-                "wchar": "596.5 MB",
-                "metrics": {
-                    "lcmc": 0.3218728040372907,
-                    "density_preservation": 0.06810057753397143,
-                    "qnn_auc": 0.5977074159479503,
-                    "rmse": 24002.870041847695,
-                    "trustworthiness": 0.9603850118135833,
-                    "qnn": 0.36898526604336973,
-                    "qglobal": 0.6239280955896765,
-                    "continuity": 0.8660269075465032,
-                    "qlocal": 0.332844434104216
-                }
-            },
-            "neuralee_logCPM_1kHVG": {
-                "submit": "2022-05-17 21:37:56.695",
-                "duration": "1h 38m 59s",
-                "realtime": "58m 7s",
-                "%cpu": "220.8%",
-                "peak_rss": "1.2 GB",
-                "peak_vmem": "46 GB",
-                "rchar": "640.5 MB",
-                "wchar": "10.6 MB",
-                "metrics": {
-                    "qnn": 0.6703216016447208,
-                    "qlocal": 0.6504867123881023,
-                    "rmse": 67.00173442908672,
-                    "lcmc": 0.6232091396386418,
-                    "trustworthiness": 0.8399370470799042,
-                    "qnn_auc": 0.8385786333170601,
-                    "continuity": 0.9882296242415475,
-                    "qglobal": 0.8578070834687416,
-                    "density_preservation": 0.7892772562183566
+                    "graph_connectivity": 0.993421052631579,
+                    "isolated_labels_f1": 0.7058823529411765,
+                    "ari": 0.09475256820347772
                 }
             }
         }
     },
     "denoising": {
         "pbmc": {
-            "no_denoising": {
-                "submit": "2022-05-17 21:38:46.515",
-                "duration": "6m 1s",
-                "realtime": "1m 15s",
-                "%cpu": "20.7%",
-                "peak_rss": "226.9 MB",
-                "peak_vmem": "5 GB",
-                "rchar": "195.4 MB",
-                "wchar": "282.5 MB",
-                "metrics": {
-                    "poisson": 0.3011988118677921,
-                    "mse": 0.27097428
-                }
-            },
-            "magic_approx": {
-                "submit": "2022-05-17 21:38:46.246",
-                "duration": "6m 50s",
-                "realtime": "43.2s",
-                "%cpu": "323.9%",
-                "peak_rss": "797.3 MB",
-                "peak_vmem": "12.1 GB",
-                "rchar": "196.7 MB",
-                "wchar": "282.5 MB",
-                "metrics": {
-                    "mse": 0.18850343,
-                    "poisson": 0.16140704236334177
-                }
-            },
             "magic": {
-                "submit": "2022-05-17 21:38:46.309",
-                "duration": "6m 50s",
-                "realtime": "42.5s",
-                "%cpu": "377.8%",
-                "peak_rss": "552 MB",
-                "peak_vmem": "11.3 GB",
-                "rchar": "196.7 MB",
-                "wchar": "282.5 MB",
+                "submit": "2022-05-19 21:47:52.677",
+                "duration": "6m 9s",
+                "realtime": "9.9s",
+                "%cpu": "58.1%",
+                "peak_rss": "259.6 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "40.3 MB",
+                "wchar": "1.1 MB",
                 "metrics": {
-                    "poisson": 0.16180691297676686,
-                    "mse": 0.1886401
+                    "poisson": 0.02256164474789636,
+                    "mse": 2.4680867
                 }
             },
             "alra": {
-                "submit": "2022-05-17 21:56:36.303",
-                "duration": "3m 10s",
-                "realtime": "2m 24s",
-                "%cpu": "82.9%",
-                "peak_rss": "2.6 GB",
-                "peak_vmem": "7.1 GB",
-                "rchar": "232.5 MB",
-                "wchar": "308.3 MB",
+                "submit": "2022-05-19 21:47:52.473",
+                "duration": "5m 9s",
+                "realtime": "21s",
+                "%cpu": "76.3%",
+                "peak_rss": "833.7 MB",
+                "peak_vmem": "1.7 GB",
+                "rchar": "76 MB",
+                "wchar": "1.2 MB",
                 "metrics": {
-                    "poisson": 0.04970525261096118,
-                    "mse": 0.26365772
+                    "poisson": 0.009512814982832995,
+                    "mse": 2.0384352
+                }
+            },
+            "magic_approx": {
+                "submit": "2022-05-19 21:47:52.790",
+                "duration": "6m 9s",
+                "realtime": "10s",
+                "%cpu": "53.6%",
+                "peak_rss": "258.3 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "40.3 MB",
+                "wchar": "1.1 MB",
+                "metrics": {
+                    "mse": 2.4680867,
+                    "poisson": 0.02256164474789636
+                }
+            },
+            "no_denoising": {
+                "submit": "2022-05-19 21:47:52.630",
+                "duration": "3m 49s",
+                "realtime": "12.6s",
+                "%cpu": "45.5%",
+                "peak_rss": "229.8 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "40.6 MB",
+                "wchar": "1.1 MB",
+                "metrics": {
+                    "mse": 1.5642654,
+                    "poisson": 0.07933265818672611
+                }
+            }
+        }
+    },
+    "dimensionality_reduction": {
+        "olsson_2016_mouse_blood": {
+            "densmap_pca_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:52:28.429",
+                "duration": "2m 23s",
+                "realtime": "35.3s",
+                "%cpu": "76.6%",
+                "peak_rss": "508.7 MB",
+                "peak_vmem": "3 GB",
+                "rchar": "65.4 MB",
+                "wchar": "2.9 MB",
+                "metrics": {
+                    "lcmc": 0.48643598746199534,
+                    "rmse": 61.91253159554625,
+                    "density_preservation": 0.8902967428386848,
+                    "qnn": 0.5904628330995793,
+                    "qlocal": 0.6178952820211207,
+                    "qnn_auc": 0.8232611092264921,
+                    "trustworthiness": 0.9373068592057762,
+                    "continuity": 0.9692157134276831,
+                    "qglobal": 0.8965308018630573
+                }
+            },
+            "densmap_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:52:11.957",
+                "duration": "2m 29s",
+                "realtime": "33.8s",
+                "%cpu": "79.7%",
+                "peak_rss": "515.9 MB",
+                "peak_vmem": "2.8 GB",
+                "rchar": "65.4 MB",
+                "wchar": "2.7 MB",
+                "metrics": {
+                    "qlocal": 0.6453087330579823,
+                    "qnn_auc": 0.8387835717663507,
+                    "qnn": 0.7582263458841298,
+                    "lcmc": 0.6541995002465459,
+                    "qglobal": 0.8610669446417489,
+                    "rmse": 61.79761538620255,
+                    "density_preservation": 0.7812505946433547,
+                    "trustworthiness": 0.9698243080625752,
+                    "continuity": 0.9856321746537567
+                }
+            },
+            "neuralee_default": {
+                "submit": "2022-05-19 21:52:27.675",
+                "duration": "2m 44s",
+                "realtime": "16.6s",
+                "%cpu": "92.0%",
+                "peak_rss": "457.2 MB",
+                "peak_vmem": "3.9 GB",
+                "rchar": "47.6 MB",
+                "wchar": "1.9 MB",
+                "metrics": {
+                    "qnn": 0.5551839464882943,
+                    "density_preservation": 0.8088704211484187,
+                    "continuity": 0.9603637868484742,
+                    "qlocal": 0.5789725856781337,
+                    "qglobal": 0.8909842762382262,
+                    "rmse": 35510.3238693919,
+                    "trustworthiness": 0.9379446450060168,
+                    "lcmc": 0.45115710085071037,
+                    "qnn_auc": 0.8099292174143973
+                }
+            },
+            "neuralee_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:52:44.493",
+                "duration": "1m 47s",
+                "realtime": "13.6s",
+                "%cpu": "90.6%",
+                "peak_rss": "370.6 MB",
+                "peak_vmem": "3.1 GB",
+                "rchar": "47.7 MB",
+                "wchar": "1.9 MB",
+                "metrics": {
+                    "lcmc": 0.5648694754326502,
+                    "continuity": 0.9743596452949408,
+                    "qnn": 0.6688963210702341,
+                    "rmse": 72.6567512883808,
+                    "trustworthiness": 0.952317689530686,
+                    "qglobal": 0.8766982469900808,
+                    "qnn_auc": 0.8246969194363944,
+                    "density_preservation": 0.5254798603329045,
+                    "qlocal": 0.6760509472022085
+                }
+            },
+            "pca_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:00.926",
+                "duration": "1m 31s",
+                "realtime": "10.3s",
+                "%cpu": "67.1%",
+                "peak_rss": "254.3 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "42 MB",
+                "wchar": "2.1 MB",
+                "metrics": {
+                    "lcmc": 0.4399369044972742,
+                    "rmse": 13.31908306901342,
+                    "trustworthiness": 0.925515443241075,
+                    "qglobal": 0.9472771269426846,
+                    "density_preservation": 0.8790919910402993,
+                    "qlocal": 0.5949063517561951,
+                    "qnn_auc": 0.8556374652493924,
+                    "continuity": 0.963460290520641,
+                    "qnn": 0.5439637501348581
+                }
+            },
+            "phate_default": {
+                "submit": "2022-05-19 21:53:16.825",
+                "duration": "2m 28s",
+                "realtime": "13.2s",
+                "%cpu": "61.1%",
+                "peak_rss": "232.6 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "41.5 MB",
+                "wchar": "2.7 MB",
+                "metrics": {
+                    "qlocal": 0.4952071742250466,
+                    "rmse": 1198.6419412159673,
+                    "continuity": 0.9381242723699444,
+                    "qnn_auc": 0.7353949207933376,
+                    "qnn": 0.48063437263998277,
+                    "lcmc": 0.37660752700239886,
+                    "qglobal": 0.8205442113270842,
+                    "trustworthiness": 0.9142366626554352,
+                    "density_preservation": -0.7729659750417679
+                }
+            },
+            "scvis_logCM_1kHVG": {
+                "submit": "2022-05-19 21:53:32.510",
+                "duration": "4m 29s",
+                "realtime": "43.5s",
+                "%cpu": "88.0%",
+                "peak_rss": "383.8 MB",
+                "peak_vmem": "3.4 GB",
+                "rchar": "49.6 MB",
+                "wchar": "2 MB",
+                "metrics": {
+                    "lcmc": 0.5331508434335133,
+                    "qglobal": 0.8849842560749983,
+                    "rmse": 5.256228207751711,
+                    "qnn_auc": 0.8222619562435134,
+                    "qlocal": 0.6429716337219991,
+                    "continuity": 0.9682588245523918,
+                    "density_preservation": 0.6235756769236481,
+                    "trustworthiness": 0.9397513036502206,
+                    "qnn": 0.6371776890710972
+                }
+            },
+            "phate_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:01.351",
+                "duration": "2m 40s",
+                "realtime": "10.2s",
+                "%cpu": "67.8%",
+                "peak_rss": "271.6 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "41.6 MB",
+                "wchar": "1.9 MB",
+                "metrics": {
+                    "continuity": 0.9754312642204878,
+                    "qnn": 0.6643650879275003,
+                    "rmse": 75.83785629573524,
+                    "trustworthiness": 0.9528543922984356,
+                    "lcmc": 0.5603382422899164,
+                    "qnn_auc": 0.8328864612608279,
+                    "density_preservation": 0.5651857412915724,
+                    "qlocal": 0.667196842744174,
+                    "qglobal": 0.8907832902851271
+                }
+            },
+            "tsne_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:17.739",
+                "duration": "3m 24s",
+                "realtime": "39.1s",
+                "%cpu": "127.9%",
+                "peak_rss": "266.2 MB",
+                "peak_vmem": "2.5 GB",
+                "rchar": "40.9 MB",
+                "wchar": "2.1 MB",
+                "metrics": {
+                    "rmse": 950.9497875036379,
+                    "qlocal": 0.5783168615462453,
+                    "lcmc": 0.4583854965784049,
+                    "qnn": 0.5624123422159888,
+                    "continuity": 0.9375747758134562,
+                    "density_preservation": 0.5529919432145836,
+                    "qnn_auc": 0.7286373480861662,
+                    "qglobal": 0.7790601420161569,
+                    "trustworthiness": 0.9200336943441636
+                }
+            },
+            "umap_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:33.060",
+                "duration": "3m 48s",
+                "realtime": "49.1s",
+                "%cpu": "52.5%",
+                "peak_rss": "331.1 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "44.4 MB",
+                "wchar": "2.9 MB",
+                "metrics": {
+                    "trustworthiness": 0.9313935018050541,
+                    "density_preservation": -0.2688993777188537,
+                    "qlocal": 0.6713396781159355,
+                    "lcmc": 0.4757552236255512,
+                    "qnn_auc": 0.8218860701095069,
+                    "rmse": 61.100437089081026,
+                    "qnn": 0.5797820692631351,
+                    "continuity": 0.9597007679264697,
+                    "qglobal": 0.9055497307374805
+                }
+            }
+        },
+        "tenx_5k_pbmc": {
+            "densmap_pca_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:52:28.532",
+                "duration": "1m 34s",
+                "realtime": "35.9s",
+                "%cpu": "76.9%",
+                "peak_rss": "523.3 MB",
+                "peak_vmem": "2 GB",
+                "rchar": "64 MB",
+                "wchar": "1.5 MB",
+                "metrics": {
+                    "qnn": 0.23905876268666365,
+                    "qlocal": 0.3349544010750716,
+                    "trustworthiness": 0.7719983228511531,
+                    "rmse": 46.95478071733987,
+                    "qglobal": 0.7865990838864467,
+                    "continuity": 0.844763969626598,
+                    "lcmc": 0.1768097667027279,
+                    "density_preservation": 0.9106375488447718,
+                    "qnn_auc": 0.6870807753284237
+                }
+            },
+            "densmap_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:52:12.348",
+                "duration": "2m 29s",
+                "realtime": "34.8s",
+                "%cpu": "83.2%",
+                "peak_rss": "514.8 MB",
+                "peak_vmem": "2.8 GB",
+                "rchar": "64 MB",
+                "wchar": "1.3 MB",
+                "metrics": {
+                    "qnn": 0.22153985390135109,
+                    "continuity": 0.8354358289228029,
+                    "lcmc": 0.15929085791741535,
+                    "trustworthiness": 0.751475890985325,
+                    "rmse": 47.01323642453351,
+                    "density_preservation": 0.9130986956781665,
+                    "qlocal": 0.35017858304119026,
+                    "qnn_auc": 0.6774365216208441,
+                    "qglobal": 0.7915114165579824
+                }
+            },
+            "neuralee_default": {
+                "submit": "2022-05-19 21:52:27.724",
+                "duration": "1m 35s",
+                "realtime": "11.7s",
+                "%cpu": "78.1%",
+                "peak_rss": "441 MB",
+                "peak_vmem": "3.1 GB",
+                "rchar": "46.2 MB",
+                "wchar": "509.8 KB",
+                "metrics": {
+                    "qnn": 0.12476566035296399,
+                    "qlocal": 0.28956360869440195,
+                    "trustworthiness": 0.6184368972746331,
+                    "rmse": 40.76336932776257,
+                    "density_preservation": 0.6717245595272713,
+                    "qglobal": 0.7698429297113327,
+                    "qnn_auc": 0.6033590215423681,
+                    "lcmc": 0.06251666436902825,
+                    "continuity": 0.7105817645768515
+                }
+            },
+            "neuralee_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:52:44.601",
+                "duration": "1m 58s",
+                "realtime": "18.8s",
+                "%cpu": "60.9%",
+                "peak_rss": "432.8 MB",
+                "peak_vmem": "2.5 GB",
+                "rchar": "46.3 MB",
+                "wchar": "554.3 KB",
+                "metrics": {
+                    "rmse": 49.9484618046782,
+                    "qnn_auc": 0.6638395578974977,
+                    "qnn": 0.19787963022819832,
+                    "lcmc": 0.13563063424426258,
+                    "qlocal": 0.29658926744469016,
+                    "continuity": 0.809981694848202,
+                    "qglobal": 0.7737170167071743,
+                    "trustworthiness": 0.7382649895178197,
+                    "density_preservation": 0.5712371675720199
+                }
+            },
+            "pca_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:01.153",
+                "duration": "2m 1s",
+                "realtime": "11.5s",
+                "%cpu": "64.5%",
+                "peak_rss": "274.2 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "42 MB",
+                "wchar": "735.7 KB",
+                "metrics": {
+                    "lcmc": 0.1362124430231106,
+                    "density_preservation": 0.34105429319009506,
+                    "rmse": 33.44949293525367,
+                    "continuity": 0.7668670674682698,
+                    "qglobal": 0.7861204620314118,
+                    "qnn": 0.19846143900704635,
+                    "qlocal": 0.327103811957727,
+                    "trustworthiness": 0.7590753319357093,
+                    "qnn_auc": 0.6665706438211924
+                }
+            },
+            "phate_default": {
+                "submit": "2022-05-19 21:53:16.868",
+                "duration": "2m 56s",
+                "realtime": "12.4s",
+                "%cpu": "65.2%",
+                "peak_rss": "253.3 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "40.1 MB",
+                "wchar": "707.8 KB",
+                "metrics": {
+                    "density_preservation": 0.35052445511788305,
+                    "trustworthiness": 0.7308637316561846,
+                    "qlocal": 0.2627273138251806,
+                    "qnn_auc": 0.6350962982158547,
+                    "rmse": 969.3572477601774,
+                    "continuity": 0.7529870880442993,
+                    "lcmc": 0.09813629071850138,
+                    "qglobal": 0.7477026084827653,
+                    "qnn": 0.16038528670243712
+                }
+            },
+            "scvis_logCM_1kHVG": {
+                "submit": "2022-05-19 21:53:32.615",
+                "duration": "4m 29s",
+                "realtime": "47.6s",
+                "%cpu": "90.7%",
+                "peak_rss": "404.2 MB",
+                "peak_vmem": "3.4 GB",
+                "rchar": "48.9 MB",
+                "wchar": "574 KB",
+                "metrics": {
+                    "qglobal": 0.686241194507861,
+                    "continuity": 0.6365566810488913,
+                    "qlocal": 0.20106822701024746,
+                    "qnn_auc": 0.5436190843569466,
+                    "density_preservation": 0.10424449637829826,
+                    "trustworthiness": 0.583869461914745,
+                    "rmse": 51.161994281068914,
+                    "lcmc": 0.03549487886253139,
+                    "qnn": 0.09774387484646713
+                }
+            },
+            "phate_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:01.555",
+                "duration": "2m 11s",
+                "realtime": "12.1s",
+                "%cpu": "161.2%",
+                "peak_rss": "282.5 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "41.7 MB",
+                "wchar": "558.5 KB",
+                "metrics": {
+                    "rmse": 51.276409769214276,
+                    "density_preservation": 0.554212861013172,
+                    "lcmc": 0.15269702509047114,
+                    "qglobal": 0.7904550387300253,
+                    "trustworthiness": 0.7496095038434661,
+                    "continuity": 0.8372876163134099,
+                    "qnn": 0.21494602107440688,
+                    "qnn_auc": 0.6733575880375471,
+                    "qlocal": 0.32284244900035325
+                }
+            },
+            "tsne_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:17.898",
+                "duration": "3m 24s",
+                "realtime": "46.1s",
+                "%cpu": "148.8%",
+                "peak_rss": "285 MB",
+                "peak_vmem": "2.5 GB",
+                "rchar": "40.9 MB",
+                "wchar": "743.8 KB",
+                "metrics": {
+                    "qlocal": 0.3518494190396098,
+                    "continuity": 0.8217470231336674,
+                    "qnn": 0.27726420583101685,
+                    "lcmc": 0.2150152098470811,
+                    "trustworthiness": 0.8170800838574424,
+                    "density_preservation": 0.4523633436741643,
+                    "qnn_auc": 0.6724959897034753,
+                    "qglobal": 0.7608280322670551,
+                    "rmse": 36.45044257819879
+                }
+            },
+            "umap_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:33.203",
+                "duration": "3m 29s",
+                "realtime": "27.2s",
+                "%cpu": "85.7%",
+                "peak_rss": "327.2 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "43 MB",
+                "wchar": "1.7 MB",
+                "metrics": {
+                    "rmse": 47.505780396258785,
+                    "density_preservation": 0.29032657196761474,
+                    "trustworthiness": 0.7832684835779176,
+                    "lcmc": 0.18682980678288824,
+                    "continuity": 0.8143299281220284,
+                    "qlocal": 0.3305489039875334,
+                    "qnn_auc": 0.6668721564305861,
+                    "qglobal": 0.7697280642074577,
+                    "qnn": 0.24907880276682398
+                }
+            }
+        },
+        "human_blood_nestorowa2016": {
+            "densmap_pca_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:52:28.378",
+                "duration": "1m 34s",
+                "realtime": "35.4s",
+                "%cpu": "77.3%",
+                "peak_rss": "513.3 MB",
+                "peak_vmem": "2 GB",
+                "rchar": "65.6 MB",
+                "wchar": "3.2 MB",
+                "metrics": {
+                    "trustworthiness": 0.698479105520615,
+                    "qlocal": 0.2315856637295834,
+                    "density_preservation": 0.8110599984393935,
+                    "qglobal": 0.6873516694990287,
+                    "qnn": 0.23000840390458335,
+                    "rmse": 54.51095484585374,
+                    "qnn_auc": 0.6256408949959582,
+                    "lcmc": 0.1677594079206476,
+                    "continuity": 0.7797024984625993
+                }
+            },
+            "densmap_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:51:42.149",
+                "duration": "2m 29s",
+                "realtime": "30.9s",
+                "%cpu": "87.4%",
+                "peak_rss": "521.4 MB",
+                "peak_vmem": "2.8 GB",
+                "rchar": "65.6 MB",
+                "wchar": "3 MB",
+                "metrics": {
+                    "qnn_auc": 0.623236547833165,
+                    "qnn": 0.22334992565776715,
+                    "qlocal": 0.23980095824789832,
+                    "rmse": 54.71459528771773,
+                    "qglobal": 0.6916830003932906,
+                    "continuity": 0.7846669351937954,
+                    "trustworthiness": 0.6863594689028651,
+                    "lcmc": 0.1611009296738314,
+                    "density_preservation": 0.848608648765594
+                }
+            },
+            "neuralee_default": {
+                "submit": "2022-05-19 21:52:27.566",
+                "duration": "34s",
+                "realtime": "11.7s",
+                "%cpu": "63.7%",
+                "peak_rss": "442.3 MB",
+                "peak_vmem": "2.5 GB",
+                "rchar": "47.8 MB",
+                "wchar": "2.2 MB",
+                "metrics": {
+                    "density_preservation": 0.6533010186619524,
+                    "rmse": 14664.747797775706,
+                    "continuity": 0.6261714219727019,
+                    "lcmc": 0.059025811695940136,
+                    "qglobal": 0.6586980241813866,
+                    "trustworthiness": 0.7123625436757512,
+                    "qlocal": 0.1783113180357929,
+                    "qnn": 0.12127480767987588,
+                    "qnn_auc": 0.5541947603012313
+                }
+            },
+            "neuralee_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:52:44.420",
+                "duration": "1m 58s",
+                "realtime": "18.6s",
+                "%cpu": "56.2%",
+                "peak_rss": "434.1 MB",
+                "peak_vmem": "2.5 GB",
+                "rchar": "47.9 MB",
+                "wchar": "2.2 MB",
+                "metrics": {
+                    "qnn": 0.1498480832633008,
+                    "lcmc": 0.08759908727936505,
+                    "qnn_auc": 0.5805058005910132,
+                    "qglobal": 0.6645336742928363,
+                    "rmse": 56.69105218628878,
+                    "continuity": 0.7237300628276128,
+                    "trustworthiness": 0.625404891684137,
+                    "density_preservation": -0.03472417270591696,
+                    "qlocal": 0.19108029539516658
+                }
+            },
+            "pca_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:00.943",
+                "duration": "2m 1s",
+                "realtime": "10.7s",
+                "%cpu": "69.9%",
+                "peak_rss": "270.5 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "42.2 MB",
+                "wchar": "2.4 MB",
+                "metrics": {
+                    "qnn": 0.1839162195358459,
+                    "qlocal": 0.1951971112195218,
+                    "lcmc": 0.12166722355191015,
+                    "qglobal": 0.6613049726916913,
+                    "qnn_auc": 0.5944970488802608,
+                    "rmse": 42.28178986468592,
+                    "trustworthiness": 0.6734227812718379,
+                    "density_preservation": -0.22374345680795654,
+                    "continuity": 0.7117786717631569
+                }
+            },
+            "phate_default": {
+                "submit": "2022-05-19 21:53:16.825",
+                "duration": "2m 56s",
+                "realtime": "12.1s",
+                "%cpu": "66.7%",
+                "peak_rss": "273.3 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "41.7 MB",
+                "wchar": "3.1 MB",
+                "metrics": {
+                    "density_preservation": -0.33791463926774323,
+                    "lcmc": 0.11849959797818205,
+                    "qnn_auc": 0.5666866189844753,
+                    "trustworthiness": 0.6798898672257163,
+                    "qnn": 0.1807485939621178,
+                    "rmse": 816.7840197023446,
+                    "qglobal": 0.6205722022048431,
+                    "continuity": 0.6759035026214546,
+                    "qlocal": 0.1678325866906947
+                }
+            },
+            "scvis_logCM_1kHVG": {
+                "submit": "2022-05-19 21:53:32.507",
+                "duration": "4m 49s",
+                "realtime": "32.9s",
+                "%cpu": "109.6%",
+                "peak_rss": "387 MB",
+                "peak_vmem": "2.2 GB",
+                "rchar": "49.8 MB",
+                "wchar": "2.2 MB",
+                "metrics": {
+                    "qnn_auc": 0.5453788947160253,
+                    "lcmc": 0.029870727333667208,
+                    "trustworthiness": 0.5622020964360588,
+                    "qglobal": 0.7833320598723895,
+                    "qlocal": 0.29484670557024945,
+                    "rmse": 4.6066623325442535,
+                    "qnn": 0.09211972331760294,
+                    "continuity": 0.6380047108277763,
+                    "density_preservation": 0.35245975672428637
+                }
+            },
+            "phate_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:01.336",
+                "duration": "2m 10s",
+                "realtime": "11.5s",
+                "%cpu": "175.6%",
+                "peak_rss": "287.1 MB",
+                "peak_vmem": "2.7 GB",
+                "rchar": "41.8 MB",
+                "wchar": "2.2 MB",
+                "metrics": {
+                    "qnn": 0.187342426789062,
+                    "density_preservation": -0.29081078155744733,
+                    "rmse": 57.12696622482691,
+                    "qnn_auc": 0.5765036241263002,
+                    "qlocal": 0.1817230062788097,
+                    "qglobal": 0.6308875681276763,
+                    "trustworthiness": 0.6572013976240392,
+                    "lcmc": 0.12509343080512625,
+                    "continuity": 0.7227406287623497
+                }
+            },
+            "tsne_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:17.731",
+                "duration": "3m 15s",
+                "realtime": "32.1s",
+                "%cpu": "385.7%",
+                "peak_rss": "268.9 MB",
+                "peak_vmem": "2.5 GB",
+                "rchar": "41.1 MB",
+                "wchar": "2.4 MB",
+                "metrics": {
+                    "qlocal": 0.24271408916837733,
+                    "rmse": 44.83523092837428,
+                    "trustworthiness": 0.7326280922431866,
+                    "lcmc": 0.18818736060020025,
+                    "qglobal": 0.6613260150378673,
+                    "continuity": 0.7562798605206,
+                    "qnn": 0.250436356584136,
+                    "density_preservation": 0.5895427136439992,
+                    "qnn_auc": 0.6131851785697886
+                }
+            },
+            "umap_logCPM_1kHVG": {
+                "submit": "2022-05-19 21:53:32.995",
+                "duration": "4m 18s",
+                "realtime": "24.5s",
+                "%cpu": "86.7%",
+                "peak_rss": "321 MB",
+                "peak_vmem": "907.3 MB",
+                "rchar": "44.6 MB",
+                "wchar": "3.4 MB",
+                "metrics": {
+                    "density_preservation": 0.04746801518761736,
+                    "qnn": 0.22444889779559118,
+                    "qglobal": 0.6433225423884203,
+                    "qlocal": 0.20771259316814766,
+                    "trustworthiness": 0.6925439552760307,
+                    "lcmc": 0.16219990181165544,
+                    "rmse": 53.891062231807865,
+                    "qnn_auc": 0.593201325232826,
+                    "continuity": 0.7535274574514345
                 }
             }
         }
     },
     "label_projection": {
-        "zebrafish_random": {
-            "majority_vote": {
-                "submit": "2022-05-17 21:37:57.144",
-                "duration": "7m 9s",
-                "realtime": "1m 36s",
-                "%cpu": "18.3%",
-                "peak_rss": "1 GB",
-                "peak_vmem": "5.3 GB",
-                "rchar": "795.8 MB",
-                "wchar": "757.5 MB",
+        "cengen_batch": {
+            "knn_classifier_scran": {
+                "submit": "2022-05-19 21:53:48.832",
+                "duration": "4m 24s",
+                "realtime": "26.1s",
+                "%cpu": "98.4%",
+                "peak_rss": "900.5 MB",
+                "peak_vmem": "2.3 GB",
+                "rchar": "78.1 MB",
+                "wchar": "675.1 KB",
                 "metrics": {
-                    "f1_micro": 0.1810800604229607,
-                    "accuracy": 0.18108006042296074,
-                    "f1": 0.055525428599718415
-                }
-            },
-            "random_labels": {
-                "submit": "2022-05-17 21:37:57.685",
-                "duration": "7m 8s",
-                "realtime": "1m 36s",
-                "%cpu": "10.8%",
-                "peak_rss": "1 GB",
-                "peak_vmem": "5.3 GB",
-                "rchar": "795.8 MB",
-                "wchar": "757.5 MB",
-                "metrics": {
-                    "f1": 0.08783027747886801,
-                    "accuracy": 0.08761329305135952,
-                    "f1_micro": 0.08761329305135952
-                }
-            },
-            "logistic_regression_log_cpm": {
-                "submit": "2022-05-17 21:37:57.004",
-                "duration": "8m 59s",
-                "realtime": "3m 16s",
-                "%cpu": "562.3%",
-                "peak_rss": "1.6 GB",
-                "peak_vmem": "6.9 GB",
-                "rchar": "795.8 MB",
-                "wchar": "1.1 GB",
-                "metrics": {
-                    "f1": 0.8273667770550877,
-                    "accuracy": 0.8298716012084593,
-                    "f1_micro": 0.8298716012084593
+                    "accuracy": 0.03225806451612903,
+                    "f1": 0.030052384891094568,
+                    "f1_micro": 0.03225806451612903
                 }
             },
             "knn_classifier_log_cpm": {
-                "submit": "2022-05-17 21:53:16.226",
-                "duration": "3m 20s",
-                "realtime": "2m 14s",
-                "%cpu": "363.6%",
-                "peak_rss": "2.3 GB",
-                "peak_vmem": "7.8 GB",
-                "rchar": "795.8 MB",
-                "wchar": "1.1 GB",
+                "submit": "2022-05-19 21:53:47.491",
+                "duration": "3m 44s",
+                "realtime": "9.3s",
+                "%cpu": "62.9%",
+                "peak_rss": "255 MB",
+                "peak_vmem": "805.1 MB",
+                "rchar": "40.5 MB",
+                "wchar": "478.2 KB",
                 "metrics": {
-                    "accuracy": 0.787953172205438,
-                    "f1_micro": 0.787953172205438,
-                    "f1": 0.7851024810413672
+                    "f1": 0.02124935995903738,
+                    "accuracy": 0.043010752688172046,
+                    "f1_micro": 0.043010752688172046
                 }
             },
-            "mlp_log_cpm": {
-                "submit": "2022-05-17 21:37:57.232",
-                "duration": "33m 19s",
-                "realtime": "27m 38s",
-                "%cpu": "1506.1%",
-                "peak_rss": "1.5 GB",
-                "peak_vmem": "6.9 GB",
-                "rchar": "795.8 MB",
-                "wchar": "1.1 GB",
+            "logistic_regression_log_cpm": {
+                "submit": "2022-05-19 21:54:03.251",
+                "duration": "3m 49s",
+                "realtime": "22s",
+                "%cpu": "133.3%",
+                "peak_rss": "266.7 MB",
+                "peak_vmem": "1.2 GB",
+                "rchar": "40.6 MB",
+                "wchar": "478.8 KB",
                 "metrics": {
-                    "f1": 0.8284209136726922,
-                    "f1_micro": 0.8291163141993958,
-                    "accuracy": 0.8291163141993958
-                }
-            },
-            "knn_classifier_scran": {
-                "submit": "2022-05-17 22:17:06.436",
-                "duration": "22m 20s",
-                "realtime": "18m 43s",
-                "%cpu": "96.4%",
-                "peak_rss": "7.8 GB",
-                "peak_vmem": "12.3 GB",
-                "rchar": "835 MB",
-                "wchar": "1.5 GB",
-                "metrics": {
-                    "f1_micro": 0.8015483383685801,
-                    "f1": 0.801392221555476,
-                    "accuracy": 0.8015483383685801
-                }
-            },
-            "mlp_scran": {
-                "submit": "2022-05-17 22:12:26.992",
-                "duration": "32m 9s",
-                "realtime": "31m 9s",
-                "%cpu": "1033.4%",
-                "peak_rss": "7.8 GB",
-                "peak_vmem": "10.8 GB",
-                "rchar": "835 MB",
-                "wchar": "1.5 GB",
-                "metrics": {
-                    "f1_micro": 0.8404456193353473,
-                    "accuracy": 0.8404456193353474,
-                    "f1": 0.8399810968140312
+                    "f1": 0.07589605734767026,
+                    "accuracy": 0.08602150537634409,
+                    "f1_micro": 0.08602150537634409
                 }
             },
             "logistic_regression_scran": {
-                "submit": "2022-05-17 22:11:36.195",
-                "duration": "38m 40s",
-                "realtime": "10m 39s",
-                "%cpu": "107.2%",
-                "peak_rss": "7.8 GB",
-                "peak_vmem": "8.8 GB",
-                "rchar": "835 MB",
-                "wchar": "1.5 GB",
+                "submit": "2022-05-19 21:54:19.725",
+                "duration": "6m 22s",
+                "realtime": "28s",
+                "%cpu": "87.7%",
+                "peak_rss": "899.1 MB",
+                "peak_vmem": "1.6 GB",
+                "rchar": "78 MB",
+                "wchar": "645 KB",
                 "metrics": {
-                    "accuracy": 0.8395015105740181,
-                    "f1": 0.8373086819332034,
-                    "f1_micro": 0.8395015105740181
-                }
-            },
-            "scarches_scanvi_hvg": {
-                "submit": "2022-05-18 04:14:27.170",
-                "duration": "3h 8m 39s",
-                "realtime": "1h 28m 52s",
-                "%cpu": "1430.3%",
-                "peak_rss": "4.1 GB",
-                "peak_vmem": "29.5 GB",
-                "rchar": "815.4 MB",
-                "wchar": "757.8 MB",
-                "metrics": {
-                    "f1": 0.6424909753609652,
-                    "accuracy": 0.7194108761329305,
-                    "f1_micro": 0.7194108761329305
-                }
-            },
-            "scanvi_hvg": {
-                "submit": "2022-05-18 04:19:37.287",
-                "duration": "5h 3m 19s",
-                "realtime": "3h 1m 10s",
-                "%cpu": "1283.4%",
-                "peak_rss": "4.1 GB",
-                "peak_vmem": "29.4 GB",
-                "rchar": "815.4 MB",
-                "wchar": "757.7 MB",
-                "metrics": {
-                    "accuracy": 0.7316842900302115,
-                    "f1": 0.6632269171135193,
-                    "f1_micro": 0.7316842900302115
-                }
-            },
-            "scarches_scanvi_all_genes": {
-                "submit": "2022-05-18 03:57:37.045",
-                "duration": "7h 38m 40s",
-                "realtime": "6h 58m 35s",
-                "%cpu": "1191.8%",
-                "peak_rss": "6.2 GB",
-                "peak_vmem": "31.4 GB",
-                "rchar": "813.9 MB",
-                "wchar": "757.8 MB",
-                "metrics": {
-                    "accuracy": 0.6193353474320241,
-                    "f1": 0.5109754356114206,
-                    "f1_micro": 0.6193353474320241
-                }
-            },
-            "scanvi_all_genes": {
-                "submit": "2022-05-18 18:57:07.647",
-                "duration": "9h 5m",
-                "realtime": "5h 9m 57s",
-                "%cpu": "970.7%",
-                "peak_rss": "4.9 GB",
-                "peak_vmem": "27.7 GB",
-                "rchar": "813.9 MB",
-                "wchar": "757.7 MB",
-                "metrics": {
-                    "f1": 0.7270814032740405,
-                    "accuracy": 0.7753021148036254,
-                    "f1_micro": 0.7753021148036253
-                }
-            }
-        },
-        "zebrafish_labels": {
-            "logistic_regression_log_cpm": {
-                "submit": "2022-05-17 21:37:46.324",
-                "duration": "8m",
-                "realtime": "4m 23s",
-                "%cpu": "534.2%",
-                "peak_rss": "1.9 GB",
-                "peak_vmem": "5.3 GB",
-                "rchar": "795.8 MB",
-                "wchar": "1.1 GB",
-                "metrics": {
-                    "f1": 0.2817519166096617,
-                    "accuracy": 0.24497210328272997,
-                    "f1_micro": 0.24497210328272997
-                }
-            },
-            "random_labels": {
-                "submit": "2022-05-17 21:37:46.725",
-                "duration": "7m 59s",
-                "realtime": "2m 4s",
-                "%cpu": "10.2%",
-                "peak_rss": "1 GB",
-                "peak_vmem": "5.3 GB",
-                "rchar": "795.8 MB",
-                "wchar": "757.5 MB",
-                "metrics": {
-                    "accuracy": 0.03029713247696899,
-                    "f1_micro": 0.03029713247696899,
-                    "f1": 0.04185258062711781
+                    "f1_micro": 0.08602150537634409,
+                    "f1": 0.05875576036866358,
+                    "accuracy": 0.08602150537634409
                 }
             },
             "majority_vote": {
-                "submit": "2022-05-17 21:37:46.441",
-                "duration": "8m 9s",
-                "realtime": "2m 3s",
-                "%cpu": "12.4%",
-                "peak_rss": "1 GB",
-                "peak_vmem": "5.3 GB",
-                "rchar": "795.8 MB",
-                "wchar": "757.5 MB",
+                "submit": "2022-05-19 21:54:04.223",
+                "duration": "4m 48s",
+                "realtime": "9s",
+                "%cpu": "69.8%",
+                "peak_rss": "254.7 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "40.5 MB",
+                "wchar": "363.9 KB",
+                "metrics": {
+                    "accuracy": 0.0,
+                    "f1": 0.0,
+                    "f1_micro": 0.0
+                }
+            },
+            "mlp_log_cpm": {
+                "submit": "2022-05-19 21:54:34.797",
+                "duration": "7m 20s",
+                "realtime": "52.6s",
+                "%cpu": "162.4%",
+                "peak_rss": "261.8 MB",
+                "peak_vmem": "5 GB",
+                "rchar": "40.6 MB",
+                "wchar": "478.4 KB",
+                "metrics": {
+                    "accuracy": 0.03225806451612903,
+                    "f1_micro": 0.03225806451612903,
+                    "f1": 0.01508169250104734
+                }
+            },
+            "random_labels": {
+                "submit": "2022-05-19 21:54:36.050",
+                "duration": "5m 58s",
+                "realtime": "12.4s",
+                "%cpu": "53.5%",
+                "peak_rss": "255.6 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "40.5 MB",
+                "wchar": "364.6 KB",
+                "metrics": {
+                    "f1": 0.0,
+                    "f1_micro": 0.0,
+                    "accuracy": 0.0
+                }
+            },
+            "mlp_scran": {
+                "submit": "2022-05-19 21:54:20.584",
+                "duration": "5m 52s",
+                "realtime": "28.5s",
+                "%cpu": "108.5%",
+                "peak_rss": "895.6 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "78.1 MB",
+                "wchar": "645.2 KB",
+                "metrics": {
+                    "f1_micro": 0.03225806451612903,
+                    "f1": 0.011000827129859387,
+                    "accuracy": 0.03225806451612903
+                }
+            },
+            "scanvi_hvg": {
+                "submit": "2022-05-19 21:55:06.989",
+                "duration": "8m 14s",
+                "realtime": "55.7s",
+                "%cpu": "312.9%",
+                "peak_rss": "666.7 MB",
+                "peak_vmem": "42.7 GB",
+                "rchar": "58.4 MB",
+                "wchar": "424.5 KB",
+                "metrics": {
+                    "accuracy": 0.0,
+                    "f1_micro": 0.0,
+                    "f1": 0.0
+                }
+            },
+            "scanvi_all_genes": {
+                "submit": "2022-05-19 21:54:51.920",
+                "duration": "8m 26s",
+                "realtime": "1m 13s",
+                "%cpu": "266.3%",
+                "peak_rss": "636.1 MB",
+                "peak_vmem": "40.2 GB",
+                "rchar": "56.9 MB",
+                "wchar": "373.3 KB",
+                "metrics": {
+                    "f1_micro": 0.0,
+                    "f1": 0.0,
+                    "accuracy": 0.0
+                }
+            },
+            "scarches_scanvi_hvg": {
+                "submit": "2022-05-19 21:55:08.202",
+                "duration": "8m 15s",
+                "realtime": "51.3s",
+                "%cpu": "310.6%",
+                "peak_rss": "661.2 MB",
+                "peak_vmem": "42.7 GB",
+                "rchar": "58.4 MB",
+                "wchar": "425.7 KB",
                 "metrics": {
                     "f1": 0.0,
                     "accuracy": 0.0,
                     "f1_micro": 0.0
                 }
             },
-            "knn_classifier_log_cpm": {
-                "submit": "2022-05-17 21:50:56.225",
-                "duration": "1m 20s",
-                "realtime": "42.6s",
-                "%cpu": "811.7%",
-                "peak_rss": "2.6 GB",
-                "peak_vmem": "6.7 GB",
-                "rchar": "795.8 MB",
-                "wchar": "1.1 GB",
-                "metrics": {
-                    "f1": 0.22634915951143952,
-                    "f1_micro": 0.19255222524977295,
-                    "accuracy": 0.19255222524977295
-                }
-            },
-            "mlp_log_cpm": {
-                "submit": "2022-05-17 21:37:46.340",
-                "duration": "23m 30s",
-                "realtime": "18m 47s",
-                "%cpu": "1272.8%",
-                "peak_rss": "1.9 GB",
-                "peak_vmem": "5.3 GB",
-                "rchar": "795.8 MB",
-                "wchar": "1.1 GB",
-                "metrics": {
-                    "f1": 0.33730299162218796,
-                    "accuracy": 0.2688465031789282,
-                    "f1_micro": 0.2688465031789282
-                }
-            },
-            "logistic_regression_scran": {
-                "submit": "2022-05-17 22:17:26.292",
-                "duration": "21m 30s",
-                "realtime": "18m 11s",
-                "%cpu": "124.0%",
-                "peak_rss": "7.8 GB",
-                "peak_vmem": "12.3 GB",
-                "rchar": "835 MB",
-                "wchar": "1.5 GB",
-                "metrics": {
-                    "accuracy": 0.2393278837420527,
-                    "f1_micro": 0.2393278837420527,
-                    "f1": 0.28447603090599827
-                }
-            },
-            "mlp_scran": {
-                "submit": "2022-05-17 22:18:56.281",
-                "duration": "40m 10s",
-                "realtime": "37m 13s",
-                "%cpu": "1684.0%",
-                "peak_rss": "7.9 GB",
-                "peak_vmem": "12.3 GB",
-                "rchar": "835 MB",
-                "wchar": "1.5 GB",
-                "metrics": {
-                    "f1_micro": 0.13922408200337355,
-                    "accuracy": 0.13922408200337355,
-                    "f1": 0.16782138669259994
-                }
-            },
-            "knn_classifier_scran": {
-                "submit": "2022-05-17 22:11:26.243",
-                "duration": "59m",
-                "realtime": "18m 17s",
-                "%cpu": "114.1%",
-                "peak_rss": "7.9 GB",
-                "peak_vmem": "10.8 GB",
-                "rchar": "835 MB",
-                "wchar": "1.5 GB",
-                "metrics": {
-                    "f1": 0.1999666238371372,
-                    "accuracy": 0.1897625535227715,
-                    "f1_micro": 0.1897625535227715
-                }
-            },
-            "scanvi_hvg": {
-                "submit": "2022-05-18 05:15:08.121",
-                "duration": "1h 24m 28s",
-                "realtime": "1h 15m 24s",
-                "%cpu": "1365.4%",
-                "peak_rss": "3.8 GB",
-                "peak_vmem": "29.3 GB",
-                "rchar": "815.4 MB",
-                "wchar": "757.7 MB",
-                "metrics": {
-                    "f1_micro": 0.2074088490982224,
-                    "accuracy": 0.2074088490982224,
-                    "f1": 0.22170596561366432
-                }
-            },
-            "scarches_scanvi_hvg": {
-                "submit": "2022-05-18 04:45:48.126",
-                "duration": "4h 1m 58s",
-                "realtime": "4h 1m 26s",
-                "%cpu": "1205.1%",
-                "peak_rss": "3.5 GB",
-                "peak_vmem": "29.4 GB",
-                "rchar": "815.4 MB",
-                "wchar": "757.8 MB",
-                "metrics": {
-                    "accuracy": 0.1228753081614117,
-                    "f1_micro": 0.1228753081614117,
-                    "f1": 0.10554582661693672
-                }
-            },
             "scarches_scanvi_all_genes": {
-                "submit": "2022-05-18 09:53:58.659",
-                "duration": "4h 29m 38s",
-                "realtime": "4h 29m 3s",
-                "%cpu": "1270.6%",
-                "peak_rss": "4.7 GB",
-                "peak_vmem": "29.7 GB",
-                "rchar": "813.9 MB",
-                "wchar": "757.8 MB",
+                "submit": "2022-05-19 21:54:52.681",
+                "duration": "8m 27s",
+                "realtime": "1m 15s",
+                "%cpu": "250.6%",
+                "peak_rss": "642.8 MB",
+                "peak_vmem": "40.2 GB",
+                "rchar": "56.9 MB",
+                "wchar": "374.5 KB",
                 "metrics": {
-                    "accuracy": 0.2467237576229402,
-                    "f1": 0.276846984819456,
-                    "f1_micro": 0.2467237576229402
-                }
-            },
-            "scanvi_all_genes": {
-                "submit": "2022-05-18 22:49:49.151",
-                "duration": "5h 19m 9s",
-                "realtime": "5h 17m",
-                "%cpu": "952.7%",
-                "peak_rss": "3.9 GB",
-                "peak_vmem": "26.6 GB",
-                "rchar": "813.9 MB",
-                "wchar": "757.7 MB",
-                "metrics": {
-                    "f1_micro": 0.2290774620474893,
-                    "accuracy": 0.2290774620474893,
-                    "f1": 0.2502368306268314
-                }
-            }
-        },
-        "cengen_batch": {
-            "random_labels": {
-                "submit": "2022-05-17 21:38:27.811",
-                "duration": "7m 18s",
-                "realtime": "2m 4s",
-                "%cpu": "9.1%",
-                "peak_rss": "996.5 MB",
-                "peak_vmem": "5.3 GB",
-                "rchar": "758.4 MB",
-                "wchar": "720.1 MB",
-                "metrics": {
-                    "f1": 0.016282243305667236,
-                    "accuracy": 0.012582384661473937,
-                    "f1_micro": 0.012582384661473937
-                }
-            },
-            "majority_vote": {
-                "submit": "2022-05-17 21:38:27.285",
-                "duration": "7m 29s",
-                "realtime": "2m 5s",
-                "%cpu": "11.8%",
-                "peak_rss": "996.6 MB",
-                "peak_vmem": "5.3 GB",
-                "rchar": "758.4 MB",
-                "wchar": "720 MB",
-                "metrics": {
-                    "accuracy": 0.022168963451168363,
-                    "f1": 0.0009616080277763535,
-                    "f1_micro": 0.022168963451168363
-                }
-            },
-            "knn_classifier_log_cpm": {
-                "submit": "2022-05-17 21:56:56.371",
-                "duration": "3m",
-                "realtime": "1m 55s",
-                "%cpu": "419.1%",
-                "peak_rss": "2.6 GB",
-                "peak_vmem": "7.9 GB",
-                "rchar": "758.4 MB",
-                "wchar": "1 GB",
-                "metrics": {
-                    "f1": 0.7956051365185428,
-                    "f1_micro": 0.7735170760934691,
-                    "accuracy": 0.7735170760934691
-                }
-            },
-            "knn_classifier_scran": {
-                "submit": "2022-05-17 22:09:36.228",
-                "duration": "41m 20s",
-                "realtime": "40m 32s",
-                "%cpu": "108.2%",
-                "peak_rss": "7.1 GB",
-                "peak_vmem": "10 GB",
-                "rchar": "797.6 MB",
-                "wchar": "1.4 GB",
-                "metrics": {
-                    "accuracy": 0.7831036548831636,
-                    "f1_micro": 0.7831036548831637,
-                    "f1": 0.8009993248280962
-                }
-            },
-            "logistic_regression_log_cpm": {
-                "submit": "2022-05-17 22:43:16.676",
-                "duration": "9m 59s",
-                "realtime": "9m 29s",
-                "%cpu": "826.4%",
-                "peak_rss": "1.8 GB",
-                "peak_vmem": "3.3 GB",
-                "rchar": "758.4 MB",
-                "wchar": "1 GB",
-                "metrics": {
-                    "accuracy": 0.8771719592570402,
-                    "f1": 0.8740824801165378,
-                    "f1_micro": 0.8771719592570402
-                }
-            },
-            "logistic_regression_scran": {
-                "submit": "2022-05-17 22:13:36.277",
-                "duration": "1h 7m 40s",
-                "realtime": "1h 6m 43s",
-                "%cpu": "671.7%",
-                "peak_rss": "7.1 GB",
-                "peak_vmem": "10 GB",
-                "rchar": "797.6 MB",
-                "wchar": "1.4 GB",
-                "metrics": {
-                    "f1_micro": 0.7741162372678251,
-                    "f1": 0.8053930631051027,
-                    "accuracy": 0.7741162372678251
-                }
-            },
-            "mlp_scran": {
-                "submit": "2022-05-17 22:10:56.276",
-                "duration": "1h 30m 20s",
-                "realtime": "1h 29m 39s",
-                "%cpu": "970.2%",
-                "peak_rss": "7.1 GB",
-                "peak_vmem": "10 GB",
-                "rchar": "797.6 MB",
-                "wchar": "1.4 GB",
-                "metrics": {
-                    "accuracy": 0.8430197723187537,
-                    "f1": 0.8502892264370411,
-                    "f1_micro": 0.8430197723187537
-                }
-            },
-            "mlp_log_cpm": {
-                "submit": "2022-05-17 22:43:26.424",
-                "duration": "1h 35m 30s",
-                "realtime": "1h 34m 51s",
-                "%cpu": "2403.9%",
-                "peak_rss": "1.6 GB",
-                "peak_vmem": "4.9 GB",
-                "rchar": "758.4 MB",
-                "wchar": "1 GB",
-                "metrics": {
-                    "f1": 0.8358013611086623,
-                    "f1_micro": 0.8316357100059917,
-                    "accuracy": 0.8316357100059916
-                }
-            },
-            "scarches_scanvi_hvg": {
-                "submit": "2022-05-17 23:52:47.126",
-                "duration": "1h 7m 49s",
-                "realtime": "1h 7m 21s",
-                "%cpu": "688.0%",
-                "peak_rss": "2.8 GB",
-                "peak_vmem": "12.2 GB",
-                "rchar": "777.9 MB",
-                "wchar": "720.1 MB",
-                "metrics": {
-                    "accuracy": 0.0701018573996405,
-                    "f1_micro": 0.0701018573996405,
-                    "f1": 0.03298571023551313
-                }
-            },
-            "scanvi_hvg": {
-                "submit": "2022-05-18 03:54:27.548",
-                "duration": "2h 22m 9s",
-                "realtime": "2h 21m 34s",
-                "%cpu": "1450.1%",
-                "peak_rss": "5.5 GB",
-                "peak_vmem": "30.2 GB",
-                "rchar": "778 MB",
-                "wchar": "720 MB",
-                "metrics": {
-                    "f1": 0.5497207750060438,
-                    "accuracy": 0.5823846614739365,
-                    "f1_micro": 0.5823846614739365
-                }
-            },
-            "scanvi_all_genes": {
-                "submit": "2022-05-18 04:48:07.399",
-                "duration": "3h 35m 49s",
-                "realtime": "3h 28m 1s",
-                "%cpu": "1812.3%",
-                "peak_rss": "11.6 GB",
-                "peak_vmem": "27.6 GB",
-                "rchar": "776.5 MB",
-                "wchar": "720.3 MB",
-                "metrics": {
-                    "f1": 0.3680576516026999,
-                    "f1_micro": 0.4164170161773517,
-                    "accuracy": 0.4164170161773517
-                }
-            },
-            "scarches_scanvi_all_genes": {
-                "submit": "2022-05-19 00:28:27.962",
-                "duration": "2h 13m 50s",
-                "realtime": "2h 9m 47s",
-                "%cpu": "1662.5%",
-                "peak_rss": "12.6 GB",
-                "peak_vmem": "27.3 GB",
-                "rchar": "776.6 MB",
-                "wchar": "720.3 MB",
-                "metrics": {
-                    "f1_micro": 0.0689035350509287,
-                    "f1": 0.024698243508371943,
-                    "accuracy": 0.0689035350509287
+                    "f1_micro": 0.0,
+                    "f1": 0.0,
+                    "accuracy": 0.0
                 }
             }
         },
         "cengen_random": {
-            "majority_vote": {
-                "submit": "2022-05-17 21:38:26.384",
-                "duration": "7m 41s",
-                "realtime": "2m 20s",
-                "%cpu": "8.3%",
-                "peak_rss": "996.4 MB",
-                "peak_vmem": "5.3 GB",
-                "rchar": "758.4 MB",
-                "wchar": "720 MB",
+            "knn_classifier_scran": {
+                "submit": "2022-05-19 21:53:48.826",
+                "duration": "4m 24s",
+                "realtime": "29.6s",
+                "%cpu": "106.2%",
+                "peak_rss": "895.9 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "78.1 MB",
+                "wchar": "675.2 KB",
                 "metrics": {
-                    "f1": 0.004948839751168624,
-                    "accuracy": 0.050996134403806126,
-                    "f1_micro": 0.050996134403806126
-                }
-            },
-            "random_labels": {
-                "submit": "2022-05-17 21:38:26.921",
-                "duration": "7m 40s",
-                "realtime": "2m 19s",
-                "%cpu": "11.9%",
-                "peak_rss": "997.9 MB",
-                "peak_vmem": "5.3 GB",
-                "rchar": "758.4 MB",
-                "wchar": "720.1 MB",
-                "metrics": {
-                    "f1": 0.01587796608568316,
-                    "accuracy": 0.015957974031123007,
-                    "f1_micro": 0.015957974031123007
+                    "accuracy": 0.12380952380952381,
+                    "f1": 0.1047103689960833,
+                    "f1_micro": 0.12380952380952381
                 }
             },
             "knn_classifier_log_cpm": {
-                "submit": "2022-05-17 21:54:46.330",
-                "duration": "4m",
-                "realtime": "3m 8s",
-                "%cpu": "1105.0%",
-                "peak_rss": "2.8 GB",
-                "peak_vmem": "8.1 GB",
-                "rchar": "758.4 MB",
-                "wchar": "1 GB",
+                "submit": "2022-05-19 21:53:47.729",
+                "duration": "2m 54s",
+                "realtime": "14s",
+                "%cpu": "186.4%",
+                "peak_rss": "260.8 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "40.5 MB",
+                "wchar": "478.2 KB",
                 "metrics": {
-                    "f1_micro": 0.8311031816830211,
-                    "accuracy": 0.8311031816830211,
-                    "f1": 0.8362119006822281
-                }
-            },
-            "knn_classifier_scran": {
-                "submit": "2022-05-17 22:07:16.301",
-                "duration": "36m 20s",
-                "realtime": "35m 44s",
-                "%cpu": "111.8%",
-                "peak_rss": "7.1 GB",
-                "peak_vmem": "13.4 GB",
-                "rchar": "797.6 MB",
-                "wchar": "1.4 GB",
-                "metrics": {
-                    "f1": 0.8368903885722362,
-                    "f1_micro": 0.8362573099415205,
-                    "accuracy": 0.8362573099415205
-                }
-            },
-            "mlp_log_cpm": {
-                "submit": "2022-05-17 22:43:26.262",
-                "duration": "9m 20s",
-                "realtime": "8m 41s",
-                "%cpu": "320.7%",
-                "peak_rss": "1.7 GB",
-                "peak_vmem": "2.2 GB",
-                "rchar": "758.4 MB",
-                "wchar": "1 GB",
-                "metrics": {
-                    "f1_micro": 0.8531073446327684,
-                    "accuracy": 0.8531073446327684,
-                    "f1": 0.8539314425246883
+                    "accuracy": 0.10476190476190476,
+                    "f1": 0.06989559460147696,
+                    "f1_micro": 0.10476190476190476
                 }
             },
             "logistic_regression_log_cpm": {
-                "submit": "2022-05-17 23:14:26.665",
-                "duration": "7m 19s",
-                "realtime": "6m 38s",
-                "%cpu": "257.5%",
-                "peak_rss": "1.9 GB",
-                "peak_vmem": "2.4 GB",
-                "rchar": "758.4 MB",
-                "wchar": "1 GB",
+                "submit": "2022-05-19 21:54:03.476",
+                "duration": "3m 49s",
+                "realtime": "22s",
+                "%cpu": "139.0%",
+                "peak_rss": "260.6 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "40.6 MB",
+                "wchar": "478.9 KB",
                 "metrics": {
-                    "accuracy": 0.887699474675389,
-                    "f1": 0.8899067843420773,
-                    "f1_micro": 0.887699474675389
+                    "f1_micro": 0.2857142857142857,
+                    "accuracy": 0.2857142857142857,
+                    "f1": 0.2853294853294853
                 }
             },
             "logistic_regression_scran": {
-                "submit": "2022-05-17 22:20:47.838",
-                "duration": "1h 10m 8s",
-                "realtime": "1h 5m 35s",
-                "%cpu": "586.2%",
-                "peak_rss": "7.1 GB",
-                "peak_vmem": "10 GB",
-                "rchar": "797.6 MB",
-                "wchar": "1.4 GB",
+                "submit": "2022-05-19 21:54:19.646",
+                "duration": "6m 22s",
+                "realtime": "28.3s",
+                "%cpu": "87.2%",
+                "peak_rss": "896.9 MB",
+                "peak_vmem": "1.6 GB",
+                "rchar": "78 MB",
+                "wchar": "645.2 KB",
                 "metrics": {
-                    "f1_micro": 0.8215878679750223,
-                    "f1": 0.8362558823152829,
-                    "accuracy": 0.8215878679750223
-                }
-            },
-            "mlp_scran": {
-                "submit": "2022-05-17 22:11:16.441",
-                "duration": "1h 28m 19s",
-                "realtime": "1h 27m 32s",
-                "%cpu": "941.4%",
-                "peak_rss": "7.1 GB",
-                "peak_vmem": "10 GB",
-                "rchar": "797.6 MB",
-                "wchar": "1.4 GB",
-                "metrics": {
-                    "accuracy": 0.8697591436217663,
-                    "f1_micro": 0.8697591436217663,
-                    "f1": 0.8716158340563667
-                }
-            },
-            "scarches_scanvi_hvg": {
-                "submit": "2022-05-18 03:54:47.913",
-                "duration": "5h 44m 39s",
-                "realtime": "2h 19m 24s",
-                "%cpu": "1550.8%",
-                "peak_rss": "5.3 GB",
-                "peak_vmem": "30.1 GB",
-                "rchar": "778 MB",
-                "wchar": "720.1 MB",
-                "metrics": {
-                    "f1_micro": 0.36980870254732884,
-                    "f1": 0.23053609097895267,
-                    "accuracy": 0.3698087025473288
-                }
-            },
-            "scanvi_hvg": {
-                "submit": "2022-05-18 06:11:28.146",
-                "duration": "4h 13m 58s",
-                "realtime": "1h 22m 53s",
-                "%cpu": "1642.7%",
-                "peak_rss": "5.5 GB",
-                "peak_vmem": "30 GB",
-                "rchar": "778 MB",
-                "wchar": "720 MB",
-                "metrics": {
-                    "f1_micro": 0.6229556943205471,
-                    "f1": 0.5364553247448423,
-                    "accuracy": 0.6229556943205471
-                }
-            },
-            "scarches_scanvi_all_genes": {
-                "submit": "2022-05-18 07:19:19.005",
-                "duration": "6h 26m 28s",
-                "realtime": "4h 43m 13s",
-                "%cpu": "1759.0%",
-                "peak_rss": "11.1 GB",
-                "peak_vmem": "36 GB",
-                "rchar": "776.5 MB",
-                "wchar": "720.3 MB",
-                "metrics": {
-                    "accuracy": 0.42105263157894735,
-                    "f1_micro": 0.42105263157894735,
-                    "f1": 0.2916076962479532
-                }
-            },
-            "scanvi_all_genes": {
-                "submit": "2022-05-18 20:57:48.756",
-                "duration": "4h 6m 9s",
-                "realtime": "2h 49m 48s",
-                "%cpu": "1586.5%",
-                "peak_rss": "10 GB",
-                "peak_vmem": "25.3 GB",
-                "rchar": "776.4 MB",
-                "wchar": "720.3 MB",
-                "metrics": {
-                    "accuracy": 0.6345524829021707,
-                    "f1_micro": 0.6345524829021707,
-                    "f1": 0.5407510460860092
-                }
-            }
-        },
-        "tabula_muris_senis_lung_random": {
-            "random_labels": {
-                "submit": "2022-05-17 21:50:16.974",
-                "duration": "59.3s",
-                "realtime": "18.1s",
-                "%cpu": "65.6%",
-                "peak_rss": "1.4 GB",
-                "peak_vmem": "4.2 GB",
-                "rchar": "1.2 GB",
-                "wchar": "1.2 GB",
-                "metrics": {
-                    "f1_micro": 0.07959866220735785,
-                    "accuracy": 0.07959866220735785,
-                    "f1": 0.0791630955728267
+                    "f1_micro": 0.21904761904761905,
+                    "accuracy": 0.21904761904761905,
+                    "f1": 0.22612593755450897
                 }
             },
             "majority_vote": {
-                "submit": "2022-05-17 21:50:16.634",
-                "duration": "1m 59s",
-                "realtime": "1m 6s",
-                "%cpu": "26.5%",
-                "peak_rss": "1.4 GB",
-                "peak_vmem": "5.7 GB",
-                "rchar": "1.2 GB",
-                "wchar": "1.2 GB",
+                "submit": "2022-05-19 21:54:04.246",
+                "duration": "4m 48s",
+                "realtime": "13.5s",
+                "%cpu": "46.7%",
+                "peak_rss": "226.7 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "40.5 MB",
+                "wchar": "363.9 KB",
                 "metrics": {
-                    "f1": 0.06213395842449638,
-                    "f1_micro": 0.19247491638795985,
-                    "accuracy": 0.19247491638795985
-                }
-            },
-            "knn_classifier_log_cpm": {
-                "submit": "2022-05-17 21:56:56.483",
-                "duration": "3m 30s",
-                "realtime": "2m 13s",
-                "%cpu": "325.8%",
-                "peak_rss": "3.7 GB",
-                "peak_vmem": "9 GB",
-                "rchar": "1.2 GB",
-                "wchar": "1.6 GB",
-                "metrics": {
-                    "f1_micro": 0.8692307692307693,
-                    "accuracy": 0.8692307692307693,
-                    "f1": 0.8667916685295117
-                }
-            },
-            "logistic_regression_log_cpm": {
-                "submit": "2022-05-17 21:57:56.242",
-                "duration": "10m 20s",
-                "realtime": "9m 24s",
-                "%cpu": "1446.6%",
-                "peak_rss": "2.6 GB",
-                "peak_vmem": "5.9 GB",
-                "rchar": "1.2 GB",
-                "wchar": "1.6 GB",
-                "metrics": {
-                    "accuracy": 0.9255852842809364,
-                    "f1_micro": 0.9255852842809364,
-                    "f1": 0.9240388479983562
+                    "accuracy": 0.05714285714285714,
+                    "f1": 0.006177606177606177,
+                    "f1_micro": 0.05714285714285714
                 }
             },
             "mlp_log_cpm": {
-                "submit": "2022-05-17 21:57:16.656",
-                "duration": "31m 9s",
-                "realtime": "30m 11s",
-                "%cpu": "1085.3%",
-                "peak_rss": "2.5 GB",
-                "peak_vmem": "5.9 GB",
-                "rchar": "1.2 GB",
-                "wchar": "1.6 GB",
+                "submit": "2022-05-19 21:54:34.789",
+                "duration": "7m 47s",
+                "realtime": "1m 13s",
+                "%cpu": "444.4%",
+                "peak_rss": "264.8 MB",
+                "peak_vmem": "5.6 GB",
+                "rchar": "40.6 MB",
+                "wchar": "478.5 KB",
                 "metrics": {
-                    "accuracy": 0.929933110367893,
-                    "f1_micro": 0.929933110367893,
-                    "f1": 0.9289765769260936
-                }
-            },
-            "knn_classifier_scran": {
-                "submit": "2022-05-17 22:17:36.302",
-                "duration": "23m 10s",
-                "realtime": "19m 41s",
-                "%cpu": "95.2%",
-                "peak_rss": "6.5 GB",
-                "peak_vmem": "17.7 GB",
-                "rchar": "1.3 GB",
-                "wchar": "2 GB",
-                "metrics": {
-                    "accuracy": 0.7974916387959866,
-                    "f1_micro": 0.7974916387959866,
-                    "f1": 0.7967714000860788
-                }
-            },
-            "logistic_regression_scran": {
-                "submit": "2022-05-17 22:15:57.249",
-                "duration": "25m 29s",
-                "realtime": "20m 30s",
-                "%cpu": "324.8%",
-                "peak_rss": "6.5 GB",
-                "peak_vmem": "11.8 GB",
-                "rchar": "1.3 GB",
-                "wchar": "2 GB",
-                "metrics": {
-                    "f1": 0.9251290286017281,
-                    "f1_micro": 0.9267558528428094,
-                    "accuracy": 0.9267558528428094
-                }
-            },
-            "mlp_scran": {
-                "submit": "2022-05-17 22:19:56.223",
-                "duration": "21m 40s",
-                "realtime": "19m 24s",
-                "%cpu": "723.9%",
-                "peak_rss": "7.9 GB",
-                "peak_vmem": "10.8 GB",
-                "rchar": "1.3 GB",
-                "wchar": "2 GB",
-                "metrics": {
-                    "f1": 0.9340983498156218,
-                    "accuracy": 0.934448160535117,
-                    "f1_micro": 0.934448160535117
-                }
-            },
-            "scanvi_hvg": {
-                "submit": "2022-05-18 04:14:38.275",
-                "duration": "1h 27m 48s",
-                "realtime": "1h 27m 8s",
-                "%cpu": "1611.7%",
-                "peak_rss": "5.8 GB",
-                "peak_vmem": "30.2 GB",
-                "rchar": "1.2 GB",
-                "wchar": "1.2 GB",
-                "metrics": {
-                    "accuracy": 0.7769230769230769,
-                    "f1": 0.7031752294251802,
-                    "f1_micro": 0.7769230769230768
-                }
-            },
-            "scarches_scanvi_hvg": {
-                "submit": "2022-05-18 04:14:37.671",
-                "duration": "3h 59m 59s",
-                "realtime": "3h 59m 16s",
-                "%cpu": "1241.8%",
-                "peak_rss": "7.3 GB",
-                "peak_vmem": "30.6 GB",
-                "rchar": "1.2 GB",
-                "wchar": "1.2 GB",
-                "metrics": {
-                    "f1_micro": 0.7006688963210702,
-                    "accuracy": 0.7006688963210702,
-                    "f1": 0.6075673026130007
-                }
-            },
-            "scanvi_all_genes": {
-                "submit": "2022-05-18 06:11:29.411",
-                "duration": "5h 16m 37s",
-                "realtime": "2h 25m 20s",
-                "%cpu": "1824.4%",
-                "peak_rss": "4.7 GB",
-                "peak_vmem": "29.6 GB",
-                "rchar": "1.2 GB",
-                "wchar": "1.2 GB",
-                "metrics": {
-                    "f1": 0.7849078613267408,
-                    "f1_micro": 0.8299331103678931,
-                    "accuracy": 0.829933110367893
-                }
-            },
-            "scarches_scanvi_all_genes": {
-                "submit": "2022-05-18 07:56:37.597",
-                "duration": "4h 29m 19s",
-                "realtime": "3h 23m 4s",
-                "%cpu": "1736.0%",
-                "peak_rss": "8.5 GB",
-                "peak_vmem": "31 GB",
-                "rchar": "1.2 GB",
-                "wchar": "1.2 GB",
-                "metrics": {
-                    "f1": 0.5883327709069067,
-                    "f1_micro": 0.6939799331103679,
-                    "accuracy": 0.6939799331103679
-                }
-            }
-        },
-        "pancreas_random": {
-            "majority_vote": {
-                "submit": "2022-05-17 22:09:36.505",
-                "duration": "2m 39s",
-                "realtime": "58.6s",
-                "%cpu": "44.2%",
-                "peak_rss": "3.7 GB",
-                "peak_vmem": "6.5 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
-                "metrics": {
-                    "f1": 0.1721534379392878,
-                    "accuracy": 0.3395666369842683,
-                    "f1_micro": 0.3395666369842683
+                    "accuracy": 0.18095238095238095,
+                    "f1": 0.12267161410018552,
+                    "f1_micro": 0.18095238095238095
                 }
             },
             "random_labels": {
-                "submit": "2022-05-17 22:11:56.230",
-                "duration": "4m 10s",
-                "realtime": "2m 30s",
-                "%cpu": "20.9%",
-                "peak_rss": "3.6 GB",
-                "peak_vmem": "6.5 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+                "submit": "2022-05-19 21:54:35.998",
+                "duration": "7m 8s",
+                "realtime": "43.1s",
+                "%cpu": "24.0%",
+                "peak_rss": "253.2 MB",
+                "peak_vmem": "4.9 GB",
+                "rchar": "40.5 MB",
+                "wchar": "364.7 KB",
                 "metrics": {
-                    "f1_micro": 0.19976254081329772,
-                    "accuracy": 0.19976254081329772,
-                    "f1": 0.19961006089856262
-                }
-            },
-            "logistic_regression_log_cpm": {
-                "submit": "2022-05-17 22:19:06.317",
-                "duration": "7m",
-                "realtime": "3m 15s",
-                "%cpu": "825.8%",
-                "peak_rss": "6.5 GB",
-                "peak_vmem": "11.8 GB",
-                "rchar": "3.5 GB",
-                "wchar": "4.6 GB",
-                "metrics": {
-                    "f1_micro": 0.9824873849807064,
-                    "f1": 0.9819944104102406,
-                    "accuracy": 0.9824873849807064
-                }
-            },
-            "mlp_log_cpm": {
-                "submit": "2022-05-17 22:28:56.279",
-                "duration": "4m 30s",
-                "realtime": "1m 8s",
-                "%cpu": "171.8%",
-                "peak_rss": "6.5 GB",
-                "peak_vmem": "7.4 GB",
-                "rchar": "3.5 GB",
-                "wchar": "4.6 GB",
-                "metrics": {
-                    "f1_micro": 0.9827842089640842,
-                    "f1": 0.9821933231935052,
-                    "accuracy": 0.9827842089640842
-                }
-            },
-            "knn_classifier_log_cpm": {
-                "submit": "2022-05-17 22:30:46.833",
-                "duration": "5m 9s",
-                "realtime": "1m 10s",
-                "%cpu": "106.3%",
-                "peak_rss": "6.5 GB",
-                "peak_vmem": "7.4 GB",
-                "rchar": "3.5 GB",
-                "wchar": "4.6 GB",
-                "metrics": {
-                    "f1_micro": 0.9370733155238943,
-                    "f1": 0.9343557448793341,
-                    "accuracy": 0.9370733155238943
-                }
-            },
-            "scarches_scanvi_hvg": {
-                "submit": "2022-05-17 22:30:16.373",
-                "duration": "29m 20s",
-                "realtime": "26m 45s",
-                "%cpu": "335.4%",
-                "peak_rss": "5.8 GB",
-                "peak_vmem": "11.5 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
-                "metrics": {
-                    "f1_micro": 0.9489462748590086,
-                    "f1": 0.9369544369617957,
-                    "accuracy": 0.9489462748590086
-                }
-            },
-            "knn_classifier_scran": {
-                "submit": "2022-05-17 23:26:16.238",
-                "duration": "15m 10s",
-                "realtime": "13m 30s",
-                "%cpu": "124.4%",
-                "peak_rss": "22.5 GB",
-                "peak_vmem": "24.2 GB",
-                "rchar": "3.5 GB",
-                "wchar": "6.9 GB",
-                "metrics": {
-                    "f1_micro": 0.9504303947758979,
-                    "f1": 0.9483341551780361,
-                    "accuracy": 0.9504303947758979
-                }
-            },
-            "logistic_regression_scran": {
-                "submit": "2022-05-17 23:54:06.431",
-                "duration": "23m 40s",
-                "realtime": "21m 42s",
-                "%cpu": "195.9%",
-                "peak_rss": "22.6 GB",
-                "peak_vmem": "26 GB",
-                "rchar": "3.5 GB",
-                "wchar": "6.9 GB",
-                "metrics": {
-                    "f1_micro": 0.9421193232413179,
-                    "f1": 0.9334275519465944,
-                    "accuracy": 0.9421193232413179
+                    "f1": 0.019954648526077097,
+                    "f1_micro": 0.01904761904761905,
+                    "accuracy": 0.01904761904761905
                 }
             },
             "mlp_scran": {
-                "submit": "2022-05-17 23:53:26.365",
-                "duration": "31m 50s",
-                "realtime": "29m 54s",
-                "%cpu": "1425.7%",
-                "peak_rss": "22.5 GB",
-                "peak_vmem": "27.9 GB",
-                "rchar": "3.5 GB",
-                "wchar": "6.9 GB",
+                "submit": "2022-05-19 21:54:20.497",
+                "duration": "5m 51s",
+                "realtime": "28.6s",
+                "%cpu": "112.2%",
+                "peak_rss": "896.3 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "78.1 MB",
+                "wchar": "645.3 KB",
                 "metrics": {
-                    "f1": 0.9799406403524348,
-                    "accuracy": 0.9804096170970614,
-                    "f1_micro": 0.9804096170970614
+                    "f1_micro": 0.20000000000000004,
+                    "f1": 0.1336672726588693,
+                    "accuracy": 0.2
                 }
             },
             "scanvi_hvg": {
-                "submit": "2022-05-17 22:34:56.756",
-                "duration": "2h 16m 9s",
-                "realtime": "2h 9m 20s",
-                "%cpu": "1528.4%",
-                "peak_rss": "6.9 GB",
-                "peak_vmem": "32.1 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+                "submit": "2022-05-19 21:55:06.962",
+                "duration": "8m 14s",
+                "realtime": "51.5s",
+                "%cpu": "332.4%",
+                "peak_rss": "663.5 MB",
+                "peak_vmem": "42.7 GB",
+                "rchar": "58.4 MB",
+                "wchar": "424.5 KB",
                 "metrics": {
-                    "f1": 0.9482719587989678,
-                    "accuracy": 0.9578509943603443,
-                    "f1_micro": 0.9578509943603443
-                }
-            },
-            "scarches_scanvi_all_genes": {
-                "submit": "2022-05-17 22:47:46.435",
-                "duration": "4h 52m 40s",
-                "realtime": "4h 51m 18s",
-                "%cpu": "1335.4%",
-                "peak_rss": "9.8 GB",
-                "peak_vmem": "35 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
-                "metrics": {
-                    "f1_micro": 0.9465716829919858,
-                    "f1": 0.9345004051765253,
-                    "accuracy": 0.9465716829919858
+                    "f1_micro": 0.0,
+                    "accuracy": 0.0,
+                    "f1": 0.0
                 }
             },
             "scanvi_all_genes": {
-                "submit": "2022-05-18 02:33:47.614",
-                "duration": "2h 21m 39s",
-                "realtime": "2h 20m 19s",
-                "%cpu": "1724.1%",
-                "peak_rss": "6.1 GB",
-                "peak_vmem": "31.2 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+                "submit": "2022-05-19 21:54:51.957",
+                "duration": "8m 26s",
+                "realtime": "1m 15s",
+                "%cpu": "267.1%",
+                "peak_rss": "646.1 MB",
+                "peak_vmem": "40.2 GB",
+                "rchar": "56.9 MB",
+                "wchar": "373.3 KB",
                 "metrics": {
-                    "f1_micro": 0.9652715939447908,
-                    "f1": 0.9581203701417405,
-                    "accuracy": 0.9652715939447908
+                    "f1_micro": 0.0,
+                    "f1": 0.0,
+                    "accuracy": 0.0
+                }
+            },
+            "scarches_scanvi_hvg": {
+                "submit": "2022-05-19 21:55:08.247",
+                "duration": "8m 15s",
+                "realtime": "52.9s",
+                "%cpu": "318.4%",
+                "peak_rss": "662.4 MB",
+                "peak_vmem": "42.7 GB",
+                "rchar": "58.4 MB",
+                "wchar": "425.9 KB",
+                "metrics": {
+                    "f1": 0.0032708032708032705,
+                    "f1_micro": 0.02857142857142857,
+                    "accuracy": 0.02857142857142857
+                }
+            },
+            "scarches_scanvi_all_genes": {
+                "submit": "2022-05-19 21:54:52.500",
+                "duration": "8m 26s",
+                "realtime": "1m 15s",
+                "%cpu": "243.8%",
+                "peak_rss": "643 MB",
+                "peak_vmem": "40.2 GB",
+                "rchar": "56.9 MB",
+                "wchar": "374.6 KB",
+                "metrics": {
+                    "f1_micro": 0.02857142857142857,
+                    "accuracy": 0.02857142857142857,
+                    "f1": 0.0032708032708032705
                 }
             }
         },
         "pancreas_batch": {
-            "random_labels": {
-                "submit": "2022-05-17 22:13:36.728",
-                "duration": "3m 49s",
-                "realtime": "2m 23s",
-                "%cpu": "20.3%",
-                "peak_rss": "3.7 GB",
-                "peak_vmem": "6.5 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+            "knn_classifier_scran": {
+                "submit": "2022-05-19 22:10:52.022",
+                "duration": "1m 29s",
+                "realtime": "49.4s",
+                "%cpu": "257.9%",
+                "peak_rss": "1.7 GB",
+                "peak_vmem": "10.7 GB",
+                "rchar": "79.6 MB",
+                "wchar": "5.3 MB",
                 "metrics": {
-                    "f1": 0.21684954873882725,
-                    "f1_micro": 0.21395726264538814,
-                    "accuracy": 0.21395726264538814
-                }
-            },
-            "majority_vote": {
-                "submit": "2022-05-17 22:20:36.467",
-                "duration": "5m 9s",
-                "realtime": "1m 15s",
-                "%cpu": "33.7%",
-                "peak_rss": "3.6 GB",
-                "peak_vmem": "6.5 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
-                "metrics": {
-                    "f1_micro": 0.34947254530700567,
-                    "accuracy": 0.34947254530700567,
-                    "f1": 0.1810056237869919
-                }
-            },
-            "logistic_regression_log_cpm": {
-                "submit": "2022-05-17 22:17:46.615",
-                "duration": "9m 50s",
-                "realtime": "6m 37s",
-                "%cpu": "775.9%",
-                "peak_rss": "6.6 GB",
-                "peak_vmem": "11.8 GB",
-                "rchar": "3.5 GB",
-                "wchar": "4.6 GB",
-                "metrics": {
-                    "f1": 0.9548561099590251,
-                    "f1_micro": 0.9548282391127941,
-                    "accuracy": 0.9548282391127941
+                    "accuracy": 0.758957654723127,
+                    "f1": 0.6549523464832911,
+                    "f1_micro": 0.758957654723127
                 }
             },
             "knn_classifier_log_cpm": {
-                "submit": "2022-05-17 22:34:26.298",
-                "duration": "8m 30s",
-                "realtime": "3m 25s",
-                "%cpu": "302.1%",
-                "peak_rss": "6.5 GB",
-                "peak_vmem": "10 GB",
-                "rchar": "3.5 GB",
-                "wchar": "4.6 GB",
+                "submit": "2022-05-19 22:10:52.155",
+                "duration": "1m 1s",
+                "realtime": "21.7s",
+                "%cpu": "34.7%",
+                "peak_rss": "256 MB",
+                "peak_vmem": "805 MB",
+                "rchar": "42.8 MB",
+                "wchar": "3.5 MB",
                 "metrics": {
-                    "f1_micro": 0.7630511225317825,
-                    "accuracy": 0.7630511225317825,
-                    "f1": 0.7542082400465353
+                    "f1_micro": 0.758957654723127,
+                    "accuracy": 0.758957654723127,
+                    "f1": 0.6549523464832911
                 }
             },
-            "mlp_log_cpm": {
-                "submit": "2022-05-17 22:26:16.195",
-                "duration": "21m 20s",
-                "realtime": "17m 54s",
-                "%cpu": "1624.8%",
-                "peak_rss": "6.6 GB",
-                "peak_vmem": "11.8 GB",
-                "rchar": "3.5 GB",
-                "wchar": "4.6 GB",
+            "logistic_regression_log_cpm": {
+                "submit": "2022-05-19 22:10:52.201",
+                "duration": "1m 9s",
+                "realtime": "33.7s",
+                "%cpu": "653.9%",
+                "peak_rss": "267.7 MB",
+                "peak_vmem": "5 GB",
+                "rchar": "42.8 MB",
+                "wchar": "3.5 MB",
                 "metrics": {
-                    "accuracy": 0.9653773329726806,
-                    "f1_micro": 0.9653773329726806,
-                    "f1": 0.966275454799842
-                }
-            },
-            "mlp_scran": {
-                "submit": "2022-05-18 00:05:56.795",
-                "duration": "15m 59s",
-                "realtime": "14m 21s",
-                "%cpu": "182.1%",
-                "peak_rss": "22.6 GB",
-                "peak_vmem": "24.2 GB",
-                "rchar": "3.5 GB",
-                "wchar": "6.9 GB",
-                "metrics": {
-                    "f1_micro": 0.9545577495266432,
-                    "f1": 0.9567592254554089,
-                    "accuracy": 0.9545577495266432
-                }
-            },
-            "knn_classifier_scran": {
-                "submit": "2022-05-18 00:05:56.572",
-                "duration": "22m 49s",
-                "realtime": "20m 43s",
-                "%cpu": "197.0%",
-                "peak_rss": "22.6 GB",
-                "peak_vmem": "28 GB",
-                "rchar": "3.5 GB",
-                "wchar": "6.9 GB",
-                "metrics": {
-                    "accuracy": 0.8371652691371382,
-                    "f1": 0.8401210417226909,
-                    "f1_micro": 0.8371652691371382
+                    "f1_micro": 0.758957654723127,
+                    "f1": 0.6549523464832911,
+                    "accuracy": 0.758957654723127
                 }
             },
             "logistic_regression_scran": {
-                "submit": "2022-05-18 00:03:06.340",
-                "duration": "26m",
-                "realtime": "23m 50s",
-                "%cpu": "186.5%",
-                "peak_rss": "22.6 GB",
-                "peak_vmem": "28 GB",
-                "rchar": "3.5 GB",
-                "wchar": "6.9 GB",
+                "submit": "2022-05-19 22:10:52.414",
+                "duration": "50.8s",
+                "realtime": "26.3s",
+                "%cpu": "77.7%",
+                "peak_rss": "907.5 MB",
+                "peak_vmem": "1.9 GB",
+                "rchar": "79.5 MB",
+                "wchar": "5.2 MB",
                 "metrics": {
-                    "f1_micro": 0.9445496348390587,
-                    "f1": 0.943635984956737,
-                    "accuracy": 0.9445496348390587
+                    "accuracy": 0.5504885993485342,
+                    "f1": 0.5826241856677523,
+                    "f1_micro": 0.5504885993485342
                 }
             },
-            "scarches_scanvi_all_genes": {
-                "submit": "2022-05-17 22:55:06.280",
-                "duration": "1h 51m 50s",
-                "realtime": "1h 50m 40s",
-                "%cpu": "1796.3%",
-                "peak_rss": "9.7 GB",
-                "peak_vmem": "34.8 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+            "majority_vote": {
+                "submit": "2022-05-19 22:10:52.320",
+                "duration": "1m 2s",
+                "realtime": "22.1s",
+                "%cpu": "47.3%",
+                "peak_rss": "210.5 MB",
+                "peak_vmem": "5 GB",
+                "rchar": "42.8 MB",
+                "wchar": "2.6 MB",
                 "metrics": {
-                    "f1": 0.944570955432443,
-                    "f1_micro": 0.9491479578036246,
-                    "accuracy": 0.9491479578036246
+                    "accuracy": 0.758957654723127,
+                    "f1": 0.6549523464832911,
+                    "f1_micro": 0.758957654723127
                 }
             },
-            "scanvi_hvg": {
-                "submit": "2022-05-18 02:31:06.769",
-                "duration": "2h 50s",
-                "realtime": "1h 59m 38s",
-                "%cpu": "1376.2%",
-                "peak_rss": "6.8 GB",
-                "peak_vmem": "32 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+            "mlp_log_cpm": {
+                "submit": "2022-05-19 22:10:52.548",
+                "duration": "40.4s",
+                "realtime": "11.1s",
+                "%cpu": "68.7%",
+                "peak_rss": "267.9 MB",
+                "peak_vmem": "1.2 GB",
+                "rchar": "42.9 MB",
+                "wchar": "3.5 MB",
                 "metrics": {
-                    "f1_micro": 0.9583446037327563,
-                    "f1": 0.9570139499370328,
-                    "accuracy": 0.9583446037327563
+                    "f1_micro": 0.7915309446254072,
+                    "accuracy": 0.7915309446254072,
+                    "f1": 0.7392660889967612
+                }
+            },
+            "random_labels": {
+                "submit": "2022-05-19 22:10:52.557",
+                "duration": "2m 9s",
+                "realtime": "23.4s",
+                "%cpu": "28.8%",
+                "peak_rss": "234.9 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "42.8 MB",
+                "wchar": "2.6 MB",
+                "metrics": {
+                    "f1": 0.6549523464832911,
+                    "f1_micro": 0.758957654723127,
+                    "accuracy": 0.758957654723127
+                }
+            },
+            "mlp_scran": {
+                "submit": "2022-05-19 22:10:52.406",
+                "duration": "50.6s",
+                "realtime": "26.5s",
+                "%cpu": "85.5%",
+                "peak_rss": "906.2 MB",
+                "peak_vmem": "1.9 GB",
+                "rchar": "79.6 MB",
+                "wchar": "5.2 MB",
+                "metrics": {
+                    "accuracy": 0.739413680781759,
+                    "f1": 0.6452561334162915,
+                    "f1_micro": 0.739413680781759
                 }
             },
             "scanvi_all_genes": {
-                "submit": "2022-05-18 02:40:08.155",
-                "duration": "2h 43m 18s",
-                "realtime": "2h 42m 12s",
-                "%cpu": "1642.3%",
-                "peak_rss": "6.1 GB",
-                "peak_vmem": "31.2 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+                "submit": "2022-05-19 22:10:52.731",
+                "duration": "1m 48s",
+                "realtime": "13.9s",
+                "%cpu": "63.2%",
+                "peak_rss": "416.7 MB",
+                "peak_vmem": "2.1 GB",
+                "rchar": "59.1 MB",
+                "wchar": "2.7 MB",
                 "metrics": {
-                    "accuracy": 0.9567216662158506,
-                    "f1_micro": 0.9567216662158506,
-                    "f1": 0.9546955136439287
+                    "accuracy": 0.758957654723127,
+                    "f1": 0.6549523464832911,
+                    "f1_micro": 0.758957654723127
                 }
             },
             "scarches_scanvi_hvg": {
-                "submit": "2022-05-18 09:53:57.973",
-                "duration": "8h 34m 59s",
-                "realtime": "46m 37s",
-                "%cpu": "1432.3%",
-                "peak_rss": "7 GB",
-                "peak_vmem": "29.8 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+                "submit": "2022-05-19 22:10:52.913",
+                "duration": "1m 59s",
+                "realtime": "1m",
+                "%cpu": "137.7%",
+                "peak_rss": "601.8 MB",
+                "peak_vmem": "39.4 GB",
+                "rchar": "59.3 MB",
+                "wchar": "2.7 MB",
                 "metrics": {
-                    "f1": 0.9470599057678405,
-                    "accuracy": 0.9505004057343792,
-                    "f1_micro": 0.9505004057343792
+                    "f1_micro": 0.6319218241042345,
+                    "f1": 0.5877755888873718,
+                    "accuracy": 0.6319218241042345
+                }
+            },
+            "scarches_scanvi_all_genes": {
+                "submit": "2022-05-19 22:10:52.765",
+                "duration": "1m 59s",
+                "realtime": "1m 1s",
+                "%cpu": "133.4%",
+                "peak_rss": "597 MB",
+                "peak_vmem": "36.7 GB",
+                "rchar": "59.2 MB",
+                "wchar": "2.7 MB",
+                "metrics": {
+                    "accuracy": 0.6319218241042345,
+                    "f1": 0.5877755888873718,
+                    "f1_micro": 0.6319218241042345
+                }
+            }
+        },
+        "pancreas_random": {
+            "knn_classifier_scran": {
+                "submit": "2022-05-19 22:11:12.171",
+                "duration": "1m 10s",
+                "realtime": "27s",
+                "%cpu": "76.9%",
+                "peak_rss": "906.3 MB",
+                "peak_vmem": "2 GB",
+                "rchar": "79.6 MB",
+                "wchar": "5.3 MB",
+                "metrics": {
+                    "f1": 0.8834548834548834,
+                    "accuracy": 0.8648648648648649,
+                    "f1_micro": 0.8648648648648649
+                }
+            },
+            "knn_classifier_log_cpm": {
+                "submit": "2022-05-19 22:11:11.987",
+                "duration": "49.8s",
+                "realtime": "13s",
+                "%cpu": "57.0%",
+                "peak_rss": "228.9 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "42.8 MB",
+                "wchar": "3.5 MB",
+                "metrics": {
+                    "accuracy": 0.9009009009009009,
+                    "f1": 0.8539345032236026,
+                    "f1_micro": 0.9009009009009009
+                }
+            },
+            "logistic_regression_log_cpm": {
+                "submit": "2022-05-19 22:11:12.205",
+                "duration": "1m 29s",
+                "realtime": "41s",
+                "%cpu": "629.4%",
+                "peak_rss": "269.6 MB",
+                "peak_vmem": "5 GB",
+                "rchar": "42.8 MB",
+                "wchar": "3.5 MB",
+                "metrics": {
+                    "f1": 0.9907989012466626,
+                    "accuracy": 0.990990990990991,
+                    "f1_micro": 0.990990990990991
+                }
+            },
+            "logistic_regression_scran": {
+                "submit": "2022-05-19 22:11:12.191",
+                "duration": "1m 10s",
+                "realtime": "26.9s",
+                "%cpu": "78.2%",
+                "peak_rss": "907.7 MB",
+                "peak_vmem": "1.9 GB",
+                "rchar": "79.5 MB",
+                "wchar": "5.2 MB",
+                "metrics": {
+                    "f1_micro": 0.963963963963964,
+                    "f1": 0.963963963963964,
+                    "accuracy": 0.963963963963964
+                }
+            },
+            "majority_vote": {
+                "submit": "2022-05-19 22:11:12.255",
+                "duration": "49.8s",
+                "realtime": "12.9s",
+                "%cpu": "49.5%",
+                "peak_rss": "222.8 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "42.8 MB",
+                "wchar": "2.6 MB",
+                "metrics": {
+                    "accuracy": 0.9009009009009009,
+                    "f1": 0.8539345032236026,
+                    "f1_micro": 0.9009009009009009
+                }
+            },
+            "mlp_log_cpm": {
+                "submit": "2022-05-19 22:11:12.375",
+                "duration": "1m 40s",
+                "realtime": "57.3s",
+                "%cpu": "878.7%",
+                "peak_rss": "269.6 MB",
+                "peak_vmem": "5.6 GB",
+                "rchar": "42.9 MB",
+                "wchar": "3.5 MB",
+                "metrics": {
+                    "accuracy": 0.954954954954955,
+                    "f1": 0.9517316123486723,
+                    "f1_micro": 0.954954954954955
+                }
+            },
+            "random_labels": {
+                "submit": "2022-05-19 22:11:12.569",
+                "duration": "1m 10s",
+                "realtime": "23.2s",
+                "%cpu": "46.0%",
+                "peak_rss": "254.9 MB",
+                "peak_vmem": "5 GB",
+                "rchar": "42.8 MB",
+                "wchar": "2.6 MB",
+                "metrics": {
+                    "f1_micro": 0.7567567567567567,
+                    "accuracy": 0.7567567567567568,
+                    "f1": 0.7817025530086098
+                }
+            },
+            "mlp_scran": {
+                "submit": "2022-05-19 22:11:12.371",
+                "duration": "2m 19s",
+                "realtime": "1m 32s",
+                "%cpu": "955.5%",
+                "peak_rss": "1.7 GB",
+                "peak_vmem": "10.6 GB",
+                "rchar": "79.7 MB",
+                "wchar": "5.2 MB",
+                "metrics": {
+                    "f1": 0.963963963963964,
+                    "accuracy": 0.963963963963964,
+                    "f1_micro": 0.963963963963964
+                }
+            },
+            "scanvi_hvg": {
+                "submit": "2022-05-19 22:11:12.821",
+                "duration": "2m 9s",
+                "realtime": "1m 22s",
+                "%cpu": "200.0%",
+                "peak_rss": "606.1 MB",
+                "peak_vmem": "42.7 GB",
+                "rchar": "59.3 MB",
+                "wchar": "2.7 MB",
+                "metrics": {
+                    "accuracy": 0.9009009009009009,
+                    "f1_micro": 0.9009009009009009,
+                    "f1": 0.8539345032236026
+                }
+            },
+            "scanvi_all_genes": {
+                "submit": "2022-05-19 22:11:12.631",
+                "duration": "2m 9s",
+                "realtime": "1m 23s",
+                "%cpu": "200.7%",
+                "peak_rss": "601.2 MB",
+                "peak_vmem": "40.2 GB",
+                "rchar": "59.2 MB",
+                "wchar": "2.7 MB",
+                "metrics": {
+                    "accuracy": 0.9009009009009009,
+                    "f1": 0.8539345032236026,
+                    "f1_micro": 0.9009009009009009
+                }
+            },
+            "scarches_scanvi_all_genes": {
+                "submit": "2022-05-19 22:11:12.665",
+                "duration": "1m 59s",
+                "realtime": "1m 14s",
+                "%cpu": "163.1%",
+                "peak_rss": "604.5 MB",
+                "peak_vmem": "40.1 GB",
+                "rchar": "59.2 MB",
+                "wchar": "2.7 MB",
+                "metrics": {
+                    "f1_micro": 0.9009009009009009,
+                    "accuracy": 0.9009009009009009,
+                    "f1": 0.8539345032236026
                 }
             }
         },
         "pancreas_random_label_noise": {
-            "majority_vote": {
-                "submit": "2022-05-17 22:13:26.675",
-                "duration": "4m 9s",
-                "realtime": "2m 48s",
-                "%cpu": "25.3%",
-                "peak_rss": "3.7 GB",
-                "peak_vmem": "6.5 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+            "knn_classifier_scran": {
+                "submit": "2022-05-19 22:09:52.080",
+                "duration": "49.1s",
+                "realtime": "25.9s",
+                "%cpu": "84.0%",
+                "peak_rss": "909.8 MB",
+                "peak_vmem": "1.7 GB",
+                "rchar": "79.6 MB",
+                "wchar": "5.3 MB",
                 "metrics": {
-                    "f1_micro": 0.3318345323741007,
-                    "accuracy": 0.3318345323741007,
-                    "f1": 0.16535711336400155
-                }
-            },
-            "random_labels": {
-                "submit": "2022-05-17 22:13:56.293",
-                "duration": "4m 50s",
-                "realtime": "2m 34s",
-                "%cpu": "26.1%",
-                "peak_rss": "3.6 GB",
-                "peak_vmem": "6.5 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
-                "metrics": {
-                    "f1": 0.1989536145077819,
-                    "f1_micro": 0.18525179856115107,
-                    "accuracy": 0.18525179856115107
-                }
-            },
-            "logistic_regression_log_cpm": {
-                "submit": "2022-05-17 22:30:47.200",
-                "duration": "5m 19s",
-                "realtime": "1m 58s",
-                "%cpu": "646.4%",
-                "peak_rss": "6.5 GB",
-                "peak_vmem": "9.9 GB",
-                "rchar": "3.5 GB",
-                "wchar": "4.6 GB",
-                "metrics": {
-                    "f1_micro": 0.979916067146283,
-                    "f1": 0.9793339498303505,
-                    "accuracy": 0.979916067146283
-                }
-            },
-            "mlp_log_cpm": {
-                "submit": "2022-05-17 22:31:36.575",
-                "duration": "5m 59s",
-                "realtime": "1m 33s",
-                "%cpu": "883.5%",
-                "peak_rss": "6.4 GB",
-                "peak_vmem": "8 GB",
-                "rchar": "3.5 GB",
-                "wchar": "4.6 GB",
-                "metrics": {
-                    "f1": 0.8669700871385441,
-                    "f1_micro": 0.842326139088729,
-                    "accuracy": 0.842326139088729
+                    "f1": 0.7962016070124177,
+                    "accuracy": 0.7567567567567568,
+                    "f1_micro": 0.7567567567567567
                 }
             },
             "knn_classifier_log_cpm": {
-                "submit": "2022-05-17 22:36:16.290",
-                "duration": "10m 20s",
-                "realtime": "4m 32s",
-                "%cpu": "255.9%",
-                "peak_rss": "6.5 GB",
-                "peak_vmem": "11.8 GB",
-                "rchar": "3.5 GB",
-                "wchar": "4.6 GB",
+                "submit": "2022-05-19 22:09:52.220",
+                "duration": "28.9s",
+                "realtime": "10.4s",
+                "%cpu": "57.3%",
+                "peak_rss": "255 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "42.8 MB",
+                "wchar": "3.5 MB",
                 "metrics": {
-                    "f1_micro": 0.9232613908872902,
-                    "accuracy": 0.9232613908872902,
-                    "f1": 0.9226095742102641
+                    "accuracy": 0.8738738738738738,
+                    "f1": 0.8402633402633403,
+                    "f1_micro": 0.8738738738738738
                 }
             },
-            "knn_classifier_scran": {
-                "submit": "2022-05-17 23:30:37.071",
-                "duration": "16m 59s",
-                "realtime": "14m 48s",
-                "%cpu": "235.3%",
-                "peak_rss": "22.5 GB",
-                "peak_vmem": "27.9 GB",
-                "rchar": "3.5 GB",
-                "wchar": "6.9 GB",
+            "logistic_regression_log_cpm": {
+                "submit": "2022-05-19 22:09:52.557",
+                "duration": "28.9s",
+                "realtime": "10.3s",
+                "%cpu": "69.0%",
+                "peak_rss": "255.5 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "42.8 MB",
+                "wchar": "3.5 MB",
                 "metrics": {
-                    "f1": 0.9457165293974363,
-                    "accuracy": 0.9463429256594724,
-                    "f1_micro": 0.9463429256594724
+                    "f1": 0.8971244509160402,
+                    "f1_micro": 0.8828828828828829,
+                    "accuracy": 0.8828828828828829
                 }
             },
             "logistic_regression_scran": {
-                "submit": "2022-05-17 23:53:26.553",
-                "duration": "15m 49s",
-                "realtime": "14m 1s",
-                "%cpu": "211.3%",
-                "peak_rss": "22.5 GB",
-                "peak_vmem": "26 GB",
-                "rchar": "3.5 GB",
-                "wchar": "6.9 GB",
+                "submit": "2022-05-19 22:09:52.582",
+                "duration": "49.1s",
+                "realtime": "23.6s",
+                "%cpu": "85.8%",
+                "peak_rss": "1.7 GB",
+                "peak_vmem": "3.6 GB",
+                "rchar": "79.5 MB",
+                "wchar": "5.2 MB",
                 "metrics": {
-                    "f1_micro": 0.8264388489208633,
-                    "f1": 0.8040431537796124,
-                    "accuracy": 0.8264388489208633
+                    "f1_micro": 0.8288288288288288,
+                    "accuracy": 0.8288288288288288,
+                    "f1": 0.8496434282619048
                 }
             },
-            "scarches_scanvi_all_genes": {
-                "submit": "2022-05-17 23:04:56.325",
-                "duration": "1h 35m 50s",
-                "realtime": "1h 33m 35s",
-                "%cpu": "762.9%",
-                "peak_rss": "9.3 GB",
-                "peak_vmem": "17.9 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+            "majority_vote": {
+                "submit": "2022-05-19 22:09:52.572",
+                "duration": "29.3s",
+                "realtime": "10.2s",
+                "%cpu": "54.4%",
+                "peak_rss": "254.4 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "42.8 MB",
+                "wchar": "2.6 MB",
                 "metrics": {
-                    "f1": 0.9427279477436156,
-                    "accuracy": 0.9523381294964028,
-                    "f1_micro": 0.9523381294964028
+                    "f1_micro": 0.9009009009009009,
+                    "f1": 0.8539345032236026,
+                    "accuracy": 0.9009009009009009
+                }
+            },
+            "mlp_log_cpm": {
+                "submit": "2022-05-19 22:09:52.730",
+                "duration": "38.6s",
+                "realtime": "10.1s",
+                "%cpu": "80.6%",
+                "peak_rss": "269 MB",
+                "peak_vmem": "888.6 MB",
+                "rchar": "42.9 MB",
+                "wchar": "3.5 MB",
+                "metrics": {
+                    "f1_micro": 0.8288288288288288,
+                    "accuracy": 0.8288288288288288,
+                    "f1": 0.8424835091501757
+                }
+            },
+            "random_labels": {
+                "submit": "2022-05-19 22:09:52.659",
+                "duration": "49.4s",
+                "realtime": "11.8s",
+                "%cpu": "102.1%",
+                "peak_rss": "263.2 MB",
+                "peak_vmem": "5 GB",
+                "rchar": "42.8 MB",
+                "wchar": "2.6 MB",
+                "metrics": {
+                    "f1": 0.7187497094617837,
+                    "accuracy": 0.6486486486486487,
+                    "f1_micro": 0.6486486486486487
                 }
             },
             "mlp_scran": {
-                "submit": "2022-05-18 00:12:06.527",
-                "duration": "50m 40s",
-                "realtime": "48m 20s",
-                "%cpu": "2042.8%",
-                "peak_rss": "22.5 GB",
-                "peak_vmem": "27.9 GB",
-                "rchar": "3.5 GB",
-                "wchar": "6.9 GB",
+                "submit": "2022-05-19 22:09:52.577",
+                "duration": "1m 49s",
+                "realtime": "50.6s",
+                "%cpu": "894.0%",
+                "peak_rss": "909 MB",
+                "peak_vmem": "6.3 GB",
+                "rchar": "79.7 MB",
+                "wchar": "5.2 MB",
                 "metrics": {
-                    "accuracy": 0.9226618705035972,
-                    "f1": 0.9293160279187735,
-                    "f1_micro": 0.9226618705035972
+                    "f1_micro": 0.8738738738738738,
+                    "f1": 0.8854369833751277,
+                    "accuracy": 0.8738738738738738
                 }
             },
             "scanvi_hvg": {
-                "submit": "2022-05-17 22:27:36.361",
-                "duration": "3h 8m 10s",
-                "realtime": "3h 4m 24s",
-                "%cpu": "1058.6%",
-                "peak_rss": "6.9 GB",
-                "peak_vmem": "32 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+                "submit": "2022-05-19 22:09:53.109",
+                "duration": "3m 28s",
+                "realtime": "1m 24s",
+                "%cpu": "198.6%",
+                "peak_rss": "608.5 MB",
+                "peak_vmem": "42.6 GB",
+                "rchar": "59.3 MB",
+                "wchar": "2.7 MB",
                 "metrics": {
-                    "f1": 0.9585383158943404,
-                    "f1_micro": 0.9646282973621103,
-                    "accuracy": 0.9646282973621103
-                }
-            },
-            "scarches_scanvi_hvg": {
-                "submit": "2022-05-18 02:35:16.702",
-                "duration": "4h 50m",
-                "realtime": "44m 57s",
-                "%cpu": "1621.5%",
-                "peak_rss": "7.6 GB",
-                "peak_vmem": "32.4 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
-                "metrics": {
-                    "accuracy": 0.9529376498800959,
-                    "f1_micro": 0.9529376498800959,
-                    "f1": 0.943255352619438
+                    "f1": 0.8539345032236026,
+                    "f1_micro": 0.9009009009009009,
+                    "accuracy": 0.9009009009009009
                 }
             },
             "scanvi_all_genes": {
-                "submit": "2022-05-18 02:25:57.457",
-                "duration": "6h 32m 19s",
-                "realtime": "2h 45m 49s",
-                "%cpu": "1669.2%",
-                "peak_rss": "6.3 GB",
-                "peak_vmem": "31.3 GB",
-                "rchar": "3.5 GB",
-                "wchar": "3.4 GB",
+                "submit": "2022-05-19 22:09:52.875",
+                "duration": "3m 28s",
+                "realtime": "1m 25s",
+                "%cpu": "192.3%",
+                "peak_rss": "598.4 MB",
+                "peak_vmem": "40.1 GB",
+                "rchar": "59.2 MB",
+                "wchar": "2.7 MB",
                 "metrics": {
-                    "f1_micro": 0.9637290167865707,
-                    "f1": 0.957608221626819,
-                    "accuracy": 0.9637290167865707
+                    "accuracy": 0.9009009009009009,
+                    "f1_micro": 0.9009009009009009,
+                    "f1": 0.8539345032236026
+                }
+            },
+            "scarches_scanvi_hvg": {
+                "submit": "2022-05-19 22:09:53.160",
+                "duration": "38.7s",
+                "realtime": "14.1s",
+                "%cpu": "70.2%",
+                "peak_rss": "438.7 MB",
+                "peak_vmem": "2.7 GB",
+                "rchar": "59.1 MB",
+                "wchar": "2.7 MB",
+                "metrics": {
+                    "f1_micro": 0.9009009009009009,
+                    "f1": 0.8539345032236026,
+                    "accuracy": 0.9009009009009009
+                }
+            },
+            "scarches_scanvi_all_genes": {
+                "submit": "2022-05-19 22:09:52.941",
+                "duration": "3m 8s",
+                "realtime": "1m 14s",
+                "%cpu": "160.8%",
+                "peak_rss": "603.3 MB",
+                "peak_vmem": "40 GB",
+                "rchar": "59.2 MB",
+                "wchar": "2.7 MB",
+                "metrics": {
+                    "f1_micro": 0.9009009009009009,
+                    "f1": 0.8539345032236026,
+                    "accuracy": 0.9009009009009009
+                }
+            }
+        },
+        "zebrafish_labels": {
+            "knn_classifier_scran": {
+                "submit": "2022-05-19 21:53:49.019",
+                "duration": "3m 43s",
+                "realtime": "27.5s",
+                "%cpu": "126.8%",
+                "peak_rss": "1.7 GB",
+                "peak_vmem": "3.6 GB",
+                "rchar": "77.9 MB",
+                "wchar": "412.9 KB",
+                "metrics": {
+                    "f1": 0.03212121212121213,
+                    "f1_micro": 0.02,
+                    "accuracy": 0.02
+                }
+            },
+            "knn_classifier_log_cpm": {
+                "submit": "2022-05-19 21:53:47.987",
+                "duration": "3m 34s",
+                "realtime": "9.8s",
+                "%cpu": "81.7%",
+                "peak_rss": "264.7 MB",
+                "peak_vmem": "1.2 GB",
+                "rchar": "40.4 MB",
+                "wchar": "282.6 KB",
+                "metrics": {
+                    "f1": 0.017126979716587942,
+                    "accuracy": 0.02,
+                    "f1_micro": 0.02
+                }
+            },
+            "logistic_regression_log_cpm": {
+                "submit": "2022-05-19 21:54:03.659",
+                "duration": "4m 10s",
+                "realtime": "8.2s",
+                "%cpu": "88.0%",
+                "peak_rss": "255.1 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "40.4 MB",
+                "wchar": "282.6 KB",
+                "metrics": {
+                    "f1": 0.023471685979977973,
+                    "accuracy": 0.036,
+                    "f1_micro": 0.036
+                }
+            },
+            "logistic_regression_scran": {
+                "submit": "2022-05-19 21:54:20.050",
+                "duration": "6m 32s",
+                "realtime": "27.7s",
+                "%cpu": "83.2%",
+                "peak_rss": "897.7 MB",
+                "peak_vmem": "1.6 GB",
+                "rchar": "77.9 MB",
+                "wchar": "382.9 KB",
+                "metrics": {
+                    "accuracy": 0.052,
+                    "f1": 0.06201918782971414,
+                    "f1_micro": 0.052
+                }
+            },
+            "majority_vote": {
+                "submit": "2022-05-19 21:54:04.406",
+                "duration": "4m 49s",
+                "realtime": "13s",
+                "%cpu": "44.6%",
+                "peak_rss": "229.9 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "40.4 MB",
+                "wchar": "224.2 KB",
+                "metrics": {
+                    "f1": 0.0,
+                    "f1_micro": 0.0,
+                    "accuracy": 0.0
+                }
+            },
+            "mlp_log_cpm": {
+                "submit": "2022-05-19 21:54:34.959",
+                "duration": "7m 30s",
+                "realtime": "55.5s",
+                "%cpu": "96.5%",
+                "peak_rss": "263.3 MB",
+                "peak_vmem": "5.5 GB",
+                "rchar": "40.4 MB",
+                "wchar": "282.7 KB",
+                "metrics": {
+                    "f1": 0.005234782608695653,
+                    "f1_micro": 0.024,
+                    "accuracy": 0.024
+                }
+            },
+            "random_labels": {
+                "submit": "2022-05-19 21:54:36.173",
+                "duration": "7m 19s",
+                "realtime": "54s",
+                "%cpu": "25.5%",
+                "peak_rss": "246 MB",
+                "peak_vmem": "5 GB",
+                "rchar": "40.4 MB",
+                "wchar": "224.5 KB",
+                "metrics": {
+                    "f1": 0.02717996870109546,
+                    "accuracy": 0.02,
+                    "f1_micro": 0.02
+                }
+            },
+            "mlp_scran": {
+                "submit": "2022-05-19 21:54:20.755",
+                "duration": "6m 31s",
+                "realtime": "29.1s",
+                "%cpu": "106.4%",
+                "peak_rss": "895.2 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "78 MB",
+                "wchar": "383 KB",
+                "metrics": {
+                    "f1_micro": 0.016,
+                    "f1": 0.01588116458704694,
+                    "accuracy": 0.016
+                }
+            },
+            "scanvi_hvg": {
+                "submit": "2022-05-19 21:55:07.208",
+                "duration": "8m 15s",
+                "realtime": "43.4s",
+                "%cpu": "167.2%",
+                "peak_rss": "605.4 MB",
+                "peak_vmem": "26.6 GB",
+                "rchar": "58.3 MB",
+                "wchar": "284.8 KB",
+                "metrics": {
+                    "f1_micro": 0.0,
+                    "accuracy": 0.0,
+                    "f1": 0.0
+                }
+            },
+            "scanvi_all_genes": {
+                "submit": "2022-05-19 21:54:52.081",
+                "duration": "8m 27s",
+                "realtime": "1m 4s",
+                "%cpu": "169.6%",
+                "peak_rss": "588.1 MB",
+                "peak_vmem": "24 GB",
+                "rchar": "56.8 MB",
+                "wchar": "233.6 KB",
+                "metrics": {
+                    "f1_micro": 0.0,
+                    "accuracy": 0.0,
+                    "f1": 0.0
+                }
+            },
+            "scarches_scanvi_hvg": {
+                "submit": "2022-05-19 21:55:08.442",
+                "duration": "8m 15s",
+                "realtime": "45.9s",
+                "%cpu": "127.8%",
+                "peak_rss": "603.7 MB",
+                "peak_vmem": "26.5 GB",
+                "rchar": "58.3 MB",
+                "wchar": "286.1 KB",
+                "metrics": {
+                    "accuracy": 0.048,
+                    "f1": 0.05526131722749496,
+                    "f1_micro": 0.048
+                }
+            },
+            "scarches_scanvi_all_genes": {
+                "submit": "2022-05-19 21:54:52.809",
+                "duration": "8m 27s",
+                "realtime": "53.1s",
+                "%cpu": "112.3%",
+                "peak_rss": "588.2 MB",
+                "peak_vmem": "24 GB",
+                "rchar": "56.8 MB",
+                "wchar": "234.9 KB",
+                "metrics": {
+                    "accuracy": 0.048,
+                    "f1": 0.05526131722749496,
+                    "f1_micro": 0.048
+                }
+            }
+        },
+        "tabula_muris_senis_lung_random": {
+            "knn_classifier_scran": {
+                "submit": "2022-05-19 22:06:38.135",
+                "duration": "50.2s",
+                "realtime": "27s",
+                "%cpu": "83.4%",
+                "peak_rss": "923.1 MB",
+                "peak_vmem": "1.7 GB",
+                "rchar": "88.2 MB",
+                "wchar": "11.1 MB",
+                "metrics": {
+                    "f1_micro": 0.26136363636363635,
+                    "f1": 0.23149357251736485,
+                    "accuracy": 0.26136363636363635
+                }
+            },
+            "knn_classifier_log_cpm": {
+                "submit": "2022-05-19 22:06:38.383",
+                "duration": "35.7s",
+                "realtime": "8.3s",
+                "%cpu": "81.0%",
+                "peak_rss": "254.6 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "50.7 MB",
+                "wchar": "10.7 MB",
+                "metrics": {
+                    "f1_micro": 0.2840909090909091,
+                    "f1": 0.20879642823216485,
+                    "accuracy": 0.2840909090909091
+                }
+            },
+            "logistic_regression_log_cpm": {
+                "submit": "2022-05-19 22:06:38.327",
+                "duration": "40.3s",
+                "realtime": "10.2s",
+                "%cpu": "71.8%",
+                "peak_rss": "286.9 MB",
+                "peak_vmem": "907.7 MB",
+                "rchar": "50.7 MB",
+                "wchar": "10.7 MB",
+                "metrics": {
+                    "f1": 0.5710071301247772,
+                    "f1_micro": 0.6136363636363636,
+                    "accuracy": 0.6136363636363636
+                }
+            },
+            "logistic_regression_scran": {
+                "submit": "2022-05-19 22:06:38.489",
+                "duration": "50.5s",
+                "realtime": "24.3s",
+                "%cpu": "136.6%",
+                "peak_rss": "918.7 MB",
+                "peak_vmem": "1.9 GB",
+                "rchar": "88.3 MB",
+                "wchar": "11.1 MB",
+                "metrics": {
+                    "f1": 0.49785898506334886,
+                    "accuracy": 0.5568181818181818,
+                    "f1_micro": 0.5568181818181818
+                }
+            },
+            "majority_vote": {
+                "submit": "2022-05-19 22:06:38.532",
+                "duration": "40.4s",
+                "realtime": "12.3s",
+                "%cpu": "59.5%",
+                "peak_rss": "251.9 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "50.7 MB",
+                "wchar": "10.5 MB",
+                "metrics": {
+                    "accuracy": 0.36363636363636365,
+                    "f1": 0.19393939393939394,
+                    "f1_micro": 0.36363636363636365
+                }
+            },
+            "mlp_log_cpm": {
+                "submit": "2022-05-19 22:06:39.246",
+                "duration": "59.5s",
+                "realtime": "28.3s",
+                "%cpu": "1589.1%",
+                "peak_rss": "288.3 MB",
+                "peak_vmem": "5.6 GB",
+                "rchar": "50.7 MB",
+                "wchar": "10.7 MB",
+                "metrics": {
+                    "f1_micro": 0.4318181818181818,
+                    "accuracy": 0.4318181818181818,
+                    "f1": 0.3482975357975358
+                }
+            },
+            "random_labels": {
+                "submit": "2022-05-19 22:06:38.774",
+                "duration": "40.4s",
+                "realtime": "8.5s",
+                "%cpu": "131.0%",
+                "peak_rss": "274.5 MB",
+                "peak_vmem": "5 GB",
+                "rchar": "50.7 MB",
+                "wchar": "10.5 MB",
+                "metrics": {
+                    "f1": 0.18106060606060606,
+                    "f1_micro": 0.1590909090909091,
+                    "accuracy": 0.1590909090909091
+                }
+            },
+            "mlp_scran": {
+                "submit": "2022-05-19 22:06:38.576",
+                "duration": "50.8s",
+                "realtime": "26.2s",
+                "%cpu": "122.5%",
+                "peak_rss": "922.8 MB",
+                "peak_vmem": "2 GB",
+                "rchar": "88.3 MB",
+                "wchar": "11.1 MB",
+                "metrics": {
+                    "accuracy": 0.4318181818181818,
+                    "f1": 0.33590006250434057,
+                    "f1_micro": 0.4318181818181818
+                }
+            },
+            "scanvi_hvg": {
+                "submit": "2022-05-19 22:06:39.295",
+                "duration": "2m 3s",
+                "realtime": "25.9s",
+                "%cpu": "45.3%",
+                "peak_rss": "645.2 MB",
+                "peak_vmem": "7.1 GB",
+                "rchar": "68.5 MB",
+                "wchar": "10.6 MB",
+                "metrics": {
+                    "accuracy": 0.0,
+                    "f1": 0.0,
+                    "f1_micro": 0.0
+                }
+            },
+            "scanvi_all_genes": {
+                "submit": "2022-05-19 22:06:38.945",
+                "duration": "2m 2s",
+                "realtime": "25.6s",
+                "%cpu": "41.6%",
+                "peak_rss": "450.8 MB",
+                "peak_vmem": "2.4 GB",
+                "rchar": "67 MB",
+                "wchar": "10.5 MB",
+                "metrics": {
+                    "f1": 0.0,
+                    "f1_micro": 0.0,
+                    "accuracy": 0.0
+                }
+            },
+            "scarches_scanvi_hvg": {
+                "submit": "2022-05-19 22:06:39.395",
+                "duration": "1m",
+                "realtime": "19.6s",
+                "%cpu": "418.8%",
+                "peak_rss": "647.1 MB",
+                "peak_vmem": "34 GB",
+                "rchar": "68.6 MB",
+                "wchar": "10.6 MB",
+                "metrics": {
+                    "f1": 0.001286449399656947,
+                    "accuracy": 0.011363636363636364,
+                    "f1_micro": 0.011363636363636364
+                }
+            },
+            "scarches_scanvi_all_genes": {
+                "submit": "2022-05-19 22:06:39.176",
+                "duration": "2m 2s",
+                "realtime": "25.7s",
+                "%cpu": "40.3%",
+                "peak_rss": "622.8 MB",
+                "peak_vmem": "6.7 GB",
+                "rchar": "67 MB",
+                "wchar": "10.5 MB",
+                "metrics": {
+                    "accuracy": 0.011363636363636364,
+                    "f1": 0.001286449399656947,
+                    "f1_micro": 0.011363636363636364
+                }
+            }
+        },
+        "zebrafish_random": {
+            "knn_classifier_scran": {
+                "submit": "2022-05-19 21:53:48.970",
+                "duration": "4m 24s",
+                "realtime": "29.8s",
+                "%cpu": "101.0%",
+                "peak_rss": "895.4 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "77.9 MB",
+                "wchar": "412.9 KB",
+                "metrics": {
+                    "f1_micro": 0.10000000000000002,
+                    "f1": 0.09859197235513024,
+                    "accuracy": 0.1
+                }
+            },
+            "knn_classifier_log_cpm": {
+                "submit": "2022-05-19 21:53:47.888",
+                "duration": "2m 54s",
+                "realtime": "11.3s",
+                "%cpu": "72.1%",
+                "peak_rss": "263 MB",
+                "peak_vmem": "1.2 GB",
+                "rchar": "40.4 MB",
+                "wchar": "282.6 KB",
+                "metrics": {
+                    "f1_micro": 0.11,
+                    "f1": 0.10849225170964302,
+                    "accuracy": 0.11
+                }
+            },
+            "logistic_regression_log_cpm": {
+                "submit": "2022-05-19 21:54:03.473",
+                "duration": "3m 49s",
+                "realtime": "16.5s",
+                "%cpu": "64.7%",
+                "peak_rss": "263.6 MB",
+                "peak_vmem": "1.2 GB",
+                "rchar": "40.4 MB",
+                "wchar": "282.6 KB",
+                "metrics": {
+                    "f1_micro": 0.12,
+                    "f1": 0.1212048066875653,
+                    "accuracy": 0.12
+                }
+            },
+            "logistic_regression_scran": {
+                "submit": "2022-05-19 21:54:19.831",
+                "duration": "6m 31s",
+                "realtime": "27.6s",
+                "%cpu": "83.2%",
+                "peak_rss": "898.1 MB",
+                "peak_vmem": "1.6 GB",
+                "rchar": "77.9 MB",
+                "wchar": "382.9 KB",
+                "metrics": {
+                    "f1_micro": 0.16,
+                    "f1": 0.15675629700629698,
+                    "accuracy": 0.16
+                }
+            },
+            "majority_vote": {
+                "submit": "2022-05-19 21:54:04.390",
+                "duration": "4m 49s",
+                "realtime": "13.2s",
+                "%cpu": "47.9%",
+                "peak_rss": "229.7 MB",
+                "peak_vmem": "1.1 GB",
+                "rchar": "40.4 MB",
+                "wchar": "224.2 KB",
+                "metrics": {
+                    "f1": 0.0391304347826087,
+                    "f1_micro": 0.15,
+                    "accuracy": 0.15
+                }
+            },
+            "mlp_log_cpm": {
+                "submit": "2022-05-19 21:54:34.960",
+                "duration": "7m 47s",
+                "realtime": "1m 4s",
+                "%cpu": "253.2%",
+                "peak_rss": "262.6 MB",
+                "peak_vmem": "5.6 GB",
+                "rchar": "40.4 MB",
+                "wchar": "282.7 KB",
+                "metrics": {
+                    "accuracy": 0.19,
+                    "f1_micro": 0.19,
+                    "f1": 0.15203660130718955
+                }
+            },
+            "random_labels": {
+                "submit": "2022-05-19 21:54:36.186",
+                "duration": "7m 29s",
+                "realtime": "53.5s",
+                "%cpu": "25.2%",
+                "peak_rss": "252.6 MB",
+                "peak_vmem": "5 GB",
+                "rchar": "40.4 MB",
+                "wchar": "224.5 KB",
+                "metrics": {
+                    "f1": 0.04352564102564102,
+                    "accuracy": 0.04,
+                    "f1_micro": 0.04
+                }
+            },
+            "mlp_scran": {
+                "submit": "2022-05-19 21:54:20.777",
+                "duration": "6m 31s",
+                "realtime": "29.4s",
+                "%cpu": "117.5%",
+                "peak_rss": "895.5 MB",
+                "peak_vmem": "1.8 GB",
+                "rchar": "78 MB",
+                "wchar": "383.1 KB",
+                "metrics": {
+                    "f1_micro": 0.16,
+                    "accuracy": 0.16,
+                    "f1": 0.14087345807345805
+                }
+            },
+            "scanvi_hvg": {
+                "submit": "2022-05-19 21:55:07.191",
+                "duration": "8m 15s",
+                "realtime": "44.2s",
+                "%cpu": "209.4%",
+                "peak_rss": "605.4 MB",
+                "peak_vmem": "28.2 GB",
+                "rchar": "58.3 MB",
+                "wchar": "284.8 KB",
+                "metrics": {
+                    "f1_micro": 0.03,
+                    "f1": 0.006486486486486486,
+                    "accuracy": 0.03
+                }
+            },
+            "scanvi_all_genes": {
+                "submit": "2022-05-19 21:54:51.915",
+                "duration": "8m 26s",
+                "realtime": "1m",
+                "%cpu": "177.8%",
+                "peak_rss": "587 MB",
+                "peak_vmem": "24.1 GB",
+                "rchar": "56.8 MB",
+                "wchar": "233.6 KB",
+                "metrics": {
+                    "accuracy": 0.03,
+                    "f1": 0.006486486486486486,
+                    "f1_micro": 0.03
+                }
+            },
+            "scarches_scanvi_hvg": {
+                "submit": "2022-05-19 21:55:08.440",
+                "duration": "8m 15s",
+                "realtime": "45s",
+                "%cpu": "152.1%",
+                "peak_rss": "606.5 MB",
+                "peak_vmem": "26.5 GB",
+                "rchar": "58.3 MB",
+                "wchar": "286.2 KB",
+                "metrics": {
+                    "accuracy": 0.03,
+                    "f1": 0.021241830065359478,
+                    "f1_micro": 0.03
+                }
+            },
+            "scarches_scanvi_all_genes": {
+                "submit": "2022-05-19 21:54:52.644",
+                "duration": "8m 27s",
+                "realtime": "50.4s",
+                "%cpu": "133.8%",
+                "peak_rss": "586.3 MB",
+                "peak_vmem": "24.2 GB",
+                "rchar": "56.8 MB",
+                "wchar": "235 KB",
+                "metrics": {
+                    "f1_micro": 0.03,
+                    "f1": 0.021241830065359478,
+                    "accuracy": 0.03
                 }
             }
         }
     },
     "multimodal_data_integration": {
-        "scicar_cell_lines": {
-            "procrustes": {
-                "submit": "2022-05-17 21:38:06.354",
-                "duration": "7m 30s",
-                "realtime": "2m 8s",
-                "%cpu": "424.9%",
-                "peak_rss": "674.8 MB",
-                "peak_vmem": "5.9 GB",
-                "rchar": "199 MB",
-                "wchar": "230.2 MB",
+        "scicar_mouse_kidney": {
+            "harmonic_alignment_sqrt_cpm": {
+                "submit": "2022-05-19 21:55:39.572",
+                "duration": "7m 47s",
+                "realtime": "26.9s",
+                "%cpu": "674.0%",
+                "peak_rss": "272.5 MB",
+                "peak_vmem": "11.6 GB",
+                "rchar": "40.4 MB",
+                "wchar": "1.2 MB",
                 "metrics": {
-                    "knn_auc": 0.08452137353372531,
-                    "mse": 0.8907390049561917
+                    "mse": 1.0005954494333054,
+                    "knn_auc": 0.0334041101197367
                 }
             },
             "mnn_log_cpm": {
-                "submit": "2022-05-17 21:38:06.282",
-                "duration": "12m 30s",
-                "realtime": "3m 42s",
-                "%cpu": "85.8%",
-                "peak_rss": "1.9 GB",
-                "peak_vmem": "6.3 GB",
-                "rchar": "242.8 MB",
-                "wchar": "297.4 MB",
+                "submit": "2022-05-19 21:55:40.280",
+                "duration": "7m 47s",
+                "realtime": "41s",
+                "%cpu": "91.7%",
+                "peak_rss": "926.9 MB",
+                "peak_vmem": "5.3 GB",
+                "rchar": "82.9 MB",
+                "wchar": "2.1 MB",
                 "metrics": {
-                    "knn_auc": 0.07279219467155297,
-                    "mse": 0.8983644163307505
-                }
-            },
-            "harmonic_alignment_sqrt_cpm": {
-                "submit": "2022-05-17 21:38:06.334",
-                "duration": "16m 10s",
-                "realtime": "7m 41s",
-                "%cpu": "560.1%",
-                "peak_rss": "891.5 MB",
-                "peak_vmem": "12.2 GB",
-                "rchar": "200.3 MB",
-                "wchar": "230.2 MB",
-                "metrics": {
-                    "knn_auc": 0.03911683119667607,
-                    "mse": 0.9997591574474723
-                }
-            },
-            "mnn_log_scran_pooling": {
-                "submit": "2022-05-17 21:59:16.327",
-                "duration": "4m 50s",
-                "realtime": "4m 11s",
-                "%cpu": "87.7%",
-                "peak_rss": "3.4 GB",
-                "peak_vmem": "6.3 GB",
-                "rchar": "245.6 MB",
-                "wchar": "297.4 MB",
-                "metrics": {
-                    "knn_auc": 0.09923162983366954,
-                    "mse": 0.7173333624118253
+                    "knn_auc": 0.020108373779449597,
+                    "mse": 0.9891620966369757
                 }
             },
             "harmonic_alignment_log_scran_pooling": {
-                "submit": "2022-05-17 22:04:46.222",
-                "duration": "7m 50s",
-                "realtime": "7m 2s",
-                "%cpu": "1204.8%",
-                "peak_rss": "3.3 GB",
-                "peak_vmem": "7.9 GB",
-                "rchar": "243.9 MB",
-                "wchar": "286.5 MB",
+                "submit": "2022-05-19 21:55:24.885",
+                "duration": "8m 1s",
+                "realtime": "44.5s",
+                "%cpu": "321.4%",
+                "peak_rss": "1.7 GB",
+                "peak_vmem": "10.7 GB",
+                "rchar": "84.2 MB",
+                "wchar": "1.5 MB",
                 "metrics": {
-                    "mse": 1.000029788857487,
-                    "knn_auc": 0.05325471149605907
+                    "mse": 0.994413536661769,
+                    "knn_auc": 0.03676417564953024
                 }
             }
         },
-        "scicar_mouse_kidney": {
-            "procrustes": {
-                "submit": "2022-05-17 21:38:16.309",
-                "duration": "7m 40s",
-                "realtime": "2m 23s",
-                "%cpu": "410.9%",
-                "peak_rss": "915.9 MB",
-                "peak_vmem": "6.2 GB",
-                "rchar": "263.2 MB",
-                "wchar": "317.4 MB",
-                "metrics": {
-                    "knn_auc": 0.07430273077088702,
-                    "mse": 0.943144463790013
-                }
-            },
+        "scicar_cell_lines": {
             "harmonic_alignment_sqrt_cpm": {
-                "submit": "2022-05-17 21:38:16.278",
-                "duration": "24m 30s",
-                "realtime": "16m 7s",
-                "%cpu": "488.4%",
-                "peak_rss": "1.9 GB",
-                "peak_vmem": "13.2 GB",
-                "rchar": "264.4 MB",
-                "wchar": "317.2 MB",
+                "submit": "2022-05-19 21:55:39.554",
+                "duration": "7m 47s",
+                "realtime": "23.2s",
+                "%cpu": "638.2%",
+                "peak_rss": "272.1 MB",
+                "peak_vmem": "11.6 GB",
+                "rchar": "40.5 MB",
+                "wchar": "1.2 MB",
                 "metrics": {
-                    "knn_auc": 0.05419433404529414,
-                    "mse": 0.9999969065596783
+                    "mse": 1.0010956427930287,
+                    "knn_auc": 0.02737520900072716
                 }
             },
             "mnn_log_cpm": {
-                "submit": "2022-05-17 22:12:26.712",
-                "duration": "11m 59s",
-                "realtime": "9m 20s",
-                "%cpu": "53.2%",
-                "peak_rss": "2.3 GB",
-                "peak_vmem": "6.7 GB",
-                "rchar": "307 MB",
-                "wchar": "422 MB",
+                "submit": "2022-05-19 21:55:40.294",
+                "duration": "7m 47s",
+                "realtime": "41.5s",
+                "%cpu": "89.7%",
+                "peak_rss": "928 MB",
+                "peak_vmem": "5.3 GB",
+                "rchar": "82.9 MB",
+                "wchar": "2.1 MB",
                 "metrics": {
-                    "knn_auc": 0.046475813747296806,
-                    "mse": 0.9787441197705792
+                    "mse": 1.0047947038464426,
+                    "knn_auc": 0.01564796702759739
                 }
             },
             "harmonic_alignment_log_scran_pooling": {
-                "submit": "2022-05-17 22:25:06.293",
-                "duration": "19m 30s",
-                "realtime": "16m 30s",
-                "%cpu": "447.5%",
-                "peak_rss": "4.3 GB",
-                "peak_vmem": "7.2 GB",
-                "rchar": "308.1 MB",
-                "wchar": "362.2 MB",
+                "submit": "2022-05-19 21:55:24.898",
+                "duration": "8m 1s",
+                "realtime": "40.4s",
+                "%cpu": "262.2%",
+                "peak_rss": "916.2 MB",
+                "peak_vmem": "6.3 GB",
+                "rchar": "84.2 MB",
+                "wchar": "1.5 MB",
                 "metrics": {
-                    "mse": 1.0002097567461599,
-                    "knn_auc": 0.06515525783664229
-                }
-            },
-            "mnn_log_scran_pooling": {
-                "submit": "2022-05-17 22:37:06.311",
-                "duration": "19m 30s",
-                "realtime": "8m 46s",
-                "%cpu": "100.2%",
-                "peak_rss": "4.3 GB",
-                "peak_vmem": "7.2 GB",
-                "rchar": "309.8 MB",
-                "wchar": "422 MB",
-                "metrics": {
-                    "mse": 0.9683558880294852,
-                    "knn_auc": 0.07588211610314763
+                    "mse": 1.002763244655941,
+                    "knn_auc": 0.04956528610992988
                 }
             }
         },
         "citeseq_cbmc": {
-            "procrustes": {
-                "submit": "2022-05-17 21:43:26.501",
-                "duration": "2m 50s",
-                "realtime": "20.6s",
-                "%cpu": "205.5%",
-                "peak_rss": "534 MB",
-                "peak_vmem": "5.2 GB",
-                "rchar": "222.6 MB",
-                "wchar": "276.4 MB",
-                "metrics": {
-                    "knn_auc": 0.203519744159809,
-                    "mse": 0.5775231341200949
-                }
-            },
             "harmonic_alignment_sqrt_cpm": {
-                "submit": "2022-05-17 21:43:26.297",
-                "duration": "6m 30s",
-                "realtime": "3m 58s",
-                "%cpu": "1666.3%",
-                "peak_rss": "643.1 MB",
-                "peak_vmem": "12 GB",
-                "rchar": "223.8 MB",
-                "wchar": "287.8 MB",
+                "submit": "2022-05-19 21:56:33.078",
+                "duration": "6m 57s",
+                "realtime": "36.5s",
+                "%cpu": "725.6%",
+                "peak_rss": "271 MB",
+                "peak_vmem": "11.6 GB",
+                "rchar": "40.5 MB",
+                "wchar": "1.6 MB",
                 "metrics": {
-                    "knn_auc": 0.05438411882692756,
-                    "mse": 0.9999939009381821
+                    "mse": 0.9988651952665148,
+                    "knn_auc": 0.0613993983494232
                 }
             },
             "mnn_log_cpm": {
-                "submit": "2022-05-17 21:43:26.394",
-                "duration": "7m 49s",
-                "realtime": "2m 2s",
-                "%cpu": "72.8%",
-                "peak_rss": "1.9 GB",
-                "peak_vmem": "6.3 GB",
-                "rchar": "266.4 MB",
-                "wchar": "367.3 MB",
+                "submit": "2022-05-19 21:56:33.653",
+                "duration": "6m 57s",
+                "realtime": "38.2s",
+                "%cpu": "84.7%",
+                "peak_rss": "943.3 MB",
+                "peak_vmem": "5.3 GB",
+                "rchar": "83 MB",
+                "wchar": "2 MB",
                 "metrics": {
-                    "mse": 0.8835459606453614,
-                    "knn_auc": 0.055966858684876455
+                    "mse": 1.1241886666971264,
+                    "knn_auc": 0.023785090036906223
                 }
             },
             "harmonic_alignment_log_scran_pooling": {
-                "submit": "2022-05-17 22:26:57.002",
-                "duration": "12m 29s",
-                "realtime": "11m 15s",
-                "%cpu": "617.1%",
-                "peak_rss": "4.3 GB",
-                "peak_vmem": "7.2 GB",
-                "rchar": "267.5 MB",
-                "wchar": "377.6 MB",
+                "submit": "2022-05-19 21:56:32.853",
+                "duration": "6m 56s",
+                "realtime": "52.4s",
+                "%cpu": "382.5%",
+                "peak_rss": "1.7 GB",
+                "peak_vmem": "10.7 GB",
+                "rchar": "84.3 MB",
+                "wchar": "2 MB",
                 "metrics": {
-                    "mse": 1.0001975598744821,
-                    "knn_auc": 0.05639884940537318
-                }
-            },
-            "mnn_log_scran_pooling": {
-                "submit": "2022-05-17 22:33:26.356",
-                "duration": "10m 20s",
-                "realtime": "4m 5s",
-                "%cpu": "100.3%",
-                "peak_rss": "4.3 GB",
-                "peak_vmem": "5.7 GB",
-                "rchar": "269.2 MB",
-                "wchar": "367.3 MB",
-                "metrics": {
-                    "mse": 1.0136365203475632,
-                    "knn_auc": 0.043631880220832635
-                }
-            }
-        }
-    },
-    "batch_integration_graph": {
-        "pancreas_batch": {
-            "bbknn_full_unscaled": {
-                "submit": "2022-05-17 23:14:16.333",
-                "duration": "5m 20s",
-                "realtime": "3m 33s",
-                "%cpu": "350.7%",
-                "peak_rss": "17.5 GB",
-                "peak_vmem": "20.6 GB",
-                "rchar": "3.5 GB",
-                "wchar": "5.7 GB",
-                "metrics": {
-                    "ari": 0.5144547087676324
-                }
-            }
-        },
-        "immune_batch": {
-            "bbknn_full_unscaled": {
-                "submit": "2022-05-17 23:32:57.084",
-                "duration": "6m 9s",
-                "realtime": "4m 5s",
-                "%cpu": "411.1%",
-                "peak_rss": "21.2 GB",
-                "peak_vmem": "24.3 GB",
-                "rchar": "3.5 GB",
-                "wchar": "6.6 GB",
-                "metrics": {
-                    "ari": 0.4446290701807272
-                }
-            }
-        }
-    },
-    "regulatory_effect_prediction": {
-        "scicar_mouse_kidney": {
-            "beta": {
-                "submit": "2022-05-18 01:03:56.459",
-                "duration": "12m 10s",
-                "realtime": "10m 4s",
-                "%cpu": "865.5%",
-                "peak_rss": "3 GB",
-                "peak_vmem": "6.1 GB",
-                "rchar": "2.5 GB",
-                "wchar": "2.1 GB",
-                "metrics": {
-                    "spearman_correlation": -0.013979251313609442,
-                    "pearson_correlation": 0.000840363920114177
+                    "mse": 0.9851276843809412,
+                    "knn_auc": 0.04491287928433337
                 }
             }
         }
