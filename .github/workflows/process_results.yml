@@ -19,7 +19,6 @@ jobs:
     - name: Set up Git branch
       run: |
         git checkout -b $UPDATE_BRANCH_NAME
-        git push -u origin $UPDATE_BRANCH_NAME
 
     - name: Set up Python
       uses: actions/setup-python@v2
