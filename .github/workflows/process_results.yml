@@ -16,6 +16,10 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Set up Git branch
+      run: |
+        git checkout -b $UPDATE_BRANCH_NAME
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -65,16 +69,15 @@ jobs:
         IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
         aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
 
+    - name: Push Git branch
+      run: |
+        git push -u origin $UPDATE_BRANCH_NAME
+
     - name: Pre-commit
       uses: pre-commit/action@v2.0.0
       continue-on-error: true
       env:
         SKIP: style-files,lintr
-
-    - name: Set up Git branch
-      run: |
-        git checkout -b $UPDATE_BRANCH_NAME
-        git push -u origin $UPDATE_BRANCH_NAME
 
     - name: Commit result
       uses: EndBug/add-and-commit@v6
