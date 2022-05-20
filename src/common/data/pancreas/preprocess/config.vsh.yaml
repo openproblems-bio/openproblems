@@ -1,5 +1,5 @@
 functionality:
-  name: "load_pancreas"
+  name: "preprocess_pancreas"
   namespace: "common/data/pancreas/preprocess"
   version: "dev"
   description: "Common component to preprocess pancreas data"
@@ -19,6 +19,7 @@ functionality:
     - name: "--method"
       description: "The preprocess method to be used. Options: ['batch', 'random', 'random_with_noise']"
       type: "string"
+      values: ['batch', 'random', 'random_with_noise']
       required: true
       default: "batch"
     - name: "--output"
@@ -30,14 +31,16 @@ functionality:
       required: true
   resources:
     - type: python_script
-      path: preprocess.py
-    - path: noise.py
-    - path: "../../utils/"
-  tests:
+      path: script.py
     - type: python_script
-      path: load_save_test.py
-    - path: load_save.py
-    - path: fake_anndata.py
+      path: noise.py
+    - type: python_script
+      path: "../../utils/preprocess.py"
+  # tests:
+  #   - type: python_script
+  #     path: load_save_test.py
+  #   - path: load_save.py
+  #   - path: fake_anndata.py
 platforms:
   - type: native
   - type: docker
