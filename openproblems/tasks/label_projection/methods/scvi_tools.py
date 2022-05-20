@@ -48,7 +48,9 @@ def _scanvi(adata, test=False, n_hidden=None, n_latent=None, n_layers=None):
     scvi_model = scvi.model.SCVI(
         adata, n_hidden=n_hidden, n_latent=n_latent, n_layers=n_layers
     )
-    train_kwargs = dict(train_size=1.0, early_stopping=True)
+    train_kwargs = dict(
+        train_size=1.0, early_stopping=True, early_stopping_monitor="elbo_train"
+    )
     if test:
         train_kwargs["max_epochs"] = 1
         train_kwargs["limit_train_batches"] = 10
@@ -94,7 +96,9 @@ def _scanvi_scarches(adata, test=False, n_hidden=None, n_latent=None, n_layers=N
         n_latent=n_latent,
     )
     scvi_model = scvi.model.SCVI(adata_train, **arches_params)
-    train_kwargs = dict(train_size=1.0, early_stopping=True)
+    train_kwargs = dict(
+        train_size=1.0, early_stopping=True, early_stopping_monitor="elbo_train"
+    )
     if test:
         train_kwargs["max_epochs"] = 1
         train_kwargs["limit_train_batches"] = 10
