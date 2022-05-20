@@ -130,7 +130,8 @@ jobs:
         github.event.pull_request.draft == false
       ) &&
       !startsWith(github.ref, 'refs/heads/test_docker') &&
-      !startsWith(github.ref, 'refs/heads/test_benchmark')
+      !startsWith(github.ref, 'refs/heads/test_benchmark') &&
+      !startsWith(github.ref, 'refs/heads/test_process')
 
     steps:
 
