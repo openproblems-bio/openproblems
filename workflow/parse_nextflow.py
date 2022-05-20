@@ -211,8 +211,6 @@ def main(results_path, outdir):
     results = parse_trace_to_dict(df)
     results = parse_metric_results(results_path, results)
     results_to_json(results, outdir)
-    with open("results.json", "w") as handle:
-        dump_json(results, handle)
     return 0
 
 
