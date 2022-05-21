@@ -17,12 +17,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        fetch-depth: 0
+        fetch-depth: 1
         path: openproblems
 
     - name: Checkout website repo
       uses: actions/checkout@v3
       with:
+        fetch-depth: 0
         repository: openproblems-bio/website
         path: website
 
@@ -74,6 +75,7 @@ jobs:
         AWS_DEFAULT_REGION: us-west-2
       run: |
         aws s3 rm --recursive "s3://openproblems-nextflow/work_main"
+        aws s3 rm --recursive "s3://openproblems-nextflow/cwd_example"
         aws s3 cp --recursive "s3://openproblems-nextflow/cwd_main" "s3://openproblems-nextflow/cwd_example"
         aws s3 rm --recursive "s3://openproblems-nextflow/cwd_main"
 
