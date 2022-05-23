@@ -1,4 +1,4 @@
-from .datasets.pancreas import pancreas_batch
+from ...batch_integration_graph.datasets.pancreas import pancreas_batch
 
 
 def check_dataset(adata):
