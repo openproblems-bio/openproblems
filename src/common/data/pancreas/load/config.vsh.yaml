@@ -12,6 +12,7 @@ functionality:
       description: "Url where data should be download"
       type: "string"
       required: true
+      example: https://ndownloader.figshare.com/files/24539828
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
@@ -26,7 +27,6 @@ functionality:
     - type: python_script
       path: test_script.py
 platforms:
-  - type: native
   - type: docker
     image: "python:3.8"
     setup:
@@ -34,5 +34,5 @@ platforms:
         packages:
           - scprep
           - scanpy
-          - openpyxl # to tests
+  - type: native
   - type: nextflow
