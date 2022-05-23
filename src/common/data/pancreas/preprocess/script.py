@@ -1,9 +1,9 @@
 ## VIASH START
 par = {
-    "input": "data.h5ad",
+    "input": "./test/data.h5ad",
     "test": False,
     "method": 'batch',
-    "output": "/tmp/output.h5ad"
+    "output": "./test/preprocess.h5ad"
 }
 resources_dir = '../../utils/'
 ## VIASH END
@@ -26,7 +26,7 @@ def batch(adata):
         False if adata.obs["batch"][idx] in test_batches else True
         for idx in adata.obs_names
     ]
-    return
+    return adata
 
 
 def random(adata):
@@ -53,6 +53,8 @@ def random_with_noise(adata):
     # Inject label noise
     adata = noise.add_label_noise(adata, noise_prob=0.2)
 
+    return adata
+
 
 func_map = {'batch': batch,
             'random': random,
@@ -74,6 +76,8 @@ if par['test']:
     # Ensure there are no cells or genes with 0 counts
     preprocess.filter_genes_cells(adata)
 else:
-    adata = preprocess.filter_genes_cells(adata)
-    preprocessed_adata = method_func(adata)
-    preprocessed_adata.write(par['output'])
+    preprocess.filter_genes_cells(adata)
+
+
+preprocessed_adata = method_func(adata)
+preprocessed_adata.write(par['output'])

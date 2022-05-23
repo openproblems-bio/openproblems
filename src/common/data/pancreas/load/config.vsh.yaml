@@ -5,8 +5,11 @@ functionality:
   description: "Common component to load pancreas data"
   authors:
     - name: "Scott Gigante"
-      roles: [ maintainer, author ]
+      roles: [ author ]
       props: { github: scottgigante }
+    - name: "Vinicius Saraiva Chagas"
+      roles: [ maintainer ]
+      props: { github: chagasVinicius }
   arguments:
     - name: "--url"
       description: "Url where data should be download"
