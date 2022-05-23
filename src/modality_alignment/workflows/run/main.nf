@@ -22,12 +22,8 @@ include { knn_auc }              from "$targetDir/modality_alignment/metrics/knn
 include { mse }                  from "$targetDir/modality_alignment/metrics/mse/main.nf"                 params(params)
 
 // import helper functions
-include { overrideOptionValue; overrideParams } from "$launchDir/src/common/workflows/utils.nf"
 include { extract_scores }       from "$targetDir/common/extract_scores/main.nf"                           params(params)
 
-// Helper function for redefining the ids of elements in a channel
-// based on its files.
-def renameID = { [ it[1].baseName, it[1], it[2] ] }
 
 /*******************************************************
 *             Dataset processor workflows              *
@@ -41,14 +37,11 @@ def renameID = { [ it[1].baseName, it[1], it[2] ] }
 
 workflow get_scprep_csv_datasets {
     main:
-        output_ = Channel.fromPath(file("$launchDir/src/modality_alignment/datasets/datasets_scprep_csv.tsv")) \
-            | splitCsv(header: true, sep: "\t") \
+        output_ = Channel.fromPath("$launchDir/src/modality_alignment/datasets/datasets_scprep_csv.tsv")
+            | splitCsv(header: true, sep: "\t")
             | map { row ->
-                files = [ "input1": file(row.input1), "input2": file(row.input2) ]
-                newParams = overrideParams(params, row.processor, "id", row.id)
-                [ row.id, files, newParams, row ]
-            } \
-            | map{ overrideOptionValue(it, "scprep_csv", "compression", it[3].compression)} \
+                [ row.id, [ "input1": file(row.input1), "input2": file(row.input2), "id": row.id ]]
+            }
             | scprep_csv
     emit:
         output_
@@ -56,7 +49,7 @@ workflow get_scprep_csv_datasets {
 
 workflow get_sample_datasets {
     main:
-        output_ = Channel.fromList( [[ "sample_dataset", [], params]] ) \
+        output_ = Channel.value( [ "sample_dataset", [:] ] )
             | sample_dataset
     emit:
         output_
@@ -67,14 +60,16 @@ workflow get_sample_datasets {
 *******************************************************/
 
 workflow {
-    (get_sample_datasets & get_scprep_csv_datasets) \
-        | mix \
-        | (sample_method & mnn & scot & harmonic_alignment) \
-        | mix | map(renameID) \
-        | (knn_auc & mse) \
-        | mix | map(renameID) \
-        | toSortedList \
-        | map{ it -> [ "combined", it.collect{ a -> a[1] }, params ] }
-        | extract_scores
+    (get_sample_datasets & get_scprep_csv_datasets)
+        | mix
+        // | (sample_method & mnn & scot & harmonic_alignment)
+        // | mix
+        // | (knn_auc & mse)
+        // | mix
+        // | toSortedList
+        // | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
+        // | extract_scores.run(
+        //     auto: [ publish: true ]
+        // )
 
 }

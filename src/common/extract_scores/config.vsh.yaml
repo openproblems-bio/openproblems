@@ -21,7 +21,10 @@ functionality:
       path: ./script.R
 platforms:
   - type: docker
-    image: "dataintuitive/randpy:r4.0_bioc3.12" # contains a few bioconductor and the 'anndata' package
+    image: "ghcr.io/data-intuitive/randpy:r4.1_py3.10"
+    setup:
+      - type: r
+        cran: anndata
+      - type: python
+        pypi: anndata
   - type: nextflow
-    publish: true
-    per_id: false
