@@ -31,7 +31,7 @@ functionality:
       type: "file"
       direction: "output"
       default: "output.h5ad"
-      description: "Output h5ad file donwloaded from 'url' input"
+      description: "Output h5ad file preprocessed"
       required: true
   resources:
     - type: python_script
@@ -52,5 +52,4 @@ platforms:
         packages:
           - scprep
           - scanpy
-          - openpyxl # to tests
   - type: nextflow
