@@ -7,8 +7,9 @@ par = {
 }
 resources_dir = '../../utils/'
 ## VIASH END
-# import sys
-# sys.path.append(resources_dir, "./")
+
+import sys
+sys.path.append(resources_dir)
 import noise
 import preprocess
 import numpy as np

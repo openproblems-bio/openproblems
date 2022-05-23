@@ -15,12 +15,13 @@ functionality:
     - name: "--test"
       description: "Indicates if should be returned a test preprocessed data"
       type: "boolean"
-      required: true
+      required: false
+      default: false
     - name: "--method"
       description: "The preprocess method to be used. Options: ['batch', 'random', 'random_with_noise']"
       type: "string"
       values: ['batch', 'random', 'random_with_noise']
-      required: true
+      required: false
       default: "batch"
     - name: "--output"
       alternatives: ["-o"]
@@ -32,10 +33,8 @@ functionality:
   resources:
     - type: python_script
       path: script.py
-    - type: python_script
-      path: noise.py
-    - type: python_script
-      path: "../../utils/preprocess.py"
+    - path: noise.py
+    - path: "../../utils/preprocess.py"
   # tests:
   #   - type: python_script
   #     path: load_save_test.py
