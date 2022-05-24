@@ -1,6 +1,6 @@
 def _get_split(adata):
     uni = adata
-    uni.X = uni.layers["logcounts"]
+    uni.X = uni.layers["log_scran"]
     uni.obsm["X_pca"] = uni.obsm["X_uni"]
 
     if "X_emb" not in adata.obsm:
