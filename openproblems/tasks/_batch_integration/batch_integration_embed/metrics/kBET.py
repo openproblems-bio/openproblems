@@ -15,7 +15,7 @@ def kBET(adata):
         kBET(
             adata,
             batch_key="batch",
-            label_key="label",
+            label_key="labels",
             embed="X_emb",
             verbose=False,
         )["kBET"]
