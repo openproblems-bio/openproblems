@@ -36,7 +36,7 @@ def fastmnn_feature_full_unscaled(adata, test=False):
 
     adata.X = _fastmnn_feature(adata, "batch").T
     reduce_data(adata, umap=False)
-    adata.obsm['X_emb'] = adata.obsm['X_pca']
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     # Complete the result in-place
     return adata
 
@@ -57,7 +57,7 @@ def fastmnn_feature_hvg_unscaled(adata, test=False):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata.X = _fastmnn_feature(adata, "batch").T
     reduce_data(adata, umap=False)
-    adata.obsm['X_emb'] = adata.obsm['X_pca']
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     return adata
 
 
@@ -79,7 +79,7 @@ def fastmnn_feature_hvg_scaled(adata, test=False):
     adata = scale_batch(adata, "batch")
     adata.X = _fastmnn_feature(adata, "batch").T
     reduce_data(adata, umap=False)
-    adata.obsm['X_emb'] = adata.obsm['X_pca']
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     return adata
 
 
@@ -99,5 +99,5 @@ def fastmnn_feature_full_scaled(adata, test=False):
     adata = scale_batch(adata, "batch")
     adata.X = _fastmnn_feature(adata, "batch").T
     reduce_data(adata, umap=False)
-    adata.obsm['X_emb'] = adata.obsm['X_pca']
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     return adata
