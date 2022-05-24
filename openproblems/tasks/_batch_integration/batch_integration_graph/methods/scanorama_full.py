@@ -16,9 +16,11 @@ from .....tools.utils import check_version
 def scanorama_feature_full_unscaled(adata, test=False):
     from scib.integration import runScanorama
     from scib.preprocessing import reduce_data
-
+    log_scran = adata.layers["log_scran"]
     adata = runScanorama(adata, "batch")
+    adata.layers["log_scran"] = log_scran
     reduce_data(adata, umap=False)
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     # Complete the result in-place
     return adata
 
@@ -39,8 +41,11 @@ def scanorama_feature_hvg_unscaled(adata, test=False):
     from scib.preprocessing import reduce_data
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
+    log_scran = adata.layers["log_scran"]
     adata = runScanorama(adata, "batch")
+    adata.layers["log_scran"] = log_scran
     reduce_data(adata, umap=False)
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     return adata
 
 
@@ -62,8 +67,11 @@ def scanorama_feature_hvg_scaled(adata, test=False):
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = scale_batch(adata, "batch")
+    log_scran = adata.layers["log_scran"]
     adata = runScanorama(adata, "batch")
+    adata.layers["log_scran"] = log_scran
     reduce_data(adata, umap=False)
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     return adata
 
 
@@ -83,6 +91,9 @@ def scanorama_feature_full_scaled(adata, test=False):
     from scib.preprocessing import reduce_data
 
     adata = scale_batch(adata, "batch")
+    log_scran = adata.layers["log_scran"]
     adata = runScanorama(adata, "batch")
+    adata.layers["log_scran"] = log_scran
     reduce_data(adata, umap=False)
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     return adata
