@@ -16,6 +16,7 @@ from .....tools.utils import check_version
 def scanorama_feature_full_unscaled(adata, test=False):
     from scib.integration import runScanorama
     from scib.preprocessing import reduce_data
+
     log_scran = adata.layers["log_scran"]
     adata = runScanorama(adata, "batch")
     adata.layers["log_scran"] = log_scran
