@@ -13,7 +13,6 @@ def check_dataset(adata):
 
 def check_method(adata):
     """Check that method output fits expected API."""
-    assert "X_emb" in adata.obsm
     return True
 
 
@@ -27,5 +26,4 @@ def sample_dataset():
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
 
-    adata.obsm["X_emb"] = adata.obsm["X_uni"]
     return adata
