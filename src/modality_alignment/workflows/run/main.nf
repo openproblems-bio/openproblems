@@ -62,14 +62,14 @@ workflow get_sample_datasets {
 workflow {
     (get_sample_datasets & get_scprep_csv_datasets)
         | mix
-        // | (sample_method & mnn & scot & harmonic_alignment)
-        // | mix
-        // | (knn_auc & mse)
-        // | mix
-        // | toSortedList
-        // | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
-        // | extract_scores.run(
-        //     auto: [ publish: true ]
-        // )
+        | (sample_method & mnn & scot & harmonic_alignment)
+        | mix
+        | (knn_auc & mse)
+        | mix
+        | toSortedList
+        | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
+        | extract_scores.run(
+            auto: [ publish: true ]
+        )
 
 }
