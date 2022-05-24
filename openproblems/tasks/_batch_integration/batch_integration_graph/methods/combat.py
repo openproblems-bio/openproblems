@@ -19,6 +19,7 @@ def combat_full_unscaled(adata, test=False):
 
     adata = runCombat(adata, "batch")
     reduce_data(adata, umap=False)
+    adata.obsm['X_emb'] = adata.obsm['X_pca']
     # Complete the result in-place
     return adata
 
@@ -41,6 +42,7 @@ def combat_hvg_unscaled(adata, test=False):
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
     adata = runCombat(adata, "batch")
     reduce_data(adata, umap=False)
+    adata.obsm['X_emb'] = adata.obsm['X_pca']
     return adata
 
 
@@ -64,6 +66,7 @@ def combat_hvg_scaled(adata, test=False):
     adata = scale_batch(adata, "batch")
     adata = runCombat(adata, "batch")
     reduce_data(adata, umap=False)
+    adata.obsm['X_emb'] = adata.obsm['X_pca']
     return adata
 
 
@@ -85,4 +88,5 @@ def combat_full_scaled(adata, test=False):
     adata = scale_batch(adata, "batch")
     adata = runCombat(adata, "batch")
     reduce_data(adata, umap=False)
+    adata.obsm['X_emb'] = adata.obsm['X_pca']
     return adata
