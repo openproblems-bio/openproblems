@@ -3,6 +3,9 @@ name: Process Nextflow results
 on:
   repository_dispatch:
     types: [benchmark_complete]
+  push:
+    branches:
+      - 'test_process'
 
 jobs:
   process_results:
@@ -12,9 +15,22 @@ jobs:
       UPDATE_BRANCH_NAME: "auto_update_benchmark_${{ github.run_number }}"
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        path: openproblems
+
+    - name: Checkout website repo
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
+        repository: openproblems-bio/website
+        path: website
+
+    - name: Set up Git branch
+      working-directory: website
+      run: |
+        git checkout -b $UPDATE_BRANCH_NAME
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -34,7 +50,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -U wheel setuptools
-        pip install -U --editable .[process]
+        pip install -U --editable ./openproblems[process]
         python -c "import openproblems"
 
     - name: Parse results
@@ -43,19 +59,28 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        aws s3 cp --quiet --recursive "s3://openproblems-nextflow/cwd_main" /tmp/results/
-        python workflow/parse_nextflow.py /tmp
+        if [[ ${{ github.event_name }} == "repository_dispatch" ]]; then
+          S3_URI="s3://openproblems-nextflow/cwd_main"
+        else
+          S3_URI="s3://openproblems-nextflow/cwd_example"
+        fi
+        aws s3 cp --quiet --recursive "${S3_URI}" /tmp/results/
+        python openproblems/workflow/parse_nextflow.py /tmp website/data/results
 
     - name: AWS S3 cleanup
+      if: "github.event_name == 'repository_dispatch'"
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
         aws s3 rm --recursive "s3://openproblems-nextflow/work_main"
+        aws s3 rm --recursive "s3://openproblems-nextflow/cwd_example"
+        aws s3 cp --recursive "s3://openproblems-nextflow/cwd_main" "s3://openproblems-nextflow/cwd_example"
         aws s3 rm --recursive "s3://openproblems-nextflow/cwd_main"
 
     - name: Remove untagged images
+      if: "github.event_name == 'repository_dispatch'"
       continue-on-error: true
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -65,28 +90,36 @@ jobs:
         IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
         aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
 
+    - name: Push Git branch
+      if: "github.event_name == 'repository_dispatch'"
+      working-directory: website
+      run: |
+        git push -u origin $UPDATE_BRANCH_NAME
+
     - name: Pre-commit
-      uses: pre-commit/action@v2.0.0
       continue-on-error: true
+      working-directory: website
       env:
         SKIP: style-files,lintr
-
-    - name: Set up Git branch
       run: |
-        git checkout -b $UPDATE_BRANCH_NAME
-        git push -u origin $UPDATE_BRANCH_NAME
+        pip install pre-commit
+        git add .
+        pre-commit run
 
     - name: Commit result
       uses: EndBug/add-and-commit@v6
+      if: "github.event_name == 'repository_dispatch'"
       with:
         author_name: SingleCellOpenProblems
         author_email: singlecellopenproblems@protonmail.com
         message: 'Update benchmark results # ci skip'
-        add: "['website/data/results', 'results.json']"
+        add: "['data/results']"
         branch: ${{ env.UPDATE_BRANCH_NAME }}
         push: false
+        cwd: './website'
 
     - name: Create Pull Request
+      if: "github.event_name == 'repository_dispatch'"
       uses: peter-evans/create-pull-request@v3
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
@@ -94,3 +127,4 @@ jobs:
         base: main
         title: '[auto] Update benchmark results'
         reviewers: scottgigante, dburkhardt
+        path: './website'
