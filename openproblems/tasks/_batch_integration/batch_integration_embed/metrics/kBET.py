@@ -12,11 +12,11 @@ def kBET(adata):
     import numpy as np
 
     kbet_score = kBET(
-            adata,
-            batch_key="batch",
-            label_key="labels",
-            type_="embed",
-            embed="X_emb",
-            scaled=True,
-            verbose=False,
-        )
+        adata,
+        batch_key="batch",
+        label_key="labels",
+        type_="embed",
+        embed="X_emb",
+        scaled=True,
+        verbose=False,
+    )
