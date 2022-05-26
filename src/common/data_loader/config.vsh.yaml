@@ -12,6 +12,7 @@ functionality:
       alternatives: ["-o"]
       type: "file"
       direction: "output"
+      deafult: "output.h5ad"
       description: "Output h5ad file of the cleaned dataset"
       required: true
     - name: "--url"
@@ -20,6 +21,7 @@ functionality:
       required: true
     - name: "--name"
       type: "string"
+      default: "pbmc"
       description: "Name of dataset"
       required: true
   resources:

@@ -8,7 +8,7 @@ METHODS = ["batch", "random", "random_with_noise"]
 
 print(">> Runing script as test")
 out = subprocess.check_output([
-    "./preprocess_pancreas",
+    "./preprocess",
     "--input", INPUT,
     "--test", "True",
     "--output", OUTPUT
@@ -23,7 +23,7 @@ assert (500, 441) == adata.X.shape, "processed result data shape {}".format(adat
 for method in METHODS:
     print(">> Running script for {} method".format(method))
     out = subprocess.check_output([
-        "./preprocess_pancreas",
+        "./preprocess",
         "--input", INPUT,
         "--method", method,
         "--output", OUTPUT

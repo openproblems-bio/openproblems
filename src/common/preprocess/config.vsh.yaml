@@ -1,6 +1,6 @@
 functionality:
-  name: "preprocess_pancreas"
-  namespace: "common/data/pancreas/preprocess"
+  name: "preprocess"
+  namespace: "common/preprocess"
   version: "dev"
   description: "Common component to preprocess pancreas data"
   authors:
@@ -23,7 +23,7 @@ functionality:
     - name: "--method"
       description: "The preprocess method to be used. Options: ['batch', 'random', 'random_with_noise']"
       type: "string"
-      values: ['batch', 'random', 'random_with_noise']
+      choices: ['batch', 'random', 'random_with_noise']
       required: false
       default: "batch"
     - name: "--output"
@@ -37,7 +37,7 @@ functionality:
     - type: python_script
       path: script.py
     - path: noise.py
-    - path: "../../utils/preprocess.py"
+    - path: preprocess.py
   tests:
     - type: python_script
       path: test_script.py
