@@ -54,7 +54,7 @@ jobs:
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 20
         df -h
 
-        ls -laSh $(dpkg-query -L adoptopenjdk-12-hotspot) | head -n 20
+        ls -laSh $(dpkg-query -L azure-cli) | grep "^/\|^total\|[0-9\.]*[MG]"
 
         sudo rm -rf /opt/az
         sudo rm -rf /usr/lib/google-cloud-sdk
