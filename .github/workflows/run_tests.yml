@@ -54,8 +54,9 @@ jobs:
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 100
         df -h
 
-        dpkg-query -L azure-cli
+        dpkg-query -L firefox
 
+        sudo rm -rf /opt/az
         sudo rm -rf /usr/share/dotnet
         sudo rm -rf /opt/ghc
         sudo rm -rf "/usr/local/share/boost"
