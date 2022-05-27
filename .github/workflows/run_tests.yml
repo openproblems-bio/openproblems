@@ -33,6 +33,7 @@ jobs:
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
         startsWith(github.ref, 'refs/heads/test_docker') ||
+        startsWith(github.ref, 'refs/heads/ci/disk_space') ||
         (
           startsWith(github.ref, 'refs/heads/main') &&
           github.repository == 'openproblems-bio/openproblems'
@@ -43,6 +44,22 @@ jobs:
       BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
 
     steps:
+    - name: Clear space on runner
+      run: |
+        echo "=============================================================================="
+        echo "Freeing up disk space on CI system"
+        echo "=============================================================================="
+
+        echo "Listing 100 largest packages"
+        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 100
+        df -h
+
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        echo "$AGENT_TOOLSDIRECTORY"
+
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1000
@@ -134,6 +151,12 @@ jobs:
       !startsWith(github.ref, 'refs/heads/test_process')
 
     steps:
+    - name: Clear space on runner
+      run: |
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
     - uses: actions/checkout@v2
       with:
