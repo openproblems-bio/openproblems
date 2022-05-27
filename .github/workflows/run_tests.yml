@@ -54,7 +54,7 @@ jobs:
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 20
         df -h
 
-        dpkg-query -L azure-cli | xargs -n $(getconf ARG_MAX) ls | grep "^/\|^total\|[0-9\.]*[MG]"
+        dpkg-query -L azure-cli | xargs -n $(getconf ARG_MAX) ls -laSh | grep "^/\|^total\|[0-9\.]*[MG]"
 
         sudo rm -rf /opt/az
         sudo rm -rf /usr/lib/google-cloud-sdk
