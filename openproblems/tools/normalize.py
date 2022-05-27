@@ -6,10 +6,17 @@ import scprep
 import warnings
 
 _scran = scprep.run.RFunction(
-    setup="library('scran')",
+    setup="""
+        library('scran')
+        library('BiocParallel')
+        """,
     args="sce, min.mean=0.1",
     body="""
-    sce <- computeSumFactors(sce, min.mean=min.mean, assay.type="X")
+    sce <- computeSumFactors(
+           sce, min.mean=min.mean,
+           assay.type="X",
+           BPPARAM=MulticoreParam()
+           )
     sizeFactors(sce)
     """,
 )
