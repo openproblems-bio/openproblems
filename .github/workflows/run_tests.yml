@@ -43,12 +43,12 @@ jobs:
       BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
 
     steps:
-    - name: Clear space on runner
-      run: ./scripts/clear_runner_diskspace.sh
-
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1000
+
+    - name: Clear space on runner
+      run: ./scripts/clear_runner_diskspace.sh
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -233,12 +233,12 @@ jobs:
       )
 
     steps:
-    - name: Clear space on runner
-      run: ./scripts/clear_runner_diskspace.sh
-
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1000
+
+    - name: Clear space on runner
+      run: ./scripts/clear_runner_diskspace.sh
 
     - name: Install system dependencies
       run: |
