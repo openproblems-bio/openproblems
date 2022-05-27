@@ -54,8 +54,11 @@ jobs:
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 20
         df -h
 
-        dpkg-query -L temurin-17-jdk | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
-        dpkg-query -L temurin-11-jdk | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
+        dpkg-query -L google-chrome-stable | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
+        dpkg-query -L firefox | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
+        dpkg-query -L powershell | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
+        dpkg-query -L mongodb-mongosh | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
+        dpkg-query -L dotnet-sdk-5.0 | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
 
         sudo rm -rf /opt/az
         sudo rm -rf /usr/lib/google-cloud-sdk
