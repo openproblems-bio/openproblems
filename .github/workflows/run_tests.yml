@@ -33,7 +33,6 @@ jobs:
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
         startsWith(github.ref, 'refs/heads/test_docker') ||
-        startsWith(github.ref, 'refs/heads/ci/disk_space') ||
         (
           startsWith(github.ref, 'refs/heads/main') &&
           github.repository == 'openproblems-bio/openproblems'
