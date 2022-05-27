@@ -46,23 +46,19 @@ jobs:
     steps:
     - name: Clear space on runner
       run: |
-        echo "=============================================================================="
-        echo "Freeing up disk space on CI system"
-        echo "=============================================================================="
-
         echo "Listing 20 largest packages"
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 20
         df -h
 
-        dpkg-query -L google-chrome-stable | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
-        dpkg-query -L firefox | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
-        dpkg-query -L powershell | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
-        dpkg-query -L mongodb-mongosh | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
-        dpkg-query -L dotnet-sdk-5.0 | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
+        echo
+        echo "Removing unneeded packages"
 
         sudo rm -rf /opt/az
         sudo rm -rf /usr/lib/google-cloud-sdk
         sudo rm -rf /usr/lib/jvm
+        sudo rm -rf /opt/google/chrome
+        sudo rm -rf /usr/lib/firefox
+        sudo rm -rf /opt/microsoft/powershell
         sudo rm -rf /usr/share/dotnet
         sudo rm -rf /opt/ghc
         sudo rm -rf /opt/hostedtoolcache
