@@ -45,25 +45,7 @@ jobs:
 
     steps:
     - name: Clear space on runner
-      run: |
-        echo "Listing 20 largest packages"
-        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 20
-        df -h
-
-        echo
-        echo "Removing unneeded packages"
-
-        sudo rm -rf /opt/az
-        sudo rm -rf /usr/lib/google-cloud-sdk
-        sudo rm -rf /usr/lib/jvm
-        sudo rm -rf /opt/google/chrome
-        sudo rm -rf /usr/lib/firefox
-        sudo rm -rf /opt/microsoft/powershell
-        sudo rm -rf /usr/share/dotnet
-        sudo rm -rf /opt/ghc
-        sudo rm -rf /opt/hostedtoolcache
-
-        df -h
+      run: ./scripts/clear_runner_diskspace.sh
 
     - uses: actions/checkout@v2
       with:
@@ -139,6 +121,15 @@ jobs:
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - /tmp:/tmp
+        - /opt/az:/opt/remove/az
+        - /usr/lib/google-cloud-sdk:/opt/remove/google-cloud-sdk
+        - /usr/lib/jvm:/opt/remove/jvm
+        - /opt/google/chrome:/opt/remove/chrome
+        - /usr/lib/firefox:/opt/remove/firefox
+        - /opt/microsoft/powershell:/opt/remove/powershell
+        - /usr/share/dotnet:/opt/remove/dotnet
+        - /opt/ghc:/opt/remove/ghc
+        - /opt/hostedtoolcache:/opt/remove/hostedtoolcache
       options: --user root
 
     needs: build_images
@@ -158,10 +149,7 @@ jobs:
     steps:
     - name: Clear space on runner
       run: |
-        sudo rm -rf /usr/share/dotnet
-        sudo rm -rf /opt/ghc
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        sudo rm -rf /opt/remove/*/*
 
     - uses: actions/checkout@v2
       with:
@@ -246,6 +234,8 @@ jobs:
       )
 
     steps:
+    - name: Clear space on runner
+      run: ./scripts/clear_runner_diskspace.sh
 
     - uses: actions/checkout@v2
       with:
