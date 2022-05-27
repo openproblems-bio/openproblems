@@ -54,13 +54,13 @@ jobs:
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 20
         df -h
 
-        ls -laSh $(dpkg-query -L google-cloud-sdk)
+        ls -laSh $(dpkg-query -L adoptopenjdk-12-hotspot) | head -n 20
 
         sudo rm -rf /opt/az
+        sudo rm -rf /usr/lib/google-cloud-sdk
         sudo rm -rf /usr/share/dotnet
         sudo rm -rf /opt/ghc
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        echo "$AGENT_TOOLSDIRECTORY"
+        sudo rm -rf /opt/hostedtoolcache
 
         df -h
 
