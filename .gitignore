@@ -17,6 +17,7 @@ docker_output/
 target/
 check_results/
 log.txt
+.viash*
 
 # nextflow specific ignores
 .nextflow*

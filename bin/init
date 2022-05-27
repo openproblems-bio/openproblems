@@ -6,7 +6,12 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
-curl -fsSL get.viash.io | bash -s -- --registry openpipeline --tag develop --log check_results/results.tsv
+curl -fsSL get.viash.io | bash -s -- \
+  --registry ghcr.io \
+  --organisation openproblems-bio \
+  --target_image_source https://github.com/openproblems-bio/openproblems-v2 \
+  --tag 0.5.12 \
+  --nextflow_variant vdsl3
 
 cd bin
 
