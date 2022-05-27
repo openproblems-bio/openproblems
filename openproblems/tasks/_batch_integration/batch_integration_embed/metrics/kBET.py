@@ -29,6 +29,7 @@ allowed us to compare integration results on kNN graphs irrespective of integrat
 output format.
 """
 
+
 @metric(
     metric_name="kBET",
     maximize=True,

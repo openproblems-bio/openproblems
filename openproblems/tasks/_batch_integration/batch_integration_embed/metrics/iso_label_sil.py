@@ -22,6 +22,7 @@ and scale this score to be between 0 and 1. The final score for each metric vers
 consists of the mean isolated score of all isolated labels.
 """
 
+
 @metric(
     metric_name="Isolated label Silhouette",
     maximize=True,
