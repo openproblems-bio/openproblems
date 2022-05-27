@@ -386,7 +386,7 @@ jobs:
 
     - name: Parse results
       run: |
-        python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH}
+        python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH} /tmp/website
 
     - name: Upload nextflow log
       if: always()
