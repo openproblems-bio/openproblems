@@ -55,6 +55,8 @@ jobs:
         df -h
 
         dpkg-query -L adoptopenjdk-12-hotspot | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
+        dpkg-query -L adoptopenjdk-11-hotspot | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
+        dpkg-query -L adoptopenjdk-8-hotspot | xargs -n $(getconf ARG_MAX) ls -laSh | grep -B 1 -A 2 "^total [0-9\.]*[MG]"
 
         sudo rm -rf /opt/az
         sudo rm -rf /usr/lib/google-cloud-sdk
