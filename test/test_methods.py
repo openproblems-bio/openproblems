@@ -17,7 +17,6 @@ pytestmark = pytest.mark.skipif(
         (
             task.__name__.split(".")[-1],
             method.__name__,
-            utils.TEMPDIR.name,
             method.metadata["image"],
         )
         for task in utils.git.list_modified_tasks()
@@ -27,7 +26,7 @@ pytestmark = pytest.mark.skipif(
     skip_on_empty=True,
 )
 @utils.docker.docker_test(timeout=600, retries=2)
-def test_method(task_name, method_name, tempdir, image):
+def test_method(task_name, method_name, image):
     """Test application of a method."""
     import anndata
 
