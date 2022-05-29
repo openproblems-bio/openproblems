@@ -6,7 +6,7 @@ import os
 install_requires = [
     "numpy>=1.17.0",
     "scikit-learn>=0.19.1",
-    "anndata>=0.7.5,<0.8",
+    "anndata>=0.8",
     "scprep>=1.2.0",
     "scipy",
     "scanpy>=1.6",
@@ -55,7 +55,7 @@ setup(
     packages=find_packages(),
     license="MIT",
     install_requires=install_requires,
-    python_requires=">=3.5",
+    python_requires=">=3.7",
     extras_require={
         "test": test_requires + r_requires,
         "doc": doc_requires,
