@@ -20,7 +20,7 @@ RUN \
    find /var/lib/apt/lists/ ! -type d -exec rm '{}' \;
 
 # update pip
-RUN python3 -m pip install --no-cache-dir -U pip
+RUN python3 -m pip install --no-cache-dir -U pip!=21.1.1
 
 # install AWS CLI
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
