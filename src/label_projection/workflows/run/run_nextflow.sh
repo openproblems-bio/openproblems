@@ -15,8 +15,6 @@ export NXF_VER=21.10.6
 bin/nextflow \
   run . \
   -main-script src/label_projection/workflows/run/main.nf \
-  --url "https://ndownloader.figshare.com/files/24539828" \
-  --name "pbmc" \
-  --output output/label_projection \
+  --publishDir output/label_projection \
   -resume \
   -with-docker

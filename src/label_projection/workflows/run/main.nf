@@ -9,20 +9,14 @@ targetDir = "${params.rootDir}/target/nextflow"
 
 // import dataset loaders
 include { data_loader }       from "$targetDir/common/data_loader/main.nf"     params(params)
-// include { scprep_csv }           from "$targetDir/modality_alignment/datasets/scprep_csv/main.nf" params(params)
+
+// import preprocess
+include { preprocess }        from "$targetDir/label_projection/data/preprocess/main.nf"     params(params)
 
 // import methods
-// include { sample_method }        from "$targetDir/modality_alignment/methods/sample_method/main.nf"       params(params)
-// include { mnn }                  from "$targetDir/modality_alignment/methods/mnn/main.nf"                 params(params)
-// include { scot }                 from "$targetDir/modality_alignment/methods/scot/main.nf"                params(params)
-// include { harmonic_alignment }   from "$targetDir/modality_alignment/methods/harmonic_alignment/main.nf"  params(params)
-
+// TODO
 // import metrics
-// include { knn_auc }              from "$targetDir/modality_alignment/metrics/knn_auc/main.nf"             params(params)
-// include { mse }                  from "$targetDir/modality_alignment/metrics/mse/main.nf"                 params(params)
-
-// import helper functions
-// include { extract_scores }       from "$targetDir/common/extract_scores/main.nf"                           params(params)
+// TODO
 
 
 /*******************************************************
@@ -35,11 +29,17 @@ include { data_loader }       from "$targetDir/common/data_loader/main.nf"     p
 //
 // If the need arises, these workflows could be split off into a separate file.
 
+params.tsv = "$launchDir/src/label_projection/data/fake_anndata_loader.tsv"
+
 workflow load_data {
     main:
-    output_ = Channel.value(params)
-    | map { params -> ["new-id", ["url": params.url, "name": params.name]] }
-    | data_loader
+        output_ = Channel.fromPath(params.tsv)
+            | splitCsv(header: true, sep: "\t")
+            | map { row ->
+                [ row.name, [ "url": row.url, "name": row.name ]]
+            }
+            | data_loader
+            | preprocess
     emit:
         output_
 }
@@ -51,5 +51,4 @@ workflow load_data {
 workflow {
     load_data
     | view()
-
 }
