@@ -35,7 +35,12 @@ adata = sc.read(adata_file)
 
 # Rename columns
 adata.obs.rename(columns={label: 'label', batch: 'batch'}, inplace=True)
-adata.layers['counts'] = adata.X
+adata.layers['counts'] = adata.X.copy()
+
+print('Normalise and log-transform data')
+sc.pp.normalize_total(adata)
+sc.pp.log1p(adata)
+adata.layers['logcounts'] = adata.X.copy()
 
 print(f'Select {hvgs} highly variable genes')
 hvg_list = hvg_batch(adata, 'batch', n_hvg=hvgs)

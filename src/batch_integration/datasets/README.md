@@ -4,6 +4,14 @@ Viash component for preparing data **before** running data integration methods.
 
 ## API
 
+### Requires
+
+* `adata.X`: raw counts
+* batch label in `adata.obs` that is specified as a parameter to the script
+* cell identity label in `adata.obs` that is specified as a parameter to the script
+
+### Returns
+
 This module creates Anndata objects that contain:
 
 * `adata.uns['name']`: name of the dataset

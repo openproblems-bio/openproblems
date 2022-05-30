@@ -5,23 +5,24 @@ import numpy as np
 
 name = 'pancreas'
 anndata_in = 'data_loader_pancreas.h5ad'
-anndata_out = 'data_loader_pancreas.h5ad'
+anndata_out = 'datasets_pancreas.h5ad'
 
 print('>> Running script')
+n_hvgs = 100
 out = subprocess.check_output([
     './pancreas',
     '--adata', anndata_in,
     '--label', 'celltype',
     '--batch', 'tech',
-    '--hvgs', '100',
+    '--hvgs', str(n_hvgs),
     '--output', anndata_out
 ]).decode('utf-8')
 
 print('>> Checking whether file exists')
-assert path.exists(anndata_in)
+assert path.exists(anndata_out)
 
 print('>> Check that output fits expected API')
-adata = sc.read_h5ad(anndata_in)
+adata = sc.read_h5ad(anndata_out)
 assert 'name' in adata.uns
 assert 'label' in adata.obs.columns
 assert 'batch' in adata.obs.columns
@@ -36,8 +37,8 @@ assert 'uni_distances' in adata.obsp
 assert 'uni_connectivities' in adata.obsp
 
 assert adata.var['highly_variable'].dtype == 'bool'
-assert adata.var['highly_variable'].sum() == 100
+assert adata.var['highly_variable'].sum() == n_hvgs
 assert -0.0000001 <= np.mean(adata.layers['logcounts_scaled']) <= 0.0000001
-assert 0.8 <= np.var(adata.layers['logcounts_scaled']) <= 1
+assert 0.75 <= np.var(adata.layers['logcounts_scaled']) <= 1
 
 print('>> All tests passed successfully')

@@ -43,9 +43,9 @@ functionality:
   tests:
     - type: python_script
       path: test.py
-    - path: '../resources/data_loader_pancreas.h5ad'
+    - path: '../../resources/data_loader_pancreas.h5ad'
 platforms:
   - type: docker
-    image: mumichae/scib-base:1.0.0
+    image: mumichae/scib-base:1.0.2
   - type: native
   - type: nextflow
