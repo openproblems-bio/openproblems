@@ -13,7 +13,7 @@ import preprocess
 import numpy as np
 import scanpy as sc
 
-
+# TODO split the functions in different viash components
 def batch(adata):
     adata.obs["labels"] = adata.obs["celltype"]
     adata.obs["batch"] = adata.obs["tech"]

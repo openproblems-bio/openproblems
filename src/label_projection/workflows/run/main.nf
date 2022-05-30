@@ -29,7 +29,7 @@ include { preprocess }        from "$targetDir/label_projection/data/preprocess/
 //
 // If the need arises, these workflows could be split off into a separate file.
 
-params.tsv = "$launchDir/src/label_projection/data/fake_anndata_loader.tsv"
+params.tsv = "$launchDir/src/common/data_loader/anndata_loader.tsv"
 
 workflow load_data {
     main:
