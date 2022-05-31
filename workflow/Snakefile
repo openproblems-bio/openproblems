@@ -80,9 +80,10 @@ rule build_docker_image:
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
-        label = tools.build_type
+        label = tools.build_type,
+        docker_update = "{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)
     shell:
-        "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+        "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .. && touch {params.docker_update}"
 
 rule password_docker:
     output:

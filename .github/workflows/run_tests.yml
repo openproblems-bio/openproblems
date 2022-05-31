@@ -69,7 +69,7 @@ jobs:
         cd ..
         ls -lart docker/*/.docker_update
 
-    - name: Test build Docker images
+    - name: Test push Docker images
       run: |
         ls -lart docker/*/.docker_update
         cd workflow
