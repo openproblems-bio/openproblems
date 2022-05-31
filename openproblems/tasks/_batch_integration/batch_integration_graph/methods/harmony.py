@@ -4,8 +4,6 @@ from .....tools.utils import check_version
 
 import scprep
 
-
-
 _harmony = scprep.run.RFunction(
     setup="""
             library(SingleCellExperiment)
