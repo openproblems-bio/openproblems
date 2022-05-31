@@ -204,6 +204,8 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
 
 def results_to_json(results, outdir):
     """Convert the full results to pretty JSON for web."""
+    if not os.path.isdir(outdir):
+        os.mkdir(outdir)
     for task_name, task_results in results.items():
         for dataset_name, dataset_results in task_results.items():
             results_dir = os.path.join(outdir, task_name)
