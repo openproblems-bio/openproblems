@@ -14,9 +14,9 @@ include { data_loader }       from "$targetDir/common/data_loader/main.nf"     p
 include { pancreas_preprocess }        from "$targetDir/label_projection/data/preprocess/pancreas_preprocess/main.nf"     params(params)
 
 // import methods
-// TODO
+include { majority_vote }     from "$targetDir/label_projection/methods/baseline/majority_vote/main.nf" params(params)
 // import metrics
-// TODO
+include { accuracy }          from "$targetDir/label_projection/metrics/accuracy/main.nf" params(params)
 
 
 /*******************************************************
@@ -29,7 +29,8 @@ include { pancreas_preprocess }        from "$targetDir/label_projection/data/pr
 //
 // If the need arises, these workflows could be split off into a separate file.
 
-params.tsv = "$launchDir/src/common/data_loader/anndata_loader.tsv"
+// params.tsv = "$launchDir/src/common/data_loader/anndata_loader.tsv"
+params.tsv = "$launchDir/src/label_projection/data/fake_anndata_loader.tsv"
 
 workflow load_data {
     main:
@@ -50,5 +51,7 @@ workflow load_data {
 
 workflow {
     load_data
+    | majority_vote
+    | accuracy.run(auto: [ publish: true ])
     | view()
 }
