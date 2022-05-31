@@ -67,12 +67,14 @@ jobs:
         cd workflow
         snakemake -j $(nproc) docker_build
         cd ..
+        ls -lart docker/*/.docker_update
 
     - name: Push Docker images
       if: "startsWith(github.ref, 'refs/heads/main')"
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
+        ls -lart docker/*/.docker_update
         cd workflow
         snakemake -j $(nproc) docker_push
         cd ..
