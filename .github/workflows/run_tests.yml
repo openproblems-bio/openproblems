@@ -73,7 +73,7 @@ jobs:
       run: |
         ls -lart docker/*/.docker_update
         cd workflow
-        snakemake -j $(nproc) -n docker_build
+        snakemake -j $(nproc) -n docker_push
         cd ..
 
     - name: Push Docker images
