@@ -39,8 +39,8 @@ assert 'uni_connectivities' in adata.obsp
 assert 'connectivities' in adata.obsp
 assert 'distances' in adata.obsp
 assert 'hvg' in adata.uns
-assert adata.uns['hvg'] == False
+assert not adata.uns['hvg']
 assert 'scaled' in adata.uns
-assert adata.uns['scaled'] == False
+assert not adata.uns['scaled']
 
 print(">> All tests passed successfully")

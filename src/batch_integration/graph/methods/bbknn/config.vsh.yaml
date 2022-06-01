@@ -39,10 +39,10 @@ functionality:
       path: test.py
     - type: python_script
       path: test_scaled_hvg.py
-    - path: '../../../datasets/resources/datasets_pancreas.h5ad'
+    - path: '../../../resources/datasets_pancreas.h5ad'
 platforms:
   - type: docker
-    image: mumichae/scib-base:1.0.0
+    image: mumichae/scib-base:1.0.2
     setup:
       - type: python
         packages:
