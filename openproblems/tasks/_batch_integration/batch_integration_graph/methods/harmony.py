@@ -56,7 +56,7 @@ def harmony_hvg_unscaled(adata, test=False):
     from scanpy.pp import neighbors
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    adat_int = _harmony(adata, "batch")
+    adata_int = _harmony(adata, "batch")
     adata.obsm["X_emb"] = adata_int.obsm["HARMONY"]
     neighbors(adata, use_rep="X_emb")
     return adata
