@@ -71,19 +71,21 @@ rule update_docker_image:
 		shell:
         "touch {output}"
 
+ruleorder: update_docker_image > build_docker_image
+
 rule build_docker_image:
     input:
         dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_build_requirements,
     output:
-        temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)))
+        docker_build = temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR))),
+        docker_update = touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)),
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
-        label = tools.build_type,
-        docker_update = "{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)
+        label = tools.build_type
     shell:
-        "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .. && touch {params.docker_update}"
+        "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule password_docker:
     output:
