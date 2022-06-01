@@ -73,7 +73,7 @@ jobs:
       run: |
         ls -lart docker/*/.docker_update
         cd workflow
-        snakemake -j $(nproc) -n docker_push
+        snakemake -j $(nproc) -n docker_build docker_push
         cd ..
 
     - name: Push Docker images
@@ -83,7 +83,7 @@ jobs:
       run: |
         ls -lart docker/*/.docker_update
         cd workflow
-        snakemake -j $(nproc) docker_push
+        snakemake -j $(nproc) docker_build docker_push
         cd ..
         echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
 

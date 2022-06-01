@@ -69,7 +69,7 @@ rule update_docker_image:
     input:
         tools.docker_update_requirements
     output:
-        "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)
+        temp("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR))
 		shell:
         "touch {output}"
 
@@ -78,8 +78,8 @@ rule build_docker_image:
         dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_build_requirements,
     output:
-        docker_build = temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR))),
-        docker_update = touch("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)),
+        docker_build = touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)),
+        docker_update = temp(touch("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR))),
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
