@@ -47,6 +47,9 @@ jobs:
       with:
         fetch-depth: 1000
 
+    - name: Clear space on runner
+      run: ./scripts/clear_runner_diskspace.sh
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -117,6 +120,15 @@ jobs:
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - /tmp:/tmp
+        - /opt/az:/opt/remove/az
+        - /usr/lib/google-cloud-sdk:/opt/remove/google-cloud-sdk
+        - /usr/lib/jvm:/opt/remove/jvm
+        - /opt/google/chrome:/opt/remove/chrome
+        - /usr/lib/firefox:/opt/remove/firefox
+        - /opt/microsoft/powershell:/opt/remove/powershell
+        - /usr/share/dotnet:/opt/remove/dotnet
+        - /opt/ghc:/opt/remove/ghc
+        - /opt/hostedtoolcache:/opt/remove/hostedtoolcache
       options: --user root
 
     needs: build_images
@@ -130,9 +142,13 @@ jobs:
         github.event.pull_request.draft == false
       ) &&
       !startsWith(github.ref, 'refs/heads/test_docker') &&
-      !startsWith(github.ref, 'refs/heads/test_benchmark')
+      !startsWith(github.ref, 'refs/heads/test_benchmark') &&
+      !startsWith(github.ref, 'refs/heads/test_process')
 
     steps:
+    - name: Clear space on runner
+      run: |
+        sudo rm -rf /opt/remove/*/*
 
     - uses: actions/checkout@v2
       with:
@@ -217,10 +233,12 @@ jobs:
       )
 
     steps:
-
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1000
+
+    - name: Clear space on runner
+      run: ./scripts/clear_runner_diskspace.sh
 
     - name: Install system dependencies
       run: |
@@ -368,7 +386,7 @@ jobs:
 
     - name: Parse results
       run: |
-        python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH}
+        python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH} /tmp/website
 
     - name: Upload nextflow log
       if: always()
