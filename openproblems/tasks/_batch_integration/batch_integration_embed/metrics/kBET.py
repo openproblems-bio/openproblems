@@ -3,8 +3,8 @@ from .....tools.decorators import metric
 """
 The kBET algorithm (v.0.99.6, release 4c9dafa) determines whether the label composition
 of a k nearest neighborhood of a cell is similar to the expected (global) label
-composition (Buettner et al., Nat Meth 2019). The test is repeated for a random subset 
-of cells, and the results are summarized as a rejection rate over all tested 
+composition (Buettner et al., Nat Meth 2019). The test is repeated for a random subset
+of cells, and the results are summarized as a rejection rate over all tested
 neighborhoods. Thus, kBET works on a kNN graph.
 
 We compute kNN graphs where k = 50 for joint embeddings and corrected feature outputs
