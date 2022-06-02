@@ -63,15 +63,10 @@ jobs:
         python -c "import openproblems"
 
     - name: Build Docker images
+      if: "!startsWith(github.ref, 'refs/heads/main')"
       run: |
         cd workflow
         snakemake -j $(nproc) docker_build
-        cd ..
-
-    - name: Test push Docker images
-      run: |
-        cd workflow
-        snakemake -j $(nproc) -n docker_build docker_push
         cd ..
 
     - name: Push Docker images
