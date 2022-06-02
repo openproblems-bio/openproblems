@@ -67,11 +67,9 @@ jobs:
         cd workflow
         snakemake -j $(nproc) docker_build
         cd ..
-        ls -lart docker/*/.docker_update
 
     - name: Test push Docker images
       run: |
-        ls -lart docker/*/.docker_update
         cd workflow
         snakemake -j $(nproc) -n docker_build docker_push
         cd ..
@@ -81,7 +79,6 @@ jobs:
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
-        ls -lart docker/*/.docker_update
         cd workflow
         snakemake -j $(nproc) docker_build docker_push
         cd ..
