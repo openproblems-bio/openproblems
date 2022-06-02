@@ -31,6 +31,8 @@ Methods are run in four different scenarios that include scaling and highly vari
 * `full_scaled`
 * `hvg_scaled`
 
+Where `full` refers to the full gene set that is used as input to the method.
+
 An example script can be found [here](../batch_integration_graph/methods/_example.py)
 
 Metrics can compare:
