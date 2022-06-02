@@ -11,5 +11,5 @@ pybedtools
 scvi-tools>=0.16.0
 torch
 git+https://github.com/michalk8/neuralee@master  # contains gradient error fix
-tensorflow-cpu==2.4.1
+tensorflow-cpu==2.7.2
 git+https://github.com/czbiohub/molecular-cross-validation
