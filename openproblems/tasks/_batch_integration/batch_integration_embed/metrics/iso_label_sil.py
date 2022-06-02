@@ -1,14 +1,14 @@
 from .....tools.decorators import metric
 
 """
-In the scIB package two isolated label scores are available. These metrics evaluate how 
-well the data integration methods dealt with cell identity labels shared by few batches. 
+In the scIB package two isolated label scores are available. These metrics evaluate how
+well the data integration methods dealt with cell identity labels shared by few batches.
 Specifically, isolated cell labels are defined as the labels present in the least number
- of batches in the integration task. The score evaluates how well these isolated labels 
+ of batches in the integration task. The score evaluates how well these isolated labels
 separate from other cell identities.
 
 The isolated label metric is available in two versions: (1) the best clustering of the
-isolated label (F1 score) and (2) the global ASW of the isolated label. This function 
+isolated label (F1 score) and (2) the global ASW of the isolated label. This function
 contains the latter version. The isolated label ASW score is obtained by computing the
 ASW of isolated versus non-isolated labels on the PCA embedding (ASW metric above) and
 scaling this score to be between 0 and 1. The final score for each metric version
