@@ -2,4 +2,4 @@ docopt
 styler
 git2r
 lintr
-tibble >= 3.1.7
+tibble@3.1.7
