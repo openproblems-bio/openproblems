@@ -150,5 +150,3 @@ nf-openproblems
 scratch/
 openproblems/results/
 openproblems/work/
-# snakemake
-.docker_build
