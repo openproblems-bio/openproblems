@@ -7,7 +7,7 @@ igraph@1.2.11
 conos
 rliger
 dplyr
-tibble@3.1.5
+tibble@3.1.7
 cli@3.1.0
 caret@6.0-86
 crayon@1.4.1
