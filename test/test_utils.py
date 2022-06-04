@@ -1,6 +1,9 @@
 import numpy as np
 import openproblems
+import openproblems.tools.utils
 import packaging.version
+import rpy2.robjects as ro
+import sklearn
 import utils
 
 utils.warnings.ignore_warnings()
@@ -36,3 +39,53 @@ def test_temporary_version_future():
         "after version {}".format(test_fn.__module__, test_fn.__name__, temp_version),
         test_fn,
     )
+
+
+def test_future_warning():
+    """Test future warning behavior with version from the past."""
+    version = packaging.version.parse(openproblems.__version__)
+    error_version = "{}.{}".format(version.major, version.minor + 1)
+
+    np.testing.assert_warns(
+        FutureWarning,
+        openproblems.utils.future_warning,
+        msg="this is a future warning",
+        error_version=error_version,
+        error_category=ValueError,
+    )
+
+
+def test_future_warning_error():
+    """Test future warning behavior with version from the future."""
+    version = packaging.version.parse(openproblems.__version__)
+    if version.minor > 0:
+        error_version = "{}.{}".format(version.major, version.minor - 1)
+    else:
+        error_version = "{}.{}".format(version.major - 1, 0)
+
+    np.testing.assert_raises_regex(
+        ValueError,
+        "this is a future warning",
+        openproblems.utils.future_warning,
+        msg="this is a future warning",
+        error_version=error_version,
+        error_category=ValueError,
+    )
+
+
+def test_package_version():
+    version = packaging.version.parse(sklearn.__version__)
+    assert openproblems.tools.utils.check_version("scikit-learn") == version
+
+
+def test_package_version_missing():
+    assert openproblems.tools.utils.check_version("not_a_module") == "ModuleNotFound"
+
+
+def test_r_package_version():
+    version = ro.r("packageVersion('scran')")
+    assert openproblems.tools.utils.check_r_version("scran") == version
+
+
+def test_r_package_version_missing():
+    assert openproblems.tools.utils.check_r_version("not_a_module") == "ModuleNotFound"
