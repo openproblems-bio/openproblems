@@ -1,4 +1,5 @@
-docopt
-styler
-git2r
-lintr
+docopt@0.7.1
+styler@1.7.0
+git2r@0.30.1
+lintr@2.0.1
+dbplyr@2.1.1
