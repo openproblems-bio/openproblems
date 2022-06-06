@@ -1,7 +1,6 @@
 from ....tools.decorators import method
 from ....tools.normalize import log_cpm
 from ....tools.normalize import log_scran_pooling
-from ....tools.utils import check_version
 from .sklearn import classifier
 
 import sklearn.neural_network
@@ -29,7 +28,6 @@ def _mlp(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     paper_year=1990,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.neural_network.MLPClassifier.html",
-    code_version=check_version("scikit-learn"),
 )
 def mlp_log_cpm(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     adata = log_cpm(adata)
@@ -45,7 +43,6 @@ def mlp_log_cpm(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     paper_year=1990,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.neural_network.MLPClassifier.html",
-    code_version=check_version("scikit-learn"),
     image="openproblems-r-base",
 )
 def mlp_scran(adata, test=False, max_iter=None, hidden_layer_sizes=None):

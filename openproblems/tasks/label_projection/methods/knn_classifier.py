@@ -1,7 +1,6 @@
 from ....tools.decorators import method
 from ....tools.normalize import log_cpm
 from ....tools.normalize import log_scran_pooling
-from ....tools.utils import check_version
 from .sklearn import classifier
 
 import sklearn.neighbors
@@ -14,7 +13,6 @@ import sklearn.neighbors
     paper_year=1967,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.neighbors.KNeighborsClassifier.html",
-    code_version=check_version("scikit-learn"),
 )
 def knn_classifier_log_cpm(adata, test=False):
     adata = log_cpm(adata)
@@ -28,7 +26,6 @@ def knn_classifier_log_cpm(adata, test=False):
     paper_year=1967,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.neighbors.KNeighborsClassifier.html",
-    code_version=check_version("scikit-learn"),
     image="openproblems-r-base",
 )
 def knn_classifier_scran(adata, test=False):

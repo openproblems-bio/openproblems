@@ -132,11 +132,11 @@ def _scanvi_scarches(adata, test=False, n_hidden=None, n_latent=None, n_layers=N
     paper_url="https://www.embopress.org/doi/full/10.15252/msb.20209620",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    code_version=check_version("scvi"),
     image="openproblems-python-scvi",
 )
 def scanvi_all_genes(adata, test=False):
     adata.obs["labels_pred"] = _scanvi(adata, test=test)
+    adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
 
 
@@ -147,13 +147,13 @@ def scanvi_all_genes(adata, test=False):
     paper_url="https://www.embopress.org/doi/full/10.15252/msb.20209620",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    code_version=check_version("scvi"),
     image="openproblems-python-scvi",
 )
 def scanvi_hvg(adata, test=False):
     hvg_df = _hvg(adata, test)
     bdata = adata[:, hvg_df.highly_variable].copy()
     adata.obs["labels_pred"] = _scanvi(bdata, test=test)
+    adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
 
 
@@ -163,11 +163,11 @@ def scanvi_hvg(adata, test=False):
     paper_url="https://www.biorxiv.org/content/10.1101/2020.07.16.205997v1",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    code_version=check_version("scvi"),
     image="openproblems-python-scvi",
 )
 def scarches_scanvi_all_genes(adata, test=False):
     adata.obs["labels_pred"] = _scanvi_scarches(adata, test=test)
+    adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
 
 
@@ -177,11 +177,11 @@ def scarches_scanvi_all_genes(adata, test=False):
     paper_url="https://www.biorxiv.org/content/10.1101/2020.07.16.205997v1",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    code_version=check_version("scvi"),
     image="openproblems-python-scvi",
 )
 def scarches_scanvi_hvg(adata, test=False):
     hvg_df = _hvg(adata, test)
     bdata = adata[:, hvg_df.highly_variable].copy()
     adata.obs["labels_pred"] = _scanvi_scarches(bdata, test=test)
+    adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
