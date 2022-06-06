@@ -74,8 +74,7 @@ def test_future_warning_error():
 
 
 def test_package_version():
-    version = packaging.version.parse(sklearn.__version__)
-    assert openproblems.tools.utils.check_version("scikit-learn") == version
+    assert openproblems.tools.utils.check_version("scikit-learn") == sklearn.__version__
 
 
 def test_package_version_missing():
@@ -83,8 +82,8 @@ def test_package_version_missing():
 
 
 def test_r_package_version():
-    version = ro.r("packageVersion('scran')")
-    assert openproblems.tools.utils.check_r_version("scran") == version
+    version = ro.r("as.character(packageVersion('BiocManager'))")[0]
+    assert openproblems.tools.utils.check_r_version("BiocManager") == version
 
 
 def test_r_package_version_missing():
