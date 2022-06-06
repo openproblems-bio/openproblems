@@ -10,12 +10,13 @@ import numpy as np
     paper_url="",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
-    code_version=check_version("openproblems"),
 )
 def majority_vote(adata, test=False):
     majority = adata.obs.labels[adata.obs.is_train].value_counts().index[0]
     adata.obs["labels_pred"] = np.nan
     adata.obs.loc[~adata.obs.is_train, "labels_pred"] = majority
+
+    adata.uns["method_code_version"] = check_version("openproblems")
     return adata
 
 
@@ -25,7 +26,6 @@ def majority_vote(adata, test=False):
     paper_url="",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
-    code_version=check_version("openproblems"),
 )
 def random_labels(adata, test=False):
     label_distribution = adata.obs.labels[adata.obs.is_train].value_counts()
@@ -37,4 +37,6 @@ def random_labels(adata, test=False):
         replace=True,
         p=label_distribution,
     )
+
+    adata.uns["method_code_version"] = check_version("openproblems")
     return adata

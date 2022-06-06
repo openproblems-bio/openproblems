@@ -16,6 +16,8 @@ def _magic(adata, solver):
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
+
+    adata.uns["method_code_version"] = check_version("magic-impute")
     return adata
 
 
@@ -26,7 +28,6 @@ def _magic(adata, solver):
     paper_url="https://www.cell.com/cell/abstract/S0092-8674(18)30724-4",
     paper_year=2018,
     code_url="https://github.com/KrishnaswamyLab/MAGIC",
-    code_version=check_version("magic-impute"),
     image="openproblems-python-extras",
 )
 def magic(adata, test=False):
@@ -40,7 +41,6 @@ def magic(adata, test=False):
     paper_url="https://www.cell.com/cell/abstract/S0092-8674(18)30724-4",
     paper_year=2018,
     code_url="https://github.com/KrishnaswamyLab/MAGIC",
-    code_version=check_version("magic-impute"),
     image="openproblems-python-extras",
 )
 def magic_approx(adata, test=False):

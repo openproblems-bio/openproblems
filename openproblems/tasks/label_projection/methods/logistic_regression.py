@@ -1,7 +1,6 @@
 from ....tools.decorators import method
 from ....tools.normalize import log_cpm
 from ....tools.normalize import log_scran_pooling
-from ....tools.utils import check_version
 from .sklearn import classifier
 
 import sklearn.linear_model
@@ -24,7 +23,6 @@ def _logistic_regression(adata, test=False, max_iter=None):
     paper_year=2013,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.linear_model.LogisticRegression.html",
-    code_version=check_version("scikit-learn"),
 )
 def logistic_regression_log_cpm(adata, test=False, max_iter=None):
     adata = log_cpm(adata)
@@ -38,7 +36,6 @@ def logistic_regression_log_cpm(adata, test=False, max_iter=None):
     paper_year=2013,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.linear_model.LogisticRegression.html",
-    code_version=check_version("scikit-learn"),
     image="openproblems-r-base",
 )
 def logistic_regression_scran(adata, test=False, max_iter=None):
