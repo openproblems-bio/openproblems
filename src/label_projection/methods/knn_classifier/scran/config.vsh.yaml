@@ -1,0 +1,51 @@
+functionality:
+  name: "knn_classifier_scran"
+  namespace: "label_projection/methods/knn_classifier"
+  version: "dev"
+  description: ""
+  authors:
+    - name: "Scott Gigante"
+      roles: [ author ]
+      props: { github: scottgigante }
+    - name: "Vinicius Chagas"
+      roles: [ maintainer ]
+      props: { github: chagasVinicius }
+  arguments:
+    - name: "--input"
+      alternatives: ["-i"]
+      type: "file"
+      example: "input.h5ad"
+      description: "Input file that will be used to generate predictions"
+      required: true
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: "Output data labeled"
+      required: true
+  resources:
+    - type: python_script
+      path: script.py
+    - path: "../../../../common/tools/normalize.py"
+    - path: "../../../utils.py"
+  tests:
+    - type: python_script
+      path: test_script.py
+    - type: file
+      path: "../../../data/test_data_preprocessed.h5ad"
+platforms:
+  - type: docker
+    image: "singlecellopenproblems/openproblems-r-base:latest"
+    setup:
+      - type: r
+        bioc:
+          - scran
+          - BiocParallel
+      - type: python
+        packages:
+          - scanpy
+          - scprep
+          - sklearn
+          - "anndata<0.8"
+  - type: nextflow

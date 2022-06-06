@@ -13,9 +13,13 @@ include { data_loader }       from "$targetDir/common/data_loader/main.nf"     p
 // import preprocess
 include { pancreas_preprocess }        from "$targetDir/label_projection/data/preprocess/pancreas_preprocess/main.nf"     params(params)
 
-// import methods
+// import methods TODO[baseline/random_labels,
+//                     knn_classifier/scran, mlp/log_cpm, mlp/scran, sklearn/classifier,
+//                     scvi, logistic_regression/log_cpm, logistic_regression/scran]
 include { majority_vote }     from "$targetDir/label_projection/methods/baseline/majority_vote/main.nf" params(params)
-// import metrics
+include { knn_classifier_log_cpm }     from "$targetDir/label_projection/methods/knn_classifier/knn_classifier_log_cpm/main.nf" params(params)
+
+// import metrics TODO [f1]
 include { accuracy }          from "$targetDir/label_projection/metrics/accuracy/main.nf" params(params)
 
 
@@ -51,7 +55,8 @@ workflow load_data {
 
 workflow {
     load_data
-    | majority_vote
-    | accuracy.run(auto: [ publish: true ])
-    | view()
+    | view
+    | (majority_vote & knn_classifier_log_cpm)
+    | mix
+    | view
 }
