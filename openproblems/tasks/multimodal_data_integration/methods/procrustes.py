@@ -13,7 +13,6 @@ import sklearn.decomposition
     paper_year=1975,
     code_url="https://docs.scipy.org/doc/scipy/reference/generated/"
     "scipy.spatial.procrustes.html",
-    code_version=check_version("scipy"),
 )
 def procrustes(adata, test=False, n_svd=None):
     if test:
@@ -28,4 +27,6 @@ def procrustes(adata, test=False, n_svd=None):
     X_proc, Y_proc, _ = scipy.spatial.procrustes(X_pca, Y_pca)
     adata.obsm["aligned"] = X_proc
     adata.obsm["mode2_aligned"] = Y_proc
+
+    adata.uns["method_code_version"] = check_version("scipy")
     return adata

@@ -36,6 +36,8 @@ def _harmonic_alignment(
     XY_aligned = ha_op.diffusion_map(n_eigenvectors=n_eigenvectors)
     adata.obsm["aligned"] = XY_aligned[: X_pca.shape[0]]
     adata.obsm["mode2_aligned"] = XY_aligned[X_pca.shape[0] :]
+
+    adata.uns["method_code_version"] = check_version("harmonicalignment")
     return adata
 
 
@@ -45,7 +47,6 @@ def _harmonic_alignment(
     paper_url="https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
     paper_year=2020,
     code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
-    code_version=check_version("harmonicalignment"),
     image="openproblems-python-extras",
 )
 def harmonic_alignment_sqrt_cpm(
