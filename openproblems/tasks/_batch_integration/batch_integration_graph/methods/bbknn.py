@@ -1,6 +1,20 @@
-# from ....tools.normalize import log_cpm
 from .....tools.decorators import method
 from .....tools.utils import check_version
+
+
+def _run_bbknn(adata, batch):
+    from scanpy.preprocessing import pca
+
+    import bbknn
+
+    pca(adata, svd_solver="arpack")
+    kwargs = dict(batch_key=batch, copy=True)
+    if adata.n_obs >= 1e5:
+        kwargs["neighbors_within_batch"] = 25
+    adata = bbknn.bbknn(adata, **kwargs)
+
+    adata.uns["method_code_version"] = check_version("bbknn")
+    return adata
 
 
 @method(
@@ -9,14 +23,64 @@ from .....tools.utils import check_version
     paper_url="https://academic.oup.com/bioinformatics/article/36/3/964/5545955",
     paper_year=2020,
     code_url="https://github.com/Teichlab/bbknn",
-    code_version=check_version("bbknn"),
     image="openproblems-python-batch-integration",  # only if required
 )
 def bbknn_full_unscaled(adata, test=False):
-    from scib.integration import combat
-    from scib.preprocessing import reduce_data
 
-    adata = combat(adata, "batch")
-    reduce_data(adata, umap=False)
+    adata = _run_bbknn(adata, "batch")
+    # Complete the result in-place
+    return adata
+
+
+@method(
+    method_name="BBKNN (hvg,unscaled)",
+    paper_name="BBKNN: fast batch alignment of single cell transcriptomes",
+    paper_url="https://academic.oup.com/bioinformatics/article/36/3/964/5545955",
+    paper_year=2020,
+    code_url="https://github.com/Teichlab/bbknn",
+    code_version=check_version("bbknn"),
+    image="openproblems-python-batch-integration",  # only if required
+)
+def bbknn_hvg_unscaled(adata, test=False):
+    from ._utils import hvg_batch
+
+    adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
+    adata = _run_bbknn(adata, "batch")
+    # Complete the result in-place
+    return adata
+
+
+@method(
+    method_name="BBKNN (hvg,scaled)",
+    paper_name="BBKNN: fast batch alignment of single cell transcriptomes",
+    paper_url="https://academic.oup.com/bioinformatics/article/36/3/964/5545955",
+    paper_year=2020,
+    code_url="https://github.com/Teichlab/bbknn",
+    image="openproblems-python-batch-integration",  # only if required
+)
+def bbknn_hvg_scaled(adata, test=False):
+    from ._utils import hvg_batch
+    from ._utils import scale_batch
+
+    adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
+    adata = scale_batch(adata, "batch")
+    adata = _run_bbknn(adata, "batch")
+    # Complete the result in-place
+    return adata
+
+
+@method(
+    method_name="BBKNN (full/scaled)",
+    paper_name="BBKNN: fast batch alignment of single cell transcriptomes",
+    paper_url="https://academic.oup.com/bioinformatics/article/36/3/964/5545955",
+    paper_year=2020,
+    code_url="https://github.com/Teichlab/bbknn",
+    image="openproblems-python-batch-integration",  # only if required
+)
+def bbknn_full_scaled(adata, test=False):
+    from ._utils import scale_batch
+
+    adata = scale_batch(adata, "batch")
+    adata = _run_bbknn(adata, "batch")
     # Complete the result in-place
     return adata

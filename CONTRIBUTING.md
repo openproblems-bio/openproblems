@@ -34,6 +34,7 @@ link to it from your website, or simply star it in GitHub to say "I use it".
 * [Code of Conduct](#code-of-conduct)
 * [Attribution](#attribution)
 
+
 <!-- Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
 
 ## Submitting New Features
@@ -111,7 +112,7 @@ Datasets should take no arguments and return an AnnData object. If `test is True
 function dataset(bool test=False) -> AnnData adata
 ```
 
-Methods should take an AnnData object and store the output in `adata.obs` according to the specification of the task. If `test is True`, you may modify hyperparameters (e.g. number of iterations) to make the method run faster.
+Methods should take an AnnData object and store a) the output in `adata.obs` / `adata.obsm` / etc., according to the specification of the task and b) the version of the package used to run the method in `adata.uns["method_code_version"]`. If `test is True`, you may modify hyperparameters (e.g. number of iterations) to make the method run faster.
 
 ```
 function method(AnnData adata, bool test=False) -> AnnData adata

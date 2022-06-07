@@ -142,10 +142,11 @@ resources/
 
 # Nextflow
 nf-openproblems
-.nextflow
+.nextflow*
 
 # Editor
 .idea
 
-# snakemake
-.docker_update
+scratch/
+openproblems/results/
+openproblems/work/
