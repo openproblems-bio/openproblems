@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-DEEP_SCAN=${DEEP_SCAN:=true}
+DEEP_SCAN=${DEEP_SCAN:=false}
 
 echo "========================================"
 echo "Clearing runner disk space"
