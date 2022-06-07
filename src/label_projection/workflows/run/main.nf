@@ -16,8 +16,11 @@ include { pancreas_preprocess }        from "$targetDir/label_projection/data/pr
 // import methods TODO[baseline/random_labels,
 //                     knn_classifier/scran, mlp/log_cpm, mlp/scran, sklearn/classifier,
 //                     scvi, logistic_regression/log_cpm, logistic_regression/scran]
-include { majority_vote }     from "$targetDir/label_projection/methods/baseline/majority_vote/main.nf" params(params)
-include { knn_classifier_log_cpm }     from "$targetDir/label_projection/methods/knn_classifier/knn_classifier_log_cpm/main.nf" params(params)
+include { majority_vote }            from "$targetDir/label_projection/methods/baseline/majority_vote/main.nf" params(params)
+include { knn_classifier_log_cpm }   from "$targetDir/label_projection/methods/knn_classifier/knn_classifier_log_cpm/main.nf" params(params)
+include { knn_classifier_scran }     from "$targetDir/label_projection/methods/knn_classifier/knn_classifier_scran/main.nf" params(params)//LOCALY OUT OF MEMORY
+include { mlp_log_cpm }              from "$targetDir/label_projection/methods/mlp/mlp_log_cpm/main.nf" params(params)  //LOCALY OUT OF MEMORY
+include { mlp_scran }                from "$targetDir/label_projection/methods/mlp/mlp_scran/main.nf" params(params)  //LOCALY OUT OF MEMORY
 
 // import metrics TODO [f1]
 include { accuracy }          from "$targetDir/label_projection/metrics/accuracy/main.nf" params(params)
@@ -56,7 +59,8 @@ workflow load_data {
 workflow {
     load_data
     | view
-    | (majority_vote & knn_classifier_log_cpm)
+    | (majority_vote & knn_classifier_log_cpm & knn_classifier_scran & mlp_log_cpm & mlp_scran)
     | mix
+    | accuracy
     | view
 }
