@@ -1,4 +1,4 @@
-scvi-tools~=0.16
-scikit-misc
 jax==0.3.6
 jaxlib==0.3.5
+scikit-misc
+scvi-tools~=0.16

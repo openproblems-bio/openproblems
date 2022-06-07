@@ -1,7 +1,7 @@
-pip
-wheel
-setuptools
+boto3>1.0<2.0
 cmake
 jupyter
-boto3>1.0<2.0
+pip
 sagemaker>2.0<3.0
+setuptools
+wheel
