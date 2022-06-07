@@ -27,6 +27,7 @@ sudo rm -rf /opt/microsoft/powershell
 sudo rm -rf /usr/share/dotnet
 sudo rm -rf /opt/ghc
 sudo rm -rf /opt/hostedtoolcache
+sudo rm -rf /usr/local/lib/android
 
 echo
 echo "Disk space usage: after"

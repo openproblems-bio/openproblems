@@ -130,6 +130,7 @@ jobs:
         - /usr/share/dotnet:/opt/remove/dotnet
         - /opt/ghc:/opt/remove/ghc
         - /opt/hostedtoolcache:/opt/remove/hostedtoolcache
+        - /usr/local/lib/android:/opt/remove/android
       options: --user root
 
     needs: build_images
