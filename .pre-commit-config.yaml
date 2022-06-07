@@ -6,6 +6,8 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
         exclude: \.(ai|gz|md)$
+      - id: requirements-txt-fixer
+        files: .*requirements.*\.txt
   - repo: https://github.com/timothycrosley/isort
     rev: 5.6.4
     hooks:
