@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-DEEP_SCAN=${DEEP_SCAN:=false}
+DEEP_SCAN=${DEEP_SCAN:=true}
 
 echo "========================================"
 echo "Clearing runner disk space"
@@ -8,7 +8,7 @@ echo "========================================"
 echo "Listing 20 largest packages"
 dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 20
 
-if DEEP_SCAN; then
+if $DEEP_SCAN; then
   echo
   echo "Running deep scan"
   du -h / 2>/dev/null | grep "^ *[0-9]*G"
