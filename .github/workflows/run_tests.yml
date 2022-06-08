@@ -444,6 +444,7 @@ jobs:
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
+        TOWER_ACTION_ID: 5ww3OCEyCgdyTHdTFJLZJ9
       run: |
         generate_parameters()
         {
@@ -458,7 +459,7 @@ jobs:
         WORKFLOW_ID=$(
             curl -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
-            https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=${TOWER_WORKSPACE_ID} \
+            https://api.tower.nf/actions/${TOWER_ACTION_ID}/launch?workspaceId=${TOWER_WORKSPACE_ID} \
             --data "$(generate_parameters)" | \
             tee /dev/stderr | \
             sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
