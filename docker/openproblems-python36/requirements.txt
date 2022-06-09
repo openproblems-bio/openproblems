@@ -1,4 +1,4 @@
-boto3==1.24.*
+boto3==1.23.*
 cmake==3.22.*
 git+https://bitbucket.org/jerry00/scvis-dev@af73849
 jupyter==1.0.*
