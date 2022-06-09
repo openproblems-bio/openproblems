@@ -8,7 +8,7 @@ install_requires = [
     "scikit-learn>=0.24,<1.2",
     "anndata>=0.7.5,<0.8",
     "scprep>=1.2.0",
-    "scipy==1.8.*",
+    "scipy>=1.5,<1.9",
     "scanpy>=1.6",
     "louvain==0.7.*",
     "decorator<5.0",
