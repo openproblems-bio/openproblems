@@ -4,7 +4,7 @@ from setuptools import setup
 import os
 
 install_requires = [
-    "numpy==1.22.*",
+    "numpy>=1.19,<1.23",
     "scikit-learn==1.1.*",
     "anndata>=0.7.5,<0.8",
     "scprep>=1.2.0",
