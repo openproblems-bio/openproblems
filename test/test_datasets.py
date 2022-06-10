@@ -136,5 +136,6 @@ class TestDataset(unittest.TestCase):
         assert hasattr(self.dataset, "metadata")
         for attr in [
             "dataset_name",
+            "data_url",
         ]:
             assert attr in self.dataset.metadata

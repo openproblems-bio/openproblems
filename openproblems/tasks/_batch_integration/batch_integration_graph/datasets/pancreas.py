@@ -4,7 +4,11 @@ from .....tools.decorators import dataset
 import scanpy as sc
 
 
-@dataset(dataset_name="Pancreas (by batch)", image="openproblems")
+@dataset(
+    dataset_name="Pancreas (by batch)",
+    data_url=load_pancreas.metadata["data_url"],
+    image="openproblems",
+)
 def pancreas_batch(test=False):
     adata = load_pancreas(test)
     from_cache = adata.__from_cache__

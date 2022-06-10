@@ -163,6 +163,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
     dataset = utils.get_function(task_name, "datasets", dataset_name)
     output = dict(
         name=dataset.metadata["dataset_name"],
+        data_url=dataset.metadata["data_url"],
         headers=dict(names=["Rank"], fixed=["Name", "Paper", "Website", "Code"]),
         results=list(),
     )
