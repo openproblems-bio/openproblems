@@ -130,6 +130,7 @@ jobs:
         - /usr/share/dotnet:/opt/remove/dotnet
         - /opt/ghc:/opt/remove/ghc
         - /opt/hostedtoolcache:/opt/remove/hostedtoolcache
+        - /usr/local/lib/android:/opt/remove/android
       options: --user root
 
     needs: build_images
@@ -207,7 +208,7 @@ jobs:
         cd ..
 
     - name: Run tests
-      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv --maxfail=2
+      run: pytest --cov=openproblems --cov-report=xml -vv --maxfail=2
 
     - name: Upload coverage
       continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
@@ -244,7 +245,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+        sudo apt-get install -qy --no-install-recommends libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -305,7 +306,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        sudo apt-get install -qy s3fs
+        sudo apt-get install -qy --no-install-recommends s3fs
         echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
         chmod 600 ~/.passwd-s3fs
         sudo mkdir -p /mnt/openproblems-nextflow
@@ -372,7 +373,7 @@ jobs:
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run \
-        -revision v1.3 \
+        -revision v1.4 \
         -with-tower \
         -ansi-log false -resume \
         -profile aws,test \
@@ -444,6 +445,7 @@ jobs:
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
+        TOWER_ACTION_ID: 5ww3OCEyCgdyTHdTFJLZJ9
       run: |
         generate_parameters()
         {
@@ -458,7 +460,7 @@ jobs:
         WORKFLOW_ID=$(
             curl -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
-            https://api.tower.nf/actions/2kxpi4Q0zNCy6wPExD8yD5/launch?workspaceId=${TOWER_WORKSPACE_ID} \
+            https://api.tower.nf/actions/${TOWER_ACTION_ID}/launch?workspaceId=${TOWER_WORKSPACE_ID} \
             --data "$(generate_parameters)" | \
             tee /dev/stderr | \
             sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
