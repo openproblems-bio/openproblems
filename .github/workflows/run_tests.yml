@@ -208,7 +208,7 @@ jobs:
         cd ..
 
     - name: Run tests
-      run: pytest --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv --maxfail=2
+      run: pytest --numprocesses $(nproc) --cov=openproblems --cov-report=term-missing:skip-covered --cov-report=xml -vv --maxfail=2
 
     - name: Upload coverage
       continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}

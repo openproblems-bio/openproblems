@@ -30,6 +30,7 @@ process_requires = ["numpyencoder"]
 test_requires = [
     "pytest",
     "pytest-cov",
+    "pytest-xdist",
     "black==22.3.0",
     "coverage",
     "codecov",
