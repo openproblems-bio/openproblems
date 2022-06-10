@@ -4,7 +4,7 @@ from ....tools.decorators import dataset
 import numpy as np
 
 
-@dataset("CeNGEN (by batch)")
+@dataset("CeNGEN (by batch)", data_url=load_cengen.metadata["data_url"])
 def cengen_batch(test=False):
     adata = load_cengen(test=test)
     adata.obs["labels"] = adata.obs["cell_type"]
@@ -20,7 +20,7 @@ def cengen_batch(test=False):
     return adata
 
 
-@dataset("CeNGEN (random split)")
+@dataset("CeNGEN (random split)", data_url=load_cengen.metadata["data_url"])
 def cengen_random(test=False):
     adata = load_cengen(test=test)
     adata.obs["labels"] = adata.obs["cell_type"]

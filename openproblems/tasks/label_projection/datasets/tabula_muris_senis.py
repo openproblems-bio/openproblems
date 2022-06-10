@@ -4,7 +4,10 @@ from ....tools.decorators import dataset
 import numpy as np
 
 
-@dataset("Tabula Muris Senis Lung (random split)")
+@dataset(
+    "Tabula Muris Senis Lung (random split)",
+    data_url=load_tabula_muris_senis.metadata["data_url"],
+)
 def tabula_muris_senis_lung_random(test=False):
     adata = load_tabula_muris_senis(test=test, organ_list=["lung"])
     adata.obs["labels"] = adata.obs["free_annotation"]
