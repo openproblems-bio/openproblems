@@ -130,6 +130,7 @@ jobs:
         - /usr/share/dotnet:/opt/remove/dotnet
         - /opt/ghc:/opt/remove/ghc
         - /opt/hostedtoolcache:/opt/remove/hostedtoolcache
+        - /usr/local/lib/android:/opt/remove/android
       options: --user root
 
     needs: build_images
@@ -244,7 +245,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-        sudo apt-get install -qy libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+        sudo apt-get install -qy --no-install-recommends libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -305,7 +306,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
       run: |
-        sudo apt-get install -qy s3fs
+        sudo apt-get install -qy --no-install-recommends s3fs
         echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
         chmod 600 ~/.passwd-s3fs
         sudo mkdir -p /mnt/openproblems-nextflow
