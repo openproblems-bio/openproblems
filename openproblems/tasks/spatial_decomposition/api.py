@@ -14,17 +14,9 @@ def check_dataset(adata):
     # check that proportions are included
     assert "proportions_true" in adata.obsm
     # make sure proportions sum to one, some precision error allowed
-    assert np.all(
-        np.abs(
-            np.sum(
-                adata[adata.obs["modality"] == "sp"].obsm["proportions_true"], axis=1
-            )
-            - 1  # noqa: W503
-        )
-        < EPS  # noqa: W503
-    )
+    proportions_sum = np.sum(adata[adata.obs["modality"] == "sp"].obsm["proportions_true"], axis=1)
+    np.testing.assert_allclose(proportions_sum, 1)
     # ensure cell type labels are found in single cell reference
-
     assert is_categorical_dtype(adata.obs["label"])
     return True
 
