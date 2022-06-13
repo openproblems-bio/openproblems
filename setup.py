@@ -4,14 +4,14 @@ from setuptools import setup
 import os
 
 install_requires = [
-    "numpy>=1.19,<1.23",
-    "scikit-learn>=0.24,<1.2",
-    "anndata>=0.7.5,<0.8",
+    "numpy>=1.19,<1.23",  # pinned for py36
+    "scikit-learn>=0.24,<1.2",  # pinned for py36
+    "anndata>=0.7.5,<0.8",  # pinned for py36
     "scprep>=1.2.0",
-    "scipy>=1.5,<1.9",
+    "scipy>=1.5,<1.9",  # pinned for py36
     "scanpy>=1.6",
     "louvain==0.7.*",
-    "decorator<5.0",
+    "decorator<5.0",  # pinned in #324
     "memory-profiler==0.60",
     "colorama==0.4.*",
     "packaging==21.3",
