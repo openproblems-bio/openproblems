@@ -10,3 +10,4 @@ pyensembl
 tensorflow-cpu==2.7.2
 torch
 umap-learn
+dca
