@@ -1,51 +1,56 @@
 name: viash test CI
 
-on: [ push, pull_request ]
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ '*' ]
+
+# Skip older CI runs for pull requests (head_ref exists), otherwise allways build
+# https://docs.github.com/en/actions/using-jobs/using-concurrency#example-using-a-fallback-value
+concurrency: 
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
-  viash-test:
-    runs-on: ${{ matrix.config.os }}
+  # phase 1
+  list_components:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Fetch viash
+      run: |
+        bin/init
+        bin/viash -h
+    - id: set_matrix
+      run: |
+        echo "::set-output name=matrix::$( bin/viash ns list -p docker --format json | jq -c '[ .[] | .info.config ]' )"
+    outputs:
+        matrix: ${{ steps.set_matrix.outputs.matrix }}
+
+  # phase 2
+  viash_test:
+    needs: list_components
+
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'ci skip')"
 
     strategy:
       fail-fast: false
       matrix:
-        config:
-        - {name: 'main_only_common', os: ubuntu-latest, query: 'common' }
-        - {name: 'main_only_MA', os: ubuntu-latest, query: 'modality_alignment' }
-        - {name: 'main_only_TI', os: ubuntu-latest, query: 'trajectory_inference' }
-        - {name: 'main_only_BI', os: ubuntu-latest, query: 'batch_integration' }
+        component_path: ${{ fromJson(needs.list_components.outputs.matrix) }}
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Cache executables
-      uses: actions/cache@v2
-      with:
-        path: bin
-        key: executable-caching-${{ github.workflow }}-${{ matrix.config.name }}
 
     - name: Fetch viash
       run: |
         bin/init
         bin/viash -h
 
-    - name: Run build
+    - name: Run test
       run: |
-        bin/viash_build -q '${{ matrix.config.query }}'
-
-    - name: Run tests
-      run: |
-        # create check_results folder
-        sed -i '/^check_results\/$/d' .gitignore
-        mkdir check_results
-
-        # run tests
-        bin/viash_test -q '${{ matrix.config.query }}' --append=false --log=check_results/results.tsv
-
-    - name: Upload check results
-      uses: actions/upload-artifact@master
-      with:
-        name: ${{ matrix.config.name }}_results
-        path: check_results
+        bin/viash test -p docker ${{ matrix.component_path }}
 
