@@ -42,12 +42,12 @@ def loader(func, *args, **kwargs):
             "Loading cached {}({}, {}) dataset".format(func.__name__, args, kwargs)
         )
         adata = anndata.read_h5ad(filepath)
-        adata.__from_cache__ = True
+        adata.uns["_from_cache"] = True
         return adata
     else:
         log.debug("Downloading {}({}, {}) dataset".format(func.__name__, args, kwargs))
         adata = func(*args, **kwargs)
-        adata.__from_cache__ = False
+        adata.uns["_from_cache"] = False
         if "counts" not in adata.layers:
             adata.layers["counts"] = adata.X
         try:
