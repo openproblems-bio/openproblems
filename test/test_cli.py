@@ -8,6 +8,9 @@ import parameterized
 import sklearn
 import tempfile
 import utils
+import utils.warnings
+
+utils.warnings.ignore_warnings()
 
 
 def test_print(capsys):

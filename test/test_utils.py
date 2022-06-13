@@ -4,7 +4,7 @@ import openproblems.tools.utils
 import packaging.version
 import rpy2.robjects as ro
 import sklearn
-import utils
+import utils.warnings
 
 utils.warnings.ignore_warnings()
 
