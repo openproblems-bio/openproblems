@@ -38,7 +38,7 @@ def seuratv3(adata, test=False):
     # add proportions
     sp_adata.obsm["proportions_pred"] = proportions_pred.iloc[order, :]
     sp_adata.obsm["proportions_true"] = proportions_true.iloc[order, :]
-    
+
     sp_adata.uns["method_code_version"] = check_r_version("Seurat")
 
     return sp_adata
