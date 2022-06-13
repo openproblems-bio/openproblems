@@ -1,3 +1,4 @@
+from . import exceptions
 from . import git
 from . import run
 
@@ -217,13 +218,11 @@ def run_image(image, script, *args, timeout=None, retries=0):
     else:
         container_command = singularity_command
     command = container_command(image, script, *args)
-    if timeout is not None:
-        command = ["timeout", str(timeout)] + command
     while True:
         try:
-            return run.run(command)
+            return run.run(command, timeout=timeout)
         except Exception as e:
-            if retries > 0:
+            if retries > 0 and not isinstance(e, exceptions.TimeoutError):
                 warnings.warn(
                     'Container failed with {}("{}").'.format(type(e).__name__, str(e)),
                     RuntimeWarning,

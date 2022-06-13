@@ -1,3 +1,4 @@
+from . import exceptions
 from . import streams
 
 import logging
@@ -86,7 +87,7 @@ def run(
             time.sleep(1)
             runtime += 1
         if runtime > timeout:
-            raise RuntimeError(
+            raise exceptions.TimeoutError(
                 format_error_timeout(
                     p, timeout, p.stderr if stderr is subprocess.PIPE else p.stdout
                 )
