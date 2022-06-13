@@ -1,3 +1,3 @@
-bioc::scran
-IRkernel
-RcppAnnoy
+bioc::scran@1.24.0
+IRkernel@1.3
+RcppAnnoy@0.0.19
