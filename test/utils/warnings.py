@@ -47,3 +47,6 @@ def ignore_warnings():
         return
 
     warnings.filterwarnings("ignore", category=numba.NumbaWarning)
+
+
+ignore_warnings()

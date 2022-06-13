@@ -1,12 +1,11 @@
 """Specific tests for the dimensionality_reduction task"""
+import utils.warnings  # noqa: F401
+
+# isort: split
 import openproblems
 import pytest
 import utils.docker
 import utils.git
-import utils.warnings
-
-utils.warnings.ignore_warnings()
-
 
 # global skip
 TASK = openproblems.tasks.dimensionality_reduction

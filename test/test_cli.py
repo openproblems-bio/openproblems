@@ -1,3 +1,6 @@
+import utils.warnings  # noqa: F401
+
+# isort: split
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
 
@@ -8,9 +11,6 @@ import parameterized
 import sklearn
 import tempfile
 import utils
-import utils.warnings
-
-utils.warnings.ignore_warnings()
 
 
 def test_print(capsys):
