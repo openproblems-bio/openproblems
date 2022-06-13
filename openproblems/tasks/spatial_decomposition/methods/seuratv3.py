@@ -1,6 +1,6 @@
 from ....tools.conversion import r_function
 from ....tools.decorators import method
-from ....tools.utils import check_version
+from ....tools.utils import check_r_version
 from .._utils import split_sc_and_sp
 
 import pandas as pd
@@ -14,7 +14,6 @@ _seuratv3 = r_function("seuratv3.R")
     paper_url="https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8",
     paper_year=2019,
     code_url="https://satijalab.org/seurat/archive/v3.2/spatial_vignette.html",
-    code_version=check_version("seuratv3"),
     image="openproblems-r-extras",
 )
 def seuratv3(adata, test=False):
@@ -39,5 +38,7 @@ def seuratv3(adata, test=False):
     # add proportions
     sp_adata.obsm["proportions_pred"] = proportions_pred.iloc[order, :]
     sp_adata.obsm["proportions_true"] = proportions_true.iloc[order, :]
+    
+    sp_adata.uns["method_code_version"] = check_r_version("Seurat")
 
     return sp_adata
