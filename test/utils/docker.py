@@ -223,6 +223,21 @@ def run_image(image, script, *args, timeout=None, retries=0):
         try:
             return run.run(command)
         except Exception as e:
+            if isinstance(e, FileNotFoundError) and "timeout" in str(e):
+                raise FileNotFoundError(
+                    "\n".join(
+                        [
+                            "timeout is not available. Install with",
+                            "```",
+                            "sudo cat <<EOF | sudo tee /usr/local/bin/timeout",
+                            "#!/usr/bin/env bash",
+                            "perl -e 'alarm shift; exec @ARGV' \"$@\"",
+                            "EOF",
+                            "sudo chmod +x /usr/local/bin/timeout",
+                            "```",
+                        ]
+                    )
+                ) from e
             if retries > 0:
                 warnings.warn(
                     'Container failed with {}("{}").'.format(type(e).__name__, str(e)),
