@@ -25,7 +25,7 @@ pytestmark = pytest.mark.skipif(
     name_func=utils.name.name_test,
     skip_on_empty=True,
 )
-@utils.docker.docker_test(timeout=60, retries=2)
+@utils.docker.docker_test(timeout=600, retries=2)
 def test_method(task_name, method_name, image):
     """Test application of a method."""
     import anndata
