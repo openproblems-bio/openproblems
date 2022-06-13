@@ -145,7 +145,6 @@ def generate_synthetic_dataset(
         columns=uni_labs,
     )
     adata_merged = merge_sc_and_sp(adata, adata_spatial)
-    adata_merged.__from_cache__ = adata.__from_cache__
     adata_merged.X[adata_merged.X == np.inf] = adata_merged.X.max()  # remove inf
     adata_merged.layers["counts"] = adata_merged.X.copy()
 
