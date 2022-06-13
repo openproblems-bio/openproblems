@@ -1,4 +1,4 @@
-numpy==1.7
-keras==2.4
-tensorflow==2.0
 dca
+keras==2.4
+numpy==1.7
+tensorflow==2.0
