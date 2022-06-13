@@ -28,6 +28,7 @@ def merge_sc_and_sp(
         label=batch_key,
         join="outer",
         index_unique=None,
+        merge="unique",
     )
 
     adata_merged.obs["label"] = pd.Categorical(adata_merged.obs["label"])
