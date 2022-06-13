@@ -19,7 +19,7 @@ sce_sp <- sce[, colData(sce)$modality == "sp"]
 # get spatial data counts
 sp_counts <- assay(sce_sp, "X")
 # get spatial data coordinates
-sp_coords <- as.data.frame(sce_sp@reducedDims$spatial)
+sp_coords <- as.data.frame(reducedDim(sce, "spatial"))
 colnames(sp_coords) <- c("x", "y")
 rownames(sp_coords) <- colnames(sce_sp)
 rownames(sp_counts) <- rownames(sce_sp)

@@ -24,7 +24,6 @@ rliger
 rmarkdown@2.2
 RSQLite@2.2.4
 Seurat
-Seurat@4.0.1
 shiny@1.4.0.2
 sparsesvd
 tibble@3.1.7

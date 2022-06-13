@@ -1,12 +1,15 @@
-from scipy.sparse import csr_matrix
+"""
+From:
+https://github.com/romain-lopez/DestVI-reproducibility/blob/master/simulations/
+"""
+from .._utils import merge_sc_and_sp
+from numba import jit
 from scipy.spatial.distance import pdist
 from scipy.spatial.distance import squareform
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.decomposition import PCA
 from sklearn.neighbors import kneighbors_graph
 from torch.distributions import Gamma
-from utils import categorical
-from utils import get_mean_normal
 
 import anndata
 import matplotlib.pyplot as plt
@@ -20,14 +23,44 @@ np.random.seed(0)
 torch.manual_seed(0)
 
 
-def generate_synthetic_dataset(
+def categorical(p, n_samples):
+    size = list(p.shape[:-1])
+    size.insert(0, n_samples)
+    return (p.cumsum(-1) >= np.random.uniform(size=size)[..., None]).argmax(-1).T
+
+
+@jit(nopython=True)
+def get_mean_normal(cell_types, gamma, mean_, components_):  # pragma: no cover
+    """Util for preparing the mean of the normal distribution.
+
+    cell_types: (n_spots, n_cells)
+    gamma: (n_spots, n_cells, n_latent)
+
+    return: samples: (n_spots, n_cells, n_genes)
+    """
+    # extract shapes
+    n_spots = gamma.shape[0]
+    n_cells = gamma.shape[1]
+    n_genes = components_[0].shape[1]
+
+    mean_normal = np.zeros((n_spots, n_cells, n_genes))
+    for spot in range(n_spots):
+        for cell in range(n_cells):
+            mean_normal[spot, cell] = mean_[cell_types[spot, cell]]
+            c = components_[cell_types[spot, cell]]
+            g = np.expand_dims(gamma[spot, cell], 0)
+            mean_normal[spot, cell] += np.dot(g, c)[0]
+    return mean_normal
+
+
+def generate_synthetic_dataset_destvi(
     input_file: str = "_input_data/",
     lam_ct: float = 0.1,
     temp_ct: float = 1.0,
     lam_gam: float = 0.5,
     sf_gam: float = 15.0,
     bin_sampling: float = 1.0,
-    ct_study: int = 1,
+    ct_study: int = 0,
     grid_size: int = 10,
 ):
     # parameters
@@ -52,17 +85,6 @@ def generate_synthetic_dataset(
         sf_gam=sf_gam,
         savefig=False,
     )
-
-    # put together a summary of distinct cell types per spot
-    cell_types_sc = categorical(freq_sample, 10)
-    x = np.sort(cell_types_sc, axis=1)
-    res = (x[:, 1:] != x[:, :-1]).sum(axis=1) + 1
-    plt.hist(res, bins=np.linspace(0, C, 20))
-    plt.xlabel("Number of cell types")
-    plt.ylabel("Number of spots")
-    plt.title(f"temp-ct={temp_ct}")
-    plt.tight_layout()
-    # plt.savefig(output_dir+"fre.png")
 
     cell_types_sc = categorical(freq_sample, K)
     gamma_sc = gamma[:, None, :].repeat(K, axis=1)
@@ -90,12 +112,15 @@ def generate_synthetic_dataset(
 
     samples = np.random.poisson(lam=transformed_mean)
 
+    X = samples[:, :K_sampled].reshape((-1, samples.shape[-1]))
+    obs_names = [f"sc_{i}" for i in range(X.shape[0])]
     sc_anndata = anndata.AnnData(
-        X=csr_matrix(samples[:, :K_sampled].reshape((-1, samples.shape[-1])))
+        X=X,
+        obs=dict(obs_names=obs_names),
     )
     sc_anndata.obs["cell_type"] = cell_types_sc[:, :K_sampled].reshape(-1, 1)
     sc_anndata.obs["label"] = sc_anndata.obs["cell_type"].astype(str).astype("category")
-    sc_anndata.obs["n_counts"] = np.sum(sc_anndata.X.A, axis=1)
+    sc_anndata.obs["n_counts"] = np.sum(sc_anndata.X, axis=1)
     sc_anndata.obsm["gamma"] = gamma_sc[:, :K_sampled].reshape(-1, gamma.shape[-1])
     sc_anndata.obsm["locations"] = location_sc[:, :K_sampled].reshape(-1, 2)
 
@@ -105,7 +130,7 @@ def generate_synthetic_dataset(
     hier_labels_sc = np.zeros((sc_anndata.n_obs, len(target_list)))
     for ct in range(C):
         slice_ind = np.where(sc_anndata.obs["cell_type"] == ct)
-        slice_counts = sc_anndata.X[slice_ind].A
+        slice_counts = sc_anndata.X[slice_ind]
         slice_normalized = slice_counts / np.sum(slice_counts, axis=1)[:, np.newaxis]
         slice_embedding = PCA(n_components=10).fit_transform(
             np.log(1 + 1e4 * slice_normalized)
@@ -154,7 +179,6 @@ def generate_synthetic_dataset(
     elif ct_study == 0:
 
         list_transformed = [transformed_mean_st_full]
-    # file_name = ["st_simu.h5ad", "st_simu_partial.h5ad"]
     for i, transformed_mean_st in enumerate(list_transformed):
         # Important remark: Gamma is parametrized by the rate = 1/scale!
         gamma_st = Gamma(
@@ -166,8 +190,11 @@ def generate_synthetic_dataset(
 
         samples_st = np.random.poisson(lam=mean_st)
         samples_st = np.random.binomial(samples_st, bin_sampling)
-
-        st_anndata = anndata.AnnData(X=csr_matrix(samples_st))
+        obs_names = [f"st_{i}" for i in range(samples_st.shape[0])]
+        st_anndata = anndata.AnnData(
+            X=samples_st,
+            obs=dict(obs_names=obs_names),
+        )
         if i == 0:
             altered_freq = freq_sample
         if i > 0:
@@ -181,20 +208,16 @@ def generate_synthetic_dataset(
         st_anndata.obsm["proportions_true"] = freq_df
         st_anndata.obsm["gamma"] = gamma
         st_anndata.obsm["locations"] = locations
-        st_anndata.obsm["n_counts"] = np.sum(st_anndata.X, axis=1)
+        st_anndata.obs["n_counts"] = np.sum(st_anndata.X, axis=1)
         st_anndata.uns["key_clustering"] = key_list
         st_anndata.uns["target_list"] = [1] + target_list
-        st_anndata.uns["sc_reference"] = sc_anndata
-        # st_anndata.write(output_dir + file_name[i], compression="gzip")
-        if i == 0:
-            plt.figure(figsize=(5, 5))
-            plt.hist(st_anndata.obsm["n_counts"], bins=100)
-            plt.xlabel("Number of UMIs")
-            plt.ylabel("Number of spots")
-            plt.title(f"bin-sampling={bin_sampling}")
-            plt.tight_layout()
-            # plt.savefig(output_dir+"lib.png")
-    return st_anndata
+
+    sc_anndata.layers["counts"] = sc_anndata.X.copy()
+    st_anndata.layers["counts"] = st_anndata.X.copy()
+
+    merged_anndata = merge_sc_and_sp(sc_anndata, st_anndata)
+
+    return merged_anndata
 
 
 def generate_spatial_information(

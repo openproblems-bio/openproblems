@@ -1,4 +1,5 @@
 from ...data.sample import load_sample_data
+from pandas.core.dtypes.common import is_categorical_dtype
 
 import numpy as np
 import pandas as pd
@@ -13,17 +14,18 @@ def check_dataset(adata):
     # check that proportions are included
     assert "proportions_true" in adata.obsm
     # make sure proportions sum to one, some precision error allowed
-    assert np.all(np.abs(np.sum(adata.obsm["proportions_true"], axis=1) - 1) < EPS)
-    # make sure single cell reference is in uns
-    assert "sc_reference" in adata.uns
+    assert np.all(
+        np.abs(
+            np.sum(
+                adata[adata.obs["modality"] == "sp"].obsm["proportions_true"], axis=1
+            )
+            - 1  # noqa: W503
+        )
+        < EPS  # noqa: W503
+    )
     # ensure cell type labels are found in single cell reference
-    if adata.uns["sc_reference"] is not None:
-        assert "label" in adata.uns["sc_reference"].obs
-        # make sure single cell reference and spatial data has same cell types
-        prop_names = adata.obsm["proportions_true"].columns.values
-        label_names = np.unique(adata.uns["sc_reference"].obs["label"])
-        name_match = [ct in prop_names for ct in label_names]
-        assert np.all(name_match)
+
+    assert is_categorical_dtype(adata.obs["label"])
     return True
 
 

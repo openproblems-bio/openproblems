@@ -1,6 +1,7 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 from .._utils import obs_means
+from .._utils import split_sc_and_sp
 
 
 @method(
@@ -18,7 +19,7 @@ def nmf(adata, test=False):
 
     import numpy as np
 
-    adata_sc = adata.uns["sc_reference"].copy()
+    adata_sc, adata = split_sc_and_sp(adata)
     n_types = adata_sc.obs["label"].cat.categories.shape[0]
 
     vanila_nmf_model = NMF(

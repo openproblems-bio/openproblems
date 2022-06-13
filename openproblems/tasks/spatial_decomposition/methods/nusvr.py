@@ -2,6 +2,7 @@ from ....tools.decorators import method
 from ....tools.utils import check_version
 from .._utils import normalize_coefficients
 from .._utils import obs_means
+from .._utils import split_sc_and_sp
 
 import numpy as np
 import pandas as pd
@@ -19,7 +20,7 @@ def nusvr_sklearn(adata, test=False):
     from scipy.sparse import issparse
     from sklearn.svm import NuSVR
 
-    adata_sc = adata.uns["sc_reference"].copy()
+    adata_sc, adata = split_sc_and_sp(adata)
     labels = adata_sc.obs["label"].cat.categories
     adata_means = obs_means(adata_sc, "label")
 

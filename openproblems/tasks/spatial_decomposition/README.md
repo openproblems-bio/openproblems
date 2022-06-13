@@ -22,23 +22,14 @@ cell data set, but methods are free to ignore this information.
 
 ## API
 
-Datasets should contain the following attributes:
+Datasets consists of 2 `anndata.AnnData` objects, concatenated by key `adata.obs["modality"]` with values:
+* `sc` for the single cell reference.
+* `sp` for the target spatial dataset.
 
-
-* `adata.obsm["proportions_true"]` ground truth proportion estimates 
-* `adata.obsm["spatial"]` array with spatial coordinates (x,y)
-* `adata.uns["sc_reference"]` an `anndata` object that holds the single cell reference data
-* `adata.uns["sc_reference"].obs["label"]` cell type/state/cluster of associated cell
-
-
-
-Note that the entries of the label column in the single cell `anndata` object must agree with the columns of the columns in the `obsm["proportions_true"]` attribute of the spatial data.
-
-Methods should store estimates of the cell type proportions in `adata.obsm["proportions_pred"]` 
-
-Single cell annotations are found in `adata.uns["sc_reference"].obs['labels']`.
-
-Metrics shall compare `adata.obsm['proportions_pred']` to `adata.obsm['proportions_true']`.
+In the single cell reference, cell-types are stored in `adata_sc.obs["label"]`.
+In the spatial target, ground-truth cell-type proportions are stored in `adata_spatial.obsm["proportions_true"]`.
+Methods should return inferred proportions stored in `adata_spatial.obsm["proportions_pred"]`.
+Metrics shall compare `adata_spatial.obsm['proportions_pred']` to `adata_spatial.obsm['proportions_true']`.
 
 ## Metrics
 

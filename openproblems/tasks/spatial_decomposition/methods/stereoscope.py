@@ -1,5 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
+from .._utils import split_sc_and_sp
 
 
 @method(
@@ -15,7 +16,7 @@ def stereoscope_raw(adata, test=False):
     from scvi.external import RNAStereoscope
     from scvi.external import SpatialStereoscope
 
-    adata_sc = adata.uns["sc_reference"].copy()
+    adata_sc, adata = split_sc_and_sp(adata)
     RNAStereoscope.setup_anndata(adata_sc, labels_key="label", layer=None)
     sc_model = RNAStereoscope(adata_sc)
     sc_model.train(max_epochs=100)

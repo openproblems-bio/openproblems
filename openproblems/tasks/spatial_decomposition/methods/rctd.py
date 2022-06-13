@@ -1,6 +1,7 @@
 from ....tools.conversion import r_function
 from ....tools.decorators import method
 from ....tools.utils import check_version
+from .._utils import split_sc_and_sp
 
 import numpy as np
 import pandas as pd
@@ -19,7 +20,7 @@ _rctd = r_function("rctd.R")
 )
 def rctd(adata, test=False):
     # exctract single cell reference data
-    sc_adata = adata.uns["sc_reference"].copy()
+    sc_adata, adata = split_sc_and_sp(adata)
     # remove single cell reference from original anndata
     del adata.uns["sc_reference"]
     # set spatial coordinates for the single cell data
