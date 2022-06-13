@@ -1,16 +1,16 @@
 from ....tools.decorators import method
+from ....tools.utils import check_version
 
 import numpy as np
 import pandas as pd
 
 
 @method(
-    method_name="Random assignment of porportion values. For baseline reference.",
-    paper_name="NA",
-    paper_url="NA",
-    paper_year="NA",
-    code_url="NA",
-    code_version="NA",
+    method_name="Random assignment (baseline)",
+    paper_name="Open Problems for Single Cell Analysis",
+    paper_url="https://openproblems.bio",
+    paper_year="2022",
+    code_url="https://github.com/openproblems-bio/openproblems",
 )
 def random_proportion_assignment(adata, test=False):
     n_types = adata.obsm["proportions_true"].shape[1]
@@ -25,5 +25,6 @@ def random_proportion_assignment(adata, test=False):
     )
 
     adata.obsm["proportions_pred"] = props
+    adata.uns["method_code_version"] = check_version("openproblems")
 
     return adata
