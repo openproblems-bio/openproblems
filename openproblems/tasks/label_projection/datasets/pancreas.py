@@ -5,7 +5,11 @@ from .tools import add_label_noise
 import numpy as np
 
 
-@dataset("Pancreas (by batch)", data_url=load_pancreas.metadata["data_url"])
+@dataset(
+    "Pancreas (by batch)",
+    data_url=load_pancreas.metadata["data_url"],
+    dataset_summary="TODO",
+)
 def pancreas_batch(test=False):
     adata = load_pancreas(test=test)
     adata.obs["labels"] = adata.obs["celltype"]
@@ -21,7 +25,11 @@ def pancreas_batch(test=False):
     return adata
 
 
-@dataset("Pancreas (random split)", data_url=load_pancreas.metadata["data_url"])
+@dataset(
+    "Pancreas (random split)",
+    data_url=load_pancreas.metadata["data_url"],
+    dataset_summary="TODO",
+)
 def pancreas_random(test=False):
     adata = load_pancreas(test=test)
     adata.obs["labels"] = adata.obs["celltype"]
@@ -38,6 +46,7 @@ def pancreas_random(test=False):
 @dataset(
     r"Pancreas (random split with 20% label noise",
     data_url=load_pancreas.metadata["data_url"],
+    dataset_summary="TODO",
 )
 def pancreas_random_label_noise(test=False):
     adata = load_pancreas(test=test)

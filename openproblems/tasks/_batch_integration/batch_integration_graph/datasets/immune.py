@@ -7,6 +7,7 @@ import scanpy as sc
 @dataset(
     dataset_name="Immune (by batch)",
     data_url=load_immune.metadata["data_url"],
+    dataset_summary="TODO",
     image="openproblems",
 )
 def immune_batch(test=False):

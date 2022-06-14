@@ -125,7 +125,7 @@ def metric(metric_name, maximize, image="openproblems"):
     return decorator
 
 
-def dataset(dataset_name, data_url, image="openproblems"):
+def dataset(dataset_name, data_url, dataset_summary, image="openproblems"):
     """Decorate a dataset function.
 
     Parameters
@@ -134,6 +134,8 @@ def dataset(dataset_name, data_url, image="openproblems"):
         Unique human readable name of the dataset
     data_url : str
         Link to the original source of the dataset
+    dataset_summary : str
+        Short (<80 character) summary of the dataset
     image : str, optional (default: "openproblems")
         Name of the Docker image to be used for this dataset
     """
@@ -145,7 +147,10 @@ def dataset(dataset_name, data_url, image="openproblems"):
             return func(*args, **kwargs)
 
         apply_func.metadata = dict(
-            dataset_name=dataset_name, image=image, data_url=data_url
+            dataset_name=dataset_name,
+            image=image,
+            data_url=data_url,
+            dataset_summary=dataset_summary,
         )
         return apply_func
 

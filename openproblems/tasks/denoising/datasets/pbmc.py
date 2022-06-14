@@ -6,6 +6,7 @@ from . import utils
 @dataset(
     "1k PBMCs from a Healthy Donor (10x/v3)",
     data_url=load_pbmc.metadata["data_url"],
+    dataset_summary="TODO",
     image="openproblems-python-extras",
 )
 def pbmc(test=False):

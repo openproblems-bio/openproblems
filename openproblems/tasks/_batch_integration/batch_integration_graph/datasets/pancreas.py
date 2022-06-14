@@ -7,6 +7,7 @@ import scanpy as sc
 @dataset(
     dataset_name="Pancreas (by batch)",
     data_url=load_pancreas.metadata["data_url"],
+    dataset_summary="TODO",
     image="openproblems",
 )
 def pancreas_batch(test=False):

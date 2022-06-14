@@ -15,6 +15,8 @@ import utils.cache
 import utils.git
 import utils.name
 
+DATASET_SUMMARY_MAXLEN = 80
+
 pytestmark = pytest.mark.skipif(
     len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
 )
@@ -138,5 +140,8 @@ class TestDataset(unittest.TestCase):
         for attr in [
             "dataset_name",
             "data_url",
+            "dataset_summary",
         ]:
             assert attr in self.dataset.metadata
+
+        assert len(self.dataset.metadata["dataset_summary"]) < DATASET_SUMMARY_MAXLEN
