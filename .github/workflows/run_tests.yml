@@ -208,7 +208,7 @@ jobs:
         cd ..
 
     - name: Run tests
-      run: pytest --cov=openproblems --cov-report=xml -vv --durations=10
+      run: pytest --cov=openproblems --cov-report=xml -vv --durations=10 --tb=native
 
     - name: Upload coverage
       continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
