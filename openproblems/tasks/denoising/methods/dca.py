@@ -16,6 +16,7 @@ def _dca(adata):
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
+    adata.uns["method_code_version"] = check_version("dca")
     return adata
 
 
@@ -25,7 +26,6 @@ def _dca(adata):
     paper_url="https://www.nature.com/articles/s41467-018-07931-2",
     paper_year=2019,
     code_url="https://github.com/theislab/dca",
-    code_version=check_version("dca"),
     image="openproblems-python-tf2.4",
 )
 def dca(adata, test=False):
