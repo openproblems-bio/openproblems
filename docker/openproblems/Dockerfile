@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.8.12-bullseye
 
 # Adding this comment as a temporary bugfix on 3/30
 
