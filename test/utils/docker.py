@@ -224,7 +224,7 @@ def run_image(image, script, *args, timeout=None, retries=0):
         except Exception as e:
             if retries > 0 and not isinstance(e, exceptions.TimeoutError):
                 warnings.warn(
-                    'Container failed with {}("{}").'.format(type(e).__name__, str(e)),
+                    "Container failed with {}; retrying".format(type(e).__name__),
                     RuntimeWarning,
                 )
                 retries -= 1
