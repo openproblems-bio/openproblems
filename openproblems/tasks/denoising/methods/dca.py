@@ -1,7 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
-# import dca
 import numpy as np
 import scprep
 
@@ -29,5 +28,5 @@ def _dca(adata):
     code_version=check_version("dca"),
     image="openproblems-python-tf2.4",
 )
-def DCA(adata, test=False):
+def dca(adata, test=False):
     return _dca(adata)
