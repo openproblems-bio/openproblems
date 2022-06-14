@@ -19,6 +19,7 @@ summary = "{dataset_summary}"
 """
 
 API_PATTERN = re.compile(r"^#.*API$")
+HEADING_PATTERN = re.compile(r"^# ")
 
 
 def write_index_md(task, outdir):
@@ -28,6 +29,9 @@ def write_index_md(task, outdir):
     readme_file = task.__file__.replace("__init__.py", "README.md")
     with open(readme_file, "r") as readme_handle:
         for line in readme_handle:
+            if HEADING_PATTERN.match(line):
+                # exclude top-level headings
+                continue
             if API_PATTERN.match(line):
                 # exclude everything after ## API
                 break
