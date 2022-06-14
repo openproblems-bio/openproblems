@@ -8,7 +8,7 @@ USER root
 WORKDIR /
 
 # Install Python packages
-COPY ./docker/openproblems-python-scvi/requirements.txt ./requirements.txt
+COPY ./docker/openproblems-python-tf2.4/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 USER $NB_UID
