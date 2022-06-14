@@ -1,3 +1,6 @@
+import utils.warnings  # noqa: F401
+
+# isort: split
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
 

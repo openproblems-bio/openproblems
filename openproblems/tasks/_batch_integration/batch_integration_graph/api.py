@@ -1,4 +1,7 @@
-from .datasets.immune import immune_batch
+from ....data.sample import load_sample_data
+
+import numpy as np
+import scanpy as sc
 
 
 def check_dataset(adata):
@@ -21,9 +24,12 @@ def check_method(adata):
 
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
-    adata = immune_batch(True)
-    # print(adata.obs.columns)
+    adata = load_sample_data()
+    adata.obsm["X_uni"] = sc.pp.pca(adata.X)
+    adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
+    adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
 
+    sc.pp.neighbors(adata, use_rep="X_uni", key_added="uni")
     return adata
 
 

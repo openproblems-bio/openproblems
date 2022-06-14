@@ -1,4 +1,7 @@
 """Specific tests for the dimensionality_reduction task"""
+import utils.warnings  # noqa: F401
+
+# isort: split
 import openproblems
 import pytest
 import utils.docker
