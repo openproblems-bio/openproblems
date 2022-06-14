@@ -114,7 +114,7 @@ jobs:
         author_name: SingleCellOpenProblems
         author_email: singlecellopenproblems@protonmail.com
         message: 'Update benchmark results # ci skip'
-        add: "['data/results']"
+        add: "['data/results', 'content/tasks']"
         branch: ${{ env.UPDATE_BRANCH_NAME }}
         push: false
         cwd: './website'
