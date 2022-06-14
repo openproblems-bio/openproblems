@@ -29,7 +29,7 @@ functionality:
     - type: python_script
       path: test_script.py
     - type: file
-      path: test_data.h5ad
+      path: "../../../resources/toy_preprocessed_data.h5ad"
 platforms:
   - type: native
   - type: docker

@@ -2,7 +2,7 @@ import subprocess
 import scanpy as sc
 from os import path
 
-INPUT = "test_data_preprocessed.h5ad"
+INPUT = "toy_preprocessed_data.h5ad"
 OUTPUT = "output.mlplogcpm.h5ad"
 
 print(">> Running script as test")
