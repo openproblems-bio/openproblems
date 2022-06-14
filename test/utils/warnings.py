@@ -3,11 +3,11 @@ import warnings
 
 def ignore_warnings():
     """Ignore irrelevant warnings."""
+    warnings.simplefilter("error")
     warnings.filterwarnings(
-        "ignore",
+        "always",
         category=FutureWarning,
-        message="Reordering categories will always return a new Categorical object.",
-        module="anndata._core.anndata",
+        message="self.adata.X is loaded as dense",
     )
     warnings.filterwarnings(
         "ignore",
