@@ -176,7 +176,9 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             "Paper": method.metadata["paper_name"],
             "Paper URL": method.metadata["paper_url"],
             "Year": method.metadata["paper_year"],
-            "Code": method.metadata["code_url"],
+            "Library": method.metadata["code_url"],
+            "Implementation": "https://github.com/openproblems-bio/openproblems/"
+            f"blob/main/{method.__module__.replace('.', '/')}",
             "Version": method_results["code_version"],
             "Runtime (min)": parse_time_to_min(method_results["realtime"]),
             "CPU (%)": float(method_results["%cpu"].replace("%", "")),
