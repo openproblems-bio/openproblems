@@ -1,12 +1,12 @@
+import utils.warnings  # noqa: F401
+
+# isort: split
 import numpy as np
 import openproblems
 import openproblems.tools.utils
 import packaging.version
 import rpy2.robjects as ro
 import sklearn
-import utils
-
-utils.warnings.ignore_warnings()
 
 
 def test_temporary_version_missing():
