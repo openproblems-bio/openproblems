@@ -9,6 +9,6 @@ Python: 3.8
 Python packages:
 
 
-* keras >=2.5,<2.6
+* keras >=2.4,<2.6
 * tensorflow >=2.4,<2.5
 * dca
