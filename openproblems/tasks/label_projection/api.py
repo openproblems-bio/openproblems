@@ -33,7 +33,7 @@ def sample_dataset():
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
     adata.obs["labels_pred"] = adata.obs["labels"]
-    adata.obs["labels_pred"][::5] = np.random.choice(
+    adata.obs.loc[adata.obs.index[::5], "labels_pred"] = np.random.choice(
         5, len(adata.obs["labels_pred"][::5]), replace=True
     ).astype(str)
     return adata
