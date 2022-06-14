@@ -27,7 +27,7 @@ def _dca(adata):
     paper_year=2019,
     code_url="https://github.com/theislab/dca",
     code_version=check_version("dca"),
-    image="openproblems-python-extras",
+    image="openproblems-python-tf2.4",
 )
 def DCA(adata, test=False):
     return _dca(adata)
