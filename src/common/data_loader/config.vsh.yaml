@@ -38,5 +38,6 @@ platforms:
         packages:
           - scanpy
           - scprep
+          - "anndata<0.8"
   - type: native
   - type: nextflow

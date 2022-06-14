@@ -1,8 +1,8 @@
 functionality:
-  name: "preprocess"
+  name: "toy"
   namespace: "label_projection/data"
   version: "dev"
-  description: "Common component to preprocess data"
+  description: "Component to generate a toy data for tests finality"
   authors:
     - name: "Scott Gigante"
       roles: [ author ]
@@ -13,31 +13,35 @@ functionality:
   arguments:
     - name: "--input"
       type: "file"
-      description: "Input data to be preprocessed"
+      description: "Input data to be resized"
       required: true
-    - name: "--method"
-      description: "The preprocess method to be used. Options: ['batch', 'random', 'random_with_noise']"
-      type: "string"
-      choices: ['batch', 'random', 'random_with_noise']
+    - name: "--celltype_categories"
+      type: "integer"
+      multiple: true
+      description: "Categories indexes to be selected"
       required: false
-      default: "batch"
+    - name: "--tech_categories"
+      type: "integer"
+      multiple: true
+      description: "Categories indexes to be selected"
+      required: false
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
       direction: "output"
-      default: "output.h5ad"
-      description: "Output h5ad file preprocessed"
+      default: "toy_data.h5ad"
+      description: "Output h5ad file resized"
       required: true
   resources:
     - type: python_script
       path: script.py
-    - path: "../utils/noise.py"
   tests:
     - type: python_script
       path: test_script.py
     - type: file
-      path: "../../resources/toy_preprocessed_data.h5ad"
+      path: "../../resources/raw_data.h5ad"
 platforms:
+  - type: native
   - type: docker
     image: "python:3.8"
     setup:

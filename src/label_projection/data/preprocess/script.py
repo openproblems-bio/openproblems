@@ -1,7 +1,6 @@
 ## VIASH START
 par = {
     "input": "./test/data.h5ad",
-    "test": False,
     "method": 'batch',
     "output": "./test/preprocess.h5ad"
 }
@@ -9,9 +8,17 @@ par = {
 import sys
 sys.path.append(meta["resources_dir"])
 import noise
-import preprocess
 import numpy as np
 import scanpy as sc
+
+
+def filter_genes_cells(adata):
+    """Remove empty cells and genes."""
+    sc.pp.filter_genes(adata, min_cells=1)
+    sc.pp.filter_cells(adata, min_counts=2)
+
+    return adata
+
 
 # TODO split the functions in different viash components
 def batch(adata):
@@ -58,24 +65,13 @@ func_map = {'batch': batch,
             'random': random,
             'random_with_noise': random_with_noise}
 
-method_func = func_map[par['method']]
+print(">> Load data")
 adata = sc.read(par['input'])
 
-if par['test']:
-    adata = adata[:, :500].copy()
-    preprocess.filter_genes_cells(adata)
-    keep_celltypes = adata.obs["celltype"].dtype.categories[[0, 3]]
-    keep_techs = adata.obs["tech"].dtype.categories[[0, -3, -2]]
-    keep_tech_idx = adata.obs["tech"].isin(keep_techs)
-    keep_celltype_idx = adata.obs["celltype"].isin(keep_celltypes)
-    adata = adata[keep_tech_idx & keep_celltype_idx].copy()
-    sc.pp.subsample(adata, n_obs=500)
-    # Note: could also use 200-500 HVGs rather than 200 random genes
-    # Ensure there are no cells or genes with 0 counts
-    preprocess.filter_genes_cells(adata)
-else:
-    preprocess.filter_genes_cells(adata)
-
-
+print(">> Process data using {} method".format(par['method']))
+filter_genes_cells(adata)
+method_func = func_map[par['method']]
 preprocessed_adata = method_func(adata)
+
+print(">> Writing data")
 preprocessed_adata.write(par['output'])
