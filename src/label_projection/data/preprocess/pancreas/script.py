@@ -1,6 +1,6 @@
 ## VIASH START
 par = {
-    "input": "./test/data.h5ad",
+    "input": "../../../raw_data.h5ad",
     "method": 'batch',
     "output": "./test/preprocess.h5ad"
 }
