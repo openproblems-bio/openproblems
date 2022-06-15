@@ -1,4 +1,3 @@
-almaan/RCTD@9ecd25d
 bioc::batchelor@1.12.1
 bioc::ComplexHeatmap@2.12.0
 caret@6.0-86
@@ -7,6 +6,7 @@ conos@1.4.6
 crayon@1.4.1
 dbplyr@2.1.1
 devtools@2.3.2
+dmcable/RCTD
 dplyr@1.0.9
 ellipsis@0.3.2
 forecast@8.14

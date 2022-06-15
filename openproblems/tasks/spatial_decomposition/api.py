@@ -1,4 +1,5 @@
 from ...data.sample import load_sample_data
+from ._utils import merge_sc_and_sp
 from pandas.core.dtypes.common import is_categorical_dtype
 
 import numpy as np
@@ -35,24 +36,23 @@ def sample_dataset():
     # set number of cell types
     n_types = 3
     # load sample anndata
-    adata = load_sample_data()
+    adata_spatial = load_sample_data()
     # set spatial coordinates
-    adata.obsm["spatial"] = np.random.random((adata.shape[0], 2))
+    adata_spatial.obsm["spatial"] = np.random.random((adata_spatial.shape[0], 2))
     # generate proportion values
     props = pd.DataFrame(
-        np.random.dirichlet(alpha=np.ones(n_types), size=adata.shape[0]),
+        np.random.dirichlet(alpha=np.ones(n_types), size=adata_spatial.shape[0]),
         columns=np.arange(n_types),
-        index=adata.obs.index,
+        index=adata_spatial.obs.index,
     )
-    adata.obsm["proportions_true"] = props
+    adata_spatial.obsm["proportions_true"] = props
     # get anndata for single cell reference
-    sc_adata = load_sample_data()
+    adata_sc = load_sample_data()
     # set labels for single cell data
-    sc_adata.obs["label"] = np.random.randint(0, n_types, size=sc_adata.shape[0])
+    adata_sc.obs["label"] = np.random.randint(0, n_types, size=adata_sc.shape[0])
     # bind single cell reference to spatial anndata
-    adata.uns["sc_reference"] = sc_adata
-
-    return adata
+    adata_merged = merge_sc_and_sp(adata_sc, adata_spatial)
+    return adata_merged
 
 
 def sample_method(adata):
