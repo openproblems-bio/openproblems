@@ -50,10 +50,10 @@ jobs:
     - name: Clear space on runner
       run: ./scripts/clear_runner_diskspace.sh
 
-#    - name: Setup Docker
-#      uses: docker-practice/actions-setup-docker@master
-#      with:
-#        docker_version: 20.10.15
+    - name: Setup Docker
+      uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_version: 20.10.15
 
     - name: Check docker version
       run: docker --version
