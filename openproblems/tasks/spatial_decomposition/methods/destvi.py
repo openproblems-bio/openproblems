@@ -9,7 +9,6 @@ from .._utils import split_sc_and_sp
     paper_url="https://www.biorxiv.org/content/10.1101/2021.05.10.443517v1",
     paper_year=2022,
     code_url="https://github.com/YosefLab/scvi-tools",
-    code_version=check_version("scvi-tools"),
     image="openproblems-python-extras",
 )
 def destvi_raw(adata, test=False):
@@ -25,4 +24,5 @@ def destvi_raw(adata, test=False):
     st_model = DestVI.from_rna_model(adata_sp, sc_model)
     st_model.train(max_epochs=2500)
     adata_sp.obsm["proportions_pred"] = st_model.get_proportions()
+    adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata_sp
