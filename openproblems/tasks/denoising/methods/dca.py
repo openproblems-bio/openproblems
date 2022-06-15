@@ -14,7 +14,7 @@ def _dca(adata):
     # by casting list(range(dim(adata.obsm['train'][1]) as header for vars and the next index [2] for header of obs
     adata2 = sc.AnnData(adata.obsm["train"])
     Y = dca(adata2, threads=1)
-    adata.obsm["denoised"] = Y
+    adata.obsm["denoised"] = Y.X #Y.X should call the count matrix of DCA.
     adata.uns["method_code_version"] = check_version("dca")
     return adata
 
