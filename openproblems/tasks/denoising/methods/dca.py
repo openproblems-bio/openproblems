@@ -7,11 +7,12 @@ import scanpy as sc
 
 def _dca(adata):
     from dca.api import dca
-    #sc.AnnData takes (counts, obs=[obs], vars=[vars]), but is tested to return an anndata even if just given counts. If DCA relies on obs or vars, 
-    #we will likely need to either access the vars of adata (vars index) and the barcodes (obs index) of 
-    #cells in adata.obs['train'], or else create fake matrices 
-    #by casting list(range(dim(adata.obsm['train'][1]) as header for vars and the next index [2] for header of obs
-    adata2 = sc.AnnData(adata.obsm['train'])
+
+    # sc.AnnData takes (counts, obs=[obs], vars=[vars]), but is tested to return an anndata even if just given counts. If DCA relies on obs or vars,
+    # we will likely need to either access the vars of adata (vars index) and the barcodes (obs index) of
+    # cells in adata.obs['train'], or else create fake matrices
+    # by casting list(range(dim(adata.obsm['train'][1]) as header for vars and the next index [2] for header of obs
+    adata2 = sc.AnnData(adata.obsm["train"])
     Y = dca(adata2, threads=1)
     adata.obsm["denoised"] = Y
     adata.uns["method_code_version"] = check_version("dca")
