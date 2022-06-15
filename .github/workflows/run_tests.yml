@@ -50,6 +50,11 @@ jobs:
     - name: Clear space on runner
       run: ./scripts/clear_runner_diskspace.sh
 
+    - name: Setup Docker
+      uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_version: 20.10.16
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
