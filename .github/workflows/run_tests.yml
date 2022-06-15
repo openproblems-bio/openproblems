@@ -55,6 +55,9 @@ jobs:
       with:
         docker_version: 20.10.16
 
+    - name: Check docker version
+      run: docker --version
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
