@@ -238,6 +238,8 @@ sample_dataset() -> AnnData adata # generates a simple dataset the fits the expe
 sample_method(AnnData adata) -> AnnData adata # applies a simple modification that fits the method API
 ```
 
+`README.md` should contain a description of the task as will be displayed on the website, followed by a description of the task API for dataset/method/metric authors. Note: everything after `## API` will be discarded in generating the webpage for the task.
+
 For adding datasets, methods and metrics, see above.
 
 ### Adding a new Docker container
