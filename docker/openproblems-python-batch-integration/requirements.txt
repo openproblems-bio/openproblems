@@ -1,3 +1,4 @@
+annoy==1.16.3
 bbknn==1.5.*
 git+https://github.com/pinin4fjords/mnnpy@6c0b2c0  # branch: fix_for_numba_jit
 git+https://github.com/theislab/scib@9ecda46
