@@ -370,10 +370,10 @@ jobs:
         AWS_DEFAULT_REGION: us-west-2
         NXF_DEFAULT_DSL: 1
       run: |
-        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]//g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run \
-        -revision v1.4 \
+        -revision v1.5 \
         -with-tower \
         -ansi-log false -resume \
         -profile aws,test \
@@ -445,7 +445,7 @@ jobs:
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
-        TOWER_ACTION_ID: 5ww3OCEyCgdyTHdTFJLZJ9
+        TOWER_ACTION_ID: 57wo0nOx8Pyp0v25bdkBqB
       run: |
         generate_parameters()
         {
