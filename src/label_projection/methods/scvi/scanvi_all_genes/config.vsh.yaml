@@ -2,7 +2,7 @@ functionality:
   name: "scanvi_all_genes"
   namespace: "label_projection/methods/scvi"
   version: "dev"
-  description: "Probabilistic harmonization and annotation of single-cell"
+  description: "Probabilistic harmonization and annotation of single-cell transcriptomics data with deep generative models."
   authors:
     - name: "Scott Gigante"
       roles: [ author ]
@@ -17,6 +17,27 @@ functionality:
       example: "input.h5ad"
       description: "Input file that will be used to generate predictions"
       required: true
+    - name: "--n_hidden"
+      type: "integer"
+      required: true
+      default: "10"
+    - name: "--n_layers"
+      type: "integer"
+      required: true
+      default: "1"
+    - name: "--n_latent"
+      type: "integer"
+      required: true
+      default: "10"
+    - name: "--max_epochs"
+      type: "integer"
+      required: false
+    - name: "--limit_brain_batches"
+      type: "integer"
+      required: false
+    - name: "--limit_val_batches"
+      type: "integer"
+      required: false
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
@@ -27,12 +48,12 @@ functionality:
   resources:
     - type: python_script
       path: script.py
-    - path: "../../tools.py"
+    - path: "../tools.py"
   tests:
     - type: python_script
       path: test_script.py
     - type: file
-      path: "../../../data/test_data_preprocessed.h5ad"
+      path: "../../../resources/toy_preprocessed_data.h5ad"
 platforms:
   - type: docker
     image: "python:3.8"
@@ -43,7 +64,6 @@ platforms:
           - scprep
           - sklearn
           - "anndata<0.8"
-          - "scvi==0.6.8"
-          - "scvi-tools==0.13.0"
+          - scvi-tools
   - type: native
   - type: nextflow

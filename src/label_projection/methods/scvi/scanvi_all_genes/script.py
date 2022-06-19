@@ -1,7 +1,13 @@
 ## VIASH START
 par = {
-    'input': '../../../data/test_data_preprocessed.h5ad',
-    'output': 'output.mlplogcpm.h5ad'
+    'input': '../../../resources/toy_preprocessed_data.h5ad',
+    'n_latent': 10,
+    'n_layers': 1,
+    'n_hidden': 32,
+    'max_epochs': 1,
+    'limit_train_batches': 10,
+    'limit_val_batches': 10,
+    'output': 'output.scviallgenes.h5ad'
 }
 ## VIASH END
 resources_dir="../"
@@ -13,10 +19,6 @@ import scvi
 import scanpy as sc
 from tools import scanvi
 
-###TODO add these as input
-### n_hidden, n_latent, n_layers
-n_latent, n_layers, n_hidden = (10, 1, 32)
-
 print("Load input data")
 adata = sc.read(par['input'])
 
@@ -25,9 +27,13 @@ train_kwargs = {
     "early_stopping": True,
 }
 
-# check parameters for test exists
+# check if parameters for test exists
 par.get("max_epochs") and train_kwargs.update({"max_epochs": par['max_epochs']})
 par.get("limit_train_batches") and train_kwargs.update({"limit_train_batches": par['limit_train_batches']})
 par.get("limit_val_batches") and train_kwargs.update({"limit_val_batches": par['limit_val_batches']})
 
-adata.obs["labels_pred"] = scanvi(adata, n_hidden, n_latent, n_layers,  **train_kwargs)
+adata.obs["labels_pred"] = scanvi(adata, par['n_hidden'], par['n_latent'], par['n_layers'],  **train_kwargs)
+adata.uns["method_id"] = "scanvi_all_genes"
+
+print("Write data")
+adata.write(par['output'], compression="gzip")
