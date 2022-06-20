@@ -2,7 +2,10 @@ import subprocess
 import scanpy as sc
 from os import path
 
-INPUT = "raw_data.h5ad"
+## VIASH START
+## VIASH END
+
+INPUT = f"{meta['resources_dir']}/pancreas/raw_data.h5ad"
 OUTPUT = "toy_data.h5ad"
 
 print(">> Runing script as test")

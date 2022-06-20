@@ -1,6 +1,6 @@
 functionality:
   name: "subsample"
-  namespace: "label_projection/data"
+  namespace: "label_projection/data_processing"
   version: "dev"
   description: "Component to generate a toy data for tests finality"
   authors:
@@ -39,7 +39,7 @@ functionality:
     - type: python_script
       path: test_script.py
     - type: file
-      path: "../../resources/raw_data.h5ad"
+      path: "../../resources/pancreas"
 platforms:
   - type: native
   - type: docker
