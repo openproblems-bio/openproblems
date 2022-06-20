@@ -9,7 +9,7 @@ METHODS = ["batch", "random", "random_with_noise"]
 for method in METHODS:
     print(">> Running script for {} method".format(method))
     out = subprocess.check_output([
-        "./pancreas_preprocess",
+        "./" + meta["functionality_name"],
         "--input", INPUT,
         "--method", method,
         "--output", OUTPUT

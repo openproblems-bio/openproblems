@@ -1,6 +1,6 @@
 functionality:
-  name: "pancreas_preprocess"
-  namespace: "label_projection/data/preprocess"
+  name: "randomize"
+  namespace: "label_projection/data_processing"
   version: "dev"
   description: "Label_projection component to preprocess pancreas data"
   authors:

@@ -7,7 +7,7 @@ OUTPUT = "toy_data.h5ad"
 
 print(">> Runing script as test")
 out = subprocess.check_output([
-    "./toy",
+    "./" + meta["functionality_name"],
     "--input", INPUT,
     "--celltype_categories", "0:3",
     "--tech_categories", "0:-3:-2",

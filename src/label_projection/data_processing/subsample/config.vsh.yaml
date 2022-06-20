@@ -1,5 +1,5 @@
 functionality:
-  name: "toy"
+  name: "subsample"
   namespace: "label_projection/data"
   version: "dev"
   description: "Component to generate a toy data for tests finality"
