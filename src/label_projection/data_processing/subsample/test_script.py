@@ -2,12 +2,15 @@ import subprocess
 import scanpy as sc
 from os import path
 
-INPUT = "raw_data.h5ad"
+## VIASH START
+## VIASH END
+
+INPUT = f"{meta['resources_dir']}/pancreas/raw_data.h5ad"
 OUTPUT = "toy_data.h5ad"
 
 print(">> Runing script as test")
 out = subprocess.check_output([
-    "./toy",
+    "./" + meta["functionality_name"],
     "--input", INPUT,
     "--celltype_categories", "0:3",
     "--tech_categories", "0:-3:-2",

@@ -1,8 +1,8 @@
 functionality:
-  name: "pancreas_preprocess"
-  namespace: "label_projection/data/preprocess"
+  name: "subsample"
+  namespace: "label_projection/data_processing"
   version: "dev"
-  description: "Label_projection component to preprocess pancreas data"
+  description: "Component to generate a toy data for tests finality"
   authors:
     - name: "Scott Gigante"
       roles: [ author ]
@@ -13,31 +13,35 @@ functionality:
   arguments:
     - name: "--input"
       type: "file"
-      description: "Input data to be processed"
+      description: "Input data to be resized"
       required: true
-    - name: "--method"
-      description: "The process method to assign train/test. Options: ['batch', 'random', 'random_with_noise']"
-      type: "string"
-      choices: ['batch', 'random', 'random_with_noise']
+    - name: "--celltype_categories"
+      type: "integer"
+      multiple: true
+      description: "Categories indexes to be selected"
       required: false
-      default: "batch"
+    - name: "--tech_categories"
+      type: "integer"
+      multiple: true
+      description: "Categories indexes to be selected"
+      required: false
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
       direction: "output"
-      default: "output.h5ad"
-      description: "Output h5ad file preprocessed"
+      default: "toy_data.h5ad"
+      description: "Output h5ad file resized"
       required: true
   resources:
     - type: python_script
       path: script.py
-    - path: "../../utils/noise.py"
   tests:
     - type: python_script
       path: test_script.py
     - type: file
-      path: "../../../resources/toy_preprocessed_data.h5ad"
+      path: "../../resources/pancreas"
 platforms:
+  - type: native
   - type: docker
     image: "python:3.8"
     setup:
