@@ -112,127 +112,127 @@ jobs:
       with:
         name: ${{ matrix.config.name }}_results
         path: check
-
-  run_tester:
-    runs-on: ubuntu-latest
-
-    container:
-      image: singlecellopenproblems/openproblems-github-actions:latest
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /tmp:/tmp
-        - /opt/az:/opt/remove/az
-        - /usr/lib/google-cloud-sdk:/opt/remove/google-cloud-sdk
-        - /usr/lib/jvm:/opt/remove/jvm
-        - /opt/google/chrome:/opt/remove/chrome
-        - /usr/lib/firefox:/opt/remove/firefox
-        - /opt/microsoft/powershell:/opt/remove/powershell
-        - /usr/share/dotnet:/opt/remove/dotnet
-        - /opt/ghc:/opt/remove/ghc
-        - /opt/hostedtoolcache:/opt/remove/hostedtoolcache
-        - /usr/local/lib/android:/opt/remove/android
-      options: --user root
-
-    needs: build_images
-    if: |
-      always() &&
-      (needs.build_images.result == 'success' || needs.build_images.result == 'skipped') &&
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      (
-        startsWith(github.ref, 'refs/heads') ||
-        startsWith(github.ref, 'refs/tags') ||
-        github.event.pull_request.draft == false
-      ) &&
-      !startsWith(github.ref, 'refs/heads/test_docker') &&
-      !startsWith(github.ref, 'refs/heads/test_benchmark') &&
-      !startsWith(github.ref, 'refs/heads/test_process')
-
-    steps:
-    - name: Clear space on runner
-      run: |
-        sudo rm -rf /opt/remove/*/*
-
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-
-    - name: Set up environment
-      run: |
-        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
-        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
-        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
-
-    - name: Cache Python packages
-      uses: actions/cache@v2
-      with:
-        path: ${{ env.PYTHON_VERSION }}
-        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
-
-    - name: Install package & dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -U wheel setuptools
-        pip install -U --editable .[test,r,evaluate]
-        python -c "import openproblems"
-
-    - name: Cache R packages
-      uses: actions/cache@v2
-      if: startsWith(runner.os, 'Linux')
-      with:
-        path: /usr/local/lib/R/site-library
-        key: ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
-        restore-keys: |
-          ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
-
-    - name: Install R packages
-      run: |
-        if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-        renv::restore()
-        source("./scripts/install_renv.R")
-        install_renv("docker/openproblems-r-base/r_requirements.txt")
-      shell: Rscript {0}
-
-    - name: Pull Docker images
-      if: "startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems'"
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker_pull
-        cd ..
-
-    - name: Update Docker images
-      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker
-        cd ..
-
-    - name: Run tests
-      run: pytest --cov=openproblems --cov-report=xml -vv --durations=10 --tb=native
-
-    - name: Upload coverage
-      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
-      run: codecov --no-color --required --flags unittests
-
-    - name: Upload check results on fail
-      if: failure()
-      uses: actions/upload-artifact@main
-      with:
-        name: ${{ matrix.config.name }}_results
-        path: results
+#
+#  run_tester:
+#    runs-on: ubuntu-latest
+#
+#    container:
+#      image: singlecellopenproblems/openproblems-github-actions:latest
+#      volumes:
+#        - /var/run/docker.sock:/var/run/docker.sock
+#        - /tmp:/tmp
+#        - /opt/az:/opt/remove/az
+#        - /usr/lib/google-cloud-sdk:/opt/remove/google-cloud-sdk
+#        - /usr/lib/jvm:/opt/remove/jvm
+#        - /opt/google/chrome:/opt/remove/chrome
+#        - /usr/lib/firefox:/opt/remove/firefox
+#        - /opt/microsoft/powershell:/opt/remove/powershell
+#        - /usr/share/dotnet:/opt/remove/dotnet
+#        - /opt/ghc:/opt/remove/ghc
+#        - /opt/hostedtoolcache:/opt/remove/hostedtoolcache
+#        - /usr/local/lib/android:/opt/remove/android
+#      options: --user root
+#
+#    needs: build_images
+#    if: |
+#      always() &&
+#      (needs.build_images.result == 'success' || needs.build_images.result == 'skipped') &&
+#      !endsWith(github.event.head_commit.message, '# ci skip') &&
+#      (
+#        startsWith(github.ref, 'refs/heads') ||
+#        startsWith(github.ref, 'refs/tags') ||
+#        github.event.pull_request.draft == false
+#      ) &&
+#      !startsWith(github.ref, 'refs/heads/test_docker') &&
+#      !startsWith(github.ref, 'refs/heads/test_benchmark') &&
+#      !startsWith(github.ref, 'refs/heads/test_process')
+#
+#    steps:
+#    - name: Clear space on runner
+#      run: |
+#        sudo rm -rf /opt/remove/*/*
+#
+#    - uses: actions/checkout@v2
+#      with:
+#        fetch-depth: 0
+#
+#    - name: Set up environment
+#      run: |
+#        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
+#        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
+#        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
+#
+#    - name: Cache Python packages
+#      uses: actions/cache@v2
+#      with:
+#        path: ${{ env.PYTHON_VERSION }}
+#        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
+#        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
+#
+#    - name: Install package & dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install -U wheel setuptools
+#        pip install -U --editable .[test,r,evaluate]
+#        python -c "import openproblems"
+#
+#    - name: Cache R packages
+#      uses: actions/cache@v2
+#      if: startsWith(runner.os, 'Linux')
+#      with:
+#        path: /usr/local/lib/R/site-library
+#        key: ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-${{ hashFiles('**/renv.lock') }}
+#        restore-keys: |
+#          ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
+#
+#    - name: Install R packages
+#      run: |
+#        if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+#        renv::restore()
+#        source("./scripts/install_renv.R")
+#        install_renv("docker/openproblems-r-base/r_requirements.txt")
+#      shell: Rscript {0}
+#
+#    - name: Pull Docker images
+#      if: "startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems'"
+#      run: |
+#        cd workflow
+#        snakemake -j $(nproc) docker_pull
+#        cd ..
+#
+#    - name: Update Docker images
+#      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+#      run: |
+#        cd workflow
+#        snakemake -j $(nproc) docker
+#        cd ..
+#
+#    - name: Run tests
+#      run: pytest --cov=openproblems --cov-report=xml -vv --durations=10 --tb=native
+#
+#    - name: Upload coverage
+#      continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
+#      run: codecov --no-color --required --flags unittests
+#
+#    - name: Upload check results on fail
+#      if: failure()
+#      uses: actions/upload-artifact@main
+#      with:
+#        name: ${{ matrix.config.name }}_results
+#        path: results
 
 
   run_test_benchmark:
-    needs: run_tester
+#    needs: run_tester
     runs-on: ubuntu-18.04
-    if: >-
-      always() &&
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      github.event_name == 'push' &&
-      (
-        needs.run_tester.result == 'success' ||
-        startsWith(github.ref, 'refs/heads/test_benchmark')
-      )
+#    if: >-
+#      always() &&
+#      !endsWith(github.event.head_commit.message, '# ci skip') &&
+#      github.event_name == 'push' &&
+#      (
+#        needs.run_tester.result == 'success' ||
+#        startsWith(github.ref, 'refs/heads/test_benchmark')
+#      )
 
     steps:
     - uses: actions/checkout@v2
@@ -335,17 +335,17 @@ jobs:
         cd workflow
         snakemake -j $(nproc) docker_pull
         cd ..
-
-    - name: Build Docker images
-      if: |
-        !(
-          startsWith(github.ref, 'refs/heads/main') &&
-          github.repository == 'openproblems-bio/openproblems'
-        )
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker
-        cd ..
+#
+#    - name: Build Docker images
+#      if: |
+#        !(
+#          startsWith(github.ref, 'refs/heads/main') &&
+#          github.repository == 'openproblems-bio/openproblems'
+#        )
+#      run: |
+#        cd workflow
+#        snakemake -j $(nproc) docker
+#        cd ..
 
     - name: Upload Docker images
       env:
@@ -373,7 +373,7 @@ jobs:
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run \
-        -revision v1.5 \
+        -revision master \
         -with-tower \
         -ansi-log false -resume \
         -profile aws,test \
