@@ -47,7 +47,7 @@ def _run_bbknn(
     return adata
 
 
-@_bbknn_method(method_name="BBKNN (hvg,unscaled)")
+@_bbknn_method(method_name="BBKNN (hvg/unscaled)")
 def bbknn_hvg_unscaled(
     adata,
     test: bool = False,
@@ -70,7 +70,7 @@ def bbknn_hvg_unscaled(
     return adata
 
 
-@_bbknn_method(method_name="BBKNN (hvg,scaled)")
+@_bbknn_method(method_name="BBKNN (hvg/scaled)")
 def bbknn_hvg_scaled(
     adata,
     test: bool = False,

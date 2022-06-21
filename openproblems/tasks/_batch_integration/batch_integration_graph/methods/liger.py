@@ -44,7 +44,7 @@ def _liger(
     return adata
 
 
-@_liger_method(method_name="Liger")
+@_liger_method(method_name="Liger (full/unscaled)")
 def liger_full_unscaled(
     adata,
     test: bool = False,

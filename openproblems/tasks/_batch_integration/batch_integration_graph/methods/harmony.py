@@ -48,7 +48,7 @@ def _harmony(
     return adata
 
 
-@_harmony_method(method_name="Harmony")
+@_harmony_method(method_name="Harmony (full/unscaled)")
 def harmony_full_unscaled(
     adata,
     test: bool = False,
@@ -110,7 +110,7 @@ def harmony_hvg_scaled(
     )
 
 
-@_harmony_method(method_name="Harmony(full/scaled)")
+@_harmony_method(method_name="Harmony (full/scaled)")
 def harmony_full_scaled(
     adata,
     test: bool = False,

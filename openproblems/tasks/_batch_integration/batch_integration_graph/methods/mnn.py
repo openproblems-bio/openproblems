@@ -24,7 +24,7 @@ def _mnn(adata):
     return adata
 
 
-@_mnn_method(method_name="MNN")
+@_mnn_method(method_name="MNN (full/unscaled)")
 def mnn_full_unscaled(adata, test=False):
     return _mnn(adata)
 

@@ -30,12 +30,12 @@ def _scvi(adata):
     return adata
 
 
-@_scvi_method(method_name="Scvi")
+@_scvi_method(method_name="scVI (full/unscaled)")
 def scvi_full_unscaled(adata, test=False):
     return _scvi(adata)
 
 
-@_scvi_method(method_name="Scvi (hvg/unscaled)")
+@_scvi_method(method_name="scVI (hvg/unscaled)")
 def scvi_hvg_unscaled(adata, test=False):
     from ._utils import hvg_batch
 

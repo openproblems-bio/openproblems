@@ -30,12 +30,12 @@ def _scanvi(adata):
     return adata
 
 
-@_scanvi_method(method_name="scanvi")
+@_scanvi_method(method_name="scANVI (full/unscaled)")
 def scanvi_full_unscaled(adata, test=False):
     return _scanvi(adata)
 
 
-@_scanvi_method(method_name="Scanvi (hvg/unscaled)")
+@_scanvi_method(method_name="scANVI (hvg/unscaled)")
 def scanvi_hvg_unscaled(adata, test=False):
     from ._utils import hvg_batch
 

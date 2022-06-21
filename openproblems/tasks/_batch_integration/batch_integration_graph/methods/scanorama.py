@@ -33,7 +33,7 @@ def _scanorama_full(adata):
     return _scanorama(adata, use_rep="X_pca")
 
 
-@_scanorama_method(method_name="Scanorama")
+@_scanorama_method(method_name="Scanorama (full/unscaled)")
 def scanorama_embed_full_unscaled(adata, test=False):
     return _scanorama_embed(adata)
 
@@ -64,7 +64,7 @@ def scanorama_embed_full_scaled(adata, test=False):
     return _scanorama_embed(adata)
 
 
-@_scanorama_method(method_name="Scanorama gene output")
+@_scanorama_method(method_name="Scanorama gene output (full/unscaled)")
 def scanorama_feature_full_unscaled(adata, test=False):
     return _scanorama_full(adata)
 

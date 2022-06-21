@@ -69,14 +69,14 @@ def _fastmnn_feature(
     return adata
 
 
-@_fastmnn_method(method_name="FastMNN feature")
+@_fastmnn_method(method_name="FastMNN embed (full/unscaled)")
 def fastmnn_embed_full_unscaled(
     adata, test: bool = False, k: Optional[int] = None, n_pca: Optional[int] = None
 ):
     return _fastmnn_embed(adata, "batch", test=test, k=k, n_pca=n_pca)
 
 
-@_fastmnn_method(method_name="FastMNN feature (hvg/unscaled)")
+@_fastmnn_method(method_name="FastMNN embed (hvg/unscaled)")
 def fastmnn_embed_hvg_unscaled(
     adata, test: bool = False, k: Optional[int] = None, n_pca: Optional[int] = None
 ):
@@ -86,7 +86,7 @@ def fastmnn_embed_hvg_unscaled(
     return _fastmnn_embed(adata, "batch", test=test, k=k, n_pca=n_pca)
 
 
-@_fastmnn_method(method_name="FastMNN feature (hvg/scaled)")
+@_fastmnn_method(method_name="FastMNN embed (hvg/scaled)")
 def fastmnn_embed_hvg_scaled(
     adata, test: bool = False, k: Optional[int] = None, n_pca: Optional[int] = None
 ):
@@ -98,7 +98,7 @@ def fastmnn_embed_hvg_scaled(
     return _fastmnn_embed(adata, "batch", test=test, k=k, n_pca=n_pca)
 
 
-@_fastmnn_method(method_name="FastMNN feature (full/scaled)")
+@_fastmnn_method(method_name="FastMNN embed (full/scaled)")
 def fastmnn_embed_full_scaled(
     adata, test: bool = False, k: Optional[int] = None, n_pca: Optional[int] = None
 ):
@@ -108,7 +108,7 @@ def fastmnn_embed_full_scaled(
     return _fastmnn_embed(adata, "batch", test=test, k=k, n_pca=n_pca)
 
 
-@_fastmnn_method(method_name="FastMNN feature")
+@_fastmnn_method(method_name="FastMNN feature (full/unscaled)")
 def fastmnn_feature_full_unscaled(
     adata, test: bool = False, k: Optional[int] = None, n_pca: Optional[int] = None
 ):

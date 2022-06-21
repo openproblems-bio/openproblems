@@ -24,7 +24,7 @@ def _combat(adata):
     return adata
 
 
-@_combat_method(method_name="Combat")
+@_combat_method(method_name="Combat (full/unscaled)")
 def combat_full_unscaled(adata, test=False):
     return _combat(adata)
 
