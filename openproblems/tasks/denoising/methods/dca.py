@@ -5,7 +5,11 @@ from ....tools.utils import check_version
 import scanpy as sc
 
 
-def _dca(adata):
+def _dca(adata, test=False, epochs=None):
+    if test:
+        epochs = 30
+    else:
+        epochs = epochs or 300
     from dca.api import dca
 
     # sc.AnnData takes (counts, obs=[obs], vars=[vars]), but returns an anndata
@@ -25,5 +29,5 @@ def _dca(adata):
     code_url="https://github.com/theislab/dca",
     image="openproblems-python-tf2.4",
 )
-def dca(adata, test=False):
-    return _dca(adata)
+def dca(adata, test=False, epochs=None):
+    return _dca(adata, test=test, epochs=epochs)
