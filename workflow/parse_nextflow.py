@@ -125,6 +125,9 @@ def parse_metric_results(results_path, results):
 def parse_method_versions(results_path, results):
     """Add method versions to the trace output."""
     for filename in os.listdir(os.path.join(results_path, "results/method_versions")):
+        print(
+            os.path.join(results_path, "results/method_versions", filename), flush=True
+        )
         with open(
             os.path.join(results_path, "results/method_versions", filename), "r"
         ) as handle:
