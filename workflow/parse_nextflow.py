@@ -128,7 +128,7 @@ def parse_method_versions(results_path, results):
         with open(
             os.path.join(results_path, "results/method_versions", filename), "r"
         ) as handle:
-            code_version = float(handle.read().strip())
+            code_version = handle.read().strip()
         task_name, dataset_name, method_name = filename.replace(
             ".method.txt", ""
         ).split(".")
