@@ -8,8 +8,8 @@ import scanpy as sc
 def _dca(adata):
     from dca.api import dca
 
-    # sc.AnnData takes (counts, obs=[obs], vars=[vars]), but returns an anndata 
-    #even if just given counts. 
+    # sc.AnnData takes (counts, obs=[obs], vars=[vars]), but returns an anndata
+    # even if just given counts.
     adata2 = sc.AnnData(adata.obsm["train"])
     dca(adata2, threads=1)
     adata.obsm["denoised"] = adata2.X  # adata2.X should call the count matrix of DCA.
