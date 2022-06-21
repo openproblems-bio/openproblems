@@ -1,17 +1,12 @@
 nextflow.enable.dsl=2
 
-/* For now, you need to manually specify the
- * root directory of this repository as follows.
- * (it's a nextflow limitation I'm trying to figure out
- * how to resolve.) */
-
 targetDir = "${params.rootDir}/target/nextflow"
 
 // import dataset loaders
-include { data_loader }       from "$targetDir/common/data_loader/main.nf"     params(params)
+include { download } from "$targetDir/common/dataset_loader/download/main.nf"
 
 // import preprocess
-include { pancreas_preprocess }        from "$targetDir/label_projection/data/preprocess/pancreas_preprocess/main.nf"     params(params)
+include { randomize } from "$targetDir/label_projection/data_processing/randomize/main.nf"
 
 // import methods TODO[baseline/random_labels,
 //                     knn_classifier/scran, mlp/log_cpm, mlp/scran, sklearn/classifier,
@@ -32,7 +27,7 @@ include { accuracy }          from "$targetDir/label_projection/metrics/accuracy
 // This workflow reads in a tsv containing some metadata about each dataset.
 // For each entry in the metadata, a dataset is generated, usually by downloading
 // and processing some files. The end result of each of these workflows
-// should be simply a channel of [id, h5adfile, params] triplets.
+// should be simply a channel of [id, h5adfile] triplets.
 //
 // If the need arises, these workflows could be split off into a separate file.
 
@@ -43,11 +38,9 @@ workflow load_data {
     main:
         output_ = Channel.fromPath(params.tsv)
             | splitCsv(header: true, sep: "\t")
-            | map { row ->
-                [ row.name, [ "url": row.url, "name": row.name ]]
-            }
-            | data_loader
-            | pancreas_preprocess
+            | filter{ it.obs_celltype != "NA" && it.obs_batch != "NA" }
+            | map{ [ it.name, it ] }
+            | download
     emit:
         output_
 }
@@ -58,7 +51,7 @@ workflow load_data {
 
 workflow {
     load_data
-    | view
+    | randomize
     | (majority_vote & knn_classifier_log_cpm & mlp_log_cpm)
     | mix
     | accuracy

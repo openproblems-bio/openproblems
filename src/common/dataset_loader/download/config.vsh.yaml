@@ -1,8 +1,8 @@
 functionality:
-  name: "data_loader"
-  namespace: "common"
+  name: "download"
+  namespace: "common/dataset_loader"
   version: "dev"
-  description: "Load datasets"
+  description: "Download a dataset."
   authors:
     - name: "Michaela Mueller "
       roles: [ maintainer, author ]
@@ -24,6 +24,15 @@ functionality:
       example: "pbmc"
       description: "Name of dataset"
       required: true
+    - name: "--obs_celltype"
+      type: "string"
+      description: "Location of where to find the observation cell types."
+    - name: "--obs_batch"
+      type: "string"
+      description: "Location of where to find the observation batch IDs."
+    - name: "--obs_tissue"
+      type: "string"
+      description: "Location of where to find the observation tissue information."
   resources:
     - type: python_script
       path: script.py
@@ -37,7 +46,6 @@ platforms:
       - type: python
         packages:
           - scanpy
-          - scprep
           - "anndata<0.8"
   - type: native
   - type: nextflow
