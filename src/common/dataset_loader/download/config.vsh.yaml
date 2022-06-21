@@ -30,6 +30,9 @@ functionality:
     - name: "--obs_batch"
       type: "string"
       description: "Location of where to find the observation batch IDs."
+    - name: "--obs_tissue"
+      type: "string"
+      description: "Location of where to find the observation tissue information."
   resources:
     - type: python_script
       path: script.py

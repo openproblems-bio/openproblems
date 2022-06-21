@@ -19,10 +19,6 @@ print(">> Process data using {} method".format(par['method']))
 sc.pp.filter_genes(adata, min_cells=1)
 sc.pp.filter_cells(adata, min_counts=2)
 
-# Assign training/test
-adata.obs["labels"] = adata.obs["celltype"]
-adata.obs["batch"] = adata.obs["tech"]
-
 if par["method"] == "batch":
     test_batches = adata.obs["batch"].dtype.categories[[-3, -1]]
     adata.obs["is_train"] = [

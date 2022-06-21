@@ -53,6 +53,13 @@ if par["obs_batch"]:
     else:
         print(f"Warning: key '{par['obs_batch']}' could not be found in adata.obs.")
 
+print("Setting .obs['tissue']")
+if par["obs_tissue"]:
+    if par["obs_tissue"] in adata.obs:
+        adata.obs["tissue"] = adata.obs[par["obs_tissue"]]
+    else:
+        print(f"Warning: key '{par['obs_tissue']}' could not be found in adata.obs.")
+
 print("Remove cells or genes with 0 counts")
 sc.pp.filter_genes(adata, min_cells=1)
 sc.pp.filter_cells(adata, min_counts=2)
