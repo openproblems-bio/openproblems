@@ -1,7 +1,7 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
-import numpy as np
+#import numpy as np
 import scanpy as sc
 
 
