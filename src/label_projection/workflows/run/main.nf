@@ -11,7 +11,7 @@ targetDir = "${params.rootDir}/target/nextflow"
 include { data_loader }       from "$targetDir/common/data_loader/main.nf"     params(params)
 
 // import preprocess
-include { pancreas_preprocess }        from "$targetDir/label_projection/data/preprocess/pancreas_preprocess/main.nf"     params(params)
+include { randomize }        from "$targetDir/label_projection/data_processing/randomize/main.nf"     params(params)
 
 // import methods
 // TODO
@@ -39,7 +39,7 @@ workflow load_data {
                 [ row.name, [ "url": row.url, "name": row.name ]]
             }
             | data_loader
-            | pancreas_preprocess
+            | randomize
     emit:
         output_
 }
