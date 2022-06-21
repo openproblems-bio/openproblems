@@ -44,16 +44,12 @@ functionality:
       path: "../../../resources/pancreas/toy_preprocessed_data.h5ad"
 platforms:
   - type: docker
-    image: "singlecellopenproblems/openproblems-r-base:latest"
+    image: eddelbuettel/r2u:22.04
     setup:
       - type: r
-        bioc:
-          - scran
-          - BiocParallel
+        cran: [ scran, BiocParallel, rlang ]
+      - type: apt
+        packages: [ libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3 ]
       - type: python
-        packages:
-          - scanpy
-          - scprep
-          - sklearn
-          - "anndata<0.8"
+        pip: [ scanpy, anndata<0.8, scprep, sklearn, rpy2 ]
   - type: nextflow
