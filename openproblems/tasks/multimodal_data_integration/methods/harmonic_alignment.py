@@ -13,7 +13,6 @@ _harmonic_alignment_method = functools.partial(
     paper_url="https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
     paper_year=2020,
     code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
-    image="openproblems-python-extras",
 )
 
 
@@ -51,7 +50,9 @@ def _harmonic_alignment(
     return adata
 
 
-@_harmonic_alignment_method(method_name="Harmonic Alignment (sqrt CPM)")
+@_harmonic_alignment_method(
+    method_name="Harmonic Alignment (sqrt CPM)", image="openproblems-python-extras"
+)
 def harmonic_alignment_sqrt_cpm(
     adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
 ):
@@ -68,7 +69,9 @@ def harmonic_alignment_sqrt_cpm(
     return adata
 
 
-@_harmonic_alignment_method(method_name="Harmonic Alignment (log scran)")
+@_harmonic_alignment_method(
+    method_name="Harmonic Alignment (log scran)", image="openproblems-r-extras"
+)
 def harmonic_alignment_log_scran_pooling(
     adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
 ):
