@@ -37,7 +37,7 @@ include { accuracy }          from "$targetDir/label_projection/metrics/accuracy
 // If the need arises, these workflows could be split off into a separate file.
 
 // params.tsv = "$launchDir/src/common/data_loader/anndata_loader.tsv"
-params.tsv = "$launchDir/src/label_projection/data/fake_anndata_loader.tsv"
+params.tsv = "$launchDir/src/label_projection/resources/data_loader/fake_anndata_loader.tsv"
 
 workflow load_data {
     main:
@@ -59,7 +59,7 @@ workflow load_data {
 workflow {
     load_data
     | view
-    | (majority_vote & knn_classifier_log_cpm & knn_classifier_scran & mlp_log_cpm & mlp_scran)
+    | (majority_vote & knn_classifier_log_cpm & mlp_log_cpm)
     | mix
     | accuracy
     | view
