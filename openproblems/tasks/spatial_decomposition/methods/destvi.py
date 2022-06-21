@@ -14,7 +14,7 @@ from .._utils import split_sc_and_sp
 def destvi_raw(adata, test=False, max_epochs=None):
     from scvi.model import CondSCVI
     from scvi.model import DestVI
-    
+
     if test:
         max_epochs = max_epochs or 10
     else:
