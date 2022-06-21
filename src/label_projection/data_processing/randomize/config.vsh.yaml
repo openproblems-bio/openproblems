@@ -1,0 +1,49 @@
+functionality:
+  name: "randomize"
+  namespace: "label_projection/data_processing"
+  version: "dev"
+  description: "Label_projection component to preprocess pancreas data"
+  authors:
+    - name: "Scott Gigante"
+      roles: [ author ]
+      props: { github: scottgigante }
+    - name: "Vinicius Saraiva Chagas"
+      roles: [ maintainer ]
+      props: { github: chagasVinicius }
+  arguments:
+    - name: "--input"
+      type: "file"
+      description: "Input data to be processed"
+      required: true
+    - name: "--method"
+      description: "The process method to assign train/test. Options: ['batch', 'random', 'random_with_noise']"
+      type: "string"
+      choices: ['batch', 'random', 'random_with_noise']
+      required: false
+      default: "batch"
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file preprocessed"
+      required: true
+  resources:
+    - type: python_script
+      path: script.py
+    - path: "../utils/noise.py"
+  tests:
+    - type: python_script
+      path: test_script.py
+    - type: file
+      path: "../../resources/pancreas"
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - scprep
+          - scanpy
+          -  "anndata<0.8"
+  - type: nextflow
