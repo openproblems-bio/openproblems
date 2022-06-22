@@ -48,7 +48,7 @@ def _run_bbknn(
 
 
 @_bbknn_method(method_name="BBKNN (full/unscaled)")
-def bbknn_hvg_unscaled(
+def bbknn_full_unscaled(
     adata,
     test: bool = False,
     n_pca: Optional[int] = None,
