@@ -3,7 +3,7 @@ import os
 import scprep
 
 
-def r_function(filename):
+def r_function(filename, args="sce"):
     """Convert a .R file to a Python function.
 
     This code takes a .R file written as the body of a function.
@@ -30,6 +30,6 @@ def r_function(filename):
     with open(filepath, "r") as handle:
         r_code = handle.read()
 
-    out_fun = scprep.run.RFunction(setup="", args="sce", body=r_code)
+    out_fun = scprep.run.RFunction(setup="", args=args, body=r_code)
     out_fun.__r_file__ = filepath
     return out_fun
