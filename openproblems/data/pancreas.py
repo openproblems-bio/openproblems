@@ -8,7 +8,7 @@ import tempfile
 URL = "https://ndownloader.figshare.com/files/24539828"
 
 
-@utils.loader
+@utils.loader(data_url=URL)
 def load_pancreas(test=False):
     """Download pancreas data from figshare."""
     if test:

@@ -8,7 +8,7 @@ import tempfile
 URL = "https://ndownloader.figshare.com/files/24974582"
 
 
-@utils.loader
+@utils.loader(data_url=URL)
 def load_pbmc(test=False):
     """Download PBMC data from Figshare."""
     with tempfile.TemporaryDirectory() as tempdir:
