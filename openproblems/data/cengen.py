@@ -11,7 +11,7 @@ URL = (
 )
 
 
-@utils.loader
+@utils.loader(data_url=URL)
 def load_cengen(test=False):
     """Download CeNGEN data from GitHub.
 

@@ -8,7 +8,7 @@ import pandas as pd
 import scipy.sparse
 
 
-@loader
+@loader(data_url="https://openproblems.bio")
 def load_sample_data(test=True):
     """Create a simple dataset to use for testing in multimodal applications."""
     assert test
