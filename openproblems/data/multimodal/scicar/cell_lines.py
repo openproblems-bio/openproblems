@@ -28,7 +28,7 @@ atac_genes_url = (
 )
 
 
-@loader
+@loader(data_url="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117089")
 def load_scicar_cell_lines(test=False):
     """Download sci-CAR cell lines data from GEO."""
     if test:

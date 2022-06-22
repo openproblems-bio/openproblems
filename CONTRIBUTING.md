@@ -112,7 +112,7 @@ Datasets should take no arguments and return an AnnData object. If `test is True
 function dataset(bool test=False) -> AnnData adata
 ```
 
-Methods should take an AnnData object and store the output in `adata.obs` according to the specification of the task. If `test is True`, you may modify hyperparameters (e.g. number of iterations) to make the method run faster.
+Methods should take an AnnData object and store a) the output in `adata.obs` / `adata.obsm` / etc., according to the specification of the task and b) the version of the package used to run the method in `adata.uns["method_code_version"]`. If `test is True`, you may modify hyperparameters (e.g. number of iterations) to make the method run faster.
 
 ```
 function method(AnnData adata, bool test=False) -> AnnData adata
@@ -154,7 +154,7 @@ sce
 ### tasks/<task_name>/methods/pca.py
 from ....tools.conversion import r_function
 from ....tools.decorators import method
-from ....tools.utils import check_version
+from ....tools.utils import check_r_version
 
 _pca = r_function("pca.R")
 
@@ -165,10 +165,10 @@ _pca = r_function("pca.R")
     paper_url="https://www.tandfonline.com/doi/abs/10.1080/14786440109462720",
     paper_year=1901,
     code_url="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp",
-    code_version=check_version("rpy2"),
     image="openproblems-r-base",
 )
 def pca(adata):
+    adata.uns["method_code_version"] = check_r_version("stats"),
     return _pca(adata)
 ```
 
@@ -180,7 +180,7 @@ If you are unable to write your method using our base dependencies, you may add 
 
 ### Adding a new dataset
 
-Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader` in order to cache the result.
+Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader(data_url="https://data.link")` in order to cache the result.
 
 Data should be provided in a raw count format. We assume that `adata.X` contains the raw (count) data for the primary modality; this will also be copied to `adata.layers["counts"]` for permanent access to the raw data. Additional modalities should be stored in `adata.obsm`. Prenormalized data (if available) can be stored in `adata.layers`, preferably using a name corresponding to the equivalent [normalization function](./openproblems/tools/normalize.py) (e.g., `adata.layers["log_scran_pooling"]`). 
 
@@ -198,7 +198,7 @@ to [`openproblems/tasks/label_projection/metrics/__init__.py`](openproblems/task
 
 For datasets in particular, these should be loaded using a `loader` function from `openproblems.data`, with only task-specific annotations added in the task-specific data file.
 
-For methods and metrics, they should be decorated with the appropriate function in `openproblems.tools.decorators` to include metadata required for the evaluation and presentation of results.
+Datasets, methods, and metrics should all be decorated with the appropriate function in `openproblems.tools.decorators` to include metadata required for the evaluation and presentation of results.
 
 Note that data is not normalized in the data loader; normalization should be performed as part of each method or in the task dataset function if stated in the task API. For ease of use, we provide a collection of common normalization functions in [`openproblems.tools.normalize`](openproblems/tools/normalize.py). The original data stored in `adata.X` is automatically stored in `adata.layers["counts"]` for later reference in the case the a metric needs to access the unnormalized data.
 
@@ -237,6 +237,8 @@ check_method(AnnData adata) -> bool # checks that the output from a method fits 
 sample_dataset() -> AnnData adata # generates a simple dataset the fits the expected API
 sample_method(AnnData adata) -> AnnData adata # applies a simple modification that fits the method API
 ```
+
+`README.md` should contain a description of the task as will be displayed on the website, followed by a description of the task API for dataset/method/metric authors. Note: everything after `## API` will be discarded in generating the webpage for the task.
 
 For adding datasets, methods and metrics, see above.
 

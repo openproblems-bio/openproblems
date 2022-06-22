@@ -2,7 +2,7 @@ from ....tools.conversion import r_function
 from ....tools.decorators import method
 from ....tools.normalize import log_cpm
 from ....tools.normalize import log_scran_pooling
-from ....tools.utils import check_version
+from ....tools.utils import check_r_version
 
 _mnn = r_function("mnn.R")
 
@@ -14,13 +14,14 @@ _mnn = r_function("mnn.R")
     paper_url="https://www.nature.com/articles/nbt.4091",
     paper_year=2018,
     code_url="https://github.com/LTLA/batchelor",
-    code_version=check_version("rpy2"),
     image="openproblems-r-extras",
 )
 def mnn_log_cpm(adata, test=False):
     adata = log_cpm(adata)
     adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    return _mnn(adata)
+    adata = _mnn(adata)
+    adata.uns["method_code_version"] = check_r_version("batchelor")
+    return adata
 
 
 @method(
@@ -30,10 +31,11 @@ def mnn_log_cpm(adata, test=False):
     paper_url="https://www.nature.com/articles/nbt.4091",
     paper_year=2018,
     code_url="https://github.com/LTLA/batchelor",
-    code_version=check_version("rpy2"),
     image="openproblems-r-extras",
 )
 def mnn_log_scran_pooling(adata, test=False):
     adata = log_scran_pooling(adata)
     adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
-    return _mnn(adata)
+    adata = _mnn(adata)
+    adata.uns["method_code_version"] = check_r_version("batchelor")
+    return adata
