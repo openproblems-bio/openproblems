@@ -1,12 +1,13 @@
+import utils.warnings  # noqa: F401
+
+# isort: split
 import openproblems
 import parameterized
 import pytest
 import utils.docker
 import utils.git
 import utils.name
-import utils.warnings
 
-utils.warnings.ignore_warnings()
 pytestmark = pytest.mark.skipif(
     len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
 )
@@ -41,5 +42,5 @@ def test_load_dataset(task_name, dataset_name, test, tempdir, image):
     utils.asserts.assert_array_equal(adata.X, adata.layers["counts"])
     adata2 = dataset(test=test)
     assert adata2.shape == adata.shape
-    assert adata2.__from_cache__
+    assert adata2.uns["_from_cache"]
     utils.cache.save(adata, tempdir, task, dataset, test=test)

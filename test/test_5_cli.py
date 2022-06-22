@@ -1,3 +1,6 @@
+import utils.warnings  # noqa: F401
+
+# isort: split
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
 
@@ -5,6 +8,7 @@ import numpy as np
 import openproblems
 import os
 import parameterized
+import sklearn
 import tempfile
 import utils
 
@@ -192,7 +196,7 @@ def test_pipeline():
             do_print=False,
         )
         assert os.path.isfile(dataset_file)
-        main(
+        code_version = main(
             [
                 "run",
                 "--task",
@@ -206,6 +210,7 @@ def test_pipeline():
             do_print=False,
         )
         assert os.path.isfile(method_file)
+        assert code_version == sklearn.__version__
         result = main(
             [
                 "evaluate",

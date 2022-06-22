@@ -8,7 +8,7 @@ echo "========================================"
 echo "Listing 20 largest packages"
 dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 20
 
-if DEEP_SCAN; then
+if $DEEP_SCAN; then
   echo
   echo "Running deep scan"
   du -h / 2>/dev/null | grep "^ *[0-9]*G"
@@ -27,6 +27,7 @@ sudo rm -rf /opt/microsoft/powershell
 sudo rm -rf /usr/share/dotnet
 sudo rm -rf /opt/ghc
 sudo rm -rf /opt/hostedtoolcache
+sudo rm -rf /usr/local/lib/android
 
 echo
 echo "Disk space usage: after"

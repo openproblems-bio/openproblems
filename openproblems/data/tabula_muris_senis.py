@@ -59,7 +59,7 @@ def make_anndata_list(subset_df, test):
     return adata_list
 
 
-@utils.loader
+@utils.loader(data_url="https://tabula-muris-senis.ds.czbiohub.org/")
 def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
     """Load tubula_muris_senis datasets into 1 anndata object based on user input.
 

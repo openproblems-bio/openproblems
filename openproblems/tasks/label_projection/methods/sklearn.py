@@ -1,3 +1,4 @@
+from ....tools.utils import check_version
 from .utils import pca_op
 
 import numpy as np
@@ -28,4 +29,6 @@ def classifier(adata, estimator, n_pca=100, **kwargs):
         adata_test.obs["labels_pred"][idx] if idx in adata_test.obs_names else np.nan
         for idx in adata.obs_names
     ]
+
+    adata.uns["method_code_version"] = check_version("scikit-learn")
     return adata

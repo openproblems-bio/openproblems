@@ -2,6 +2,7 @@ from .version import __version__
 
 import decorator
 import packaging.version
+import warnings
 
 
 @decorator.decorator
@@ -23,6 +24,19 @@ def temporary(func, version=None, *args, **kwargs):
             )
         )
     return func(*args, **kwargs)
+
+
+def future_warning(msg, error_version, error_category, warning_category=FutureWarning):
+    """Raise a warning until a specific version, then raise an error."""
+
+    current_version = packaging.version.parse(__version__)
+    if current_version < packaging.version.parse(error_version):
+        msg += " This will raise a {} in openproblems v{}".format(
+            error_category.__name__, error_version
+        )
+        warnings.warn(msg, warning_category)
+    else:
+        raise error_category(msg)
 
 
 def get_members(module):

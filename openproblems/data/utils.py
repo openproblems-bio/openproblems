@@ -1,7 +1,7 @@
 from . import TEMPDIR
 
 import anndata
-import decorator
+import functools
 import hashlib
 import logging
 import os
@@ -33,29 +33,47 @@ def _cache_path(func, *args, **kwargs):
     return os.path.join(TEMPDIR, filename)
 
 
-@decorator.decorator
-def loader(func, *args, **kwargs):
-    """Decorate a data loader function."""
-    filepath = _cache_path(func, *args, **kwargs)
-    if os.path.isfile(filepath):
-        log.debug(
-            "Loading cached {}({}, {}) dataset".format(func.__name__, args, kwargs)
-        )
-        adata = anndata.read_h5ad(filepath)
-        adata.__from_cache__ = True
-        return adata
-    else:
-        log.debug("Downloading {}({}, {}) dataset".format(func.__name__, args, kwargs))
-        adata = func(*args, **kwargs)
-        adata.__from_cache__ = False
-        if "counts" not in adata.layers:
-            adata.layers["counts"] = adata.X
-        try:
-            os.mkdir(TEMPDIR)
-        except OSError:
-            pass
-        adata.write_h5ad(filepath)
-        return adata
+def loader(data_url):
+    """Decorate a data loader function.
+
+    Parameters
+    ----------
+    data_url : str
+        Link to the original source of the dataset
+    """
+
+    def decorator(func):
+        @functools.wraps(func)
+        def apply_func(*args, **kwargs):
+            filepath = _cache_path(func, *args, **kwargs)
+            if os.path.isfile(filepath):
+                log.debug(
+                    "Loading cached {}({}, {}) dataset".format(
+                        func.__name__, args, kwargs
+                    )
+                )
+                adata = anndata.read_h5ad(filepath)
+                adata.uns["_from_cache"] = True
+                return adata
+            else:
+                log.debug(
+                    "Downloading {}({}, {}) dataset".format(func.__name__, args, kwargs)
+                )
+                adata = func(*args, **kwargs)
+                adata.uns["_from_cache"] = False
+                if "counts" not in adata.layers:
+                    adata.layers["counts"] = adata.X
+                try:
+                    os.mkdir(TEMPDIR)
+                except OSError:
+                    pass
+                adata.write_h5ad(filepath)
+                return adata
+
+        apply_func.metadata = dict(data_url=data_url)
+        return apply_func
+
+    return decorator
 
 
 def filter_genes_cells(adata):

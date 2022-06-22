@@ -5,6 +5,7 @@ from . import methods
 from . import metrics
 
 _task_name = "Dimensionality reduction manifold preservation"
+_task_summary = "TODO"
 
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)

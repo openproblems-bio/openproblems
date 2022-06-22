@@ -1,12 +1,13 @@
+import utils.warnings  # noqa: F401
+
+# isort: split
 import openproblems
 import parameterized
 import pytest
 import utils.docker
 import utils.git
 import utils.name
-import utils.warnings
 
-utils.warnings.ignore_warnings()
 pytestmark = pytest.mark.skipif(
     len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
 )
@@ -29,6 +30,7 @@ pytestmark = pytest.mark.skipif(
 def test_method(task_name, method_name, image):
     """Test application of a method."""
     import anndata
+    import openproblems.utils
 
     task = getattr(openproblems.tasks, task_name)
     method = getattr(task.methods, method_name)
@@ -39,6 +41,16 @@ def test_method(task_name, method_name, image):
     adata = method(adata, test=True)
     assert isinstance(adata, anndata.AnnData)
     assert task.api.check_method(adata)
+    if "method_code_version" not in adata.uns:
+        openproblems.utils.future_warning(
+            "Setting code_version in the method decorator is deprecated. "
+            "Store code version in `adata.uns['method_code_version']` instead.",
+            error_version="1.0",
+            error_category=TypeError,
+        )
+        assert method.metadata["code_version"] is not None
+    else:
+        assert adata.uns["method_code_version"] != "ModuleNotFound"
 
 
 @parameterized.parameterized.expand(
@@ -54,7 +66,6 @@ def test_method_metadata(method):
         "paper_url",
         "paper_year",
         "code_url",
-        "code_version",
         "image",
     ]:
         assert attr in method.metadata
