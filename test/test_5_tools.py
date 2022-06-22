@@ -1,3 +1,6 @@
+import utils.warnings  # noqa: F401
+
+# isort: split
 import numpy as np
 import openproblems
 import parameterized
@@ -7,9 +10,6 @@ import unittest
 import utils.asserts
 import utils.data
 import utils.name
-import utils.warnings
-
-utils.warnings.ignore_warnings()
 
 
 def _dense_data(X):

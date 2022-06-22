@@ -1,1 +1,1 @@
-jupyter-client
+jupyter-client==7.3.*

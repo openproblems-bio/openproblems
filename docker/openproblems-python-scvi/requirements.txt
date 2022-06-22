@@ -1,4 +1,4 @@
-jax==0.3.6
-jaxlib==0.3.5
-scikit-misc
-scvi-tools~=0.16
+jax==0.3.6  # pinned in #313
+jaxlib==0.3.5  # pinned in #313
+scikit-misc==0.1.*
+scvi-tools~=0.16  # pinned in #313

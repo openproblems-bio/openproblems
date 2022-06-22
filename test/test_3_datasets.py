@@ -1,3 +1,6 @@
+import utils.warnings  # noqa: F401
+
+# isort: split
 import anndata
 import openproblems
 import openproblems.utils
@@ -11,9 +14,9 @@ import utils.asserts
 import utils.cache
 import utils.git
 import utils.name
-import utils.warnings
 
-utils.warnings.ignore_warnings()
+DATASET_SUMMARY_MAXLEN = 80
+
 pytestmark = pytest.mark.skipif(
     len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
 )
@@ -136,5 +139,9 @@ class TestDataset(unittest.TestCase):
         assert hasattr(self.dataset, "metadata")
         for attr in [
             "dataset_name",
+            "data_url",
+            "dataset_summary",
         ]:
             assert attr in self.dataset.metadata
+
+        assert len(self.dataset.metadata["dataset_summary"]) < DATASET_SUMMARY_MAXLEN
