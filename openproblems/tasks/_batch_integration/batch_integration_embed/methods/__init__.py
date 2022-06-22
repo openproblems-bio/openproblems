@@ -12,10 +12,10 @@ from ...batch_integration_graph.methods.fastmnn_embed import fastmnn_embed_full_
 from ...batch_integration_graph.methods.fastmnn_embed import fastmnn_embed_hvg_scaled
 from ...batch_integration_graph.methods.fastmnn_embed import fastmnn_embed_hvg_unscaled
 
-# from ...batch_integration_graph.methods.fastmnn_feature import fastmnn_feature_full_scaled
-# from ...batch_integration_graph.methods.fastmnn_feature import fastmnn_feature_full_unscaled
-# from ...batch_integration_graph.methods.fastmnn_feature import fastmnn_feature_hvg_scaled
-# from ...batch_integration_graph.methods.fastmnn_feature import fastmnn_feature_hvg_unscaled
+# from ...batch_integration_graph.methods.fastmnn import fastmnn_feature_full_scaled
+# from ...batch_integration_graph.methods.fastmnn import fastmnn_feature_full_unscaled
+# from ...batch_integration_graph.methods.fastmnn import fastmnn_feature_hvg_scaled
+# from ...batch_integration_graph.methods.fastmnn import fastmnn_feature_hvg_unscaled
 from ...batch_integration_graph.methods.harmony import harmony_full_scaled
 from ...batch_integration_graph.methods.harmony import harmony_full_unscaled
 from ...batch_integration_graph.methods.harmony import harmony_hvg_scaled
@@ -27,38 +27,22 @@ from ...batch_integration_graph.methods.mnn import mnn_full_unscaled
 from ...batch_integration_graph.methods.mnn import mnn_hvg_scaled
 from ...batch_integration_graph.methods.mnn import mnn_hvg_unscaled
 
-# from ...batch_integration_graph.methods.saucie_embed import saucie_embed_full_scaled
-# from ...batch_integration_graph.methods.saucie_embed import saucie_embed_full_unscaled
-# from ...batch_integration_graph.methods.saucie_embed import saucie_embed_hvg_scaled
-# from ...batch_integration_graph.methods.saucie_embed import saucie_embed_hvg_unscaled
-# from ...batch_integration_graph.methods.saucie_full import saucie_feature_full_scaled
-# from ...batch_integration_graph.methods.saucie_full import saucie_feature_full_unscaled
-# from ...batch_integration_graph.methods.saucie_full import saucie_feature_hvg_scaled
-# from ...batch_integration_graph.methods.saucie_full import saucie_feature_hvg_unscaled
-from ...batch_integration_graph.methods.scanorama_embed import (
-    scanorama_embed_full_scaled,
-)
-from ...batch_integration_graph.methods.scanorama_embed import (
-    scanorama_embed_full_unscaled,
-)
-from ...batch_integration_graph.methods.scanorama_embed import (
-    scanorama_embed_hvg_scaled,
-)
-from ...batch_integration_graph.methods.scanorama_embed import (
-    scanorama_embed_hvg_unscaled,
-)
-from ...batch_integration_graph.methods.scanorama_full import (
-    scanorama_feature_full_scaled,
-)
-from ...batch_integration_graph.methods.scanorama_full import (
-    scanorama_feature_full_unscaled,
-)
-from ...batch_integration_graph.methods.scanorama_full import (
-    scanorama_feature_hvg_scaled,
-)
-from ...batch_integration_graph.methods.scanorama_full import (
-    scanorama_feature_hvg_unscaled,
-)
+# from ...batch_integration_graph.methods.saucie import saucie_embed_full_scaled
+# from ...batch_integration_graph.methods.saucie import saucie_embed_full_unscaled
+# from ...batch_integration_graph.methods.saucie import saucie_embed_hvg_scaled
+# from ...batch_integration_graph.methods.saucie import saucie_embed_hvg_unscaled
+# from ...batch_integration_graph.methods.saucie import saucie_feature_full_scaled
+# from ...batch_integration_graph.methods.saucie import saucie_feature_full_unscaled
+# from ...batch_integration_graph.methods.saucie import saucie_feature_hvg_scaled
+# from ...batch_integration_graph.methods.saucie import saucie_feature_hvg_unscaled
+from ...batch_integration_graph.methods.scanorama import scanorama_embed_full_scaled
+from ...batch_integration_graph.methods.scanorama import scanorama_embed_full_unscaled
+from ...batch_integration_graph.methods.scanorama import scanorama_embed_hvg_scaled
+from ...batch_integration_graph.methods.scanorama import scanorama_embed_hvg_unscaled
+from ...batch_integration_graph.methods.scanorama import scanorama_feature_full_scaled
+from ...batch_integration_graph.methods.scanorama import scanorama_feature_full_unscaled
+from ...batch_integration_graph.methods.scanorama import scanorama_feature_hvg_scaled
+from ...batch_integration_graph.methods.scanorama import scanorama_feature_hvg_unscaled
 from ...batch_integration_graph.methods.scanvi import scanvi_full_unscaled
 from ...batch_integration_graph.methods.scanvi import scanvi_hvg_unscaled
 
