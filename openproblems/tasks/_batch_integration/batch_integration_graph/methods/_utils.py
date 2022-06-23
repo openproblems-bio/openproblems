@@ -16,6 +16,7 @@ def hvg_batch(adata, batch_key, target_genes, adataOut):
 def scale_batch(adata, batch_key):
     from scib.preprocessing import scale_batch
 
+    adata.strings_to_categoricals()
     tmp = scale_batch(adata, batch_key)
     tmp.var = tmp.var.iloc[:, :-6]
     return tmp

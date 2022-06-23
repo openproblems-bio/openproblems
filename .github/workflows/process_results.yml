@@ -66,6 +66,7 @@ jobs:
         fi
         aws s3 cp --quiet --recursive "${S3_URI}" /tmp/results/
         python openproblems/workflow/parse_nextflow.py /tmp website/data/results
+        python openproblems/workflow/generate_website_markdown.py website/content/tasks
 
     - name: AWS S3 cleanup
       if: "github.event_name == 'repository_dispatch'"
@@ -113,7 +114,7 @@ jobs:
         author_name: SingleCellOpenProblems
         author_email: singlecellopenproblems@protonmail.com
         message: 'Update benchmark results # ci skip'
-        add: "['data/results']"
+        add: "['data/results', 'content/tasks']"
         branch: ${{ env.UPDATE_BRANCH_NAME }}
         push: false
         cwd: './website'
