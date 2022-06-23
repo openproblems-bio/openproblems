@@ -6,7 +6,11 @@ from ._sc_to_sp_utils import get_pancreas_integer
 import scanpy as sc
 
 
-@dataset("Pancreas (alpha=1)", data_url=load_pancreas.metadata["data_url"], data_summary="TODO")
+@dataset(
+    "Pancreas (alpha=1)",
+    data_url=load_pancreas.metadata["data_url"],
+    data_summary="TODO",
+)
 def pancreas_alpha_1(test=False, n_obs=10):
     adata = load_pancreas(test=test)
     adata = get_pancreas_integer(adata)
