@@ -128,7 +128,7 @@ def parse_method_versions(results_path, results):
         with open(
             os.path.join(results_path, "results/method_versions", filename), "r"
         ) as handle:
-            code_version = float(handle.read().strip())
+            code_version = handle.read().strip()
         task_name, dataset_name, method_name = filename.replace(
             ".method.txt", ""
         ).split(".")
@@ -163,6 +163,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
     dataset = utils.get_function(task_name, "datasets", dataset_name)
     output = dict(
         name=dataset.metadata["dataset_name"],
+        data_url=dataset.metadata["data_url"],
         headers=dict(names=["Rank"], fixed=["Name", "Paper", "Website", "Code"]),
         results=list(),
     )
@@ -175,7 +176,9 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             "Paper": method.metadata["paper_name"],
             "Paper URL": method.metadata["paper_url"],
             "Year": method.metadata["paper_year"],
-            "Code": method.metadata["code_url"],
+            "Library": method.metadata["code_url"],
+            "Implementation": "https://github.com/openproblems-bio/openproblems/"
+            f"blob/main/{method.__module__.replace('.', '/')}",
             "Version": method_results["code_version"],
             "Runtime (min)": parse_time_to_min(method_results["realtime"]),
             "CPU (%)": float(method_results["%cpu"].replace("%", "")),

@@ -8,7 +8,7 @@ import tempfile
 URL = "https://ndownloader.figshare.com/files/25555739"
 
 
-@utils.loader
+@utils.loader(data_url=URL)
 def load_tenx_5k_pbmc(test=False):
     """Download 5k PBMCs from 10x Genomics."""
     if test:
