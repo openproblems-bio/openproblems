@@ -42,7 +42,7 @@ def phate_default(adata, test: bool = False, n_pca: Optional[int] = None):
 )
 def phate_sqrt(adata, test: bool = False, n_pca: Optional[int] = None):
     adata = sqrt_cpm(adata)
-    return _phate(adata, test=test, n_pca=n_pca)
+    return _phate(adata, test=test, n_pca=n_pca, gamma=0)
 
 
 @method(
