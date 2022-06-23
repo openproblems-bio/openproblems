@@ -47,6 +47,26 @@ def _run_bbknn(
     return adata
 
 
+@_bbknn_method(method_name="BBKNN (full/unscaled)")
+def bbknn_full_unscaled(
+    adata,
+    test: bool = False,
+    n_pca: Optional[int] = None,
+    annoy_n_trees: Optional[int] = None,
+    neighbors_within_batch: Optional[int] = None,
+):
+    adata = _run_bbknn(
+        adata,
+        "batch",
+        test=test,
+        n_pca=n_pca,
+        annoy_n_trees=annoy_n_trees,
+        neighbors_within_batch=neighbors_within_batch,
+    )
+    # Complete the result in-place
+    return adata
+
+
 @_bbknn_method(method_name="BBKNN (hvg/unscaled)")
 def bbknn_hvg_unscaled(
     adata,
