@@ -27,6 +27,7 @@ rule docker_refresh:
     input: tools.refresh_images
 
 rule refresh_docker_image:
+    priority: 50
     input:
         dockerfile = "{}/{{image}}/refresh.Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_refresh_requirements,
@@ -40,6 +41,7 @@ rule refresh_docker_image:
         "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule refresh_dockerfile:
+    priority: 50
     input:
         docker_pull = "{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR),
     output:
