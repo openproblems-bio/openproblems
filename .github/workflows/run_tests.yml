@@ -344,7 +344,7 @@ jobs:
         )
       run: |
         cd workflow
-        snakemake -j $(nproc) docker
+        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
         cd ..
 
     - name: Upload Docker images
