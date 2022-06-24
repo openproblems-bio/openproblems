@@ -24,7 +24,7 @@ RUN gpg --output cran41.gpg --export '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'
 RUN cp cran41.gpg /etc/apt/trusted.gpg.d/
 RUN echo 'deb http://cloud.r-project.org/bin/linux/debian bullseye-cran40/' >> /etc/apt/sources.list
 RUN apt-get update -qq
-RUN apt-get install -yq --no-install-suggests --no-install-recommends r-base-dev=4.1\*
+RUN apt-get install -yq --no-install-suggests --no-install-recommends r-base-dev=4.2\*
 RUN apt-get clean -y && apt-get autoremove -y
 ENV R_HOME=/usr/bin/R
 
