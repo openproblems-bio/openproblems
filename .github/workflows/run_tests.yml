@@ -69,7 +69,7 @@ jobs:
         snakemake -j $(nproc) docker_build
         cd ..
 
-    - name: Push Docker images
+    - name: Build and push Docker images
       if: "startsWith(github.ref, 'refs/heads/main')"
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -208,7 +208,7 @@ jobs:
         cd ..
 
     - name: Run tests
-      run: pytest --cov=openproblems --cov-report=xml -vv --durations=10 --tb=native
+      run: pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native
 
     - name: Upload coverage
       continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
@@ -344,7 +344,7 @@ jobs:
         )
       run: |
         cd workflow
-        snakemake -j $(nproc) docker
+        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
         cd ..
 
     - name: Upload Docker images
