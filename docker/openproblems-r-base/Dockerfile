@@ -26,7 +26,7 @@ RUN echo 'deb http://cloud.r-project.org/bin/linux/debian bullseye-cran40/' >> /
 RUN apt-get update -qq
 RUN apt-get install -yq --no-install-suggests --no-install-recommends r-base-dev=4.2\*
 RUN apt-get clean -y && apt-get autoremove -y
-ENV R_HOME=/usr/bin/R
+ENV R_HOME=/usr/lib/R
 
 # Install R packages
 RUN R -e "install.packages('renv'); renv::consent(TRUE)"
