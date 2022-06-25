@@ -17,19 +17,16 @@ USER root
 WORKDIR /
 
 # Install R
-ENV R_VERSION="4.2.1"
 RUN apt-get update -qq
-RUN apt-get -yq --no-install-suggests --no-install-recommends --allow-unauthenticated install \
-    dirmngr ca-certificates gnupg gpgv gfortran liblapack-dev gdebi-core \
-    libopenblas-dev libopenblas-pthread-dev libopenblas0 libopenblas0-pthread libpaper-utils libpaper1 zip
+RUN apt-get -yq --no-install-suggests --no-install-recommends --allow-unauthenticated install dirmngr ca-certificates gnupg gpgv gfortran libblas-dev liblapack-dev
+RUN gpg --keyserver keyserver.ubuntu.com --recv-key '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'
+RUN gpg --output cran41.gpg --export '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'
+RUN cp cran41.gpg /etc/apt/trusted.gpg.d/
+RUN echo 'deb http://cloud.r-project.org/bin/linux/debian bullseye-cran40/' >> /etc/apt/sources.list
+RUN apt-get update -qq
+RUN apt-get install -yq --no-install-suggests --no-install-recommends r-base-dev=4.2\*
 RUN apt-get clean -y && apt-get autoremove -y
-RUN curl https://cdn.rstudio.com/r/debian-11/pkgs/r-${R_VERSION}_1_amd64.deb --output r-${R_VERSION}_3_amd64.deb
-RUN gdebi -n r-${R_VERSION}_3_amd64.deb
-RUN update-alternatives --install /usr/bin/R R /opt/R/${R_VERSION}/bin/R 1
-RUN update-alternatives --install /usr/bin/Rscript Rscript /opt/R/${R_VERSION}/bin/Rscript 1
-ENV R_HOME=/opt/R/${R_VERSION}/lib/R
-RUN mkdir -p ${R_HOME}/etc
-RUN bash -c "echo \"local({r <- getOption('repos'); r['CRAN'] <- 'https://cloud.r-project.org/'; options(repos = r)})\" >> ${R_HOME}/etc/Rprofile.site"
+ENV R_HOME=/usr/bin/R
 
 # Install R packages
 RUN R -e "install.packages('renv'); renv::consent(TRUE)"
