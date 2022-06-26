@@ -33,7 +33,7 @@ elif par["method"] == "random_with_noise":
     adata.obs["is_train"] = np.random.choice(
         [True, False], adata.shape[0], replace=True, p=[0.8, 0.2]
     )
-    adata = noise.add_label_noise(adata, noise_prob=0.2)
+    adata = noise.add_celltype_noise(adata, noise_prob=0.2)
 
 print(">> Writing data")
 adata.write(par['output'])

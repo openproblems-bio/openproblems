@@ -36,13 +36,13 @@ def classifier(adata, estimator, n_pca=100, **kwargs):
     )
 
     # Fit to train data
-    classifier.fit(adata_train.X, adata_train.obs["labels"].astype(str))
+    classifier.fit(adata_train.X, adata_train.obs["celltype"].astype(str))
 
     # Predict on test data
-    adata_test.obs["labels_pred"] = classifier.predict(adata_test.X)
+    adata_test.obs["celltype_pred"] = classifier.predict(adata_test.X)
 
-    adata.obs["labels_pred"] = [
-        adata_test.obs["labels_pred"][idx] if idx in adata_test.obs_names else np.nan
+    adata.obs["celltype_pred"] = [
+        adata_test.obs["celltype_pred"][idx] if idx in adata_test.obs_names else np.nan
         for idx in adata.obs_names
     ]
     return adata

@@ -1,8 +1,8 @@
 functionality:
-  name: "logistic_regression_scran"
-  namespace: "label_projection/methods/logistic_regression"
+  name: "knn_classifier"
+  namespace: "label_projection/methods/knn_classifier"
   version: "dev"
-  description: ""
+  description: "Run Harmonic Alignment"
   authors:
     - name: "Scott Gigante"
       roles: [ author ]
@@ -17,10 +17,6 @@ functionality:
       example: "input.h5ad"
       description: "Input file that will be used to generate predictions"
       required: true
-    - name: "--max_iter"
-      type: "integer"
-      example: "100"
-      description: "Maximum number of iterations"
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
@@ -31,21 +27,16 @@ functionality:
   resources:
     - type: python_script
       path: script.py
-    - path: "../../../../common/tools/normalize.py"
-    - path: "../../../utils.py"
+    - path: "../../utils.py"
   tests:
     - type: python_script
       path: test_script.py
-    - type: file
-      path: "../../../resources/pancreas/toy_preprocessed_data.h5ad"
+    - path: ../../resources/pancreas/toy_normalized_log_scran_pooling_data.h5ad
+    - path: ../../resources/pancreas/toy_normalized_log_cpm_data.h5ad
 platforms:
   - type: docker
-    image: "singlecellopenproblems/openproblems-r-base:latest"
+    image: "python:3.8"
     setup:
-      - type: r
-        bioc:
-          - scran
-          - BiocParallel
       - type: python
         packages:
           - scanpy

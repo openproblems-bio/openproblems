@@ -1,6 +1,6 @@
 functionality:
   name: "log_cpm"
-  namespace: "label_projection/data_processing/normalize/log_cpm"
+  namespace: "label_projection/data_processing/normalize"
   version: "dev"
   description: "Normalize data"
   authors:

@@ -18,7 +18,7 @@ def hvg (adata, **hvg_kwargs):
         )
 
 def scanvi(adata, n_hidden=None, n_latent=None, n_layers=None, **train_kwargs):
-    scanvi_labels = adata.obs["labels"].to_numpy()
+    scanvi_labels = adata.obs["celltype"].to_numpy()
     # test set labels masked
     scanvi_labels[~adata.obs["is_train"].to_numpy()] = "Unknown"
     adata.obs["scanvi_labels"] = scanvi_labels
@@ -38,7 +38,7 @@ def scanvi_scarches(adata, n_hidden=None, n_latent=None, n_layers=None, train_kw
     query_model_train_kwargs = train_kwargs['query_model_train_kwargs']
     # new obs labels to mask test set
     adata_train = adata[adata.obs["is_train"]].copy()
-    adata_train.obs["scanvi_labels"] = adata_train.obs["labels"].copy()
+    adata_train.obs["scanvi_labels"] = adata_train.obs["celltype"].copy()
     adata_test = adata[~adata.obs["is_train"]].copy()
     adata_test.obs["scanvi_labels"] = "Unknown"
     scvi.model.SCVI.setup_anndata(
