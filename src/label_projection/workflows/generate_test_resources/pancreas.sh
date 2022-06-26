@@ -13,8 +13,10 @@ DATASET_DIR=src/label_projection/resources/pancreas
 
 mkdir -p $DATASET_DIR
 
-target/docker/common/data_loader/data_loader\
+target/docker/common/dataset_loader/download/download\
     --url "https://ndownloader.figshare.com/files/24539828"\
+    --obs_celltype "celltype"\
+    --obs_batch "tech"\
     --name "pancreas"\
     --output $DATASET_DIR/raw_data.h5ad
 
@@ -27,3 +29,11 @@ target/docker/label_projection/data_processing/subsample/subsample\
 target/docker/label_projection/data_processing/randomize/randomize\
     --input $DATASET_DIR/toy_data.h5ad\
     --output $DATASET_DIR/toy_preprocessed_data.h5ad
+
+target/docker/label_projection/data_processing/normalize/log_cpm\
+    --input $DATASET_DIR/toy_preprocessed_data.h5ad\
+    --output $DATASET_DIR/toy_normalized_log_cpm_data.h5ad
+
+target/docker/label_projection/data_processing/normalize/log_scran_pooling\
+    --input $DATASET_DIR/toy_preprocessed_data.h5ad\
+    --output $DATASET_DIR/toy_normalized_log_scran_pooling_data.h5ad
