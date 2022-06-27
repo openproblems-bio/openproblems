@@ -21,8 +21,6 @@ _rctd = r_function("rctd.R")
 def rctd(adata, test=False):
     # exctract single cell reference data
     sc_adata, adata = split_sc_and_sp(adata)
-    # remove single cell reference from original anndata
-    del adata.uns["sc_reference"]
     # set spatial coordinates for the single cell data
     sc_adata.obsm["spatial"] = np.ones((sc_adata.shape[0], 2))
     # store true proportions, due to error when passing DataFrame in obsm
