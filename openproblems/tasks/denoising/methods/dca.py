@@ -12,17 +12,17 @@ def _dca(adata, test=False, epochs=None):
         epochs = epochs or 300
     from dca.api import dca
 
-    #find all-zero genes (columns)
+    # find all-zero genes (columns)
     gene_sums = np.asarray(adata.obsm["train"].sum(axis=0)).flatten()
     is_missing = gene_sums == 0
-    #make adata object with train counts
+    # make adata object with train counts
     adata2 = sc.AnnData(adata.obsm["train"])
-    #mask all-zero genes
-    adata2.X[:,is_missing] = 1
-    #run DCA
+    # mask all-zero genes
+    adata2.X[:, is_missing] = 1
+    # run DCA
     dca(adata2, epochs=epochs)
     adata.obsm["denoised"] = adata2.X  # adata2.X should call the count matrix of DCA.
-    #return masked values to zero
+    # return masked values to zero
     adata.obsm["denoised"][:.is_missing] = 0
     adata.uns["method_code_version"] = check_version("dca")
     return adata
