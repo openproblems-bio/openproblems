@@ -32,6 +32,7 @@ def merge_sc_and_sp(
         uns_merge="unique",
     )
 
+    adata_merged.strings_to_categoricals()
     for key, dtype in adata_merged.obs.iteritems():
         if isinstance(dtype, pd.CategoricalDtype):
             adata_merged.obs[key] = pd.Categorical(adata_merged.obs[key].astype(str))

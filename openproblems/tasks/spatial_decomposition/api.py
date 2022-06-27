@@ -49,7 +49,9 @@ def sample_dataset():
     # get anndata for single cell reference
     adata_sc = load_sample_data()
     # set labels for single cell data
-    adata_sc.obs["label"] = np.random.randint(0, n_types, size=adata_sc.shape[0])
+    adata_sc.obs["label"] = np.random.randint(
+        0, n_types, size=adata_sc.shape[0]
+    ).astype(str)
     # bind single cell reference to spatial anndata
     adata_merged = merge_sc_and_sp(adata_sc, adata_spatial)
     return adata_merged
