@@ -32,7 +32,9 @@ def merge_sc_and_sp(
         uns_merge="unique",
     )
 
-    adata_merged.obs["label"] = pd.Categorical(adata_merged.obs["label"])
+    for key, dtype in adata_merged.obs.iteritems():
+        if isinstance(dtype, pd.CategoricalDtype):
+            adata_merged.obs[key] = pd.Categorical(adata_merged.obs[key].astype(str))
 
     return adata_merged
 
