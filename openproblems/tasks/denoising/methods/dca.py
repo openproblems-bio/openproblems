@@ -15,7 +15,7 @@ def _dca(adata, test=False, epochs=None):
     # sc.AnnData takes (counts, obs=[obs], vars=[vars]), but returns an anndata
     # even if just given counts.
     adata2 = sc.AnnData(adata.obsm["train"])
-    dca(adata2, epochs = epochs)
+    dca(adata2, epochs=epochs)
     adata.obsm["denoised"] = adata2.X  # adata2.X should call the count matrix of DCA.
     adata.uns["method_code_version"] = check_version("dca")
     return adata
