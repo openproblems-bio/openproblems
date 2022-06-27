@@ -4,7 +4,12 @@ from .....tools.decorators import dataset
 import scanpy as sc
 
 
-@dataset(dataset_name="Immune (by batch)", image="openproblems")
+@dataset(
+    dataset_name="Immune (by batch)",
+    data_url=load_immune.metadata["data_url"],
+    dataset_summary="TODO",
+    image="openproblems",
+)
 def immune_batch(test=False):
     adata = load_immune(test)
     adata.obs["labels"] = adata.obs["final_annotation"]

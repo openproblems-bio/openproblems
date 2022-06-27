@@ -2,7 +2,11 @@ from ....data.multimodal import scicar
 from ....tools.decorators import dataset
 
 
-@dataset("sciCAR Mouse Kidney with cell clusters")
+@dataset(
+    "sciCAR Mouse Kidney with cell clusters",
+    data_url=scicar.load_scicar_mouse_kidney.metadata["data_url"],
+    dataset_summary="TODO",
+)
 def scicar_mouse_kidney(test=False):
     adata = scicar.load_scicar_mouse_kidney(test=test)
 
