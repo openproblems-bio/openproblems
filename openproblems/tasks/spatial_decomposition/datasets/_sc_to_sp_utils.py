@@ -129,7 +129,6 @@ def generate_synthetic_dataset(
         sp_x,
         obs=dict(obs_names=obs_names),
         var=dict(var_names=adata.var_names),
-        uns=adata.uns,
     )
 
     # fake coordinates
