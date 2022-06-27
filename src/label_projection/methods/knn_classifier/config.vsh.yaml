@@ -1,6 +1,6 @@
 functionality:
   name: "knn_classifier"
-  namespace: "label_projection/methods/knn_classifier"
+  namespace: "label_projection/methods"
   version: "dev"
   description: "Run Harmonic Alignment"
   authors:

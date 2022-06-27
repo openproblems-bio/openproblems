@@ -1,6 +1,6 @@
 functionality:
   name: "mlp"
-  namespace: "label_projection/methods/mlp"
+  namespace: "label_projection/methods"
   version: "dev"
   description: "Run Harmonic Alignment"
   authors:
