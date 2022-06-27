@@ -32,8 +32,9 @@ def merge_sc_and_sp(
         uns_merge="unique",
     )
 
+    adata_merged.strings_to_categoricals()
     for key, dtype in adata_merged.obs.iteritems():
-        if isinstance(dtype, (pd.CategoricalDtype, pd.StringDtype)):
+        if isinstance(dtype, pd.CategoricalDtype):
             adata_merged.obs[key] = pd.Categorical(adata_merged.obs[key].astype(str))
 
     return adata_merged
@@ -49,7 +50,7 @@ def split_sc_and_sp(
     adata_sp = adata_merged[is_sp, :].copy()
     adata_sc = adata_merged[~is_sp, :].copy()
 
-    return (adata_sc, adata_sp)
+    return adata_sc, adata_sp
 
 
 def obs_means(adata: ad.AnnData, cluster_key: str) -> ad.AnnData:
