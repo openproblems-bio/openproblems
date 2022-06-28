@@ -4,9 +4,8 @@ from ....tools.utils import check_version
 from .._utils import split_sc_and_sp
 
 import numpy as np
-import pandas as pd
 
-_rctd = r_function("rctd.R")
+_rctd = r_function("rctd.R", args="sce_sc, sce_sp")
 
 
 @method(
@@ -20,35 +19,17 @@ _rctd = r_function("rctd.R")
 )
 def rctd(adata, test=False):
     # exctract single cell reference data
-    sc_adata, adata = split_sc_and_sp(adata)
+    adata_sc, adata_sp = split_sc_and_sp(adata)
+    del adata
     # set spatial coordinates for the single cell data
-    sc_adata.obsm["spatial"] = np.ones((sc_adata.shape[0], 2))
-    # store true proportions, due to error when passing DataFrame in obsm
-    proportions_true = pd.DataFrame(
-        adata.obsm["proportions_true"], index=sc_adata.obs_names.copy()
-    )
-    # concatenate single cell and spatial data, r_function only accepts one argument
-    adata = adata.concatenate(
-        sc_adata, batch_key="modality", batch_categories=["sp", "sc"]
-    )
-    # remove single cell reference anndata to reduce memory use
-    del sc_adata
+    adata_sc.obsm["spatial"] = np.ones((adata_sc.shape[0], 2))
     # run RCTD
-    adata = _rctd(adata)
-    # remove appended subsetting name from index names
-    new_idx = pd.Index([x.rstrip("-sp") for x in adata.obs.index], name="sample")
-    adata.obs_names = new_idx
-    adata.obsm.dim_names = new_idx
+    adata_sp = _rctd(adata_sc, adata_sp)
 
     # get predicted cell type proportions from obs
-    cell_type_names = [x for x in adata.obs.columns if "xCT_" in x[0:4]]
-    proportions_pred = adata.obs[cell_type_names]
-    proportions_pred.columns = pd.Index([x.lstrip("xCT_") for x in cell_type_names])
-    # make sure true proportions are concurrently ordered with predicted
-    proportions_true = proportions_true.loc[new_idx, :]
+    cell_type_names = [x for x in adata_sp.obs.columns if x.startswith("xCT")]
 
     # add proportions
-    adata.obsm["proportions_pred"] = proportions_pred.to_numpy()
-    adata.obsm["proportions_true"] = proportions_true.to_numpy()
+    adata_sp.obsm["proportions_pred"] = adata_sp.obs[cell_type_names].to_numpy()
 
-    return adata
+    return adata_sp
