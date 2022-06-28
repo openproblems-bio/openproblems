@@ -49,7 +49,7 @@ par.get("limit_val_batches") and model_train_kwargs.update({"limit_val_batches":
 
 hvg_df = hvg(adata, **hvg_kwargs)
 bdata = adata[:, hvg_df.highly_variable].copy()
-adata.obs["labels_pred"] = scanvi_scarches(bdata, par['n_hidden'], par['n_latent'], par['n_layers'], {'model_train_kwargs': model_train_kwargs,
+adata.obs["celltype_pred"] = scanvi_scarches(bdata, par['n_hidden'], par['n_latent'], par['n_layers'], {'model_train_kwargs': model_train_kwargs,
                                                                                                       'query_model_train_kwargs': query_model_train_kwargs})
 adata.uns["method_id"] = "scarches_scanvi_hvg"
 

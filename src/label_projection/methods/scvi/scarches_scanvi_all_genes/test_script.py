@@ -23,5 +23,5 @@ assert path.exists(OUTPUT)
 
 print(">> Checking if predictions were added")
 adata = sc.read_h5ad(OUTPUT)
-assert "labels_pred" in adata.obs
+assert "celltype_pred" in adata.obs
 assert "scarches_scanvi_all_genes" == adata.uns["method_id"]

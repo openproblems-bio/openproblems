@@ -32,7 +32,7 @@ par.get("max_epochs") and train_kwargs.update({"max_epochs": par['max_epochs']})
 par.get("limit_train_batches") and train_kwargs.update({"limit_train_batches": par['limit_train_batches']})
 par.get("limit_val_batches") and train_kwargs.update({"limit_val_batches": par['limit_val_batches']})
 
-adata.obs["labels_pred"] = scanvi(adata, par['n_hidden'], par['n_latent'], par['n_layers'],  **train_kwargs)
+adata.obs["celltype_pred"] = scanvi(adata, par['n_hidden'], par['n_latent'], par['n_layers'],  **train_kwargs)
 adata.uns["method_id"] = "scanvi_all_genes"
 
 print("Write data")

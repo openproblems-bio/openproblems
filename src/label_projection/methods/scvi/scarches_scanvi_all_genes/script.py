@@ -34,7 +34,7 @@ par.get("max_epochs") and model_train_kwargs.update({"max_epochs": par['max_epoc
 par.get("limit_train_batches") and model_train_kwargs.update({"limit_train_batches": par['limit_train_batches']}) and query_model_train_kwargs.update({"limit_train_batches": par['limit_train_batches']})
 par.get("limit_val_batches") and model_train_kwargs.update({"limit_val_batches": par['limit_val_batches']}) and query_model_train_kwargs.update({"limit_val_batches": par['limit_val_batches']})
 
-adata.obs["labels_pred"] = scanvi_scarches(adata, par['n_hidden'], par['n_latent'], par['n_layers'], {'model_train_kwargs': model_train_kwargs,
+adata.obs["celltype_pred"] = scanvi_scarches(adata, par['n_hidden'], par['n_latent'], par['n_layers'], {'model_train_kwargs': model_train_kwargs,
                                                                                                       'query_model_train_kwargs': query_model_train_kwargs})
 adata.uns["method_id"] = "scarches_scanvi_all_genes"
 
