@@ -7,7 +7,7 @@ include { download } from "$targetDir/common/dataset_loader/download/main.nf"
 
 // import preprocess
 include { randomize } from "$targetDir/label_projection/data_processing/randomize/main.nf"
-// for test finallity
+// for tests
 include { subsample } from "$targetDir/label_projection/data_processing/subsample/main.nf"
 
 // import normalization
@@ -39,7 +39,7 @@ include { accuracy }          from "$targetDir/label_projection/metrics/accuracy
 // If the need arises, these workflows could be split off into a separate file.
 
 // params.tsv = "$launchDir/src/common/data_loader/anndata_loader.tsv"
-params.tsv = "$launchDir/src/label_projection/data_processing/fake_anndata_loader.tsv" //tests finallity
+params.tsv = "$launchDir/src/label_projection/data_processing/fake_anndata_loader.tsv" //for tests
 
 workflow load_data {
     main:
@@ -51,6 +51,14 @@ workflow load_data {
     emit:
         output_
 }
+
+def mlp0 = mlp.run(
+        map: { [it[0], [input: it[1], max_iter: 100, hidden_layer_sizes: 20]] }
+)
+
+def lr0 = logistic_regression.run(
+        map: { [it[0], [input: it[1], max_iter: 100]] }
+)
 
 /*******************************************************
 *                    Main workflow                     *
@@ -64,11 +72,12 @@ workflow {
                         celltype_categories: "0:3",
                         tech_categories: "0:-3:-2"]] }
     )
-    | (log_cpm & log_scran_pooling)
-    | majority_vote
     | view
-    // | (majority_vote & knn_classifier & mlp & logistic_regression & scanvi_hvg & scanvi_all_genes & scarches_scanvi_all_genes & scarches_scanvi_hvg)
-    // | mix
-    // | accuracy
-    // | view
+    | log_cpm
+    | view
+    | (majority_vote & knn_classifier & mlp0 & lr0)
+    | mix
+    | view
+    | accuracy
+    | view
 }

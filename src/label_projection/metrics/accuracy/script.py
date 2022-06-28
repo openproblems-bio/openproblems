@@ -13,13 +13,13 @@ print("Load data")
 adata = sc.read(par['input'])
 
 print("Get prediction accuracy")
-encoder = sklearn.preprocessing.LabelEncoder().fit(adata.obs["labels"])
+encoder = sklearn.preprocessing.LabelEncoder().fit(adata.obs["celltype"])
 test_data = adata[~adata.obs["is_train"]]
 
-test_data.obs["labels"] = encoder.transform(test_data.obs["labels"])
-test_data.obs["labels_pred"] = encoder.transform(test_data.obs["labels_pred"])
+test_data.obs["celltype"] = encoder.transform(test_data.obs["celltype"])
+test_data.obs["celltype_pred"] = encoder.transform(test_data.obs["celltype_pred"])
 
-accuracy = np.mean(test_data.obs["labels"] == test_data.obs["labels_pred"])
+accuracy = np.mean(test_data.obs["celltype"] == test_data.obs["celltype_pred"])
 
 print("Store metric value")
 adata.uns["metric_id"] = "accuracy"

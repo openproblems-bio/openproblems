@@ -5,18 +5,21 @@ import subprocess
 import scanpy as sc
 import numpy as np
 
+INPUT = "toy_baseline_pred_data.h5ad"
+OUTPUT = "output.accuracy.h5ad"
+
 print(">> Running knn_auc")
 out = subprocess.check_output([
     "./accuracy",
-    "--input", "test_data.h5ad",
-    "--output", "output.accuracy.h5ad"
+    "--input", INPUT,
+    "--output", OUTPUT
 ]).decode("utf-8")
 
 print(">> Checking whether file exists")
-assert path.exists("output.accuracy.h5ad")
+assert path.exists(OUTPUT)
 
 print(">> Check that dataset fits expected API")
-adata = sc.read_h5ad("output.accuracy.h5ad")
+adata = sc.read_h5ad(OUTPUT)
 
 # check id
 assert "metric_id" in adata.uns
