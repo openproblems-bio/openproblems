@@ -11,7 +11,7 @@ def remove_zeros(Xmat):
         # creates boolean list of missing
         missing_bool = np.apply_along_axis(np.count_nonzero, 0, Xmat) == 0
         # removes missing genes
-        Xmat[, np.apply_along_axis(np.count_nonzero, 0, Xmat) == 0]
+        Xmat[, (np.apply_along_axis(np.count_nonzero, 0, Xmat) == 0)]
         # creates list of true (missing) indices
         inds = list(compress(xrange(len(missing_bool)), missing_bool))
     return Xmat, inds
@@ -21,7 +21,8 @@ def remove_zeros(Xmat):
 
 def insert_at(arr, output_size, indices):
     result = np.zeros(output_size)
-    existing_indices = [np.setdiff1d(np.arange(axis_size), axis_indices, assume_unique=True)
+    existing_indices = [np.setdiff1d(np.arange(axis_size), 
+                                     axis_indices, assume_unique=True)
                         for axis_size, axis_indices in zip(output_size, indices)]
     result[np.ix_(*existing_indices)] = arr
     return result
