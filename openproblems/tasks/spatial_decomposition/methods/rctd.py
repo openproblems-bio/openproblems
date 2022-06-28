@@ -24,7 +24,9 @@ def rctd(adata, test=False):
     # set spatial coordinates for the single cell data
     sc_adata.obsm["spatial"] = np.ones((sc_adata.shape[0], 2))
     # store true proportions, due to error when passing DataFrame in obsm
-    proportions_true = adata.obsm["proportions_true"]
+    proportions_true = pd.DataFrame(
+        adata.obsm["proportions_true"], index=sc_adata.obs_names.copy()
+    )
     # concatenate single cell and spatial data, r_function only accepts one argument
     adata = adata.concatenate(
         sc_adata, batch_key="modality", batch_categories=["sp", "sc"]
@@ -46,7 +48,7 @@ def rctd(adata, test=False):
     proportions_true = proportions_true.loc[new_idx, :]
 
     # add proportions
-    adata.obsm["proportions_pred"] = proportions_pred
-    adata.obsm["proportions_true"] = proportions_true
+    adata.obsm["proportions_pred"] = proportions_pred.to_numpy()
+    adata.obsm["proportions_true"] = proportions_true.to_numpy()
 
     return adata

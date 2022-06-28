@@ -5,7 +5,6 @@ from .._utils import obs_means
 from .._utils import split_sc_and_sp
 
 import numpy as np
-import pandas as pd
 
 
 @method(
@@ -21,7 +20,6 @@ def nusvr_sklearn(adata, test=False):
     from sklearn.svm import NuSVR
 
     adata_sc, adata = split_sc_and_sp(adata)
-    labels = adata_sc.obs["label"].cat.categories
     adata_means = obs_means(adata_sc, "label")
 
     if issparse(adata.X):
@@ -38,7 +36,5 @@ def nusvr_sklearn(adata, test=False):
 
     res_prop = normalize_coefficients(res)
 
-    adata.obsm["proportions_pred"] = pd.DataFrame(
-        res_prop, columns=labels, index=adata.obs_names
-    )
+    adata.obsm["proportions_pred"] = res_prop
     return adata

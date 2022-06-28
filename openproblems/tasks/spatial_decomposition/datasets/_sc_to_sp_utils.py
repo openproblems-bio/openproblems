@@ -6,7 +6,6 @@ from typing import Union
 
 import anndata as ad
 import numpy as np
-import pandas as pd
 
 
 def generate_synthetic_dataset(
@@ -133,17 +132,9 @@ def generate_synthetic_dataset(
 
     # fake coordinates
     adata_spatial.obsm["spatial"] = rng.random((adata_spatial.shape[0], 2))
-    adata_spatial.obsm["proportions_true"] = pd.DataFrame(
-        sp_p,
-        index=obs_names,
-        columns=uni_labs,
-    )
+    adata_spatial.obsm["proportions_true"] = sp_p
     adata_spatial.obs["n_cells"] = n_cells
-    adata_spatial.obsm["n_cells"] = pd.DataFrame(
-        sp_c,
-        index=obs_names,
-        columns=uni_labs,
-    )
+    adata_spatial.obsm["n_cells"] = sp_c
     adata_merged = merge_sc_and_sp(adata, adata_spatial)
     adata_merged.X[adata_merged.X == np.inf] = adata_merged.X.max()  # remove inf
     adata_merged.layers["counts"] = adata_merged.X.copy()

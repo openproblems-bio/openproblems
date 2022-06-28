@@ -15,12 +15,8 @@ def merge_sc_and_sp(
         if isinstance(adata_sp.obsm[k], pd.DataFrame):
             n_col = adata_sp.obsm[k].shape[1]
             n_row = adata_sc.shape[0]
-            df = pd.DataFrame(
-                np.zeros((n_row, n_col)),
-                columns=adata_sp.obsm[k].columns.copy(),
-                index=adata_sc.obs_names.copy(),
-            )
-            adata_sc.obsm[k] = df
+            arr = np.zeros((n_row, n_col))
+            adata_sc.obsm[k] = arr
 
     # merge single cell and spatial data
     adata_merged = ad.concat(

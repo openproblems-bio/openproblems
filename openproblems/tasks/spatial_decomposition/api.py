@@ -3,7 +3,6 @@ from ._utils import merge_sc_and_sp
 from pandas.core.dtypes.common import is_categorical_dtype
 
 import numpy as np
-import pandas as pd
 
 EPS = 1e-10
 
@@ -12,8 +11,10 @@ def check_dataset(adata):
     """Check that dataset output fits expected API."""
     # test for spatial coordinates
     assert "spatial" in adata.obsm
+    assert isinstance(adata.obsm["spatial"], np.ndarray)
     # check that proportions are included
     assert "proportions_true" in adata.obsm
+    assert isinstance(adata.obsm["proportions_true"], np.ndarray)
     # make sure proportions sum to one, some precision error allowed
     proportions_sum = np.sum(
         adata[adata.obs["modality"] == "sp"].obsm["proportions_true"], axis=1
@@ -27,7 +28,9 @@ def check_dataset(adata):
 def check_method(adata):
     """Check that method output fits expected API."""
     assert "proportions_pred" in adata.obsm
+    assert isinstance(adata.obsm["proportions_pred"], np.ndarray)
     assert "proportions_true" in adata.obsm
+    assert isinstance(adata.obsm["proportions_true"], np.ndarray)
     return True
 
 
@@ -37,14 +40,12 @@ def sample_dataset():
     n_types = 3
     # load sample anndata
     adata_spatial = load_sample_data()
+    # modify index
+    adata_spatial.obs.index = "spatial_" + adata_spatial.obs.index
     # set spatial coordinates
     adata_spatial.obsm["spatial"] = np.random.random((adata_spatial.shape[0], 2))
     # generate proportion values
-    props = pd.DataFrame(
-        np.random.dirichlet(alpha=np.ones(n_types), size=adata_spatial.shape[0]),
-        columns=np.arange(n_types),
-        index=adata_spatial.obs.index,
-    )
+    props = np.random.dirichlet(alpha=np.ones(n_types), size=adata_spatial.shape[0])
     adata_spatial.obsm["proportions_true"] = props
     # get anndata for single cell reference
     adata_sc = load_sample_data()
@@ -62,10 +63,6 @@ def sample_method(adata):
     # get number of cell types
     n_types = adata.obsm["proportions_true"].shape[1]
     # generate predicted proportions
-    props = pd.DataFrame(
-        np.random.dirichlet(alpha=np.ones(n_types), size=adata.shape[0]),
-        columns=np.arange(n_types),
-        index=adata.obs.index,
-    )
+    props = np.random.dirichlet(alpha=np.ones(n_types), size=adata.shape[0])
     adata.obsm["proportions_pred"] = props
     return adata

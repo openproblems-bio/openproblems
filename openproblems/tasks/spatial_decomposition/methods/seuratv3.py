@@ -20,7 +20,9 @@ def seuratv3(adata, test=False):
     # exctract single cell reference data
     sc_adata, sp_adata = split_sc_and_sp(adata)
     # store true proportions, due to error when passing DataFrame in obsm
-    proportions_true = sp_adata.obsm["proportions_true"]
+    proportions_true = pd.DataFrame(
+        adata.obsm["proportions_true"], index=sc_adata.obs_names.copy()
+    )
     # r function only accepts one argument, pass original adata object
     sp_adata = _seuratv3(adata)
     # get predicted cell type proportions from obs
@@ -36,8 +38,8 @@ def seuratv3(adata, test=False):
     order = sp_adata.obs.index
 
     # add proportions
-    sp_adata.obsm["proportions_pred"] = proportions_pred.iloc[order, :]
-    sp_adata.obsm["proportions_true"] = proportions_true.iloc[order, :]
+    sp_adata.obsm["proportions_pred"] = proportions_pred.iloc[order, :].to_numpy()
+    sp_adata.obsm["proportions_true"] = proportions_true.iloc[order, :].to_numpy()
 
     sp_adata.uns["method_code_version"] = check_r_version("Seurat")
 

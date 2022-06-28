@@ -2,7 +2,6 @@ from ....tools.decorators import method
 from ....tools.utils import check_version
 
 import numpy as np
-import pandas as pd
 
 
 @method(
@@ -17,11 +16,6 @@ def random_proportion_assignment(adata, test=False):
     props = np.random.dirichlet(
         np.ones(n_types),
         size=adata.shape[0],
-    )
-    props = pd.DataFrame(
-        props,
-        columns=adata.obsm["proportions_true"].columns,
-        index=adata.obs.index,
     )
 
     adata.obsm["proportions_pred"] = props
