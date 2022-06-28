@@ -21,7 +21,7 @@ def remove_zeros(Xmat):
 
 def insert_at(arr, output_size, indices):
     result = np.zeros(output_size)
-    existing_indices = [np.setdiff1d(np.arange(axis_size), 
+    existing_indices = [np.setdiff1d(np.arange(axis_size),
                                      axis_indices, assume_unique=True)
                         for axis_size, axis_indices in zip(output_size, indices)]
     result[np.ix_(*existing_indices)] = arr
