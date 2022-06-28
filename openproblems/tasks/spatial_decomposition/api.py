@@ -1,5 +1,6 @@
 from ...data.sample import load_sample_data
 from ._utils import merge_sc_and_sp
+from ._utils import split_sc_and_sp
 from pandas.core.dtypes.common import is_categorical_dtype
 
 import numpy as np
@@ -62,6 +63,7 @@ def sample_dataset():
 
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
+    _, adata = split_sc_and_sp(adata)
     # get number of cell types
     n_types = adata.obsm["proportions_true"].shape[1]
     # generate predicted proportions

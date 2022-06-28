@@ -85,18 +85,18 @@ def nmfreg(adata, test=False):
     sc_deconv = sc_deconv / sc_deconv.sum(1)[:, np.newaxis]
 
     # Evaluation on reference TODO(either ove or delete)
-    cluster_df.loc[:, "predicted_code"] = np.argmax(sc_deconv, axis=1)
-    pos_neg_dict = {
-        i: [
-            sc_deconv[cluster_df.predicted_code == i, i],
-            sc_deconv[cluster_df.predicted_code != i, i],
-        ]
-        for i in range(n_types)
-    }
+    # cluster_df.loc[:, "predicted_code"] = np.argmax(sc_deconv, axis=1)
+    # pos_neg_dict = {
+    #     i: [
+    #         sc_deconv[cluster_df.predicted_code == i, i],
+    #         sc_deconv[cluster_df.predicted_code != i, i],
+    #     ]
+    #     for i in range(n_types)
+    # }
 
-    thresh_certainty = [0] * n_types
-    for c in range(n_types):
-        thresh_certainty[c] = np.max(pos_neg_dict[c][1])
+    # thresh_certainty = [0] * n_types
+    # for c in range(n_types):
+    #     thresh_certainty[c] = np.max(pos_neg_dict[c][1])
     # Evaluation ends here
 
     # Start run on actual spatial data
@@ -116,6 +116,6 @@ def nmfreg(adata, test=False):
     prop = bead_prop / bead_prop.sum(1)[:, np.newaxis]
     adata.obsm["proportions_pred"] = prop
 
-    adata.uns["method_code_version"] = check_version("nmf-reg")
+    adata.uns["method_code_version"] = check_version("scikit-learn")
 
     return adata
