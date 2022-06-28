@@ -10,7 +10,6 @@ from .._utils import split_sc_and_sp
     paper_url="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.214.6398&rep=rep1&type=pdf",  # noqa: E501
     paper_year=2009,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html",  # noqa: E501
-    code_version=check_version("scikit-learn"),
 )
 def nmf(adata, test=False):
     """NMF for spatial deconvolution."""
@@ -46,5 +45,7 @@ def nmf(adata, test=False):
 
     prop = Wa / Wa.sum(1)[:, np.newaxis]
     adata.obsm["proportions_pred"] = prop
+
+    adata.uns["method_code_version"] = check_version("scikit-learn")
 
     return adata

@@ -13,7 +13,6 @@ import numpy as np
     paper_url="http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.41.1639",
     paper_year=1999,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.svm.NuSVR.html",
-    code_version=check_version("scikit-learn"),
 )
 def nusvr_sklearn(adata, test=False):
     from scipy.sparse import issparse
@@ -22,12 +21,12 @@ def nusvr_sklearn(adata, test=False):
     adata_sc, adata = split_sc_and_sp(adata)
     adata_means = obs_means(adata_sc, "label")
 
-    if issparse(adata.X):
-        X = adata_means.X.T.toarray()
-        y = adata.X.T.toarray()
-    else:
-        X = adata_means.X.T
-        y = adata.X.T
+    X = adata_means.X.T
+    y = adata.X.T
+    if issparse(X):
+        X = X.toarray()
+    if issparse(y):
+        y = y.toarray()
     res = np.zeros((y.shape[1], X.shape[1]))  # (voxels,cells)
     for i in range(y.shape[1]):
         model = NuSVR(kernel="linear")
@@ -37,4 +36,5 @@ def nusvr_sklearn(adata, test=False):
     res_prop = normalize_coefficients(res)
 
     adata.obsm["proportions_pred"] = res_prop
+    adata.uns["method_code_version"] = check_version("scikit-learn")
     return adata

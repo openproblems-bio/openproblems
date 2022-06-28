@@ -27,10 +27,12 @@ def check_dataset(adata):
 
 def check_method(adata):
     """Check that method output fits expected API."""
+    assert np.all(adata.obs["modality"] == "sp")
     assert "proportions_pred" in adata.obsm
     assert isinstance(adata.obsm["proportions_pred"], np.ndarray)
     assert "proportions_true" in adata.obsm
     assert isinstance(adata.obsm["proportions_true"], np.ndarray)
+    assert adata.obsm["proportions_pred"].shape == adata.obsm["proportions_true"].shape
     return True
 
 

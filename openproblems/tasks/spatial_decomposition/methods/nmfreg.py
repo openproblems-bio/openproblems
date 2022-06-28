@@ -11,7 +11,6 @@ import numpy as np
     paper_url="https://science.sciencemag.org/content/363/6434/1463",  # noqa: E501
     paper_year=2019,
     code_url="https://github.com/tudaga/NMFreg_tutorial",
-    code_version=check_version("nmf-reg"),
 )
 def nmfreg(adata, test=False):
     """NMF-reg: NMF regression for array-based spatial transcriptomics data.
@@ -116,5 +115,7 @@ def nmfreg(adata, test=False):
 
     prop = bead_prop / bead_prop.sum(1)[:, np.newaxis]
     adata.obsm["proportions_pred"] = prop
+
+    adata.uns["method_code_version"] = check_version("nmf-reg")
 
     return adata

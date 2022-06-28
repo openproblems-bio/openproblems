@@ -5,7 +5,7 @@ from .._utils import split_sc_and_sp
 
 import pandas as pd
 
-_seuratv3 = r_function("seuratv3.R")
+_seuratv3 = r_function("seuratv3.R", args="sce_sc, sce_sp")
 
 
 @method(
@@ -17,30 +17,19 @@ _seuratv3 = r_function("seuratv3.R")
     image="openproblems-r-extras",
 )
 def seuratv3(adata, test=False):
-    # exctract single cell reference data
-    sc_adata, sp_adata = split_sc_and_sp(adata)
-    # store true proportions, due to error when passing DataFrame in obsm
-    proportions_true = pd.DataFrame(
-        adata.obsm["proportions_true"], index=sc_adata.obs_names.copy()
-    )
-    # r function only accepts one argument, pass original adata object
-    sp_adata = _seuratv3(adata)
+    # extract single cell reference data
+    adata_sc, adata = split_sc_and_sp(adata)
+    # proportions_true gets lost in translation
+    proportions_true = adata.obsm["proportions_true"]
+    adata = _seuratv3(adata_sc, adata)
     # get predicted cell type proportions from obs
-    cell_type_names = pd.Index([x for x in sp_adata.obs.columns if "xCT_" in x[0:4]])
-    proportions_pred = sp_adata.obs[cell_type_names]
-    proportions_pred.columns = pd.Index([x.lstrip("xCT_") for x in cell_type_names])
-
-    assert (
-        proportions_pred.shape == proportions_true.shape
-    ), "mismatched sizes between predicted and true proportions"
-
-    # get observation order
-    order = sp_adata.obs.index
+    cell_type_names = pd.Index([x for x in adata.obs.columns if x.startswith("xCT_")])
+    proportions_pred = adata.obs[cell_type_names].to_numpy()
 
     # add proportions
-    sp_adata.obsm["proportions_pred"] = proportions_pred.iloc[order, :].to_numpy()
-    sp_adata.obsm["proportions_true"] = proportions_true.iloc[order, :].to_numpy()
+    adata.obsm["proportions_pred"] = proportions_pred
+    adata.obsm["proportions_true"] = proportions_true
 
-    sp_adata.uns["method_code_version"] = check_r_version("Seurat")
+    adata.uns["method_code_version"] = check_r_version("Seurat")
 
-    return sp_adata
+    return adata

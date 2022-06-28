@@ -9,7 +9,6 @@ from .._utils import split_sc_and_sp
     paper_url="https://www.nature.com/articles/s41592-021-01264-7",
     paper_year=2021,
     code_url="https://github.com/broadinstitute/Tangram",
-    code_version=check_version("tangram-sc"),
     image="openproblems-python-extras",
 )
 def tangram(adata, test=False, num_epochs=1000, n_markers=100):
@@ -62,5 +61,7 @@ def tangram(adata, test=False, num_epochs=1000, n_markers=100):
 
     # remove un-normalized predictions
     del adata.obsm["tangram_ct_pred"]
+
+    adata.uns["method_code_version"] = check_version("tangram-sc")
 
     return adata

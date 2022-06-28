@@ -28,7 +28,7 @@ Datasets consists of 2 `anndata.AnnData` objects, concatenated by key `adata.obs
 
 In the single cell reference, cell-types are stored in `adata_sc.obs["label"]`.
 In the spatial target, ground-truth cell-type proportions are stored in `adata_spatial.obsm["proportions_true"]`.
-Methods should return inferred proportions stored in `adata_spatial.obsm["proportions_pred"]`.
+Methods should return only the spatial data with inferred proportions stored in `adata_spatial.obsm["proportions_pred"]`.
 Metrics shall compare `adata_spatial.obsm['proportions_pred']` to `adata_spatial.obsm['proportions_true']`.
 
 ## Metrics

@@ -9,7 +9,6 @@ from .._utils import split_sc_and_sp
     paper_url="https://www.nature.com/articles/s42003-020-01247-y",
     paper_year=2020,
     code_url="https://github.com/YosefLab/scvi-tools",
-    code_version=check_version("scvi-tools"),
     image="openproblems-python-extras",
 )
 def stereoscope_raw(adata, test=False):
@@ -25,4 +24,6 @@ def stereoscope_raw(adata, test=False):
     stereo = SpatialStereoscope.from_rna_model(adata, sc_model)
     stereo.train(max_epochs=1000)
     adata.obsm["proportions_pred"] = stereo.get_proportions()
+
+    adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata

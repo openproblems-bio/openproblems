@@ -13,7 +13,6 @@ import numpy as np
     paper_url="https://epubs.siam.org/doi/pdf/10.1137/1.9781611971217.bm",
     paper_year=1987,
     code_url="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.nnls.html",  # noqa: E501
-    code_version=check_version("scipy"),
 )
 def nnls_scipy(adata, test=False):
     from scipy.optimize import nnls
@@ -22,12 +21,12 @@ def nnls_scipy(adata, test=False):
     adata_sc, adata = split_sc_and_sp(adata)
     adata_means = obs_means(adata_sc, "label")
 
-    if issparse(adata.X):
-        X = adata_means.X.T.toarray()
-        y = adata.X.T.toarray()
-    else:
-        X = adata_means.X.T
-        y = adata.X.T
+    X = adata_means.X.T
+    y = adata.X.T
+    if issparse(X):
+        X = X.toarray()
+    if issparse(y):
+        y = y.toarray()
     res = np.zeros((y.shape[1], X.shape[1]))  # (voxels,cells)
     for i in range(y.shape[1]):
         x, _ = nnls(X, y[:, i])
@@ -36,5 +35,6 @@ def nnls_scipy(adata, test=False):
     res_prop = normalize_coefficients(res)
 
     adata.obsm["proportions_pred"] = res_prop
+    adata.uns["method_code_version"] = check_version("scipy")
 
     return adata

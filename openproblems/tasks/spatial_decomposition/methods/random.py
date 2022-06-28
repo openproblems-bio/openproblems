@@ -1,5 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
+from .._utils import split_sc_and_sp
 
 import numpy as np
 
@@ -12,6 +13,7 @@ import numpy as np
     code_url="https://github.com/openproblems-bio/openproblems",
 )
 def random_proportion_assignment(adata, test=False):
+    _, adata = split_sc_and_sp(adata)
     n_types = adata.obsm["proportions_true"].shape[1]
     props = np.random.dirichlet(
         np.ones(n_types),
