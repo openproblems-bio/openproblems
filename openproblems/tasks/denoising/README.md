@@ -8,7 +8,7 @@ A key challenge in evaluating denoising methods is the general lack of a ground 
 
 # The metrics
 
-Metrics for data denoising aim to 
+Metrics for data denoising aim to assess denoising accuracy by comparing the denoised *training* set to the randomly sampled *test* set. Two comparisons have been implemented, MSE and Poisson, which penalize differences between the denoised *train* and *test* set under gaussian or poisson loss functions, respectively.  
 
 * **TODO**: TODO
 * **TODO**: TODO
