@@ -13,7 +13,6 @@ hexbin@1.28.2
 htmltools@0.4.0
 htmlwidgets@1.5.3
 igraph@1.2.11
-immunogenomics/harmony@ea48a6c
 lifecycle@1.0.1
 Matrix@1.4-1
 Rcpp@1.0.7
