@@ -95,14 +95,7 @@ class TestDataset(unittest.TestCase):
 
     def test_sparse(self):
         """Ensure output is sparse."""
-        if not scipy.sparse.issparse(self.adata.X):
-            openproblems.utils.future_warning(
-                "{}-{}: self.adata.X is loaded as dense.".format(
-                    self.task.__name__.split(".")[-1], self.dataset.__name__
-                ),
-                error_version="1.0",
-                error_category=TypeError,
-            )
+        assert scipy.sparse.issparse(self.adata.X)
 
     def test_not_bytes(self):
         """Ensure output does not contain byte strings."""
