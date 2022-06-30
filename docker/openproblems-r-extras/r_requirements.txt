@@ -16,6 +16,7 @@ igraph@1.2.11
 immunogenomics/harmony@ea48a6c
 lifecycle@1.0.1
 Matrix@1.4-1
+pkgload@1.2.4
 Rcpp@1.0.7
 reticulate@1.18
 rlang@1.0.2
