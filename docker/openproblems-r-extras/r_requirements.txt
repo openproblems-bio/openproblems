@@ -9,6 +9,7 @@ devtools@2.3.2
 dplyr@1.0.9
 ellipsis@0.3.2
 forecast@8.14
+hardhat@1.1.0
 hexbin@1.28.2
 htmltools@0.4.0
 htmlwidgets@1.5.3
