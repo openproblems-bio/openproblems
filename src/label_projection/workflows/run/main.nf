@@ -27,6 +27,9 @@ include { scarches_scanvi_hvg } from "$targetDir/label_projection/methods/scvi/s
 // import metrics TODO [f1]
 include { accuracy }          from "$targetDir/label_projection/metrics/accuracy/main.nf"
 
+// import helper functions
+include { extract_scores }       from "$targetDir/common/extract_scores/main.nf"
+
 
 /*******************************************************
 *             Dataset processor workflows              *
@@ -53,12 +56,37 @@ workflow load_data {
 }
 
 def mlp0 = mlp.run(
-        map: { [it[0], [input: it[1], max_iter: 100, hidden_layer_sizes: 20]] }
+        args: [max_iter: 100, hidden_layer_sizes: 20]
 )
 
 def lr0 = logistic_regression.run(
-        map: { [it[0], [input: it[1], max_iter: 100]] }
+        args: [max_iter: 100]
 )
+
+def scvi_hvg0 = scanvi_hvg.run(
+    args: [n_hidden: 32, n_layers: 1, n_latent: 10, n_top_genes: 2000,
+           span: 0.8, max_epochs: 1, limit_train_batches: 10, limit_val_batches: 10]
+)
+
+def scvi_allgns0 = scanvi_all_genes.run(
+    args: [n_hidden: 32, n_layers: 1, n_latent: 10, n_top_genes: 2000,
+           span: 0.8, max_epochs: 1, limit_train_batches: 10, limit_val_batches: 10]
+)
+
+def scarches_hvg0 = scarches_scanvi_hvg.run(
+    args: [n_hidden: 32, n_layers: 1, n_latent: 10, n_top_genes: 2000,
+           span: 0.8, max_epochs: 1, limit_train_batches: 10, limit_val_batches: 10]
+)
+
+def scarches_allgns0 = scarches_scanvi_all_genes.run(
+    args: [n_hidden: 32, n_layers: 1, n_latent: 10, n_top_genes: 2000,
+           span: 0.8, max_epochs: 1, limit_train_batches: 10, limit_val_batches: 10]
+)
+
+def unique_file_name(params){
+    output = "${params[1].parent[-1]}_${params[1].baseName}"
+    return [params[0], [input: params[1], output: output]]
+}
 
 /*******************************************************
 *                    Main workflow                     *
@@ -72,12 +100,19 @@ workflow {
                         celltype_categories: "0:3",
                         tech_categories: "0:-3:-2"]] }
     )
-    | view
-    | log_cpm
-    | view
+    | map { [it[0], [input: it[1]]] }
+    | (log_cpm & log_scran_pooling)
+    | mix
+    | map { [it[0], [input: it[1]]] }
     | (majority_vote & knn_classifier & mlp0 & lr0)
     | mix
-    | view
+    // | map { [it[0], [input: it[1]]] }
+    | map { unique_file_name(it) }
     | accuracy
+    | toSortedList
+    | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
     | view
+    | extract_scores.run(
+        auto: [ publish: true ]
+    )
 }

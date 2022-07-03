@@ -17,14 +17,20 @@ scores <- map_df(par$input, function(inp) {
   cat("Reading '", inp, "'\n", sep = "")
   ad <- read_h5ad(inp)
 
-  for (uns_name in c("dataset_id", "method_id", "metric_id", "metric_value")) {
+  if ("normalization_method" %in% names(ad$uns)) {
+    uns_names <- c("dataset_id", "normalization_method", "method_id", "metric_id", "metric_value")
+  } else {
+    uns_names <- c("dataset_id", "method_id", "metric_id", "metric_value")
+  }
+
+  for (uns_name in uns_names) {
     assert_that(
       uns_name %in% names(ad$uns),
       msg = paste0("File ", inp, " must contain `uns['", uns_name, "']`")
     )
   }
 
-  as_tibble(ad$uns[c("dataset_id", "method_id", "metric_id", "metric_value")])
+  as_tibble(ad$uns[uns_names])
 })
 
 write_tsv(scores, par$output)
