@@ -83,9 +83,8 @@ def scarches_allgns0 = scarches_scanvi_all_genes.run(
            span: 0.8, max_epochs: 1, limit_train_batches: 10, limit_val_batches: 10]
 )
 
-def unique_file_name(params){
-    output = "${params[1].parent[-1]}_${params[1].baseName}"
-    return [params[0], [input: params[1], output: output]]
+def unique_file_name(tuple) {
+    return [tuple[1].baseName.replaceAll('\\.output$', ''), tuple[1]]
 }
 
 /*******************************************************
@@ -94,25 +93,23 @@ def unique_file_name(params){
 
 workflow {
     load_data
-    | randomize
-    | subsample.run(
-        map: { [it[0], [input: it[1],
-                        celltype_categories: "0:3",
-                        tech_categories: "0:-3:-2"]] }
-    )
-    | map { [it[0], [input: it[1]]] }
-    | (log_cpm & log_scran_pooling)
-    | mix
-    | map { [it[0], [input: it[1]]] }
-    | (majority_vote & knn_classifier & mlp0 & lr0)
-    | mix
-    // | map { [it[0], [input: it[1]]] }
-    | map { unique_file_name(it) }
-    | accuracy
-    | toSortedList
-    | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
-    | view
-    | extract_scores.run(
-        auto: [ publish: true ]
-    )
+        | randomize
+        | subsample.run(
+            map: { [it[0], [input: it[1],
+                            celltype_categories: "0:3",
+                            tech_categories: "0:-3:-2"]] }
+        )
+        | (log_cpm & log_scran_pooling)
+        | mix
+        | map { unique_file_name(it) }
+        | (majority_vote & knn_classifier & mlp0 & lr0)
+        | mix
+        | map { unique_file_name(it) }
+        | accuracy
+        | toSortedList
+        | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
+        | view
+        | extract_scores.run(
+            auto: [ publish: true ]
+        )
 }
