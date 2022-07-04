@@ -39,6 +39,7 @@ sc.pp.subsample(adata, n_obs=500)
 # Note: could also use 200-500 HVGs rather than 200 random genes
 # Ensure there are no cells or genes with 0 counts
 filter_genes_cells(adata)
+adata.uns["dataset_id"] = adata.uns["dataset_id"] + "_subsample"
 
 print(">> Writing data")
 adata.write(par['output'])

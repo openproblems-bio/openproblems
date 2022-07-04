@@ -108,7 +108,6 @@ workflow {
         | accuracy
         | toSortedList
         | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
-        | view
         | extract_scores.run(
             auto: [ publish: true ]
         )
