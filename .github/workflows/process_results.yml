@@ -91,12 +91,6 @@ jobs:
         IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
         aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
 
-    - name: Push Git branch
-      if: "github.event_name == 'repository_dispatch'"
-      working-directory: website
-      run: |
-        git push -u origin $UPDATE_BRANCH_NAME
-
     - name: Pre-commit
       continue-on-error: true
       working-directory: website
@@ -116,8 +110,9 @@ jobs:
         message: 'Update benchmark results # ci skip'
         add: "['data/results', 'content/tasks']"
         branch: ${{ env.UPDATE_BRANCH_NAME }}
-        push: false
+        push: true
         cwd: './website'
+        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
 
     - name: Create Pull Request
       if: "github.event_name == 'repository_dispatch'"
@@ -129,3 +124,4 @@ jobs:
         title: '[auto] Update benchmark results'
         reviewers: scottgigante, dburkhardt
         path: './website'
+        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
