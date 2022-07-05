@@ -7,11 +7,13 @@ import numpy as np
 
 INPUT = "toy_baseline_pred_data.h5ad"
 OUTPUT = "output.accuracy.h5ad"
+AVG = "weighted"
 
-print(">> Running accuracy component")
+print(">> Running f1 component")
 out = subprocess.check_output([
-    "./accuracy",
+    "./f1",
     "--input", INPUT,
+    "--average", AVG,
     "--output", OUTPUT
 ]).decode("utf-8")
 
@@ -23,7 +25,7 @@ adata = sc.read_h5ad(OUTPUT)
 
 # check id
 assert "metric_id" in adata.uns
-assert adata.uns["metric_id"] == "accuracy"
+assert adata.uns["metric_id"] == "f1"
 assert "metric_value" in adata.uns
 assert type(adata.uns["metric_value"]) is np.float64
 

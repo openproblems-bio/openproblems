@@ -14,8 +14,9 @@ include { subsample } from "$targetDir/label_projection/data_processing/subsampl
 include { log_scran_pooling } from "$targetDir/label_projection/data_processing/normalize/scran/log_scran_pooling/main.nf"
 include { log_cpm } from "$targetDir/label_projection/data_processing/normalize/log_cpm/main.nf"
 
-// import methods TODO[baseline/random_labels]
-include { majority_vote }            from "$targetDir/label_projection/methods/baseline/majority_vote/main.nf"
+// import methods
+include { baseline_majority_vote }    from "$targetDir/label_projection/control_methods/baseline_majority_vote/main.nf"
+include { baseline_random_celltype }  from "$targetDir/label_projection/control_methods/baseline_random_celltype/main.nf"
 include { knn_classifier }   from "$targetDir/label_projection/methods/knn_classifier/main.nf"
 include { mlp }              from "$targetDir/label_projection/methods/mlp/main.nf"
 include { logistic_regression } from "$targetDir/label_projection/methods/logistic_regression/main.nf"
@@ -24,8 +25,9 @@ include { scanvi_all_genes } from "$targetDir/label_projection/methods/scvi/scan
 include { scarches_scanvi_all_genes } from "$targetDir/label_projection/methods/scvi/scarches_scanvi_all_genes/main.nf"
 include { scarches_scanvi_hvg } from "$targetDir/label_projection/methods/scvi/scarches_scanvi_hvg/main.nf"
 
-// import metrics TODO [f1]
+// import metrics
 include { accuracy }          from "$targetDir/label_projection/metrics/accuracy/main.nf"
+include { f1 }          from "$targetDir/label_projection/metrics/f1/main.nf"
 
 // import helper functions
 include { extract_scores }       from "$targetDir/common/extract_scores/main.nf"
@@ -83,6 +85,10 @@ def scarches_allgns0 = scarches_scanvi_all_genes.run(
            span: 0.8, max_epochs: 1, limit_train_batches: 10, limit_val_batches: 10]
 )
 
+def f1a = f1.run(
+    args: [average: "weighted"]
+)
+
 def unique_file_name(tuple) {
     return [tuple[1].baseName.replaceAll('\\.output$', ''), tuple[1]]
 }
@@ -102,10 +108,11 @@ workflow {
         | (log_cpm & log_scran_pooling)
         | mix
         | map { unique_file_name(it) }
-        | (majority_vote & knn_classifier & mlp0 & lr0)
+        | (knn_classifier & mlp0 & lr0 & baseline_random_celltype & baseline_majority_vote)
         | mix
         | map { unique_file_name(it) }
-        | accuracy
+        | (accuracy & f1a)
+        | mix
         | toSortedList
         | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
         | extract_scores.run(
