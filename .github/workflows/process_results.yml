@@ -92,16 +92,6 @@ jobs:
         IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
         aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
 
-    - name: Pre-commit
-      continue-on-error: true
-      working-directory: website
-      env:
-        SKIP: style-files,lintr
-      run: |
-        pip install pre-commit
-        git add .
-        pre-commit run
-
     - name: Commit result
       uses: EndBug/add-and-commit@v6
       if: "github.event_name == 'repository_dispatch'"
