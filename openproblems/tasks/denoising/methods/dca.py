@@ -35,19 +35,13 @@ def _dca(adata, test=False, epochs=None):
         epochs = epochs or 300
     from dca.api import dca
 
-    # remove zeros from train
-    Xmat, inds = remove_zeros(adata.obsm["train"])
     # make adata object with train counts
-    adata2 = sc.AnnData(Xmat)
+    adata_train = sc.AnnData(adata.obsm["train"])
     # run DCA
-    dca(adata2, epochs=epochs)
-    Xmat = adata2.X
-    # insert zero rows back into Xmat at inds
-    Xmat = insert_at(Xmat,
-                     (adata.obsm["train"].shape[0], adata.obsm["train"].shape[1]),
-                     (0, list(inds)))[1:, :]
+    dca(adata_train, epochs=epochs)
+    
     # set denoised to Xmat
-    adata.obsm["denoised"] = Xmat
+    adata.obsm["denoised"] = adata_train.X
     # check version of dca
     adata.uns["method_code_version"] = check_version("dca")
     return adata
@@ -55,7 +49,8 @@ def _dca(adata, test=False, epochs=None):
 
 @method(
     method_name="DCA",
-    paper_name="Single-cell RNA-seq denoising using...",
+    paper_name="Single-cell RNA-seq denoising using a "
+    "deep count autoencoder",
     paper_url="https://www.nature.com/articles/s41467-018-07931-2",
     paper_year=2019,
     code_url="https://github.com/theislab/dca",
