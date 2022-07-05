@@ -28,7 +28,7 @@ def split_data(
     )
     # remove zero entries
     is_missing = X_train.sum(axis=0) == 0
-    X_train, X_test = X_train[:,~is_missing], X_test[:,~is_missing]
+    X_train, X_test = X_train[:, ~is_missing], X_test[:, ~is_missing]
 
     adata = adata[:, ~is_missing].copy()
     adata.obsm["train"] = scipy.sparse.csr_matrix(X_train).astype(float)
