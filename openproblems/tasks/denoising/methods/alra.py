@@ -10,11 +10,12 @@ log = logging.getLogger("openproblems")
 
 @method(
     method_name="ALRA",
-    paper_name="Zero-preserving imputation of scRNA-seq...",
+    paper_name="Zero-preserving imputation of scRNA-seq data using "
+    "low-rank approximation",
     paper_url="https://www.biorxiv.org/content/10.1101/397588v1",
     paper_year=2018,
     code_url="https://github.com/KlugerLab/ALRA",
-    code_version="v1.0.0",
+    code_version="1.0.0",
     image="openproblems-r-extras",
 )
 def alra(adata, test=False):
