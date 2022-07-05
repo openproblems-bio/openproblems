@@ -255,13 +255,14 @@ def docker_test(func, image=None, timeout=None, retries=0, *args, **kwargs):
                     handle.write(line + "\n")
             handle.write("\n")
             handle.write("if __name__ == '__main__':\n")
-            handle.write("    import openproblems\n")
             handle.write("    import sys\n")
             handle.write(
                 "    sys.path.append('{}')\n".format(
                     os.path.join(DOCKER_BASEDIR, "test")
                 )
             )
+            handle.write("    import utils.warnings\n")
+            handle.write("    import openproblems\n")
             handle.write("    {}(*{}, **{})\n".format(func.__name__, args, kwargs))
 
         run_image(image, f, timeout=timeout, retries=retries)
