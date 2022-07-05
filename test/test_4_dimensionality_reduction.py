@@ -1,5 +1,7 @@
 """Specific tests for the dimensionality_reduction task"""
-import utils.warnings  # noqa: F401
+import utils.warnings
+
+utils.warnings.ignore_warnings()  # noqa: F401
 
 # isort: split
 import openproblems

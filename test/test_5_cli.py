@@ -1,4 +1,6 @@
-import utils.warnings  # noqa: F401
+import utils.warnings
+
+utils.warnings.ignore_warnings()  # noqa: F401
 
 # isort: split
 from openproblems.api.main import main

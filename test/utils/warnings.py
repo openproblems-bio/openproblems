@@ -54,6 +54,3 @@ def ignore_warnings():
         warnings.filterwarnings("ignore", category=numba.NumbaWarning)
     except ImportError:
         pass
-
-
-ignore_warnings()
