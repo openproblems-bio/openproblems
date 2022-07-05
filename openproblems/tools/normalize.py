@@ -17,7 +17,7 @@ _scran = scprep.run.RFunction(
     sce <- computeSumFactors(
            sce, min.mean=min.mean,
            assay.type="X",
-           BPPARAM=MulticoreParam()
+           BPPARAM=SerialParam()
            )
     sizeFactors(sce)
     """,
