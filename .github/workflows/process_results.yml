@@ -26,6 +26,7 @@ jobs:
         fetch-depth: 0
         repository: openproblems-bio/website
         path: website
+        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
 
     - name: Set up Git branch
       working-directory: website
@@ -112,7 +113,6 @@ jobs:
         new_branch: ${{ env.UPDATE_BRANCH_NAME }}
         push: true
         cwd: './website'
-        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
 
     - name: Create Pull Request
       if: "github.event_name == 'repository_dispatch'"
