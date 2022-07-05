@@ -93,7 +93,7 @@ jobs:
         aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
 
     - name: Commit result
-      uses: EndBug/add-and-commit@v6
+      uses: EndBug/add-and-commit@v9
       if: "github.event_name == 'repository_dispatch'"
       with:
         author_name: SingleCellOpenProblems
