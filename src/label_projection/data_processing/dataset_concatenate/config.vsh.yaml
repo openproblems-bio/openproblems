@@ -1,0 +1,41 @@
+functionality:
+  name: "dataset_concatenate"
+  namespace: "label_projection/data_processing"
+  version: "dev"
+  description: "Concatenate datasets."
+  authors:
+    - name: "Michaela Mueller "
+      roles: [ maintainer, author ]
+      props: { github: mumichae }
+  arguments:
+    - name: "--inputs"
+      alternatives: ["-i"]
+      type: "file"
+      multiple: true
+      required: true
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: "Output h5ad file of the cleaned dataset"
+      required: true
+
+  resources:
+    - type: python_script
+      path: script.py
+  tests:
+    - type: python_script
+      path: test_script.py
+    - type: file
+      path: "../../resources/pancreas"
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - "anndata<0.8"
+  - type: native
+  - type: nextflow

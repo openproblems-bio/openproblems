@@ -1,2 +1,0 @@
-processor	name	url	obs_celltype	obs_batch	obs_tissue
-anndata_loader	pancreas	https://ndownloader.figshare.com/files/24539828	celltype	tech	NA
