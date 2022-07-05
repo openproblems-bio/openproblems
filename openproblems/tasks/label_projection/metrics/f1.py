@@ -21,6 +21,6 @@ def f1(adata):
     return _f1(adata, average="weighted")
 
 
-@metric(metric_name="Micro F1 score", maximize=True)
-def f1_micro(adata):
-    return _f1(adata, average="micro")
+@metric(metric_name="Macro F1 score", maximize=True)
+def f1_macro(adata):
+    return _f1(adata, average="macro")
