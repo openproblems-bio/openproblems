@@ -144,7 +144,9 @@ def dataset(dataset_name, data_url, dataset_summary, image="openproblems"):
         @functools.wraps(func)
         def apply_func(*args, **kwargs):
             log.debug("Loading {} dataset".format(func.__name__))
-            return func(*args, **kwargs)
+            adata = func(*args, **kwargs)
+            adata.strings_to_categoricals()
+            return adata
 
         apply_func.metadata = dict(
             dataset_name=dataset_name,
