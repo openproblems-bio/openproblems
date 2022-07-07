@@ -191,7 +191,7 @@ def test_pipeline():
                 "--test",
                 "--output",
                 dataset_file,
-                "pancreas_batch",
+                "zebrafish_batch",
             ],
             do_print=False,
         )
