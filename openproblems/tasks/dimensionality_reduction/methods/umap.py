@@ -13,7 +13,6 @@ import scanpy as sc
     paper_url="https://arxiv.org/abs/1802.03426",
     paper_year=2018,
     code_url="https://github.com/lmcinnes/umap",
-    code_version=check_version("umap-learn"),
 )
 def umap_logCPM_1kHVG(adata, test: bool = False, n_pca=50):
     adata = log_cpm_hvg(adata)
@@ -21,4 +20,5 @@ def umap_logCPM_1kHVG(adata, test: bool = False, n_pca=50):
     sc.pp.neighbors(adata, use_rep="X_pca", n_pcs=n_pca)
     sc.tl.umap(adata)
     adata.obsm["X_emb"] = adata.obsm["X_umap"]
+    adata.uns["method_code_version"] = check_version("umap-learn")
     return adata
