@@ -25,15 +25,18 @@ def _xgboost(adata, test: bool = False, num_round: Optional[int] = None):
         num_round = num_round or 5
 
     adata.strings_to_categoricals()
+    adata.obs["labels_int"] = adata.obs["labels"].cat.codes
+    categories = adata.obs["labels"].cat.categories
+
     adata_train = adata[adata.obs["is_train"]]
     adata_test = adata[~adata.obs["is_train"]].copy()
 
-    xg_train = xgb.DMatrix(adata_train.X, label=adata_train.obs["labels"].cat.codes)
-    xg_test = xgb.DMatrix(adata_test.X, label=adata_test.obs["labels"].cat.codes)
+    xg_train = xgb.DMatrix(adata_train.X, label=adata_train.obs["labels_int"])
+    xg_test = xgb.DMatrix(adata_test.X, label=adata_test.obs["labels_int"])
 
     param = dict(
         objective="multi:softmax",
-        num_class=len(adata.obs["labels"].astype(str).unique()),
+        num_class=len(categories),
     )
 
     watchlist = [(xg_train, "train")]
@@ -41,7 +44,7 @@ def _xgboost(adata, test: bool = False, num_round: Optional[int] = None):
 
     # Predict on test data
     pred = xgb_op.predict(xg_test).astype(int)
-    adata_test.obs["labels_pred"] = adata_test.obs["labels"].cat.categories[pred]
+    adata_test.obs["labels_pred"] = categories[pred]
 
     adata.obs["labels_pred"] = [
         adata_test.obs["labels_pred"][idx] if idx in adata_test.obs_names else np.nan
