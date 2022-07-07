@@ -48,6 +48,7 @@ class TestTask(unittest.TestCase):
         assert callable(self.task.api.check_method)
         assert callable(self.task.api.sample_dataset)
         assert callable(self.task.api.sample_method)
+        assert hasattr(self.task.api.sample_dataset, "metadata")
 
     def test_task_api_is_consistent(self):
         """Test that a task's API is self-consistent"""
