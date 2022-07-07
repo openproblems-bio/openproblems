@@ -66,6 +66,11 @@ def parse_output(parser):
     )
 
 
+def parse_test(parser):
+    """Parse the test flag argument"""
+    parser.add_argument("--test", action="store_true", help="Run in test mode")
+
+
 def create_tasks_parser(subparsers):
     """Create the argument parser for ``openproblems-cli tasks``."""
     subparsers.add_parser("tasks", help="List tasks")
@@ -125,9 +130,7 @@ def create_load_parser(subparsers):
         help="Select datasets from a specific task",
         required=True,
     )
-    parser.add_argument(
-        "--test", action="store_true", help="Load the test version of the dataset"
-    )
+    parse_test(parser)
     parse_output(parser)
     parser.add_argument("name", type=str, help="Name of the selected dataset")
 
@@ -145,9 +148,7 @@ def create_run_parser(subparsers):
     parse_input(parser)
     parse_output(parser)
     parser.add_argument("name", type=str, help="Name of the selected method")
-    parser.add_argument(
-        "--test", action="store_true", help="Run the test version of the method"
-    )
+    parse_test(parser)
 
 
 def create_evaluate_parser(subparsers):
@@ -162,6 +163,37 @@ def create_evaluate_parser(subparsers):
     )
     parse_input(parser)
     parser.add_argument("name", type=str, help="Name of the selected metric")
+
+
+def create_test_parser(subparsers):
+    """Create the argument parser for ``openproblems-cli test``."""
+    parser = subparsers.add_parser("test", help="Test a dataset, method and/or metric")
+    parser.add_argument(
+        "--task",
+        "-t",
+        type=str,
+        help="Name of task to test",
+        required=True,
+    )
+    parser.add_argument(
+        "--dataset",
+        type=str,
+        help="Name of the dataset to test. If missing, uses the sample dataset",
+        default=None,
+    )
+    parser.add_argument(
+        "--method",
+        type=str,
+        help="Name of the method to test. If missing, uses the sample method",
+        default=None,
+    )
+    parser.add_argument(
+        "--metric",
+        type=str,
+        help="Name of the metric to test. If missing, no metric is run",
+        default=None,
+    )
+    parse_test(parser)
 
 
 def create_parser():
@@ -197,6 +229,7 @@ def create_parser():
         create_run_parser,
         create_evaluate_parser,
         create_hash_parser,
+        create_test_parser,
     ]:
         create_subparser(subparsers)
 

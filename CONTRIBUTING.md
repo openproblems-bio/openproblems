@@ -202,6 +202,12 @@ Datasets, methods, and metrics should all be decorated with the appropriate func
 
 Note that data is not normalized in the data loader; normalization should be performed as part of each method or in the task dataset function if stated in the task API. For ease of use, we provide a collection of common normalization functions in [`openproblems.tools.normalize`](openproblems/tools/normalize.py). The original data stored in `adata.X` is automatically stored in `adata.layers["counts"]` for later reference in the case the a metric needs to access the unnormalized data.
 
+To test the performance of a dataset, method, or metric, you can use the command-line interface:
+
+```shell
+openproblems-cli test --help
+```
+
 ### Adding a new task
 
 The task directory structure is as follows
