@@ -1,5 +1,5 @@
 processor	name	url	obs_celltype	obs_batch	obs_tissue
 anndata_loader	pancreas	https://ndownloader.figshare.com/files/24539828	celltype	tech	NA
-anndata_loader	immune_cells	https://ndownloader.figshare.com/files/25717328	afinal_annotation	batch	tissue
+anndata_loader	immune_cells	https://ndownloader.figshare.com/files/25717328	final_annotation	batch	tissue
 anndata_loader	pbmc	https://ndownloader.figshare.com/files/24974582	NA	NA	NA
 anndata_loader	tenx_5k_pbmc	https://ndownloader.figshare.com/files/25555739	NA	NA	NA
