@@ -222,7 +222,7 @@ def test_pipeline():
                 "--test",
                 "--output",
                 dataset_file,
-                "zebrafish_batch",
+                "zebrafish_labels",
             ],
             do_print=False,
         )
