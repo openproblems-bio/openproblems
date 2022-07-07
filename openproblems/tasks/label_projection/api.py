@@ -1,6 +1,7 @@
 from ...data.sample import load_sample_data
 
 import numpy as np
+import pandas as pd
 
 
 def check_dataset(adata):
@@ -8,6 +9,9 @@ def check_dataset(adata):
     assert "labels" in adata.obs
     assert "batch" in adata.obs
     assert "is_train" in adata.obs
+    assert np.issubdtype(adata.obs["is_train"].dtype, bool)
+    assert pd.api.types.is_categorical(adata.obs["batch"])
+    assert pd.api.types.is_categorical(adata.obs["labels"])
     assert np.sum(adata.obs["is_train"]) > 0
     assert np.sum(~adata.obs["is_train"]) > 0
     return True
@@ -34,6 +38,8 @@ def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
     adata.obs["labels_pred"] = adata.obs["labels"]
     adata.obs["labels_pred"][::5] = np.random.choice(
-        5, len(adata.obs["labels_pred"][::5]), replace=True
-    ).astype(str)
+        adata.obs["labels"].cat.categories,
+        len(adata.obs["labels_pred"][::5]),
+        replace=True,
+    )
     return adata
