@@ -1,4 +1,4 @@
-# openproblems-r-extras Docker image
+# openproblems-r-pytorch Docker image
 
 Base image: singlecellopenproblems/openproblems-r-base
 

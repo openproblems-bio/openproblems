@@ -10,7 +10,7 @@ URL = (
 )
 
 
-@utils.loader
+@utils.loader(data_url=URL)
 def load_zebrafish(test=False):
     """Download zebrafish data from figshare."""
     with tempfile.TemporaryDirectory() as tempdir:
