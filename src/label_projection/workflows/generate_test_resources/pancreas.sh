@@ -22,8 +22,8 @@ target/docker/common/dataset_loader/download/download\
 
 target/docker/label_projection/data_processing/subsample/subsample\
     --input $DATASET_DIR/raw_data.h5ad\
-    --celltype_categories "0:3"\
-    --tech_categories "0:-3:-2"\
+    --celltype_categories "acinar:beta"\
+    --tech_categories "celseq:inDrop4:smarter"\
     --output $DATASET_DIR/toy_data.h5ad
 
 target/docker/label_projection/data_processing/randomize/randomize\

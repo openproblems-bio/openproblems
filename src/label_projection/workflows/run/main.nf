@@ -43,14 +43,13 @@ include { extract_scores }       from "$targetDir/common/extract_scores/main.nf"
 //
 // If the need arises, these workflows could be split off into a separate file.
 
-// params.tsv = "$launchDir/src/common/data_loader/anndata_loader.tsv"
-params.tsv = "$launchDir/src/label_projection/data_processing/fake_anndata_loader.tsv" //for tests
+params.tsv = "$launchDir/src/label_projection/data_processing/anndata_loader.tsv"
 
 workflow load_data {
     main:
         output_ = Channel.fromPath(params.tsv)
             | splitCsv(header: true, sep: "\t")
-            | filter{ it.obs_celltype != "NA" && it.obs_batch != "NA" }
+            | filter{ it.name != "tabula_muris_senis_facs_lung" || it.name != "tabula_muris_senis_droplet_lung" } //TODO
             | map{ [ it.name, it ] }
             | download
     emit:
@@ -101,9 +100,7 @@ workflow {
     load_data
         | randomize
         | subsample.run(
-            map: { [it[0], [input: it[1],
-                            celltype_categories: "0:3",
-                            tech_categories: "0:-3:-2"]] }
+            map: { [it[0], [input: it[1], even: true]] }
         )
         | (log_cpm & log_scran_pooling)
         | mix
