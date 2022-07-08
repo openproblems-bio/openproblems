@@ -11,5 +11,5 @@ cd "$REPO_ROOT"
 
 NXF_VER=20.10.0 bin/nextflow run src/trajectory_inference/workflows/main.nf \
   -resume \
-  --output output/trajectory_inference
+  --publish_dir output/trajectory_inference
 
