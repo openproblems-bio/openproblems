@@ -40,7 +40,7 @@ def get_function(task_name, function_type, function_name):
     """Get a function from a task."""
     # check function type
     function_type = function_type.lower()
-    assert function_type in ["datasets", "methods", "metrics"]
+    assert function_type in ["datasets", "methods", "metrics", "api"]
 
     # get function
     task = str_to_task(task_name)
