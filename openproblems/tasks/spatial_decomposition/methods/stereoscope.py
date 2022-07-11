@@ -5,7 +5,8 @@ from .._utils import split_sc_and_sp
 
 @method(
     method_name="Stereoscope",
-    paper_name="Single-cell and spatial transcriptomics enables probabilistic inference of cell type topography",  # noqa: E501
+    paper_name="Single-cell and spatial transcriptomics enables "
+    "probabilistic inference of cell type topography",
     paper_url="https://www.nature.com/articles/s42003-020-01247-y",
     paper_year=2020,
     code_url="https://github.com/YosefLab/scvi-tools",
