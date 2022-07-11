@@ -2,9 +2,9 @@ from ....tools.conversion import r_function
 from ....tools.decorators import method
 from ....tools.utils import check_r_version
 from .._utils import split_sc_and_sp
+from typing import Optional
 
 import pandas as pd
-from typing import Optional
 
 _seuratv3 = r_function("seuratv3.R", args="sce_sc, sce_sp, n_pcs")
 
