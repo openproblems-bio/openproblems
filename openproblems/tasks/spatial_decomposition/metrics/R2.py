@@ -3,8 +3,8 @@ from ....tools.decorators import metric
 import sklearn.metrics
 
 
-@metric(metric_name="R2", maximize=True)
-def R2(adata):
+@metric(metric_name="r2", maximize=True)
+def r2(adata):
 
     prop_true = adata.obsm["proportions_true"]
     prop_pred = adata.obsm["proportions_pred"]

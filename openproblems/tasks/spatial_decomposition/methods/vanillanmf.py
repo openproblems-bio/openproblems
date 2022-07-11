@@ -5,13 +5,13 @@ from .._utils import split_sc_and_sp
 
 
 @method(
-    method_name="Non-Negative Matrix Factorization (NMF).",
+    method_name="Non-Negative Matrix Factorization (NMF)",
     paper_name="Fast local algorithms for large scale nonnegative matrix and tensor factorizations",  # noqa: E501
-    paper_url="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.214.6398&rep=rep1&type=pdf",  # noqa: E501
+    paper_url="10.1587/transfun.E92.A.708",  # noqa: E501
     paper_year=2009,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html",  # noqa: E501
 )
-def nmf(adata, test=False):
+def nmf(adata, test=False, max_iter=None):
     """NMF for spatial deconvolution."""
     from scipy.sparse import issparse
     from sklearn.decomposition import NMF
@@ -21,11 +21,16 @@ def nmf(adata, test=False):
     adata_sc, adata = split_sc_and_sp(adata)
     n_types = adata_sc.obs["label"].cat.categories.shape[0]
 
+    if test:
+        max_iter = max_iter or 10
+    else:
+        max_iter = max_iter or 4000
+
     vanila_nmf_model = NMF(
         n_components=n_types,
         beta_loss="kullback-leibler",
         solver="mu",
-        max_iter=4000,
+        max_iter=max_iter,
         alpha=0.1,
         init="custom",
         random_state=17,  # TODO(handle random_state)

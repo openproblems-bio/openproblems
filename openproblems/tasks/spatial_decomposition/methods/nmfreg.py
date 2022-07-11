@@ -12,7 +12,7 @@ import numpy as np
     paper_year=2019,
     code_url="https://github.com/tudaga/NMFreg_tutorial",
 )
-def nmfreg(adata, test=False):
+def nmfreg(adata, test=False, factors=None, projection_type=None):
     """NMF-reg: NMF regression for array-based spatial transcriptomics data.
 
     Re-implementation from https://github.com/tudaga/NMFreg_tutorial.
@@ -36,8 +36,8 @@ def nmfreg(adata, test=False):
 
     n_types = adata_sc.obs["label"].cat.categories.shape[0]
 
-    factors = 30  # TODO(handle hyper params)
-    projection_type = "l2"  # TODO(handle hyper params)
+    factors = factors or 30
+    projection_type = projection_type or "l2"
 
     # Learn from reference
     if issparse(adata_sc.X):
@@ -83,21 +83,6 @@ def nmfreg(adata, test=False):
         sc_deconv = np.dot(Ha_norm, factor_to_best_celltype_matrix)
 
     sc_deconv = sc_deconv / sc_deconv.sum(1)[:, np.newaxis]
-
-    # Evaluation on reference TODO(either ove or delete)
-    # cluster_df.loc[:, "predicted_code"] = np.argmax(sc_deconv, axis=1)
-    # pos_neg_dict = {
-    #     i: [
-    #         sc_deconv[cluster_df.predicted_code == i, i],
-    #         sc_deconv[cluster_df.predicted_code != i, i],
-    #     ]
-    #     for i in range(n_types)
-    # }
-
-    # thresh_certainty = [0] * n_types
-    # for c in range(n_types):
-    #     thresh_certainty[c] = np.max(pos_neg_dict[c][1])
-    # Evaluation ends here
 
     # Start run on actual spatial data
     if issparse(adata.X):

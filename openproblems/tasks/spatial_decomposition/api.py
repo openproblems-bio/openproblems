@@ -5,8 +5,6 @@ from pandas.core.dtypes.common import is_categorical_dtype
 
 import numpy as np
 
-EPS = 1e-10
-
 
 def check_dataset(adata):
     """Check that dataset output fits expected API."""

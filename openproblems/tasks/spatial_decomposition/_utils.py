@@ -63,9 +63,9 @@ def obs_means(adata: ad.AnnData, cluster_key: str) -> ad.AnnData:
     return adata_means
 
 
-def normalize_coefficients(_prop: np.array) -> np.array:
+def normalize_coefficients(prop: np.array) -> np.array:
     """Normalize coefficients to sum to 1."""
-    prop = _prop.copy()
+    prop = prop.copy()
     prop[prop < 0] = 0
     prop = prop / prop.sum(axis=1, keepdims=1)
     return prop

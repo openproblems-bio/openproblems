@@ -11,7 +11,7 @@ from .._utils import split_sc_and_sp
     code_url="https://github.com/broadinstitute/Tangram",
     image="openproblems-python-extras",
 )
-def tangram(adata, test=False, num_epochs=1000, n_markers=100):
+def tangram(adata, test=False, num_epochs=None, n_markers=100):
     # analysis based on: https://github.com/broadinstitute/Tangram/blob/master/tutorial_tangram_with_squidpy.ipynb # noqa: E501
     # using tangram from PyPi, not github version
 
@@ -42,6 +42,11 @@ def tangram(adata, test=False, num_epochs=1000, n_markers=100):
 
     # get device
     device = t.device("cuda" if t.cuda.is_available() else "cpu")
+
+    if test:
+        num_epochs = num_epochs or 10
+    else:
+        num_epochs = num_epochs or 1000
 
     # map single cells to spatial locations
     ad_map = tg.map_cells_to_space(

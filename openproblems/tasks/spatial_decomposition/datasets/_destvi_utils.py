@@ -12,7 +12,6 @@ from sklearn.neighbors import kneighbors_graph
 from torch.distributions import Gamma
 
 import anndata
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
@@ -101,14 +100,13 @@ def generate_synthetic_dataset_destvi(
     # (i.e., genes are as overpoissonian as in the experiments)
     inv_dispersion *= 1e2
 
-    if True:
-        # Important remark: Gamma is parametrized by the rate = 1/scale!
-        gamma_s = Gamma(
-            concentration=torch.tensor(inv_dispersion),
-            rate=torch.tensor(inv_dispersion) / torch.tensor(transformed_mean),
-        ).sample()
-        mean_poisson = torch.clamp(gamma_s, max=1e8).cpu().numpy()
-        transformed_mean = mean_poisson
+    # Important remark: Gamma is parametrized by the rate = 1/scale!
+    gamma_s = Gamma(
+        concentration=torch.tensor(inv_dispersion),
+        rate=torch.tensor(inv_dispersion) / torch.tensor(transformed_mean),
+    ).sample()
+    mean_poisson = torch.clamp(gamma_s, max=1e8).cpu().numpy()
+    transformed_mean = mean_poisson
 
     samples = np.random.poisson(lam=transformed_mean)
 
@@ -174,10 +172,8 @@ def generate_synthetic_dataset_destvi(
     transformed_mean_st_partial /= np.sum(cell_types_sc != C - 1, 1)[:, np.newaxis]
 
     if ct_study == 1:
-
         list_transformed = [transformed_mean_st_full, transformed_mean_st_partial]
     elif ct_study == 0:
-
         list_transformed = [transformed_mean_st_full]
     for i, transformed_mean_st in enumerate(list_transformed):
         # Important remark: Gamma is parametrized by the rate = 1/scale!
@@ -242,25 +238,4 @@ def generate_spatial_information(
     # get latent variable for each cell types
     gamma = np.random.multivariate_normal(np.zeros(N), K, size=(D)).T
 
-    # plot cell types
-    if savefig:
-        plt.figure(figsize=(9, 9))
-        for i in range(0, C):
-            plt.subplot(331 + i)
-            plt.scatter(locations[:, 0], locations[:, 1], c=freq_sample[:, i])
-            plt.title("cell type " + str(i))
-            plt.colorbar()
-        plt.tight_layout()
-        plt.savefig(savefig + "cell_type_proportion.png")
-        plt.clf()
-        # plot gammas
-        plt.figure(figsize=(5, 5))
-        for i in range(D):
-            plt.subplot(221 + i)
-            plt.scatter(locations[:, 0], locations[:, 1], c=gamma[:, i])
-            plt.title("gamma " + str(i))
-            plt.colorbar()
-        plt.tight_layout()
-        plt.savefig(savefig + "gamma.png")
-        plt.clf()
     return locations, freq_sample, gamma

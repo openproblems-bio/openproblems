@@ -1,5 +1,7 @@
 from . import utils
 
+import anndata as ad
+import numpy as np
 import os
 import scanpy as sc
 import scprep
@@ -47,3 +49,24 @@ def load_pancreas(test=False):
             utils.filter_genes_cells(adata)
 
         return adata
+
+
+def get_pancreas_integer(adata: ad.AnnData):
+    """Transform counts to integer.
+
+    For some platforms the pancreas data set only have processed counts.
+    Here we grab those with integer counts.
+    See: https://github.com/theislab/scib-reproducibility/tree/main/notebooks/data_preprocessing/pancreas. # noqa: E501
+    """
+    is_int = ["smartseq2"]
+    is_int += ["inDrop{}".format(x) for x in range(1, 5)]
+
+    keep = np.zeros(len(adata)).astype(bool)
+
+    for tech in is_int:
+        idx = adata.obs.tech.values == tech
+        keep = keep | idx
+
+    adata = adata[keep, :].copy()
+
+    return adata
