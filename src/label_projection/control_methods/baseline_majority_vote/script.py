@@ -1,6 +1,6 @@
 ## VIASH START
 par = {
-    'input': 'ouput.h5ad',
+    'input': '../../resources/pancreas/toy_normalized_log_cpm.h5ad',
     'output': 'output.mv.h5ad'
 }
 ## VIASH END

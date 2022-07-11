@@ -50,7 +50,7 @@ functionality:
       type: "file"
       direction: "output"
       example: "output.h5ad"
-      description: "Output data labeled"
+      description: "Output data containing predictions"
       required: true
   resources:
     - type: python_script

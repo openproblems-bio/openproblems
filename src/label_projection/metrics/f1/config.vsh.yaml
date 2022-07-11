@@ -2,7 +2,7 @@ functionality:
   name: "f1"
   namespace: "label_projection/metrics"
   version: "dev"
-  description: "Accuracy of predictions"
+  description: "balanced F-score or F-measure"
   authors:
     - name: "Scott Gigante"
       roles: [ author ]
@@ -13,7 +13,7 @@ functionality:
   arguments:
     - name: "--input"
       type: "file"
-      description: "Input data to get accuracy"
+      description: "Input data with predictions to get f1-score"
       required: true
     - name: "--average"
       type: "string"

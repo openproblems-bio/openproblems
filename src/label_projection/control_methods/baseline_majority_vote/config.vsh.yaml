@@ -13,12 +13,12 @@ functionality:
   arguments:
     - name: "--input"
       type: "file"
-      description: "Input data to add prediction"
+      description: "Input data to predict"
       required: true
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
-      description: "Ouput data labeled"
+      description: "Ouput data containing predictions"
       direction: "output"
       example: "output.mv.h5ad"
       required: true

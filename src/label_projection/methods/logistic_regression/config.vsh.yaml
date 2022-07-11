@@ -2,7 +2,7 @@ functionality:
   name: "logistic_regression"
   namespace: "label_projection/methods"
   version: "dev"
-  description: "Run Harmonic Alignment"
+  description: "Applied Logistic Regression"
   authors:
     - name: "Scott Gigante"
       roles: [ author ]
@@ -27,7 +27,7 @@ functionality:
       type: "file"
       direction: "output"
       example: "output.h5ad"
-      description: "Output data labeled"
+      description: "Output data containing predictions"
       required: true
   resources:
     - type: python_script
