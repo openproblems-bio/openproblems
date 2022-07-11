@@ -5,14 +5,16 @@ from .._utils import split_sc_and_sp
 
 @method(
     method_name="Tangram",
-    paper_name="Deep learning and alignment of spatially resolved single-cell transcriptomes with Tangram",  # noqa: E501
+    paper_name="Deep learning and alignment of spatially resolved "
+    "single-cell transcriptomes with Tangram",
     paper_url="https://www.nature.com/articles/s41592-021-01264-7",
     paper_year=2021,
     code_url="https://github.com/broadinstitute/Tangram",
     image="openproblems-python-extras",
 )
 def tangram(adata, test=False, num_epochs=None, n_markers=100):
-    # analysis based on: https://github.com/broadinstitute/Tangram/blob/master/tutorial_tangram_with_squidpy.ipynb # noqa: E501
+    # analysis based on
+    # https://github.com/broadinstitute/Tangram/blob/master/tutorial_tangram_with_squidpy.ipynb # noqa: E501
     # using tangram from PyPi, not github version
 
     # import dependencies
