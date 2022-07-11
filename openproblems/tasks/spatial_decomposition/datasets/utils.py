@@ -1,6 +1,5 @@
-from .._utils import merge_sc_and_sp
+from ..utils import merge_sc_and_sp
 
-# from scipy.sparse import issparse
 from typing import Sequence
 from typing import Union
 
