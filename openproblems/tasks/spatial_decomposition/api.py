@@ -1,12 +1,14 @@
 from ...data.sample import load_sample_data
+from ...tools.decorators import dataset
 from ._utils import merge_sc_and_sp
 from ._utils import split_sc_and_sp
+from anndata import AnnData
 from pandas.core.dtypes.common import is_categorical_dtype
 
 import numpy as np
 
 
-def check_dataset(adata):
+def check_dataset(adata: AnnData):
     """Check that dataset output fits expected API."""
     # test for spatial coordinates
     assert "spatial" in adata.obsm
@@ -24,7 +26,7 @@ def check_dataset(adata):
     return True
 
 
-def check_method(adata):
+def check_method(adata: AnnData):
     """Check that method output fits expected API."""
     assert np.all(adata.obs["modality"] == "sp")
     assert "proportions_pred" in adata.obsm
@@ -35,6 +37,7 @@ def check_method(adata):
     return True
 
 
+@dataset()
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     # set number of cell types
