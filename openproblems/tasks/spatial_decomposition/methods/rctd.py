@@ -13,7 +13,7 @@ _rctd = r_function("rctd.R", args="sce_sc, sce_sp")
     paper_name="Robust decomposition of cell type mixtures in spatial transcriptomics",
     paper_url="https://www.nature.com/articles/s41587-021-00830-w",
     paper_year=2020,
-    code_url="https://github.com/almaan/RCTD",
+    code_url="https://github.com/dmcable/spacexr",
     image="openproblems-r-extras",
 )
 def rctd(adata, test=False):
