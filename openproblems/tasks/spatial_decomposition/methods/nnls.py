@@ -8,7 +8,7 @@ import numpy as np
 
 
 @method(
-    method_name="NNLS: Non-Negative Least Square",
+    method_name="Non-Negative Least Squares",
     paper_name="Solving Least Squares Problems",
     paper_url="https://epubs.siam.org/doi/pdf/10.1137/1.9781611971217.bm",
     paper_year=1987,
