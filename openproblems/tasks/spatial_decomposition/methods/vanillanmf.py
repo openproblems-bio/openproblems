@@ -6,10 +6,12 @@ from .._utils import split_sc_and_sp
 
 @method(
     method_name="Non-Negative Matrix Factorization (NMF)",
-    paper_name="Fast local algorithms for large scale nonnegative matrix and tensor factorizations",  # noqa: E501
+    paper_name="Fast local algorithms for large scale nonnegative "
+    "matrix and tensor factorizations",
     paper_url="10.1587/transfun.E92.A.708",  # noqa: E501
     paper_year=2009,
-    code_url="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html",  # noqa: E501
+    code_url="https://scikit-learn.org/stable/modules/generated/"
+    "sklearn.decomposition.NMF.html",
 )
 def nmf(adata, test=False, max_iter=None):
     """NMF for spatial deconvolution."""
