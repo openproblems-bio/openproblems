@@ -56,7 +56,7 @@ def get_pancreas_integer(adata: ad.AnnData):
 
     For some platforms the pancreas data set only have processed counts.
     Here we grab those with integer counts.
-    See: https://github.com/theislab/scib-reproducibility/tree/main/notebooks/data_preprocessing/pancreas. # noqa: E501
+    See https://github.com/theislab/scib-reproducibility/tree/main/notebooks/data_preprocessing/pancreas # noqa: E501
     """
     is_int = ["smartseq2"]
     is_int += ["inDrop{}".format(x) for x in range(1, 5)]
