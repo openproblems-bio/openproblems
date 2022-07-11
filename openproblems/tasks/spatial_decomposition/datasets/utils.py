@@ -1,5 +1,4 @@
 from ..utils import merge_sc_and_sp
-
 from typing import Sequence
 from typing import Union
 
