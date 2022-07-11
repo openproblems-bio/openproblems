@@ -13,7 +13,7 @@ R packages:
 * batchelor
 * sparsesvd
 * dplyr
-* RCTD
+* spacexr
 * Seurat
 
 Python packages:
