@@ -5,7 +5,7 @@ from .._utils import split_sc_and_sp
 
 import numpy as np
 
-_rctd = r_function("rctd.R", args="sce_sc, sce_sp")
+_rctd = r_function("rctd.R", args="sce_sc, sce_sp, n_pcs")
 
 
 @method(
@@ -16,13 +16,17 @@ _rctd = r_function("rctd.R", args="sce_sc, sce_sp")
     code_url="https://github.com/dmcable/spacexr",
     image="openproblems-r-extras",
 )
-def rctd(adata, test=False):
+def rctd(adata, test=False, n_pca: Optional[int] = None):
+    if test:
+        n_pca = n_pca or 10
+    else:  # pragma: nocover
+        n_pca = n_pca or 30
     # exctract single cell reference data
     adata_sc, adata = split_sc_and_sp(adata)
     # set spatial coordinates for the single cell data
     adata_sc.obsm["spatial"] = np.ones((adata_sc.shape[0], 2))
     # run RCTD
-    adata = _rctd(adata_sc, adata)
+    adata = _rctd(adata_sc, adata, n_pcs=n_pca)
 
     # get predicted cell type proportions from obs
     cell_type_names = [x for x in adata.obs.columns if x.startswith("xCT")]
