@@ -2,7 +2,7 @@
 From:
 https://github.com/romain-lopez/DestVI-reproducibility/blob/master/simulations/
 """
-from .._utils import merge_sc_and_sp
+from ..utils import merge_sc_and_sp
 from numba import jit
 from scipy.spatial.distance import pdist
 from scipy.spatial.distance import squareform

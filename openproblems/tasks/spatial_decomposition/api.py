@@ -1,7 +1,7 @@
 from ...data.sample import load_sample_data
 from ...tools.decorators import dataset
-from ._utils import merge_sc_and_sp
-from ._utils import split_sc_and_sp
+from .utils import merge_sc_and_sp
+from .utils import split_sc_and_sp
 from anndata import AnnData
 from pandas.core.dtypes.common import is_categorical_dtype
 

@@ -1,8 +1,8 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
-from .._utils import normalize_coefficients
-from .._utils import obs_means
-from .._utils import split_sc_and_sp
+from ..utils import normalize_coefficients
+from ..utils import obs_means
+from ..utils import split_sc_and_sp
 
 import numpy as np
 

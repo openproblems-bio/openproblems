@@ -1,7 +1,7 @@
 from ....tools.conversion import r_function
 from ....tools.decorators import method
 from ....tools.utils import check_r_version
-from .._utils import split_sc_and_sp
+from ..utils import split_sc_and_sp
 from typing import Optional
 
 import pandas as pd
