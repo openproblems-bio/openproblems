@@ -9,14 +9,14 @@ print(sce_sp)
 # Normalize and do dimred for spatial data
 sce_sp <- SCTransform(sce_sp, assay = "originalexp", verbose = FALSE)
 
-sce_sp <- RunPCA(sce_sp, assay = "SCT", verbose = FALSE)
+sce_sp <- RunPCA(sce_sp, assay = "SCT", verbose = FALSE, n_pcs = n_pcs)
 
 # Normalize and do dimred for single cell data
 sce_sc <- SCTransform(
   sce_sc,
   assay = "originalexp", ncells = min(3000, nrow(sce_sc)), verbose = FALSE
 )
-sce_sc <- RunPCA(sce_sc, verbose = FALSE)
+sce_sc <- RunPCA(sce_sc, verbose = FALSE, n_pcs = n_pcs)
 
 # find anchors (MNN's to compute adjustmen vectors)
 anchors <- FindTransferAnchors(
@@ -31,7 +31,7 @@ predictions_assay <- TransferData(
   refdata = as.factor(as.character(sce_sc@meta.data$label)),
   prediction.assay = TRUE,
   weight.reduction = sce_sp[["pca"]],
-  dims = 1:30
+  dims = 1:n_pcs
 )
 
 # format data and return results
