@@ -27,7 +27,7 @@ def pancreas_alpha_1(test=False, n_obs=100):
     dataset_summary="TODO",
 )
 def pancreas_alpha_5(test=False, n_obs=100):
-    adata = load_pancreas(test=False)
+    adata = load_pancreas(test=test)
     adata = get_pancreas_integer(adata)
     adata.obs["label"] = adata.obs["celltype"]
 
@@ -41,7 +41,7 @@ def pancreas_alpha_5(test=False, n_obs=100):
     dataset_summary="TODO",
 )
 def pancreas_alpha_0_1(test=False, n_obs=100):
-    adata = load_pancreas(test=False)
+    adata = load_pancreas(test=test)
     adata = get_pancreas_integer(adata)
     adata.obs["label"] = adata.obs["celltype"]
 
