@@ -40,7 +40,7 @@ def pancreas_alpha_5(test=False, n_obs=100):
     data_url=load_pancreas.metadata["data_url"],
     dataset_summary="TODO",
 )
-def pancreas_alpha_0_1(test=False, n_obs=100):
+def pancreas_alpha_0_5(test=False, n_obs=100):
     adata = load_pancreas(test=test)
     adata = get_pancreas_integer(adata)
     adata.obs["label"] = adata.obs["celltype"]
