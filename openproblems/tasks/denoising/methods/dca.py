@@ -7,7 +7,7 @@ import scanpy as sc
 def _dca(adata, test=False, epochs=None):
     if test:
         epochs = epochs or 30
-    else:
+    else:  # pragma: nocover
         epochs = epochs or 300
     from dca.api import dca
 
