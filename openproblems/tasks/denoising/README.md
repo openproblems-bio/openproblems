@@ -8,11 +8,10 @@ A key challenge in evaluating denoising methods is the general lack of a ground 
 
 # The metrics
 
-Metrics for data denoising aim to assess denoising accuracy by comparing the denoised *training* set to the randomly sampled *test* set. Two comparisons have been implemented, *MSE* and *Poisson*, which penalize differences between the denoised *train* and *test* set under gaussian or poisson loss functions, respectively.  
+Metrics for data denoising aim to assess denoising accuracy by comparing the denoised *training* set to the randomly sampled *test* set. 
 
-The *MSE* metric multiplies the *denoised* data by the rowsums of the *test* data, and divides by the sum of the *train* data. The result becomes a normalized version of the *denoised* data, which is compared to the *test* data via gaussian MSE.
-
-The *Poisson* metric multiplies the *denoised* data by the rowsums of the *test* data, and divides by the sum of the *train* data. The result becomes a normalized version of the *denoised* data, which is compared to the *test* data via poisson MSE.
+* **MSE**: The mean squared error between the denoised counts of the training dataset and the true counts of the test dataset after reweighting by the train/test ratio.
+* **Poisson**: The Poisson log likelihood of observing the true counts of the test dataset given the distribution given in the denoised dataset.
 
 ## API
 
