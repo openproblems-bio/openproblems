@@ -1,5 +1,6 @@
 from ....data.pancreas import get_pancreas_integer
 from ....data.pancreas import load_pancreas
+from ....data.utils import filter_genes_cells
 from ....tools.decorators import dataset
 from .utils import generate_synthetic_dataset
 
@@ -18,6 +19,7 @@ def pancreas_alpha_1(test=False, n_obs=100):
     adata.obs["label"] = adata.obs["celltype"]
 
     merged_adata = generate_synthetic_dataset(adata, n_obs=n_obs, alpha=1)
+    merged_adata = filter_genes_cells(merged_adata)
     return merged_adata
 
 
@@ -32,6 +34,7 @@ def pancreas_alpha_5(test=False, n_obs=100):
     adata.obs["label"] = adata.obs["celltype"]
 
     merged_adata = generate_synthetic_dataset(adata, n_obs=n_obs, alpha=5)
+    merged_adata = filter_genes_cells(merged_adata)
     return merged_adata
 
 
@@ -46,4 +49,5 @@ def pancreas_alpha_0_5(test=False, n_obs=100):
     adata.obs["label"] = adata.obs["celltype"]
 
     merged_adata = generate_synthetic_dataset(adata, n_obs=n_obs, alpha=0.5)
+    merged_adata = filter_genes_cells(merged_adata)
     return merged_adata
