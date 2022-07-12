@@ -143,5 +143,6 @@ class TestDataset(unittest.TestCase):
             "dataset_summary",
         ]:
             assert attr in self.dataset.metadata
+            assert self.dataset.metadata[attr] is not None
 
         assert len(self.dataset.metadata["dataset_summary"]) < DATASET_SUMMARY_MAXLEN

@@ -1,6 +1,5 @@
-from .....tools.conversion import r_function
 from .....tools.decorators import method
-from .....tools.utils import check_r_version
+from .....tools.utils import check_version
 from typing import Optional
 
 import functools
@@ -8,15 +7,11 @@ import functools
 _harmony_method = functools.partial(
     method,
     paper_name="Fast, sensitive and accurate integration "
-    "of single - cell data with Harmony",
+    "of single-cell data with Harmony",
     paper_url="https://www.nature.com/articles/s41592-019-0619-0",
     paper_year=2019,
-    code_url="https://github.com/immunogenomics/harmony",
-    image="openproblems-r-extras",
-)
-
-_r_harmony = r_function(
-    "harmony.R", args="sce, batch, n_pca, max_iter_harmony, max_iter_cluster"
+    code_url="https://github.com/lilab-bcb/harmony-pytorch",
+    image="openproblems-r-pytorch",
 )
 
 
@@ -28,7 +23,9 @@ def _harmony(
     max_iter_harmony: Optional[int] = None,
     max_iter_cluster: Optional[int] = None,
 ):
-    from scanpy.pp import neighbors
+    from harmony import harmonize
+
+    import scanpy as sc
 
     if test:
         n_pca = n_pca or 10
@@ -39,12 +36,17 @@ def _harmony(
         max_iter_harmony = max_iter_harmony or 10
         max_iter_cluster = max_iter_cluster or 20
 
-    adata = _r_harmony(adata, batch, n_pca, max_iter_harmony, max_iter_cluster)
-    adata.obsm["X_emb"] = adata.obsm["HARMONY"]
-    neighbors(adata, use_rep="X_emb")
-    adata.obs.nFeature_originalexp = adata.obs.nFeature_originalexp.astype("int")
+    sc.pp.pca(adata, n_comps=n_pca)
+    adata.obsm["X_emb"] = harmonize(
+        adata.obsm["X_pca"],
+        adata.obs,
+        batch_key=batch,
+        max_iter_harmony=max_iter_harmony,
+        max_iter_clustering=max_iter_cluster,
+    )
+    sc.pp.neighbors(adata, use_rep="X_emb")
 
-    adata.uns["method_code_version"] = check_r_version("harmony")
+    adata.uns["method_code_version"] = check_version("harmony-pytorch")
     return adata
 
 
