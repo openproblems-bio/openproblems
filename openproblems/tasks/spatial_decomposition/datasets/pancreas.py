@@ -1,7 +1,7 @@
 from ....data.pancreas import get_pancreas_integer
 from ....data.pancreas import load_pancreas
 from ....tools.decorators import dataset
-from ._sc_to_sp_utils import generate_synthetic_dataset
+from .utils import generate_synthetic_dataset
 
 import scanpy as sc
 
