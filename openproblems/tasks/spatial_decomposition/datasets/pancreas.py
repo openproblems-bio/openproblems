@@ -10,7 +10,7 @@ import scanpy as sc
 @dataset(
     "Pancreas (alpha=1)",
     data_url=load_pancreas.metadata["data_url"],
-    dataset_summary="TODO",
+    dataset_summary="Aggregated data from single-cell reference.",
 )
 def pancreas_alpha_1(test=False, n_obs=100):
     adata = load_pancreas(test=test)
@@ -26,7 +26,7 @@ def pancreas_alpha_1(test=False, n_obs=100):
 @dataset(
     "Pancreas (alpha=5)",
     data_url=load_pancreas.metadata["data_url"],
-    dataset_summary="TODO",
+    dataset_summary="Aggregated data from single-cell reference.",
 )
 def pancreas_alpha_5(test=False, n_obs=100):
     adata = load_pancreas(test=test)
@@ -41,7 +41,7 @@ def pancreas_alpha_5(test=False, n_obs=100):
 @dataset(
     "Pancreas (alpha=0.5)",
     data_url=load_pancreas.metadata["data_url"],
-    dataset_summary="TODO",
+    dataset_summary="Aggregated data from single-cell reference.",
 )
 def pancreas_alpha_0_5(test=False, n_obs=100):
     adata = load_pancreas(test=test)
