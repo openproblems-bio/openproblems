@@ -8,4 +8,8 @@
 
 * `extract_scores`: Summarise a metrics output tsv.
 
+* `dataset_concatenate`: concatenate N AnnData datasets
+
+* `label_projection`: all components for **label_projection** task
+
 ## 

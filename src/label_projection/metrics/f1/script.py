@@ -25,7 +25,7 @@ metrics = sklearn.metrics.f1_score(
 )
 
 print("Store metric value")
-adata.uns["metric_id"] = "f1"
+adata.uns["metric_id"] = meta["functionality_name"]
 adata.uns["metric_value"] = metrics
 
 print("Writing adata to file")

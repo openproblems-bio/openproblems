@@ -23,6 +23,6 @@ for method in METHODS:
     
     print(">> Check that test output fits expected API")
     adata = sc.read_h5ad(OUTPUT)
-    assert (500, 443) == adata.X.shape, "processed result data shape {}".format(adata.X.shape)
+    assert (500, 468) == adata.X.shape, "processed result data shape {}".format(adata.X.shape)
     assert "batch" in adata.obs
     assert "is_train" in adata.obs

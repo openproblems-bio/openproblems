@@ -27,7 +27,7 @@ print("Run classifier")
 hidden_layer_sizes = tuple(par['hidden_layer_sizes'])
 max_iter = par['max_iter']
 adata = classifier(adata, estimator=sklearn.neural_network.MLPClassifier, hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter)
-adata.uns["method_id"] = "mlp"
+adata.uns["method_id"] = meta["functionality_name"]
 
 print("Write data")
 adata.write(par['output'], compression="gzip")

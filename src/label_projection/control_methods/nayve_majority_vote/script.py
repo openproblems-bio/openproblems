@@ -18,5 +18,5 @@ adata.obs.loc[~adata.obs.is_train, "celltype_pred"] = majority
 
 
 print("Write output to file")
-adata.uns["method_id"] = "majority_vote"
+adata.uns["method_id"] = meta["functionality_name"]
 adata.write(par["output"], compression="gzip")

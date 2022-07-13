@@ -51,7 +51,7 @@ hvg_df = hvg(adata, **hvg_kwargs)
 bdata = adata[:, hvg_df.highly_variable].copy()
 adata.obs["celltype_pred"] = scanvi_scarches(bdata, par['n_hidden'], par['n_latent'], par['n_layers'], {'model_train_kwargs': model_train_kwargs,
                                                                                                       'query_model_train_kwargs': query_model_train_kwargs})
-adata.uns["method_id"] = "scarches_scanvi_hvg"
+adata.uns["method_id"] = meta["functionality_name"]
 
 print("Write data")
 adata.write(par['output'], compression="gzip")

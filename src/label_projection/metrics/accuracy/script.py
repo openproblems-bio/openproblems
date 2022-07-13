@@ -22,7 +22,7 @@ test_data.obs["celltype_pred"] = encoder.transform(test_data.obs["celltype_pred"
 accuracy = np.mean(test_data.obs["celltype"] == test_data.obs["celltype_pred"])
 
 print("Store metric value")
-adata.uns["metric_id"] = "accuracy"
+adata.uns["metric_id"] = meta["functionality_name"]
 adata.uns["metric_value"] = accuracy
 
 print("Writing adata to file")

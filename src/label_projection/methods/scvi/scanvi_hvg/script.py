@@ -45,7 +45,7 @@ par.get("limit_val_batches") and train_kwargs.update({"limit_val_batches": par['
 hvg_df = hvg(adata, **hvg_kwargs)
 bdata = adata[:, hvg_df.highly_variable].copy()
 adata.obs["celltype_pred"] = scanvi(bdata, par['n_hidden'], par['n_latent'], par['n_layers'],  **train_kwargs)
-adata.uns["method_id"] = "scanvi_hvg"
+adata.uns["method_id"] = meta["functionality_name"]
 
 print("Write data")
 adata.write(par['output'], compression="gzip")

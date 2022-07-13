@@ -1,8 +1,11 @@
 functionality:
-  name: "baseline_majority_vote"
+  name: "nayve_random_celltype"
   namespace: "label_projection/control_methods"
   version: "dev"
-  description: "Majority vote dummy"
+  description: "Random Labels dummy"
+  info:
+    type: nayve_control
+    label: Random prediction
   authors:
     - name: "Scott Gigante"
       roles: [ author ]

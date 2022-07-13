@@ -19,4 +19,4 @@ assert path.exists(OUTPUT)
 
 print(">> Check that test output fits expected API")
 adata = sc.read_h5ad(OUTPUT)
-assert (1000, 443) == adata.X.shape, "processed result data shape {}".format(adata.X.shape)
+assert (1000, 468) == adata.X.shape, "processed result data shape {}".format(adata.X.shape)

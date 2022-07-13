@@ -24,5 +24,5 @@ adata.obs.loc[~adata.obs.is_train, "celltype_pred"] = np.random.choice(
 
 
 print("Write output to file")
-adata.uns["method_id"] = "random_celltype"
+adata.uns["method_id"] = meta["functionality_name"]
 adata.write(par["output"], compression="gzip")

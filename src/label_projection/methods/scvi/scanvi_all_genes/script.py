@@ -33,7 +33,7 @@ par.get("limit_train_batches") and train_kwargs.update({"limit_train_batches": p
 par.get("limit_val_batches") and train_kwargs.update({"limit_val_batches": par['limit_val_batches']})
 
 adata.obs["celltype_pred"] = scanvi(adata, par['n_hidden'], par['n_latent'], par['n_layers'],  **train_kwargs)
-adata.uns["method_id"] = "scanvi_all_genes"
+adata.uns["method_id"] = meta["functionality_name"]
 
 print("Write data")
 adata.write(par['output'], compression="gzip")

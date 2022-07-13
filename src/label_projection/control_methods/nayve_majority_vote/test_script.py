@@ -19,4 +19,4 @@ assert path.exists(OUTPUT)
 print(">> Checking if predictions were added")
 adata = sc.read_h5ad(OUTPUT)
 assert "celltype_pred" in adata.obs
-assert "majority_vote" == adata.uns["method_id"]
+assert meta["functionality_name"] == adata.uns["method_id"]

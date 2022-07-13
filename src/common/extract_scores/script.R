@@ -17,13 +17,7 @@ scores <- map_df(par$input, function(inp) {
   cat("Reading '", inp, "'\n", sep = "")
   ad <- read_h5ad(inp)
 
-  if ("normalization_method" %in% names(ad$uns)) {
-    uns_names <- c("dataset_id", "normalization_method", "method_id", "metric_id", "metric_value")
-  } else {
-    uns_names <- c("dataset_id", "method_id", "metric_id", "metric_value")
-  }
-
-  for (uns_name in uns_names) {
+  for (uns_name in par$column_names) {
     assert_that(
       uns_name %in% names(ad$uns),
       msg = paste0("File ", inp, " must contain `uns['", uns_name, "']`")

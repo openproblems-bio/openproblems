@@ -20,7 +20,7 @@ adata = sc.read(par['input'])
 
 print("Run classifier")
 adata = classifier(adata, estimator=sklearn.neighbors.KNeighborsClassifier)
-adata.uns["method_id"] = "knn_classifier"
+adata.uns["method_id"] = meta["functionality_name"]
 
 print("Write data")
 adata.write(par['output'], compression="gzip")

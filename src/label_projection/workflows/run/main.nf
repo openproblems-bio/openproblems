@@ -113,6 +113,7 @@ workflow {
         | toSortedList
         | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
         | extract_scores.run(
+            args: [column_names: "dataset_id:normalization_method:method_id:metric_id:metric_value"]
             auto: [ publish: true ]
         )
 }

@@ -3,6 +3,9 @@ functionality:
   namespace: "label_projection/methods/scvi"
   version: "dev"
   description: "Probabilistic harmonization and annotation of single-cell"
+  info:
+    type: baseline
+    label: Scarches_scanvi_ALL_GENES
   authors:
     - name: "Scott Gigante"
       roles: [ author ]
@@ -51,7 +54,7 @@ functionality:
     - path: "../tools.py"
   tests:
     - type: python_script
-      path: test_script.py
+      path: ../unit_tests/test_method.py
     - type: file
       path: "../../../resources/pancreas/toy_preprocessed_data.h5ad"
 platforms:
