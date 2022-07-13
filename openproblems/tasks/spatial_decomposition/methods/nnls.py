@@ -12,7 +12,8 @@ import numpy as np
     paper_name="Solving Least Squares Problems",
     paper_url="https://epubs.siam.org/doi/pdf/10.1137/1.9781611971217.bm",
     paper_year=1987,
-    code_url="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.nnls.html",  # noqa: E501
+    code_url="https://docs.scipy.org/doc/scipy/"
+    "reference/generated/scipy.optimize.nnls.html",
 )
 def nnls_scipy(adata, test=False):
     from scipy.optimize import nnls
