@@ -5,7 +5,9 @@ from . import methods
 from . import metrics
 
 _task_name = "Spatial Decomposition"
-_task_summary = "Decompose spatial gene expression data by cell type from single cell reference"
+_task_summary = (
+    "Decompose spatial gene expression data by cell type from single cell reference"
+)
 
 DATASETS = get_callable_members(datasets)
 METHODS = get_callable_members(methods)
