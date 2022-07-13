@@ -1,8 +1,19 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
+import functools
 import numpy as np
 import scprep
+
+_magic_method = functools.partial(
+    method,
+    paper_name="Recovering Gene Interactions from Single-Cell Data "
+    "Using Data Diffusion",
+    paper_url="https://doi.org/10.1016/j.cell.2018.05.061",
+    paper_year=2018,
+    code_url="https://github.com/KrishnaswamyLab/MAGIC",
+    image="openproblems-python-extras",
+)
 
 
 def _magic(adata, solver):
@@ -21,27 +32,15 @@ def _magic(adata, solver):
     return adata
 
 
-@method(
+@_magic_method(
     method_name="MAGIC",
-    paper_name="Recovering Gene Interactions from Single-Cell Data "
-    "Using Data Diffusion",
-    paper_url="https://www.cell.com/cell/abstract/S0092-8674(18)30724-4",
-    paper_year=2018,
-    code_url="https://github.com/KrishnaswamyLab/MAGIC",
-    image="openproblems-python-extras",
 )
 def magic(adata, test=False):
     return _magic(adata, solver="exact")
 
 
-@method(
+@_magic_method(
     method_name="MAGIC (approximate)",
-    paper_name="Recovering Gene Interactions from Single-Cell Data "
-    "Using Data Diffusion",
-    paper_url="https://www.cell.com/cell/abstract/S0092-8674(18)30724-4",
-    paper_year=2018,
-    code_url="https://github.com/KrishnaswamyLab/MAGIC",
-    image="openproblems-python-extras",
 )
 def magic_approx(adata, test=False):
     return _magic(adata, solver="approximate")

@@ -7,7 +7,7 @@ _scanvi_method = functools.partial(
     method,
     paper_name="Probabilistic harmonization and annotation of single-cell"
     " transcriptomics data with deep generative models",
-    paper_url="https://www.embopress.org/doi/full/10.15252/msb.20209620",
+    paper_url="https://doi.org/10.15252/msb.20209620",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
     image="openproblems-python-scvi",
