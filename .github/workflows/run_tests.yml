@@ -267,7 +267,7 @@ jobs:
           echo "Tower authentication failed; email singlecellopenproblems@protonmail.com with a request to be added to the openproblems-bio workspace"
           exit 1
         fi
-      shell: /bin/bash -e
+      shell: /bin/bash -e {0}
 
     - name: Set up Python
       uses: actions/setup-python@v2
