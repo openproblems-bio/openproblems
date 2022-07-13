@@ -1,10 +1,9 @@
 from ....tools.decorators import metric
 
-import sklearn.metrics
-
 
 @metric(metric_name="r2", maximize=True)
 def r2(adata):
+    import sklearn.metrics
 
     prop_true = adata.obsm["proportions_true"]
     prop_pred = adata.obsm["proportions_pred"]
