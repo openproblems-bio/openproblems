@@ -4,9 +4,12 @@ functionality:
   version: "dev"
   description: "Concatenate datasets."
   authors:
-    - name: "Michaela Mueller "
-      roles: [ maintainer, author ]
-      props: { github: mumichae }
+    - name: "Scott Gigante"
+      roles: [ author ]
+      props: { github: scottgigante }
+    - name: "Vinicius Chagas "
+      roles: [ maintainer ]
+      props: { github: chagasVinicius }
   arguments:
     - name: "--inputs"
       alternatives: ["-i"]
