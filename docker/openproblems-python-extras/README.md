@@ -17,6 +17,7 @@ Python packages:
 * phate
 * scvi-tools
 * neuralee
+* tangram-sc
 * torch
 * tensorflow-cpu
 * ivis
