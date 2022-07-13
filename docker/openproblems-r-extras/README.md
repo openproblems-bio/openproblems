@@ -17,3 +17,4 @@ R packages:
 Python packages:
 
 * harmonic-alignment
+* xgboost
