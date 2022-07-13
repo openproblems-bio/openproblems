@@ -24,7 +24,6 @@ def _xgboost(adata, test: bool = False, num_round: Optional[int] = None):
     else:  # pragma: nocover
         num_round = num_round or 5
 
-    adata.strings_to_categoricals()
     adata.obs["labels_int"] = adata.obs["labels"].cat.codes
     categories = adata.obs["labels"].cat.categories
 
