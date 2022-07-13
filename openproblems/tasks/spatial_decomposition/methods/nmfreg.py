@@ -7,8 +7,9 @@ import numpy as np
 
 @method(
     method_name="NMF-reg",
-    paper_name="Slide-seq: A scalable technology for measuring genome-wide expression at high spatial resolution",  # noqa: E501
-    paper_url="https://science.sciencemag.org/content/363/6434/1463",  # noqa: E501
+    paper_name="Slide-seq: A scalable technology for measuring genome-wide"
+    " expression at high spatial resolution",
+    paper_url="https://science.sciencemag.org/content/363/6434/1463",
     paper_year=2019,
     code_url="https://github.com/tudaga/NMFreg_tutorial",
 )
@@ -70,7 +71,6 @@ def nmfreg(adata, test=False, factors=None, projection_type=None):
     ).T
 
     factor_to_best_celltype = np.argmax(factor_to_cluster_map, axis=0)
-    # celltype_to_best_factor = np.argmax(factor_to_cluster_map, axis=1) # TODO(remove?)
 
     factor_to_best_celltype_matrix = np.zeros((factors, n_types))
     for i, j in enumerate(factor_to_best_celltype):
