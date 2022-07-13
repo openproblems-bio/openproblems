@@ -1,7 +1,6 @@
 from openproblems.tools.utils import assert_finite  # noqa
 
 import numpy as np
-import requests
 import scipy.sparse
 
 _REQUEST_HEADERS = {
@@ -26,6 +25,8 @@ def assert_array_equal(X, Y):
 
 
 def assert_url_accessible(url):
+    import requests
+
     with requests.head(url, headers=_REQUEST_HEADERS) as response:
         assert response.ok, (url, response.status_code)
     return True
