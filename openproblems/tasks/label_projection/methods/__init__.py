@@ -10,3 +10,5 @@ from .scvi_tools import scanvi_all_genes
 from .scvi_tools import scanvi_hvg
 from .scvi_tools import scarches_scanvi_all_genes
 from .scvi_tools import scarches_scanvi_hvg
+from .xgboost import xgboost_log_cpm
+from .xgboost import xgboost_scran

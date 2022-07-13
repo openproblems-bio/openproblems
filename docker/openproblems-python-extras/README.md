@@ -22,3 +22,4 @@ Python packages:
 * tensorflow-cpu
 * ivis
 * umap-learn
+* xgboost

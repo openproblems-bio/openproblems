@@ -11,3 +11,4 @@ scvi-tools==0.16.*
 tangram-sc==1.0.*
 tensorflow-cpu==2.7.*
 torch==1.11.*
+xgboost==1.6.*
