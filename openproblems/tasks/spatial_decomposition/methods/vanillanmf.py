@@ -13,7 +13,7 @@ from ..utils import split_sc_and_sp
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.decomposition.NMF.html",
 )
-def nmf(adata, test=False, max_iter=None):
+def nmf(adata, test=False, max_iter=None, random_state=17):
     """NMF for spatial deconvolution."""
     from scipy.sparse import issparse
     from sklearn.decomposition import NMF
@@ -35,7 +35,7 @@ def nmf(adata, test=False, max_iter=None):
         max_iter=max_iter,
         alpha=0.1,
         init="custom",
-        random_state=17,  # TODO(handle random_state)
+        random_state=random_state,
     )
 
     # Make profiles from single-cell expression dataset
