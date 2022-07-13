@@ -257,6 +257,7 @@ jobs:
       with:
         java-version: 15
         architecture: x64
+        distribution: zulu
 
     - name: Set up environment
       run: |
