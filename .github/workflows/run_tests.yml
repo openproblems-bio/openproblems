@@ -8,6 +8,8 @@ on:
       - '**'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   cancel_previous_runs:
@@ -221,14 +223,19 @@ jobs:
         name: ${{ matrix.config.name }}_results
         path: results
 
-
   run_test_benchmark:
     needs: run_tester
     runs-on: ubuntu-18.04
     if: >-
       always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
-      github.event_name == 'push' &&
+      (
+        github.event_name == 'pull_request_target' ||
+        (
+          github.event_name == 'push' &&
+          github.actor != 'dependabot[bot]'
+        )
+      ) &&
       (
         needs.run_tester.result == 'success' ||
         startsWith(github.ref, 'refs/heads/test_benchmark')
