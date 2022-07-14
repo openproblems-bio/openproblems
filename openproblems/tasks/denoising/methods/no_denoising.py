@@ -8,9 +8,9 @@ from ....tools.utils import check_version
     paper_url="https://www.biorxiv.org/content/10.1101/786269v1",
     paper_year=2019,
     code_url="https://github.com/czbiohub/molecular-cross-validation",
-    code_version=check_version("scanpy"),
 )
 def no_denoising(adata, test=False):
     """Do nothing."""
     adata.obsm["denoised"] = adata.obsm["train"].toarray()
+    adata.uns["method_code_version"] = check_version("openproblems")
     return adata

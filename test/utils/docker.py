@@ -1,3 +1,4 @@
+from . import exceptions
 from . import git
 from . import run
 
@@ -217,15 +218,13 @@ def run_image(image, script, *args, timeout=None, retries=0):
     else:
         container_command = singularity_command
     command = container_command(image, script, *args)
-    if timeout is not None:
-        command = ["timeout", str(timeout)] + command
     while True:
         try:
-            return run.run(command)
+            return run.run(command, timeout=timeout)
         except Exception as e:
-            if retries > 0:
+            if retries > 0 and not isinstance(e, exceptions.TimeoutError):
                 warnings.warn(
-                    'Container failed with {}("{}").'.format(type(e).__name__, str(e)),
+                    "Container failed with {}; retrying".format(type(e).__name__),
                     RuntimeWarning,
                 )
                 retries -= 1
@@ -234,13 +233,14 @@ def run_image(image, script, *args, timeout=None, retries=0):
 
 
 @decorator.decorator
-def docker_test(func, timeout=None, retries=0, *args, **kwargs):
+def docker_test(func, image=None, timeout=None, retries=0, *args, **kwargs):
     """Run a test function in Docker.
 
     The function must take only simple objects as arguments
     (i.e. eval(str(args)) == args) and the final argument must be the Docker image.
     """
-    image = args[-1]
+    if image is None:
+        image = args[-1]
     if not image.startswith("openproblems"):
         warnings.warn("Image {} expected to begin with openproblems.".format(image))
     assert eval(str(args)) == args

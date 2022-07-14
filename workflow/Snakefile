@@ -27,6 +27,7 @@ rule docker_refresh:
     input: tools.refresh_images
 
 rule refresh_docker_image:
+    priority: 50
     input:
         dockerfile = "{}/{{image}}/refresh.Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_refresh_requirements,
@@ -40,6 +41,7 @@ rule refresh_docker_image:
         "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule refresh_dockerfile:
+    priority: 50
     input:
         docker_pull = "{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR),
     output:
@@ -56,18 +58,21 @@ RUN if [ -f requirements.txt ]; then sudo pip install --no-cache-dir -U -r requi
 
 # Install R packages
 RUN if [ -f r_requirements.txt ]; then sudo R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"; fi
-
+""" + ("" if "SNAKEMAKE_COPY_SOURCE" not in os.environ else r"""
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
 RUN cd /usr/src/singlecellopenproblems && sudo git clean -fxdq
 RUN sudo pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
+""") + r"""
 ' > {output}"""
+
+ruleorder: update_docker_image > build_docker_image
 
 rule update_docker_image:
     input:
         tools.docker_update_requirements
     output:
-        "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR)
+        temp("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR))
 		shell:
         "touch {output}"
 
@@ -76,7 +81,8 @@ rule build_docker_image:
         dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_build_requirements,
     output:
-        temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR)))
+        docker_build = temp(touch("{}/{{image}}/.docker_build".format(tools.IMAGES_DIR))),
+        docker_update = temp(touch("{}/{{image}}/.docker_update".format(tools.IMAGES_DIR))),
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",

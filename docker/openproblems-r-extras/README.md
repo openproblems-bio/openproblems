@@ -1,4 +1,4 @@
-# openproblems-r-base Docker image
+# openproblems-r-extras Docker image
 
 Base image: singlecellopenproblems/openproblems-r-base
 
