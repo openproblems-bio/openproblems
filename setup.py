@@ -34,6 +34,7 @@ test_requires = [
     "coverage==6.4.*",
     "codecov==2.1.*",
     "parameterized==0.8.*",
+    "requests==2.28.*",
 ]
 
 version_py = os.path.join(os.path.dirname(__file__), "openproblems", "version.py")
