@@ -24,8 +24,6 @@ def nnls_scipy(adata, test=False):
 
     X = adata_means.X.T
     y = adata.X.T
-    if issparse(X):
-        X = X.toarray()
     if issparse(y):
         y = y.toarray()
     res = np.zeros((y.shape[1], X.shape[1]))  # (voxels,cells)
