@@ -11,7 +11,7 @@ install_requires = [
     "scipy>=1.5,<1.9",  # pinned for py36
     "scanpy>=1.6",
     "louvain==0.7.*",
-    "decorator<6.0",  # pinned in #324
+    "decorator<6.0",
     "memory-profiler==0.60",
     "colorama==0.4.*",
     "packaging==21.3",
