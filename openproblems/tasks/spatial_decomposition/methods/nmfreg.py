@@ -13,7 +13,7 @@ import numpy as np
     paper_year=2019,
     code_url="https://github.com/tudaga/NMFreg_tutorial",
 )
-def nmfreg(adata, test=False, factors=None, projection_type=None):
+def nmfreg(adata, test=False, factors=None):
     """NMF-reg: NMF regression for array-based spatial transcriptomics data.
 
     Re-implementation from https://github.com/tudaga/NMFreg_tutorial.
@@ -38,7 +38,6 @@ def nmfreg(adata, test=False, factors=None, projection_type=None):
     n_types = adata_sc.obs["label"].cat.categories.shape[0]
 
     factors = factors or 30
-    projection_type = projection_type or "l2"
 
     # Learn from reference
     if issparse(adata_sc.X):
@@ -77,10 +76,7 @@ def nmfreg(adata, test=False, factors=None, projection_type=None):
         factor_to_best_celltype_matrix[i, j] = 1
 
     Ha_norm = StandardScaler(with_mean=False).fit_transform(Ha)
-    if projection_type == "l2":
-        sc_deconv = np.dot(Ha_norm**2, factor_to_best_celltype_matrix)
-    else:
-        sc_deconv = np.dot(Ha_norm, factor_to_best_celltype_matrix)
+    sc_deconv = np.dot(Ha_norm**2, factor_to_best_celltype_matrix)
 
     sc_deconv = sc_deconv / sc_deconv.sum(1)[:, np.newaxis]
 
