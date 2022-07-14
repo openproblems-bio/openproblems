@@ -2,7 +2,6 @@ from typing import Tuple
 
 import anndata as ad
 import numpy as np
-import pandas as pd
 
 
 def merge_sc_and_sp(
