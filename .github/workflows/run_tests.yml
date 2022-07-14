@@ -235,6 +235,13 @@ jobs:
       )
 
     steps:
+    - name: Check dependabot
+      run: |
+        if [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+          echo "Dependabot cannot access Action secrets. Rerun the workflow manually"
+          exit 1
+        fi
+
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1000
