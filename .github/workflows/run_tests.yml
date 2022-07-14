@@ -163,7 +163,7 @@ jobs:
         echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
 
     - name: Cache Python packages
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ env.PYTHON_VERSION }}
         key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
@@ -177,7 +177,7 @@ jobs:
         python -c "import openproblems"
 
     - name: Cache R packages
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       if: startsWith(runner.os, 'Linux')
       with:
         path: /usr/local/lib/R/site-library
@@ -283,7 +283,7 @@ jobs:
         fi
 
     - name: Cache Python packages
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
         key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
