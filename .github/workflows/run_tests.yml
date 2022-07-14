@@ -274,11 +274,13 @@ jobs:
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
+        REPO_PARSED=$(echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6)
+        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g' | sed 's/[^a-zA-Z0-9]*$//')
         if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
-          echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
+          echo "BRANCH=`echo $BRANCH_PARSED | head -c 40`" >> $GITHUB_ENV
         else
-          echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
-        fi >> $GITHUB_ENV
+          echo "BRANCH=${REPO_PARSED}-`echo $BRANCH_PARSED | head -c 33`" >> $GITHUB_ENV
+        fi
 
     - name: Cache Python packages
       uses: actions/cache@v2
