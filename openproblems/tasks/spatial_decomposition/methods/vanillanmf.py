@@ -25,7 +25,7 @@ def nmf(adata, test=False, max_iter=None, random_state=17):
 
     if test:
         max_iter = max_iter or 10
-    else:
+    else:  # pragma: nocover
         max_iter = max_iter or 4000
 
     vanila_nmf_model = NMF(
