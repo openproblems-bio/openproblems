@@ -11,13 +11,6 @@ def merge_sc_and_sp(
     batch_key: str = "modality",
 ) -> ad.AnnData:
 
-    for k in adata_sp.obsm.keys():
-        if isinstance(adata_sp.obsm[k], pd.DataFrame):
-            n_col = adata_sp.obsm[k].shape[1]
-            n_row = adata_sc.shape[0]
-            arr = np.zeros((n_row, n_col))
-            adata_sc.obsm[k] = arr
-
     # merge single cell and spatial data
     adata_merged = ad.concat(
         {"sp": adata_sp, "sc": adata_sc},
