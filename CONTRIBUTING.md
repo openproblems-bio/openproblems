@@ -207,8 +207,6 @@ For datasets in particular, these should be loaded using a `loader` function fro
 
 For methods and metrics, they should be decorated with the appropriate function in `openproblems.tools.decorators` to include metadata required for the evaluation and presentation of results.
 
-For methods and metrics requiring image-specific packages, see the "Adding Package Dependencies" section for further explanation.
-
 Note that data is not normalized in the data loader; normalization should be performed as part of each method or in the task dataset function if stated in the task API. For ease of use, we provide a collection of common normalization functions in [`openproblems.tools.normalize`](openproblems/tools/normalize.py). The original data stored in `adata.X` is automatically stored in `adata.layers["counts"]` for later reference in the case the a metric needs to access the unnormalized data.
 
 ### Adding a new task
