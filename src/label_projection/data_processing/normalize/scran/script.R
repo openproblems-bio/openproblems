@@ -14,7 +14,7 @@ cat(">> Load data\n")
 adata <- anndata::read_h5ad(par$input)
 
 cat(">> Normalizing data\n")
-sce <- scran::calculateSumFactors(t(adata$X), min.mean=0.1, BPPARAM=BiocParallel::MulticoreParam())
+sce <- scran::calculateSumFactors(as.matrix(t(adata$X)), min.mean=0.1, BPPARAM=BiocParallel::MulticoreParam())
 adata$obs[["size_factors"]] <- sce
 adata$X <- log1p(sce * adata$X)
 

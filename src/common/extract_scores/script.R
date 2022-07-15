@@ -24,7 +24,7 @@ scores <- map_df(par$input, function(inp) {
     )
   }
 
-  as_tibble(ad$uns[uns_names])
+  as_tibble(ad$uns[par$column_names])
 })
 
 write_tsv(scores, par$output)

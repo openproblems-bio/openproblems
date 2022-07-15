@@ -15,8 +15,8 @@ include { log_scran_pooling } from "$targetDir/label_projection/data_processing/
 include { log_cpm } from "$targetDir/label_projection/data_processing/normalize/log_cpm/main.nf"
 
 // import methods
-include { baseline_majority_vote }    from "$targetDir/label_projection/control_methods/baseline_majority_vote/main.nf"
-include { baseline_random_celltype }  from "$targetDir/label_projection/control_methods/baseline_random_celltype/main.nf"
+include { nayve_majority_vote }    from "$targetDir/label_projection/control_methods/nayve_majority_vote/main.nf"
+include { nayve_random_celltype }  from "$targetDir/label_projection/control_methods/nayve_random_celltype/main.nf"
 include { knn_classifier }   from "$targetDir/label_projection/methods/knn_classifier/main.nf"
 include { mlp }              from "$targetDir/label_projection/methods/mlp/main.nf"
 include { logistic_regression } from "$targetDir/label_projection/methods/logistic_regression/main.nf"
@@ -105,7 +105,7 @@ workflow {
         | (log_cpm & log_scran_pooling)
         | mix
         | map { unique_file_name(it) }
-        | (knn_classifier & mlp0 & lr0 & baseline_random_celltype & baseline_majority_vote)
+        | (knn_classifier & mlp0 & lr0 & nayve_random_celltype & nayve_majority_vote)
         | mix
         | map { unique_file_name(it) }
         | (accuracy & f1a)
@@ -113,7 +113,7 @@ workflow {
         | toSortedList
         | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
         | extract_scores.run(
-            args: [column_names: "dataset_id:normalization_method:method_id:metric_id:metric_value"]
+            args: [column_names: "dataset_id:normalization_method:method_id:metric_id:metric_value"],
             auto: [ publish: true ]
         )
 }
