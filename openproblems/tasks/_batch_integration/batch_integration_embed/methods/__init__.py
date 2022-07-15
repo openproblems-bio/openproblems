@@ -7,10 +7,10 @@ from ...batch_integration_graph.methods.combat import combat_hvg_unscaled
 # from ...batch_integration_graph.methods.desc import desc_full_unscaled
 # from ...batch_integration_graph.methods.desc import desc_hvg_scaled
 # from ...batch_integration_graph.methods.desc import desc_hvg_unscaled
-from ...batch_integration_graph.methods.fastmnn_embed import fastmnn_embed_full_scaled
-from ...batch_integration_graph.methods.fastmnn_embed import fastmnn_embed_full_unscaled
-from ...batch_integration_graph.methods.fastmnn_embed import fastmnn_embed_hvg_scaled
-from ...batch_integration_graph.methods.fastmnn_embed import fastmnn_embed_hvg_unscaled
+from ...batch_integration_graph.methods.fastmnn import fastmnn_embed_full_scaled
+from ...batch_integration_graph.methods.fastmnn import fastmnn_embed_full_unscaled
+from ...batch_integration_graph.methods.fastmnn import fastmnn_embed_hvg_scaled
+from ...batch_integration_graph.methods.fastmnn import fastmnn_embed_hvg_unscaled
 
 # from ...batch_integration_graph.methods.fastmnn import fastmnn_feature_full_scaled
 # from ...batch_integration_graph.methods.fastmnn import fastmnn_feature_full_unscaled
