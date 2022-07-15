@@ -15,7 +15,7 @@ export NXF_VER=21.10.6
 bin/nextflow \
   run . \
   -main-script src/modality_alignment/workflows/run/main.nf \
-  --output output/modality_alignment \
+  --publish_dir output/modality_alignment \
   -resume \
   -with-docker
 

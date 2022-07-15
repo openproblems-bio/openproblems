@@ -2,33 +2,68 @@ name: viash test CI
 
 on:
   push:
-    branches: [ '*' ]
-  pull_request:
-    branches: [ '*' ]
-
-# Skip older CI runs for pull requests (head_ref exists), otherwise allways build
-# https://docs.github.com/en/actions/using-jobs/using-concurrency#example-using-a-fallback-value
-concurrency: 
-  group: ${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
+    branches: [ '**' ]
 
 jobs:
+  cancel:
+      name: 'Cancel Previous Runs'
+      runs-on: ubuntu-latest
+      timeout-minutes: 3
+      if: github.ref != 'refs/heads/main'
+      steps:
+        - uses: styfle/cancel-workflow-action@0.10.0
+          with:
+            all_but_latest: true
+            access_token: ${{ github.token }}
+
   # phase 1
   list_components:
+    env:
+      s3_bucket: s3://openproblems-data/
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'ci skip')"
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Fetch viash
       run: |
         bin/init
         bin/viash -h
+
+    # create cachehash key
+    - name: Create hash key
+      id: cachehash
+      run: |
+        AWS_EC2_METADATA_DISABLED=true aws s3 ls $s3_bucket --recursive --no-sign-request > bucket-contents.txt
+        echo "::set-output name=cachehash::resources_test__$( md5sum bucket-contents.txt | awk '{ print $1 }' )"
+    
+    # initialize cache
+    - name: Cache resources data
+      uses: actions/cache@v3
+      with:
+        path: resources_test
+        key: ${{ steps.cachehash.outputs.cachehash }}
+        restore-keys: resources_test_
+
+    # sync if need be
+    - name: Sync test resources
+      run: |
+        bin/viash run \
+          -p native \
+          src/common/sync_test_resources/config.vsh.yaml -- \
+          --input $s3_bucket \
+          --delete
+        tree resources_test/ -L 3
+
+    # store component locations
     - id: set_matrix
       run: |
-        echo "::set-output name=matrix::$( bin/viash ns list -p docker --format json | jq -c '[ .[] | .info.config ]' )"
+        json=$(bin/viash ns list -p docker --format json | jq -c '[ .[] | { "name": .functionality.name, "config": .info.config } ]')
+        echo "::set-output name=matrix::$json"
     outputs:
-        matrix: ${{ steps.set_matrix.outputs.matrix }}
+      matrix: ${{ steps.set_matrix.outputs.matrix }}
+      cachehash: ${{ steps.cachehash.outputs.cachehash }}
 
   # phase 2
   viash_test:
@@ -40,7 +75,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component_path: ${{ fromJson(needs.list_components.outputs.matrix) }}
+        component: ${{ fromJson(needs.list_components.outputs.matrix) }}
 
     steps:
     - uses: actions/checkout@v2
@@ -50,7 +85,14 @@ jobs:
         bin/init
         bin/viash -h
 
+    # use cache
+    - name: Cache resources data
+      uses: actions/cache@v3
+      with:
+        path: resources_test
+        key: ${{ needs.list_components.outputs.cachehash }}
+
     - name: Run test
       run: |
-        bin/viash test -p docker ${{ matrix.component_path }}
+        bin/viash test -p docker ${{ matrix.component.config }}
 

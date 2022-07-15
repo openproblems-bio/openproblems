@@ -1,0 +1,112 @@
+name: main build
+
+on:
+  push:
+    branches: [ 'main' ]
+
+jobs:
+  # phase 1
+  list_components:
+    env:
+      s3_bucket: s3://openproblems-data/
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Fetch viash
+      run: |
+        bin/init
+        bin/viash -h
+
+    # create cachehash key
+    - name: Create hash key
+      id: cachehash
+      run: |
+        AWS_EC2_METADATA_DISABLED=true aws s3 ls $s3_bucket --recursive --no-sign-request > bucket-contents.txt
+        echo "::set-output name=cachehash::resources_test__$( md5sum bucket-contents.txt | awk '{ print $1 }' )"
+    
+    # initialize cache
+    - name: Cache resources data
+      uses: actions/cache@v3
+      with:
+        path: resources_test
+        key: ${{ steps.cachehash.outputs.cachehash }}
+        restore-keys: resources_test_
+
+    # sync if need be
+    - name: Sync test resources
+      run: |
+        bin/viash run \
+          -p native \
+          src/common/sync_test_resources/config.vsh.yaml -- \
+          --input $s3_bucket \
+          --delete
+        tree resources_test/ -L 3
+
+    - name: Build target dir
+      run: |
+        # allow publishing the target folder
+        sed -i '/^target.*/d' .gitignore
+
+        # force override viash build strategy to not build containers
+        sed -i 's#--setup "\\$setup_strat"#--setup donothing#' bin/viash_build
+
+        # build target dir
+        bin/viash_build -m release -t main_build
+
+    - name: Deploy to target branch
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .
+        publish_branch: main_build
+
+    # store component locations
+    - id: set_matrix
+      run: |
+        component_json=$(bin/viash ns list -p docker --format json | jq -c '[ .[] | { "name": .functionality.name, "config": .info.config } ]')
+        echo "::set-output name=component_matrix::$component_json"
+        workflow_json=$(bin/viash ns list -s workflows --format json | jq -c '[ .[] | { "name": .functionality.name, "config": .info.config, "test_script": .functionality.test_resources[].path, "entry": .functionality.test_resources[].entrypoint } ]')
+        echo "::set-output name=workflow_matrix::$workflow_json"
+    outputs:
+      component_matrix: ${{ steps.set_matrix.outputs.component_matrix }}
+      workflow_matrix: ${{ steps.set_matrix.outputs.workflow_matrix }}
+      cachehash: ${{ steps.cachehash.outputs.cachehash }}
+
+  # phase 2
+  build_containers:
+    needs: list_components
+
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        component: ${{ fromJson(needs.list_components.outputs.component_matrix) }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Fetch viash
+      run: |
+        bin/init
+        bin/viash -h
+
+    - name: Build container
+      run: |
+        SRC_DIR=`dirname ${{ matrix.component.config }}`
+        bin/viash_build -m release -t main_build -s "$SRC_DIR"
+        
+    - name: Login to container registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GTHB_PAT }}
+
+    - name: Push containers
+      run: |
+        bin/viash_push -m release -t main_build --force
