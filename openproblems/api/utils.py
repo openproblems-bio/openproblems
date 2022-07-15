@@ -1,4 +1,5 @@
 import openproblems
+import os
 import sys
 
 
@@ -39,7 +40,7 @@ def get_function(task_name, function_type, function_name):
     """Get a function from a task."""
     # check function type
     function_type = function_type.lower()
-    assert function_type in ["datasets", "methods", "metrics"]
+    assert function_type in ["datasets", "methods", "metrics", "api"]
 
     # get function
     task = str_to_task(task_name)
@@ -64,3 +65,9 @@ def print_output(output):
         print("\n".join(output))
     else:
         print(output)
+
+
+def write_h5ad(adata, filename):
+    if os.path.isfile(filename):
+        os.unlink(filename)
+    adata.write_h5ad(filename)

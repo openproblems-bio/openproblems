@@ -51,7 +51,7 @@ jobs:
       run: ./scripts/clear_runner_diskspace.sh
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: "3.8"
 
@@ -69,7 +69,7 @@ jobs:
         snakemake -j $(nproc) docker_build
         cd ..
 
-    - name: Push Docker images
+    - name: Build and push Docker images
       if: "startsWith(github.ref, 'refs/heads/main')"
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -163,7 +163,7 @@ jobs:
         echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
 
     - name: Cache Python packages
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ env.PYTHON_VERSION }}
         key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
@@ -177,7 +177,7 @@ jobs:
         python -c "import openproblems"
 
     - name: Cache R packages
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       if: startsWith(runner.os, 'Linux')
       with:
         path: /usr/local/lib/R/site-library
@@ -208,7 +208,7 @@ jobs:
         cd ..
 
     - name: Run tests
-      run: pytest --cov=openproblems --cov-report=xml -vv --durations=10 --tb=native
+      run: pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native
 
     - name: Upload coverage
       continue-on-error: ${{ github.repository != 'openproblems-bio/openproblems' }}
@@ -235,6 +235,13 @@ jobs:
       )
 
     steps:
+    - name: Check dependabot
+      run: |
+        if [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+          echo "Dependabot cannot access Action secrets. Rerun the workflow manually"
+          exit 1
+        fi
+
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1000
@@ -248,15 +255,16 @@ jobs:
         sudo apt-get install -qy --no-install-recommends libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: "3.8"
 
     - name: Set up Java ${{ matrix.java_version }}
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v3
       with:
         java-version: 15
         architecture: x64
+        distribution: zulu
 
     - name: Set up environment
       run: |
@@ -267,14 +275,18 @@ jobs:
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
+        REPO_PARSED=$(echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6)
+        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g')
         if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
-          echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
+          BRANCH=`echo $BRANCH_PARSED | head -c 40`
         else
-          echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
-        fi >> $GITHUB_ENV
+          BRANCH="${REPO_PARSED}-`echo $BRANCH_PARSED | head -c 33`"
+        fi
+        BRANCH=`echo $BRANCH | sed 's/[^a-zA-Z0-9]*$//'`
+        echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
 
     - name: Cache Python packages
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
         key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
@@ -344,7 +356,7 @@ jobs:
         )
       run: |
         cd workflow
-        snakemake -j $(nproc) docker
+        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
         cd ..
 
     - name: Upload Docker images
@@ -397,35 +409,6 @@ jobs:
       with:
         name: nextflow.log
         path: /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log
-
-    - name: AWS ECR cleanup
-      if: |
-        !(
-          startsWith(github.ref, 'refs/heads/main') &&
-          github.repository == 'openproblems-bio/openproblems'
-        )
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
-        done
-
-    - name: AWS S3 cleanup
-      if: |
-        success() ||
-        startsWith(github.ref, 'refs/heads/main') ||
-        startsWith(github.ref, 'refs/tags')
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        aws s3 rm --recursive "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
-        aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-        aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
 
   run_full_benchmark:
     needs: run_test_benchmark

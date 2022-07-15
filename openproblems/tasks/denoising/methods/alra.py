@@ -10,11 +10,11 @@ log = logging.getLogger("openproblems")
 
 @method(
     method_name="ALRA",
-    paper_name="Zero-preserving imputation of scRNA-seq...",
+    paper_name="Zero-preserving imputation of scRNA-seq data using "
+    "low-rank approximation",
     paper_url="https://www.biorxiv.org/content/10.1101/397588v1",
     paper_year=2018,
     code_url="https://github.com/KlugerLab/ALRA",
-    code_version="v1.0.0",
     image="openproblems-r-extras",
 )
 def alra(adata, test=False):
@@ -48,4 +48,6 @@ def alra(adata, test=False):
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
+
+    adata.uns["method_code_version"] = "1.0.0"
     return adata

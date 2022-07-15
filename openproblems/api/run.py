@@ -23,5 +23,5 @@ def main(args):
     """Run the ``run`` subcommand."""
     adata = anndata.read_h5ad(args.input)
     adata = run_method(adata, args.task, args.name, args.test)
-    adata.write_h5ad(args.output)
+    utils.write_h5ad(adata, args.output)
     return adata.uns["method_code_version"]

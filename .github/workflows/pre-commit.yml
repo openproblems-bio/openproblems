@@ -43,7 +43,7 @@ jobs:
           echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
 
       - name: Cache R packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         if: startsWith(runner.os, 'Linux')
         with:
           path: /usr/local/lib/R/site-library
@@ -59,7 +59,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Cache pre-commit
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}-
