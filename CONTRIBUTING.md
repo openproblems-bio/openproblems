@@ -272,6 +272,12 @@ pip install --editable .[test,r]
 pytest -v
 ```
 
+You may run specific tests with
+
+```shell
+pytest -k my_task
+```
+
 The test suite also requires Python>=3.7, R>=4.0, and Docker to be installed.
 
 The benchmarking suite is tested by GitHub Actions when you push your changes. However, if you wish to test locally, you can do so with the following command:
