@@ -410,35 +410,6 @@ jobs:
         name: nextflow.log
         path: /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log
 
-    - name: AWS ECR cleanup
-      if: |
-        !(
-          startsWith(github.ref, 'refs/heads/main') &&
-          github.repository == 'openproblems-bio/openproblems'
-        )
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
-        done
-
-    - name: AWS S3 cleanup
-      if: |
-        success() ||
-        startsWith(github.ref, 'refs/heads/main') ||
-        startsWith(github.ref, 'refs/tags')
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        aws s3 rm --recursive "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
-        aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-        aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
-
   run_full_benchmark:
     needs: run_test_benchmark
     runs-on: ubuntu-latest
