@@ -36,7 +36,7 @@ functionality:
     - type: python_script
       path: test_script.py
     - type: file
-      path: "../../resources/pancreas"
+      path: "../../../../resources_test/label_projection/pancreas"
 platforms:
   - type: docker
     image: "python:3.8"

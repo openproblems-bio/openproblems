@@ -1,6 +1,6 @@
 ## VIASH START
 par = {
-    'input': '../../resources/pancreas/toy_preprocessed_data.h5ad',
+    'input': '../../../../resources_test/label_projection/pancreas/toy_preprocessed_data.h5ad',
     'output': 'output.mlplogcpm.h5ad'
 }
 ## VIASH END

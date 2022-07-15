@@ -1,7 +1,7 @@
 import scanpy as sc
 ### VIASH START
 par = {
-    "input": "../../resources/pancreas/raw_data.h5ad",
+    "input": "../../../../resources_test/label_projection/pancreas/raw_data.h5ad",
     # "keep_celltype_categories": ["acinar", "beta"],
     # "keep_batch_categories": ["celseq", "inDrop4", "smarter"],
     "even": True,

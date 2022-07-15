@@ -28,7 +28,7 @@ functionality:
   tests:
     - type: python_script
       path: test_script.py
-    - path: "../../resources/pancreas/toy_baseline_pred_data.h5ad"
+    - path: "../../../../resources_test/label_projection/pancreas/toy_baseline_pred_data.h5ad"
 platforms:
   - type: native
   - type: docker

@@ -56,7 +56,7 @@ functionality:
     - type: python_script
       path: ../unit_tests/test_method.py
     - type: file
-      path: "../../../resources/pancreas/toy_preprocessed_data.h5ad"
+      path: "../../../../../resources_test/label_projection/pancreas/toy_preprocessed_data.h5ad"
 platforms:
   - type: docker
     image: "python:3.8"

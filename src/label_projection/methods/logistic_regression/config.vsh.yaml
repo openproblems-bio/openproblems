@@ -39,8 +39,8 @@ functionality:
   tests:
     - type: python_script
       path: ../unit_tests/test_method.py
-    - path: ../../resources/pancreas/toy_normalized_log_scran_pooling_data.h5ad
-    - path: ../../resources/pancreas/toy_normalized_log_cpm_data.h5ad
+    - path: ../../../../resources_test/label_projection/pancreas/toy_normalized_log_scran_pooling_data.h5ad
+    - path: ../../../../resources_test/label_projection/pancreas/toy_normalized_log_cpm_data.h5ad
 platforms:
   - type: docker
     image: "python:3.8"
