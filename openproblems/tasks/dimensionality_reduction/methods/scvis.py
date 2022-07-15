@@ -93,7 +93,6 @@ def _fit(data: np.ndarray):
     paper_url="https://www.nature.com/articles/s41467-018-04368-5",
     paper_year=2018,
     code_url="https://bitbucket.org/jerry00/scvis-dev/",
-    code_version=check_version("scvis"),
     image="openproblems-python36",
 )
 def scvis_logCM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
@@ -103,5 +102,6 @@ def scvis_logCM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
     emb, _ = model.encode(x)
 
     adata.obsm["X_emb"] = np.asarray(emb[:, :2])
+    adata.uns["method_code_version"] = check_version("scvis")
 
     return adata

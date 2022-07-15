@@ -1,4 +1,4 @@
-# openproblems-r-extras Docker image
+# openproblems-r-pytorch Docker image
 
 Base image: singlecellopenproblems/openproblems-r-base
 
@@ -17,4 +17,3 @@ R packages:
 Python packages:
 
 * harmonic-alignment
-* xgboost

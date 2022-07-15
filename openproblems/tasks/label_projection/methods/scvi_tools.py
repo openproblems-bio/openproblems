@@ -1,6 +1,27 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
+import functools
+
+_scanvi_method = functools.partial(
+    method,
+    paper_name="Probabilistic harmonization and annotation of single-cell"
+    " transcriptomics data with deep generative models",
+    paper_url="https://doi.org/10.15252/msb.20209620",
+    paper_year=2021,
+    code_url="https://github.com/YosefLab/scvi-tools",
+    image="openproblems-python-scvi",
+)
+
+_scanvi_scarches_method = functools.partial(
+    method,
+    paper_name="Query to reference single-cell integration with transfer learning",
+    paper_url="https://www.biorxiv.org/content/10.1101/2020.07.16.205997v1",
+    paper_year=2021,
+    code_url="https://github.com/YosefLab/scvi-tools",
+    image="openproblems-python-scvi",
+)
+
 
 def _hvg(adata, test=False, n_top_genes=2000):
     import scanpy as sc
@@ -125,30 +146,14 @@ def _scanvi_scarches(adata, test=False, n_hidden=None, n_latent=None, n_layers=N
     return preds
 
 
-@method(
-    method_name="scANVI (All genes)",
-    paper_name="Probabilistic harmonization and annotation of single-cell"
-    " transcriptomics data with deep generative models.",
-    paper_url="https://www.embopress.org/doi/full/10.15252/msb.20209620",
-    paper_year=2021,
-    code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-python-scvi",
-)
+@_scanvi_method(method_name="scANVI (All genes)")
 def scanvi_all_genes(adata, test=False):
     adata.obs["labels_pred"] = _scanvi(adata, test=test)
     adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
 
 
-@method(
-    method_name="scANVI (Seurat v3 2000 HVG)",
-    paper_name="Probabilistic harmonization and annotation of single-cell"
-    " transcriptomics data with deep generative models.",
-    paper_url="https://www.embopress.org/doi/full/10.15252/msb.20209620",
-    paper_year=2021,
-    code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-python-scvi",
-)
+@_scanvi_method(method_name="scANVI (Seurat v3 2000 HVG)")
 def scanvi_hvg(adata, test=False):
     hvg_df = _hvg(adata, test)
     bdata = adata[:, hvg_df.highly_variable].copy()
@@ -157,28 +162,14 @@ def scanvi_hvg(adata, test=False):
     return adata
 
 
-@method(
-    method_name="scArches+scANVI (All genes)",
-    paper_name="Query to reference single-cell integration with transfer learning.",
-    paper_url="https://www.biorxiv.org/content/10.1101/2020.07.16.205997v1",
-    paper_year=2021,
-    code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-python-scvi",
-)
+@_scanvi_scarches_method(method_name="scArches+scANVI (All genes)")
 def scarches_scanvi_all_genes(adata, test=False):
     adata.obs["labels_pred"] = _scanvi_scarches(adata, test=test)
     adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
 
 
-@method(
-    method_name="scArches+scANVI (Seurat v3 2000 HVG)",
-    paper_name="Query to reference single-cell integration with transfer learning.",
-    paper_url="https://www.biorxiv.org/content/10.1101/2020.07.16.205997v1",
-    paper_year=2021,
-    code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-python-scvi",
-)
+@_scanvi_scarches_method(method_name="scArches+scANVI (Seurat v3 2000 HVG)")
 def scarches_scanvi_hvg(adata, test=False):
     hvg_df = _hvg(adata, test)
     bdata = adata[:, hvg_df.highly_variable].copy()

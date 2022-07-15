@@ -18,6 +18,7 @@ positional arguments:
     load                Load a dataset for a task
     run                 Run a method on a dataset
     evaluate            Evaluate a metric on a method
+    test                Test a dataset, method and/or metric
 
 optional arguments:
   -h, --help            show this help message and exit

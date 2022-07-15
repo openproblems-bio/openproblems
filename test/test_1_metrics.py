@@ -22,6 +22,9 @@ def test_metric_metadata(metric):
     for attr in ["metric_name", "maximize", "image"]:
         assert attr in metric.metadata
     assert isinstance(metric.metadata["maximize"], bool)
+    assert isinstance(metric.metadata["metric_name"], str)
+    assert isinstance(metric.metadata["image"], str)
+    assert metric.metadata["image"].startswith("openproblems")
 
 
 @parameterized.parameterized.expand(

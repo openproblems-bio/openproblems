@@ -60,6 +60,7 @@ def loader(data_url):
                     "Downloading {}({}, {}) dataset".format(func.__name__, args, kwargs)
                 )
                 adata = func(*args, **kwargs)
+                adata.strings_to_categoricals()
                 adata.uns["_from_cache"] = False
                 if "counts" not in adata.layers:
                     adata.layers["counts"] = adata.X
