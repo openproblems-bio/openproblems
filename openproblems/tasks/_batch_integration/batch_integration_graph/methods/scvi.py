@@ -16,7 +16,7 @@ _scvi_method = functools.partial(
 
 def _scvi(adata, test: bool = False, max_epochs: Optional[int] = None):
     from scanpy.preprocessing import neighbors
-    from scib.integration import runScvi
+    from scib.integration import scvi
 
     if test:
         max_epochs = max_epochs or 2
@@ -24,7 +24,7 @@ def _scvi(adata, test: bool = False, max_epochs: Optional[int] = None):
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
     )  # ugly fix for scvi conversion error
-    adata = runScvi(adata, "batch", max_epochs=max_epochs)
+    adata = scvi(adata, "batch", max_epochs=max_epochs)
     neighbors(adata, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
