@@ -13,6 +13,10 @@ RUN sh -c 'echo \
 RUN sudo apt-get update
 RUN sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
+# install Python packages
+COPY ./docker/openproblems-github-actions/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
 # Install R packages
 COPY ./.pre-commit.r_requirements.txt ./r_requirements.txt
 RUN sudo R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))"

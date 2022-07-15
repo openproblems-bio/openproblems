@@ -1,5 +1,9 @@
+import utils.warnings  # noqa: F401
+
+# isort: split
 import anndata
 import openproblems
+import openproblems.utils
 import pandas as pd
 import parameterized
 import pytest
@@ -10,9 +14,9 @@ import utils.asserts
 import utils.cache
 import utils.git
 import utils.name
-import utils.warnings
 
-utils.warnings.ignore_warnings()
+DATASET_SUMMARY_MAXLEN = 80
+
 pytestmark = pytest.mark.skipif(
     len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
 )
@@ -92,7 +96,7 @@ class TestDataset(unittest.TestCase):
     def test_sparse(self):
         """Ensure output is sparse."""
         if not scipy.sparse.issparse(self.adata.X):
-            utils.warnings.future_warning(
+            openproblems.utils.future_warning(
                 "{}-{}: self.adata.X is loaded as dense.".format(
                     self.task.__name__.split(".")[-1], self.dataset.__name__
                 ),
@@ -133,7 +137,14 @@ class TestDataset(unittest.TestCase):
     def test_metadata(self):
         """Test for existence of dataset metadata."""
         assert hasattr(self.dataset, "metadata")
-        for attr in [
-            "dataset_name",
-        ]:
+        for attr in ["dataset_name", "data_url", "dataset_summary", "image"]:
             assert attr in self.dataset.metadata
+            assert self.dataset.metadata[attr] is not None
+
+        assert isinstance(self.dataset.metadata["dataset_name"], str)
+        assert isinstance(self.dataset.metadata["image"], str)
+        assert self.dataset.metadata["image"].startswith("openproblems")
+        assert isinstance(self.dataset.metadata["dataset_summary"], str)
+        assert len(self.dataset.metadata["dataset_summary"]) < DATASET_SUMMARY_MAXLEN
+        assert isinstance(self.dataset.metadata["data_url"], str)
+        assert utils.asserts.assert_url_accessible(self.dataset.metadata["data_url"])

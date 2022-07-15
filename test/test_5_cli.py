@@ -1,3 +1,6 @@
+import utils.warnings  # noqa: F401
+
+# isort: split
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
 
@@ -5,6 +8,7 @@ import numpy as np
 import openproblems
 import os
 import parameterized
+import sklearn
 import tempfile
 import utils
 
@@ -145,6 +149,37 @@ def test_hash(task, function_type, function_name):
     assert h1 == h2
 
 
+@parameterized.parameterized.expand(
+    [
+        (dataset, method, metric)
+        for dataset in ["zebrafish_labels", None]
+        for method in ["logistic_regression_log_cpm", None]
+        for metric in ["accuracy", None]
+    ],
+    name_func=utils.name.name_test,
+)
+def test_test(dataset, method, metric):
+    """Test pipeline for dev testing."""
+    args = ["test", "--task", "label_projection", "--test"]
+    if dataset is not None:
+        args += ["--dataset", dataset]
+    if method is not None:
+        args += ["--method", method]
+    if metric is not None:
+        args += ["--metric", metric]
+    out = main(
+        args,
+        do_print=False,
+    )
+    if metric is None:
+        assert out is None
+    else:
+        try:
+            float(out)
+        except ValueError:
+            assert False, "result could not be converted to float"
+
+
 def test_zero_metric():
     def __zero_metric(*args):
         return 0.0
@@ -187,12 +222,12 @@ def test_pipeline():
                 "--test",
                 "--output",
                 dataset_file,
-                "pancreas_batch",
+                "zebrafish_labels",
             ],
             do_print=False,
         )
         assert os.path.isfile(dataset_file)
-        main(
+        code_version = main(
             [
                 "run",
                 "--task",
@@ -206,6 +241,7 @@ def test_pipeline():
             do_print=False,
         )
         assert os.path.isfile(method_file)
+        assert code_version == sklearn.__version__
         result = main(
             [
                 "evaluate",

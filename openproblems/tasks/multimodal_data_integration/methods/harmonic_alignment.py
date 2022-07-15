@@ -4,7 +4,16 @@ from ....tools.normalize import log_scran_pooling
 from ....tools.normalize import sqrt_cpm
 from ....tools.utils import check_version
 
+import functools
 import sklearn.decomposition
+
+_harmonic_alignment_method = functools.partial(
+    method,
+    paper_name="Harmonic Alignment",
+    paper_url="https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
+    paper_year=2020,
+    code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
+)
 
 
 def _harmonic_alignment(
@@ -36,17 +45,13 @@ def _harmonic_alignment(
     XY_aligned = ha_op.diffusion_map(n_eigenvectors=n_eigenvectors)
     adata.obsm["aligned"] = XY_aligned[: X_pca.shape[0]]
     adata.obsm["mode2_aligned"] = XY_aligned[X_pca.shape[0] :]
+
+    adata.uns["method_code_version"] = check_version("harmonicalignment")
     return adata
 
 
-@method(
-    method_name="Harmonic Alignment (sqrt CPM)",
-    paper_name="Harmonic Alignment",
-    paper_url="https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
-    paper_year=2020,
-    code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
-    code_version=check_version("harmonicalignment"),
-    image="openproblems-python-extras",
+@_harmonic_alignment_method(
+    method_name="Harmonic Alignment (sqrt CPM)", image="openproblems-python-extras"
 )
 def harmonic_alignment_sqrt_cpm(
     adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
@@ -64,14 +69,8 @@ def harmonic_alignment_sqrt_cpm(
     return adata
 
 
-@method(
-    method_name="Harmonic Alignment (log scran)",
-    paper_name="Harmonic Alignment",
-    paper_url="https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
-    paper_year=2020,
-    code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
-    code_version=check_version("harmonicalignment"),
-    image="openproblems-r-extras",
+@_harmonic_alignment_method(
+    method_name="Harmonic Alignment (log scran)", image="openproblems-r-extras"
 )
 def harmonic_alignment_log_scran_pooling(
     adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None

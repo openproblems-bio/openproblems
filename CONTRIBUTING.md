@@ -112,7 +112,7 @@ Datasets should take no arguments and return an AnnData object. If `test is True
 function dataset(bool test=False) -> AnnData adata
 ```
 
-Methods should take an AnnData object and store the output in `adata.obs` according to the specification of the task. If `test is True`, you may modify hyperparameters (e.g. number of iterations) to make the method run faster.
+Methods should take an AnnData object and store a) the output in `adata.obs` / `adata.obsm` / etc., according to the specification of the task and b) the version of the package used to run the method in `adata.uns["method_code_version"]`. If `test is True`, you may modify hyperparameters (e.g. number of iterations) to make the method run faster.
 
 ```
 function method(AnnData adata, bool test=False) -> AnnData adata
@@ -154,7 +154,7 @@ sce
 ### tasks/<task_name>/methods/pca.py
 from ....tools.conversion import r_function
 from ....tools.decorators import method
-from ....tools.utils import check_version
+from ....tools.utils import check_r_version
 
 _pca = r_function("pca.R")
 
@@ -165,10 +165,10 @@ _pca = r_function("pca.R")
     paper_url="https://www.tandfonline.com/doi/abs/10.1080/14786440109462720",
     paper_year=1901,
     code_url="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp",
-    code_version=check_version("rpy2"),
     image="openproblems-r-base",
 )
 def pca(adata):
+    adata.uns["method_code_version"] = check_r_version("stats"),
     return _pca(adata)
 ```
 
@@ -176,11 +176,18 @@ See the [`anndata2ri` docs](https://icb-anndata2ri.readthedocs-hosted.com/en/lat
 
 ### Adding package dependencies
 
-If you are unable to write your method using our base dependencies, you may add to our existing Docker images, or create your own. The image you wish to use (if you are not using the base image) should be specified in the `image` keyword argument of the method/metric decorator. See the [Docker images README](docker/README.md) for details.
+If you are unable to write your method using our base dependencies, you may add to our existing Docker images, or create your own. The image you wish to use (if you are not using the base image) should be specified in the `image` keyword argument of the method/metric decorator. See the [Docker images README](docker/README.md) for details. 
+
+For the target method or metric, image-specific packages can then be imported in the associated python file (i.e. `f2.py`). Importantly, the import statement must be located in the function that calls the method or metric. If this is the `f2` function, the first few lines of the function may be structured as follows:
+```
+def f2(adata):
+  import package1
+  import package2
+```
 
 ### Adding a new dataset
 
-Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader` in order to cache the result.
+Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader(data_url="https://data.link")` in order to cache the result.
 
 Data should be provided in a raw count format. We assume that `adata.X` contains the raw (count) data for the primary modality; this will also be copied to `adata.layers["counts"]` for permanent access to the raw data. Additional modalities should be stored in `adata.obsm`. Prenormalized data (if available) can be stored in `adata.layers`, preferably using a name corresponding to the equivalent [normalization function](./openproblems/tools/normalize.py) (e.g., `adata.layers["log_scran_pooling"]`). 
 
@@ -198,9 +205,15 @@ to [`openproblems/tasks/label_projection/metrics/__init__.py`](openproblems/task
 
 For datasets in particular, these should be loaded using a `loader` function from `openproblems.data`, with only task-specific annotations added in the task-specific data file.
 
-For methods and metrics, they should be decorated with the appropriate function in `openproblems.tools.decorators` to include metadata required for the evaluation and presentation of results.
+Datasets, methods, and metrics should all be decorated with the appropriate function in `openproblems.tools.decorators` to include metadata required for the evaluation and presentation of results.
 
 Note that data is not normalized in the data loader; normalization should be performed as part of each method or in the task dataset function if stated in the task API. For ease of use, we provide a collection of common normalization functions in [`openproblems.tools.normalize`](openproblems/tools/normalize.py). The original data stored in `adata.X` is automatically stored in `adata.layers["counts"]` for later reference in the case the a metric needs to access the unnormalized data.
+
+To test the performance of a dataset, method, or metric, you can use the command-line interface:
+
+```shell
+openproblems-cli test --help
+```
 
 ### Adding a new task
 
@@ -238,6 +251,8 @@ sample_dataset() -> AnnData adata # generates a simple dataset the fits the expe
 sample_method(AnnData adata) -> AnnData adata # applies a simple modification that fits the method API
 ```
 
+`README.md` should contain a description of the task as will be displayed on the website, followed by a description of the task API for dataset/method/metric authors. Note: everything after `## API` will be discarded in generating the webpage for the task.
+
 For adding datasets, methods and metrics, see above.
 
 ### Adding a new Docker container
@@ -255,6 +270,12 @@ Code is tested by GitHub Actions when you push your changes. However, if you wis
 cd openproblems
 pip install --editable .[test,r]
 pytest -v
+```
+
+You may run specific tests with
+
+```shell
+pytest -k my_task
 ```
 
 The test suite also requires Python>=3.7, R>=4.0, and Docker to be installed.

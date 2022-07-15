@@ -1,3 +1,4 @@
+from ..utils import temporary
 from . import utils
 
 import anndata
@@ -39,13 +40,19 @@ def normalizer(func, *args, **kwargs):
     return normalize
 
 
+@temporary(version="1.0")
+def _backport_code_version(apply_method, code_version):
+    apply_method.metadata["code_version"] = code_version
+    return apply_method
+
+
 def method(
     method_name,
     paper_name,
     paper_url,
     paper_year,
     code_url,
-    code_version,
+    code_version=None,
     image="openproblems",
 ):
     """Decorate a method function.
@@ -78,9 +85,9 @@ def method(
             paper_url=paper_url,
             paper_year=paper_year,
             code_url=code_url,
-            code_version=code_version,
             image=image,
         )
+        apply_method = _backport_code_version(apply_method, code_version)
         return apply_method
 
     return decorator
@@ -118,13 +125,19 @@ def metric(metric_name, maximize, image="openproblems"):
     return decorator
 
 
-def dataset(dataset_name, image="openproblems"):
+def dataset(
+    dataset_name=None, data_url=None, dataset_summary=None, image="openproblems"
+):
     """Decorate a dataset function.
 
     Parameters
     ----------
     dataset_name : str
         Unique human readable name of the dataset
+    data_url : str
+        Link to the original source of the dataset
+    dataset_summary : str
+        Short (<80 character) summary of the dataset
     image : str, optional (default: "openproblems")
         Name of the Docker image to be used for this dataset
     """
@@ -133,9 +146,16 @@ def dataset(dataset_name, image="openproblems"):
         @functools.wraps(func)
         def apply_func(*args, **kwargs):
             log.debug("Loading {} dataset".format(func.__name__))
-            return func(*args, **kwargs)
+            adata = func(*args, **kwargs)
+            adata.strings_to_categoricals()
+            return adata
 
-        apply_func.metadata = dict(dataset_name=dataset_name, image=image)
+        apply_func.metadata = dict(
+            dataset_name=dataset_name,
+            image=image,
+            data_url=data_url,
+            dataset_summary=dataset_summary,
+        )
         return apply_func
 
     return decorator
