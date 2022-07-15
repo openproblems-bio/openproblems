@@ -34,7 +34,7 @@ jobs:
         git checkout -b $UPDATE_BRANCH_NAME
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.config.python }}
 
