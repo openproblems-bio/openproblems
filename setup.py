@@ -5,7 +5,7 @@ import os
 
 install_requires = [
     "numpy==1.22.*",
-    "scikit-learn==1..1.*",
+    "scikit-learn==1.1.*",
     "anndata==0.8.*",
     "scprep>=1.2.0",
     "scipy==1.8.*",
