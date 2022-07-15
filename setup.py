@@ -19,8 +19,8 @@ install_requires = [
 ]
 
 r_requires = [
-    "rpy2<3.4.3",  # pinned in #219
-    "anndata2ri==1.0.6",
+    "rpy2<3.5.3",
+    "anndata2ri==1.1.*",
 ]
 
 evaluate_requires = ["snakemake==7.8.*"]
