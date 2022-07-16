@@ -6,6 +6,7 @@ import openproblems.api.utils as utils
 import os
 import pandas as pd
 import sys
+import warnings
 
 
 def dump_json(obj, fp):
@@ -116,7 +117,7 @@ def parse_metric_results(results_path, results):
         print("Missing execution trace for: ")
         for filename in missing_traces:
             print("    {}".format(filename))
-        raise ValueError(
+        warnings.warn(
             "Missing execution traces for {} results.".format(len(missing_traces))
         )
     return results
