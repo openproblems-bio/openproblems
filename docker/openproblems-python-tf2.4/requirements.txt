@@ -1,6 +1,5 @@
 anndata>=0.8. # dca downgrades it otherwise
 dca==0.3.*
-h5py>=3.0 # tensorflow downgrades it otherwise
 keras>=2.4,<2.6  # pinned in dca
 pyyaml==5.4.1  # pinned in #431
 tensorflow==2.4.*  # pinned in dca
