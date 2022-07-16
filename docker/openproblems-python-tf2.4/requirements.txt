@@ -2,3 +2,4 @@ dca==0.3.*
 keras>=2.4,<2.6  # pinned in dca
 pyyaml==5.4.1  # pinned in #431
 tensorflow==2.4.*  # pinned in dca
+anndata>=0.8. # dca downgrades it otherwise
