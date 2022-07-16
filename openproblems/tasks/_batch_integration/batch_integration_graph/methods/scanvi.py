@@ -30,7 +30,7 @@ def _scanvi(adata, test: bool = False, max_epochs: Optional[int] = None):
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
-    adata.uns["method_code_version"] = check_version("scvi")
+    adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
 
 
