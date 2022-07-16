@@ -29,9 +29,7 @@ def _scanorama_embed(adata):
 
 
 def _scanorama_full(adata):
-    log_scran = adata.layers["log_scran"]
     adata = _scanorama(adata, use_rep="X_pca")
-    adata.layers["log_scran"] = log_scran
     adata.obsm["X_emb"] = adata.obsm["X_pca"]
     return adata
 
