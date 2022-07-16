@@ -1,0 +1,24 @@
+name: Check R dependencies
+
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 0 * * 0'
+
+jobs:
+  check-r-dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+
+    - name: Check for available updates
+      run: |
+        for REQUIREMENTS in $(ls -1 docker/*/r_requirements.txt); do
+          IMAGE=$(echo ${REQUIREMENTS} | sed 's:^docker/::' | sed 's:/.*::')
+          docker run -t --rm --user=root singlecellopenproblems/${IMAGE} \
+            Rscript /usr/src/singlecellopenproblems/scripts/upgrade_renv.R \
+            /usr/src/singlecellopenproblems/${REQUIREMENTS}
+        done
