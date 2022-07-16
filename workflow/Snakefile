@@ -62,8 +62,8 @@ RUN if [ -f r_requirements.txt ]; then sudo R -e "source(\"install_renv.R\"); in
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
 RUN cd /usr/src/singlecellopenproblems && sudo git clean -fxdq
-RUN sudo pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
 """) + r"""
+RUN sudo pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
 ' > {output}"""
 
 ruleorder: update_docker_image > build_docker_image
