@@ -30,7 +30,7 @@ def _scvi(adata, test: bool = False, max_epochs: Optional[int] = None):
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
     # Complete the result in-place
-    adata.uns["method_code_version"] = check_version("scvi")
+    adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
 
 
