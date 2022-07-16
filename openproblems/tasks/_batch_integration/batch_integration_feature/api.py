@@ -11,12 +11,14 @@ def check_dataset(adata):
     assert "X_uni" in adata.obsm
     assert "batch" in adata.obs
     assert "labels" in adata.obs
+    assert "log_scran_pooling" in adata.layers
 
     return True
 
 
 def check_method(adata):
     """Check that method output fits expected API."""
+    assert "log_scran_pooling" in adata.layers
     return True
 
 
