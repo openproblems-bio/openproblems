@@ -15,10 +15,13 @@ _scanorama_method = functools.partial(
 
 
 def _scanorama(adata, use_rep):
-    from scib.integration import runScanorama
+    from scib.integration import scanorama
     from scib.preprocessing import reduce_data
 
-    adata = runScanorama(adata, "batch")
+    # scanorama clears adata.layers
+    log_scran = adata.layers["log_scran_pooling"]
+    adata = scanorama(adata, "batch")
+    adata.layers["log_scran_pooling"] = log_scran
     reduce_data(adata, umap=False, use_rep=use_rep)
     adata.uns["method_code_version"] = check_version("scanorama")
     return adata

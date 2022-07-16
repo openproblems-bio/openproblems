@@ -30,6 +30,9 @@ def sample_dataset():
     adata.obsm["X_uni"] = sc.pp.pca(adata.X)
     adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
     adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
+    adata.layers["log_scran_pooling"] = adata.X.multiply(
+        10000 / adata.X.sum(axis=1)
+    ).tocsr()
     return adata
 
 
