@@ -1,4 +1,4 @@
-bioc::batchelor@1.12.1
+bioc::batchelor@1.12.3
 bioc::ComplexHeatmap@2.12.0
 caret@6.0-86
 cli@3.1.0
