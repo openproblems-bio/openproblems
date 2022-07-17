@@ -5,9 +5,11 @@ from ...batch_integration_graph.datasets.pancreas import pancreas_batch
 from typing import Callable
 
 
-def _convert_dataset_function(func: Callable) -> Callable:
+def _convert_dataset_function(
+    func: Callable, name: str, image: str = "openproblems-r-base"
+) -> Callable:
     metadata = func.metadata.copy()
-    metadata["image"] = "openproblems-r-base"
+    metadata["image"] = image
 
     @dataset(**metadata)
     def converted_func(test=False):
@@ -16,8 +18,14 @@ def _convert_dataset_function(func: Callable) -> Callable:
         adata.X = adata.layers["counts"]
         return adata
 
+    converted_func.__name__ = name
+
     return converted_func
 
 
-immune_batch_log_scran = _convert_dataset_function(immune_batch)
-pancreas_batch_log_scran = _convert_dataset_function(pancreas_batch)
+immune_batch_log_scran = _convert_dataset_function(
+    immune_batch, "immune_batch_log_scran"
+)
+pancreas_batch_log_scran = _convert_dataset_function(
+    pancreas_batch, "pancreas_batch_log_scran"
+)
