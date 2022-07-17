@@ -1,12 +1,13 @@
 bioc::batchelor@1.12.3
 bioc::ComplexHeatmap@2.12.0
-caret@6.0-86
+caret@6.0-92
 cli@3.1.0
 conos@1.4.6
 crayon@1.4.1
 dbplyr@2.1.1
 devtools@2.3.2
 dplyr@1.0.9
+e1071@1.7-11
 ellipsis@0.3.2
 forecast@8.14
 hardhat@1.1.0
@@ -17,6 +18,7 @@ igraph@1.2.11
 lifecycle@1.0.1
 Matrix@1.4-1
 pkgload@1.2.4
+proxy@0.4-27
 Rcpp@1.0.7
 reticulate@1.18
 rlang@1.0.2
