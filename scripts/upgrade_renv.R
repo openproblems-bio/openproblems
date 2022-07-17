@@ -1,6 +1,9 @@
 upgraded_remote_version <- function(remote) {
   if (remote$Source == "Repository") {
-    return(paste0(remote$Package, "@", remote$Version))
+    out <- paste0(remote$Package, "@", remote$Version)
+    if (remote$Repository == "BioCsoft") {
+      out <- paste0("bioc::", out)
+    }
   } else if (remote$Source == "GitHub") {
     out <- paste0(
       remote$RemoteUsername, "/", remote$RemoteRepo, "@", remote$RemoteSha[1:7]
@@ -8,8 +11,8 @@ upgraded_remote_version <- function(remote) {
     if (remote$RemoteRef != remote$RemoteSha) {
       out <- paste0(out, " # ", remote$RemoteRef)
     }
-    return(out)
   }
+  return(out)
 }
 
 upgrade_first_available <- function(remotes) {
