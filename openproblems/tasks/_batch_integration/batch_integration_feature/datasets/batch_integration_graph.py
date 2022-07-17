@@ -4,13 +4,19 @@ from ...batch_integration_graph.datasets.immune import immune_batch
 from ...batch_integration_graph.datasets.pancreas import pancreas_batch
 
 
-@dataset(**(immune_batch.metadata))
-def immune_batch_log_scran(test=False):
-    adata = immune_batch(test=test)
-    return log_scran_pooling(adata)
+def _convert_dataset_function(func):
+    metadata = func.metadata.copy()
+    metadata["image"] = "openproblems-r-base"
+
+    @dataset(**metadata)
+    def converted_func(test=False):
+        adata = func(test=test)
+        adata = log_scran_pooling(adata)
+        adata.X = adata.layers["counts"]
+        return adata
+
+    return converted_func
 
 
-@dataset(**(pancreas_batch.metadata))
-def pancreas_batch_log_scran(test=False):
-    adata = pancreas_batch(test=test)
-    return log_scran_pooling(adata)
+immune_batch_log_scran = _convert_dataset_function(immune_batch)
+pancreas_batch_log_scran = _convert_dataset_function(pancreas_batch)
