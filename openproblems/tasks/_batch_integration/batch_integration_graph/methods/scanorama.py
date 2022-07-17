@@ -19,9 +19,9 @@ def _scanorama(adata, use_rep):
     from scib.preprocessing import reduce_data
 
     # scanorama clears adata.layers
-    log_scran = adata.layers["log_scran_pooling"]
+    layers = adata.layers
     adata = scanorama(adata, "batch")
-    adata.layers["log_scran_pooling"] = log_scran
+    adata.layers = layers
     reduce_data(adata, umap=False, use_rep=use_rep)
     adata.uns["method_code_version"] = check_version("scanorama")
     return adata
