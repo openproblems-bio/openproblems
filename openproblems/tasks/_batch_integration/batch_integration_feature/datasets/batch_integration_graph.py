@@ -9,14 +9,13 @@ def _convert_dataset_function(func: Callable) -> Callable:
     metadata = func.metadata.copy()
     metadata["image"] = "openproblems-r-base"
 
-    @dataset(**metadata)
     def converted_func(test=False):
         adata = func(test=test)
         adata = log_scran_pooling(adata)
         adata.X = adata.layers["counts"]
         return adata
 
-    return converted_func
+    return dataset(**metadata)(converted_func)
 
 
 immune_batch_log_scran = _convert_dataset_function(immune_batch)
