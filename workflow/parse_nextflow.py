@@ -117,6 +117,7 @@ def parse_metric_results(results_path, results):
         print("Missing execution trace for: ")
         for filename in missing_traces:
             print("    {}".format(filename))
+            os.remove(os.path.join(results_path, "results/metrics", filename))
         warnings.warn(
             "Missing execution traces for {} results.".format(len(missing_traces))
         )
