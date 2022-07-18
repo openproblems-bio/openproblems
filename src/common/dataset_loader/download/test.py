@@ -4,7 +4,7 @@ import scanpy as sc
 
 name = "pancreas"
 anndata_file = "dataset.h5ad"
-url = "https://ndownloader.figshare.com/files/24974582"
+url = "https://ndownloader.figshare.com/files/24539828"
 obs_celltype = "celltype"
 obs_batch = "tech"
 
@@ -28,8 +28,8 @@ print(">> Check that output fits expected API")
 assert "counts" not in adata.layers
 assert adata.uns["dataset_id"] == name
 if obs_celltype:
-    assert "celltype" in adata.obs
+    assert "celltype" in adata.obs.columns
 if obs_batch:
-    assert "batch" in adata.obs
+    assert "batch" in adata.obs.columns
 
 print(">> All tests passed successfully")

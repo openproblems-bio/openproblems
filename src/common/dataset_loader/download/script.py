@@ -26,7 +26,6 @@ with tempfile.TemporaryDirectory() as tempdir:
         urllib.request.install_opener(opener)
         with urllib.request.urlopen(par["url"]) as urlhandle:
             filehandle.write(urlhandle.read())
-    # scprep.io.download.download_url(par['url'], filepath)
 
     print("Reading file")
     adata = sc.read_h5ad(filepath)

@@ -15,16 +15,18 @@ functionality:
       type: "file"
       description: "Input data to be resized"
       required: true
-    - name: "--celltype_categories"
-      type: "integer"
+    - name: "--keep_celltype_categories"
+      type: "string"
       multiple: true
       description: "Categories indexes to be selected"
       required: false
-    - name: "--tech_categories"
-      type: "integer"
+    - name: "--keep_batch_categories"
+      type: "string"
       multiple: true
       description: "Categories indexes to be selected"
       required: false
+    - name: "--even"
+      type: "boolean_true"
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
@@ -39,7 +41,7 @@ functionality:
     - type: python_script
       path: test_script.py
     - type: file
-      path: "../../resources/pancreas"
+      path: "../../../../resources_test/label_projection/pancreas"
 platforms:
   - type: native
   - type: docker
