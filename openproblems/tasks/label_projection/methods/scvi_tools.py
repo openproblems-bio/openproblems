@@ -1,5 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
+from typing import Optional
 
 import functools
 
@@ -173,6 +174,7 @@ def _pred_xgb(
     num_round: Optional[int] = None,
 ):
     import xgboost as xgb
+    import numpy as np
 
     df = _classif_df(adata_train, query_model, label_col)
 
@@ -201,6 +203,8 @@ def _pred_xgb(
 
 
 def _classif_df(adata, trained_model, label_col):
+    import pandas as pd
+
     emb_data = trained_model.get_latent_representation(adata)
 
     df = pd.DataFrame(data=emb_data, index=adata.obs_names)
@@ -243,7 +247,7 @@ def scarches_scanvi_hvg(adata, test=False):
 
 
 @_scanvi_scarches_method(method_name="scArches+scANVI+xgboost (All genes)")
-def scarches_scanvi_all_genes(adata, test=False):
+def scarches_scanvi_xgb_all_genes(adata, test=False):
     adata.obs["labels_pred"] = _scanvi_scarches(
         adata, test=test, prediction_method="xgboost"
     )
@@ -253,7 +257,7 @@ def scarches_scanvi_all_genes(adata, test=False):
 
 
 @_scanvi_scarches_method(method_name="scArches+scANVI+xgboost (Seurat v3 2000 HVG)")
-def scarches_scanvi_hvg(adata, test=False):
+def scarches_scanvi_xgb_hvg(adata, test=False):
     hvg_df = _hvg(adata, test)
     bdata = adata[:, hvg_df.highly_variable].copy()
     adata.obs["labels_pred"] = _scanvi_scarches(
