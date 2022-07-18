@@ -86,7 +86,14 @@ def _scanvi(adata, test=False, n_hidden=None, n_latent=None, n_layers=None):
     return preds
 
 
-def _scanvi_scarches(adata, test=False, n_hidden=None, n_latent=None, n_layers=None, prediction_method='scanvi'):
+def _scanvi_scarches(
+    adata,
+    test=False,
+    n_hidden=None,
+    n_latent=None,
+    n_layers=None,
+    prediction_method="scanvi",
+):
     import scvi
 
     if test:
@@ -138,11 +145,11 @@ def _scanvi_scarches(adata, test=False, n_hidden=None, n_latent=None, n_layers=N
         train_kwargs["limit_val_batches"] = 10
     query_model.train(plan_kwargs=dict(weight_decay=0.0), **train_kwargs)
 
-    if prediction_method == 'scanvi':
+    if prediction_method == "scanvi":
         preds = _pred_scanvi(adata, query_model)
-    elif prediction_method == 'xgboost':
+    elif prediction_method == "xgboost":
         preds = _pred_xgb(adata, adata_train, adata_test, query_model, test=test)
-    
+
     return preds
 
 
@@ -154,22 +161,23 @@ def _pred_scanvi(adata, query_model):
     # predictions for train and test
     return preds
 
+
 # note: add test option here
 def _pred_xgb(
-        adata,
-        adata_train,
-        adata_test,
-        query_model,
-        label_col='labels',
-        test=False,
-        num_round: Optional[int] = None
+    adata,
+    adata_train,
+    adata_test,
+    query_model,
+    label_col="labels",
+    test=False,
+    num_round: Optional[int] = None,
 ):
     import xgboost as xgb
-    
+
     df = _classif_df(adata_train, query_model, label_col)
 
-    X_train = df.drop(columns='labels')
-    y_train = df['labels']
+    X_train = df.drop(columns="labels")
+    y_train = df["labels"]
 
     X_test = query_model.get_latent_representation(adata_test)
 
@@ -178,32 +186,27 @@ def _pred_xgb(
     else:
         num_round = num_round or 5
 
-    xgbc = xgb.XGBClassifier(
-        tree_method = 'hist',
-        objective = 'multi:softprob'
-    )
+    xgbc = xgb.XGBClassifier(tree_method="hist", objective="multi:softprob")
 
-    
     xgbc.fit(X_train, y_train)
 
-    adata_test.obs['preds_test'] = xgbc.predict(X_test)
+    adata_test.obs["preds_test"] = xgbc.predict(X_test)
 
-    preds = [adata_test.obs['preds_test'][idx] if idx in adata_test.obs_names else np.nan
-             for idx in adata.obs_names]
-    
+    preds = [
+        adata_test.obs["preds_test"][idx] if idx in adata_test.obs_names else np.nan
+        for idx in adata.obs_names
+    ]
+
     return preds
 
 
 def _classif_df(adata, trained_model, label_col):
     emb_data = trained_model.get_latent_representation(adata)
-    
-    df = pd.DataFrame(
-        data = emb_data,
-        index = adata.obs_names
-    )
-    
-    df['labels'] = adata.obs[label_col]
-    
+
+    df = pd.DataFrame(data=emb_data, index=adata.obs_names)
+
+    df["labels"] = adata.obs[label_col]
+
     return df
 
 
@@ -238,12 +241,11 @@ def scarches_scanvi_hvg(adata, test=False):
     adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
 
+
 @_scanvi_scarches_method(method_name="scArches+scANVI+xgboost (All genes)")
 def scarches_scanvi_all_genes(adata, test=False):
     adata.obs["labels_pred"] = _scanvi_scarches(
-        adata,
-        test=test,
-        prediction_method='xgboost'
+        adata, test=test, prediction_method="xgboost"
     )
 
     adata.uns["method_code_version"] = check_version("scvi-tools")
@@ -255,10 +257,8 @@ def scarches_scanvi_hvg(adata, test=False):
     hvg_df = _hvg(adata, test)
     bdata = adata[:, hvg_df.highly_variable].copy()
     adata.obs["labels_pred"] = _scanvi_scarches(
-        bdata,
-        test=test,
-        prediction_method='xgboost'
+        bdata, test=test, prediction_method="xgboost"
     )
-    
+
     adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
