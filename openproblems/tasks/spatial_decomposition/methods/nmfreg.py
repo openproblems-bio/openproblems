@@ -54,9 +54,8 @@ def nmfreg(adata, test=False, factors=None):
     )
     Ha = model.fit_transform(X_scaled)
     Wa = model.components_
-    print(Ha.shape, Wa.shape)
 
-    cluster_df = adata.obs[["label"]].copy()
+    cluster_df = adata_sc.obs[["label"]].copy()
     cluster_df.loc[:, "factor"] = np.argmax(Ha, axis=1)
     cluster_df.loc[:, "code"] = cluster_df.label.values.codes
     factor_to_cluster_map = np.array(
