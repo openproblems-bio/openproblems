@@ -173,8 +173,8 @@ def _pred_xgb(
     test=False,
     num_round: Optional[int] = None,
 ):
-    import xgboost as xgb
     import numpy as np
+    import xgboost as xgb
 
     df = _classif_df(adata_train, query_model, label_col)
 
