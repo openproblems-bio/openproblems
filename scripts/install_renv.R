@@ -31,11 +31,16 @@ check_available <- function(remote) {
   )
 }
 
+strip_comments <- function(remote) {
+  gsub("\\s*#.*", "", remote)
+}
+
 install_renv <- function(requirements_file, ...) {
   remotes <- scan(requirements_file, what = character(), sep = "\n")
+  remotes <- sapply(remotes, strip_comments)
   remotes_installed <- sapply(remotes, check_available)
-  remotes <- remotes[!remotes_installed]
-  if (length(remotes) > 0) {
-    renv::install(remotes, ...)
+  remotes_to_install <- remotes[!remotes_installed]
+  if (length(remotes_to_install) > 0) {
+    renv::install(remotes_to_install, ...)
   }
 }

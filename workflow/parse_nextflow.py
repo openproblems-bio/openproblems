@@ -6,6 +6,7 @@ import openproblems.api.utils as utils
 import os
 import pandas as pd
 import sys
+import warnings
 
 
 def dump_json(obj, fp):
@@ -113,17 +114,18 @@ def parse_metric_results(results_path, results):
         except KeyError:
             missing_traces.append(filename)
     if len(missing_traces) > 0:
-        print("Missing execution trace for: ")
+        print("Missing execution trace for metrics: ")
         for filename in missing_traces:
             print("    {}".format(filename))
-        raise ValueError(
-            "Missing execution traces for {} results.".format(len(missing_traces))
+        warnings.warn(
+            "Missing execution traces for {} metrics.".format(len(missing_traces))
         )
     return results
 
 
 def parse_method_versions(results_path, results):
     """Add method versions to the trace output."""
+    missing_traces = []
     for filename in os.listdir(os.path.join(results_path, "results/method_versions")):
         with open(
             os.path.join(results_path, "results/method_versions", filename), "r"
@@ -132,7 +134,18 @@ def parse_method_versions(results_path, results):
         task_name, dataset_name, method_name = filename.replace(
             ".method.txt", ""
         ).split(".")
-        results[task_name][dataset_name][method_name]["code_version"] = code_version
+
+        try:
+            results[task_name][dataset_name][method_name]["code_version"] = code_version
+        except KeyError:
+            missing_traces.append(filename)
+    if len(missing_traces) > 0:
+        print("Missing execution trace for method code versions: ")
+        for filename in missing_traces:
+            print("    {}".format(filename))
+        warnings.warn(
+            "Missing execution traces for {} methods.".format(len(missing_traces))
+        )
     return results
 
 

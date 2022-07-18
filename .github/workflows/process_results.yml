@@ -34,7 +34,7 @@ jobs:
         git checkout -b $UPDATE_BRANCH_NAME
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.config.python }}
 
@@ -80,17 +80,6 @@ jobs:
         aws s3 rm --recursive "s3://openproblems-nextflow/cwd_example"
         aws s3 cp --recursive "s3://openproblems-nextflow/cwd_main" "s3://openproblems-nextflow/cwd_example"
         aws s3 rm --recursive "s3://openproblems-nextflow/cwd_main"
-
-    - name: Remove untagged images
-      if: "github.event_name == 'repository_dispatch'"
-      continue-on-error: true
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name openproblems --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --max-items 100 --output json )
-        aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "$IMAGES_TO_DELETE"
 
     - name: Commit result
       uses: EndBug/add-and-commit@v9

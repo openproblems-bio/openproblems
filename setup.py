@@ -4,14 +4,14 @@ from setuptools import setup
 import os
 
 install_requires = [
-    "numpy>=1.19,<1.23",  # pinned for py36
-    "scikit-learn>=0.24,<1.2",  # pinned for py36
-    "anndata>=0.7.5,<0.8",  # pinned for py36
+    "numpy>=1.22,<1.24",
+    "scikit-learn==1.1.*",
+    "anndata==0.8.*",
     "scprep>=1.2.0",
-    "scipy>=1.5,<1.9",  # pinned for py36
+    "scipy==1.8.*",
     "scanpy>=1.6",
     "louvain==0.7.*",
-    "decorator<6.0",
+    "decorator<5.0",  # pinned in #324
     "memory-profiler==0.60",
     "colorama==0.4.*",
     "packaging==21.3",
@@ -19,8 +19,8 @@ install_requires = [
 ]
 
 r_requires = [
-    "rpy2<3.4.3",  # pinned in #219
-    "anndata2ri==1.0.6",
+    "rpy2<3.5.3",
+    "anndata2ri==1.1.*",
 ]
 
 evaluate_requires = ["snakemake==7.8.*"]
@@ -48,7 +48,7 @@ setup(
     packages=find_packages(),
     license="MIT",
     install_requires=install_requires,
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     extras_require={
         "test": test_requires + r_requires,
         "r": r_requires,
