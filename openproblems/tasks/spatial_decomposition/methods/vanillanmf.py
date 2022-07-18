@@ -33,7 +33,8 @@ def nmf(adata, test=False, max_iter=None, random_state=17):
         beta_loss="kullback-leibler",
         solver="mu",
         max_iter=max_iter,
-        alpha=0.1,
+        alpha_W=0.1,
+        alpha_A=0.1,
         init="custom",
         random_state=random_state,
     )
@@ -47,7 +48,7 @@ def nmf(adata, test=False, max_iter=None, random_state=17):
         X = adata.X
 
     Wa = vanila_nmf_model.fit_transform(
-        X,
+        X.astype(adata_means.X.dtype),
         H=adata_means.X,
         W=np.ones((adata.shape[0], n_types), dtype=adata_means.X.dtype),
     )
