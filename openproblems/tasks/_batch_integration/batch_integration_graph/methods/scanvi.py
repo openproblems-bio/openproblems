@@ -1,5 +1,6 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
+from typing import Optional
 
 import functools
 
@@ -14,30 +15,33 @@ _scanvi_method = functools.partial(
 )
 
 
-def _scanvi(adata):
+def _scanvi(adata, test: bool = False, max_epochs: Optional[int] = None):
     from scanpy.preprocessing import neighbors
-    from scib.integration import runScanvi
+    from scib.integration import scanvi
+
+    if test:
+        max_epochs = max_epochs or 2
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
     )  # ugly fix for scvi conversion error
-    adata = runScanvi(adata, "batch", "lab")
+    adata = scanvi(adata, "batch", "lab", max_epochs=max_epochs)
     neighbors(adata, use_rep="X_emb")
     adata.obs.rename(
         columns={"lab": "labels"}, inplace=True
     )  # ugly fix for scvi conversion error
-    adata.uns["method_code_version"] = check_version("scvi")
+    adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
 
 
 @_scanvi_method(method_name="scANVI (full/unscaled)")
-def scanvi_full_unscaled(adata, test=False):
-    return _scanvi(adata)
+def scanvi_full_unscaled(adata, test: bool = False, max_epochs: Optional[int] = None):
+    return _scanvi(adata, test=test, max_epochs=max_epochs)
 
 
 @_scanvi_method(method_name="scANVI (hvg/unscaled)")
-def scanvi_hvg_unscaled(adata, test=False):
+def scanvi_hvg_unscaled(adata, test: bool = False, max_epochs: Optional[int] = None):
     from ._utils import hvg_batch
 
     adata = hvg_batch(adata, "batch", target_genes=2000, adataOut=True)
-    return _scanvi(adata)
+    return _scanvi(adata, test=test, max_epochs=max_epochs)
