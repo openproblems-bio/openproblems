@@ -47,7 +47,9 @@ def nmf(adata, test=False, max_iter=None, random_state=17):
         X = adata.X
 
     Wa = vanila_nmf_model.fit_transform(
-        X, H=adata_means.X, W=np.ones((adata.shape[0], n_types), dtype=np.float32)
+        X,
+        H=adata_means.X,
+        W=np.ones((adata.shape[0], n_types), dtype=adata_means.X.dtype),
     )
 
     prop = Wa / Wa.sum(1)[:, np.newaxis]
