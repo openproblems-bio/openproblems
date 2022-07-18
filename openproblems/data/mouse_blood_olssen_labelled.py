@@ -15,7 +15,7 @@ def load_olsson_2016_mouse_blood(test=False):
         # load full data first, cached if available
         adata = load_olsson_2016_mouse_blood(test=False)
 
-        # Select 700 genes expressed on most cells
+        # Select 700 genes expressed in most cells
         sc.pp.calculate_qc_metrics(adata, inplace=True)
         top = list(adata.var.nlargest(700, "mean_counts").index.values)
         adata = adata[:, top].copy()
