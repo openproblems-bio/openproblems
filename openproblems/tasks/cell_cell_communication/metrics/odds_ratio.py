@@ -1,7 +1,7 @@
 from ....tools.decorators import metric
 
-import scipy.stats as stats
 import numpy as np
+import scipy.stats as stats
 
 
 @metric(metric_name="Odds Ratio", maximize=True)
@@ -15,7 +15,9 @@ def odds_ratio(adata, top_n=100):
     gt.loc[:, ["top_n"]] = a
 
     # Fisher ET
-    table = np.array(gt.pivot_table(index=['top_n', 'response'], aggfunc='size')).reshape(2, 2)
+    table = np.array(
+        gt.pivot_table(index=["top_n", "response"], aggfunc="size")
+    ).reshape(2, 2)
     oddsratio, _ = stats.fisher_exact(table)
 
     return oddsratio

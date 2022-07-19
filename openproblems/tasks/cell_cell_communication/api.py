@@ -31,6 +31,7 @@ def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     return load_sample_data()
 
+
 #
 # def sample_method(adata):
 #     """Create sample method output for testing metrics in this task."""

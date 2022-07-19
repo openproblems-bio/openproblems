@@ -24,10 +24,28 @@ def load_tnbc_data(test=False):
         # response ligands
         lr = list(set(adata.uns["bench"].ligand))
         # add corresponding receptors
-        lr += ["IFNLR1", "CD70", "NGFR", "CD53", "IL20RA",
-               "IL20RB", "IL2RG", "SIGLEC6", "EGFR", "ITGB1",
-               "ITGB3", "ACVRL1", "CXCR4", "SMAD3", "CAV1",
-               "IL21R", "IL4R", "IL2RG", "IL13RA1", "IL13RA2"]
+        lr += [
+            "IFNLR1",
+            "CD70",
+            "NGFR",
+            "CD53",
+            "IL20RA",
+            "IL20RB",
+            "IL2RG",
+            "SIGLEC6",
+            "EGFR",
+            "ITGB1",
+            "ITGB3",
+            "ACVRL1",
+            "CXCR4",
+            "SMAD3",
+            "CAV1",
+            "IL21R",
+            "IL4R",
+            "IL2RG",
+            "IL13RA1",
+            "IL13RA2",
+        ]
         adata = adata[:, adata.var.index.isin(lr)].copy()
 
         return adata

@@ -1,5 +1,8 @@
 bioc::batchelor@1.12.3
 bioc::ComplexHeatmap@2.12.0
+bioc::scater@1.18.5
+bioc::scran@1.18.5
+bioc::scuttle@1.0.4
 caret@6.0-92
 cli@3.3.0
 conos@1.4.6
@@ -25,6 +28,7 @@ rlang@1.0.2
 rliger@1.0.0
 rmarkdown@2.2
 RSQLite@2.2.4
+saezlab/liana@0.1.5
 Seurat@4.1.1
 shiny@1.4.0.2
 sparsesvd@0.2
@@ -33,7 +37,3 @@ tidymodels@0.1.2
 tidyverse@1.3.0
 tune@0.2.0
 welch-lab/liger@v0.5.0
-bioc::scater@1.18.5
-bioc::scran@1.18.5
-bioc::scuttle@1.0.4
-saezlab/liana@0.1.5
