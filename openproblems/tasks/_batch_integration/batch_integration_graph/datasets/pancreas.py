@@ -7,7 +7,7 @@ import scanpy as sc
 @dataset(
     dataset_name="Pancreas (by batch)",
     data_url=load_pancreas.metadata["data_url"],
-    dataset_summary="TODO",
+    dataset_summary="Human pancreatic islet scRNA-seq data from 6 datasets across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, and SMARTER-seq), retrieved scran-normalized from doi:10.1038/s41592-021-01336-8.",
     image="openproblems",
 )
 def pancreas_batch(test=False):
