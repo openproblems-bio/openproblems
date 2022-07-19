@@ -44,7 +44,9 @@ write_updates_to_file <- function(curr_remotes, new_remotes, filename) {
   new_names <- gsub("@.*", "", new_remotes)
   keep_current <- !(current_names %in% new_names)
   write_remotes <- sort(c(curr_remotes[keep_current], new_remotes))
+  print(write_remotes)
   writeLines(write_remotes, filename, sep = "\n")
+  print(scan(filename, what = character(), sep = "\n"))
 }
 
 upgrade_renv <- function(requirements_file) {
