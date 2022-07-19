@@ -34,7 +34,7 @@ def nmf(adata, test=False, max_iter=None, random_state=17):
         solver="mu",
         max_iter=max_iter,
         alpha_W=0.1,
-        alpha_A=0.1,
+        alpha_H=0.1,
         init="custom",
         random_state=random_state,
     )
