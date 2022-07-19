@@ -79,23 +79,6 @@ jobs:
         cd ..
         echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
 
-    - name: Set up Git branch
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      run: |
-        git checkout -b $BRANCH_NAME
-        git push -u origin $BRANCH_NAME
-
-    - name: Commit result
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      uses: EndBug/add-and-commit@v6
-      with:
-        author_name: SingleCellOpenProblems
-        author_email: singlecellopenproblems@protonmail.com
-        message: 'Update docker version # ci skip'
-        add: "docker/.version"
-        branch: ${{ env.BRANCH_NAME }}
-        push: false
-
     - name: Create Pull Request
       if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
       uses: peter-evans/create-pull-request@v4
@@ -105,6 +88,9 @@ jobs:
         base: main
         title: '[auto] Update docker version'
         reviewers: scottgigante, dburkhardt
+        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        commit-message: Update docker version # ci skip
+        add-paths: docker/.version
 
     - name: Upload check results on fail
       if: failure()
