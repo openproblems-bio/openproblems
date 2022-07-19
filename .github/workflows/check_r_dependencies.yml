@@ -34,7 +34,6 @@ jobs:
             Rscript /usr/src/singlecellopenproblems/scripts/upgrade_renv.R \
             /usr/src/singlecellopenproblems/${REQUIREMENTS}
         done
-        git diff
         PKG_CHANGED=$(\
           git diff | \
           grep --color=none "^+[a-z]" | \

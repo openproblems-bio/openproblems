@@ -40,14 +40,11 @@ strip_comments <- function(remote) {
 }
 
 write_updates_to_file <- function(curr_remotes, new_remotes, filename) {
-  cat("Running write_updates\n")
   current_names <- gsub("@.*", "", curr_remotes)
   new_names <- gsub("@.*", "", new_remotes)
   keep_current <- !(current_names %in% new_names)
   write_remotes <- sort(c(curr_remotes[keep_current], new_remotes))
-  cat(format(write_remotes))
   writeLines(write_remotes, filename, sep = "\n")
-  cat(format(scan(filename, what = character(), sep = "\n")))
 }
 
 upgrade_renv <- function(requirements_file) {
