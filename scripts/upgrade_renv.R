@@ -22,7 +22,7 @@ upgrade_first_available <- function(remotes) {
     result <- renv::update(parsed_spec$package, prompt = FALSE)
     if (class(result) != "logical") {
       upgraded_remotes <- sapply(result, upgraded_remote_version)
-      return(paste(upgraded_remotes, collapse = "\n"))
+      return(upgraded_remotes)
     }
   }
 }
@@ -39,18 +39,27 @@ strip_comments <- function(remote) {
   gsub("\\s*#.*", "", remote)
 }
 
+write_updates_to_file <- function(curr_remotes, new_remotes, filename) {
+  current_names <- gsub("@.*", "", curr_remotes)
+  new_names <- gsub("@.*", "", new_remotes)
+  keep_current <- !(current_names %in% new_names)
+  write_remotes <- sort(c(curr_remotes[keep_current], new_remotes))
+  writeLines(write_remotes, filename, sep = "\n")
+}
+
 upgrade_renv <- function(requirements_file) {
   remotes <- scan(requirements_file, what = character(), sep = "\n")
   if (length(remotes) > 0) {
-    remotes <- drop_pinned(remotes)
-    remotes <- sapply(remotes, strip_comments)
+    remotes_parsed <- drop_pinned(remotes)
+    remotes_parsed <- sapply(remotes_parsed, strip_comments)
     capture.output(suppressWarnings(suppressMessages(
-      output <- upgrade_first_available(remotes)
+      upgraded_remotes <- upgrade_first_available(remotes_parsed)
     )), file = nullfile())
-    if (!is.null(output)) {
+    if (!is.null(upgraded_remotes)) {
       cat("Upgrades are available:\n")
-      cat(output)
+      cat(paste(upgraded_remotes, collapse = "\n"))
       cat("\n")
+      write_updates_to_file(remotes, upgraded_remotes, requirements_file)
     } else {
       cat("No upgrades available\n")
     }
