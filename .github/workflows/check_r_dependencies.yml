@@ -34,7 +34,7 @@ jobs:
             /usr/src/singlecellopenproblems/${REQUIREMENTS}
         done
         PKG_CHANGED=$(\
-          git diff HEAD~1 | \
+          git diff | \
           grep --color=none "^+[a-z]" | \
           tail -n 1 | \
           sed 's/^+//'
