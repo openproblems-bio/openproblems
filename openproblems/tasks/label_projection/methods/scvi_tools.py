@@ -163,7 +163,7 @@ def _pred_scanvi(adata, query_model):
     return preds
 
 
-# note: add test option here
+# note: could extend test option
 def _pred_xgb(
     adata,
     adata_train,
@@ -178,9 +178,14 @@ def _pred_xgb(
 
     df = _classif_df(adata_train, query_model, label_col)
 
-    X_train = df.drop(columns="labels")
-    y_train = df["labels"].astype("category")
+    df['labels_int'] = df['labels'].cat.codes
+    categories = df['labels'].cat.categories
 
+    #X_train = df.drop(columns="labels")
+    X_train = df.drop(columns=["labels", "labels_int"])
+    #y_train = df["labels"].astype("category")
+    y_train = df["labels_int"].astype(int)
+    
     X_test = query_model.get_latent_representation(adata_test)
 
     if test:
@@ -192,7 +197,8 @@ def _pred_xgb(
 
     xgbc.fit(X_train, y_train)
 
-    adata_test.obs["preds_test"] = xgbc.predict(X_test)
+    #adata_test.obs["preds_test"] = xgbc.predict(X_test)
+    adata_test.obs["preds_test"] = categories[xgbc.predict(X_test)]
 
     preds = [
         adata_test.obs["preds_test"][idx] if idx in adata_test.obs_names else np.nan
