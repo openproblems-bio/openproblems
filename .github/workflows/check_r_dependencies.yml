@@ -40,23 +40,14 @@ jobs:
         echo "PKG_CHANGED=$(echo ${PKG_CHANGED} | sed 's/@/ to /')" >> $GITHUB_ENV
         echo "UPDATE_BRANCH_NAME=dependencies/r/${PKG_CHANGED}" >> $GITHUB_ENV
 
-    - name: Commit result
-      if: "env.PKG_CHANGED != ''"
-      uses: EndBug/add-and-commit@v9
-      with:
-        author_name: dependabot[bot]
-        author_email: singlecellopenproblems@protonmail.com
-        message: "Update ${{ env.PKG_CHANGED }}"
-        add: "['docker']"
-        new_branch: ${{ env.UPDATE_BRANCH_NAME }}
-        push: true
-
     - name: Create Pull Request
       if: "env.PKG_CHANGED != ''"
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
         delete-branch: true
         base: main
         labels: dependencies,r
         title: "Update ${{ env.PKG_CHANGED }}"
+        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        commit-message: "Update ${{ env.PKG_CHANGED }}"
