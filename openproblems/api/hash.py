@@ -65,17 +65,13 @@ def get_context(obj, context=None):
     if isinstance(obj, _MODULE):
         module_name = obj.__name__
     else:
-        if isinstance(obj, scprep.run.RFunction):
+        if isinstance(obj, scprep.run.RFunction) and hasattr(obj, "__r_file__"):
             if obj.__r_file__ not in context:
-                try:
-                    context[obj.__r_file__] = git_hash(obj.__r_file__)
-                except AttributeError:
-                    pass
-        if hasattr(obj, "metadata"):
-            if "image" in obj.metadata:
-                image_name = f"singlecellopenproblems/{obj.metadata['image']}"
-                if image_name not in context:
-                    context[image_name] = docker_hash(image_name)
+                context[obj.__r_file__] = git_hash(obj.__r_file__)
+        if hasattr(obj, "metadata") and "image" in obj.metadata:
+            image_name = f"singlecellopenproblems/{obj.metadata['image']}"
+            if image_name not in context:
+                context[image_name] = docker_hash(image_name)
         try:
             module_name = get_module(obj)
         except AttributeError:
