@@ -11,6 +11,8 @@ on:
       - completed
     branches:
       - 'main'
+  push:
+    branches:
       - 'dependencies/r/auto_update'
 
 jobs:
