@@ -6,6 +6,7 @@ from ....tools.decorators import dataset
 @dataset(
     "sciCAR Cell Lines",
     data_url=load_scicar_cell_lines.metadata["data_url"],
+    data_reference=load_scicar_cell_lines.metadata["data_reference"],
     dataset_summary="TODO",
 )
 def scicar_cell_lines(test=False):

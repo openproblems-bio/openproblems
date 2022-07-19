@@ -8,6 +8,7 @@ import numpy as np
 @dataset(
     "Pancreas (by batch)",
     data_url=load_pancreas.metadata["data_url"],
+    data_reference=load_pancreas.metadata["data_reference"],
     dataset_summary="TODO",
 )
 def pancreas_batch(test=False):

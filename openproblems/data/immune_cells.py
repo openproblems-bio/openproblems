@@ -8,7 +8,7 @@ import tempfile
 URL = "https://ndownloader.figshare.com/files/25717328"
 
 
-@utils.loader(data_url=URL)
+@utils.loader(data_url=URL, data_reference="TODO")
 def load_immune(test=False):
     """Download immune human data from figshare."""
     if test:
