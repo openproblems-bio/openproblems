@@ -179,7 +179,7 @@ def _pred_xgb(
     df = _classif_df(adata_train, query_model, label_col)
 
     X_train = df.drop(columns="labels")
-    y_train = df["labels"]
+    y_train = df["labels"].astype("category")
 
     X_test = query_model.get_latent_representation(adata_test)
 
