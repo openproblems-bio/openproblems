@@ -4,7 +4,7 @@ from ....tools.decorators import dataset
 
 @dataset(
     "~43k Cells from Triple Negative Breast Cancer"
-    "Wu, S.Z., Al-Eryani, G., Roden, D.L., Junankar, S., Harvey, K., Andersson, A., Thennavan, A., Wang, C., Torpy, J.R., Bartonicek, N. and Wang, T., 2021. A single-cell and spatially resolved atlas of human breast cancers. Nature genetics, 53(9), pp.1334-1347.",
+    "Wu et al., 2021. Nature genetics, 53(9), pp.1334-1347.",
     data_url=load_tnbc_data.metadata["data_url"],
     dataset_summary="TODO",
 )
