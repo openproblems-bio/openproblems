@@ -11,7 +11,7 @@ on:
       - completed
     branches:
       - 'main'
-      - 'test_r_dependabot'
+      - 'dependencies/r/auto_update'
 
 jobs:
   check-r-dependencies:
