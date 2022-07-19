@@ -3,7 +3,7 @@ bioc::ComplexHeatmap@2.12.0
 caret@6.0-92
 cli@3.3.0
 conos@1.4.6
-crayon@1.4.1
+crayon@1.5.1
 dbplyr@2.1.1
 devtools@2.3.2
 dmcable/spacexr@6a593aa # master
