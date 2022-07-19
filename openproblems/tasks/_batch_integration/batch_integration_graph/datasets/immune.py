@@ -7,7 +7,9 @@ import scanpy as sc
 @dataset(
     dataset_name="Immune (by batch)",
     data_url=load_immune.metadata["data_url"],
-    dataset_summary="Human immune cells from peripheral blood and bone marrow taken from 5 datasets comprising 10 batches across technologies (10X, Smart-seq2). Data was retrieved from doi:10.1038/s41592-021-01336-8.",
+    dataset_summary="Human immune cells from peripheral blood and bone marrow "
+    "taken from 5 datasets comprising 10 batches across technologies (10X, "
+    "Smart-seq2). Data was retrieved from doi:10.1038/s41592-021-01336-8.",
     image="openproblems",
 )
 def immune_batch(test=False):
