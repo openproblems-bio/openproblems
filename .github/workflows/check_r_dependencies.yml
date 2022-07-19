@@ -11,9 +11,6 @@ on:
       - completed
     branches:
       - 'main'
-  push:
-    branches:
-      - 'dependencies/r/auto_update'
 
 jobs:
   check-r-dependencies:
@@ -45,7 +42,7 @@ jobs:
 
     - name: Create Pull Request
       if: "env.PKG_CHANGED != ''"
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
         delete-branch: true
