@@ -52,7 +52,7 @@ To submit new features to Open Problems for Single Cell Analysis, follow the ste
     * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login details. If you do not have these, please contact us at [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
     * *TOWER_ACCESS_KEY: log in with GitHub to https://tower.nf and create a token at https://tower.nf/tokens.*
     * When you are done with this step, your page should look like this:
-    ![AWS secrets success](website/static/img/AWS_secret.png)
+    ![AWS secrets success](static/img/AWS_secret.png)
       
 6. Enable workflows at [https://github.com/USERNAME/openproblems/actions](https://github.com/USERNAME/openproblems/actions).
 7. Set up your git repository to fetch branches from `base` at `openproblems-bio/openproblems`
