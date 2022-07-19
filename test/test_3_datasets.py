@@ -15,7 +15,7 @@ import utils.cache
 import utils.git
 import utils.name
 
-DATASET_SUMMARY_MAXLEN = 80
+DATASET_SUMMARY_MAXLEN = 280
 
 pytestmark = pytest.mark.skipif(
     len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
