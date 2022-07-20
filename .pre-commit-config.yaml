@@ -38,4 +38,4 @@ repos:
     rev: v0.32.0
     hooks:
       - id: markdownlint-fix
-        exclude: SAGEMAKER.md
+        exclude: (SAGEMAKER.md|.github/ISSUE_TEMPLATE/bug_report.md|.github/pull_request_template.md)
