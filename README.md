@@ -28,7 +28,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
 
 * Daniel Burkhardt (@dburkhardt), Cellarity
 * Robrecht Cannoodt (@rcannoodt), Data Intuitive
-* Scott Gigante (@scottgigante-immunai), ImmunAI
+* Scott Gigante (@scottgigante-immunai), Immunai
 * Malte Luecken (@LuckyMD), Helmholtz Munich
 * Angela Pisco (@aopisco), CZ Biohub
 * Christopher Lance (@xlancelottx), Helmholtz Munich
@@ -47,8 +47,8 @@ Task stubs:
 
 Tasks in discussion:
 * ATAC denoising - Dominik Otto (@katosh)
+* Cell-cell communication - Daniel Dimitrov (@dbdimitrov)
 * Differential abundance - Emma Dann (@emdann)
-* Cell-cell communication - Daniel Dimitrov (@...)
 * Regulatory effect prediction - Qian (Alvin) Qin (@qinqian)
 
 
