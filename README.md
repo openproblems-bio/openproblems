@@ -70,4 +70,6 @@ Tasks in discussion:
 
 **Contributors**:
 
-See the long list of all those who contributed datasets, methods, metrics, or infrastructure code [here](https://github.com/openproblems-bio/openproblems/graphs/contributors)
+See the long list of all those who contributed datasets, methods, metrics, or
+infrastructure code
+[here](https://github.com/openproblems-bio/openproblems/graphs/contributors)
