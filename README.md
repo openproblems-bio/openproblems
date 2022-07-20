@@ -29,17 +29,17 @@ Formalizing and benchmarking open problems in single-cell genomics.
 * Daniel Burkhardt (@dburkhardt), Cellarity
 * Robrecht Cannoodt (@rcannoodt), Data Intuitive
 * Scott Gigante (@scottgigante-immunai), Immunai
+* Christopher Lance (@xlancelottx), Helmholtz Munich
 * Malte Luecken (@LuckyMD), Helmholtz Munich
 * Angela Pisco (@aopisco), CZ Biohub
-* Christopher Lance (@xlancelottx), Helmholtz Munich
 
 **Task leaders** (_alphabetically_):
 
 Full tasks (>1 datasets, >5 methods):
 * Batch integration - Daniel Strobl (@danielStrobl)
-* Dimensionality reduction - Luke Zappia (@lazappi) and Michael Vinyard (@mvinyard)
+* Dimensionality reduction - Michael Vinyard (@mvinyard) and Luke Zappia (@lazappi)
 * Label projection - Nick Markov (@mxposed)
-* Spatial deconvolution - Giovanni Palla (@giovp) and Alma Anderson (@almaan)
+* Spatial deconvolution - Alma Anderson (@almaan) and Giovanni Palla (@giovp)
 
 Task stubs:
 * Data denoising - Wes Lewis (@weslewis)
