@@ -25,20 +25,29 @@ Formalizing and benchmarking open problems in single-cell genomics.
 ## The team
 
 **Core**:
-* Scott Gigante (@scottgigante)
-* Daniel Burkhardt (@dburkhardt)
-* Malte Luecken (@LuckyMD)
-* Angela Pisco (@aopisco)
-* Olga Botvinnik (@olgabot)
+* Scott Gigante (@scottgigante-immunai), ImmunAI
+* Daniel Burkhardt (@dburkhardt), Cellarity
+* Malte Luecken (@LuckyMD), Helmholtz Munich
+* Angela Pisco (@aopisco), CZ Biohub
+* Robrecht Cannoodt (@rcannoodt), Data Intuitive
 
-**Task authors** (_alphabetically_):
-* Emma Dann (@emdann) - Differential abundance 
-* Wes Lewis (@weslewis) - Differential abundance and data denoising
-* Mohammad Lotfallahi (@M0hammadL) - Label projection task
-* Qian Qin (@qinqian) - Predicting gene expression from chromatin accessibility
-* Daniel Strobl (@danielStrobl) - Batch integration
-* Michael Vinyard (@mvinyard) - Stress preservation in dimensionality reduction
-* Florian Wagner (@flo-compbio) - Data denoising
+**Task leaders** (_alphabetically_):
+Full tasks (>1 datasets, >5 methods):
+* Batch integration - Daniel Strobl (@danielStrobl)
+* Dimensionality reduction - Luke Zappia (@lazappi) and Michael Vinyard (mvinyard)
+* Label projection - Nick Markov (@mxposed)
+* Spatial deconvolution - Giovanni Palla (@giovp) and Alma Anderson (@almaan)
+
+Task stubs:
+* Data denoising - Wes Lewis (@weslewis)
+* Multimodal data integration - The Open Problems core team
+
+Tasks in discussion:
+* ATAC denoising - Dominik Otto (@katosh)
+* Differential abundance - Emma Dann (@emdann)
+* Cell-cell communication - Daniel Dimitrov (@...)
+* Regulatory effect prediction - Qian (Alvin) Qin (@qinqian)
+
 
 **Supervision** (_alphabetically_):
 * Smita Krishnaswamy, Yale
@@ -47,3 +56,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
 **Chan Zuckerberg Initiative Support** (_alphabetically_):
 * Jonah Cool
 * Fiona Griffin
+* Ivana Williams
+
+**Contributors**
+See the long list of all those who contributed datasets, methods, metrics, or infrastructure code [here](https://github.com/openproblems-bio/openproblems/graphs/contributors)
