@@ -5,12 +5,29 @@ import scanpy as sc
 import scprep
 import tempfile
 
-URL = "https://ndownloader.figshare.com/files/25555739"
+PBMC_1K_URL = "https://ndownloader.figshare.com/files/24974582"
+PBMC_5K_URL = "https://ndownloader.figshare.com/files/25555739"
+REFERENCE_URL = "https://www.10xgenomics.com/resources/datasets"
 
 
-@utils.loader(
-    data_url=URL, data_reference="https://www.10xgenomics.com/resources/datasets"
-)
+@utils.loader(data_url=PBMC_1K_URL, data_reference=REFERENCE_URL)
+def load_tenx_1k_pbmc(test=False):
+    """Download PBMC data from Figshare."""
+    if test:
+        adata = load_tenx_1k_pbmc(test=False)
+        sc.pp.subsample(adata, n_obs=100)
+        adata = adata[:, :1000]
+        utils.filter_genes_cells(adata)
+    else:
+        with tempfile.TemporaryDirectory() as tempdir:
+            filepath = os.path.join(tempdir, "pbmc.h5ad")
+            scprep.io.download.download_url(PBMC_1K_URL, filepath)
+            adata = sc.read_h5ad(filepath)
+            utils.filter_genes_cells(adata)
+    return adata
+
+
+@utils.loader(data_url=PBMC_5K_URL, data_reference=REFERENCE_URL)
 def load_tenx_5k_pbmc(test=False):
     """Download 5k PBMCs from 10x Genomics."""
     if test:
@@ -32,7 +49,7 @@ def load_tenx_5k_pbmc(test=False):
     else:
         with tempfile.TemporaryDirectory() as tempdir:
             filepath = os.path.join(tempdir, "10x_5k_pbmc.h5ad")
-            scprep.io.download.download_url(URL, filepath)
+            scprep.io.download.download_url(PBMC_5K_URL, filepath)
             adata = sc.read(filepath)
 
             adata.var_names_make_unique()

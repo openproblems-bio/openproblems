@@ -1,4 +1,4 @@
-from ....data.tenx_5k_pbmc import load_tenx_5k_pbmc
+from ....data.tenx import load_tenx_5k_pbmc
 from ....tools.decorators import dataset
 
 
