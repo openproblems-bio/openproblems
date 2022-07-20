@@ -13,13 +13,18 @@
 ### Testing
 
 * [ ] This submission was written on a forked copy of SingleCellOpenProblems
-* [ ] GitHub Actions "Run Benchmark" tests are passing on this base branch of this pull request (include link to passed test: )
-* [ ] If this pull request is not ready for review (including passing the "Run Benchmark" tests), I will open this PR as a draft (click on the down arrow next to the "Create Pull Request" button)
+* [ ] GitHub Actions "Run Benchmark" tests are passing on this base branch of this pull
+  request (include link to passed test: )
+* [ ] If this pull request is not ready for review (including passing the "Run
+  Benchmark" tests), I will open this PR as a draft (click on the down arrow next to the
+  "Create Pull Request" button)
 
 ### Submission guidelines
 
-* [ ] This submission follows the guidelines in our [Contributing](../blob/master/CONTRIBUTING.md) document
-* [ ] I have checked to ensure there aren't other open [Pull Requests](../pulls) for the same update/change
+* [ ] This submission follows the guidelines in our
+  [Contributing](../blob/master/CONTRIBUTING.md) document
+* [ ] I have checked to ensure there aren't other open [Pull Requests](../pulls) for the
+  same update/change
 
 ### PR review checklist
 
@@ -28,7 +33,9 @@ This PR will be evaluated on the basis of the following checks:
 * [ ] The task addresses a valid open problem in single-cell analysis
 * [ ] The latest version of master is merged and tested
 * [ ] The methods/metrics are imported to `__init__.py` and were tested in the pipeline
-* [ ] Method and metric decorators are annotated with paper title, year, author, code version, and date
+* [ ] Method and metric decorators are annotated with paper title, year, author, code
+  version, and date
 * [ ] The README gives an outline of the methods, metrics and datasets in the folder
 * [ ] The README provides a satisfactory task explanation (for new tasks)
-* [ ] The sample test data is appropriate to test implementation of all methods and metrics (for new tasks)
+* [ ] The sample test data is appropriate to test implementation of all methods and
+  metrics (for new tasks)
