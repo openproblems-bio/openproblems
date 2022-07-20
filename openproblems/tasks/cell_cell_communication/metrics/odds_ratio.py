@@ -15,12 +15,11 @@ def odds_ratio(adata, top_n=100):
     gt.loc[:, ["top_n"]] = a
 
     # Shape to contingency table
-    table = np.array(
-        gt.pivot_table(index=["top_n", "response"], aggfunc="size")
-    )
+    table = np.array(gt.pivot_table(index=["top_n", "response"], aggfunc="size"))
 
     # if positive or negative class is not in top_n
-    if table.shape != (4,): return 1
+    if table.shape != (4,):
+        return 1
 
     # Fisher ET
     oddsratio, _ = stats.fisher_exact(table.reshape(2, 2))
