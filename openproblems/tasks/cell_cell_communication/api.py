@@ -1,10 +1,12 @@
 from ...data.sample import load_sample_data
 from ...tools.decorators import dataset
+from random import choices
+from random import seed
 
 import numpy as np
 import pandas as pd
 import scanpy as sc
-from random import choices, seed
+
 
 def check_dataset(adata):
     """Check that dataset output fits expected API."""
@@ -20,11 +22,15 @@ def check_method(adata):
     """Check that method output fits expected API."""
     assert "ccc" in adata.uns
     # check if ligand-receptor and source-target (cell type) columns exist
-    assert set(adata.uns["ccc"]).issuperset(['ligand',
-                                             # 'receptor',
-                                             'source',
-                                             'target',
-                                             'score'])
+    assert set(adata.uns["ccc"]).issuperset(
+        [
+            "ligand",
+            # 'receptor',
+            "source",
+            "target",
+            "score",
+        ]
+    )
 
     return True
 
@@ -36,22 +42,30 @@ def sample_dataset():
 
     # keep only the top 10 most variable
     sc.pp.highly_variable_genes(adata, n_top_genes=10)
-    adata = adata[:, adata.var['highly_variable']]
+    adata = adata[:, adata.var["highly_variable"]]
     # assign names to known interactions
-    adata.var.index = ['LGALS9', 'PTPRC',
-                       'LRP1', 'CD47',
-                       'CD44', 'COL1A1',
-                       'ADAM10', 'SIRPA',
-                       'COL4A1', 'THBS2']
+    adata.var.index = [
+        "LGALS9",
+        "PTPRC",
+        "LRP1",
+        "CD47",
+        "CD44",
+        "COL1A1",
+        "ADAM10",
+        "SIRPA",
+        "COL4A1",
+        "THBS2",
+    ]
     # transfer label
     adata.obs["label"] = adata.obs.cell_name
 
-    adata.uns["bench"] = pd.DataFrame(np.random.binomial(1, 0.1, 10), columns=["response"])
+    adata.uns["bench"] = pd.DataFrame(
+        np.random.binomial(1, 0.1, 10), columns=["response"]
+    )
 
     # assign to human prior knowledge
     adata.uns["target_organism"] = 9606
     return adata
-
 
 
 def sample_method(adata):
