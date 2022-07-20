@@ -1,1 +1,1 @@
-from .odds_ratio import oddsratio
+from .odds_ratio import odds_ratio
