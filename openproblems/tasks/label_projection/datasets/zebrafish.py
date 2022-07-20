@@ -21,6 +21,7 @@ def zebrafish_labels(test=False):
 @dataset(
     "Zebrafish (random split)",
     data_url=load_zebrafish.metadata["data_url"],
+    data_reference=load_zebrafish.metadata["data_reference"],
     dataset_summary="TODO",
 )
 def zebrafish_random(test=False):

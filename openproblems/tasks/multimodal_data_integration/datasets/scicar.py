@@ -16,6 +16,7 @@ def scicar_cell_lines(test=False):
 @dataset(
     "sciCAR Mouse Kidney",
     data_url=load_scicar_mouse_kidney.metadata["data_url"],
+    data_reference=load_scicar_cell_lines.metadata["data_reference"],
     dataset_summary="TODO",
 )
 def scicar_mouse_kidney(test=False):
