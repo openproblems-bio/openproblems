@@ -31,6 +31,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
 * Scott Gigante (@scottgigante-immunai), ImmunAI
 * Malte Luecken (@LuckyMD), Helmholtz Munich
 * Angela Pisco (@aopisco), CZ Biohub
+* Christopher Lance (@xlancelottx), Helmholtz Munich
 
 **Task leaders** (_alphabetically_):
 
