@@ -142,7 +142,7 @@ cd workflow && snakemake -j 10 docker_build
 Docker images are built by the `run_benchmarks` GitHub Actions workflow on both the base
 repository and on forks. As long as you have AWS secrets configured properly for your
 repository (see our [Contributing
-Guide](https://github.com/openproblems-bio/openproblems/blob/main/CONTRIBUTING.md#submitting-new-features)), <!-- markdownlint-disable-line MD013 -->
+Guide](https://github.com/openproblems-bio/openproblems/blob/main/CONTRIBUTING.md#submitting-new-features)),
 these images will be uploaded to Amazon Web Services [Elastic Container
 Registry](https://aws.amazon.com/ecr/) (ECR). You can then download the image locally or
 attach to AWS SageMaker Studio.
@@ -150,7 +150,7 @@ attach to AWS SageMaker Studio.
 Once your Run Benchmark has completed successfully, you should see a pane in the GitHub
 Actions tab of your fork that looks like this:
 
-![Successful Actions run](https://user-images.githubusercontent.com/8322751/112719533-c508e100-8ecf-11eb-91b0-6f99ccee2e3f.png)  <!-- markdownlint-disable-line MD013 -->
+![Successful Actions run](https://user-images.githubusercontent.com/8322751/112719533-c508e100-8ecf-11eb-91b0-6f99ccee2e3f.png)
 
 If that workflow failed, you should look at the workflow logs to find the error.
 
@@ -165,12 +165,12 @@ As you can see below, images uploaded to the ECR have Image Tags in the followin
 `openproblems-python37-scgen` image. This is converted to an Image Tag
 `daniel-batch-integration-openproblems-python37-scgen`.
 
-![ECR example screen](https://user-images.githubusercontent.com/8322751/112719414-43b14e80-8ecf-11eb-8fe2-5588e42c77c5.png)  <!-- markdownlint-disable-line MD013 -->
+![ECR example screen](https://user-images.githubusercontent.com/8322751/112719414-43b14e80-8ecf-11eb-8fe2-5588e42c77c5.png)
 
 ## Pulling images from the ECR to your local machine
 
 To pull images from the ECR using `docker pull`, first download and setup the
-[`amazon-ecr-credential-helper`](https://github.com/awslabs/amazon-ecr-credential-helper)  <!-- markdownlint-disable-line MD013 -->
+[`amazon-ecr-credential-helper`](https://github.com/awslabs/amazon-ecr-credential-helper)
 using the same AWS secrets that you used to set up your fork repository. With that set
 up you can use the following command to pull the image:
 

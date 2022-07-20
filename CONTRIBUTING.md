@@ -56,21 +56,21 @@ below:
    documentation helpful.
    ![](<https://i.imgur.com/fUcpLYl.png>" width=400px>
 4. Set up [tower.nf](https://tower.nf) and make sure you have access to
-   [`openproblems-bio`](https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch). <!-- markdownlint-disable-line MD013 -->
+   [`openproblems-bio`](https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch).
    If you do not have access, please contact us at
-   [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com). <!-- markdownlint-disable-line MD013 -->
+   [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).
 5. Create repository secrets (*not environment secrets*)
-   [https://github.com/USERNAME/openproblems/settings/secrets](https://github.com/USERNAME/openproblems/settings/secrets)  <!-- markdownlint-disable-line MD013 -->
+   [https://github.com/USERNAME/openproblems/settings/secrets](https://github.com/USERNAME/openproblems/settings/secrets)
     * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login
       details. If you do not have these, please contact us at
-      [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).* <!-- markdownlint-disable-line MD013 -->
+      [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
     * *TOWER_ACCESS_KEY: log in with GitHub to <https://tower.nf> and create a token at
       <https://tower.nf/tokens>.*
     * When you are done with this step, your page should look like this:
     ![AWS secrets success](static/img/AWS_secret.png)
 
 6. Enable workflows at
-   [https://github.com/USERNAME/openproblems/actions](https://github.com/USERNAME/openproblems/actions). <!-- markdownlint-disable-line MD013 -->
+   [https://github.com/USERNAME/openproblems/actions](https://github.com/USERNAME/openproblems/actions).
 7. Set up your git repository to fetch branches from `base` at
    `openproblems-bio/openproblems`
 
@@ -93,7 +93,7 @@ below:
     ```
 
    To generate an SSH key and add it to your GitHub account, follow [this tutorial from
-   GitHub](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account). <!-- markdownlint-disable-line MD013 -->
+   GitHub](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
 
 8. Create a new branch for your task (**no underscores or spaces allowed**). It is best
    to coordinate with other people working on the same feature as you so that there
@@ -118,7 +118,7 @@ below:
 9. Sometimes, changes might be made to the openproblems `base` repository that you want
    to incorporate into your fork. To sync your fork from `base`, use the following code
    adapted from the [Syncing a
-   Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork) <!-- markdownlint-disable-line MD013 -->
+   Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork)
    tutorial from GitHub.
 
     ```shell
@@ -169,7 +169,7 @@ If your method takes hyperparameters, set them as keyword arguments in the metho
 definition. If the hyperparameters change depending on the value of `test`, set the
 keyword argument to `None` and set them to your chosen defaults only if the passed value
 is `None`. For an example, see [harmonic
-alignment](openproblems/tasks/multimodal_data_integration/methods/harmonic_alignment.py). <!-- markdownlint-disable-line MD013 -->
+alignment](openproblems/tasks/multimodal_data_integration/methods/harmonic_alignment.py).
 
 Metrics should take an AnnData object and return a `float`.
 
@@ -268,7 +268,7 @@ function](./openproblems/tools/normalize.py) (e.g.,
 `adata.layers["log_scran_pooling"]`).
 
 To see a gold standard loader, look at
-[openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](./openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py) <!-- markdownlint-disable-line MD013 -->
+[openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](./openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py)
 
 This file name should match
 `[First Author Last Name]_[Year Published]_short_Description_of_data.py`. E.g. the
@@ -287,7 +287,7 @@ from .f2 import f2
 ```
 
 to
-[`openproblems/tasks/label_projection/metrics/__init__.py`](openproblems/tasks/label_projection/metrics/__init__.py). <!-- markdownlint-disable-line MD013 -->
+[`openproblems/tasks/label_projection/metrics/__init__.py`](openproblems/tasks/label_projection/metrics/__init__.py).
 
 For datasets in particular, these should be loaded using a `loader` function from
 `openproblems.data`, with only task-specific annotations added in the task-specific data
