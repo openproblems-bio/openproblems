@@ -1,2 +1,2 @@
-from .mnn import mnn_log_cpm
-from .mnn import mnn_log_scran_pooling
+from .logfc import logfc
+from .sca import sca
