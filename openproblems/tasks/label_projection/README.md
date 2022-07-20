@@ -31,7 +31,7 @@ assigns cell type labels to cells in the test set.
 
 * **Accuracy**: Average number of correctly applied labels.
 * **F1 score**: The [F1
-  score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html) <!-- markdownlint-disable-line MD013 -->
+  score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html)
   is a weighted average of the precision and recall over all class labels, where an F1
   score reaches its best value at 1 and worst score at 0, where each class contributes
   to the score relative to its frequency in the dataset.

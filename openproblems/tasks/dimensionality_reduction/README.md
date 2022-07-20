@@ -10,7 +10,7 @@ scRNA-seq experiments have been growing in terms of the number of cells measured
 Originally, cutting-edge SmartSeq experiments would yield a few hundred cells, at best.
 Now, it is not uncommon to see experiments that yield over [100,000 cells]
 (<https://www.nature.com/articles/s41586-018-0590-4>) or even [> 1 million
-cells.](https://www.10xgenomics.com/blog/our-13-million-single-cell-dataset-is-ready-to-download) <!-- markdownlint-disable-line MD013 -->
+cells.](https://www.10xgenomics.com/blog/our-13-million-single-cell-dataset-is-ready-to-download)
 
 Each *feature* in a dataset functions as a single dimension. While each of the ~30,000
 dimensions measured in each cell (not accounting for roughly 75-90% data dropout per
@@ -29,7 +29,7 @@ the data for visualization and interpretation.
 [Reference](https://www.tandfonline.com/doi/abs/10.1080/14786440109462720)
 
 *Adapted from the [sklearn
-documentation](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html)*.  <!-- markdownlint-disable-line MD013 -->
+documentation](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html)*.
 
 Linear dimensionality reduction using Singular Value Decomposition of the data to
 project it to a lower dimensional space. The input data is centered but not scaled for
@@ -43,7 +43,7 @@ by [scanpy](https://scanpy.readthedocs.io/en/stable/generated/scanpy.tl.pca.html
 [Reference](https://arxiv.org/abs/1802.03426)
 
 *Adapted from the [sklearn
-documentation](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html)*.  <!-- markdownlint-disable-line MD013 -->
+documentation](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html)*.
 
 t-SNE is a tool to visualize high-dimensional data. It converts similarities between
 data points to joint probabilities and tries to minimize the Kullback-Leibler divergence
@@ -159,7 +159,7 @@ of the ***topography*** of the data in high-dimensional space.
 ### Trustworthiness
 
 *Adapted from the [sklearn
-documentation.](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.trustworthiness.html)* <!-- markdownlint-disable-line MD013 -->
+documentation.](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.trustworthiness.html)*
 
 Trustworthiness expresses to what extent the local structure in an embedding is
 retained. The trustworthiness is within [0, 1]. It is defined as
