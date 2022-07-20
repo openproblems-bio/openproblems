@@ -37,7 +37,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
 
 Full tasks (>1 datasets, >5 methods):
 * Batch integration - Daniel Strobl (@danielStrobl)
-* Dimensionality reduction - Luke Zappia (@lazappi) and Michael Vinyard (mvinyard)
+* Dimensionality reduction - Luke Zappia (@lazappi) and Michael Vinyard (@mvinyard)
 * Label projection - Nick Markov (@mxposed)
 * Spatial deconvolution - Giovanni Palla (@giovp) and Alma Anderson (@almaan)
 
