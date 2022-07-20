@@ -36,7 +36,7 @@ consistency between the gene scores and gene expression across cells.
 
 Two representative software
 [ArchR](https://www.archrproject.com/bookdown/calculating-gene-scores-in-archr.html) and
-[MAESTRO](https://github.com/liulab-dfci/MAESTRO/blob/d58fc186a4329febde3b0d5b213c2d0edf8de44c/example/Gene_activity_modelling/Gene_activity_modelling.md), <!-- markdownlint-disable-line MD013 -->
+[MAESTRO](https://github.com/liulab-dfci/MAESTRO/blob/d58fc186a4329febde3b0d5b213c2d0edf8de44c/example/Gene_activity_modelling/Gene_activity_modelling.md),
 each has different way of assigning peak weights upon genes include a set of methods,
 but also share some common property. A typical algorithm includes the following common
 steps:
@@ -112,7 +112,7 @@ experiments have been growing in terms of the number of cells measured. Original
 cutting-edge SmartSeq experiments would yield a few hundred cells, at best. Now, it is
 not uncommon to see experiments that yield over [100,000
 cells](https://www.nature.com/articles/s41586-018-0590-4) or even [>1 million
-cells.](https://www.10xgenomics.com/blog/our-13-million-single-cell-dataset-is-ready-to-download) <!-- markdownlint-disable-line MD013 -->
+cells.](https://www.10xgenomics.com/blog/our-13-million-single-cell-dataset-is-ready-to-download)
 
 Each *feature* in a dataset functions as a single dimension. While each of the ~30,000
 dimensions measured in each cell (not accounting for roughly 75-90% data dropout per

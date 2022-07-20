@@ -17,7 +17,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
 * For contributing guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md)  
 * For instructions on editing Docker images, see [docker/README.md](docker/README.md)  
 * For instructions on using the `openproblems-cli`, see
-  [openproblems/api/README.md](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/api) <!-- markdownlint-disable-line MD013 -->
+  [openproblems/api/README.md](https://github.com/singlecellopenproblems/SingleCellOpenProblems/tree/master/openproblems/api)
 * For a walkthrough of the GitHub Actions workflows and AWS Sagemaker, see
   [SAGEMAKER.md](SAGEMAKER.md)  
 * For a description of existing an proposed tasks, see [TASKS.md](TASKS.md)  
