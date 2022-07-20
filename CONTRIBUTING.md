@@ -187,7 +187,7 @@ def f2(adata):
 
 ### Adding a new dataset
 
-Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader(data_url="https://data.link")` in order to cache the result.
+Datasets are loaded under `openproblems/data`. Each data loading function should download the appropriate dataset from a stable location (e.g. from Figshare) be decorated with `openproblems.data.utils.loader(data_url="https://data.link", data_reference="https://doi.org/10.0/123")` in order to cache the result.
 
 Data should be provided in a raw count format. We assume that `adata.X` contains the raw (count) data for the primary modality; this will also be copied to `adata.layers["counts"]` for permanent access to the raw data. Additional modalities should be stored in `adata.obsm`. Prenormalized data (if available) can be stored in `adata.layers`, preferably using a name corresponding to the equivalent [normalization function](./openproblems/tools/normalize.py) (e.g., `adata.layers["log_scran_pooling"]`). 
 
