@@ -24,14 +24,16 @@ Formalizing and benchmarking open problems in single-cell genomics.
 
 ## The team
 
-**Core**:
-* Scott Gigante (@scottgigante-immunai), ImmunAI
+**Core** (_alphabetically_):
+
 * Daniel Burkhardt (@dburkhardt), Cellarity
+* Robrecht Cannoodt (@rcannoodt), Data Intuitive
+* Scott Gigante (@scottgigante-immunai), ImmunAI
 * Malte Luecken (@LuckyMD), Helmholtz Munich
 * Angela Pisco (@aopisco), CZ Biohub
-* Robrecht Cannoodt (@rcannoodt), Data Intuitive
 
 **Task leaders** (_alphabetically_):
+
 Full tasks (>1 datasets, >5 methods):
 * Batch integration - Daniel Strobl (@danielStrobl)
 * Dimensionality reduction - Luke Zappia (@lazappi) and Michael Vinyard (mvinyard)
@@ -58,5 +60,6 @@ Tasks in discussion:
 * Fiona Griffin
 * Ivana Williams
 
-**Contributors**
+**Contributors**:
+
 See the long list of all those who contributed datasets, methods, metrics, or infrastructure code [here](https://github.com/openproblems-bio/openproblems/graphs/contributors)
