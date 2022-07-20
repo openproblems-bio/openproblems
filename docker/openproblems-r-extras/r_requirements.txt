@@ -4,7 +4,7 @@ caret@6.0-92
 cli@3.3.0
 conos@1.4.6
 crayon@1.5.1
-dbplyr@2.1.1
+dbplyr@2.2.1
 devtools@2.3.2
 dplyr@1.0.9
 e1071@1.7-11
