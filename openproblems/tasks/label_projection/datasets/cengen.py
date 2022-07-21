@@ -7,6 +7,7 @@ import numpy as np
 @dataset(
     "CeNGEN (by batch)",
     data_url=load_cengen.metadata["data_url"],
+    data_reference=load_cengen.metadata["data_reference"],
     dataset_summary="TODO",
 )
 def cengen_batch(test=False):
@@ -27,6 +28,7 @@ def cengen_batch(test=False):
 @dataset(
     "CeNGEN (random split)",
     data_url=load_cengen.metadata["data_url"],
+    data_reference=load_cengen.metadata["data_reference"],
     dataset_summary="TODO",
 )
 def cengen_random(test=False):
