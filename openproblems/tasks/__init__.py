@@ -1,3 +1,4 @@
+from . import cell_cell_communication
 from . import denoising
 from . import dimensionality_reduction
 from . import label_projection
