@@ -11,6 +11,9 @@ on:
       - completed
     branches:
       - 'main'
+  push:
+    branches:
+      - 'dependencies/r/auto_update/skip_existing'
 
 jobs:
   check-r-dependencies:
@@ -37,11 +40,18 @@ jobs:
           tail -n 1 | \
           sed 's/^+//'
         )
+        UPDATE_BRANCH_NAME=dependencies/r/${PKG_CHANGED}
         echo "PKG_CHANGED=$(echo ${PKG_CHANGED} | sed 's/@/ to /')" >> $GITHUB_ENV
-        echo "UPDATE_BRANCH_NAME=dependencies/r/${PKG_CHANGED}" >> $GITHUB_ENV
+        echo "UPDATE_BRANCH_NAME=${UPDATE_BRANCH_NAME}" >> $GITHUB_ENV
+        echo "BRANCH_EXISTS=$(\
+          git ls-remote --heads origin ${UPDATE_BRANCH_NAME} | \
+          tr -d '\n' \
+        )" >> $GITHUB_ENV
 
     - name: Create Pull Request
-      if: "env.PKG_CHANGED != ''"
+      if: >-
+        env.PKG_CHANGED != '' &&
+        env.BRANCH_EXISTS == ''
       uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
