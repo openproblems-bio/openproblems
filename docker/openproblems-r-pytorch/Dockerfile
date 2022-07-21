@@ -9,7 +9,6 @@ USER root
 WORKDIR /
 
 # Install R packages
-COPY ./scripts/install_renv.R ./
 COPY ./docker/openproblems-r-pytorch/r_requirements.txt ./r_requirements.txt
 RUN R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"
 

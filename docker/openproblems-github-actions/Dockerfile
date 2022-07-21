@@ -18,7 +18,6 @@ COPY ./docker/openproblems-github-actions/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install R packages
-COPY ./scripts/install_renv.R ./
 COPY ./docker/openproblems-github-actions/r_requirements.txt ./r_requirements.txt
 RUN R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"
 
