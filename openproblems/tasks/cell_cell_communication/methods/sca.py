@@ -17,5 +17,5 @@ _sca_method = functools.partial(
 @_sca_method(
     method_name="SingleCellSignalR",
 )
-def sca(adata):
+def sca(adata, test=False):
     return liana(adata, method="sca", score_col="LRscore", asc=False)

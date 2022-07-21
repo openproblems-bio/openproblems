@@ -16,5 +16,5 @@ _natmi_method = functools.partial(
 @_natmi_method(
     method_name="NATMI",
 )
-def natmi(adata):
+def natmi(adata, test=False):
     return liana(adata, method="natmi", score_col="edge_specificity", asc=False)

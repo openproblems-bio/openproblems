@@ -21,7 +21,7 @@ _liana_method = functools.partial(
 @_liana_method(
     method_name="LIANA",
 )
-def liana(adata, score_col="aggregate_rank", asc=True, **kwargs):
+def liana(adata, score_col="aggregate_rank", asc=True, test=False, **kwargs):
     # log-normalize
     adata = log_cpm(adata)
     adata.layers["logcounts"] = adata.layers["log_cpm"]

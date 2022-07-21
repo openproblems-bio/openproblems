@@ -17,5 +17,5 @@ _connectome_method = functools.partial(
 @_connectome_method(
     method_name="Connectome",
 )
-def connectome(adata):
+def connectome(adata, test=False):
     return liana(adata, method="connectome", score_col="weight_sc", asc=False)

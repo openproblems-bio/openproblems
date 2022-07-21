@@ -25,7 +25,7 @@ def _p_filt(x, y):
 @_cellphonedb_method(
     method_name="CellPhoneDB",
 )
-def cellphonedb(adata):
+def cellphonedb(adata, test=False):
     adata = liana(adata, method="cellphonedb", score_col="lr.mean", asc=False)
     # Filter & Re-order
     adata.uns["ccc"]["score"] = adata.uns["ccc"].apply(

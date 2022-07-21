@@ -1,3 +1,5 @@
+# Cell-cell Communication
+
 ## The task
 
 The growing availability of single-cell data has sparked an increased interest in the inference of

@@ -17,5 +17,5 @@ _logfc_method = functools.partial(
 @_logfc_method(
     method_name="Mean log2FC",
 )
-def logfc(adata):
+def logfc(adata, test=False):
     return liana(adata, method="logfc", score_col="logfc_comb", asc=False)
