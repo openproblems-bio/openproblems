@@ -22,29 +22,31 @@ sce@assays@data$logcounts <- as(as.matrix(sce@assays@data$logcounts), "sparseMat
 op_resource <- select_resource("Consensus")[[1]]
 
 # Check if the target organism is human
-if(sce@metadata$target_organism!=9606){
-    # Generate orthologous resource
-    op_resource <- generate_homologs(op_resource = op_resource,
-                                     target_organism = sce@metadata$target_organism)
+if (sce@metadata$target_organism != 9606) {
+  # Generate orthologous resource
+  op_resource <- generate_homologs(
+    op_resource = op_resource,
+    target_organism = sce@metadata$target_organism
+  )
 }
 
 # Run LIANA
 liana_res <- liana_wrap(sce,
-                        resource = 'custom',
-                        external_resource = op_resource,
-                        expr_prop = expr_prop,
-                        idents_col = idents_col,
-                        base = 2.718282, # Relevant only for logfc
-                        ...
-                        )
+  resource = "custom",
+  external_resource = op_resource,
+  expr_prop = expr_prop,
+  idents_col = idents_col,
+  base = 2.718282, # Relevant only for logfc
+  ...
+)
 
 # Aggregate if a run /w multiple methods
-if(!is.tibble(liana_res)){
-liana_res %>%
+if (!is.tibble(liana_res)) {
+  liana_res %>%
     liana_aggregate()
 }
 
 # Return (Keep Complexes [not subunits] for Consistency)
 liana_res %>%
-    dplyr::select(-c("ligand", "receptor")) %>%
-    dplyr::rename(ligand=ligand.complex, receptor=receptor.complex)
+  dplyr::select(-c("ligand", "receptor")) %>%
+  dplyr::rename(ligand = ligand.complex, receptor = receptor.complex)

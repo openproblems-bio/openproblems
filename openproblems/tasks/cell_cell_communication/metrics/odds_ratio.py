@@ -8,8 +8,8 @@ import scipy.stats as stats
 def odds_ratio(adata, top_n=100):
     # Join benchmark (assumed truth) and ccc results
     # Get /w ccc_results and a response [0, 1] column
-    gt = adata.uns["bench"].merge(adata.uns["ccc"], how='right')
-    gt = gt[gt['response'].notna()]
+    gt = adata.uns["bench"].merge(adata.uns["ccc"], how="right")
+    gt = gt[gt["response"].notna()]
 
     # assign the top rank interactions to 1
     a = np.zeros(len(gt["score"]))
