@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
+        uses: styfle/cancel-workflow-action@0.10.0
         with:
           access_token: ${{ github.token }}
 
@@ -66,7 +66,7 @@ jobs:
 
       - name: Run pre-commit
         id: precommit
-        uses: pre-commit/action@v2.0.0
+        uses: pre-commit/action@v3.0.0
         continue-on-error: true
 
       - name: Commit files
@@ -89,4 +89,4 @@ jobs:
 
       - name: Check pre-commit
         if: steps.precommit.outcome == 'failure'
-        uses: pre-commit/action@v2.0.0
+        uses: pre-commit/action@v3.0.0

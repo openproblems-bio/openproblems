@@ -4,7 +4,7 @@ from setuptools import setup
 import os
 
 install_requires = [
-    "numpy==1.22.*",
+    "numpy>=1.22,<1.24",
     "scikit-learn==1.1.*",
     "anndata==0.8.*",
     "scprep>=1.2.0",
@@ -23,14 +23,14 @@ r_requires = [
     "anndata2ri==1.1.*",
 ]
 
-evaluate_requires = ["snakemake==7.8.*"]
+evaluate_requires = ["snakemake>=7.8,<7.10"]
 
 process_requires = ["numpyencoder==0.3.*"]
 
 test_requires = [
     "pytest==7.1.*",
     "pytest-cov==3.0.*",
-    "black==22.3.0",
+    "black==22.6.0",
     "coverage==6.4.*",
     "codecov==2.1.*",
     "parameterized==0.8.*",

@@ -6,6 +6,8 @@ import pandas as pd
 import scprep
 import tempfile
 
+DATA_REFERENCE = "https://doi.org/10.1126/science.aau0730"
+
 
 def load_scicar(
     rna_url,
