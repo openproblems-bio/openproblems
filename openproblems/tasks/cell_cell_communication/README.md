@@ -7,9 +7,9 @@ interest in the inference of cell-cell communication (CCC),
 with an ever-growing number of computational tools developed for this purpose.
 
 Different tools propose distinct preprocessing steps with diverse
-scoring functions, that are challenging to compare and evaluate. 
+scoring functions, that are challenging to compare and evaluate.
 Furthermore, each tool typically comes with its own set of prior knowledge.
-To harmonize these, we recently developed the 
+To harmonize these, we recently developed the
 [LIANA](https://github.com/saezlab/liana) framework, which is
 used extensively at the current stage of the task.
 
@@ -28,11 +28,11 @@ different CCC methods will be better understood.
 ## The metrics
 
 Metrics for cell-cell communication aim to characterize how good are
-the different scoring functions/methods at prioritizing 
+the different scoring functions/methods at prioritizing
 assumed truth predictions.
 
 `Odds ratios`: represent the ratio of true and false positives within a set of
-prioritized interactions (top ranked hits) versus the same ratio for the 
+prioritized interactions (top ranked hits) versus the same ratio for the
 remainder of the interactions. Thus, in this scenario odds ratios quantify
 the strength of association between the ability of methods to prioritize
 interactions and those interactions assigned to the positive class.
