@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
+        uses: styfle/cancel-workflow-action@0.10.0
         with:
           access_token: ${{ github.token }}
 
@@ -79,32 +79,18 @@ jobs:
         cd ..
         echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
 
-    - name: Set up Git branch
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      run: |
-        git checkout -b $BRANCH_NAME
-        git push -u origin $BRANCH_NAME
-
-    - name: Commit result
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      uses: EndBug/add-and-commit@v6
-      with:
-        author_name: SingleCellOpenProblems
-        author_email: singlecellopenproblems@protonmail.com
-        message: 'Update docker version # ci skip'
-        add: "docker/.version"
-        branch: ${{ env.BRANCH_NAME }}
-        push: false
-
     - name: Create Pull Request
       if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.BRANCH_NAME }}
         delete-branch: true
         base: main
         title: '[auto] Update docker version'
         reviewers: scottgigante, dburkhardt
+        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        commit-message: Update docker version # ci skip
+        add-paths: docker/.version
 
     - name: Upload check results on fail
       if: failure()
@@ -253,6 +239,28 @@ jobs:
       run: |
         sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
         sudo apt-get install -qy --no-install-recommends libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+
+    - name: Check Tower authentication
+      env:
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+        TOWER_ORG_ID: 9180144064527
+        TOWER_WORKSPACE_ID: 53907369739130
+      run: |
+        result=$(
+          curl -X GET "https://api.tower.nf/orgs/${TOWER_ORG_ID}/workspaces/${TOWER_WORKSPACE_ID}" \
+          -H "Accept: application/json" \
+          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}" || \
+          (
+            echo "Tower authentication failed; set TOWER_ACCESS_KEY in repo secrets." >&2 &&
+            echo "See CONTRIBUTING.md for details." >&2 && \
+            exit 1
+          )
+        )
+        if [ -z "${result}" ]; then
+          echo "Tower authentication failed; email singlecellopenproblems@protonmail.com with a request to be added to the openproblems-bio workspace"
+          exit 1
+        fi
+      shell: /bin/bash -e {0}
 
     - name: Set up Python
       uses: actions/setup-python@v4
