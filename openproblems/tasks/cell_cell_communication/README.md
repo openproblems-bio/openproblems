@@ -2,7 +2,6 @@
 
 The growing availability of single-cell data has sparked an increased interest in the inference of
 cell-cell communication (CCC), with an ever-growing number of computational tools developed for this purpose.
-As such, this task focuses on approaches designed to infer CCC events from dissociated single-cell data.
 
 Different tools propose distinct preprocessing steps with diverse scoring functions, that are challenging
 to compare and evaluate. Furthermore, each tool typically comes with its own set of prior knowledge.
