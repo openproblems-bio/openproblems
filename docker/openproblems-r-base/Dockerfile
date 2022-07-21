@@ -30,8 +30,9 @@ ENV R_HOME=/usr/lib/R
 
 # Install R packages
 RUN R -e "install.packages('renv'); renv::consent(TRUE)"
+COPY ./scripts/install_renv.R ./
 COPY ./docker/openproblems-r-base/r_requirements.txt ./r_requirements.txt
-RUN R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))"
+RUN R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"
 
 # Install kernelspec
 RUN R -e "IRkernel::installspec(user = FALSE);"
