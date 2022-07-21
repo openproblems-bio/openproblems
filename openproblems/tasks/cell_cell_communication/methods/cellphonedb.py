@@ -6,7 +6,7 @@ import functools
 _cellphonedb_method = functools.partial(
     method,
     paper_name="CellPhoneDB: inferring cell–cell communication from "
-               "combined expression of multi-subunit ligand–receptor complexes.",
+    "combined expression of multi-subunit ligand–receptor complexes.",
     paper_url="https://www.nature.com/articles/s41596-020-0292-x",
     paper_year=2020,
     code_url="https://github.com/saezlab/liana",
@@ -28,8 +28,9 @@ def _p_filt(x, y):
 def cellphonedb(adata):
     adata = liana(adata, method="cellphonedb", score_col="lr.mean", asc=False)
     # Filter & Re-order
-    adata.uns["ccc"]["score"] = adata.uns["ccc"].\
-        apply(lambda x: _p_filt(x.pvalue, x["lr.mean"]), axis=1)
+    adata.uns["ccc"]["score"] = adata.uns["ccc"].apply(
+        lambda x: _p_filt(x.pvalue, x["lr.mean"]), axis=1
+    )
     adata.uns["ccc"].sort_values("score", ascending=False, inplace=True)
 
     return adata

@@ -10,7 +10,7 @@ _r_liana = r_function("liana.R", args="sce, ...")
 _liana_method = functools.partial(
     method,
     paper_name="Comparison of methods and resources for cell-cell "
-               "communication inference from single-cell RNA-Seq data",
+    "communication inference from single-cell RNA-Seq data",
     paper_url="https://www.nature.com/articles/s41467-022-30755-0",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
@@ -24,8 +24,8 @@ _liana_method = functools.partial(
 def liana(adata, score_col="aggregate_rank", asc=True, **kwargs):
     # log-normalize
     adata = log_cpm(adata)
-    adata.layers['logcounts'] = adata.layers['log_cpm']
-    del adata.layers['log_cpm']
+    adata.layers["logcounts"] = adata.layers["log_cpm"]
+    del adata.layers["log_cpm"]
 
     # Run LIANA
     liana_res = _r_liana(adata, **kwargs)
