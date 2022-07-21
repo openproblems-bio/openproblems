@@ -15,9 +15,9 @@ idents_col <- "label"
 
 # Convert data to an R-friendly sparse format
 sce@assays@data$counts <-
-                    as(as.matrix(sce@assays@data$counts), "sparseMatrix")
+  as(as.matrix(sce@assays@data$counts), "sparseMatrix")
 sce@assays@data$logcounts <-
-                    as(as.matrix(sce@assays@data$logcounts), "sparseMatrix")
+  as(as.matrix(sce@assays@data$logcounts), "sparseMatrix")
 
 
 # Obtain LIANA's Consensus resource
