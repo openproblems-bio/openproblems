@@ -8,7 +8,9 @@ import tempfile
 URL = "https://ndownloader.figshare.com/files/25555751"
 
 
-@utils.loader(data_url=URL)
+@utils.loader(
+    data_url=URL, data_reference="https://doi.org/10.1182/blood-2016-05-716480"
+)
 def load_human_blood_nestorowa2016(test=False):
     """Download Nesterova data from Figshare."""
     if test:
