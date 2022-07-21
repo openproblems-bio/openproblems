@@ -5,7 +5,8 @@
 
 # Libraries
 library(SingleCellExperiment)
-library(tidyverse)
+library(tibble)
+library(dplyr)
 library(liana)
 
 # Parameters
@@ -31,11 +32,19 @@ if(sce@metadata$target_organism!=9606){
 liana_res <- liana_wrap(sce,
                         resource = 'custom',
                         external_resource = op_resource,
-                        method=method,
                         expr_prop = expr_prop,
                         idents_col = idents_col,
-                        base = 2.718282 # Relevant only for logfc
+                        base = 2.718282, # Relevant only for logfc
+                        ...
                         )
 
-# Return
-liana_res
+# Aggregate if a run /w multiple methods
+if(!is.tibble(liana_res)){
+liana_res %>%
+    liana_aggregate()
+}
+
+# Return (Keep Complexes [not subunits] for Consistency)
+liana_res %>%
+    dplyr::select(-c("ligand", "receptor")) %>%
+    dplyr::rename(ligand=ligand.complex, receptor=receptor.complex)

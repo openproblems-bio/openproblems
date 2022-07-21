@@ -1,11 +1,7 @@
-from ....tools.conversion import r_function
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
-from ....tools.utils import check_r_version
+from .liana import liana
 
 import functools
-
-_liana = r_function("liana.R", args="sce, method")
 
 _logfc_method = functools.partial(
     method,
@@ -22,18 +18,4 @@ _logfc_method = functools.partial(
     method_name="Mean log2FC",
 )
 def logfc(adata):
-    # log-normalize
-    adata = log_cpm(adata)
-    adata.layers['logcounts'] = adata.layers['log_cpm']
-    del adata.layers['log_cpm']
-
-    # Run LIANA
-    liana_res = _liana(adata, method="logfc")
-    # Format results
-    liana_res["score"] = liana_res["logfc_comb"]
-    liana_res.sort_values("score", ascending=False, inplace=True)
-    adata.uns["ccc"] = liana_res
-
-    adata.uns["method_code_version"] = check_r_version("liana")
-
-    return adata
+    return liana(adata, method="logfc", score_col="logfc_comb", asc=False)
