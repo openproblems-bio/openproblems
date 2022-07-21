@@ -8,7 +8,9 @@ ARG NB_GID="100"
 USER root
 WORKDIR /
 
-RUN apt-get update && apt-get install -y libhdf5-dev hdf5-tools libgeos-dev
+RUN apt-get update && apt-get install -y \
+    libhdf5-dev hdf5-tools libgeos-dev \
+    libharfbuzz-dev libfribidi-dev
 
 RUN apt-get clean autoclean && \
     apt-get autoremove --yes && \
