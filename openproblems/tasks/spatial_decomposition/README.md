@@ -12,7 +12,6 @@ location. The cell type/states estimates are presented as proportion values,
 representing the proportion of the cells at each capture location that belong to
 a given cell type.
 
-
 We distinguish between _reference-based_ decomposition and _de novo_
 decomposition, where the former leverage external data (e.g., scRNA-seq or
 scNuc-seq) to guide the inference process, while the latter only work with the
@@ -28,6 +27,7 @@ R2 pronounced as "R squared", also known as the "coefficient of determination". 
 ## API
 
 Datasets consists of 2 `anndata.AnnData` objects, concatenated by key `adata.obs["modality"]` with values:
+
 * `sc` for the single cell reference.
 * `sp` for the target spatial dataset.
 
