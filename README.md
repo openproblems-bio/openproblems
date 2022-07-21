@@ -35,7 +35,6 @@ Formalizing and benchmarking open problems in single-cell genomics.
 * Malte Luecken (@LuckyMD), Helmholtz Munich
 * Angela Pisco (@aopisco), CZ Biohub
 
-
 **Task leaders** (_alphabetically_):
 
 Full tasks (>1 datasets, >5 methods):
@@ -57,19 +56,16 @@ Tasks in discussion:
 * Differential abundance - Emma Dann (@emdann)
 * Regulatory effect prediction - Qian (Alvin) Qin (@qinqian)
 
-
 **Supervision** (_alphabetically_):
 
 * Smita Krishnaswamy, Yale
 * Fabian Theis, Helmholtz Munich
-
 
 **Chan Zuckerberg Initiative Support** (_alphabetically_):
 
 * Jonah Cool
 * Fiona Griffin
 * Ivana Williams
-
 
 **Contributors**:
 
