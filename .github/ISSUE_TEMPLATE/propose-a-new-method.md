@@ -14,4 +14,5 @@ Describe it briefly and include a citation.
 Include a link to the publicly available codebase.
 
 **Which task(s) could it be used for?**
-If the method is to be used for a task that is not yet included in the code base, use the issue template *propose a new task* instead.
+If the method is to be used for a task that is not yet included in the code base, use
+the issue template *propose a new task* instead.
