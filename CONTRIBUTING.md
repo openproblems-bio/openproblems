@@ -381,10 +381,10 @@ pip install --editable .[test,r]
 pytest -v
 ```
 
-You may run specific tests with
+You may run specific tests quickly with
 
 ```shell
-pytest -k my_task
+PYTEST_MAX_RETRIES=0 pytest -k my_task
 ```
 
 The test suite also requires Python>=3.7, R>=4.0, and Docker to be installed.
