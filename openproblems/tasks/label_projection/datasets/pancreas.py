@@ -8,6 +8,7 @@ import numpy as np
 @dataset(
     "Pancreas (by batch)",
     data_url=load_pancreas.metadata["data_url"],
+    data_reference=load_pancreas.metadata["data_reference"],
     dataset_summary="TODO",
 )
 def pancreas_batch(test=False):
@@ -28,6 +29,7 @@ def pancreas_batch(test=False):
 @dataset(
     "Pancreas (random split)",
     data_url=load_pancreas.metadata["data_url"],
+    data_reference=load_pancreas.metadata["data_reference"],
     dataset_summary="TODO",
 )
 def pancreas_random(test=False):
@@ -46,6 +48,7 @@ def pancreas_random(test=False):
 @dataset(
     r"Pancreas (random split with 20% label noise",
     data_url=load_pancreas.metadata["data_url"],
+    data_reference=load_pancreas.metadata["data_reference"],
     dataset_summary="TODO",
 )
 def pancreas_random_label_noise(test=False):
