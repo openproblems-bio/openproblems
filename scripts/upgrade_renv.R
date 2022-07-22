@@ -22,7 +22,7 @@ upgrade_first_available <- function(remotes) {
     result <- renv::update(parsed_spec$package, prompt = FALSE)
     if (class(result) != "logical") {
       upgraded_remotes <- sapply(result, upgraded_remote_version)
-      primary <- upgraded_remotes[[remote]]
+      primary <- upgraded_remotes[[parsed_spec$package]]
       return(list(primary = primary, upgraded = upgraded_remotes))
     }
   }
