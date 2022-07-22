@@ -65,6 +65,7 @@ upgrade_renv <- function(requirements_file) {
       write_updates_to_file(
         remotes, upgraded_remotes$upgraded, requirements_file
       )
+      print(upgraded_remotes)
       cat(paste0("\n", upgraded_remotes$primary, "\n"))
     } else {
       cat("No upgrades available\n\n")
