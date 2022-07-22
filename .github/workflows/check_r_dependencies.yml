@@ -40,7 +40,6 @@ jobs:
           git diff --quiet --exit-code || break
         done
         UPDATE_BRANCH_NAME=dependencies/r/${PKG_CHANGED}
-        echo $UPDATE_BRANCH_NAME
         echo "PKG_CHANGED=$(echo ${PKG_CHANGED} | sed 's/@/ to /')" >> $GITHUB_ENV
         echo "UPDATE_BRANCH_NAME=${UPDATE_BRANCH_NAME}" >> $GITHUB_ENV
         echo "BRANCH_EXISTS=$(\
