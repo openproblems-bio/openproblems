@@ -22,9 +22,7 @@ upgrade_first_available <- function(remotes) {
     result <- renv::update(parsed_spec$package, prompt = FALSE)
     if (class(result) != "logical") {
       upgraded_remotes <- sapply(result, upgraded_remote_version)
-      primary <- upgraded_remotes[
-        startsWith(upgraded_remotes, paste0(remote, "@"))
-      ]
+      primary <- upgraded_remotes[[remote]]
       return(list(primary = primary, upgraded = upgraded_remotes))
     }
   }
@@ -55,9 +53,9 @@ upgrade_renv <- function(requirements_file) {
   if (length(remotes) > 0) {
     remotes_parsed <- drop_pinned(remotes)
     remotes_parsed <- sapply(remotes_parsed, strip_comments)
-    capture.output(suppressWarnings(suppressMessages(
-      upgraded_remotes <- upgrade_first_available(remotes_parsed)
-    )), file = nullfile())
+    # capture.output(suppressWarnings(suppressMessages(
+    upgraded_remotes <- upgrade_first_available(remotes_parsed)
+    # )), file = nullfile())
     if (!is.null(upgraded_remotes)) {
       cat("Upgrades are available:\n")
       cat(paste(upgraded_remotes$upgraded, collapse = "\n"))
