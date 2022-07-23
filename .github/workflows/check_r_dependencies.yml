@@ -52,5 +52,6 @@ jobs:
         base: main
         labels: dependencies,r
         title: "Update ${{ env.PKG_CHANGED }}"
+        committer: "openproblems-bio <singlecellopenproblems@protonmail.com>"
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
         commit-message: "Update ${{ env.PKG_CHANGED }}"
