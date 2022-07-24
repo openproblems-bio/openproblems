@@ -284,7 +284,7 @@ jobs:
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
         REPO_PARSED=$(echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6)
-        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g')
+        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[^a-zA-Z0-9]:-:g')
         if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
           BRANCH=`echo $BRANCH_PARSED | head -c 40`
         else
