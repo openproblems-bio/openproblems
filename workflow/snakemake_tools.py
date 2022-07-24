@@ -48,6 +48,19 @@ def build_type(wildcards):
     return "github_actions" if "GITHUB_ACTIONS" in os.environ else "local"
 
 
+def _build_age(image):
+    age = git_file_age(os.path.join(IMAGES_DIR, image))
+    base = _docker_base(image)
+    if base is not None:
+        age += _build_age(base)
+    return age
+
+
+def build_hash(wildcards):
+    age = _build_age(wildcards.image)
+    return hash(age)
+
+
 def push_images(wildcards):
     """Get Docker push timestamp for all images."""
     images = _images(".docker_push")
