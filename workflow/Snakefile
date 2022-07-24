@@ -36,9 +36,10 @@ rule refresh_docker_image:
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
-        label = "github_actions" if "GITHUB_ACTIONS" in os.environ else "local"
+        label = tools.build_type,
+        hash = tools.build_hash,
     shell:
-        "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+        "docker build --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule refresh_dockerfile:
     priority: 50
@@ -86,9 +87,10 @@ rule build_docker_image:
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
-        label = tools.build_type
+        label = tools.build_type,
+        hash = tools.build_hash,
     shell:
-        "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+        "docker build --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule password_docker:
     output:
