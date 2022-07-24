@@ -12,7 +12,7 @@ library(batchelor)
 n_svd <- 100
 
 # Convert data to friendly sparse format
-assay(sce, "X") <- as(assay(sce, "X"), "CsparseMatrix")
+assay(sce, "X") <- as(assay(sce, "X"), "CsparseMatrix") # nolint: object_name_linter
 reducedDim(sce, "mode2") <- as(reducedDim(sce, "mode2"), "CsparseMatrix")
 
 # Check parameters
