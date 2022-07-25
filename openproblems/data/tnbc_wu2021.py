@@ -8,7 +8,8 @@ import tempfile
 URL = "https://figshare.com/ndownloader/files/36352914"
 
 
-@utils.loader(data_url=URL)
+@utils.loader(data_url=URL,
+              data_reference="https://doi.org/10.1038/s41588-021-00911-1")
 def load_tnbc_data(test=False):
     """Download TNBC data (Wu et al., 2021) from Figshare."""
     if test:

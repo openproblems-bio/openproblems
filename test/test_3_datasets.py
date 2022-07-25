@@ -137,7 +137,13 @@ class TestDataset(unittest.TestCase):
     def test_metadata(self):
         """Test for existence of dataset metadata."""
         assert hasattr(self.dataset, "metadata")
-        for attr in ["dataset_name", "data_url", "dataset_summary", "image"]:
+        for attr in [
+            "dataset_name",
+            "data_url",
+            "data_reference",
+            "dataset_summary",
+            "image",
+        ]:
             assert attr in self.dataset.metadata
             assert self.dataset.metadata[attr] is not None
 
@@ -148,3 +154,7 @@ class TestDataset(unittest.TestCase):
         assert len(self.dataset.metadata["dataset_summary"]) < DATASET_SUMMARY_MAXLEN
         assert isinstance(self.dataset.metadata["data_url"], str)
         assert utils.asserts.assert_url_accessible(self.dataset.metadata["data_url"])
+        assert isinstance(self.dataset.metadata["data_reference"], str)
+        assert utils.asserts.assert_url_accessible(
+            self.dataset.metadata["data_reference"]
+        )

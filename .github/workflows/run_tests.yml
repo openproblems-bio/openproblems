@@ -240,6 +240,28 @@ jobs:
         sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
         sudo apt-get install -qy --no-install-recommends libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
 
+    - name: Check Tower authentication
+      env:
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+        TOWER_ORG_ID: 9180144064527
+        TOWER_WORKSPACE_ID: 53907369739130
+      run: |
+        result=$(
+          curl -X GET "https://api.tower.nf/orgs/${TOWER_ORG_ID}/workspaces/${TOWER_WORKSPACE_ID}" \
+          -H "Accept: application/json" \
+          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}" || \
+          (
+            echo "Tower authentication failed; set TOWER_ACCESS_KEY in repo secrets." >&2 &&
+            echo "See CONTRIBUTING.md for details." >&2 && \
+            exit 1
+          )
+        )
+        if [ -z "${result}" ]; then
+          echo "Tower authentication failed; email singlecellopenproblems@protonmail.com with a request to be added to the openproblems-bio workspace"
+          exit 1
+        fi
+      shell: /bin/bash -e {0}
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -262,7 +284,7 @@ jobs:
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
         REPO_PARSED=$(echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6)
-        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g')
+        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[^a-zA-Z0-9]:-:g')
         if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
           BRANCH=`echo $BRANCH_PARSED | head -c 40`
         else
