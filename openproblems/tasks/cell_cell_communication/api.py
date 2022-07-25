@@ -60,7 +60,9 @@ def sample_dataset():
     adata.obs["label"] = adata.obs.cell_name
 
     adata.uns["bench"] = pd.DataFrame(
-        np.random.binomial(1, 0.1, 10), columns=["response"]
+        {"response": np.random.binomial(1, 0.2, 50),
+         "ligand": choices(adata.var.index, k=50),
+         "target": choices(list(set(adata.obs.label)), k=50)}
     )
 
     # assign to human prior knowledge

@@ -5,7 +5,7 @@ from ....tools.utils import check_r_version
 
 import functools
 
-_r_liana = r_function("liana.R", args="sce, ...")
+_r_liana = r_function("liana.R", args="sce, test, ...")
 
 _liana_method = functools.partial(
     method,
@@ -28,7 +28,7 @@ def liana(adata, score_col="aggregate_rank", asc=True, test=False, **kwargs):
     del adata.layers["log_cpm"]
 
     # Run LIANA
-    liana_res = _r_liana(adata, **kwargs)
+    liana_res = _r_liana(adata, test=test, **kwargs)
 
     # Format results
     liana_res["score"] = liana_res[score_col]
