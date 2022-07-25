@@ -1,5 +1,6 @@
 from openproblems.tools.utils import assert_finite  # noqa
 
+import functools
 import numpy as np
 import scipy.sparse
 
@@ -33,6 +34,7 @@ def _response_ok(response):
     return False
 
 
+@functools.lru_cache(None)
 def assert_url_accessible(url):
     import requests
 

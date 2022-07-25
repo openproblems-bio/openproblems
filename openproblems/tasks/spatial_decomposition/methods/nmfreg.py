@@ -9,7 +9,7 @@ import numpy as np
     method_name="NMF-reg",
     paper_name="Slide-seq: A scalable technology for measuring genome-wide"
     " expression at high spatial resolution",
-    paper_url="https://science.sciencemag.org/content/363/6434/1463",
+    paper_url="https://doi.org/10.1126/science.aaw1219",
     paper_year=2019,
     code_url="https://github.com/tudaga/NMFreg_tutorial",
 )
