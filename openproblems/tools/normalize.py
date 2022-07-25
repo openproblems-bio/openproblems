@@ -14,8 +14,8 @@ _scran = scprep.run.RFunction(
         """,
     args="sce, min.mean=0.1",
     body="""
-    if(class(assay(sce))!="dgCMatrix"){ # deal /w dgRMatrix conversion bug
-    assay(sce) <- as(as.matrix(assay(sce)), Class="sparseMatrix")
+    if(class(sce@assays@data$X)!="dgCMatrix"){ # dgRMatrix conversion bug
+    sce@assays@data$X <- as(as.matrix(sce@assays@data$X), Class="sparseMatrix")
     }
     sce <- computeSumFactors(
            sce, min.mean=min.mean,

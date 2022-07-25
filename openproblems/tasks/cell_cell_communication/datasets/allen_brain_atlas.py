@@ -5,6 +5,7 @@ from ....tools.decorators import dataset
 @dataset(
     "~15k Murine Brain cells" "Tasic, B. et al., 2016. Nat. Neurosci. 19, 335–346 .",
     data_url=load_mouse_brain_atlas.metadata["data_url"],
+    data_reference=load_mouse_brain_atlas.metadata["data_reference"],
     dataset_summary="TODO",
     image="openproblems-r-extras",
 )

@@ -6,6 +6,7 @@ from ....tools.decorators import dataset
     "~43k Cells from Triple Negative Breast Cancer"
     "Wu et al., 2021. Nature genetics, 53(9), pp.1334-1347.",
     data_url=load_tnbc_data.metadata["data_url"],
+    data_reference=load_tnbc_data.metadata["data_reference"],
     dataset_summary="TODO",
     image="openproblems-r-extras",
 )
