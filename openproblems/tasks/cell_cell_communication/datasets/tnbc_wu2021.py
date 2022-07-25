@@ -7,6 +7,7 @@ from ....tools.decorators import dataset
     "Wu et al., 2021. Nature genetics, 53(9), pp.1334-1347.",
     data_url=load_tnbc_data.metadata["data_url"],
     dataset_summary="TODO",
+    image="openproblems-r-extras",
 )
 def tnbc_data(test=False):
     return load_tnbc_data(test=test)
