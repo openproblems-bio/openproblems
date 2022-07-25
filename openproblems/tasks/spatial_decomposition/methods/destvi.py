@@ -31,6 +31,6 @@ def destvi(adata, test=False, max_epochs_sc=None, max_epochs_sp=None):
 
     st_model = DestVI.from_rna_model(adata_sp, sc_model)
     st_model.train(max_epochs=max_epochs_sp)
-    adata_sp.obsm["proportions_pred"] = st_model.get_proportions()
+    adata_sp.obsm["proportions_pred"] = st_model.get_proportions().to_numpy()
     adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata_sp
