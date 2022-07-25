@@ -8,8 +8,7 @@ import tempfile
 URL = "https://figshare.com/ndownloader/files/36352287"
 
 
-@utils.loader(data_url=URL,
-              data_reference="https://doi.org/10.1038/nn.4216")
+@utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/nn.4216")
 def load_mouse_brain_atlas(test=False):
     """Download Allen Brain (Taisc et al.,2016) data from Figshare."""
     if test:
