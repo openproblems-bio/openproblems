@@ -5,7 +5,8 @@ from ..utils import split_sc_and_sp
 
 @method(
     method_name="DestVI",
-    paper_name="DestVI identifies continuums of cell types in spatial transcriptomics data",  # noqa: E501
+    paper_name="DestVI identifies continuums of cell types in spatial "
+    "transcriptomics data",
     paper_url="https://doi.org/10.1038/s41587-022-01272-8",
     paper_year=2022,
     code_url="https://github.com/YosefLab/scvi-tools",
