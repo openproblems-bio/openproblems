@@ -4,15 +4,15 @@
 # @return a tibble with liana results
 
 # Libraries
-library(SingleCellExperiment, quietly=TRUE)
-library(tibble, quietly=TRUE)
-library(dplyr, quietly=TRUE)
-library(liana, quietly=TRUE)
+library(SingleCellExperiment, quietly = TRUE)
+library(tibble, quietly = TRUE)
+library(dplyr, quietly = TRUE)
+library(liana, quietly = TRUE)
 
 # Parameters
 expr_prop <- 0.1
 idents_col <- "label"
-nperms <- if(test) 2 else 1000
+nperms <- if (test) 2 else 1000
 
 # Convert data to an R-friendly sparse format
 sce@assays@data$counts <-
@@ -40,7 +40,7 @@ liana_res <- liana_wrap(sce,
   expr_prop = expr_prop,
   idents_col = idents_col,
   base = 2.718282, # Relevant only for logfc
-  permutation.params = list(nperms=nperms), # Relevant only for CPDB
+  permutation.params = list(nperms = nperms), # Relevant only for CPDB
   ...
 )
 
