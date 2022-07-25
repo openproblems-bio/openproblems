@@ -12,7 +12,7 @@ log = logging.getLogger("openproblems")
     method_name="ALRA",
     paper_name="Zero-preserving imputation of scRNA-seq data using "
     "low-rank approximation",
-    paper_url="https://www.biorxiv.org/content/10.1101/397588v1",
+    paper_url="https://doi.org/10.1101/397588",
     paper_year=2018,
     code_url="https://github.com/KlugerLab/ALRA",
     image="openproblems-r-extras",
