@@ -32,7 +32,7 @@ def load_pancreas(test=False, integer_only=False):
         keep_cell_idx = np.concatenate(
             [
                 np.random.choice(
-                    np.argwhere(adata.obs["celltype"].isin(ct).to_numpy()).flatten(),
+                    np.argwhere(adata.obs["celltype"].to_numpy() == ct).flatten(),
                     250,
                     replace=False,
                 )
