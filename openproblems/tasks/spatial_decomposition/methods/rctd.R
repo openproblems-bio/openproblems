@@ -1,8 +1,14 @@
+#' RCTD
+#'
+#' R base for rctd.py
+#'
+#' @param sce_sc SingleCellExperiment single-cell dataset
+#' @param sce_sp SingleCellExperiment spatial dataset
+#' @return sce_sp SingleCellExperiment spatial dataset with predictions in obs
+
 library(spacexr)
 library(SingleCellExperiment)
 library(Matrix)
-
-# R base for rctd.py
 
 # get single cell reference counts
 sc_counts <- assay(sce_sc, "X")
