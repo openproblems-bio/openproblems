@@ -27,11 +27,19 @@ def destvi(adata, test=False, max_epochs_sc=None, max_epochs_sp=None):
 
     CondSCVI.setup_anndata(adata_sc, labels_key="label")
     sc_model = CondSCVI(adata_sc, weight_obs=False)
-    sc_model.train(max_epochs=max_epochs_sc, early_stopping=True)
+    sc_model.train(
+        max_epochs=max_epochs_sc,
+        early_stopping=True,
+        early_stopping_monitor="reconstruction_loss_train",
+    )
     DestVI.setup_anndata(adata)
 
     st_model = DestVI.from_rna_model(adata, sc_model)
-    st_model.train(max_epochs=max_epochs_sp, early_stopping=True)
+    st_model.train(
+        max_epochs=max_epochs_sp,
+        early_stopping=True,
+        early_stopping_monitor="reconstruction_loss_train",
+    )
     adata.obsm["proportions_pred"] = st_model.get_proportions().to_numpy()
     adata.uns["method_code_version"] = check_version("scvi-tools")
     return adata
