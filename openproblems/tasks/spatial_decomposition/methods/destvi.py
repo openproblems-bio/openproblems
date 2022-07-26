@@ -1,6 +1,7 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 from ..utils import split_sc_and_sp
+from typing import Optional
 
 
 @method(
@@ -12,7 +13,12 @@ from ..utils import split_sc_and_sp
     code_url="https://github.com/YosefLab/scvi-tools",
     image="openproblems-python-extras",
 )
-def destvi(adata, test=False, max_epochs_sc=None, max_epochs_sp=None):
+def destvi(
+    adata,
+    test: bool = False,
+    max_epochs_sc: Optional[int] = None,
+    max_epochs_sp: Optional[int] = None,
+):
     from scvi.model import CondSCVI
     from scvi.model import DestVI
 
