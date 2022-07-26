@@ -34,10 +34,14 @@ def docker_hash(image_name):
     """Get the docker image hash associated with an image."""
     subprocess.run(["docker", "pull", "-q", image_name])
     p = subprocess.run(
-        ["docker", "inspect", "--format='{{index .RepoDigests 0}}'", image_name],
+        [
+            "docker",
+            "inspect",
+            "-f='{{ index .Config.Labels \"bio.openproblems.hash\"}}'",
+            image_name,
+        ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        cwd=os.path.dirname(__file__),
     )
     if p.returncode != 0:
         raise RuntimeError(p.stderr.decode())

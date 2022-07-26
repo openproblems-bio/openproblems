@@ -15,7 +15,9 @@ Python packages:
 * molecular-cross-validation
 * MulticoreTSNE
 * phate
+* scvi-tools
 * neuralee
+* tangram-sc
 * torch
 * tensorflow-cpu
 * ivis
