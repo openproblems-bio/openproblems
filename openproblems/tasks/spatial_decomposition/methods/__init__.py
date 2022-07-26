@@ -1,3 +1,4 @@
+from .destvi import destvi
 from .nmfreg import nmfreg
 from .nnls import nnls_scipy
 from .nusvr import nusvr_sklearn
