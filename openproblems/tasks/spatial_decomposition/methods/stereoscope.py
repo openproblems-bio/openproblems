@@ -19,7 +19,7 @@ def stereoscope(adata, test=False, max_epochs_sc=None, max_epochs_sp=None):
     if test:
         max_epochs_sp = max_epochs_sp or 10
         max_epochs_sc = max_epochs_sc or 10
-    else:
+    else:  # pragma: nocover
         max_epochs_sc = max_epochs_sc or 100
         max_epochs_sp = max_epochs_sp or 1000
 
