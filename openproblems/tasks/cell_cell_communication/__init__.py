@@ -6,7 +6,7 @@ from . import metrics
 
 _task_name = "Cell-Cell Communication Inference"
 _task_summary = (
-    "Evaluate the methods' ability to detect assumed truth intercellular events"
+    "Detect intercellular communication events between cell types"
 )
 
 DATASETS = utils.get_callable_members(datasets)
