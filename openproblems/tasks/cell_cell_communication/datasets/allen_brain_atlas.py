@@ -3,10 +3,11 @@ from ....tools.decorators import dataset
 
 
 @dataset(
-    "~15k Murine Brain cells" "Tasic, B. et al., 2016. Nat. Neurosci. 19, 335–346 .",
+    "~15k Murine Brain cells",
     data_url=load_mouse_brain_atlas.metadata["data_url"],
     data_reference=load_mouse_brain_atlas.metadata["data_reference"],
-    dataset_summary="TODO",
+    dataset_summary="A murine brain atlas with inferred spatially-adjacent "
+                    "cell types as assumed benchmark truth",
     image="openproblems-r-extras",
 )
 def mouse_brain_atlas(test=False):

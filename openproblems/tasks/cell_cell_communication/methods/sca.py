@@ -6,7 +6,7 @@ import functools
 _sca_method = functools.partial(
     method,
     paper_name="SingleCellSignalR: inference of intercellular networks "
-    "from single-cell transcriptomics.",
+    "from single-cell transcriptomics",
     paper_url="https://academic.oup.com/nar/article/48/10/e55/5810485",
     paper_year=2021,
     code_url="https://github.com/saezlab/liana",

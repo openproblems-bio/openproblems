@@ -6,7 +6,7 @@ import functools
 _cellphonedb_method = functools.partial(
     method,
     paper_name="CellPhoneDB: inferring cell–cell communication from "
-    "combined expression of multi-subunit ligand–receptor complexes.",
+    "combined expression of multi-subunit ligand–receptor complexes",
     paper_url="https://www.nature.com/articles/s41596-020-0292-x",
     paper_year=2020,
     code_url="https://github.com/saezlab/liana",

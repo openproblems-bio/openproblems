@@ -3,11 +3,11 @@ from ....tools.decorators import dataset
 
 
 @dataset(
-    "~43k Cells from Triple Negative Breast Cancer"
-    "Wu et al., 2021. Nature genetics, 53(9), pp.1334-1347.",
+    "~43k Cells from Triple Negative Breast Cancer",
     data_url=load_tnbc_data.metadata["data_url"],
     data_reference=load_tnbc_data.metadata["data_reference"],
-    dataset_summary="TODO",
+    dataset_summary="A single-cell atlas of human breast cancers with inferred"
+                    " cytokine activities as assumed benchmark truth",
     image="openproblems-r-extras",
 )
 def tnbc_data(test=False):

@@ -5,7 +5,7 @@ import functools
 
 _natmi_method = functools.partial(
     method,
-    paper_name="Predicting cell-to-cell communication networks using NATMI.",
+    paper_name="Predicting cell-to-cell communication networks using NATMI",
     paper_url="https://www.nature.com/articles/s41467-020-18873-z",
     paper_year=2021,
     code_url="https://github.com/saezlab/liana",

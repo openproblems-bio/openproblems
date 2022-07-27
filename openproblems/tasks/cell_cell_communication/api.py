@@ -1,7 +1,5 @@
 from ...data.sample import load_sample_data
 from ...tools.decorators import dataset
-from random import choices
-from random import seed
 
 import numpy as np
 import pandas as pd
@@ -13,6 +11,7 @@ def check_dataset(adata):
     assert "label" in adata.obs
     assert "bench" in adata.uns
     assert "response" in adata.uns["bench"]
+    assert np.issubdtype(adata.uns['bench']['response'].dtype, int)
     assert "target_organism" in adata.uns
     assert np.isreal(adata.uns["target_organism"])
     return True
@@ -62,8 +61,8 @@ def sample_dataset():
     adata.uns["bench"] = pd.DataFrame(
         {
             "response": np.random.binomial(1, 0.2, 50),
-            "ligand": choices(adata.var.index, k=50),
-            "target": choices(list(set(adata.obs.label)), k=50),
+            "ligand": np.random.choice(adata.var.index, 50),
+            "target": np.random.choice(list(set(adata.obs.label)), 50),
         }
     )
 
@@ -75,17 +74,17 @@ def sample_dataset():
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
     row_num = 10
-    seed(1234)
+    np.random.seed(1234)
 
     df = pd.DataFrame(np.random.random((row_num, 1)), columns=["score"])
 
     celltypes = list(map(pd.util.testing.rands, (3, 3, 4, 5)))
     lrs = list(map(pd.util.testing.rands, (4, 4, 4, 6)))
 
-    df["source"] = choices(celltypes, k=row_num)
-    df["target"] = choices(celltypes, k=row_num)
-    df["ligand"] = choices(lrs, k=row_num)
-    df["receptor"] = choices(lrs, k=row_num)
+    df["source"] = np.random.choice(celltypes, row_num)
+    df["target"] = np.random.choice(celltypes, row_num)
+    df["ligand"] = np.random.choice(lrs, row_num)
+    df["receptor"] = np.random.choice(lrs, row_num)
 
     adata.uns["ccc"] = df
     return adata
