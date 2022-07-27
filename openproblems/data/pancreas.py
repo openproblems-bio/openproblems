@@ -39,7 +39,7 @@ def load_pancreas(test=False, integer_only=False):
                 for ct in keep_celltypes
             ]
         )
-        adata = adata[adata.obs[keep_cell_idx]]
+        adata = adata[adata.obs.index[keep_cell_idx]]
 
         # Ensure there are no cells or genes with 0 counts
         utils.filter_genes_cells(adata)
