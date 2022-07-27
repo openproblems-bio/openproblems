@@ -9,21 +9,21 @@ with an ever-growing number of computational tools developed for this purpose.
 Different tools propose distinct preprocessing steps with diverse
 scoring functions, that are challenging to compare and evaluate.
 Furthermore, each tool typically comes with its own set of prior knowledge.
-To harmonize these, we recently developed the
-[LIANA](https://github.com/saezlab/liana) framework, which is
-used extensively at the current stage of the task.
+To harmonize these, [Dimitrov et
+al](https://doi.org/10.1038/s41467-022-30755-0) recently developed the
+[LIANA](https://github.com/saezlab/liana) framework, which is used
+as a foundation for this task.
 
 The challenges in evaluating the tools are further exacerbated by the
 lack of an appropriate gold standard to benchmark the performance of
-CCC methods. In a [recent publication](https://rdcu.be/cR69y), we used
-alternative data modalities, including the spatial proximity of cell types
-and inferred downstream cytokine activities, to assess the ability
-of the methods to detect biological signal. Yet, these modalities are only
-approximations of biological reality and come with their own assumptions
-and limitation. We thus hope that the **OpenProblems** platform will allow
-for the inclusion of more datasets with known ground truth interactions,
-with which the limitations and advantages of the
-different CCC methods will be better understood.
+CCC methods. To solve this, Dimitrov et al use alternative data modalities,
+including the spatial proximity of cell types and inferred downstream
+cytokine activities, to generate an inferred ground truth. However, 
+these modalities are only approximations of biological reality and come
+with their own assumptions and limitations. In time, the inclusion of more
+datasets with known ground truth interactions will become available, from
+which the limitations and advantages of the different CCC methods will
+be better understood.
 
 ## The metrics
 
@@ -31,11 +31,12 @@ Metrics for cell-cell communication aim to characterize how good are
 the different scoring functions/methods at prioritizing
 assumed truth predictions.
 
-`Odds ratios`: represent the ratio of true and false positives within a set of
-prioritized interactions (top ranked hits) versus the same ratio for the
-remainder of the interactions. Thus, in this scenario odds ratios quantify
-the strength of association between the ability of methods to prioritize
-interactions and those interactions assigned to the positive class.
+* **Odds ratio**: The odds ratio represents the ratio of true and false
+positives within a set of prioritized interactions (top ranked hits) versus
+the same ratio for the remainder of the interactions. Thus, in this
+scenario odds ratios quantify the strength of association between the
+ability of methods to prioritize interactions and those interactions
+assigned to the positive class.
 
 ## API
 
