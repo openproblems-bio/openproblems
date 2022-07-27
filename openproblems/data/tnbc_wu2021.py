@@ -15,11 +15,6 @@ def load_tnbc_data(test=False):
         # load full data first, cached if available
         adata = load_tnbc_data(test=False)
 
-        # Subsample data to 500 random cells
-        sc.pp.subsample(adata, n_obs=500)
-        # Basic filtering
-        utils.filter_genes_cells(adata)
-
         # Keep only relevant response ligands
         lr = list(set(adata.uns["bench"].ligand))
         # add corresponding receptors
@@ -46,6 +41,15 @@ def load_tnbc_data(test=False):
             "IL13RA2",
         ]
         adata = adata[:, adata.var.index.isin(lr)].copy()
+
+        # Keep only cells with nonzero relevant ligands/receptors
+        utils.filter_genes_cells(adata)
+
+        # Subsample data to 500 random cells
+        sc.pp.subsample(adata, n_obs=500)
+
+        # Remove empty
+        utils.filter_genes_cells(adata)
 
         return adata
 
