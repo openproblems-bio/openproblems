@@ -7,7 +7,7 @@ from ....tools.decorators import dataset
     data_url=load_mouse_brain_atlas.metadata["data_url"],
     data_reference=load_mouse_brain_atlas.metadata["data_reference"],
     dataset_summary="A murine brain atlas with inferred spatially-adjacent "
-                    "cell types as assumed benchmark truth",
+    "cell types as assumed benchmark truth",
     image="openproblems-r-extras",
 )
 def mouse_brain_atlas(test=False):

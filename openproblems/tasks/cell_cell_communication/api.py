@@ -11,7 +11,7 @@ def check_dataset(adata):
     assert "label" in adata.obs
     assert "bench" in adata.uns
     assert "response" in adata.uns["bench"]
-    assert np.issubdtype(adata.uns['bench']['response'].dtype, int)
+    assert np.issubdtype(adata.uns["bench"]["response"].dtype, int)
     assert "target_organism" in adata.uns
     assert np.isreal(adata.uns["target_organism"])
     return True
