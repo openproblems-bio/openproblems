@@ -33,7 +33,7 @@ def load_pancreas(test=False, integer_only=False):
             [
                 np.random.choice(
                     np.argwhere(adata.obs["celltype"].to_numpy() == ct).flatten(),
-                    250,
+                    min(250, np.sum(adata.obs["celltype"].to_numpy() == ct)),
                     replace=False,
                 )
                 for ct in keep_celltypes
