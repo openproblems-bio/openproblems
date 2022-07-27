@@ -14,7 +14,7 @@ _scran = scprep.run.RFunction(
         """,
     args="sce, min.mean=0.1",
     body="""
-    if(is(sce@assays@data$X, "RsparseMatrix")) { 
+    if(is(sce@assays@data$X, "RsparseMatrix")) {
         # scran does not work with RsparseMatrix
         sce@assays@data$X <- as(sce@assays@data$X, "CsparseMatrix")
     }
