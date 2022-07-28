@@ -40,7 +40,7 @@ jobs:
         echo "UPDATE_BRANCH_NAME=dependencies/r/${PKG_CHANGED}" >> $GITHUB_ENV
 
     - name: Create Pull Request
-      if: "env.PKG_CHANGED != ''"
+      if: "env.PKG_CHANGED != 'No upgrades available'"
       uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
