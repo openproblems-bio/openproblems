@@ -67,8 +67,10 @@ upgrade_renv <- function(requirements_file) {
       )
       cat(paste0("\nUpgrade triggered by:\n", upgraded_remotes$primary, "\n"))
     } else {
-      cat("\nNo upgrades available\n")
+      cat("\nNo upgrades available\n\n")
     }
+  } else {
+    cat("\n")
   }
 }
 
