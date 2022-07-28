@@ -4,10 +4,14 @@ from .....tools.decorators import dataset
 import scanpy as sc
 
 
-@dataset(dataset_name="Pancreas (by batch)", image="openproblems")
+@dataset(
+    dataset_name="Pancreas (by batch)",
+    data_url=load_pancreas.metadata["data_url"],
+    dataset_summary="TODO",
+    image="openproblems",
+)
 def pancreas_batch(test=False):
     adata = load_pancreas(test)
-    from_cache = adata.__from_cache__
     adata.obs["labels"] = adata.obs["celltype"]
     adata.obs["batch"] = adata.obs["tech"]
 
@@ -23,5 +27,4 @@ def pancreas_batch(test=False):
 
     sc.pp.neighbors(adata, use_rep="X_uni", key_added="uni")
 
-    adata.__from_cache__ = from_cache
     return adata

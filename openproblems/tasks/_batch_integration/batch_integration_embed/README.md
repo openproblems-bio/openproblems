@@ -32,6 +32,7 @@ Methods are run in four different scenarios that include scaling and highly vari
 * `full_scaled`
 * `hvg_scaled`
 
+Where `full` refers to the full gene set that is used as input to the method.
 
 Metrics can compare:
 * `adata.obsm['X_emb']` to `adata.obsm['X_uni']`,

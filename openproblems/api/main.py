@@ -8,11 +8,12 @@ from . import load
 from . import parser
 from . import run
 from . import tasks
+from . import test
 from . import utils
 
 SUBCOMMANDS = {
     utils.module_to_str(module): module
-    for module in [tasks, list, image, load, run, evaluate, hash]
+    for module in [tasks, list, image, load, run, evaluate, hash, test]
 }
 
 
