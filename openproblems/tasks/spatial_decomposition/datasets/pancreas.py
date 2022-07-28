@@ -1,4 +1,3 @@
-from ....data.pancreas import get_pancreas_integer
 from ....data.pancreas import load_pancreas
 from ....data.utils import filter_genes_cells
 from ....tools.decorators import dataset
@@ -15,8 +14,7 @@ import scanpy as sc
     " (Dirichlet alpha=1)",
 )
 def pancreas_alpha_1(test=False, n_obs=100):
-    adata = load_pancreas(test=test)
-    adata = get_pancreas_integer(adata)
+    adata = load_pancreas(test=test, integer_only=True)
     sc.pp.filter_genes(adata, min_counts=10)
     adata.obs["label"] = adata.obs["celltype"]
 
@@ -33,8 +31,7 @@ def pancreas_alpha_1(test=False, n_obs=100):
     " (Dirichlet alpha=5)",
 )
 def pancreas_alpha_5(test=False, n_obs=100):
-    adata = load_pancreas(test=test)
-    adata = get_pancreas_integer(adata)
+    adata = load_pancreas(test=test, integer_only=True)
     adata.obs["label"] = adata.obs["celltype"]
 
     merged_adata = generate_synthetic_dataset(adata, n_obs=n_obs, alpha=5)
@@ -50,8 +47,7 @@ def pancreas_alpha_5(test=False, n_obs=100):
     " (Dirichlet alpha=0.5)",
 )
 def pancreas_alpha_0_5(test=False, n_obs=100):
-    adata = load_pancreas(test=test)
-    adata = get_pancreas_integer(adata)
+    adata = load_pancreas(test=test, integer_only=True)
     adata.obs["label"] = adata.obs["celltype"]
 
     merged_adata = generate_synthetic_dataset(adata, n_obs=n_obs, alpha=0.5)
