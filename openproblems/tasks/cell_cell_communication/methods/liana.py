@@ -5,6 +5,15 @@ from ....tools.utils import check_r_version
 
 import functools
 
+
+# Helper function to filter according to permutation p-values
+def _p_filt(x, y):
+    if x <= 0.05:
+        return y
+    else:
+        return 0
+
+
 _r_liana = r_function("liana.R", args="sce, test, ...")
 
 _liana_method = functools.partial(
@@ -51,14 +60,6 @@ _cellphonedb_method = functools.partial(
 )
 
 
-# Helper function to filter according to permutation p-values
-def _p_filt(x, y):
-    if x <= 0.05:
-        return y
-    else:
-        return 0
-
-
 @_cellphonedb_method(
     method_name="CellPhoneDB",
 )
@@ -96,7 +97,7 @@ def connectome(adata, test=False):
 _logfc_method = functools.partial(
     method,
     paper_name="Comparison of methods and resources for cell-cell "
-    "communication inference from single-cell RNA-Seq data",
+               "communication inference from single-cell RNA-Seq data",
     paper_url="https://www.nature.com/articles/s41467-022-30755-0",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
