@@ -72,4 +72,4 @@ upgrade_renv <- function(requirements_file) {
   }
 }
 
-upgrade_renv(commandArgs(trailingOnly = TRUE)[1])
+suppressWarnings(upgrade_renv(commandArgs(trailingOnly = TRUE)[1]))

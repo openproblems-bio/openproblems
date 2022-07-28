@@ -28,7 +28,6 @@ jobs:
           docker pull -q singlecellopenproblems/${IMAGE}
           PKG_CHANGED=$(
             docker run -t --rm --user=root \
-              -e GITHUB_PAT=${GITHUB_TOKEN} \
               -v $(pwd):/usr/src/singlecellopenproblems \
               singlecellopenproblems/${IMAGE} \
               Rscript /usr/src/singlecellopenproblems/scripts/upgrade_renv.R \
