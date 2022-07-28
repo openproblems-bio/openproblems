@@ -5,6 +5,7 @@ from ....tools.decorators import dataset
 @dataset(
     "Human blood (HSCs and differentiation thereof). Nestorowa, et al. Blood. 2016",
     data_url=load_human_blood_nestorowa2016.metadata["data_url"],
+    data_reference=load_human_blood_nestorowa2016.metadata["data_reference"],
     dataset_summary="TODO",
 )
 def human_blood_nestorowa2016(test=False):

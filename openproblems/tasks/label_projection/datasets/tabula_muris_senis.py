@@ -7,6 +7,7 @@ import numpy as np
 @dataset(
     "Tabula Muris Senis Lung (random split)",
     data_url=load_tabula_muris_senis.metadata["data_url"],
+    data_reference=load_tabula_muris_senis.metadata["data_reference"],
     dataset_summary="TODO",
 )
 def tabula_muris_senis_lung_random(test=False):

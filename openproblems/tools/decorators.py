@@ -126,7 +126,11 @@ def metric(metric_name, maximize, image="openproblems"):
 
 
 def dataset(
-    dataset_name=None, data_url=None, dataset_summary=None, image="openproblems"
+    dataset_name=None,
+    data_url=None,
+    data_reference=None,
+    dataset_summary=None,
+    image="openproblems",
 ):
     """Decorate a dataset function.
 
@@ -136,6 +140,8 @@ def dataset(
         Unique human readable name of the dataset
     data_url : str
         Link to the original source of the dataset
+    data_reference : str
+        Link to the paper describing how the dataset was generated
     dataset_summary : str
         Short (<80 character) summary of the dataset
     image : str, optional (default: "openproblems")
@@ -154,6 +160,7 @@ def dataset(
             dataset_name=dataset_name,
             image=image,
             data_url=data_url,
+            data_reference=data_reference,
             dataset_summary=dataset_summary,
         )
         return apply_func
