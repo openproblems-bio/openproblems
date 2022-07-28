@@ -16,7 +16,7 @@ forecast@8.17.0
 hardhat@1.1.0
 hexbin@1.28.2
 htmltools@0.5.3
-htmlwidgets@1.5.3
+htmlwidgets@1.5.4
 igraph@1.2.11
 lifecycle@1.0.1
 Matrix@1.4-1
