@@ -19,7 +19,7 @@ _r_liana = r_function("liana.R", args="sce, test, ...")
 _liana_method = functools.partial(
     method,
     paper_name="Comparison of methods and resources for cell-cell "
-               "communication inference from single-cell RNA-Seq data",
+    "communication inference from single-cell RNA-Seq data",
     paper_url="https://www.nature.com/articles/s41467-022-30755-0",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
@@ -52,7 +52,7 @@ def liana(adata, score_col="aggregate_rank", asc=True, test=False, **kwargs):
 _cellphonedb_method = functools.partial(
     method,
     paper_name="CellPhoneDB: inferring cell–cell communication from "
-               "combined expression of multi-subunit ligand–receptor complexes",
+    "combined expression of multi-subunit ligand–receptor complexes",
     paper_url="https://www.nature.com/articles/s41596-020-0292-x",
     paper_year=2020,
     code_url="https://github.com/saezlab/liana",
@@ -79,7 +79,7 @@ def cellphonedb(adata, test=False):
 _connectome_method = functools.partial(
     method,
     paper_name="Computation and visualization of cell–cell signaling "
-               "topologies in single-cell systems data using Connectome",
+    "topologies in single-cell systems data using Connectome",
     paper_url="https://www.nature.com/articles/s41598-022-07959-x",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
@@ -97,7 +97,7 @@ def connectome(adata, test=False):
 _logfc_method = functools.partial(
     method,
     paper_name="Comparison of methods and resources for cell-cell "
-               "communication inference from single-cell RNA-Seq data",
+    "communication inference from single-cell RNA-Seq data",
     paper_url="https://www.nature.com/articles/s41467-022-30755-0",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
@@ -132,7 +132,7 @@ def natmi(adata, test=False):
 _sca_method = functools.partial(
     method,
     paper_name="SingleCellSignalR: inference of intercellular networks "
-               "from single-cell transcriptomics",
+    "from single-cell transcriptomics",
     paper_url="https://academic.oup.com/nar/article/48/10/e55/5810485",
     paper_year=2021,
     code_url="https://github.com/saezlab/liana",
