@@ -9,7 +9,6 @@ This is a sub-task of the overall batch integration task. Batch (or data) integr
 
 This sub-task was taken from a [benchmarking study of data integration methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
 
-
 ## API
 
 Datasets should contain the following attributes:
@@ -27,6 +26,7 @@ can be installed without package conflicts. For R methods, the `openproblems-r-e
 container is used.
 
 Methods are run in four different scenarios that include scaling and highly variable gene selection:
+
 * `full_unscaled`
 * `hvg_unscaled`
 * `full_scaled`
@@ -35,6 +35,7 @@ Methods are run in four different scenarios that include scaling and highly vari
 Where `full` refers to the full gene set that is used as input to the method.
 
 Metrics can compare:
+
 * `adata.obsm['X_emb']` to `adata.obsm['X_uni']`,
 * `adata.obsm['X_emb']` to `adata.obs['label']`, and/or
 * `adata.obsm['X_emb']` to `adata.obs['batch']`.
