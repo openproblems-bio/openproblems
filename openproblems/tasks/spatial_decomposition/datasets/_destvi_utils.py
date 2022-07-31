@@ -4,6 +4,7 @@ https://github.com/romain-lopez/DestVI-reproducibility/blob/master/simulations/
 """
 from ..utils import merge_sc_and_sp
 from numba import jit
+from pathlib import Path
 from scipy.spatial.distance import pdist
 from scipy.spatial.distance import squareform
 from sklearn.cluster import AgglomerativeClustering
@@ -65,11 +66,12 @@ def generate_synthetic_dataset_destvi(
     # parameters
     K = 100
     K_sampled = 20
+    main_dir = Path().resolve()
 
-    grtruth_PCA = np.load(f"{input_file}grtruth_PCA.npz")
+    grtruth_PCA = np.load(main_dir / f"{input_file}grtruth_PCA.npz")
     mean_, components_ = grtruth_PCA["mean_"], grtruth_PCA["components_"]
 
-    inv_dispersion = np.load(f"{input_file}inv-dispersion.npy")
+    inv_dispersion = np.load(main_dir / f"{input_file}inv-dispersion.npy")
 
     C = components_.shape[0]
     D = components_.shape[1]
