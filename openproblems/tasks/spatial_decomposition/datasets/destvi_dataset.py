@@ -8,7 +8,7 @@ from ....tools.decorators import dataset
     dataset_summary="Synthetic dataset from destvi manuscript.",
     image="openproblems-python-extras",
 )
-def destvi_dataset():
+def destvi_dataset(test=False):
     from ._destvi_utils import generate_synthetic_dataset_destvi
 
     merged_adata = generate_synthetic_dataset_destvi()
