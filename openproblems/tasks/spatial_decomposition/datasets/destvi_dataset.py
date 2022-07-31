@@ -1,6 +1,5 @@
 from ....data.utils import filter_genes_cells
 from ....tools.decorators import dataset
-from ._destvi_utils import generate_synthetic_dataset_destvi
 
 
 @dataset(
@@ -10,6 +9,8 @@ from ._destvi_utils import generate_synthetic_dataset_destvi
     image="openproblems-python-extras",
 )
 def destvi_dataset():
+    from ._destvi_utils import generate_synthetic_dataset_destvi
+
     merged_adata = generate_synthetic_dataset_destvi()
     filter_genes_cells(merged_adata)
     return merged_adata
