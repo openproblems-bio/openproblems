@@ -11,12 +11,12 @@ scoring functions, that are challenging to compare and evaluate.
 Furthermore, each tool typically comes with its own set of prior knowledge.
 To harmonize these, [Dimitrov et
 al, 2022](https://doi.org/10.1038/s41467-022-30755-0) recently developed the
-[LIANA](https://github.com/saezlab/liana) framework, which is used
+[LIANA](https://github.com/saezlab/liana) framework, which was used
 as a foundation for this task.
 
 The challenges in evaluating the tools are further exacerbated by the
 lack of an appropriate gold standard to benchmark the performance of
-CCC methods. To solve this, Dimitrov et al use alternative data modalities,
+CCC methods. To address this, Dimitrov et al use alternative data modalities,
 including the spatial proximity of cell types and inferred downstream
 cytokine activities, to generate an inferred ground truth. However,
 these modalities are only approximations of biological reality and come
@@ -46,12 +46,14 @@ benchmark. The assumed truth could essentially be in
 different forms, and we refer the reader to [our recent publication for more
 details](https://rdcu.be/cSs92).
 
-For example, the triple negative breast cancer dataset (`tnbc_wu2021`) portrays
+For example, the triple [negative breast cancer dataset](
+https://www.nature.com/articles/s41588-021-00911-1) (`tnbc_wu2021`) portrays
 benchmark truth in the form of inferred cytokine activities in the target cell
 types, as such in addition to the `response` column `adata.uns["ccc_target"]`,
 also contains `ligand` and `target` columns with which we can join the assumed
 truth to the output CCC predictions in `adata.uns['ccc']`.
-In the case of the murine brain dataset (`allen_brain_atlas`), we assume that
+In the case of the [murine brain dataset](
+https://www.nature.com/articles/nn.4216) (`allen_brain_atlas`), we assume that
 spatially-adjacent cell types are more likely to interact, hence interactions
 between them should be preferentially detected.
 Consequently, `adata.uns["ccc_target"]` contains `source`, `target`,
