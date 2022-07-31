@@ -65,13 +65,13 @@ knowledge of the CCC methods to the corresponding gene homologs.
 
 `adata.uns["ccc_target"]` should be a Pandas DataFrame containing the following
 columns:
-- `response`: int, binary response variable indicating whether an interaction
+* `response`: int, binary response variable indicating whether an interaction
 is assumed to have occurred
-- `source`: str, name of source cell type in interaction
-- `target`: str, name of target cell type in interaction
-- `ligand`: str, gene symbol of the ligand in an interaction
-- `receptor`: str, gene symbol of the receptor in an interaction (may be null)
-- `score`: float, score between -inf to +inf giving an inferred strength of
+* `source`: str, name of source cell type in interaction
+* `target`: str, name of target cell type in interaction
+* `ligand`: str, gene symbol of the ligand in an interaction
+* `receptor`: str, gene symbol of the receptor in an interaction (may be null)
+* `score`: float, score between -inf to +inf giving an inferred strength of
 the inferred interaction
 
 Metrics should evaluate the ability of methods to preferentially
