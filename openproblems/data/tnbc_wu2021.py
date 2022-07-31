@@ -5,7 +5,7 @@ import scanpy as sc
 import scprep
 import tempfile
 
-URL = "https://figshare.com/ndownloader/files/36352914"
+URL = "https://figshare.com/ndownloader/files/36488430"
 
 
 @utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/s41588-021-00911-1")
@@ -16,7 +16,7 @@ def load_tnbc_data(test=False):
         adata = load_tnbc_data(test=False)
 
         # Keep only relevant response ligands
-        lr = list(set(adata.uns["bench"].ligand))
+        lr = list(set(adata.uns["ccc_target"].ligand))
         # add corresponding receptors
         lr += [
             "IFNLR1",

@@ -9,9 +9,9 @@ import scanpy as sc
 def check_dataset(adata):
     """Check that dataset output fits expected API."""
     assert "label" in adata.obs
-    assert "bench" in adata.uns
-    assert "response" in adata.uns["bench"]
-    assert np.issubdtype(adata.uns["bench"]["response"].dtype, int)
+    assert "ccc_target" in adata.uns
+    assert "response" in adata.uns["ccc_target"]
+    assert np.issubdtype(adata.uns["ccc_target"]["response"].dtype, int)
     assert "target_organism" in adata.uns
     assert np.isreal(adata.uns["target_organism"])
     return True
@@ -19,9 +19,9 @@ def check_dataset(adata):
 
 def check_method(adata):
     """Check that method output fits expected API."""
-    assert "ccc" in adata.uns
+    assert "ccc_pred" in adata.uns
     # check if ligand-receptor and source-target (cell type) columns exist
-    assert set(adata.uns["ccc"]).issuperset(
+    assert set(adata.uns["ccc_pred"]).issuperset(
         [
             "ligand",
             # 'receptor',
@@ -58,7 +58,7 @@ def sample_dataset():
     # transfer label
     adata.obs["label"] = adata.obs.cell_name
 
-    adata.uns["bench"] = pd.DataFrame(
+    adata.uns["ccc_target"] = pd.DataFrame(
         {
             "response": np.random.binomial(1, 0.2, 50),
             "ligand": np.random.choice(adata.var.index, 50),
@@ -86,5 +86,5 @@ def sample_method(adata):
     df["ligand"] = np.random.choice(lrs, row_num)
     df["receptor"] = np.random.choice(lrs, row_num)
 
-    adata.uns["ccc"] = df
+    adata.uns["ccc_pred"] = df
     return adata

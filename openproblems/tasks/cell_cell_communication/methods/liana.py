@@ -42,7 +42,7 @@ def liana(adata, score_col="aggregate_rank", asc=True, test=False, **kwargs):
     # Format results
     liana_res["score"] = liana_res[score_col]
     liana_res.sort_values("score", ascending=asc, inplace=True)
-    adata.uns["ccc"] = liana_res
+    adata.uns["ccc_pred"] = liana_res
 
     adata.uns["method_code_version"] = check_r_version("liana")
 
@@ -61,10 +61,10 @@ def cellphonedb(adata, test=False):
         adata, method="cellphonedb", score_col="lr.mean", asc=False, test=test
     )
     # Filter & Re-order
-    adata.uns["ccc"]["score"] = adata.uns["ccc"].apply(
+    adata.uns["ccc_pred"]["score"] = adata.uns["ccc_pred"].apply(
         lambda x: _p_filt(x.pvalue, x["lr.mean"]), axis=1
     )
-    adata.uns["ccc"].sort_values("score", ascending=False, inplace=True)
+    adata.uns["ccc_pred"].sort_values("score", ascending=False, inplace=True)
 
     return adata
 
