@@ -2,7 +2,7 @@
 From:
 https://github.com/romain-lopez/DestVI-reproducibility/blob/master/simulations/
 """
-from ..utils import merge_sc_and_sp
+from ...utils import merge_sc_and_sp
 from numba import jit
 from pathlib import Path
 from scipy.spatial.distance import pdist
@@ -53,8 +53,7 @@ def get_mean_normal(cell_types, gamma, mean_, components_):  # pragma: no cover
     return mean_normal
 
 
-def generate_synthetic_dataset_destvi(
-    input_file: str = "_input_data/",
+def generate_synthetic_dataset(
     lam_ct: float = 0.1,
     temp_ct: float = 1.0,
     lam_gam: float = 0.5,
@@ -66,12 +65,12 @@ def generate_synthetic_dataset_destvi(
     # parameters
     K = 100
     K_sampled = 20
-    main_dir = Path().resolve()
+    script_dir = Path(__file__).resolve().parent
 
-    grtruth_PCA = np.load(main_dir / f"{input_file}grtruth_PCA.npz")
+    grtruth_PCA = np.load(script_dir.joinpath("ground_truth_pca.npz").as_posix())
     mean_, components_ = grtruth_PCA["mean_"], grtruth_PCA["components_"]
 
-    inv_dispersion = np.load(main_dir / f"{input_file}inv-dispersion.npy")
+    inv_dispersion = np.load(script_dir.joinpath("inverse_dispersion.npy").as_posix())
 
     C = components_.shape[0]
     D = components_.shape[1]
@@ -177,6 +176,8 @@ def generate_synthetic_dataset_destvi(
         list_transformed = [transformed_mean_st_full, transformed_mean_st_partial]
     elif ct_study == 0:
         list_transformed = [transformed_mean_st_full]
+    else:
+        raise NotImplementedError
     for i, transformed_mean_st in enumerate(list_transformed):
         # Important remark: Gamma is parametrized by the rate = 1/scale!
         gamma_st = Gamma(
