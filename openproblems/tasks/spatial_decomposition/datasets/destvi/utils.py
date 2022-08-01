@@ -10,17 +10,10 @@ from scipy.spatial.distance import squareform
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.decomposition import PCA
 from sklearn.neighbors import kneighbors_graph
-from torch.distributions import Gamma
 
 import anndata
 import numpy as np
 import pandas as pd
-import torch
-
-np.random.seed(0)
-
-
-torch.manual_seed(0)
 
 
 def categorical(p, n_samples):
@@ -61,7 +54,13 @@ def generate_synthetic_dataset(
     bin_sampling: float = 1.0,
     ct_study: int = 0,
     grid_size: int = 10,
+    seed: int = 0,
 ):
+    import torch
+
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+
     # parameters
     K = 100
     K_sampled = 20
@@ -83,7 +82,6 @@ def generate_synthetic_dataset(
         temp_ct=temp_ct,
         lam_gam=lam_gam,
         sf_gam=sf_gam,
-        savefig=False,
     )
 
     cell_types_sc = categorical(freq_sample, K)
@@ -102,7 +100,7 @@ def generate_synthetic_dataset(
     inv_dispersion *= 1e2
 
     # Important remark: Gamma is parametrized by the rate = 1/scale!
-    gamma_s = Gamma(
+    gamma_s = torch.distributions.Gamma(
         concentration=torch.tensor(inv_dispersion),
         rate=torch.tensor(inv_dispersion) / torch.tensor(transformed_mean),
     ).sample()
@@ -180,7 +178,7 @@ def generate_synthetic_dataset(
         raise NotImplementedError
     for i, transformed_mean_st in enumerate(list_transformed):
         # Important remark: Gamma is parametrized by the rate = 1/scale!
-        gamma_st = Gamma(
+        gamma_st = torch.distributions.Gamma(
             concentration=torch.tensor(inv_dispersion),
             rate=torch.tensor(inv_dispersion) / torch.tensor(transformed_mean_st),
         ).sample()
@@ -220,7 +218,13 @@ def generate_synthetic_dataset(
 
 
 def generate_spatial_information(
-    grid_size, C, lam_ct, temp_ct, lam_gam, D, sf_gam, savefig: bool
+    grid_size,
+    C,
+    lam_ct,
+    temp_ct,
+    lam_gam,
+    D,
+    sf_gam,
 ):
     locations = (
         np.mgrid[-grid_size:grid_size:0.5, -grid_size:grid_size:0.5].reshape(2, -1).T
