@@ -58,6 +58,7 @@ Tasks in discussion:
 
 **Supervision** (_alphabetically_):
 
+* Jonathan Bloom (@jbloom22)
 * Smita Krishnaswamy, Yale
 * Fabian Theis, Helmholtz Munich
 
