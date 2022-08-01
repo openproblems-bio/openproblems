@@ -19,11 +19,11 @@ install_requires = [
 ]
 
 r_requires = [
-    "rpy2<3.5.3",
+    "rpy2<3.5.4",
     "anndata2ri==1.1.*",
 ]
 
-evaluate_requires = ["snakemake==7.8.*"]
+evaluate_requires = ["snakemake>=7.8,<7.12"]
 
 process_requires = ["numpyencoder==0.3.*"]
 

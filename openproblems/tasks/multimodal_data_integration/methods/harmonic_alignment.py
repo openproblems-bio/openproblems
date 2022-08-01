@@ -10,7 +10,7 @@ import sklearn.decomposition
 _harmonic_alignment_method = functools.partial(
     method,
     paper_name="Harmonic Alignment",
-    paper_url="https://epubs.siam.org/doi/abs/10.1137/1.9781611976236.36",
+    paper_url="https://doi.org/10.1137/1.9781611976236.36",
     paper_year=2020,
     code_url="https://github.com/KrishnaswamyLab/harmonic-alignment",
 )

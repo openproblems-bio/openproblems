@@ -177,6 +177,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
     output = dict(
         name=dataset.metadata["dataset_name"],
         data_url=dataset.metadata["data_url"],
+        data_reference=dataset.metadata["data_reference"],
         headers=dict(names=["Rank"], fixed=["Name", "Paper", "Website", "Code"]),
         results=list(),
     )

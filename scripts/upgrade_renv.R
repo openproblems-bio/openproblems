@@ -19,10 +19,15 @@ upgrade_first_available <- function(remotes) {
   for (remote in remotes) {
     cat(paste0(remote, "\n"))
     parsed_spec <- renv:::renv_remotes_parse(remote)
-    result <- renv::update(parsed_spec$package, prompt = FALSE)
+    package <- parsed_spec$package
+    if (is.null(package)) {
+      package <- parsed_spec$repo
+    }
+    result <- renv::update(package, prompt = FALSE)
     if (class(result) != "logical") {
       upgraded_remotes <- sapply(result, upgraded_remote_version)
-      return(upgraded_remotes)
+      primary <- upgraded_remotes[[package]]
+      return(list(primary = primary, upgraded = upgraded_remotes))
     }
   }
 }
@@ -52,18 +57,21 @@ upgrade_renv <- function(requirements_file) {
   if (length(remotes) > 0) {
     remotes_parsed <- drop_pinned(remotes)
     remotes_parsed <- sapply(remotes_parsed, strip_comments)
-    capture.output(suppressWarnings(suppressMessages(
-      upgraded_remotes <- upgrade_first_available(remotes_parsed)
-    )), file = nullfile())
+    upgraded_remotes <- upgrade_first_available(remotes_parsed)
     if (!is.null(upgraded_remotes)) {
-      cat("Upgrades are available:\n")
-      cat(paste(upgraded_remotes, collapse = "\n"))
+      cat("\nUpgrades are available:\n")
+      cat(paste(upgraded_remotes$upgraded, collapse = "\n"))
       cat("\n")
-      write_updates_to_file(remotes, upgraded_remotes, requirements_file)
+      write_updates_to_file(
+        remotes, upgraded_remotes$upgraded, requirements_file
+      )
+      cat(paste0("\nUpgrade triggered by:\n", upgraded_remotes$primary, "\n"))
     } else {
-      cat("No upgrades available\n")
+      cat("\nNo upgrades available\n\n")
     }
+  } else {
+    cat("\n")
   }
 }
 
-upgrade_renv(commandArgs(trailingOnly = TRUE)[1])
+suppressWarnings(upgrade_renv(commandArgs(trailingOnly = TRUE)[1]))

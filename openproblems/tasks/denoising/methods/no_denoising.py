@@ -5,7 +5,7 @@ from ....tools.utils import check_version
 @method(
     method_name="No denoising",
     paper_name="Molecular Cross-Validation for Single-Cell RNA-seq",
-    paper_url="https://www.biorxiv.org/content/10.1101/786269v1",
+    paper_url="https://doi.org/10.1101/786269",
     paper_year=2019,
     code_url="https://github.com/czbiohub/molecular-cross-validation",
 )

@@ -5,12 +5,12 @@ library(Seurat)
 # Only counts is converted to liger object. To pass our own normalized data,
 # store it in the "counts" slot
 sobj <- as.Seurat(sce, data = NULL)
-sobj@assays$RNA <- sobj@assays$originalexp # nolint
+sobj@assays$RNA <- sobj@assays$originalexp
 sobj@assays$RNA@counts <- sobj@assays$RNA@data
 
 # Create Liger object
 lobj <- seuratToLiger(sobj,
-  combined.seurat = T, meta.var = batch, renormalize = FALSE,
+  combined.seurat = TRUE, meta.var = batch, renormalize = FALSE,
   remove.missing = FALSE
 )
 
