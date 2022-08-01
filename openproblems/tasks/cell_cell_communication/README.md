@@ -39,25 +39,23 @@ assigned to the positive class.
 
 ## API
 
-Datasets should include cell type annotations in `adata.obs["label"]`,
-along with some assumed truth in `adata.uns["ccc_target"]` with a binary
-`response` vector [0; 1], and the corresponding columns relevant for the
-benchmark. The assumed truth could essentially be in
-different forms, and we refer the reader to [our recent publication for more
-details](https://rdcu.be/cSs92).
+### Datasets
 
-For example, the triple [negative breast cancer dataset](
-https://www.nature.com/articles/s41588-021-00911-1) (`tnbc_wu2021`) portrays
-benchmark truth in the form of inferred cytokine activities in the target cell
-types, as such in addition to the `response` column `adata.uns["ccc_target"]`,
-also contains `ligand` and `target` columns with which we can join the assumed
-truth to the output CCC predictions in `adata.uns['ccc']`.
-In the case of the [murine brain dataset](
-https://www.nature.com/articles/nn.4216) (`allen_brain_atlas`), we assume that
-spatially-adjacent cell types are more likely to interact, hence interactions
-between them should be preferentially detected.
-Consequently, `adata.uns["ccc_target"]` contains `source`, `target`,
-and `response`columns.
+Datasets should include cell type annotations in `adata.obs["label"]`, along with some
+assumed truth in `adata.uns["ccc_target"]`. The assumed truth could be derived from
+various proxies; we refer the reader to [Dimitrov et
+al](https://doi.org/10.1038/s41467-022-30755-0) for more details.
+
+`adata.uns["ccc_target"]` should be a Pandas DataFrame containing the following
+columns:
+
+* `response`: `int`, binary response variable indicating whether an interaction
+is assumed to have occurred
+* `source`: `str`, name of source cell type in interaction
+* `target`: `str`, name of target cell type in interaction
+* `ligand`: `str`, gene symbol of the ligand in an interaction
+* `receptor`: `str` or `np.nan`, gene symbol of the receptor in an interaction (may be
+  null)
 
 The datasets should also include a
 [NCBI taxonomy ID](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi)
@@ -65,17 +63,36 @@ in `adata.uns["target_organism"]` - used to convert the (typically human) prior
 knowledge of the CCC methods to the corresponding gene homologs.
 `adata.X` should contain the raw counts matrix.
 
-`adata.uns["ccc_target"]` should be a Pandas DataFrame containing the following
-columns:
+### Methods
 
-* `response`: int, binary response variable indicating whether an interaction
-is assumed to have occurred
-* `source`: str, name of source cell type in interaction
-* `target`: str, name of target cell type in interaction
-* `ligand`: str, gene symbol of the ligand in an interaction
-* `receptor`: str, gene symbol of the receptor in an interaction (may be null)
-* `score`: float, score between -inf to +inf giving an inferred strength of
-the inferred interaction
+Methods should predict interactions between cell types without using
+`adata.uns["ccc_target"]`. Predicted interactions should be stored in
+`adata.uns["ccc_pred"]` as a Pandas DataFrame containing the following columns:
 
-Metrics should evaluate the ability of methods to preferentially
-detect assumed truth CCC events.
+* `score`: `float`, score between `-inf` to `+inf` giving a predicted strength of the
+  inferred interaction
+* `source`: `str`, name of source cell type in interaction
+* `target`: `str`, name of target cell type in interaction
+* `ligand`: `str`, gene symbol of the ligand in an interaction
+* `receptor`: `str`, gene symbol of the receptor in an interaction
+
+### Metrics
+
+Metrics should evaluate the concordance between `adata.uns["ccc_target"]` and
+`adata.uns["ccc_pred"]` to evaluate the success of a method in predicting interactions.
+
+### Examples
+
+The triple [negative breast cancer dataset](
+https://www.nature.com/articles/s41588-021-00911-1) (`tnbc_wu2021`) portrays
+benchmark truth in the form of inferred cytokine activities in the target cell
+types, as such in addition to the `response` column `adata.uns["ccc_target"]`,
+also contains `ligand` and `target` columns with which we can join the assumed
+truth to the output CCC predictions in `adata.uns['ccc_pred']`.
+
+In the case of the [murine brain dataset](
+https://www.nature.com/articles/nn.4216) (`allen_brain_atlas`), we assume that
+spatially-adjacent cell types are more likely to interact, hence interactions
+between them should be preferentially detected.
+Consequently, `adata.uns["ccc_target"]` contains `source`, `target`,
+and `response` columns, but no `ligand` or `receptor` columns.
