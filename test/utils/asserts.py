@@ -1,5 +1,6 @@
 from openproblems.tools.utils import assert_finite  # noqa
 
+import functools
 import numpy as np
 import scipy.sparse
 
@@ -24,9 +25,19 @@ def assert_array_equal(X, Y):
         np.testing.assert_array_equal(X, Y)
 
 
+def _response_ok(response):
+    if response.ok:
+        return True
+    if response.status_code == 429:
+        # rejected; too many requests
+        return True
+    return False
+
+
+@functools.lru_cache(None)
 def assert_url_accessible(url):
     import requests
 
     with requests.head(url, headers=_REQUEST_HEADERS) as response:
-        assert response.ok, (url, response.status_code)
+        assert _response_ok(response), (url, response.status_code)
     return True
