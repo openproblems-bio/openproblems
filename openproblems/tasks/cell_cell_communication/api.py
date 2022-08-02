@@ -12,8 +12,22 @@ def check_dataset(adata):
     assert "ccc_target" in adata.uns
     assert "response" in adata.uns["ccc_target"]
     assert np.issubdtype(adata.uns["ccc_target"]["response"].dtype, int)
+    assert np.all(np.isin(adata.uns["ccc_target"]["response"], [0, 1]))
+    if 'source' in adata.uns["ccc_target"].columns:
+        assert np.all(np.isin(adata.uns["ccc_target"]["source"].unique(),
+                              np.unique(adata.obs[["label"]].values)))
+    if 'target' in adata.uns["ccc_target"].columns:
+        assert np.all(np.isin(adata.uns["ccc_target"]["target"].unique(),
+                              np.unique(adata.obs[["label"]].values)))
+    if 'receptor' in adata.uns["ccc_target"].columns:
+        assert np.any(np.isin(adata.uns["ccc_target"]["receptor"].unique(),
+                              adata.var.index))
+    if 'ligand' in adata.uns["ccc_target"].columns:
+        assert np.any(np.isin(adata.uns["ccc_target"]["ligand"].unique(),
+                              adata.var.index))
     assert "target_organism" in adata.uns
     assert np.issubdtype(adata.uns["target_organism"], np.integer)
+
     return True
 
 
@@ -67,7 +81,7 @@ def sample_dataset():
     )
 
     # assign to human prior knowledge
-    adata.uns["target_organism"] = 9606
+    adata.uns["target_organism"] = np.int64(9606)
     return adata
 
 
