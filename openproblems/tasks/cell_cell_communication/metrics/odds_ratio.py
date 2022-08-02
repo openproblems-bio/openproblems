@@ -7,7 +7,7 @@ import scipy.stats as stats
 @metric(metric_name="Odds Ratio", maximize=True)
 def odds_ratio(adata, top_n=100):
     # Join benchmark (assumed truth) and ccc results
-    # Get /w ccc_results and a response [0, 1] column
+    # Get /w ccc_target and a response [0, 1] column
     gt = adata.uns["ccc_target"].merge(adata.uns["ccc_pred"], how="right")
     gt = gt[gt["response"].notna()]
 

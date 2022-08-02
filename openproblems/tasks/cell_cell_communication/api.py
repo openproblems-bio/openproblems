@@ -13,7 +13,7 @@ def check_dataset(adata):
     assert "response" in adata.uns["ccc_target"]
     assert np.issubdtype(adata.uns["ccc_target"]["response"].dtype, int)
     assert "target_organism" in adata.uns
-    assert np.isreal(adata.uns["target_organism"])
+    assert np.issubdtype(adata.uns["target_organism"], np.integer)
     return True
 
 
