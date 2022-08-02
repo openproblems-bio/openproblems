@@ -18,14 +18,14 @@ def check_dataset(adata):
         assert np.all(
             np.isin(
                 adata.uns["ccc_target"]["source"].unique(),
-                np.unique(adata.obs[["label"]].values),
+                adata.obs["label"].cat.categories,
             )
         )
     if "target" in adata.uns["ccc_target"].columns:
         assert np.all(
             np.isin(
                 adata.uns["ccc_target"]["target"].unique(),
-                np.unique(adata.obs[["label"]].values),
+                adata.obs["label"].cat.categories,
             )
         )
     if "receptor" in adata.uns["ccc_target"].columns:
@@ -58,13 +58,13 @@ def check_method(adata):
     assert np.any(
         np.isin(
             adata.uns["ccc_pred"]["source"].unique(),
-            np.unique(adata.obs[["label"]].values),
+            adata.obs["label"].cat.categories,
         )
     )
     assert np.any(
         np.isin(
             adata.uns["ccc_pred"]["target"].unique(),
-            np.unique(adata.obs[["label"]].values),
+            adata.obs["label"].cat.categories,
         )
     )
     assert np.all(np.isreal(adata.uns["ccc_pred"]["score"]))
