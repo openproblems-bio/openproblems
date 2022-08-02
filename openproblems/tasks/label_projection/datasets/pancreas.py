@@ -9,7 +9,9 @@ import numpy as np
     "Pancreas (by batch)",
     data_url=load_pancreas.metadata["data_url"],
     data_reference=load_pancreas.metadata["data_reference"],
-    dataset_summary="TODO",
+    dataset_summary="Human pancreatic islet scRNA-seq data from 6 datasets "
+    "across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, "
+    "and SMARTER-seq). Split into train/test by experimental batch.",
 )
 def pancreas_batch(test=False):
     adata = load_pancreas(test=test)
@@ -30,7 +32,9 @@ def pancreas_batch(test=False):
     "Pancreas (random split)",
     data_url=load_pancreas.metadata["data_url"],
     data_reference=load_pancreas.metadata["data_reference"],
-    dataset_summary="TODO",
+    dataset_summary="Human pancreatic islet scRNA-seq data from 6 datasets "
+    "across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, "
+    "and SMARTER-seq). Split into train/test randomly.",
 )
 def pancreas_random(test=False):
     adata = load_pancreas(test=test)
