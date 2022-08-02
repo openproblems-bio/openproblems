@@ -10,7 +10,7 @@ import numpy as np
 @method(
     method_name="Non-Negative Least Squares",
     paper_name="Solving Least Squares Problems",
-    paper_url="https://epubs.siam.org/doi/pdf/10.1137/1.9781611971217.bm",
+    paper_url="https://doi.org/10.1137/1.9781611971217",
     paper_year=1987,
     code_url="https://docs.scipy.org/doc/scipy/"
     "reference/generated/scipy.optimize.nnls.html",

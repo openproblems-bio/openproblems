@@ -246,21 +246,25 @@ jobs:
         TOWER_ORG_ID: 9180144064527
         TOWER_WORKSPACE_ID: 53907369739130
       run: |
-        result=$(
+        token_confirmation=$(
+          curl -X GET "https://api.tower.nf/user-info" \
+          -H "Accept: application/json" \
+          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}"
+        )
+        if [ -z "${token_confirmation}" ]; then
+          echo "Tower authentication failed; set TOWER_ACCESS_KEY in repo secrets."
+          echo "See CONTRIBUTING.md for details."
+          exit 1
+        fi
+        workspace_confirmation=$(
           curl -X GET "https://api.tower.nf/orgs/${TOWER_ORG_ID}/workspaces/${TOWER_WORKSPACE_ID}" \
           -H "Accept: application/json" \
-          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}" || \
-          (
-            echo "Tower authentication failed; set TOWER_ACCESS_KEY in repo secrets." >&2 &&
-            echo "See CONTRIBUTING.md for details." >&2 && \
-            exit 1
-          )
+          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}"
         )
-        if [ -z "${result}" ]; then
+        if [ -z "${workspace_confirmation}" ]; then
           echo "Tower authentication failed; email singlecellopenproblems@protonmail.com with a request to be added to the openproblems-bio workspace"
           exit 1
         fi
-      shell: /bin/bash -e {0}
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -284,7 +288,7 @@ jobs:
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
         REPO_PARSED=$(echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6)
-        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g')
+        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[^a-zA-Z0-9]:-:g')
         if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
           BRANCH=`echo $BRANCH_PARSED | head -c 40`
         else

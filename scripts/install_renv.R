@@ -6,7 +6,7 @@ as_integer_version <- function(v) {
 compare_version <- function(v1, v2) {
   v1 <- as_integer_version(v1)
   v2 <- as_integer_version(v2)
-  for (i in 1:min(length(v1), length(v2))) {
+  for (i in seq_len(min(length(v1), length(v2)))) {
     if (v1[i] != v2[i]) {
       return(FALSE)
     }
