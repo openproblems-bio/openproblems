@@ -38,12 +38,21 @@ def check_method(adata):
     assert set(adata.uns["ccc_pred"]).issuperset(
         [
             "ligand",
-            # 'receptor',
             "source",
             "target",
             "score",
         ]
     )
+    assert np.any(np.isin(adata.uns["ccc_pred"]["ligand"].unique(),
+                          adata.var.index))
+    assert np.any(np.isin(adata.uns["ccc_pred"]["source"].unique(),
+                          np.unique(adata.obs[["label"]].values)))
+    assert np.any(np.isin(adata.uns["ccc_pred"]["target"].unique(),
+                          np.unique(adata.obs[["label"]].values)))
+    assert np.all(np.isreal(adata.uns["ccc_pred"]["score"]))
+    if 'receptor' in adata.uns["ccc_pred"].columns:
+        assert np.any(np.isin(adata.uns["ccc_pred"]["receptor"].unique(),
+                              adata.var.index))
 
     return True
 
@@ -87,18 +96,15 @@ def sample_dataset():
 
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
-    row_num = 10
+    row_num = 500
     np.random.seed(1234)
 
     df = pd.DataFrame(np.random.random((row_num, 1)), columns=["score"])
-
-    celltypes = list(map(pd.util.testing.rands, (3, 3, 4, 5)))
-    lrs = list(map(pd.util.testing.rands, (4, 4, 4, 6)))
-
-    df["source"] = np.random.choice(celltypes, row_num)
-    df["target"] = np.random.choice(celltypes, row_num)
-    df["ligand"] = np.random.choice(lrs, row_num)
-    df["receptor"] = np.random.choice(lrs, row_num)
+    df["source"] = np.random.choice(np.unique(adata.obs[["label"]]), row_num)
+    df["target"] = np.random.choice(np.unique(adata.obs[["label"]]), row_num)
+    df["ligand"] = np.random.choice(adata.var.index, row_num)
+    df["receptor"] = np.random.choice(adata.var.index, row_num)
 
     adata.uns["ccc_pred"] = df
+
     return adata
