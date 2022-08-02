@@ -13,18 +13,28 @@ def check_dataset(adata):
     assert "response" in adata.uns["ccc_target"]
     assert np.issubdtype(adata.uns["ccc_target"]["response"].dtype, int)
     assert np.all(np.isin(adata.uns["ccc_target"]["response"], [0, 1]))
-    if 'source' in adata.uns["ccc_target"].columns:
-        assert np.all(np.isin(adata.uns["ccc_target"]["source"].unique(),
-                              np.unique(adata.obs[["label"]].values)))
-    if 'target' in adata.uns["ccc_target"].columns:
-        assert np.all(np.isin(adata.uns["ccc_target"]["target"].unique(),
-                              np.unique(adata.obs[["label"]].values)))
-    if 'receptor' in adata.uns["ccc_target"].columns:
-        assert np.any(np.isin(adata.uns["ccc_target"]["receptor"].unique(),
-                              adata.var.index))
-    if 'ligand' in adata.uns["ccc_target"].columns:
-        assert np.any(np.isin(adata.uns["ccc_target"]["ligand"].unique(),
-                              adata.var.index))
+    if "source" in adata.uns["ccc_target"].columns:
+        assert np.all(
+            np.isin(
+                adata.uns["ccc_target"]["source"].unique(),
+                np.unique(adata.obs[["label"]].values),
+            )
+        )
+    if "target" in adata.uns["ccc_target"].columns:
+        assert np.all(
+            np.isin(
+                adata.uns["ccc_target"]["target"].unique(),
+                np.unique(adata.obs[["label"]].values),
+            )
+        )
+    if "receptor" in adata.uns["ccc_target"].columns:
+        assert np.any(
+            np.isin(adata.uns["ccc_target"]["receptor"].unique(), adata.var.index)
+        )
+    if "ligand" in adata.uns["ccc_target"].columns:
+        assert np.any(
+            np.isin(adata.uns["ccc_target"]["ligand"].unique(), adata.var.index)
+        )
     assert "target_organism" in adata.uns
     assert np.issubdtype(adata.uns["target_organism"], np.integer)
 
@@ -43,16 +53,24 @@ def check_method(adata):
             "score",
         ]
     )
-    assert np.any(np.isin(adata.uns["ccc_pred"]["ligand"].unique(),
-                          adata.var.index))
-    assert np.any(np.isin(adata.uns["ccc_pred"]["source"].unique(),
-                          np.unique(adata.obs[["label"]].values)))
-    assert np.any(np.isin(adata.uns["ccc_pred"]["target"].unique(),
-                          np.unique(adata.obs[["label"]].values)))
+    assert np.any(np.isin(adata.uns["ccc_pred"]["ligand"].unique(), adata.var.index))
+    assert np.any(
+        np.isin(
+            adata.uns["ccc_pred"]["source"].unique(),
+            np.unique(adata.obs[["label"]].values),
+        )
+    )
+    assert np.any(
+        np.isin(
+            adata.uns["ccc_pred"]["target"].unique(),
+            np.unique(adata.obs[["label"]].values),
+        )
+    )
     assert np.all(np.isreal(adata.uns["ccc_pred"]["score"]))
-    if 'receptor' in adata.uns["ccc_pred"].columns:
-        assert np.any(np.isin(adata.uns["ccc_pred"]["receptor"].unique(),
-                              adata.var.index))
+    if "receptor" in adata.uns["ccc_pred"].columns:
+        assert np.any(
+            np.isin(adata.uns["ccc_pred"]["receptor"].unique(), adata.var.index)
+        )
 
     return True
 
