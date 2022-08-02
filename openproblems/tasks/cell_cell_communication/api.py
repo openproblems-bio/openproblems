@@ -1,6 +1,7 @@
 from ...data.sample import load_sample_data
 from ...tools.decorators import dataset
 
+import numbers
 import numpy as np
 import pandas as pd
 import scanpy as sc
@@ -36,7 +37,7 @@ def check_dataset(adata):
             np.isin(adata.uns["ccc_target"]["ligand"].unique(), adata.var.index)
         )
     assert "target_organism" in adata.uns
-    assert np.issubdtype(adata.uns["target_organism"], np.integer)
+    assert isinstance(adata.uns["target_organism"], numbers.Integral)
 
     return True
 
@@ -108,7 +109,7 @@ def sample_dataset():
     )
 
     # assign to human prior knowledge
-    adata.uns["target_organism"] = np.int64(9606)
+    adata.uns["target_organism"] = 9606
     return adata
 
 
