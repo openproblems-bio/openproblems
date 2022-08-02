@@ -16,7 +16,7 @@ sub-tasks for batch integration can be found for:
 
 This sub-task was taken from a
 [benchmarking study of data integration methods]
-(https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
+(<https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2>).
 
 ## API
 
@@ -36,6 +36,7 @@ that can be installed without package conflicts. For R methods, the
 
 Methods are run in four different scenarios that include scaling and highly variable
 gene selection:
+
 * `full_unscaled`
 * `hvg_unscaled`
 * `full_scaled`
