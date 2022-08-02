@@ -15,7 +15,7 @@ RNA_URL = (
 )
 
 
-@loader
+@loader(data_url="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100866")
 def load_citeseq_cbmc(test=False):
     """Download CITEseq data from GEO."""
     if test:

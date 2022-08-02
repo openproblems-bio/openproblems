@@ -150,8 +150,7 @@ nf-openproblems
 scratch/
 openproblems/results/
 openproblems/work/
-# snakemake
-.docker_update
+
 immune.h5ad
 batch_embed.txt
 .vscode/launch.json

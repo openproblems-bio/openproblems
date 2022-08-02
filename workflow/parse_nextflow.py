@@ -122,6 +122,20 @@ def parse_metric_results(results_path, results):
     return results
 
 
+def parse_method_versions(results_path, results):
+    """Add method versions to the trace output."""
+    for filename in os.listdir(os.path.join(results_path, "results/method_versions")):
+        with open(
+            os.path.join(results_path, "results/method_versions", filename), "r"
+        ) as handle:
+            code_version = handle.read().strip()
+        task_name, dataset_name, method_name = filename.replace(
+            ".method.txt", ""
+        ).split(".")
+        results[task_name][dataset_name][method_name]["code_version"] = code_version
+    return results
+
+
 def compute_ranking(task_name, dataset_results):
     """Rank all methods on a specific dataset."""
     rankings = np.zeros(len(dataset_results))
@@ -149,6 +163,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
     dataset = utils.get_function(task_name, "datasets", dataset_name)
     output = dict(
         name=dataset.metadata["dataset_name"],
+        data_url=dataset.metadata["data_url"],
         headers=dict(names=["Rank"], fixed=["Name", "Paper", "Website", "Code"]),
         results=list(),
     )
@@ -161,8 +176,10 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             "Paper": method.metadata["paper_name"],
             "Paper URL": method.metadata["paper_url"],
             "Year": method.metadata["paper_year"],
-            "Code": method.metadata["code_url"],
-            "Version": method.metadata["code_version"],
+            "Library": method.metadata["code_url"],
+            "Implementation": "https://github.com/openproblems-bio/openproblems/"
+            f"blob/main/{method.__module__.replace('.', '/')}",
+            "Version": method_results["code_version"],
             "Runtime (min)": parse_time_to_min(method_results["realtime"]),
             "CPU (%)": float(method_results["%cpu"].replace("%", "")),
             "Memory (GB)": parse_size_to_gb(method_results["peak_rss"]),
@@ -188,14 +205,16 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
     return output
 
 
-def results_to_json(results):
+def results_to_json(results, outdir):
     """Convert the full results to pretty JSON for web."""
+    if not os.path.isdir(outdir):
+        os.mkdir(outdir)
     for task_name, task_results in results.items():
         for dataset_name, dataset_results in task_results.items():
-            results_dir = "website/data/results/{}".format(task_name)
+            results_dir = os.path.join(outdir, task_name)
             if not os.path.isdir(results_dir):
                 os.mkdir(results_dir)
-            filename = "{}/{}.json".format(results_dir, dataset_name)
+            filename = os.path.join(results_dir, "{}.json".format(dataset_name))
             with open(filename, "w") as handle:
                 dump_json(
                     dataset_results_to_json(task_name, dataset_name, dataset_results),
@@ -203,18 +222,17 @@ def results_to_json(results):
                 )
 
 
-def main(results_path):
+def main(results_path, outdir):
     """Parse the nextflow output."""
     df = read_trace(
         os.path.join(results_path, "results/pipeline_info/execution_trace.txt")
     )
     results = parse_trace_to_dict(df)
     results = parse_metric_results(results_path, results)
-    results_to_json(results)
-    with open("results.json", "w") as handle:
-        dump_json(results, handle)
+    results = parse_method_versions(results_path, results)
+    results_to_json(results, outdir)
     return 0
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])
