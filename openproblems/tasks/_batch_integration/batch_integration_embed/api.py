@@ -27,6 +27,9 @@ def sample_dataset():
     adata = load_sample_data()
 
     adata.var.index = adata.var.gene_short_name
+    sc.pp.filter_genes
+    sc.pp.normalize_total(adata)
+    sc.pp.log1p(adata)
     adata.obsm["X_uni"] = sc.pp.pca(adata.X)
     adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
     adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
