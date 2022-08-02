@@ -24,4 +24,13 @@ def cc_score(adata):
     from ._utils import _get_split
     from scib.metrics import cell_cycle
 
-    return cell_cycle(*_get_split(adata), "batch", embed="X_emb", organism="human")
+    try:
+        cc = cell_cycle(*_get_split(adata), "batch", embed="X_emb", organism="human")
+
+    except ValueError:
+        if adata.n_vars<500:
+            cc = 0
+        else:
+            raise ValueError("Cell cycle genes not found in data")
+    return cc
+
