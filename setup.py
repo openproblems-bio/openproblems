@@ -8,7 +8,7 @@ install_requires = [
     "scikit-learn==1.1.*",
     "anndata==0.8.*",
     "scprep>=1.2.0",
-    "scipy==1.8.*",
+    "scipy>=1.8,<1.10",
     "scanpy>=1.6",
     "louvain==0.7.*",
     "decorator<5.0",  # pinned in #324
@@ -23,7 +23,7 @@ r_requires = [
     "anndata2ri==1.1.*",
 ]
 
-evaluate_requires = ["snakemake>=7.8,<7.12"]
+evaluate_requires = ["snakemake>=7.8,<7.13"]
 
 process_requires = ["numpyencoder==0.3.*"]
 
