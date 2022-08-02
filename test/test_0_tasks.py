@@ -6,6 +6,7 @@ import parameterized
 import unittest
 import utils.name
 
+TASK_SUMMARY_MINLEN = 40
 TASK_SUMMARY_MAXLEN = 80
 
 MODULE = type(openproblems)
@@ -27,6 +28,7 @@ class TestTask(unittest.TestCase):
         assert isinstance(self.task._task_name, str)
         assert hasattr(self.task, "_task_summary")
         assert isinstance(self.task._task_summary, str)
+        assert len(self.task._task_summary) > TASK_SUMMARY_MINLEN
         assert len(self.task._task_summary) < TASK_SUMMARY_MAXLEN
         assert hasattr(self.task, "api")
         assert isinstance(self.task.api, MODULE)
