@@ -1,6 +1,9 @@
 # Standardized CCC method runs via LIANA
 # @param sce SingleCellExperiment
-# @param method character name for method to be called via LIANA
+# @param expr_prop minimum proportion of cells per cell type expressing the
+# ligands and receptors for a given interaction
+# @param idents_col cell identity column name
+# @param test logical; if a test run
 # @return a tibble with liana results
 
 # Libraries
@@ -10,8 +13,6 @@ library(dplyr, quietly = TRUE)
 library(liana, quietly = TRUE)
 
 # Parameters
-expr_prop <- 0.1
-idents_col <- "label"
 nperms <- if (test) 2 else 1000
 
 # Convert data to an R-friendly sparse format
@@ -21,17 +22,6 @@ sce@assays@data$logcounts <-
   as(as.matrix(sce@assays@data$logcounts), "sparseMatrix")
 
 
-# Obtain LIANA's Consensus resource
-op_resource <- select_resource("Consensus")[[1]]
-
-# Check if the target organism is human
-if (sce@metadata$target_organism != 9606) {
-  # Generate orthologous resource
-  op_resource <- generate_homologs(
-    op_resource = op_resource,
-    target_organism = sce@metadata$target_organism
-  )
-}
 
 # Run LIANA
 liana_res <- liana_wrap(sce,

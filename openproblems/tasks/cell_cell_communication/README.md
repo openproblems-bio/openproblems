@@ -76,6 +76,20 @@ Methods should predict interactions between cell types without using
 * `ligand`: `str`, gene symbol of the ligand in an interaction
 * `receptor`: `str`, gene symbol of the receptor in an interaction
 
+Methods should infer a score for each `intersecting interaction` in the harmonized
+prior-knowledge resource provided by LIANA - available via the `lr_resource`
+function. The relevant columns in the `lr_resource` are `ligand_genesymbol` and
+`receptor_genesymbol`, which correspond to the ligand and receptor genes, 
+respectively. These may contain complexes with subunits separated with `_`.
+Hence, **methods should be able to deal with complex-containing interactions**.
+
+We define `intersecting interactions` as those for which the relevant 
+genes are both present in the dataset and the resource.
+
+Methods should also enable the filtering of interactions according to their 
+minimum expression proportion in both the `source` and `target` cell types,
+via the `expr_prop` parameter - set to `0.1` by default.
+
 ### Metrics
 
 Metrics should evaluate the concordance between `adata.uns["ccc_target"]` and
