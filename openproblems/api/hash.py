@@ -2,11 +2,25 @@ from . import utils
 
 import hashlib
 import importlib
+import json
 import os
 import scprep
 import subprocess
 
 _MODULE = type(os)
+
+
+def _run(args, **kwargs):
+    p = subprocess.run(
+        args,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        **kwargs,
+    )
+    if p.returncode != 0:
+        raise RuntimeError(p.stderr.decode())
+    else:
+        return p.stdout.decode()
 
 
 def get_module(fun):
@@ -18,35 +32,57 @@ def get_module(fun):
 
 def git_hash(file):
     """Get the git commit hash associated with a file."""
-    p = subprocess.run(
+    return _run(
         ["git", "log", "-n", "1", "--pretty=format:%H", "--", file],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
         cwd=os.path.dirname(__file__),
     )
-    if p.returncode != 0:
-        raise RuntimeError(p.stderr.decode())
-    else:
-        return p.stdout.decode()
+
+
+def docker_token(image_name):
+    output = json.loads(
+        _run(
+            [
+                "curl",
+                "--silent",
+                f"https://auth.docker.io/token?scope=repository:{image_name}:"
+                "pull&service=registry.docker.io",
+            ]
+        )
+    )
+    return output["token"]
+
+
+def docker_labels_from_api(image_name, tag="latest"):
+    token = docker_token(image_name)
+    output = json.loads(
+        _run(
+            [
+                "curl",
+                "--silent",
+                "--header",
+                f"Authorization: Bearer {token}",
+                f"https://registry-1.docker.io/v2/{image_name}/manifests/{tag}",
+            ]
+        )
+    )
+    v1_compat_output = json.loads(output["history"][0]["v1Compatibility"])
+    return v1_compat_output["config"]["Labels"]
 
 
 def docker_hash(image_name):
     """Get the docker image hash associated with an image."""
-    subprocess.run(["docker", "pull", "-q", image_name])
-    p = subprocess.run(
-        [
-            "docker",
-            "inspect",
-            "-f='{{ index .Config.Labels \"bio.openproblems.hash\"}}'",
-            image_name,
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    if p.returncode != 0:
-        raise RuntimeError(p.stderr.decode())
-    else:
-        return p.stdout.decode()
+    try:
+        return _run(
+            [
+                "docker",
+                "inspect",
+                "-f='{{ index .Config.Labels \"bio.openproblems.hash\"}}'",
+                image_name,
+            ]
+        )
+    except RuntimeError:  # pragma: nocover
+        # docker is unavailable or the image is not locally available; use the API
+        return docker_labels_from_api(image_name)["bio.openproblems.hash"]
 
 
 def get_context(obj, context=None):
