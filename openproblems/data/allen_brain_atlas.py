@@ -2,6 +2,7 @@ from . import utils
 
 import os
 import scanpy as sc
+import numpy as np
 import scprep
 import tempfile
 
@@ -23,6 +24,12 @@ def load_mouse_brain_atlas(test=False):
         # Keep only 500 genes
         adata = adata[:, 30000:30500].copy()
         adata.uns["target_organism"] = adata.uns["target_organism"]
+
+        # remove missing labels for tests
+        labels = adata.obs["label"].cat.categories
+        msk = np.logical_not(~adata.uns["ccc_target"]["source"].isin(labels) |
+                             ~adata.uns["ccc_target"]["target"].isin(labels))
+        adata.uns["ccc_target"] = adata.uns["ccc_target"][msk]
 
         return adata
 
