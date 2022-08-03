@@ -140,7 +140,7 @@ def sample_method(adata):
     np.random.seed(1234)
 
     lrs = lr_resource(adata.uns["target_organism"])
-    ligand_msk = lrs["ligand_genesymbol"].isin(adata.var.index)
+    ligand_msk = ~lrs["ligand_genesymbol"].isin(adata.var.index)
     receptor_msk = ~lrs["receptor_genesymbol"].isin(adata.var.index)
     msk = np.logical_not(ligand_msk | receptor_msk)
     # keep only plausible interactions
