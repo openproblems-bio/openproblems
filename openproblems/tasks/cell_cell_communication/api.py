@@ -60,10 +60,18 @@ def check_method(adata):
     assert np.any(np.isin(adata.uns["ccc_pred"]["receptor"].unique(), adata.var.index))
 
     lrs = lr_resource(adata.uns["target_organism"])
-    assert np.all(np.isin(adata.uns["ccc_pred"]["ligand"].unique(),
-                          np.unique(lrs["ligand_genesymbol"])))
-    assert np.all(np.isin(adata.uns["ccc_pred"]["receptor"].unique(),
-                          np.unique(lrs["receptor_genesymbol"])))
+    assert np.all(
+        np.isin(
+            adata.uns["ccc_pred"]["ligand"].unique(),
+            np.unique(lrs["ligand_genesymbol"]),
+        )
+    )
+    assert np.all(
+        np.isin(
+            adata.uns["ccc_pred"]["receptor"].unique(),
+            np.unique(lrs["receptor_genesymbol"]),
+        )
+    )
 
     assert np.all(
         np.isin(
@@ -132,21 +140,21 @@ def sample_method(adata):
     np.random.seed(1234)
 
     lrs = lr_resource(adata.uns["target_organism"])
-    msk = np.logical_not(~lrs["ligand_genesymbol"].isin(adata.var.index) |
-                         ~lrs["receptor_genesymbol"].isin(adata.var.index))
+    msk = np.logical_not(
+        ~lrs["ligand_genesymbol"].isin(adata.var.index)
+        | ~lrs["receptor_genesymbol"].isin(adata.var.index)
+    )
     # keep only plausible interactions
     lrs = lrs[msk]
 
     df = pd.DataFrame(np.random.random((row_num, 1)), columns=["score"])
     df["source"] = np.random.choice(np.unique(adata.obs[["label"]]), row_num)
     df["target"] = np.random.choice(np.unique(adata.obs[["label"]]), row_num)
-    df["ligand"] = np.random.choice(
-        np.unique(lrs["ligand_genesymbol"].values), row_num)
+    df["ligand"] = np.random.choice(np.unique(lrs["ligand_genesymbol"].values), row_num)
     df["receptor"] = np.random.choice(
-        np.unique(lrs["receptor_genesymbol"].values), row_num)
+        np.unique(lrs["receptor_genesymbol"].values), row_num
+    )
 
     adata.uns["ccc_pred"] = df
 
     return adata
-
-

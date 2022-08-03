@@ -1,8 +1,8 @@
 from . import utils
 
+import numpy as np
 import os
 import scanpy as sc
-import numpy as np
 import scprep
 import tempfile
 
@@ -27,8 +27,10 @@ def load_mouse_brain_atlas(test=False):
 
         # remove missing labels for tests
         labels = adata.obs["label"].cat.categories
-        msk = np.logical_not(~adata.uns["ccc_target"]["source"].isin(labels) |
-                             ~adata.uns["ccc_target"]["target"].isin(labels))
+        msk = np.logical_not(
+            ~adata.uns["ccc_target"]["source"].isin(labels)
+            | ~adata.uns["ccc_target"]["target"].isin(labels)
+        )
         adata.uns["ccc_target"] = adata.uns["ccc_target"][msk]
 
         return adata
