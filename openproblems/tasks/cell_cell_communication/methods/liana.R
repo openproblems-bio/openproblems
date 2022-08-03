@@ -1,7 +1,7 @@
 # Standardized CCC method runs via LIANA
 # @param sce SingleCellExperiment
-# @param expr_prop minimum proportion of cells per cell type expressing the
-# ligands and receptors for a given interaction
+# @param min_expression_prop minimum proportion of cells per cell type
+# expressing the ligands and receptors for a given interaction
 # @param idents_col cell identity column name
 # @param test logical; if a test run
 # @return a tibble with liana results
@@ -27,7 +27,7 @@ sce@assays@data$logcounts <-
 liana_res <- liana_wrap(sce,
   resource = "custom",
   external_resource = op_resource,
-  expr_prop = expr_prop,
+  expr_prop = min_expression_prop,
   idents_col = idents_col,
   base = 2.718282, # Relevant only for logfc
   permutation.params = list(nperms = nperms), # Relevant only for CPDB

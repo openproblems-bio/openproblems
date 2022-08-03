@@ -1,17 +1,31 @@
 from ...data.sample import load_sample_data
 from ...tools.decorators import dataset
-from .methods.liana import lr_resource
+from .utils import ligand_receptor_resource
 
 import numbers
 import numpy as np
 import pandas as pd
 import scanpy as sc
 
+CCC_COLUMNS = {
+    "ligand",
+    "receptor",
+    "source",
+    "target",
+}
+CCC_TARGET_COLUMNS = CCC_COLUMNS.union({"response"})
+CCC_PRED_COLUMNS = CCC_COLUMNS.union({"score"})
+
 
 def check_dataset(adata):
     """Check that dataset output fits expected API."""
     assert "label" in adata.obs
     assert "ccc_target" in adata.uns
+    # require no superfluous columns
+    assert set(adata.uns["ccc_target"]).issubset(CCC_TARGET_COLUMNS)
+    # require at least one non-response column to be defined
+    assert len(set(adata.uns["ccc_target"]).intersection(CCC_TARGET_COLUMNS)) >= 2
+
     assert "response" in adata.uns["ccc_target"]
     assert np.issubdtype(adata.uns["ccc_target"]["response"].dtype, int)
     assert np.all(np.isin(adata.uns["ccc_target"]["response"], [0, 1]))
@@ -29,14 +43,23 @@ def check_dataset(adata):
                 adata.obs["label"].cat.categories,
             )
         )
+
+    resource = ligand_receptor_resource(adata.uns["target_organism"])
     if "receptor" in adata.uns["ccc_target"].columns:
-        assert np.any(
-            np.isin(adata.uns["ccc_target"]["receptor"].unique(), adata.var.index)
+        assert np.all(
+            np.isin(
+                adata.uns["ccc_pred"]["receptor"].unique(),
+                np.unique(resource["receptor_genesymbol"]),
+            )
         )
     if "ligand" in adata.uns["ccc_target"].columns:
-        assert np.any(
-            np.isin(adata.uns["ccc_target"]["ligand"].unique(), adata.var.index)
+        assert np.all(
+            np.isin(
+                adata.uns["ccc_pred"]["ligand"].unique(),
+                np.unique(resource["ligand_genesymbol"]),
+            )
         )
+
     assert "target_organism" in adata.uns
     assert isinstance(adata.uns["target_organism"], numbers.Integral)
 
@@ -47,29 +70,23 @@ def check_method(adata):
     """Check that method output fits expected API."""
     assert "ccc_pred" in adata.uns
     # check if ligand-receptor and source-target (cell type) columns exist
-    assert set(adata.uns["ccc_pred"]).issuperset(
-        [
-            "ligand",
-            "receptor",
-            "source",
-            "target",
-            "score",
-        ]
-    )
+    assert set(adata.uns["ccc_pred"]).issuperset(CCC_PRED_COLUMNS)
+    assert "response" not in adata.uns["ccc_pred"]
+
     assert np.any(np.isin(adata.uns["ccc_pred"]["ligand"].unique(), adata.var.index))
     assert np.any(np.isin(adata.uns["ccc_pred"]["receptor"].unique(), adata.var.index))
 
-    lrs = lr_resource(adata.uns["target_organism"])
+    resource = ligand_receptor_resource(adata.uns["target_organism"])
     assert np.all(
         np.isin(
             adata.uns["ccc_pred"]["ligand"].unique(),
-            np.unique(lrs["ligand_genesymbol"]),
+            np.unique(resource["ligand_genesymbol"]),
         )
     )
     assert np.all(
         np.isin(
             adata.uns["ccc_pred"]["receptor"].unique(),
-            np.unique(lrs["receptor_genesymbol"]),
+            np.unique(resource["receptor_genesymbol"]),
         )
     )
 
@@ -87,9 +104,6 @@ def check_method(adata):
     )
 
     assert np.all(np.isreal(adata.uns["ccc_pred"]["score"]))
-
-    assert "expr_prop" in adata.uns
-    assert np.isreal(adata.uns["expr_prop"])
 
     return True
 
@@ -128,8 +142,6 @@ def sample_dataset():
 
     # assign to human prior knowledge
     adata.uns["target_organism"] = 9606
-    # assign preprocessing details
-    adata.uns["expr_prop"] = 0.1
 
     return adata
 
@@ -139,19 +151,21 @@ def sample_method(adata):
     row_num = 500
     np.random.seed(1234)
 
-    lrs = lr_resource(adata.uns["target_organism"])
-    ligand_msk = ~lrs["ligand_genesymbol"].isin(adata.var.index)
-    receptor_msk = ~lrs["receptor_genesymbol"].isin(adata.var.index)
+    resource = ligand_receptor_resource(adata.uns["target_organism"])
+    ligand_msk = ~resource["ligand_genesymbol"].isin(adata.var.index)
+    receptor_msk = ~resource["receptor_genesymbol"].isin(adata.var.index)
     msk = np.logical_not(ligand_msk | receptor_msk)
     # keep only plausible interactions
-    lrs = lrs[msk]
+    resource = resource[msk]
 
     df = pd.DataFrame(np.random.random((row_num, 1)), columns=["score"])
     df["source"] = np.random.choice(np.unique(adata.obs[["label"]]), row_num)
     df["target"] = np.random.choice(np.unique(adata.obs[["label"]]), row_num)
-    df["ligand"] = np.random.choice(np.unique(lrs["ligand_genesymbol"].values), row_num)
+    df["ligand"] = np.random.choice(
+        np.unique(resource["ligand_genesymbol"].values), row_num
+    )
     df["receptor"] = np.random.choice(
-        np.unique(lrs["receptor_genesymbol"].values), row_num
+        np.unique(resource["receptor_genesymbol"].values), row_num
     )
 
     adata.uns["ccc_pred"] = df

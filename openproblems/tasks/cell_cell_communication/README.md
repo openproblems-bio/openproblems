@@ -46,16 +46,17 @@ assumed truth in `adata.uns["ccc_target"]`. The assumed truth could be derived f
 various proxies; we refer the reader to [Dimitrov et
 al](https://doi.org/10.1038/s41467-022-30755-0) for more details.
 
-`adata.uns["ccc_target"]` should be a Pandas DataFrame containing the following
-columns:
+`adata.uns["ccc_target"]` should be a Pandas DataFrame containing:
 
-* `response`: `int`, binary response variable indicating whether an interaction
-is assumed to have occurred
+* `response`: `int`, binary response variable indicating whether an interaction is
+  assumed to have occurred
+
+and at least one of the following columns:
+
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
 * `ligand`: `str`, gene symbol of the ligand in an interaction
-* `receptor`: `str` or `np.nan`, gene symbol of the receptor in an interaction (may be
-  null)
+* `receptor`: `str`, gene symbol of the receptor in an interaction
 
 The datasets should also include a
 [NCBI taxonomy ID](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi)
@@ -67,7 +68,7 @@ knowledge of the CCC methods to the corresponding gene homologs.
 
 Methods should predict interactions between cell types without using
 `adata.uns["ccc_target"]`. Predicted interactions should be stored in
-`adata.uns["ccc_pred"]` as a Pandas DataFrame containing the following columns:
+`adata.uns["ccc_pred"]` as a Pandas DataFrame containing all of the following columns:
 
 * `score`: `float`, score between `-inf` to `+inf` giving a predicted strength of the
   inferred interaction
@@ -76,24 +77,24 @@ Methods should predict interactions between cell types without using
 * `ligand`: `str`, gene symbol of the ligand in an interaction
 * `receptor`: `str`, gene symbol of the receptor in an interaction
 
-Methods should infer a score for each `intersecting interaction` in the harmonized
-prior-knowledge resource provided by LIANA - available via the `lr_resource`
-function. The relevant columns in the `lr_resource` are `ligand_genesymbol` and
-`receptor_genesymbol`, which correspond to the ligand and receptor genes,
-respectively. These may contain complexes with subunits separated with `_`.
-Hence, **methods should be able to deal with complex-containing interactions**.
+Methods should infer a score for each _intersecting interaction_ in the harmonized
+prior-knowledge resource provided by LIANA. We define _intersecting interactions_ as
+those for which the relevant genes are both present in the dataset and the resource.
 
-We define `intersecting interactions` as those for which the relevant
-genes are both present in the dataset and the resource.
-
-Methods should also enable the filtering of interactions according to their
-minimum expression proportion in both the `source` and `target` cell types,
-via the `expr_prop` parameter - set to `0.1` by default.
+The prior-knowledge resource is available via the
+`cell_cell_communication.utils.ligand_receptor_resource` function, which returns a
+DataFrame containing the columns `ligand_genesymbol` and `receptor_genesymbol`, which
+correspond to the ligand and receptor genes, respectively. These may contain complexes
+with subunits separated with `_`. Hence, **methods should be able to deal with
+complex-containing interactions**.
 
 ### Metrics
 
 Metrics should evaluate the concordance between `adata.uns["ccc_target"]` and
 `adata.uns["ccc_pred"]` to evaluate the success of a method in predicting interactions.
+Since not all datasets will provide all possible columns in `adata.uns["ccc_target"]`,
+metrics should perform a join on all shared columns in the two data frames to get the
+union/intersection of predicted and assumed interactions.
 
 ### Examples
 

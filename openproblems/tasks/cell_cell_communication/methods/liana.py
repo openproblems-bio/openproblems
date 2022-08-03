@@ -2,34 +2,9 @@ from ....tools.conversion import r_function
 from ....tools.decorators import method
 from ....tools.normalize import log_cpm
 from ....tools.utils import check_r_version
+from ..utils import ligand_receptor_resource
 
 import functools
-import scprep.run
-
-_get_lr_resource = scprep.run.RFunction(
-    args="target_organism",
-    body="""
-            if(target_organism!=9606){
-              op_resource <-
-              liana::generate_homologs(
-                    op_resource = liana::select_resource('Consensus')[[1]],
-                    target_organism = target_organism
-                )
-            } else{
-            op_resource <- liana::select_resource('Consensus')[[1]]
-            }
-
-            dplyr::mutate(op_resource,
-                          ligand_genesymbol = source_genesymbol,
-                          receptor_genesymbol = target_genesymbol
-            )
-        """,
-)
-
-
-def lr_resource(target_organism):
-    """Helper function to obtain and convert a Ligand-Receptor resource"""
-    return _get_lr_resource(target_organism)
 
 
 # Helper function to filter according to permutation p-values
@@ -41,7 +16,7 @@ def _p_filt(x, y):
 
 
 _r_liana = r_function(
-    "liana.R", args="sce, op_resource, expr_prop, idents_col, test, ..."
+    "liana.R", args="sce, op_resource, min_expression_prop, idents_col, test, ..."
 )
 
 _liana_method = functools.partial(
@@ -59,7 +34,12 @@ _liana_method = functools.partial(
     method_name="LIANA",
 )
 def liana(
-    adata, score_col="aggregate_rank", asc=True, expr_prop=0.1, test=False, **kwargs
+    adata,
+    score_col="aggregate_rank",
+    ascending=True,
+    min_expression_prop=0.1,
+    test=False,
+    **kwargs,
 ):
     # log-normalize
     adata = log_cpm(adata)
@@ -69,8 +49,8 @@ def liana(
     # Run LIANA
     liana_res = _r_liana(
         adata,
-        op_resource=lr_resource(adata.uns["target_organism"]),
-        expr_prop=expr_prop,
+        op_resource=ligand_receptor_resource(adata.uns["target_organism"]),
+        min_expression_prop=min_expression_prop,
         idents_col="label",
         test=test,
         **kwargs,
@@ -78,10 +58,9 @@ def liana(
 
     # Format results
     liana_res["score"] = liana_res[score_col]
-    liana_res.sort_values("score", ascending=asc, inplace=True)
+    liana_res.sort_values("score", ascending=ascending, inplace=True)
     adata.uns["ccc_pred"] = liana_res
 
-    adata.uns["expr_prop"] = expr_prop
     adata.uns["method_code_version"] = check_r_version("liana")
 
     return adata
@@ -96,7 +75,7 @@ def liana(
 )
 def cellphonedb(adata, test=False):
     adata = liana(
-        adata, method="cellphonedb", score_col="lr.mean", asc=False, test=test
+        adata, method="cellphonedb", score_col="lr.mean", ascending=False, test=test
     )
     # Filter & Re-order
     adata.uns["ccc_pred"]["score"] = adata.uns["ccc_pred"].apply(
@@ -115,14 +94,18 @@ def cellphonedb(adata, test=False):
     paper_year=2022,
 )
 def connectome(adata, test=False):
-    return liana(adata, method="connectome", score_col="weight_sc", asc=False)
+    return liana(
+        adata, method="connectome", score_col="weight_sc", ascending=False, test=test
+    )
 
 
 @_liana_method(
     method_name="Mean log2FC",
 )
 def logfc(adata, test=False):
-    return liana(adata, method="logfc", score_col="logfc_comb", asc=False)
+    return liana(
+        adata, method="logfc", score_col="logfc_comb", ascending=False, test=test
+    )
 
 
 @_liana_method(
@@ -132,7 +115,9 @@ def logfc(adata, test=False):
     paper_year=2021,
 )
 def natmi(adata, test=False):
-    return liana(adata, method="natmi", score_col="edge_specificity", asc=False)
+    return liana(
+        adata, method="natmi", score_col="edge_specificity", ascending=False, test=test
+    )
 
 
 @_liana_method(
@@ -143,4 +128,4 @@ def natmi(adata, test=False):
     paper_year=2021,
 )
 def sca(adata, test=False):
-    return liana(adata, method="sca", score_col="LRscore", asc=False)
+    return liana(adata, method="sca", score_col="LRscore", ascending=False, test=test)
