@@ -15,6 +15,7 @@ _seurat_method = functools.partial(
     image="openproblems-r-extras",
 )
 
+
 @_seurat_method(
     method_name="Seurat reference mapping (SCTransform)",
 )
