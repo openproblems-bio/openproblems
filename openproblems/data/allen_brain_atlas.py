@@ -27,10 +27,9 @@ def load_mouse_brain_atlas(test=False):
 
         # remove missing labels for tests
         labels = adata.obs["label"].cat.categories
-        msk = np.logical_not(
-            ~adata.uns["ccc_target"]["source"].isin(labels)
-            | ~adata.uns["ccc_target"]["target"].isin(labels)
-        )
+        source_mask = ~adata.uns["ccc_target"]["target"].isin(labels)
+        target_mask = ~adata.uns["ccc_target"]["target"].isin(labels)
+        msk = np.logical_not(source_mask | target_mask)
         adata.uns["ccc_target"] = adata.uns["ccc_target"][msk]
 
         return adata
