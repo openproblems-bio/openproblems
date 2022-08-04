@@ -4,11 +4,11 @@ library(Seurat)
 
 # Method body
 # Default and test parameters
-n_pcs <- 50
+n.pcs <- 50
 k.score <- NULL
 k.filter <- NULL
 if (is_test) {
-  n_pcs <- 5
+  n.pcs <- 5
   k.score <- 5
   k.filter <- 20
 }
@@ -19,12 +19,12 @@ data <- SCTransform(data, assay = "originalexp", verbose = FALSE)
 reference <- data[, data$is_train]
 query <- data[, !data$is_train]
 
-reference <- RunPCA(reference, assay = "SCT", verbose = FALSE, n_pcs = n_pcs)
+reference <- RunPCA(reference, assay = "SCT", verbose = FALSE, n_pcs = n.pcs)
 anchors <- FindTransferAnchors(
   reference = reference,
   query = query,
   normalization.method = "SCT",
-  dims = 1:n_pcs,
+  dims = 1:n.pcs,
   k.score = k.score,
   k.filter = k.filter,
   verbose = FALSE
