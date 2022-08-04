@@ -6,7 +6,7 @@ library(Seurat)
 # Default and test parameters
 n_pcs <- 50
 k_score <- NULL
-k - filter <- NULL
+k_filter <- NULL
 if (is_test) {
   n_pcs <- 5
   k_score <- 5
