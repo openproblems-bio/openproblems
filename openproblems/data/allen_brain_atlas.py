@@ -16,8 +16,8 @@ def load_mouse_brain_atlas(test=False):
         # load full data first, cached if available
         adata = load_mouse_brain_atlas(test=False)
 
-        # Subsample data to 500 random cells
-        sc.pp.subsample(adata, n_obs=500)
+        # Subsample data to 0.1 random cells
+        sc.pp.subsample(adata, fraction=0.1)
         # Basic filtering
         utils.filter_genes_cells(adata)
 

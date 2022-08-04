@@ -51,8 +51,6 @@ def load_tnbc_data(test=False):
         # Remove empty
         utils.filter_genes_cells(adata)
 
-        return adata
-
     else:
         with tempfile.TemporaryDirectory() as tempdir:
             filepath = os.path.join(tempdir, "brca_tnbc.h5ad")
@@ -62,4 +60,7 @@ def load_tnbc_data(test=False):
             # Ensure there are no cells or genes with 0 counts
             utils.filter_genes_cells(adata)
 
-        return adata
+    # Remove unneeded cols
+    adata.uns["ccc_target"] = adata.uns["ccc_target"][["ligand", "target", "response"]]
+
+    return adata

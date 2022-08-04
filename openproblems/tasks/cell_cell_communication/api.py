@@ -46,16 +46,16 @@ def check_dataset(adata):
 
     resource = ligand_receptor_resource(adata.uns["target_organism"])
     if "receptor" in adata.uns["ccc_target"].columns:
-        assert np.all(
+        assert np.any(
             np.isin(
-                adata.uns["ccc_pred"]["receptor"].unique(),
+                adata.uns["ccc_target"]["receptor"].unique(),
                 np.unique(resource["receptor_genesymbol"]),
             )
         )
     if "ligand" in adata.uns["ccc_target"].columns:
-        assert np.all(
+        assert np.any(
             np.isin(
-                adata.uns["ccc_pred"]["ligand"].unique(),
+                adata.uns["ccc_target"]["ligand"].unique(),
                 np.unique(resource["ligand_genesymbol"]),
             )
         )
