@@ -15,9 +15,9 @@ al, 2022](https://doi.org/10.1038/s41467-022-30755-0) recently developed the
 as a foundation for this task.
 
 The challenges in evaluating the tools are further exacerbated by the
-lack of an appropriate gold standard to benchmark the performance of
-CCC methods. In an attempt to address this, Dimitrov et al use alternative
-data modalities, including the spatial proximity of cell types and inferred
+lack of aa gold standard to benchmark the performance of CCC methods. In an
+attempt to address this, Dimitrov et al use alternative data modalities, including
+the spatial proximity of cell types and inferred
 downstream cytokine activities, to generate an inferred ground truth. However,
 these modalities are only approximations of biological reality and come
 with their own assumptions and limitations. In time, the inclusion of more
