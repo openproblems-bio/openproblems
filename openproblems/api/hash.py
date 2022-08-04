@@ -80,7 +80,7 @@ def docker_hash(image_name):
                 image_name,
             ]
         )
-    except RuntimeError:  # pragma: nocover
+    except (RuntimeError, FileNotFoundError):  # pragma: nocover
         # docker is unavailable or the image is not locally available; use the API
         return docker_labels_from_api(image_name)["bio.openproblems.hash"]
 
