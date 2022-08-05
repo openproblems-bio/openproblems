@@ -7,6 +7,8 @@ import numpy as np
 
 _rctd = r_function("rctd.R", args="sce_sc, sce_sp")
 
+RCTD_MIN_CELLTYPE_COUNT = 25
+
 
 @method(
     method_name="RCTD",
@@ -19,6 +21,10 @@ _rctd = r_function("rctd.R", args="sce_sc, sce_sp")
 def rctd(adata, test=False):
     # exctract single cell reference data
     adata_sc, adata = split_sc_and_sp(adata)
+    # filter to min 25 cells per celltype
+    celltype_counts = adata_sc.obs["label"].value_counts() >= RCTD_MIN_CELLTYPE_COUNT
+    keep_cells = np.isin(adata_sc.obs["label"], celltype_counts.index[celltype_counts])
+    adata_sc = adata_sc[adata_sc.obs.index[keep_cells]]
     # set spatial coordinates for the single cell data
     adata_sc.obsm["spatial"] = np.ones((adata_sc.shape[0], 2))
     # run RCTD
