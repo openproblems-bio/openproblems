@@ -4,7 +4,7 @@ import numpy as np
 import scipy.stats as stats
 
 
-@metric(metric_name="Odds Ratio", maximize=True, image="openproblems-r-extras")
+@metric(metric_name="Odds Ratio", maximize=True)
 def odds_ratio(adata, top_n=100):
     # Join benchmark (assumed truth) and ccc results
     # Get /w ccc_target and a response [0, 1] column

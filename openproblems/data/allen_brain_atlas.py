@@ -25,7 +25,6 @@ def load_mouse_brain_atlas(test=False):
 
         # Keep only 500 genes
         adata = adata[:, 30000:30500].copy()
-        adata.uns["target_organism"] = adata.uns["target_organism"]
 
         # remove missing labels for tests
         labels = adata.obs["label"].cat.categories
@@ -41,7 +40,6 @@ def load_mouse_brain_atlas(test=False):
             filepath = os.path.join(tempdir, "mouse_brain_atlas.h5ad")
             scprep.io.download.download_url(URL, filepath)
             adata = sc.read(filepath)
-            adata.uns["target_organism"] = adata.uns["target_organism"]
 
             # Ensure there are no cells or genes with 0 counts
             utils.filter_genes_cells(adata)
