@@ -21,7 +21,7 @@ CCC_PRED_COLUMNS = CCC_COLUMNS.union({"score"})
 # Helper function to split complex subunits
 def decomplexify(entities):
     entity_list = [np.chararray.split(x, sep="_").tolist() for x in entities]
-    return reduce(lambda a,b:a+b, entity_list)
+    return reduce(lambda a, b: a + b, entity_list)
 
 
 def check_dataset(adata):
@@ -80,10 +80,14 @@ def check_method(adata):
     assert set(adata.uns["ccc_pred"]).issuperset(CCC_PRED_COLUMNS)
     assert "response" not in adata.uns["ccc_pred"]
 
-    assert np.all(np.isin(decomplexify(adata.uns["ccc_pred"]["ligand"].unique()),
-                          adata.var.index))
-    assert np.all(np.isin(decomplexify(adata.uns["ccc_pred"]["receptor"].unique()),
-                          adata.var.index))
+    assert np.all(
+        np.isin(decomplexify(adata.uns["ccc_pred"]["ligand"].unique()), adata.var.index)
+    )
+    assert np.all(
+        np.isin(
+            decomplexify(adata.uns["ccc_pred"]["receptor"].unique()), adata.var.index
+        )
+    )
 
     resource = ligand_receptor_resource(adata.uns["target_organism"])
     assert np.all(
