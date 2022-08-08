@@ -1,5 +1,5 @@
 backports@1.4.1
-bioc::OmnipathR@3.2.0
+bioc::OmnipathR@3.4.0
 bioc::scater@1.24.0
 bioc::scran@1.24.0
 bioc::scuttle@1.6.2
