@@ -30,10 +30,7 @@ def rctd(adata, test=False):
     for celltype in celltype_counts.index[~celltype_counts]:
         keep_idx = adata_sc.obs["label"] == celltype
         sample_idx = np.random.choice(adata_sc.obs.index[keep_idx], 25, replace=True)
-        adata_sc = ad.concat([
-            adata_sc,
-            adata_sc[sample_idx]
-        ])
+        adata_sc = ad.concat([adata_sc, adata_sc[sample_idx]])
     adata_sc.obs_names_make_unique()
 
     # set spatial coordinates for the single cell data
