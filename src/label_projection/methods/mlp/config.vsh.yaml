@@ -4,7 +4,7 @@ functionality:
   version: "dev"
   description: "Multilayer perceptron"
   info:
-    type: baseline
+    type: method
     label: Multilayer perceptron
   authors:
     - name: "Scott Gigante"

@@ -4,7 +4,7 @@ functionality:
   version: "dev"
   description: "Probabilistic harmonization and annotation of single-cell transcriptomics data with deep generative models."
   info:
-    type: baseline
+    type: method
     label: Scanvi_ALL_GENES
   authors:
     - name: "Scott Gigante"

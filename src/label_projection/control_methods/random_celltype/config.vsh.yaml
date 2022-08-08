@@ -1,10 +1,10 @@
 functionality:
-  name: "nayve_random_celltype"
+  name: "random_celltype"
   namespace: "label_projection/control_methods"
-  version: "dev"
+  versionn: "dev"
   description: "Random Labels dummy"
   info:
-    type: nayve_control
+    type: negative_control
     label: Random prediction
   authors:
     - name: "Scott Gigante"
