@@ -1,7 +1,6 @@
 from ...data.sample import load_sample_data
 from ...tools.decorators import dataset
 from .utils import ligand_receptor_resource
-from functools import reduce
 
 import numbers
 import numpy as np
@@ -19,9 +18,10 @@ CCC_PRED_COLUMNS = CCC_COLUMNS.union({"score"})
 
 
 # Helper function to split complex subunits
-def decomplexify(entities):
-    entity_list = [np.chararray.split(x, sep="_").tolist() for x in entities]
-    return reduce(lambda a, b: a + b, entity_list)
+def flatten_complex_subunits(entities):
+    return [
+        entity for entity_complex in entities for entity in entity_complex.split("_")
+    ]
 
 
 def check_dataset(adata):
@@ -81,11 +81,15 @@ def check_method(adata):
     assert "response" not in adata.uns["ccc_pred"]
 
     assert np.all(
-        np.isin(decomplexify(adata.uns["ccc_pred"]["ligand"].unique()), adata.var.index)
+        np.isin(
+            flatten_complex_subunits(adata.uns["ccc_pred"]["ligand"].unique()),
+            adata.var.index,
+        )
     )
     assert np.all(
         np.isin(
-            decomplexify(adata.uns["ccc_pred"]["receptor"].unique()), adata.var.index
+            flatten_complex_subunits(adata.uns["ccc_pred"]["receptor"].unique()),
+            adata.var.index,
         )
     )
 
