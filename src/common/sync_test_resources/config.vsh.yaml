@@ -1,0 +1,50 @@
+functionality:
+  name: "sync_test_resources"
+  namespace: "common"
+  version: "dev"
+  description: Synchronise the test resources from s3 to resources_test
+  usage: |
+    sync_test_resources
+    sync_test_resources --input s3://openproblems-data --output resources_test
+  authors:
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ maintainer ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--input"
+      alternatives: ["-i"]
+      type: string
+      description: "Path to the S3 bucket to sync from."
+      default: "s3://openproblems-data"
+    - name: "--output"
+      alternatives: ["-o"]
+      type: file
+      default: resources_test
+      direction: output
+      description: "Path to the test resource directory."
+    - name: "--quiet"
+      type: boolean_true
+      description: "Displays the operations that would be performed using the specified command without actually running them."
+    - name: "--dryrun"
+      type: boolean_true
+      description: "Does not display the operations performed from the specified command."
+    - name: "--delete"
+      type: boolean_true
+      description: "Files that exist in the destination but not in the source are deleted during sync."
+    - name: "--exclude"
+      type: "string"
+      multiple: true
+      description: Exclude all files or objects from the command that matches the specified pattern.
+  resources:
+    - type: bash_script
+      path: script.sh
+  test_resources:
+    - type: bash_script
+      path: run_test.sh
+platforms:
+  - type: docker
+    image: "amazon/aws-cli:2.7.12"
+  - type: native
+  - type: nextflow
+    variant: vdsl3

@@ -1,0 +1,6 @@
+processor	name	url	obs_celltype	obs_batch	obs_tissue
+anndata_loader	pancreas	https://ndownloader.figshare.com/files/24539828	celltype	tech	NA
+anndata_loader	cengen	https://github.com/Munfred/wormcells-data/releases/download/taylor2020/taylor2020.h5ad	cell_type	experiment_code	tissue
+anndata_loader	zebrafish	https://ndownloader.figshare.com/files/24566651?private_link=e3921450ec1bd0587870	cell_type	lab NA
+anndata_loader	tabula_muris_senis_facs_lung	https://ndownloader.figshare.com/files/23872619	free_annotation	mouse.id	NA
+anndata_loader	tabula_muris_senis_droplet_lung	https://ndownloader.figshare.com/files/23873012	free_annotation	mouse.id	NA

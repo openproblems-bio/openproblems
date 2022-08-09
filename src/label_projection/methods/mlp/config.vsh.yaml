@@ -1,0 +1,59 @@
+functionality:
+  name: "mlp"
+  namespace: "label_projection/methods"
+  version: "dev"
+  description: "Multilayer perceptron"
+  info:
+    type: baseline
+    label: Multilayer perceptron
+  authors:
+    - name: "Scott Gigante"
+      roles: [ author ]
+      props: { github: scottgigante }
+    - name: "Vinicius Chagas"
+      roles: [ maintainer ]
+      props: { github: chagasVinicius }
+  arguments:
+    - name: "--input"
+      alternatives: ["-i"]
+      type: "file"
+      example: "input.h5ad"
+      description: "Input file that will be used to generate predictions"
+      required: true
+    - name: "--hidden_layer_sizes"
+      type: "integer"
+      multiple: true
+      description: "The ith element represents the number of neurons in the ith hidden layer."
+      required: true
+    - name: "--max_iter"
+      type: "integer"
+      example: "100"
+      description: "Maximum number of iterations"
+      required: true
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: "Output data contatining predictions"
+      required: true
+  resources:
+    - type: python_script
+      path: script.py
+    - path: "../../utils.py"
+  tests:
+    - type: python_script
+      path: ../unit_tests/test_method.py
+    - path: ../../../../resources_test/label_projection/pancreas/toy_normalized_log_scran_pooling_data.h5ad
+    - path: ../../../../resources_test/label_projection/pancreas/toy_normalized_log_cpm_data.h5ad
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - sklearn
+          - "anndata<0.8"
+  - type: native
+  - type: nextflow

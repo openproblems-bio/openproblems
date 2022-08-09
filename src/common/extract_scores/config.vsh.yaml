@@ -10,6 +10,11 @@ functionality:
       multiple: true
       default: "input.h5ad"
       description: "Input h5ad files containing metadata and metrics in adata.uns"
+    - name: "--column_names"
+      type: "string"
+      multiple: true
+      default: [ "dataset_id", "method_id", "metric_id", "metric_value" ]
+      description: "Which fields from adata.uns to extract and store as a data frame."
     - name: "--output"
       alternatives: ["-o"]
       type: "file"

@@ -18,6 +18,7 @@ target/
 check_results/
 log.txt
 .viash*
+resources_test/
 
 # nextflow specific ignores
 .nextflow*
