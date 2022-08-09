@@ -26,11 +26,13 @@ def rctd(adata, test=False):
     # sample to min 25 cells per celltype
     celltype_counts = adata_sc.obs["label"].value_counts() >= RCTD_MIN_CELLTYPE_COUNT
     keep_cells = np.isin(adata_sc.obs["label"], celltype_counts.index[celltype_counts])
-    adata_sc = adata_sc[adata_sc.obs.index[keep_cells]]
+    keep_idx = adata_sc.obs.index[keep_cells]
     for celltype in celltype_counts.index[~celltype_counts]:
         keep_idx = adata_sc.obs["label"] == celltype
         sample_idx = np.random.choice(adata_sc.obs.index[keep_idx], 25, replace=True)
-        adata_sc = ad.concat([adata_sc, adata_sc[sample_idx]])
+        keep_idx = np.concatenate([keep_idx, sample_idx])
+        
+    adata_sc = adata_sc[keep_idx].copy()
     adata_sc.obs_names_make_unique()
 
     # set spatial coordinates for the single cell data
