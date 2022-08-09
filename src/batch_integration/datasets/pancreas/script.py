@@ -34,7 +34,8 @@ print('Read adata')
 adata = sc.read(adata_file)
 
 # Rename columns
-adata.obs.rename(columns={label: 'label', batch: 'batch'}, inplace=True)
+adata.obs['label'] = adata.obs[label]
+adata.obs['batch'] = adata.obs[batch]
 adata.layers['counts'] = adata.X.copy()
 
 print('Normalise and log-transform data')

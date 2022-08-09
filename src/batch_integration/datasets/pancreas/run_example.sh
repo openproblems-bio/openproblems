@@ -8,5 +8,5 @@ bin/viash run ${SCRIPTPATH}/config.vsh.yaml -- \
   --label celltype \
   --batch tech \
   --hvgs 100 \
-  --output src/batch_integration/datasets/resources/datasets_pancreas.h5ad \
+  --output src/batch_integration/resources/datasets_pancreas.h5ad \
   --debug true
