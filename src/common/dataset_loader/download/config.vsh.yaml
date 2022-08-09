@@ -23,10 +23,6 @@ functionality:
       type: "string"
       example: "pbmc"
       description: "Name of dataset"
-    - name: "--lognorm_available"
-      type: "string"
-      description: "Location of lognorm counts if exists, else empty"
-      required: true
     - name: "--obs_celltype"
       type: "string"
       description: "Location of where to find the observation cell types."
