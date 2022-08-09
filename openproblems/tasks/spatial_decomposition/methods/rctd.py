@@ -3,7 +3,6 @@ from ....tools.decorators import method
 from ....tools.utils import check_r_version
 from ..utils import split_sc_and_sp
 
-import anndata as ad
 import numpy as np
 
 _rctd = r_function("rctd.R", args="sce_sc, sce_sp")
@@ -22,18 +21,6 @@ RCTD_MIN_CELLTYPE_COUNT = 25
 def rctd(adata, test=False):
     # exctract single cell reference data
     adata_sc, adata = split_sc_and_sp(adata)
-
-    # sample to min 25 cells per celltype
-    celltype_counts = adata_sc.obs["label"].value_counts() >= RCTD_MIN_CELLTYPE_COUNT
-    keep_cells = np.isin(adata_sc.obs["label"], celltype_counts.index[celltype_counts])
-    keep_idx = adata_sc.obs.index[keep_cells]
-    for celltype in celltype_counts.index[~celltype_counts]:
-        keep_idx = adata_sc.obs["label"] == celltype
-        sample_idx = np.random.choice(adata_sc.obs.index[keep_idx], 25, replace=True)
-        keep_idx = np.concatenate([keep_idx, sample_idx])
-        
-    adata_sc = adata_sc[keep_idx].copy()
-    adata_sc.obs_names_make_unique()
 
     # set spatial coordinates for the single cell data
     adata_sc.obsm["spatial"] = np.ones((adata_sc.shape[0], 2))
