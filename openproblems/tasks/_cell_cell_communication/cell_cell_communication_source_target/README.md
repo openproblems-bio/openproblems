@@ -15,7 +15,7 @@ al, 2022](https://doi.org/10.1038/s41467-022-30755-0) recently developed the
 as a foundation for this task.
 
 The challenges in evaluating the tools are further exacerbated by the
-lack of a gold standard to benchmark the performance of CCC methods. In an
+lack of aa gold standard to benchmark the performance of CCC methods. In an
 attempt to address this, Dimitrov et al use alternative data modalities, including
 the spatial proximity of cell types and inferred
 downstream cytokine activities, to generate an inferred ground truth. However,
@@ -24,6 +24,9 @@ with their own assumptions and limitations. In time, the inclusion of more
 datasets with known ground truth interactions will become available, from
 which the limitations and advantages of the different CCC methods will
 be better understood.
+
+This subtask evaluates methods that predict interations between source cell types and
+target cell types.
 
 ## The metrics
 
@@ -46,17 +49,13 @@ assumed truth in `adata.uns["ccc_target"]`. The assumed truth could be derived f
 various proxies; we refer the reader to [Dimitrov et
 al](https://doi.org/10.1038/s41467-022-30755-0) for more details.
 
-`adata.uns["ccc_target"]` should be a Pandas DataFrame containing:
+`adata.uns["ccc_target"]` should be a Pandas DataFrame containing all of the
+following columns:
 
 * `response`: `int`, binary response variable indicating whether an interaction is
   assumed to have occurred
-
-and at least one of the following columns:
-
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
-* `ligand`: `str`, gene symbol of the ligand in an interaction
-* `receptor`: `str`, gene symbol of the receptor in an interaction
 
 The datasets should also include a
 [NCBI taxonomy ID](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi)
@@ -74,40 +73,8 @@ Methods should predict interactions between cell types without using
   inferred interaction
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
-* `ligand`: `str`, gene symbol of the ligand in an interaction
-* `receptor`: `str`, gene symbol of the receptor in an interaction
-
-Methods should infer a score for each _intersecting interaction_ in the harmonized
-prior-knowledge resource provided by LIANA. We define _intersecting interactions_ as
-those for which the relevant genes are both present in the dataset and the resource.
-
-The prior-knowledge resource is available via the
-`cell_cell_communication.utils.ligand_receptor_resource` function, which returns a
-DataFrame containing the columns `ligand_genesymbol` and `receptor_genesymbol`, which
-correspond to the ligand and receptor genes, respectively. These may contain complexes
-with subunits separated with `_`. Hence, **methods should be able to deal with
-complex-containing interactions**.
 
 ### Metrics
 
 Metrics should evaluate the concordance between `adata.uns["ccc_target"]` and
 `adata.uns["ccc_pred"]` to evaluate the success of a method in predicting interactions.
-Since not all datasets will provide all possible columns in `adata.uns["ccc_target"]`,
-metrics should perform a join on all shared columns in the two data frames to get the
-union/intersection of predicted and assumed interactions.
-
-### Examples
-
-The triple [negative breast cancer dataset](
-https://www.nature.com/articles/s41588-021-00911-1) (`tnbc_wu2021`) portrays
-benchmark truth in the form of inferred cytokine activities in the target cell
-types, as such in addition to the `response` column `adata.uns["ccc_target"]`,
-also contains `ligand` and `target` columns with which we can join the assumed
-truth to the output CCC predictions in `adata.uns['ccc_pred']`.
-
-In the case of the [murine brain dataset](
-https://www.nature.com/articles/nn.4216) (`allen_brain_atlas`), we assume that
-spatially-adjacent cell types are more likely to interact, hence interactions
-between them should be preferentially detected.
-Consequently, `adata.uns["ccc_target"]` contains `source`, `target`,
-and `response` columns, but no `ligand` or `receptor` columns.

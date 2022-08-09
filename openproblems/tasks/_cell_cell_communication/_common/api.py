@@ -1,5 +1,4 @@
-from ...data.sample import load_sample_data
-from ...tools.decorators import dataset
+from ....data.sample import load_sample_data
 from .utils import ligand_receptor_resource
 
 import numbers
@@ -24,26 +23,32 @@ def flatten_complex_subunits(entities):
     ]
 
 
-def check_dataset(adata):
+def check_dataset(adata, merge_keys):
     """Check that dataset output fits expected API."""
     assert "label" in adata.obs
     assert "ccc_target" in adata.uns
-    # require no superfluous columns
-    assert set(adata.uns["ccc_target"]).issubset(CCC_TARGET_COLUMNS)
-    # require at least one non-response column to be defined
-    assert len(set(adata.uns["ccc_target"]).intersection(CCC_TARGET_COLUMNS)) >= 2
 
+    # check target organism
+    assert "target_organism" in adata.uns
+    assert isinstance(adata.uns["target_organism"], numbers.Integral)
+
+    # check response columns
+    assert "score" not in adata.uns["ccc_target"]
     assert "response" in adata.uns["ccc_target"]
     assert np.issubdtype(adata.uns["ccc_target"]["response"].dtype, int)
     assert np.all(np.isin(adata.uns["ccc_target"]["response"], [0, 1]))
-    if "source" in adata.uns["ccc_target"].columns:
+
+    # check merge keys
+    if "source" in merge_keys:
+        assert "source" in adata.uns["ccc_target"]
         assert np.all(
             np.isin(
                 adata.uns["ccc_target"]["source"].unique(),
                 adata.obs["label"].cat.categories,
             )
         )
-    if "target" in adata.uns["ccc_target"].columns:
+    if "target" in merge_keys:
+        assert "target" in adata.uns["ccc_target"]
         assert np.all(
             np.isin(
                 adata.uns["ccc_target"]["target"].unique(),
@@ -51,15 +56,18 @@ def check_dataset(adata):
             )
         )
 
-    resource = ligand_receptor_resource(adata.uns["target_organism"])
-    if "receptor" in adata.uns["ccc_target"].columns:
+    if "receptor" in merge_keys:
+        assert "receptor" in adata.uns["ccc_target"]
+        resource = ligand_receptor_resource(adata.uns["target_organism"])
         assert np.all(
             np.isin(
                 adata.uns["ccc_target"]["receptor"].unique(),
                 np.unique(resource["receptor_genesymbol"]),
             )
         )
-    if "ligand" in adata.uns["ccc_target"].columns:
+    if "ligand" in merge_keys:
+        assert "ligand" in adata.uns["ccc_target"]
+        resource = ligand_receptor_resource(adata.uns["target_organism"])
         assert np.all(
             np.isin(
                 adata.uns["ccc_target"]["ligand"].unique(),
@@ -67,66 +75,56 @@ def check_dataset(adata):
             )
         )
 
-    assert "target_organism" in adata.uns
-    assert isinstance(adata.uns["target_organism"], numbers.Integral)
-
     return True
 
 
-def check_method(adata):
+def check_method(adata, merge_keys):
     """Check that method output fits expected API."""
     assert "ccc_pred" in adata.uns
-    # check if ligand-receptor and source-target (cell type) columns exist
-    assert set(adata.uns["ccc_pred"]).issuperset(CCC_PRED_COLUMNS)
+
+    # check response columns
     assert "response" not in adata.uns["ccc_pred"]
-
-    assert np.all(
-        np.isin(
-            flatten_complex_subunits(adata.uns["ccc_pred"]["ligand"].unique()),
-            adata.var.index,
-        )
-    )
-    assert np.all(
-        np.isin(
-            flatten_complex_subunits(adata.uns["ccc_pred"]["receptor"].unique()),
-            adata.var.index,
-        )
-    )
-
-    resource = ligand_receptor_resource(adata.uns["target_organism"])
-    assert np.all(
-        np.isin(
-            adata.uns["ccc_pred"]["ligand"].unique(),
-            np.unique(resource["ligand_genesymbol"]),
-        )
-    )
-    assert np.all(
-        np.isin(
-            adata.uns["ccc_pred"]["receptor"].unique(),
-            np.unique(resource["receptor_genesymbol"]),
-        )
-    )
-
-    assert np.all(
-        np.isin(
-            adata.uns["ccc_pred"]["source"].unique(),
-            adata.obs["label"].cat.categories,
-        )
-    )
-    assert np.all(
-        np.isin(
-            adata.uns["ccc_pred"]["target"].unique(),
-            adata.obs["label"].cat.categories,
-        )
-    )
-
+    assert "score" in adata.uns["ccc_pred"]
     assert np.all(np.isreal(adata.uns["ccc_pred"]["score"]))
+
+    # check merge keys
+    if "ligand" in merge_keys:
+        assert "ligand" in adata.uns["ccc_pred"]
+        assert np.all(
+            np.isin(
+                flatten_complex_subunits(adata.uns["ccc_pred"]["ligand"].unique()),
+                adata.var.index,
+            )
+        )
+    if "receptor" in merge_keys:
+        assert "receptor" in adata.uns["ccc_pred"]
+        assert np.all(
+            np.isin(
+                flatten_complex_subunits(adata.uns["ccc_pred"]["receptor"].unique()),
+                adata.var.index,
+            )
+        )
+    if "source" in merge_keys:
+        assert "source" in adata.uns["ccc_pred"]
+        assert np.all(
+            np.isin(
+                adata.uns["ccc_pred"]["source"].unique(),
+                adata.obs["label"].cat.categories,
+            )
+        )
+    if "target" in merge_keys:
+        assert "target" in adata.uns["ccc_pred"]
+        assert np.all(
+            np.isin(
+                adata.uns["ccc_pred"]["target"].unique(),
+                adata.obs["label"].cat.categories,
+            )
+        )
 
     return True
 
 
-@dataset()
-def sample_dataset():
+def sample_dataset(merge_keys):
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()
 
@@ -149,13 +147,18 @@ def sample_dataset():
     # transfer label
     adata.obs["label"] = adata.obs.cell_name
 
+    # generate target interactions
     adata.uns["ccc_target"] = pd.DataFrame(
         {
             "response": np.random.binomial(1, 0.2, 50),
             "ligand": np.random.choice(adata.var.index, 50),
+            "receptor": np.random.choice(adata.var.index, 50),
+            "source": np.random.choice(list(set(adata.obs.label)), 50),
             "target": np.random.choice(list(set(adata.obs.label)), 50),
         }
     )
+    # subset columns
+    adata.uns["ccc_target"] = adata.uns["ccc_target"][["response"] + merge_keys]
 
     # assign to human prior knowledge
     adata.uns["target_organism"] = 9606
@@ -163,7 +166,7 @@ def sample_dataset():
     return adata
 
 
-def sample_method(adata):
+def sample_method(adata, merge_keys):
     """Create sample method output for testing metrics in this task."""
     row_num = 500
     np.random.seed(1234)
@@ -184,6 +187,8 @@ def sample_method(adata):
     df["receptor"] = np.random.choice(
         np.unique(resource["receptor_genesymbol"].values), row_num
     )
+    # subset columns
+    df = df[["score"] + merge_keys]
 
     adata.uns["ccc_pred"] = df
 

@@ -1,7 +1,7 @@
-from ....tools.conversion import r_function
-from ....tools.decorators import method
-from ....tools.normalize import log_cpm
-from ....tools.utils import check_r_version
+from .....tools.conversion import r_function
+from .....tools.decorators import method
+from .....tools.normalize import log_cpm
+from .....tools.utils import check_r_version
 from ..utils import ligand_receptor_resource
 
 import functools

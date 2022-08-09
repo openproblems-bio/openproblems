@@ -1,14 +1,16 @@
-from ....tools.decorators import metric
+from .....tools.decorators import metric
 
 import numpy as np
 import scipy.stats as stats
 
 
 @metric(metric_name="Odds Ratio", maximize=True)
-def odds_ratio(adata, top_n=100):
+def odds_ratio(adata, merge_keys, top_n=100):
     # Join benchmark (assumed truth) and ccc results
     # Get /w ccc_target and a response [0, 1] column
-    gt = adata.uns["ccc_target"].merge(adata.uns["ccc_pred"], how="right")
+    gt = adata.uns["ccc_target"].merge(
+        adata.uns["ccc_pred"], on=merge_keys, how="right"
+    )
     gt = gt[gt["response"].notna()]
 
     # assign the top rank interactions to 1

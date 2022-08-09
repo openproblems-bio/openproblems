@@ -1,5 +1,5 @@
-from ....data.allen_brain_atlas import load_mouse_brain_atlas
-from ....tools.decorators import dataset
+from .....data.allen_brain_atlas import load_mouse_brain_atlas
+from .....tools.decorators import dataset
 
 
 @dataset(

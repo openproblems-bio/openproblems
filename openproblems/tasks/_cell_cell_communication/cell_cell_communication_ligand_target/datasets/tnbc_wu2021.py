@@ -1,5 +1,5 @@
-from ....data.tnbc_wu2021 import load_tnbc_data
-from ....tools.decorators import dataset
+from .....data.tnbc_wu2021 import load_tnbc_data
+from .....tools.decorators import dataset
 
 
 @dataset(

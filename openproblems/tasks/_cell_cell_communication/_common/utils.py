@@ -1,7 +1,8 @@
+import functools
 import scprep.run
 
 # Helper function to obtain and convert a Ligand-Receptor resource
-ligand_receptor_resource = scprep.run.RFunction(
+_ligand_receptor_resource = scprep.run.RFunction(
     args="target_organism",
     body="""
         HUMAN <- 9606
@@ -21,3 +22,8 @@ ligand_receptor_resource = scprep.run.RFunction(
         )
     """,
 )
+
+
+@functools.lru_cache(None)
+def ligand_receptor_resource(target_organism):
+    return _ligand_receptor_resource(target_organism)
