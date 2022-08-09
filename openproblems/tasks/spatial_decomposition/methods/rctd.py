@@ -7,8 +7,6 @@ import numpy as np
 
 _rctd = r_function("rctd.R", args="sce_sc, sce_sp")
 
-RCTD_MIN_CELLTYPE_COUNT = 25
-
 
 @method(
     method_name="RCTD",
