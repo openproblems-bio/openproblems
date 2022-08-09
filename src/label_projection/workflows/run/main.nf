@@ -15,6 +15,7 @@ include { log_scran_pooling } from "$targetDir/label_projection/data_processing/
 include { log_cpm } from "$targetDir/label_projection/data_processing/normalize/log_cpm/main.nf"
 
 // import methods
+include { all_correct }    from "$targetDir/label_projection/control_methods/all_correct/main.nf"
 include { majority_vote }    from "$targetDir/label_projection/control_methods/majority_vote/main.nf"
 include { random_celltype }  from "$targetDir/label_projection/control_methods/random_celltype/main.nf"
 include { knn_classifier }   from "$targetDir/label_projection/methods/knn_classifier/main.nf"
@@ -105,7 +106,7 @@ workflow {
         | (log_cpm & log_scran_pooling)
         | mix
         | map { unique_file_name(it) }
-        | (knn_classifier & mlp0 & lr0 & random_celltype & majority_vote)
+        | (knn_classifier & mlp0 & lr0 & random_celltype & majority_vote & all_correct)
         | mix
         | map { unique_file_name(it) }
         | (accuracy & f1a)

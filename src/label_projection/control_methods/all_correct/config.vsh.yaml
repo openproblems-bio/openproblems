@@ -1,11 +1,11 @@
 functionality:
-  name: "majority_vote"
+  name: "all_correct"
   namespace: "label_projection/control_methods"
   version: "dev"
-  description: "Majority vote dummy"
+  description: "Positive control method"
   info:
-    type: negative_control
-    label: Random prediction
+    type: positive_control
+    label: All predictions are correct
   authors:
     - name: "Scott Gigante"
       roles: [ author ]

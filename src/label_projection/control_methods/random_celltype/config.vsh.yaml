@@ -1,7 +1,7 @@
 functionality:
   name: "random_celltype"
   namespace: "label_projection/control_methods"
-  versionn: "dev"
+  version: "dev"
   description: "Random Labels dummy"
   info:
     type: negative_control
