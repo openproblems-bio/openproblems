@@ -1,0 +1,47 @@
+functionality:
+  name: subsample
+  namespace: batch_integration/subsample
+  version: dev
+  description: Subset adata object for testing
+  authors:
+    - name: Michaela Mueller
+      roles: [ maintainer, author ]
+      props: { github: mumichae }
+  arguments:
+    - name: --output
+      alternatives: [ -o ]
+      type: file
+      direction: output
+      description: Output h5ad file of the cleaned dataset
+      required: true
+    - name: --adata
+      type: file
+      description: Anndata HDF5 file
+      required: true
+    - name: --label
+      type: string
+      description: Cell annotation label in adata.obs
+      required: true
+    - name: --batch
+      type: string
+      description: Batch assignment in adata.obs
+      required: true
+    - name: --debug
+      type: boolean
+      description: Verbose output for debugging
+      default: False
+      required: false
+  resources:
+    - type: python_script
+      path: script.py
+    - path: "../../resources/g2m_genes_tirosh_hm.txt"
+    - path: "../../resources/s_genes_tirosh_hm.txt"
+  tests:
+    - type: python_script
+      path: test.py
+    - path: '../../../common/dataset_loader/download/resources/pancreas.h5ad'
+platforms:
+  - type: docker
+    image: mumichae/scib-base:1.0.2
+  - type: native
+  - type: nextflow
