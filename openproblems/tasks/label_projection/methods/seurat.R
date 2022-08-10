@@ -1,17 +1,16 @@
+#' seurat.R
+#' Runs Seurat TransferData with SCT
+#' @param sce SingleCellExperiment
+#' @param n_pcs int Number of PCA components
+#' @param k_score int How many neighbors (k) to use when filtering anchors.
+#' Set to NA to turn off filtering.
+#' @param k_filter int How many neighbors (k) to use when scoring anchors
+
 # Dependencies
 library(SingleCellExperiment)
 library(Seurat)
 
 # Method body
-# Default and test parameters
-n_pcs <- 50
-k_score <- NULL
-k_filter <- NULL
-if (is_test) {
-  n_pcs <- 5
-  k_score <- 5
-  k_filter <- 20
-}
 
 data <- as.Seurat(sce, counts = "X", data = NULL)
 data <- SCTransform(data, assay = "originalexp", verbose = FALSE)
