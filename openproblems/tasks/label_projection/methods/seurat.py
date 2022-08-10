@@ -24,7 +24,7 @@ def seurat(
     adata,
     n_pcs: Optional[int] = None,
     k_score: Optional[int] = None,
-    k_filter: Optiona[int] = None,
+    k_filter: Optional[int] = None,
     test: bool = False,
 ):
     kwargs = {}
