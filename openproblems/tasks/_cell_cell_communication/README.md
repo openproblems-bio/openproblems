@@ -78,6 +78,9 @@ in `adata.uns["target_organism"]` - used to convert the (typically human) prior
 knowledge of the CCC methods to the corresponding gene homologs.
 `adata.X` should contain the raw counts matrix.
 
+For subtasks including ligands or receptors in the inferred interactions, TODO: describe
+ligand-receptor resource.
+
 ### Methods
 
 Methods should predict interactions between cell types without using

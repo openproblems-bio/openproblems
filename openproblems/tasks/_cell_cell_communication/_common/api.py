@@ -1,19 +1,9 @@
 from ....data.sample import load_sample_data
-from .utils import ligand_receptor_resource
 
 import numbers
 import numpy as np
 import pandas as pd
 import scanpy as sc
-
-CCC_COLUMNS = {
-    "ligand",
-    "receptor",
-    "source",
-    "target",
-}
-CCC_TARGET_COLUMNS = CCC_COLUMNS.union({"response"})
-CCC_PRED_COLUMNS = CCC_COLUMNS.union({"score"})
 
 
 # Helper function to split complex subunits
@@ -38,6 +28,35 @@ def check_dataset(adata, merge_keys):
     assert np.issubdtype(adata.uns["ccc_target"]["response"].dtype, int)
     assert np.all(np.isin(adata.uns["ccc_target"]["response"], [0, 1]))
 
+    # check resource
+    if "ligand" in merge_keys or "receptor" in merge_keys:
+        # verify resource is correct
+        # TODO(@dbdimitrov): check this is right
+        assert "ligand_receptor_resource" in adata.uns
+        assert "ligand_receptor_resource" in adata.uns
+        assert "receptor_genesymbol" in adata.uns["ligand_receptor_resource"]
+        assert "ligand_genesymbol" in adata.uns["ligand_receptor_resource"]
+        assert np.all(
+            np.isin(
+                flatten_complex_subunits(
+                    np.unique(
+                        adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]
+                    )
+                ),
+                adata.var.index,
+            )
+        )
+        assert np.all(
+            np.isin(
+                flatten_complex_subunits(
+                    np.unique(
+                        adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]
+                    )
+                ),
+                adata.var.index,
+            )
+        )
+
     # check merge keys
     if "source" in merge_keys:
         assert "source" in adata.uns["ccc_target"]
@@ -57,21 +76,21 @@ def check_dataset(adata, merge_keys):
         )
 
     if "receptor" in merge_keys:
+        # verify target receptors are in resource
         assert "receptor" in adata.uns["ccc_target"]
-        resource = ligand_receptor_resource(adata.uns["target_organism"])
         assert np.all(
             np.isin(
                 adata.uns["ccc_target"]["receptor"].unique(),
-                np.unique(resource["receptor_genesymbol"]),
+                np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]),
             )
         )
     if "ligand" in merge_keys:
+        # verify target ligands are in resource
         assert "ligand" in adata.uns["ccc_target"]
-        resource = ligand_receptor_resource(adata.uns["target_organism"])
         assert np.all(
             np.isin(
                 adata.uns["ccc_target"]["ligand"].unique(),
-                np.unique(resource["ligand_genesymbol"]),
+                np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]),
             )
         )
 
@@ -92,16 +111,16 @@ def check_method(adata, merge_keys):
         assert "ligand" in adata.uns["ccc_pred"]
         assert np.all(
             np.isin(
-                flatten_complex_subunits(adata.uns["ccc_pred"]["ligand"].unique()),
-                adata.var.index,
+                adata.uns["ccc_target"]["ligand"].unique(),
+                np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]),
             )
         )
     if "receptor" in merge_keys:
         assert "receptor" in adata.uns["ccc_pred"]
         assert np.all(
             np.isin(
-                flatten_complex_subunits(adata.uns["ccc_pred"]["receptor"].unique()),
-                adata.var.index,
+                adata.uns["ccc_pred"]["receptor"].unique(),
+                np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]),
             )
         )
     if "source" in merge_keys:
@@ -162,6 +181,20 @@ def sample_dataset(merge_keys):
 
     # assign to human prior knowledge
     adata.uns["target_organism"] = 9606
+    # TODO(@dbdimitrov): make a proper fake resource
+    n_complexes = 10
+    ligand_complexes = [
+        "_".join(np.random.choice(adata.var.index, 3)) for _ in range(n_complexes)
+    ]
+    receptor_complexes = [
+        "_".join(np.random.choice(adata.var.index, 3)) for _ in range(n_complexes)
+    ]
+    adata.uns["ligand_receptor_resource"] = pd.DataFrame(
+        {
+            "ligand_genesymbol": ligand_complexes + adata.var.index.to_list(),
+            "receptor_genesymbol": receptor_complexes + adata.var.index.to_list(),
+        }
+    )
 
     return adata
 
@@ -171,12 +204,15 @@ def sample_method(adata, merge_keys):
     row_num = 500
     np.random.seed(1234)
 
-    resource = ligand_receptor_resource(adata.uns["target_organism"])
-    ligand_msk = ~resource["ligand_genesymbol"].isin(adata.var.index)
-    receptor_msk = ~resource["receptor_genesymbol"].isin(adata.var.index)
+    ligand_msk = ~adata.uns["ligand_receptor_resource"]["ligand_genesymbol"].isin(
+        adata.var.index
+    )
+    receptor_msk = ~adata.uns["ligand_receptor_resource"]["receptor_genesymbol"].isin(
+        adata.var.index
+    )
     msk = np.logical_not(ligand_msk | receptor_msk)
     # keep only plausible interactions
-    resource = resource[msk]
+    resource = adata.uns["ligand_receptor_resource"][msk]
 
     df = pd.DataFrame(np.random.random((row_num, 1)), columns=["score"])
     df["source"] = np.random.choice(np.unique(adata.obs[["label"]]), row_num)

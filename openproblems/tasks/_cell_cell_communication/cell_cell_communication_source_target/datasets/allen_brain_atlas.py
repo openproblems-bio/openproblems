@@ -1,5 +1,6 @@
 from .....data.allen_brain_atlas import load_mouse_brain_atlas
 from .....tools.decorators import dataset
+from ..._common.utils import ligand_receptor_resource
 
 
 @dataset(
@@ -13,4 +14,8 @@ from .....tools.decorators import dataset
     image="openproblems-r-extras",
 )
 def mouse_brain_atlas(test=False):
-    return load_mouse_brain_atlas(test=test)
+    adata = load_mouse_brain_atlas(test=test)
+    adata.uns["ligand_receptor_resource"] = ligand_receptor_resource(
+        adata.uns["target_organism"]
+    )
+    return adata
