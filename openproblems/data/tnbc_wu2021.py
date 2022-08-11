@@ -1,7 +1,9 @@
 from . import utils
 
+import numpy as np
 import os
 import scanpy as sc
+import scipy.sparse
 import scprep
 import tempfile
 
@@ -48,9 +50,14 @@ def load_tnbc_data(test=False):
         # Subsample data to 500 random cells
         sc.pp.subsample(adata, n_obs=500)
 
-        # Remove empty
-        utils.filter_genes_cells(adata)
-
+        # Add noise to ensure no genes are empty -- filtering genes could remove ligands
+        empty_gene_idx = np.argwhere(adata.X.sum(axis=0).A.flatten() == 0).flatten()
+        random_cell_idx = np.random.choice(adata.shape[0], len(empty_gene_idx))
+        adata.X += scipy.sparse.coo_matrix(
+            (np.ones(len(empty_gene_idx)), (random_cell_idx, empty_gene_idx)),
+            shape=adata.shape,
+        )
+        adata.X = adata.X.tocsr()
     else:
         with tempfile.TemporaryDirectory() as tempdir:
             filepath = os.path.join(tempdir, "brca_tnbc.h5ad")
