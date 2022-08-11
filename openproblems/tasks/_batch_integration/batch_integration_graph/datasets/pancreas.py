@@ -28,4 +28,5 @@ def pancreas_batch(test=False):
 
     sc.pp.neighbors(adata, use_rep="X_uni", key_added="uni")
 
+    adata.var_names_make_unique()
     return adata

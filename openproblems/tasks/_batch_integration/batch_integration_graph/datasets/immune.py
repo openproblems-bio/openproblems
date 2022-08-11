@@ -26,4 +26,5 @@ def immune_batch(test=False):
     adata.obsm["X_uni"] = adata.obsm["X_pca"]
 
     sc.pp.neighbors(adata, use_rep="X_uni", key_added="uni")
+    adata.var_names_make_unique()
     return adata
