@@ -7,6 +7,8 @@ from pandas.core.dtypes.common import is_categorical_dtype
 
 import numpy as np
 
+CELLTYPE_MIN_CELLS = 25
+
 
 def check_dataset(adata: AnnData):
     """Check that dataset output fits expected API."""
@@ -16,13 +18,17 @@ def check_dataset(adata: AnnData):
     # check that proportions are included
     assert "proportions_true" in adata.obsm
     assert isinstance(adata.obsm["proportions_true"], np.ndarray)
-    # make sure proportions sum to one, some precision error allowed
-    proportions_sum = np.sum(
-        adata[adata.obs["modality"] == "sp"].obsm["proportions_true"], axis=1
-    )
-    np.testing.assert_allclose(proportions_sum, 1)
-    # ensure cell type labels are found in single cell reference
+    assert "label" in adata.obs
     assert is_categorical_dtype(adata.obs["label"])
+    assert "modality" in adata.obs
+    assert np.all(np.isin(adata.obs["modality"], ["sc", "sp"]))
+    adata_sc, adata_sp = split_sc_and_sp(adata)
+    # make sure proportions sum to one, some precision error allowed
+    proportions_sum = np.sum(adata_sp.obsm["proportions_true"], axis=1)
+    np.testing.assert_allclose(proportions_sum, 1)
+    # make sure no celltype labels are too rare
+    celltype_counts = adata_sc.obs["label"].value_counts()
+    assert np.all(celltype_counts >= CELLTYPE_MIN_CELLS)
     return True
 
 

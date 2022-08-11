@@ -19,6 +19,7 @@ _rctd = r_function("rctd.R", args="sce_sc, sce_sp")
 def rctd(adata, test=False):
     # exctract single cell reference data
     adata_sc, adata = split_sc_and_sp(adata)
+
     # set spatial coordinates for the single cell data
     adata_sc.obsm["spatial"] = np.ones((adata_sc.shape[0], 2))
     # run RCTD
