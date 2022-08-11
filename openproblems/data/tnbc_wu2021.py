@@ -58,6 +58,8 @@ def load_tnbc_data(test=False):
             shape=adata.shape,
         )
         adata.X = adata.X.tocsr()
+        # update layers["counts"] with the new counts
+        adata.layers["counts"] = adata.X
     else:
         with tempfile.TemporaryDirectory() as tempdir:
             filepath = os.path.join(tempdir, "brca_tnbc.h5ad")
