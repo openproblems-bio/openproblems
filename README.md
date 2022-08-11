@@ -43,6 +43,7 @@ Full tasks (>1 datasets, >5 methods):
 * Dimensionality reduction - Michael Vinyard (@mvinyard) and Luke Zappia (@lazappi)
 * Label projection - Nick Markov (@mxposed)
 * Spatial deconvolution - Alma Anderson (@almaan) and Giovanni Palla (@giovp)
+* Cell-cell communication - Daniel Dimitrov (@dbdimitrov)
 
 Task stubs:
 
@@ -52,7 +53,6 @@ Task stubs:
 Tasks in discussion:
 
 * ATAC denoising - Dominik Otto (@katosh)
-* Cell-cell communication - Daniel Dimitrov (@dbdimitrov)
 * Differential abundance - Emma Dann (@emdann)
 * Regulatory effect prediction - Qian (Alvin) Qin (@qinqian)
 
