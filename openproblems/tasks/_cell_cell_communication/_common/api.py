@@ -6,6 +6,16 @@ import pandas as pd
 import scanpy as sc
 
 
+def assert_is_subset(subset, superset, subset_name="subset", superset_name="superset"):
+    """Assert `np.all(np.isin(subset, superset))` with a more readable error message"""
+    is_missing = ~np.isin(subset, superset)
+    if np.any(is_missing):
+        x_missing = ",".join([x for x in subset[is_missing]])
+        raise AssertionError(
+            f"{subset_name} elements {x_missing} missing from {superset_name}"
+        )
+
+
 # Helper function to split complex subunits
 def flatten_complex_subunits(entities):
     return [
@@ -36,62 +46,58 @@ def check_dataset(adata, merge_keys):
         assert "ligand_receptor_resource" in adata.uns
         assert "receptor_genesymbol" in adata.uns["ligand_receptor_resource"]
         assert "ligand_genesymbol" in adata.uns["ligand_receptor_resource"]
-        assert np.all(
-            np.isin(
-                flatten_complex_subunits(
-                    np.unique(
-                        adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]
-                    )
-                ),
-                adata.var.index,
-            )
+        assert assert_is_subset(
+            flatten_complex_subunits(
+                np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"])
+            ),
+            adata.var.index,
+            "resource receptor names",
+            "gene names",
         )
-        assert np.all(
-            np.isin(
-                flatten_complex_subunits(
-                    np.unique(
-                        adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]
-                    )
-                ),
-                adata.var.index,
-            )
+        assert assert_is_subset(
+            flatten_complex_subunits(
+                np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"])
+            ),
+            adata.var.index,
+            "resource ligand names",
+            "gene names",
         )
 
     # check merge keys
     if "source" in merge_keys:
         assert "source" in adata.uns["ccc_target"]
-        assert np.all(
-            np.isin(
-                adata.uns["ccc_target"]["source"].unique(),
-                adata.obs["label"].cat.categories,
-            )
+        assert assert_is_subset(
+            adata.uns["ccc_target"]["source"].unique(),
+            adata.obs["label"].cat.categories,
+            "source cell",
+            "cell types",
         )
     if "target" in merge_keys:
         assert "target" in adata.uns["ccc_target"]
-        assert np.all(
-            np.isin(
-                adata.uns["ccc_target"]["target"].unique(),
-                adata.obs["label"].cat.categories,
-            )
+        assert assert_is_subset(
+            adata.uns["ccc_target"]["target"].unique(),
+            adata.obs["label"].cat.categories,
+            "target cell",
+            "cell types",
         )
 
     if "receptor" in merge_keys:
         # verify target receptors are in resource
         assert "receptor" in adata.uns["ccc_target"]
-        assert np.all(
-            np.isin(
-                adata.uns["ccc_target"]["receptor"].unique(),
-                np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]),
-            )
+        assert assert_is_subset(
+            adata.uns["ccc_target"]["receptor"].unique(),
+            np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]),
+            "target receptor names",
+            "resource receptor names",
         )
     if "ligand" in merge_keys:
         # verify target ligands are in resource
         assert "ligand" in adata.uns["ccc_target"]
-        assert np.all(
-            np.isin(
-                adata.uns["ccc_target"]["ligand"].unique(),
-                np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]),
-            )
+        assert assert_is_subset(
+            adata.uns["ccc_target"]["ligand"].unique(),
+            np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]),
+            "target ligand names",
+            "resource ligand names",
         )
 
     return True
@@ -109,35 +115,35 @@ def check_method(adata, merge_keys):
     # check merge keys
     if "ligand" in merge_keys:
         assert "ligand" in adata.uns["ccc_pred"]
-        assert np.all(
-            np.isin(
-                adata.uns["ccc_target"]["ligand"].unique(),
-                np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]),
-            )
+        assert assert_is_subset(
+            adata.uns["ccc_pred"]["ligand"].unique(),
+            np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]),
+            "predicted ligand names",
+            "resource ligand names",
         )
     if "receptor" in merge_keys:
         assert "receptor" in adata.uns["ccc_pred"]
-        assert np.all(
-            np.isin(
-                adata.uns["ccc_pred"]["receptor"].unique(),
-                np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]),
-            )
+        assert assert_is_subset(
+            adata.uns["ccc_pred"]["receptor"].unique(),
+            np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]),
+            "predicted receptor names",
+            "resource receptor names",
         )
     if "source" in merge_keys:
         assert "source" in adata.uns["ccc_pred"]
-        assert np.all(
-            np.isin(
-                adata.uns["ccc_pred"]["source"].unique(),
-                adata.obs["label"].cat.categories,
-            )
+        assert assert_is_subset(
+            adata.uns["ccc_pred"]["source"].unique(),
+            adata.obs["label"].cat.categories,
+            "source cell",
+            "cell types",
         )
     if "target" in merge_keys:
         assert "target" in adata.uns["ccc_pred"]
-        assert np.all(
-            np.isin(
-                adata.uns["ccc_pred"]["target"].unique(),
-                adata.obs["label"].cat.categories,
-            )
+        assert assert_is_subset(
+            adata.uns["ccc_pred"]["target"].unique(),
+            adata.obs["label"].cat.categories,
+            "target cell",
+            "cell types",
         )
 
     return True
