@@ -16,6 +16,7 @@ def _convert_dataset_function(
         adata = func(test=test)
         adata = log_scran_pooling(adata)
         adata.X = adata.layers["counts"]
+        adata.var_names_make_unique()
         return adata
 
     converted_func.__name__ = name
