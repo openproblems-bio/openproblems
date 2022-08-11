@@ -46,7 +46,7 @@ def check_dataset(adata, merge_keys):
         assert "ligand_receptor_resource" in adata.uns
         assert "receptor_genesymbol" in adata.uns["ligand_receptor_resource"]
         assert "ligand_genesymbol" in adata.uns["ligand_receptor_resource"]
-        assert assert_is_subset(
+        assert_is_subset(
             flatten_complex_subunits(
                 np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"])
             ),
@@ -54,7 +54,7 @@ def check_dataset(adata, merge_keys):
             "resource receptor names",
             "gene names",
         )
-        assert assert_is_subset(
+        assert_is_subset(
             flatten_complex_subunits(
                 np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"])
             ),
@@ -66,7 +66,7 @@ def check_dataset(adata, merge_keys):
     # check merge keys
     if "source" in merge_keys:
         assert "source" in adata.uns["ccc_target"]
-        assert assert_is_subset(
+        assert_is_subset(
             adata.uns["ccc_target"]["source"].unique(),
             adata.obs["label"].cat.categories,
             "source cell",
@@ -74,7 +74,7 @@ def check_dataset(adata, merge_keys):
         )
     if "target" in merge_keys:
         assert "target" in adata.uns["ccc_target"]
-        assert assert_is_subset(
+        assert_is_subset(
             adata.uns["ccc_target"]["target"].unique(),
             adata.obs["label"].cat.categories,
             "target cell",
@@ -84,7 +84,7 @@ def check_dataset(adata, merge_keys):
     if "receptor" in merge_keys:
         # verify target receptors are in resource
         assert "receptor" in adata.uns["ccc_target"]
-        assert assert_is_subset(
+        assert_is_subset(
             adata.uns["ccc_target"]["receptor"].unique(),
             np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]),
             "target receptor names",
@@ -93,7 +93,7 @@ def check_dataset(adata, merge_keys):
     if "ligand" in merge_keys:
         # verify target ligands are in resource
         assert "ligand" in adata.uns["ccc_target"]
-        assert assert_is_subset(
+        assert_is_subset(
             adata.uns["ccc_target"]["ligand"].unique(),
             np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]),
             "target ligand names",
@@ -115,7 +115,7 @@ def check_method(adata, merge_keys):
     # check merge keys
     if "ligand" in merge_keys:
         assert "ligand" in adata.uns["ccc_pred"]
-        assert assert_is_subset(
+        assert_is_subset(
             adata.uns["ccc_pred"]["ligand"].unique(),
             np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]),
             "predicted ligand names",
@@ -123,7 +123,7 @@ def check_method(adata, merge_keys):
         )
     if "receptor" in merge_keys:
         assert "receptor" in adata.uns["ccc_pred"]
-        assert assert_is_subset(
+        assert_is_subset(
             adata.uns["ccc_pred"]["receptor"].unique(),
             np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]),
             "predicted receptor names",
@@ -131,7 +131,7 @@ def check_method(adata, merge_keys):
         )
     if "source" in merge_keys:
         assert "source" in adata.uns["ccc_pred"]
-        assert assert_is_subset(
+        assert_is_subset(
             adata.uns["ccc_pred"]["source"].unique(),
             adata.obs["label"].cat.categories,
             "source cell",
@@ -139,7 +139,7 @@ def check_method(adata, merge_keys):
         )
     if "target" in merge_keys:
         assert "target" in adata.uns["ccc_pred"]
-        assert assert_is_subset(
+        assert_is_subset(
             adata.uns["ccc_pred"]["target"].unique(),
             adata.obs["label"].cat.categories,
             "target cell",
