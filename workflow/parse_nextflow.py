@@ -229,9 +229,15 @@ def results_to_json(results, outdir):
             if not os.path.isdir(results_dir):
                 os.mkdir(results_dir)
             filename = os.path.join(results_dir, "{}.json".format(dataset_name))
+            try:
+                dataset_results_json = dataset_results_to_json(
+                    task_name, dataset_name, dataset_results
+                )
+            except utils.NoSuchFunctionError:
+                continue
             with open(filename, "w") as handle:
                 dump_json(
-                    dataset_results_to_json(task_name, dataset_name, dataset_results),
+                    dataset_results_json,
                     handle,
                 )
 
