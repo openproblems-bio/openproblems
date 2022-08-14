@@ -25,6 +25,20 @@ datasets with known ground truth interactions will become available, from
 which the limitations and advantages of the different CCC methods will
 be better understood.
 
+## The subtasks
+
+Subtasks for cell-cell communication are defined by which aspects of a communication
+event are detected. Currently, two subtasks are defined:
+
+* [Ligand-Target](./cell_cell_communication_ligand_target): interactions between
+  ligand molecules and target cell types; and
+* [Source-Target](./cell_cell_communication_source_target): interactions between
+  source cell types and target cell types.
+
+More subtasks may be defined that infer communication events on any of the source
+cell type, the target cell type, the ligand molecule, and the ligand receptor.
+More aspects of the communication may also be added in future.
+
 ## The metrics
 
 Metrics for cell-cell communication aim to characterize how good are
@@ -64,6 +78,9 @@ in `adata.uns["target_organism"]` - used to convert the (typically human) prior
 knowledge of the CCC methods to the corresponding gene homologs.
 `adata.X` should contain the raw counts matrix.
 
+For subtasks including ligands or receptors in the inferred interactions, TODO: describe
+ligand-receptor resource.
+
 ### Methods
 
 Methods should predict interactions between cell types without using
@@ -92,9 +109,6 @@ complex-containing interactions**.
 
 Metrics should evaluate the concordance between `adata.uns["ccc_target"]` and
 `adata.uns["ccc_pred"]` to evaluate the success of a method in predicting interactions.
-Since not all datasets will provide all possible columns in `adata.uns["ccc_target"]`,
-metrics should perform a join on all shared columns in the two data frames to get the
-union/intersection of predicted and assumed interactions.
 
 ### Examples
 
@@ -102,8 +116,7 @@ The triple [negative breast cancer dataset](
 https://www.nature.com/articles/s41588-021-00911-1) (`tnbc_wu2021`) portrays
 benchmark truth in the form of inferred cytokine activities in the target cell
 types, as such in addition to the `response` column `adata.uns["ccc_target"]`,
-also contains `ligand` and `target` columns with which we can join the assumed
-truth to the output CCC predictions in `adata.uns['ccc_pred']`.
+also contains `ligand` and `target` columns.
 
 In the case of the [murine brain dataset](
 https://www.nature.com/articles/nn.4216) (`allen_brain_atlas`), we assume that

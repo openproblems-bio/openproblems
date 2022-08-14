@@ -1,11 +1,11 @@
-from ...utils import get_callable_members
+from ....utils import get_callable_members
 from . import api
 from . import datasets
 from . import methods
 from . import metrics
 
-_task_name = "Cell-Cell Communication Inference"
-_task_summary = "Detect intercellular communication events between cell types"
+_task_name = "Cell-Cell Communication Inference (Ligand-Target)"
+_task_summary = "Detect interactions between ligands and target cell types"
 
 DATASETS = get_callable_members(datasets)
 METHODS = get_callable_members(methods)

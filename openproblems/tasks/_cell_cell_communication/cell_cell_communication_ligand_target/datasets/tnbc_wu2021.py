@@ -1,5 +1,6 @@
-from ....data.tnbc_wu2021 import load_tnbc_data
-from ....tools.decorators import dataset
+from .....data.tnbc_wu2021 import load_tnbc_data
+from .....tools.decorators import dataset
+from ..._common.utils import ligand_receptor_resource
 
 
 @dataset(
@@ -13,4 +14,8 @@ from ....tools.decorators import dataset
     image="openproblems-r-extras",
 )
 def tnbc_data(test=False):
-    return load_tnbc_data(test=test)
+    adata = load_tnbc_data(test=test)
+    adata.uns["ligand_receptor_resource"] = ligand_receptor_resource(
+        adata.uns["target_organism"]
+    )
+    return adata
