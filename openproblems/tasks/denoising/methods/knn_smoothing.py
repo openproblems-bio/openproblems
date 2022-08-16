@@ -23,7 +23,9 @@ def _magic(adata, solver):
         adata.obsm["train"], rescale=1, return_library_size=True
     )
     X = scprep.transform.sqrt(X)
-    Y = MAGIC(solver=solver, decay=0, t=1, verbose=False).fit_transform(X, genes="all_genes")
+    Y = MAGIC(solver=solver, decay=0, t=1, verbose=False).fit_transform(
+        X, genes="all_genes"
+    )
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
