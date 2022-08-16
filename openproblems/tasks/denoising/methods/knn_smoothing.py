@@ -13,8 +13,8 @@ def _magic(adata, solver):
         adata.obsm["train"], rescale=1, return_library_size=True
     )
     X = scprep.transform.sqrt(X)
-    #the decay and t parameter give knn smoothing behavior
-    Y = MAGIC(solver=solver, decay=0, 
+    # the decay and t parameter give knn smoothing behavior
+    Y = MAGIC(solver=solver, decay=0,
               t=1, verbose=False).fit_transform(X, genes="all_genes")
     Y = scprep.utils.matrix_transform(Y, np.square)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
@@ -34,7 +34,7 @@ def knn_smoothing(adata, test=False):
     "single-cell RNA-Seq data",
     paper_url="https://www.biorxiv.org/content/10.1101/217737v3",
     paper_year=2018,
-    #magic codebase is used instead of knn-smoothing
+    # magic codebase is used instead of knn-smoothing
     code_url="https://github.com/yanailab/knn-smoothing",
     image="openproblems-python-extras",
 )
