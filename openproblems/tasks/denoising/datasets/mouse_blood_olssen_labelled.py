@@ -1,6 +1,6 @@
 from ....data.mouse_blood_olssen_labelled import load_olsson_2016_mouse_blood
 from ....tools.decorators import dataset
-
+from . import utils
 
 @dataset(
     "Mouse myeloid lineage differentiation",
