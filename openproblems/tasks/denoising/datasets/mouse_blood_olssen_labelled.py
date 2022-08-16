@@ -10,4 +10,6 @@ from ....tools.decorators import dataset
     "Sequenced by SMARTseq in 2016 by Olsson et al.",
 )
 def olsson_2016_mouse_blood(test=False):
-    return load_olsson_2016_mouse_blood(test=test)
+    adata = load_olsson_2016_mouse_blood(test=test)
+    adata = utils.split_data(adata)
+    return adata
