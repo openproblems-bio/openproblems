@@ -5,8 +5,6 @@ import functools
 import numpy as np
 import scprep
 
-# citation for magic, the package implementing
-# knn smoothing
 _magic_method = functools.partial(
     method,
     paper_name="Recovering Gene Interactions from Single-Cell Data "
@@ -34,15 +32,15 @@ def _magic(adata, solver):
     return adata
 
 
-# @_magic_method(
-#    method_name="MAGIC",
-# )
-def knn_smoothing(adata, test=False):
+@_magic_method(
+    method_name="MAGIC",
+)
+def magic(adata, test=False):
     return _magic(adata, solver="exact")
 
 
-# @_magic_method(
-#    method_name="MAGIC (approximate)",
-# )
-# def magic_approx(adata, test=False):
-#    return _magic(adata, solver="approximate")
+@_magic_method(
+    method_name="MAGIC (approximate)",
+)
+def magic_approx(adata, test=False):
+    return _magic(adata, solver="approximate")
