@@ -106,7 +106,7 @@ def image_requires_docker(image):
         if not docker_available():
             raise RuntimeError(
                 "The Dockerfile for image {} is newer than the "
-                "latest push, but Docker is not available."
+                "latest push, but Docker is not available.".format(image)
             )
         if docker_image_age(image) < git_file_age:
             import sys

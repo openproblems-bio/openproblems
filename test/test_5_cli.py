@@ -1,6 +1,7 @@
 import utils.warnings  # noqa: F401
 
 # isort: split
+from openproblems.api.hash import docker_labels_from_api
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
 
@@ -147,6 +148,10 @@ def test_hash(task, function_type, function_name):
         do_print=False,
     )
     assert h1 == h2
+
+
+def test_hash_docker_api():
+    assert docker_labels_from_api("circleci/python", tag="3.8-bullseye") is None
 
 
 @parameterized.parameterized.expand(
