@@ -8,6 +8,7 @@ import scanpy as sc
 
 def assert_is_subset(subset, superset, subset_name="subset", superset_name="superset"):
     """Assert `np.all(np.isin(subset, superset))` with a more readable error message"""
+    subset = np.asarray(subset)
     is_missing = ~np.isin(subset, superset)
     if np.any(is_missing):
         x_missing = ",".join([x for x in subset[is_missing]])
