@@ -2,9 +2,9 @@
 #' Runs Seurat TransferData with SCT
 #' @param sce SingleCellExperiment
 #' @param n_pcs int Number of PCA components
-#' @param k_score int How many neighbors (k) to use when filtering anchors.
+#' @param k_filter int How many neighbors (k) to use when filtering anchors.
 #' Set to NA to turn off filtering.
-#' @param k_filter int How many neighbors (k) to use when scoring anchors
+#' @param k_score int How many neighbors (k) to use when scoring anchors
 
 # Dependencies
 library(SingleCellExperiment)
