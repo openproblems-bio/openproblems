@@ -9,6 +9,12 @@
 # Dependencies
 library(SingleCellExperiment)
 library(Seurat)
+library(Matrix)
+
+# Convert RsparseMatrix
+if (is(assay(sce, "X"), "RsparseMatrix") {
+  assay(sce, "X") <- as(assay(sce, "X"), "CsparseMatrix")
+}
 
 # Method body
 
