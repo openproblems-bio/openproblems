@@ -13,7 +13,7 @@ library(Matrix)
 
 # Convert RsparseMatrix
 if (is(assay(sce, "X"), "RsparseMatrix")) {
-  assay(sce, "X") <- as(assay(sce, "X"), "CsparseMatrix")
+  assay(sce, "X") <- as(assay(sce, "X"), "CsparseMatrix") # nolint: object_name_linter
 }
 
 # Method body
