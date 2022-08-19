@@ -26,26 +26,39 @@ Formalizing and benchmarking open problems in single-cell genomics.
 
 ## The team
 
-**Core**:
+**Core** (_alphabetically_):
 
-* Scott Gigante (@scottgigante)
-* Daniel Burkhardt (@dburkhardt)
-* Malte Luecken (@LuckyMD)
-* Angela Pisco (@aopisco)
-* Olga Botvinnik (@olgabot)
+* Daniel Burkhardt (@dburkhardt), Cellarity
+* Robrecht Cannoodt (@rcannoodt), Data Intuitive
+* Scott Gigante (@scottgigante-immunai), Immunai
+* Christopher Lance (@xlancelottx), Helmholtz Munich
+* Malte Luecken (@LuckyMD), Helmholtz Munich
+* Angela Pisco (@aopisco), CZ Biohub
 
-**Task authors** (_alphabetically_):
+**Task leaders** (_alphabetically_):
 
-* Emma Dann (@emdann) - Differential abundance
-* Wes Lewis (@weslewis) - Differential abundance and data denoising
-* Mohammad Lotfallahi (@M0hammadL) - Label projection task
-* Qian Qin (@qinqian) - Predicting gene expression from chromatin accessibility
-* Daniel Strobl (@danielStrobl) - Batch integration
-* Michael Vinyard (@mvinyard) - Stress preservation in dimensionality reduction
-* Florian Wagner (@flo-compbio) - Data denoising
+Full tasks (>1 datasets, >5 methods):
+
+* Batch integration - Daniel Strobl (@danielStrobl)
+* Dimensionality reduction - Michael Vinyard (@mvinyard) and Luke Zappia (@lazappi)
+* Label projection - Nick Markov (@mxposed)
+* Spatial deconvolution - Alma Anderson (@almaan) and Giovanni Palla (@giovp)
+* Cell-cell communication - Daniel Dimitrov (@dbdimitrov)
+
+Task stubs:
+
+* Data denoising - Wes Lewis (@weslewis)
+* Multimodal data integration - The Open Problems core team
+
+Tasks in discussion:
+
+* ATAC denoising - Dominik Otto (@katosh)
+* Differential abundance - Emma Dann (@emdann)
+* Regulatory effect prediction - Qian (Alvin) Qin (@qinqian)
 
 **Supervision** (_alphabetically_):
 
+* Jonathan Bloom (@jbloom22)
 * Smita Krishnaswamy, Yale
 * Fabian Theis, Helmholtz Munich
 
@@ -53,3 +66,10 @@ Formalizing and benchmarking open problems in single-cell genomics.
 
 * Jonah Cool
 * Fiona Griffin
+* Ivana Williams
+
+**Contributors**:
+
+See the long list of all those who contributed datasets, methods, metrics, or
+infrastructure code
+[here](https://github.com/openproblems-bio/openproblems/graphs/contributors)
