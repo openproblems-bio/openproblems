@@ -8,7 +8,8 @@ import numpy as np
     "CeNGEN (by batch)",
     data_url=load_cengen.metadata["data_url"],
     data_reference=load_cengen.metadata["data_reference"],
-    dataset_summary="TODO",
+    dataset_summary="100k FACS-isolated C. elegans neurons from 17 experiments "
+    "sequenced on 10x Genomics. Split into train/test by experimental batch.",
 )
 def cengen_batch(test=False):
     adata = load_cengen(test=test)
@@ -29,7 +30,8 @@ def cengen_batch(test=False):
     "CeNGEN (random split)",
     data_url=load_cengen.metadata["data_url"],
     data_reference=load_cengen.metadata["data_reference"],
-    dataset_summary="TODO",
+    dataset_summary="100k FACS-isolated C. elegans neurons from 17 experiments "
+    "sequenced on 10x Genomics. Split into train/test randomly.",
 )
 def cengen_random(test=False):
     adata = load_cengen(test=test)

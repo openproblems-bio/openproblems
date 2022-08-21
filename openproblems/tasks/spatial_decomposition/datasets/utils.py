@@ -1,3 +1,4 @@
+from ..api import CELLTYPE_MIN_CELLS
 from ..utils import merge_sc_and_sp
 from typing import Sequence
 from typing import Union
@@ -54,6 +55,8 @@ def generate_synthetic_dataset(
 
     The cell type labels are stored in adata_sc.obs["label"].
     """
+    # remove rare celltypes
+    adata = filter_celltypes(adata)
 
     # set random generator seed
     rng = np.random.default_rng(seed)
@@ -138,3 +141,10 @@ def generate_synthetic_dataset(
     adata_merged.layers["counts"] = adata_merged.X.copy()
 
     return adata_merged
+
+
+def filter_celltypes(adata, min_cells=CELLTYPE_MIN_CELLS):
+    """Filter rare celltypes from an AnnData"""
+    celltype_counts = adata.obs["label"].value_counts() >= min_cells
+    keep_cells = np.isin(adata.obs["label"], celltype_counts.index[celltype_counts])
+    return adata[adata.obs.index[keep_cells]].copy()
