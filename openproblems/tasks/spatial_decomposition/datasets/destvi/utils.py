@@ -2,7 +2,7 @@
 From:
 https://github.com/romain-lopez/DestVI-reproducibility/blob/master/simulations/
 """
-from ..utils import merge_sc_and_sp
+from ...utils import merge_sc_and_sp
 from numba import jit
 from pathlib import Path
 from scipy.spatial.distance import pdist
@@ -10,17 +10,10 @@ from scipy.spatial.distance import squareform
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.decomposition import PCA
 from sklearn.neighbors import kneighbors_graph
-from torch.distributions import Gamma
 
 import anndata
 import numpy as np
 import pandas as pd
-import torch
-
-np.random.seed(0)
-
-
-torch.manual_seed(0)
 
 
 def categorical(p, n_samples):
@@ -53,8 +46,7 @@ def get_mean_normal(cell_types, gamma, mean_, components_):  # pragma: no cover
     return mean_normal
 
 
-def generate_synthetic_dataset_destvi(
-    input_file: str = "_input_data/",
+def generate_synthetic_dataset(
     lam_ct: float = 0.1,
     temp_ct: float = 1.0,
     lam_gam: float = 0.5,
@@ -62,16 +54,22 @@ def generate_synthetic_dataset_destvi(
     bin_sampling: float = 1.0,
     ct_study: int = 0,
     grid_size: int = 10,
+    seed: int = 0,
 ):
+    import torch
+
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+
     # parameters
     K = 100
     K_sampled = 20
-    main_dir = Path().resolve()
+    script_dir = Path(__file__).resolve().parent
 
-    grtruth_PCA = np.load(main_dir / f"{input_file}grtruth_PCA.npz")
+    grtruth_PCA = np.load(script_dir.joinpath("ground_truth_pca.npz").as_posix())
     mean_, components_ = grtruth_PCA["mean_"], grtruth_PCA["components_"]
 
-    inv_dispersion = np.load(main_dir / f"{input_file}inv-dispersion.npy")
+    inv_dispersion = np.load(script_dir.joinpath("inverse_dispersion.npy").as_posix())
 
     C = components_.shape[0]
     D = components_.shape[1]
@@ -84,7 +82,6 @@ def generate_synthetic_dataset_destvi(
         temp_ct=temp_ct,
         lam_gam=lam_gam,
         sf_gam=sf_gam,
-        savefig=False,
     )
 
     cell_types_sc = categorical(freq_sample, K)
@@ -103,7 +100,7 @@ def generate_synthetic_dataset_destvi(
     inv_dispersion *= 1e2
 
     # Important remark: Gamma is parametrized by the rate = 1/scale!
-    gamma_s = Gamma(
+    gamma_s = torch.distributions.Gamma(
         concentration=torch.tensor(inv_dispersion),
         rate=torch.tensor(inv_dispersion) / torch.tensor(transformed_mean),
     ).sample()
@@ -177,9 +174,11 @@ def generate_synthetic_dataset_destvi(
         list_transformed = [transformed_mean_st_full, transformed_mean_st_partial]
     elif ct_study == 0:
         list_transformed = [transformed_mean_st_full]
+    else:
+        raise NotImplementedError
     for i, transformed_mean_st in enumerate(list_transformed):
         # Important remark: Gamma is parametrized by the rate = 1/scale!
-        gamma_st = Gamma(
+        gamma_st = torch.distributions.Gamma(
             concentration=torch.tensor(inv_dispersion),
             rate=torch.tensor(inv_dispersion) / torch.tensor(transformed_mean_st),
         ).sample()
@@ -219,7 +218,13 @@ def generate_synthetic_dataset_destvi(
 
 
 def generate_spatial_information(
-    grid_size, C, lam_ct, temp_ct, lam_gam, D, sf_gam, savefig: bool
+    grid_size,
+    C,
+    lam_ct,
+    temp_ct,
+    lam_gam,
+    D,
+    sf_gam,
 ):
     locations = (
         np.mgrid[-grid_size:grid_size:0.5, -grid_size:grid_size:0.5].reshape(2, -1).T
