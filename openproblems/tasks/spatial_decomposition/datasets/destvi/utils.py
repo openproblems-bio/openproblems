@@ -10,6 +10,7 @@ from scipy.spatial.distance import squareform
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.decomposition import PCA
 from sklearn.neighbors import kneighbors_graph
+from typing import Optional
 
 import anndata
 import numpy as np
@@ -47,13 +48,15 @@ def get_mean_normal(cell_types, gamma, mean_, components_):  # pragma: no cover
 
 
 def generate_synthetic_dataset(
+    test: bool,
     lam_ct: float = 0.1,
     temp_ct: float = 1.0,
     lam_gam: float = 0.5,
     sf_gam: float = 15.0,
     bin_sampling: float = 1.0,
     ct_study: int = 0,
-    grid_size: int = 10,
+    grid_size: Optional[int] = None,  # size of spatial grid
+    K_sampled: Optional[int] = None,  # cells sampled for each spot
     seed: int = 0,
 ):
     import torch
@@ -63,7 +66,13 @@ def generate_synthetic_dataset(
 
     # parameters
     K = 100
-    K_sampled = 20
+    if test:
+        K_sampled = K_sampled or 3
+        grid_size = grid_size or 5
+    else:  # pragma: nocover
+        K_sampled = K_sampled or 20
+        grid_size = grid_size or 10
+
     script_dir = Path(__file__).resolve().parent
 
     grtruth_PCA = np.load(script_dir.joinpath("ground_truth_pca.npz").as_posix())

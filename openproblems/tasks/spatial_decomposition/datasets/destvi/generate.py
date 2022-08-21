@@ -13,6 +13,6 @@ from openproblems.tools.decorators import dataset
 def destvi(test=False):
     from .utils import generate_synthetic_dataset
 
-    merged_adata = generate_synthetic_dataset()
+    merged_adata = generate_synthetic_dataset(test=test)
     filter_genes_cells(merged_adata)
     return merged_adata
