@@ -104,7 +104,6 @@ def stereoscope(adata, test=False, max_epochs_sc=None, max_epochs_sp=None):
         sample_kwargs={
             "num_samples": num_samples,
             "batch_size": st_model.adata.n_obs,
-            "use_gpu": True,
         },
     )
 
