@@ -30,6 +30,7 @@ def _cell2location(
     max_epochs_st=None,
 ):
 
+    from cell2location.cluster_averages.cluster_averages import compute_cluster_averages
     from cell2location.models import Cell2location
     from cell2location.models import RegressionModel
     from torch.nn import ELU
@@ -81,10 +82,6 @@ def _cell2location(
         ].copy()
         means_per_cluster.columns = adata_sc.uns["mod"]["factor_names"]
     else:
-        from cell2location.cluster_averages.cluster_averages import (
-            compute_cluster_averages,
-        )
-
         means_per_cluster = compute_cluster_averages(
             adata_sc,
             labels="label",
