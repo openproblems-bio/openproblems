@@ -20,6 +20,7 @@ def _cell2location(
     adata,
     detection_alpha,
     N_cells_per_location=20,
+    hard_coded_reference=True,
     amortised=False,
     num_samples=1000,
     sc_batch_size=2500,
@@ -44,38 +45,52 @@ def _cell2location(
 
     adata_sc, adata = split_sc_and_sp(adata)
 
-    if "tech" in adata_sc.obs.columns:
-        adata_sc.obs["batch_key"] = adata_sc.obs["tech"].copy()
-    else:
+    if not hard_coded_reference:
+        # if "tech" in adata_sc.obs.columns:
+        #     adata_sc.obs["batch_key"] = adata_sc.obs["tech"].copy()
+        # else:
         adata_sc.obs["batch_key"] = "all"
+        # REFERENCE SIGNATURE ESTIMATION FROM SCRNA
+        # prepare anndata for the regression model
+        RegressionModel.setup_anndata(
+            adata=adata_sc,
+            # 10X reaction / sample / batch
+            batch_key="batch_key",
+            # cell type, covariate used for constructing signatures
+            labels_key="label",
+        )
+        sc_model = RegressionModel(adata_sc)
+        sc_model.train(max_epochs=max_epochs_sc, batch_size=sc_batch_size)
+        # In this section, we export the estimated cell abundance
+        # (summary of the posterior distribution).
+        adata_sc = sc_model.export_posterior(
+            adata_sc,
+            sample_kwargs={"num_samples": num_samples, "batch_size": sc_batch_size},
+        )
+        # export estimated expression in each cluster
+        try:
+            means_per_cluster = adata_sc.varm["means_per_cluster_mu_fg"]
+        except KeyError:
+            # sometimes varm fails for unknown reason
+            means_per_cluster = adata_sc.var
+        means_per_cluster = means_per_cluster[
+            [
+                f"means_per_cluster_mu_fg_{i}"
+                for i in adata_sc.uns["mod"]["factor_names"]
+            ]
+        ].copy()
+        means_per_cluster.columns = adata_sc.uns["mod"]["factor_names"]
+    else:
+        from cell2location.cluster_averages.cluster_averages import (
+            compute_cluster_averages,
+        )
 
-    # REFERENCE SIGNATURE ESTIMATION FROM SCRNA
-    # prepare anndata for the regression model
-    RegressionModel.setup_anndata(
-        adata=adata_sc,
-        # 10X reaction / sample / batch
-        batch_key="batch_key",
-        # cell type, covariate used for constructing signatures
-        labels_key="label",
-    )
-    sc_model = RegressionModel(adata_sc)
-    sc_model.train(max_epochs=max_epochs_sc, batch_size=sc_batch_size)
-    # In this section, we export the estimated cell abundance
-    # (summary of the posterior distribution).
-    adata_sc = sc_model.export_posterior(
-        adata_sc,
-        sample_kwargs={"num_samples": num_samples, "batch_size": sc_batch_size},
-    )
-    # export estimated expression in each cluster
-    try:
-        means_per_cluster = adata_sc.varm["means_per_cluster_mu_fg"]
-    except KeyError:
-        # sometimes varm fails for unknown reason
-        means_per_cluster = adata_sc.var
-    means_per_cluster = means_per_cluster[
-        [f"means_per_cluster_mu_fg_{i}" for i in adata_sc.uns["mod"]["factor_names"]]
-    ].copy()
-    means_per_cluster.columns = adata_sc.uns["mod"]["factor_names"]
+        means_per_cluster = compute_cluster_averages(
+            adata_sc,
+            labels="label",
+            layer=None,
+            use_raw=True,
+        )
 
     # SPATIAL MAPPING
     # find shared genes and subset both anndata and reference signatures
@@ -139,11 +154,14 @@ def _cell2location(
     return adata
 
 
-@_cell2location_method(method_name="Cell2location (detection_alpha=20)")
+@_cell2location_method(
+    method_name="Cell2location (detection_alpha=20, reference hard-coded)"
+)
 def cell2location_detection_alpha_20(
     adata,
     detection_alpha=20,
     N_cells_per_location=20,
+    hard_coded_reference=True,
     amortised=False,
     num_samples=1000,
     sc_batch_size=2500,
@@ -156,6 +174,7 @@ def cell2location_detection_alpha_20(
         adata,
         detection_alpha=detection_alpha,
         N_cells_per_location=N_cells_per_location,
+        hard_coded_reference=hard_coded_reference,
         amortised=amortised,
         num_samples=num_samples,
         sc_batch_size=sc_batch_size,
@@ -166,11 +185,45 @@ def cell2location_detection_alpha_20(
     )
 
 
-@_cell2location_method(method_name="Cell2location (detection_alpha=200)")
+@_cell2location_method(
+    method_name="Cell2location (detection_alpha=20, reference NB without batch info)"
+)
+def cell2location_detection_alpha_20_nb(
+    adata,
+    detection_alpha=20,
+    N_cells_per_location=20,
+    hard_coded_reference=False,
+    amortised=False,
+    num_samples=1000,
+    sc_batch_size=2500,
+    st_batch_size=None,
+    test: bool = False,
+    max_epochs_sc: Optional[int] = None,
+    max_epochs_st: Optional[int] = None,
+):
+    return _cell2location(
+        adata,
+        detection_alpha=detection_alpha,
+        N_cells_per_location=N_cells_per_location,
+        hard_coded_reference=hard_coded_reference,
+        amortised=amortised,
+        num_samples=num_samples,
+        sc_batch_size=sc_batch_size,
+        st_batch_size=st_batch_size,
+        test=test,
+        max_epochs_sc=max_epochs_sc,
+        max_epochs_st=max_epochs_st,
+    )
+
+
+@_cell2location_method(
+    method_name="Cell2location (detection_alpha=200, reference hard-coded)"
+)
 def cell2location_detection_alpha_200(
     adata,
     detection_alpha=200,
     N_cells_per_location=20,
+    hard_coded_reference=True,
     amortised=False,
     num_samples=1000,
     sc_batch_size=2500,
@@ -183,6 +236,7 @@ def cell2location_detection_alpha_200(
         adata,
         detection_alpha=detection_alpha,
         N_cells_per_location=N_cells_per_location,
+        hard_coded_reference=hard_coded_reference,
         amortised=amortised,
         num_samples=num_samples,
         sc_batch_size=sc_batch_size,
@@ -193,11 +247,14 @@ def cell2location_detection_alpha_200(
     )
 
 
-@_cell2location_method(method_name="Cell2location, amortised (detection_alpha=20)")
+@_cell2location_method(
+    method_name="Cell2location, amortised (detection_alpha=20, reference hard-coded)"
+)
 def cell2location_amortised_detection_alpha_20(
     adata,
     detection_alpha=20,
     N_cells_per_location=20,
+    hard_coded_reference=True,
     amortised=True,
     num_samples=1000,
     sc_batch_size=2500,
@@ -210,6 +267,7 @@ def cell2location_amortised_detection_alpha_20(
         adata,
         detection_alpha=detection_alpha,
         N_cells_per_location=N_cells_per_location,
+        hard_coded_reference=hard_coded_reference,
         amortised=amortised,
         num_samples=num_samples,
         sc_batch_size=sc_batch_size,
