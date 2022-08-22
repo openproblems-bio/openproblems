@@ -26,7 +26,7 @@ def _cell2location(
     st_batch_size=None,
     test=False,
     max_epochs_sc=None,
-    max_epochs_sp=None,
+    max_epochs_st=None,
 ):
 
     from cell2location.models import Cell2location
@@ -34,12 +34,12 @@ def _cell2location(
     from torch.nn import ELU
 
     if test:
-        max_epochs_sp = max_epochs_sp or 10
         max_epochs_sc = max_epochs_sc or 10
+        max_epochs_st = max_epochs_st or 10
         num_samples = num_samples or 10
     else:  # pragma: nocover
         max_epochs_sc = max_epochs_sc or 250
-        max_epochs_sp = max_epochs_sp or 30000
+        max_epochs_st = max_epochs_st or 30000
         num_samples = num_samples or 1000
 
     adata_sc, adata = split_sc_and_sp(adata)
@@ -67,92 +67,63 @@ def _cell2location(
         sample_kwargs={"num_samples": num_samples, "batch_size": sc_batch_size},
     )
     # export estimated expression in each cluster
-    if "means_per_cluster_mu_fg" in adata_sc.varm.keys():
-        inf_aver = adata_sc.varm["means_per_cluster_mu_fg"][
-            [
-                f"means_per_cluster_mu_fg_{i}"
-                for i in adata_sc.uns["mod"]["factor_names"]
-            ]
-        ].copy()
-    else:
-        inf_aver = adata_sc.var[
-            [
-                f"means_per_cluster_mu_fg_{i}"
-                for i in adata_sc.uns["mod"]["factor_names"]
-            ]
-        ].copy()
-    inf_aver.columns = adata_sc.uns["mod"]["factor_names"]
+    try:
+        means_per_cluster = adata_sc.varm["means_per_cluster_mu_fg"]
+    except KeyError:
+        # sometimes varm fails for unknown reason
+        means_per_cluster = adata_sc.var
+    means_per_cluster = means_per_cluster[
+        [f"means_per_cluster_mu_fg_{i}" for i in adata_sc.uns["mod"]["factor_names"]]
+    ].copy()
+    means_per_cluster.columns = adata_sc.uns["mod"]["factor_names"]
 
     # SPATIAL MAPPING
     # find shared genes and subset both anndata and reference signatures
-    intersect = np.intersect1d(adata.var_names, inf_aver.index)
+    intersect = np.intersect1d(adata.var_names, means_per_cluster.index)
     adata = adata[:, intersect].copy()
-    inf_aver = inf_aver.loc[intersect, :].copy()
+    means_per_cluster = means_per_cluster.loc[intersect, :].copy()
 
     # prepare anndata for cell2location model
     adata.obs["sample"] = "all"
     Cell2location.setup_anndata(adata=adata, batch_key="sample")
-    if not amortised:
-        # create and train the model
-        st_model = Cell2location(
-            adata,
-            cell_state_df=inf_aver,
-            # the expected average cell abundance: tissue-dependent
-            # hyper-prior which can be estimated from paired histology:
-            # here = average in the simulated dataset
-            N_cells_per_location=N_cells_per_location,
-            # hyperparameter controlling normalisation of
-            # within-experiment variation in RNA detection:
-            detection_alpha=detection_alpha,
-        )
-
-        st_model.train(
-            max_epochs=max_epochs_sp,
-            # train using full data (batch_size=None)
-            batch_size=st_batch_size,
-            # use all data points in training because
-            # we need to estimate cell abundance at all locations
-            train_size=1,
-        )
-    else:
-        # create and train the model
-        st_model = Cell2location(
-            adata,
-            cell_state_df=inf_aver,
-            # the expected average cell abundance: tissue-dependent
-            # hyper-prior which can be estimated from paired histology:
-            # here = average in the simulated dataset
-            N_cells_per_location=N_cells_per_location,
-            # hyperparameter controlling normalisation of
-            # within-experiment variation in RNA detection:
-            detection_alpha=detection_alpha,
-            amortised=True,
-            encoder_mode="multiple",
-            encoder_kwargs={
-                "dropout_rate": 0.1,
-                "n_hidden": {
-                    "single": 256,
-                    "n_s_cells_per_location": 10,
-                    "b_s_groups_per_location": 10,
-                    "z_sr_groups_factors": 64,
-                    "w_sf": 256,
-                    "detection_y_s": 20,
-                },
-                "use_batch_norm": False,
-                "use_layer_norm": True,
-                "n_layers": 1,
-                "activation_fn": ELU,
+    cell2location_kwargs = dict(
+        cell_state_df=means_per_cluster,
+        # the expected average cell abundance: tissue-dependent
+        # hyper-prior which can be estimated from paired histology:
+        # here = average in the simulated dataset
+        N_cells_per_location=N_cells_per_location,
+        # hyperparameter controlling normalisation of
+        # within-experiment variation in RNA detection:
+        detection_alpha=detection_alpha,
+    )
+    if amortised:
+        cell2location_kwargs["amortised"] = True
+        cell2location_kwargs["encoder_mode"] = "multiple"
+        cell2location_kwargs["encoder_kwargs"] = {
+            "dropout_rate": 0.1,
+            "n_hidden": {
+                "single": 256,
+                "n_s_cells_per_location": 10,
+                "b_s_groups_per_location": 10,
+                "z_sr_groups_factors": 64,
+                "w_sf": 256,
+                "detection_y_s": 20,
             },
-        )
-
-        st_model.train(
-            max_epochs=max_epochs_sp,
-            # train using full data (batch_size=None)
-            batch_size=st_batch_size,
-            # use all data points in training because
-            # we need to estimate cell abundance at all locations
-            train_size=1,
-        )
+            "use_batch_norm": False,
+            "use_layer_norm": True,
+            "n_layers": 1,
+            "activation_fn": ELU,
+        }
+    # create and train the model
+    st_model = Cell2location(adata, **cell2location_kwargs)
+    st_model.train(
+        max_epochs=max_epochs_st,
+        # train using full data (batch_size=None)
+        batch_size=st_batch_size,
+        # use all data points in training because
+        # we need to estimate cell abundance at all locations
+        train_size=1,
+    )
     # In this section, we export the estimated cell abundance
     # (summary of the posterior distribution).
     adata = st_model.export_posterior(
@@ -178,8 +149,8 @@ def cell2location_detection_alpha_20(
     sc_batch_size=2500,
     st_batch_size=None,
     test: bool = False,
-    max_iter_harmony: Optional[int] = None,
-    max_iter_cluster: Optional[int] = None,
+    max_epochs_sc: Optional[int] = None,
+    max_epochs_st: Optional[int] = None,
 ):
     return _cell2location(
         adata,
@@ -190,8 +161,8 @@ def cell2location_detection_alpha_20(
         sc_batch_size=sc_batch_size,
         st_batch_size=st_batch_size,
         test=test,
-        max_iter_harmony=max_iter_harmony,
-        max_iter_cluster=max_iter_cluster,
+        max_epochs_sc=max_epochs_sc,
+        max_epochs_st=max_epochs_st,
     )
 
 
@@ -205,8 +176,8 @@ def cell2location_detection_alpha_200(
     sc_batch_size=2500,
     st_batch_size=None,
     test: bool = False,
-    max_iter_harmony: Optional[int] = None,
-    max_iter_cluster: Optional[int] = None,
+    max_epochs_sc: Optional[int] = None,
+    max_epochs_st: Optional[int] = None,
 ):
     return _cell2location(
         adata,
@@ -217,8 +188,8 @@ def cell2location_detection_alpha_200(
         sc_batch_size=sc_batch_size,
         st_batch_size=st_batch_size,
         test=test,
-        max_iter_harmony=max_iter_harmony,
-        max_iter_cluster=max_iter_cluster,
+        max_epochs_sc=max_epochs_sc,
+        max_epochs_st=max_epochs_st,
     )
 
 
@@ -232,8 +203,8 @@ def cell2location_amortised_detection_alpha_20(
     sc_batch_size=2500,
     st_batch_size=1024,
     test: bool = False,
-    max_iter_harmony: Optional[int] = None,
-    max_iter_cluster: Optional[int] = None,
+    max_epochs_sc: Optional[int] = None,
+    max_epochs_st: Optional[int] = None,
 ):
     return _cell2location(
         adata,
@@ -244,6 +215,6 @@ def cell2location_amortised_detection_alpha_20(
         sc_batch_size=sc_batch_size,
         st_batch_size=st_batch_size,
         test=test,
-        max_iter_harmony=max_iter_harmony,
-        max_iter_cluster=max_iter_cluster,
+        max_epochs_sc=max_epochs_sc,
+        max_epochs_st=max_epochs_st,
     )
