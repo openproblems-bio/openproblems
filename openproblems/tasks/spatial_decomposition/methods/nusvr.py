@@ -23,6 +23,7 @@ def nusvr_sklearn(
     n_pca: Optional[int] = None,
     max_iter: Optional[int] = None,
 ):
+    from sklearn.preprocessing import StandardScaler
     from sklearn.svm import NuSVR
 
     if test:
@@ -38,6 +39,9 @@ def nusvr_sklearn(
 
     X = adata_pca_means.X.T
     y = adata.obsm["X_pca"].T
+    scale_op = StandardScaler()
+    y = scale_op.fit_transform(y)
+    X = scale_op.transform(X)
     res = np.zeros((y.shape[1], X.shape[1]))  # (voxels,cells)
     for i in range(y.shape[1]):
         model = NuSVR(kernel="linear", max_iter=max_iter)
