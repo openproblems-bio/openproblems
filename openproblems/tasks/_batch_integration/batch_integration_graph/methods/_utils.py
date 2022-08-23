@@ -20,6 +20,8 @@ def scale_batch(adata, batch_key):
     from scib.preprocessing import scale_batch
 
     var = adata.var.copy()
+    adata.var_names_make_unique()
+    adata.obs_names_make_unique()
     adata = scale_batch(adata, batch_key)
     adata.var = var.loc[adata.var_names]
     return adata
