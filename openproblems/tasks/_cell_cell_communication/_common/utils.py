@@ -1,7 +1,10 @@
+from typing import Union
+
 import anndata
 import collections
 import numpy as np
 import pandas as pd
+import pathlib
 import scipy.sparse
 import scprep.run
 
@@ -28,7 +31,7 @@ ligand_receptor_resource = scprep.run.RFunction(
 )
 
 
-def map_gene_symbols(adata, map_filename: str):
+def map_gene_symbols(adata, map_filename: Union[str, pathlib.Path]):
     """Maps gene symbols from aliases to standard symbols
 
     Genes that map many-to-one are summed.
@@ -37,7 +40,7 @@ def map_gene_symbols(adata, map_filename: str):
     Parameters
     ----------
     adata : anndata.AnnData
-    map_filename : str
+    map_filename : PathLike
         Path to csv containing gene symbol map with two columns, `gene` and `alias`
 
     Returns

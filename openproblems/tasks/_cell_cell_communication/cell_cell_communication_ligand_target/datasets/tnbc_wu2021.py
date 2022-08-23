@@ -1,6 +1,9 @@
 from .....data.tnbc_wu2021 import load_tnbc_data
 from .....tools.decorators import dataset
 from ..._common.utils import ligand_receptor_resource
+from ..._common.utils import map_gene_symbols
+
+import pathlib
 
 
 @dataset(
@@ -15,6 +18,9 @@ from ..._common.utils import ligand_receptor_resource
 )
 def tnbc_data(test=False):
     adata = load_tnbc_data(test=test)
+    adata = map_gene_symbols(
+        adata, pathlib.Path(__file__).parent.joinpath("tnbc_wu2021_gene_symbols.csv")
+    )
     adata.uns["ligand_receptor_resource"] = ligand_receptor_resource(
         adata.uns["target_organism"]
     )
