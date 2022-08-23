@@ -20,7 +20,7 @@ component."""
     maximize=True,
     image="openproblems-python-batch-integration",  # only if required
 )
-def cc_score(adata):
+def cc_score(adata, test=False):
     from ._utils import _get_split
     from scib.metrics import cell_cycle
 
@@ -28,8 +28,5 @@ def cc_score(adata):
         cc = cell_cycle(*_get_split(adata), "batch", embed="X_emb", organism="human")
 
     except ValueError:
-        if adata.n_vars < 500:
-            cc = 0
-        else:
-            raise ValueError("Cell cycle genes not found in data")
+        cc = 0
     return cc
