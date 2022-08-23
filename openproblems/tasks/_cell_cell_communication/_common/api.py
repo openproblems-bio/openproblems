@@ -47,11 +47,12 @@ def check_dataset(adata, merge_keys):
         assert "ligand_receptor_resource" in adata.uns
         assert "receptor_genesymbol" in adata.uns["ligand_receptor_resource"]
         assert "ligand_genesymbol" in adata.uns["ligand_receptor_resource"]
+        assert "var_names_all" in adata.uns
         assert_is_subset(
             flatten_complex_subunits(
                 np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"])
             ),
-            adata.var.index,
+            adata.uns["var_names_all"],
             "resource receptor names",
             "gene names",
         )
@@ -59,7 +60,7 @@ def check_dataset(adata, merge_keys):
             flatten_complex_subunits(
                 np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"])
             ),
-            adata.var.index,
+            adata.uns["var_names_all"],
             "resource ligand names",
             "gene names",
         )
