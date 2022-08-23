@@ -5,7 +5,7 @@ from . import methods
 from . import metrics
 
 _task_name = "Batch integration embed"
-_task_summary = "Subtask of batch integration on embedding output"
+_task_summary = "Removing batch effects while preserving biological variation in single-cell data embeddings"
 
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)
