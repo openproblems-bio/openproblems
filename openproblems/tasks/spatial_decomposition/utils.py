@@ -45,7 +45,8 @@ def obs_means(
     """Return means over observation key."""
 
     labels = adata.obs[cluster_key].cat.categories
-    means = np.empty((labels.shape[0], adata.shape[1]))
+    n_var = adata.shape[1] if obsm is None else adata.obsm[obsm].shape[1]
+    means = np.empty((labels.shape[0], n_var))
     for i, lab in enumerate(labels):
         adata_lab = adata[adata.obs[cluster_key] == lab]
         x_lab = adata_lab.X if obsm is None else adata_lab.obsm[obsm]
