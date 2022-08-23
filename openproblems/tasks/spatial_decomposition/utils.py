@@ -1,3 +1,4 @@
+from typing import Optional
 from typing import Tuple
 
 import anndata as ad
@@ -38,16 +39,22 @@ def split_sc_and_sp(
     return adata_sc, adata_sp
 
 
-def obs_means(adata: ad.AnnData, cluster_key: str) -> ad.AnnData:
+def obs_means(
+    adata: ad.AnnData, cluster_key: str, obsm: Optional[str] = None
+) -> ad.AnnData:
     """Return means over observation key."""
 
     labels = adata.obs[cluster_key].cat.categories
-    means = np.empty((labels.shape[0], adata.shape[1]))
+    n_var = adata.shape[1] if obsm is None else adata.obsm[obsm].shape[1]
+    means = np.empty((labels.shape[0], n_var))
     for i, lab in enumerate(labels):
-        means[i, :] = adata[adata.obs[cluster_key] == lab].X.mean(axis=0).flatten()
+        adata_lab = adata[adata.obs[cluster_key] == lab]
+        x_lab = adata_lab.X if obsm is None else adata_lab.obsm[obsm]
+        means[i, :] = x_lab.mean(axis=0).flatten()
     adata_means = ad.AnnData(means)
     adata_means.obs_names = labels
-    adata_means.var_names = adata.var_names
+    if obsm is None:
+        adata_means.var_names = adata.var_names
 
     return adata_means
 
