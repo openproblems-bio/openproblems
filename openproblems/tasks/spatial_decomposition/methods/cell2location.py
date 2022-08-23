@@ -86,7 +86,7 @@ def _cell2location(
             adata_sc,
             labels="label",
             layer=None,
-            use_raw=True,
+            use_raw=False,
         )
 
     # SPATIAL MAPPING
