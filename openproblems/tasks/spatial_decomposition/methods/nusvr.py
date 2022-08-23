@@ -10,7 +10,8 @@ import numpy as np
 
 @method(
     method_name="NuSVR",
-    paper_name="Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods",  # noqa: E501
+    paper_name="Probabilistic Outputs for Support Vector Machines and Comparisons to"
+    " Regularized Likelihood Methods",
     paper_url="http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.41.1639",
     paper_year=1999,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.svm.NuSVR.html",
