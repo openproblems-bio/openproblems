@@ -6,6 +6,7 @@ from ..utils import split_sc_and_sp
 from typing import Optional
 
 import numpy as np
+import scanpy as sc
 
 
 @method(
@@ -16,22 +17,27 @@ import numpy as np
     paper_year=1999,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.svm.NuSVR.html",
 )
-def nusvr_sklearn(adata, test: bool = False, max_iter: Optional[int] = None):
-    from scipy.sparse import issparse
+def nusvr_sklearn(
+    adata,
+    test: bool = False,
+    n_pca: Optional[int] = None,
+    max_iter: Optional[int] = None,
+):
     from sklearn.svm import NuSVR
 
     if test:
         max_iter = max_iter or 100
+        n_pca = n_pca or 10
     else:  # pragma: nocover
         max_iter = max_iter or 10000
+        n_pca = n_pca or 50
 
+    sc.pp.pca(adata, n_comps=n_pca)
     adata_sc, adata = split_sc_and_sp(adata)
-    adata_means = obs_means(adata_sc, "label")
+    adata_pca_means = obs_means(adata_sc, "label", obsm="X_pca")
 
-    X = adata_means.X.T
-    y = adata.X.T
-    if issparse(y):
-        y = y.toarray()
+    X = adata_pca_means.X.T
+    y = adata.obsm["X_pca"].T
     res = np.zeros((y.shape[1], X.shape[1]))  # (voxels,cells)
     for i in range(y.shape[1]):
         model = NuSVR(kernel="linear", max_iter=max_iter)
