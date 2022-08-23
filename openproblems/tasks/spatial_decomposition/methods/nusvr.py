@@ -37,11 +37,9 @@ def nusvr_sklearn(
     adata_sc, adata = split_sc_and_sp(adata)
     adata_pca_means = obs_means(adata_sc, "label", obsm="X_pca")
 
-    X = adata_pca_means.X.T
-    y = adata.obsm["X_pca"].T
     scale_op = StandardScaler()
-    y = scale_op.fit_transform(y)
-    X = scale_op.transform(X)
+    y = scale_op.fit_transform(adata.obsm["X_pca"]).T
+    X = scale_op.transform(adata_pca_means.X).T
     res = np.zeros((y.shape[1], X.shape[1]))  # (voxels,cells)
     for i in range(y.shape[1]):
         model = NuSVR(kernel="linear", max_iter=max_iter)
