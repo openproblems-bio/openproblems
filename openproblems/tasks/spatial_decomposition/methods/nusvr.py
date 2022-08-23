@@ -3,6 +3,7 @@ from ....tools.utils import check_version
 from ..utils import normalize_coefficients
 from ..utils import obs_means
 from ..utils import split_sc_and_sp
+from typing import Optional
 
 import numpy as np
 
@@ -14,9 +15,14 @@ import numpy as np
     paper_year=1999,
     code_url="https://scikit-learn.org/stable/modules/generated/sklearn.svm.NuSVR.html",
 )
-def nusvr_sklearn(adata, test=False):
+def nusvr_sklearn(adata, test: bool = False, max_iter: Optional[int] = None):
     from scipy.sparse import issparse
     from sklearn.svm import NuSVR
+
+    if test:
+        max_iter = max_iter or 100
+    else:  # pragma: nocover
+        max_iter = max_iter or 10000
 
     adata_sc, adata = split_sc_and_sp(adata)
     adata_means = obs_means(adata_sc, "label")
@@ -27,7 +33,7 @@ def nusvr_sklearn(adata, test=False):
         y = y.toarray()
     res = np.zeros((y.shape[1], X.shape[1]))  # (voxels,cells)
     for i in range(y.shape[1]):
-        model = NuSVR(kernel="linear")
+        model = NuSVR(kernel="linear", max_iter=max_iter)
         model.fit(X, y[:, i])
         res[i] = model.coef_
 
