@@ -19,7 +19,7 @@ _cell2location_method = functools.partial(
 def _cell2location(
     adata,
     detection_alpha,
-    N_cells_per_location=20,
+    n_cells_per_location=20,
     hard_coded_reference=True,
     amortised=False,
     num_samples=1000,
@@ -103,7 +103,7 @@ def _cell2location(
         # the expected average cell abundance: tissue-dependent
         # hyper-prior which can be estimated from paired histology:
         # here = average in the simulated dataset
-        N_cells_per_location=N_cells_per_location,
+        N_cells_per_location=n_cells_per_location,
         # hyperparameter controlling normalisation of
         # within-experiment variation in RNA detection:
         detection_alpha=detection_alpha,
@@ -157,7 +157,7 @@ def _cell2location(
 def cell2location_detection_alpha_20(
     adata,
     detection_alpha=20,
-    N_cells_per_location=20,
+    n_cells_per_location=20,
     hard_coded_reference=True,
     amortised=False,
     num_samples=1000,
@@ -170,7 +170,7 @@ def cell2location_detection_alpha_20(
     return _cell2location(
         adata,
         detection_alpha=detection_alpha,
-        N_cells_per_location=N_cells_per_location,
+        n_cells_per_location=n_cells_per_location,
         hard_coded_reference=hard_coded_reference,
         amortised=amortised,
         num_samples=num_samples,
@@ -188,7 +188,7 @@ def cell2location_detection_alpha_20(
 def cell2location_detection_alpha_20_nb(
     adata,
     detection_alpha=20,
-    N_cells_per_location=20,
+    n_cells_per_location=20,
     hard_coded_reference=False,
     amortised=False,
     num_samples=1000,
@@ -201,7 +201,7 @@ def cell2location_detection_alpha_20_nb(
     return _cell2location(
         adata,
         detection_alpha=detection_alpha,
-        N_cells_per_location=N_cells_per_location,
+        n_cells_per_location=n_cells_per_location,
         hard_coded_reference=hard_coded_reference,
         amortised=amortised,
         num_samples=num_samples,
@@ -219,7 +219,7 @@ def cell2location_detection_alpha_20_nb(
 def cell2location_detection_alpha_200(
     adata,
     detection_alpha=200,
-    N_cells_per_location=20,
+    n_cells_per_location=20,
     hard_coded_reference=True,
     amortised=False,
     num_samples=1000,
@@ -232,7 +232,7 @@ def cell2location_detection_alpha_200(
     return _cell2location(
         adata,
         detection_alpha=detection_alpha,
-        N_cells_per_location=N_cells_per_location,
+        n_cells_per_location=n_cells_per_location,
         hard_coded_reference=hard_coded_reference,
         amortised=amortised,
         num_samples=num_samples,
@@ -250,7 +250,7 @@ def cell2location_detection_alpha_200(
 def cell2location_amortised_detection_alpha_20(
     adata,
     detection_alpha=20,
-    N_cells_per_location=20,
+    n_cells_per_location=20,
     hard_coded_reference=True,
     amortised=True,
     num_samples=1000,
@@ -263,7 +263,7 @@ def cell2location_amortised_detection_alpha_20(
     return _cell2location(
         adata,
         detection_alpha=detection_alpha,
-        N_cells_per_location=N_cells_per_location,
+        n_cells_per_location=n_cells_per_location,
         hard_coded_reference=hard_coded_reference,
         amortised=amortised,
         num_samples=num_samples,
