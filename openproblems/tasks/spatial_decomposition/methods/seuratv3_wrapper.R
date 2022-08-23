@@ -13,7 +13,7 @@ saveRDS(
   "/tmp/openproblems_seurat_args.rds"
 )
 # clear memory
-rm(c("sce_sc", "sce_sp"))
+rm("sce_sc", "sce_sp")
 
 exitcode <- system2("Rscript", script_path)
 if (exitcode != 0) {
