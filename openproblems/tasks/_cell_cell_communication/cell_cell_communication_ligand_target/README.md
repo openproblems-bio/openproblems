@@ -49,7 +49,7 @@ assumed truth in `adata.uns["ccc_target"]`. The assumed truth could be derived f
 various proxies; we refer the reader to [Dimitrov et
 al](https://doi.org/10.1038/s41467-022-30755-0) for more details.
 
-`adata.uns["ccc_target"]` should be a Pandas DataFrame containing all of the following
+`adata.uns["ccc_target"]` should be a Pandas DataFrame containing all the following
 columns:
 
 * `response`: `int`, binary response variable indicating whether an interaction is

@@ -18,9 +18,11 @@ def assert_is_subset(subset, superset, subset_name="subset", superset_name="supe
 
 # Helper function to split complex subunits
 def flatten_complex_subunits(entities):
-    return [
-        entity for entity_complex in entities for entity in entity_complex.split("_")
-    ]
+    return np.unique(
+        np.array([
+            entity for entity_complex in entities for entity in entity_complex.split("_")
+        ])
+    )
 
 
 def check_dataset(adata, merge_keys):
@@ -38,7 +40,7 @@ def check_dataset(adata, merge_keys):
     assert np.issubdtype(adata.uns["ccc_target"]["response"].dtype, int)
     assert np.all(np.isin(adata.uns["ccc_target"]["response"], [0, 1]))
 
-    # check resource
+    # check against resource
     if "ligand" in merge_keys or "receptor" in merge_keys:
         # verify resource is correct
         # TODO(@dbdimitrov): check this is right
@@ -48,7 +50,7 @@ def check_dataset(adata, merge_keys):
         assert "ligand_genesymbol" in adata.uns["ligand_receptor_resource"]
         assert_is_subset(
             flatten_complex_subunits(
-                np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"])
+                adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]
             ),
             adata.var.index,
             "resource receptor names",
@@ -56,7 +58,7 @@ def check_dataset(adata, merge_keys):
         )
         assert_is_subset(
             flatten_complex_subunits(
-                np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"])
+                adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]
             ),
             adata.var.index,
             "resource ligand names",
@@ -187,18 +189,22 @@ def sample_dataset(merge_keys):
 
     # assign to human prior knowledge
     adata.uns["target_organism"] = 9606
-    # TODO(@dbdimitrov): make a proper fake resource
-    n_complexes = 10
+    n_complexes = 5
+    n_genes = len(adata.var.index)
     ligand_complexes = [
-        "_".join(np.random.choice(adata.var.index, 3)) for _ in range(n_complexes)
+        "_".join(np.random.choice(adata.var.index, 2)) for _ in
+        range(n_complexes)
     ]
     receptor_complexes = [
-        "_".join(np.random.choice(adata.var.index, 3)) for _ in range(n_complexes)
+        "_".join(np.random.choice(adata.var.index, 2)) for _ in
+        range(n_complexes)
     ]
     adata.uns["ligand_receptor_resource"] = pd.DataFrame(
         {
-            "ligand_genesymbol": ligand_complexes + adata.var.index.to_list(),
-            "receptor_genesymbol": receptor_complexes + adata.var.index.to_list(),
+            "ligand_genesymbol": ligand_complexes + np.random.choice(
+                adata.var.index, n_genes, replace=False).tolist(),
+            "receptor_genesymbol": receptor_complexes + np.random.choice(
+                adata.var.index, n_genes, replace=False).tolist(),
         }
     )
 
