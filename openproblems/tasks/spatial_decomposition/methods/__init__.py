@@ -5,7 +5,6 @@ from .cell2location import cell2location_detection_alpha_200
 from .destvi import destvi
 from .nmfreg import nmfreg
 from .nnls import nnls_scipy
-from .nusvr import nusvr_sklearn
 from .random import random_proportion_assignment
 from .rctd import rctd
 from .seuratv3 import seuratv3
