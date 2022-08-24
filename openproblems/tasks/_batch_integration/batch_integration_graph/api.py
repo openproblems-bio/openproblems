@@ -2,8 +2,8 @@ from ....data.sample import load_sample_data
 from ....tools.decorators import dataset
 
 import numpy as np
-import scanpy as sc
 import pandas as pd
+import scanpy as sc
 
 
 def check_dataset(adata):
@@ -29,8 +29,12 @@ def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()
     adata.obsm["X_uni"] = sc.pp.pca(adata.X)
-    adata.obs["batch"] = pd.Categorical(np.random.choice(2, adata.shape[0], replace=True).astype(str))
-    adata.obs["labels"] = pd.Categorical(np.random.choice(5, adata.shape[0], replace=True).astype(str))
+    adata.obs["batch"] = pd.Categorical(
+        np.random.choice(2, adata.shape[0], replace=True).astype(str)
+    )
+    adata.obs["labels"] = pd.Categorical(
+        np.random.choice(5, adata.shape[0], replace=True).astype(str)
+    )
 
     sc.pp.neighbors(adata, use_rep="X_uni", key_added="uni")
     return adata
