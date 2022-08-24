@@ -5,8 +5,9 @@ from ..utils import split_sc_and_sp
 from typing import Optional
 
 import pandas as pd
+import pathlib
 
-_seuratv3 = r_function("seuratv3.R", args="sce_sc, sce_sp, n_pcs")
+_seuratv3 = r_function("seuratv3_wrapper.R", args="sce_sc, sce_sp, n_pcs, script_path")
 
 
 @method(
@@ -26,7 +27,12 @@ def seuratv3(adata, test: bool = False, n_pca: Optional[int] = None):
     adata_sc, adata = split_sc_and_sp(adata)
     # proportions_true gets lost in translation
     proportions_true = adata.obsm["proportions_true"]
-    adata = _seuratv3(adata_sc, adata, n_pcs=n_pca)
+    adata = _seuratv3(
+        adata_sc,
+        adata,
+        n_pcs=n_pca,
+        script_path=pathlib.Path(__file__).parent.joinpath("seuratv3.R").as_posix(),
+    )
     # get predicted cell type proportions from obs
     cell_type_names = pd.Index([x for x in adata.obs.columns if x.startswith("xCT_")])
     proportions_pred = adata.obs[cell_type_names].to_numpy()
