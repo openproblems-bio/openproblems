@@ -36,6 +36,8 @@ def sample_dataset():
     adata.layers["log_scran_pooling"] = adata.X.multiply(
         10000 / adata.X.sum(axis=1)
     ).tocsr()
+    adata.var_names_make_unique()
+    adata.obs_names_make_unique()
     return adata
 
 
