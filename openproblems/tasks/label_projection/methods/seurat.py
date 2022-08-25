@@ -6,7 +6,9 @@ from typing import Optional
 import functools
 import pathlib
 
-_seurat = r_function("seurat_wrapper.R", args="sce, n_pcs, k_score=NULL, k_filter=NULL")
+_seurat = r_function(
+    "seurat_wrapper.R", args="sce, n_pcs, k_score=NULL, k_filter=NULL, script_path"
+)
 
 _seurat_method = functools.partial(
     method,
