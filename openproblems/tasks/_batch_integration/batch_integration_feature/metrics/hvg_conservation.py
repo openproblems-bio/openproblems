@@ -26,6 +26,7 @@ coefficients.
 def hvg_conservation(adata):
     from scib.metrics import hvg_overlap
 
+    adata.var_names_make_unique()
     adata_unint = adata.copy()
     adata_unint.X = adata_unint.layers["log_scran_pooling"]
 
