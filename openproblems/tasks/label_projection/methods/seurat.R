@@ -1,5 +1,6 @@
 #' seurat.R
 #' Runs Seurat TransferData with SCT
+#'
 #' @param sce SingleCellExperiment
 #' @param n_pcs int Number of PCA components
 #' @param k_filter int How many neighbors (k) to use when filtering anchors.
@@ -10,6 +11,15 @@
 library(SingleCellExperiment)
 library(Seurat)
 library(Matrix)
+library(future)
+
+plan(multicore, workers = availableCores())
+
+args <- readRDS("/tmp/openproblems_seurat_args.rds")
+sce <- args$sce
+n_pcs <- args$n_pcs
+k_filter <- args$k_filter
+k_score <- args$k_score
 
 # Convert RsparseMatrix
 if (is(assay(sce, "X"), "RsparseMatrix")) {
@@ -49,4 +59,4 @@ reference$labels_pred <- reference$labels
 sce <- as.SingleCellExperiment(merge(reference, query))
 
 # Return
-sce
+saveRDS(sce_sp, "/tmp/openproblems_seurat_sce_out.rds")

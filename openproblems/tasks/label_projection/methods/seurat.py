@@ -5,7 +5,7 @@ from typing import Optional
 
 import functools
 
-_seurat = r_function("seurat.R", args="sce, n_pcs, k_score=NULL, k_filter=NULL")
+_seurat = r_function("seurat_wrapper.R", args="sce, n_pcs, k_score=NULL, k_filter=NULL")
 
 _seurat_method = functools.partial(
     method,
