@@ -13,6 +13,8 @@ library(Seurat)
 library(Matrix)
 library(future)
 
+# 8GB max size up from default of 500MB
+options(future.globals.maxSize = 8 * 1024^3)
 plan(multicore, workers = availableCores())
 
 args <- readRDS("/tmp/openproblems_seurat_args.rds")
