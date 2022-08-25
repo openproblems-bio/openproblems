@@ -26,6 +26,12 @@ def split_data(
     X_train, X_test = molecular_cross_validation.util.split_molecules(
         X, 0.9, 0.0, random_state
     )
+    # remove zero entries
+    is_missing = X_train.sum(axis=0) == 0
+    X_train, X_test = X_train[:, ~is_missing], X_test[:, ~is_missing]
+
+    adata = adata[:, ~is_missing].copy()
     adata.obsm["train"] = scipy.sparse.csr_matrix(X_train).astype(float)
     adata.obsm["test"] = scipy.sparse.csr_matrix(X_test).astype(float)
+
     return adata

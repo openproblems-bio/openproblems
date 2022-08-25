@@ -6,6 +6,7 @@ import parameterized
 import unittest
 import utils.name
 
+TASK_SUMMARY_MINLEN = 40
 TASK_SUMMARY_MAXLEN = 80
 
 MODULE = type(openproblems)
@@ -27,6 +28,7 @@ class TestTask(unittest.TestCase):
         assert isinstance(self.task._task_name, str)
         assert hasattr(self.task, "_task_summary")
         assert isinstance(self.task._task_summary, str)
+        assert len(self.task._task_summary) > TASK_SUMMARY_MINLEN
         assert len(self.task._task_summary) < TASK_SUMMARY_MAXLEN
         assert hasattr(self.task, "api")
         assert isinstance(self.task.api, MODULE)
@@ -48,6 +50,7 @@ class TestTask(unittest.TestCase):
         assert callable(self.task.api.check_method)
         assert callable(self.task.api.sample_dataset)
         assert callable(self.task.api.sample_method)
+        assert hasattr(self.task.api.sample_dataset, "metadata")
 
     def test_task_api_is_consistent(self):
         """Test that a task's API is self-consistent"""

@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
+        uses: styfle/cancel-workflow-action@0.10.0
         with:
           access_token: ${{ github.token }}
 
@@ -43,11 +43,11 @@ jobs:
           echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
 
       - name: Cache R packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         if: startsWith(runner.os, 'Linux')
         with:
           path: /usr/local/lib/R/site-library
-          key: precommit-${{env.LINUX_VERSION}}-${{env.R_VERSION}}-renv-${{ hashFiles('.pre-commit.r_requirements.txt') }}-
+          key: precommit-${{env.LINUX_VERSION}}-${{env.R_VERSION}}-renv-${{ hashFiles('./docker/openproblems-github-actions/r_requirements.txt') }}-
           restore-keys: |
             precommit-${{env.LINUX_VERSION}}-${{env.R_VERSION}}-renv-
 
@@ -55,18 +55,18 @@ jobs:
         run: |
           renv::restore()
           source("./scripts/install_renv.R")
-          install_renv(".pre-commit.r_requirements.txt")
+          install_renv("./docker/openproblems-github-actions/r_requirements.txt")
         shell: Rscript {0}
 
       - name: Cache pre-commit
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}-
 
       - name: Run pre-commit
         id: precommit
-        uses: pre-commit/action@v2.0.0
+        uses: pre-commit/action@v3.0.0
         continue-on-error: true
 
       - name: Commit files
@@ -89,4 +89,4 @@ jobs:
 
       - name: Check pre-commit
         if: steps.precommit.outcome == 'failure'
-        uses: pre-commit/action@v2.0.0
+        uses: pre-commit/action@v3.0.0

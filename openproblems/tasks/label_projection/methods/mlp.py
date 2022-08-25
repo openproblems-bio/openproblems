@@ -3,7 +3,17 @@ from ....tools.normalize import log_cpm
 from ....tools.normalize import log_scran_pooling
 from .sklearn import classifier
 
+import functools
 import sklearn.neural_network
+
+_mlp_method = functools.partial(
+    method,
+    paper_name="Connectionist learning procedures",
+    paper_url="https://doi.org/10.1016/0004-3702(89)90049-0",
+    paper_year=1990,
+    code_url="https://scikit-learn.org/stable/modules/generated/"
+    "sklearn.neural_network.MLPClassifier.html",
+)
 
 
 def _mlp(adata, test=False, max_iter=None, hidden_layer_sizes=None):
@@ -21,13 +31,8 @@ def _mlp(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     )
 
 
-@method(
+@_mlp_method(
     method_name="Multilayer perceptron (log CPM)",
-    paper_name="Connectionist learning procedures",
-    paper_url="https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
-    paper_year=1990,
-    code_url="https://scikit-learn.org/stable/modules/generated/"
-    "sklearn.neural_network.MLPClassifier.html",
 )
 def mlp_log_cpm(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     adata = log_cpm(adata)
@@ -36,13 +41,8 @@ def mlp_log_cpm(adata, test=False, max_iter=None, hidden_layer_sizes=None):
     )
 
 
-@method(
+@_mlp_method(
     method_name="Multilayer perceptron (log scran)",
-    paper_name="Connectionist learning procedures",
-    paper_url="https://www.sciencedirect.com/science/article/pii/B9780080510552500298",
-    paper_year=1990,
-    code_url="https://scikit-learn.org/stable/modules/generated/"
-    "sklearn.neural_network.MLPClassifier.html",
     image="openproblems-r-base",
 )
 def mlp_scran(adata, test=False, max_iter=None, hidden_layer_sizes=None):

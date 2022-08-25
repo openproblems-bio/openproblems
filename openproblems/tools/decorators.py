@@ -125,7 +125,13 @@ def metric(metric_name, maximize, image="openproblems"):
     return decorator
 
 
-def dataset(dataset_name, data_url, dataset_summary, image="openproblems"):
+def dataset(
+    dataset_name=None,
+    data_url=None,
+    data_reference=None,
+    dataset_summary=None,
+    image="openproblems",
+):
     """Decorate a dataset function.
 
     Parameters
@@ -134,6 +140,8 @@ def dataset(dataset_name, data_url, dataset_summary, image="openproblems"):
         Unique human readable name of the dataset
     data_url : str
         Link to the original source of the dataset
+    data_reference : str
+        Link to the paper describing how the dataset was generated
     dataset_summary : str
         Short (<80 character) summary of the dataset
     image : str, optional (default: "openproblems")
@@ -144,12 +152,15 @@ def dataset(dataset_name, data_url, dataset_summary, image="openproblems"):
         @functools.wraps(func)
         def apply_func(*args, **kwargs):
             log.debug("Loading {} dataset".format(func.__name__))
-            return func(*args, **kwargs)
+            adata = func(*args, **kwargs)
+            adata.strings_to_categoricals()
+            return adata
 
         apply_func.metadata = dict(
             dataset_name=dataset_name,
             image=image,
             data_url=data_url,
+            data_reference=data_reference,
             dataset_summary=dataset_summary,
         )
         return apply_func

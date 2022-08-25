@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
+        uses: styfle/cancel-workflow-action@0.10.0
         with:
           access_token: ${{ github.token }}
 
@@ -51,7 +51,7 @@ jobs:
       run: ./scripts/clear_runner_diskspace.sh
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: "3.8"
 
@@ -79,32 +79,18 @@ jobs:
         cd ..
         echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
 
-    - name: Set up Git branch
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      run: |
-        git checkout -b $BRANCH_NAME
-        git push -u origin $BRANCH_NAME
-
-    - name: Commit result
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      uses: EndBug/add-and-commit@v6
-      with:
-        author_name: SingleCellOpenProblems
-        author_email: singlecellopenproblems@protonmail.com
-        message: 'Update docker version # ci skip'
-        add: "docker/.version"
-        branch: ${{ env.BRANCH_NAME }}
-        push: false
-
     - name: Create Pull Request
       if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.BRANCH_NAME }}
         delete-branch: true
         base: main
         title: '[auto] Update docker version'
         reviewers: scottgigante, dburkhardt
+        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        commit-message: Update docker version # ci skip
+        add-paths: docker/.version
 
     - name: Upload check results on fail
       if: failure()
@@ -163,7 +149,7 @@ jobs:
         echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
 
     - name: Cache Python packages
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ env.PYTHON_VERSION }}
         key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
@@ -177,7 +163,7 @@ jobs:
         python -c "import openproblems"
 
     - name: Cache R packages
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       if: startsWith(runner.os, 'Linux')
       with:
         path: /usr/local/lib/R/site-library
@@ -235,6 +221,13 @@ jobs:
       )
 
     steps:
+    - name: Check dependabot
+      run: |
+        if [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+          echo "Dependabot cannot access Action secrets. Rerun the workflow manually"
+          exit 1
+        fi
+
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1000
@@ -247,16 +240,43 @@ jobs:
         sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
         sudo apt-get install -qy --no-install-recommends libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
 
+    - name: Check Tower authentication
+      env:
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+        TOWER_ORG_ID: 9180144064527
+        TOWER_WORKSPACE_ID: 53907369739130
+      run: |
+        token_confirmation=$(
+          curl -X GET "https://api.tower.nf/user-info" \
+          -H "Accept: application/json" \
+          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}"
+        )
+        if [ -z "${token_confirmation}" ]; then
+          echo "Tower authentication failed; set TOWER_ACCESS_KEY in repo secrets."
+          echo "See CONTRIBUTING.md for details."
+          exit 1
+        fi
+        workspace_confirmation=$(
+          curl -X GET "https://api.tower.nf/orgs/${TOWER_ORG_ID}/workspaces/${TOWER_WORKSPACE_ID}" \
+          -H "Accept: application/json" \
+          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}"
+        )
+        if [ -z "${workspace_confirmation}" ]; then
+          echo "Tower authentication failed; email singlecellopenproblems@protonmail.com with a request to be added to the openproblems-bio workspace"
+          exit 1
+        fi
+
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: "3.8"
 
     - name: Set up Java ${{ matrix.java_version }}
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v3
       with:
         java-version: 15
         architecture: x64
+        distribution: zulu
 
     - name: Set up environment
       run: |
@@ -267,14 +287,18 @@ jobs:
         echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
+        REPO_PARSED=$(echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6)
+        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[^a-zA-Z0-9]:-:g')
         if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
-          echo "BRANCH=`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 40`"; \
+          BRANCH=`echo $BRANCH_PARSED | head -c 40`
         else
-          echo "BRANCH=`echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6`-`echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g'| head -c 33`"; \
-        fi >> $GITHUB_ENV
+          BRANCH="${REPO_PARSED}-`echo $BRANCH_PARSED | head -c 33`"
+        fi
+        BRANCH=`echo $BRANCH | sed 's/[^a-zA-Z0-9]*$//'`
+        echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
 
     - name: Cache Python packages
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
         key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
@@ -373,7 +397,7 @@ jobs:
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run \
-        -revision v1.6 \
+        -revision v1.7 \
         -with-tower \
         -ansi-log false -resume \
         -profile aws,test \
@@ -398,35 +422,6 @@ jobs:
         name: nextflow.log
         path: /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log
 
-    - name: AWS ECR cleanup
-      if: |
-        !(
-          startsWith(github.ref, 'refs/heads/main') &&
-          github.repository == 'openproblems-bio/openproblems'
-        )
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name openproblems --image-ids "imageTag=${BRANCH}-${image}"
-        done
-
-    - name: AWS S3 cleanup
-      if: |
-        success() ||
-        startsWith(github.ref, 'refs/heads/main') ||
-        startsWith(github.ref, 'refs/tags')
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        aws s3 rm --recursive "s3://openproblems-nextflow/work/${{ env.BRANCH }}"
-        aws s3 rm --recursive "s3://openproblems-nextflow/bucket/${{ env.BRANCH }}"
-        aws s3 rm --recursive "s3://openproblems-nextflow/cwd/${{ env.BRANCH }}"
-
   run_full_benchmark:
     needs: run_test_benchmark
     runs-on: ubuntu-latest
@@ -446,7 +441,7 @@ jobs:
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
-        TOWER_ACTION_ID: 47GPYNQpUGw18YzLVeI6ke
+        TOWER_ACTION_ID: 6v5zG5ZjOWd1zrLGQR3fGL
       run: |
         generate_parameters()
         {

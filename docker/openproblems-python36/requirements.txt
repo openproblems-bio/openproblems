@@ -1,9 +1,0 @@
-boto3==1.23.*
-cmake==3.22.*
-git+https://bitbucket.org/jerry00/scvis-dev@af73849
-jupyter==1.0.*
-pip
-sagemaker==2.94.*
-setuptools
-tensorflow==1.1.0  # pinned in #318
-wheel
