@@ -8,7 +8,9 @@ ARG NB_GID="100"
 USER root
 WORKDIR /
 
-RUN apt-get update && apt-get install -y libhdf5-dev hdf5-tools libgeos-dev
+RUN apt-get update && apt-get install -y \
+    libhdf5-dev hdf5-tools libgeos-dev \
+    libharfbuzz-dev libfribidi-dev
 
 RUN apt-get clean autoclean && \
     apt-get autoremove --yes && \
@@ -17,8 +19,7 @@ RUN apt-get clean autoclean && \
 
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
-RUN \
-    R -e "renv::install(scan('r_requirements.txt', sep='\n', what=character()))"
+RUN R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"
 
 # Install Python packages
 COPY ./docker/openproblems-r-extras/requirements.txt ./requirements.txt

@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
+        uses: styfle/cancel-workflow-action@0.10.0
         with:
           access_token: ${{ github.token }}
 
@@ -79,32 +79,18 @@ jobs:
         cd ..
         echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
 
-    - name: Set up Git branch
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      run: |
-        git checkout -b $BRANCH_NAME
-        git push -u origin $BRANCH_NAME
-
-    - name: Commit result
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      uses: EndBug/add-and-commit@v6
-      with:
-        author_name: SingleCellOpenProblems
-        author_email: singlecellopenproblems@protonmail.com
-        message: 'Update docker version # ci skip'
-        add: "docker/.version"
-        branch: ${{ env.BRANCH_NAME }}
-        push: false
-
     - name: Create Pull Request
       if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.BRANCH_NAME }}
         delete-branch: true
         base: main
         title: '[auto] Update docker version'
         reviewers: scottgigante, dburkhardt
+        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        commit-message: Update docker version # ci skip
+        add-paths: docker/.version
 
     - name: Upload check results on fail
       if: failure()
@@ -254,6 +240,32 @@ jobs:
         sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
         sudo apt-get install -qy --no-install-recommends libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
 
+    - name: Check Tower authentication
+      env:
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+        TOWER_ORG_ID: 9180144064527
+        TOWER_WORKSPACE_ID: 53907369739130
+      run: |
+        token_confirmation=$(
+          curl -X GET "https://api.tower.nf/user-info" \
+          -H "Accept: application/json" \
+          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}"
+        )
+        if [ -z "${token_confirmation}" ]; then
+          echo "Tower authentication failed; set TOWER_ACCESS_KEY in repo secrets."
+          echo "See CONTRIBUTING.md for details."
+          exit 1
+        fi
+        workspace_confirmation=$(
+          curl -X GET "https://api.tower.nf/orgs/${TOWER_ORG_ID}/workspaces/${TOWER_WORKSPACE_ID}" \
+          -H "Accept: application/json" \
+          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}"
+        )
+        if [ -z "${workspace_confirmation}" ]; then
+          echo "Tower authentication failed; email singlecellopenproblems@protonmail.com with a request to be added to the openproblems-bio workspace"
+          exit 1
+        fi
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -276,7 +288,7 @@ jobs:
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
         REPO_PARSED=$(echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6)
-        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[/_]:-:g')
+        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[^a-zA-Z0-9]:-:g')
         if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
           BRANCH=`echo $BRANCH_PARSED | head -c 40`
         else
@@ -385,7 +397,7 @@ jobs:
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run \
-        -revision v1.6 \
+        -revision v1.7 \
         -with-tower \
         -ansi-log false -resume \
         -profile aws,test \
@@ -429,7 +441,7 @@ jobs:
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
-        TOWER_ACTION_ID: 47GPYNQpUGw18YzLVeI6ke
+        TOWER_ACTION_ID: 6v5zG5ZjOWd1zrLGQR3fGL
       run: |
         generate_parameters()
         {

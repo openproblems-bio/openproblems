@@ -3,9 +3,11 @@ from ....tools.decorators import dataset
 
 
 @dataset(
-    "Mouse blood. Olsson, et al. Nature. 2016",
+    "Mouse myeloid lineage differentiation",
     data_url=load_olsson_2016_mouse_blood.metadata["data_url"],
-    dataset_summary="TODO",
+    data_reference=load_olsson_2016_mouse_blood.metadata["data_reference"],
+    dataset_summary="Myeloid lineage differentiation from mouse blood. "
+    "Sequenced by SMARTseq in 2016 by Olsson et al.",
 )
 def olsson_2016_mouse_blood(test=False):
     return load_olsson_2016_mouse_blood(test=test)
