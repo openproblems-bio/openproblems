@@ -4,6 +4,7 @@ from ....tools.utils import check_r_version
 from typing import Optional
 
 import functools
+import pathlib
 
 _seurat = r_function("seurat_wrapper.R", args="sce, n_pcs, k_score=NULL, k_filter=NULL")
 
@@ -38,6 +39,10 @@ def seurat(
             kwargs["k_score"] = k_score
         if k_filter is not None:
             kwargs["k_filter"] = k_filter
-    adata = _seurat(adata, **kwargs)
+    adata = _seurat(
+        adata,
+        script_path=pathlib.Path(__file__).parent.joinpath("seurat.R").as_posix(),
+        **kwargs,
+    )
     adata.uns["method_code_version"] = check_r_version("Seurat")
     return adata
