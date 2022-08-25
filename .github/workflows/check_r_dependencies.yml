@@ -26,15 +26,18 @@ jobs:
         for REQUIREMENTS in $(ls -1 docker/*/r_requirements.txt); do
           IMAGE=$(echo ${REQUIREMENTS} | sed 's:^docker/::' | sed 's:/.*::')
           docker pull -q singlecellopenproblems/${IMAGE}
-          PKG_CHANGED=$(
-            docker run -t --rm --user=root \
+          OUTPUT=$(docker run -t --rm --user=root \
               -v $(pwd):/usr/src/singlecellopenproblems \
               singlecellopenproblems/${IMAGE} \
               Rscript /usr/src/singlecellopenproblems/scripts/upgrade_renv.R \
               /usr/src/singlecellopenproblems/${REQUIREMENTS} | \
-              tee /dev/stderr | \
+              tee /dev/stderr
+          )
+          PKG_CHANGED=$(
+            echo ${OUTPUT} | \
               tail -n 1 | \
-              sed 's-::-/-g'
+              sed 's-::-/-g' | \
+              tr -d "\n"
           )
           git diff --exit-code || break
         done
@@ -42,7 +45,8 @@ jobs:
         echo "UPDATE_BRANCH_NAME=dependencies/r/${PKG_CHANGED}" >> $GITHUB_ENV
 
     - name: Create Pull Request
-      if: "env.PKG_CHANGED != ''"
+      if: >-
+        env.UPDATE_BRANCH_NAME != ""
       uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
