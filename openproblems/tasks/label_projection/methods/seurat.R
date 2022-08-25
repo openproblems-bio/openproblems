@@ -59,4 +59,4 @@ reference$labels_pred <- reference$labels
 sce <- as.SingleCellExperiment(merge(reference, query))
 
 # Return
-saveRDS(sce_sp, "/tmp/openproblems_seurat_sce_out.rds")
+saveRDS(sce, "/tmp/openproblems_seurat_sce_out.rds")
