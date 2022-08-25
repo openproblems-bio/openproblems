@@ -15,8 +15,7 @@ sub-tasks for batch integration can be found for:
 * [corrected features]()
 
 This sub-task was taken from a [benchmarking study of data integration methods]
-(https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
-
+(<https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2>).
 
 ## API
 
@@ -36,13 +35,14 @@ container is used.
 
 Methods are run in four different scenarios that include scaling and highly variable
 gene selection:
+
 * `full_unscaled`
 * `hvg_unscaled`
 * `full_scaled`
 * `hvg_scaled`
 
-
 Metrics can compare:
+
 * `adata.obsm['X_emb']` to `adata.obsm['X_uni']`,
 * `adata.obsm['X_emb']` to `adata.obs['label']`, and/or
 * `adata.obsm['X_emb']` to `adata.obs['batch']`.
