@@ -1,5 +1,5 @@
 bioc::batchelor@1.12.3
-bioc::ComplexHeatmap@2.12.0
+bioc::ComplexHeatmap@2.12.1
 bslib@0.4.0
 caret@6.0-93
 cli@3.3.0
