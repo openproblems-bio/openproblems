@@ -46,7 +46,7 @@ jobs:
 
     - name: Create Pull Request
       if: >-
-        env.UPDATE_BRANCH_NAME != ""
+        env.UPDATE_BRANCH_NAME != ''
       uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
