@@ -31,10 +31,14 @@ if (is(assay(sce, "X"), "RsparseMatrix")) {
 # Method body
 
 data <- as.Seurat(sce, counts = "X", data = NULL)
+rm("sce")
+gc()
 data <- SCTransform(data, assay = "originalexp", verbose = FALSE)
 
 reference <- data[, data$is_train]
 query <- data[, !data$is_train]
+rm("data")
+gc()
 
 reference <- RunPCA(reference, assay = "SCT", verbose = FALSE, n_pcs = n_pcs)
 anchors <- FindTransferAnchors(
