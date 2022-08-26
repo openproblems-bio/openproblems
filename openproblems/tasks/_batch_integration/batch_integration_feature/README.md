@@ -1,6 +1,6 @@
 <!--- TODO: add links --->
 
-# Batch integration graph
+# Batch integration feature
 
 This is a sub-task of the overall batch integration task. Batch (or data) integration
 integrates datasets across batches that arise from various biological and technical
@@ -12,7 +12,7 @@ feature matrices with subsequent postprocessing to generate a joint embedding. O
 sub-tasks for batch integration can be found for:
 
 * [graphs](../batch_integration_graph/), and
-* [corrected features]()
+* [embeddings](../batch_integration_embed/)
 
 This sub-task was taken from a [benchmarking study of data integration methods]
 (<https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2>).
@@ -23,10 +23,11 @@ Datasets should contain the following attributes:
 
 * `adata.obs["batch"]` with the batch covariate, and
 * `adata.obs["label"]` with the cell identity label
-* `adata.layers['counts']` with raw, integer UMI count data, and
+* `adata.layers['counts']` with raw, integer UMI count data,
+* `adata.layers['log_scran_pooling]` with log-normalized data and
 * `adata.X` with log-normalized data
 
-Methods should assign output to `adata.obsm['X_emb'].
+Methods should batch correct the matrix stored in `adata.X`.
 
 The `openproblems-python-batch-integration` docker container is used for the methods
 that
@@ -43,9 +44,7 @@ gene selection:
 
 Metrics can compare:
 
-* `adata.obsm['X_emb']` to `adata.obsm['X_uni']`,
-* `adata.obsm['X_emb']` to `adata.obs['label']`, and/or
-* `adata.obsm['X_emb']` to `adata.obs['batch']`.
+* `adata.X` vs `adata.layers['log_scran_pooling']`
 
 To reuse metrics functions from `scIB`, [`metrics._utils._get_split`](metrics/_utils.py)
 separates the combined anndata into an integrated and an unintegrated anndata object.
