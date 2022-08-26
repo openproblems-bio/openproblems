@@ -7,6 +7,7 @@ celltypeASW=(ASWC+1)/2,
 
 where C denotes the set of all cell identity labels."""
 
+
 @metric(
     metric_name="Silhouette",
     maximize=True,
