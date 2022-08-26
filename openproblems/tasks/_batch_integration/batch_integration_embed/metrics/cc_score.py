@@ -1,18 +1,21 @@
 from .....tools.decorators import metric
 
 """
-Principal component regression, derived from PCA, has previously been used to quantify
-batch removal11. Briefly, the R2 was calculated from a linear regression of the
-covariate of interest (for example, the batch variable B) onto each principal component.
-The variance contribution of the batch effect per principal component was then
-calculated as the product of the variance explained by the ith principal component (PC)
-and the corresponding R2(PCi|B). The sum across all variance contributions by the batch
-effects in all principal components gives the total variance explained by the batch
-variable as follows:
-Var(𝐶|𝐵)=∑𝑖=1𝐺Var(𝐶|PC𝑖)×𝑅2(PC𝑖|𝐵),
+The cell-cycle conservation score evaluates how well the cell-cycle effect can be
+captured before and after integration. We computed cell-cycle scores using Scanpy’s
+score_cell_cycle function with a reference gene set from Tirosh et al.45 for the
+respective cell-cycle phases. We used the same set of cell-cycle genes for mouse and
+human data (using capitalization to convert between the gene symbols). We then computed
+the variance contribution of the resulting S and G2/M phase scores using principal
+component regression (Principal component regression), which was performed for each
+batch separately. The differences in variance before, Varbefore, and after, Varafter,
+integration were aggregated into a final score between 0 and 1, using the equation:
+CCconservation=1−|Varafter−Varbefore|/Varbefore.
 
-where Var(C|PCi) is the variance of the data matrix C explained by the ith principal
-component."""
+In this equation, values close to 0 indicate lower conservation and 1 indicates complete
+conservation of the variance explained by cell cycle. In other words, the variance
+remains unchanged within each batch for complete conservation, while any deviation from
+the preintegration variance contribution reduces the score."""
 
 
 @metric(
