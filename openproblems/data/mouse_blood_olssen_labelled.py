@@ -5,7 +5,7 @@ import scanpy as sc
 import scprep
 import tempfile
 
-URL = "https://ndownloader.figshare.com/files/36088646"
+URL = "https://figshare.com/ndownloader/files/36872214"
 
 
 @utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/nature19348")
