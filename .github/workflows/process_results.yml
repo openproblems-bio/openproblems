@@ -81,9 +81,16 @@ jobs:
         aws s3 cp --recursive "s3://openproblems-nextflow/cwd_main" "s3://openproblems-nextflow/cwd_example"
         aws s3 rm --recursive "s3://openproblems-nextflow/cwd_main"
 
+    - name: Push to ${{ env.PUSH_BRANCH }}
+      shell: bash
+      working-directory: './website'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
+      run: |
+        git push origin "${UPDATE_BRANCH_NAME}"
 
     - name: Create Pull Request
-      if: "github.event_name == 'repository_dispatch'"
+#      if: "github.event_name == 'repository_dispatch'"
       uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
