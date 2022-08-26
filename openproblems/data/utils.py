@@ -64,6 +64,8 @@ def loader(data_url, data_reference):
                 adata = func(*args, **kwargs)
                 adata.strings_to_categoricals()
                 adata.uns["_from_cache"] = False
+                if "var_names_all" not in adata.uns:
+                    adata.uns["var_names_all"] = adata.var.index.to_numpy()
                 if "counts" not in adata.layers:
                     adata.layers["counts"] = adata.X
                 try:
@@ -81,6 +83,9 @@ def loader(data_url, data_reference):
 
 def filter_genes_cells(adata):
     """Remove empty cells and genes."""
+    if "var_names_all" not in adata.uns:
+        # fill in original var names before filtering
+        adata.uns["var_names_all"] = adata.var.index.to_numpy()
     sc.pp.filter_genes(adata, min_cells=1)
     sc.pp.filter_cells(adata, min_counts=2)
 

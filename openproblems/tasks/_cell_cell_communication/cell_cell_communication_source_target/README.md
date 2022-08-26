@@ -15,7 +15,7 @@ al, 2022](https://doi.org/10.1038/s41467-022-30755-0) recently developed the
 as a foundation for this task.
 
 The challenges in evaluating the tools are further exacerbated by the
-lack of aa gold standard to benchmark the performance of CCC methods. In an
+lack of a gold standard to benchmark the performance of CCC methods. In an
 attempt to address this, Dimitrov et al use alternative data modalities, including
 the spatial proximity of cell types and inferred
 downstream cytokine activities, to generate an inferred ground truth. However,
@@ -25,8 +25,8 @@ datasets with known ground truth interactions will become available, from
 which the limitations and advantages of the different CCC methods will
 be better understood.
 
-This subtask evaluates methods that predict interations between source cell types and
-target cell types.
+**This subtask evaluates methods in their ability to predict interactions between
+spatially-adjacent source cell types and target cell types**.
 
 ## The metrics
 
@@ -73,6 +73,23 @@ Methods should predict interactions between cell types without using
   inferred interaction
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
+
+### Prior-knowledge Resource
+
+Each dataset should be supplemented with a prior knowledge resource of
+ligand-receptor interactions, with matching feature IDs.
+The resource used in the [Ligand-Target](./cell_cell_communication_ligand_target)
+and [Source-Target](./cell_cell_communication_source_target)
+tasks was generated as the consensus from multiple manually-curated human
+ligand-receptor resources, and includes interactions from
+[CellPhoneDB](https://www.nature.com/articles/s41596-020-0292-x),
+[CellChatDB](https://www.nature.com/articles/s41467-021-21246-9#disqus_thread),
+[ICELLNET](https://www.nature.com/articles/s41467-021-21244-x),
+[connectomeDB2020](https://www.nature.com/articles/s41467-020-18873-z),
+and [CellTalkDB](https://www.nature.com/articles/s41467-020-18873-z) resources.
+All of these were queried via the
+[OmniPath database](https://www.embopress.org/doi/full/10.15252/msb.20209923),
+and are fixed for each version of LIANA.
 
 ### Metrics
 

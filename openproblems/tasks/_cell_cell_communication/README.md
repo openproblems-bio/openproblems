@@ -35,8 +35,8 @@ event are detected. Currently, two subtasks are defined:
 * [Source-Target](./cell_cell_communication_source_target): interactions between
   source cell types and target cell types.
 
-More subtasks may be defined that infer communication events on any of the source
-cell type, the target cell type, the ligand molecule, and the ligand receptor.
+More subtasks may be defined that infer communication events on any of the `source`
+cell type, the `target` cell type, the `ligand` molecule, and the receptor.
 More aspects of the communication may also be added in future.
 
 ## The metrics
@@ -78,8 +78,8 @@ in `adata.uns["target_organism"]` - used to convert the (typically human) prior
 knowledge of the CCC methods to the corresponding gene homologs.
 `adata.X` should contain the raw counts matrix.
 
-For subtasks including ligands or receptors in the inferred interactions, TODO: describe
-ligand-receptor resource.
+For subtasks including ligands or receptors in the inferred interactions, provide a
+prior-k
 
 ### Methods
 
@@ -104,6 +104,23 @@ DataFrame containing the columns `ligand_genesymbol` and `receptor_genesymbol`, 
 correspond to the ligand and receptor genes, respectively. These may contain complexes
 with subunits separated with `_`. Hence, **methods should be able to deal with
 complex-containing interactions**.
+
+### Prior-knowledge Resource
+
+Each dataset should be supplemented with a prior knowledge resource of
+ligand-receptor interactions, with matching feature IDs.
+The resource used in the [Ligand-Target](./cell_cell_communication_ligand_target)
+and [Source-Target](./cell_cell_communication_source_target)
+tasks was generated as the consensus from multiple manually-curated human
+ligand-receptor resources, and includes interactions from
+[CellPhoneDB](https://www.nature.com/articles/s41596-020-0292-x),
+[CellChatDB](https://www.nature.com/articles/s41467-021-21246-9#disqus_thread),
+[ICELLNET](https://www.nature.com/articles/s41467-021-21244-x),
+[connectomeDB2020](https://www.nature.com/articles/s41467-020-18873-z),
+and [CellTalkDB](https://www.nature.com/articles/s41467-020-18873-z) resources.
+All of these were queried via the
+[OmniPath database](https://www.embopress.org/doi/full/10.15252/msb.20209923),
+and are fixed for each version of LIANA.
 
 ### Metrics
 
