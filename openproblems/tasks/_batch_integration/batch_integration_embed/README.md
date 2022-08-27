@@ -34,8 +34,8 @@ The `openproblems-python-batch-integration` docker container is used for the met
 that can be installed without package conflicts. For R methods, the
 `openproblems-r-extras` container is used.
 
-Methods are run in four different scenarios that include scaling and highly variable
-gene selection:
+Most methods in this task are run in four different scenarios that include scaling and
+highly variable gene selection:
 
 * `full_unscaled`
 * `hvg_unscaled`
