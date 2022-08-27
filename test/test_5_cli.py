@@ -234,7 +234,7 @@ def test_pipeline():
             do_print=False,
         )
         assert os.path.isfile(dataset_file)
-        main(
+        code_version = main(
             [
                 "run",
                 "--task",
@@ -268,5 +268,5 @@ def test_pipeline():
             do_print=False,
         )
         with open(result_file, "r") as handle:
-            result = handle.read()
+            result = float(handle.read())
         assert isinstance(result, float)
