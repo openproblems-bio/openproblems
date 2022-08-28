@@ -24,4 +24,6 @@ def main(args):
     adata = anndata.read_h5ad(args.input)
     adata = run_method(adata, args.task, args.name, args.test)
     utils.write_h5ad(adata, args.output)
-    return adata.uns["method_code_version"]
+    if args.version_file is not None:
+        with open(args.version_file, "w") as handle:
+            handle.write(adata.uns["method_code_version"])

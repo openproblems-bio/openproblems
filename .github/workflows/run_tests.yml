@@ -397,7 +397,7 @@ jobs:
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run \
-        -revision v1.7 \
+        -revision v1.8 \
         -with-tower \
         -ansi-log false -resume \
         -profile aws,test \
@@ -441,7 +441,7 @@ jobs:
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
-        TOWER_ACTION_ID: 6v5zG5ZjOWd1zrLGQR3fGL
+        TOWER_ACTION_ID: 7jylKuFGbSN65qSA4NfdFY
       run: |
         generate_parameters()
         {
