@@ -148,7 +148,7 @@ below:
 Each task consists of datasets, methods, and metrics.
 
 Datasets should take no arguments and return an AnnData object. If `test is True`, then
-the method should load the full dataset, but only return a small s-clion of the same
+the method should load the full dataset, but only return a small version of the same
 data (preferably <200 cells and <500 genes) for faster downstream analysis.
 
 ```text
