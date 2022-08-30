@@ -5,7 +5,7 @@ import functools
 import numpy as np
 import scprep
 
-
+# the decay and t parameter give knn smoothing behavior
 def _magic(adata, solver):
     from magic import MAGIC
 
@@ -13,7 +13,7 @@ def _magic(adata, solver):
         adata.obsm["train"], rescale=1, return_library_size=True
     )
     X = scprep.transform.sqrt(X)
-    # the decay and t parameter give knn smoothing behavior
+    
     Y = MAGIC(solver=solver, decay=0,
               t=1, verbose=False).fit_transform(X, genes="all_genes")
     Y = scprep.utils.matrix_transform(Y, np.square)
@@ -27,14 +27,14 @@ def _magic(adata, solver):
 def knn_smoothing(adata, test=False):
     return _magic(adata, solver="exact")
 
-
+# magic codebase is used instead of knn-smoothing
 @method(
     method_name="KNN smoothing",
     paper_name="K-nearest neighbor smoothing for high-throughput "
     "single-cell RNA-Seq data",
     paper_url="https://www.biorxiv.org/content/10.1101/217737v3",
     paper_year=2018,
-    # magic codebase is used instead of knn-smoothing
+    
     code_url="https://github.com/yanailab/knn-smoothing",
     image="openproblems-python-extras",
 )
