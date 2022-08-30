@@ -148,7 +148,7 @@ below:
 Each task consists of datasets, methods, and metrics.
 
 Datasets should take no arguments and return an AnnData object. If `test is True`, then
-the method should load the full dataset, but only return a small version of the same
+the method should load the full dataset, but only return a small s-clion of the same
 data (preferably <200 cells and <500 genes) for faster downstream analysis.
 
 ```text
@@ -304,12 +304,67 @@ ease of use, we provide a collection of common normalization functions in
 stored in `adata.X` is automatically stored in `adata.layers["counts"]` for later
 reference in the case the a metric needs to access the unnormalized data.
 
-To test the performance of a dataset, method, or metric, you can use the command-line
-interface:
+#### Testing method performance
 
-```shell
-openproblems-cli test --help
+To test the performance of a dataset, method, or metric, you can use the command-line
+interface `openproblems-cli test`.
+
+First, you must launch a Docker image containing the relevant dependencies for the
+dataset/method/metric you wish to test. You can then run `openproblems-cli test` with
+any/all of `--dataset`, `--method`, and `--metric` as desired. E.g.,
+
+```bash
+cd openproblems
+docker run \
+  -v $(pwd):/usr/src/singlecellopenproblems -v /tmp:/tmp \
+  -it singlecellopenproblems/openproblems-python-extras bash
+openproblems-cli test \
+  --task label_projection \
+  --dataset zebrafish_labels \
+  --method logistic_regression_log_cpm \
+  --metric f1
 ```
+
+which will print the benchmark score for the method evaluated by the metric on the
+dataset you chose.
+
+Note:
+
+* If you have updated Docker images to run your method, you must first rebuild the
+  images -- see the [Docker README](docker/README.md) for details.
+* If your dataset/method/metric cannot be run on the same docker image, you may wish to
+  `load`, `run`, and `evaluate` separately. You can do this using each of these commands
+  independently; however, this workflow is not documented.
+* If your compute environment is not powerful enough to run the test, you may use your
+  AWS credentials to launch a VM for testing purposes; however, **please be respectful
+  of our finite resources!** If developers are found to be using resources
+  irresponsibly, we may have to revoke this privilege. To launch a VM, run the
+  following, adjusting
+  [`AWS_EC2_INSTANCE_TYPE`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html)
+  according to your needs (you may need to install
+  [jq](https://stedolan.github.io/jq/download/)):
+
+  ```bash
+  KEY_NAME="my_aws_key"
+  AWS_EC2_INSTANCE_TYPE="t2.micro"
+  aws ec2 create-key-pair --key-name $KEY_NAME --key-format pem \
+    --query "KeyMaterial" --output text > ${KEY_NAME}.pem
+  chmod 400 ${KEY_NAME}.pem
+  INSTANCE_ID=$(
+    aws ec2 run-instances --count 1 --image-id ami-01219569b1bbf9fb2
+      --instance-type $AWS_EC2_INSTANCE_TYPE --key-name $KEY_NAME
+      --security-group-ids sg-002d2b9db29bb43dd |
+      jq '.["Instances"][0]["InstanceId"]' |
+      tr -d '"'
+  )
+  sleep 30 # wait for boot
+  PUBLIC_DNS_NAME=$(
+    aws ec2 describe-instances --instance-id $INSTANCE_ID |
+      jq '.["Reservations"][0]["Instances"][0]["PublicDnsName"]' |
+      tr -d '"'
+  )
+  ssh -i ${KEY_NAME}.pem ubuntu@${PUBLIC_DNS_NAME}
+  ```
 
 ### Adding a new task
 
