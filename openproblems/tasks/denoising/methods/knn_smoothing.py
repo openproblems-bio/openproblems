@@ -18,9 +18,6 @@ def _knn_smoothing(adata, solver):
 def knn_smoothing(adata, test=False):
     return _knn_smoothing(adata)
 
-# magic codebase is used instead of knn-smoothing
-
-
 @method(
     method_name="KNN smoothing",
     paper_name="K-nearest neighbor smoothing for high-throughput "
