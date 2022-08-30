@@ -20,6 +20,7 @@ batchASW=1|𝑀|∑𝑗∈𝑀batchASW𝑗.
 
 Here, M is the set of unique cell labels."""
 
+
 @metric(
     metric_name="Batch ASW",
     maximize=True,

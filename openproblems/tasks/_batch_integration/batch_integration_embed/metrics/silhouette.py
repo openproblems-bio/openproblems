@@ -9,6 +9,7 @@ where C denotes the set of all cell identity labels.
 For information about the batch silhouette score, check sil_batch."""
 
 
+
 @metric(
     metric_name="Silhouette",
     maximize=True,

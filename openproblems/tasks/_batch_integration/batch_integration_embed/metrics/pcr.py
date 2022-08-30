@@ -14,6 +14,7 @@ Var(𝐶|𝐵)=∑𝑖=1𝐺Var(𝐶|PC𝑖)×𝑅2(PC𝑖|𝐵),
 where Var(C|PCi) is the variance of the data matrix C explained by the ith principal
 component."""
 
+
 @metric(
     metric_name="PC Regression",
     maximize=True,
