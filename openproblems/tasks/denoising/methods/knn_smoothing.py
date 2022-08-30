@@ -17,6 +17,7 @@ import scprep
 )
 def knn_smoothing(adata, test=False):
     import knn_smooth
+
     adata.uns["method_code_version"] = check_version("knn_smooth")
     adata.X = knn_smooth.knn_smoothing(adata.X)
     return adata
