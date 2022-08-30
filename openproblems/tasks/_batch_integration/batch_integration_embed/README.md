@@ -28,7 +28,7 @@ Datasets should contain the following attributes:
 * `adata.layers['counts']` with raw, integer UMI count data, and
 * `adata.X` with log-normalized data
 
-Methods should assign output to `adata.obsm['X_emb'].
+Methods should assign output to `adata.obsm['X_emb']`.
 
 The `openproblems-python-batch-integration` docker container is used for the methods
 that can be installed without package conflicts. For R methods, the
