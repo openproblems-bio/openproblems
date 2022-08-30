@@ -56,7 +56,7 @@ def magic(adata, test=False, normtype="sqrt", decay=1, t=3):
 @_knn_naive_method(
     method_name="KNN naive (approximate)",
 )
-def knn_naive(adata, test=False, normtype="sqrt", decay=0, t=1):
+def knn_naive(adata, test=False, normtype="log", decay=0, t=1):
     return _magic(adata, solver="exact")
 
 
