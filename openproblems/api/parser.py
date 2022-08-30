@@ -4,12 +4,14 @@ import pathlib
 
 def filepath(string):
     """Require an argument type to be a valid path."""
+    if string is None:
+        return string
     path = pathlib.Path(string)
     if path.exists and path.is_dir():
         raise argparse.ArgumentTypeError("Value must not be a directory")
     if not path.parent.is_dir():
         try:
-            path.parent.mkdir(exists_ok=True, parents=True)
+            path.parent.mkdir(exist_ok=True, parents=True)
         except OSError as e:
             raise argparse.ArgumentTypeError(
                 "Failed to create directory {}: {}".format(path.parent, e)
@@ -55,13 +57,13 @@ def parse_input(parser):
     )
 
 
-def parse_output(parser):
+def parse_output(parser, required=True):
     """Parse the output file argument."""
     parser.add_argument(
         "--output",
         "-o",
         type=filepath,
-        required=True,
+        required=required,
         help="Output file path",
     )
 
@@ -147,6 +149,12 @@ def create_run_parser(subparsers):
     )
     parse_input(parser)
     parse_output(parser)
+    parser.add_argument(
+        "--version-file",
+        type=str,
+        help="Write method version to a file",
+        default=None,
+    )
     parser.add_argument("name", type=str, help="Name of the selected method")
     parse_test(parser)
 
@@ -162,6 +170,7 @@ def create_evaluate_parser(subparsers):
         required=True,
     )
     parse_input(parser)
+    parse_output(parser, required=False)
     parser.add_argument("name", type=str, help="Name of the selected metric")
 
 
