@@ -20,7 +20,7 @@ def _combat(adata):
 
     adata = runCombat(adata, "batch")
     reduce_data(adata, umap=False)
-    adata.obsm['X_emb']=adata.obsm['X_pca']
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     adata.uns["method_code_version"] = check_version("scanpy")
     return adata
 
