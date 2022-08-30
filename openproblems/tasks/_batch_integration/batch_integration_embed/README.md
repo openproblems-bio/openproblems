@@ -15,8 +15,8 @@ sub-tasks for batch integration can be found for:
 * [corrected features](../batch_integration_features)
 
 This sub-task was taken from a
-[benchmarking study of data integration methods]
-(<https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2>).
+[benchmarking study of data integration
+methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
 
 ## API
 
