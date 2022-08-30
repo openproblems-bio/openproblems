@@ -38,5 +38,4 @@ def knn_smoothing(adata, test=False):
     paper_url="https://www.biorxiv.org/content/10.1101/217737v3",
     paper_year=2018,
     code_url="https://github.com/yanailab/knn-smoothing",
-    image="openproblems-python-extras",
-)
+    image="openproblems-python-extras")
