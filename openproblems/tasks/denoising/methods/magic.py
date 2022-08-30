@@ -14,18 +14,33 @@ _magic_method = functools.partial(
     code_url="https://github.com/KrishnaswamyLab/MAGIC",
     image="openproblems-python-extras",
 )
+_knn_naive_method = functools.partial(
+    method,
+    paper_name="NA",
+    paper_url="NA",
+    paper_year=2022,
+    code_url="https://openproblems.bio",
+    image="openproblems-python-extras",
+)
 
 
-def _magic(adata, solver):
+def _magic(adata, solver, normtype, decay, t):
     from magic import MAGIC
 
     X, libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
     )
-    X = scprep.transform.sqrt(X)
-    Y = MAGIC(solver=solver, verbose=False).fit_transform(X, genes="all_genes")
-    Y = scprep.utils.matrix_transform(Y, np.square)
-    Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
+
+    if (normtype=="sqrt"):  
+        X = scprep.transform.sqrt(X)
+        Y = MAGIC(solver=solver, decay=decay, t=t, verbose=False).fit_transform(X, genes="all_genes")
+        Y = scprep.utils.matrix_transform(Y, np.square)
+        Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
+    else if (normtype=="log"):
+        X = scprep.transform.log(X, base="e")
+        Y = MAGIC(solver=solver, decay=decay, t=t, verbose=False).fit_transform(X, genes="all_genes")
+        Y = scprep.utils.matrix_transform(Y, np.expm1)
+        Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
 
     adata.uns["method_code_version"] = check_version("magic-impute")
@@ -35,7 +50,13 @@ def _magic(adata, solver):
 @_magic_method(
     method_name="MAGIC",
 )
-def magic(adata, test=False):
+def magic(adata, test=False, normtype="sqrt", decay=1, t=3):
+    return _magic(adata, solver="exact")
+
+@_knn_naive_method(
+    method_name="KNN naive (approximate)",
+)
+def knn_naive(adata, test=False, normtype="sqrt", decay=0, t=1):
     return _magic(adata, solver="exact")
 
 
