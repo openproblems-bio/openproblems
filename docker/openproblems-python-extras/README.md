@@ -23,4 +23,4 @@ Python packages:
 * ivis
 * umap-learn
 * xgboost
-* knn_smoothing
+* knn_smooth
