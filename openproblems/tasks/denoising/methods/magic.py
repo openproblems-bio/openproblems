@@ -31,14 +31,16 @@ def _magic(adata, solver, normtype, decay, t):
         adata.obsm["train"], rescale=1, return_library_size=True
     )
 
-    if (normtype=="sqrt"):  
+    if (normtype == "sqrt"):
         X = scprep.transform.sqrt(X)
-        Y = MAGIC(solver=solver, decay=decay, t=t, verbose=False).fit_transform(X, genes="all_genes")
+        Y = MAGIC(solver=solver, decay=decay, t=t,
+                  verbose=False).fit_transform(X, genes="all_genes")
         Y = scprep.utils.matrix_transform(Y, np.square)
         Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
-    else if (normtype=="log"):
+    else if (normtype == "log"):
         X = scprep.transform.log(X, base="e")
-        Y = MAGIC(solver=solver, decay=decay, t=t, verbose=False).fit_transform(X, genes="all_genes")
+        Y = MAGIC(solver=solver, decay=decay, t=t,
+                  verbose=False).fit_transform(X, genes="all_genes")
         Y = scprep.utils.matrix_transform(Y, np.expm1)
         Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
@@ -52,6 +54,7 @@ def _magic(adata, solver, normtype, decay, t):
 )
 def magic(adata, test=False, normtype="sqrt", decay=1, t=3):
     return _magic(adata, solver="exact")
+
 
 @_knn_naive_method(
     method_name="KNN naive (approximate)",
