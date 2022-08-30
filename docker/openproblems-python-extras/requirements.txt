@@ -12,3 +12,4 @@ tangram-sc==1.0.*
 tensorflow-cpu==2.7.*
 torch==1.11.*
 xgboost==1.6.*
+git+https://github.com/scottgigante-immunai/knn-smoothing@python_package
