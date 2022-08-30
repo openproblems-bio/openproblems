@@ -10,7 +10,7 @@ import scprep
     method_name="KNN smoothing",
     paper_name="K-nearest neighbor smoothing for high-throughput "
     "single-cell RNA-Seq data",
-    paper_url="https://www.biorxiv.org/content/10.1101/217737v3",
+    paper_url="https://doi.org/10.1101/217737",
     paper_year=2018,
     code_url="https://github.com/yanailab/knn-smoothing",
     image="openproblems-python-extras",
