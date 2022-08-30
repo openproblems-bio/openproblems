@@ -3,7 +3,7 @@ from .....tools.decorators import metric
 """
 The cell-cycle conservation score evaluates how well the cell-cycle effect can be
 captured before and after integration. We computed cell-cycle scores using Scanpy’s
-score_cell_cycle function with a reference gene set from Tirosh et al.45 for the
+score_cell_cycle function with a reference gene set from Tirosh et al for the
 respective cell-cycle phases. We used the same set of cell-cycle genes for mouse and
 human data (using capitalization to convert between the gene symbols). We then computed
 the variance contribution of the resulting S and G2/M phase scores using principal

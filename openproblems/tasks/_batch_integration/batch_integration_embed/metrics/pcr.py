@@ -2,7 +2,7 @@ from .....tools.decorators import metric
 
 """
 Principal component regression, derived from PCA, has previously been used to quantify
-batch removal11. Briefly, the R2 was calculated from a linear regression of the
+batch removal. Briefly, the R2 was calculated from a linear regression of the
 covariate of interest (for example, the batch variable B) onto each principal component.
 The variance contribution of the batch effect per principal component was then
 calculated as the product of the variance explained by the ith principal component (PC)

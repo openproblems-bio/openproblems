@@ -1,14 +1,14 @@
 from .....tools.decorators import metric
 
 """
-For the batch mixing score (2), we consider the absolute silhouette width, s(i), on
+We consider the absolute silhouette width, s(i), on
 batch labels per cell i. Here, 0 indicates that batches are well mixed, and any
 deviation from 0 indicates a batch effect:
 𝑠batch(𝑖)=|𝑠(𝑖)|.
 
 To ensure higher scores indicate better batch mixing, these scores are scaled by
 subtracting them from 1. As we expect batches to integrate within cell identity
-clusters, we compute the batchASWj (ref. 11) score for each cell label j separately,
+clusters, we compute the batchASWj score for each cell label j separately,
 using the equation:
 batchASW𝑗=1|𝐶𝑗|∑𝑖∈𝐶𝑗1−𝑠batch(𝑖),
 
