@@ -5,7 +5,11 @@ import scanpy as sc
 import scprep
 import tempfile
 
+# sparsified from https://ndownloader.figshare.com/files/24974582
+# TODO(@LuckyMD): change link to figshare.com/articles/*
 PBMC_1K_URL = "https://ndownloader.figshare.com/files/36088667"
+
+# TODO(@LuckyMD): document relevant link at figshare.com/articles/*
 PBMC_5K_URL = "https://ndownloader.figshare.com/files/25555739"
 REFERENCE_URL = "https://www.10xgenomics.com/resources/datasets"
 

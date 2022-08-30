@@ -5,6 +5,8 @@ import scanpy as sc
 import scprep
 import tempfile
 
+# sparsified from https://ndownloader.figshare.com/files/25555751
+# TODO(@LuckyMD): change link to figshare.com/articles/*
 URL = "https://ndownloader.figshare.com/files/36088649"
 
 
