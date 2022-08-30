@@ -9,7 +9,7 @@ from . import utils
     data_reference=load_olsson_2016_mouse_blood.metadata["data_reference"],
     dataset_summary="Myeloid lineage differentiation from mouse blood. "
     "Sequenced by SMARTseq in 2016 by Olsson et al.",
-    image="openproblems-python-extras"
+    image="openproblems-python-extras",
 )
 def olsson_2016_mouse_blood(test=False):
     adata = load_olsson_2016_mouse_blood(test=test)
