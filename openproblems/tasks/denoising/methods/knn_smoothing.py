@@ -6,17 +6,10 @@ import numpy as np
 import scprep
 
 
-# the decay and t parameter give knn smoothing behavior
-def _knn_smoothing(adata, solver):
-    import knn - smooth
-
-    smoothX = knn - smooth.knn_smoothing(adata.X)
-    adata.X = smoothX
-    return adata
-
-
 def knn_smoothing(adata, test=False):
-    return _knn_smoothing(adata)
+    import knn_smooth
+    adata.X = knn_smooth.knn_smoothing(adata.X)
+    return adata
 
 
 @method(
