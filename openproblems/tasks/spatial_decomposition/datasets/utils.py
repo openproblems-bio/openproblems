@@ -114,7 +114,7 @@ def generate_synthetic_dataset(
             # get indices of cells from which transcripts should be added
             idx_sl = rng.choice(label_indices[uni_labs[lab]], size=n)
             # add molecules to pool
-            pool_s += X[idx_sl, :].sum(axis=0)
+            pool_s += X[idx_sl, :].sum(axis=0).A.flatten()
 
         # number of UMIs at spot s
         n_umis = rng.integers(umi_lb, umi_ub)
