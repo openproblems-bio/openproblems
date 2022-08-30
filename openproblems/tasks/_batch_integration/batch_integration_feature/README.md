@@ -14,8 +14,8 @@ sub-tasks for batch integration can be found for:
 * [graphs](../batch_integration_graph/), and
 * [embeddings](../batch_integration_embed/)
 
-This sub-task was taken from a [benchmarking study of data integration methods]
-(<https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2>).
+This sub-task was taken from a [benchmarking study of data integration
+methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
 
 ## API
 
