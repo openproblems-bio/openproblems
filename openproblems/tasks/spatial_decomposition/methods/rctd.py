@@ -5,7 +5,7 @@ from ..utils import split_sc_and_sp
 
 import numpy as np
 
-_rctd = r_function("rctd.R", args="sce_sc, sce_sp")
+_rctd = r_function("rctd.R", args="sce_sc, sce_sp, test")
 
 
 @method(
@@ -23,7 +23,7 @@ def rctd(adata, test=False):
     # set spatial coordinates for the single cell data
     adata_sc.obsm["spatial"] = np.ones((adata_sc.shape[0], 2))
     # run RCTD
-    adata = _rctd(adata_sc, adata)
+    adata = _rctd(adata_sc, adata, test=test)
 
     # get predicted cell type proportions from obs
     cell_type_names = [x for x in adata.obs.columns if x.startswith("xCT")]
