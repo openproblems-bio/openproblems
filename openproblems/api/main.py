@@ -35,8 +35,7 @@ def _main(args=None):
     elif args.subcommand in SUBCOMMANDS:
         # Since printing the output to stdout is important here,
         # we redirect all other stdout to stderr.
-        with utils.RedirectStdout():
-            return SUBCOMMANDS[args.subcommand].main(args)
+        return SUBCOMMANDS[args.subcommand].main(args)
     else:
         raise NotImplementedError
 

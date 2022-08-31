@@ -1,4 +1,4 @@
-# Dimensionality reduction
+# Dimensionality reduction for visualisation
 
 ## The task
 
