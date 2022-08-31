@@ -47,9 +47,6 @@ def check_dataset(adata, merge_keys):
 
     # check against resource
     if "ligand" in merge_keys or "receptor" in merge_keys:
-        # verify resource is correct
-        # TODO(@dbdimitrov): check this is right
-        assert "ligand_receptor_resource" in adata.uns
         assert "ligand_receptor_resource" in adata.uns
         assert "receptor_genesymbol" in adata.uns["ligand_receptor_resource"]
         assert "ligand_genesymbol" in adata.uns["ligand_receptor_resource"]
