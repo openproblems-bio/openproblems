@@ -12,7 +12,13 @@ URL = "https://figshare.com/ndownloader/files/36590871"
 
 @utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/s41588-021-00911-1")
 def load_tnbc_data(test=False):
-    """Download TNBC data (Wu et al., 2021) from Figshare."""
+    """Download TNBC data (Wu et al., 2021) from Figshare.
+
+    Further information how we generated the assumed truth and the reference
+    to the dataset is available at:
+    https://figshare.com/articles/dataset/TNBC_Data_from_Wu_et_al_2021/20338536
+
+    """
     if test:
         # load full data first, cached if available
         adata = load_tnbc_data(test=False)
