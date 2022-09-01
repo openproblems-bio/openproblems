@@ -30,7 +30,7 @@ process_requires = ["numpyencoder==0.3.*"]
 test_requires = [
     "pytest==7.1.*",
     "pytest-cov==3.0.*",
-    "black==22.6.0",
+    "black==22.8.0",
     "coverage==6.4.*",
     "codecov==2.1.*",
     "parameterized==0.8.*",
