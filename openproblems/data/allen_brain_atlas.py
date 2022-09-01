@@ -12,9 +12,11 @@ URL = "https://figshare.com/ndownloader/files/36509385"
 @utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/nn.4216")
 def load_mouse_brain_atlas(test=False):
     """Download Allen Brain (Taisc et al.,2016) data from Figshare.
+    
     Further information how we generated the assumed truth and the reference
     to the dataset is available at:
-    https://figshare.com/articles/dataset/allen_brain_h5ad/20338089"""
+    https://figshare.com/articles/dataset/allen_brain_h5ad/20338089
+    """
     if test:
         # load full data first, cached if available
         adata = load_mouse_brain_atlas(test=False)
