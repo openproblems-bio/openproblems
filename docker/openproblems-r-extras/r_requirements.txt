@@ -9,7 +9,7 @@ dbplyr@2.2.1
 devtools@2.4.4
 dmcable/spacexr@eeb02a2 # master
 downlit@0.4.2
-dplyr@1.0.9
+dplyr@1.0.10
 e1071@1.7-11
 ellipsis@0.3.2
 forecast@8.17.0
