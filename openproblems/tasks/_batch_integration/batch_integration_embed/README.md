@@ -56,7 +56,7 @@ separates the combined anndata into an integrated and an unintegrated anndata ob
 ## Metrics
 
 In the following, we will give a short description of the implemented metrics. We split
-by metrics capturing batch correction meaning the removal of batch effects and metrics 
+by metrics capturing batch correction meaning the removal of batch effects and metrics
 describing biological conservation, meaning how well the biological differences between
 cell states are conserved.
 
