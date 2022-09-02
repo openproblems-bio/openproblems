@@ -49,8 +49,9 @@ Metrics can compare:
 To reuse metrics functions from `scIB`, [`metrics._utils._get_split`](metrics/_utils.py)
 separates the combined anndata into an integrated and an unintegrated anndata object.
 
-
 ## Metrics
+
 ### HVG conservation
+
 Metric that computes the average percentage of overlapping highly variable genes per
 batch pre post integration.
