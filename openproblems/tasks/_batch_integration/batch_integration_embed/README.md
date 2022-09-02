@@ -55,7 +55,10 @@ separates the combined anndata into an integrated and an unintegrated anndata ob
 
 ## Metrics
 
-In the following, we will give a short description of the implemented metrics. We split by metrics capturing batch correction meaning the removal of batch effects and metrics describing biological conservation, meaning how well the biological differences between cell states are conserved.
+In the following, we will give a short description of the implemented metrics. We split
+by metrics capturing batch correction meaning the removal of batch effects and metrics 
+describing biological conservation, meaning how well the biological differences between
+cell states are conserved.
 
 ### Batch correction metrics
 
@@ -75,7 +78,9 @@ deviation from 0 indicates a batch effect.
 
 #### Principal component regression
 
-Compare the explained variance before and after integration. Return  a score between 0 and 1 (scaled=True) with 0 if the variance contribution hasn’t changed. The larger the score, the more different the variance contributions are before and after integration.
+Compare the explained variance before and after integration. Return  a score between 0
+and 1 (scaled=True) with 0 if the variance contribution hasn’t changed. The larger the
+score, the more different the variance contributions are before and after integration.
 
 ### Biological conservation metrics
 
