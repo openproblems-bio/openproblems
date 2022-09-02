@@ -24,7 +24,7 @@ Datasets should contain the following attributes:
 
 * `adata.obs["batch"]` with the batch covariate, and
 * `adata.obs["label"]` with the cell identity label
-* `adata.obsm['X_uni']` with a pre-integration embedding (usually PCA)
+* `adata.obsm['X_uni']` with a pre-integration embedding (PCA)
 * `adata.layers['counts']` with raw, integer UMI count data, and
 * `adata.X` with log-normalized data
 
