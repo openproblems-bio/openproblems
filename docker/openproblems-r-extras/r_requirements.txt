@@ -28,7 +28,7 @@ proxy@0.4-27
 ragg@1.2.2
 Rcpp@1.0.9
 RcppTOML@0.1.7
-reticulate@1.25
+reticulate@1.26
 rlang@1.0.3
 rliger@1.0.0
 rmarkdown@2.2
