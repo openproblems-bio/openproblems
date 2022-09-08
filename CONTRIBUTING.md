@@ -346,7 +346,7 @@ Note:
   [`jq`](https://stedolan.github.io/jq/download/)):
 
   ```bash
-  KEY_NAME="my_aws_key"
+  KEY_NAME="my_openproblems_key" # name this whatever you like, but it must be unique
   AWS_EC2_INSTANCE_TYPE="t2.micro"
   aws ec2 create-key-pair --key-name $KEY_NAME --key-format pem \
     --query "KeyMaterial" --output text > ${KEY_NAME}.pem
