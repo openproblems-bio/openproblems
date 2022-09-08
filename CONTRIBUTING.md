@@ -338,11 +338,12 @@ Note:
 * If your compute environment is not powerful enough to run the test, you may use your
   AWS credentials to launch a VM for testing purposes; however, **please be respectful
   of our finite resources!** If developers are found to be using resources
-  irresponsibly, we may have to revoke this privilege. To launch a VM, run the
-  following, adjusting
+  irresponsibly, we may have to revoke this privilege. To launch a VM, configure the
+  [`aws`](https://aws.amazon.com/cli/) CLI with your `openproblems` credentials and run
+  the following, adjusting
   [`AWS_EC2_INSTANCE_TYPE`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html)
   according to your needs (you may need to install
-  [jq](https://stedolan.github.io/jq/download/)):
+  [`jq`](https://stedolan.github.io/jq/download/)):
 
   ```bash
   KEY_NAME="my_aws_key"
