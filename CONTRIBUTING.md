@@ -345,12 +345,19 @@ Note:
   according to your needs (you may need to install
   [`jq`](https://stedolan.github.io/jq/download/)):
 
-  ```bash
+  First, create a key pair (only do this once):
+
+  ```shell
   KEY_NAME="my_openproblems_key" # name this whatever you like, but it must be unique
   AWS_EC2_INSTANCE_TYPE="t2.micro"
   aws ec2 create-key-pair --key-name $KEY_NAME --key-format pem \
     --query "KeyMaterial" --output text > ${KEY_NAME}.pem
   chmod 400 ${KEY_NAME}.pem
+  ```
+
+  Now, create an instance with your key pair:
+
+  ```shell
   INSTANCE_ID=$(
     aws ec2 run-instances --count 1 --image-id ami-01219569b1bbf9fb2
       --instance-type $AWS_EC2_INSTANCE_TYPE --key-name $KEY_NAME
@@ -364,7 +371,20 @@ Note:
       jq '.["Reservations"][0]["Instances"][0]["PublicDnsName"]' |
       tr -d '"'
   )
+  ```
+
+  Now you can SSH into your instance:
+
+  ```shell
+  # check the status of your instance
+  aws ec2 describe-instance-status --instance-id ${INSTANCE_ID}
   ssh -i ${KEY_NAME}.pem ubuntu@${PUBLIC_DNS_NAME}
+  ```
+
+  When you are done, make sure to shut down your instance:
+
+  ```shell
+  aws ec2 terminate-instances --instance-ids ${INSTANCE_ID}
   ```
 
 ### Adding a new task
