@@ -66,8 +66,10 @@ jobs:
           S3_URI="s3://openproblems-nextflow/cwd_example"
         fi
         aws s3 cp --quiet --recursive "${S3_URI}" /tmp/results/
+        rm website/data/results/*/*.json
+        rm website/content/benchmarks/*/*.md
         python openproblems/workflow/parse_nextflow.py /tmp website/data/results
-        python openproblems/workflow/generate_website_markdown.py website/content/tasks
+        python openproblems/workflow/generate_website_markdown.py website/content/benchmarks
 
     - name: AWS S3 cleanup
       if: "github.event_name == 'repository_dispatch'"
