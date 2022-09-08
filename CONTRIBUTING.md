@@ -328,7 +328,7 @@ openproblems-cli test \
 which will print the benchmark score for the method evaluated by the metric on the
 dataset you chose.
 
-Note:
+Notes:
 
 * If you have updated Docker images to run your method, you must first rebuild the
   images -- see the [Docker README](docker/README.md) for details.
@@ -336,56 +336,7 @@ Note:
   `load`, `run`, and `evaluate` separately. You can do this using each of these commands
   independently; however, this workflow is not documented.
 * If your compute environment is not powerful enough to run the test, you may use your
-  AWS credentials to launch a VM for testing purposes; however, **please be respectful
-  of our finite resources!** If developers are found to be using resources
-  irresponsibly, we may have to revoke this privilege. To launch a VM, configure the
-  [`aws`](https://aws.amazon.com/cli/) CLI with your `openproblems` credentials and run
-  the following, adjusting
-  [`AWS_EC2_INSTANCE_TYPE`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html)
-  according to your needs (you may need to install
-  [`jq`](https://stedolan.github.io/jq/download/)):
-
-  First, create a key pair (only do this once):
-
-  ```shell
-  KEY_NAME="my_openproblems_key" # name this whatever you like, but it must be unique
-  AWS_EC2_INSTANCE_TYPE="t2.micro"
-  aws ec2 create-key-pair --key-name $KEY_NAME --key-format pem \
-    --query "KeyMaterial" --output text > ${KEY_NAME}.pem
-  chmod 400 ${KEY_NAME}.pem
-  ```
-
-  Now, create an instance with your key pair:
-
-  ```shell
-  INSTANCE_ID=$(
-    aws ec2 run-instances --count 1 --image-id ami-01219569b1bbf9fb2
-      --instance-type $AWS_EC2_INSTANCE_TYPE --key-name $KEY_NAME
-      --security-group-ids sg-002d2b9db29bb43dd |
-      jq '.["Instances"][0]["InstanceId"]' |
-      tr -d '"'
-  )
-  sleep 30 # wait for boot
-  PUBLIC_DNS_NAME=$(
-    aws ec2 describe-instances --instance-id $INSTANCE_ID |
-      jq '.["Reservations"][0]["Instances"][0]["PublicDnsName"]' |
-      tr -d '"'
-  )
-  ```
-
-  Now you can SSH into your instance:
-
-  ```shell
-  # check the status of your instance
-  aws ec2 describe-instance-status --instance-id ${INSTANCE_ID} | jq '.["InstanceStatuses"][0]["SystemStatus"]'
-  ssh -i ${KEY_NAME}.pem ubuntu@${PUBLIC_DNS_NAME}
-  ```
-
-  When you are done, make sure to shut down your instance:
-
-  ```shell
-  aws ec2 terminate-instances --instance-ids ${INSTANCE_ID}
-  ```
+  AWS credentials to launch a VM for testing purposes. See [EC2 README](./EC2.md) for details.
 
 ### Adding a new task
 
