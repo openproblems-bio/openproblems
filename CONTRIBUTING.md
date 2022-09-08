@@ -377,7 +377,7 @@ Note:
 
   ```shell
   # check the status of your instance
-  aws ec2 describe-instance-status --instance-id ${INSTANCE_ID}
+  aws ec2 describe-instance-status --instance-id ${INSTANCE_ID} | jq '.["InstanceStatuses"][0]["SystemStatus"]'
   ssh -i ${KEY_NAME}.pem ubuntu@${PUBLIC_DNS_NAME}
   ```
 
