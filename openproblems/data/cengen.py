@@ -5,6 +5,7 @@ import scanpy as sc
 import scprep
 import tempfile
 
+# TODO(@LuckyMD): document relevant link at figshare.com/articles/*
 URL = (
     "https://github.com/Munfred/wormcells-data/"
     "releases/download/taylor2020/taylor2020.h5ad"

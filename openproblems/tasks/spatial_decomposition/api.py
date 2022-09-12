@@ -39,6 +39,7 @@ def check_method(adata: AnnData):
     assert isinstance(adata.obsm["proportions_pred"], np.ndarray)
     assert "proportions_true" in adata.obsm
     assert isinstance(adata.obsm["proportions_true"], np.ndarray)
+    assert np.all(np.isfinite(adata.obsm["proportions_true"]))
     assert adata.obsm["proportions_pred"].shape == adata.obsm["proportions_true"].shape
     return True
 
