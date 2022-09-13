@@ -7,9 +7,7 @@ integrates datasets across batches that arise from various biological and techni
 sources. Methods that integrate batches typically have three different types of output:
 a corrected feature matrix, a joint embedding across batches, and/or an integrated
 cell-cell similarity graph (e.g., a kNN graph). This sub-task focuses on all methods
-that can output joint embeddings, and includes methods that canonically output corrected
-feature matrices with subsequent postprocessing to generate a joint embedding. Other
-sub-tasks for batch integration can be found for:
+that can output feature matrices. Other sub-tasks for batch integration can be found for:
 
 * [graphs](../batch_integration_graph/), and
 * [embeddings](../batch_integration_embed/)
