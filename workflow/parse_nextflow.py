@@ -164,9 +164,13 @@ def compute_ranking(task_name, dataset_results):
         if metric.metadata["maximize"]:
             sorted_order = sorted_order[::-1]
         rankings += np.argsort(sorted_order)
+
+    method_names = list(dataset_results.keys())
     final_ranking = {
-        method_name: rank + 1
-        for method_name, rank in zip(dataset_results, np.argsort(np.argsort(rankings)))
+        method_names[method_idx]: rank + 1
+        for method_idx, rank in zip(
+            np.argsort(rankings), np.arange(len(dataset_results))
+        )
     }
     return final_ranking
 
