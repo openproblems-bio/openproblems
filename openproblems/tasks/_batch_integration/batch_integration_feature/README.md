@@ -52,4 +52,4 @@ separates the combined anndata into an integrated and an unintegrated anndata ob
 ### HVG conservation
 
 Metric that computes the average percentage of overlapping highly variable genes per
-batch pre post integration.
+batch before and after integration.
