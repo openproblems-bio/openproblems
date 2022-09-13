@@ -4,6 +4,7 @@ https://github.com/romain-lopez/DestVI-reproducibility/blob/master/simulations/
 """
 from ...utils import merge_sc_and_sp
 from numba import jit
+from openproblems.data.utils import loader
 from pathlib import Path
 from scipy.spatial.distance import pdist
 from scipy.spatial.distance import squareform
@@ -47,6 +48,10 @@ def get_mean_normal(cell_types, gamma, mean_, components_):  # pragma: no cover
     return mean_normal
 
 
+@loader(
+    data_url="https://github.com/romain-lopez/DestVI-reproducibility/",
+    data_reference="https://doi.org/10.1038/s41587-022-01272-8",
+)
 def generate_synthetic_dataset(
     test: bool,
     lam_ct: float = 0.1,
