@@ -25,15 +25,15 @@ Datasets should contain the following attributes:
 * `adata.layers['log_scran_pooling]` with log-normalized data and
 * `adata.X` with log-normalized data
 
-Methods should batch correct the matrix stored in `adata.X`.
+Methods should store their a batch-corrected gene expression matrix in `adata.X`.
 
 The `openproblems-python-batch-integration` docker container is used for the methods
 that
 can be installed without package conflicts. For R methods, the `openproblems-r-extras`
 container is used.
 
-Methods are run in four different scenarios that include scaling and highly variable
-gene selection:
+Most methods in the current task are run in four different scenarios that include scaling
+and highly variable gene selection:
 
 * `full_unscaled`
 * `hvg_unscaled`
