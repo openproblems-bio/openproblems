@@ -6,7 +6,7 @@ from . import metrics
 
 _task_name = "Spatial Decomposition"
 _task_summary = (
-    "Decompose spatial gene expression data by cell type from single cell reference"
+    "Calling cell-type compositions for spot-based spatial transcriptomics data"
 )
 
 DATASETS = get_callable_members(datasets)

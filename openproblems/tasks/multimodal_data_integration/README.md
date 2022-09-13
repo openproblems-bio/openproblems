@@ -2,21 +2,26 @@
 
 ## The task
 
-Several recently described technologies allow for simultaneous measurement of different
-aspects of cell state. For example, [sci-CAR](https://doi.org/10.1126/science.aau0730)
+Cellular function is regulated by the complex interplay of different types of biological
+molecules (DNA, RNA, proteins, etc.), which determine the state of a cell. Several
+recently described technologies allow for simultaneous measurement of different aspects
+of cellular state. For example, [sci-CAR](https://doi.org/10.1126/science.aau0730)
 jointly profiles RNA expression and chromatin accessibility on the same cell and
 [CITE-seq](https://doi.org/10.1038/nmeth.4380) measures surface protein abundance and
-RNA expression from each cell. However, these joint profiling methods have several
-tradeoffs compared to unimodal measurements.
+RNA expression from each cell. These technologies enable us to better understand
+cellular function, however datasets are still rare and there are tradeoffs that these
+measurements make for to profile multiple modalities.
 
 Joint methods can be more expensive or lower throughput or more noisy than measuring a
-single modality at a time. Therefore it is useful to develop methods that are capable of
-integrating measurements of the same biological system but obtained using different
-technologies.
+single modality at a time. Therefore it is useful to develop methods that are capable
+of integrating measurements of the same biological system but obtained using different
+technologies on different cells.
 
-Here the goal is to learn a latent space where observations from the same cell acquired
-using different modalities. A perfect result has each of the paired observations sharing
-the same coordinates in the latent space.
+Here the goal is to learn a latent space cells profiled by different technologies in
+different modalities are matched if they have the same state. We use jointly profiled
+data as ground truth so that we can evaluate when the observations from the same cell
+acquired using different modalities are similar. A perfect result has each of the paired
+observations sharing the same coordinates in the latent space.
 
 ## The metrics
 

@@ -5,7 +5,9 @@ from . import methods
 from . import metrics
 
 _task_name = "Multimodal Data Integration"
-_task_summary = "Alignment of single-cell data from two different modalities"
+_task_summary = (
+    "Jointly embedding single-cell omics datasets across modalities and batches"
+)
 
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)
