@@ -40,9 +40,9 @@ and highly variable gene selection:
 * `full_scaled`
 * `hvg_scaled`
 
-Metrics can compare:
+Metrics for this task compare:
 
-* `adata.X` vs `adata.layers['log_scran_pooling']`
+* `adata.X` (corrected adata) with `adata.layers['log_scran_pooling']` (uncorrected data)
 
 To reuse metrics functions from `scIB`, [`metrics._utils._get_split`](metrics/_utils.py)
 separates the combined anndata into an integrated and an unintegrated anndata object.
