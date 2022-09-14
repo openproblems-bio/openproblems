@@ -67,7 +67,7 @@ jobs:
         fi
         aws s3 cp --quiet --recursive "${S3_URI}" /tmp/results/
         python openproblems/workflow/parse_nextflow.py /tmp website/data/results
-        python openproblems/workflow/generate_website_markdown.py website/content/tasks
+        python openproblems/workflow/generate_website_markdown.py website/content/benchmarks
 
     - name: AWS S3 cleanup
       if: "github.event_name == 'repository_dispatch'"
@@ -81,7 +81,7 @@ jobs:
         aws s3 cp --recursive "s3://openproblems-nextflow/cwd_main" "s3://openproblems-nextflow/cwd_example"
         aws s3 rm --recursive "s3://openproblems-nextflow/cwd_main"
 
-    - name: Push to ${{ env.PUSH_BRANCH }}
+    - name: Push to openproblems-bio/website
       if: "github.event_name == 'repository_dispatch'"
       shell: bash
       working-directory: './website'
@@ -103,3 +103,17 @@ jobs:
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
         commit-message: "Update benchmark results # ci skip"
+
+    - name: Upload results on test
+      if: "github.event_name != 'repository_dispatch'"
+      uses: actions/upload-artifact@main
+      with:
+        name: results
+        path: website/data/results
+
+    - name: Upload markdown on test
+      if: "github.event_name != 'repository_dispatch'"
+      uses: actions/upload-artifact@main
+      with:
+        name: markdown
+        path: website/content/benchmarks
