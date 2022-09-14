@@ -188,7 +188,8 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
     )
     ranking = compute_ranking(task_name, dataset_results)
     metric_names = set()
-    for method_name, method_results in dataset_results.items():
+    for method_name, rank in ranking.items():
+        method_results = dataset_results[method_name]
         method = openproblems.api.utils.get_function(task_name, "methods", method_name)
         result = {
             "Name": method.metadata["method_name"],
@@ -202,7 +203,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             "Runtime (min)": parse_time_to_min(method_results["realtime"]),
             "CPU (%)": float(method_results["%cpu"].replace("%", "")),
             "Memory (GB)": parse_size_to_gb(method_results["peak_rss"]),
-            "Rank": ranking[method_name],
+            "Rank": rank,
         }
         for metric_name, metric_result in method_results["metrics"].items():
             metric = openproblems.api.utils.get_function(
