@@ -66,6 +66,8 @@ jobs:
           S3_URI="s3://openproblems-nextflow/cwd_example"
         fi
         aws s3 cp --quiet --recursive "${S3_URI}" /tmp/results/
+        rm -r website/data/results/*/
+        rm -r website/content/benchmarks/*/
         python openproblems/workflow/parse_nextflow.py /tmp website/data/results
         python openproblems/workflow/generate_website_markdown.py website/content/benchmarks
 
