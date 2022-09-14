@@ -1,10 +1,9 @@
-from . import utils
-
 import openproblems
 import os
 import pathlib
 import re
 import sys
+import utils
 
 INDEX_TOML_TEMPLATE = """+++
 title = "{task_name}"

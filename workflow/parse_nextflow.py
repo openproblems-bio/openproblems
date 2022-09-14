@@ -1,5 +1,3 @@
-from . import utils
-
 import collections
 import json
 import numpy as np
@@ -8,6 +6,7 @@ import openproblems.api.utils
 import os
 import pandas as pd
 import sys
+import utils
 import warnings
 
 
