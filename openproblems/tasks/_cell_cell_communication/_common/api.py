@@ -6,14 +6,22 @@ import pandas as pd
 import scanpy as sc
 
 
-def assert_is_subset(subset, superset, subset_name="subset", superset_name="superset"):
+def assert_is_subset(
+    subset,
+    superset,
+    subset_name="subset",
+    superset_name="superset",
+    prop_missing_allowed=0,
+):
     """Assert `np.all(np.isin(subset, superset))` with a more readable error message"""
     subset = np.asarray(subset)
     is_missing = ~np.isin(subset, superset)
-    if np.any(is_missing):
+    prop_missing = np.sum(is_missing) / len(subset)
+    if prop_missing > prop_missing_allowed:
         x_missing = ",".join([x for x in subset[is_missing]])
         raise AssertionError(
-            f"{subset_name} elements {x_missing} missing from {superset_name}"
+            f"Allowed proportion ({prop_missing_allowed}) of missing {subset_name} "
+            f"elements exceeded. {x_missing} missing from {superset_name}"
         )
 
 
@@ -58,6 +66,7 @@ def check_dataset(adata, merge_keys):
             adata.uns["var_names_all"],
             "resource receptor names",
             "gene names",
+            0.1,
         )
         assert_is_subset(
             flatten_complex_subunits(
@@ -66,6 +75,7 @@ def check_dataset(adata, merge_keys):
             adata.uns["var_names_all"],
             "resource ligand names",
             "gene names",
+            0.1,
         )
 
     # check merge keys
