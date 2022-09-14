@@ -34,7 +34,7 @@ rlang@1.0.3
 rliger@1.0.0
 rmarkdown@2.2
 RSQLite@2.2.4
-saezlab/liana@0.1.5
+saezlab/liana@0.1.6
 saezlab/OmnipathR@679bb79 # master
 sass@0.4.2
 Seurat@4.1.1
