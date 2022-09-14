@@ -27,7 +27,9 @@ be better understood.
 
 **This subtask evaluates the methods' ability to predict interactions,
 the corresponding of cytokines of which, are inferred to be active in
-the target cell types.**
+the target cell types. This subtask focuses
+on the prediction of interactions from steady-state, or single-context,
+single-cell data. **
 
 ## The metrics
 

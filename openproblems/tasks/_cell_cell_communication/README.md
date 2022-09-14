@@ -28,7 +28,8 @@ be better understood.
 ## The subtasks
 
 Subtasks for cell-cell communication are defined by which aspects of a communication
-event are detected. Currently, two subtasks are defined:
+event are detected. Currently, two subtasks aimed at steady-state, or single-context,
+CCC predictions are defined:
 
 * [Ligand-Target](./cell_cell_communication_ligand_target): interactions between
   ligand molecules and target cell types; and
@@ -37,7 +38,7 @@ event are detected. Currently, two subtasks are defined:
 
 More subtasks may be defined that infer communication events on any of the `source`
 cell type, the `target` cell type, the `ligand` molecule, and the receptor.
-More aspects of the communication may also be added in future.
+More aspects of the communication may also be added in the future.
 
 ## The metrics
 
