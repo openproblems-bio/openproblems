@@ -43,7 +43,7 @@ jobs:
       BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1000
 
@@ -138,7 +138,7 @@ jobs:
       run: |
         sudo rm -rf /opt/remove/*/*
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -228,7 +228,7 @@ jobs:
           exit 1
         fi
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1000
 
