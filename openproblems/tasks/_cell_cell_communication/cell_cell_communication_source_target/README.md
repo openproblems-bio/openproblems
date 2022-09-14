@@ -28,7 +28,7 @@ be better understood.
 **This subtask evaluates methods in their ability to predict interactions between
 spatially-adjacent source cell types and target cell types. This subtask focuses
 on the prediction of interactions from steady-state, or single-context,
-single-cell data. **
+single-cell data.**
 
 ## The metrics
 
