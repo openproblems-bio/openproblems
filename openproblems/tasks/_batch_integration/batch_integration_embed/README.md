@@ -78,8 +78,8 @@ deviation from 0 indicates a batch effect.
 
 #### Principal component regression
 
-Compare the explained variance by before and after integration. Returns a score between 0
-and 1 (scaled=True) with 0 if the variance contribution hasn’t changed. The larger the
+Compare the explained variance by before and after integration. Returns a score between
+0 and 1 (scaled=True) with 0 if the variance contribution hasn’t changed. The larger the
 score, the more different the variance contributions are before and after integration.
 
 ### Biological conservation metrics
@@ -91,8 +91,10 @@ captured before and after integration.
 
 #### Isolated label silhouette
 
-This score evaluates the compactness for the label(s) that is(are) shared by fewest batches. This indicates how well rare cell types can be preserved after integration.
+This score evaluates the compactness for the label(s) that is(are) shared by fewest
+batches. This indicates how well rare cell types can be preserved after integration.
 
 #### Cell type ASW
 
-For the bio-conservation score, the ASW is computed on cell identity labels, measuring their compactness
+For the bio-conservation score, the ASW is computed on cell identity labels, measuring
+their compactness
