@@ -1,8 +1,10 @@
+from . import utils
+
 import collections
 import json
 import numpy as np
 import numpyencoder
-import openproblems.api.utils as utils
+import openproblems.api.utils
 import os
 import pandas as pd
 import sys
@@ -154,7 +156,7 @@ def compute_ranking(task_name, dataset_results):
     rankings = np.zeros(len(dataset_results))
     metric_names = list(dataset_results.values())[0]["metrics"].keys()
     for metric_name in metric_names:
-        metric = utils.get_function(task_name, "metrics", metric_name)
+        metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
         sorted_order = np.argsort(
             [
                 dataset_results[method_name]["metrics"][metric_name]
@@ -177,7 +179,7 @@ def compute_ranking(task_name, dataset_results):
 
 def dataset_results_to_json(task_name, dataset_name, dataset_results):
     """Convert the raw dataset results to pretty JSON for web."""
-    dataset = utils.get_function(task_name, "datasets", dataset_name)
+    dataset = openproblems.api.utils.get_function(task_name, "datasets", dataset_name)
     output = dict(
         name=dataset.metadata["dataset_name"],
         data_url=dataset.metadata["data_url"],
@@ -188,7 +190,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
     ranking = compute_ranking(task_name, dataset_results)
     metric_names = set()
     for method_name, method_results in dataset_results.items():
-        method = utils.get_function(task_name, "methods", method_name)
+        method = openproblems.api.utils.get_function(task_name, "methods", method_name)
         result = {
             "Name": method.metadata["method_name"],
             "Paper": method.metadata["paper_name"],
@@ -204,7 +206,9 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             "Rank": ranking[method_name],
         }
         for metric_name, metric_result in method_results["metrics"].items():
-            metric = utils.get_function(task_name, "metrics", metric_name)
+            metric = openproblems.api.utils.get_function(
+                task_name, "metrics", metric_name
+            )
             result[metric.metadata["metric_name"]] = metric_result
             metric_names.add(metric.metadata["metric_name"])
         output["results"].append(result)
@@ -228,6 +232,9 @@ def results_to_json(results, outdir):
     if not os.path.isdir(outdir):
         os.mkdir(outdir)
     for task_name, task_results in results.items():
+        if utils.task_is_stub(openproblems.api.utils.str_to_task(task_name)):
+            # don't write results for stub tasks
+            continue
         for dataset_name, dataset_results in task_results.items():
             results_dir = os.path.join(outdir, task_name)
             if not os.path.isdir(results_dir):
@@ -237,7 +244,7 @@ def results_to_json(results, outdir):
                 dataset_results_json = dataset_results_to_json(
                     task_name, dataset_name, dataset_results
                 )
-            except utils.NoSuchFunctionError:
+            except openproblems.api.utils.NoSuchFunctionError:
                 continue
             with open(filename, "w") as handle:
                 dump_json(

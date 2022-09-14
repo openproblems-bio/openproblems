@@ -1,3 +1,5 @@
+from . import utils
+
 import openproblems
 import os
 import pathlib
@@ -56,6 +58,9 @@ def write_dataset_md(dataset, outdir):
 
 def main(outdir):
     for task in openproblems.TASKS:
+        if utils.task_is_stub(task):
+            # don't write md for stub tasks
+            continue
         task_outdir = os.path.join(outdir, task.__name__.split(".")[-1])
         if not os.path.isdir(task_outdir):
             pathlib.Path(task_outdir).mkdir(parents=True, exist_ok=True)
