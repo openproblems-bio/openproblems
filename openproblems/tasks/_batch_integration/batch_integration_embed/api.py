@@ -8,7 +8,7 @@ import scanpy as sc
 def check_dataset(adata):
     """Check that dataset output fits expected API."""
 
-    assert "X_uni" in adata.obsm
+    assert "X_uni_pca" in adata.obsm
     assert "batch" in adata.obs
     assert "labels" in adata.obs
 
