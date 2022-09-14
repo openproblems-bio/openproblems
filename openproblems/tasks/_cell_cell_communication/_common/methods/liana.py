@@ -75,7 +75,12 @@ def liana(
 )
 def cellphonedb(adata, test=False):
     adata = liana(
-        adata, method="cellphonedb", score_col="lr.mean", ascending=False, test=test
+        adata,
+        method="cellphonedb",
+        score_col="lr.mean",
+        ascending=False,
+        test=test,
+        complex_policy="min",
     )
     # Filter & Re-order
     adata.uns["ccc_pred"]["score"] = adata.uns["ccc_pred"].apply(
