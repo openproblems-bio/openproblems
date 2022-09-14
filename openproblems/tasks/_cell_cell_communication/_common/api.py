@@ -202,10 +202,18 @@ def sample_dataset(merge_keys):
     ]
     adata.uns["ligand_receptor_resource"] = pd.DataFrame(
         {
-            "ligand_genesymbol": ligand_complexes
-            + np.random.choice(adata.var.index, n_genes, replace=False).tolist(),
-            "receptor_genesymbol": receptor_complexes
-            + np.random.choice(adata.var.index, n_genes, replace=False).tolist(),
+            "ligand_genesymbol": np.concatenate(
+                [
+                    ligand_complexes,
+                    np.random.choice(adata.var.index, n_genes, replace=False),
+                ]
+            ),
+            "receptor_genesymbol": np.concatenate(
+                [
+                    receptor_complexes,
+                    np.random.choice(adata.var.index, n_genes, replace=False),
+                ]
+            ),
         }
     )
 
