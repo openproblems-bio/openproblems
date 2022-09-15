@@ -13,6 +13,8 @@ def check_dataset(adata):
     assert "batch" in adata.obs
     assert "labels" in adata.obs
     assert "uni_connectivities" in adata.obsp
+    assert adata.var_names.is_unique()
+    assert adata.obs_names.is_unique()
 
     return True
 

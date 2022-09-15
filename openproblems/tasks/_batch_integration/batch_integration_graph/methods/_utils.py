@@ -19,8 +19,6 @@ def hvg_batch(adata, batch_key, target_genes, adataOut):
 def scale_batch(adata, batch_key):
     from scib.preprocessing import scale_batch
 
-    adata.var_names_make_unique()
-    adata.obs_names_make_unique()
     var = adata.var.copy()
     adata = scale_batch(adata, batch_key)
     adata.var = var.loc[adata.var_names]
