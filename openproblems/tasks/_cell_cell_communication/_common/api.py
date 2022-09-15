@@ -21,7 +21,8 @@ def assert_is_subset(
         x_missing = ",".join([x for x in subset[is_missing]])
         raise AssertionError(
             f"Allowed proportion ({prop_missing_allowed}) of missing {subset_name} "
-            f"elements exceeded. {x_missing} missing from {superset_name}"
+            f"elements exceeded ({prop_missing:.2f}). "
+            f"{x_missing} missing from {superset_name}"
         )
 
 
