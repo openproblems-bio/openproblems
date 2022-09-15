@@ -11,6 +11,9 @@ def check_dataset(adata):
     assert "batch" in adata.obs
     assert "labels" in adata.obs
     assert "log_scran_pooling" in adata.layers
+    assert "counts" in adata.layers
+    assert adata.var_names.is_unique()
+    assert adata.obs_names.is_unique()
 
     return True
 
@@ -18,6 +21,8 @@ def check_dataset(adata):
 def check_method(adata):
     """Check that method output fits expected API."""
     assert "log_scran_pooling" in adata.layers
+    assert adata.layers["log_scran_pooling"] != adata.X
+    assert adata.layers["counts"] != adata.X
     return True
 
 
@@ -32,6 +37,7 @@ def sample_dataset():
     adata.obsm["X_uni"] = sc.pp.pca(adata.X)
     adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
     adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
+    adata.layers["counts"]=adata.X
     adata.layers["log_scran_pooling"] = adata.X.multiply(
         10000 / adata.X.sum(axis=1)
     ).tocsr()
@@ -42,5 +48,5 @@ def sample_dataset():
 
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
-
+    adata.X[0,0]=adata.X[0,0]+1
     return adata

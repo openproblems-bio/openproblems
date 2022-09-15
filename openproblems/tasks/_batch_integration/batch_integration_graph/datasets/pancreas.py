@@ -21,6 +21,9 @@ def pancreas_batch(test=False):
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)
 
+    adata.var_names_make_unique()
+    adata.obs_names_make_unique()
+
     sc.tl.pca(
         adata,
         svd_solver="arpack",
