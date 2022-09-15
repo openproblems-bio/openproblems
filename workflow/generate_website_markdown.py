@@ -57,8 +57,8 @@ def write_dataset_md(dataset, outdir):
 
 def main(outdir):
     for task in openproblems.TASKS:
-        if utils.task_is_stub(task):
-            # don't write md for stub tasks
+        if utils.task_is_incomplete(task):
+            # don't write md for incomplete tasks
             continue
         task_outdir = os.path.join(outdir, task.__name__.split(".")[-1])
         if not os.path.isdir(task_outdir):
