@@ -60,8 +60,12 @@ def load_tnbc_data(test=False):
         empty_gene_idx = np.argwhere(adata.X.sum(axis=0).A.flatten() == 0).flatten()
         random_cell_idx = np.random.choice(adata.shape[0], len(empty_gene_idx))
         adata.X += scipy.sparse.coo_matrix(
-            (np.ones(len(empty_gene_idx)), (random_cell_idx, empty_gene_idx)),
+            (
+                np.ones(len(empty_gene_idx), dtype=adata.X.dtype),
+                (random_cell_idx, empty_gene_idx),
+            ),
             shape=adata.shape,
+            dtype=adata.X.dtype,
         )
         adata.X = adata.X.tocsr()
         # update layers["counts"] with the new counts
