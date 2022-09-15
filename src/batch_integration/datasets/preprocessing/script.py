@@ -3,7 +3,7 @@ import os
 
 print(os.getcwd())
 par = {
-    'adata': './src/batch_integration/datasets/resources/data_loader_pancreas.h5ad',
+    'input': './src/batch_integration/datasets/resources/data_loader_pancreas.h5ad',
     'label': 'celltype',
     'batch': 'tech',
     'hvgs': 2000,
@@ -24,16 +24,17 @@ from _hvg_batch import hvg_batch
 if par['debug']:
     pprint(par)
 
-adata_file = par['adata']
+adata_file = par['input']
 label = par['label']
 batch = par['batch']
 hvgs = par['hvgs']
 output = par['output']
 
 print('Read adata')
-adata = sc.read(adata_file)
+adata = sc.read_h5ad(adata_file)
 
 # Rename columns
+print('Rename columns')
 adata.obs['label'] = adata.obs[label]
 adata.obs['batch'] = adata.obs[batch]
 adata.layers['counts'] = adata.X.copy()

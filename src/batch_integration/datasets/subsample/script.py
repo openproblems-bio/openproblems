@@ -19,15 +19,20 @@ from pprint import pprint
 if par['debug']:
     pprint(par)
 
-adata_file = par['adata']
+adata_file = par['input']
 label = par['label']
 batch = par['batch']
 output = par['output']
-g2m_file = f'{resources_dir}g2m_genes_tirosh_hm.txt'
-s_file = f'{resources_dir}s_genes_tirosh_hm.txt'
+g2m_file = f'{resources_dir}/g2m_genes_tirosh_hm.txt'
+s_file = f'{resources_dir}/s_genes_tirosh_hm.txt'
+
+print(g2m_file)
+import os
+print(os.getcwd())
+print(os.listdir())
 
 print('Read adata')
-adata = sc.read(adata_file)
+adata = sc.read_h5ad(adata_file)
 
 print('Get batch and label subsets')
 head_batches = adata.obs[batch].unique().tolist()[0:3]

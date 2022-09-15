@@ -3,15 +3,15 @@ import subprocess
 import scanpy as sc
 import numpy as np
 
-name = 'pancreas'
+name = 'preprocessing'
 anndata_in = 'data_loader_pancreas.h5ad'
 anndata_out = 'datasets_pancreas.h5ad'
 
 print('>> Running script')
 n_hvgs = 100
 out = subprocess.check_output([
-    './pancreas',
-    '--adata', anndata_in,
+    './preprocessing',
+    '--input', anndata_in,
     '--label', 'celltype',
     '--batch', 'tech',
     '--hvgs', str(n_hvgs),
@@ -23,7 +23,7 @@ assert path.exists(anndata_out)
 
 print('>> Check that output fits expected API')
 adata = sc.read_h5ad(anndata_out)
-assert 'name' in adata.uns
+assert 'dataset_id' in adata.uns
 assert 'label' in adata.obs.columns
 assert 'batch' in adata.obs.columns
 assert 'highly_variable' in adata.var

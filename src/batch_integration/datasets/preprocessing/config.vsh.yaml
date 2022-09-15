@@ -1,5 +1,5 @@
 functionality:
-  name: pancreas
+  name: preprocessing
   namespace: batch_integration/datasets
   version: dev
   description: Preprocess adata object for data integration
@@ -14,7 +14,7 @@ functionality:
       direction: output
       description: Output h5ad file of the cleaned dataset
       required: true
-    - name: --adata
+    - name: --input
       type: file
       description: Anndata HDF5 file
       required: true
@@ -40,7 +40,7 @@ functionality:
     - type: python_script
       path: script.py
     - path: "../utils/_hvg_batch.py"
-  tests:
+  test_resources:
     - type: python_script
       path: test.py
     - path: '../../resources/data_loader_pancreas.h5ad'

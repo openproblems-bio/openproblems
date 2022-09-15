@@ -1,6 +1,6 @@
 functionality:
   name: subsample
-  namespace: batch_integration/subsample
+  namespace: batch_integration/datasets
   version: dev
   description: Subset adata object for testing
   authors:
@@ -14,7 +14,7 @@ functionality:
       direction: output
       description: Output h5ad file of the cleaned dataset
       required: true
-    - name: --adata
+    - name: --input
       type: file
       description: Anndata HDF5 file
       required: true
@@ -36,7 +36,7 @@ functionality:
       path: script.py
     - path: "../../resources/g2m_genes_tirosh_hm.txt"
     - path: "../../resources/s_genes_tirosh_hm.txt"
-  tests:
+  test_resources:
     - type: python_script
       path: test.py
     - path: '../../../common/dataset_loader/download/resources/pancreas.h5ad'

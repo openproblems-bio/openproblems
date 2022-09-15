@@ -1,3 +1,2 @@
-name	label	batch	hvgs
-pancreas	celltype	tech	2000
-immune_cells	final_annotation	batch	2000
+name	label	batch	hvgs	url
+pancreas	celltype	tech	2000	https://ndownloader.figshare.com/files/24539828
