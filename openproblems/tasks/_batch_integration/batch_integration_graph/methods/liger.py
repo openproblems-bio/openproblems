@@ -26,6 +26,7 @@ def _liger(
     nrep: Optional[int] = None,
     thresh: Optional[float] = None,
 ):
+    from openproblems.tools.normalize import log_scran_pooling
     from scanpy.pp import neighbors
 
     if test:
@@ -37,7 +38,7 @@ def _liger(
         nrep = nrep or 3
         thresh = thresh or 5e-5
 
-    adata.X = adata.layers["log_scran_pooling"]
+    adata = log_scran_pooling(adata)
 
     adata.obsm["X_emb"] = _r_liger(adata, batch, k, nrep, thresh)
     neighbors(adata, use_rep="X_emb")

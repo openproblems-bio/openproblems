@@ -15,10 +15,12 @@ _mnn_method = functools.partial(
 
 
 def _mnn(adata):
+    from openproblems.tools.normalize import log_scran_pooling
+
     from scib.integration import runMNN
     from scib.preprocessing import reduce_data
 
-    adata.X = adata.layers["log_scran_pooling"]
+    adata = log_scran_pooling(adata)
 
     adata = runMNN(adata, "batch")
     reduce_data(adata, umap=False)

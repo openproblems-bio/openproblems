@@ -25,6 +25,8 @@ def _fastmnn(
     k: Optional[int] = None,
     n_pca: Optional[int] = None,
 ):
+    from openproblems.tools.normalize import log_scran_pooling
+
     if test:
         k = k or 5
         n_pca = n_pca or 10
@@ -32,7 +34,7 @@ def _fastmnn(
         k = k or 20
         n_pca = n_pca or 50
 
-    adata.X = adata.layers["log_scran_pooling"]
+    adata = log_scran_pooling(adata)
 
     return _r_fastmnn(adata, batch, k, n_pca, return_features=return_features)
 

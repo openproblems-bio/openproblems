@@ -24,10 +24,12 @@ def _harmony(
     max_iter_cluster: Optional[int] = None,
 ):
     from harmony import harmonize
+    from openproblems.tools.normalize import log_scran_pooling
 
     import scanpy as sc
 
-    adata.X = adata.layers["log_scran_pooling"]
+    adata = log_scran_pooling(adata)
+
 
     if test:
         n_pca = n_pca or 10

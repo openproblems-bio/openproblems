@@ -15,10 +15,11 @@ _scanorama_method = functools.partial(
 
 
 def _scanorama(adata, use_rep):
+    from openproblems.tools.normalize import log_scran_pooling
     from scib.integration import runScanorama
     from scib.preprocessing import reduce_data
 
-    adata.X = adata.layers["log_scran_pooling"]
+    adata = log_scran_pooling(adata)
 
     adata = runScanorama(adata, "batch")
     reduce_data(adata, umap=False, use_rep=use_rep)
