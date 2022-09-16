@@ -36,7 +36,7 @@ def load_immune(test=False):
 
             # Note: anndata.X contains scran log-normalized data,
             # so we're storing it in layers['log_scran']
-            adata.layers["log_scran"] = adata.X
+            adata.layers["log_scran_pooling"] = adata.X
             adata.X = adata.layers["counts"]
             del adata.layers["counts"]
 
