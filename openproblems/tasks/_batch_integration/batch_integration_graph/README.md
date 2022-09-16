@@ -36,7 +36,8 @@ Datasets should contain the following attributes:
 * `adata.obsm['X_uni']` with the PCA embedding of the unintegrated representation
 * `adata.obsp['uni_connectivities']` with an unintegrated connectivity matrix generated
   by  `scanpy.pp.neighbors()`
-* `adata.X` with log-normalized data
+* `adata.X` with counts data
+* `adata.layers['log_scran_pooling']` with log-scran-normalized data
 
 Methods can take anything from datasets as input and should assign output to:
 
