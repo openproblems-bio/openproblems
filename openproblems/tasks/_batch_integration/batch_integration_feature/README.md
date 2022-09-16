@@ -22,8 +22,8 @@ Datasets should contain the following attributes:
 * `adata.obs["batch"]` with the batch covariate, and
 * `adata.obs["label"]` with the cell identity label
 * `adata.layers['counts']` with raw, integer UMI count data,
-* `adata.layers['log_scran_pooling]` with log-normalized data and
-* `adata.X` with log-normalized data
+* `adata.layers['log_scran_pooling']` with log-normalized data and
+* `adata.X` with raw, integer UMI count data
 
 Methods should store their a batch-corrected gene expression matrix in `adata.X`.
 

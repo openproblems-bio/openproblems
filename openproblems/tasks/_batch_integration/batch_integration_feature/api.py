@@ -12,8 +12,8 @@ def check_dataset(adata):
     assert "labels" in adata.obs
     assert "log_scran_pooling" in adata.layers
     assert "counts" in adata.layers
-    assert adata.var_names.is_unique()
-    assert adata.obs_names.is_unique()
+    assert adata.var_names.is_unique
+    assert adata.obs_names.is_unique
 
     return True
 
