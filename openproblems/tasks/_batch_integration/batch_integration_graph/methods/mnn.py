@@ -20,6 +20,7 @@ def _mnn(adata):
 
     adata = runMNN(adata, "batch")
     reduce_data(adata, umap=False)
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     adata.uns["method_code_version"] = check_version("mnnpy")
     return adata
 
