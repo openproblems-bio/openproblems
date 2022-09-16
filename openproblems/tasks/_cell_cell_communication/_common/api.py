@@ -17,13 +17,17 @@ def assert_is_subset(
     subset = np.asarray(subset)
     is_missing = ~np.isin(subset, superset)
     prop_missing = np.sum(is_missing) / len(subset)
+
     if prop_missing > prop_missing_allowed:
+        if prop_missing_allowed == 0:
+            msg = f"{subset_name} is not a subset of {superset_name}. "
+        else:
+            msg = (
+                f"Allowed proportion ({prop_missing_allowed}) of missing "
+                f"{subset_name} elements exceeded ({prop_missing:.2f}). "
+            )
         x_missing = ",".join([x for x in subset[is_missing]])
-        raise AssertionError(
-            f"Allowed proportion ({prop_missing_allowed}) of missing {subset_name} "
-            f"elements exceeded ({prop_missing:.2f}). "
-            f"{x_missing} missing from {superset_name}"
-        )
+        raise AssertionError(msg + f"{x_missing} missing from {superset_name}")
 
 
 # Helper function to split complex subunits
