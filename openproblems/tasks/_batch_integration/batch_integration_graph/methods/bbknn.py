@@ -28,7 +28,7 @@ def _run_bbknn(
     import bbknn
 
     kwargs = dict(batch_key=batch, copy=True)
-    
+
     adata = log_scran_pooling(adata)
 
     if test:
