@@ -2,7 +2,6 @@ from ....data.sample import load_sample_data
 from ....tools.decorators import dataset
 
 import numpy as np
-import pandas as pd
 import scanpy as sc
 
 
@@ -12,17 +11,13 @@ def check_dataset(adata):
     assert "X_uni_pca" in adata.obsm
     assert "batch" in adata.obs
     assert "labels" in adata.obs
-    assert "uni_connectivities" in adata.obsp
-    assert adata.var_names.is_unique
-    assert adata.obs_names.is_unique
 
     return True
 
 
 def check_method(adata):
     """Check that method output fits expected API."""
-    assert "connectivities" in adata.obsp
-    assert "distances" in adata.obsp
+    assert "X_emb" in adata.obsm
     return True
 
 
@@ -30,21 +25,20 @@ def check_method(adata):
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()
-    adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
-    adata.obs["batch"] = pd.Categorical(
-        np.random.choice(2, adata.shape[0], replace=True).astype(str)
-    )
-    adata.obs["labels"] = pd.Categorical(
-        np.random.choice(5, adata.shape[0], replace=True).astype(str)
-    )
 
-    sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
+    adata.var.index = adata.var.gene_short_name.astype(str)
+    sc.pp.normalize_total(adata)
+    sc.pp.log1p(adata)
+    adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
+    adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
+    adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
+    adata.var_names_make_unique()
+    adata.obs_names_make_unique()
     return adata
 
 
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
-    import scanpy as sc
 
-    sc.pp.neighbors(adata, use_rep="X_uni_pca")
+    adata.obsm["X_emb"] = adata.obsm["X_uni_pca"]
     return adata

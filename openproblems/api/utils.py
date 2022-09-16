@@ -1,28 +1,9 @@
 import openproblems
 import os
-import sys
 
 
 class NoSuchFunctionError(RuntimeError):
     pass
-
-
-class RedirectStdout(object):
-    def __init__(self):
-        self._stdout = sys.stdout
-        self._stderr = sys.stderr
-
-    def _flush(self):
-        self._stdout.flush()
-        self._stderr.flush()
-
-    def __enter__(self):
-        self._flush()
-        sys.stdout = self._stderr
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self._flush()
-        sys.stdout = self._stdout
 
 
 def module_to_str(module):
