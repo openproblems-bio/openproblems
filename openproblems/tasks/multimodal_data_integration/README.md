@@ -17,7 +17,7 @@ single modality at a time. Therefore it is useful to develop methods that are ca
 of integrating measurements of the same biological system but obtained using different
 technologies on different cells.
 
-Here the goal is to learn a latent space cells profiled by different technologies in
+Here the goal is to learn a latent space where cells profiled by different technologies in
 different modalities are matched if they have the same state. We use jointly profiled
 data as ground truth so that we can evaluate when the observations from the same cell
 acquired using different modalities are similar. A perfect result has each of the paired
