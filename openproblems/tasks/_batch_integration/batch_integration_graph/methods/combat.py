@@ -18,6 +18,8 @@ def _combat(adata):
     from scib.integration import runCombat
     from scib.preprocessing import reduce_data
 
+    adata.X = adata.layers["log_scran_pooling"]
+
     adata = runCombat(adata, "batch")
     reduce_data(adata, umap=False)
     adata.uns["method_code_version"] = check_version("scanpy")

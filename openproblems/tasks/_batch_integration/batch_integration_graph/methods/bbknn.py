@@ -27,6 +27,8 @@ def _run_bbknn(
     import bbknn
 
     kwargs = dict(batch_key=batch, copy=True)
+    
+    adata.X = adata.layers["log_scran_pooling"]
 
     if test:
         n_pca = n_pca or 10

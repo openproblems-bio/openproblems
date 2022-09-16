@@ -21,6 +21,8 @@ def _scvi(adata, test: bool = False, max_epochs: Optional[int] = None):
     if test:
         max_epochs = max_epochs or 2
 
+    adata.X = adata.layers["log_scran_pooling"]
+
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True
     )  # ugly fix for scvi conversion error

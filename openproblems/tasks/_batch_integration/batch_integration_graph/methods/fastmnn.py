@@ -32,6 +32,8 @@ def _fastmnn(
         k = k or 20
         n_pca = n_pca or 50
 
+    adata.X = adata.layers["log_scran_pooling"]
+
     return _r_fastmnn(adata, batch, k, n_pca, return_features=return_features)
 
 

@@ -18,6 +18,8 @@ def _scanorama(adata, use_rep):
     from scib.integration import runScanorama
     from scib.preprocessing import reduce_data
 
+    adata.X = adata.layers["log_scran_pooling"]
+
     adata = runScanorama(adata, "batch")
     reduce_data(adata, umap=False, use_rep=use_rep)
     adata.uns["method_code_version"] = check_version("scanorama")

@@ -27,6 +27,8 @@ def _harmony(
 
     import scanpy as sc
 
+    adata.X = adata.layers["log_scran_pooling"]
+
     if test:
         n_pca = n_pca or 10
         max_iter_harmony = max_iter_harmony or 3
