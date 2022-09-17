@@ -6,6 +6,7 @@ from ...utils import merge_sc_and_sp
 from numba import jit
 from openproblems.data.utils import loader
 from pathlib import Path
+from scipy.sparse import csr_matrix
 from scipy.spatial.distance import pdist
 from scipy.spatial.distance import squareform
 from sklearn.cluster import AgglomerativeClustering
@@ -16,6 +17,7 @@ from typing import Optional
 import anndata
 import numpy as np
 import pandas as pd
+import scanpy as sc
 
 
 def categorical(p, n_samples):
@@ -74,9 +76,11 @@ def generate_synthetic_dataset(
     if test:
         K_sampled = K_sampled or 3
         grid_size = grid_size or 5
+        n_cells = 600
     else:  # pragma: nocover
         K_sampled = K_sampled or 20
         grid_size = grid_size or 10
+        n_cells = None
 
     script_dir = Path(__file__).resolve().parent
 
@@ -126,14 +130,16 @@ def generate_synthetic_dataset(
     X = samples[:, :K_sampled].reshape((-1, samples.shape[-1]))
     obs_names = [f"sc_{i}" for i in range(X.shape[0])]
     sc_anndata = anndata.AnnData(
-        X=X,
+        X=csr_matrix(X),
         obs=dict(obs_names=obs_names),
     )
     sc_anndata.obs["cell_type"] = cell_types_sc[:, :K_sampled].reshape(-1, 1)
     sc_anndata.obs["label"] = sc_anndata.obs["cell_type"].astype(str).astype("category")
     sc_anndata.obs["n_counts"] = np.sum(sc_anndata.X, axis=1)
     sc_anndata.obsm["gamma"] = gamma_sc[:, :K_sampled].reshape(-1, gamma.shape[-1])
-    sc_anndata.obsm["locations"] = location_sc[:, :K_sampled].reshape(-1, 2)
+    sc_anndata.obsm["spatial"] = location_sc[:, :K_sampled].reshape(-1, 2)
+    if n_cells is not None:
+        sc.pp.subsample(sc_anndata, n_obs=n_cells, random_state=seed, copy=False)
 
     # cluster the single-cell data using sklearn
     target_list = [2, 4, 8, 16]
@@ -170,12 +176,6 @@ def generate_synthetic_dataset(
     # dump keys as well
     sc_anndata.uns["key_clustering"] = key_list
     sc_anndata.uns["target_list"] = [1] + target_list
-
-    # write the full data
-    # sc_anndata.write(output_dir + "sc_simu.h5ad", compression="gzip")
-    # remove the "last" cell type and dump to separate file
-    # sc_anndata_partial = sc_anndata[sc_anndata.obs["cell_type"] != C - 1]
-    # sc_anndata_partial.write(output_dir + "sc_simu_partial.h5ad", compression="gzip")
 
     transformed_mean_st_full = transformed_mean.mean(1)
     # here we should create a mask to remove contributions from one cell type
@@ -218,7 +218,7 @@ def generate_synthetic_dataset(
         # st_anndata.obsm["cell_type"] = freq_df
         st_anndata.obsm["proportions_true"] = freq_df
         st_anndata.obsm["gamma"] = gamma
-        st_anndata.obsm["locations"] = locations
+        st_anndata.obsm["spatial"] = locations
         st_anndata.obs["n_counts"] = np.sum(st_anndata.X, axis=1)
         st_anndata.uns["key_clustering"] = key_list
         st_anndata.uns["target_list"] = [1] + target_list
