@@ -2,7 +2,7 @@ bioc::batchelor@1.12.3
 bioc::ComplexHeatmap@2.12.1
 bslib@0.4.0
 caret@6.0-93
-cli@3.3.0
+cli@3.4.0
 conos@1.4.6
 crayon@1.5.1
 dbplyr@2.2.1
@@ -28,7 +28,7 @@ proxy@0.4-27
 ragg@1.2.2
 Rcpp@1.0.9
 RcppTOML@0.1.7
-reticulate@1.25
+reticulate@1.26
 rlang@1.0.3
 rliger@1.0.0
 rmarkdown@2.2
