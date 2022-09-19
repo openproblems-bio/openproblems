@@ -18,6 +18,7 @@ _magic_method = functools.partial(
 
 def _magic(adata, solver, normtype, decay, t):
     from magic import MAGIC
+
     if normtype == "sqrt":
         norm_fn = np.sqrt
         denorm_df = np.square
@@ -28,11 +29,11 @@ def _magic(adata, solver, normtype, decay, t):
     X, libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
     )
-    
+
     X = X = scprep.utils.matrix_transform(X, norm_fn)
     Y = MAGIC(solver=solver, decay=decay, t=t, verbose=False).fit_transform(
         X, genes="all_genes"
-        )
+    )
 
     Y = scprep.utils.matrix_transform(Y, denorm_fn)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
