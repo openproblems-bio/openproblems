@@ -47,7 +47,7 @@ def _magic(adata, solver, normtype, decay, t):
     method_name="MAGIC",
 )
 def magic(adata, test=False):
-    return _magic(adata, solver="exact",normtype="sqrt", decay=1, t=3)
+    return _magic(adata, solver="exact", normtype="sqrt", decay=1, t=3)
 
 
 @method(
@@ -58,11 +58,11 @@ def magic(adata, test=False):
     code_url="https://github.com/openproblems-bio/openproblems",
 )
 def knn_naive(adata, test=False):
-    return _magic(adata, solver="exact",normtype="log", decay=0, t=1)
+    return _magic(adata, solver="exact", normtype="log", decay=0, t=1)
 
 
 @_magic_method(
     method_name="MAGIC (approximate)",
 )
 def magic_approx(adata, test=False):
-    return _magic(adata, solver="approximate",normtype="sqrt", decay=1, t=3)
+    return _magic(adata, solver="approximate", normtype="sqrt", decay=1, t=3)
