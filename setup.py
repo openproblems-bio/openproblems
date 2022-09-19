@@ -11,6 +11,7 @@ install_requires = [
     "scipy>=1.8,<1.10",
     "scanpy>=1.6",
     "louvain==0.7.*",
+    "python-igraph<0.10",
     "decorator<5.0",  # pinned in #324
     "memory-profiler==0.60",
     "colorama==0.4.*",
@@ -30,7 +31,7 @@ process_requires = ["numpyencoder==0.3.*"]
 test_requires = [
     "pytest==7.1.*",
     "pytest-cov==3.0.*",
-    "black==22.6.0",
+    "black==22.8.0",
     "coverage==6.4.*",
     "codecov==2.1.*",
     "parameterized==0.8.*",

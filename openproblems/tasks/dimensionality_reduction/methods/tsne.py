@@ -8,7 +8,7 @@ import scanpy as sc
 @method(
     method_name="“t-Distributed Stochastic Neighbor Embedding (t-SNE) (logCPM, 1kHVG)",
     paper_name="Visualizing Data using t-SNE",
-    paper_url="https://lvdmaaten.github.io/publications/papers/JMLR_2008.pdf",
+    paper_url="https://www.jmlr.org/papers/v9/vandermaaten08a.html",
     paper_year=2008,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.manifold.TSNE.html#sklearn.manifold.TSNE",
