@@ -28,7 +28,7 @@ def _magic(adata, solver, normtype, decay, t):
                   verbose=False).fit_transform(X, genes="all_genes")
         Y = scprep.utils.matrix_transform(Y, np.square)
         Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
-    else if (normtype == "log"):
+    elif (normtype == "log"):
         X = scprep.transform.log(X, base="e")
         Y = MAGIC(solver=solver, decay=decay, t=t,
                   verbose=False).fit_transform(X, genes="all_genes")
