@@ -16,6 +16,8 @@ def assert_array_equal(X, Y):
     if scipy.sparse.issparse(X) and scipy.sparse.issparse(Y):
         X = X.tocsr()
         Y = Y.tocsr()
+        X.sort_indices()
+        Y.sort_indices()
         np.testing.assert_array_equal(X.data, Y.data)
         np.testing.assert_array_equal(X.indices, Y.indices)
         np.testing.assert_array_equal(X.indptr, Y.indptr)
