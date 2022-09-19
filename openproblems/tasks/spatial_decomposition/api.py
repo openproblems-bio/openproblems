@@ -39,7 +39,10 @@ def check_method(adata: AnnData):
     assert isinstance(adata.obsm["proportions_pred"], np.ndarray)
     assert "proportions_true" in adata.obsm
     assert isinstance(adata.obsm["proportions_true"], np.ndarray)
+    assert np.all(np.isfinite(adata.obsm["proportions_true"]))
     assert adata.obsm["proportions_pred"].shape == adata.obsm["proportions_true"].shape
+    proportions_sum = np.sum(adata.obsm["proportions_true"], axis=1)
+    np.testing.assert_allclose(proportions_sum, 1)
     return True
 
 
