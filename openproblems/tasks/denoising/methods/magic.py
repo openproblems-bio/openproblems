@@ -25,18 +25,16 @@ def _magic(adata, solver, normtype, decay, t):
 
     if normtype == "sqrt":
         X = scprep.transform.sqrt(X)
-        Y = MAGIC(solver=solver, decay=decay, t=t, verbose=False).fit_transform(
-            X, genes="all_genes"
-        )
-        Y = scprep.utils.matrix_transform(Y, np.square)
-        Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
-    elif normtype == "log":
+    elif (normtype == "log"):
         X = scprep.transform.log(X, base="e")
-        Y = MAGIC(solver=solver, decay=decay, t=t, verbose=False).fit_transform(
-            X, genes="all_genes"
+    Y = MAGIC(solver=solver, decay=decay, t=t, verbose=False).fit_transform(
+        X, genes="all_genes"
         )
+    if normtype == "sqrt":
+        Y = scprep.utils.matrix_transform(Y, np.square)
+    elif (normtype == "log"):
         Y = scprep.utils.matrix_transform(Y, np.expm1)
-        Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
+    Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
 
     adata.uns["method_code_version"] = check_version("magic-impute")
