@@ -14,15 +14,6 @@ _magic_method = functools.partial(
     code_url="https://github.com/KrishnaswamyLab/MAGIC",
     image="openproblems-python-extras",
 )
-_knn_naive_method = functools.partial(
-    method,
-    paper_name="NA",
-    paper_url="NA",
-    paper_year=2022,
-    code_url="https://openproblems.bio",
-    image="openproblems-python-extras",
-)
-
 
 def _magic(adata, solver, normtype, decay, t):
     from magic import MAGIC
@@ -56,8 +47,12 @@ def magic(adata, test=False, normtype="sqrt", decay=1, t=3):
     return _magic(adata, solver="exact")
 
 
-@_knn_naive_method(
-    method_name="KNN naive (approximate)",
+@method(
+    method_name="KNN Smoothing",
+    paper_name="KNN Smoothing (baseline)",
+    paper_url="https://openproblems.bio",
+    paper_year=2022,
+    code_url="https://github.com/openproblems-bio/openproblems",
 )
 def knn_naive(adata, test=False, normtype="log", decay=0, t=1):
     return _magic(adata, solver="exact")
