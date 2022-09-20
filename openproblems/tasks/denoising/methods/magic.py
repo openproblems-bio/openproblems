@@ -56,6 +56,7 @@ def magic(adata, test=False):
     paper_url="https://openproblems.bio",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
+    image="openproblems-python-extras",
 )
 def knn_naive(adata, test=False):
     return _magic(adata, solver="exact", normtype="log", decay=0, t=1)
