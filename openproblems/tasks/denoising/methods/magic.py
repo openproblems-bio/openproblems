@@ -35,7 +35,7 @@ def _magic(adata, solver, normtype, decay, t):
         X, genes="all_genes"
     )
 
-    Y = scprep.utils.matrix_transform(Y, denorm_fn)
+    Y = scprep.utils.matrix_transform(Y, denorm_df)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
 
