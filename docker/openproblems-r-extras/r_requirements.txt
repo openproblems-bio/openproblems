@@ -35,6 +35,7 @@ rmarkdown@2.2
 RSQLite@2.2.4
 sass@0.4.2
 Seurat@4.1.1
+SeuratObject@4.1.1
 shiny@1.4.0.2
 sparsesvd@0.2
 systemfonts@1.0.4
