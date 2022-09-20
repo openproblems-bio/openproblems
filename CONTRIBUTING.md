@@ -316,7 +316,7 @@ openproblems-cli test --help
 The task directory structure is as follows
 
 ```text
-opensproblems/
+openproblems/
   - tasks/
     - task_name/
       - README.md
