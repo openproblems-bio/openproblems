@@ -3,7 +3,7 @@ bioc::ComplexHeatmap@2.12.1
 bslib@0.4.0
 caret@6.0-93
 cli@3.4.0
-conos@1.4.6
+conos@1.4.7
 crayon@1.5.1
 dbplyr@2.2.1
 devtools@2.4.4
@@ -35,6 +35,7 @@ rmarkdown@2.2
 RSQLite@2.2.4
 sass@0.4.2
 Seurat@4.1.1
+SeuratObject@4.1.1
 shiny@1.4.0.2
 sparsesvd@0.2
 systemfonts@1.0.4
