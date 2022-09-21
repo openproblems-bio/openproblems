@@ -5,7 +5,7 @@ from . import methods
 from . import metrics
 
 _task_name = "Label Projection"
-_task_summary = "Classification of cell types from an annotated reference"
+_task_summary = "Automated cell type annotation from rich, labeled reference data"
 
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)
