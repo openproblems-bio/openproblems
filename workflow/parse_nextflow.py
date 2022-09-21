@@ -6,8 +6,8 @@ import openproblems.api.utils
 import os
 import pandas as pd
 import sys
-import utils
 import warnings
+import workflow_utils
 
 
 def dump_json(obj, fp):
@@ -232,7 +232,9 @@ def results_to_json(results, outdir):
     if not os.path.isdir(outdir):
         os.mkdir(outdir)
     for task_name, task_results in results.items():
-        if utils.task_is_incomplete(openproblems.api.utils.str_to_task(task_name)):
+        if workflow_utils.task_is_incomplete(
+            openproblems.api.utils.str_to_task(task_name)
+        ):
             # don't write results for incomplete tasks
             continue
         for dataset_name, dataset_results in task_results.items():
