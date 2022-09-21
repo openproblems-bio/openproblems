@@ -415,12 +415,17 @@ jobs:
         python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH} /tmp/website
         python workflow/generate_website_markdown.py /tmp/website
 
+    - name: Rename nextflow log
+      if: always()
+      run: |
+        mv /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log /tmp/nextflow.log
+
     - name: Upload nextflow log
       if: always()
       uses: actions/upload-artifact@main
       with:
         name: nextflow.log
-        path: /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log
+        path: /tmp/nextflow.log
 
   run_full_benchmark:
     needs: run_test_benchmark

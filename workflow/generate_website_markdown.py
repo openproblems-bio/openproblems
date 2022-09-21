@@ -3,7 +3,7 @@ import os
 import pathlib
 import re
 import sys
-import utils
+import workflow_utils
 
 INDEX_TOML_TEMPLATE = """+++
 title = "{task_name}"
@@ -57,7 +57,7 @@ def write_dataset_md(dataset, outdir):
 
 def main(outdir):
     for task in openproblems.TASKS:
-        if utils.task_is_incomplete(task):
+        if workflow_utils.task_is_incomplete(task):
             # don't write md for incomplete tasks
             continue
         task_outdir = os.path.join(outdir, task.__name__.split(".")[-1])
