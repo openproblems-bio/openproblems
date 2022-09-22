@@ -59,7 +59,7 @@ def magic(adata, test=False):
     image="openproblems-python-extras",
 )
 def knn_naive(adata, test=False):
-    return _magic(adata, solver="exact", normtype="log", decay=0, t=1)
+    return _magic(adata, solver="exact", normtype="log", decay=None, t=1)
 
 
 @_magic_method(
