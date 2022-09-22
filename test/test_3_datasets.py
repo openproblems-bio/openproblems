@@ -1,8 +1,3 @@
-import utils.warnings
-
-utils.warnings.ignore_warnings()  # noqa: F401
-
-# isort: split
 import anndata
 import openproblems
 import openproblems.utils
@@ -17,7 +12,8 @@ import utils.cache
 import utils.git
 import utils.name
 
-DATASET_SUMMARY_MAXLEN = 80
+DATASET_SUMMARY_MINLEN = 40
+DATASET_SUMMARY_MAXLEN = 280
 
 pytestmark = pytest.mark.skipif(
     len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
@@ -97,14 +93,7 @@ class TestDataset(unittest.TestCase):
 
     def test_sparse(self):
         """Ensure output is sparse."""
-        if not scipy.sparse.issparse(self.adata.X):
-            openproblems.utils.future_warning(
-                "{}-{}: self.adata.X is loaded as dense.".format(
-                    self.task.__name__.split(".")[-1], self.dataset.__name__
-                ),
-                error_version="1.0",
-                error_category=TypeError,
-            )
+        assert scipy.sparse.issparse(self.adata.X)
 
     def test_not_bytes(self):
         """Ensure output does not contain byte strings."""
@@ -136,14 +125,31 @@ class TestDataset(unittest.TestCase):
             adata = normalizer(adata)
             utils.asserts.assert_finite(adata.X)
 
-    def test_metadata(self):
-        """Test for existence of dataset metadata."""
-        assert hasattr(self.dataset, "metadata")
-        for attr in [
-            "dataset_name",
-            "data_url",
-            "dataset_summary",
-        ]:
-            assert attr in self.dataset.metadata
 
-        assert len(self.dataset.metadata["dataset_summary"]) < DATASET_SUMMARY_MAXLEN
+@parameterized.parameterized.expand(
+    [(dataset,) for task in openproblems.TASKS for dataset in task.DATASETS],
+    name_func=utils.name.name_test,
+)
+def test_dataset_metadata(dataset):
+    """Test for existence of dataset metadata."""
+    assert hasattr(dataset, "metadata")
+    for attr in [
+        "dataset_name",
+        "data_url",
+        "data_reference",
+        "dataset_summary",
+        "image",
+    ]:
+        assert attr in dataset.metadata
+        assert dataset.metadata[attr] is not None
+
+    assert isinstance(dataset.metadata["dataset_name"], str)
+    assert isinstance(dataset.metadata["image"], str)
+    assert dataset.metadata["image"].startswith("openproblems")
+    assert isinstance(dataset.metadata["dataset_summary"], str)
+    assert len(dataset.metadata["dataset_summary"]) > DATASET_SUMMARY_MINLEN
+    assert len(dataset.metadata["dataset_summary"]) < DATASET_SUMMARY_MAXLEN
+    assert isinstance(dataset.metadata["data_url"], str)
+    assert utils.asserts.assert_url_accessible(dataset.metadata["data_url"])
+    assert isinstance(dataset.metadata["data_reference"], str)
+    assert utils.asserts.assert_url_accessible(dataset.metadata["data_reference"])

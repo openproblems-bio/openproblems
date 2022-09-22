@@ -106,7 +106,7 @@ def image_requires_docker(image):
         if not docker_available():
             raise RuntimeError(
                 "The Dockerfile for image {} is newer than the "
-                "latest push, but Docker is not available."
+                "latest push, but Docker is not available.".format(image)
             )
         if docker_image_age(image) < git_file_age:
             import sys
@@ -261,7 +261,6 @@ def docker_test(func, image=None, timeout=None, retries=0, *args, **kwargs):
                     os.path.join(DOCKER_BASEDIR, "test")
                 )
             )
-            handle.write("    import utils.warnings\n")
             handle.write("    import openproblems\n")
             handle.write("    {}(*{}, **{})\n".format(func.__name__, args, kwargs))
 

@@ -13,7 +13,10 @@ R packages:
 * batchelor
 * sparsesvd
 * dplyr
+* spacexr
+* Seurat
 
 Python packages:
 
 * harmonic-alignment
+* xgboost

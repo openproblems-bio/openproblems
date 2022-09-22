@@ -18,9 +18,9 @@ def _mnn(adata):
     from scib.integration import runMNN
     from scib.preprocessing import reduce_data
 
-    adata.strings_to_categoricals()
     adata = runMNN(adata, "batch")
     reduce_data(adata, umap=False)
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     adata.uns["method_code_version"] = check_version("mnnpy")
     return adata
 

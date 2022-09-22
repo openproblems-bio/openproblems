@@ -5,10 +5,11 @@ import scanpy as sc
 import scprep
 import tempfile
 
-URL = "https://ndownloader.figshare.com/files/25717328"
+# sparsified from https://figshare.com/articles/dataset/Benchmarking_atlas-level_data_integration_in_single-cell_genomics_-_integration_task_datasets_Immune_and_pancreas_/12420968/2 # noqa: E501
+URL = "https://ndownloader.figshare.com/files/36086786"
 
 
-@utils.loader(data_url=URL)
+@utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/s41592-021-01336-8")
 def load_immune(test=False):
     """Download immune human data from figshare."""
     if test:

@@ -18,7 +18,6 @@ def _scanorama(adata, use_rep):
     from scib.integration import runScanorama
     from scib.preprocessing import reduce_data
 
-    adata.strings_to_categoricals()
     adata = runScanorama(adata, "batch")
     reduce_data(adata, umap=False, use_rep=use_rep)
     adata.uns["method_code_version"] = check_version("scanorama")
@@ -30,7 +29,9 @@ def _scanorama_embed(adata):
 
 
 def _scanorama_full(adata):
-    return _scanorama(adata, use_rep="X_pca")
+    adata = _scanorama(adata, use_rep="X_pca")
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
+    return adata
 
 
 @_scanorama_method(method_name="Scanorama (full/unscaled)")

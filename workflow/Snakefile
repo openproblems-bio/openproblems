@@ -36,9 +36,10 @@ rule refresh_docker_image:
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
-        label = "github_actions" if "GITHUB_ACTIONS" in os.environ else "local"
+        label = tools.build_type,
+        hash = tools.build_hash,
     shell:
-        "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+        "docker build --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule refresh_dockerfile:
     priority: 50
@@ -62,8 +63,8 @@ RUN if [ -f r_requirements.txt ]; then sudo R -e "source(\"install_renv.R\"); in
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
 RUN cd /usr/src/singlecellopenproblems && sudo git clean -fxdq
-RUN sudo pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
 """) + r"""
+RUN sudo pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
 ' > {output}"""
 
 ruleorder: update_docker_image > build_docker_image
@@ -86,9 +87,10 @@ rule build_docker_image:
     params:
         sourcedir = os.path.dirname(tools.SCRIPTS_DIR),
         user = "singlecellopenproblems",
-        label = tools.build_type
+        label = tools.build_type,
+        hash = tools.build_hash,
     shell:
-        "docker build --label bio.openproblems.build={params.label} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+        "docker build --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule password_docker:
     output:

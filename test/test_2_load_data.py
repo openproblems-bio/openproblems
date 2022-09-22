@@ -1,8 +1,3 @@
-import utils.warnings
-
-utils.warnings.ignore_warnings()  # noqa: F401
-
-# isort: split
 import openproblems
 import parameterized
 import pytest

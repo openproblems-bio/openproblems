@@ -1,0 +1,58 @@
+name: Check R dependencies
+
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 0 * * 0'
+  workflow_run:
+    workflows:
+      - 'Run Tests'
+    types:
+      - completed
+    branches:
+      - 'main'
+
+jobs:
+  check-r-dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+
+    - name: Check for available updates
+      run: |
+        for REQUIREMENTS in $(ls -1 docker/*/r_requirements.txt); do
+          IMAGE=$(echo ${REQUIREMENTS} | sed 's:^docker/::' | sed 's:/.*::')
+          docker pull -q singlecellopenproblems/${IMAGE}
+          PKG_CHANGED=$(
+            docker run -t --rm --user=root \
+              -v $(pwd):/usr/src/singlecellopenproblems \
+              singlecellopenproblems/${IMAGE} \
+              Rscript /usr/src/singlecellopenproblems/scripts/upgrade_renv.R \
+              /usr/src/singlecellopenproblems/${REQUIREMENTS} | \
+              tee /dev/stderr | \
+              tail -n 1 | \
+              sed 's-::-/-g'
+          )
+          git diff --exit-code || break
+          PKG_CHANGED=""
+        done
+        echo "PKG_CHANGED=$(echo ${PKG_CHANGED} | sed 's/@/ to /')" >> $GITHUB_ENV
+        echo "UPDATE_BRANCH_NAME=dependencies/r/${PKG_CHANGED}" >> $GITHUB_ENV
+
+    - name: Create Pull Request
+      if: >-
+        env.PKG_CHANGED != ''
+      uses: peter-evans/create-pull-request@v4
+      with:
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
+        delete-branch: true
+        base: main
+        labels: dependencies,r
+        title: "Update ${{ env.PKG_CHANGED }}"
+        committer: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        commit-message: "Update ${{ env.PKG_CHANGED }}"
+        draft: true

@@ -1,13 +1,26 @@
-from ..tools.utils import check_version
 from . import utils
 
 import hashlib
 import importlib
+import json
 import os
 import scprep
 import subprocess
 
 _MODULE = type(os)
+
+
+def _run(args, **kwargs):
+    p = subprocess.run(
+        args,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        **kwargs,
+    )
+    if p.returncode != 0:
+        raise RuntimeError(p.stderr.decode())
+    else:
+        return p.stdout.decode()
 
 
 def get_module(fun):
@@ -19,16 +32,57 @@ def get_module(fun):
 
 def git_hash(file):
     """Get the git commit hash associated with a file."""
-    p = subprocess.run(
+    return _run(
         ["git", "log", "-n", "1", "--pretty=format:%H", "--", file],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
         cwd=os.path.dirname(__file__),
     )
-    if p.returncode != 0:
-        raise RuntimeError(p.stderr.decode())
-    else:
-        return p.stdout.decode()
+
+
+def docker_token(image_name):
+    output = json.loads(
+        _run(
+            [
+                "curl",
+                "--silent",
+                f"https://auth.docker.io/token?scope=repository:{image_name}:"
+                "pull&service=registry.docker.io",
+            ]
+        )
+    )
+    return output["token"]
+
+
+def docker_labels_from_api(image_name, tag="latest"):
+    token = docker_token(image_name)
+    output = json.loads(
+        _run(
+            [
+                "curl",
+                "--silent",
+                "--header",
+                f"Authorization: Bearer {token}",
+                f"https://registry-1.docker.io/v2/{image_name}/manifests/{tag}",
+            ]
+        )
+    )
+    v1_compat_output = json.loads(output["history"][0]["v1Compatibility"])
+    return v1_compat_output["config"]["Labels"]
+
+
+def docker_hash(image_name):
+    """Get the docker image hash associated with an image."""
+    try:
+        return _run(
+            [
+                "docker",
+                "inspect",
+                "-f='{{ index .Config.Labels \"bio.openproblems.hash\"}}'",
+                image_name,
+            ]
+        )
+    except (RuntimeError, FileNotFoundError):  # pragma: nocover
+        # docker is unavailable or the image is not locally available; use the API
+        return docker_labels_from_api(image_name)["bio.openproblems.hash"]
 
 
 def get_context(obj, context=None):
@@ -51,25 +105,19 @@ def get_context(obj, context=None):
     if isinstance(obj, _MODULE):
         module_name = obj.__name__
     else:
-        if isinstance(obj, scprep.run.RFunction):
-            try:
+        if isinstance(obj, scprep.run.RFunction) and hasattr(obj, "__r_file__"):
+            if obj.__r_file__ not in context:
                 context[obj.__r_file__] = git_hash(obj.__r_file__)
-            except AttributeError:
-                pass
+        if hasattr(obj, "metadata") and "image" in obj.metadata:
+            image_name = f"singlecellopenproblems/{obj.metadata['image']}"
+            if image_name not in context:
+                context[image_name] = docker_hash(image_name)
         try:
             module_name = get_module(obj)
         except AttributeError:
             # doesn't belong to a module
             return context
-    if module_name in context:
-        # already done
-        pass
-    elif not module_name.startswith("openproblems"):
-        # use version number of external libs
-        version = check_version(module_name.split(".")[0])
-        if version != "ModuleNotFound":
-            context[module_name] = version
-    else:
+    if module_name.startswith("openproblems") and module_name not in context:
         module = importlib.import_module(module_name)
         context[module_name] = git_hash(module.__file__)
         for member_name in dir(module):

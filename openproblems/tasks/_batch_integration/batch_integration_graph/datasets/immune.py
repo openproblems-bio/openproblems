@@ -7,7 +7,10 @@ import scanpy as sc
 @dataset(
     dataset_name="Immune (by batch)",
     data_url=load_immune.metadata["data_url"],
-    dataset_summary="TODO",
+    data_reference=load_immune.metadata["data_reference"],
+    dataset_summary="Human immune cells from peripheral blood and bone marrow "
+    "taken from 5 datasets comprising 10 batches across technologies (10X, "
+    "Smart-seq2).",
     image="openproblems",
 )
 def immune_batch(test=False):
@@ -22,7 +25,8 @@ def immune_batch(test=False):
         svd_solver="arpack",
         return_info=True,
     )
-    adata.obsm["X_uni"] = adata.obsm["X_pca"]
+    adata.obsm["X_uni_pca"] = adata.obsm["X_pca"]
 
-    sc.pp.neighbors(adata, use_rep="X_uni", key_added="uni")
+    sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
+    adata.var_names_make_unique()
     return adata

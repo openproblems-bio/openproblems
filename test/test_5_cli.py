@@ -1,8 +1,4 @@
-import utils.warnings
-
-utils.warnings.ignore_warnings()  # noqa: F401
-
-# isort: split
+from openproblems.api.hash import docker_labels_from_api
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
 
@@ -151,6 +147,41 @@ def test_hash(task, function_type, function_name):
     assert h1 == h2
 
 
+def test_hash_docker_api():
+    assert docker_labels_from_api("circleci/python", tag="3.8-bullseye") is None
+
+
+@parameterized.parameterized.expand(
+    [
+        (dataset, method, metric)
+        for dataset in ["zebrafish_labels", None]
+        for method in ["logistic_regression_log_cpm", None]
+        for metric in ["accuracy", None]
+    ],
+    name_func=utils.name.name_test,
+)
+def test_test(dataset, method, metric):
+    """Test pipeline for dev testing."""
+    args = ["test", "--task", "label_projection", "--test"]
+    if dataset is not None:
+        args += ["--dataset", dataset]
+    if method is not None:
+        args += ["--method", method]
+    if metric is not None:
+        args += ["--metric", metric]
+    out = main(
+        args,
+        do_print=False,
+    )
+    if metric is None:
+        assert out is None
+    else:
+        try:
+            float(out)
+        except ValueError:
+            assert False, "result could not be converted to float"
+
+
 def test_zero_metric():
     def __zero_metric(*args):
         return 0.0
@@ -183,6 +214,8 @@ def test_pipeline():
     with tempfile.TemporaryDirectory() as tempdir:
         dataset_file = os.path.join(tempdir, "dataset.h5ad")
         method_file = os.path.join(tempdir, "method.h5ad")
+        version_file = os.path.join(tempdir, "version.txt")
+        result_file = os.path.join(tempdir, "result.txt")
         assert not os.path.isfile(dataset_file)
         assert not os.path.isfile(method_file)
         main(
@@ -193,7 +226,7 @@ def test_pipeline():
                 "--test",
                 "--output",
                 dataset_file,
-                "pancreas_batch",
+                "zebrafish_labels",
             ],
             do_print=False,
         )
@@ -207,21 +240,30 @@ def test_pipeline():
                 dataset_file,
                 "--output",
                 method_file,
+                "--version-file",
+                version_file,
                 "logistic_regression_log_cpm",
             ],
             do_print=False,
         )
         assert os.path.isfile(method_file)
+        assert os.path.isfile(version_file)
+        with open(version_file, "r") as handle:
+            code_version = handle.read()
         assert code_version == sklearn.__version__
-        result = main(
+        main(
             [
                 "evaluate",
                 "--task",
                 "label_projection",
                 "--input",
                 method_file,
+                "--output",
+                result_file,
                 "accuracy",
             ],
             do_print=False,
         )
+        with open(result_file, "r") as handle:
+            result = float(handle.read())
         assert isinstance(result, float)

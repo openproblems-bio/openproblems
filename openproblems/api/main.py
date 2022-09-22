@@ -8,11 +8,12 @@ from . import load
 from . import parser
 from . import run
 from . import tasks
+from . import test
 from . import utils
 
 SUBCOMMANDS = {
     utils.module_to_str(module): module
-    for module in [tasks, list, image, load, run, evaluate, hash]
+    for module in [tasks, list, image, load, run, evaluate, hash, test]
 }
 
 
@@ -34,8 +35,7 @@ def _main(args=None):
     elif args.subcommand in SUBCOMMANDS:
         # Since printing the output to stdout is important here,
         # we redirect all other stdout to stderr.
-        with utils.RedirectStdout():
-            return SUBCOMMANDS[args.subcommand].main(args)
+        return SUBCOMMANDS[args.subcommand].main(args)
     else:
         raise NotImplementedError
 

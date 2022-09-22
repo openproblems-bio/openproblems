@@ -1,4 +1,5 @@
 from ...data.multimodal.sample import load_sample_data
+from ...tools.decorators import dataset
 
 import numpy as np
 
@@ -32,6 +33,7 @@ def check_method(adata):
     return True
 
 
+@dataset()
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()

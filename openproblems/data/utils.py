@@ -33,13 +33,15 @@ def _cache_path(func, *args, **kwargs):
     return os.path.join(TEMPDIR, filename)
 
 
-def loader(data_url):
+def loader(data_url, data_reference):
     """Decorate a data loader function.
 
     Parameters
     ----------
     data_url : str
         Link to the original source of the dataset
+    data_reference : str
+        Link to the paper describing how the dataset was generated
     """
 
     def decorator(func):
@@ -60,6 +62,7 @@ def loader(data_url):
                     "Downloading {}({}, {}) dataset".format(func.__name__, args, kwargs)
                 )
                 adata = func(*args, **kwargs)
+                adata.strings_to_categoricals()
                 adata.uns["_from_cache"] = False
                 if "counts" not in adata.layers:
                     adata.layers["counts"] = adata.X
@@ -70,7 +73,7 @@ def loader(data_url):
                 adata.write_h5ad(filepath)
                 return adata
 
-        apply_func.metadata = dict(data_url=data_url)
+        apply_func.metadata = dict(data_url=data_url, data_reference=data_reference)
         return apply_func
 
     return decorator
