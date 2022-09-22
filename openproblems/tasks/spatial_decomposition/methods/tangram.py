@@ -63,9 +63,8 @@ def tangram(adata, test=False, num_epochs=None, n_markers=None):
     tg.project_cell_annotations(adata_map=ad_map, adata_sp=adata, annotation="label")
 
     # normalize scores
-    pred_props = adata.obsm["tangram_ct_pred"].copy()
-    pred_props_sum = pred_props.values.sum(axis=1, keepdims=True)
-    adata.obsm["proportions_pred"] = pred_props.iloc[:, :] / pred_props_sum
+    pred_props = adata.obsm["tangram_ct_pred"].to_numpy()
+    adata.obsm["proportions_pred"] = pred_props / pred_props.sum(axis=1)[:, None]
 
     # remove un-normalized predictions
     del adata.obsm["tangram_ct_pred"]
