@@ -19,7 +19,7 @@ hexbin@1.28.2
 htmltools@0.5.3
 htmlwidgets@1.5.4
 igraph@1.3.4
-lifecycle@1.0.1
+lifecycle@1.0.2
 Matrix@1.4-1
 pkgdown@2.0.6
 pkgload@1.3.0
@@ -29,11 +29,12 @@ ragg@1.2.2
 Rcpp@1.0.9
 RcppTOML@0.1.7
 reticulate@1.26
-rlang@1.0.3
+rlang@1.0.5
 rliger@1.0.0
 rmarkdown@2.2
 RSQLite@2.2.4
 sass@0.4.2
+sctransform@0.3.4
 Seurat@4.1.1
 SeuratObject@4.1.1
 shiny@1.4.0.2
