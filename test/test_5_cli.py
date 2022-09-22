@@ -231,7 +231,7 @@ def test_pipeline():
             do_print=False,
         )
         assert os.path.isfile(dataset_file)
-        code_version = main(
+        main(
             [
                 "run",
                 "--task",

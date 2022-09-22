@@ -16,8 +16,8 @@ def load_sample_data(test=True):
     """Create a simple dataset to use for testing in multimodal applications."""
     assert test
 
-    genes = pd.read_csv(rna_genes_url, low_memory=False, index_col=0).iloc[:500]
-    cells = pd.read_csv(rna_cells_url, low_memory=False, index_col=0).iloc[:200]
+    genes = pd.read_csv(rna_genes_url, low_memory=False, index_col=0, nrows=500)
+    cells = pd.read_csv(rna_cells_url, low_memory=False, index_col=0, nrows=200)
 
     rna_data = scipy.sparse.csr_matrix(
         np.random.poisson(0.3, (cells.shape[0], genes.shape[0])).astype(np.float32)
