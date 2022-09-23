@@ -194,6 +194,7 @@ def test_zero_metric():
     adata = task.api.sample_dataset()
     with tempfile.TemporaryDirectory() as tempdir:
         dataset_file = os.path.join(tempdir, "dataset.h5ad")
+        adata.var = adata.var[[]]
         adata.write_h5ad(dataset_file)
         with warnings.catch_warnings():
             warnings.filterwarnings(
