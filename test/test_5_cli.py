@@ -10,6 +10,7 @@ import parameterized
 import sklearn
 import tempfile
 import utils.name
+import warnings
 
 
 def test_print(capsys):
@@ -196,7 +197,9 @@ def test_zero_metric():
         print(adata.var)
         print(adata.var.index)
         adata.write_h5ad(dataset_file)
-        print(anndata.read_h5ad(dataset_file).var)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            print(anndata.read_h5ad(dataset_file).var)
 
         result = main(
             [
