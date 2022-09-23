@@ -194,24 +194,24 @@ def test_zero_metric():
     adata = task.api.sample_dataset()
     with tempfile.TemporaryDirectory() as tempdir:
         dataset_file = os.path.join(tempdir, "dataset.h5ad")
-        print(adata.var)
-        print(adata.var.index)
         adata.write_h5ad(dataset_file)
         with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            print(anndata.read_h5ad(dataset_file).var)
-
-        result = main(
-            [
-                "evaluate",
-                "--task",
-                task.__name__.split(".")[-1],
-                "--input",
-                dataset_file,
-                metric_name,
-            ],
-            do_print=True,
-        )
+            warnings.filterwarnings(
+                "ignore",
+                category=anndata.ImplicitModificationWarning,
+                message="Transforming to str index.",
+            )
+            result = main(
+                [
+                    "evaluate",
+                    "--task",
+                    task.__name__.split(".")[-1],
+                    "--input",
+                    dataset_file,
+                    metric_name,
+                ],
+                do_print=True,
+            )
         assert result == 0
         assert isinstance(result, int)
 
