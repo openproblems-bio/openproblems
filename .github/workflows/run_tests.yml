@@ -186,12 +186,12 @@ jobs:
         snakemake -j $(nproc) docker_pull
         cd ..
 
-    - name: Update Docker images
-      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker
-        cd ..
+#    - name: Update Docker images
+#      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
+#      run: |
+#        cd workflow
+#        snakemake -j $(nproc) docker
+#        cd ..
 
     - name: Run tests
       run: pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native --maxfail 1 test/test_2* test/test_3* test/test_4* test/test_5*
