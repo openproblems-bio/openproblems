@@ -8,7 +8,7 @@ import os
 import parameterized
 import sklearn
 import tempfile
-import utils
+import utils.name
 
 
 def test_print(capsys):
