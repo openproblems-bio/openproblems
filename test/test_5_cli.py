@@ -2,6 +2,7 @@ from openproblems.api.hash import docker_labels_from_api
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
 
+import anndata
 import numpy as np
 import openproblems
 import os
@@ -195,6 +196,7 @@ def test_zero_metric():
         print(adata.var)
         print(adata.var.index)
         adata.write_h5ad(dataset_file)
+        print(anndata.read_h5ad(dataset_file).var)
 
         result = main(
             [
