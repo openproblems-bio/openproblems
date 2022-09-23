@@ -2,7 +2,6 @@ from openproblems.api.hash import docker_labels_from_api
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
 
-import anndata
 import numpy as np
 import openproblems
 import os
@@ -10,7 +9,6 @@ import parameterized
 import sklearn
 import tempfile
 import utils.name
-import warnings
 
 
 def test_print(capsys):
@@ -196,23 +194,17 @@ def test_zero_metric():
         dataset_file = os.path.join(tempdir, "dataset.h5ad")
         adata.var = adata.var[[]]
         adata.write_h5ad(dataset_file)
-        with warnings.catch_warnings():
-            warnings.filterwarnings(
-                "ignore",
-                category=anndata.ImplicitModificationWarning,
-                message="Transforming to str index.",
-            )
-            result = main(
-                [
-                    "evaluate",
-                    "--task",
-                    task.__name__.split(".")[-1],
-                    "--input",
-                    dataset_file,
-                    metric_name,
-                ],
-                do_print=True,
-            )
+        result = main(
+            [
+                "evaluate",
+                "--task",
+                task.__name__.split(".")[-1],
+                "--input",
+                dataset_file,
+                metric_name,
+            ],
+            do_print=True,
+        )
         assert result == 0
         assert isinstance(result, int)
 
