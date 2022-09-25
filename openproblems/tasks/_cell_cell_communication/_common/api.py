@@ -17,12 +17,17 @@ def assert_is_subset(
     subset = np.asarray(subset)
     is_missing = ~np.isin(subset, superset)
     prop_missing = np.sum(is_missing) / len(subset)
+
     if prop_missing > prop_missing_allowed:
+        if prop_missing_allowed == 0:
+            msg = f"{subset_name} is not a subset of {superset_name}. "
+        else:
+            msg = (
+                f"Allowed proportion ({prop_missing_allowed}) of missing "
+                f"{subset_name} elements exceeded ({prop_missing:.2f}). "
+            )
         x_missing = ",".join([x for x in subset[is_missing]])
-        raise AssertionError(
-            f"Allowed proportion ({prop_missing_allowed}) of missing {subset_name} "
-            f"elements exceeded. {x_missing} missing from {superset_name}"
-        )
+        raise AssertionError(msg + f"{x_missing} missing from {superset_name}")
 
 
 # Helper function to split complex subunits
@@ -171,8 +176,8 @@ def sample_dataset(merge_keys):
     # keep only the top 10 most variable
     sc.pp.highly_variable_genes(adata, n_top_genes=10)
     adata = adata[:, adata.var["highly_variable"]]
-    # assign names to known interactions
-    adata.var.index = [
+    # hard-code var names to known interactions
+    adata.var.index = adata.uns["var_names_all"] = [
         "LGALS9",
         "PTPRC",
         "LRP1",
