@@ -53,8 +53,9 @@ def load_tnbc_data(test=False):
         # Keep only cells with nonzero relevant ligands/receptors
         utils.filter_genes_cells(adata)
 
-        # Subsample data to 500 random cells
-        sc.pp.subsample(adata, n_obs=500)
+        # Subsample data to random cell from each cell type
+        msk = adata.obs_names.isin(adata.obs.groupby("label").head(20).index)
+        adata = adata[msk, :]
 
         # Add noise to ensure no genes are empty -- filtering genes could remove ligands
         empty_gene_idx = np.argwhere(adata.X.sum(axis=0).A.flatten() == 0).flatten()
