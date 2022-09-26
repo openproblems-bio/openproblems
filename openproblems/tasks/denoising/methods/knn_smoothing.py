@@ -16,7 +16,8 @@ def knn_smoothing(adata, test=False):
     import numpy as np
 
     adata.uns["method_code_version"] = check_version("knn_smooth")
+    X = np.float64(np.array(adata.obsm["train"].transpose()))
     adata.obsm["train"] = (
-        knn_smooth.knn_smoothing(np.array(adata.obsm["train"].transpose()), k=10)
+        knn_smooth.knn_smoothing(X, k=10)
     ).transpose()
     return adata
