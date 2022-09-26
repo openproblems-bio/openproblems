@@ -1,8 +1,5 @@
-import os
-import utils.warnings  # noqa: F401
-
-# isort: split
 import openproblems
+import os
 import parameterized
 import pytest
 import utils.docker
