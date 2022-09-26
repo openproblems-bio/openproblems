@@ -1,6 +1,3 @@
-import utils.warnings  # noqa: F401
-
-# isort: split
 from openproblems.api.hash import docker_labels_from_api
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
@@ -11,7 +8,7 @@ import os
 import parameterized
 import sklearn
 import tempfile
-import utils
+import utils.name
 
 
 def test_print(capsys):
@@ -195,8 +192,8 @@ def test_zero_metric():
     adata = task.api.sample_dataset()
     with tempfile.TemporaryDirectory() as tempdir:
         dataset_file = os.path.join(tempdir, "dataset.h5ad")
+        adata.var = adata.var[[]]
         adata.write_h5ad(dataset_file)
-
         result = main(
             [
                 "evaluate",
@@ -234,7 +231,7 @@ def test_pipeline():
             do_print=False,
         )
         assert os.path.isfile(dataset_file)
-        code_version = main(
+        main(
             [
                 "run",
                 "--task",
