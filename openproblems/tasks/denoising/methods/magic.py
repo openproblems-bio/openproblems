@@ -21,10 +21,10 @@ def _magic(adata, solver, normtype, decay, t):
 
     if normtype == "sqrt":
         norm_fn = np.sqrt
-        denorm_df = np.square
+        denorm_fn = np.square
     elif normtype == "log":
         norm_fn = np.log1p
-        denorm_df = np.expm1
+        denorm_fn = np.expm1
 
     X, libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
@@ -35,7 +35,7 @@ def _magic(adata, solver, normtype, decay, t):
         X, genes="all_genes"
     )
 
-    Y = scprep.utils.matrix_transform(Y, denorm_df)
+    Y = scprep.utils.matrix_transform(Y, denorm_fn)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
 
