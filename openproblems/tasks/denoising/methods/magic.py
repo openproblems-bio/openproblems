@@ -16,7 +16,7 @@ _magic_method = functools.partial(
 )
 
 
-def _magic(adata, solver, normtype, decay, t):
+def _magic(adata, solver, normtype="sqrt"):
     from magic import MAGIC
 
     if normtype == "sqrt":
@@ -30,8 +30,8 @@ def _magic(adata, solver, normtype, decay, t):
         adata.obsm["train"], rescale=1, return_library_size=True
     )
 
-    X = X = scprep.utils.matrix_transform(X, norm_fn)
-    Y = MAGIC(solver=solver, decay=decay, t=t, verbose=False).fit_transform(
+    X = scprep.utils.matrix_transform(X, norm_fn)
+    Y = MAGIC(solver=solver, **kwargs, verbose=False).fit_transform(
         X, genes="all_genes"
     )
 
@@ -47,7 +47,7 @@ def _magic(adata, solver, normtype, decay, t):
     method_name="MAGIC",
 )
 def magic(adata, test=False):
-    return _magic(adata, solver="exact", normtype="sqrt", decay=1, t=3)
+    return _magic(adata, solver="exact", normtype="sqrt")
 
 
 @method(
@@ -66,4 +66,4 @@ def knn_naive(adata, test=False):
     method_name="MAGIC (approximate)",
 )
 def magic_approx(adata, test=False):
-    return _magic(adata, solver="approximate", normtype="sqrt", decay=1, t=3)
+    return _magic(adata, solver="approximate", normtype="sqrt")
