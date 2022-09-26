@@ -1,5 +1,8 @@
 bioc::batchelor@1.12.3
 bioc::ComplexHeatmap@2.12.1
+bioc::scater@1.24.0
+bioc::scran@1.24.0
+bioc::scuttle@1.6.2
 bslib@0.4.0
 caret@6.0-93
 cli@3.4.1
@@ -33,6 +36,8 @@ rlang@1.0.5
 rliger@1.0.0
 rmarkdown@2.2
 RSQLite@2.2.4
+saezlab/liana@0.1.6
+saezlab/OmnipathR@679bb79 # master
 sass@0.4.2
 sctransform@0.3.4
 Seurat@4.1.1
