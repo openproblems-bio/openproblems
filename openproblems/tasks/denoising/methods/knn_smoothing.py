@@ -1,7 +1,6 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
-import numpy as np
 
 
 @method(
@@ -15,7 +14,8 @@ import numpy as np
 )
 def knn_smoothing(adata, test=False):
     import knn_smooth
-
+    import numpy as np
+    
     adata.uns["method_code_version"] = check_version("knn_smooth")
     adata.obsm["train"] = (
         knn_smooth.knn_smoothing(np.array(adata.obsm["train"].transpose()), k=10)
