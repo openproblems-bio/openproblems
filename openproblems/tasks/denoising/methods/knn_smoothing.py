@@ -2,7 +2,6 @@ from ....tools.decorators import method
 from ....tools.utils import check_version
 
 
-
 @method(
     method_name="KNN smoothing",
     paper_name="K-nearest neighbor smoothing for high-throughput "
@@ -15,7 +14,7 @@ from ....tools.utils import check_version
 def knn_smoothing(adata, test=False):
     import knn_smooth
     import numpy as np
-    
+
     adata.uns["method_code_version"] = check_version("knn_smooth")
     adata.obsm["train"] = (
         knn_smooth.knn_smoothing(np.array(adata.obsm["train"].transpose()), k=10)
