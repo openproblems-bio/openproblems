@@ -177,6 +177,7 @@ jobs:
         renv::restore()
         source("./scripts/install_renv.R")
         install_renv("docker/openproblems-r-base/r_requirements.txt")
+        install_renv("docker/openproblems-github-actions/r_requirements.txt")
       shell: Rscript {0}
 
     - name: Pull Docker images
