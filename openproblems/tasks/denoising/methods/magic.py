@@ -16,7 +16,7 @@ _magic_method = functools.partial(
 )
 
 
-def _magic(adata, solver, normtype="sqrt"):
+def _magic(adata, solver, normtype="sqrt", **kwargs):
     from magic import MAGIC
 
     if normtype == "sqrt":
