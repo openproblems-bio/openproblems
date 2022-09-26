@@ -50,6 +50,13 @@ def magic(adata, test=False):
     return _magic(adata, solver="exact", normtype="sqrt")
 
 
+@_magic_method(
+    method_name="MAGIC (approximate)",
+)
+def magic_approx(adata, test=False):
+    return _magic(adata, solver="approximate", normtype="sqrt")
+
+
 @method(
     method_name="KNN Smoothing",
     paper_name="KNN Smoothing (baseline)",
@@ -60,10 +67,3 @@ def magic(adata, test=False):
 )
 def knn_naive(adata, test=False):
     return _magic(adata, solver="exact", normtype="log", decay=None, t=1)
-
-
-@_magic_method(
-    method_name="MAGIC (approximate)",
-)
-def magic_approx(adata, test=False):
-    return _magic(adata, solver="approximate", normtype="sqrt")
