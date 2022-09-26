@@ -1,6 +1,3 @@
-import utils.warnings  # noqa: F401
-
-# isort: split
 import numpy as np
 import openproblems
 import openproblems.tools.utils

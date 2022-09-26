@@ -43,7 +43,7 @@ jobs:
       BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1000
 
@@ -138,7 +138,7 @@ jobs:
       run: |
         sudo rm -rf /opt/remove/*/*
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -229,7 +229,7 @@ jobs:
           exit 1
         fi
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1000
 
@@ -416,12 +416,17 @@ jobs:
         python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH} /tmp/website
         python workflow/generate_website_markdown.py /tmp/website
 
+    - name: Rename nextflow log
+      if: always()
+      run: |
+        mv /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log /tmp/nextflow.log
+
     - name: Upload nextflow log
       if: always()
       uses: actions/upload-artifact@main
       with:
         name: nextflow.log
-        path: /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log
+        path: /tmp/nextflow.log
 
   run_full_benchmark:
     needs: run_test_benchmark

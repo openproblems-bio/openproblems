@@ -107,15 +107,14 @@ def subsample_even(adata, n_obs, even_obs):
         Subsampled AnnData object
     """
     values = adata.obs[even_obs].unique()
-    adata_out = None
+    adatas = []
     n_obs_per_value = n_obs // len(values)
     for v in values:
         adata_subset = adata[adata.obs[even_obs] == v].copy()
         sc.pp.subsample(adata_subset, n_obs=min(n_obs_per_value, adata_subset.shape[0]))
-        if adata_out is None:
-            adata_out = adata_subset
-        else:
-            adata_out = adata_out.concatenate(adata_subset, batch_key="_obs_batch")
+        adatas.append(adata_subset)
+
+    adata_out = anndata.concat(adatas, label="_obs_batch")
 
     adata_out.uns = adata.uns
     adata_out.varm = adata.varm

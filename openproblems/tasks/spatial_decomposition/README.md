@@ -48,7 +48,7 @@ In the spatial target, ground-truth cell-type proportions are stored in
 `adata_spatial.obsm["proportions_true"]`.
 
 Methods should return only the spatial data with inferred proportions stored in
-`adata_spatial.obsm["proportions_pred"]`.
+`adata_spatial.obsm["proportions_pred"]`. Proportions must sum to one.
 
 Metrics shall compare `adata_spatial.obsm['proportions_pred']` to
 `adata_spatial.obsm['proportions_true']`.

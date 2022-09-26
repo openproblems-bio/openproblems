@@ -29,7 +29,9 @@ def _scanorama_embed(adata):
 
 
 def _scanorama_full(adata):
-    return _scanorama(adata, use_rep="X_pca")
+    adata = _scanorama(adata, use_rep="X_pca")
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
+    return adata
 
 
 @_scanorama_method(method_name="Scanorama (full/unscaled)")
