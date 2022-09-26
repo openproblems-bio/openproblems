@@ -54,8 +54,7 @@ def load_tnbc_data(test=False):
         utils.filter_genes_cells(adata)
 
         # Subsample data to random cell from each cell type
-        msk = adata.obs_names.isin(adata.obs.groupby("label").head(20).index)
-        adata = adata[msk, :]
+        adata = utils.subsample_even(adata, n_obs=500, even_obs="label")
 
         # Add noise to ensure no genes are empty -- filtering genes could remove ligands
         empty_gene_idx = np.argwhere(adata.X.sum(axis=0).A.flatten() == 0).flatten()
