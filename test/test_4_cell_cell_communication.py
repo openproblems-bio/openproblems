@@ -1,8 +1,4 @@
 """Specific tests for the dimensionality_reduction task"""
-import tempfile
-import utils.warnings  # noqa: F401
-
-# isort: split
 import numpy as np
 import openproblems
 import openproblems.tasks._cell_cell_communication._common as common
@@ -11,6 +7,7 @@ import openproblems.tasks._cell_cell_communication._common.utils
 import os
 import pandas as pd
 import pytest
+import tempfile
 import unittest
 import utils.docker
 import utils.git
