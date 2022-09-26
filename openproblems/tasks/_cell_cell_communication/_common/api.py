@@ -175,7 +175,7 @@ def sample_dataset(merge_keys):
 
     # keep only the top 10 most variable
     sc.pp.highly_variable_genes(adata, n_top_genes=10)
-    adata = adata[:, adata.var["highly_variable"]]
+    adata = adata[:, adata.var["highly_variable"]].copy()
     # hard-code var names to known interactions
     adata.var.index = adata.uns["var_names_all"] = [
         "LGALS9",
