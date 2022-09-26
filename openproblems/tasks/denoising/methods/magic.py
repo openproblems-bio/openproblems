@@ -25,6 +25,8 @@ def _magic(adata, solver, normtype="sqrt", **kwargs):
     elif normtype == "log":
         norm_fn = np.log1p
         denorm_fn = np.expm1
+    else:
+        raise NotImplementedError
 
     X, libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
