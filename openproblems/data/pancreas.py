@@ -53,7 +53,7 @@ def load_pancreas(test=False, integer_only=False):
         adata = sc.read(filepath)
 
     # NOTE: X contains counts that are normalized with scran
-    adata.layers["log_scran_pooling"] = adata.X
+    adata.layers["log_normalized"] = adata.X
     adata.X = adata.layers["counts"]
     del adata.layers["counts"]
 
