@@ -22,7 +22,6 @@ def _scvi(adata, test: bool = False, max_epochs: Optional[int] = None):
     if test:
         max_epochs = max_epochs or 2
 
-    adata = log_scran_pooling(adata)
 
     adata.obs.rename(
         columns={"labels": "lab"}, inplace=True

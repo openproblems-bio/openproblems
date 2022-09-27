@@ -20,7 +20,6 @@ def _mnn(adata):
     from scib.integration import runMNN
     from scib.preprocessing import reduce_data
 
-    adata = log_scran_pooling(adata)
 
     adata = runMNN(adata, "batch")
     reduce_data(adata, umap=False)

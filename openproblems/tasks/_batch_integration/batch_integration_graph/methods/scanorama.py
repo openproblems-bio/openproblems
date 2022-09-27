@@ -19,7 +19,6 @@ def _scanorama(adata, use_rep):
     from scib.integration import runScanorama
     from scib.preprocessing import reduce_data
 
-    adata = log_scran_pooling(adata)
 
     adata = runScanorama(adata, "batch")
     reduce_data(adata, umap=False, use_rep=use_rep)

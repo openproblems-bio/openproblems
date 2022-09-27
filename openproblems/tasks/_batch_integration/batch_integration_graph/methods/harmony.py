@@ -28,7 +28,6 @@ def _harmony(
 
     import scanpy as sc
 
-    adata = log_scran_pooling(adata)
 
 
     if test:

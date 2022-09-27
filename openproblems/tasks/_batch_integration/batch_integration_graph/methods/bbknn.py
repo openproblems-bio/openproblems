@@ -29,7 +29,6 @@ def _run_bbknn(
 
     kwargs = dict(batch_key=batch, copy=True)
     
-    adata = log_scran_pooling(adata)
 
     if test:
         n_pca = n_pca or 10
