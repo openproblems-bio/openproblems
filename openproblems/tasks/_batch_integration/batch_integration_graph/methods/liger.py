@@ -38,7 +38,6 @@ def _liger(
         nrep = nrep or 3
         thresh = thresh or 5e-5
 
-
     adata.obsm["X_emb"] = _r_liger(adata, batch, k, nrep, thresh)
     neighbors(adata, use_rep="X_emb")
 

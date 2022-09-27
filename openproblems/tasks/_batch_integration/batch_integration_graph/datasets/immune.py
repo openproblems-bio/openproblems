@@ -20,7 +20,7 @@ def immune_batch(test=False):
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)
 
-    adata.layers['log_normalized'] = adata.layers["log_scran_pooling"]
+    adata.layers["log_normalized"] = adata.layers["log_scran_pooling"]
     adata.X = adata.layers["log_scran_pooling"]
 
     sc.tl.pca(

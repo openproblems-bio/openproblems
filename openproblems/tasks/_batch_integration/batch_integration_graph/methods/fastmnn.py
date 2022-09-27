@@ -34,7 +34,6 @@ def _fastmnn(
         k = k or 20
         n_pca = n_pca or 50
 
-
     return _r_fastmnn(adata, batch, k, n_pca, return_features=return_features)
 
 
