@@ -24,7 +24,6 @@ def _harmony(
     max_iter_cluster: Optional[int] = None,
 ):
     from harmony import harmonize
-    from openproblems.tools.normalize import log_scran_pooling
 
     import scanpy as sc
 

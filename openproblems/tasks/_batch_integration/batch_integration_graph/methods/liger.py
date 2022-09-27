@@ -26,7 +26,6 @@ def _liger(
     nrep: Optional[int] = None,
     thresh: Optional[float] = None,
 ):
-    from openproblems.tools.normalize import log_scran_pooling
     from scanpy.pp import neighbors
 
     if test:

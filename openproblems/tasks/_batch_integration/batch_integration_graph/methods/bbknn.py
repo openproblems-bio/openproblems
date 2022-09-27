@@ -22,7 +22,6 @@ def _run_bbknn(
     annoy_n_trees: Optional[int] = None,
     neighbors_within_batch: Optional[int] = None,
 ):
-    from openproblems.tools.normalize import log_scran_pooling
     from scanpy.preprocessing import pca
 
     import bbknn

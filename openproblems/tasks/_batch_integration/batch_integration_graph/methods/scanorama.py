@@ -15,7 +15,6 @@ _scanorama_method = functools.partial(
 
 
 def _scanorama(adata, use_rep):
-    from openproblems.tools.normalize import log_scran_pooling
     from scib.integration import runScanorama
     from scib.preprocessing import reduce_data
 

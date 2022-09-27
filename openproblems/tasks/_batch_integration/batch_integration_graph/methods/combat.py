@@ -15,7 +15,6 @@ _combat_method = functools.partial(
 
 
 def _combat(adata):
-    from openproblems.tools.normalize import log_scran_pooling
     from scib.integration import runCombat
     from scib.preprocessing import reduce_data
 

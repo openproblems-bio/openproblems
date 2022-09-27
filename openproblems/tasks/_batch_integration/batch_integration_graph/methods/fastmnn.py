@@ -25,7 +25,6 @@ def _fastmnn(
     k: Optional[int] = None,
     n_pca: Optional[int] = None,
 ):
-    from openproblems.tools.normalize import log_scran_pooling
 
     if test:
         k = k or 5
