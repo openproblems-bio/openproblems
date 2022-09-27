@@ -16,7 +16,6 @@ _mnn_method = functools.partial(
 
 def _mnn(adata):
     from openproblems.tools.normalize import log_scran_pooling
-
     from scib.integration import runMNN
     from scib.preprocessing import reduce_data
 

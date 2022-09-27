@@ -28,7 +28,6 @@ def _run_bbknn(
     import bbknn
 
     kwargs = dict(batch_key=batch, copy=True)
-    
 
     if test:
         n_pca = n_pca or 10

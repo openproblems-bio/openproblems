@@ -29,7 +29,6 @@ def _harmony(
     import scanpy as sc
 
 
-
     if test:
         n_pca = n_pca or 10
         max_iter_harmony = max_iter_harmony or 3
