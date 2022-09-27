@@ -18,7 +18,6 @@ def _mnn(adata):
     from scib.integration import runMNN
     from scib.preprocessing import reduce_data
 
-
     adata = runMNN(adata, "batch")
     reduce_data(adata, umap=False)
     adata.uns["method_code_version"] = check_version("mnnpy")
