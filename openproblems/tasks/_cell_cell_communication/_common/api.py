@@ -5,6 +5,19 @@ import numpy as np
 import pandas as pd
 import scanpy as sc
 
+SAMPLE_RECEPTOR_NAMES = [
+    "LGALS9",
+    "PTPRC",
+    "LRP1",
+    "CD47",
+    "CD44",
+    "COL1A1",
+    "ADAM10",
+    "SIRPA",
+    "COL4A1",
+    "THBS2",
+]
+
 
 def assert_is_subset(
     subset,
@@ -174,21 +187,12 @@ def sample_dataset(merge_keys):
     adata = load_sample_data()
 
     # keep only the top 10 most variable
-    sc.pp.highly_variable_genes(adata, n_top_genes=10)
-    adata = adata[:, adata.var["highly_variable"]].copy()
+    sc.pp.highly_variable_genes(adata, n_top_genes=len(SAMPLE_RECEPTOR_NAMES))
+    adata = adata[:, adata.var["highly_variable"]]
+    # ensure we got the right number of genes
+    adata = adata[:, : len(SAMPLE_RECEPTOR_NAMES)].copy()
     # hard-code var names to known interactions
-    adata.var.index = adata.uns["var_names_all"] = [
-        "LGALS9",
-        "PTPRC",
-        "LRP1",
-        "CD47",
-        "CD44",
-        "COL1A1",
-        "ADAM10",
-        "SIRPA",
-        "COL4A1",
-        "THBS2",
-    ]
+    adata.var.index = adata.uns["var_names_all"] = SAMPLE_RECEPTOR_NAMES
     # transfer label
     adata.obs["label"] = adata.obs.cell_name
 
