@@ -27,6 +27,7 @@ Metrics for batch integration (graph) aim to TODO
 * **TODO**: TODO
 
 ## API
+
 WARNING: other than most tasks, `adata.X` should contain log-normalized data.
    This is the case as we are comparing the results of integration on the normalized
    features pre- and post-integration and the data comes from different technologies.
