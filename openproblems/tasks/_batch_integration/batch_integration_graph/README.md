@@ -27,6 +27,10 @@ Metrics for batch integration (graph) aim to TODO
 * **TODO**: TODO
 
 ## API
+WARNING: other than most tasks, `adata.X` should contain log-normalized data.
+   This is the case as we are comparing the results of integration on the normalized
+   features pre- and post-integration and the data comes from different technologies.
+   For UMI data, the data is scran-normalized, full-length data is TPM-normalized.
 
 Datasets should contain the following attributes:
 
@@ -36,9 +40,7 @@ Datasets should contain the following attributes:
 * `adata.obsm['X_uni']` with the PCA embedding of the unintegrated representation
 * `adata.obsp['uni_connectivities']` with an unintegrated connectivity matrix generated
   by  `scanpy.pp.neighbors()`
-* `adata.X` WARNING: other than most tasks, this should contain log-normalized data.
-   This is the case as we are comparing against the normalized un-integrated data and
-   the data compes from different origins
+* `adata.X` with log-normalized data
 * `adata.layers['log_normalized']` with log-normalized data
 
 Methods can take anything from datasets as input and should assign output to:
