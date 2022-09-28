@@ -66,6 +66,7 @@ def _fastmnn_feature(
         adata, batch, test=test, k=k, n_pca=n_pca, return_features=True
     ).T
     reduce_data(adata, umap=False)
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
     adata.uns["method_code_version"] = check_r_version("batchelor")
     return adata
 

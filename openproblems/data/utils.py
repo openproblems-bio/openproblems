@@ -64,6 +64,8 @@ def loader(data_url, data_reference):
                 adata = func(*args, **kwargs)
                 adata.strings_to_categoricals()
                 adata.uns["_from_cache"] = False
+                if "var_names_all" not in adata.uns:
+                    adata.uns["var_names_all"] = adata.var.index.to_numpy()
                 if "counts" not in adata.layers:
                     adata.layers["counts"] = adata.X
                 try:
@@ -81,6 +83,9 @@ def loader(data_url, data_reference):
 
 def filter_genes_cells(adata):
     """Remove empty cells and genes."""
+    if "var_names_all" not in adata.uns:
+        # fill in original var names before filtering
+        adata.uns["var_names_all"] = adata.var.index.to_numpy()
     sc.pp.filter_genes(adata, min_cells=1)
     sc.pp.filter_cells(adata, min_counts=2)
 
@@ -102,15 +107,14 @@ def subsample_even(adata, n_obs, even_obs):
         Subsampled AnnData object
     """
     values = adata.obs[even_obs].unique()
-    adata_out = None
+    adatas = []
     n_obs_per_value = n_obs // len(values)
     for v in values:
         adata_subset = adata[adata.obs[even_obs] == v].copy()
         sc.pp.subsample(adata_subset, n_obs=min(n_obs_per_value, adata_subset.shape[0]))
-        if adata_out is None:
-            adata_out = adata_subset
-        else:
-            adata_out = adata_out.concatenate(adata_subset, batch_key="_obs_batch")
+        adatas.append(adata_subset)
+
+    adata_out = anndata.concat(adatas, label="_obs_batch")
 
     adata_out.uns = adata.uns
     adata_out.varm = adata.varm
