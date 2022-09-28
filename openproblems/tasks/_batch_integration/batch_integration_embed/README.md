@@ -19,13 +19,18 @@ This sub-task was taken from a
 methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
 
 ## API
+WARNING: other than most tasks, `adata.X` should contain log-normalized data.
+   This is the case as we are comparing the results of integration on the normalized
+   features pre- and post-integration and the data comes from different technologies.
+   For UMI data, the data is scran-normalized, full-length data is TPM-normalized.
+
 
 Datasets should contain the following attributes:
 
 * `adata.obs["batch"]` with the batch covariate, and
 * `adata.obs["label"]` with the cell identity label
 * `adata.obsm['X_uni']` with a pre-integration embedding (PCA)
-* `adata.layers['counts']` with raw, integer UMI count data, and
+* `adata.layers['log_normalized']` with log-normalized data
 * `adata.X` with log-normalized data
 
 Methods should assign output to `adata.obsm['X_emb']`.

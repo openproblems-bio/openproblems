@@ -11,6 +11,7 @@ def check_dataset(adata):
     assert "X_uni_pca" in adata.obsm
     assert "batch" in adata.obs
     assert "labels" in adata.obs
+    assert "log_normalized" in adata.layers
 
     return True
 
