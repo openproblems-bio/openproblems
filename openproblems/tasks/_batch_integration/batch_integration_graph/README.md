@@ -31,6 +31,8 @@ Metrics for batch integration (graph) aim to TODO
 WARNING: other than most tasks, `adata.X` should contain log-normalized data.
    This is the case as we are comparing the results of integration on the normalized
    features pre- and post-integration and the data comes from different technologies.
+   In this subtask, we are computing a pre-integration graph on the normalized
+   features.
    For UMI data, the data is scran-normalized, full-length data is TPM-normalized.
 
 Datasets should contain the following attributes:
