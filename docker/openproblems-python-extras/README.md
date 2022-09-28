@@ -16,6 +16,7 @@ Python packages:
 * MulticoreTSNE
 * phate
 * scvi-tools
+* cell2location
 * neuralee
 * tangram-sc
 * torch
