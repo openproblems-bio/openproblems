@@ -2,6 +2,6 @@ boto3==1.24.*
 cmake==3.22.*
 jupyter==1.0.*
 pip
-sagemaker==2.94.*
+sagemaker==2.110.*
 setuptools
 wheel
