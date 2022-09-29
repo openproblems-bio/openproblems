@@ -36,7 +36,6 @@ def test_load_dataset(task_name, dataset_name, test, tempdir, image):
     dataset = getattr(task.datasets, dataset_name)
     adata = dataset(test=test)
     utils.asserts.assert_finite(adata.X)
-    utils.asserts.assert_array_equal(adata.X, adata.layers["counts"])
     adata2 = dataset(test=test)
     assert adata2.shape == adata.shape
     assert adata2.uns["_from_cache"]
