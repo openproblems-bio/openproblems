@@ -34,8 +34,13 @@ def test_load_dataset(task_name, dataset_name, test, tempdir, image):
 
     task = getattr(openproblems.tasks, task_name)
     dataset = getattr(task.datasets, dataset_name)
+    default_layer = task.DEFAULT_LAYER
     adata = dataset(test=test)
     utils.asserts.assert_finite(adata.X)
+    if default_layer == "counts":
+        utils.asserts.assert_array_equal(adata.X, adata.layers["counts"])
+    elif default_layer == "log_normalized":
+        utils.asserts.assert_array_equal(adata.X, adata.layers["log_normalized"])
     adata2 = dataset(test=test)
     assert adata2.shape == adata.shape
     assert adata2.uns["_from_cache"]
