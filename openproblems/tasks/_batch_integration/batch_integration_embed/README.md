@@ -21,8 +21,10 @@ methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
 ## API
 
 WARNING: other than most tasks, `adata.X` should contain log-normalized data.
-   This is the case as we are comparing the results of integration on the normalized
+   This is the case as we are comparing the results of integration on the
    features pre- and post-integration and the data comes from different technologies.
+   In this subtask, we are computing a pre-integration embedding on the normalized
+   features.
    For UMI data, the data is scran-normalized, full-length data is TPM-normalized.
 
 Datasets should contain the following attributes:

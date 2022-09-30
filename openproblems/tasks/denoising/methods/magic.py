@@ -16,15 +16,28 @@ _magic_method = functools.partial(
 )
 
 
-def _magic(adata, solver):
+def _magic(adata, solver, normtype="sqrt", **kwargs):
     from magic import MAGIC
+
+    if normtype == "sqrt":
+        norm_fn = np.sqrt
+        denorm_fn = np.square
+    elif normtype == "log":
+        norm_fn = np.log1p
+        denorm_fn = np.expm1
+    else:
+        raise NotImplementedError
 
     X, libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
     )
-    X = scprep.transform.sqrt(X)
-    Y = MAGIC(solver=solver, verbose=False).fit_transform(X, genes="all_genes")
-    Y = scprep.utils.matrix_transform(Y, np.square)
+
+    X = scprep.utils.matrix_transform(X, norm_fn)
+    Y = MAGIC(solver=solver, **kwargs, verbose=False).fit_transform(
+        X, genes="all_genes"
+    )
+
+    Y = scprep.utils.matrix_transform(Y, denorm_fn)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
 
@@ -36,11 +49,23 @@ def _magic(adata, solver):
     method_name="MAGIC",
 )
 def magic(adata, test=False):
-    return _magic(adata, solver="exact")
+    return _magic(adata, solver="exact", normtype="sqrt")
 
 
 @_magic_method(
     method_name="MAGIC (approximate)",
 )
 def magic_approx(adata, test=False):
-    return _magic(adata, solver="approximate")
+    return _magic(adata, solver="approximate", normtype="sqrt")
+
+
+@method(
+    method_name="KNN Smoothing",
+    paper_name="KNN Smoothing (baseline)",
+    paper_url="https://openproblems.bio",
+    paper_year=2022,
+    code_url="https://github.com/openproblems-bio/openproblems",
+    image="openproblems-python-extras",
+)
+def knn_naive(adata, test=False):
+    return _magic(adata, solver="exact", normtype="log", decay=None, t=1)

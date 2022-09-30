@@ -1,4 +1,4 @@
-cmake==3.18.4  # pinned for #327
+cmake==3.24.1.1  # pinned for #327
 git+https://github.com/BayraktarLab/cell2location.git@7e7aa231cc61ff460da14402fa3b9a1fa3ec69ac
 git+https://github.com/czbiohub/molecular-cross-validation@04d9df0
 git+https://github.com/KrishnaswamyLab/harmonic-alignment@v0.1#subdirectory=python

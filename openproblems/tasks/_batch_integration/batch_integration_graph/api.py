@@ -13,8 +13,7 @@ def check_dataset(adata):
     assert "batch" in adata.obs
     assert "labels" in adata.obs
     assert "uni_connectivities" in adata.obsp
-    assert adata.var_names.is_unique
-    assert adata.obs_names.is_unique
+    assert "log_normalized" in adata.layers
 
     return True
 
@@ -31,12 +30,9 @@ def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()
     adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
-    adata.obs["batch"] = pd.Categorical(
-        np.random.choice(2, adata.shape[0], replace=True).astype(str)
-    )
-    adata.obs["labels"] = pd.Categorical(
-        np.random.choice(5, adata.shape[0], replace=True).astype(str)
-    )
+    adata.layers["log_normalized"] = adata.X
+    adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
+    adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
 
     sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
     return adata

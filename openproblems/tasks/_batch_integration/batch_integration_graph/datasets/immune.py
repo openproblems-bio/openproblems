@@ -22,6 +22,8 @@ def immune_batch(test=False):
     adata.var_names_make_unique()
     adata.obs_names_make_unique()
 
+    adata.X = adata.layers["log_normalized"]
+
     sc.tl.pca(
         adata,
         svd_solver="arpack",

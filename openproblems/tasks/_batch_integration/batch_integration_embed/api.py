@@ -30,6 +30,7 @@ def sample_dataset():
     adata.var.index = adata.var.gene_short_name.astype(str)
     sc.pp.normalize_total(adata)
     sc.pp.log1p(adata)
+    adata.layers["log_normalized"] = adata.X
     adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
     adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
     adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)

@@ -52,8 +52,8 @@ def load_pancreas(test=False, integer_only=False):
         scprep.io.download.download_url(URL, filepath)
         adata = sc.read(filepath)
 
-    # NOTE: X contains counts that are normalized with scran
-    adata.layers["log_scran"] = adata.X
+    # NOTE: adata.X contains log-normalized data, so we're moving it
+    adata.layers["log_normalized"] = adata.X
     adata.X = adata.layers["counts"]
     del adata.layers["counts"]
 

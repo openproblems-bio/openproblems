@@ -23,6 +23,6 @@ def load_zebrafish(test=False):
     if test:
         adata = utils.subsample_even(adata, n_obs=500, even_obs="lab")
         utils.filter_genes_cells(adata)
-        adata = adata[:, :100]
+        adata = adata[:, :100].copy()
         utils.filter_genes_cells(adata)
     return adata
