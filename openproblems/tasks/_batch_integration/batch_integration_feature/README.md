@@ -24,7 +24,6 @@ WARNING: other than most tasks, `adata.X` should contain log-normalized data.
    features.
    For UMI data, the data is scran-normalized, full-length data is TPM-normalized.
 
-
 Datasets should contain the following attributes:
 
 * `adata.obs["batch"]` with the batch covariate, and
