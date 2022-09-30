@@ -28,6 +28,13 @@ Metrics for batch integration (graph) aim to TODO
 
 ## API
 
+WARNING: other than most tasks, `adata.X` should contain log-normalized data.
+   This is the case as we are comparing the results of integration on the normalized
+   features pre- and post-integration and the data comes from different technologies.
+   In this subtask, we are computing a pre-integration graph on the normalized
+   features.
+   For UMI data, the data is scran-normalized, full-length data is TPM-normalized.
+
 Datasets should contain the following attributes:
 
 * `adata.obs["batch"]` with the batch covariate,
@@ -37,6 +44,7 @@ Datasets should contain the following attributes:
 * `adata.obsp['uni_connectivities']` with an unintegrated connectivity matrix generated
   by  `scanpy.pp.neighbors()`
 * `adata.X` with log-normalized data
+* `adata.layers['log_normalized']` with log-normalized data
 
 Methods can take anything from datasets as input and should assign output to:
 
