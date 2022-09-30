@@ -1,6 +1,5 @@
 from ....data.sample import load_sample_data
 from ....tools.decorators import dataset
-
 import numpy as np
 import scanpy as sc
 
@@ -10,7 +9,7 @@ def check_dataset(adata):
 
     assert "batch" in adata.obs
     assert "labels" in adata.obs
-    assert "log_scran_pooling" in adata.layers
+    assert "log_normalized" in adata.layers
     assert "counts" in adata.layers
     assert adata.var_names.is_unique
     assert adata.obs_names.is_unique
@@ -20,8 +19,8 @@ def check_dataset(adata):
 
 def check_method(adata):
     """Check that method output fits expected API."""
-    assert "log_scran_pooling" in adata.layers
-    assert adata.layers["log_scran_pooling"] is not adata.X
+    assert "log_normalized" in adata.layers
+    assert adata.layers["log_normalized"] is not adata.X
     return True
 
 
@@ -37,7 +36,7 @@ def sample_dataset():
     adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
     adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
     adata.layers["counts"] = adata.X
-    adata.layers["log_scran_pooling"] = adata.X.multiply(
+    adata.layers["log_normalized"] = adata.X.multiply(
         10000 / adata.X.sum(axis=1)
     ).tocsr()
     adata.var_names_make_unique()
