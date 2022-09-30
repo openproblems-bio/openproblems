@@ -7,6 +7,8 @@ from . import metrics
 _task_name = "Cell-Cell Communication Inference (Source-Target)"
 _task_summary = "Detect interactions between source and target cell types"
 
+DEFAULT_LAYER = "counts"
+
 DATASETS = get_callable_members(datasets)
 METHODS = get_callable_members(methods)
 METRICS = get_callable_members(metrics)
