@@ -9,6 +9,8 @@ _task_summary = (
     "Reduction of high-dimensional datasets to 2D for visualization & interpretation"
 )
 
+DEFAULT_LAYER = "counts"
+
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)
 METRICS = utils.get_callable_members(metrics)
