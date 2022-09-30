@@ -46,5 +46,5 @@ def sample_dataset():
 
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
-    adata.X[0, 0] = adata.X[0, 0] + 1
+    adata.X = adata.X.multiply(2)
     return adata

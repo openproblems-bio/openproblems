@@ -17,13 +17,21 @@ methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
 
 ## API
 
+WARNING: other than most tasks, `adata.X` should contain log-normalized data.
+   This is the case as we are comparing the results of integration on the
+   features pre- and post-integration and the data comes from different technologies.
+   In this subtask, we are computing a pre-integration embedding on the normalized
+   features.
+   For UMI data, the data is scran-normalized, full-length data is TPM-normalized.
+
+
 Datasets should contain the following attributes:
 
 * `adata.obs["batch"]` with the batch covariate, and
 * `adata.obs["label"]` with the cell identity label
 * `adata.layers['counts']` with raw, integer UMI count data,
-* `adata.layers['log_scran_pooling']` with log-normalized data and
-* `adata.X` with raw, integer UMI count data
+* `adata.layers['log_normalized']` with log-normalized data and
+* `adata.X` with log-normalized data
 
 Methods should store their a batch-corrected gene expression matrix in `adata.X`.
 
@@ -42,7 +50,7 @@ and highly variable gene selection:
 
 Metrics for this task compare:
 
-* `adata.X` (corrected adata) with `adata.layers['log_scran_pooling']` (uncorrected data)
+* `adata.X` (corrected adata) with `adata.layers['log_normalized']` (uncorrected data)
 
 To reuse metrics functions from `scIB`, [`metrics._utils._get_split`](metrics/_utils.py)
 separates the combined anndata into an integrated and an unintegrated anndata object.
