@@ -1,2 +1,2 @@
-from .batch_integration_graph import immune_batch_log_scran
-from .batch_integration_graph import pancreas_batch_log_scran
+from ...batch_integration_graph.datasets.immune import immune_batch
+from ...batch_integration_graph.datasets.pancreas import pancreas_batch
