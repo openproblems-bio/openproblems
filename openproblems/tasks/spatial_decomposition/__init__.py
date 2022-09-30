@@ -9,6 +9,8 @@ _task_summary = (
     "Calling cell-type compositions for spot-based spatial transcriptomics data"
 )
 
+DEFAULT_LAYER = "counts"
+
 DATASETS = get_callable_members(datasets)
 METHODS = get_callable_members(methods)
 METRICS = get_callable_members(metrics)
