@@ -2,7 +2,6 @@ from ....data.sample import load_sample_data
 from ....tools.decorators import dataset
 
 import numpy as np
-import pandas as pd
 import scanpy as sc
 
 
