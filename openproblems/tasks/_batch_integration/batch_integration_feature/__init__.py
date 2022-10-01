@@ -4,7 +4,7 @@ from . import datasets
 from . import methods
 from . import metrics
 
-_task_name = "Batch integration embed"
+_task_name = "Batch integration feature"
 _task_summary = (
     "Removing batch effects while preserving biological variation (feature output)"
 )
