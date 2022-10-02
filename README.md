@@ -40,10 +40,10 @@ Formalizing and benchmarking open problems in single-cell genomics.
 Full tasks (>1 datasets, >5 methods):
 
 * Batch integration - Daniel Strobl (@danielStrobl)
+* Cell-cell communication - Daniel Dimitrov (@dbdimitrov)
 * Dimensionality reduction - Michael Vinyard (@mvinyard) and Luke Zappia (@lazappi)
 * Label projection - Nick Markov (@mxposed)
 * Spatial deconvolution - Alma Anderson (@almaan) and Giovanni Palla (@giovp)
-* Cell-cell communication - Daniel Dimitrov (@dbdimitrov)
 
 Task stubs:
 

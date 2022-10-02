@@ -6,6 +6,60 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 1
 
+  - package-ecosystem: "pip"
+    directory: "/docker/openproblems"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 1
+
+  - package-ecosystem: "pip"
+    directory: "/docker/openproblems-github-actions"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 1
+
+  - package-ecosystem: "pip"
+    directory: "/docker/openproblems-python-batch-integration"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 1
+
+  - package-ecosystem: "pip"
+    directory: "/docker/openproblems-python-extras"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 1
+
+  - package-ecosystem: "pip"
+    directory: "/docker/openproblems-python-scvi"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 1
+
+  - package-ecosystem: "pip"
+    directory: "/docker/openproblems-python-tf2.4"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 1
+
+  - package-ecosystem: "pip"
+    directory: "/docker/openproblems-r-base"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 1
+
+  - package-ecosystem: "pip"
+    directory: "/docker/openproblems-r-extras"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 1
+
+  - package-ecosystem: "pip"
+    directory: "/docker/openproblems-r-pytorch"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 1
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
