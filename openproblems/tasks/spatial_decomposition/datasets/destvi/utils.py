@@ -148,7 +148,7 @@ def generate_synthetic_dataset(
     for ct in range(C):
         slice_ind = np.where(sc_anndata.obs["cell_type"] == ct)
         slice_counts = sc_anndata.X[slice_ind]
-        slice_normalized = slice_counts / np.sum(slice_counts, axis=1)[:, np.newaxis]
+        slice_normalized = slice_counts / slice_counts.sum(1)
         slice_embedding = PCA(n_components=10).fit_transform(
             np.log(1 + 1e4 * slice_normalized)
         )
