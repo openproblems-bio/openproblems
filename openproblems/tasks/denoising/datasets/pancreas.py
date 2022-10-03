@@ -1,15 +1,17 @@
-from ....data.mouse_blood_olssen_labelled import load_olsson_2016_mouse_blood
-from ....tools.decorators import dataset
-from . import utils
+from .....data.pancreas import load_pancreas
+from .....tools.decorators import dataset
+
+import scanpy as sc
 
 
 @dataset(
-    "Mouse myeloid lineage differentiation",
-    data_url=load_olsson_2016_mouse_blood.metadata["data_url"],
-    data_reference=load_olsson_2016_mouse_blood.metadata["data_reference"],
-    dataset_summary="Myeloid lineage differentiation from mouse blood. "
-    "Sequenced by SMARTseq in 2016 by Olsson et al.",
-    image="openproblems-python-extras",
+    dataset_name="Pancreas (by batch)",
+    data_url=load_pancreas.metadata["data_url"],
+    data_reference=load_pancreas.metadata["data_reference"],
+    dataset_summary="Human pancreatic islet scRNA-seq data from 6 datasets "
+    "across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, "
+    "and SMARTER-seq).",
+    image="openproblems",
 )
 def olsson_2016_mouse_blood(test=False):
     adata = load_olsson_2016_mouse_blood(test=test)
