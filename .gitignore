@@ -150,3 +150,5 @@ nf-openproblems
 scratch/
 openproblems/results/
 openproblems/work/
+batch_embed.txt
+immune.h5ad

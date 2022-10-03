@@ -25,6 +25,7 @@ def _fastmnn(
     k: Optional[int] = None,
     n_pca: Optional[int] = None,
 ):
+
     if test:
         k = k or 5
         n_pca = n_pca or 10
