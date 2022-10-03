@@ -13,7 +13,7 @@ import scanpy as sc
     "and SMARTER-seq).",
     image="openproblems",
 )
-def olsson_2016_mouse_blood(test=False):
-    adata = load_olsson_2016_mouse_blood(test=test)
+def pancreas(test=False):
+    adata = load_pancreas(test)
     adata = utils.split_data(adata)
     return adata
