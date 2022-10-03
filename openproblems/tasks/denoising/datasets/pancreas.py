@@ -13,7 +13,7 @@ import scanpy as sc
     "and SMARTER-seq).",
     image="openproblems",
 )
-def pancreas(test=False, integer_only=True, techkeeps=[-3]):
-    adata = load_pancreas(test)
+def pancreas(test=False):
+    adata = load_pancreas(test, integer_only=True, techkeeps=[-3])
     adata = utils.split_data(adata)
     return adata
