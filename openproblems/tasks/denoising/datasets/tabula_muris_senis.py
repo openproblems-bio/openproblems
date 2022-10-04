@@ -11,7 +11,7 @@ from . import utils
     "organs and tissues across the mouse lifespan. Split into train/test randomly.",
 )
 def tabula_muris_senis_lung_random(test=False):
-    adata = openproblems.data.tabula_muris_senis.load_tabula_muris_senis(organ_list=[“lung”], method_list=[“droplet”])
+    adata = openproblems.data.tabula_muris_senis.load_tabula_muris_senis(organ_list=["lung"], method_list=["droplet"])
     return adata
 
   def pbmc(test=False):
