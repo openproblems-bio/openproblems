@@ -18,5 +18,5 @@ def knn_smoothing(adata, test=False):
     adata.uns["method_code_version"] = check_version("knn_smooth")
     X = adata.obsm["train"].transpose().toarray()
     X = X.astype(np.float64)
-    adata.obsm["train"] = (knn_smooth.knn_smoothing(X, k=10)).transpose()
+    adata.obsm["denoised"] = (knn_smooth.knn_smoothing(X, k=10)).transpose()
     return adata
