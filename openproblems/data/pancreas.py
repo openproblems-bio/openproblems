@@ -12,14 +12,14 @@ URL = "https://ndownloader.figshare.com/files/36086813"
 
 
 @utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/s41592-021-01336-8")
-def load_pancreas(test=False, integer_only=False, techkeeps=[0, -3, -2]):
+def load_pancreas(test=False, integer_only=False, smartseq_only=False):
     """Download pancreas data from figshare."""
     if test:
         # load full data first, cached if available
         adata = load_pancreas(test=False, integer_only=integer_only)
 
         keep_celltypes = adata.obs["celltype"].dtype.categories[[0, 3]]
-        keep_techs = adata.obs["tech"].dtype.categories[techkeeps]
+        keep_techs = adata.obs["tech"].dtype.categories[[0, -3, -2]]
         keep_tech_idx = adata.obs["tech"].isin(keep_techs)
         keep_celltype_idx = adata.obs["celltype"].isin(keep_celltypes)
         adata = adata[keep_tech_idx & keep_celltype_idx].copy()
@@ -74,7 +74,8 @@ def _get_pancreas_integer(adata: ad.AnnData):
     See https://github.com/theislab/scib-reproducibility/tree/main/notebooks/data_preprocessing/pancreas # noqa: E501
     """
     is_int = ["smartseq2"]
-    is_int += ["inDrop{}".format(x) for x in range(1, 5)]
+    if not smartseq_only:
+        is_int += ["inDrop{}".format(x) for x in range(1, 5)]
 
     keep = np.zeros(len(adata)).astype(bool)
 
