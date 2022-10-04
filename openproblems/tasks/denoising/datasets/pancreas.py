@@ -14,6 +14,6 @@ from ....tools.decorators import dataset
     image="openproblems",
 )
 def pancreas(test=False):
-    adata = load_pancreas(test, integer_only=True, techkeeps=[-3])
+    adata = load_pancreas(test, integer_only=True, smartseq_only=True)
     adata = utils.split_data(adata)
     return adata
