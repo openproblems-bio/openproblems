@@ -66,7 +66,7 @@ def load_pancreas(test=False, integer_only=False):
     return adata
 
 
-def _get_pancreas_integer(adata: ad.AnnData, smartseq_only=False):
+def _get_pancreas_integer(adata: ad.AnnData):
     """Transform counts to integer.
 
     For some platforms the pancreas data set only have processed counts.
