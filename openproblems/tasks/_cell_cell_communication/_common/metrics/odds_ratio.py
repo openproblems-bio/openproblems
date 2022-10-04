@@ -9,9 +9,8 @@ def odds_ratio(adata, merge_keys, top_n=100):
     # Join benchmark (assumed truth) and ccc results
     # Get /w ccc_target and a response [0, 1] column
     gt = adata.uns["ccc_target"].merge(
-        adata.uns["ccc_pred"], on=merge_keys, how="right"
+        adata.uns["ccc_pred"], on=merge_keys, how="inner"
     )
-    gt = gt[gt["response"].notna()]
 
     # assign the top rank interactions to 1
     a = np.zeros(len(gt["score"]))
