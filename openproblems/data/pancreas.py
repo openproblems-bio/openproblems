@@ -58,7 +58,7 @@ def load_pancreas(test=False, integer_only=False, smartseq_only=False):
     del adata.layers["counts"]
 
     if integer_only:
-        adata = _get_pancreas_integer(adata)
+        adata = _get_pancreas_integer(adata, smartseq_only=smartseq_only)
 
     # Ensure there are no cells or genes with 0 counts
     utils.filter_genes_cells(adata)
@@ -66,7 +66,7 @@ def load_pancreas(test=False, integer_only=False, smartseq_only=False):
     return adata
 
 
-def _get_pancreas_integer(adata: ad.AnnData):
+def _get_pancreas_integer(adata: ad.AnnData, smartseq_only=False):
     """Transform counts to integer.
 
     For some platforms the pancreas data set only have processed counts.
