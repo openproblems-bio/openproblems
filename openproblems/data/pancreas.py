@@ -58,7 +58,7 @@ def load_pancreas(test=False, integer_only=False):
     del adata.layers["counts"]
 
     if integer_only:
-        adata = _get_pancreas_integer(adata, smartseq_only=smartseq_only)
+        adata = _get_pancreas_integer(adata)
 
     # Ensure there are no cells or genes with 0 counts
     utils.filter_genes_cells(adata)
