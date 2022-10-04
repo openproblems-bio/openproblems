@@ -12,7 +12,7 @@ URL = "https://ndownloader.figshare.com/files/36086813"
 
 
 @utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/s41592-021-01336-8")
-def load_pancreas(test=False, integer_only=False, smartseq_only=False):
+def load_pancreas(test=False, integer_only=False):
     """Download pancreas data from figshare."""
     if test:
         # load full data first, cached if available
@@ -74,8 +74,7 @@ def _get_pancreas_integer(adata: ad.AnnData, smartseq_only=False):
     See https://github.com/theislab/scib-reproducibility/tree/main/notebooks/data_preprocessing/pancreas # noqa: E501
     """
     is_int = ["smartseq2"]
-    if not smartseq_only:
-        is_int += ["inDrop{}".format(x) for x in range(1, 5)]
+    is_int += ["inDrop{}".format(x) for x in range(1, 5)]
 
     keep = np.zeros(len(adata)).astype(bool)
 
