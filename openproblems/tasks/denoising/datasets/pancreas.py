@@ -13,7 +13,7 @@ from . import utils
     image="openproblems",
 )
 def pancreas(test=False):
-    adata = load_pancreas(test, integer_only=True, smartseq_only=True)
+    adata = load_pancreas(test, integer_only=True)
     adata = adata[adata.obs["celltype"].isin(["inDrop1"])]
     adata = utils.split_data(adata)
     return adata
