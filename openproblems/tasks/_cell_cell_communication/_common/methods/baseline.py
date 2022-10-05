@@ -1,5 +1,5 @@
-from ....tools.decorators import method
-from ....tools.utils import check_version
+from .....tools.decorators import method
+from .....tools.utils import check_version
 
 import numpy as np
 import pandas as pd
