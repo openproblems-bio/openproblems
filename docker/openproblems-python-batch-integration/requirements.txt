@@ -2,5 +2,5 @@ annoy==1.17.1
 bbknn==1.5.*
 git+https://github.com/scottgigante-immunai/mnnpy@eb4c551  # branch: patch-2
 git+https://github.com/theislab/scib@a35e300
-scanorama==1.7.*
+scanorama==1.7.0
 scvi-tools~=0.16  # pinned in #313
