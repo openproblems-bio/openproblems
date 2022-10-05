@@ -44,5 +44,7 @@ def seurat(
         script_path=pathlib.Path(__file__).parent.joinpath("seurat.R").as_posix(),
         **kwargs,
     )
+    # R conversion scrambles booleans
+    adata.obs["is_train"] = adata.obs["is_train"].astype(bool)
     adata.uns["method_code_version"] = check_r_version("Seurat")
     return adata
