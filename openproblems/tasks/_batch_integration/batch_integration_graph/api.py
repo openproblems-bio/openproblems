@@ -12,12 +12,13 @@ def check_dataset(adata):
     assert "batch" in adata.obs
     assert "labels" in adata.obs
     assert "uni_connectivities" in adata.obsp
+    assert "uni_distances" in adata.obsp
     assert "log_normalized" in adata.layers
 
     return True
 
 
-def check_method(adata):
+def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
     assert "connectivities" in adata.obsp
     assert "distances" in adata.obsp
