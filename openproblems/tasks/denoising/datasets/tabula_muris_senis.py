@@ -9,6 +9,7 @@ from . import utils
     data_reference=load_tabula_muris_senis.metadata["data_reference"],
     dataset_summary="All lung cells from Tabula Muris Senis, a 500k cell-atlas from 18 "
     "organs and tissues across the mouse lifespan. Split into train/test randomly.",
+    image="openproblems-python-extras",
 )
 def tabula_muris_senis_lung_random(test=False):
     adata = openproblems.data.tabula_muris_senis.load_tabula_muris_senis(
