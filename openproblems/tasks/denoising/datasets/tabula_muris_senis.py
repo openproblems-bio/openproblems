@@ -15,4 +15,5 @@ def tabula_muris_senis_lung_random(test=False):
     adata = load_tabula_muris_senis(
         organ_list=["lung"], method_list=["droplet"]
     )
+    adata = utils.split_data(adata)
     return adata
