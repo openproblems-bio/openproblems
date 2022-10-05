@@ -21,5 +21,5 @@ def scale_batch(adata, batch_key):
 
     var = adata.var.copy()
     adata = scale_batch(adata, batch_key)
-    adata.var = var
+    adata.var = var.loc[adata.var_names]
     return adata
