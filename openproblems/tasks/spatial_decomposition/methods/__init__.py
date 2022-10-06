@@ -9,4 +9,5 @@ from .random import random_proportion_assignment
 from .rctd import rctd
 from .seuratv3 import seuratv3
 from .stereoscope import stereoscope
+from .tangram import tangram
 from .vanillanmf import nmf
