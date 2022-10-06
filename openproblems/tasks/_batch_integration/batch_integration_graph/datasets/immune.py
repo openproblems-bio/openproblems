@@ -19,13 +19,18 @@ def immune_batch(test=False):
 
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)
+    adata.var_names_make_unique()
+    adata.obs_names_make_unique()
+
+    adata.X = adata.layers["log_normalized"]
 
     sc.tl.pca(
         adata,
         svd_solver="arpack",
         return_info=True,
     )
-    adata.obsm["X_uni"] = adata.obsm["X_pca"]
+    adata.obsm["X_uni_pca"] = adata.obsm["X_pca"]
 
-    sc.pp.neighbors(adata, use_rep="X_uni", key_added="uni")
+    sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
+    adata.var_names_make_unique()
     return adata

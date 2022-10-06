@@ -25,6 +25,8 @@ RUN R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"
 COPY ./docker/openproblems-r-extras/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Fix permissions
+RUN chown -R $NB_USER:$NB_GID /home/$NB_USER
 
 USER $NB_UID
 WORKDIR /home/$NB_USER

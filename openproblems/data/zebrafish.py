@@ -5,6 +5,7 @@ import os
 import scprep
 import tempfile
 
+# TODO(@LuckyMD): document relevant link at figshare.com/articles/*
 URL = (
     "https://ndownloader.figshare.com/files/24566651?private_link=e3921450ec1bd0587870"
 )
@@ -22,6 +23,6 @@ def load_zebrafish(test=False):
     if test:
         adata = utils.subsample_even(adata, n_obs=500, even_obs="lab")
         utils.filter_genes_cells(adata)
-        adata = adata[:, :100]
+        adata = adata[:, :100].copy()
         utils.filter_genes_cells(adata)
     return adata

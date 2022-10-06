@@ -43,7 +43,7 @@ jobs:
       BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1000
 
@@ -138,7 +138,7 @@ jobs:
       run: |
         sudo rm -rf /opt/remove/*/*
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -177,6 +177,7 @@ jobs:
         renv::restore()
         source("./scripts/install_renv.R")
         install_renv("docker/openproblems-r-base/r_requirements.txt")
+        install_renv("docker/openproblems-github-actions/r_requirements.txt")
       shell: Rscript {0}
 
     - name: Pull Docker images
@@ -228,7 +229,7 @@ jobs:
           exit 1
         fi
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1000
 
@@ -397,7 +398,7 @@ jobs:
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run \
-        -revision v1.7 \
+        -revision v1.8 \
         -with-tower \
         -ansi-log false -resume \
         -profile aws,test \
@@ -415,12 +416,17 @@ jobs:
         python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH} /tmp/website
         python workflow/generate_website_markdown.py /tmp/website
 
+    - name: Rename nextflow log
+      if: always()
+      run: |
+        mv /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log /tmp/nextflow.log
+
     - name: Upload nextflow log
       if: always()
       uses: actions/upload-artifact@main
       with:
         name: nextflow.log
-        path: /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log
+        path: /tmp/nextflow.log
 
   run_full_benchmark:
     needs: run_test_benchmark
@@ -441,7 +447,7 @@ jobs:
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
-        TOWER_ACTION_ID: 6v5zG5ZjOWd1zrLGQR3fGL
+        TOWER_ACTION_ID: 7jylKuFGbSN65qSA4NfdFY
       run: |
         generate_parameters()
         {
