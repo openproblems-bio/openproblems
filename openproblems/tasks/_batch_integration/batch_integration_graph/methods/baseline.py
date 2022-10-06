@@ -49,10 +49,10 @@ def random_integration(adata, test=False):
     distances_data = np.random.permutation(distances.data)[: len(row)]
     adata.obsp["distances"] = scipy.sparse.coo_matrix(
         (distances_data, (row, col)), shape=distances.shape
-    )
+    ).tocsr()
     connectivities_data = np.random.permutation(connectivities.data)[: len(row)]
     adata.obsp["connectivities"] = scipy.sparse.coo_matrix(
         (connectivities_data, (row, col)), shape=connectivities.shape
-    )
+    ).tocsr()
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
