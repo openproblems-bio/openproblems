@@ -3,25 +3,20 @@ from ....tools.decorators import method
 from ....tools.utils import check_r_version
 from typing import Optional
 
-import functools
 import pathlib
 
 _seurat = r_function(
     "seurat_wrapper.R", args="sce, n_pcs, k_score, k_filter, script_path"
 )
 
-_seurat_method = functools.partial(
-    method,
+
+@method(
+    method_name="Seurat reference mapping (SCTransform)",
     paper_name="Integrated analysis of multimodal single-cell data",
     paper_url="https://doi.org/10.1016/j.cell.2021.04.048",
     paper_year=2021,
     code_url="https://github.com/satijalab/seurat",
     image="openproblems-r-extras",
-)
-
-
-@_seurat_method(
-    method_name="Seurat reference mapping (SCTransform)",
 )
 def seurat(
     adata,
