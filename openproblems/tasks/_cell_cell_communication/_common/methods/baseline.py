@@ -36,6 +36,8 @@ def random_events(adata, test=False, n_events=1000):
     is_baseline=True,
 )
 def true_events(adata, test=False):
-    adata.uns["ccc_pred"] = adata.uns["ccc_target"]
+    adata.uns["ccc_pred"] = adata.uns["ccc_target"].rename(
+        {"response": "score"}, axis=1
+    )
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
