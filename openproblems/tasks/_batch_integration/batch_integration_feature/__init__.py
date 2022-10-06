@@ -1,13 +1,15 @@
-from ... import utils
+from .... import utils
 from . import api
 from . import datasets
 from . import methods
 from . import metrics
 
-_task_name = "Denoising"
-_task_summary = "Removing noise in sparse single-cell RNA-sequencing count data"
+_task_name = "Batch integration feature"
+_task_summary = (
+    "Removing batch effects while preserving biological variation (feature output)"
+)
 
-DEFAULT_LAYER = "counts"
+DEFAULT_LAYER = "log_normalized"
 
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)

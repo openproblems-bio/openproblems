@@ -7,6 +7,8 @@ from . import metrics
 _task_name = "Regulatory effect prediction"
 _task_summary = "Prediction of gene expression from chromatin accessibility"
 
+DEFAULT_LAYER = "counts"
+
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)
 METRICS = utils.get_callable_members(metrics)
