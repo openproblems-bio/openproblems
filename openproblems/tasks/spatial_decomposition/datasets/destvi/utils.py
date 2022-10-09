@@ -76,7 +76,7 @@ def generate_synthetic_dataset(
     if test:
         K_sampled = K_sampled or 3
         grid_size = grid_size or 5
-        n_cells = 600
+        n_cells = 200
     else:  # pragma: nocover
         K_sampled = K_sampled or 20
         grid_size = grid_size or 10
