@@ -216,7 +216,7 @@ def generate_synthetic_dataset(
             altered_freq, index=st_anndata.obs.index, columns=columns
         )
         # st_anndata.obsm["cell_type"] = freq_df
-        st_anndata.obsm["proportions_true"] = freq_df
+        st_anndata.obsm["proportions_true"] = freq_df.to_numpy()
         st_anndata.obsm["gamma"] = gamma
         st_anndata.obsm["spatial"] = locations
         st_anndata.obs["n_counts"] = np.sum(st_anndata.X, axis=1)
