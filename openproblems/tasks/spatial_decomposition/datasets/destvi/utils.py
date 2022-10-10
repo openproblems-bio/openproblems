@@ -78,11 +78,13 @@ def generate_synthetic_dataset(
         grid_size = grid_size or 5
         n_cells = 200
         knn_cells = 3
+        n_genes = 1000
     else:  # pragma: nocover
         K_sampled = K_sampled or 20
         grid_size = grid_size or 10
         n_cells = None
         knn_cells = 30
+        n_genes = None
 
     script_dir = Path(__file__).resolve().parent
 
@@ -229,6 +231,8 @@ def generate_synthetic_dataset(
     st_anndata.layers["counts"] = st_anndata.X.copy()
 
     merged_anndata = merge_sc_and_sp(sc_anndata, st_anndata)
+    if n_genes is not None:
+        merged_anndata = merged_anndata[:, :n_genes].copy()
 
     return merged_anndata
 
