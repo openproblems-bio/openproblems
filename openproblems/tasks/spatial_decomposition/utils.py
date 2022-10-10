@@ -9,7 +9,10 @@ def merge_sc_and_sp(
     adata_sc: ad.AnnData,
     adata_sp: ad.AnnData,
     batch_key: str = "modality",
+    test: bool = False,
 ) -> ad.AnnData:
+
+    n_genes = 1000
 
     # merge single cell and spatial data
     adata_merged = ad.concat(
@@ -22,6 +25,9 @@ def merge_sc_and_sp(
     )
 
     adata_merged.strings_to_categoricals()
+
+    if test:
+        adata_merged = adata_merged[:, :n_genes].copy()
 
     return adata_merged
 
