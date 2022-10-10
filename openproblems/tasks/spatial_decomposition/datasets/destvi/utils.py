@@ -77,10 +77,12 @@ def generate_synthetic_dataset(
         K_sampled = K_sampled or 3
         grid_size = grid_size or 5
         n_cells = 200
+        knn_cells = 3
     else:  # pragma: nocover
         K_sampled = K_sampled or 20
         grid_size = grid_size or 10
         n_cells = None
+        knn_cells = 30
 
     script_dir = Path(__file__).resolve().parent
 
@@ -152,7 +154,7 @@ def generate_synthetic_dataset(
         slice_embedding = PCA(n_components=10).fit_transform(
             np.log(1 + 1e4 * slice_normalized)
         )
-        knn_graph = kneighbors_graph(slice_embedding, 30, include_self=False)
+        knn_graph = kneighbors_graph(slice_embedding, knn_cells, include_self=False)
         for i, target in enumerate(target_list):
             labels = AgglomerativeClustering(
                 n_clusters=target, connectivity=knn_graph
