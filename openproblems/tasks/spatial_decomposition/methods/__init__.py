@@ -10,4 +10,5 @@ from .nnls import nnls_scipy
 from .rctd import rctd
 from .seuratv3 import seuratv3
 from .stereoscope import stereoscope
+from .tangram import tangram
 from .vanillanmf import nmf
