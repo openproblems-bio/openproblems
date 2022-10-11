@@ -1,3 +1,4 @@
+from .baseline import celltype_integration
 from .baseline import no_integration
 from .baseline import random_integration
 from .bbknn import bbknn_full_scaled
