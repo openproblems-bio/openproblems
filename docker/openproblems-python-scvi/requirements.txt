@@ -1,4 +1,4 @@
-jax==0.3.20
+jax==0.3.21
 jaxlib==0.3.20
 scikit-misc==0.1.*
 scvi-tools~=0.17  # pinned in #313
