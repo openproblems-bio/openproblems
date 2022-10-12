@@ -7,6 +7,8 @@
 #' Set to NA to turn off filtering.
 #' @param k_score int How many neighbors (k) to use when scoring anchors
 
+options(error = rlang::entrace)
+
 # Dependencies
 library(SingleCellExperiment)
 library(Seurat)

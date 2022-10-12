@@ -3,6 +3,8 @@
 #' @param sce_sp SingleCellExperiment spatial data
 #' @param n_pcs int Number of principal components
 
+options(error = rlang::entrace)
+
 library(Seurat)
 library(future)
 
