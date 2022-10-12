@@ -1,3 +1,5 @@
+from .baseline import random_features
+from .baseline import true_features
 from .densmap import densmap_logCPM_1kHVG
 from .densmap import densmap_pca_logCPM_1kHVG
 from .neuralee import neuralee_default
