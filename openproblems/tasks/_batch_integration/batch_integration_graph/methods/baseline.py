@@ -47,14 +47,12 @@ def _randomize_subgraph(distances, connectivities):
 
 def _randomize_graph(distances, connectivities, batch=None):
     if batch is None:
-        return _randomize_subgraph(
-            distances, connectivities, np.arange(distances.shape[0])
-        )
+        return _randomize_subgraph(distances, connectivities)
     else:
         distances_out = scipy.sparse.csr_matrix(distances.shape)
         connectivities_out = scipy.sparse.csr_matrix(connectivities.shape)
         for batch_name in np.unique(batch):
-            idx = np.where(batch == batch_name).flatten()
+            idx = np.argwhere(batch == batch_name).flatten()
             distances_out[idx], connectivities_out[idx] = _randomize_subgraph(
                 distances[idx], connectivities[idx]
             )
@@ -89,7 +87,7 @@ def celltype_integration(adata, test=False):
     adata.obsp["distances"], adata.obsp["connectivities"] = _randomize_graph(
         adata.obsp["uni_distances"],
         adata.obsp["uni_connectivities"],
-        batch=adata.obs["batch"],
+        batch=adata.obs["batch"].to_numpy(),
     )
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata

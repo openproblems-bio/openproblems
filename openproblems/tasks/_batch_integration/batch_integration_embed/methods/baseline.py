@@ -45,7 +45,7 @@ def random_integration(adata, test=False):
 def celltype_integration(adata, test=False):
     adata.obsm["X_emb"] = adata.obsm["X_uni_pca"]
     for batch_name in np.unique(adata.obs["batch"]):
-        batch_idx = np.argwhere(adata.obs["batch"] == batch_name).flatten()
+        batch_idx = np.argwhere(adata.obs["batch"].to_numpy() == batch_name).flatten()
         adata.obsm["X_emb"][batch_idx] = adata.obsm["X_emb"][
             np.random.permutation(batch_idx)
         ]

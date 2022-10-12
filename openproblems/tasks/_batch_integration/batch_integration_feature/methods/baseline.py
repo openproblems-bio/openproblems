@@ -41,7 +41,7 @@ def random_integration(adata, test=False):
 )
 def celltype_integration(adata, test=False):
     for batch_name in np.unique(adata.obs["batch"]):
-        batch_idx = np.argwhere(adata.obs["batch"] == batch_name).flatten()
+        batch_idx = np.argwhere(adata.obs["batch"].to_numpy() == batch_name).flatten()
         adata.X[batch_idx] = adata.X[np.random.permutation(batch_idx)]
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
