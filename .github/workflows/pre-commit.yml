@@ -23,11 +23,11 @@ jobs:
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.10.0
+        uses: styfle/cancel-workflow-action@0.10.1
         with:
           access_token: ${{ github.token }}
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -47,7 +47,7 @@ jobs:
         if: startsWith(runner.os, 'Linux')
         with:
           path: /usr/local/lib/R/site-library
-          key: precommit-${{env.LINUX_VERSION}}-${{env.R_VERSION}}-renv-${{ hashFiles('.pre-commit.r_requirements.txt') }}-
+          key: precommit-${{env.LINUX_VERSION}}-${{env.R_VERSION}}-renv-${{ hashFiles('./docker/openproblems-github-actions/r_requirements.txt') }}-
           restore-keys: |
             precommit-${{env.LINUX_VERSION}}-${{env.R_VERSION}}-renv-
 
@@ -55,7 +55,7 @@ jobs:
         run: |
           renv::restore()
           source("./scripts/install_renv.R")
-          install_renv(".pre-commit.r_requirements.txt")
+          install_renv("./docker/openproblems-github-actions/r_requirements.txt")
         shell: Rscript {0}
 
       - name: Cache pre-commit

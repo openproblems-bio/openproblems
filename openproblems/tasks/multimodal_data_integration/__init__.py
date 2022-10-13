@@ -5,7 +5,9 @@ from . import methods
 from . import metrics
 
 _task_name = "Multimodal Data Integration"
-_task_summary = "TODO"
+_task_summary = "Alignment of cellular profiles from two different modalities"
+
+DEFAULT_LAYER = "counts"
 
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)

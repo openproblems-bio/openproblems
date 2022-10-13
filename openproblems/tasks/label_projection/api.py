@@ -21,6 +21,7 @@ def check_dataset(adata):
 def check_method(adata):
     """Check that method output fits expected API."""
     assert "labels_pred" in adata.obs
+    assert np.issubdtype(adata.obs["is_train"].dtype, bool)
     return True
 
 

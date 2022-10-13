@@ -5,17 +5,19 @@ import scanpy as sc
 import scprep
 import tempfile
 
-URL = "https://ndownloader.figshare.com/files/27346712"
+# sparsified from https://ndownloader.figshare.com/files/27346712
+# TODO(@LuckyMD): change link to figshare.com/articles/*
+URL = "https://figshare.com/ndownloader/files/36872214"
 
 
-@utils.loader(data_url=URL)
+@utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/nature19348")
 def load_olsson_2016_mouse_blood(test=False):
     """Download Olsson, 2016_mouse_blood, Nature, 2016 data from Figshare."""
     if test:
         # load full data first, cached if available
         adata = load_olsson_2016_mouse_blood(test=False)
 
-        # Select 700 genes expressed on most cells
+        # Select 700 genes expressed in most cells
         sc.pp.calculate_qc_metrics(adata, inplace=True)
         top = list(adata.var.nlargest(700, "mean_counts").index.values)
         adata = adata[:, top].copy()

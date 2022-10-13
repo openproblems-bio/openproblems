@@ -1,5 +1,6 @@
 from ...utils import loader
 from ..utils import subset_joint_data
+from .base import DATA_REFERENCE
 from .base import load_scicar
 
 rna_url = (
@@ -28,7 +29,10 @@ atac_genes_url = (
 )
 
 
-@loader(data_url="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117089")
+@loader(
+    data_url="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117089",
+    data_reference=DATA_REFERENCE,
+)
 def load_scicar_mouse_kidney(test=False):
     """Download sci-CAR mouse kidney data from GEO."""
     if test:

@@ -106,7 +106,7 @@ def image_requires_docker(image):
         if not docker_available():
             raise RuntimeError(
                 "The Dockerfile for image {} is newer than the "
-                "latest push, but Docker is not available."
+                "latest push, but Docker is not available.".format(image)
             )
         if docker_image_age(image) < git_file_age:
             import sys
@@ -223,8 +223,10 @@ def run_image(image, script, *args, timeout=None, retries=0):
             return run.run(command, timeout=timeout)
         except Exception as e:
             if retries > 0 and not isinstance(e, exceptions.TimeoutError):
+                time = "time" if retries == 1 else "times"
                 warnings.warn(
-                    "Container failed with {}; retrying".format(type(e).__name__),
+                    f"Container failed with {type(e).__name__}. "
+                    f"Retrying {retries} more {time}",
                     RuntimeWarning,
                 )
                 retries -= 1

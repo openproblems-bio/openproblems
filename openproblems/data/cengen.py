@@ -5,13 +5,16 @@ import scanpy as sc
 import scprep
 import tempfile
 
+# TODO(@LuckyMD): document relevant link at figshare.com/articles/*
 URL = (
     "https://github.com/Munfred/wormcells-data/"
     "releases/download/taylor2020/taylor2020.h5ad"
 )
 
 
-@utils.loader(data_url=URL)
+@utils.loader(
+    data_url=URL, data_reference="https://doi.org/10.1016/j.neuron.2018.07.042"
+)
 def load_cengen(test=False):
     """Download CeNGEN data from GitHub.
 

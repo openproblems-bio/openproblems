@@ -14,22 +14,27 @@ _scanorama_method = functools.partial(
 )
 
 
-def _scanorama(adata, use_rep):
-    from scib.integration import runScanorama
+def _scanorama(adata, use_rep, pca):
+    from scib.integration import scanorama
     from scib.preprocessing import reduce_data
 
-    adata = runScanorama(adata, "batch")
-    reduce_data(adata, umap=False, use_rep=use_rep)
+    # scanorama clears adata.layers
+    layers = adata.layers
+    adata = scanorama(adata, "batch")
+    adata.layers = layers
+    reduce_data(adata, umap=False, use_rep=use_rep, pca=pca)
     adata.uns["method_code_version"] = check_version("scanorama")
     return adata
 
 
 def _scanorama_embed(adata):
-    return _scanorama(adata, use_rep="X_emb")
+    return _scanorama(adata, use_rep="X_emb", pca=False)
 
 
 def _scanorama_full(adata):
-    return _scanorama(adata, use_rep="X_pca")
+    adata = _scanorama(adata, use_rep="X_pca", pca=True)
+    adata.obsm["X_emb"] = adata.obsm["X_pca"]
+    return adata
 
 
 @_scanorama_method(method_name="Scanorama (full/unscaled)")

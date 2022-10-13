@@ -1,6 +1,4 @@
-import utils.warnings  # noqa: F401
-
-# isort: split
+from openproblems.api.hash import docker_labels_from_api
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
 
@@ -10,7 +8,7 @@ import os
 import parameterized
 import sklearn
 import tempfile
-import utils
+import utils.name
 
 
 def test_print(capsys):
@@ -149,6 +147,10 @@ def test_hash(task, function_type, function_name):
     assert h1 == h2
 
 
+def test_hash_docker_api():
+    assert docker_labels_from_api("circleci/python", tag="3.8-bullseye") is None
+
+
 @parameterized.parameterized.expand(
     [
         (dataset, method, metric)
@@ -190,8 +192,8 @@ def test_zero_metric():
     adata = task.api.sample_dataset()
     with tempfile.TemporaryDirectory() as tempdir:
         dataset_file = os.path.join(tempdir, "dataset.h5ad")
+        adata.var = adata.var[[]]
         adata.write_h5ad(dataset_file)
-
         result = main(
             [
                 "evaluate",
@@ -212,6 +214,8 @@ def test_pipeline():
     with tempfile.TemporaryDirectory() as tempdir:
         dataset_file = os.path.join(tempdir, "dataset.h5ad")
         method_file = os.path.join(tempdir, "method.h5ad")
+        version_file = os.path.join(tempdir, "version.txt")
+        result_file = os.path.join(tempdir, "result.txt")
         assert not os.path.isfile(dataset_file)
         assert not os.path.isfile(method_file)
         main(
@@ -227,7 +231,7 @@ def test_pipeline():
             do_print=False,
         )
         assert os.path.isfile(dataset_file)
-        code_version = main(
+        main(
             [
                 "run",
                 "--task",
@@ -236,21 +240,30 @@ def test_pipeline():
                 dataset_file,
                 "--output",
                 method_file,
+                "--version-file",
+                version_file,
                 "logistic_regression_log_cpm",
             ],
             do_print=False,
         )
         assert os.path.isfile(method_file)
+        assert os.path.isfile(version_file)
+        with open(version_file, "r") as handle:
+            code_version = handle.read()
         assert code_version == sklearn.__version__
-        result = main(
+        main(
             [
                 "evaluate",
                 "--task",
                 "label_projection",
                 "--input",
                 method_file,
+                "--output",
+                result_file,
                 "accuracy",
             ],
             do_print=False,
         )
+        with open(result_file, "r") as handle:
+            result = float(handle.read())
         assert isinstance(result, float)

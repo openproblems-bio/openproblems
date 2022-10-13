@@ -17,4 +17,5 @@ Include links to at least one publicly available dataset that could be used.
 Include links to codebases of at least two methods that perform the task.
 
 **Propose metrics**
-Describe at least one metric by which to measure success on the task. It must be able to be applied to the proposed datasets.
+Describe at least one metric by which to measure success on the task. It must be able to
+be applied to the proposed datasets.

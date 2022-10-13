@@ -5,7 +5,11 @@ from . import methods
 from . import metrics
 
 _task_name = "Batch integration graph"
-_task_summary = "TODO"
+_task_summary = (
+    "Removing batch effects while preserving biological variation (graph output)"
+)
+
+DEFAULT_LAYER = "log_normalized"
 
 DATASETS = utils.get_callable_members(datasets)
 METHODS = utils.get_callable_members(methods)

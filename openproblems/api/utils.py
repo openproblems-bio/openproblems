@@ -1,24 +1,9 @@
 import openproblems
 import os
-import sys
 
 
-class RedirectStdout(object):
-    def __init__(self):
-        self._stdout = sys.stdout
-        self._stderr = sys.stderr
-
-    def _flush(self):
-        self._stdout.flush()
-        self._stderr.flush()
-
-    def __enter__(self):
-        self._flush()
-        sys.stdout = self._stderr
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self._flush()
-        sys.stdout = self._stdout
+class NoSuchFunctionError(RuntimeError):
+    pass
 
 
 def module_to_str(module):
@@ -49,7 +34,7 @@ def get_function(task_name, function_type, function_name):
         fun = getattr(functions, function_name)
         assert callable(fun)
     except (AssertionError, AttributeError):
-        raise RuntimeError(
+        raise NoSuchFunctionError(
             "Task {} has no {} '{}'".format(
                 task_name, function_type[:-1], function_name
             )
