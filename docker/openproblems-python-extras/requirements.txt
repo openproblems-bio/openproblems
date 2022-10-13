@@ -11,6 +11,6 @@ pybedtools==0.9.*
 pyensembl==2.0.*
 scvi-tools==0.16.*
 tangram-sc==1.0.*
-tensorflow-cpu==2.7.*
+tensorflow-cpu==2.9.*
 torch==1.12.*
 xgboost==1.6.*
