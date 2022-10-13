@@ -18,7 +18,7 @@ _scanvi_method = functools.partial(
 _scanvi_scarches_method = functools.partial(
     method,
     paper_name="Query to reference single-cell integration with transfer learning",
-    paper_url="https://www.biorxiv.org/content/10.1101/2020.07.16.205997v1",
+    paper_url="https://doi.org/10.1101/2020.07.16.205997",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
     image="openproblems-python-scvi",

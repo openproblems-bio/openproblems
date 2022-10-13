@@ -1,5 +1,5 @@
-jax==0.3.6  # pinned in #313
-jaxlib==0.3.5  # pinned in #313
+jax==0.3.20
+jaxlib==0.3.20
 scikit-misc==0.1.*
-scvi-tools~=0.16  # pinned in #313
+scvi-tools~=0.17  # pinned in #313
 xgboost==1.6.*

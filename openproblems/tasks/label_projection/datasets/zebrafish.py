@@ -7,7 +7,10 @@ import numpy as np
 @dataset(
     "Zebrafish (by labels)",
     data_url=load_zebrafish.metadata["data_url"],
-    dataset_summary="TODO",
+    data_reference=load_zebrafish.metadata["data_reference"],
+    dataset_summary="90k cells from zebrafish embryos throughout the first day of "
+    "development, with and without a knockout of chordin, an important developmental "
+    "gene. Split into train/test by laboratory.",
 )
 def zebrafish_labels(test=False):
     adata = load_zebrafish(test=test)
@@ -20,7 +23,10 @@ def zebrafish_labels(test=False):
 @dataset(
     "Zebrafish (random split)",
     data_url=load_zebrafish.metadata["data_url"],
-    dataset_summary="TODO",
+    data_reference=load_zebrafish.metadata["data_reference"],
+    dataset_summary="90k cells from zebrafish embryos throughout the first day of "
+    "development, with and without a knockout of chordin, an important developmental "
+    "gene. Split into train/test randomly.",
 )
 def zebrafish_random(test=False):
     adata = load_zebrafish(test=test)

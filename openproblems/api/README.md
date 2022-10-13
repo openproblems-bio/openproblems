@@ -1,10 +1,11 @@
 # openproblems-cli
 
-This CLI provides an interface to the `openproblems` Python package from the command line, primarily for the testing and evaluation workflow.
+This CLI provides an interface to the `openproblems` Python package from the command
+line, primarily for the testing and evaluation workflow.
 
 ## Usage
 
-```
+```text
 usage: openproblems-cli [-h] [--parallel]
                         {tasks,list,image,load,run,evaluate} ...
 
@@ -27,10 +28,14 @@ optional arguments:
 ```
 
 ## Example (without docker)
-Running the CLI requires commands to be run in a specific order: `load` -> `run` -> `evaluate`.
+
+Running the CLI requires commands to be run in a specific order: `load` -> `run` ->
+`evaluate`.
 
 For example:
-```
+
+<!-- markdownlint-disable MD013 -->
+```shell
 # Download a task-specific dataset and save it to `dataset.h5ad`
 openproblems-cli load --task label_projection --output dataset.h5ad pancreas_batch
 # Run a method on a datasets and save output to `method.h5ad`
@@ -38,9 +43,11 @@ openproblems-cli run --task label_projection --input dataset.h5ad --output metho
 # Evaluate the performance of a previously run method using the `accuracy` metric
 openproblems-cli evaluate --task label_projection --input method.h5ad accuracy
 ```
+<!-- markdownlint-enable MD013 -->
 
 You can list available tasks using `openproblems-cli tasks`
-```
+
+```shell
 > openproblems-cli tasks
 denoising
 dimensionality_reduction
@@ -49,8 +56,10 @@ multimodal_data_integration
 regulatory_effect_prediction
 ```
 
-You can then list the avaiable datasets, methods, and metrics for a partiular task using `openproblems-cli list --[datasets|methods|metrics] --task [task_name]`
-```
+You can then list the avaiable datasets, methods, and metrics for a partiular task using
+`openproblems-cli list --[datasets|methods|metrics] --task [task_name]`
+
+```shell
 > openproblems-cli list --datasets --task label_projection
 pancreas_batch
 pancreas_random
@@ -71,11 +80,13 @@ f1
 f1_micro
 ```
 
-The output of these commands are allowable arguments to the respective `load`, `run`, and `evaluate` commands.
+The output of these commands are allowable arguments to the respective `load`, `run`,
+and `evaluate` commands.
 
 ### Sample output
 
-```
+<!-- markdownlint-disable MD013 -->
+```shell
 $ openproblems-cli tasks
 chromatin_potential
 denoising
@@ -98,10 +109,12 @@ $ openproblems-cli list --metrics --task label_projection
 $ openproblems-cli evaluate --task label_projection --input method.h5ad accuracy
 0.9521233432512848
 ```
+<!-- markdownlint-enable MD013 -->
 
 ## Example (with docker)
 
-```
+<!-- markdownlint-disable MD013 -->
+```shell
 openproblems-cli tasks
 openproblems-cli list --datasets --task label_projection
 openproblems-cli image --datasets --task label_projection pancreas_batch
@@ -113,10 +126,12 @@ openproblems-cli list --metrics --task label_projection
 openproblems-cli image --metrics --task label_projection accuracy
 openproblems-cli evaluate --task label_projection --input method.h5ad accuracy
 ```
+<!-- markdownlint-enable MD013 -->
 
-### Sample output
+### Sample output (with docker)
 
-```
+<!-- markdownlint-disable MD013 -->
+```shell
 $ openproblems-cli tasks
 chromatin_potential
 denoising
@@ -148,3 +163,4 @@ openproblems
 $ docker run -dt singlecellopenproblems/openproblems openproblems-cli evaluate --task label_projection --input method.h5ad accuracy
 0.9521233432512848
 ```
+<!-- markdownlint-enable MD013 -->

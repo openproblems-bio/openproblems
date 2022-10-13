@@ -2,11 +2,12 @@ import collections
 import json
 import numpy as np
 import numpyencoder
-import openproblems.api.utils as utils
+import openproblems.api.utils
 import os
 import pandas as pd
 import sys
 import warnings
+import workflow_utils
 
 
 def dump_json(obj, fp):
@@ -154,7 +155,7 @@ def compute_ranking(task_name, dataset_results):
     rankings = np.zeros(len(dataset_results))
     metric_names = list(dataset_results.values())[0]["metrics"].keys()
     for metric_name in metric_names:
-        metric = utils.get_function(task_name, "metrics", metric_name)
+        metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
         sorted_order = np.argsort(
             [
                 dataset_results[method_name]["metrics"][metric_name]
@@ -164,26 +165,32 @@ def compute_ranking(task_name, dataset_results):
         if metric.metadata["maximize"]:
             sorted_order = sorted_order[::-1]
         rankings += np.argsort(sorted_order)
+
+    method_names = list(dataset_results.keys())
     final_ranking = {
-        method_name: rank + 1
-        for method_name, rank in zip(dataset_results, np.argsort(np.argsort(rankings)))
+        method_names[method_idx]: rank + 1
+        for method_idx, rank in zip(
+            np.argsort(rankings), np.arange(len(dataset_results))
+        )
     }
     return final_ranking
 
 
 def dataset_results_to_json(task_name, dataset_name, dataset_results):
     """Convert the raw dataset results to pretty JSON for web."""
-    dataset = utils.get_function(task_name, "datasets", dataset_name)
+    dataset = openproblems.api.utils.get_function(task_name, "datasets", dataset_name)
     output = dict(
         name=dataset.metadata["dataset_name"],
         data_url=dataset.metadata["data_url"],
+        data_reference=dataset.metadata["data_reference"],
         headers=dict(names=["Rank"], fixed=["Name", "Paper", "Website", "Code"]),
         results=list(),
     )
     ranking = compute_ranking(task_name, dataset_results)
     metric_names = set()
-    for method_name, method_results in dataset_results.items():
-        method = utils.get_function(task_name, "methods", method_name)
+    for method_name, rank in ranking.items():
+        method_results = dataset_results[method_name]
+        method = openproblems.api.utils.get_function(task_name, "methods", method_name)
         result = {
             "Name": method.metadata["method_name"],
             "Paper": method.metadata["paper_name"],
@@ -196,10 +203,12 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             "Runtime (min)": parse_time_to_min(method_results["realtime"]),
             "CPU (%)": float(method_results["%cpu"].replace("%", "")),
             "Memory (GB)": parse_size_to_gb(method_results["peak_rss"]),
-            "Rank": ranking[method_name],
+            "Rank": rank,
         }
         for metric_name, metric_result in method_results["metrics"].items():
-            metric = utils.get_function(task_name, "metrics", metric_name)
+            metric = openproblems.api.utils.get_function(
+                task_name, "metrics", metric_name
+            )
             result[metric.metadata["metric_name"]] = metric_result
             metric_names.add(metric.metadata["metric_name"])
         output["results"].append(result)
@@ -223,14 +232,25 @@ def results_to_json(results, outdir):
     if not os.path.isdir(outdir):
         os.mkdir(outdir)
     for task_name, task_results in results.items():
+        if workflow_utils.task_is_incomplete(
+            openproblems.api.utils.str_to_task(task_name)
+        ):
+            # don't write results for incomplete tasks
+            continue
         for dataset_name, dataset_results in task_results.items():
             results_dir = os.path.join(outdir, task_name)
             if not os.path.isdir(results_dir):
                 os.mkdir(results_dir)
             filename = os.path.join(results_dir, "{}.json".format(dataset_name))
+            try:
+                dataset_results_json = dataset_results_to_json(
+                    task_name, dataset_name, dataset_results
+                )
+            except openproblems.api.utils.NoSuchFunctionError:
+                continue
             with open(filename, "w") as handle:
                 dump_json(
-                    dataset_results_to_json(task_name, dataset_name, dataset_results),
+                    dataset_results_json,
                     handle,
                 )
 

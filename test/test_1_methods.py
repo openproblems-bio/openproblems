@@ -1,7 +1,5 @@
-import utils.warnings  # noqa: F401
-
-# isort: split
 import openproblems
+import os
 import parameterized
 import pytest
 import utils.docker
@@ -10,6 +8,9 @@ import utils.name
 
 pytestmark = pytest.mark.skipif(
     len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
+)
+RETRIES = (
+    int(os.environ["PYTEST_MAX_RETRIES"]) if "PYTEST_MAX_RETRIES" in os.environ else 2
 )
 
 
@@ -26,7 +27,7 @@ pytestmark = pytest.mark.skipif(
     name_func=utils.name.name_test,
     skip_on_empty=True,
 )
-@utils.docker.docker_test(timeout=600, retries=2)
+@utils.docker.docker_test(timeout=600, retries=RETRIES)
 def test_method(task_name, method_name, image):
     """Test application of a method."""
     import anndata

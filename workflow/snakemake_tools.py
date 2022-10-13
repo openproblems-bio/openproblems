@@ -3,7 +3,6 @@ import functools
 import multiprocessing
 import openproblems
 import os
-import packaging.version
 import subprocess
 import sys
 import time
@@ -46,6 +45,19 @@ def build_type(wildcards):
     local or github_actions
     """
     return "github_actions" if "GITHUB_ACTIONS" in os.environ else "local"
+
+
+def _build_age(image):
+    age = git_file_age(os.path.join(IMAGES_DIR, image))
+    base = _docker_base(image)
+    if base is not None:
+        age += _build_age(base)
+    return age
+
+
+def build_hash(wildcards):
+    age = _build_age(wildcards.image)
+    return hash(age)
 
 
 def push_images(wildcards):
@@ -230,21 +242,6 @@ def docker_file_age(image):
     return result
 
 
-def version_not_changed():
-    """Check that openproblems has not changed version since last build."""
-    try:
-        with open(VERSION_FILE, "r") as handle:
-            build_version = handle.read().strip()
-    except FileNotFoundError:
-        return False
-    build_version = packaging.version.parse(build_version)
-    curr_version = packaging.version.parse(openproblems.__version__)
-    if curr_version > build_version:
-        return False
-    else:
-        return True
-
-
 def format_timestamp(ts):
     """Format a unix timestamp as a string."""
     return datetime.datetime.fromtimestamp(ts).isoformat()
@@ -320,17 +317,11 @@ def docker_image_marker(image, refresh=True):
 
     if "docker_build" in sys.argv:
         # building everything from scratch
-        requirement_file = docker_build
-    elif not version_not_changed():
-        print(
-            "Code version changed: {}".format(openproblems.__version__), file=sys.stderr
-        )
-        # codebase has changed, let's rebuild
-        print("{}: rebuilding".format(image), file=sys.stderr)
+        print("{}: rebuild requested".format(image), file=sys.stderr)
         requirement_file = docker_build
     elif docker_imagespec_changed(image, dockerfile):
         # image has changed, let's rebuild
-        print("{}: rebuilding".format(image), file=sys.stderr)
+        print("{}: image changed; rebuilding".format(image), file=sys.stderr)
         requirement_file = docker_build
     elif docker_image_exists(image, local=True) or docker_image_exists(
         image, local=False
@@ -340,8 +331,9 @@ def docker_image_marker(image, refresh=True):
         requirement_file = no_change
     else:
         # image doesn't exist anywhere, need to build it
-        print("{}: building".format(image), file=sys.stderr)
+        print("{}: doesn't exist; building".format(image), file=sys.stderr)
         requirement_file = docker_build
+    print(f"Fetched update requirements: {image}", file=sys.stderr)
     sys.stderr.flush()
     return requirement_file
 
