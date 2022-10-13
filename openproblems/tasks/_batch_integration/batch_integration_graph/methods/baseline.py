@@ -6,7 +6,7 @@ import scipy.sparse
 
 
 def _set_uns(adata):
-    adata.uns["neighbors"] = adata.uns["uni_neighbors"]
+    adata.uns["neighbors"] = adata.uns["uni"]
     adata.uns["neighbors"]["connectivities_key"] = "connectivities"
     adata.uns["neighbors"]["distances_key"] = "distances"
 
