@@ -20,6 +20,9 @@ def check_dataset(adata):
 
 def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
+    assert "neighbors" in adata.uns
+    assert adata.uns["neighbors"]["connectivities_key"] == "connectivities"
+    assert adata.uns["neighbors"]["distances_key"] == "distances"
     assert "connectivities" in adata.obsp
     assert "distances" in adata.obsp
     return True

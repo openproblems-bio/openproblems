@@ -5,6 +5,12 @@ import numpy as np
 import scipy.sparse
 
 
+def _set_uns(adata):
+    adata.uns["neighbors"] = adata.uns["uni_neighbors"]
+    adata.uns["neighbors"]["connectivities_key"] = "connectivities"
+    adata.uns["neighbors"]["distances_key"] = "distances"
+
+
 @method(
     method_name="No Integration",
     paper_name="No Integration (baseline)",
@@ -16,6 +22,7 @@ import scipy.sparse
 def no_integration(adata, test=False):
     adata.obsp["connectivities"] = adata.obsp["uni_connectivities"]
     adata.obsp["distances"] = adata.obsp["uni_distances"]
+    _set_uns(adata)
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
 
@@ -71,6 +78,7 @@ def random_integration(adata, test=False):
     adata.obsp["distances"], adata.obsp["connectivities"] = _randomize_graph(
         adata.obsp["uni_distances"], adata.obsp["uni_connectivities"]
     )
+    _set_uns(adata)
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
 
@@ -89,5 +97,6 @@ def celltype_integration(adata, test=False):
         adata.obsp["uni_connectivities"],
         batch=adata.obs["batch"].to_numpy(),
     )
+    _set_uns(adata)
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
