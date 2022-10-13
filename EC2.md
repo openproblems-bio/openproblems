@@ -25,9 +25,13 @@ Linux](https://docs.microsoft.com/en-us/windows/wsl/install)).
 
 ## Instructions
 
-The following instructions are for `bash`, other shell users may need to modify commands slightly.
+The following instructions are for `bash`, other shell users may need to modify commands
+slightly.
 
-First, if you have recieved openproblems AWS credentials, configure AWS to use them. Note: `openproblems` uses `us-west-2` as default region. If you have other AWS accounts, you can configure AWS with multiple accounts by using the `AWS_PROFILE` environment variable.
+First, if you have recieved openproblems AWS credentials, configure AWS to use them.
+Note: `openproblems` uses `us-west-2` as default region. If you have other AWS accounts,
+you can configure AWS with multiple accounts by using the `AWS_PROFILE` environment
+variable.
 
 ```shell
 export AWS_PROFILE=openproblems
@@ -90,7 +94,8 @@ docker run \
 openproblems-cli --help
 ```
 
-For more information on using the CLI, see [CONTRIBUTING.md](CONTRIBUTING.md#testing-method-performance).
+For more information on using the CLI, see
+[CONTRIBUTING.md](CONTRIBUTING.md#testing-method-performance).
 
 When you are done, make sure to shut down your instance:
 

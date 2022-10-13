@@ -335,8 +335,10 @@ Notes:
 * If your dataset/method/metric cannot be run on the same docker image, you may wish to
   `load`, `run`, and `evaluate` separately. You can do this using each of these commands
   independently; however, this workflow is not documented.
-* If your compute environment is not powerful enough to run the test, you may use your
-  AWS credentials to launch a VM for testing purposes. See [EC2 README](./EC2.md) for details.
+* These commands are not guaranteed to work with Apple silicon (M1 chip).
+* If your local machine cannot run the test due to memory constraints or OS
+  incompatibility, you may use your AWS credentials to launch a VM for testing purposes.
+  See the [EC2 README](./EC2.md) for details.
 
 ### Adding a new task
 
