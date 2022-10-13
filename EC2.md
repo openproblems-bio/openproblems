@@ -25,11 +25,19 @@ Linux](https://docs.microsoft.com/en-us/windows/wsl/install)).
 
 ## Instructions
 
-First, create a key pair (only do this once):
+The following instructions are for `bash`, other shell users may need to modify commands slightly.
+
+First, if you have recieved openproblems AWS credentials, configure AWS to use them. Note: `openproblems` uses `us-west-2` as default region. If you have other AWS accounts, you can configure AWS with multiple accounts by using the `AWS_PROFILE` environment variable.
+
+```shell
+export AWS_PROFILE=openproblems
+aws configure
+```
+
+Second, create a key pair (only do this once):
 
 ```shell
 KEY_NAME="my_openproblems_key" # name this whatever you like, but it must be unique
-AWS_EC2_INSTANCE_TYPE="t2.micro"
 aws ec2 create-key-pair --key-name $KEY_NAME --key-format pem \
 --query "KeyMaterial" --output text > ${KEY_NAME}.pem
 chmod 400 ${KEY_NAME}.pem
@@ -39,11 +47,12 @@ Now, create an instance with your key pair:
 
 ```shell
 OWNER_NAME="this_is_your_name"
+AWS_EC2_INSTANCE_TYPE="t2.micro"
 INSTANCE_ID=$(
-aws ec2 run-instances --count 1 --image-id ami-01219569b1bbf9fb2
-  --instance-type $AWS_EC2_INSTANCE_TYPE --key-name $KEY_NAME
-  --security-group-ids sg-002d2b9db29bb43dd 
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=owner,Value=${OWNER_NAME}}]' |
+aws ec2 run-instances --count 1 --image-id ami-01219569b1bbf9fb2 \
+  --instance-type $AWS_EC2_INSTANCE_TYPE --key-name $KEY_NAME \
+  --security-group-ids sg-002d2b9db29bb43dd \
+  --tag-specifications "ResourceType=instance,Tags=[{Key=owner,Value=${OWNER_NAME}}]" |
   jq '.["Instances"][0]["InstanceId"]' |
   tr -d '"'
 )
