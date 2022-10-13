@@ -88,7 +88,7 @@ run `openproblems` with
 ```shell
 git clone https://github.com/openproblems-bio/openproblems
 cd openproblems
-docker run \
+sudo docker run \
   -v $(pwd):/usr/src/singlecellopenproblems -v /tmp:/tmp \
   -it singlecellopenproblems/openproblems bash
 openproblems-cli --help

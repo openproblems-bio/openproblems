@@ -315,7 +315,7 @@ any/all of `--dataset`, `--method`, and `--metric` as desired. E.g.,
 
 ```bash
 cd openproblems
-sudo docker run \
+docker run \
   -v $(pwd):/usr/src/singlecellopenproblems -v /tmp:/tmp \
   -it singlecellopenproblems/openproblems-python-extras bash
 openproblems-cli test \
