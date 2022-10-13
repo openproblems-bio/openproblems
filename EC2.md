@@ -78,14 +78,19 @@ jq '.["InstanceStatuses"][0]["SystemStatus"]'
 ssh -i ${KEY_NAME}.pem ubuntu@${PUBLIC_DNS_NAME}
 ```
 
-The instance will by default contain all dependencies for `openproblems`. You can
-install `openproblems` with
+The instance will by default contain all dependencies to use `openproblems`. You can
+run `openproblems` with
 
 ```shell
 git clone https://github.com/openproblems-bio/openproblems
 cd openproblems
-pip install -e .
+docker run \
+  -v $(pwd):/usr/src/singlecellopenproblems -v /tmp:/tmp \
+  -it singlecellopenproblems/openproblems bash
+openproblems-cli --help
 ```
+
+For more information on using the CLI, see [CONTRIBUTING.md](CONTRIBUTING.md#testing-method-performance).
 
 When you are done, make sure to shut down your instance:
 
