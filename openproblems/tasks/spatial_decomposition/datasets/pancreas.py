@@ -18,7 +18,7 @@ def pancreas_alpha_1(test=False, n_obs=100):
     sc.pp.filter_genes(adata, min_counts=10)
     adata.obs["label"] = adata.obs["celltype"]
 
-    merged_adata = generate_synthetic_dataset(adata, n_obs=n_obs, alpha=1)
+    merged_adata = generate_synthetic_dataset(adata, n_obs=n_obs, alpha=1, test=test)
     filter_genes_cells(merged_adata)
     return merged_adata
 

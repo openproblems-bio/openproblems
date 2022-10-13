@@ -17,6 +17,7 @@ def generate_synthetic_dataset(
     umi_lb: int = 1000,
     umi_ub: int = 5000,
     seed: int = 42,
+    test: bool = False,
 ) -> ad.AnnData:
     """Create cell-aggregate samples for ground-truth spatial decomposition task.
 
@@ -136,7 +137,7 @@ def generate_synthetic_dataset(
     adata_spatial.obsm["proportions_true"] = sp_p
     adata_spatial.obs["n_cells"] = n_cells
     adata_spatial.obsm["n_cells"] = sp_c
-    adata_merged = merge_sc_and_sp(adata, adata_spatial)
+    adata_merged = merge_sc_and_sp(adata, adata_spatial, test=test)
     adata_merged.X[adata_merged.X == np.inf] = adata_merged.X.max()  # remove inf
     adata_merged.layers["counts"] = adata_merged.X.copy()
 
