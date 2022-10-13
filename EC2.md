@@ -27,10 +27,10 @@ Linux](https://docs.microsoft.com/en-us/windows/wsl/install)).
 
 The following instructions are for `bash`, other shell users may need to modify commands slightly.
 
-First, if you have recieved openproblems AWS credentials, configure AWS to use them. AWS cli can store multiple credentials using different `profiles`. If you don't have other AWS accounts, set your profile to `default`. Openproblems uses `us-west-2` as default region.
+First, if you have recieved openproblems AWS credentials, configure AWS to use them. Note: `openproblems` uses `us-west-2` as default region. If you have other AWS accounts, you can configure AWS with multiple accounts by using the `AWS_PROFILE` environment variable.
 
 ```shell
-export AWS_PROFILE=openproblems  # AWS cli looks into this variable
+export AWS_PROFILE=openproblems
 aws configure
 ```
 
@@ -38,7 +38,6 @@ Second, create a key pair (only do this once):
 
 ```shell
 KEY_NAME="my_openproblems_key" # name this whatever you like, but it must be unique
-AWS_EC2_INSTANCE_TYPE="t2.micro"
 aws ec2 create-key-pair --key-name $KEY_NAME --key-format pem \
 --query "KeyMaterial" --output text > ${KEY_NAME}.pem
 chmod 400 ${KEY_NAME}.pem
@@ -48,6 +47,7 @@ Now, create an instance with your key pair:
 
 ```shell
 OWNER_NAME="this_is_your_name"
+AWS_EC2_INSTANCE_TYPE="t2.micro"
 INSTANCE_ID=$(
 aws ec2 run-instances --count 1 --image-id ami-01219569b1bbf9fb2 \
   --instance-type $AWS_EC2_INSTANCE_TYPE --key-name $KEY_NAME \
