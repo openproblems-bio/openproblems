@@ -32,7 +32,7 @@ test_requires = [
     "pytest==7.1.*",
     "pytest-cov>=3.0,<4.1",
     "black==22.8.0",
-    "coverage==6.4.*",
+    "coverage>=6.4,<6.6",
     "codecov==2.1.*",
     "parameterized==0.8.*",
     "requests==2.28.*",
