@@ -77,6 +77,9 @@ Methods should predict interactions between cell types without using
 * `ligand`: `str`, gene symbol of the ligand in an interaction
 * `target`: `str`, name of target cell type in interaction
 
+`adata.uns['ascending']` should indicate whether the score should be `score` assigned 
+to each interaction should be sorted in ascending order.
+
 Methods should infer a score for each _intersecting interaction_ in the harmonized
 prior-knowledge resource provided by LIANA. We define _intersecting interactions_ as
 those for which the relevant genes are both present in the dataset and the resource.
