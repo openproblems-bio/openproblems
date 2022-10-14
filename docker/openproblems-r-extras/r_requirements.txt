@@ -2,14 +2,14 @@ bioc::batchelor@1.12.3
 bioc::ComplexHeatmap@2.12.1
 bioc::scater@1.24.0
 bioc::scran@1.24.1
-bioc::scuttle@1.6.2
+bioc::scuttle@1.6.3
 bslib@0.4.0
 caret@6.0-93
 cli@3.4.1
-conos@1.4.7
-crayon@1.5.1
+conos@1.4.9
+crayon@1.5.2
 dbplyr@2.2.1
-devtools@2.4.4
+devtools@2.4.5
 dmcable/spacexr@eeb02a2 # master
 downlit@0.4.2
 dplyr@1.0.10
