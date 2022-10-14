@@ -7,9 +7,9 @@ bslib@0.4.0
 caret@6.0-93
 cli@3.4.1
 conos@1.4.9
-crayon@1.5.1
+crayon@1.5.2
 dbplyr@2.2.1
-devtools@2.4.4
+devtools@2.4.5
 dmcable/spacexr@eeb02a2 # master
 downlit@0.4.2
 dplyr@1.0.10
