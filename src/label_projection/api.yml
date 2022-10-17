@@ -1,0 +1,89 @@
+dataset_preprocessing:
+  input:
+    type: h5ad
+    X: Raw counts
+    obs:
+      labels: Ground truth cell type labels
+      batch: Batch information
+    uns:
+      dataset_id: "A unique identifier for the dataset"
+  output:
+    type: h5ad
+    X: Raw counts
+    layers:
+      lognorm: Normalized, log-transformed counts
+    obs:
+      labels: Ground truth cell type labels
+      batch: Batch information
+    uns:
+      dataset_id: "A unique identifier for the dataset"
+      raw_dataset_id: "A unique identifier for the original dataset (before preprocessing)"
+
+dataset_censoring:
+  input: ${dataset_preprocessing.output}
+  output_train:
+    type: h5ad
+    X: Raw counts
+    layers:
+      lognorm: Normalised, log-transformed counts
+    obs:
+      labels: Ground truth cell type labels
+      batch: Batch information
+  output_test:
+    type: h5ad
+    X: Raw counts
+    layers:
+      lognorm: Normalised, log-transformed counts
+    obs:
+      batch: Batch information
+    uns:
+      dataset_id: "A unique identifier for the dataset"
+      raw_dataset_id: "A unique identifier for the original dataset (before preprocessing)"
+  output_solution:
+    type: h5ad
+    X: Raw counts
+    layers:
+      lognorm: Normalised, log-transformed counts
+    obs:
+      batch: Batch information
+    uns:
+      dataset_id: "A unique identifier for the dataset"
+      raw_dataset_id: "A unique identifier for the original dataset (before preprocessing)"
+      
+method:
+  input_train: ${dataset_censoring.output_train}
+  input_test: ${dataset_censoring.output_test}
+  output:
+    type: h5ad
+    obs:
+      labels_pred: Predicted labels for the test cells.
+    uns:
+      dataset_id: "A unique identifier for the dataset"
+      raw_dataset_id: "A unique identifier for the original dataset (before preprocessing)"
+      method_id: "A unique identifier for the method"
+  config_info:
+    method_label: "Short descriptive label of the method, ideally 10 characters at most."
+    method_name: "The method name, ideally four words at most"
+    method_type: "Must be one of 'method', 'positive_control', 'negative_control', 'baseline'."
+    paper_name: 
+    paper_doi:
+    paper_year:
+    code_url:
+    code_version:
+
+metric:
+  input_solution: ${dataset_censoring.output_solution}
+  input_prediction: ${method.output}
+  output:
+    type: h5ad
+    uns:
+      dataset_id: "A unique identifier for the dataset"
+      raw_dataset_id: "A unique identifier for the original dataset (before preprocessing)"
+      method_id: "A unique identifier for the method"
+      metric_ids: "A vector of unique metric identifiers"
+      metric_values: "The metric values obtained for the given prediction"
+  config_info:
+    metric_ids: "The unique identifiers of metrics contained in this component"
+    metric_mins: "The minimum value of each metric"
+    metric_maxs: "The maximum value of each metric"
+    metric_maximise: "Whether a higher value is better"
