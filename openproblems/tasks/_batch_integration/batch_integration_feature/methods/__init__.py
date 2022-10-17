@@ -29,6 +29,12 @@ from ...batch_integration_graph.methods.scanorama import scanorama_feature_full_
 from ...batch_integration_graph.methods.scanorama import scanorama_feature_hvg_scaled
 from ...batch_integration_graph.methods.scanorama import scanorama_feature_hvg_unscaled
 
+# from ...batch_integration_graph.methods.seuratrpca import seuratrpca_full_scaled
+# from ...batch_integration_graph.methods.seuratrpca import seuratrpca_full_unscaled
+# from ...batch_integration_graph.methods.seuratrpca import seuratrpca_hvg_scaled
+# from ...batch_integration_graph.methods.seuratrpca import seuratrpca_hvg_unscaled
+from .scalex import scalex
+
 # from ...batch_integration_graph.methods.scgen import scgen_full_scaled
 # from ...batch_integration_graph.methods.scgen import scgen_full_unscaled
 # from ...batch_integration_graph.methods.scgen import scgen_hvg_scaled
@@ -38,8 +44,3 @@ from ...batch_integration_graph.methods.scanorama import scanorama_feature_hvg_u
 # from ...batch_integration_graph.methods.seurat_full import seurat_full_unscaled
 # from ...batch_integration_graph.methods.seurat_full import seurat_hvg_scaled
 # from ...batch_integration_graph.methods.seurat_full import seurat_hvg_unscaled
-
-# from ...batch_integration_graph.methods.seuratrpca import seuratrpca_full_scaled
-# from ...batch_integration_graph.methods.seuratrpca import seuratrpca_full_unscaled
-# from ...batch_integration_graph.methods.seuratrpca import seuratrpca_hvg_scaled
-# from ...batch_integration_graph.methods.seuratrpca import seuratrpca_hvg_unscaled

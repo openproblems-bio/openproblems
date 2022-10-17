@@ -30,6 +30,12 @@ from .mnn import mnn_full_unscaled
 from .mnn import mnn_hvg_scaled
 from .mnn import mnn_hvg_unscaled
 
+# from .seuratrpca import seuratrpca_full_scaled
+# from .seuratrpca import seuratrpca_full_unscaled
+# from .seuratrpca import seuratrpca_hvg_scaled
+# from .seuratrpca import seuratrpca_hvg_unscaled
+from .scalex import scalex
+
 # from .saucie_embed import saucie_embed_full_scaled
 # from .saucie_embed import saucie_embed_full_unscaled
 # from .saucie_embed import saucie_embed_hvg_scaled
@@ -60,8 +66,3 @@ from .scvi import scvi_hvg_unscaled
 # from .seurat_full import seurat_full_unscaled
 # from .seurat_full import seurat_hvg_scaled
 # from .seurat_full import seurat_hvg_unscaled
-
-# from .seuratrpca import seuratrpca_full_scaled
-# from .seuratrpca import seuratrpca_full_unscaled
-# from .seuratrpca import seuratrpca_hvg_scaled
-# from .seuratrpca import seuratrpca_hvg_unscaled
