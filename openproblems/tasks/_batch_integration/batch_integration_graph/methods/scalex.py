@@ -44,7 +44,7 @@ def _scalex(
         adata,
         batch_key="batch",
         ignore_umap=True,
-        impute=compute_features,
+        impute=adata.obs["batch"].cat.categories[0] if compute_features else False,
         max_iteration=max_iteration,
         min_features=min_features,
         min_cells=min_cells,
