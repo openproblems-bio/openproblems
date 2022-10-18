@@ -28,28 +28,8 @@ def no_integration(adata, test=False):
 
 
 def _randomize_subgraph(distances, connectivities):
-    row = np.random.choice(
-        np.arange(distances.shape[0]), len(distances.data), replace=True
-    )
-    col = np.random.choice(
-        np.arange(distances.shape[0]), len(distances.data), replace=True
-    )
-    while np.any(np.any(row == col)):
-        # eliminate self-loops
-        row[row == col] = np.random.choice(
-            np.arange(distances.shape[0]), np.sum(row == col)
-        )
-    # eliminate duplicates
-    row, col = zip(*set(zip(row, col)))
-    distances_data = np.random.permutation(distances.data)[: len(row)]
-    distances_out = scipy.sparse.coo_matrix(
-        (distances_data, (row, col)), shape=distances.shape
-    ).tocsr()
-    connectivities_data = np.random.permutation(connectivities.data)[: len(row)]
-    connectivities_out = scipy.sparse.coo_matrix(
-        (connectivities_data, (row, col)), shape=connectivities.shape
-    ).tocsr()
-    return distances_out, connectivities_out
+    idx = np.random.permutation(np.arange(distances.shape[0]))
+    return distances[idx][:, idx], connectivities[idx][:, idx]
 
 
 def _randomize_graph(distances, connectivities, partition=None):
