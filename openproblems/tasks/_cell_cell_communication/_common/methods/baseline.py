@@ -16,8 +16,12 @@ import pandas as pd
 def random_events(adata, test=False, n_events=1000):
     adata.uns["ccc_pred"] = pd.DataFrame(
         {
-            "ligand": np.random.choice(adata.var.index, n_events),
-            "receptor": np.random.choice(adata.var.index, n_events),
+            "ligand": np.random.choice(
+                adata.uns["ligand_receptor_resource"]["ligand_genesymbol"], n_events
+            ),
+            "receptor": np.random.choice(
+                adata.uns["ligand_receptor_resource"]["receptor_genesymbol"], n_events
+            ),
             "source": np.random.choice(adata.obs["label"].cat.categories, n_events),
             "target": np.random.choice(adata.obs["label"].cat.categories, n_events),
             "score": np.random.uniform(0, 1, n_events),
