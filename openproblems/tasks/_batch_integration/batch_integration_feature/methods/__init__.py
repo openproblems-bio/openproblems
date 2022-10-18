@@ -33,7 +33,7 @@ from ...batch_integration_graph.methods.scanorama import scanorama_feature_hvg_u
 # from ...batch_integration_graph.methods.seuratrpca import seuratrpca_full_unscaled
 # from ...batch_integration_graph.methods.seuratrpca import seuratrpca_hvg_scaled
 # from ...batch_integration_graph.methods.seuratrpca import seuratrpca_hvg_unscaled
-from .scalex import scalex
+from .scalex import scalex_full
 
 # from ...batch_integration_graph.methods.scgen import scgen_full_scaled
 # from ...batch_integration_graph.methods.scgen import scgen_full_unscaled

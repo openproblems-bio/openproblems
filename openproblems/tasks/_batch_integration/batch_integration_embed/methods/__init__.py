@@ -28,4 +28,5 @@ from ...batch_integration_graph.methods.scanvi import scanvi_full_unscaled
 from ...batch_integration_graph.methods.scanvi import scanvi_hvg_unscaled
 from ...batch_integration_graph.methods.scvi import scvi_full_unscaled
 from ...batch_integration_graph.methods.scvi import scvi_hvg_unscaled
-from .scalex import scalex
+from .scalex import scalex_full
+from .scalex import scalex_hvg

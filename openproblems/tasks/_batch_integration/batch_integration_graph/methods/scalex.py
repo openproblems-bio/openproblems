@@ -18,6 +18,7 @@ _scalex_method = functools.partial(
 def _scalex(
     adata,
     test: bool = False,
+    n_top_features: int = 0,
     max_iteration: Optional[int] = None,
     min_features: Optional[int] = None,
     min_cells: Optional[int] = None,
@@ -47,6 +48,8 @@ def _scalex(
         max_iteration=max_iteration,
         min_features=min_features,
         min_cells=min_cells,
+        n_top_features=n_top_features,
+        outdir=None,
     )
     adata.obsm["X_emb"] = adata.obsm["latent"]
     if compute_features:
@@ -57,12 +60,25 @@ def _scalex(
     return adata
 
 
-@_scalex_method(method_name="SCALEX")
-def scalex(adata, test: bool = False, max_iteration: Optional[int] = None):
+@_scalex_method(method_name="SCALEX (full)")
+def scalex_full(adata, test: bool = False, max_iteration: Optional[int] = None):
     return _scalex(
         adata,
         test=test,
         max_iteration=max_iteration,
         compute_neighbors=True,
         compute_features=False,
+        n_top_features=0,
+    )
+
+
+@_scalex_method(method_name="SCALEX (hvg)")
+def scalex_hvg(adata, test: bool = False, max_iteration: Optional[int] = None):
+    return _scalex(
+        adata,
+        test=test,
+        max_iteration=max_iteration,
+        compute_neighbors=True,
+        compute_features=False,
+        n_top_features=2000,
     )

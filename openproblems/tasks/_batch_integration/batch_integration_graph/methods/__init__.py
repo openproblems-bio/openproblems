@@ -34,7 +34,8 @@ from .mnn import mnn_hvg_unscaled
 # from .seuratrpca import seuratrpca_full_unscaled
 # from .seuratrpca import seuratrpca_hvg_scaled
 # from .seuratrpca import seuratrpca_hvg_unscaled
-from .scalex import scalex
+from .scalex import scalex_full
+from .scalex import scalex_hvg
 
 # from .saucie_embed import saucie_embed_full_scaled
 # from .saucie_embed import saucie_embed_full_unscaled
