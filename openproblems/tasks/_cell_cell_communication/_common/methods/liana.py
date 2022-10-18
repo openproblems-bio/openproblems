@@ -60,7 +60,6 @@ def liana(
     liana_res["score"] = liana_res[score_col]
     liana_res.sort_values("score", ascending=ascending, inplace=True)
     adata.uns["ccc_pred"] = liana_res
-    adata.uns['score_ascending'] = ascending
 
     adata.uns["method_code_version"] = check_r_version("liana")
 
@@ -74,12 +73,12 @@ def liana(
     paper_url="https://www.nature.com/articles/s41596-020-0292-x",
     paper_year=2020,
 )
-def cellphonedb(adata, test=False, ascending=True):
+def cellphonedb(adata, test=False):
     adata = liana(
         adata,
         method="cellphonedb",
         score_col="lr.mean",
-        ascending=ascending,
+        ascending=False,
         test=test,
         complex_policy="min",
     )
@@ -87,7 +86,7 @@ def cellphonedb(adata, test=False, ascending=True):
     adata.uns["ccc_pred"]["score"] = adata.uns["ccc_pred"].apply(
         lambda x: _p_filt(x.pvalue, x["lr.mean"]), axis=1
     )
-    adata.uns["ccc_pred"].sort_values("score", ascending=ascending, inplace=True)
+    adata.uns["ccc_pred"].sort_values("score", ascending=False, inplace=True)
 
     return adata
 
@@ -99,18 +98,18 @@ def cellphonedb(adata, test=False, ascending=True):
     paper_url="https://www.nature.com/articles/s41598-022-07959-x",
     paper_year=2022,
 )
-def connectome(adata, test=False, ascending=False):
+def connectome(adata, test=False):
     return liana(
-        adata, method="connectome", score_col="weight_sc", ascending=ascending, test=test
+        adata, method="connectome", score_col="weight_sc", ascending=False, test=test
     )
 
 
 @_liana_method(
     method_name="Mean log2FC",
 )
-def logfc(adata, test=False, ascending=False):
+def logfc(adata, test=False):
     return liana(
-        adata, method="logfc", score_col="logfc_comb", ascending=ascending, test=test
+        adata, method="logfc", score_col="logfc_comb", ascending=False, test=test
     )
 
 
@@ -120,9 +119,9 @@ def logfc(adata, test=False, ascending=False):
     paper_url="https://www.nature.com/articles/s41467-020-18873-z",
     paper_year=2021,
 )
-def natmi(adata, test=False, ascending=False):
+def natmi(adata, test=False):
     return liana(
-        adata, method="natmi", score_col="edge_specificity", ascending=ascending, test=test
+        adata, method="natmi", score_col="edge_specificity", ascending=False, test=test
     )
 
 
@@ -133,5 +132,5 @@ def natmi(adata, test=False, ascending=False):
     paper_url="https://academic.oup.com/nar/article/48/10/e55/5810485",
     paper_year=2021,
 )
-def sca(adata, test=False, ascending=False):
-    return liana(adata, method="sca", score_col="LRscore", ascending=ascending, test=test)
+def sca(adata, test=False):
+    return liana(adata, method="sca", score_col="LRscore", ascending=False, test=test)

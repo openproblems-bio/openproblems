@@ -59,9 +59,6 @@ following columns:
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
 
-`adata.uns['ascending']` should indicate whether the score should be `score` assigned 
-to each interaction should be sorted in ascending order.
-
 The datasets should also include a
 [NCBI taxonomy ID](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi)
 in `adata.uns["target_organism"]` - used to convert the (typically human) prior

@@ -10,7 +10,6 @@ def odds_ratio(adata, merge_keys, top_n=100):
     gt = adata.uns["ccc_target"].merge(
         adata.uns["ccc_pred"], on=merge_keys, how="inner"
     )
-    gt = gt.sort_values('score', ascending=adata.uns['ascending'])
 
     # assign the top rank interactions to 1
     a = np.zeros(len(gt["score"]))
