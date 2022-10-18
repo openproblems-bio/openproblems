@@ -4,6 +4,7 @@
 #'
 #' @param sce_sc SingleCellExperiment single-cell dataset
 #' @param sce_sp SingleCellExperiment spatial dataset
+#' @param test logical Test flag
 #' @return sce_sp SingleCellExperiment spatial dataset with predictions in obs
 
 library(spacexr)
@@ -32,7 +33,7 @@ puck <- SpatialRNA(sp_coords, sp_counts)
 my_rctd <- create.RCTD(
   puck, reference,
   max_cores = 1,
-  test_mode = FALSE, UMI_min_sigma = 100
+  test_mode = test, UMI_min_sigma = 100
 )
 # run analysis and get results
 my_rctd <- run.RCTD(my_rctd)
