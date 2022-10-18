@@ -15,7 +15,7 @@ downlit@0.4.2
 dplyr@1.0.10
 e1071@1.7-11
 ellipsis@0.3.2
-forecast@8.17.0
+forecast@8.18
 hardhat@1.1.0
 here@1.0.1
 hexbin@1.28.2

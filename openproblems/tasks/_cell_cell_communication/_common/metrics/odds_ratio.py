@@ -7,8 +7,10 @@ import numpy as np
 def odds_ratio(adata, merge_keys, top_n=100):
     # Join benchmark (assumed truth) and ccc results
     # Get /w ccc_target and a response [0, 1] column
-    gt = adata.uns["ccc_target"].merge(
-        adata.uns["ccc_pred"], on=merge_keys, how="inner"
+    gt = (
+        adata.uns["ccc_target"]
+        .merge(adata.uns["ccc_pred"], on=merge_keys, how="inner")
+        .sort_values("score", ascending=False)
     )
 
     # assign the top rank interactions to 1
