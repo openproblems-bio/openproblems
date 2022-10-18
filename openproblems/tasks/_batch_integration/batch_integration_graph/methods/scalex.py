@@ -29,12 +29,15 @@ def _scalex(
 
     if test:
         max_iteration = max_iteration or 2
-        min_features = min_features or 1
-        min_cells = min_cells or 1
-    else:
+    else:  # pragma: nocover
         max_iteration = max_iteration or 30000
+
+    if test or compute_features:
+        min_features = min_features or 1
+    else:  # pragma: nocover
         min_features = min_features or 600
-        min_cells = min_cells or 3
+
+    min_cells = min_cells or 1
 
     adata = scalex.SCALEX(
         adata,
