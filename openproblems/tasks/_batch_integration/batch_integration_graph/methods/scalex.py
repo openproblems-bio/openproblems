@@ -19,6 +19,8 @@ def _scalex(
     adata,
     test: bool = False,
     max_iteration: Optional[int] = None,
+    min_features: Optional[int] = None,
+    min_cells: Optional[int] = None,
     compute_neighbors: bool = False,
     compute_features: bool = False,
 ):
@@ -27,8 +29,12 @@ def _scalex(
 
     if test:
         max_iteration = max_iteration or 2
+        min_features = min_features or 1
+        min_cells = min_cells or 1
     else:
         max_iteration = max_iteration or 30000
+        min_features = min_features or 600
+        min_cells = min_cells or 3
 
     adata = scalex.SCALEX(
         adata,
@@ -36,6 +42,8 @@ def _scalex(
         ignore_umap=True,
         impute=compute_features,
         max_iteration=max_iteration,
+        min_features=min_features,
+        min_cells=min_cells,
     )
     adata.obsm["X_emb"] = adata.obsm["latent"]
     if compute_features:
