@@ -52,14 +52,14 @@ def _randomize_subgraph(distances, connectivities):
     return distances_out, connectivities_out
 
 
-def _randomize_graph(distances, connectivities, batch=None):
-    if batch is None:
+def _randomize_graph(distances, connectivities, partition=None):
+    if partition is None:
         return _randomize_subgraph(distances, connectivities)
     else:
         distances_out = scipy.sparse.csr_matrix(distances.shape)
         connectivities_out = scipy.sparse.csr_matrix(connectivities.shape)
-        for batch_name in np.unique(batch):
-            idx = np.argwhere(batch == batch_name).flatten()
+        for batch_name in np.unique(partition):
+            idx = np.argwhere(partition == batch_name).flatten()
             distances_out[idx], connectivities_out[idx] = _randomize_subgraph(
                 distances[idx], connectivities[idx]
             )
@@ -91,11 +91,30 @@ def random_integration(adata, test=False):
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,
 )
-def celltype_integration(adata, test=False):
+def celltype_random_integration(adata, test=False):
     adata.obsp["distances"], adata.obsp["connectivities"] = _randomize_graph(
         adata.obsp["uni_distances"],
         adata.obsp["uni_connectivities"],
-        batch=adata.obs["batch"].to_numpy(),
+        partition=adata.obs["labels"].to_numpy(),
+    )
+    _set_uns(adata)
+    adata.uns["method_code_version"] = check_version("openproblems")
+    return adata
+
+
+@method(
+    method_name="Random Integration by Batch",
+    paper_name="Random Integration by Batch (baseline)",
+    paper_url="https://openproblems.bio",
+    paper_year=2022,
+    code_url="https://github.com/openproblems-bio/openproblems",
+    is_baseline=True,
+)
+def batch_random_integration(adata, test=False):
+    adata.obsp["distances"], adata.obsp["connectivities"] = _randomize_graph(
+        adata.obsp["uni_distances"],
+        adata.obsp["uni_connectivities"],
+        partition=adata.obs["batch"].to_numpy(),
     )
     _set_uns(adata)
     adata.uns["method_code_version"] = check_version("openproblems")

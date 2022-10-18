@@ -17,6 +17,18 @@ def no_integration(adata, test=False):
     return adata
 
 
+def _randomize_features(X, partition=None):
+    X_out = X.copy()
+    if partition is None:
+        partition = np.full(X.shape[0], 0)
+    else:
+        partition = np.asarray(partition)
+    for partition_name in np.unique(partition):
+        partition_idx = np.argwhere(partition == partition_name).flatten()
+        X_out[partition_idx] = X[np.random.permutation(partition_idx)]
+    return X_out
+
+
 @method(
     method_name="Random Integration",
     paper_name="Random Integration (baseline)",
@@ -26,7 +38,7 @@ def no_integration(adata, test=False):
     is_baseline=True,
 )
 def random_integration(adata, test=False):
-    adata.X = adata.X[np.random.permutation(np.arange(adata.shape[0]))]
+    adata.X = _randomize_features(adata.X)
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
 
@@ -39,9 +51,21 @@ def random_integration(adata, test=False):
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,
 )
-def celltype_integration(adata, test=False):
-    for batch_name in np.unique(adata.obs["batch"]):
-        batch_idx = np.argwhere(adata.obs["batch"].to_numpy() == batch_name).flatten()
-        adata.X[batch_idx] = adata.X[np.random.permutation(batch_idx)]
+def celltype_random_integration(adata, test=False):
+    adata.X = _randomize_features(adata.X, partition=adata.obs["labels"])
+    adata.uns["method_code_version"] = check_version("openproblems")
+    return adata
+
+
+@method(
+    method_name="Random Integration by Batch",
+    paper_name="Random Integration by Batch (baseline)",
+    paper_url="https://openproblems.bio",
+    paper_year=2022,
+    code_url="https://github.com/openproblems-bio/openproblems",
+    is_baseline=True,
+)
+def batch_random_integration(adata, test=False):
+    adata.X = _randomize_features(adata.X, partition=adata.obs["batch"])
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
