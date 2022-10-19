@@ -2,7 +2,6 @@ from .....tools.decorators import method
 from .....tools.utils import check_version
 
 import numpy as np
-import scipy.sparse
 
 
 def _set_uns(adata):
@@ -27,23 +26,22 @@ def no_integration(adata, test=False):
     return adata
 
 
-def _randomize_subgraph(distances, connectivities):
-    idx = np.random.permutation(np.arange(distances.shape[0]))
-    return distances[idx][:, idx], connectivities[idx][:, idx]
-
-
-def _randomize_graph(distances, connectivities, partition=None):
+def _randomize_graph(adata, partition=None):
+    distances, connectivities = (
+        adata.obsp["uni_distances"],
+        adata.obsp["uni_connectivities"],
+    )
     if partition is None:
-        return _randomize_subgraph(distances, connectivities)
+        new_idx = np.random.permutation(np.arange(distances.shape[0]))
     else:
-        distances_out = scipy.sparse.csr_matrix(distances.shape)
-        connectivities_out = scipy.sparse.csr_matrix(connectivities.shape)
-        for batch_name in np.unique(partition):
-            idx = np.argwhere(partition == batch_name).flatten()
-            distances_out[idx], connectivities_out[idx] = _randomize_subgraph(
-                distances[idx], connectivities[idx]
-            )
-        return distances_out, connectivities_out
+        new_idx = np.arange(distances.shape[0])
+        for partition_name in np.unique(partition):
+            partition_idx = np.argwhere(partition == partition_name).flatten()
+            new_idx[partition_idx] = np.random.permutation(new_idx[partition_idx])
+    adata.obsp["distances"] = distances[new_idx][:, new_idx]
+    adata.obsp["connectivities"] = connectivities[new_idx][:, new_idx]
+    _set_uns(adata)
+    return adata
 
 
 @method(
@@ -55,10 +53,7 @@ def _randomize_graph(distances, connectivities, partition=None):
     is_baseline=True,
 )
 def random_integration(adata, test=False):
-    adata.obsp["distances"], adata.obsp["connectivities"] = _randomize_graph(
-        adata.obsp["uni_distances"], adata.obsp["uni_connectivities"]
-    )
-    _set_uns(adata)
+    adata = _randomize_graph(adata)
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
 
@@ -72,12 +67,10 @@ def random_integration(adata, test=False):
     is_baseline=True,
 )
 def celltype_random_integration(adata, test=False):
-    adata.obsp["distances"], adata.obsp["connectivities"] = _randomize_graph(
-        adata.obsp["uni_distances"],
-        adata.obsp["uni_connectivities"],
+    adata = _randomize_graph(
+        adata,
         partition=adata.obs["labels"].to_numpy(),
     )
-    _set_uns(adata)
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
 
@@ -91,11 +84,9 @@ def celltype_random_integration(adata, test=False):
     is_baseline=True,
 )
 def batch_random_integration(adata, test=False):
-    adata.obsp["distances"], adata.obsp["connectivities"] = _randomize_graph(
-        adata.obsp["uni_distances"],
-        adata.obsp["uni_connectivities"],
+    adata = _randomize_graph(
+        adata,
         partition=adata.obs["batch"].to_numpy(),
     )
-    _set_uns(adata)
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
