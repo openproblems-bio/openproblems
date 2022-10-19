@@ -49,7 +49,7 @@ def _scalex(
         min_features=min_features,
         min_cells=min_cells,
         n_top_features=n_top_features,
-        outdir=None,
+        outdir="/dev/null",
     )
     adata.obsm["X_emb"] = adata.obsm["latent"]
     if compute_features:
