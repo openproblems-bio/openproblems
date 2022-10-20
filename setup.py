@@ -24,7 +24,7 @@ r_requires = [
     "anndata2ri==1.1.*",
 ]
 
-evaluate_requires = ["snakemake>=7.8,<7.15", "tabulate<0.10"]
+evaluate_requires = ["snakemake>=7.8,<7.15", "tabulate<0.9"]
 
 process_requires = ["numpyencoder==0.3.*"]
 
