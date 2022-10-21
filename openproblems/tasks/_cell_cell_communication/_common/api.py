@@ -136,7 +136,7 @@ def check_dataset(adata, merge_keys):
     return True
 
 
-def check_method(adata, merge_keys):
+def check_method(adata, merge_keys, is_baseline=False):
     """Check that method output fits expected API."""
     assert "ccc_pred" in adata.uns
 
