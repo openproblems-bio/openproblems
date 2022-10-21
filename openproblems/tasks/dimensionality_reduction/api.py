@@ -10,10 +10,11 @@ def check_dataset(adata):
     return True
 
 
-def check_method(adata):
+def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
     assert "X_emb" in adata.obsm
-    assert adata.obsm["X_emb"].shape[1] == 2
+    if not is_baseline:
+        assert adata.obsm["X_emb"].shape[1] == 2
     assert np.all(np.isfinite(adata.obsm["X_emb"]))
     return True
 

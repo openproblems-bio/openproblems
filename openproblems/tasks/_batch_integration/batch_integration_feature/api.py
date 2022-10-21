@@ -18,10 +18,11 @@ def check_dataset(adata):
     return True
 
 
-def check_method(adata):
+def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
     assert "log_normalized" in adata.layers
-    assert adata.layers["log_normalized"] is not adata.X
+    if not is_baseline:
+        assert adata.layers["log_normalized"] is not adata.X
     return True
 
 

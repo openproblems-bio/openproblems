@@ -14,7 +14,7 @@ def check_dataset(adata):
     return True
 
 
-def check_method(adata):
+def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
     assert "aligned" in adata.obsm
     assert "mode2_aligned" in adata.obsm

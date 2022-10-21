@@ -41,7 +41,7 @@ def test_method(task_name, method_name, image):
     )
     adata = method(adata, test=True)
     assert isinstance(adata, anndata.AnnData)
-    assert task.api.check_method(adata)
+    assert task.api.check_method(adata, is_baseline=method.metadata["is_baseline"])
     if "method_code_version" not in adata.uns:
         openproblems.utils.future_warning(
             "Setting code_version in the method decorator is deprecated. "
@@ -68,6 +68,7 @@ def test_method_metadata(method):
         "paper_year",
         "code_url",
         "image",
+        "is_baseline",
     ]:
         assert attr in method.metadata
 
@@ -80,3 +81,4 @@ def test_method_metadata(method):
     assert utils.asserts.assert_url_accessible(method.metadata["paper_url"])
     assert isinstance(method.metadata["code_url"], str)
     assert utils.asserts.assert_url_accessible(method.metadata["code_url"])
+    assert isinstance(method.metadata["is_baseline"], bool)
