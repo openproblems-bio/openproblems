@@ -26,18 +26,24 @@ def no_integration(adata, test=False):
     return adata
 
 
+def _randomize_features(X, partition=None):
+    X_out = X.copy()
+    if partition is None:
+        partition = np.full(X.shape[0], 0)
+    else:
+        partition = np.asarray(partition)
+    for partition_name in np.unique(partition):
+        partition_idx = np.argwhere(partition == partition_name).flatten()
+        X_out[partition_idx] = X[np.random.permutation(partition_idx)]
+    return X_out
+
+
 def _randomize_graph(adata, partition=None):
     distances, connectivities = (
         adata.obsp["uni_distances"],
         adata.obsp["uni_connectivities"],
     )
-    if partition is None:
-        new_idx = np.random.permutation(np.arange(distances.shape[0]))
-    else:
-        new_idx = np.arange(distances.shape[0])
-        for partition_name in np.unique(partition):
-            partition_idx = np.argwhere(partition == partition_name).flatten()
-            new_idx[partition_idx] = np.random.permutation(new_idx[partition_idx])
+    new_idx = _randomize_features(np.arange(distances.shape[0]), partition=partition)
     adata.obsp["distances"] = distances[new_idx][:, new_idx]
     adata.obsp["connectivities"] = connectivities[new_idx][:, new_idx]
     _set_uns(adata)

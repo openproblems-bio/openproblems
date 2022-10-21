@@ -1,6 +1,6 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
-from ...batch_integration_feature.methods.baseline import _randomize_features
+from ...batch_integration_graph.methods.baseline import _randomize_features
 
 
 @method(
