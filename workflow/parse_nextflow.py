@@ -209,9 +209,7 @@ def compute_ranking(dataset_results):
     method_names = list(dataset_results.keys())
     final_ranking = {
         method_names[method_idx]: rank + 1
-        for method_idx, rank in zip(
-            np.argsort(metric_sums)[::-1], np.arange(len(dataset_results))
-        )
+        for rank, method_idx in enumerate(np.argsort(metric_sums)[::-1])
     }
     return final_ranking
 
