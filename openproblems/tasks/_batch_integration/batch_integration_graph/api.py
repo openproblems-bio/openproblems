@@ -11,6 +11,9 @@ def check_dataset(adata):
     assert "X_uni_pca" in adata.obsm
     assert "batch" in adata.obs
     assert "labels" in adata.obs
+    assert "uni" in adata.uns
+    assert adata.uns["uni"]["connectivities_key"] == "uni_connectivities"
+    assert adata.uns["uni"]["distances_key"] == "uni_distances"
     assert "uni_connectivities" in adata.obsp
     assert "uni_distances" in adata.obsp
     assert "log_normalized" in adata.layers
@@ -20,6 +23,9 @@ def check_dataset(adata):
 
 def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
+    assert "neighbors" in adata.uns
+    assert adata.uns["neighbors"]["connectivities_key"] == "connectivities"
+    assert adata.uns["neighbors"]["distances_key"] == "distances"
     assert "connectivities" in adata.obsp
     assert "distances" in adata.obsp
     return True

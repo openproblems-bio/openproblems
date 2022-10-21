@@ -1,7 +1,6 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
-
-import numpy as np
+from ...batch_integration_graph.methods.baseline import _randomize_features
 
 
 @method(
@@ -26,6 +25,34 @@ def no_integration(adata, test=False):
     is_baseline=True,
 )
 def random_integration(adata, test=False):
-    adata.X = adata.X[np.random.permutation(np.arange(adata.shape[0]))]
+    adata.X = _randomize_features(adata.X)
+    adata.uns["method_code_version"] = check_version("openproblems")
+    return adata
+
+
+@method(
+    method_name="Random Integration by Celltype",
+    paper_name="Random Integration by Celltype (baseline)",
+    paper_url="https://openproblems.bio",
+    paper_year=2022,
+    code_url="https://github.com/openproblems-bio/openproblems",
+    is_baseline=True,
+)
+def celltype_random_integration(adata, test=False):
+    adata.X = _randomize_features(adata.X, partition=adata.obs["labels"])
+    adata.uns["method_code_version"] = check_version("openproblems")
+    return adata
+
+
+@method(
+    method_name="Random Integration by Batch",
+    paper_name="Random Integration by Batch (baseline)",
+    paper_url="https://openproblems.bio",
+    paper_year=2022,
+    code_url="https://github.com/openproblems-bio/openproblems",
+    is_baseline=True,
+)
+def batch_random_integration(adata, test=False):
+    adata.X = _randomize_features(adata.X, partition=adata.obs["batch"])
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
