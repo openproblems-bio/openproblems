@@ -161,8 +161,24 @@ def normalize_scores(task_name, dataset_results):
                 for method_name in dataset_results
             ]
         )
-        metric_scores -= metric_scores.min()
-        metric_scores /= metric_scores.max()
+        baseline_methods = [
+            method_name
+            for method_name in dataset_results
+            if openproblems.api.utils.get_function(
+                task_name, "methods", method_name
+            ).metadata["is_baseline"]
+        ]
+        if len(baseline_methods) < 2:
+            # just use all methods as a fallback
+            baseline_methods = dataset_results.keys()
+        baseline_scores = np.array(
+            [
+                dataset_results[method_name]["metrics"][metric_name]
+                for method_name in baseline_methods
+            ]
+        )
+        metric_scores -= baseline_scores.min()
+        metric_scores /= baseline_scores.max()
         if not metric.metadata["maximize"]:
             metric_scores = 1 - metric_scores
         for method_name, score in zip(dataset_results, metric_scores):
