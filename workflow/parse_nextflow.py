@@ -151,7 +151,7 @@ def parse_method_versions(results_path, results):
 
 
 def normalize_scores(task_name, dataset_results):
-    """Rank all methods on a specific dataset."""
+    """Normalize method scores to [0, 1] based on baseline method scores."""
     metric_names = list(dataset_results.values())[0]["metrics"].keys()
     for metric_name in metric_names:
         metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
@@ -187,7 +187,7 @@ def normalize_scores(task_name, dataset_results):
 
 
 def drop_baselines(task_name, dataset_results):
-    """Rank all methods on a specific dataset."""
+    """Remove baseline methods from dataset results."""
     for method_name in dataset_results.keys():
         method = openproblems.api.utils.get_function(task_name, "methods", method_name)
         if method.metadata["is_baseline"]:
