@@ -32,6 +32,8 @@ from .baseline import batch_random_integration
 from .baseline import celltype_random_integration
 from .baseline import no_integration
 from .baseline import random_integration
+from .scalex import scalex_full
+from .scalex import scalex_hvg
 
 # from ...batch_integration_graph.methods.scgen import scgen_full_scaled
 # from ...batch_integration_graph.methods.scgen import scgen_full_unscaled
