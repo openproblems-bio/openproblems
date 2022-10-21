@@ -1,5 +1,6 @@
 from .baseline import majority_vote
 from .baseline import random_labels
+from .baseline import true_labels
 from .knn_classifier import knn_classifier_log_cpm
 from .knn_classifier import knn_classifier_scran
 from .logistic_regression import logistic_regression_log_cpm

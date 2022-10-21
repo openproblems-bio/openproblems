@@ -28,6 +28,10 @@ from ...batch_integration_graph.methods.scanorama import scanorama_feature_full_
 from ...batch_integration_graph.methods.scanorama import scanorama_feature_full_unscaled
 from ...batch_integration_graph.methods.scanorama import scanorama_feature_hvg_scaled
 from ...batch_integration_graph.methods.scanorama import scanorama_feature_hvg_unscaled
+from .baseline import batch_random_integration
+from .baseline import celltype_random_integration
+from .baseline import no_integration
+from .baseline import random_integration
 from .scalex import scalex_full
 from .scalex import scalex_hvg
 
