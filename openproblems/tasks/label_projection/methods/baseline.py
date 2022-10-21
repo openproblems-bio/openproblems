@@ -26,6 +26,7 @@ def majority_vote(adata, test=False):
     paper_url="https://openproblems.bio",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
+    is_baseline=True,
 )
 def random_labels(adata, test=False):
     label_distribution = adata.obs.labels[adata.obs.is_train].value_counts()
@@ -38,5 +39,19 @@ def random_labels(adata, test=False):
         p=label_distribution,
     )
 
+    adata.uns["method_code_version"] = check_version("openproblems")
+    return adata
+
+
+@method(
+    method_name="True Labels",
+    paper_name="True Labels (baseline)",
+    paper_url="https://openproblems.bio",
+    paper_year=2022,
+    code_url="https://github.com/openproblems-bio/openproblems",
+    is_baseline=True,
+)
+def true_labels(adata, test=False):
+    adata.obs["labels_pred"] = adata.obs["labels"]
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
