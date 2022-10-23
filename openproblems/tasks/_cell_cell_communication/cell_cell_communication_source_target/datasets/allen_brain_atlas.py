@@ -10,7 +10,8 @@ from ..._common.utils import ligand_receptor_resource
     dataset_summary="A murine brain atlas with inferred spatially-adjacent "
     "cell types as assumed benchmark truth. Adjacent cell types are inferred "
     "from z-transformed deconvolution proportion correlations. Generated from "
-    "murine brain 10x Visium slides (see Dimitrov et al., 2022).",
+    "murine brain 10x Visium slides (see Dimitrov et al., 2022)."
+    "14249 cells x 34617 features with 23 cell type labels",
     image="openproblems-r-extras",
 )
 def mouse_brain_atlas(test=False):

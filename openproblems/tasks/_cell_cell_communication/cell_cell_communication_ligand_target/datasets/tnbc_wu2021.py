@@ -10,10 +10,12 @@ import pathlib
     "Triple negative breast cancer atlas",
     data_url=load_tnbc_data.metadata["data_url"],
     data_reference=load_tnbc_data.metadata["data_reference"],
-    dataset_summary="A single-cell atlas of human breast cancers with inferred "
-    "cytokine activities as assumed true cell-cell communication. Cytokine "
-    "activities were estimated by fitting a multivariate linear model with "
-    "cytokine-focused signatures (see Dimitrov et al., 2022).",
+    dataset_summary=
+    "A single-cell atlas of human breast cancers (Wu et al., 2021), along with "
+    "inferred cytokine activities as assumed true cell-cell communication). "
+    "Cytokine activities were estimated by fitting a multivariate linear model with "
+    "cytokine-focused signatures (see Dimitrov et al., 2022)."
+    "42512 cells x 28078 features with 29 cell type labels from 10 patients",
     image="openproblems-r-extras",
 )
 def tnbc_data(test=False):
