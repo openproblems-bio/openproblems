@@ -150,28 +150,72 @@ def parse_method_versions(results_path, results):
     return results
 
 
-def compute_ranking(task_name, dataset_results):
-    """Rank all methods on a specific dataset."""
-    rankings = np.zeros(len(dataset_results))
+def normalize_scores(task_name, dataset_results):
+    """Normalize method scores to [0, 1] based on baseline method scores."""
+    for method_name in dataset_results:
+        # store original unnormalized results
+        dataset_results[method_name]["metrics_raw"] = dataset_results[method_name][
+            "metrics"
+        ]
     metric_names = list(dataset_results.values())[0]["metrics"].keys()
     for metric_name in metric_names:
         metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
-        sorted_order = np.argsort(
+        metric_scores = np.array(
             [
                 dataset_results[method_name]["metrics"][metric_name]
                 for method_name in dataset_results
             ]
         )
-        if metric.metadata["maximize"]:
-            sorted_order = sorted_order[::-1]
-        rankings += np.argsort(sorted_order)
+        baseline_methods = [
+            method_name
+            for method_name in dataset_results
+            if openproblems.api.utils.get_function(
+                task_name, "methods", method_name
+            ).metadata["is_baseline"]
+        ]
+        if len(baseline_methods) < 2:
+            # just use all methods as a fallback
+            baseline_methods = dataset_results.keys()
+        baseline_scores = np.array(
+            [
+                dataset_results[method_name]["metrics"][metric_name]
+                for method_name in baseline_methods
+            ]
+        )
+        metric_scores -= baseline_scores.min()
+        baseline_range = baseline_scores.max() - baseline_scores.min()
+        metric_scores /= np.where(baseline_range != 0, baseline_range, 1)
+        if not metric.metadata["maximize"]:
+            metric_scores = 1 - metric_scores
+        for method_name, score in zip(dataset_results, metric_scores):
+            dataset_results[method_name]["metrics"][metric_name] = score
+    return dataset_results
 
+
+def drop_baselines(task_name, dataset_results):
+    """Remove baseline methods from dataset results."""
+    for method_name in dataset_results.keys():
+        method = openproblems.api.utils.get_function(task_name, "methods", method_name)
+        if method.metadata["is_baseline"]:
+            del dataset_results[method_name]
+    return dataset_results
+
+
+def compute_ranking(dataset_results):
+    """Rank all methods on a specific dataset."""
+    metric_sums = np.zeros(len(dataset_results))
+    metric_names = list(dataset_results.values())[0]["metrics"].keys()
     method_names = list(dataset_results.keys())
+    for metric_name in metric_names:
+        metric_scores = [
+            dataset_results[method_name]["metrics"][metric_name]
+            for method_name in method_names
+        ]
+        metric_sums += metric_scores
+
     final_ranking = {
         method_names[method_idx]: rank + 1
-        for method_idx, rank in zip(
-            np.argsort(rankings), np.arange(len(dataset_results))
-        )
+        for rank, method_idx in enumerate(np.argsort(metric_sums)[::-1])
     }
     return final_ranking
 
@@ -186,7 +230,9 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
         headers=dict(names=["Rank"], fixed=["Name", "Paper", "Website", "Code"]),
         results=list(),
     )
-    ranking = compute_ranking(task_name, dataset_results)
+    dataset_results = normalize_scores(task_name, dataset_results)
+    dataset_results = drop_baselines(task_name, dataset_results)
+    ranking = compute_ranking(dataset_results)
     metric_names = set()
     for method_name, rank in ranking.items():
         method_results = dataset_results[method_name]
