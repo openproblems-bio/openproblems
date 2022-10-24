@@ -194,7 +194,8 @@ def normalize_scores(task_name, dataset_results):
 
 def drop_baselines(task_name, dataset_results):
     """Remove baseline methods from dataset results."""
-    for method_name in dataset_results.keys():
+    method_names = list(dataset_results.keys())
+    for method_name in method_names:
         method = openproblems.api.utils.get_function(task_name, "methods", method_name)
         if method.metadata["is_baseline"]:
             del dataset_results[method_name]
