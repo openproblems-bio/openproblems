@@ -92,6 +92,7 @@ nodes <- bind_rows(
     transmute(id = name, label, is_comp = TRUE)
 ) %>%
   mutate(str = paste0(
+    "  ",
     id, 
     ifelse(is_comp, "[/", "("), 
     label,
@@ -105,14 +106,15 @@ edges <- bind_rows(
     filter(direction == "output") %>%
     transmute(from = comp, to = id, arrow = "-->")
 ) %>%
-  mutate(str = paste0(from, arrow, to))
+  mutate(str = paste0("  ", from, arrow, to))
 
+# note: use ```{mermaid} instead of ```mermaid when rendering to html
 out_str <- strip_margin(glue::glue("
-  §```{{mermaid}}
+  §```mermaid
   §%%| column: screen-inset-shaded
   §flowchart LR
-  §  {paste(nodes$str, collapse = '\n  ')}
-  §  {paste(edges$str, collapse = '\n  ')}
+  §{paste(nodes$str, collapse = '\n')}
+  §{paste(edges$str, collapse = '\n')}
   §```
   §"), symbol = "§")
 knitr::asis_output(out_str)

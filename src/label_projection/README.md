@@ -46,30 +46,31 @@ correctly assigns cell type labels to cells in the test set.
 ## API
 
 ``` mermaid
+%%| column: screen-inset-shaded
 flowchart LR
   dataset_censoring__output_train(Training data)
-dataset_censoring__output_test(Test data)
-dataset_censoring__output_solution(Solution)
-dataset_preprocessing__input(Raw dataset)
-dataset_preprocessing__output(Pre-processed dataset)
-method__output(Prediction)
-metric__output(Scores)
-dataset_censoring[/Dataset censoring/]
-dataset_preprocessing[/Dataset preprocessing/]
-method[/Method/]
-metric[/Metric/]
+  dataset_censoring__output_test(Test data)
+  dataset_censoring__output_solution(Solution)
+  dataset_preprocessing__input(Raw dataset)
+  dataset_preprocessing__output(Pre-processed dataset)
+  method__output(Prediction)
+  metric__output(Scores)
+  dataset_censoring[/Dataset censoring/]
+  dataset_preprocessing[/Dataset preprocessing/]
+  method[/Method/]
+  metric[/Metric/]
   dataset_preprocessing__output---dataset_censoring
-dataset_preprocessing__input---dataset_preprocessing
-dataset_censoring__output_train---method
-dataset_censoring__output_test---method
-dataset_censoring__output_solution---metric
-method__output---metric
-dataset_censoring-->dataset_censoring__output_train
-dataset_censoring-->dataset_censoring__output_test
-dataset_censoring-->dataset_censoring__output_solution
-dataset_preprocessing-->dataset_preprocessing__output
-method-->method__output
-metric-->metric__output
+  dataset_preprocessing__input---dataset_preprocessing
+  dataset_censoring__output_train---method
+  dataset_censoring__output_test---method
+  dataset_censoring__output_solution---metric
+  method__output---metric
+  dataset_censoring-->dataset_censoring__output_train
+  dataset_censoring-->dataset_censoring__output_test
+  dataset_censoring-->dataset_censoring__output_solution
+  dataset_preprocessing-->dataset_preprocessing__output
+  method-->method__output
+  metric-->metric__output
 ```
 
 ### Training data
