@@ -1,62 +1,48 @@
 from . import utils
 
 import os
-import pandas as pd
+import requests
 import scanpy as sc
 import scprep
 import tempfile
 
-
-def get_filenames_and_urls(url_df, method_list=None, organ_list=None):
-    """Takes in dataframe and returns corresponding filename(s) and url(s).
-
-    Takes in dataframe (with sample information stored), a list of methods,
-    and a list of organs.
-    Returns filenames and figshare URLs associated with inputs.
-    If method_list or organ_list are None, do not filter based on that argument.
-    """
-    subset_df = url_df.copy()
-    # If method_list specified, filter based on methods in list.
-    if method_list:
-        subset_df = subset_df.loc[subset_df.method.isin(method_list)]
-    # If organ_list specified, filter based on organs in list.
-    if organ_list:
-        subset_df = subset_df.loc[subset_df.organ.isin(organ_list)]
-
-    return subset_df
+COLLECTION_ID = "0b9d8a04-bb9d-44da-aa27-705bb65b54eb"
+DOMAIN = "cellxgene.cziscience.com"
+API_BASE = f"https://api.{DOMAIN}"
+METHOD_ALIASES = {
+    "10x 3' v2": "droplet",
+    "Smart-seq2": "facs"
+}
 
 
-def make_anndata_from_filename_and_url(filename, url, test=False):
-    """Takes in filename and url pair. Returns corresponding anndata object."""
+def matching_dataset(dataset, method_list, organ_list):
+    # we want to skip combined datasets
+    if len(dataset["tissue"]) > 1:
+        return False
+    if dataset["tissue"][0]["label"] not in organ_list:
+        return False
+    method = METHOD_ALIASES[dataset["assay"][0]["label"]]
+    return method in method_list
+
+
+def load_raw_counts(dataset):
+    dataset_id = dataset["id"]
+    assets_path = f"/curation/v1/collections/{COLLECTION_ID}/datasets/{dataset_id}/assets"
+    url = f"{API_BASE}{assets_path}"
+    res = requests.get(url=url)
+    assets = res.json()
+    assets = [asset for asset in assets if asset["filetype"] == "H5AD"]
+    asset = assets[0]
+
+    filename = f"{COLLECTION_ID}_{dataset_id}_{asset['filename']}"
     with tempfile.TemporaryDirectory() as tempdir:
         filepath = os.path.join(tempdir, filename)
-        scprep.io.download.download_url(url, filepath)
+        scprep.io.download.download_url(asset["presigned_url"], filepath)
         adata = sc.read_h5ad(filepath)
-        utils.filter_genes_cells(adata)
 
-    if test:
-        sc.pp.subsample(adata, n_obs=100)
-        adata = adata[:, :1000]
-        utils.filter_genes_cells(adata)
-
-    return adata
-
-
-def make_anndata_list(subset_df, test):
-    """Makes anndata from filename/url pair. Adds to list of anndatas.
-
-    Input dataframe that contains filenames and urls to make anndatas from.
-    Returns a list of anndata objects.
-    """
-    adata_list = []
-    for i in range(len(subset_df)):
-        row = subset_df.iloc[i]
-        adata_list.append(
-            make_anndata_from_filename_and_url(row.filename, row.figshare_url)
-        )
-    if test:
-        return adata_list[0]
-    return adata_list
+    utils.filter_genes_cells(adata)
+    # raw counts are in `raw`
+    return adata.raw.to_adata()
 
 
 @utils.loader(
@@ -73,22 +59,33 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
     and droplet-fat anndata sets. (no facs-fat dataset available)
     """
 
-    # df containing figshare links, method of collection, and organ for each
-    # tabula muris dataset
-    url_df = pd.read_csv(
-        os.path.join(
-            os.path.dirname(__file__),
-            "tabula_muris_senis_data_objects",
-            "tabula_muris_senis_data_objects.csv",
-        ),
-        header=0,
-    )
+    if not method_list:
+        raise ValueError("`method_list' argument not provided")
+    unknown_methods = set(method_list) - set(["facs", "droplet"])
+    if unknown_methods:
+        raise ValueError(
+            f"Unknown methods provided in `method_list': {','.join(unknown_methods)}. "
+            "Known methods are `facs' and `droplet'"
+        )
+    organ_list = [x.lower() for x in organ_list]
 
-    subset_df = get_filenames_and_urls(url_df, method_list, organ_list)
-    adata_list = make_anndata_list(subset_df, test)
-    adata = adata_list[0].concatenate(adata_list[1:])
+    datasets_path = f"/curation/v1/collections/{COLLECTION_ID}"
+    url = f"{API_BASE}{datasets_path}"
+    res = requests.get(url=url)
+    datasets = res.json()["datasets"]
+
+    adata_list = []
+    for dataset in datasets:
+        if matching_dataset(dataset, method_list, organ_list):
+            adata_list.append(load_raw_counts(dataset))
+
+    if len(adata_list) > 1:
+        adata = adata_list[0].concatenate(adata_list[1:], join="outer")
+    else:
+        adata = adata_list[0]
+
     if test:
         sc.pp.subsample(adata, n_obs=500)
         adata = adata[:, :1000]
         utils.filter_genes_cells(adata)
-    return adata
+    return adata    
