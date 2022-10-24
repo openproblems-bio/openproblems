@@ -152,6 +152,11 @@ def parse_method_versions(results_path, results):
 
 def normalize_scores(task_name, dataset_results):
     """Normalize method scores to [0, 1] based on baseline method scores."""
+    for method_name in dataset_results:
+        # store original unnormalized results
+        dataset_results[method_name]["metrics_raw"] = dataset_results[method_name][
+            "metrics"
+        ]
     metric_names = list(dataset_results.values())[0]["metrics"].keys()
     for metric_name in metric_names:
         metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
