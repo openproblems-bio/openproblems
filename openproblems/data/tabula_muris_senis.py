@@ -9,10 +9,7 @@ import tempfile
 COLLECTION_ID = "0b9d8a04-bb9d-44da-aa27-705bb65b54eb"
 DOMAIN = "cellxgene.cziscience.com"
 API_BASE = f"https://api.{DOMAIN}"
-METHOD_ALIASES = {
-    "10x 3' v2": "droplet",
-    "Smart-seq2": "facs"
-}
+METHOD_ALIASES = {"10x 3' v2": "droplet", "Smart-seq2": "facs"}
 
 
 def matching_dataset(dataset, method_list, organ_list):
@@ -27,7 +24,9 @@ def matching_dataset(dataset, method_list, organ_list):
 
 def load_raw_counts(dataset):
     dataset_id = dataset["id"]
-    assets_path = f"/curation/v1/collections/{COLLECTION_ID}/datasets/{dataset_id}/assets"
+    assets_path = (
+        f"/curation/v1/collections/{COLLECTION_ID}/datasets/{dataset_id}/assets"
+    )
     url = f"{API_BASE}{assets_path}"
     res = requests.get(url=url)
     assets = res.json()
@@ -88,4 +87,4 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
         sc.pp.subsample(adata, n_obs=500)
         adata = adata[:, :1000]
         utils.filter_genes_cells(adata)
-    return adata    
+    return adata
