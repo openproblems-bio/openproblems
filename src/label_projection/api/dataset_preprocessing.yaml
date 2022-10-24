@@ -1,0 +1,50 @@
+functionality:
+  name: dataset_preprocessing
+  arguments:
+    - name: "--input"
+      type: h5ad_file
+      description: "An unprocessed dataset."
+      example: "unprocessed.h5ad"
+      slots:
+        layers: 
+          - type: integer
+            name: counts
+            description: Raw counts
+        obs:
+          - type: double
+            name: labels
+            description: Ground truth cell type labels
+          - type: double
+            name: batch
+            description: Batch information
+        uns:
+          - type: string
+            name: raw_dataset_id
+            description: "A unique identifier for the original dataset (before preprocessing)"
+    - name: "--output"
+      type: h5ad_file
+      description: "A preprocessed dataset"
+      example: "preprocessed.h5ad"
+      slots:
+        layers: 
+          - type: integer
+            name: counts
+            description: Raw counts
+          - type: double
+            name: lognorm
+            description: Log-transformed normalised counts
+        obs:
+          - type: double
+            name: labels
+            description: Ground truth cell type labels
+          - type: double
+            name: batch
+            description: Batch information
+        uns:
+          - type: string
+            name: raw_dataset_id
+            description: "A unique identifier for the original dataset (before preprocessing)"
+          - type: string
+            name: dataset
+            description: "A unique identifier for the dataset"
+      direction: output

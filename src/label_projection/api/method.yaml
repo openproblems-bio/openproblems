@@ -1,0 +1,104 @@
+functionality:
+  name: method
+  meta: 
+    # Short descriptive label of the method, ideally 10 characters at most.
+    method_label: "foo_bar"
+
+    # The method name, ideally four words at most
+    method_name: "Method foo param bar"
+
+    # The type of method. Must be one of: method, positive_control, negative_control, baseline
+    method_type: method
+
+    # The doi of an associated paper (optional).
+    # paper_doi: "10.1234/s56789-012-3456-7"
+
+    # URL to the main codebase of this method (optional).
+    # code_url: "https://github.com/foo/bar"
+  arguments:
+    - name: "--input_train"
+      type: h5ad_file
+      description: "The training data"
+      example: "training.h5ad"
+      slots:
+        layers: 
+          - type: integer
+            name: counts
+            description: Raw counts
+          - type: double
+            name: lognorm
+            description: Log-transformed normalised counts
+        obs:
+          - type: double
+            name: labels
+            description: Ground truth cell type labels
+          - type: double
+            name: batch
+            description: Batch information
+        uns:
+          - type: string
+            name: raw_dataset_id
+            description: "A unique identifier for the original dataset (before preprocessing)"
+          - type: string
+            name: dataset
+            description: "A unique identifier for the dataset"
+    - name: "--input_test"
+      type: h5ad_file
+      description: "The censored test data"
+      example: "test.h5ad"
+      slots:
+        layers: 
+          - type: integer
+            name: counts
+            description: Raw counts
+          - type: double
+            name: lognorm
+            description: Log-transformed normalised counts
+        obs:
+          - type: double
+            name: batch
+            description: Batch information
+        uns:
+          - type: string
+            name: raw_dataset_id
+            description: "A unique identifier for the original dataset (before preprocessing)"
+          - type: string
+            name: dataset
+            description: "A unique identifier for the dataset"
+    - name: "--output"
+      type: h5ad_file
+      description: "The prediction file"
+      example: "prediction.h5ad"
+      slots:
+        obs:
+          - type: double
+            name: labels_pred
+            description: Predicted labels for the test cells.
+        uns:
+          - type: string
+            name: dataset_id
+            description: "A unique identifier for the dataset"
+          - type: string
+            name: raw_dataset_id
+            description: "A unique identifier for the original dataset (before preprocessing)"
+          - type: string
+            name: method_id
+            description: "A unique identifier for the method"
+      direction: output
+  resources:
+    # A custom python script with additional checks
+    - type: python_script
+      path: format_check.py
+      text: |
+        import anndata as ad
+
+        # input_train = ad.read_h5ad(par["input_train"])
+        input_test = ad.read_h5ad(par["input_test"])
+        output = ad.read_h5ad(par["output"])
+
+        print("Checking whether data from input was copied properly to output")
+        assert input_test.n_obs == output.n_obs
+        assert input_test.uns["dataset_id"] == output.uns["dataset_id"]
+        assert input_test.uns["raw_dataset_id"] == output.uns["raw_dataset_id"]
+
+        print("All checks succeeded!")
