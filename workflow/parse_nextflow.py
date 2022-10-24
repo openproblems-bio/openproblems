@@ -199,14 +199,14 @@ def compute_ranking(dataset_results):
     """Rank all methods on a specific dataset."""
     metric_sums = np.zeros(len(dataset_results))
     metric_names = list(dataset_results.values())[0]["metrics"].keys()
+    method_names = list(dataset_results.keys())
     for metric_name in metric_names:
         metric_scores = [
             dataset_results[method_name]["metrics"][metric_name]
-            for method_name in dataset_results
+            for method_name in method_names
         ]
         metric_sums += metric_scores
 
-    method_names = list(dataset_results.keys())
     final_ranking = {
         method_names[method_idx]: rank + 1
         for rank, method_idx in enumerate(np.argsort(metric_sums)[::-1])
