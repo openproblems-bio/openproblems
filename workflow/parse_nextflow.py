@@ -178,7 +178,8 @@ def normalize_scores(task_name, dataset_results):
             ]
         )
         metric_scores -= baseline_scores.min()
-        metric_scores /= baseline_scores.max()
+        baseline_range = baseline_scores.max() - baseline_scores.min()
+        metric_scores /= np.where(baseline_range != 0, baseline_range, 1)
         if not metric.metadata["maximize"]:
             metric_scores = 1 - metric_scores
         for method_name, score in zip(dataset_results, metric_scores):
