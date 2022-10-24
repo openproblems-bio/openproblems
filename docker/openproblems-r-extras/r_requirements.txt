@@ -6,7 +6,7 @@ bioc::scuttle@1.6.3
 bslib@0.4.0
 caret@6.0-93
 cli@3.4.1
-conos@1.4.9
+conos@1.5.0
 crayon@1.5.2
 dbplyr@2.2.1
 devtools@2.4.5
