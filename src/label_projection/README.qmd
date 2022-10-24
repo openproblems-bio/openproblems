@@ -4,6 +4,18 @@ info:
   migration_date: "2022-10-17 12:49:00 GMT"
 ---
 
+```{r setup, include=FALSE}
+library(tidyverse)
+library(rlang)
+
+strip_margin <- function(text, symbol = "\\|") {
+  str_replace_all(text, paste0("(\n?)[ \t]*", symbol), "\\1") 
+}
+
+dir <- "src/label_projection"
+dir <- "."
+```
+
 # Label Projection
 
 ## The task
@@ -24,6 +36,118 @@ Metrics for label projection aim to characterize how well each classifer correct
 
 ## API
 
+```{r data, include=FALSE}
+yaml_files <- list.files(paste0(dir, "/api"), full.names = TRUE)
+
+file_arg_info <- map_df(yaml_files, function(yaml_file) {
+  conf <- yaml::read_yaml(yaml_file)
+
+  map_df(conf$functionality$arguments, function(arg) {
+    tibble(
+      comp = conf$functionality$name,
+      arg_name = str_replace_all(arg$name, "^-*", ""),
+      id = paste0(comp, "__", arg_name),
+      short_description = arg$meta$short_description,
+      description = arg$description,
+      direction = arg$direction %||% "input",
+      from = arg$meta$from
+    )
+  })
+})
+
+comp_info <- map_df(yaml_files, function(yaml_file) {
+  conf <- yaml::read_yaml(yaml_file)
+
+  tibble(
+    name = conf$functionality$name,
+    label = conf$functionality$meta$label %||% str_replace_all(name, "_", " ")
+  )
+})
+
+slot_info <- map_df(yaml_files, function(yaml_file) {
+  conf <- yaml::read_yaml(yaml_file)
+
+  map_df(conf$functionality$arguments, function(arg) {
+    out <- map2_df(names(arg$slots), arg$slots, function(group_name, slot) {
+      df <- map_df(slot, as.data.frame)
+      df$struct <- group_name
+      as_tibble(df)
+    })
+    out$component <- conf$functionality$name
+    out$argument <- str_replace_all(arg$name, "^-*", "")
+    out$direction <- arg$direction %||% "input"
+    out
+  })
+}) %>% 
+  select(component, argument, struct, name, everything()) %>%
+  mutate(multiple = multiple %|% FALSE, id = paste0(component, "__", argument))
+```
+
+```{r flow, echo=FALSE,warning=FALSE,error=FALSE}
+nodes <- bind_rows(
+  file_arg_info %>%
+    filter(!is.na(short_description)) %>%
+    transmute(id, label = short_description, is_comp = FALSE),
+  comp_info %>%
+    transmute(id = name, label, is_comp = TRUE)
+) %>%
+  mutate(str = paste0(
+    id, 
+    ifelse(is_comp, "[/", "("), 
+    label,
+    ifelse(is_comp, "/]", ")")
+  ))
+edges <- bind_rows(
+  file_arg_info %>%
+    filter(direction == "input") %>%
+    transmute(from = ifelse(!is.na(from), from, id), to = comp, arrow = "---"),
+  file_arg_info %>%
+    filter(direction == "output") %>%
+    transmute(from = comp, to = id, arrow = "-->")
+) %>%
+  mutate(str = paste0(from, arrow, to))
+
+out_str <- strip_margin(glue::glue("
+  §```{{mermaid}}
+  §%%| column: screen-inset-shaded
+  §flowchart LR
+  §  {paste(nodes$str, collapse = '\n  ')}
+  §  {paste(edges$str, collapse = '\n  ')}
+  §```
+  §"), symbol = "§")
+knitr::asis_output(out_str)
+```
+
+```{r api, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
+obj_ids <- file_arg_info %>% filter(!is.na(short_description)) %>% pull(id)
+for (obj_id in obj_ids) {
+  arg_info <- file_arg_info %>% filter(id == obj_id)
+  sub_out <- slot_info %>% 
+    filter(id == obj_id) %>% 
+    select(struct, name, type, description)
+  used_in <- file_arg_info %>%
+    filter(id == obj_id | from == obj_id) %>%
+    mutate(str = paste0("* ", comp, ": ", arg_name, " (as ", direction, ")")) %>%
+    pull(str)
+  
+  out_str <- strip_margin(glue::glue("
+    §### {arg_info$short_description}
+    §
+    §{arg_info$description}
+    §
+    §Used in:
+    §
+    §{paste(used_in, collapse = '\n')}
+    §
+    §Slots:
+    §
+    §{paste(knitr::kable(sub_out, format = 'pipe'), collapse = '\n')}
+    §"), symbol = "§")
+  cat(out_str)
+}
+```
+
+<!--
 Datasets should contain the following attributes:
 
 * `adata.obs["labels"]` with ground truth celltype labels,
@@ -37,3 +161,4 @@ Methods should assign output celltype labels to `adata.obs['labels_pred']` using
 Note that the true labels are contained in `adata['labels']`.
 
 Metrics can compare `adata['labels']` to `adata.obs['labels_pred']` using only the labels from the test data.
+-->

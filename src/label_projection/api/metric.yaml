@@ -1,6 +1,9 @@
 functionality:
   name: metric
   meta:
+    # pretty version of the functionality.name
+    label: "Metric"
+
     # The unique identifier(s) of metrics contained in this component
     metric_ids: [ "my_metric" ]
 
@@ -18,6 +21,8 @@ functionality:
       type: h5ad_file
       description: "The solution for the test data"
       example: "solution.h5ad"
+      meta:
+        from: dataset_censoring__output_solution
       slots:
         layers: 
           - type: integer
@@ -44,6 +49,8 @@ functionality:
       type: h5ad_file
       description: "The prediction file"
       example: "prediction.h5ad"
+      meta:
+        from: method__output
       slots:
         obs:
           - type: double
@@ -62,6 +69,8 @@ functionality:
     - name: "--output"
       description: "Metric score file"
       example: "output.h5ad"
+      meta:
+        short_description: "Scores"
       slots:
         uns:
           - type: string
@@ -81,6 +90,7 @@ functionality:
             name: metric_values
             description: "The metric values obtained for the given prediction. Must be of same length as 'metric_ids'."
             multiple: true
+      direction: output
   resources:
     # A custom python script with additional checks
     - type: python_script

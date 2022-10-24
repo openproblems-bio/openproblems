@@ -1,10 +1,14 @@
 functionality:
   name: dataset_preprocessing
+  meta:
+    label: "Dataset preprocessing"
   arguments:
     - name: "--input"
       type: h5ad_file
       description: "An unprocessed dataset."
       example: "unprocessed.h5ad"
+      meta:
+        short_description: "Raw dataset"
       slots:
         layers: 
           - type: integer
@@ -25,6 +29,8 @@ functionality:
       type: h5ad_file
       description: "A preprocessed dataset"
       example: "preprocessed.h5ad"
+      meta:
+        short_description: "Pre-processed dataset"
       slots:
         layers: 
           - type: integer

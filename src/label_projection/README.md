@@ -45,19 +45,177 @@ correctly assigns cell type labels to cells in the test set.
 
 ## API
 
+``` mermaid
+flowchart LR
+  dataset_censoring__output_train(Training data)
+dataset_censoring__output_test(Test data)
+dataset_censoring__output_solution(Solution)
+dataset_preprocessing__input(Raw dataset)
+dataset_preprocessing__output(Pre-processed dataset)
+method__output(Prediction)
+metric__output(Scores)
+dataset_censoring[/Dataset censoring/]
+dataset_preprocessing[/Dataset preprocessing/]
+method[/Method/]
+metric[/Metric/]
+  dataset_preprocessing__output---dataset_censoring
+dataset_preprocessing__input---dataset_preprocessing
+dataset_censoring__output_train---method
+dataset_censoring__output_test---method
+dataset_censoring__output_solution---metric
+method__output---metric
+dataset_censoring--&gt;dataset_censoring__output_train
+dataset_censoring--&gt;dataset_censoring__output_test
+dataset_censoring--&gt;dataset_censoring__output_solution
+dataset_preprocessing--&gt;dataset_preprocessing__output
+method--&gt;method__output
+metric--&gt;metric__output
+```
+
+### Training data
+
+The training data
+
+Used in:
+
+- dataset_censoring: output_train (as output)
+- method: input_train (as input)
+
+Slots:
+
+| struct | name           | type    | description                                                         |
+|:-------|:---------------|:--------|:--------------------------------------------------------------------|
+| layers | counts         | integer | Raw counts                                                          |
+| layers | lognorm        | double  | Log-transformed normalised counts                                   |
+| obs    | labels         | double  | Ground truth cell type labels                                       |
+| obs    | batch          | double  | Batch information                                                   |
+| uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
+| uns    | dataset        | string  | A unique identifier for the dataset                                 |
+
+### Test data
+
+The censored test data
+
+Used in:
+
+- dataset_censoring: output_test (as output)
+- method: input_test (as input)
+
+Slots:
+
+| struct | name           | type    | description                                                         |
+|:-------|:---------------|:--------|:--------------------------------------------------------------------|
+| layers | counts         | integer | Raw counts                                                          |
+| layers | lognorm        | double  | Log-transformed normalised counts                                   |
+| obs    | batch          | double  | Batch information                                                   |
+| uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
+| uns    | dataset        | string  | A unique identifier for the dataset                                 |
+
+### Solution
+
+The solution for the test data
+
+Used in:
+
+- dataset_censoring: output_solution (as output)
+- metric: input_solution (as input)
+
+Slots:
+
+| struct | name           | type    | description                                                         |
+|:-------|:---------------|:--------|:--------------------------------------------------------------------|
+| layers | counts         | integer | Raw counts                                                          |
+| layers | lognorm        | double  | Log-transformed normalised counts                                   |
+| obs    | labels         | double  | Ground truth cell type labels                                       |
+| obs    | batch          | double  | Batch information                                                   |
+| uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
+| uns    | dataset        | string  | A unique identifier for the dataset                                 |
+
+### Raw dataset
+
+An unprocessed dataset.
+
+Used in:
+
+- dataset_preprocessing: input (as input)
+
+Slots:
+
+| struct | name           | type    | description                                                         |
+|:-------|:---------------|:--------|:--------------------------------------------------------------------|
+| layers | counts         | integer | Raw counts                                                          |
+| obs    | labels         | double  | Ground truth cell type labels                                       |
+| obs    | batch          | double  | Batch information                                                   |
+| uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
+
+### Pre-processed dataset
+
+A preprocessed dataset
+
+Used in:
+
+- dataset_censoring: input (as input)
+- dataset_preprocessing: output (as output)
+
+Slots:
+
+| struct | name           | type    | description                                                         |
+|:-------|:---------------|:--------|:--------------------------------------------------------------------|
+| layers | counts         | integer | Raw counts                                                          |
+| layers | lognorm        | double  | Log-transformed normalised counts                                   |
+| obs    | labels         | double  | Ground truth cell type labels                                       |
+| obs    | batch          | double  | Batch information                                                   |
+| uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
+| uns    | dataset        | string  | A unique identifier for the dataset                                 |
+
+### Prediction
+
+The prediction file
+
+Used in:
+
+- method: output (as output)
+- metric: input_prediction (as input)
+
+Slots:
+
+| struct | name           | type   | description                                                         |
+|:-------|:---------------|:-------|:--------------------------------------------------------------------|
+| obs    | labels_pred    | double | Predicted labels for the test cells.                                |
+| uns    | dataset_id     | string | A unique identifier for the dataset                                 |
+| uns    | raw_dataset_id | string | A unique identifier for the original dataset (before preprocessing) |
+| uns    | method_id      | string | A unique identifier for the method                                  |
+
+### Scores
+
+Metric score file
+
+Used in:
+
+- metric: output (as output)
+
+Slots:
+
+| struct | name           | type   | description                                                                                  |
+|:-------|:---------------|:-------|:---------------------------------------------------------------------------------------------|
+| uns    | dataset_id     | string | A unique identifier for the dataset                                                          |
+| uns    | raw_dataset_id | string | A unique identifier for the original dataset (before preprocessing)                          |
+| uns    | method_id      | string | A unique identifier for the method                                                           |
+| uns    | metric_ids     | string | One or more unique metric identifiers                                                        |
+| uns    | metric_values  | double | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
+
+<!--
 Datasets should contain the following attributes:
 
-- `adata.obs["labels"]` with ground truth celltype labels,
-- `adata.obs["batch"]` with information of batches in the data, and
-- `adata.obs["is_train"]` with a train vs. test split
+* `adata.obs["labels"]` with ground truth celltype labels,
+* `adata.obs["batch"]` with information of batches in the data, and
+* `adata.obs["is_train"]` with a train vs. test split
 
-It should be noted that datasets may only contain a single batch, or not
-contain discriminative batch information.
+It should be noted that datasets may only contain a single batch, or not contain discriminative batch information.
 
-Methods should assign output celltype labels to
-`adata.obs['labels_pred']` using only the labels from the training data.
+Methods should assign output celltype labels to `adata.obs['labels_pred']` using only the labels from the training data.
 
 Note that the true labels are contained in `adata['labels']`.
 
-Metrics can compare `adata['labels']` to `adata.obs['labels_pred']`
-using only the labels from the test data.
+Metrics can compare `adata['labels']` to `adata.obs['labels_pred']` using only the labels from the test data.
+-->

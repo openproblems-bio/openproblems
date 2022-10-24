@@ -1,10 +1,14 @@
 functionality:
   name: dataset_censoring
+  meta:
+    label: "Dataset censoring"
   arguments:
     - name: "--input"
       type: h5ad_file
       description: "A preprocessed dataset"
       example: "preprocessed.h5ad"
+      meta:
+        from: dataset_preprocessing__output
       slots:
         layers: 
           - type: integer
@@ -31,6 +35,8 @@ functionality:
       type: h5ad_file
       description: "The training data"
       example: "training.h5ad"
+      meta:
+        short_description: "Training data"
       slots:
         layers: 
           - type: integer
@@ -58,6 +64,8 @@ functionality:
       type: h5ad_file
       description: "The censored test data"
       example: "test.h5ad"
+      meta:
+        short_description: "Test data"
       slots:
         layers: 
           - type: integer
@@ -82,6 +90,8 @@ functionality:
       type: h5ad_file
       description: "The solution for the test data"
       example: "solution.h5ad"
+      meta:
+        short_description: "Solution"
       slots:
         layers: 
           - type: integer
