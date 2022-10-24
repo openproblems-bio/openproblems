@@ -64,12 +64,12 @@ dataset_censoring__output_train---method
 dataset_censoring__output_test---method
 dataset_censoring__output_solution---metric
 method__output---metric
-dataset_censoring--&gt;dataset_censoring__output_train
-dataset_censoring--&gt;dataset_censoring__output_test
-dataset_censoring--&gt;dataset_censoring__output_solution
-dataset_preprocessing--&gt;dataset_preprocessing__output
-method--&gt;method__output
-metric--&gt;metric__output
+dataset_censoring-->dataset_censoring__output_train
+dataset_censoring-->dataset_censoring__output_test
+dataset_censoring-->dataset_censoring__output_solution
+dataset_preprocessing-->dataset_preprocessing__output
+method-->method__output
+metric-->metric__output
 ```
 
 ### Training data
