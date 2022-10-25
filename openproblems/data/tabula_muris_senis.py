@@ -31,11 +31,11 @@ def matching_dataset(dataset, method_list, organ_list):
     # if organ_list is not empty, we want specific tissues
     if organ_list and len(dataset["tissue"]) > 1:
         return False
-    
+
     # if organ_list is not empty, check for specific tissue
     if organ_list and dataset["tissue"][0]["label"] not in organ_list:
         return False
-    
+
     # if method_list is not empty, check for specific method
     if method_list and method not in method_list:
         return False
@@ -108,7 +108,7 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
             adata_list.append(load_raw_counts(dataset))
 
     assert len(adata_list) > 0
-    adata = ad.concat(adata_list, join='outer')
+    adata = ad.concat(adata_list, join="outer")
 
     if test:
         sc.pp.subsample(adata, n_obs=500)

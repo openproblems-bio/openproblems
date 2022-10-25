@@ -17,7 +17,7 @@ install_requires = [
     "colorama==0.4.*",
     "packaging==21.3",
     "umap-learn==0.5.*",
-    "requests==2.28.*"
+    "requests==2.28.*",
 ]
 
 r_requires = [
