@@ -19,10 +19,9 @@ methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
 
 ## The metrics
 
-### HVG conservation
+Metrics for batch integration (feature) measure how well feature-level information is batch corrected. This is only done on by capturing biological variance conservation. Further metrics for batch correction and biological variance conservation that are calculated on lower dimensional feature spaces extrapolated from corrected feature outputs can be found in the batch integration embed and graph tasks.
 
-Metric that computes the average percentage of overlapping highly variable genes per
-batch before and after integration.
+* **HVG conservation**: This metric computes the average percentage of overlapping highly variable genes per batch before and after integration.
 
 ## API
 
