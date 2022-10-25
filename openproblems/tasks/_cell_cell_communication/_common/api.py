@@ -60,8 +60,9 @@ def check_dataset(adata, merge_keys):
     """Check that dataset output fits expected API."""
     assert "label" in adata.obs
     assert "ccc_target" in adata.uns
+
     assert "merge_keys" in adata.uns
-    assert adata.uns["merge_keys"] == merge_keys
+    np.testing.assert_array_equal(adata.uns["merge_keys"], merge_keys)
 
     # check target organism
     assert "target_organism" in adata.uns
