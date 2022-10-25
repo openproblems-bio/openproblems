@@ -1,5 +1,6 @@
 from . import utils
 
+import anndata as ad
 import os
 import requests
 import scanpy as sc
@@ -12,14 +13,34 @@ API_BASE = f"https://api.{DOMAIN}"
 METHOD_ALIASES = {"10x 3' v2": "droplet", "Smart-seq2": "facs"}
 
 
+def check_unknown_organs(datasets, organ_list):
+    known_organs = set([t["label"] for d in datasets for t in d["tissue"]])
+    unknown_organs = set(organ_list) - known_organs
+    if unknown_organs:
+        raise ValueError(
+            f"Unknown organs provided in `organ_list': {', '.join(unknown_organs)}. "
+            f"Known organs are {', '.join(known_organs)}"
+        )
+
+
 def matching_dataset(dataset, method_list, organ_list):
-    # we want to skip combined datasets
-    if len(dataset["tissue"]) > 1:
+    assert len(dataset["assay"]) == 1
+    method = dataset["assay"][0]["label"]
+    method = METHOD_ALIASES[method]
+
+    # if organ_list is not empty, we want specific tissues
+    if organ_list and len(dataset["tissue"]) > 1:
         return False
-    if dataset["tissue"][0]["label"] not in organ_list:
+    
+    # if organ_list is not empty, check for specific tissue
+    if organ_list and dataset["tissue"][0]["label"] not in organ_list:
         return False
-    method = METHOD_ALIASES[dataset["assay"][0]["label"]]
-    return method in method_list
+    
+    # if method_list is not empty, check for specific method
+    if method_list and method not in method_list:
+        return False
+
+    return True
 
 
 def load_raw_counts(dataset):
@@ -31,6 +52,7 @@ def load_raw_counts(dataset):
     res = requests.get(url=url)
     assets = res.json()
     assets = [asset for asset in assets if asset["filetype"] == "H5AD"]
+    assert len(assets) == 1
     asset = assets[0]
 
     filename = f"{COLLECTION_ID}_{dataset_id}_{asset['filename']}"
@@ -40,8 +62,10 @@ def load_raw_counts(dataset):
         adata = sc.read_h5ad(filepath)
 
     utils.filter_genes_cells(adata)
-    # raw counts are in `raw`
-    return adata.raw.to_adata()
+    # If `raw` exists, raw counts are there
+    if hasattr(adata.raw):
+        return adata.raw.to_adata()
+    return adata
 
 
 @utils.loader(
@@ -58,30 +82,33 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
     and droplet-fat anndata sets. (no facs-fat dataset available)
     """
 
-    if not method_list:
-        raise ValueError("`method_list' argument not provided")
+    if method_list is None:
+        method_list = []
+    if organ_list is None:
+        organ_list = []
+    method_list = [x.lower() for x in method_list]
+    organ_list = [x.lower() for x in organ_list]
+
     unknown_methods = set(method_list) - set(["facs", "droplet"])
     if unknown_methods:
         raise ValueError(
             f"Unknown methods provided in `method_list': {','.join(unknown_methods)}. "
             "Known methods are `facs' and `droplet'"
         )
-    organ_list = [x.lower() for x in organ_list]
 
     datasets_path = f"/curation/v1/collections/{COLLECTION_ID}"
     url = f"{API_BASE}{datasets_path}"
     res = requests.get(url=url)
     datasets = res.json()["datasets"]
+    check_unknown_organs(datasets, organ_list)
 
     adata_list = []
     for dataset in datasets:
         if matching_dataset(dataset, method_list, organ_list):
             adata_list.append(load_raw_counts(dataset))
 
-    if len(adata_list) > 1:
-        adata = adata_list[0].concatenate(adata_list[1:], join="outer")
-    else:
-        adata = adata_list[0]
+    assert len(adata_list) > 0
+    adata = ad.concat(adata_list, join='outer')
 
     if test:
         sc.pp.subsample(adata, n_obs=500)
