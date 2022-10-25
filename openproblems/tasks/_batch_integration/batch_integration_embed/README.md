@@ -2,6 +2,7 @@
 
 # Batch integration embedding
 
+## The task
 This is a sub-task of the overall batch integration task. Batch (or data) integration
 integrates datasets across batches that arise from various biological and technical
 sources. Methods that integrate batches typically have three different types of output:
@@ -18,49 +19,7 @@ This sub-task was taken from a
 [benchmarking study of data integration
 methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
 
-## API
-
-WARNING: other than most tasks, `adata.X` should contain log-normalized data.
-   This is the case as we are comparing the results of integration on the
-   features pre- and post-integration and the data comes from different technologies.
-   In this subtask, we are computing a pre-integration embedding on the normalized
-   features.
-   For UMI data, the data is scran-normalized, full-length data is TPM-normalized.
-
-Datasets should contain the following attributes:
-
-* `adata.obs["batch"]` with the batch covariate, and
-* `adata.obs["label"]` with the cell identity label
-* `adata.obsm['X_uni']` with a pre-integration embedding (PCA)
-* `adata.layers['log_normalized']` with log-normalized data
-* `adata.X` with log-normalized data
-
-Methods should assign output to `adata.obsm['X_emb']`.
-
-The `openproblems-python-batch-integration` docker container is used for the methods
-that can be installed without package conflicts. For R methods, the
-`openproblems-r-extras` container is used.
-
-Most methods in this task are run in four different scenarios that include scaling and
-highly variable gene selection:
-
-* `full_unscaled`
-* `hvg_unscaled`
-* `full_scaled`
-* `hvg_scaled`
-
-Where `full` refers to the full gene set that is used as input to the method.
-
-Metrics can compare:
-
-* `adata.obsm['X_emb']` to `adata.obsm['X_uni']`,
-* `adata.obsm['X_emb']` to `adata.obs['label']`, and/or
-* `adata.obsm['X_emb']` to `adata.obs['batch']`.
-
-To reuse metrics functions from `scIB`, [`metrics._utils._get_split`](metrics/_utils.py)
-separates the combined anndata into an integrated and an unintegrated anndata object.
-
-## Metrics
+## The metrics
 
 In the following, we will give a short description of the implemented metrics. We split
 by metrics capturing batch correction meaning the removal of batch effects and metrics
@@ -105,3 +64,46 @@ batches. This indicates how well rare cell types can be preserved after integrat
 
 For the bio-conservation score, the ASW is computed on cell identity labels, measuring
 their compactness
+
+## API
+
+WARNING: other than most tasks, `adata.X` should contain log-normalized data.
+   This is the case as we are comparing the results of integration on the
+   features pre- and post-integration and the data comes from different technologies.
+   In this subtask, we are computing a pre-integration embedding on the normalized
+   features.
+   For UMI data, the data is scran-normalized, full-length data is TPM-normalized.
+
+Datasets should contain the following attributes:
+
+* `adata.obs["batch"]` with the batch covariate, and
+* `adata.obs["label"]` with the cell identity label
+* `adata.obsm['X_uni']` with a pre-integration embedding (PCA)
+* `adata.layers['log_normalized']` with log-normalized data
+* `adata.X` with log-normalized data
+
+Methods should assign output to `adata.obsm['X_emb']`.
+
+The `openproblems-python-batch-integration` docker container is used for the methods
+that can be installed without package conflicts. For R methods, the
+`openproblems-r-extras` container is used.
+
+Most methods in this task are run in four different scenarios that include scaling and
+highly variable gene selection:
+
+* `full_unscaled`
+* `hvg_unscaled`
+* `full_scaled`
+* `hvg_scaled`
+
+Where `full` refers to the full gene set that is used as input to the method.
+
+Metrics can compare:
+
+* `adata.obsm['X_emb']` to `adata.obsm['X_uni']`,
+* `adata.obsm['X_emb']` to `adata.obs['label']`, and/or
+* `adata.obsm['X_emb']` to `adata.obs['batch']`.
+
+To reuse metrics functions from `scIB`, [`metrics._utils._get_split`](metrics/_utils.py)
+separates the combined anndata into an integrated and an unintegrated anndata object.
+
