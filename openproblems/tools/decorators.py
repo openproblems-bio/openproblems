@@ -54,6 +54,7 @@ def method(
     code_url,
     code_version=None,
     image="openproblems",
+    is_baseline=False,
 ):
     """Decorate a method function.
 
@@ -71,6 +72,8 @@ def method(
         Link to the code base providing the canonical implementation
     image : str, optional (default: "openproblems")
         Name of the Docker image to be used for this method
+    is_baseline : bool, optional (default: False)
+        If True, this method serves as a baseline for the task
     """
 
     def decorator(func):
@@ -86,6 +89,7 @@ def method(
             paper_year=paper_year,
             code_url=code_url,
             image=image,
+            is_baseline=is_baseline,
         )
         apply_method = _backport_code_version(apply_method, code_version)
         return apply_method
