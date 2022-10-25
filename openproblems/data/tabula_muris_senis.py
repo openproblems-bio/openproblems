@@ -29,15 +29,15 @@ def matching_dataset(dataset, method_list, organ_list):
     method = METHOD_ALIASES[method]
 
     # if organ_list is not empty, we want specific tissues
-    if organ_list and len(dataset["tissue"]) > 1:
+    if len(organ_list) > 0 and len(dataset["tissue"]) > 1:
         return False
 
     # if organ_list is not empty, check for specific tissue
-    if organ_list and dataset["tissue"][0]["label"] not in organ_list:
+    if len(organ_list) > 0 and dataset["tissue"][0]["label"] not in organ_list:
         return False
 
     # if method_list is not empty, check for specific method
-    if method_list and method not in method_list:
+    if len(method_list) > 0 and method not in method_list:
         return False
 
     return True
