@@ -60,6 +60,8 @@ def check_dataset(adata, merge_keys):
     """Check that dataset output fits expected API."""
     assert "label" in adata.obs
     assert "ccc_target" in adata.uns
+    assert "merge_keys" in adata.uns
+    assert adata.uns["merge_keys"] == merge_keys
 
     # check target organism
     assert "target_organism" in adata.uns
@@ -185,6 +187,8 @@ def check_method(adata, merge_keys, is_baseline=False):
 def sample_dataset(merge_keys):
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()
+
+    adata.uns["merge_keys"] = merge_keys
 
     # keep only the top 10 most variable
     sc.pp.highly_variable_genes(adata, n_top_genes=len(SAMPLE_RECEPTOR_NAMES))
