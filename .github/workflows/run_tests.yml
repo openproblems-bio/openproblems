@@ -424,6 +424,7 @@ jobs:
       if: always()
       run: |
         mv /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log /tmp/nextflow.log
+      continue-on-error: true
 
     - name: Upload nextflow log
       if: always()
