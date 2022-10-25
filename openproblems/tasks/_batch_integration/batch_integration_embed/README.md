@@ -3,6 +3,7 @@
 # Batch integration embedding
 
 ## The task
+
 This is a sub-task of the overall batch integration task. Batch (or data) integration
 integrates datasets across batches that arise from various biological and technical
 sources. Methods that integrate batches typically have three different types of output:
@@ -106,4 +107,3 @@ Metrics can compare:
 
 To reuse metrics functions from `scIB`, [`metrics._utils._get_split`](metrics/_utils.py)
 separates the combined anndata into an integrated and an unintegrated anndata object.
-

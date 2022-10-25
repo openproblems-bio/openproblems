@@ -3,6 +3,7 @@
 # Batch integration feature
 
 ## The task
+
 This is a sub-task of the overall batch integration task. Batch (or data) integration
 integrates datasets across batches that arise from various biological and technical
 sources. Methods that integrate batches typically have three different types of output:
@@ -15,6 +16,7 @@ that can output feature matrices. Other sub-tasks for batch integration can be f
 
 This sub-task was taken from a [benchmarking study of data integration
 methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
+
 ## The metrics
 
 ### HVG conservation
@@ -60,4 +62,3 @@ Metrics for this task compare:
 
 To reuse metrics functions from `scIB`, [`metrics._utils._get_split`](metrics/_utils.py)
 separates the combined anndata into an integrated and an unintegrated anndata object.
-
