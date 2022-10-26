@@ -63,7 +63,7 @@ def load_raw_counts(dataset):
 
     utils.filter_genes_cells(adata)
     # If `raw` exists, raw counts are there
-    if hasattr(adata.raw):
+    if hasattr(adata, "raw"):
         return adata.raw.to_adata()
     return adata
 
