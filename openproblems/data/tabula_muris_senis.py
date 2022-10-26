@@ -115,4 +115,6 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
 
     if test:
         adata = utils.subsample_even(adata, n_obs=500, even_obs="method")
+        adata = adata[:, :1000]
+        utils.filter_genes_cells(adata)
     return adata
