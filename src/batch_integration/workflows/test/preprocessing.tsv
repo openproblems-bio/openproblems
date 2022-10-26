@@ -1,0 +1,6 @@
+name	label	batch	hvgs	scaling
+pancreas	celltype	tech	0	false
+pancreas	celltype	tech	0	true
+pancreas	celltype	tech	2000	false
+pancreas	celltype	tech	2000	true
+pancreas	celltype	tech	2000	true

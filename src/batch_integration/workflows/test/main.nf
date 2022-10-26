@@ -1,7 +1,8 @@
 nextflow.enable.dsl=2
  
 targetDir = "${params.rootDir}/target/nextflow"
-params.tsv = "$launchDir/src/batch_integration/datasets/params.tsv"
+params.download = "$launchDir/src/batch_integration/workflows/download.tsv"
+params.preprocessing = "$launchDir/src/batch_integration/workflows/test/preprocessing.tsv"
 
 // import dataset loaders
 include { download }       from "$targetDir/common/dataset_loader/download/main.nf"              params(params)
@@ -32,32 +33,22 @@ include { nmi }       from "$targetDir/batch_integration/graph/metrics/nmi/main.
 
 workflow load_data {
     main:
-        output_ = Channel.fromPath(params.tsv)
+        output_ = Channel.fromPath(params.download)
             | splitCsv(header: true, sep: "\t")
-            | map { row ->
-                [
-                    row.name,
-                    [
-                        "url": row.url,
-                        "name": row.name,
-                        "obs_cell_type": row.label,
-                        "obs_batch": row.batch,
-                    ]
-                ]
-            }
+            | map { [ it.name, it ] }
             | download
     emit:
         output_
 }
 
 workflow process_data {
-
-take:
+    take:
       channel_in
     main:
-      additional_params = Channel.fromPath(params.tsv)
+      additional_params = Channel.fromPath(params.preprocessing)
         | splitCsv(header: true, sep: "\t")
         | map { [ it.name, it ] }
+        | view { "additional_params $it" }
 
       subset = channel_in.join(additional_params)
         | map { id, data, additional ->
@@ -69,10 +60,11 @@ take:
         | map { id, data, additional ->
           [ id, [ input: data ] + additional ]
         }
+        | view { "preprocessing $it" }
         | preprocessing
         | join(additional_params)
         | map { id, data, additional ->
-          [ id, [ input: data ] + additional + [hvg: additional.hvgs.toInteger() > 0] ]
+          [ id, [ input: data ] + additional ]
         }
 
     emit:
