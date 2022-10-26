@@ -1,6 +1,6 @@
 ## VIASH START
 par = {
-    'adata': './src/batch_integration/resources/datasets_pancreas.h5ad',
+    'input': './src/batch_integration/resources/datasets_pancreas.h5ad',
     'output': './src/batch_integration/resources/pancreas_bbknn.h5ad',
     'hvg': True,
     'scaling': True,
@@ -16,7 +16,7 @@ from scib.integration import combat
 if par['debug']:
     pprint(par)
 
-adata_file = par['adata']
+adata_file = par['input']
 output = par['output']
 hvg = par['hvg']
 scaling = par['scaling']

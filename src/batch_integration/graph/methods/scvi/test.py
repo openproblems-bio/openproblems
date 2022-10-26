@@ -11,7 +11,7 @@ output_file = method + '.h5ad'
 print(">> Running script")
 out = subprocess.check_output([
     "./" + method,
-    "--adata", 'datasets_pancreas.h5ad',
+    "--input", 'datasets_pancreas.h5ad',
     "--hvg", 'False',
     "--scaling", 'False',
     "--output", output_file

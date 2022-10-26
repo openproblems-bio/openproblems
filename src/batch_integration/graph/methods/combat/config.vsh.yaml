@@ -1,6 +1,6 @@
 functionality:
   name: combat
-  namespace: batch_integration/embedding/methods
+  namespace: batch_integration/graph/methods
   version: dev
   description: Run Combat
   authors:
@@ -14,7 +14,7 @@ functionality:
       direction: output
       description: Anndata HDF5 file of the integrated graph in adata.obsp['connectivities']
       required: true
-    - name: --adata
+    - name: --input
       type: file
       description: Unintegrated anndata HDF5 file
       required: true
