@@ -1,3 +1,8 @@
+print("Loading dependencies")
+import scanpy as sc
+import harmonicalignment
+import sklearn.decomposition
+
 ## VIASH START
 par = {
   input = "output.h5ad",
@@ -8,11 +13,6 @@ par = {
 }
 resources_dir = "../../utils/"
 ## VIASH END
-
-print("Loading dependencies")
-import scanpy as sc
-import harmonicalignment
-import sklearn.decomposition
 
 # importing helper functions from common preprocessing.py file in resources dir
 import sys

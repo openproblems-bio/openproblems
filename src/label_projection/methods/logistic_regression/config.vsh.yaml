@@ -4,7 +4,7 @@ functionality:
   version: "dev"
   description: "Applied Logistic Regression"
   info:
-    type: baseline
+    type: method
     label: Logistic Regression
   authors:
     - name: "Scott Gigante"

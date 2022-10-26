@@ -13,15 +13,12 @@ functionality:
     paper_doi: "10.1137/1.9781611976236.36"
     paper_year: "2020"
     code_url: "https://github.com/KrishnaswamyLab/harmonic-alignment"
-    code_version: "0.0"
   arguments:
-    - name: "--input"
-      alternatives: ["-i"]
+    - name: "--input_mod1"
       type: "file"
-      default: "input.h5ad"
+      default: "dataset_mod1_censored.h5ad"
       description: "Input h5ad file containing at least `ad.X` and `ad.obsm['mode2']`."
     - name: "--output"
-      alternatives: ["-o"]
       type: "file"
       direction: "output"
       default: "output.h5ad"
@@ -40,7 +37,7 @@ functionality:
       description: "Number of eigenvectors of the normalized Laplacian on which to perform alignment."
   resources:
     - type: python_script
-      path: ./script.py
+      path: script.py
     - path: "../../utils/preprocessing.py"
   tests:
     - type: python_script

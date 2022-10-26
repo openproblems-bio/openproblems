@@ -1,10 +1,10 @@
 functionality:
-  name: "nayve_random_celltype"
+  name: "majority_vote"
   namespace: "label_projection/control_methods"
   version: "dev"
-  description: "Random Labels dummy"
+  description: "Majority vote dummy"
   info:
-    type: nayve_control
+    type: negative_control
     label: Random prediction
   authors:
     - name: "Scott Gigante"
