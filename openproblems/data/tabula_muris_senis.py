@@ -24,12 +24,19 @@ def check_unknown_organs(datasets, organ_list):
 
 
 def matching_dataset(dataset, method_list, organ_list):
-    assert len(dataset["assay"]) == 1
+    # if dataset has multiple methods, skip it
+    if len(dataset["assay"]) > 1:
+        return False
+
     method = dataset["assay"][0]["label"]
     method = METHOD_ALIASES[method]
 
     # if organ_list is not empty, we want specific tissues
     if len(organ_list) > 0 and len(dataset["tissue"]) > 1:
+        return False
+
+    # if organ_list is empty, we want only tissue aggregate objects
+    if len(organ_list) == 0 and len(dataset["tissue"]) < 2:
         return False
 
     # if organ_list is not empty, check for specific tissue
