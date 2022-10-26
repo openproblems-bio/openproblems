@@ -32,7 +32,7 @@ def check_dataset(adata: AnnData):
     return True
 
 
-def check_method(adata: AnnData):
+def check_method(adata: AnnData, is_baseline=False):
     """Check that method output fits expected API."""
     assert np.all(adata.obs["modality"] == "sp")
     assert "proportions_pred" in adata.obsm

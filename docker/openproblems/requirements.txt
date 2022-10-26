@@ -1,7 +1,7 @@
-boto3==1.24.*
+boto3==1.25.*
 cmake==3.22.*  # pinned in #607
 jupyter==1.0.*
 pip
-sagemaker==2.110.*
+sagemaker==2.113.*
 setuptools
 wheel

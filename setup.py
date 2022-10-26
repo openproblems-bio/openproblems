@@ -10,13 +10,14 @@ install_requires = [
     "scprep>=1.2.1",
     "scipy>=1.8,<1.10",
     "scanpy>=1.6",
-    "louvain==0.7.*",
-    "python-igraph<0.10",
+    "louvain==0.8.*",
+    "python-igraph==0.10.*",
     "decorator<5.0",  # pinned in #324
     "memory-profiler==0.60",
     "colorama==0.4.*",
     "packaging==21.3",
     "umap-learn==0.5.*",
+    "requests==2.28.*",
 ]
 
 r_requires = [
@@ -24,15 +25,15 @@ r_requires = [
     "anndata2ri==1.1.*",
 ]
 
-evaluate_requires = ["snakemake>=7.8,<7.15"]
+evaluate_requires = ["snakemake>=7.8,<7.17", "tabulate<0.9"]
 
 process_requires = ["numpyencoder==0.3.*"]
 
 test_requires = [
     "pytest==7.1.*",
     "pytest-cov>=3.0,<4.1",
-    "black==22.8.0",
-    "coverage==6.4.*",
+    "black==22.10.0",
+    "coverage>=6.4,<6.6",
     "codecov==2.1.*",
     "parameterized==0.8.*",
     "requests==2.28.*",

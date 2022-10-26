@@ -1,3 +1,7 @@
+from .baseline import batch_random_integration
+from .baseline import celltype_random_integration
+from .baseline import no_integration
+from .baseline import random_integration
 from .bbknn import bbknn_full_scaled
 from .bbknn import bbknn_full_unscaled
 from .bbknn import bbknn_hvg_scaled
@@ -29,6 +33,8 @@ from .mnn import mnn_full_scaled
 from .mnn import mnn_full_unscaled
 from .mnn import mnn_hvg_scaled
 from .mnn import mnn_hvg_unscaled
+from .scalex import scalex_full
+from .scalex import scalex_hvg
 
 # from .saucie_embed import saucie_embed_full_scaled
 # from .saucie_embed import saucie_embed_full_unscaled
