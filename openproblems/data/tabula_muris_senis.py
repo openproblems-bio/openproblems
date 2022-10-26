@@ -28,16 +28,12 @@ def matching_dataset(dataset, method_list, organ_list):
     if len(dataset["assay"]) > 1:
         return False
 
+    # if dataset has multiple tissues, skip it
+    if len(dataset["tissue"]) > 1:
+        return False
+
     method = dataset["assay"][0]["label"]
     method = METHOD_ALIASES[method]
-
-    # if organ_list is not empty, we want specific tissues
-    if len(organ_list) > 0 and len(dataset["tissue"]) > 1:
-        return False
-
-    # if organ_list is empty, we want only tissue aggregate objects
-    if len(organ_list) == 0 and len(dataset["tissue"]) < 2:
-        return False
 
     # if organ_list is not empty, check for specific tissue
     if len(organ_list) > 0 and dataset["tissue"][0]["label"] not in organ_list:
@@ -70,7 +66,7 @@ def load_raw_counts(dataset):
 
     utils.filter_genes_cells(adata)
     # If `raw` exists, raw counts are there
-    if hasattr(adata, "raw"):
+    if getattr(adata, "raw", None) is not None:
         return adata.raw.to_adata()
     return adata
 
@@ -118,7 +114,5 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
     adata = ad.concat(adata_list, join="outer")
 
     if test:
-        sc.pp.subsample(adata, n_obs=500)
-        adata = adata[:, :1000]
-        utils.filter_genes_cells(adata)
+        adata = utils.subsample_even(adata, n_obs=500, even_obs="method")
     return adata
