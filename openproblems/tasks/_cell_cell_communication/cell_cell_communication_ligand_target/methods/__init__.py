@@ -4,5 +4,5 @@ from ..._common.methods import liana_max, liana_sum
 from ..._common.methods import logfc_max, logfc_sum
 from ..._common.methods import natmi_max, natmi_sum
 from ..._common.methods import sca_max, sca_sum
-from ..._common.methods import random_events
-from ..._common.methods import true_events
+from ..._common.methods import random_events_max, random_events_sum
+from ..._common.methods import true_events_max, true_events_sum

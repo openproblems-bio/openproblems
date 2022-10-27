@@ -65,7 +65,7 @@ def liana(
 
 
 @_liana_method(
-    method_name="RobustRankAggregate_MAX",
+    method_name="RobustRankAggregate MAX",
 )
 def liana_max(adata, test=False):
     adata = liana(adata, test=test)
@@ -75,7 +75,7 @@ def liana_max(adata, test=False):
 
 
 @_liana_method(
-    method_name="RobustRankAggregate_SUM",
+    method_name="RobustRankAggregate SUM",
 )
 def liana_sum(adata, test=False):
     adata = liana(adata, test=test)
@@ -115,7 +115,7 @@ def cellphonedb(adata, test=False):
 
 
 @_cellphonedb_method(
-    method_name="CellPhoneDB_MAX",
+    method_name="CellPhoneDB MAX",
 )
 def cellphonedb_max(adata, test=False):
     adata = cellphonedb(adata, test=test)
@@ -125,7 +125,7 @@ def cellphonedb_max(adata, test=False):
 
 
 @_cellphonedb_method(
-    method_name="CellPhoneDB_SUM",
+    method_name="CellPhoneDB SUM",
 )
 def cellphonedb_sum(adata, test=False):
     adata = cellphonedb(adata, test=test)
@@ -155,7 +155,7 @@ def connectome(adata, test=False):
 
 
 @_connectome_method(
-    method_name="Connectome_MAX",
+    method_name="Connectome MAX",
 )
 def connectome_max(adata, test=False):
     adata = connectome(adata, test=test)
@@ -165,7 +165,7 @@ def connectome_max(adata, test=False):
 
 
 @_connectome_method(
-    method_name="Connectome_SUM",
+    method_name="Connectome SUM",
 )
 def connectome_sum(adata, test=False):
     adata = connectome(adata, test=test)
@@ -184,20 +184,20 @@ def logfc(adata, test=False):
 
 
 @_connectome_method(
-    method_name="Log2FC_MAX",
+    method_name="Log2FC MAX",
 )
 def logfc_max(adata, test=False):
-    adata = logfc(adata, test)
+    adata = logfc(adata, test=test)
     adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='max')
 
     return adata
 
 
 @_connectome_method(
-    method_name="Log2FC_SUM",
+    method_name="Log2FC SUM",
 )
 def logfc_sum(adata, test=False):
-    adata = logfc(adata, test)
+    adata = logfc(adata, test=test)
     adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='sum')
 
     return adata
@@ -223,20 +223,20 @@ def natmi(adata, test=False):
 
 
 @_natmi_method(
-    method_name="NATMI_MAX",
+    method_name="NATMI MAX",
 )
 def natmi_max(adata, test=False):
-    adata = natmi(adata, test)
+    adata = natmi(adata, test=test)
     adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='max')
 
     return adata
 
 
 @_natmi_method(
-    method_name="NATMI_SUM",
+    method_name="NATMI SUM",
 )
 def natmi_sum(adata, test=False):
-    adata = natmi(adata, test)
+    adata = natmi(adata, test=test)
     adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='sum')
 
     return adata
@@ -261,20 +261,20 @@ def sca(adata, test=False):
 
 
 @_sca_method(
-    method_name="SingleCellSignalR_MAX",
+    method_name="SingleCellSignalR MAX",
 )
 def sca_max(adata, test=False):
-    adata = sca(adata, test)
+    adata = sca(adata, test=test)
     adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='max')
 
     return adata
 
 
 @_sca_method(
-    method_name="SingleCellSignalR_SUM",
+    method_name="SingleCellSignalR SUM",
 )
 def sca_sum(adata, test=False):
-    adata = sca(adata, test)
+    adata = sca(adata, test=test)
     adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='sum')
 
     return adata
