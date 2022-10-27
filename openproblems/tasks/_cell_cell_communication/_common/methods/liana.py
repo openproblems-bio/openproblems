@@ -31,10 +31,7 @@ _liana_method = functools.partial(
 )
 
 
-@_liana_method(
-    method_name="LIANA's RobustRankAggregate Rank",
-)
-def liana(
+def _liana(
     adata,
     score_col="aggregate_rank",
     min_expression_prop=0.1,
@@ -66,20 +63,20 @@ def liana(
 
 
 @_liana_method(
-    method_name="RobustRankAggregate MAX",
+    method_name="LIANA Rank Aggregate (max)",
 )
 def liana_max(adata, test=False):
-    adata = liana(adata, test=test)
+    adata = _liana(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
 
 @_liana_method(
-    method_name="RobustRankAggregate SUM",
+    method_name="LIANA Rank Aggregate (sum)",
 )
 def liana_sum(adata, test=False):
-    adata = liana(adata, test=test)
+    adata = _liana(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
@@ -99,8 +96,8 @@ _cellphonedb_method = functools.partial(
 @_cellphonedb_method(
     method_name="CellPhoneDB",
 )
-def cellphonedb(adata, test=False):
-    adata = liana(
+def _cellphonedb(adata, test=False):
+    adata = _liana(
         adata,
         method="cellphonedb",
         score_col="lr.mean",
@@ -116,20 +113,20 @@ def cellphonedb(adata, test=False):
 
 
 @_cellphonedb_method(
-    method_name="CellPhoneDB MAX",
+    method_name="CellPhoneDB (max)",
 )
 def cellphonedb_max(adata, test=False):
-    adata = cellphonedb(adata, test=test)
+    adata = _cellphonedb(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
 
 @_cellphonedb_method(
-    method_name="CellPhoneDB SUM",
+    method_name="CellPhoneDB (sum)",
 )
 def cellphonedb_sum(adata, test=False):
-    adata = cellphonedb(adata, test=test)
+    adata = _cellphonedb(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
@@ -146,55 +143,49 @@ _connectome_method = functools.partial(
 )
 
 
-@_connectome_method(
-    method_name="Connectome",
-)
-def connectome(adata, test=False):
-    return liana(adata, method="connectome", score_col="weight_sc", test=test)
+def _connectome(adata, test=False):
+    return _liana(adata, method="connectome", score_col="weight_sc", test=test)
 
 
 @_connectome_method(
-    method_name="Connectome MAX",
+    method_name="Connectome (max)",
 )
 def connectome_max(adata, test=False):
-    adata = connectome(adata, test=test)
+    adata = _connectome(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
 
 @_connectome_method(
-    method_name="Connectome SUM",
+    method_name="Connectome (sum)",
 )
 def connectome_sum(adata, test=False):
-    adata = connectome(adata, test=test)
+    adata = _connectome(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
 
 
-@_liana_method(
-    method_name="Mean log2FC",
-)
-def logfc(adata, test=False):
-    return liana(adata, method="logfc", score_col="logfc_comb", test=test)
+def _logfc(adata, test=False):
+    return _liana(adata, method="logfc", score_col="logfc_comb", test=test)
 
 
 @_connectome_method(
-    method_name="Log2FC MAX",
+    method_name="Log2FC (max)",
 )
 def logfc_max(adata, test=False):
-    adata = logfc(adata, test=test)
+    adata = _logfc(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
 
 @_connectome_method(
-    method_name="Log2FC SUM",
+    method_name="Log2FC (sum)",
 )
 def logfc_sum(adata, test=False):
-    adata = logfc(adata, test=test)
+    adata = _logfc(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
@@ -210,28 +201,25 @@ _natmi_method = functools.partial(
 )
 
 
-@_natmi_method(
-    method_name="NATMI",
-)
-def natmi(adata, test=False):
-    return liana(adata, method="natmi", score_col="edge_specificity", test=test)
+def _natmi(adata, test=False):
+    return _liana(adata, method="natmi", score_col="edge_specificity", test=test)
 
 
 @_natmi_method(
-    method_name="NATMI MAX",
+    method_name="NATMI (max)",
 )
 def natmi_max(adata, test=False):
-    adata = natmi(adata, test=test)
+    adata = _natmi(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
 
 @_natmi_method(
-    method_name="NATMI SUM",
+    method_name="NATMI (sum)",
 )
 def natmi_sum(adata, test=False):
-    adata = natmi(adata, test=test)
+    adata = _natmi(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
@@ -248,28 +236,25 @@ _sca_method = functools.partial(
 )
 
 
-@_sca_method(
-    method_name="SingleCellSignalR",
-)
-def sca(adata, test=False):
-    return liana(adata, method="sca", score_col="LRscore", test=test)
+def _sca(adata, test=False):
+    return _liana(adata, method="sca", score_col="LRscore", test=test)
 
 
 @_sca_method(
-    method_name="SingleCellSignalR MAX",
+    method_name="SingleCellSignalR (max)",
 )
 def sca_max(adata, test=False):
-    adata = sca(adata, test=test)
+    adata = _sca(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
 
 @_sca_method(
-    method_name="SingleCellSignalR SUM",
+    method_name="SingleCellSignalR (sum)",
 )
 def sca_sum(adata, test=False):
-    adata = sca(adata, test=test)
+    adata = _sca(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata

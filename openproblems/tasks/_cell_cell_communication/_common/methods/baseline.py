@@ -16,10 +16,7 @@ _random_method = functools.partial(
 )
 
 
-@_random_method(
-    method_name="Random Events",
-)
-def random_events(adata, test=False, n_events=1000):
+def _random_events(adata, test=False, n_events=1000):
     adata.uns["ccc_pred"] = pd.DataFrame(
         {
             "ligand": np.random.choice(
@@ -41,7 +38,7 @@ def random_events(adata, test=False, n_events=1000):
     method_name="Random Events MAX",
 )
 def random_events_max(adata, test=False):
-    adata = random_events(adata, test=test)
+    adata = _random_events(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
@@ -51,7 +48,7 @@ def random_events_max(adata, test=False):
     method_name="Random Events SUM",
 )
 def random_events_sum(adata, test=False):
-    adata = random_events(adata, test=test)
+    adata = _random_events(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
@@ -67,10 +64,7 @@ _true_method = functools.partial(
 )
 
 
-@_true_method(
-    method_name="True Events",
-)
-def true_events(adata, test=False):
+def _true_events(adata, test=False):
     adata.uns["ccc_pred"] = adata.uns["ccc_target"].rename(
         {"response": "score"}, axis=1
     )
@@ -82,7 +76,7 @@ def true_events(adata, test=False):
     method_name="True Events SUM",
 )
 def true_events_max(adata, test=False):
-    adata = true_events(adata, test=test)
+    adata = _true_events(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
@@ -92,7 +86,7 @@ def true_events_max(adata, test=False):
     method_name="True Events SUM",
 )
 def true_events_sum(adata, test=False):
-    adata = true_events(adata, test=test)
+    adata = _true_events(adata, test=test)
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
