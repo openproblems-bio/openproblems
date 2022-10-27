@@ -1,17 +1,16 @@
 from .....tools.decorators import metric
+from ..utils import join_truth_and_pred
 
 import numpy as np
 
 
 @metric(metric_name="Odds Ratio", maximize=True)
-def odds_ratio(adata, merge_keys, top_n=100):
+def odds_ratio(adata, merge_keys, top_prop=0.05):
     # Join benchmark (assumed truth) and ccc results
     # Get /w ccc_target and a response [0, 1] column
-    gt = (
-        adata.uns["ccc_target"]
-        .merge(adata.uns["ccc_pred"], on=merge_keys, how="inner")
-        .sort_values("score", ascending=False)
-    )
+    gt = join_truth_and_pred(adata, merge_keys)
+    gt = gt.sort_values('score', ascending=False)
+    top_n = np.int(adata.uns['ccc_target'].shape[0] * top_prop)
 
     # assign the top rank interactions to 1
     a = np.zeros(len(gt["score"]))

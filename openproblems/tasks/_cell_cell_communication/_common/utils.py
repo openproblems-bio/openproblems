@@ -105,3 +105,20 @@ def map_gene_symbols(adata, map_filename: Union[str, pathlib.Path]):
         uns=adata.uns,
         obsm=adata.obsm,
     )
+
+
+# Join predictions to target
+def join_truth_and_pred(adata, merge_keys):
+    gt = adata.uns["ccc_target"].merge(
+        adata.uns["ccc_pred"], on=merge_keys, how="left"
+    )
+
+    gt.loc[gt["response"].isna(), "response"] = 0
+    gt.loc[gt["score"].isna(), "score"] = np.nanmin(gt["score"])
+
+    return gt
+
+
+def aggregate_method_scores(adata, how):
+    merge_keys = list(adata.uns['merge_keys'])
+    return adata.uns['ccc_pred'].groupby(merge_keys).aggregate(how).reset_index()
