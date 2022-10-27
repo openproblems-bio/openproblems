@@ -113,6 +113,9 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
     assert len(adata_list) > 0
     adata = ad.concat(adata_list, join="outer")
 
+    # this obs key causes write errors
+    del adata.obs["is_primary_data"]
+
     if test:
         adata = utils.subsample_even(adata, n_obs=500, even_obs="method")
         adata = adata[:, :1000]
