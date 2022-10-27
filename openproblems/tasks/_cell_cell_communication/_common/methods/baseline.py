@@ -1,8 +1,8 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
 from ..utils import aggregate_method_scores
-import functools
 
+import functools
 import numpy as np
 import pandas as pd
 
@@ -42,7 +42,7 @@ def random_events(adata, test=False, n_events=1000):
 )
 def random_events_max(adata, test=False):
     adata = random_events(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='max')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
@@ -52,7 +52,7 @@ def random_events_max(adata, test=False):
 )
 def random_events_sum(adata, test=False):
     adata = random_events(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='sum')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
 
@@ -77,12 +77,13 @@ def true_events(adata, test=False):
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
 
+
 @_true_method(
     method_name="True Events SUM",
 )
 def true_events_max(adata, test=False):
     adata = true_events(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='max')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
@@ -92,6 +93,6 @@ def true_events_max(adata, test=False):
 )
 def true_events_sum(adata, test=False):
     adata = true_events(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='sum')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata

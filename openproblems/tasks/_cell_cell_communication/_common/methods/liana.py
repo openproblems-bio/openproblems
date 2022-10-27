@@ -2,7 +2,8 @@ from .....tools.conversion import r_function
 from .....tools.decorators import method
 from .....tools.normalize import log_cpm
 from .....tools.utils import check_r_version
-from ..utils import ligand_receptor_resource, aggregate_method_scores
+from ..utils import aggregate_method_scores
+from ..utils import ligand_receptor_resource
 
 import functools
 
@@ -22,7 +23,7 @@ _r_liana = r_function(
 _liana_method = functools.partial(
     method,
     paper_name="Comparison of methods and resources for cell-cell "
-               "communication inference from single-cell RNA-Seq data",
+    "communication inference from single-cell RNA-Seq data",
     paper_url="https://www.nature.com/articles/s41467-022-30755-0",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
@@ -69,7 +70,7 @@ def liana(
 )
 def liana_max(adata, test=False):
     adata = liana(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='max')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
@@ -79,7 +80,7 @@ def liana_max(adata, test=False):
 )
 def liana_sum(adata, test=False):
     adata = liana(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='sum')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
 
@@ -87,7 +88,7 @@ def liana_sum(adata, test=False):
 _cellphonedb_method = functools.partial(
     method,
     paper_name="CellPhoneDB: inferring cell–cell communication from "
-               "combined expression of multi-subunit ligand–receptor complexes",
+    "combined expression of multi-subunit ligand–receptor complexes",
     paper_url="https://www.nature.com/articles/s41596-020-0292-x",
     paper_year=2020,
     code_url="https://github.com/saezlab/liana",
@@ -119,7 +120,7 @@ def cellphonedb(adata, test=False):
 )
 def cellphonedb_max(adata, test=False):
     adata = cellphonedb(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='max')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
@@ -129,7 +130,7 @@ def cellphonedb_max(adata, test=False):
 )
 def cellphonedb_sum(adata, test=False):
     adata = cellphonedb(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='sum')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
 
@@ -137,7 +138,7 @@ def cellphonedb_sum(adata, test=False):
 _connectome_method = functools.partial(
     method,
     paper_name="Computation and visualization of cell–cell signaling "
-               "topologies in single-cell systems data using Connectome",
+    "topologies in single-cell systems data using Connectome",
     paper_url="https://www.nature.com/articles/s41598-022-07959-x",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
@@ -149,9 +150,7 @@ _connectome_method = functools.partial(
     method_name="Connectome",
 )
 def connectome(adata, test=False):
-    return liana(
-        adata, method="connectome", score_col="weight_sc", test=test
-    )
+    return liana(adata, method="connectome", score_col="weight_sc", test=test)
 
 
 @_connectome_method(
@@ -159,7 +158,7 @@ def connectome(adata, test=False):
 )
 def connectome_max(adata, test=False):
     adata = connectome(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='max')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
@@ -169,7 +168,7 @@ def connectome_max(adata, test=False):
 )
 def connectome_sum(adata, test=False):
     adata = connectome(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='sum')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
 
@@ -178,9 +177,7 @@ def connectome_sum(adata, test=False):
     method_name="Mean log2FC",
 )
 def logfc(adata, test=False):
-    return liana(
-        adata, method="logfc", score_col="logfc_comb", test=test
-    )
+    return liana(adata, method="logfc", score_col="logfc_comb", test=test)
 
 
 @_connectome_method(
@@ -188,7 +185,7 @@ def logfc(adata, test=False):
 )
 def logfc_max(adata, test=False):
     adata = logfc(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='max')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
@@ -198,7 +195,7 @@ def logfc_max(adata, test=False):
 )
 def logfc_sum(adata, test=False):
     adata = logfc(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='sum')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
 
@@ -217,9 +214,7 @@ _natmi_method = functools.partial(
     method_name="NATMI",
 )
 def natmi(adata, test=False):
-    return liana(
-        adata, method="natmi", score_col="edge_specificity", test=test
-    )
+    return liana(adata, method="natmi", score_col="edge_specificity", test=test)
 
 
 @_natmi_method(
@@ -227,7 +222,7 @@ def natmi(adata, test=False):
 )
 def natmi_max(adata, test=False):
     adata = natmi(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='max')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
@@ -237,7 +232,7 @@ def natmi_max(adata, test=False):
 )
 def natmi_sum(adata, test=False):
     adata = natmi(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='sum')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
 
@@ -245,7 +240,7 @@ def natmi_sum(adata, test=False):
 _sca_method = functools.partial(
     method,
     paper_name="SingleCellSignalR: inference of intercellular networks "
-               "from single-cell transcriptomics",
+    "from single-cell transcriptomics",
     paper_url="https://academic.oup.com/nar/article/48/10/e55/5810485",
     paper_year=2021,
     code_url="https://github.com/saezlab/liana",
@@ -265,7 +260,7 @@ def sca(adata, test=False):
 )
 def sca_max(adata, test=False):
     adata = sca(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='max')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
@@ -275,6 +270,6 @@ def sca_max(adata, test=False):
 )
 def sca_sum(adata, test=False):
     adata = sca(adata, test=test)
-    adata.uns['ccc_pred'] = aggregate_method_scores(adata, how='sum')
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata
