@@ -16,7 +16,7 @@ def check_dataset(adata):
     return True
 
 
-def check_method(adata):
+def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
     assert "X_emb" in adata.obsm
     return True

@@ -16,6 +16,7 @@ from ..._common.utils import ligand_receptor_resource
 )
 def mouse_brain_atlas(test=False):
     adata = load_mouse_brain_atlas(test=test)
+    adata.uns["merge_keys"] = ["source", "target"]
     adata.uns["ligand_receptor_resource"] = ligand_receptor_resource(
         adata.uns["target_organism"]
     )

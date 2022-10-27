@@ -1,3 +1,5 @@
+from .baseline import random_events
+from .baseline import true_events
 from .liana import cellphonedb, cellphonedb_max, cellphonedb_sum
 from .liana import connectome, connectome_max, connectome_sum
 from .liana import liana, liana_max, liana_sum

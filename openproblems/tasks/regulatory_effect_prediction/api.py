@@ -26,7 +26,7 @@ def check_dataset(adata):
     return True
 
 
-def check_method(adata):
+def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
     assert "gene_score" in adata.obsm
     assert adata.obsm["gene_score"].shape == adata.X.shape
