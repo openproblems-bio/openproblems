@@ -148,6 +148,9 @@ def check_method(adata, merge_keys, is_baseline=False):
     assert "score" in adata.uns["ccc_pred"]
     assert np.all(np.isreal(adata.uns["ccc_pred"]["score"]))
 
+    # Check if a single prediction is return for every merge_key combo
+    assert (adata.uns["ccc_pred"].groupby(merge_keys).size() == 1).all()
+
     # check merge keys
     if "ligand" in merge_keys:
         assert "ligand" in adata.uns["ccc_pred"]
