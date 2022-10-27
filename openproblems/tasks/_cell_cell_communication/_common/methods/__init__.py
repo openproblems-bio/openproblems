@@ -1,6 +1,5 @@
 from .baseline import random_events_max
 from .baseline import random_events_sum
-from .baseline import _true_events
 from .baseline import true_events_max
 from .baseline import true_events_sum
 from .liana import cellphonedb_max
