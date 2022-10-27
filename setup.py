@@ -17,6 +17,7 @@ install_requires = [
     "colorama==0.4.*",
     "packaging==21.3",
     "umap-learn==0.5.*",
+    "requests==2.28.*",
 ]
 
 r_requires = [
@@ -24,7 +25,7 @@ r_requires = [
     "anndata2ri==1.1.*",
 ]
 
-evaluate_requires = ["snakemake>=7.8,<7.15", "tabulate<0.9"]
+evaluate_requires = ["snakemake>=7.8,<7.17", "tabulate<0.9"]
 
 process_requires = ["numpyencoder==0.3.*"]
 
