@@ -2,6 +2,8 @@ from ....data.pancreas import load_pancreas
 from ....data.utils import filter_genes_cells
 from ....tools.decorators import dataset
 from .utils import generate_synthetic_dataset
+from typing import List
+from typing import Optional
 
 import functools
 import scanpy as sc
@@ -16,8 +18,13 @@ _DATASET_SUMMARY = (
 )
 
 
-def _pancreas_synthetic(alpha: float, test: bool = False, n_obs: int = 100):
-    adata = load_pancreas(test=test, keep_techs=["inDrop3"])
+def _pancreas_synthetic(
+    alpha: float,
+    test: bool = False,
+    n_obs: int = 100,
+    keep_techs: Optional[List[str]] = None,
+):
+    adata = load_pancreas(test=test, keep_techs=keep_techs or ["inDrop3"])
     sc.pp.filter_genes(adata, min_counts=10)
     adata.obs["label"] = adata.obs["celltype"]
 
@@ -32,21 +39,21 @@ def _pancreas_synthetic(alpha: float, test: bool = False, n_obs: int = 100):
     "Pancreas (alpha=1)",
     dataset_summary=_DATASET_SUMMARY.format(1),
 )
-def pancreas_alpha_1(test=False, n_obs=100):
-    return _pancreas_synthetic(test=test, n_obs=n_obs, alpha=1)
+def pancreas_alpha_1(test=False, n_obs=100, keep_techs: Optional[List[str]] = None):
+    return _pancreas_synthetic(test=test, n_obs=n_obs, alpha=1, keep_techs=keep_techs)
 
 
 @_pancreas_dataset(
     "Pancreas (alpha=5)",
     dataset_summary=_DATASET_SUMMARY.format(5),
 )
-def pancreas_alpha_5(test=False, n_obs=100):
-    return _pancreas_synthetic(test=test, n_obs=n_obs, alpha=5)
+def pancreas_alpha_5(test=False, n_obs=100, keep_techs: Optional[List[str]] = None):
+    return _pancreas_synthetic(test=test, n_obs=n_obs, alpha=5, keep_techs=keep_techs)
 
 
 @_pancreas_dataset(
     "Pancreas (alpha=0.5)",
     dataset_summary=_DATASET_SUMMARY.format(0.5),
 )
-def pancreas_alpha_0_5(test=False, n_obs=100):
-    return _pancreas_synthetic(test=test, n_obs=n_obs, alpha=0.5)
+def pancreas_alpha_0_5(test=False, n_obs=100, keep_techs: Optional[List[str]] = None):
+    return _pancreas_synthetic(test=test, n_obs=n_obs, alpha=0.5, keep_techs=keep_techs)

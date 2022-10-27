@@ -17,9 +17,7 @@ def load_pancreas(test=False, keep_techs=None):
         # load full data first, cached if available
         adata = load_pancreas(
             test=False,
-            keep_techs=["celseq", "inDrop4", "smarter"]
-            if keep_techs is None
-            else keep_techs,
+            keep_techs=keep_techs or ["celseq", "inDrop4", "smarter"],
         )
 
         keep_celltypes = adata.obs["celltype"].dtype.categories[[0, 3]]
