@@ -126,4 +126,4 @@ def test_odds_ratio_no_match():
     adata.uns["ccc_target"]["response"] = 0
     m = metric(adata)
 
-    assert m == -9999
+    assert m is np.inf
