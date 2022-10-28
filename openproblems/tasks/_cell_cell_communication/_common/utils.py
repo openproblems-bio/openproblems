@@ -108,7 +108,8 @@ def map_gene_symbols(adata, map_filename: Union[str, pathlib.Path]):
 
 
 # Join predictions to target
-def join_truth_and_pred(adata, merge_keys):
+def join_truth_and_pred(adata):
+    merge_keys = list(adata.uns['merge_keys'])
     gt = adata.uns["ccc_target"].merge(adata.uns["ccc_pred"], on=merge_keys, how="left")
 
     gt.loc[gt["response"].isna(), "response"] = 0

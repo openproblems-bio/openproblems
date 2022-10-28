@@ -73,6 +73,7 @@ def check_dataset(adata, merge_keys):
     assert "response" in adata.uns["ccc_target"]
     assert np.issubdtype(adata.uns["ccc_target"]["response"].dtype, int)
     assert np.all(np.isin(adata.uns["ccc_target"]["response"], [0, 1]))
+    assert all(adata.uns['ccc_target'][merge_keys].duplicated()) is False
 
     # check against resource
     if "ligand" in merge_keys or "receptor" in merge_keys:

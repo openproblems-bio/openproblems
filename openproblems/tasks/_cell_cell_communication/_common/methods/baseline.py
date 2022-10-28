@@ -35,7 +35,7 @@ def _random_events(adata, test=False, n_events=1000):
 
 
 @_random_method(
-    method_name="Random Events MAX",
+    method_name="Random Events (max)",
 )
 def random_events_max(adata, test=False):
     adata = _random_events(adata, test=test)
@@ -45,7 +45,7 @@ def random_events_max(adata, test=False):
 
 
 @_random_method(
-    method_name="Random Events SUM",
+    method_name="Random Events (sum)",
 )
 def random_events_sum(adata, test=False):
     adata = _random_events(adata, test=test)
@@ -73,7 +73,7 @@ def _true_events(adata, test=False):
 
 
 @_true_method(
-    method_name="True Events SUM",
+    method_name="True Events (max)",
 )
 def true_events_max(adata, test=False):
     adata = _true_events(adata, test=test)
@@ -83,7 +83,7 @@ def true_events_max(adata, test=False):
 
 
 @_random_method(
-    method_name="True Events SUM",
+    method_name="True Events (sum)",
 )
 def true_events_sum(adata, test=False):
     adata = _true_events(adata, test=test)

@@ -5,8 +5,8 @@ from sklearn.metrics import precision_recall_curve
 
 
 @metric(metric_name="Precision-recall AUC", maximize=True)
-def auprc(adata, merge_keys):
-    gt = join_truth_and_pred(adata, merge_keys)
+def auprc(adata):
+    gt = join_truth_and_pred(adata)
     precision, recall, _ = precision_recall_curve(
         gt["response"], gt["score"], pos_label=1
     )

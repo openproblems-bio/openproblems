@@ -93,9 +93,6 @@ _cellphonedb_method = functools.partial(
 )
 
 
-@_cellphonedb_method(
-    method_name="CellPhoneDB",
-)
 def _cellphonedb(adata, test=False):
     adata = _liana(
         adata,
