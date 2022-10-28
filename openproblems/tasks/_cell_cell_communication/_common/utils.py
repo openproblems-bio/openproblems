@@ -113,7 +113,7 @@ def join_truth_and_pred(adata):
     gt = adata.uns["ccc_target"].merge(adata.uns["ccc_pred"], on=merge_keys, how="left")
 
     gt.loc[gt["response"].isna(), "response"] = 0
-    gt.loc[gt["score"].isna(), "score"] = np.nanmin(gt["score"])
+    gt.loc[gt["score"].isna(), "score"] = np.nanmin(gt["score"]) - np.finfo(float).eps
 
     return gt
 
