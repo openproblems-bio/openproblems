@@ -20,11 +20,11 @@ SAMPLE_RECEPTOR_NAMES = [
 
 
 def assert_is_subset(
-    subset,
-    superset,
-    subset_name="subset",
-    superset_name="superset",
-    prop_missing_allowed=0,
+        subset,
+        superset,
+        subset_name="subset",
+        superset_name="superset",
+        prop_missing_allowed=0,
 ):
     """Assert `np.all(np.isin(subset, superset))` with a more readable error message"""
     subset = np.asarray(subset)
@@ -208,16 +208,21 @@ def sample_dataset(merge_keys):
     # generate target interactions
     adata.uns["ccc_target"] = pd.DataFrame(
         {
-            "response": np.random.binomial(1, 0.2, 50),
             "ligand": np.random.choice(adata.var.index, 50),
             "receptor": np.random.choice(adata.var.index, 50),
             "source": np.random.choice(list(set(adata.obs.label)), 50),
             "target": np.random.choice(list(set(adata.obs.label)), 50),
         }
     )
-    # subset columns & drop duplicates
+    # drop duplicates
+    adata.uns['ccc_target'] = adata.uns['ccc_target'].drop_duplicates(subset=merge_keys)
+    # ensure positive response class is always present
+    n_rows = adata.uns['ccc_target'].shape[0]
+    response = np.zeros(n_rows)
+    response[0:np.int(n_rows*0.3)] = 1
+    adata.uns['ccc_target']["response"] = response
+    # subset columns
     adata.uns["ccc_target"] = adata.uns["ccc_target"][["response"] + merge_keys]
-    adata.uns['ccc_target'] = adata.uns['ccc_target'].drop_duplicates(subset = merge_keys)
 
     # assign to human prior knowledge
     adata.uns["target_organism"] = 9606

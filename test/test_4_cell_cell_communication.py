@@ -123,7 +123,7 @@ def test_odds_ratio_no_match():
     openproblems.log.debug(
         "Testing {} metric from {} task".format(metric.__name__, task.__name__)
     )
-    adata.uns["ccc_target"]["response"] = np.nan
+    adata.uns["ccc_target"]["response"] = 0
     m = metric(adata)
 
-    assert m == 1
+    assert m == -9999
