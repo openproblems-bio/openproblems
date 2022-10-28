@@ -6,7 +6,7 @@ import pandas as pd
 
 
 @method(
-    method_name="Random Events (sum)",
+    method_name="Random Events",
     paper_name="Random Events (baseline)",
     paper_url="https://openproblems.bio",
     paper_year=2022,
