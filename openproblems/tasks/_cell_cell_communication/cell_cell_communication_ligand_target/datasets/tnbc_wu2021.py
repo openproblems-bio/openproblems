@@ -21,6 +21,7 @@ def tnbc_data(test=False):
     adata = map_gene_symbols(
         adata, pathlib.Path(__file__).parent.joinpath("tnbc_wu2021_gene_symbols.csv")
     )
+    adata.uns["merge_keys"] = ["ligand", "target"]
     adata.uns["ligand_receptor_resource"] = ligand_receptor_resource(
         adata.uns["target_organism"]
     )

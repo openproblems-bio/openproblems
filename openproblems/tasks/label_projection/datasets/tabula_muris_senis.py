@@ -16,7 +16,7 @@ def tabula_muris_senis_lung_random(test=False):
         test=test, organ_list=["lung"], method_list=["droplet"]
     )
     adata.obs["labels"] = adata.obs["free_annotation"]
-    adata.obs["batch"] = adata.obs["mouse.id"]
+    adata.obs["batch"] = adata.obs["donor_id"]
     adata.obs["is_train"] = np.random.choice(
         [True, False], adata.shape[0], replace=True, p=[0.8, 0.2]
     )
