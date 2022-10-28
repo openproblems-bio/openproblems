@@ -1,8 +1,6 @@
 from .....tools.decorators import method
 from .....tools.utils import check_version
-from ..utils import aggregate_method_scores
 
-import functools
 import numpy as np
 import pandas as pd
 
@@ -30,7 +28,8 @@ def random_events(adata, test=False, n_events=1000):
         }
     )
     adata.uns["ccc_pred"] = adata.uns["ccc_pred"].loc[
-        ~adata.uns["ccc_pred"][adata.uns['merge_keys']].duplicated()]
+        ~adata.uns["ccc_pred"][adata.uns["merge_keys"]].duplicated()
+    ]
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
 

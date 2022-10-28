@@ -12,4 +12,3 @@ from ..._common.methods import random_events
 from ..._common.methods import sca_max
 from ..._common.methods import sca_sum
 from ..._common.methods import true_events
-

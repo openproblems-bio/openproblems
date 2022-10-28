@@ -20,11 +20,11 @@ SAMPLE_RECEPTOR_NAMES = [
 
 
 def assert_is_subset(
-        subset,
-        superset,
-        subset_name="subset",
-        superset_name="superset",
-        prop_missing_allowed=0,
+    subset,
+    superset,
+    subset_name="subset",
+    superset_name="superset",
+    prop_missing_allowed=0,
 ):
     """Assert `np.all(np.isin(subset, superset))` with a more readable error message"""
     subset = np.asarray(subset)
@@ -219,7 +219,7 @@ def sample_dataset(merge_keys):
     # ensure positive response class is always present
     n_rows = adata.uns["ccc_target"].shape[0]
     response = np.zeros(n_rows, dtype=np.int64)
-    response[0: np.int(n_rows * 0.3)] = 1
+    response[0 : np.int(n_rows * 0.3)] = 1
     adata.uns["ccc_target"]["response"] = response
     # subset columns
     adata.uns["ccc_target"] = adata.uns["ccc_target"][["response"] + merge_keys]
