@@ -304,12 +304,41 @@ ease of use, we provide a collection of common normalization functions in
 stored in `adata.X` is automatically stored in `adata.layers["counts"]` for later
 reference in the case the a metric needs to access the unnormalized data.
 
-To test the performance of a dataset, method, or metric, you can use the command-line
-interface:
+#### Testing method performance
 
-```shell
-openproblems-cli test --help
+To test the performance of a dataset, method, or metric, you can use the command-line
+interface `openproblems-cli test`.
+
+First, you must launch a Docker image containing the relevant dependencies for the
+dataset/method/metric you wish to test. You can then run `openproblems-cli test` with
+any/all of `--dataset`, `--method`, and `--metric` as desired. E.g.,
+
+```bash
+cd openproblems
+docker run \
+  -v $(pwd):/usr/src/singlecellopenproblems -v /tmp:/tmp \
+  -it singlecellopenproblems/openproblems-python-extras bash
+openproblems-cli test \
+  --task label_projection \
+  --dataset zebrafish_labels \
+  --method logistic_regression_log_cpm \
+  --metric f1
 ```
+
+which will print the benchmark score for the method evaluated by the metric on the
+dataset you chose.
+
+Notes:
+
+* If you have updated Docker images to run your method, you must first rebuild the
+  images -- see the [Docker README](docker/README.md) for details.
+* If your dataset/method/metric cannot be run on the same docker image, you may wish to
+  `load`, `run`, and `evaluate` separately. You can do this using each of these commands
+  independently; however, this workflow is not documented.
+* These commands are not guaranteed to work with Apple silicon (M1 chip).
+* If your local machine cannot run the test due to memory constraints or OS
+  incompatibility, you may use your AWS credentials to launch a VM for testing purposes.
+  See the [EC2 README](./EC2.md) for details.
 
 ### Adding a new task
 
