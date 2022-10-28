@@ -281,6 +281,9 @@ def sample_method(adata, merge_keys):
     # subset columns
     df = df[["score"] + merge_keys]
 
+    # deduplicate
+    df = df.loc[~df[merge_keys].duplicated()]
+
     adata.uns["ccc_pred"] = df
 
     return adata
