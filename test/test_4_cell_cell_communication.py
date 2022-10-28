@@ -113,6 +113,8 @@ class TestApi(unittest.TestCase):
 
 @utils.docker.docker_test(image=SUBTASKS[0].metrics.odds_ratio.metadata["image"])
 def test_odds_ratio_no_match():
+    import numpy as np
+
     task = openproblems.tasks.cell_cell_communication_source_target
     metric = task.metrics.odds_ratio
 
