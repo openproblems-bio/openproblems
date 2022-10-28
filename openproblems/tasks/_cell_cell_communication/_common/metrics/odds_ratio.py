@@ -33,7 +33,7 @@ def odds_ratio(adata, top_prop=0.05):
         fp = top_n - 1
 
     # GT dependent
-    if (tn == 0) | (np.sum(bot.response) == 0):  # comparison is impossible
+    if np.sum(bot.response) == 0:  # comparison is impossible
         return np.inf
 
     oddsratio = (tp / fp) / (fn / tn)
