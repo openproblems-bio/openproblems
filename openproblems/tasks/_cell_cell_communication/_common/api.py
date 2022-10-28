@@ -73,7 +73,7 @@ def check_dataset(adata, merge_keys):
     assert "response" in adata.uns["ccc_target"]
     assert np.issubdtype(adata.uns["ccc_target"]["response"].dtype, int)
     assert np.all(np.isin(adata.uns["ccc_target"]["response"], [0, 1]))
-    assert all(adata.uns['ccc_target'][merge_keys].duplicated()) is False
+    assert any(adata.uns['ccc_target'][merge_keys].duplicated()) is False
 
     # check against resource
     if "ligand" in merge_keys or "receptor" in merge_keys:
@@ -215,8 +215,9 @@ def sample_dataset(merge_keys):
             "target": np.random.choice(list(set(adata.obs.label)), 50),
         }
     )
-    # subset columns
+    # subset columns & drop duplicates
     adata.uns["ccc_target"] = adata.uns["ccc_target"][["response"] + merge_keys]
+    adata.uns['ccc_target'] = adata.uns['ccc_target'].drop_duplicates(subset = merge_keys)
 
     # assign to human prior knowledge
     adata.uns["target_organism"] = 9606
