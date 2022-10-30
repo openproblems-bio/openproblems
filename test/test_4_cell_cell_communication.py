@@ -118,12 +118,16 @@ def test_odds_ratio_no_match():
     task = openproblems.tasks.cell_cell_communication_source_target
     metric = task.metrics.odds_ratio
 
-    adata = task.api.sample_dataset()
-    adata = task.api.sample_method(adata)
     openproblems.log.debug(
         "Testing {} metric from {} task".format(metric.__name__, task.__name__)
     )
-    adata.uns["ccc_target"]["response"] = 0
-    m = metric(adata)
 
+    adata = task.api.sample_dataset()
+
+    adata = task.api.sample_method(adata)
+    m = metric(adata, top_prop=0)  # force numerator exception
+    assert m is np.nan
+
+    adata = task.methods.true_events(adata)
+    m = metric(adata, top_prop=0.9)  # force denominator exception
     assert m is np.inf
