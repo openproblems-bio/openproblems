@@ -4,8 +4,10 @@ import hashlib
 import importlib
 import json
 import os
+import random
 import scprep
 import subprocess
+import warnings
 
 _MODULE = type(os)
 
@@ -72,17 +74,24 @@ def docker_labels_from_api(image_name, tag="latest"):
 def docker_hash(image_name):
     """Get the docker image hash associated with an image."""
     try:
-        return _run(
-            [
-                "docker",
-                "inspect",
-                "-f='{{ index .Config.Labels \"bio.openproblems.hash\"}}'",
-                image_name,
-            ]
+        try:
+            return _run(
+                [
+                    "docker",
+                    "inspect",
+                    "-f='{{ index .Config.Labels \"bio.openproblems.hash\"}}'",
+                    image_name,
+                ]
+            )
+        except (RuntimeError, FileNotFoundError):  # pragma: nocover
+            # docker is unavailable or the image is not locally available; use the API
+            return docker_labels_from_api(image_name)["bio.openproblems.hash"]
+    except Exception:  # pragma: nocover
+        warnings.warn(
+            "Failed to access docker or the docker API; docker image hash failed. "
+            f"All jobs using {image_name} will not be cached."
         )
-    except (RuntimeError, FileNotFoundError):  # pragma: nocover
-        # docker is unavailable or the image is not locally available; use the API
-        return docker_labels_from_api(image_name)["bio.openproblems.hash"]
+        return random.getrandbits(256)
 
 
 def get_context(obj, context=None):
