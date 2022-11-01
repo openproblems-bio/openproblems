@@ -3,7 +3,6 @@ from .....tools.utils import check_version
 from typing import Optional
 
 import functools
-import tempfile
 
 _scalex_method = functools.partial(
     method,
@@ -41,18 +40,17 @@ def _scalex(
 
     min_cells = min_cells or 1
 
-    with tempfile.TemporaryDirectory() as outdir:
-        adata = scalex.SCALEX(
-            adata,
-            batch_key="batch",
-            ignore_umap=True,
-            impute=adata.obs["batch"].cat.categories[0] if compute_features else False,
-            max_iteration=max_iteration,
-            min_features=min_features,
-            min_cells=min_cells,
-            n_top_features=n_top_features,
-            outdir=outdir,
-        )
+    adata = scalex.SCALEX(
+        adata,
+        batch_key="batch",
+        ignore_umap=True,
+        impute=adata.obs["batch"].cat.categories[0] if compute_features else False,
+        max_iteration=max_iteration,
+        min_features=min_features,
+        min_cells=min_cells,
+        n_top_features=n_top_features,
+        outdir=None,
+    )
     adata.obsm["X_emb"] = adata.obsm["latent"]
     if compute_features:
         adata.X = adata.layers["impute"]
