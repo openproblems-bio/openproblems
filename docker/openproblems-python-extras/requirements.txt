@@ -9,7 +9,7 @@ magic-impute==3.0.*
 phate==1.0.*
 pybedtools==0.9.*
 pyensembl==2.0.*
-scalex==1.0.0
+scalex==1.0.2
 scvi-tools==0.16.*
 tangram-sc==1.0.*
 tensorflow-cpu==2.9.*

@@ -91,7 +91,7 @@ def docker_hash(image_name):
             "Failed to access docker or the docker API; docker image hash failed. "
             f"All jobs using {image_name} will not be cached."
         )
-        return random.getrandbits(256)
+        return str(random.getrandbits(256))
 
 
 def get_context(obj, context=None):
