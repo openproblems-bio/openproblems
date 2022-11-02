@@ -390,6 +390,21 @@ jobs:
           docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
         done
 
+    - name: Upload Docker images for full benchmark
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      if: >-
+        startsWith(github.ref, 'refs/tags') ||
+        startsWith(github.ref, 'refs/heads/test_benchmark')
+      run: |
+        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:prod-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:prod-${image}
+        done
+
     - name: Run test benchmark
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
