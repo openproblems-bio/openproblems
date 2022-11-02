@@ -21,29 +21,17 @@ methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
 
 ## The metrics
 
-### Adjusted rand index (ARI)
+Metrics for batch integration (graph) measure how well batches are mixed while biological signals are preserved. They are divided into batch correction and biological variance conservation metrics.
 
-The Rand index compares the overlap of two clusterings;
-it considers both correct clustering overlaps while also counting correct
-disagreements between two clusterings.
+### Batch correction
 
-### Graph connectivity
+* **Graph connectivity**: The graph connectivity metric assesses whether the kNN graph representation, G, of the integrated data connects all cells with the same cell identity label.
 
-The graph connectivity metric assesses whether the kNN graph representation,
-G, of the integrated data directly connects all cells with the same cell
-identity label.
+### Biological variance removal
 
-### F1 score
-
-Isolated cell labels are identified as the labels present in the least number of batches
-in the integration task. The score evaluates how well these isolated labels separate
-from other cell identities.
-
-### NMI
-
-NMI compares the overlap of two clusterings.
-We used NMI to compare the cell-type labels with Louvain clusters computed on
-the integrated dataset.
+* **Adjusted rand index (ARI)**: The Rand index compares the overlap of two clusterings; it considers both correct clustering overlaps while also counting correct disagreements between two clusterings.
+* **Iso label F1 score**: Isolated cell labels are identified as the labels present in the least number of batches in the integration task. The score evaluates how well these isolated labels separate from other cell identities based on clustering.
+* **Normalized mutual information (NMI)**: NMI compares the overlap of two clusterings. We used NMI to compare the cell-type labels with Louvain clusters computed on the integrated dataset.
 
 ## API
 

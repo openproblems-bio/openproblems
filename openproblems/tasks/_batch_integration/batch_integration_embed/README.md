@@ -22,49 +22,19 @@ methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
 
 ## The metrics
 
-In the following, we will give a short description of the implemented metrics. We split
-by metrics capturing batch correction meaning the removal of batch effects and metrics
-describing biological conservation, meaning how well the biological differences between
-cell states are conserved.
+Metrics for batch integration (embed) measure how well batches are mixed while biological signals are preserved. They are divided into batch correction and biological variance conservation metrics.
 
-### Batch correction metrics
+### Batch correction
 
-#### kBET
+* **kBET**: kBET determines whether the label composition of a k nearest neighborhood of a cell is similar to the expected (global) label composition (Buettner et al., Nat Meth 2019). The test is repeated for a random subset of cells, and the results are summarized as a rejection rate over all tested neighborhoods.
+* **Silhouette batch score**: The absolute silhouette width is computed over batch labels per cell. As 0 then indicates that batches are well mixed and any deviation from 0 indicates a batch effect, we use the 1-abs(ASW) to map the score to the scale [0;1].
+* **Principal component regression (PC regression)**: This compare the explained variance by batch before and after integration. It returns a score between 0 and 1 (scaled=True) with 0 if the variance contribution hasn’t changed. The larger the score, the more different the variance contributions are before and after integration.
 
-The kBET algorithm (v.0.99.6, release 4c9dafa) determines whether the label composition
-of a k nearest neighborhood of a cell is similar to the expected (global) label
-composition (Buettner et al., Nat Meth 2019). The test is repeated for a random subset
-of cells, and the results are summarized as a rejection rate over all tested
-neighborhoods.
+### Biological variance conservation
 
-#### Silhouette batch score
-
-We consider the absolute silhouette width, s(i), on
-batch labels per cell i. Here, 0 indicates that batches are well mixed, and any
-deviation from 0 indicates a batch effect.
-
-#### Principal component regression
-
-Compare the explained variance by before and after integration. Returns a score between
-0 and 1 (scaled=True) with 0 if the variance contribution hasn’t changed. The larger the
-score, the more different the variance contributions are before and after integration.
-
-### Biological conservation metrics
-
-#### Cell cycle score
-
-The cell-cycle conservation score evaluates how well the cell-cycle effect can be
-captured before and after integration.
-
-#### Isolated label silhouette
-
-This score evaluates the compactness for the label(s) that is(are) shared by fewest
-batches. This indicates how well rare cell types can be preserved after integration.
-
-#### Cell type ASW
-
-For the bio-conservation score, the ASW is computed on cell identity labels, measuring
-their compactness
+* **Cell cycle score**: The cell-cycle conservation score evaluates how well the cell-cycle effect can be captured before and after integration.
+* **Isolated label silhouette**: This score evaluates the compactness for the label(s) that is(are) shared by fewest batches. It indicates how well rare cell types can be preserved after integration.
+* **Cell type ASW**: The absolute silhouette with is computed on cell identity labels, measuring their compactness.
 
 ## API
 
