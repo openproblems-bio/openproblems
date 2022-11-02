@@ -449,13 +449,19 @@ jobs:
         path: /tmp/nextflow.log
 
   run_full_benchmark:
-    needs: run_test_benchmark
+    needs:
+    - run_test_benchmark
+    - run_tester
     runs-on: ubuntu-latest
     if: >-
       always() &&
       (needs.run_test_benchmark.result == 'success' || needs.run_test_benchmark.result == 'skipped') &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       github.event_name == 'push' &&
+      (
+        needs.run_tester.result == 'success' ||
+        startsWith(github.ref, 'refs/heads/test_benchmark')
+      ) &&
       (
         startsWith(github.ref, 'refs/tags') ||
         startsWith(github.ref, 'refs/heads/test_benchmark')
