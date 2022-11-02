@@ -149,6 +149,12 @@ def test_hash(task, function_type, function_name):
 
 def test_hash_docker_api():
     assert docker_labels_from_api("circleci/python", tag="3.8-bullseye") is None
+    labels = docker_labels_from_api("singlecellopenproblems/openproblems", tag="latest")
+    assert "bio.openproblems.build" in labels
+    assert "bio.openproblems.hash" in labels
+    assert isinstance(labels["bio.openproblems.build"], str)
+    assert isinstance(labels["bio.openproblems.hash"], str)
+    assert labels["bio.openproblems.build"] in ["github_actions", "local"]
 
 
 @parameterized.parameterized.expand(
