@@ -35,12 +35,27 @@ strip_comments <- function(remote) {
   gsub("\\s*#.*", "", remote)
 }
 
+install_with_retries <- function(remotes, attempts = 3, ...) {
+  result <- NULL
+  attempt <- 1
+  while (is.null(result) && attempt <= attempts - 1) {
+    attempt <- attempt + 1
+    try(
+      result <- renv::install(remotes, ...)
+    )
+  }
+  if (is.null(result)) {
+    # last attempt
+    renv::install(remotes, ...)
+  }
+}
+
 install_renv <- function(requirements_file, ...) {
   remotes <- scan(requirements_file, what = character(), sep = "\n")
   remotes <- sapply(remotes, strip_comments)
   remotes_installed <- sapply(remotes, check_available)
   remotes_to_install <- remotes[!remotes_installed]
   if (length(remotes_to_install) > 0) {
-    renv::install(remotes_to_install, ...)
+    install_with_retries(remotes_to_install, ...)
   }
 }
