@@ -125,7 +125,7 @@ example, to install the `openproblems` base container, you can run the following
 docker build -f docker/openproblems/Dockerfile -t singlecellopenproblems/openproblems .
 ```
 
-or to update all available Docker images:
+or to update all available Docker images, updating only when necessary:
 
 ```shell
 cd workflow && snakemake -j 10 docker
@@ -215,14 +215,16 @@ You can then run commands within a docker container using `docker run`. Consult 
 [Docker documentation](https://docs.docker.com/engine/reference/commandline/run/) to
 learn more about the `run` command.
 
-**Using `IMAGE ID`**
-
 ```shell
-docker run -it 90a9110c7d69 /bin/bash
+cd openproblems
+docker run \
+  -v $(pwd):/usr/src/singlecellopenproblems -v /tmp:/tmp \
+  -it singlecellopenproblems/openproblems-python-extras bash
 ```
 
-**Using `RESPOSITORY:TAG`**
+You may also specify the docker image by its ID, rather than its name:
 
 ```shell
-docker run -it singlecellopenproblems/openproblems-python-extras:latest /bin/bash
+cd openproblems
+docker run -v $(pwd):/usr/src/singlecellopenproblems -v /tmp:/tmp -it 90a9110c7d69 bash
 ```
