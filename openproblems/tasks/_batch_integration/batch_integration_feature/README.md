@@ -53,7 +53,7 @@ that
 can be installed without package conflicts. For R methods, the `openproblems-r-extras`
 container is used.
 
-Most methods in the current task are run in four different scenarios that include 
+Most methods in the current task are run in four different scenarios that include
 caling
 and highly variable gene selection:
 
