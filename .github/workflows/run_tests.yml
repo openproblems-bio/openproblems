@@ -480,7 +480,7 @@ jobs:
         cat <<EOF
           {
             "params" : {
-              "branch": "main"
+              "branch": "prod"
             }
           }
         EOF
