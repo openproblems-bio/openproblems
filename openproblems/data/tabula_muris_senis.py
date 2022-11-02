@@ -64,8 +64,7 @@ def load_raw_counts(dataset):
         f"/curation/v1/collections/{COLLECTION_ID}/datasets/{dataset_id}/assets"
     )
     url = f"{API_BASE}{assets_path}"
-    res = requests.get(url=url)
-    assets = res.json()
+    assets = _get_json(url)
     assets = [asset for asset in assets if asset["filetype"] == "H5AD"]
     assert len(assets) == 1
     asset = assets[0]
