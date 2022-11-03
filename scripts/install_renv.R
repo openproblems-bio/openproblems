@@ -1,3 +1,7 @@
+if (nchar(Sys.getenv("BIOCVERSION")) > 0) {
+  renv::settings$bioconductor.version(Sys.getenv("BIOCVERSION"))
+}
+
 as_integer_version <- function(v) {
   class(v) <- "list"
   v[[1]]
