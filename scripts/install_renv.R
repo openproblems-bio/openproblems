@@ -35,7 +35,11 @@ strip_comments <- function(remote) {
   gsub("\\s*#.*", "", remote)
 }
 
-install_with_retries <- function(remotes, attempts = 3, ...) {
+install_with_retries <- function(remotes,
+                                 attempts = 3,
+                                 sleep = 3,
+                                 backoff = 2,
+                                 ...) {
   result <- NULL
   attempt <- 1
   while (is.null(result) && attempt <= attempts - 1) {
@@ -43,6 +47,8 @@ install_with_retries <- function(remotes, attempts = 3, ...) {
     try(
       result <- renv::install(remotes, ...)
     )
+    Sys.sleep(sleep)
+    sleep <- sleep * backoff
   }
   if (is.null(result)) {
     # last attempt
