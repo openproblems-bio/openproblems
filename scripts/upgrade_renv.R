@@ -1,3 +1,7 @@
+if (nchar(Sys.getenv("BIOCVERSION")) > 0) {
+  renv::settings$bioconductor.version(Sys.getenv("BIOCVERSION"))
+}
+
 upgraded_remote_version <- function(remote) {
   if (remote$Source == "Repository") {
     out <- paste0(remote$Package, "@", remote$Version)
