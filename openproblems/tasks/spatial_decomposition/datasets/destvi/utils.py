@@ -137,7 +137,7 @@ def generate_synthetic_dataset(
     )
     sc_anndata.obs["cell_type"] = cell_types_sc[:, :K_sampled].reshape(-1, 1)
     sc_anndata.obs["label"] = sc_anndata.obs["cell_type"].astype(str).astype("category")
-    sc_anndata.obs["n_counts"] = np.sum(sc_anndata.X, axis=1)
+    sc_anndata.obs["n_counts"] = np.sum(sc_anndata.X, axis=1).A.flatten()
     sc_anndata.obsm["gamma"] = gamma_sc[:, :K_sampled].reshape(-1, gamma.shape[-1])
     sc_anndata.obsm["spatial"] = location_sc[:, :K_sampled].reshape(-1, 2)
     if n_cells is not None:
