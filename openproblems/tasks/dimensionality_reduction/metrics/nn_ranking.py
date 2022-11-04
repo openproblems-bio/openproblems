@@ -67,18 +67,9 @@ def _coranking_matrix(R1: np.ndarray, R2: np.ndarray) -> np.ndarray:  # pragma: 
 
 
 @njit(cache=True, fastmath=True)
-def _metrics(
-    Q: np.ndarray,
-) -> Tuple[
-    np.ndarray, np.ndarray, np.ndarray, float, np.ndarray, int, float, float
-]:  # pragma: no cover
-    Q = Q[1:, 1:]
-    m = len(Q)
+def _trustworthiness(Q: np.ndarray, m: int) -> np.ndarray:  # pragma: no cover
 
     T = np.zeros(m - 1)  # trustworthiness
-    C = np.zeros(m - 1)  # continuity
-    QNN = np.zeros(m)  # Co-k-nearest neighbor size
-    LCMC = np.zeros(m)  # Local Continuity Meta Criterion
 
     for k in range(m - 1):
         Qs = Q[k:, :k]
@@ -86,24 +77,85 @@ def _metrics(
         W = np.arange(Qs.shape[0]).reshape(-1, 1)
         # 1 - normalized hard-k-intrusions. lower-left region.
         # weighted by rank error (rank - k)
-        T[k] = 1 - np.sum(Qs * W) / (k + 1) / m / (m - 1 - k)
+        T[k] = 1 - np.sum(Qs * W) / ((k + 1) * m * (m - 1 - k))
+
+    return T
+
+
+@njit(cache=True, fastmath=True)
+def _continuity(Q: np.ndarray, m: int) -> np.ndarray:  # pragma: no cover
+
+    C = np.zeros(m - 1)  # continuity
+
+    for k in range(m - 1):
         Qs = Q[:k, k:]
         # a row vector of weights. weight = rank error = actual_rank - k
         W = np.arange(Qs.shape[1]).reshape(1, -1)
         # 1 - normalized hard-k-extrusions. upper-right region
-        C[k] = 1 - np.sum(Qs * W) / (k + 1) / m / (m - 1 - k)
+        C[k] = 1 - np.sum(Qs * W) / ((k + 1) * m * (m - 1 - k))
+
+    return C
+
+
+@njit(cache=True, fastmath=True)
+def _qnn(Q: np.ndarray, m: int) -> np.ndarray:  # pragma: no cover
+
+    QNN = np.zeros(m)  # Co-k-nearest neighbor size
 
     for k in range(m):
         # Q[0,0] is always m. 0-th nearest neighbor is always the point itself.
         # Exclude Q[0,0]
         QNN[k] = np.sum(Q[: k + 1, : k + 1]) / ((k + 1) * m)
+
+    return QNN
+
+
+@njit(cache=True, fastmath=True)
+def _lcmc(QNN: np.ndarray, m: int) -> np.ndarray:  # pragma: no cover
+
+    LCMC = np.zeros(m)  # Local Continuity Meta Criterion
+
+    for k in range(m):
         LCMC[k] = QNN[k] - (k + 1) / (m - 1)
 
+    return LCMC
+
+
+def _kmax(LCMC: np.ndarray) -> int:
     kmax = np.argmax(LCMC)
+    return kmax  # type: ignore
+
+
+def _q_local(QNN: np.ndarray, kmax: int) -> float:
     Qlocal = np.sum(QNN[: kmax + 1]) / (kmax + 1)
+    return Qlocal
+
+
+def _q_global(QNN: np.ndarray, kmax: int, m: int) -> float:
     # skip the last. The last is (m-1)-nearest neighbor, including all samples.
     Qglobal = np.sum(QNN[kmax:-1]) / (m - kmax - 1)
+    return Qglobal
+
+
+def _qnn_auc(QNN: np.ndarray) -> float:
     AUC = np.mean(QNN)
+    return AUC  # type: ignore
+
+
+def _metrics(
+    Q: np.ndarray,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, float, np.ndarray, int, float, float]:
+    Q = Q[1:, 1:]
+    m = len(Q)
+
+    T = _trustworthiness(Q, m)
+    C = _continuity(Q, m)
+    QNN = _qnn(Q, m)
+    LCMC = _lcmc(QNN, m)
+    kmax = _kmax(LCMC)
+    Qlocal = _q_local(QNN, kmax)
+    Qglobal = _q_global(QNN, kmax, m)
+    AUC = _qnn_auc(QNN)
 
     return T, C, QNN, AUC, LCMC, kmax, Qlocal, Qglobal
 
