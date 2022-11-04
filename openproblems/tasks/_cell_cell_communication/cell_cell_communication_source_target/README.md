@@ -79,12 +79,12 @@ Methods should predict interactions between cell types without using
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
 
-Methods should infer a score for each _intersecting interaction_ 
+Methods should infer a score for each _intersecting interaction_
 between a `source` and a `target`.
 
 The predictions of any method which do not uniquely map
 to the columns in `adata.uns["merge_keys"]` are to be **aggregated**.
-By default, aggregation is carried as the `max` and `sum` 
+By default, aggregation is carried as the `max` and `sum`
 according to columns in the `merge_keys`.
 
 ### Prior-knowledge Resource

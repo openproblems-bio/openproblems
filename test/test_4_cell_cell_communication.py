@@ -129,7 +129,7 @@ def test_odds_ratio_no_match():
     assert m is np.nan
 
     m = metric(adata, top_prop=0.5)  # check non-exception output
-    assert np.issubdtype('float64', m)
+    assert np.issubdtype("float64", m)
 
     adata = task.methods.true_events(adata)
     m = metric(adata, top_prop=0.9)  # force denominator exception

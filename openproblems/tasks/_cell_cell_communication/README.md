@@ -55,7 +55,6 @@ assigned to the positive class.
 * **AUPRC**: a single number _[0-1]_ that summarizes the area under the curve where
 x is the recall and y is the precision
 
-
 ## API
 
 ### Datasets
@@ -80,7 +79,6 @@ in `adata.uns["target_organism"]` - used to convert the (typically human) prior
 knowledge of the CCC methods to the corresponding gene homologs.
 `adata.X` should contain the raw counts matrix.
 
-
 ### Methods
 
 Methods should predict interactions between cell types without using
@@ -98,24 +96,23 @@ and at least two of the following columns:
 * `receptor`: `str`, gene symbol of the receptor in an interaction
 
 The relevance of these columns is determined by the subtask in question
-via `adata.uns["merge_keys"]`, a list of at least two columns from the 
-aforementioned columns corresponding to the assumed 
+via `adata.uns["merge_keys"]`, a list of at least two columns from the
+aforementioned columns corresponding to the assumed
 truth in `adata.uns["ccc_target"]`.
 
 Methods should infer a score for each _intersecting interaction_,
 where these represent the intersecting columns between `adata.uns["ccc_pred"]` and
 `adata.uns["ccc_target"]`.
 
-In case, `ligand` and/or `receptor` columns are present 
+In case, `ligand` and/or `receptor` columns are present
 in `adata.uns["ccc_target"]`, we further define _intersecting interactions_ as
 those for which the relevant genes are present in both the dataset and
 the prior-knowledge resource provided by LIANA.
 
 The predictions of any method which do not uniquely map
 to the columns in `adata.uns["merge_keys"]` are to be **aggregated**.
-By default, aggregation is carried as the `max` and `sum` 
+By default, aggregation is carried as the `max` and `sum`
 according to columns in the `merge_keys`.
-
 
 The prior-knowledge resource is available via the
 `cell_cell_communication.utils.ligand_receptor_resource` function, which returns a
