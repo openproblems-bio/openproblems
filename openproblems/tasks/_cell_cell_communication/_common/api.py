@@ -75,30 +75,55 @@ def check_dataset(adata, merge_keys):
     assert np.all(np.isin(adata.uns["ccc_target"]["response"], [0, 1]))
     assert any(adata.uns["ccc_target"][merge_keys].duplicated()) is False
 
-    # check against resource
     if "ligand" in merge_keys or "receptor" in merge_keys:
         assert "ligand_receptor_resource" in adata.uns
-        assert "receptor_genesymbol" in adata.uns["ligand_receptor_resource"]
-        assert "ligand_genesymbol" in adata.uns["ligand_receptor_resource"]
         assert "var_names_all" in adata.uns
-        assert_is_subset(
-            flatten_complex_subunits(
-                adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]
-            ),
-            adata.uns["var_names_all"],
-            "resource receptor names",
-            "gene names",
-            0.1,
-        )
-        assert_is_subset(
-            flatten_complex_subunits(
-                adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]
-            ),
-            adata.uns["var_names_all"],
-            "resource ligand names",
-            "gene names",
-            0.1,
-        )
+
+        if "receptor" in merge_keys:
+            assert "receptor" in adata.uns["ccc_target"]
+            assert "receptor_genesymbol" in adata.uns["ligand_receptor_resource"]
+
+            # verify target receptors are in resource
+            assert_is_subset(
+                adata.uns["ccc_target"]["receptor"].unique(),
+                np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]),
+                "target receptor names",
+                "resource receptor names",
+            )
+
+            # verify resource receptors are in the data
+            assert_is_subset(
+                flatten_complex_subunits(
+                    adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]
+                ),
+                adata.uns["var_names_all"],
+                "resource receptor names",
+                "gene names",
+                0.1,
+            )
+
+        if "ligand" in merge_keys:
+            assert "ligand" in adata.uns["ccc_target"]
+            assert "ligand_genesymbol" in adata.uns["ligand_receptor_resource"]
+
+            # verify target ligands are in resource
+            assert_is_subset(
+                adata.uns["ccc_target"]["ligand"].unique(),
+                np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]),
+                "target ligand names",
+                "resource ligand names",
+            )
+
+            # verify resource ligands are in the data
+            assert_is_subset(
+                flatten_complex_subunits(
+                    adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]
+                ),
+                adata.uns["var_names_all"],
+                "resource ligand names",
+                "gene names",
+                0.1,
+            )
 
     # check merge keys
     if "source" in merge_keys:
@@ -118,25 +143,6 @@ def check_dataset(adata, merge_keys):
             "cell types",
         )
 
-    if "receptor" in merge_keys:
-        # verify target receptors are in resource
-        assert "receptor" in adata.uns["ccc_target"]
-        assert_is_subset(
-            adata.uns["ccc_target"]["receptor"].unique(),
-            np.unique(adata.uns["ligand_receptor_resource"]["receptor_genesymbol"]),
-            "target receptor names",
-            "resource receptor names",
-        )
-    if "ligand" in merge_keys:
-        # verify target ligands are in resource
-        assert "ligand" in adata.uns["ccc_target"]
-        assert_is_subset(
-            adata.uns["ccc_target"]["ligand"].unique(),
-            np.unique(adata.uns["ligand_receptor_resource"]["ligand_genesymbol"]),
-            "target ligand names",
-            "resource ligand names",
-        )
-
     return True
 
 
@@ -149,7 +155,7 @@ def check_method(adata, merge_keys, is_baseline=False):
     assert "score" in adata.uns["ccc_pred"]
     assert np.all(np.isreal(adata.uns["ccc_pred"]["score"]))
 
-    # Check if a single prediction is return for every merge_key combo
+    # Check if a single prediction is returned for every merge_key combo
     assert (adata.uns["ccc_pred"].groupby(merge_keys).size() == 1).all()
 
     # check merge keys
