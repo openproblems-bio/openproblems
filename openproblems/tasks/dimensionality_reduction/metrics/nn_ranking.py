@@ -110,14 +110,8 @@ def _qnn(Q: np.ndarray, m: int) -> np.ndarray:  # pragma: no cover
     return QNN
 
 
-@njit(cache=True, fastmath=True)
-def _lcmc(QNN: np.ndarray, m: int) -> np.ndarray:  # pragma: no cover
-
-    LCMC = np.zeros(m)  # Local Continuity Meta Criterion
-
-    for k in range(m):
-        LCMC[k] = QNN[k] - (k + 1) / (m - 1)
-
+def _lcmc(QNN: np.ndarray, m: int) -> np.ndarray:
+    LCMC = QNN - (np.arange(m) + 1) / (m - 1)
     return LCMC
 
 
