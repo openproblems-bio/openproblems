@@ -39,7 +39,7 @@ def _cache_path(func, *args, **kwargs):
 
 
 def _fix_sparse_format(X):
-    if isinstance(X, scipy.sparse.coo_matrix):
+    if scipy.sparse.issparse(X) and not isinstance(X, scipy.sparse.csr_matrix):
         X = X.tocsr()
     return X
 
