@@ -94,6 +94,7 @@ class TestDataset(unittest.TestCase):
     def test_sparse(self):
         """Ensure output is sparse."""
         assert scipy.sparse.issparse(self.adata.X)
+        assert isinstance(self.adata.X, scipy.sparse.csr_matrix)
 
     def test_not_bytes(self):
         """Ensure output does not contain byte strings."""
