@@ -28,6 +28,10 @@ def _hash_function(func, *args, **kwargs):
 
 
 def _cache_path(func, *args, **kwargs):
+    try:
+        os.mkdir(TEMPDIR)
+    except OSError:
+        pass
     if hasattr(func, "__wrapped__"):
         func = func.__wrapped__
     filename = "openproblems_{}.h5ad".format(_hash_function(func, *args, **kwargs))
@@ -38,6 +42,19 @@ def _fix_sparse_format(X):
     if isinstance(X, scipy.sparse.coo_matrix):
         X = X.tocsr()
     return X
+
+
+def _fix_adata(adata):
+    adata.strings_to_categoricals()
+    if "var_names_all" not in adata.uns:
+        adata.uns["var_names_all"] = adata.var.index.to_numpy()
+    adata.X = _fix_sparse_format(adata.X)
+    for layer in adata.layers:
+        adata.layers[layer] = _fix_sparse_format(adata.layers[layer])
+    for obsm in adata.obsm:
+        adata.obsm[obsm] = _fix_sparse_format(adata.obsm[obsm])
+    if "counts" not in adata.layers:
+        adata.layers["counts"] = adata.X
 
 
 def loader(data_url, data_reference):
@@ -55,35 +72,17 @@ def loader(data_url, data_reference):
         @functools.wraps(func)
         def apply_func(*args, **kwargs):
             filepath = _cache_path(func, *args, **kwargs)
+            dataset_name = f"{func.__name__}({args}, {kwargs})"
             if os.path.isfile(filepath):
-                log.debug(
-                    "Loading cached {}({}, {}) dataset".format(
-                        func.__name__, args, kwargs
-                    )
-                )
+                log.debug(f"Loading cached {dataset_name} dataset")
                 adata = anndata.read_h5ad(filepath)
                 adata.uns["_from_cache"] = True
                 return adata
             else:
-                log.debug(
-                    "Downloading {}({}, {}) dataset".format(func.__name__, args, kwargs)
-                )
+                log.debug(f"Downloading {dataset_name} dataset")
                 adata = func(*args, **kwargs)
-                adata.strings_to_categoricals()
+                _fix_adata(adata)
                 adata.uns["_from_cache"] = False
-                if "var_names_all" not in adata.uns:
-                    adata.uns["var_names_all"] = adata.var.index.to_numpy()
-                adata.X = _fix_sparse_format(adata.X)
-                for layer in adata.layers:
-                    adata.layers[layer] = _fix_sparse_format(adata.layers[layer])
-                for obsm in adata.obsm:
-                    adata.obsm[obsm] = _fix_sparse_format(adata.obsm[obsm])
-                if "counts" not in adata.layers:
-                    adata.layers["counts"] = adata.X
-                try:
-                    os.mkdir(TEMPDIR)
-                except OSError:
-                    pass
                 adata.write_h5ad(filepath)
                 return adata
 
