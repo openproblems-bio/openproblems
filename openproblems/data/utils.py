@@ -6,6 +6,7 @@ import hashlib
 import logging
 import os
 import scanpy as sc
+import scipy.sparse
 
 log = logging.getLogger("openproblems")
 
@@ -31,6 +32,12 @@ def _cache_path(func, *args, **kwargs):
         func = func.__wrapped__
     filename = "openproblems_{}.h5ad".format(_hash_function(func, *args, **kwargs))
     return os.path.join(TEMPDIR, filename)
+
+
+def _fix_sparse_format(X):
+    if isinstance(X, scipy.sparse.coo_matrix):
+        X = X.tocsr()
+    return X
 
 
 def loader(data_url, data_reference):
@@ -66,6 +73,11 @@ def loader(data_url, data_reference):
                 adata.uns["_from_cache"] = False
                 if "var_names_all" not in adata.uns:
                     adata.uns["var_names_all"] = adata.var.index.to_numpy()
+                adata.X = _fix_sparse_format(adata.X)
+                for layer in adata.layers:
+                    adata.layers[layer] = _fix_sparse_format(adata.layers[layer])
+                for obsm in adata.obsm:
+                    adata.obsm[obsm] = _fix_sparse_format(adata.obsm[obsm])
                 if "counts" not in adata.layers:
                     adata.layers["counts"] = adata.X
                 try:
