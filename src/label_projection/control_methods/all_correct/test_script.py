@@ -8,7 +8,7 @@ OUTPUT = "output.mv.h5ad"
 
 print(">> Running script as test")
 out = subprocess.check_output([
-    "./" + meta["functionality_name"],
+    meta["executable"],
     "--input", INPUT,
     "--output", OUTPUT
 ]).decode("utf-8")

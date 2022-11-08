@@ -10,7 +10,7 @@ OUTPUT = "toy_data_concatenated.h5ad"
 
 print(">> Runing script as test")
 out = subprocess.check_output([
-    "./" + meta["functionality_name"],
+    meta["executable"],
     "--inputs", INPUTS,
     "--output", OUTPUT
 ]).decode("utf-8")
