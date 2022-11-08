@@ -4,10 +4,6 @@ engine: knitr
 format: gfm
 ---
 
-```{r setup, echo=FALSE}
-repo="https://github.com/openproblems-bio/openproblems-v2"
-```
-
 [OpenProblems](https://openproblems.bio) is a community effort, and everyone is welcome to contribute. This project is hosted on [github.com/openproblems-bio/openproblems-v2](https://github.com/openproblems-bio/openproblems-v2).
 
 ## Code of conduct {#code-of-conduct}
@@ -16,7 +12,7 @@ We as members, contributors, and leaders pledge to make participation in our com
 
 We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
 
-Our [Code of Conduct](CODE_OF_CONDUCT.md) is adapted from the [Contributor Covenant][homepage], version 2.1, available at [https://www.contributor-covenant.org/version/2/1/code_of_conduct.html][v2.1].
+Our full [Code of Conduct](CODE_OF_CONDUCT.md) is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1.
 
 
 ## Ways to contribute
@@ -34,6 +30,7 @@ Another way to contribute is to report [issues you're facing](#submitting-a-bug-
 <a class="github-button" href="https://github.com/openproblems-bio/openproblems-v2" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star openproblems-bio/openproblems-v2 on GitHub">Star</a>
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 
+<!-- wip -->
 
 ## Submitting New Features
 

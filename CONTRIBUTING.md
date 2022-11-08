@@ -17,9 +17,9 @@ race, caste, color, religion, or sexual identity and orientation.
 We pledge to act and interact in ways that contribute to an open,
 welcoming, diverse, inclusive, and healthy community.
 
-Our [Code of Conduct](CODE_OF_CONDUCT.md) is adapted from the
-\[Contributor Covenant\]\[homepage\], version 2.1, available at
-\[https://www.contributor-covenant.org/version/2/1/code_of_conduct.html\]\[v2.1\].
+Our full [Code of Conduct](CODE_OF_CONDUCT.md) is adapted from the
+[Contributor Covenant](https://www.contributor-covenant.org), version
+2.1.
 
 ## Ways to contribute
 
@@ -50,6 +50,7 @@ it”:
 
 <a class="github-button" href="https://github.com/openproblems-bio/openproblems-v2" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star openproblems-bio/openproblems-v2 on GitHub">Star</a>
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- wip -->
 
 ## Submitting New Features
 
