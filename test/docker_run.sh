@@ -15,6 +15,7 @@ if [ ! -f ~/.install_complete ]; then
   if echo "$FREEZE" | grep -q annoy; then
     python3 -m pip install --force "$(echo "$FREEZE" | grep annoy)"
   fi
+  python3 -m pip check
   touch ~/.install_complete
 fi
 
