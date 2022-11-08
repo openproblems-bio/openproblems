@@ -1,0 +1,17 @@
+__inherits__: ../../api/normalization.yaml
+functionality:
+  name: "normalize_log_cpm"
+  namespace: "label_projection/data_processing"
+  description: "Normalize data using Log CPM"
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - "anndata<0.8"
+  - type: nextflow
