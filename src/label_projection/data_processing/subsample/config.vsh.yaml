@@ -37,13 +37,11 @@ functionality:
     - type: file
       path: "../../../../resources_test/common/pancreas"
 platforms:
-  - type: native
   - type: docker
     image: "python:3.8"
     setup:
       - type: python
         packages:
-          - scprep
           - scanpy
           -  "anndata<0.8"
   - type: nextflow

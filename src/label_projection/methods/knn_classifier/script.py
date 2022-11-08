@@ -3,13 +3,14 @@ par = {
     'input': '../../../data/test_data_preprocessed.h5ad',
     'output': 'output.knnscran.h5ad'
 }
+meta = {
+    'resources_dir'
+}
 ## VIASH END
 resources_dir = "../../../../common/tools/"
 utils_dir = "../../../"
 
 import sys
-sys.path.append(resources_dir)
-sys.path.append(utils_dir)
 sys.path.append(meta['resources_dir'])
 import scanpy as sc
 from utils import classifier

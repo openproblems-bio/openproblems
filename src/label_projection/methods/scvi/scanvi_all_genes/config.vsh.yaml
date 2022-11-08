@@ -52,7 +52,7 @@ functionality:
     - type: python_script
       path: script.py
     - path: "../tools.py"
-  tests:
+  test_resources:
     - type: python_script
       path: ../unit_tests/test_method.py
     - type: file
