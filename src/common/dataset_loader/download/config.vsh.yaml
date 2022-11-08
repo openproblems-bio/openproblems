@@ -26,6 +26,10 @@ functionality:
     - name: "--obs_tissue"
       type: "string"
       description: "Location of where to find the observation tissue information."
+    - name: "--layer_counts"
+      type: "string"
+      description: "Location of where to store the counts data. Leave undefined to store in `.X`, else it will be stored in `.layers[par['layer_counts']]`."
+      example: counts
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
@@ -37,9 +41,9 @@ functionality:
         slots:
           X: 
             type: integer
-            name: counts
+            name: counts # todo: this should depend on the value of 'layer_counts'
             description: Raw counts
-            required: true
+            required: false
           obs:
             - type: string
               name: celltype

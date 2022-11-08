@@ -7,6 +7,7 @@ output = "dataset.h5ad"
 url = "https://ndownloader.figshare.com/files/24539828"
 obs_celltype = "celltype"
 obs_batch = "tech"
+layer_counts = "foobar"
 
 print(">> Running script")
 out = subprocess.check_output([
@@ -15,6 +16,7 @@ out = subprocess.check_output([
     "--name", name,
     "--obs_celltype", obs_celltype,
     "--obs_batch", obs_batch,
+    "--layer_counts", layer_counts,
     "--output", output
 ]).decode("utf-8")
 
@@ -24,9 +26,15 @@ assert path.exists(output)
 print(">> Read output anndata")
 adata = sc.read_h5ad(output)
 
+print(adata)
+
 print(">> Check that output fits expected API")
-assert adata.X is not None
-assert "counts" not in adata.layers
+if layer_counts is not None:
+    assert adata.X is None
+    assert layer_counts in adata.layers
+else:
+    assert adata.X is not None
+    assert layer_counts not in adata.layers
 assert adata.uns["dataset_id"] == name
 if obs_celltype:
     assert "celltype" in adata.obs.columns

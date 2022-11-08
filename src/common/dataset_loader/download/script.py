@@ -66,5 +66,10 @@ print("Remove cells or genes with 0 counts")
 sc.pp.filter_genes(adata, min_cells=1)
 sc.pp.filter_cells(adata, min_counts=2)
 
+if par["layer_counts"]:
+    print(f"Copying .X back to .layers['{par['layer_counts']}']")
+    adata.layers[par["layer_counts"]] = adata.X
+    del adata.X
+
 print("Writing adata to file")
 adata.write(par["output"], compression="gzip")
