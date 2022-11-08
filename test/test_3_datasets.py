@@ -45,7 +45,7 @@ def _assert_not_bytes(X):
         (staticmethod(dataset), task, test, utils.TEMPDIR.name)
         for task in utils.git.list_modified_tasks()
         for dataset in task.DATASETS
-        for test in [True]
+        for test in [True, False]
     ],
     class_name_func=utils.name.name_test,
 )
