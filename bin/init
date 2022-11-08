@@ -10,8 +10,7 @@ curl -fsSL get.viash.io | bash -s -- \
   --registry ghcr.io \
   --organisation openproblems-bio \
   --target_image_source https://github.com/openproblems-bio/openproblems-v2 \
-  --tag 0.5.15 \
-  --nextflow_variant vdsl3
+  --tag develop
 
 cd bin
 
