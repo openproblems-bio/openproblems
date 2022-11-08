@@ -1,5 +1,5 @@
 functionality:
-  name: "random_celltype"
+  name: "random_labels"
   namespace: "label_projection/control_methods"
   version: "dev"
   description: "Random Labels dummy"
@@ -7,12 +7,9 @@ functionality:
     type: negative_control
     label: Random prediction
   authors:
-    - name: "Scott Gigante"
-      roles: [ author ]
-      props: { github: scottgigante }
-    - name: "Vinicius Chagas"
-      roles: [ maintainer ]
-      props: { github: chagasVinicius }
+    - name: "Nikolay Markov"
+      roles: [ author, maintainer ]
+      props: { github: mxposed }
   arguments:
     - name: "--input"
       type: "file"
