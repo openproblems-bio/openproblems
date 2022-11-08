@@ -21,11 +21,11 @@ mkdir -p $DATASET_DIR
 
 bin/viash run src/label_projection/data_processing/subsample/config.vsh.yaml -- \
     --input $RAW_DATA \
-    --celltype_categories "acinar:beta" \
-    --tech_categories "celseq:inDrop4:smarter" \
+    --keep_celltype_categories "acinar:beta" \
+    --keep_batch_categories "celseq:inDrop4:smarter" \
     --output $DATASET_DIR/dataset_subsampled.h5ad
 
-bin/viash run src/label_projection/data_processing/normalize/log_cpm/config.vsh.yaml -- \
+bin/viash run src/label_projection/data_processing/normalize_log_cpm/config.vsh.yaml -- \
     --input $DATASET_DIR/dataset_subsampled.h5ad \
     --output $DATASET_DIR/dataset_subsampled_cpm.h5ad
 
