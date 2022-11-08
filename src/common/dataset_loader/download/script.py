@@ -30,13 +30,16 @@ with tempfile.TemporaryDirectory() as tempdir:
     print("Reading file")
     adata = sc.read_h5ad(filepath)
 
-print("Copying .layers['counts'] to .X")
 if "counts" in adata.layers:
+    print("Copying .layers['counts'] to .X")
     adata.X = adata.layers["counts"]
     del adata.layers["counts"]
 
 print("Setting .uns['dataset_id']")
 adata.uns["dataset_id"] = par["name"]
+
+print("Setting .uns['raw_dataset_id']")
+adata.uns["raw_dataset_id"] = par["name"]
 
 print("Setting .obs['celltype']")
 if par["obs_celltype"]:
