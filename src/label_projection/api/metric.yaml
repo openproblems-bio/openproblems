@@ -1,112 +1,28 @@
 functionality:
-  name: metric
-  meta:
-    # pretty version of the functionality.name
-    label: "Metric"
-
-    # The unique identifier(s) of metrics contained in this component
-    metric_ids: [ "my_metric" ]
-
-    # The minimum value of each metric
-    metric_mins: [ 0 ]
-
-    # The maximum value of each metric
-    metric_maxs: [ 1 ]
-
-    # Whether a higher value is better
-    metric_maximise: [ true ]
-
   arguments:
     - name: "--input_solution"
-      type: h5ad_file
-      description: "The solution for the test data"
-      example: "solution.h5ad"
-      meta:
-        from: dataset_censoring__output_solution
-      slots:
-        layers: 
-          - type: integer
-            name: counts
-            description: Raw counts
-          - type: double
-            name: lognorm
-            description: Log-transformed normalised counts
-        obs:
-          - type: double
-            name: labels
-            description: Ground truth cell type labels
-          - type: double
-            name: batch
-            description: Batch information
-        uns:
-          - type: string
-            name: raw_dataset_id
-            description: "A unique identifier for the original dataset (before preprocessing)"
-          - type: string
-            name: dataset
-            description: "A unique identifier for the dataset"
+      __inherits__: anndata_solution.yaml
     - name: "--input_prediction"
-      type: h5ad_file
-      description: "The prediction file"
-      example: "prediction.h5ad"
-      meta:
-        from: method__output
-      slots:
-        obs:
-          - type: double
-            name: labels_pred
-            description: Predicted labels for the test cells.
-        uns:
-          - type: string
-            name: dataset_id
-            description: "A unique identifier for the dataset"
-          - type: string
-            name: raw_dataset_id
-            description: "A unique identifier for the original dataset (before preprocessing)"
-          - type: string
-            name: method_id
-            description: "A unique identifier for the method"
+      __inherits__: anndata_prediction.yaml
     - name: "--output"
-      description: "Metric score file"
-      example: "output.h5ad"
-      meta:
-        short_description: "Scores"
-      slots:
-        uns:
-          - type: string
-            name: dataset_id
-            description: "A unique identifier for the dataset"
-          - type: string
-            name: raw_dataset_id
-            description: "A unique identifier for the original dataset (before preprocessing)"
-          - type: string
-            name: method_id
-            description: "A unique identifier for the method"
-          - type: string
-            name: metric_ids
-            description: "One or more unique metric identifiers"
-            multiple: true
-          - type: double
-            name: metric_values
-            description: "The metric values obtained for the given prediction. Must be of same length as 'metric_ids'."
-            multiple: true
+      __inherits__: anndata_score.yaml
       direction: output
-  resources:
-    # A custom python script with additional checks
-    - type: python_script
-      path: format_check.py
-      text: |
-        import anndata as ad
+  # test_resources:
+  #   # A custom python script with additional checks
+  #   - type: python_script
+  #     path: format_check.py
+  #     text: |
+  #       import anndata as ad
 
-        input_solution = ad.read_h5ad(par["input_solution"])
-        input_prediction = ad.read_h5ad(par["input_prediction"])
-        output = ad.read_h5ad(par["output"])
+  #       input_solution = ad.read_h5ad(par["input_solution"])
+  #       input_prediction = ad.read_h5ad(par["input_prediction"])
+  #       output = ad.read_h5ad(par["output"])
 
-        print("Checking whether data from input was copied properly to output")
-        assert input_solution.uns["dataset_id"] == input_prediction.uns["dataset_id"]
-        assert input_solution.uns["raw_dataset_id"] == input_prediction.uns["raw_dataset_id"]
-        assert input_prediction.uns["dataset_id"] == output.uns["dataset_id"]
-        assert input_prediction.uns["raw_dataset_id"] == output.uns["raw_dataset_id"]
-        assert input_prediction.uns["method_id"] == output.uns["method_id"]
+  #       print("Checking whether data from input was copied properly to output")
+  #       assert input_solution.uns["dataset_id"] == input_prediction.uns["dataset_id"]
+  #       assert input_solution.uns["raw_dataset_id"] == input_prediction.uns["raw_dataset_id"]
+  #       assert input_prediction.uns["dataset_id"] == output.uns["dataset_id"]
+  #       assert input_prediction.uns["raw_dataset_id"] == output.uns["raw_dataset_id"]
+  #       assert input_prediction.uns["method_id"] == output.uns["method_id"]
 
-        print("All checks succeeded!")
+  #       print("All checks succeeded!")

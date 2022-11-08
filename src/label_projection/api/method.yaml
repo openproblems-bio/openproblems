@@ -1,106 +1,49 @@
 functionality:
-  name: method
-  meta:
-    # Short descriptive label of the method, ideally 10 characters at most.
-    label: "Method"
-
-    # The method name, ideally four words at most
-    name: "Method foo param bar"
-
-    # The type of method. Must be one of: method, positive_control, negative_control, baseline
-    type: method
-
-    # The doi of an associated paper (optional).
-    # paper_doi: "10.1234/s56789-012-3456-7"
-
-    # URL to the main codebase of this method (optional).
-    # code_url: "https://github.com/foo/bar"
   arguments:
     - name: "--input_train"
-      type: h5ad_file
-      description: "The training data"
-      example: "training.h5ad"
-      meta:
-        from: dataset_censoring__output_train
-      slots:
-        layers: 
-          - type: integer
-            name: counts
-            description: Raw counts
-          - type: double
-            name: lognorm
-            description: Log-transformed normalised counts
-        obs:
-          - type: double
-            name: labels
-            description: Ground truth cell type labels
-          - type: double
-            name: batch
-            description: Batch information
-        uns:
-          - type: string
-            name: raw_dataset_id
-            description: "A unique identifier for the original dataset (before preprocessing)"
-          - type: string
-            name: dataset_id
-            description: "A unique identifier for the dataset"
+      __inherits__: anndata_train.yaml
     - name: "--input_test"
-      type: h5ad_file
-      description: "The censored test data"
-      example: "test.h5ad"
-      meta:
-        from: dataset_censoring__output_test
-      slots:
-        layers: 
-          - type: integer
-            name: counts
-            description: Raw counts
-          - type: double
-            name: lognorm
-            description: Log-transformed normalised counts
-        obs:
-          - type: double
-            name: batch
-            description: Batch information
-        uns:
-          - type: string
-            name: raw_dataset_id
-            description: "A unique identifier for the original dataset (before preprocessing)"
-          - type: string
-            name: dataset
-            description: "A unique identifier for the dataset"
+      __inherits__: anndata_test.yaml
     - name: "--output"
-      type: h5ad_file
-      description: "The prediction file"
-      example: "prediction.h5ad"
-      meta:
-        short_description: "Prediction"
-      slots:
-        obs:
-          - type: double
-            name: labels_pred
-            description: Predicted labels for the test cells.
-        uns:
-          - type: string
-            name: dataset_id
-            description: "A unique identifier for the dataset"
-          - type: string
-            name: raw_dataset_id
-            description: "A unique identifier for the original dataset (before preprocessing)"
-          - type: string
-            name: method_id
-            description: "A unique identifier for the method"
+      __inherits__: anndata_prediction.yaml
       direction: output
-  resources:
-    # A custom python script with additional checks
+  test_resources:
+    - path: ../../../../resources_test/label_projection/pancreas
     - type: python_script
-      path: format_check.py
+      path: generic_test.py
       text: |
         import anndata as ad
 
-        # input_train = ad.read_h5ad(par["input_train"])
-        input_test = ad.read_h5ad(par["input_test"])
-        output = ad.read_h5ad(par["output"])
+        import subprocess
+        import scanpy as sc
+        from os import path
+
+        input_train_path = meta["resources_dir"] + "/pancreas/toy_train.h5ad"
+        input_test_path = meta["resources_dir"] + "/pancreas/toy_test.h5ad"
+        output_path = "output.h5ad"
+
+        cmd = [
+          meta['executable'],
+          "--input_train", input_train_path,
+          "--input_test", input_test_path,
+          "--output", output_path
+        ]
+
+        print(">> Running script as test")
+        out = subprocess.check_output(cmd).decode("utf-8")
+
+        print(">> Checking whether output file exists")
+        assert path.exists(output_path)
+
+        print(">> Reading h5ad files")
+        input_test = ad.read_h5ad(input_test_path)
+        output = ad.read_h5ad(output_path)
+        print("input_test:", input_test)
+        print("output:", output)
+
+        print(">> Checking whether predictions were added")
+        assert "celltype_pred" in adata.obs
+        assert meta['functionality_name'] == adata.uns["method_id"]
 
         print("Checking whether data from input was copied properly to output")
         assert input_test.n_obs == output.n_obs

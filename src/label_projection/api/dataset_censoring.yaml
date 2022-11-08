@@ -1,146 +1,42 @@
 functionality:
-  name: dataset_censoring
-  meta:
-    label: "Dataset censoring"
   arguments:
     - name: "--input"
-      type: h5ad_file
-      description: "A preprocessed dataset"
-      example: "preprocessed.h5ad"
-      meta:
-        from: dataset_preprocessing__output
-      slots:
-        layers: 
-          - type: integer
-            name: counts
-            description: Raw counts
-          - type: double
-            name: lognorm
-            description: Log-transformed normalised counts
-        obs:
-          - type: double
-            name: labels
-            description: Ground truth cell type labels
-          - type: double
-            name: batch
-            description: Batch information
-        uns:
-          - type: string
-            name: raw_dataset_id
-            description: "A unique identifier for the original dataset (before preprocessing)"
-          - type: string
-            name: dataset
-            description: "A unique identifier for the dataset"
+      __inherits__: anndata_preprocessed.yaml
     - name: "--output_train"
-      type: h5ad_file
-      description: "The training data"
-      example: "training.h5ad"
-      meta:
-        short_description: "Training data"
-      slots:
-        layers: 
-          - type: integer
-            name: counts
-            description: Raw counts
-          - type: double
-            name: lognorm
-            description: Log-transformed normalised counts
-        obs:
-          - type: double
-            name: labels
-            description: Ground truth cell type labels
-          - type: double
-            name: batch
-            description: Batch information
-        uns:
-          - type: string
-            name: raw_dataset_id
-            description: "A unique identifier for the original dataset (before preprocessing)"
-          - type: string
-            name: dataset
-            description: "A unique identifier for the dataset"
+      __inherits__: anndata_train.yaml
       direction: output
     - name: "--output_test"
-      type: h5ad_file
-      description: "The censored test data"
-      example: "test.h5ad"
-      meta:
-        short_description: "Test data"
-      slots:
-        layers: 
-          - type: integer
-            name: counts
-            description: Raw counts
-          - type: double
-            name: lognorm
-            description: Log-transformed normalised counts
-        obs:
-          - type: double
-            name: batch
-            description: Batch information
-        uns:
-          - type: string
-            name: raw_dataset_id
-            description: "A unique identifier for the original dataset (before preprocessing)"
-          - type: string
-            name: dataset
-            description: "A unique identifier for the dataset"
+      __inherits__: anndata_test.yaml
       direction: output
     - name: "--output_solution"
-      type: h5ad_file
-      description: "The solution for the test data"
-      example: "solution.h5ad"
-      meta:
-        short_description: "Solution"
-      slots:
-        layers: 
-          - type: integer
-            name: counts
-            description: Raw counts
-          - type: double
-            name: lognorm
-            description: Log-transformed normalised counts
-        obs:
-          - type: double
-            name: labels
-            description: Ground truth cell type labels
-          - type: double
-            name: batch
-            description: Batch information
-        uns:
-          - type: string
-            name: raw_dataset_id
-            description: "A unique identifier for the original dataset (before preprocessing)"
-          - type: string
-            name: dataset
-            description: "A unique identifier for the dataset"
+      __inherits__: anndata_solution.yaml
       direction: output
-  resources:
-    # A custom python script with additional checks
-    - type: python_script
-      path: format_check.py
-      text: |
-        import anndata as ad
+  # test_resources:
+  #   # A custom python script with additional checks
+  #   - type: python_script
+  #     path: format_check.py
+  #     text: |
+  #       import anndata as ad
 
-        input = ad.read_h5ad(par["input"])
-        output_train = ad.read_h5ad(par["output_train"])
-        output_test = ad.read_h5ad(par["output_test"])
-        output_solution = ad.read_h5ad(par["output_solution"])
+  #       input = ad.read_h5ad(par["input"])
+  #       output_train = ad.read_h5ad(par["output_train"])
+  #       output_test = ad.read_h5ad(par["output_test"])
+  #       output_solution = ad.read_h5ad(par["output_solution"])
 
-        print("Checking dimensions")
-        assert input.n_obs == output_train.n_obs + output_test.n_obs
-        assert output_test.n_obs == output_solution.n_obs
-        assert input.n_vars == output_train.n_vars
-        assert input.n_vars == output_test.n_vars
+  #       print("Checking dimensions")
+  #       assert input.n_obs == output_train.n_obs + output_test.n_obs
+  #       assert output_test.n_obs == output_solution.n_obs
+  #       assert input.n_vars == output_train.n_vars
+  #       assert input.n_vars == output_test.n_vars
         
-        print("Checking whether data from input was copied properly to output")
-        assert input.uns["dataset_id"] == output_train.uns["dataset_id"]
-        assert input.uns["raw_dataset_id"] == output_train.uns["raw_dataset_id"]
-        assert input.uns["dataset_id"] == output_test.uns["dataset_id"]
-        assert input.uns["raw_dataset_id"] == output_test.uns["raw_dataset_id"]
-        assert input.uns["dataset_id"] == output_solution.uns["dataset_id"]
-        assert input.uns["raw_dataset_id"] == output_solution.uns["raw_dataset_id"]
+  #       print("Checking whether data from input was copied properly to output")
+  #       assert input.uns["dataset_id"] == output_train.uns["dataset_id"]
+  #       assert input.uns["raw_dataset_id"] == output_train.uns["raw_dataset_id"]
+  #       assert input.uns["dataset_id"] == output_test.uns["dataset_id"]
+  #       assert input.uns["raw_dataset_id"] == output_test.uns["raw_dataset_id"]
+  #       assert input.uns["dataset_id"] == output_solution.uns["dataset_id"]
+  #       assert input.uns["raw_dataset_id"] == output_solution.uns["raw_dataset_id"]
 
-        # todo: check .obs and .layers
+  #       # todo: check .obs and .layers
 
-        print("All checks succeeded!")
+  #       print("All checks succeeded!")
