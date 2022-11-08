@@ -3,35 +3,40 @@ import scanpy as sc
 from os import path
 
 ### VIASH START
+meta = {
+    "resources_dir": "resources_test/label_projection"
+}
 ### VIASH END
-INPUT = f"{meta['resources_dir']}/pancreas/raw_data.h5ad"
-OUTPUT = "toy_data.h5ad"
 
-print(">> Runing script as test for even")
+input_path = f"{meta['resources_dir']}/pancreas/dataset.h5ad"
+output_path = "toy_data.h5ad"
+
+print(">> Running script as test for even")
 out = subprocess.check_output([
-    "./" + meta["functionality_name"],
-    "--input", INPUT,
-    "--output", OUTPUT,
+    meta["executable"],
+    "--input", input_path,
+    "--output", output_path,
     "--even"
 ]).decode("utf-8")
+
 print(">> Checking whether file exists")
-assert path.exists(OUTPUT)
+assert path.exists(output_path)
 
 print(">> Check that test output fits expected API")
-adata = sc.read_h5ad(OUTPUT)
-assert (495, 467) == adata.X.shape, "processed result data shape {}".format(adata.X.shape)
+adata = sc.read_h5ad(output_path)
+assert (495, 467) == adata.layers["counts"].shape, "processed result data shape {}".format(adata.layers["counts"].shape)
 
 print(">> Runing script as test for specific batch and celltype categories")
 out = subprocess.check_output([
-    "./" + meta["functionality_name"],
-    "--input", INPUT,
+    meta["executable"],
+    "--input", input_path,
     "--keep_celltype_categories", "acinar:beta",
     "--keep_batch_categories", "celseq:inDrop4:smarter",
-    "--output", OUTPUT
+    "--output", output_path
 ]).decode("utf-8")
 print(">> Checking whether file exists")
-assert path.exists(OUTPUT)
+assert path.exists(output_path)
 
 print(">> Check that test output fits expected API")
-adata = sc.read_h5ad(OUTPUT)
-assert (500, 443) == adata.X.shape, "processed result data shape {}".format(adata.X.shape)
+adata = sc.read_h5ad(output_path)
+assert (500, 443) == adata.layers["counts"].shape, "processed result data shape {}".format(adata.layers["counts"].shape)

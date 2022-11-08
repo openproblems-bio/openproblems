@@ -1,11 +1,11 @@
 import scanpy as sc
 ### VIASH START
 par = {
-    "input": "../../../../resources_test/label_projection/pancreas/raw_data.h5ad",
+    "input": "resources_test/common/pancreas/dataset.h5ad",
     # "keep_celltype_categories": ["acinar", "beta"],
     # "keep_batch_categories": ["celseq", "inDrop4", "smarter"],
     "even": True,
-    "ouput": "./toy_data.h5ad"
+    "ouput": "toy_data.h5ad"
 }
 ### VIASH END
 
@@ -13,12 +13,15 @@ def filter_genes_cells(adata):
     """Remove empty cells and genes."""
     sc.pp.filter_genes(adata, min_cells=1)
     sc.pp.filter_cells(adata, min_counts=2)
-
     return adata
 
 
 print(">> Load data")
 adata = sc.read(par['input'])
+
+# copy counts to .X because otherwise filter_genes and filter_cells won't work
+adata.X = adata.layers["counts"]
+
 if par.get('even'):
     keep_batch_categories = adata.obs["batch"].unique()
     adata_out = None
@@ -52,6 +55,9 @@ if par.get('keep_celltype_categories') and par.get('keep_batch_categories'):
 sc.pp.subsample(adata, n_obs=min(500, adata.shape[0]))
 filter_genes_cells(adata)
 adata.uns["dataset_id"] = adata.uns["dataset_id"] + "_subsample"
+
+# remove previously copied .X
+del adata.X
 
 print(">> Writing data")
 adata.write(par['output'])
