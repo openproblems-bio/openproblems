@@ -30,6 +30,11 @@ Here, we compare methods for annotation based on a reference dataset. The datase
 
 Metrics for label projection aim to characterize how well each classifer correctly assigns cell type labels to cells in the test set.
 
+```{r metrics, include=FALSE}
+metric_yamls <- list.files(paste0(dir, "/metrics"), pattern = "config.vsh.yaml", full.names = TRUE, recursive = TRUE)
+# todo
+```
+
 * **Accuracy**: Average number of correctly applied labels.
 * **F1 score**: The [F1 score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html) is a weighted average of the precision and recall over all class labels, where an F1 score reaches its best value at 1 and worst score at 0, where each class contributes to the score relative to its frequency in the dataset.
 * **Macro F1 score**: The macro F1 score is an unweighted F1 score, where each class contributes equally, regardless of its frequency.
@@ -37,57 +42,57 @@ Metrics for label projection aim to characterize how well each classifer correct
 ## API
 
 ```{r data, include=FALSE}
-yaml_files <- list.files(paste0(dir, "/api"), full.names = TRUE)
+comp_yamls <- list.files(paste0(dir, "/api"), pattern = "comp_", full.names = TRUE)
+file_yamls <- list.files(paste0(dir, "/api"), pattern = "anndata_", full.names = TRUE)
 
-file_arg_info <- map_df(yaml_files, function(yaml_file) {
+comp_file <- map_df(comp_yamls, function(yaml_file) {
   conf <- yaml::read_yaml(yaml_file)
 
   map_df(conf$functionality$arguments, function(arg) {
     tibble(
-      comp = conf$functionality$name,
+      comp_name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
       arg_name = str_replace_all(arg$name, "^-*", ""),
-      id = paste0(comp, "__", arg_name),
-      short_description = arg$meta$short_description,
-      description = arg$description,
       direction = arg$direction %||% "input",
-      from = arg$meta$from
+      file_name = basename(arg$`__inherits__`) %>% gsub("\\.yaml", "", .)
     )
   })
 })
 
-comp_info <- map_df(yaml_files, function(yaml_file) {
+comp_info <- map_df(comp_yamls, function(yaml_file) {
   conf <- yaml::read_yaml(yaml_file)
 
   tibble(
-    name = conf$functionality$name,
-    label = conf$functionality$meta$label %||% str_replace_all(name, "_", " ")
+    name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
+    label = name %>% gsub("comp_", "", .) %>% gsub("_", " ", .)
   )
 })
 
-slot_info <- map_df(yaml_files, function(yaml_file) {
-  conf <- yaml::read_yaml(yaml_file)
+file_info <- map_df(file_yamls, function(yaml_file) {
+  arg <- yaml::read_yaml(yaml_file)
+  
+  tibble(
+    name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
+    label = name %>% gsub("anndata_", "", .) %>% gsub("_", " ", .)
+  )
+})
 
-  map_df(conf$functionality$arguments, function(arg) {
-    out <- map2_df(names(arg$slots), arg$slots, function(group_name, slot) {
-      df <- map_df(slot, as.data.frame)
-      df$struct <- group_name
-      as_tibble(df)
-    })
-    out$component <- conf$functionality$name
-    out$argument <- str_replace_all(arg$name, "^-*", "")
-    out$direction <- arg$direction %||% "input"
-    out
+file_slot <- map_df(file_yamls, function(yaml_file) {
+  arg <- yaml::read_yaml(yaml_file)
+
+  map2_df(names(arg$info$slots), arg$info$slots, function(group_name, slot) {
+    df <- map_df(slot, as.data.frame)
+    df$struct <- group_name
+    df$file_name = basename(yaml_file) %>% gsub("\\.yaml", "", .)
+    as_tibble(df)
   })
 }) %>% 
-  select(component, argument, struct, name, everything()) %>%
-  mutate(multiple = multiple %|% FALSE, id = paste0(component, "__", argument))
+  mutate(multiple = multiple %|% FALSE)
 ```
 
 ```{r flow, echo=FALSE,warning=FALSE,error=FALSE}
 nodes <- bind_rows(
-  file_arg_info %>%
-    filter(!is.na(short_description)) %>%
-    transmute(id, label = short_description, is_comp = FALSE),
+  file_info %>%
+    transmute(id = name, label, is_comp = FALSE),
   comp_info %>%
     transmute(id = name, label, is_comp = TRUE)
 ) %>%
@@ -99,12 +104,20 @@ nodes <- bind_rows(
     ifelse(is_comp, "/]", ")")
   ))
 edges <- bind_rows(
-  file_arg_info %>%
+  comp_file %>%
     filter(direction == "input") %>%
-    transmute(from = ifelse(!is.na(from), from, id), to = comp, arrow = "---"),
-  file_arg_info %>%
+    transmute(
+      from = file_name,
+      to = comp_name,
+      arrow = "---"
+    ),
+  comp_file %>%
     filter(direction == "output") %>%
-    transmute(from = comp, to = id, arrow = "-->")
+    transmute(
+      from = comp_name, 
+      to = file_name, 
+      arrow = "-->"
+    )
 ) %>%
   mutate(str = paste0("  ", from, arrow, to))
 
@@ -121,21 +134,19 @@ knitr::asis_output(out_str)
 ```
 
 ```{r api, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
-obj_ids <- file_arg_info %>% filter(!is.na(short_description)) %>% pull(id)
-for (obj_id in obj_ids) {
-  arg_info <- file_arg_info %>% filter(id == obj_id)
-  sub_out <- slot_info %>% 
-    filter(id == obj_id) %>% 
+for (file_name in file_info$name) {
+  arg_info <- file_info %>% filter(name == file_name)
+  sub_out <- file_slot %>% 
+    filter(file_name == !!file_name) %>% 
     select(struct, name, type, description)
-  used_in <- file_arg_info %>%
-    filter(id == obj_id | from == obj_id) %>%
-    mutate(str = paste0("* ", comp, ": ", arg_name, " (as ", direction, ")")) %>%
+  used_in <- comp_file %>%
+    filter(file_name == !!file_name) %>%
+    left_join(comp_info %>% select(comp_name = name, comp_label = label), by = "comp_name") %>%
+    mutate(str = paste0("* ", comp_label, ": ", arg_name, " (as ", direction, ")")) %>%
     pull(str)
   
   out_str <- strip_margin(glue::glue("
-    §### {arg_info$short_description}
-    §
-    §{arg_info$description}
+    §### {arg_info$label}
     §
     §Used in:
     §
@@ -148,19 +159,3 @@ for (obj_id in obj_ids) {
   cat(out_str)
 }
 ```
-
-<!--
-Datasets should contain the following attributes:
-
-* `adata.obs["labels"]` with ground truth celltype labels,
-* `adata.obs["batch"]` with information of batches in the data, and
-* `adata.obs["is_train"]` with a train vs. test split
-
-It should be noted that datasets may only contain a single batch, or not contain discriminative batch information.
-
-Methods should assign output celltype labels to `adata.obs['labels_pred']` using only the labels from the training data.
-
-Note that the true labels are contained in `adata['labels']`.
-
-Metrics can compare `adata['labels']` to `adata.obs['labels_pred']` using only the labels from the test data.
--->
