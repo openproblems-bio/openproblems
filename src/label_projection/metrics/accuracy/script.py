@@ -26,4 +26,4 @@ adata.uns["metric_id"] = meta["functionality_name"]
 adata.uns["metric_value"] = accuracy
 
 print("Writing adata to file")
-adata.write(par['output'], compression="gzip")
+adata.write_h5ad(par['output'], compression="gzip")

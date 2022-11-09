@@ -37,4 +37,4 @@ adata.uns["metric_id"] = "mse"
 adata.uns["metric_value"] = metric_value
 
 print("Writing adata to file")
-adata.write(par["output"], compression = "gzip")
+adata.write_h5ad(par["output"], compression = "gzip")

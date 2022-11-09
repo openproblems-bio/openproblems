@@ -18,4 +18,4 @@ print("Concatenate anndatas")
 adata = adata_list[0].concatenate(adata_list[1:])
 
 print("Writing result file")
-adata.write(par["output"], compression="gzip")
+adata.write_h5ad(par["output"], compression="gzip")

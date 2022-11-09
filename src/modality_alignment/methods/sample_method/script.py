@@ -12,4 +12,4 @@ adata.obsm["mode2_aligned"] = np.random.normal(0, 0.1, new_shape)
 
 print("Write output to file")
 adata.uns["method_id"] = "sample_method"
-adata.write(par["output"], compression = "gzip")
+adata.write_h5ad(par["output"], compression = "gzip")

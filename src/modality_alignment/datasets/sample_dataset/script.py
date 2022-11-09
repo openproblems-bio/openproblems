@@ -81,4 +81,4 @@ adata = subset_joint_data(adata, n_cells = par["n_cells"], n_genes = par["n_gene
 adata.uns["dataset_id"] = "sample_dataset_test"
 
 print("Writing adata to file")
-adata.write(par["output"], compression = "gzip")
+adata.write_h5ad(par["output"], compression = "gzip")

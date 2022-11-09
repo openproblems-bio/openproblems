@@ -25,7 +25,7 @@ with tempfile.TemporaryDirectory() as tempdir:
         opener.addheaders = _FAKE_HEADERS
         urllib.request.install_opener(opener)
         with urllib.request.urlopen(par["url"]) as urlhandle:
-            filehandle.write(urlhandle.read())
+            filehandle.write_h5ad(urlhandle.read())
 
     print("Reading file")
     adata = sc.read_h5ad(filepath)
@@ -72,4 +72,4 @@ if par["layer_counts"]:
     del adata.X
 
 print("Writing adata to file")
-adata.write(par["output"], compression="gzip")
+adata.write_h5ad(par["output"], compression="gzip")

@@ -56,4 +56,4 @@ adata.obsm["mode2_aligned"] = XY_aligned[X_pca.shape[0] :]
 
 print("Write output to file")
 adata.uns["method_id"] = "harmonic_alignment"
-adata.write(par["output"], compression = "gzip")
+adata.write_h5ad(par["output"], compression = "gzip")
