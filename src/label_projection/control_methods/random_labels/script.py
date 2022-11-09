@@ -1,28 +1,33 @@
+import anndata as ad
+import numpy as np
+
 ## VIASH START
 par = {
-    'input': 'ouput.h5ad',
-    'output': 'output.mv.h5ad'
+    'input_train': 'resources_test/label_projection/pancreas/dataset_subsampled_cpm_train.h5ad',
+    'input_test': 'resources_test/label_projection/pancreas/dataset_subsampled_cpm_test.h5ad',
+    'output': 'output.h5ad'
+}
+meta = {
+    'functionality_name': 'foo'
 }
 ## VIASH END
-import numpy as np
-import scanpy as sc
-
 
 print("Load data")
-adata = sc.read(par['input'])
+input_train = ad.read_h5ad(par['input_train'])
+input_test = ad.read_h5ad(par['input_test'])
 
-print("Add celltype prediction")
-celltype_distribution = adata.obs.celltype[adata.obs.is_train].value_counts()
-celltype_distribution = celltype_distribution / celltype_distribution.sum()
-adata.obs["celltype_pred"] = np.nan
-adata.obs.loc[~adata.obs.is_train, "celltype_pred"] = np.random.choice(
-    celltype_distribution.index,
-    size=(~adata.obs.is_train).sum(),
+print("Compute label distribution")
+label_distribution = input_train.obs.label.value_counts()
+label_distribution = label_distribution / label_distribution.sum()
+
+print("Create prediction object")
+input_test.obs["label_pred"] = np.random.choice(
+    label_distribution.index,
+    size=input_test.n_obs,
     replace=True,
-    p=celltype_distribution
+    p=label_distribution
 )
 
-
 print("Write output to file")
-adata.uns["method_id"] = meta["functionality_name"]
-adata.write(par["output"], compression="gzip")
+input_test.uns["method_id"] = meta["functionality_name"]
+input_test.write(par["output"], compression="gzip")
