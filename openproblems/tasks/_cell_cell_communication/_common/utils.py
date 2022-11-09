@@ -99,7 +99,7 @@ def map_gene_symbols(adata, map_filename: Union[str, pathlib.Path]):
         layers={
             layer_name: scipy.sparse.hstack(
                 [adata_one_to_any.layers[layer_name]] + many_to_one_layers[layer_name]
-            )
+            ).tocsr()
             for layer_name in adata.layers
         },
         uns=adata.uns,
