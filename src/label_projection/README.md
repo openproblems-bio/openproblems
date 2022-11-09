@@ -33,15 +33,19 @@ labels onto the test set.
 Metrics for label projection aim to characterize how well each classifer
 correctly assigns cell type labels to cells in the test set.
 
-- **Accuracy**: Average number of correctly applied labels.
-- **F1 score**: The [F1
-  score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html)
-  is a weighted average of the precision and recall over all class
-  labels, where an F1 score reaches its best value at 1 and worst score
-  at 0, where each class contributes to the score relative to its
-  frequency in the dataset.
-- **Macro F1 score**: The macro F1 score is an unweighted F1 score,
-  where each class contributes equally, regardless of its frequency.
+- **[Accuracy](./metrics/accuracy/config.vsh.yaml)**: The percentage of
+  correctly predicted labels. Range: \[0, 1\]. Higher is better.
+- **[F1 weighted](./metrics/f1/config.vsh.yaml)**: Calculates the F1
+  score for each label, and find their average weighted by support (the
+  number of true instances for each label). This alters ‘macro’ to
+  account for label imbalance; it can result in an F-score that is not
+  between precision and recall. Range: \[0, 1\]. Higher is better.
+- **[F1 macro](./metrics/f1/config.vsh.yaml)**: Calculates the F1 score
+  for each label, and find their unweighted mean. This does not take
+  label imbalance into account. Range: \[0, 1\]. Higher is better.
+- **[F1 micro](./metrics/f1/config.vsh.yaml)**: Calculates the F1 score
+  globally by counting the total true positives, false negatives and
+  false positives. Range: \[0, 1\]. Higher is better.
 
 ## API
 

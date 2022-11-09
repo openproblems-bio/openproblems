@@ -30,14 +30,29 @@ Here, we compare methods for annotation based on a reference dataset. The datase
 
 Metrics for label projection aim to characterize how well each classifer correctly assigns cell type labels to cells in the test set.
 
-```{r metrics, include=FALSE}
+```{r metrics, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
 metric_yamls <- list.files(paste0(dir, "/metrics"), pattern = "config.vsh.yaml", full.names = TRUE, recursive = TRUE)
-# todo
-```
+metric_yaml <- metric_yamls[[1]]
+metric_info <- map_df(metric_yamls, function(metric_yaml) {
+  out <- system(paste0("viash config view ", metric_yaml), intern = TRUE, ignore.stderr = TRUE)
+  config <- yaml::yaml.load(out)
+  metric_info <- as_tibble(map_df(config$functionality$info$metrics, as.data.frame))
+  metric_info$comp_yaml <- metric_yaml
+  metric_info$comp_name <- config$functionality$name
+  metric_info$comp_namespace <- config$functionality$namespace
+  metric_info
+})
 
-* **Accuracy**: Average number of correctly applied labels.
-* **F1 score**: The [F1 score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html) is a weighted average of the precision and recall over all class labels, where an F1 score reaches its best value at 1 and worst score at 0, where each class contributes to the score relative to its frequency in the dataset.
-* **Macro F1 score**: The macro F1 score is an unweighted F1 score, where each class contributes equally, regardless of its frequency.
+metric_info_view <- 
+  metric_info %>%
+    transmute(
+      Name = paste0("[", label, "](", comp_yaml, ")"),
+      Description = paste0(description, " Range: [", min, ", ", max, "]. ", ifelse(maximise, "Higher is better.", "Lower is better.")),
+      str = paste0("* **[", label, "](", comp_yaml, ")**: ", description, " Range: [", min, ", ", max, "]. ", ifelse(maximise, "Higher is better.", "Lower is better."))
+    )
+
+cat(paste(metric_info_view$str, collapse = '\n'))
+```
 
 ## API
 
