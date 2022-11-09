@@ -1,4 +1,4 @@
-__inherits__: ../../api/method.yaml
+__inherits__: ../../api/comp_method.yaml
 functionality:
   name: "random_labels"
   namespace: "label_projection/control_methods"
@@ -6,7 +6,7 @@ functionality:
   info:
     type: negative_control
     label: Random Labels
-    v1_url: https://github.com/openproblems-bio/openproblems/blob/main/openproblems/tasks/label_projection/methods/baseline.py
+    v1_url: openproblems/tasks/label_projection/methods/baseline.py
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
   resources:
     - type: python_script

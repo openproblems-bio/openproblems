@@ -1,24 +1,27 @@
-__inherits__: ../../api/method.yaml
+__inherits__: ../../api/comp_method.yaml
 functionality:
   name: "knn_classifier"
   namespace: "label_projection/methods"
-  version: "dev"
-  description: "Nearest neighbor pattern classification"
+  description: "K-Nearest Neighbors classifier"
   info:
     type: method
     label: KNN
+    # paper_name: "Nearest neighbor pattern classification"
+    # paper_url: "https://doi.org/10.1109/TIT.1967.1053964"
+    # paper_year: 1967
+    paper_doi: "10.1109/TIT.1967.1053964"
+    code_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html"
+    v1_url: openproblems/tasks/label_projection/methods/knn_classifier.py
+    v1_commit: 2097bbb3e996f66e98128c9ac95bc9640a496e0d
   resources:
     - type: python_script
       path: script.py
-    - path: "../../utils.py"
 platforms:
   - type: docker
-    image: "python:3.8"
+    image: "python:3.10"
     setup:
       - type: python
         packages:
-          - scanpy
-          - scprep
-          - sklearn
+          - scikit-learn
           - "anndata<0.8"
   - type: nextflow

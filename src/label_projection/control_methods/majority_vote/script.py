@@ -23,4 +23,4 @@ input_test.obs["label_pred"] = majority
 
 print("Write output to file")
 input_test.uns["method_id"] = meta["functionality_name"]
-input_test.write(par["output"], compression="gzip")
+input_test.write_h5ad(par["output"], compression="gzip")

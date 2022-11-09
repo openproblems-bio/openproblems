@@ -23,4 +23,4 @@ adata.obs["norm_factor"] = norm["norm_factor"]
 adata.uns["normalization_method"] = meta["functionality_name"].removeprefix("normalize_")
 
 print(">> Write data")
-adata.write(par['output'], compression="gzip")
+adata.write_h5ad(par['output'], compression="gzip")

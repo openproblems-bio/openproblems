@@ -60,4 +60,4 @@ adata.uns["dataset_id"] = adata.uns["dataset_id"] + "_subsample"
 del adata.X
 
 print(">> Writing data")
-adata.write(par['output'])
+adata.write_h5ad(par['output'])
