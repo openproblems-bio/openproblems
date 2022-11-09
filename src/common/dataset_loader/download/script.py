@@ -12,6 +12,7 @@ par = {
     "name": "pancreas",
     "obs_celltype": "celltype",
     "obs_batch": "tech",
+    "layer_counts": "counts",
     "output": "test_data.h5ad"
 }
 ## VIASH END

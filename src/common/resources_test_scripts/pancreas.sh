@@ -13,10 +13,19 @@ DATASET_DIR=resources_test/common/pancreas
 
 mkdir -p $DATASET_DIR
 
+# download dataset
 bin/viash run src/common/dataset_loader/download/config.vsh.yaml -- \
     --url "https://ndownloader.figshare.com/files/24539828" \
     --obs_celltype "celltype" \
     --obs_batch "tech" \
     --name "pancreas" \
     --layer_counts "counts" \
-    --output $DATASET_DIR/dataset.h5ad
+    --output $DATASET_DIR/temp_full_dataset.h5ad
+
+# subsample
+bin/viash run src/common/subsample/config.vsh.yaml -- \
+    --input $DATASET_DIR/temp_full_dataset.h5ad \
+    --keep_celltype_categories "acinar:beta" \
+    --keep_batch_categories "celseq:inDrop4:smarter" \
+    --output $DATASET_DIR/dataset.h5ad \
+    --seed 123

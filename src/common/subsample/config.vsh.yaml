@@ -1,8 +1,8 @@
 functionality:
   name: "subsample"
-  namespace: "label_projection/data_processing"
+  namespace: "common"
   version: "dev"
-  description: "Component to generate a toy data for tests finality"
+  description: "Subsample an anndata file"
   arguments:
     - name: "--input"
       type: "file"
@@ -27,16 +27,19 @@ functionality:
       type: "file"
       direction: "output"
       example: "output.h5ad"
-      description: "Output h5ad file resized"
+      description: "Output h5ad file"
       required: true
+    - name: "--seed"
+      type: "integer"
+      description: "A seed for the subsampling."
+      example: 123
   resources:
     - type: python_script
       path: script.py
   test_resources:
     - type: python_script
       path: test_script.py
-    - type: file
-      path: "../../../../resources_test/common/pancreas"
+    - path: "../../../resources_test/common/pancreas"
 platforms:
   - type: docker
     image: "python:3.8"

@@ -1,20 +1,28 @@
 import scanpy as sc
+import random
+
 ### VIASH START
 par = {
     "input": "resources_test/common/pancreas/dataset.h5ad",
+    "keep_celltype_categories": None,
+    "keep_batch_categories": None,
     # "keep_celltype_categories": ["acinar", "beta"],
     # "keep_batch_categories": ["celseq", "inDrop4", "smarter"],
     "even": True,
-    "ouput": "toy_data.h5ad"
+    "output": "toy_data.h5ad",
+    "seed": 123
 }
 ### VIASH END
+
+if par["seed"]:
+    print(f">> Setting seed to {par['seed']}")
+    random.seed(par["seed"])
 
 def filter_genes_cells(adata):
     """Remove empty cells and genes."""
     sc.pp.filter_genes(adata, min_cells=1)
     sc.pp.filter_cells(adata, min_counts=2)
     return adata
-
 
 print(">> Load data")
 adata = sc.read(par['input'])
