@@ -1,4 +1,4 @@
-import sklearn.metrics
+from sklearn.metrics import f1_score
 import sklearn.preprocessing
 import anndata as ad
 
@@ -26,15 +26,17 @@ input_solution.obs["label"] = encoder.transform(input_solution.obs["label"])
 input_prediction.obs["label_pred"] = encoder.transform(input_prediction.obs["label_pred"])
 
 print("Compute F1 score")
-metric_value = sklearn.metrics.f1_score(
-    input_solution.obs["label"], 
-    input_prediction.obs["label_pred"], 
-    average=par["average"]
-)
+metric_type = [ "macro", "micro", "weighted" ]
+metric_id = [ "f1_" + x for x in metric_type]
+metric_value = [ f1_score(
+        input_solution.obs["label"], 
+        input_prediction.obs["label_pred"], 
+        average=x
+    ) for x in metric_type ]
 
 print("Store metric value")
-input_prediction.uns["metric_id"] = meta["functionality_name"]
-input_prediction.uns["metric_value"] = metric_value
+input_prediction.uns["metric_ids"] = metric_id
+input_prediction.uns["metric_values"] = metric_value
 
 print("Writing adata to file")
 input_prediction.write_h5ad(par['output'], compression="gzip")

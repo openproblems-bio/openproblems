@@ -28,8 +28,8 @@ print("Compute prediction accuracy")
 accuracy = np.mean(input_solution.obs["label"] == input_prediction.obs["label_pred"])
 
 print("Store metric value")
-input_prediction.uns["metric_id"] = meta["functionality_name"]
-input_prediction.uns["metric_value"] = accuracy
+input_prediction.uns["metric_ids"] = "accuracy"
+input_prediction.uns["metric_values"] = accuracy
 
 print("Writing adata to file")
 input_prediction.write_h5ad(par['output'], compression="gzip")

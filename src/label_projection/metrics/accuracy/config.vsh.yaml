@@ -3,6 +3,16 @@ functionality:
   name: "accuracy"
   namespace: "label_projection/metrics"
   description: "The percentage of correctly predicted labels."
+  info:
+    v1_url: openproblems/tasks/label_projection/metrics/accuracy.py
+    v1_commit: fcd5b876e7d0667da73a2858bc27c40224e19f65
+    metrics:
+      - id: accuracy
+        label: Accuracy
+        description: The percentage of correctly predicted labels.
+        min: 0
+        max: 1
+        maximise: true
   resources:
     - type: python_script
       path: script.py
