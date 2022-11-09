@@ -2,9 +2,9 @@ import anndata as ad
 
 ## VIASH START
 par = {
-    'input_train': 'resources_test/label_projection/pancreas/dataset_subsampled_cpm_train.h5ad',
-    'input_test': 'resources_test/label_projection/pancreas/dataset_subsampled_cpm_test.h5ad',
-    'input_solution': 'resources_test/label_projection/pancreas/dataset_subsampled_cpm_test.h5ad',
+    'input_train': 'resources_test/label_projection/pancreas/dataset_cpm_train.h5ad',
+    'input_test': 'resources_test/label_projection/pancreas/dataset_cpm_test.h5ad',
+    'input_solution': 'resources_test/label_projection/pancreas/dataset_cpm_test.h5ad',
     'output': 'output.h5ad'
 }
 meta = {

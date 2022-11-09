@@ -1,4 +1,4 @@
-__inherits__: ../../api/comp_dataset_censoring.yaml
+__inherits__: ../../api/comp_censoring.yaml
 functionality:
   name: "censoring"
   namespace: "label_projection/data_processing"

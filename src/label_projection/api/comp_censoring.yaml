@@ -19,7 +19,7 @@ functionality:
         import subprocess
         from os import path
 
-        input_path = meta["resources_dir"] + "/pancreas/dataset_subsampled_cpm.h5ad"
+        input_path = meta["resources_dir"] + "/pancreas/dataset_cpm.h5ad"
         output_train_path = "output_train.h5ad"
         output_test_path = "output_test.h5ad"
         output_solution_path = "output_solution.h5ad"

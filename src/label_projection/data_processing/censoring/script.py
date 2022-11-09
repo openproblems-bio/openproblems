@@ -4,7 +4,7 @@ import random
 
 ## VIASH START
 par = {
-    'input': 'resources_test/label_projection/pancreas/dataset_subsampled_cpm.h5ad',
+    'input': 'resources_test/label_projection/pancreas/dataset_cpm.h5ad',
     'method': 'batch',
     'seed': None,
     'obs_batch': 'batch',
