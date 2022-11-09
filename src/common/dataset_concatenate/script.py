@@ -1,21 +1,21 @@
-import scanpy as sc
+import anndata as ad
 
-###VIASH START
+## VIASH START
 par = {
-    "inputs": ["../resources/pancreas/toy_data.h5ad", "../resources/pancreas/toy_data.h5ad"],
+    "inputs": ["resources_test/common/pancreas/dataset_cpm.h5ad", "resources_test/common/pancreas/dataset_cpm.h5ad"],
     "output": "output.h5ad"
 }
-###VIASH END
+## VIASH END
 
 adata_list = []
-for i in par["inputs"]:
-    print("Loading {}".format(i))
-    adata_list.append(
-        sc.read_h5ad(i)
-    )
+for input in par["inputs"]:
+    print("Loading {}".format(input))
+    adata_list.append(ad.read_h5ad(input))
 
 print("Concatenate anndatas")
-adata = adata_list[0].concatenate(adata_list[1:])
+adata = ad.concat(adata_list)
+
+print("Concatenated anndata: ", adata)
 
 print("Writing result file")
 adata.write_h5ad(par["output"], compression="gzip")
