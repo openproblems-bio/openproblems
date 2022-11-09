@@ -7,18 +7,21 @@
   - <a href="#pipeline-topology" id="toc-pipeline-topology">Pipeline
     topology</a>
   - <a href="#file-format-api" id="toc-file-format-api">File format API</a>
-    - <a href="#file-dataset" id="toc-file-dataset"><code>dataset.h5ad</code>:
+    - <a href="#dataset.h5ad-preprocessed-dataset"
+      id="toc-dataset.h5ad-preprocessed-dataset"><code>dataset.h5ad</code>:
       Preprocessed dataset</a>
-    - <a href="#file-prediction"
-      id="toc-file-prediction"><code>prediction.h5ad</code>: Prediction</a>
-    - <a href="#file-score" id="toc-file-score"><code>score.h5ad</code>:
-      Score</a>
-    - <a href="#file-solution"
-      id="toc-file-solution"><code>solution.h5ad</code>: Solution</a>
-    - <a href="#file-test" id="toc-file-test"><code>test.h5ad</code>: Test
+    - <a href="#prediction.h5ad-prediction"
+      id="toc-prediction.h5ad-prediction"><code>prediction.h5ad</code>:
+      Prediction</a>
+    - <a href="#score.h5ad-score"
+      id="toc-score.h5ad-score"><code>score.h5ad</code>: Score</a>
+    - <a href="#solution.h5ad-solution"
+      id="toc-solution.h5ad-solution"><code>solution.h5ad</code>: Solution</a>
+    - <a href="#test.h5ad-test-data"
+      id="toc-test.h5ad-test-data"><code>test.h5ad</code>: Test data</a>
+    - <a href="#train.h5ad-training-data"
+      id="toc-train.h5ad-training-data"><code>train.h5ad</code>: Training
       data</a>
-    - <a href="#file-train" id="toc-file-train"><code>train.h5ad</code>:
-      Training data</a>
   - <a href="#component-api" id="toc-component-api">Component API</a>
     - <a href="#censoring" id="toc-censoring"><code>censoring</code></a>
     - <a href="#method" id="toc-method"><code>method</code></a>
@@ -230,29 +233,29 @@ Slots:
 
 Arguments:
 
-| Name                | File format                     | Direction | Description          |
-|:--------------------|:--------------------------------|:----------|:---------------------|
-| `--input`           | [dataset.h5ad](#file-dataset)   | input     | Preprocessed dataset |
-| `--output_train`    | [train.h5ad](#file-train)       | output    | Training data        |
-| `--output_test`     | [test.h5ad](#file-test)         | output    | Test data            |
-| `--output_solution` | [solution.h5ad](#file-solution) | output    | Solution             |
+| Name                | File format   | Direction | Description          |
+|:--------------------|:--------------|:----------|:---------------------|
+| `--input`           | dataset.h5ad  | input     | Preprocessed dataset |
+| `--output_train`    | train.h5ad    | output    | Training data        |
+| `--output_test`     | test.h5ad     | output    | Test data            |
+| `--output_solution` | solution.h5ad | output    | Solution             |
 
 ### `method`
 
 Arguments:
 
-| Name            | File format                         | Direction | Description   |
-|:----------------|:------------------------------------|:----------|:--------------|
-| `--input_train` | [train.h5ad](#file-train)           | input     | Training data |
-| `--input_test`  | [test.h5ad](#file-test)             | input     | Test data     |
-| `--output`      | [prediction.h5ad](#file-prediction) | output    | Prediction    |
+| Name            | File format     | Direction | Description   |
+|:----------------|:----------------|:----------|:--------------|
+| `--input_train` | train.h5ad      | input     | Training data |
+| `--input_test`  | test.h5ad       | input     | Test data     |
+| `--output`      | prediction.h5ad | output    | Prediction    |
 
 ### `metric`
 
 Arguments:
 
-| Name                 | File format                         | Direction | Description |
-|:---------------------|:------------------------------------|:----------|:------------|
-| `--input_solution`   | [solution.h5ad](#file-solution)     | input     | Solution    |
-| `--input_prediction` | [prediction.h5ad](#file-prediction) | input     | Prediction  |
-| `--output`           | [score.h5ad](#file-score)           | output    | Score       |
+| Name                 | File format     | Direction | Description |
+|:---------------------|:----------------|:----------|:------------|
+| `--input_solution`   | solution.h5ad   | input     | Solution    |
+| `--input_prediction` | prediction.h5ad | input     | Prediction  |
+| `--output`           | score.h5ad      | output    | Score       |

@@ -203,7 +203,7 @@ for (file_name in file_info$name) {
     pull(str)
   
   out_str <- strip_margin(glue::glue("
-    §### `{arg_info$label}.h5ad`: {arg_info$short_description} {{#file-{arg_info$label}}}
+    §### `{arg_info$label}.h5ad`: {arg_info$short_description}
     §
     §{arg_info$description}
     §
@@ -233,7 +233,7 @@ for (comp_name in comp_info$name) {
     left_join(file_info %>% select(file_name = name, file_desc = description, file_sdesc = short_description, file_label = label), by = "file_name") %>%
     transmute(
       Name = paste0("`--", arg_name, "`"),
-      `File format` = paste0("[", file_label, ".h5ad](#file-", file_label, ")"),
+      `File format` = paste0(file_label, ".h5ad"),
       Direction = direction,
       Description = file_sdesc
     )
