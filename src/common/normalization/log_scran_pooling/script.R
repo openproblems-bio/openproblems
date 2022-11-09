@@ -1,7 +1,7 @@
 cat(">> Loading dependencies\n")
 library(anndata, warn.conflicts = FALSE)
-library(scran, warn.conflicts = FALSE)
-library(BiocParallel, warn.conflicts = FALSE)
+requireNamespace("scran", quietly = TRUE)
+requireNamespace("BiocParallel", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE)
 
 ## VIASH START
