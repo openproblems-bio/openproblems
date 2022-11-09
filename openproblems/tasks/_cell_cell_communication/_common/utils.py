@@ -91,7 +91,7 @@ def map_gene_symbols(adata, map_filename: Union[str, pathlib.Path]):
             )
 
     return anndata.AnnData(
-        X=scipy.sparse.hstack([adata_one_to_any.X] + many_to_one_X),
+        X=scipy.sparse.hstack([adata_one_to_any.X] + many_to_one_X).tocsr(),
         obs=adata.obs,
         var=pd.DataFrame(
             index=np.concatenate([adata_one_to_any.var.index, many_to_one_genes])
