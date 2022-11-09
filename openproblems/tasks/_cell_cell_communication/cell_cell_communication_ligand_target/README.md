@@ -58,8 +58,8 @@ al](https://doi.org/10.1038/s41467-022-30755-0) for more details.
 `adata.uns["ccc_target"]` should be a Pandas DataFrame containing all the following
 columns:
 
-* `response`: `int`, binary response variable _[0; 1]_ indicating whether an interaction is
-  assumed to have occurred
+* `response`: `int`, binary response variable _[0; 1]_ indicating whether an interaction
+  is assumed to have occurred
 * `ligand`: `str`, gene symbol of the ligand in an interaction
 * `target`: `str`, name of target cell type in interaction
 
