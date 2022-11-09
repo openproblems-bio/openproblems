@@ -1,4 +1,19 @@
 
+- <a href="#label-projection" id="toc-label-projection">Label
+  Projection</a>
+  - <a href="#the-task" id="toc-the-task">The task</a>
+  - <a href="#methods" id="toc-methods">Methods</a>
+  - <a href="#metrics" id="toc-metrics">Metrics</a>
+  - <a href="#pipeline-topology" id="toc-pipeline-topology">Pipeline
+    topology</a>
+  - <a href="#file-format-api" id="toc-file-format-api">File format API</a>
+    - <a href="#dataset" id="toc-dataset">dataset</a>
+    - <a href="#prediction" id="toc-prediction">prediction</a>
+    - <a href="#score" id="toc-score">score</a>
+    - <a href="#solution" id="toc-solution">solution</a>
+    - <a href="#test" id="toc-test">test</a>
+    - <a href="#train" id="toc-train">train</a>
+
 # Label Projection
 
 ## The task
@@ -28,10 +43,20 @@ then split into training and test batches, and the task of each method
 is to train a cell type classifer on the training set and project those
 labels onto the test set.
 
-## The metrics
+## Methods
 
-Metrics for label projection aim to characterize how well each classifer
-correctly assigns cell type labels to cells in the test set.
+Methods for assigning cell labels from a reference dataset to a
+
+| Name                                                                 | Description                    | DOI                                                  | URL                                                                                                    |
+|:---------------------------------------------------------------------|:-------------------------------|:-----------------------------------------------------|:-------------------------------------------------------------------------------------------------------|
+| [KNN](./methods/knn_classifier/config.vsh.yaml)                      | K-Nearest Neighbors classifier | [link](https://doi.org/10.1109/TIT.1967.1053964)     | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html)  |
+| [Logistic Regression](./methods/logistic_regression/config.vsh.yaml) | Logistic regression method     |                                                      | [link](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) |
+| [Multilayer perceptron](./methods/mlp/config.vsh.yaml)               | Multilayer perceptron          | [link](https://doi.org/10.1016/0004-3702(89)90049-0) | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html)    |
+
+## Metrics
+
+Metrics for label projection aim to characterize how well each
+classifier correctly assigns cell type labels to cells in the test set.
 
 - **[Accuracy](./metrics/accuracy/config.vsh.yaml)**: The percentage of
   correctly predicted labels. Range: \[0, 1\]. Higher is better.
@@ -47,7 +72,7 @@ correctly assigns cell type labels to cells in the test set.
   globally by counting the total true positives, false negatives and
   false positives. Range: \[0, 1\]. Higher is better.
 
-## API
+## Pipeline topology
 
 ``` mermaid
 %%| column: screen-inset-shaded
@@ -72,6 +97,8 @@ flowchart LR
   comp_method-->anndata_prediction
   comp_metric-->anndata_score
 ```
+
+## File format API
 
 ### dataset
 

@@ -1,16 +1,36 @@
-opsca-viash
+OpenProblems v2
 ================
 
--   [Requirements](#requirements)
--   [Quick start](#quick-start)
--   [Project structure](#project-structure)
--   [Adding a viash component](#adding-a-viash-component)
--   [Running a component from CLI](#running-a-component-from-cli)
--   [Building a component](#building-a-component)
--   [Unit testing a component](#unit-testing-a-component)
--   [Frequently asked questions](#frequently-asked-questions)
--   [Benefits of using Nextflow +
-    viash](#benefits-of-using-nextflow--viash)
+- <a href="#requirements" id="toc-requirements">Requirements</a>
+- <a href="#quick-start" id="toc-quick-start">Quick start</a>
+- <a href="#project-structure" id="toc-project-structure">Project
+  structure</a>
+- <a href="#adding-a-viash-component"
+  id="toc-adding-a-viash-component">Adding a viash component</a>
+- <a href="#running-a-component-from-cli"
+  id="toc-running-a-component-from-cli">Running a component from CLI</a>
+- <a href="#building-a-component" id="toc-building-a-component">Building a
+  component</a>
+- <a href="#unit-testing-a-component"
+  id="toc-unit-testing-a-component">Unit testing a component</a>
+- <a href="#frequently-asked-questions"
+  id="toc-frequently-asked-questions">Frequently asked questions</a>
+  - <a href="#my-component-doesnt-work" id="toc-my-component-doesnt-work">My
+    component doesn’t work!</a>
+- <a href="#benefits-of-using-nextflow-viash"
+  id="toc-benefits-of-using-nextflow-viash">Benefits of using Nextflow +
+  viash</a>
+  - <a href="#the-pipeline-is-language-agnostic"
+    id="toc-the-pipeline-is-language-agnostic">The pipeline is
+    <strong>language-agnostic</strong></a>
+  - <a href="#one-docker-container-per-component"
+    id="toc-one-docker-container-per-component">One Docker container per
+    component</a>
+  - <a href="#reproducible-components"
+    id="toc-reproducible-components">Reproducible components</a>
+  - <a href="#reprodicible-components-on-docker-hub"
+    id="toc-reprodicible-components-on-docker-hub">Reprodicible components
+    on Docker Hub</a>
 
 Proof Of Concept in adapting [Open Problems
 repository](https://github.com/openproblems-bio/openproblems) with
@@ -21,11 +41,11 @@ Nextflow and viash. Documentation for viash is available at
 
 To use this repository, please install the following dependencies:
 
--   Bash
--   Java (Java 11 or higher)
--   Docker (Instructions [here](https://docs.docker.com/get-docker/))
--   Nextflow (Optional, though [very easy to
-    install](https://www.nextflow.io/index.html#GetStarted))
+- Bash
+- Java (Java 11 or higher)
+- Docker (Instructions [here](https://docs.docker.com/get-docker/))
+- Nextflow (Optional, though [very easy to
+  install](https://www.nextflow.io/index.html#GetStarted))
 
 ## Quick start
 
@@ -167,9 +187,6 @@ You can **run the component** as follows:
 viash run src/modality_alignment/methods/foo/config.vsh.yaml -- -i LICENSE -o foo_output.txt
 ```
 
-    [notice] Checking if Docker image is available at 'modality_alignment/methods_foo:0.0.1'
-    [warning] Could not pull from 'modality_alignment/methods_foo:0.0.1'. Docker image doesn't exist or is not accessible.
-    [notice] Building container 'modality_alignment/methods_foo:0.0.1' with Dockerfile
     This is a skeleton component
     The arguments are:
      - input:  /viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/LICENSE
@@ -245,11 +262,11 @@ functionality of a component, you can run the tests by using the
 viash test src/modality_alignment/methods/foo/config.vsh.yaml
 ```
 
-    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo5306251997508180162'
+    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo14025213034981140811'
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo5306251997508180162/build_executable/foo ---verbosity 6 ---setup cachedbuild
-    [notice] Building container 'modality_alignment/methods_foo:test_FI4Ch4' with Dockerfile
-    [info] Running 'docker build -t modality_alignment/methods_foo:test_FI4Ch4 /home/rcannood/workspace/viash_temp/viash_test_foo5306251997508180162/build_executable -f /home/rcannood/workspace/viash_temp/viash_test_foo5306251997508180162/build_executable/tmp/dockerbuild-foo-RlMhS8/Dockerfile'
+    +/home/rcannood/workspace/viash_temp/viash_test_foo14025213034981140811/build_executable/foo ---verbosity 6 ---setup cachedbuild
+    [notice] Building container 'modality_alignment/methods_foo:test_HeBJG6' with Dockerfile
+    [info] Running 'docker build -t modality_alignment/methods_foo:test_HeBJG6 /home/rcannood/workspace/viash_temp/viash_test_foo14025213034981140811/build_executable -f /home/rcannood/workspace/viash_temp/viash_test_foo14025213034981140811/build_executable/tmp/dockerbuild-foo-alcpr9/Dockerfile'
     Sending build context to Docker daemon  38.91kB
 
     Step 1/7 : FROM python:3.9.3-buster
@@ -260,26 +277,26 @@ viash test src/modality_alignment/methods/foo/config.vsh.yaml
     Step 3/7 : LABEL org.opencontainers.image.description="Companion container for running component modality_alignment/methods foo"
      ---> Using cache
      ---> c1c0f5ae9c7d
-    Step 4/7 : LABEL org.opencontainers.image.created="2022-11-09T13:22:17+01:00"
-     ---> Running in fa0c5209aade
-    Removing intermediate container fa0c5209aade
-     ---> b2db5789cac5
+    Step 4/7 : LABEL org.opencontainers.image.created="2022-11-09T15:53:27+01:00"
+     ---> Running in 70b7c0e821f0
+    Removing intermediate container 70b7c0e821f0
+     ---> a9d3ced02d38
     Step 5/7 : LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems-v2.git"
-     ---> Running in d1f880f7a935
-    Removing intermediate container d1f880f7a935
-     ---> 30128c9999fd
-    Step 6/7 : LABEL org.opencontainers.image.revision="a7a0f0d841531959b4a6e4965fc0bd81665b6acb"
-     ---> Running in 4407f6fc3929
-    Removing intermediate container 4407f6fc3929
-     ---> ae4cc7922a61
-    Step 7/7 : LABEL org.opencontainers.image.version="test_FI4Ch4"
-     ---> Running in 2e07476da268
-    Removing intermediate container 2e07476da268
-     ---> c95b24408e60
-    Successfully built c95b24408e60
-    Successfully tagged modality_alignment/methods_foo:test_FI4Ch4
+     ---> Running in 4b3f0db79860
+    Removing intermediate container 4b3f0db79860
+     ---> 42a0cb2e8f14
+    Step 6/7 : LABEL org.opencontainers.image.revision="0b182c07fb8cc9306829c068d4ea600ee26891fc"
+     ---> Running in 5cc029947710
+    Removing intermediate container 5cc029947710
+     ---> fdc11be13f2e
+    Step 7/7 : LABEL org.opencontainers.image.version="test_HeBJG6"
+     ---> Running in 58757ca3bece
+    Removing intermediate container 58757ca3bece
+     ---> eea37ebd4ea2
+    Successfully built eea37ebd4ea2
+    Successfully tagged modality_alignment/methods_foo:test_HeBJG6
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo5306251997508180162/test_test/test_executable
+    +/home/rcannood/workspace/viash_temp/viash_test_foo14025213034981140811/test_test/test_executable
     >> Writing test file
     >> Running component
     >> Checking whether output file exists

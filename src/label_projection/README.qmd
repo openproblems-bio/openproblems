@@ -1,7 +1,9 @@
 ---
 format: gfm
 info:
-  migration_date: "2022-10-17 12:49:00 GMT"
+  v1_url: openproblems/tasks/label_projection/README.md
+  v1_commit: 817ea64a526c7251f74c9a7a6dba98e8602b94a8
+toc: true
 ---
 
 ```{r setup, include=FALSE}
@@ -26,13 +28,47 @@ To ensure that the cell type labels in newly generated datasets match existing r
 
 Here, we compare methods for annotation based on a reference dataset. The datasets consist of two or more samples of single cell profiles that have been manually annotated with matching labels. These datasets are then split into training and test batches, and the task of each method is to train a cell type classifer on the training set and project those labels onto the test set.
 
-## The metrics
 
-Metrics for label projection aim to characterize how well each classifer correctly assigns cell type labels to cells in the test set.
+
+## Methods
+
+Methods for assigning cell labels from a reference dataset to a 
+
+```{r methods, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
+method_yamls <- list.files(paste0(dir, "/methods"), pattern = "config.vsh.yaml", full.names = TRUE, recursive = TRUE)
+
+method_info <- map_df(method_yamls, function(method_yaml) {
+  out <- system(paste0("viash config view ", method_yaml), intern = TRUE, ignore.stderr = TRUE)
+  config <- yaml::yaml.load(out)
+  if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") return(NULL)
+  info <- as_tibble(config$functionality$info)
+  info$comp_yaml <- method_yaml
+  info$name <- config$functionality$name
+  info$namespace <- config$functionality$namespace
+  info$description <- config$functionality$description
+  info
+})
+
+method_info_view <- 
+  method_info %>%
+    transmute(
+      Name = paste0("[", label, "](", comp_yaml, ")"),
+      Description = description,
+      DOI = ifelse(!is.na(paper_doi), paste0("[link](https://doi.org/", paper_doi, ")"), ""),
+      URL = ifelse(!is.na(code_url), paste0("[link](", code_url, ")"), "")
+    )
+
+cat(paste(knitr::kable(method_info_view, format = 'pipe'), collapse = "\n"))
+```
+
+
+## Metrics
+
+Metrics for label projection aim to characterize how well each classifier correctly assigns cell type labels to cells in the test set.
 
 ```{r metrics, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
 metric_yamls <- list.files(paste0(dir, "/metrics"), pattern = "config.vsh.yaml", full.names = TRUE, recursive = TRUE)
-metric_yaml <- metric_yamls[[1]]
+
 metric_info <- map_df(metric_yamls, function(metric_yaml) {
   out <- system(paste0("viash config view ", metric_yaml), intern = TRUE, ignore.stderr = TRUE)
   config <- yaml::yaml.load(out)
@@ -46,15 +82,16 @@ metric_info <- map_df(metric_yamls, function(metric_yaml) {
 metric_info_view <- 
   metric_info %>%
     transmute(
-      Name = paste0("[", label, "](", comp_yaml, ")"),
-      Description = paste0(description, " Range: [", min, ", ", max, "]. ", ifelse(maximise, "Higher is better.", "Lower is better.")),
+      # Name = paste0("[", label, "](", comp_yaml, ")"),
+      # Description = paste0(description, " Range: [", min, ", ", max, "]. ", ifelse(maximise, "Higher is better.", "Lower is better.")),
       str = paste0("* **[", label, "](", comp_yaml, ")**: ", description, " Range: [", min, ", ", max, "]. ", ifelse(maximise, "Higher is better.", "Lower is better."))
     )
 
 cat(paste(metric_info_view$str, collapse = '\n'))
 ```
 
-## API
+
+## Pipeline topology
 
 ```{r data, include=FALSE}
 comp_yamls <- list.files(paste0(dir, "/api"), pattern = "comp_", full.names = TRUE)
@@ -147,6 +184,8 @@ out_str <- strip_margin(glue::glue("
   §"), symbol = "§")
 knitr::asis_output(out_str)
 ```
+
+## File format API
 
 ```{r api, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
 for (file_name in file_info$name) {
