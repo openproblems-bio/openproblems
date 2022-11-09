@@ -22,7 +22,7 @@ Proof Of Concept in adapting [Open Problems repository](https://github.com/openp
 To use this repository, please install the following dependencies:
 
 * Bash
-* Java (Java 8 or higher)
+* Java (Java 11 or higher)
 * Docker (Instructions [here](https://docs.docker.com/get-docker/))
 * Nextflow (Optional, though [very easy to install](https://www.nextflow.io/index.html#GetStarted))
 
@@ -43,6 +43,12 @@ bin/init
     > Building components
     > Done, happy viash-ing!
     > Nextflow installation completed.
+
+**Step 0b, download test resources:** by running the following command.
+
+```bash
+bin/viash run src/common/sync_test_resources/config.vsh.yaml
+```
 
 **Step 1, build all the components:** in the `src/` folder as standalone executables in the `target/` folder. Use the `-q 'xxx'` parameter to build only several components of the repository.
 
