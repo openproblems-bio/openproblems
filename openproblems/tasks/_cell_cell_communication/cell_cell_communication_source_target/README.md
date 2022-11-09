@@ -17,7 +17,7 @@ as a foundation for this task.
 The challenges in evaluating the tools are further exacerbated by the
 lack of a gold standard to benchmark the performance of CCC methods. In an
 attempt to address this, Dimitrov et al use alternative data modalities, including
-the spatial proximity of cell types and inferred
+the spatial proximity of cell types and
 downstream cytokine activities, to generate an inferred ground truth. However,
 these modalities are only approximations of biological reality and come
 with their own assumptions and limitations. In time, the inclusion of more
@@ -42,6 +42,9 @@ scenario odds ratios quantify the strength of association between the
 ability of methods to prioritize interactions and those interactions
 assigned to the positive class.
 
+* **AUPRC**: a single number _[0-1]_ that summarizes the area under the curve where
+x is the recall and y is the precision.
+
 ## API
 
 ### Datasets
@@ -54,7 +57,7 @@ al](https://doi.org/10.1038/s41467-022-30755-0) for more details.
 `adata.uns["ccc_target"]` should be a Pandas DataFrame containing all of the
 following columns:
 
-* `response`: `int`, binary response variable indicating whether an interaction is
+* `response`: `int`, binary response variable _[0; 1]_ indicating whether an interaction is
   assumed to have occurred
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
@@ -75,6 +78,15 @@ Methods should predict interactions between cell types without using
   inferred interaction
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
+
+Methods should infer a `score` for each _intersecting interaction_
+between a `source` and a `target`, which correspond to all possible combinations
+of the cell identity labels in the dataset.
+
+The predictions of any method which do not uniquely map
+to the columns in `adata.uns["merge_keys"]` are to be **aggregated**.
+By default, aggregation is carried as the `max` and `sum`
+according to columns in the `merge_keys`.
 
 ### Prior-knowledge Resource
 

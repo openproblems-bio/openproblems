@@ -1,32 +1,40 @@
 from .....tools.decorators import metric
+from ..utils import join_truth_and_pred
 
 import numpy as np
-import scipy.stats as stats
 
 
 @metric(metric_name="Odds Ratio", maximize=True)
-def odds_ratio(adata, merge_keys, top_n=100):
+def odds_ratio(adata, top_prop=0.05):
     # Join benchmark (assumed truth) and ccc results
     # Get /w ccc_target and a response [0, 1] column
-    gt = (
-        adata.uns["ccc_target"]
-        .merge(adata.uns["ccc_pred"], on=merge_keys, how="inner")
-        .sort_values("score", ascending=False)
-    )
+    gt = join_truth_and_pred(adata)
+    gt = gt.sort_values("score", ascending=False)
+    top_n = np.int(adata.uns["ccc_target"].shape[0] * top_prop)
 
     # assign the top rank interactions to 1
     a = np.zeros(len(gt["score"]))
     a[0:top_n] = 1
     gt.loc[:, ["top_n"]] = a
 
-    # Shape to contingency table
-    table = np.array(gt.pivot_table(index=["top_n", "response"], aggfunc="size"))
+    top = gt[gt["top_n"] == 1]
+    tp = np.sum(top.response == 1)
+    fp = np.sum(top.response == 0)
 
-    # if positive or negative class is not in top_n
-    if table.shape != (4,):
-        return 1
+    bot = gt[gt["top_n"] == 0]
+    fn = np.sum(bot.response == 1)
+    tn = np.sum(bot.response == 0)
 
-    # Fisher ET
-    oddsratio, _ = stats.fisher_exact(table.reshape(2, 2))
+    numerator = tp * tn
+    denominator = fp * fn
+    if denominator == 0:
+        if numerator == 0:
+            # undefined
+            oddsratio = np.nan
+        else:
+            # perfect score
+            oddsratio = np.inf
+    else:
+        oddsratio = numerator / denominator
 
     return oddsratio
