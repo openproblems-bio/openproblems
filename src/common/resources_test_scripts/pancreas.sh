@@ -29,3 +29,8 @@ bin/viash run src/common/subsample/config.vsh.yaml -- \
     --keep_batch_categories "celseq:inDrop4:smarter" \
     --output $DATASET_DIR/dataset.h5ad \
     --seed 123
+
+# run one normalisation
+bin/viash run src/common/normalization/log_cpm/config.vsh.yaml -- \
+    --input $DATASET_DIR/dataset.h5ad \
+    --output $DATASET_DIR/dataset_cpm.h5ad

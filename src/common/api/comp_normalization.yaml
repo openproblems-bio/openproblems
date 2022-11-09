@@ -3,7 +3,7 @@ functionality:
     - name: "--input"
       __inherits__: anndata_raw_dataset.yaml
     - name: "--output"
-      __inherits__: anndata_preprocessed.yaml
+      __inherits__: anndata_normalized_dataset.yaml
       direction: output
   test_resources:
     - type: python_script
@@ -13,7 +13,7 @@ functionality:
         import subprocess
         from os import path
 
-        input_path = meta["resources_dir"] + "/pancreas/dataset_subsampled.h5ad"
+        input_path = meta["resources_dir"] + "/common/dataset.h5ad"
         output_path = "output.h5ad"
 
         cmd = [

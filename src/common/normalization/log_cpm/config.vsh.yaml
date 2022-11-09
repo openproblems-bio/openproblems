@@ -1,7 +1,7 @@
 __inherits__: ../../api/comp_normalization.yaml
 functionality:
-  name: "normalize_log_cpm"
-  namespace: "label_projection/data_processing"
+  name: "log_cpm"
+  namespace: "common/normalization"
   description: "Normalize data using Log CPM"
   resources:
     - type: python_script

@@ -19,11 +19,6 @@ fi
 
 mkdir -p $DATASET_DIR
 
-# run one normalisation
-bin/viash run src/label_projection/data_processing/normalize_log_cpm/config.vsh.yaml -- \
-    --input $RAW_DATA \
-    --output $DATASET_DIR/dataset_cpm.h5ad
-
 # censor dataset
 bin/viash run src/label_projection/data_processing/censoring/config.vsh.yaml -- \
     --input $DATASET_DIR/dataset_cpm.h5ad \

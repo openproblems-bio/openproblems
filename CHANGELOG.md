@@ -14,21 +14,21 @@
 
 * Created test data `resources_test/pancreas` with `src/common/resources_test_scripts/pancreas.sh`.
 
+* Created normalization method `common/normalise_log_cpm`.
+
+* Created normalization method `common/normalise_log_scran_pooling`.
+
 ## label_projection
 
 ### NEW FUNCTIONALITY
 
-* API: Created an explicit api definition for the censor, normalisation, method and metric components.
+* API: Created an explicit api definition for the censor, method and metric components.
 
 * Created censoring component `data_processing/censoring`.
 
 * Created test data `resources_test/label_projection/pancreas` with `src/label_projection/resources_test_scripts/pancreas.sh`.
 
 ### V1 MIGRATION
-
-* Ported normalisation method `data_processing/normalise_log_cpm`.
-
-* Ported normalisation method `data_processing/normalise_log_scran_pooling`.
 
 * Ported method `methods/knn_classifier`.
 
