@@ -17,7 +17,7 @@ as a foundation for this task.
 The challenges in evaluating the tools are further exacerbated by the
 lack of a gold standard to benchmark the performance of CCC methods. In an
 attempt to address this, Dimitrov et al use alternative data modalities, including
-the spatial proximity of cell types and inferred
+the spatial proximity of cell types and
 downstream cytokine activities, to generate an inferred ground truth. However,
 these modalities are only approximations of biological reality and come
 with their own assumptions and limitations. In time, the inclusion of more
@@ -53,7 +53,7 @@ ability of methods to prioritize interactions and those interactions
 assigned to the positive class.
 
 * **AUPRC**: a single number _[0-1]_ that summarizes the area under the curve where
-x is the recall and y is the precision
+x is the recall and y is the precision.
 
 ## API
 

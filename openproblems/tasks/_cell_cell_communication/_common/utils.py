@@ -120,4 +120,4 @@ def join_truth_and_pred(adata):
 
 def aggregate_method_scores(adata, how):
     merge_keys = list(adata.uns["merge_keys"])
-    return adata.uns["ccc_pred"].groupby(merge_keys).aggregate(how).reset_index()
+    return adata.uns["ccc_pred"].groupby(merge_keys).agg(score=('score', how)).reset_index()

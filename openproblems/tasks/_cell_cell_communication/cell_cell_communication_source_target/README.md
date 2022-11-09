@@ -17,7 +17,7 @@ as a foundation for this task.
 The challenges in evaluating the tools are further exacerbated by the
 lack of a gold standard to benchmark the performance of CCC methods. In an
 attempt to address this, Dimitrov et al use alternative data modalities, including
-the spatial proximity of cell types and inferred
+the spatial proximity of cell types and
 downstream cytokine activities, to generate an inferred ground truth. However,
 these modalities are only approximations of biological reality and come
 with their own assumptions and limitations. In time, the inclusion of more
@@ -43,7 +43,7 @@ ability of methods to prioritize interactions and those interactions
 assigned to the positive class.
 
 * **AUPRC**: a single number _[0-1]_ that summarizes the area under the curve where
-x is the recall and y is the precision
+x is the recall and y is the precision.
 
 ## API
 
@@ -79,8 +79,9 @@ Methods should predict interactions between cell types without using
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
 
-Methods should infer a score for each _intersecting interaction_
-between a `source` and a `target`.
+Methods should infer a `score` for each _intersecting interaction_
+between a `source` and a `target`, which correspond to all possible combinations
+of the cell identity labels in the dataset.
 
 The predictions of any method which do not uniquely map
 to the columns in `adata.uns["merge_keys"]` are to be **aggregated**.
