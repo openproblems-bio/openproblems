@@ -32,7 +32,7 @@ Here, we compare methods for annotation based on a reference dataset. The datase
 
 ## Methods
 
-Methods for assigning cell labels from a reference dataset to a 
+Methods for assigning labels from a reference dataset to a new dataset.
 
 ```{r methods, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
 method_yamls <- list.files(paste0(dir, "/methods"), pattern = "config.vsh.yaml", full.names = TRUE, recursive = TRUE)
@@ -124,6 +124,9 @@ file_info <- map_df(file_yamls, function(yaml_file) {
   
   tibble(
     name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
+    description = arg$description,
+    short_description = arg$info$short_description,
+    example = arg$example,
     label = name %>% gsub("anndata_", "", .) %>% gsub("_", " ", .)
   )
 })
@@ -187,7 +190,7 @@ knitr::asis_output(out_str)
 
 ## File format API
 
-```{r api, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
+```{r file_api, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
 for (file_name in file_info$name) {
   arg_info <- file_info %>% filter(name == file_name)
   sub_out <- file_slot %>% 
@@ -196,17 +199,51 @@ for (file_name in file_info$name) {
   used_in <- comp_file %>%
     filter(file_name == !!file_name) %>%
     left_join(comp_info %>% select(comp_name = name, comp_label = label), by = "comp_name") %>%
-    mutate(str = paste0("* ", comp_label, ": ", arg_name, " (as ", direction, ")")) %>%
+    mutate(str = paste0("* [", comp_label, "](#", comp_label, "): ", arg_name, " (as ", direction, ")")) %>%
     pull(str)
   
   out_str <- strip_margin(glue::glue("
-    §### `{arg_info$label}.h5ad`
+    §### `{arg_info$label}.h5ad`: {arg_info$short_description} {{#file-{arg_info$label}}}
+    §
+    §{arg_info$description}
     §
     §Used in:
     §
     §{paste(used_in, collapse = '\n')}
     §
     §Slots:
+    §
+    §{paste(knitr::kable(sub_out, format = 'pipe'), collapse = '\n')}
+    §"), symbol = "§")
+  cat(out_str)
+}
+```
+
+
+
+## Component API
+
+```{r comp_api, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
+# todo: add description
+# todo: add required info fields
+for (comp_name in comp_info$name) {
+  comp <- comp_info %>% filter(name == comp_name)
+  sub_out <- comp_file %>% 
+    filter(comp_name == !!comp_name) %>%
+    left_join(file_info %>% select(file_name = name, file_desc = description, file_sdesc = short_description, file_label = label), by = "file_name") %>%
+    transmute(
+      Name = paste0("`--", arg_name, "`"),
+      `File format` = paste0("[", file_label, ".h5ad](#file-", file_label, ")"),
+      Direction = direction,
+      Description = file_sdesc
+    )
+  
+  out_str <- strip_margin(glue::glue("
+    §### `{comp$label}`
+    §
+    §{ifelse(\"description\" %in% names(comp), comp$description, \"\")}
+    §
+    §Arguments:
     §
     §{paste(knitr::kable(sub_out, format = 'pipe'), collapse = '\n')}
     §"), symbol = "§")

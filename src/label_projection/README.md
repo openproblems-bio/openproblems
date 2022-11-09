@@ -7,15 +7,22 @@
   - <a href="#pipeline-topology" id="toc-pipeline-topology">Pipeline
     topology</a>
   - <a href="#file-format-api" id="toc-file-format-api">File format API</a>
-    - <a href="#dataset.h5ad"
-      id="toc-dataset.h5ad"><code>dataset.h5ad</code></a>
-    - <a href="#prediction.h5ad"
-      id="toc-prediction.h5ad"><code>prediction.h5ad</code></a>
-    - <a href="#score.h5ad" id="toc-score.h5ad"><code>score.h5ad</code></a>
-    - <a href="#solution.h5ad"
-      id="toc-solution.h5ad"><code>solution.h5ad</code></a>
-    - <a href="#test.h5ad" id="toc-test.h5ad"><code>test.h5ad</code></a>
-    - <a href="#train.h5ad" id="toc-train.h5ad"><code>train.h5ad</code></a>
+    - <a href="#file-dataset" id="toc-file-dataset"><code>dataset.h5ad</code>:
+      Preprocessed dataset</a>
+    - <a href="#file-prediction"
+      id="toc-file-prediction"><code>prediction.h5ad</code>: Prediction</a>
+    - <a href="#file-score" id="toc-file-score"><code>score.h5ad</code>:
+      Score</a>
+    - <a href="#file-solution"
+      id="toc-file-solution"><code>solution.h5ad</code>: Solution</a>
+    - <a href="#file-test" id="toc-file-test"><code>test.h5ad</code>: Test
+      data</a>
+    - <a href="#file-train" id="toc-file-train"><code>train.h5ad</code>:
+      Training data</a>
+  - <a href="#component-api" id="toc-component-api">Component API</a>
+    - <a href="#censoring" id="toc-censoring"><code>censoring</code></a>
+    - <a href="#method" id="toc-method"><code>method</code></a>
+    - <a href="#metric" id="toc-metric"><code>metric</code></a>
 
 # Label Projection
 
@@ -48,7 +55,7 @@ labels onto the test set.
 
 ## Methods
 
-Methods for assigning cell labels from a reference dataset to a
+Methods for assigning labels from a reference dataset to a new dataset.
 
 | Name                                                                 | Description                    | DOI                                                  | URL                                                                                                    |
 |:---------------------------------------------------------------------|:-------------------------------|:-----------------------------------------------------|:-------------------------------------------------------------------------------------------------------|
@@ -103,11 +110,13 @@ flowchart LR
 
 ## File format API
 
-### `dataset.h5ad`
+### `dataset.h5ad`: Preprocessed dataset
+
+A preprocessed dataset
 
 Used in:
 
-- censoring: input (as input)
+- [censoring](#censoring): input (as input)
 
 Slots:
 
@@ -120,12 +129,14 @@ Slots:
 | uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
 | uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
 
-### `prediction.h5ad`
+### `prediction.h5ad`: Prediction
+
+The prediction file
 
 Used in:
 
-- method: output (as output)
-- metric: input_prediction (as input)
+- [method](#method): output (as output)
+- [metric](#metric): input_prediction (as input)
 
 Slots:
 
@@ -136,11 +147,13 @@ Slots:
 | uns    | raw_dataset_id | string | A unique identifier for the original dataset (before preprocessing) |
 | uns    | method_id      | string | A unique identifier for the method                                  |
 
-### `score.h5ad`
+### `score.h5ad`: Score
+
+Metric score file
 
 Used in:
 
-- metric: output (as output)
+- [metric](#metric): output (as output)
 
 Slots:
 
@@ -152,12 +165,14 @@ Slots:
 | uns    | metric_ids     | string | One or more unique metric identifiers                                                        |
 | uns    | metric_values  | double | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
 
-### `solution.h5ad`
+### `solution.h5ad`: Solution
+
+The solution for the test data
 
 Used in:
 
-- censoring: output_solution (as output)
-- metric: input_solution (as input)
+- [censoring](#censoring): output_solution (as output)
+- [metric](#metric): input_solution (as input)
 
 Slots:
 
@@ -170,12 +185,14 @@ Slots:
 | uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
 | uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
 
-### `test.h5ad`
+### `test.h5ad`: Test data
+
+The censored test data
 
 Used in:
 
-- censoring: output_test (as output)
-- method: input_test (as input)
+- [censoring](#censoring): output_test (as output)
+- [method](#method): input_test (as input)
 
 Slots:
 
@@ -187,12 +204,14 @@ Slots:
 | uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
 | uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
 
-### `train.h5ad`
+### `train.h5ad`: Training data
+
+The training data
 
 Used in:
 
-- censoring: output_train (as output)
-- method: input_train (as input)
+- [censoring](#censoring): output_train (as output)
+- [method](#method): input_train (as input)
 
 Slots:
 
@@ -204,3 +223,36 @@ Slots:
 | obs    | batch          | string  | Batch information                                                   |
 | uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
 | uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
+
+## Component API
+
+### `censoring`
+
+Arguments:
+
+| Name                | File format                     | Direction | Description          |
+|:--------------------|:--------------------------------|:----------|:---------------------|
+| `--input`           | [dataset.h5ad](#file-dataset)   | input     | Preprocessed dataset |
+| `--output_train`    | [train.h5ad](#file-train)       | output    | Training data        |
+| `--output_test`     | [test.h5ad](#file-test)         | output    | Test data            |
+| `--output_solution` | [solution.h5ad](#file-solution) | output    | Solution             |
+
+### `method`
+
+Arguments:
+
+| Name            | File format                         | Direction | Description   |
+|:----------------|:------------------------------------|:----------|:--------------|
+| `--input_train` | [train.h5ad](#file-train)           | input     | Training data |
+| `--input_test`  | [test.h5ad](#file-test)             | input     | Test data     |
+| `--output`      | [prediction.h5ad](#file-prediction) | output    | Prediction    |
+
+### `metric`
+
+Arguments:
+
+| Name                 | File format                         | Direction | Description |
+|:---------------------|:------------------------------------|:----------|:------------|
+| `--input_solution`   | [solution.h5ad](#file-solution)     | input     | Solution    |
+| `--input_prediction` | [prediction.h5ad](#file-prediction) | input     | Prediction  |
+| `--output`           | [score.h5ad](#file-score)           | output    | Score       |
