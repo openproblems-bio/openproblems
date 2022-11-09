@@ -8,8 +8,30 @@
 
 * `extract_scores`: Summarise a metrics output tsv.
 
-* `dataset_concatenate`: concatenate N AnnData datasets
+* `dataset_concatenate`: Concatenate N AnnData datasets.
 
-* `label_projection`: all components for **label_projection** task
+* `subsample`: Subsample an anndata file.
 
-## 
+* Created test data `resources_test/pancreas` with `src/common/resources_test_scripts/pancreas.sh`.
+
+## label_projection
+
+### NEW FUNCTIONALITY
+
+* API: Created an explicit api definition for the censor, normalisation, method and metric components.
+
+* Created censoring component `data_processing/censoring`.
+
+* Created test data `resources_test/label_projection/pancreas` with `src/label_projection/resources_test_scripts/pancreas.sh`.
+
+### V1 MIGRATION
+
+* Ported normalisation method `data_processing/normalise_log_cpm`.
+
+* Ported normalisation method `data_processing/normalise_log_scran_pooling`.
+
+* Ported method `methods/knn_classifier`.
+
+* Ported method `methods/logistic_regression`.
+
+* Ported method `methods/mlp`.
