@@ -7,12 +7,15 @@
   - <a href="#pipeline-topology" id="toc-pipeline-topology">Pipeline
     topology</a>
   - <a href="#file-format-api" id="toc-file-format-api">File format API</a>
-    - <a href="#dataset" id="toc-dataset">dataset</a>
-    - <a href="#prediction" id="toc-prediction">prediction</a>
-    - <a href="#score" id="toc-score">score</a>
-    - <a href="#solution" id="toc-solution">solution</a>
-    - <a href="#test" id="toc-test">test</a>
-    - <a href="#train" id="toc-train">train</a>
+    - <a href="#dataset.h5ad"
+      id="toc-dataset.h5ad"><code>dataset.h5ad</code></a>
+    - <a href="#prediction.h5ad"
+      id="toc-prediction.h5ad"><code>prediction.h5ad</code></a>
+    - <a href="#score.h5ad" id="toc-score.h5ad"><code>score.h5ad</code></a>
+    - <a href="#solution.h5ad"
+      id="toc-solution.h5ad"><code>solution.h5ad</code></a>
+    - <a href="#test.h5ad" id="toc-test.h5ad"><code>test.h5ad</code></a>
+    - <a href="#train.h5ad" id="toc-train.h5ad"><code>train.h5ad</code></a>
 
 # Label Projection
 
@@ -77,12 +80,12 @@ classifier correctly assigns cell type labels to cells in the test set.
 ``` mermaid
 %%| column: screen-inset-shaded
 flowchart LR
-  anndata_dataset(dataset)
-  anndata_prediction(prediction)
-  anndata_score(score)
-  anndata_solution(solution)
-  anndata_test(test)
-  anndata_train(train)
+  anndata_dataset(dataset.h5ad)
+  anndata_prediction(prediction.h5ad)
+  anndata_score(score.h5ad)
+  anndata_solution(solution.h5ad)
+  anndata_test(test.h5ad)
+  anndata_train(train.h5ad)
   comp_censoring[/censoring/]
   comp_method[/method/]
   comp_metric[/metric/]
@@ -100,7 +103,7 @@ flowchart LR
 
 ## File format API
 
-### dataset
+### `dataset.h5ad`
 
 Used in:
 
@@ -117,7 +120,7 @@ Slots:
 | uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
 | uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
 
-### prediction
+### `prediction.h5ad`
 
 Used in:
 
@@ -133,7 +136,7 @@ Slots:
 | uns    | raw_dataset_id | string | A unique identifier for the original dataset (before preprocessing) |
 | uns    | method_id      | string | A unique identifier for the method                                  |
 
-### score
+### `score.h5ad`
 
 Used in:
 
@@ -149,7 +152,7 @@ Slots:
 | uns    | metric_ids     | string | One or more unique metric identifiers                                                        |
 | uns    | metric_values  | double | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
 
-### solution
+### `solution.h5ad`
 
 Used in:
 
@@ -167,7 +170,7 @@ Slots:
 | uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
 | uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
 
-### test
+### `test.h5ad`
 
 Used in:
 
@@ -184,7 +187,7 @@ Slots:
 | uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
 | uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
 
-### train
+### `train.h5ad`
 
 Used in:
 

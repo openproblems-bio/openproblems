@@ -144,7 +144,7 @@ file_slot <- map_df(file_yamls, function(yaml_file) {
 ```{r flow, echo=FALSE,warning=FALSE,error=FALSE}
 nodes <- bind_rows(
   file_info %>%
-    transmute(id = name, label, is_comp = FALSE),
+    transmute(id = name, label = paste0(label, ".h5ad"), is_comp = FALSE),
   comp_info %>%
     transmute(id = name, label, is_comp = TRUE)
 ) %>%
@@ -200,7 +200,7 @@ for (file_name in file_info$name) {
     pull(str)
   
   out_str <- strip_margin(glue::glue("
-    §### {arg_info$label}
+    §### `{arg_info$label}.h5ad`
     §
     §Used in:
     §
