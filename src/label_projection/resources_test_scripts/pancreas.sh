@@ -33,8 +33,8 @@ bin/viash run src/label_projection/methods/knn_classifier/config.vsh.yaml -- \
     --input_test $DATASET_DIR/dataset_cpm_test.h5ad \
     --output $DATASET_DIR/dataset_cpm_knn.h5ad
 
-# # run one metric
-# bin/viash run src/label_projection/metric/accuracy/config.vsh.yaml -- \
-#     --input_prediction $DATASET_DIR/dataset_cpm_knn.h5ad \
-#     --input_solution $DATASET_DIR/dataset_cpm_solution.h5ad \
-#     --output $DATASET_DIR/dataset_cpm_knn_accuracy.h5ad
+# run one metric
+bin/viash run src/label_projection/metrics/accuracy/config.vsh.yaml -- \
+    --input_prediction $DATASET_DIR/dataset_cpm_knn.h5ad \
+    --input_solution $DATASET_DIR/dataset_cpm_solution.h5ad \
+    --output $DATASET_DIR/dataset_cpm_knn_accuracy.h5ad

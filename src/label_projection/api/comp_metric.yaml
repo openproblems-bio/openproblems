@@ -7,22 +7,41 @@ functionality:
     - name: "--output"
       __inherits__: anndata_score.yaml
       direction: output
-  # test_resources:
-  #   # A custom python script with additional checks
-  #   - type: python_script
-  #     path: format_check.py
-  #     text: |
-  #       import anndata as ad
+  test_resources:
+    - path: ../../../../resources_test/label_projection/pancreas
+    - type: python_script
+      path: format_check.py
+      text: |
+        import anndata as ad
+        import subprocess
+        from os import path
 
-  #       input_solution = ad.read_h5ad(par["input_solution"])
-  #       input_prediction = ad.read_h5ad(par["input_prediction"])
-  #       output = ad.read_h5ad(par["output"])
+        input_prediction_path = meta["resources_dir"] + "/pancreas/dataset_cpm_knn.h5ad"
+        input_solution_path = meta["resources_dir"] + "/pancreas/dataset_cpm_solution.h5ad"
+        output_path = "output.h5ad"
 
-  #       print("Checking whether data from input was copied properly to output")
-  #       assert input_solution.uns["dataset_id"] == input_prediction.uns["dataset_id"]
-  #       assert input_solution.uns["raw_dataset_id"] == input_prediction.uns["raw_dataset_id"]
-  #       assert input_prediction.uns["dataset_id"] == output.uns["dataset_id"]
-  #       assert input_prediction.uns["raw_dataset_id"] == output.uns["raw_dataset_id"]
-  #       assert input_prediction.uns["method_id"] == output.uns["method_id"]
+        cmd = [
+          meta['executable'],
+          "--input_prediction", input_prediction_path,
+          "--input_solution", input_solution_path,
+          "--output", output_path
+        ]
 
-  #       print("All checks succeeded!")
+        print(">> Running script as test")
+        out = subprocess.check_output(cmd).decode("utf-8")
+
+        print(">> Checking whether output file exists")
+        assert path.exists(output_path)
+
+        input_solution = ad.read_h5ad(input_solution_path)
+        input_prediction = ad.read_h5ad(input_prediction_path)
+        output = ad.read_h5ad(output_path)
+
+        print("Checking whether data from input was copied properly to output")
+        assert output.uns["dataset_id"] == input_prediction.uns["dataset_id"]
+        assert output.uns["raw_dataset_id"] == input_prediction.uns["raw_dataset_id"]
+        assert output.uns["method_id"] == input_prediction.uns["method_id"]
+        assert output.uns["metric_id"]
+        assert output.uns["metric_value"]
+
+        print("All checks succeeded!")

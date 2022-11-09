@@ -1,46 +1,29 @@
+__inherits__: ../../api/comp_metric.yaml
 functionality:
   name: "f1"
   namespace: "label_projection/metrics"
-  version: "dev"
   description: "balanced F-score or F-measure"
-  authors:
-    - name: "Scott Gigante"
-      roles: [ author ]
-      props: { github: scottgigante }
-    - name: "Vinicius Chagas"
-      roles: [ maintainer ]
-      props: { github: chagasVinicius }
   arguments:
-    - name: "--input"
-      type: "file"
-      description: "Input data with predictions to get f1-score"
-      required: true
     - name: "--average"
       type: "string"
-      example: "weighted"
-      required: true
-    - name: "--output"
-      alternatives: ["-o"]
-      type: "file"
-      description: "Ouput data with metric value"
-      direction: "output"
-      example: "output.mv.h5ad"
-      required: true
+      default: "weighted"
+      choices: ['micro', 'macro', 'samples', 'weighted']
+      description: |
+        Determines the type of averaging performed on the data.
+
+          - 'micro': Calculate metrics globally by counting the total true positives, false negatives and false positives.
+          - 'macro': Calculate metrics for each label, and find their unweighted mean. This does not take label imbalance into account.
+          - 'weighted': Calculate metrics for each label, and find their average weighted by support (the number of true instances for each label). This alters ‘macro’ to account for label imbalance; it can result in an F-score that is not between precision and recall.
+          - 'samples': Calculate metrics for each instance, and find their average (only meaningful for multilabel classification where this differs from accuracy_score).
   resources:
     - type: python_script
       path: script.py
-  test_resources:
-    - type: python_script
-      path: test_script.py
-    - path: "../../../../resources_test/label_projection/pancreas/toy_baseline_pred_data.h5ad"
 platforms:
-  - type: native
   - type: docker
-    image: "python:3.8"
+    image: "python:3.10"
     setup:
       - type: python
         packages:
-          - sklearn
-          - scanpy
+          - scikit-learn
           - "anndata<0.8"
   - type: nextflow
