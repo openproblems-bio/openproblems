@@ -1,10 +1,12 @@
 import numpy as np
-import scanpy as sc
+import anndata as ad
+import random
 
 ## VIASH START
 par = {
     'input': 'resources_test/label_projection/pancreas/dataset_subsampled_cpm.h5ad',
     'method': 'batch',
+    'seed': None,
     'obs_batch': 'batch',
     'obs_label': 'celltype',
     'output_train': 'train.h5ad',
@@ -16,8 +18,12 @@ meta = {
 }
 ## VIASH END
 
+if par["seed"]:
+    print(f">> Setting seed to {par['seed']}")
+    random.seed(par["seed"])
+
 print(">> Load data")
-adata = sc.read(par["input"])
+adata = ad.read_h5ad(par["input"])
 
 print("adata:", adata)
 
@@ -30,13 +36,12 @@ if par["method"] == "batch":
         for idx in adata.obs_names
     ]
 elif par["method"] == "random":
-    is_test = np.random.choice(
-        [False, True], adata.shape[0], replace=True, p=[0.8, 0.2]
-    )
+    train_ix = np.random.choice(adata.n_obs, round(adata.n_obs * 0.8), replace=False)
+    is_test = [ not x in train_ix for x in range(0, adata.n_obs) ]
 
 # create new anndata objects according to api spec
 def subset_anndata(adata_sub, layers, obs, uns):
-    return sc.AnnData(
+    return ad.AnnData(
         layers={key: adata_sub.layers[key] for key in layers},
         obs=adata_sub.obs[obs.values()].rename({v:n for n,v in obs.items()}, axis=1),
         var=adata.var.drop(adata.var.columns, axis=1),

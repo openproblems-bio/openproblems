@@ -16,6 +16,10 @@ functionality:
       type: "string"
       description: "Which .obs slot to use as batch covariate."
       default: "batch"
+    - name: "--seed"
+      type: "integer"
+      description: "A seed for the subsampling."
+      example: 123
   resources:
     - type: python_script
       path: script.py
