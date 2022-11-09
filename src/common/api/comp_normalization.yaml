@@ -13,7 +13,7 @@ functionality:
         import subprocess
         from os import path
 
-        input_path = meta["resources_dir"] + "/common/dataset.h5ad"
+        input_path = meta["resources_dir"] + "/pancreas/dataset.h5ad"
         output_path = "output.h5ad"
 
         cmd = [
@@ -44,5 +44,5 @@ functionality:
         assert input.uns["raw_dataset_id"] == output.uns["raw_dataset_id"]
 
         print("All checks succeeded!")
-    - path: ../../../../resources_test/label_projection/pancreas
+    - path: ../../../../resources_test/common/pancreas
 
