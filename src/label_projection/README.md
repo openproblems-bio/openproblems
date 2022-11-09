@@ -48,9 +48,8 @@ correctly assigns cell type labels to cells in the test set.
 ``` mermaid
 %%| column: screen-inset-shaded
 flowchart LR
+  anndata_dataset(dataset)
   anndata_prediction(prediction)
-  anndata_preprocessed(preprocessed)
-  anndata_raw_dataset(raw dataset)
   anndata_score(score)
   anndata_solution(solution)
   anndata_test(test)
@@ -58,20 +57,34 @@ flowchart LR
   comp_censoring[/censoring/]
   comp_method[/method/]
   comp_metric[/metric/]
-  comp_normalization[/normalization/]
-  anndata_preprocessed---comp_censoring
+  anndata_dataset---comp_censoring
   anndata_train---comp_method
   anndata_test---comp_method
   anndata_solution---comp_metric
   anndata_prediction---comp_metric
-  anndata_raw_dataset---comp_normalization
   comp_censoring-->anndata_train
   comp_censoring-->anndata_test
   comp_censoring-->anndata_solution
   comp_method-->anndata_prediction
   comp_metric-->anndata_score
-  comp_normalization-->anndata_preprocessed
 ```
+
+### dataset
+
+Used in:
+
+- censoring: input (as input)
+
+Slots:
+
+| struct | name           | type    | description                                                         |
+|:-------|:---------------|:--------|:--------------------------------------------------------------------|
+| layers | counts         | integer | Raw counts                                                          |
+| layers | lognorm        | double  | Log-transformed normalised counts                                   |
+| obs    | label          | double  | Ground truth cell type labels                                       |
+| obs    | batch          | double  | Batch information                                                   |
+| uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
+| uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
 
 ### prediction
 
@@ -88,39 +101,6 @@ Slots:
 | uns    | dataset_id     | string | A unique identifier for the dataset                                 |
 | uns    | raw_dataset_id | string | A unique identifier for the original dataset (before preprocessing) |
 | uns    | method_id      | string | A unique identifier for the method                                  |
-
-### preprocessed
-
-Used in:
-
-- censoring: input (as input)
-- normalization: output (as output)
-
-Slots:
-
-| struct | name           | type    | description                                                         |
-|:-------|:---------------|:--------|:--------------------------------------------------------------------|
-| layers | counts         | integer | Raw counts                                                          |
-| layers | lognorm        | double  | Log-transformed normalised counts                                   |
-| obs    | label          | double  | Ground truth cell type labels                                       |
-| obs    | batch          | double  | Batch information                                                   |
-| uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
-| uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
-
-### raw dataset
-
-Used in:
-
-- normalization: input (as input)
-
-Slots:
-
-| struct | name       | type    | description                                                         |
-|:-------|:-----------|:--------|:--------------------------------------------------------------------|
-| layers | counts     | integer | Raw counts                                                          |
-| obs    | label      | string  | Ground truth cell type labels                                       |
-| obs    | batch      | string  | Batch information                                                   |
-| uns    | dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
 
 ### score
 
