@@ -27,6 +27,9 @@ def random_events(adata, test=False, n_events=1000):
             "score": np.random.uniform(0, 1, n_events),
         }
     )
+    adata.uns["ccc_pred"] = adata.uns["ccc_pred"].loc[
+        ~adata.uns["ccc_pred"][adata.uns["merge_keys"]].duplicated()
+    ]
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
 
