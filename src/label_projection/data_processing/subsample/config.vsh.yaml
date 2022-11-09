@@ -8,6 +8,7 @@ functionality:
       type: "file"
       description: "Input data to be resized"
       required: true
+      example: input.h5ad
     - name: "--keep_celltype_categories"
       type: "string"
       multiple: true
@@ -20,12 +21,12 @@ functionality:
       required: false
     - name: "--even"
       type: "boolean_true"
-      description: Evenly subsamples from different batches
+      description: Subsample evenly from different batches
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
       direction: "output"
-      default: "toy_data.h5ad"
+      example: "output.h5ad"
       description: "Output h5ad file resized"
       required: true
   resources:
