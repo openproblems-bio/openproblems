@@ -1,0 +1,20 @@
+type: file
+description: "The prediction file"
+example: "prediction.h5ad"
+info:
+  short_description: "Prediction"
+  slots:
+    obs:
+      - type: string
+        name: label_pred
+        description: Predicted labels for the test cells.
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+      - type: string
+        name: raw_dataset_id
+        description: "A unique identifier for the original dataset (before preprocessing)"
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"

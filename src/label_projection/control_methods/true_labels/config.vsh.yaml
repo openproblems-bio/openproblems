@@ -1,0 +1,24 @@
+__inherits__: ../../api/comp_method.yaml
+functionality:
+  name: "true_labels"
+  namespace: "label_projection/control_methods"
+  description: "Positive control method by returning the true labels"
+  info:
+    type: positive_control
+    label: True labels
+    v1_url: openproblems/tasks/label_projection/methods/baseline.py
+    v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
+  arguments:
+    - name: "--input_solution"
+      __inherits__: ../../api/anndata_solution.yaml
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - "anndata<0.8"
+  - type: nextflow

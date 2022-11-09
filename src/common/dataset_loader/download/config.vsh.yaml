@@ -4,17 +4,10 @@ functionality:
   version: "dev"
   description: "Download a dataset."
   authors:
-    - name: "Michaela Mueller "
+    - name: "Michaela Mueller"
       roles: [ maintainer, author ]
       props: { github: mumichae }
   arguments:
-    - name: "--output"
-      alternatives: ["-o"]
-      type: "file"
-      direction: "output"
-      example: "output.h5ad"
-      description: "Output h5ad file of the cleaned dataset"
-      required: true
     - name: "--url"
       type: "string"
       description: "URL of dataset"
@@ -33,10 +26,50 @@ functionality:
     - name: "--obs_tissue"
       type: "string"
       description: "Location of where to find the observation tissue information."
+    - name: "--layer_counts"
+      type: "string"
+      description: "Location of where to store the counts data. Leave undefined to store in `.X`, else it will be stored in `.layers[par['layer_counts']]`."
+      example: counts
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: "Output h5ad file of the cleaned dataset"
+      required: true
+      info:
+        slots:
+          X: 
+            type: integer
+            name: counts # todo: this should depend on the value of 'layer_counts'
+            description: Raw counts
+            required: false
+          obs:
+            - type: string
+              name: celltype
+              description: Cell type labels
+              required: false
+            - type: string
+              name: batch
+              description: Batch information
+              required: false
+            - type: string
+              name: tissue
+              description: Tissue information
+              required: false
+          uns:
+            - type: string
+              name: dataset_id
+              description: "A unique identifier for the dataset"
+              required: false
+            - type: string
+              name: raw_dataset_id
+              description: "A unique identifier for the original dataset (before preprocessing)"
+              required: false
   resources:
     - type: python_script
       path: script.py
-  tests:
+  test_resources:
     - type: python_script
       path: test.py
 platforms:
@@ -47,5 +80,4 @@ platforms:
         packages:
           - scanpy
           - "anndata<0.8"
-  - type: native
   - type: nextflow

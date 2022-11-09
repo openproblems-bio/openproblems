@@ -1,42 +1,27 @@
+__inherits__: ../../api/comp_metric.yaml
 functionality:
   name: "accuracy"
   namespace: "label_projection/metrics"
-  version: "dev"
-  description: "Accuracy of predictions"
-  authors:
-    - name: "Scott Gigante"
-      roles: [ author ]
-      props: { github: scottgigante }
-    - name: "Vinicius Chagas"
-      roles: [ maintainer ]
-      props: { github: chagasVinicius }
-  arguments:
-    - name: "--input"
-      type: "file"
-      description: "Input data to get accuracy"
-      required: true
-    - name: "--output"
-      alternatives: ["-o"]
-      type: "file"
-      description: "Ouput data with metric value"
-      direction: "output"
-      example: "output.mv.h5ad"
-      required: true
+  description: "The percentage of correctly predicted labels."
+  info:
+    v1_url: openproblems/tasks/label_projection/metrics/accuracy.py
+    v1_commit: fcd5b876e7d0667da73a2858bc27c40224e19f65
+    metrics:
+      - id: accuracy
+        label: Accuracy
+        description: The percentage of correctly predicted labels.
+        min: 0
+        max: 1
+        maximise: true
   resources:
     - type: python_script
       path: script.py
-  tests:
-    - type: python_script
-      path: test_script.py
-    - path: "../../../../resources_test/label_projection/pancreas/toy_baseline_pred_data.h5ad"
 platforms:
-  - type: native
   - type: docker
-    image: "python:3.8"
+    image: "python:3.10"
     setup:
       - type: python
         packages:
-          - sklearn
-          - scanpy
+          - scikit-learn
           - "anndata<0.8"
   - type: nextflow

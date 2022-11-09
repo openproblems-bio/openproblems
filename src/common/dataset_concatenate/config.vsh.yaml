@@ -1,15 +1,7 @@
 functionality:
   name: "dataset_concatenate"
-  namespace: "label_projection/data_processing"
-  version: "dev"
-  description: "Concatenate datasets."
-  authors:
-    - name: "Scott Gigante"
-      roles: [ author ]
-      props: { github: scottgigante }
-    - name: "Vinicius Chagas "
-      roles: [ maintainer ]
-      props: { github: chagasVinicius }
+  namespace: "common/data_processing"
+  description: "Concatenate datasets"
   arguments:
     - name: "--inputs"
       alternatives: ["-i"]
@@ -21,24 +13,21 @@ functionality:
       type: "file"
       direction: "output"
       example: "output.h5ad"
-      description: "Output h5ad file of the cleaned dataset"
+      description: "Output h5ad file"
       required: true
-
   resources:
     - type: python_script
       path: script.py
-  tests:
+  test_resources:
     - type: python_script
       path: test_script.py
     - type: file
-      path: "../../../resources_test/label_projection/pancreas"
+      path: "../../../resources_test/common/pancreas"
 platforms:
   - type: docker
-    image: "python:3.8"
+    image: "python:3.10"
     setup:
       - type: python
         packages:
-          - scanpy
-          - "anndata<0.8"
-  - type: native
+          - "anndata>=0.8"
   - type: nextflow

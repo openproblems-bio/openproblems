@@ -22,7 +22,7 @@ Nextflow and viash. Documentation for viash is available at
 To use this repository, please install the following dependencies:
 
 -   Bash
--   Java (Java 8 or higher)
+-   Java (Java 11 or higher)
 -   Docker (Instructions [here](https://docs.docker.com/get-docker/))
 -   Nextflow (Optional, though [very easy to
     install](https://www.nextflow.io/index.html#GetStarted))
@@ -45,6 +45,12 @@ bin/init
     > Building components
     > Done, happy viash-ing!
     > Nextflow installation completed.
+
+**Step 0b, download test resources:** by running the following command.
+
+``` bash
+bin/viash run src/common/sync_test_resources/config.vsh.yaml
+```
 
 **Step 1, build all the components:** in the `src/` folder as standalone
 executables in the `target/` folder. Use the `-q 'xxx'` parameter to
@@ -136,15 +142,18 @@ viash run src/modality_alignment/methods/foo/config.vsh.yaml -- -h
 ```
 
     foo 0.0.1
+
     Replace this with a (multiline) description of your component.
 
-    Options:
+    Arguments:
         -i, --input
             type: file, required parameter
+            example: input.txt
             Describe the input file.
 
         -o, --output
             type: file, required parameter, output
+            example: output.txt
             Describe the output file.
 
         --option
@@ -158,10 +167,13 @@ You can **run the component** as follows:
 viash run src/modality_alignment/methods/foo/config.vsh.yaml -- -i LICENSE -o foo_output.txt
 ```
 
+    [notice] Checking if Docker image is available at 'modality_alignment/methods_foo:0.0.1'
+    [warning] Could not pull from 'modality_alignment/methods_foo:0.0.1'. Docker image doesn't exist or is not accessible.
+    [notice] Building container 'modality_alignment/methods_foo:0.0.1' with Dockerfile
     This is a skeleton component
     The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
+     - input:  /viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/LICENSE
+     - output:  /viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/foo_output.txt
      - option:  default-
 
 ## Building a component
@@ -192,15 +204,18 @@ target/docker/modality_alignment/methods/foo/foo -h
 ```
 
     foo 0.0.1
+
     Replace this with a (multiline) description of your component.
 
-    Options:
+    Arguments:
         -i, --input
             type: file, required parameter
+            example: input.txt
             Describe the input file.
 
         -o, --output
             type: file, required parameter, output
+            example: output.txt
             Describe the output file.
 
         --option
@@ -216,8 +231,8 @@ target/docker/modality_alignment/methods/foo/foo -i LICENSE -o foo_output.txt
 
     This is a skeleton component
     The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
+     - input:  /viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/LICENSE
+     - output:  /viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/foo_output.txt
      - option:  default-
 
 ## Unit testing a component
@@ -230,21 +245,41 @@ functionality of a component, you can run the tests by using the
 viash test src/modality_alignment/methods/foo/config.vsh.yaml
 ```
 
-    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo18431554913355206711'
+    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo5306251997508180162'
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo18431554913355206711/build_executable/foo --verbosity 6 ---setup cachedbuild
-    [notice] Running 'docker build -t modality_alignment/methods_foo:da7Qhr5nLi6A /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-4h6urx'
-    Sending build context to Docker daemon  22.53kB
+    +/home/rcannood/workspace/viash_temp/viash_test_foo5306251997508180162/build_executable/foo ---verbosity 6 ---setup cachedbuild
+    [notice] Building container 'modality_alignment/methods_foo:test_FI4Ch4' with Dockerfile
+    [info] Running 'docker build -t modality_alignment/methods_foo:test_FI4Ch4 /home/rcannood/workspace/viash_temp/viash_test_foo5306251997508180162/build_executable -f /home/rcannood/workspace/viash_temp/viash_test_foo5306251997508180162/build_executable/tmp/dockerbuild-foo-RlMhS8/Dockerfile'
+    Sending build context to Docker daemon  38.91kB
 
-    Step 1/2 : FROM python:3.9.3-buster
+    Step 1/7 : FROM python:3.9.3-buster
      ---> 05034335a2e3
-    Step 2/2 : RUN pip install --upgrade pip &&   pip install --no-cache-dir "numpy"
+    Step 2/7 : RUN pip install --upgrade pip &&   pip install --upgrade --no-cache-dir "numpy"
      ---> Using cache
-     ---> 45db33ebb9de
-    Successfully built 45db33ebb9de
-    Successfully tagged modality_alignment/methods_foo:da7Qhr5nLi6A
+     ---> ddeebf641d36
+    Step 3/7 : LABEL org.opencontainers.image.description="Companion container for running component modality_alignment/methods foo"
+     ---> Using cache
+     ---> c1c0f5ae9c7d
+    Step 4/7 : LABEL org.opencontainers.image.created="2022-11-09T13:22:17+01:00"
+     ---> Running in fa0c5209aade
+    Removing intermediate container fa0c5209aade
+     ---> b2db5789cac5
+    Step 5/7 : LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems-v2.git"
+     ---> Running in d1f880f7a935
+    Removing intermediate container d1f880f7a935
+     ---> 30128c9999fd
+    Step 6/7 : LABEL org.opencontainers.image.revision="a7a0f0d841531959b4a6e4965fc0bd81665b6acb"
+     ---> Running in 4407f6fc3929
+    Removing intermediate container 4407f6fc3929
+     ---> ae4cc7922a61
+    Step 7/7 : LABEL org.opencontainers.image.version="test_FI4Ch4"
+     ---> Running in 2e07476da268
+    Removing intermediate container 2e07476da268
+     ---> c95b24408e60
+    Successfully built c95b24408e60
+    Successfully tagged modality_alignment/methods_foo:test_FI4Ch4
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo18431554913355206711/test_test.py/test.py
+    +/home/rcannood/workspace/viash_temp/viash_test_foo5306251997508180162/test_test/test_executable
     >> Writing test file
     >> Running component
     >> Checking whether output file exists
@@ -382,7 +417,7 @@ cp target/docker/modality_alignment/methods/foo/foo foo_by_email
 ./foo_by_email ---setup cachedbuild
 ```
 
-    [notice] Running 'docker build -t modality_alignment/methods_foo:0.0.1 /home/rcannood/workspace/viash_temp/viashsetupdocker-foo-TsNVGL'
+    [notice] Building container 'modality_alignment/methods_foo:0.0.1' with Dockerfile
 
 ``` bash
 # view help
@@ -390,15 +425,18 @@ cp target/docker/modality_alignment/methods/foo/foo foo_by_email
 ```
 
     foo 0.0.1
+
     Replace this with a (multiline) description of your component.
 
-    Options:
+    Arguments:
         -i, --input
             type: file, required parameter
+            example: input.txt
             Describe the input file.
 
         -o, --output
             type: file, required parameter, output
+            example: output.txt
             Describe the output file.
 
         --option
@@ -413,8 +451,8 @@ cp target/docker/modality_alignment/methods/foo/foo foo_by_email
 
     This is a skeleton component
     The arguments are:
-     - input:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/LICENSE
-     - output:  /viash_automount/home/rcannood/workspace/opsca/opsca-viash/foo_output.txt
+     - input:  /viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/LICENSE
+     - output:  /viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/foo_output.txt
      - option:  default-
 
 ### Reprodicible components on Docker Hub

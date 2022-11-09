@@ -1,0 +1,21 @@
+type: file
+description: "A raw dataset"
+example: "raw_dataset.h5ad"
+info:
+  short_description: "Raw dataset"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+    obs:
+      - type: string
+        name: label
+        description: Ground truth cell type labels
+      - type: string
+        name: batch
+        description: Batch information
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the original dataset (before preprocessing)"

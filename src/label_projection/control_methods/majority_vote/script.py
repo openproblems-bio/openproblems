@@ -1,22 +1,26 @@
+import anndata as ad
+
 ## VIASH START
 par = {
-    'input': '../../../../resources_test/label_projection/pancreas/toy_normalized_log_cpm.h5ad',
-    'output': 'output.mv.h5ad'
+    'input_train': 'resources_test/label_projection/pancreas/dataset_cpm_train.h5ad',
+    'input_test': 'resources_test/label_projection/pancreas/dataset_cpm_test.h5ad',
+    'output': 'output.h5ad'
+}
+meta = {
+    'functionality_name': 'foo'
 }
 ## VIASH END
-import numpy as np
-import scanpy as sc
-
 
 print("Load data")
-adata = sc.read(par['input'])
+input_train = ad.read_h5ad(par['input_train'])
+input_test = ad.read_h5ad(par['input_test'])
 
-print("Add celltype prediction")
-majority = adata.obs.celltype[adata.obs.is_train].value_counts().index[0]
-adata.obs["celltype_pred"] = np.nan
-adata.obs.loc[~adata.obs.is_train, "celltype_pred"] = majority
+print("Compute majority vote")
+majority = input_train.obs.label.value_counts().index[0]
 
+print("Create prediction object")
+input_test.obs["label_pred"] = majority
 
 print("Write output to file")
-adata.uns["method_id"] = meta["functionality_name"]
-adata.write(par["output"], compression="gzip")
+input_test.uns["method_id"] = meta["functionality_name"]
+input_test.write_h5ad(par["output"], compression="gzip")

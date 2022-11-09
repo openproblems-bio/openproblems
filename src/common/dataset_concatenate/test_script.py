@@ -1,22 +1,26 @@
 import subprocess
-import scanpy as sc
+import anndata as ad
 from os import path
 
 ## VIASH START
 ## VIASH END
-INPUT = f"{meta['resources_dir']}/pancreas/toy_data.h5ad"
-INPUTS = f"{INPUT}:{INPUT}"
-OUTPUT = "toy_data_concatenated.h5ad"
+
+input_path = f"{meta['resources_dir']}/pancreas/dataset_cpm.h5ad"
+output_path = "toy_data_concatenated.h5ad"
 
 print(">> Runing script as test")
 out = subprocess.check_output([
-    "./" + meta["functionality_name"],
-    "--inputs", INPUTS,
-    "--output", OUTPUT
+    meta["executable"],
+    "--inputs", f"{input_path}:{input_path}",
+    "--output", output_path
 ]).decode("utf-8")
+
 print(">> Checking whether file exists")
-assert path.exists(OUTPUT)
+assert path.exists(output_path)
 
 print(">> Check that test output fits expected API")
-adata = sc.read_h5ad(OUTPUT)
-assert (1000, 468) == adata.X.shape, "processed result data shape {}".format(adata.X.shape)
+input = ad.read_h5ad(input_path)
+output = ad.read_h5ad(output_path)
+
+assert output.n_obs == input.n_obs * 2
+assert output.n_vars == input.n_vars

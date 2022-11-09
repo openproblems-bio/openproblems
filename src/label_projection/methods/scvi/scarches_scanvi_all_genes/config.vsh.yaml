@@ -1,4 +1,5 @@
 functionality:
+  status: disabled
   name: "scarches_scanvi_all_genes"
   namespace: "label_projection/methods/scvi"
   version: "dev"
@@ -52,7 +53,7 @@ functionality:
     - type: python_script
       path: script.py
     - path: "../tools.py"
-  tests:
+  test_resources:
     - type: python_script
       path: ../unit_tests/test_method.py
     - type: file
@@ -65,7 +66,7 @@ platforms:
         packages:
           - scanpy
           - scprep
-          - sklearn
+          - scikit-learn
           - "anndata<0.8"
           - scvi-tools
   - type: native

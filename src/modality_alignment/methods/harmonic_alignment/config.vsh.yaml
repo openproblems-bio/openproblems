@@ -39,7 +39,7 @@ functionality:
     - type: python_script
       path: script.py
     - path: "../../utils/preprocessing.py"
-  tests:
+  test_resources:
     - type: python_script
       path: test.py
     - path: "../../resources/sample_dataset.h5ad"

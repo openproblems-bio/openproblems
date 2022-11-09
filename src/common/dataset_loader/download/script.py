@@ -12,6 +12,7 @@ par = {
     "name": "pancreas",
     "obs_celltype": "celltype",
     "obs_batch": "tech",
+    "layer_counts": "counts",
     "output": "test_data.h5ad"
 }
 ## VIASH END
@@ -30,13 +31,16 @@ with tempfile.TemporaryDirectory() as tempdir:
     print("Reading file")
     adata = sc.read_h5ad(filepath)
 
-print("Copying .layers['counts'] to .X")
 if "counts" in adata.layers:
+    print("Copying .layers['counts'] to .X")
     adata.X = adata.layers["counts"]
     del adata.layers["counts"]
 
 print("Setting .uns['dataset_id']")
 adata.uns["dataset_id"] = par["name"]
+
+print("Setting .uns['raw_dataset_id']")
+adata.uns["raw_dataset_id"] = par["name"]
 
 print("Setting .obs['celltype']")
 if par["obs_celltype"]:
@@ -63,5 +67,10 @@ print("Remove cells or genes with 0 counts")
 sc.pp.filter_genes(adata, min_cells=1)
 sc.pp.filter_cells(adata, min_counts=2)
 
+if par["layer_counts"]:
+    print(f"Copying .X back to .layers['{par['layer_counts']}']")
+    adata.layers[par["layer_counts"]] = adata.X
+    del adata.X
+
 print("Writing adata to file")
-adata.write(par["output"], compression="gzip")
+adata.write_h5ad(par["output"], compression="gzip")

@@ -1,46 +1,39 @@
+__inherits__: ../../api/comp_metric.yaml
 functionality:
   name: "f1"
   namespace: "label_projection/metrics"
-  version: "dev"
   description: "balanced F-score or F-measure"
-  authors:
-    - name: "Scott Gigante"
-      roles: [ author ]
-      props: { github: scottgigante }
-    - name: "Vinicius Chagas"
-      roles: [ maintainer ]
-      props: { github: chagasVinicius }
-  arguments:
-    - name: "--input"
-      type: "file"
-      description: "Input data with predictions to get f1-score"
-      required: true
-    - name: "--average"
-      type: "string"
-      example: "weighted"
-      required: true
-    - name: "--output"
-      alternatives: ["-o"]
-      type: "file"
-      description: "Ouput data with metric value"
-      direction: "output"
-      example: "output.mv.h5ad"
-      required: true
+  info:
+    v1_url: openproblems/tasks/label_projection/metrics/f1.py
+    v1_commit: bb16ca05ae1ce20ce59bfa7a879641b9300df6b0
+    metrics:
+      - id: f1_weighted
+        label: F1 weighted
+        description: Calculates the F1 score for each label, and find their average weighted by support (the number of true instances for each label). This alters 'macro' to account for label imbalance; it can result in an F-score that is not between precision and recall.
+        min: 0
+        max: 1
+        maximise: true
+      - id: f1_macro
+        label: F1 macro
+        description: Calculates the F1 score for each label, and find their unweighted mean. This does not take label imbalance into account.
+        min: 0
+        max: 1
+        maximise: true
+      - id: f1_micro
+        label: F1 micro
+        description: Calculates the F1 score globally by counting the total true positives, false negatives and false positives.
+        min: 0
+        max: 1
+        maximise: true
   resources:
     - type: python_script
       path: script.py
-  tests:
-    - type: python_script
-      path: test_script.py
-    - path: "../../../../resources_test/label_projection/pancreas/toy_baseline_pred_data.h5ad"
 platforms:
-  - type: native
   - type: docker
-    image: "python:3.8"
+    image: "python:3.10"
     setup:
       - type: python
         packages:
-          - sklearn
-          - scanpy
+          - scikit-learn
           - "anndata<0.8"
   - type: nextflow

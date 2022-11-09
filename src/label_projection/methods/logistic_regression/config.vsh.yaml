@@ -1,55 +1,31 @@
+__inherits__: ../../api/comp_method.yaml
 functionality:
   name: "logistic_regression"
   namespace: "label_projection/methods"
-  version: "dev"
-  description: "Applied Logistic Regression"
+  description: "Logistic regression method"
   info:
     type: method
     label: Logistic Regression
-  authors:
-    - name: "Scott Gigante"
-      roles: [ author ]
-      props: { github: scottgigante }
-    - name: "Vinicius Chagas"
-      roles: [ maintainer ]
-      props: { github: chagasVinicius }
+    # paper_name: "Applied Logistic Regression"
+    # paper_url: "https://books.google.com/books?id=64JYAwAAQBAJ"
+    # paper_year: 2013
+    code_url: "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html"
+    v1_url: openproblems/tasks/label_projection/methods/logistic_regression.py
+    v1_commit: 2097bbb3e996f66e98128c9ac95bc9640a496e0d
   arguments:
-    - name: "--input"
-      alternatives: ["-i"]
-      type: "file"
-      example: "input.h5ad"
-      description: "Input file that will be used to generate predictions"
-      required: true
     - name: "--max_iter"
       type: "integer"
-      example: "100"
+      default: 1000
       description: "Maximum number of iterations"
-      required: true
-    - name: "--output"
-      alternatives: ["-o"]
-      type: "file"
-      direction: "output"
-      example: "output.h5ad"
-      description: "Output data containing predictions"
-      required: true
   resources:
     - type: python_script
       path: script.py
-    - path: "../../utils.py"
-  tests:
-    - type: python_script
-      path: ../unit_tests/test_method.py
-    - path: ../../../../resources_test/label_projection/pancreas/toy_normalized_log_scran_pooling_data.h5ad
-    - path: ../../../../resources_test/label_projection/pancreas/toy_normalized_log_cpm_data.h5ad
 platforms:
   - type: docker
-    image: "python:3.8"
+    image: "python:3.10"
     setup:
       - type: python
         packages:
-          - scanpy
-          - scprep
-          - sklearn
+          - scikit-learn
           - "anndata<0.8"
-  - type: native
   - type: nextflow
