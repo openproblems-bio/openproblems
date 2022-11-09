@@ -26,7 +26,7 @@ with tempfile.TemporaryDirectory() as tempdir:
         opener.addheaders = _FAKE_HEADERS
         urllib.request.install_opener(opener)
         with urllib.request.urlopen(par["url"]) as urlhandle:
-            filehandle.write_h5ad(urlhandle.read())
+            filehandle.write(urlhandle.read())
 
     print("Reading file")
     adata = sc.read_h5ad(filepath)
