@@ -48,7 +48,7 @@ pipeline = sklearn.pipeline.Pipeline(
 )
 
 print("Fit to train data")
-classifipipelineer.fit(input_train.layers["lognorm"], input_train.obs["label"].astype(str))
+pipeline.fit(input_train.layers["lognorm"], input_train.obs["label"].astype(str))
 
 print("Predict on test data")
 input_test.obs["label_pred"] = pipeline.predict(input_test.layers["lognorm"])
