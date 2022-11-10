@@ -3,6 +3,15 @@ functionality:
   name: "log_cpm"
   namespace: "common/normalization"
   description: "Normalize data using Log CPM"
+  arguments:
+    - name: "--layer_output"
+      type: string
+      default: "log_cpm"
+      description: The name of the layer in which to store the log normalized data.
+    - name: "--obs_size_factors"
+      type: string
+      default: "size_factors_log_cpm"
+      description: In which .obs slot to store the size factors.
   resources:
     - type: python_script
       path: script.py

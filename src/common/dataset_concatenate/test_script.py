@@ -5,7 +5,7 @@ from os import path
 ## VIASH START
 ## VIASH END
 
-input_path = f"{meta['resources_dir']}/pancreas/dataset_cpm.h5ad"
+input_path = f"{meta['resources_dir']}/pancreas/dataset.h5ad"
 output_path = "toy_data_concatenated.h5ad"
 
 print(">> Runing script as test")

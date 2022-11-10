@@ -2,7 +2,7 @@ import anndata as ad
 
 ## VIASH START
 par = {
-    "inputs": ["resources_test/common/pancreas/dataset_cpm.h5ad", "resources_test/common/pancreas/dataset_cpm.h5ad"],
+    "inputs": ["resources_test/common/pancreas/dataset.h5ad", "resources_test/common/pancreas/dataset.h5ad"],
     "output": "output.h5ad"
 }
 ## VIASH END

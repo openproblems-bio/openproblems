@@ -4,8 +4,8 @@ import anndata as ad
 
 ## VIASH START
 par = {
-    'input_prediction': 'resources_test/label_projection/pancreas/dataset_cpm_knn.h5ad',
-    'input_solution': 'resources_test/label_projection/pancreas/dataset_cpm_solution.h5ad',
+    'input_prediction': 'resources_test/label_projection/pancreas/knn.h5ad',
+    'input_solution': 'resources_test/label_projection/pancreas/solution.h5ad',
     'output': 'output.h5ad'
 }
 meta = {

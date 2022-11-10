@@ -4,7 +4,7 @@ import random
 
 ## VIASH START
 par = {
-    'input': 'resources_test/label_projection/pancreas/dataset_cpm.h5ad',
+    'input': 'resources_test/label_projection/pancreas/dataset.h5ad',
     'method': 'batch',
     'seed': None,
     'obs_batch': 'batch',
@@ -49,21 +49,21 @@ def subset_anndata(adata_sub, layers, obs, uns):
     )
 output_train = subset_anndata(
     adata_sub = adata[[not x for x in is_test]], 
-    layers=["counts", "lognorm"], 
+    layers=["counts", "log_cpm", "log_scran_pooling"], 
     obs={"label": par["obs_label"], "batch": par["obs_batch"]}, 
-    uns=["raw_dataset_id", "dataset_id"]
+    uns=["dataset_id"]
 )
 output_test = subset_anndata(
     adata[is_test], 
-    layers=["counts", "lognorm"], 
+    layers=["counts", "log_cpm", "log_scran_pooling"], 
     obs={"batch": par["obs_batch"]}, # do NOT copy label to test obs!
-    uns=["raw_dataset_id", "dataset_id"]
+    uns=["dataset_id"]
 )
 output_solution = subset_anndata(
     adata[is_test], 
-    layers=["counts", "lognorm"],
+    layers=["counts", "log_cpm", "log_scran_pooling"],
     obs={"label": par["obs_label"], "batch": par["obs_batch"]},
-    uns=["raw_dataset_id", "dataset_id"]
+    uns=["dataset_id"]
 )
 
 print(">> Writing data")

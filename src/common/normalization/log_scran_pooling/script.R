@@ -7,10 +7,9 @@ library(Matrix, warn.conflicts = FALSE)
 ## VIASH START
 par <- list(
   input = "resources_test/label_projection/pancreas/dataset_subsampled.h5ad",
-  output = "output.scran.h5ad"
-)
-meta <- list(
-  functionality_name = "normalize_log_scran_pooling"
+  output = "output.scran.h5ad",
+  layer_output = "log_scran_pooling",
+  obs_size_factors = "size_factors_log_scran_pooling"
 )
 ## VIASH END
 
@@ -23,9 +22,8 @@ size_factors <- scran::calculateSumFactors(counts, min.mean=0.1, BPPARAM=BiocPar
 lognorm <- log1p(sweep(adata$layers[["counts"]], 1, size_factors, "*"))
 
 cat(">> Storing in anndata\n")
-adata$obs[["size_factors"]] <- size_factors
-adata$layers[["lognorm"]] <- lognorm
+adata$obs[[par$obs_size_factors]] <- size_factors
+adata$layers[[par$layer_output]] <- lognorm
 
 cat(">> Writing to file\n")
-adata$uns["normalization_method"] <- gsub("^normalize_", "", meta["functionality_name"])
 zzz <- adata$write_h5ad(par$output, compression = "gzip")

@@ -20,17 +20,23 @@ bin/viash run src/common/dataset_loader/download/config.vsh.yaml -- \
     --obs_batch "tech" \
     --name "pancreas" \
     --layer_counts "counts" \
-    --output $DATASET_DIR/temp_full_dataset.h5ad
+    --layer_counts_output "counts" \
+    --output $DATASET_DIR/temp_dataset_full.h5ad
 
 # subsample
 bin/viash run src/common/subsample/config.vsh.yaml -- \
-    --input $DATASET_DIR/temp_full_dataset.h5ad \
+    --input $DATASET_DIR/temp_dataset_full.h5ad \
     --keep_celltype_categories "acinar:beta" \
     --keep_batch_categories "celseq:inDrop4:smarter" \
-    --output $DATASET_DIR/dataset.h5ad \
+    --output $DATASET_DIR/temp_dataset_sampled.h5ad \
     --seed 123
 
-# run one normalisation
+# run log cpm normalisation
 bin/viash run src/common/normalization/log_cpm/config.vsh.yaml -- \
-    --input $DATASET_DIR/dataset.h5ad \
-    --output $DATASET_DIR/dataset_cpm.h5ad
+    --input $DATASET_DIR/temp_dataset_sampled.h5ad \
+    --output $DATASET_DIR/temp_dataset_cpm.h5ad
+
+# run scran pooling normalisation
+bin/viash run src/common/normalization/log_scran_pooling/config.vsh.yaml -- \
+    --input $DATASET_DIR/temp_dataset_cpm.h5ad \
+    --output $DATASET_DIR/dataset.h5ad
