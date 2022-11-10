@@ -9,9 +9,6 @@ info:
         name: dataset_id
         description: "A unique identifier for the dataset"
       - type: string
-        name: raw_dataset_id
-        description: "A unique identifier for the original dataset (before preprocessing)"
-      - type: string
         name: method_id
         description: "A unique identifier for the method"
       - type: string

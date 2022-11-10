@@ -3,7 +3,38 @@ functionality:
     - name: "--input"
       __inherits__: anndata_raw_dataset.yaml
     - name: "--output"
-      __inherits__: anndata_normalized_dataset.yaml
+      type: file
+      description: "A preprocessed dataset"
+      example: "preprocessed.h5ad"
+      info:
+        short_description: "Preprocessed dataset"
+        slots:
+          layers: 
+            - type: integer
+              name: counts
+              description: Raw counts
+              required: true
+            - type: double
+              name: $par_layer_output
+              description: Log-transformed normalised counts
+          obs:
+            - type: string
+              name: celltype
+              description: Cell type information
+              required: false
+            - type: string
+              name: batch
+              description: Batch information
+              required: false
+            - type: string
+              name: tissue
+              description: Tissue information
+              required: false
+          uns:
+            - type: string
+              name: dataset_id
+              description: "A unique identifier for the dataset"
+              required: true
       direction: output
     
     # not including this because we need to override the default

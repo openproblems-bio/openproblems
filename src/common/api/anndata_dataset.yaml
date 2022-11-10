@@ -1,14 +1,20 @@
 type: file
-description: "A raw dataset"
-example: "raw_dataset.h5ad"
+description: "A dataset"
+example: "dataset.h5ad"
 info:
-  short_description: "Raw dataset"
+  short_description: "Dataset"
   slots:
     layers: 
       - type: integer
         name: counts
         description: Raw counts
         required: true
+      - type: double
+        name: log_cpm
+        description: CPM normalized counts, log transformed
+      - type: double
+        name: log_scran_pooling
+        description: Scran pooling normalized counts, log transformed
     obs:
       - type: string
         name: celltype

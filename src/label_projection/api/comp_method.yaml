@@ -7,6 +7,11 @@ functionality:
     - name: "--output"
       __inherits__: anndata_prediction.yaml
       direction: output
+    # TODO: currently needs to be manually specified since the default value needs to be overrideable
+    # - name: "--layer_input"
+    #   type: string
+    #   default: "log_cpm"
+    #   description: Which layer to use as input.
   test_resources:
     - path: ../../../../resources_test/label_projection/pancreas
     - type: python_script
@@ -16,9 +21,9 @@ functionality:
         import subprocess
         from os import path
 
-        input_train_path = meta["resources_dir"] + "/pancreas/dataset_cpm_train.h5ad"
-        input_test_path = meta["resources_dir"] + "/pancreas/dataset_cpm_test.h5ad"
-        input_solution_path = meta["resources_dir"] + "/pancreas/dataset_cpm_solution.h5ad"
+        input_train_path = meta["resources_dir"] + "/pancreas/train.h5ad"
+        input_test_path = meta["resources_dir"] + "/pancreas/test.h5ad"
+        input_solution_path = meta["resources_dir"] + "/pancreas/solution.h5ad"
         output_path = "output.h5ad"
 
         cmd = [
@@ -52,6 +57,5 @@ functionality:
         print("Checking whether data from input was copied properly to output")
         assert input_test.n_obs == output.n_obs
         assert input_test.uns["dataset_id"] == output.uns["dataset_id"]
-        assert input_test.uns["raw_dataset_id"] == output.uns["raw_dataset_id"]
 
         print("All checks succeeded!")

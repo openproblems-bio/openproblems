@@ -19,7 +19,7 @@ functionality:
         import subprocess
         from os import path
 
-        input_path = meta["resources_dir"] + "/pancreas/dataset_cpm.h5ad"
+        input_path = meta["resources_dir"] + "/pancreas/dataset.h5ad"
         output_train_path = "output_train.h5ad"
         output_test_path = "output_test.h5ad"
         output_solution_path = "output_solution.h5ad"
@@ -59,23 +59,23 @@ functionality:
         
         print(">> Checking whether data from input was copied properly to output")
         assert output_train.uns["dataset_id"] == input.uns["dataset_id"]
-        assert output_train.uns["raw_dataset_id"] == input.uns["raw_dataset_id"]
         assert output_test.uns["dataset_id"] == input.uns["dataset_id"]
-        assert output_test.uns["raw_dataset_id"] == input.uns["raw_dataset_id"]
         assert output_solution.uns["dataset_id"] == input.uns["dataset_id"]
-        assert output_solution.uns["raw_dataset_id"] == input.uns["raw_dataset_id"]
 
         print(">> Check whether certain slots exist")
         assert "counts" in output_train.layers
-        assert "lognorm" in output_train.layers
+        assert "log_cpm" in output_train.layers
+        assert "log_scran_pooling" in output_train.layers
         assert "label" in output_train.obs
         assert "batch" in output_train.obs
         assert "counts" in output_test.layers
-        assert "lognorm" in output_test.layers
+        assert "log_cpm" in output_test.layers
+        assert "log_scran_pooling" in output_test.layers
         assert "label" not in output_test.obs # make sure label is /not/ here
         assert "batch" in output_test.obs
         assert "counts" in output_solution.layers
-        assert "lognorm" in output_solution.layers
+        assert "log_cpm" in output_solution.layers
+        assert "log_scran_pooling" in output_solution.layers
         assert "label" in output_solution.obs
         assert "batch" in output_solution.obs
 

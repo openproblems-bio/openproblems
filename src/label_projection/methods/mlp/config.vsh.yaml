@@ -12,6 +12,10 @@ functionality:
     paper_doi: "10.1016/0004-3702(89)90049-0"
     code_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html"
   arguments:
+    - name: "--layer_input"
+      type: string
+      default: "log_cpm"
+      description: Which layer to use as input.
     - name: "--hidden_layer_sizes"
       type: "integer"
       multiple: true

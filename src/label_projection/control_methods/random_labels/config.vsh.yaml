@@ -8,6 +8,11 @@ functionality:
     label: Random Labels
     v1_url: openproblems/tasks/label_projection/methods/baseline.py
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
+  arguments:
+    - name: "--layer_input"
+      type: string
+      default: "counts"
+      description: Which layer to use as input.
   resources:
     - type: python_script
       path: script.py

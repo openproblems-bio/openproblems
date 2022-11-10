@@ -11,6 +11,10 @@ functionality:
   arguments:
     - name: "--input_solution"
       __inherits__: ../../api/anndata_solution.yaml
+    - name: "--layer_input"
+      type: string
+      default: "counts"
+      description: Which layer to use as input.
   resources:
     - type: python_script
       path: script.py

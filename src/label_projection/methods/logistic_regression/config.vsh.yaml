@@ -13,6 +13,10 @@ functionality:
     v1_url: openproblems/tasks/label_projection/methods/logistic_regression.py
     v1_commit: 2097bbb3e996f66e98128c9ac95bc9640a496e0d
   arguments:
+    - name: "--layer_input"
+      type: string
+      default: "log_cpm"
+      description: Which layer to use as input.
     - name: "--max_iter"
       type: "integer"
       default: 1000
