@@ -5,6 +5,12 @@ functionality:
     - name: "--output"
       __inherits__: anndata_normalized_dataset.yaml
       direction: output
+    
+    # not including this because we need to override the default
+    # - name: "--layer_output"
+    #   type: string
+    #   default: "log_cpm"
+    #   description: The name of the layer in which to store the log normalized data.
   test_resources:
     - type: python_script
       path: generic_test.py
@@ -15,11 +21,13 @@ functionality:
 
         input_path = meta["resources_dir"] + "/pancreas/dataset.h5ad"
         output_path = "output.h5ad"
+        output_layer = "norm_layer"
 
         cmd = [
           meta['executable'],
           "--input", input_path,
-          "--output", output_path
+          "--output", output_path,
+          "--layer_output", output_layer
         ]
 
         print(">> Running script as test")
@@ -35,13 +43,11 @@ functionality:
         print("output:", output)
 
         print(">> Checking whether output data structures were added")
-        assert "lognorm" in output.layers
-        assert output.uns["normalization_method"] == meta['functionality_name'].removeprefix("normalize_")
+        assert output_layer in output.layers
 
         print("Checking whether data from input was copied properly to output")
         assert input.n_obs == output.n_obs
         assert input.uns["dataset_id"] == output.uns["dataset_id"]
-        assert input.uns["raw_dataset_id"] == output.uns["raw_dataset_id"]
 
         print("All checks succeeded!")
     - path: ../../../../resources_test/common/pancreas

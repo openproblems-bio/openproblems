@@ -18,4 +18,4 @@ info:
     uns:
       - type: string
         name: dataset_id
-        description: "A unique identifier for the original dataset (before preprocessing)"
+        description: "A unique identifier for the dataset"
