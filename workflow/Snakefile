@@ -122,7 +122,6 @@ rule push_docker_image:
 rule save_docker_image:
     input:
         build = "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR),
-        login = ".docker_login",
     output:
         temp(touch("{}/{{image}}/.docker_save".format(tools.IMAGES_DIR)))
     shell:
