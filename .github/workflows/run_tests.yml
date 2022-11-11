@@ -31,12 +31,12 @@ jobs:
     runs-on: ubuntu-18.04
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
+      !startsWith(github.ref, 'refs/heads/test_benchmark') &&
+      !startsWith(github.ref, 'refs/heads/test_process') &&
       (
-        startsWith(github.ref, 'refs/heads/test_docker') ||
-        (
-          startsWith(github.ref, 'refs/heads/main') &&
-          github.repository == 'openproblems-bio/openproblems'
-        )
+        startsWith(github.ref, 'refs/heads') ||
+        startsWith(github.ref, 'refs/tags') ||
+        github.event.pull_request.draft == false
       )
 
     env:
@@ -70,7 +70,7 @@ jobs:
         )
       run: |
         cd workflow
-        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
+        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker docker_save
         cd ..
 
     - name: Build Docker images
@@ -78,7 +78,7 @@ jobs:
         startsWith(github.ref, 'refs/heads/test_docker')
       run: |
         cd workflow
-        snakemake -j $(nproc) docker_build
+        snakemake -j $(nproc) docker_build docker_save
         cd ..
 
     - name: Build and push Docker images
@@ -88,7 +88,7 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         cd workflow
-        snakemake -j $(nproc) docker_build docker_push
+        snakemake -j $(nproc) docker_build docker_push docker_save
         cd ..
         echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
 
@@ -105,12 +105,12 @@ jobs:
         commit-message: Update docker version # ci skip
         add-paths: docker/.version
 
-    - name: Upload check results on fail
-      if: failure()
+    - name: Upload docker images
       uses: actions/upload-artifact@main
       with:
-        name: ${{ matrix.config.name }}_results
-        path: check
+        name: docker_save
+        path: /tmp/docker_save
+        retention-days: 1
 
   run_tester:
     runs-on: ubuntu-latest
@@ -175,6 +175,18 @@ jobs:
       run: |
         sudo rm -rf /opt/remove/*/*
 
+    - name: Download docker images
+      uses: actions/download-artifact@main
+      with:
+        name: docker_save
+        path: /tmp/docker_save
+
+    - name: Load docker images
+      run: |
+        for image in $(ls -1 /tmp/docker_save); do
+          docker load /tmp/docker_save/$image
+        done
+
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
@@ -217,20 +229,6 @@ jobs:
         install_renv("docker/openproblems-github-actions/r_requirements.txt")
       shell: Rscript {0}
 
-    - name: Pull Docker images
-      if: "startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems'"
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker_pull
-        cd ..
-
-    - name: Update Docker images
-      if: "!(startsWith(github.ref, 'refs/heads/main') && github.repository == 'openproblems-bio/openproblems')"
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker
-        cd ..
-
     - name: Run tests
       run: pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native -k ${{ matrix.select_tests }}
 
@@ -270,12 +268,24 @@ jobs:
           exit 1
         fi
 
+    - name: Clear space on runner
+      run: ./scripts/clear_runner_diskspace.sh
+
+    - name: Download docker images
+      uses: actions/download-artifact@main
+      with:
+        name: docker_save
+        path: /tmp/docker_save
+
+    - name: Load docker images
+      run: |
+        for image in $(ls -1 /tmp/docker_save); do
+          docker load /tmp/docker_save/$image
+        done
+
     - uses: actions/checkout@v3
       with:
         fetch-depth: 1000
-
-    - name: Clear space on runner
-      run: ./scripts/clear_runner_diskspace.sh
 
     - name: Install system dependencies
       run: |
@@ -393,26 +403,6 @@ jobs:
         openproblems-cli --version
         openproblems-cli --test-hash
 
-    - name: Pull Docker images
-      if: |
-        startsWith(github.ref, 'refs/heads/main') &&
-        github.repository == 'openproblems-bio/openproblems'
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker_pull
-        cd ..
-
-    - name: Build Docker images
-      if: |
-        !(
-          startsWith(github.ref, 'refs/heads/main') &&
-          github.repository == 'openproblems-bio/openproblems'
-        )
-      run: |
-        cd workflow
-        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
-        cd ..
-
     - name: Upload Docker images
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -484,6 +474,16 @@ jobs:
       with:
         name: nextflow.log
         path: /tmp/nextflow.log
+
+  delete_docker_artifact:
+    needs:
+    - run_test_benchmark
+    - run_tester
+    if: "always()"
+    steps:
+    - uses: geekyeggo/delete-artifact@v2
+      with:
+        name: docker_save
 
   run_full_benchmark:
     needs:

@@ -23,6 +23,9 @@ rule docker_build:
 rule docker_pull:
     input: tools.pull_images
 
+rule docker_save:
+    input: tools.save_images
+
 rule docker_refresh:
     input: tools.refresh_images
 
@@ -65,7 +68,6 @@ COPY . /usr/src/singlecellopenproblems
 RUN cd /usr/src/singlecellopenproblems && sudo git clean -fxdq
 """) + r"""
 RUN sudo pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
-RUN sudo pip check
 ' > {output}"""
 
 ruleorder: update_docker_image > build_docker_image
@@ -116,6 +118,15 @@ rule push_docker_image:
         temp(touch("{}/{{image}}/.docker_push".format(tools.IMAGES_DIR)))
     shell:
         "docker push --quiet singlecellopenproblems/{wildcards.image}"
+
+rule save_docker_image:
+    input:
+        build = "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR),
+        login = ".docker_login",
+    output:
+        temp(touch("{}/{{image}}/.docker_save".format(tools.IMAGES_DIR)))
+    shell:
+        "docker save singlecellopenproblems/{wildcards.image} | gzip > /tmp/docker_save/{wildcards.image}.tar.gz"
 
 rule pull_docker_image:
     output:
