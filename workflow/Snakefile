@@ -125,7 +125,7 @@ rule save_docker_image:
     output:
         temp(touch("{}/{{image}}/.docker_save".format(tools.IMAGES_DIR)))
     shell:
-        "docker save singlecellopenproblems/{wildcards.image} | gzip > /tmp/docker_save/{wildcards.image}.tar.gz"
+        "mkdir -p /tmp/docker_save; docker save singlecellopenproblems/{wildcards.image} | gzip > /tmp/docker_save/{wildcards.image}.tar.gz"
 
 rule pull_docker_image:
     output:
