@@ -479,6 +479,7 @@ jobs:
     needs:
     - run_test_benchmark
     - run_tester
+    runs-on: ubuntu-latest
     if: "always()"
     steps:
     - uses: geekyeggo/delete-artifact@v2
