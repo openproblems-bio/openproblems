@@ -62,15 +62,28 @@ jobs:
         pip install --editable .[evaluate]
         python -c "import openproblems"
 
+    - name: Update Docker images
+      if: |
+        !(
+          startsWith(github.ref, 'refs/heads/test_docker') ||
+          startsWith(github.ref, 'refs/heads/main')
+        )
+      run: |
+        cd workflow
+        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
+        cd ..
+
     - name: Build Docker images
-      if: "!startsWith(github.ref, 'refs/heads/main')"
+      if: |
+        startsWith(github.ref, 'refs/heads/test_docker')
       run: |
         cd workflow
         snakemake -j $(nproc) docker_build
         cd ..
 
     - name: Build and push Docker images
-      if: "startsWith(github.ref, 'refs/heads/main')"
+      if: |
+        startsWith(github.ref, 'refs/heads/main')
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
@@ -132,6 +145,30 @@ jobs:
       !startsWith(github.ref, 'refs/heads/test_docker') &&
       !startsWith(github.ref, 'refs/heads/test_benchmark') &&
       !startsWith(github.ref, 'refs/heads/test_process')
+
+    strategy:
+      fail-fast: false
+      matrix:
+        select_tests:
+          - "test_0_tasks"
+          - "test_1_ and batch_integration"
+          - "(test_2_load_data or test_3_datasets) and batch_integration"
+          - "test_1_ and cell_cell_communication"
+          - "(test_2_load_data or test_3_datasets) and cell_cell_communication"
+          - "test_1_ and denoising"
+          - "(test_2_load_data or test_3_datasets) and denoising"
+          - "test_1_ and dimensionality_reduction"
+          - "(test_2_load_data or test_3_datasets) and dimensionality_reduction"
+          - "test_1_ and label_projection"
+          - "(test_2_load_data or test_3_datasets) and label_projection"
+          - "test_1_ and multimodal_data_integration"
+          - "(test_2_load_data or test_3_datasets) and multimodal_data_integration"
+          - "test_1_ and regulatory_effect_prediction"
+          - "(test_2_load_data or test_3_datasets) and regulatory_effect_prediction"
+          - "test_1_ and spatial_decomposition"
+          - "(test_2_load_data or test_3_datasets) and spatial_decomposition"
+          - "test_4_"
+          - "test_5_"
 
     steps:
     - name: Clear space on runner
@@ -195,7 +232,7 @@ jobs:
         cd ..
 
     - name: Run tests
-      run: pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native
+      run: pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native -k ${{ matrix.select_tests }}
 
     - name: Upload coverage
       uses: codecov/codecov-action@v3
