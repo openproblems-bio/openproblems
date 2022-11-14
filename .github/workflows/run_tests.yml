@@ -124,6 +124,7 @@ jobs:
           docker tag singlecellopenproblems/$image $GHCR_IMAGE
           docker push $GHCR_IMAGE
         done
+        # convert to JSON
         echo "images=[\"$(paste -s -d ' ' <(echo $IMAGES) | sed 's/  */\",\"/g')\"]" >> $GITHUB_OUTPUT
 
   run_tester:
