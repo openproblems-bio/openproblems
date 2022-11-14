@@ -119,7 +119,7 @@ jobs:
       run: |
         set -x
         IMAGES="$(find ./docker -mindepth 1 -type d -exec basename {} \;)"
-        for image in "${IMAGES}"; do
+        for image in ${IMAGES}; do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           docker tag singlecellopenproblems/$image $GHCR_IMAGE
           docker push $GHCR_IMAGE
