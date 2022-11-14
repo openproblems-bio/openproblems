@@ -77,6 +77,7 @@ jobs:
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           docker pull singlecellopenproblems/${image} &
         done
+        wait
 
 #    - name: Update Docker images
 #      if: |
@@ -136,6 +137,7 @@ jobs:
           docker tag singlecellopenproblems/$image $GHCR_IMAGE
           docker push $GHCR_IMAGE &
         done
+        wait
         # convert to JSON
         echo "images=[\"$(paste -s -d ' ' <(echo $IMAGES) | sed 's/  */\",\"/g')\"]" >> $GITHUB_OUTPUT
 
@@ -318,6 +320,7 @@ jobs:
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           docker pull $GHCR_IMAGE &
         done
+        wait
 
     - name: Install system dependencies
       run: |
@@ -448,6 +451,7 @@ jobs:
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
           docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image} &
         done
+        wait
 
     - name: Upload Docker images for full benchmark
       env:
@@ -463,6 +467,7 @@ jobs:
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:prod-${image}
           docker push --quiet ${ECR_ENDPOINT}/openproblems:prod-${image} &
         done
+        wait
 
     - name: Run test benchmark
       env:
