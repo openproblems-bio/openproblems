@@ -90,18 +90,6 @@ jobs:
       run: |
         rm website/data/results/*/*.raw.json
 
-    - name: AWS S3 cleanup
-      if: "github.event_name == 'repository_dispatch'"
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        aws s3 rm --recursive "s3://openproblems-nextflow/work_main"
-        aws s3 rm --recursive "s3://openproblems-nextflow/cwd_example"
-        aws s3 cp --recursive "s3://openproblems-nextflow/cwd_main" "s3://openproblems-nextflow/cwd_example"
-        aws s3 rm --recursive "s3://openproblems-nextflow/cwd_main"
-
     - name: Push to openproblems-bio/website
       if: |
         github.event_name == 'repository_dispatch' ||
@@ -117,7 +105,6 @@ jobs:
       if: |
         github.event_name == 'repository_dispatch' ||
         endsWith(github.event.head_commit.message, '# publish')
-
       uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
@@ -129,3 +116,15 @@ jobs:
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
         commit-message: "Update benchmark results # ci skip"
+
+    - name: AWS S3 cleanup
+      if: "github.event_name == 'repository_dispatch'"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        aws s3 rm --recursive "s3://openproblems-nextflow/work_main"
+        aws s3 rm --recursive "s3://openproblems-nextflow/cwd_example"
+        aws s3 cp --recursive "s3://openproblems-nextflow/cwd_main" "s3://openproblems-nextflow/cwd_example"
+        aws s3 rm --recursive "s3://openproblems-nextflow/cwd_main"
