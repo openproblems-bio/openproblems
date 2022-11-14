@@ -7,8 +7,7 @@ import os
 import pandas as pd
 import sys
 import warnings
-
-# import workflow_utils
+import workflow_utils
 
 
 def dump_json(obj, fp):
@@ -222,7 +221,7 @@ def compute_ranking(dataset_results):
     return final_ranking
 
 
-def dataset_results_to_json(task_name, dataset_name, dataset_results):
+def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
     """Convert the raw dataset results to pretty JSON for web."""
     dataset = openproblems.api.utils.get_function(task_name, "datasets", dataset_name)
     output = dict(
@@ -232,8 +231,8 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
         headers=dict(names=["Rank"], fixed=["Name", "Paper", "Website", "Code"]),
         results=list(),
     )
-    # dataset_results = normalize_scores(task_name, dataset_results)
-    # dataset_results = drop_baselines(task_name, dataset_results)
+    dataset_results_raw = normalize_scores(task_name, dataset_results_raw)
+    dataset_results = drop_baselines(task_name, dataset_results_raw)
     ranking = compute_ranking(dataset_results)
     metric_names = set()
     for method_name, rank in ranking.items():
@@ -272,7 +271,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             "Year",
         ]
     )
-    return output
+    return output, dataset_results_raw
 
 
 def results_to_json(results, outdir):
@@ -280,27 +279,32 @@ def results_to_json(results, outdir):
     if not os.path.isdir(outdir):
         os.mkdir(outdir)
     for task_name, task_results in results.items():
-        # if workflow_utils.task_is_incomplete(
-        #     openproblems.api.utils.str_to_task(task_name)
-        # ):
-        #     # don't write results for incomplete tasks
-        #     continue
         for dataset_name, dataset_results in task_results.items():
             results_dir = os.path.join(outdir, task_name)
             if not os.path.isdir(results_dir):
                 os.mkdir(results_dir)
             filename = os.path.join(results_dir, "{}.json".format(dataset_name))
+            filename_raw = os.path.join(results_dir, "{}.raw.json".format(dataset_name))
             try:
-                dataset_results_json = dataset_results_to_json(
+                dataset_results_json, dataset_results_raw = dataset_results_to_json(
                     task_name, dataset_name, dataset_results
                 )
             except openproblems.api.utils.NoSuchFunctionError:
                 continue
-            with open(filename, "w") as handle:
+            with open(filename_raw, "w") as handle:
                 dump_json(
-                    dataset_results_json,
+                    dataset_results_raw,
                     handle,
                 )
+            if not workflow_utils.task_is_incomplete(
+                openproblems.api.utils.str_to_task(task_name)
+            ):
+                # don't write results for incomplete tasks
+                with open(filename, "w") as handle:
+                    dump_json(
+                        dataset_results_json,
+                        handle,
+                    )
 
 
 def main(results_path, outdir):
