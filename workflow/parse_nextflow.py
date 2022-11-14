@@ -183,8 +183,9 @@ def normalize_scores(task_name, dataset_results):
                 for method_name in baseline_methods
             ]
         )
-        metric_scores -= baseline_scores.min()
-        baseline_range = baseline_scores.max() - baseline_scores.min()
+        baseline_min = np.nanmin(baseline_scores)
+        baseline_range = np.nanmax(baseline_scores) - baseline_min
+        metric_scores -= baseline_min
         metric_scores /= np.where(baseline_range != 0, baseline_range, 1)
         if not metric.metadata["maximize"]:
             metric_scores = 1 - metric_scores
@@ -210,10 +211,14 @@ def compute_ranking(dataset_results):
     metric_names = list(dataset_results.values())[0]["metrics"].keys()
     method_names = list(dataset_results.keys())
     for metric_name in metric_names:
-        metric_scores = [
-            dataset_results[method_name]["metrics"][metric_name]
-            for method_name in method_names
-        ]
+        metric_scores = np.array(
+            [
+                dataset_results[method_name]["metrics"][metric_name]
+                for method_name in method_names
+            ]
+        )
+        metric_scores[np.isnan(metric_scores) | np.isneginf(metric_scores)] = 0
+        metric_scores[np.isinf(metric_scores)] = 1
         metric_sums += metric_scores
 
     final_ranking = {
@@ -258,6 +263,12 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
             metric = openproblems.api.utils.get_function(
                 task_name, "metrics", metric_name
             )
+            if np.isnan(metric_result):
+                metric_result = "NaN"
+            elif np.isneginf(metric_result):
+                metric_result = "-Inf"
+            elif np.isinf(metric_result):
+                metric_result = "Inf"
             result[metric.metadata["metric_name"]] = metric_result
             metric_names.add(metric.metadata["metric_name"])
         output["results"].append(result)

@@ -84,7 +84,9 @@ jobs:
         aws s3 rm --recursive "s3://openproblems-nextflow/cwd_main"
 
     - name: Push to openproblems-bio/website
-      if: "github.event_name == 'repository_dispatch'"
+      if: |
+        github.event_name == 'repository_dispatch' ||
+        endsWith(github.event.head_commit.message, '# publish')
       shell: bash
       working-directory: './website'
       env:
@@ -93,7 +95,9 @@ jobs:
         git push origin "${UPDATE_BRANCH_NAME}"
 
     - name: Create Pull Request
-      if: "github.event_name == 'repository_dispatch'"
+      if: |
+        github.event_name == 'repository_dispatch' ||
+        endsWith(github.event.head_commit.message, '# publish')
       uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
