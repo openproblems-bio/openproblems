@@ -21,7 +21,7 @@ pytestmark = pytest.mark.skipif(
         )
         for task in utils.git.list_modified_tasks()
         for dataset in task.DATASETS
-        for test in [True]
+        for test in [False, True]
     ],
     name_func=utils.name.name_test,
     skip_on_empty=True,
