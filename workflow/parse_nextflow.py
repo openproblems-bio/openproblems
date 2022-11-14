@@ -7,7 +7,8 @@ import os
 import pandas as pd
 import sys
 import warnings
-import workflow_utils
+
+# import workflow_utils
 
 
 def dump_json(obj, fp):
@@ -231,8 +232,8 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
         headers=dict(names=["Rank"], fixed=["Name", "Paper", "Website", "Code"]),
         results=list(),
     )
-    dataset_results = normalize_scores(task_name, dataset_results)
-    dataset_results = drop_baselines(task_name, dataset_results)
+    # dataset_results = normalize_scores(task_name, dataset_results)
+    # dataset_results = drop_baselines(task_name, dataset_results)
     ranking = compute_ranking(dataset_results)
     metric_names = set()
     for method_name, rank in ranking.items():
@@ -279,11 +280,11 @@ def results_to_json(results, outdir):
     if not os.path.isdir(outdir):
         os.mkdir(outdir)
     for task_name, task_results in results.items():
-        if workflow_utils.task_is_incomplete(
-            openproblems.api.utils.str_to_task(task_name)
-        ):
-            # don't write results for incomplete tasks
-            continue
+        # if workflow_utils.task_is_incomplete(
+        #     openproblems.api.utils.str_to_task(task_name)
+        # ):
+        #     # don't write results for incomplete tasks
+        #     continue
         for dataset_name, dataset_results in task_results.items():
             results_dir = os.path.join(outdir, task_name)
             if not os.path.isdir(results_dir):
