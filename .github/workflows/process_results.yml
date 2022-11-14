@@ -111,7 +111,7 @@ jobs:
         delete-branch: true
         base: main
         title: '[auto] Update benchmark results'
-        reviewers: scottgigante,dburkhardt
+        reviewers: scottgigante-immunai,rcannood,dburkhardt
         path: './website'
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
