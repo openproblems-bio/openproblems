@@ -65,6 +65,12 @@ jobs:
         pip install --editable .[evaluate]
         python -c "import openproblems"
 
+    - name: Download docker images
+      run: |
+        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
+          docker pull singlecellopenproblems/${image} &
+        done
+
     - name: Update Docker images
       if: |
         !(
@@ -117,7 +123,6 @@ jobs:
 
     - name: Export docker images
       run: |
-        set -x
         IMAGES="$(find ./docker -mindepth 1 -type d -exec basename {} \;)"
         for image in ${IMAGES}; do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
@@ -203,9 +208,10 @@ jobs:
 
     - name: Download docker images
       run: |
+        set -x
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
-          docker pull $GHCR_IMAGE &
+          docker pull $GHCR_IMAGE
         done
 
     - name: Set up environment
