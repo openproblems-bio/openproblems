@@ -70,7 +70,7 @@ jobs:
         )
       run: |
         cd workflow
-        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker docker_save
+        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
         cd ..
 
     - name: Build Docker images
@@ -78,7 +78,7 @@ jobs:
         startsWith(github.ref, 'refs/heads/test_docker')
       run: |
         cd workflow
-        snakemake -j $(nproc) docker_build docker_save
+        snakemake -j $(nproc) docker_build
         cd ..
 
     - name: Build and push Docker images
@@ -88,7 +88,7 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         cd workflow
-        snakemake -j $(nproc) docker_build docker_push docker_save
+        snakemake -j $(nproc) docker_build docker_push
         cd ..
         echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
 
@@ -104,6 +104,11 @@ jobs:
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
         commit-message: Update docker version # ci skip
         add-paths: docker/.version
+
+    - name: Export docker images
+      run: |
+        mkdir -p /tmp/docker_save
+        docker save $(docker images -q) | gzip > /tmp/docker_save/openproblems.tar.gz
 
     - name: Upload docker images
       uses: actions/upload-artifact@main
@@ -183,10 +188,8 @@ jobs:
 
     - name: Load docker images
       run: |
-        for image in $(ls -1 /tmp/docker_save); do
-          docker load --input /tmp/docker_save/$image
-          rm /tmp/docker_save/$image
-        done
+        docker load <(gunzip /tmp/docker_save/openproblems.tar.gz)
+        rm /tmp/docker_save/openproblems.tar.gz
 
     - uses: actions/checkout@v3
       with:
@@ -280,10 +283,8 @@ jobs:
 
     - name: Load docker images
       run: |
-        for image in $(ls -1 /tmp/docker_save); do
-          docker load --input /tmp/docker_save/$image
-          rm /tmp/docker_save/$image
-        done
+        docker load <(gunzip /tmp/docker_save/openproblems.tar.gz)
+        rm /tmp/docker_save/openproblems.tar.gz
 
     - uses: actions/checkout@v3
       with:

@@ -23,9 +23,6 @@ rule docker_build:
 rule docker_pull:
     input: tools.pull_images
 
-rule docker_save:
-    input: tools.save_images
-
 rule docker_refresh:
     input: tools.refresh_images
 
@@ -118,14 +115,6 @@ rule push_docker_image:
         temp(touch("{}/{{image}}/.docker_push".format(tools.IMAGES_DIR)))
     shell:
         "docker push --quiet singlecellopenproblems/{wildcards.image}"
-
-rule save_docker_image:
-    input:
-        build = "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR),
-    output:
-        temp(touch("{}/{{image}}/.docker_save".format(tools.IMAGES_DIR)))
-    shell:
-        "mkdir -p /tmp/docker_save; docker save singlecellopenproblems/{wildcards.image} | gzip > /tmp/docker_save/{wildcards.image}.tar.gz"
 
 rule pull_docker_image:
     output:

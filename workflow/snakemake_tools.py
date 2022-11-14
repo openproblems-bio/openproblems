@@ -76,11 +76,6 @@ def pull_images(wildcards):
     return _images(".docker_pull")
 
 
-def save_images(wildcards):
-    """Get Docker save timestamp for all images."""
-    return _images(".docker_save")
-
-
 def refresh_images(wildcards):
     """Get Docker refresh timestamp for all images."""
     return _images(".docker_refresh")
