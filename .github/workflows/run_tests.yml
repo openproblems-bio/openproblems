@@ -205,7 +205,7 @@ jobs:
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
-          docker pull $GHCR_IMAGE
+          docker pull $GHCR_IMAGE &
         done
 
     - name: Set up environment
@@ -303,7 +303,7 @@ jobs:
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
-          docker pull $GHCR_IMAGE
+          docker pull $GHCR_IMAGE &
         done
 
     - name: Install system dependencies
@@ -499,7 +499,8 @@ jobs:
     - run_test_benchmark
     - run_tester
     runs-on: ubuntu-latest
-    if: "always()"
+    if: >-
+      always()
     strategy:
       matrix:
         image: ${{ fromJSON(needs.build_images.outputs.images) }}
@@ -514,6 +515,7 @@ jobs:
 
   run_full_benchmark:
     needs:
+    - build_images
     - run_test_benchmark
     - run_tester
     runs-on: ubuntu-latest
