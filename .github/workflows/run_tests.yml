@@ -184,7 +184,8 @@ jobs:
     - name: Load docker images
       run: |
         for image in $(ls -1 /tmp/docker_save); do
-          docker load /tmp/docker_save/$image
+          docker load --input /tmp/docker_save/$image
+          rm /tmp/docker_save/$image
         done
 
     - uses: actions/checkout@v3
@@ -280,7 +281,8 @@ jobs:
     - name: Load docker images
       run: |
         for image in $(ls -1 /tmp/docker_save); do
-          docker load /tmp/docker_save/$image
+          docker load --input /tmp/docker_save/$image
+          rm /tmp/docker_save/$image
         done
 
     - uses: actions/checkout@v3
