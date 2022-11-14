@@ -1,4 +1,5 @@
 import collections
+import copy
 import json
 import numpy as np
 import numpyencoder
@@ -154,9 +155,9 @@ def normalize_scores(task_name, dataset_results):
     """Normalize method scores to [0, 1] based on baseline method scores."""
     for method_name in dataset_results:
         # store original unnormalized results
-        dataset_results[method_name]["metrics_raw"] = dataset_results[method_name][
-            "metrics"
-        ]
+        dataset_results[method_name]["metrics_raw"] = copy.copy(
+            dataset_results[method_name]["metrics"]
+        )
     metric_names = list(dataset_results.values())[0]["metrics"].keys()
     for metric_name in metric_names:
         metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
@@ -194,6 +195,7 @@ def normalize_scores(task_name, dataset_results):
 
 def drop_baselines(task_name, dataset_results):
     """Remove baseline methods from dataset results."""
+    dataset_results = copy.copy(dataset_results)
     method_names = list(dataset_results.keys())
     for method_name in method_names:
         method = openproblems.api.utils.get_function(task_name, "methods", method_name)
