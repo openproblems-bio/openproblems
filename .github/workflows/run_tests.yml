@@ -43,6 +43,7 @@ jobs:
 
     outputs:
       images: ${{ steps.export-images.outputs.images }}
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
 
     steps:
     - uses: actions/checkout@v3
@@ -129,6 +130,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Export docker images
+      id: export-images
       run: |
         IMAGES="$(find ./docker -mindepth 1 -type d -exec basename {} \;)"
         for image in ${IMAGES}; do
@@ -139,6 +141,11 @@ jobs:
         wait
         # convert to JSON
         echo "images=[\"$(paste -s -d ' ' <(echo $IMAGES) | sed 's/  */\",\"/g')\"]" >> $GITHUB_OUTPUT
+
+    - name: Create test matrix
+      id: generate-matrix
+      run: |
+        echo "matrix=$(python scripts/generate_test_matrix.py)" >> $GITHUB_OUTPUT
 
   run_tester:
     runs-on: ubuntu-latest
@@ -175,26 +182,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        select_tests:
-          - "test_0_tasks"
-          - "test_1_ and batch_integration"
-          - "(test_2_load_data or test_3_datasets) and batch_integration"
-          - "test_1_ and cell_cell_communication"
-          - "(test_2_load_data or test_3_datasets) and cell_cell_communication"
-          - "test_1_ and denoising"
-          - "(test_2_load_data or test_3_datasets) and denoising"
-          - "test_1_ and dimensionality_reduction"
-          - "(test_2_load_data or test_3_datasets) and dimensionality_reduction"
-          - "test_1_ and label_projection"
-          - "(test_2_load_data or test_3_datasets) and label_projection"
-          - "test_1_ and multimodal_data_integration"
-          - "(test_2_load_data or test_3_datasets) and multimodal_data_integration"
-          - "test_1_ and regulatory_effect_prediction"
-          - "(test_2_load_data or test_3_datasets) and regulatory_effect_prediction"
-          - "test_1_ and spatial_decomposition"
-          - "(test_2_load_data or test_3_datasets) and spatial_decomposition"
-          - "test_4_"
-          - "test_5_"
+        image: ${{ fromJSON(needs.build_images.outputs.matrix) }}
 
     steps:
     - name: Clear space on runner
@@ -519,6 +507,7 @@ jobs:
     if: >-
       always()
     strategy:
+      fail-fast: false
       matrix:
         image: ${{ fromJSON(needs.build_images.outputs.images) }}
     steps:
