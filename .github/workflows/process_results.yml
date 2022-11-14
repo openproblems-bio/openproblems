@@ -71,6 +71,23 @@ jobs:
         python openproblems/workflow/parse_nextflow.py /tmp website/data/results
         python openproblems/workflow/generate_website_markdown.py website/content/benchmarks
 
+    - name: Upload results
+      uses: actions/upload-artifact@main
+      with:
+        name: results
+        path: website/data/results
+
+    - name: Upload markdown
+      uses: actions/upload-artifact@main
+      with:
+        name: markdown
+        path: website/content/benchmarks
+
+    - name: Remove raw output
+      if: "github.event_name == 'repository_dispatch'"
+      run: |
+        rm website/data/results/*/*.raw.json
+
     - name: AWS S3 cleanup
       if: "github.event_name == 'repository_dispatch'"
       env:
@@ -110,17 +127,3 @@ jobs:
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
         commit-message: "Update benchmark results # ci skip"
-
-    - name: Upload results on test
-      if: "github.event_name != 'repository_dispatch'"
-      uses: actions/upload-artifact@main
-      with:
-        name: results
-        path: website/data/results
-
-    - name: Upload markdown on test
-      if: "github.event_name != 'repository_dispatch'"
-      uses: actions/upload-artifact@main
-      with:
-        name: markdown
-        path: website/content/benchmarks
