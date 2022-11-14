@@ -216,7 +216,7 @@ jobs:
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
-          docker pull $GHCR_IMAGE &
+          (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
         done
         wait
 
@@ -316,7 +316,7 @@ jobs:
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
-          docker pull $GHCR_IMAGE &
+          (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
         done
         wait
 
