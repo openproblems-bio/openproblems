@@ -42,6 +42,9 @@ jobs:
     env:
       BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
 
+    outputs:
+      images: ${{ steps.export-images.outputs.images }}
+
     steps:
     - uses: actions/checkout@v3
       with:
@@ -105,17 +108,22 @@ jobs:
         commit-message: Update docker version # ci skip
         add-paths: docker/.version
 
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Export docker images
       run: |
-        mkdir -p /tmp/docker_save
-        docker save $(docker images -q "singlecellopenproblems/*") | gzip -9 > /tmp/docker_save/openproblems.tar.gz
-
-    - name: Upload docker images
-      uses: actions/upload-artifact@main
-      with:
-        name: docker_save
-        path: /tmp/docker_save
-        retention-days: 1
+        IMAGES="$(ls -1d docker/*/ | xargs basename)"
+        for image in "${IMAGES}"; do
+          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+          docker tag singlecellopenproblems/$image $GHCR_IMAGE
+          docker push $GHCR_IMAGE
+        done
+        echo ::set-output name=images::$(jq --compact-output --null-input '$ARGS.positional' --args -- "${IMAGES}")
 
   run_tester:
     runs-on: ubuntu-latest
@@ -180,16 +188,19 @@ jobs:
       run: |
         sudo rm -rf /opt/remove/*/*
 
-    - name: Download docker images
-      uses: actions/download-artifact@main
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
       with:
-        name: docker_save
-        path: /tmp/docker_save
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Load docker images
+    - name: Download docker images
       run: |
-        docker load <(gunzip /tmp/docker_save/openproblems.tar.gz)
-        rm /tmp/docker_save/openproblems.tar.gz
+        for image in $(ls -1d docker/*/ | xargs basename); do
+          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+          docker pull $GHCR_IMAGE
+        done
 
     - uses: actions/checkout@v3
       with:
@@ -275,16 +286,19 @@ jobs:
     - name: Clear space on runner
       run: ./scripts/clear_runner_diskspace.sh
 
-    - name: Download docker images
-      uses: actions/download-artifact@main
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
       with:
-        name: docker_save
-        path: /tmp/docker_save
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Load docker images
+    - name: Download docker images
       run: |
-        docker load <(gunzip /tmp/docker_save/openproblems.tar.gz)
-        rm /tmp/docker_save/openproblems.tar.gz
+        for image in $(ls -1d docker/*/ | xargs basename); do
+          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+          docker pull $GHCR_IMAGE
+        done
 
     - uses: actions/checkout@v3
       with:
@@ -484,10 +498,17 @@ jobs:
     - run_tester
     runs-on: ubuntu-latest
     if: "always()"
+    strategy:
+      matrix:
+        image: ${{ fromJSON(needs.build_images.outputs.images) }}
     steps:
-    - uses: geekyeggo/delete-artifact@v2
+    - name: Delete image
+      uses: bots-house/ghcr-delete-image-action@v1.0.0
       with:
-        name: docker_save
+        owner: ${{ github.repository_owner }}
+        name: ${{ matrix.image }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.run_id }}
 
   run_full_benchmark:
     needs:
