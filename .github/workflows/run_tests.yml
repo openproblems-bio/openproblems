@@ -31,7 +31,6 @@ jobs:
     runs-on: ubuntu-18.04
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
-      !startsWith(github.ref, 'refs/heads/test_benchmark') &&
       !startsWith(github.ref, 'refs/heads/test_process') &&
       (
         startsWith(github.ref, 'refs/heads') ||
@@ -163,8 +162,6 @@ jobs:
 
     needs: build_images
     if: |
-      always() &&
-      (needs.build_images.result == 'success' || needs.build_images.result == 'skipped') &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
         startsWith(github.ref, 'refs/heads') ||
