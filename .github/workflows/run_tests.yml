@@ -58,6 +58,13 @@ jobs:
       with:
         python-version: "3.8"
 
+    - name: Cache Python packages
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.pythonLocation }}
+        key: pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: pip-${{ env.pythonLocation }}-
+
     - name: Install package & dependencies
       run: |
         python -m pip install --upgrade pip
@@ -71,16 +78,16 @@ jobs:
           docker pull singlecellopenproblems/${image} &
         done
 
-    - name: Update Docker images
-      if: |
-        !(
-          startsWith(github.ref, 'refs/heads/test_docker') ||
-          startsWith(github.ref, 'refs/heads/main')
-        )
-      run: |
-        cd workflow
-        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker_pull
-        cd ..
+#    - name: Update Docker images
+#      if: |
+#        !(
+#          startsWith(github.ref, 'refs/heads/test_docker') ||
+#          startsWith(github.ref, 'refs/heads/main')
+#        )
+#      run: |
+#        cd workflow
+#        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
+#        cd ..
 
     - name: Build Docker images
       if: |
@@ -223,7 +230,7 @@ jobs:
     - name: Cache Python packages
       uses: actions/cache@v3
       with:
-        path: ${{ env.PYTHON_VERSION }}
+        path: ${{ env.pythonLocation }}
         key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
         restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
 
