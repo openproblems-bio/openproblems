@@ -108,7 +108,7 @@ jobs:
     - name: Export docker images
       run: |
         mkdir -p /tmp/docker_save
-        docker save $(docker images -q) | gzip > /tmp/docker_save/openproblems.tar.gz
+        docker save $(docker images -q | grep openproblems) | gzip -9 > /tmp/docker_save/openproblems.tar.gz
 
     - name: Upload docker images
       uses: actions/upload-artifact@main
