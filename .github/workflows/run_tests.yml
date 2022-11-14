@@ -202,7 +202,7 @@ jobs:
     steps:
     - name: Clear space on runner
       run: |
-        sudo rm -rf /opt/remove/*/*
+        sudo find /opt/remove -mindepth 2 -maxdepth 2 -type d -exec rm -rf {} \;
 
     - uses: actions/checkout@v3
       with:
