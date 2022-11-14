@@ -84,7 +84,9 @@ jobs:
         path: website/content/benchmarks
 
     - name: Remove raw output
-      if: "github.event_name == 'repository_dispatch'"
+      if: |
+        github.event_name == 'repository_dispatch' ||
+        endsWith(github.event.head_commit.message, '# publish')
       run: |
         rm website/data/results/*/*.raw.json
 
