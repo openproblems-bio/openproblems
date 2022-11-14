@@ -1,7 +1,7 @@
-__inherits__: ../../api/comp_censoring.yaml
+__inherits__: ../../api/comp_split.yaml
 functionality:
-  name: "censoring"
-  namespace: "label_projection/data_processing"
+  name: "split"
+  namespace: "label_projection"
   arguments:
     - name: "--method"
       type: "string"

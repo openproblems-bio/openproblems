@@ -1,5 +1,5 @@
 type: file
-description: "The censored test data"
+description: "The test data (without labels)"
 example: "test.h5ad"
 info:
   short_description: "Test data"

@@ -23,9 +23,9 @@
       id="toc-train.h5ad-training-data"><code>train.h5ad</code>: Training
       data</a>
   - <a href="#component-api" id="toc-component-api">Component API</a>
-    - <a href="#censoring" id="toc-censoring"><code>censoring</code></a>
     - <a href="#method" id="toc-method"><code>method</code></a>
     - <a href="#metric" id="toc-metric"><code>metric</code></a>
+    - <a href="#split" id="toc-split"><code>split</code></a>
 
 # Label Projection
 
@@ -96,19 +96,19 @@ flowchart LR
   anndata_solution(solution.h5ad)
   anndata_test(test.h5ad)
   anndata_train(train.h5ad)
-  comp_censoring[/censoring/]
   comp_method[/method/]
   comp_metric[/metric/]
-  anndata_dataset---comp_censoring
+  comp_split[/split/]
   anndata_train---comp_method
   anndata_test---comp_method
   anndata_solution---comp_metric
   anndata_prediction---comp_metric
-  comp_censoring-->anndata_train
-  comp_censoring-->anndata_test
-  comp_censoring-->anndata_solution
+  anndata_dataset---comp_split
   comp_method-->anndata_prediction
   comp_metric-->anndata_score
+  comp_split-->anndata_train
+  comp_split-->anndata_test
+  comp_split-->anndata_solution
 ```
 
 ## File format API
@@ -119,18 +119,18 @@ A preprocessed dataset
 
 Used in:
 
-- [censoring](#censoring): input (as input)
+- [split](#split): input (as input)
 
 Slots:
 
-| struct | name           | type    | description                                                         |
-|:-------|:---------------|:--------|:--------------------------------------------------------------------|
-| layers | counts         | integer | Raw counts                                                          |
-| layers | lognorm        | double  | Log-transformed normalised counts                                   |
-| obs    | label          | double  | Ground truth cell type labels                                       |
-| obs    | batch          | double  | Batch information                                                   |
-| uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
-| uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
+| struct | name              | type    | description                                      |
+|:-------|:------------------|:--------|:-------------------------------------------------|
+| layers | counts            | integer | Raw counts                                       |
+| layers | log_cpm           | double  | CPM normalized counts, log transformed           |
+| layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
+| obs    | label             | double  | Ground truth cell type labels                    |
+| obs    | batch             | double  | Batch information                                |
+| uns    | dataset_id        | string  | A unique identifier for the dataset              |
 
 ### `prediction.h5ad`: Prediction
 
@@ -143,12 +143,11 @@ Used in:
 
 Slots:
 
-| struct | name           | type   | description                                                         |
-|:-------|:---------------|:-------|:--------------------------------------------------------------------|
-| obs    | label_pred     | string | Predicted labels for the test cells.                                |
-| uns    | dataset_id     | string | A unique identifier for the dataset                                 |
-| uns    | raw_dataset_id | string | A unique identifier for the original dataset (before preprocessing) |
-| uns    | method_id      | string | A unique identifier for the method                                  |
+| struct | name       | type   | description                          |
+|:-------|:-----------|:-------|:-------------------------------------|
+| obs    | label_pred | string | Predicted labels for the test cells. |
+| uns    | dataset_id | string | A unique identifier for the dataset  |
+| uns    | method_id  | string | A unique identifier for the method   |
 
 ### `score.h5ad`: Score
 
@@ -160,13 +159,12 @@ Used in:
 
 Slots:
 
-| struct | name           | type   | description                                                                                  |
-|:-------|:---------------|:-------|:---------------------------------------------------------------------------------------------|
-| uns    | dataset_id     | string | A unique identifier for the dataset                                                          |
-| uns    | raw_dataset_id | string | A unique identifier for the original dataset (before preprocessing)                          |
-| uns    | method_id      | string | A unique identifier for the method                                                           |
-| uns    | metric_ids     | string | One or more unique metric identifiers                                                        |
-| uns    | metric_values  | double | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
+| struct | name          | type   | description                                                                                  |
+|:-------|:--------------|:-------|:---------------------------------------------------------------------------------------------|
+| uns    | dataset_id    | string | A unique identifier for the dataset                                                          |
+| uns    | method_id     | string | A unique identifier for the method                                                           |
+| uns    | metric_ids    | string | One or more unique metric identifiers                                                        |
+| uns    | metric_values | double | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
 
 ### `solution.h5ad`: Solution
 
@@ -174,38 +172,38 @@ The solution for the test data
 
 Used in:
 
-- [censoring](#censoring): output_solution (as output)
 - [metric](#metric): input_solution (as input)
+- [split](#split): output_solution (as output)
 
 Slots:
 
-| struct | name           | type    | description                                                         |
-|:-------|:---------------|:--------|:--------------------------------------------------------------------|
-| layers | counts         | integer | Raw counts                                                          |
-| layers | lognorm        | double  | Log-transformed normalised counts                                   |
-| obs    | label          | string  | Ground truth cell type labels                                       |
-| obs    | batch          | string  | Batch information                                                   |
-| uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
-| uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
+| struct | name              | type    | description                                      |
+|:-------|:------------------|:--------|:-------------------------------------------------|
+| layers | counts            | integer | Raw counts                                       |
+| layers | log_cpm           | double  | CPM normalized counts, log transformed           |
+| layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
+| obs    | label             | string  | Ground truth cell type labels                    |
+| obs    | batch             | string  | Batch information                                |
+| uns    | dataset_id        | string  | A unique identifier for the dataset              |
 
 ### `test.h5ad`: Test data
 
-The censored test data
+The test data (without labels)
 
 Used in:
 
-- [censoring](#censoring): output_test (as output)
 - [method](#method): input_test (as input)
+- [split](#split): output_test (as output)
 
 Slots:
 
-| struct | name           | type    | description                                                         |
-|:-------|:---------------|:--------|:--------------------------------------------------------------------|
-| layers | counts         | integer | Raw counts                                                          |
-| layers | lognorm        | double  | Log-transformed normalised counts                                   |
-| obs    | batch          | string  | Batch information                                                   |
-| uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
-| uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
+| struct | name              | type    | description                                      |
+|:-------|:------------------|:--------|:-------------------------------------------------|
+| layers | counts            | integer | Raw counts                                       |
+| layers | log_cpm           | double  | CPM normalized counts, log transformed           |
+| layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
+| obs    | batch             | string  | Batch information                                |
+| uns    | dataset_id        | string  | A unique identifier for the dataset              |
 
 ### `train.h5ad`: Training data
 
@@ -213,32 +211,21 @@ The training data
 
 Used in:
 
-- [censoring](#censoring): output_train (as output)
 - [method](#method): input_train (as input)
+- [split](#split): output_train (as output)
 
 Slots:
 
-| struct | name           | type    | description                                                         |
-|:-------|:---------------|:--------|:--------------------------------------------------------------------|
-| layers | counts         | integer | Raw counts                                                          |
-| layers | lognorm        | double  | Log-transformed normalised counts                                   |
-| obs    | label          | string  | Ground truth cell type labels                                       |
-| obs    | batch          | string  | Batch information                                                   |
-| uns    | dataset_id     | string  | A unique identifier for the dataset                                 |
-| uns    | raw_dataset_id | string  | A unique identifier for the original dataset (before preprocessing) |
+| struct | name              | type    | description                                      |
+|:-------|:------------------|:--------|:-------------------------------------------------|
+| layers | counts            | integer | Raw counts                                       |
+| layers | log_cpm           | double  | CPM normalized counts, log transformed           |
+| layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
+| obs    | label             | string  | Ground truth cell type labels                    |
+| obs    | batch             | string  | Batch information                                |
+| uns    | dataset_id        | string  | A unique identifier for the dataset              |
 
 ## Component API
-
-### `censoring`
-
-Arguments:
-
-| Name                | File format   | Direction | Description          |
-|:--------------------|:--------------|:----------|:---------------------|
-| `--input`           | dataset.h5ad  | input     | Preprocessed dataset |
-| `--output_train`    | train.h5ad    | output    | Training data        |
-| `--output_test`     | test.h5ad     | output    | Test data            |
-| `--output_solution` | solution.h5ad | output    | Solution             |
 
 ### `method`
 
@@ -259,3 +246,14 @@ Arguments:
 | `--input_solution`   | solution.h5ad   | input     | Solution    |
 | `--input_prediction` | prediction.h5ad | input     | Prediction  |
 | `--output`           | score.h5ad      | output    | Score       |
+
+### `split`
+
+Arguments:
+
+| Name                | File format   | Direction | Description          |
+|:--------------------|:--------------|:----------|:---------------------|
+| `--input`           | dataset.h5ad  | input     | Preprocessed dataset |
+| `--output_train`    | train.h5ad    | output    | Training data        |
+| `--output_test`     | test.h5ad     | output    | Test data            |
+| `--output_solution` | solution.h5ad | output    | Solution             |

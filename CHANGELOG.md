@@ -22,9 +22,9 @@
 
 ### NEW FUNCTIONALITY
 
-* API: Created an explicit api definition for the censor, method and metric components.
+* API: Created an explicit api definition for the split, method and metric components.
 
-* `data_processing/censoring`: Added a censoring component.
+* `data_processing/split`: Added a component for splitting raw datasets into task-ready dataset objects.
 
 * `resources_test/label_projection/pancreas` with `src/label_projection/resources_test_scripts/pancreas.sh`.
 

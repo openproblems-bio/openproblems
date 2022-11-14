@@ -14,7 +14,7 @@ par = {
     'output_solution': 'solution.h5ad'
 }
 meta = {
-    'resources_dir': 'src/label_projection/data_processing/censoring'
+    'resources_dir': 'src/label_projection/split'
 }
 ## VIASH END
 

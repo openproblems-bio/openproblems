@@ -19,8 +19,8 @@ fi
 
 mkdir -p $DATASET_DIR
 
-# censor dataset
-bin/viash run src/label_projection/data_processing/censoring/config.vsh.yaml -- \
+# split dataset
+bin/viash run src/label_projection/split/config.vsh.yaml -- \
     --input $RAW_DATA \
     --output_train $DATASET_DIR/train.h5ad \
     --output_test $DATASET_DIR/test.h5ad \
