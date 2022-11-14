@@ -514,6 +514,7 @@ jobs:
 
   delete_docker_artifact:
     needs:
+    - build_images
     - run_test_benchmark
     - run_tester
     runs-on: ubuntu-latest
