@@ -122,7 +122,7 @@ jobs:
         for image in ${IMAGES}; do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           docker tag singlecellopenproblems/$image $GHCR_IMAGE
-          docker push $GHCR_IMAGE
+          docker push $GHCR_IMAGE &
         done
         # convert to JSON
         echo "images=[\"$(paste -s -d ' ' <(echo $IMAGES) | sed 's/  */\",\"/g')\"]" >> $GITHUB_OUTPUT
@@ -433,7 +433,7 @@ jobs:
           docker login --username AWS --password-stdin $ECR_ENDPOINT
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image} &
         done
 
     - name: Upload Docker images for full benchmark
@@ -448,7 +448,7 @@ jobs:
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:prod-${image}
-          docker push --quiet ${ECR_ENDPOINT}/openproblems:prod-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:prod-${image} &
         done
 
     - name: Run test benchmark
