@@ -158,7 +158,7 @@ def normalize_scores(task_name, dataset_results):
         dataset_results[method_name]["metrics_raw"] = copy.copy(
             dataset_results[method_name]["metrics"]
         )
-    metric_names = list(dataset_results.values())[0]["metrics"].keys()
+    metric_names = list(list(dataset_results.values())[0]["metrics"].keys())
     for metric_name in metric_names:
         metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
         metric_scores = np.array(
