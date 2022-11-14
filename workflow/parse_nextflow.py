@@ -167,6 +167,10 @@ def normalize_scores(task_name, dataset_results):
                 for method_name in dataset_results
             ]
         )
+        if np.all(np.isnan(metric_scores)):
+            for method_name in dataset_results:
+                del dataset_results[method_name]["metrics"][metric_name]
+            continue
         baseline_methods = [
             method_name
             for method_name in dataset_results
