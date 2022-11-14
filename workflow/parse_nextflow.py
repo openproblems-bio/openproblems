@@ -239,7 +239,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
         name=dataset.metadata["dataset_name"],
         data_url=dataset.metadata["data_url"],
         data_reference=dataset.metadata["data_reference"],
-        headers=dict(names=["Rank"], fixed=["Name", "Paper", "Library", "Code"]),
+        headers=dict(names=["Rank"], fixed=["Name", "Paper", "Library"]),
         results=list(),
     )
     dataset_results_raw = normalize_scores(task_name, dataset_results_raw)
@@ -255,7 +255,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
             "Paper URL": method.metadata["paper_url"],
             "Year": method.metadata["paper_year"],
             "Library": method.metadata["code_url"],
-            "Code": "https://github.com/openproblems-bio/openproblems/"
+            "Implementation": "https://github.com/openproblems-bio/openproblems/"
             f"blob/main/{method.__module__.replace('.', '/')}.py",
             "Version": method_results["code_version"],
             "Runtime (min)": parse_time_to_min(method_results["realtime"]),
@@ -286,7 +286,6 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
             "Paper",
             "Year",
             "Library",
-            "Code",
         ]
     )
     return output, dataset_results_raw
