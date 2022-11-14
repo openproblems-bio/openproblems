@@ -117,7 +117,7 @@ jobs:
 
     - name: Export docker images
       run: |
-        IMAGES="$(ls -1d docker/*/ | xargs basename)"
+        IMAGES="$(find ./docker -mindepth 1 -type d -exec basename {} \;)"
         for image in "${IMAGES}"; do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           docker tag singlecellopenproblems/$image $GHCR_IMAGE
@@ -197,7 +197,7 @@ jobs:
 
     - name: Download docker images
       run: |
-        for image in $(ls -1d docker/*/ | xargs basename); do
+        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           docker pull $GHCR_IMAGE
         done
@@ -295,7 +295,7 @@ jobs:
 
     - name: Download docker images
       run: |
-        for image in $(ls -1d docker/*/ | xargs basename); do
+        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           docker pull $GHCR_IMAGE
         done
