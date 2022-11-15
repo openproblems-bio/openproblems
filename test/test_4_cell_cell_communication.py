@@ -26,14 +26,14 @@ pytestmark = pytest.mark.skipif(
 class TestApi(unittest.TestCase):
     def test_assert_is_subset(self):
         assert (
-            common.api.assert_is_subset(["a"], ["a", "b", "c"], prop_missing_allowed=0)
-            is None
+                common.api.assert_is_subset(["a"], ["a", "b", "c"], prop_missing_allowed=0)
+                is None
         )
         assert (
-            common.api.assert_is_subset(
-                ["a", "b", "c", "d"], ["a", "b", "c"], prop_missing_allowed=0.25
-            )
-            is None
+                common.api.assert_is_subset(
+                    ["a", "b", "c", "d"], ["a", "b", "c"], prop_missing_allowed=0.25
+                )
+                is None
         )
         self.assertRaisesRegex(
             AssertionError,
@@ -124,13 +124,17 @@ def test_odds_ratio_no_match():
 
     adata = task.api.sample_dataset()
 
+    # check expected output
     adata = task.api.sample_method(adata)
-    m = metric(adata, top_prop=0)  # force numerator exception
-    assert m is np.nan
-
-    m = metric(adata, top_prop=0.5)  # check non-exception output
+    m = metric(adata)
     assert np.issubdtype("float64", m)
+    assert m == 0.625
 
+    # force perfect score
     adata = task.methods.true_events(adata)
-    m = metric(adata, top_prop=0.9)  # force denominator exception
+    m = metric(adata)
     assert m is np.inf
+
+    # force exception
+    m = metric(adata)
+    assert m is np.nan
