@@ -1,0 +1,24 @@
+type: file
+description: "Metric score file"
+example: "score.h5ad"
+info:
+  short_description: "Score"
+  slots:
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"
+      - type: string
+        name: param_set_id
+        description: "A unique identifier for the parameter set"
+      - type: string
+        name: metric_ids
+        description: "One or more unique metric identifiers"
+        multiple: true
+      - type: double
+        name: metric_values
+        description: "The metric values obtained for the given prediction. Must be of same length as 'metric_ids'."
+        multiple: true

@@ -1,0 +1,25 @@
+type: file
+description: "A dimensionality reduced dataset"
+example: "reduced.h5ad"
+info:
+  short_description: "2D reduced"
+  slots:
+    layers:
+      - type: integer
+        name: counts
+        description: Raw counts
+    obsm:
+      - type: double
+        name: dim_red
+        description: dimensionally-reduced 2D embedding coordinates
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"
+      - type: string
+        name: param_set_id
+        description: "A unique identifier for the parameter set"
+
