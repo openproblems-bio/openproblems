@@ -182,7 +182,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ${{ fromJSON(needs.build_images.outputs.matrix) }}
+        tests: ${{ fromJSON(needs.build_images.outputs.matrix) }}
 
     steps:
     - name: Clear space on runner
@@ -248,7 +248,7 @@ jobs:
       shell: Rscript {0}
 
     - name: Run tests
-      run: pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native -k ${{ matrix.select_tests }}
+      run: pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native -k ${{ matrix.tests }}
 
     - name: Upload coverage
       uses: codecov/codecov-action@v3
