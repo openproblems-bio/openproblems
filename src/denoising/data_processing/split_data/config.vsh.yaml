@@ -9,7 +9,7 @@ functionality:
       choices: ["mcv"]
       default: "mcv"
     - name: "--train_frac"
-      type: "float"
+      type: "double"
       description: "The fraction the molecules need to be split to train dataset"
       default: 0.9
     - name: "--seed"
@@ -28,5 +28,6 @@ platforms:
           - "anndata<0.8"
           - numpy
           - scipy
-          - molecular_cross_validation #TODO: custom github package -> how to add?
+        github:
+          - czbiohub/molecular-cross-validation
   - type: nextflow
