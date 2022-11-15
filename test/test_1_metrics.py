@@ -1,6 +1,6 @@
 import openproblems
 import parameterized
-import utils.git
+import utils.docker
 import utils.name
 
 
@@ -26,7 +26,7 @@ def test_metric_metadata(metric):
             metric.__name__,
             metric.metadata["image"],
         )
-        for task in utils.git.list_modified_tasks()
+        for task in openproblems.TASKS
         for metric in task.METRICS
     ],
     name_func=utils.name.name_test,
