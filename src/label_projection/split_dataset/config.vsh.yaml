@@ -1,6 +1,6 @@
-__inherits__: ../api/comp_split.yaml
+__inherits__: ../api/comp_split_dataset.yaml
 functionality:
-  name: "split"
+  name: "split_dataset"
   namespace: "label_projection"
   arguments:
     - name: "--method"
@@ -30,5 +30,5 @@ platforms:
       - type: python
         packages:
           - scanpy
-          - "anndata<0.8"
+          - "anndata>=0.8"
   - type: nextflow

@@ -2,17 +2,8 @@ nextflow.enable.dsl=2
 
 targetDir = "${params.rootDir}/target/nextflow"
 
-// // import dataset loaders
-// include { download } from "$targetDir/common/dataset_loader/download/main.nf"
 
-// // import preprocess
-// include { randomize } from "$targetDir/label_projection/data_processing/randomize/main.nf"
-// // for tests
-// include { subsample } from "$targetDir/label_projection/data_processing/subsample/main.nf"
-
-// // import normalization
-// include { log_scran_pooling } from "$targetDir/label_projection/data_processing/normalize/scran/log_scran_pooling/main.nf"
-// include { log_cpm } from "$targetDir/label_projection/data_processing/normalize/log_cpm/main.nf"
+// include { split_dataset } from "$targetDir/label_projection/split_dataset/main.nf"
 
 // import methods
 include { all_correct } from "$targetDir/label_projection/control_methods/all_correct/main.nf"
@@ -31,7 +22,7 @@ include { accuracy } from "$targetDir/label_projection/metrics/accuracy/main.nf"
 include { f1 } from "$targetDir/label_projection/metrics/f1/main.nf"
 
 // import helper functions
-include { extract_scores }       from "$targetDir/common/extract_scores/main.nf"
+include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
 
 
 /*******************************************************
