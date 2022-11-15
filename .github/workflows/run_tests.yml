@@ -79,16 +79,16 @@ jobs:
         done
         wait
 
-#    - name: Update Docker images
-#      if: |
-#        !(
-#          startsWith(github.ref, 'refs/heads/test_docker') ||
-#          startsWith(github.ref, 'refs/heads/main')
-#        )
-#      run: |
-#        cd workflow
-#        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
-#        cd ..
+    - name: Update Docker images
+      if: |
+        !(
+          startsWith(github.ref, 'refs/heads/test_docker') ||
+          startsWith(github.ref, 'refs/heads/main')
+        )
+      run: |
+        cd workflow
+        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
+        cd ..
 
     - name: Build Docker images
       if: |
@@ -286,12 +286,12 @@ jobs:
           exit 1
         fi
 
-    - name: Clear space on runner
-      run: ./scripts/clear_runner_diskspace.sh
-
     - uses: actions/checkout@v3
       with:
         fetch-depth: 1000
+
+    - name: Clear space on runner
+      run: ./scripts/clear_runner_diskspace.sh
 
     - name: Log in to the Container registry
       uses: docker/login-action@v2
@@ -497,31 +497,6 @@ jobs:
       with:
         name: nextflow.log
         path: /tmp/nextflow.log
-
-  delete_docker_artifact:
-    needs:
-    - build_images
-    - run_test_benchmark
-    - run_tester
-    runs-on: ubuntu-latest
-    if: >-
-      always()
-    strategy:
-      fail-fast: false
-      matrix:
-        account_type:
-          - org
-          - personal
-    steps:
-    - name: Delete image
-      uses: snok/container-retention-policy@v1
-      with:
-        image-names: openproblems*
-        account-type: ${{ matrix.account_type }}
-        org-name: ${{ github.repository_owner }}
-        filter-tags: ${{ github.run_id }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-      continue-on-error: true
 
   run_full_benchmark:
     needs:
