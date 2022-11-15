@@ -509,15 +509,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ${{ fromJSON(needs.build_images.outputs.images) }}
+        account_type:
+          - org
+          - personal
     steps:
     - name: Delete image
-      uses: bots-house/ghcr-delete-image-action@v1.0.0
+      uses: snok/container-retention-policy@v1
       with:
-        owner: ${{ github.repository_owner }}
-        name: ${{ matrix.image }}
+        image-names: openproblems*
+        account-type: ${{ matrix.account_type }}
+        org-name: ${{ github.repository_owner }}
+        filter-tags: ${{ github.run_id }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ github.run_id }}
+      continue-on-error: true
 
   run_full_benchmark:
     needs:
