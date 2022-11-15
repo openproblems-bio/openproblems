@@ -198,7 +198,7 @@ def check_method(adata, merge_keys, is_baseline=False):
 def sample_dataset(merge_keys):
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()
-    rng = np.random.default_rng(seed=123)
+    rng = np.random.default_rng(seed=1234)
 
     adata.uns["merge_keys"] = merge_keys
 
@@ -222,10 +222,12 @@ def sample_dataset(merge_keys):
         }
     )
     # drop duplicates
-    adata.uns["ccc_target"] = adata.uns["ccc_target"].\
-        sort_values(merge_keys, kind='stable').\
-        reset_index().\
-        drop_duplicates(subset=merge_keys, keep='first')
+    adata.uns["ccc_target"] = adata.uns["ccc_target"]. \
+        sort_values(merge_keys). \
+        reset_index(). \
+        drop_duplicates(subset=merge_keys, keep='first'). \
+        reset_index()
+
     n_rows = adata.uns["ccc_target"].shape[0]
     adata.uns["ccc_target"]["response"] = rng.binomial(1, 0.5, n_rows)
 
@@ -265,7 +267,7 @@ def sample_dataset(merge_keys):
 def sample_method(adata, merge_keys):
     """Create sample method output for testing metrics in this task."""
     row_num = 500
-    rng = np.random.default_rng(seed=123)
+    rng = np.random.default_rng(seed=1234)
 
     ligand_msk = ~adata.uns["ligand_receptor_resource"]["ligand_genesymbol"].isin(
         adata.var.index
@@ -286,12 +288,13 @@ def sample_method(adata, merge_keys):
     df["receptor"] = rng.choice(
         np.unique(resource["receptor_genesymbol"].values), row_num
     )
-    # subset columns
-    df = df[["score"] + merge_keys]
 
     # remove duplicates
-    df = df.sort_values(merge_keys).\
+    df = df.sort_values(merge_keys + ["score"]). \
         drop_duplicates(subset=merge_keys, keep='first')
+
+    # subset columns
+    df = df[["score"] + merge_keys]
 
     adata.uns["ccc_pred"] = df
 

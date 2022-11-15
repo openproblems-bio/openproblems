@@ -128,7 +128,7 @@ def test_odds_ratio_no_match():
     adata = task.api.sample_method(adata)
     m = metric(adata)
     assert np.issubdtype("float64", m)
-    assert m == 0.625
+    assert m == 8.75
 
     # force perfect score
     adata = task.methods.true_events(adata)
@@ -136,5 +136,6 @@ def test_odds_ratio_no_match():
     assert m is np.inf
 
     # force exception
+    adata.uns['ccc_target']['response'] = 0
     m = metric(adata)
     assert m is np.nan
