@@ -9,6 +9,3 @@ functionality:
     - name: Robrecht Cannoodt
       roles: [ author ]
       props: { github: rcannood, orcid: "0000-0003-3641-729X" }
-    - name: "Vinicius Chagas"
-      roles: [ contributor ]
-      props: { github: chagasVinicius }
