@@ -17,22 +17,23 @@ install_requires = [
     "colorama==0.4.*",
     "packaging==21.3",
     "umap-learn==0.5.*",
+    "requests==2.28.*",
 ]
 
 r_requires = [
-    "rpy2<3.5.5",
+    "rpy2<3.5.6",
     "anndata2ri==1.1.*",
 ]
 
-evaluate_requires = ["snakemake>=7.8,<7.15"]
+evaluate_requires = ["snakemake>=7.8,<7.17", "tabulate<0.9"]
 
 process_requires = ["numpyencoder==0.3.*"]
 
 test_requires = [
     "pytest==7.1.*",
     "pytest-cov>=3.0,<4.1",
-    "black==22.8.0",
-    "coverage==6.4.*",
+    "black==22.10.0",
+    "coverage>=6.4,<6.6",
     "codecov==2.1.*",
     "parameterized==0.8.*",
     "requests==2.28.*",

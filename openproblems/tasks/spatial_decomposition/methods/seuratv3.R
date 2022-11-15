@@ -3,9 +3,13 @@
 #' @param sce_sp SingleCellExperiment spatial data
 #' @param n_pcs int Number of principal components
 
+options(error = rlang::entrace)
+
 library(Seurat)
 library(future)
 
+# 8GB max size up from default of 500MB
+options(future.globals.maxSize = 8 * 1024^3)
 plan(multicore, workers = availableCores())
 
 args <- readRDS("/tmp/openproblems_seurat_args.rds")

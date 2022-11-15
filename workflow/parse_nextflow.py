@@ -1,4 +1,5 @@
 import collections
+import copy
 import json
 import numpy as np
 import numpyencoder
@@ -150,43 +151,100 @@ def parse_method_versions(results_path, results):
     return results
 
 
-def compute_ranking(task_name, dataset_results):
-    """Rank all methods on a specific dataset."""
-    rankings = np.zeros(len(dataset_results))
-    metric_names = list(dataset_results.values())[0]["metrics"].keys()
+def normalize_scores(task_name, dataset_results):
+    """Normalize method scores to [0, 1] based on baseline method scores."""
+    for method_name in dataset_results:
+        # store original unnormalized results
+        dataset_results[method_name]["metrics_raw"] = copy.copy(
+            dataset_results[method_name]["metrics"]
+        )
+    metric_names = list(list(dataset_results.values())[0]["metrics"].keys())
     for metric_name in metric_names:
         metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
-        sorted_order = np.argsort(
+        metric_scores = np.array(
             [
                 dataset_results[method_name]["metrics"][metric_name]
                 for method_name in dataset_results
             ]
         )
-        if metric.metadata["maximize"]:
-            sorted_order = sorted_order[::-1]
-        rankings += np.argsort(sorted_order)
+        if np.all(np.isnan(metric_scores)):
+            for method_name in dataset_results:
+                del dataset_results[method_name]["metrics"][metric_name]
+            continue
+        baseline_methods = [
+            method_name
+            for method_name in dataset_results
+            if openproblems.api.utils.get_function(
+                task_name, "methods", method_name
+            ).metadata["is_baseline"]
+        ]
+        if len(baseline_methods) < 2:
+            # just use all methods as a fallback
+            baseline_methods = dataset_results.keys()
+        baseline_scores = np.array(
+            [
+                dataset_results[method_name]["metrics"][metric_name]
+                for method_name in baseline_methods
+            ]
+        )
+        baseline_min = np.nanmin(baseline_scores)
+        baseline_range = np.nanmax(baseline_scores) - baseline_min
+        metric_scores -= baseline_min
+        metric_scores /= np.where(baseline_range != 0, baseline_range, 1)
+        if not metric.metadata["maximize"]:
+            metric_scores = 1 - metric_scores
+        for method_name, score in zip(dataset_results, metric_scores):
+            dataset_results[method_name]["metrics"][metric_name] = score
+    return dataset_results
 
+
+def drop_baselines(task_name, dataset_results):
+    """Remove baseline methods from dataset results."""
+    dataset_results = copy.copy(dataset_results)
     method_names = list(dataset_results.keys())
+    for method_name in method_names:
+        method = openproblems.api.utils.get_function(task_name, "methods", method_name)
+        if method.metadata["is_baseline"]:
+            del dataset_results[method_name]
+    return dataset_results
+
+
+def compute_ranking(dataset_results):
+    """Rank all methods on a specific dataset."""
+    metric_sums = np.zeros(len(dataset_results))
+    metric_names = list(dataset_results.values())[0]["metrics"].keys()
+    method_names = list(dataset_results.keys())
+    for metric_name in metric_names:
+        metric_scores = np.array(
+            [
+                dataset_results[method_name]["metrics"][metric_name]
+                for method_name in method_names
+            ]
+        )
+        metric_scores[np.isnan(metric_scores) | np.isneginf(metric_scores)] = 0
+        metric_scores[np.isinf(metric_scores)] = 1
+        metric_sums += metric_scores
+
     final_ranking = {
         method_names[method_idx]: rank + 1
-        for method_idx, rank in zip(
-            np.argsort(rankings), np.arange(len(dataset_results))
-        )
+        for rank, method_idx in enumerate(np.argsort(metric_sums)[::-1])
     }
     return final_ranking
 
 
-def dataset_results_to_json(task_name, dataset_name, dataset_results):
+def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
     """Convert the raw dataset results to pretty JSON for web."""
     dataset = openproblems.api.utils.get_function(task_name, "datasets", dataset_name)
     output = dict(
         name=dataset.metadata["dataset_name"],
         data_url=dataset.metadata["data_url"],
         data_reference=dataset.metadata["data_reference"],
-        headers=dict(names=["Rank"], fixed=["Name", "Paper", "Website", "Code"]),
+        headers=dict(names=["Rank"], fixed=["Name", "Paper", "Library"]),
         results=list(),
     )
-    ranking = compute_ranking(task_name, dataset_results)
+    dataset_results_raw = normalize_scores(task_name, dataset_results_raw)
+    dataset_results = drop_baselines(task_name, dataset_results_raw)
+    ranking = compute_ranking(dataset_results)
     metric_names = set()
     for method_name, rank in ranking.items():
         method_results = dataset_results[method_name]
@@ -198,7 +256,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             "Year": method.metadata["paper_year"],
             "Library": method.metadata["code_url"],
             "Implementation": "https://github.com/openproblems-bio/openproblems/"
-            f"blob/main/{method.__module__.replace('.', '/')}",
+            f"blob/main/{method.__module__.replace('.', '/')}.py",
             "Version": method_results["code_version"],
             "Runtime (min)": parse_time_to_min(method_results["realtime"]),
             "CPU (%)": float(method_results["%cpu"].replace("%", "")),
@@ -209,6 +267,12 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             metric = openproblems.api.utils.get_function(
                 task_name, "metrics", metric_name
             )
+            if np.isnan(metric_result):
+                metric_result = "NaN"
+            elif np.isneginf(metric_result):
+                metric_result = "-Inf"
+            elif np.isinf(metric_result):
+                metric_result = "Inf"
             result[metric.metadata["metric_name"]] = metric_result
             metric_names.add(metric.metadata["metric_name"])
         output["results"].append(result)
@@ -220,11 +284,11 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
             "CPU (%)",
             "Name",
             "Paper",
-            "Code",
             "Year",
+            "Library",
         ]
     )
-    return output
+    return output, dataset_results_raw
 
 
 def results_to_json(results, outdir):
@@ -232,27 +296,32 @@ def results_to_json(results, outdir):
     if not os.path.isdir(outdir):
         os.mkdir(outdir)
     for task_name, task_results in results.items():
-        if workflow_utils.task_is_incomplete(
-            openproblems.api.utils.str_to_task(task_name)
-        ):
-            # don't write results for incomplete tasks
-            continue
         for dataset_name, dataset_results in task_results.items():
             results_dir = os.path.join(outdir, task_name)
             if not os.path.isdir(results_dir):
                 os.mkdir(results_dir)
             filename = os.path.join(results_dir, "{}.json".format(dataset_name))
+            filename_raw = os.path.join(results_dir, "{}.raw.json".format(dataset_name))
             try:
-                dataset_results_json = dataset_results_to_json(
+                dataset_results_json, dataset_results_raw = dataset_results_to_json(
                     task_name, dataset_name, dataset_results
                 )
             except openproblems.api.utils.NoSuchFunctionError:
                 continue
-            with open(filename, "w") as handle:
+            with open(filename_raw, "w") as handle:
                 dump_json(
-                    dataset_results_json,
+                    dataset_results_raw,
                     handle,
                 )
+            if not workflow_utils.task_is_incomplete(
+                openproblems.api.utils.str_to_task(task_name)
+            ):
+                # don't write results for incomplete tasks
+                with open(filename, "w") as handle:
+                    dump_json(
+                        dataset_results_json,
+                        handle,
+                    )
 
 
 def main(results_path, outdir):
