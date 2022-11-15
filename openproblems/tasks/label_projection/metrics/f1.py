@@ -1,10 +1,10 @@
 from ....tools.decorators import metric
 
-import sklearn.metrics
-import sklearn.preprocessing
-
 
 def _f1(adata, average="weighted"):
+    import sklearn.metrics
+    import sklearn.preprocessing
+
     encoder = sklearn.preprocessing.LabelEncoder().fit(adata.obs["labels"])
     test_data = adata[~adata.obs["is_train"]]
 

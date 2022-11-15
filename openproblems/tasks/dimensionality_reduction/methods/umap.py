@@ -2,8 +2,6 @@ from ....tools.decorators import method
 from ....tools.normalize import log_cpm_hvg
 from ....tools.utils import check_version
 
-import scanpy as sc
-
 
 @method(
     method_name="Uniform Manifold Approximation and Projection (UMAP), "
@@ -15,6 +13,8 @@ import scanpy as sc
     code_url="https://github.com/lmcinnes/umap",
 )
 def umap_logCPM_1kHVG(adata, test: bool = False, n_pca=50):
+    import scanpy as sc
+
     adata = log_cpm_hvg(adata)
     sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
     sc.pp.neighbors(adata, use_rep="X_pca", n_pcs=n_pca)

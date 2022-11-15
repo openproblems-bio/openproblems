@@ -3,7 +3,6 @@ from ....tools.normalize import log_cpm_hvg
 from ....tools.utils import check_version
 
 import functools
-import scanpy as sc
 
 _densmap_method = functools.partial(
     method,
@@ -36,6 +35,8 @@ def densmap_logCPM_1kHVG(adata, test: bool = False):
 
 @_densmap_method(method_name="densMAP PCA (logCPM, 1kHVG)")
 def densmap_pca_logCPM_1kHVG(adata, test: bool = False):
+    import scanpy as sc
+
     adata = log_cpm_hvg(adata)
     sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
     return _densmap(adata, obsm="X_pca")
