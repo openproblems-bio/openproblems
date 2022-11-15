@@ -52,9 +52,15 @@ output_train.layers["counts"] = scipy.sparse.csr_matrix(X_train).astype(float)
 output_test = adata
 output_test.layers["counts"] = scipy.sparse.csr_matrix(X_test).astype(float)
 
+# TODO: remove cells which have not enough reads
+#   * first, remove genes with 0 expression
+#   * then, remove cells with 1 count or less
+
 # TODO: remove zero entries -> uncertain how this is done. below code gives error that matrix size is different
 # is_missing = output_train.layers["counts"].sum(axis=0) == 0
 # output_train.layers["counts"], output_test.layers["counts"] = output_train.layers["counts"][:, ~is_missing], output_test.layers["counts"][:, ~is_missing]
+
+# TODO: Remove other normalisation methods so that they can be recomputed later
 
 print(">> Writing")
 
