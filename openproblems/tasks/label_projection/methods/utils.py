@@ -1,8 +1,6 @@
-import scipy.sparse
-import sklearn.decomposition
-
-
 def pca_op(adata_train, adata_test, n_components=100):
+    import scipy.sparse
+    import sklearn.decomposition
 
     is_sparse = scipy.sparse.issparse(adata_train.X)
 

@@ -2,7 +2,6 @@ from . import decorators
 
 import anndata as ad
 import logging
-import scanpy as sc
 import scprep
 
 log = logging.getLogger("openproblems")
@@ -31,6 +30,8 @@ _scran = scprep.run.RFunction(
 @decorators.normalizer
 def log_scran_pooling(adata: ad.AnnData) -> ad.AnnData:
     """Normalize data with scran via rpy2."""
+    import scanpy as sc
+
     scprep.run.install_bioconductor("scran")
     adata.obs["size_factors"] = _scran(adata)
     adata.X = scprep.utils.matrix_vector_elementwise_multiply(
@@ -41,6 +42,8 @@ def log_scran_pooling(adata: ad.AnnData) -> ad.AnnData:
 
 
 def _cpm(adata: ad.AnnData):
+    import scanpy as sc
+
     adata.layers["counts"] = adata.X.copy()
     sc.pp.normalize_total(adata, target_sum=1e6, key_added="size_factors")
 
@@ -55,6 +58,8 @@ def cpm(adata: ad.AnnData) -> ad.AnnData:
 @decorators.normalizer
 def log_cpm(adata: ad.AnnData) -> ad.AnnData:
     """Normalize data to log counts per million."""
+    import scanpy as sc
+
     _cpm(adata)
     sc.pp.log1p(adata)
     return adata
@@ -75,6 +80,7 @@ def log_cpm_hvg(adata: ad.AnnData, n_genes: int = 1000) -> ad.AnnData:
     Normalize data to log counts per million and select n_genes highly
     variable genes
     """
+    import scanpy as sc
 
     adata = log_cpm(adata)
 

@@ -1,8 +1,6 @@
 from .....data.immune_cells import load_immune
 from .....tools.decorators import dataset
 
-import scanpy as sc
-
 
 @dataset(
     dataset_name="Immune (by batch)",
@@ -14,6 +12,8 @@ import scanpy as sc
     image="openproblems",
 )
 def immune_batch(test=False):
+    import scanpy as sc
+
     adata = load_immune(test)
     adata.obs["labels"] = adata.obs["final_annotation"]
 
