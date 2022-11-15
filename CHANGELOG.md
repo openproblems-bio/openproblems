@@ -1,22 +1,16 @@
+
 # openproblems-v2 0.1.0
 
 ## common
 
 ### NEW FUNCTIONALITY
 
-* `dataset_loader/download`: Download an AnnData dataset from a URL.
-
 * `extract_scores`: Summarise a metrics output tsv.
 
 * `dataset_concatenate`: Concatenate N AnnData datasets.
 
-* `subsample`: Subsample an anndata file.
-
 * Created test data `resources_test/pancreas` with `src/common/resources_test_scripts/pancreas.sh`.
 
-* `common/normalization/log_cpm`: A log CPM normalization method.
-
-* `common/normalization/log_scran_pooling`: A log scran pooling normalization method.
 
 ## label_projection
 
@@ -41,3 +35,21 @@
 * `metric/accuracy`: Migrated from v1.
 
 * `metric/f1`: Migrated from v1.
+
+## datasets
+
+### NEW FUNCTIONALITY
+
+* `workflows/process_openproblems_v1`: Fetch and process legacy OpenProblems v1 datasets
+
+* `normalization/log_cpm`: A log CPM normalization method.
+
+* `normalization/log_scran_pooling`: A log scran pooling normalization method.
+
+* `normalization/sqrt_cpm`: A sqrt CPM normalization method.
+
+* `subsample`: Subsample an h5ad file.
+
+### V1 MIGRATION
+
+* `loaders/openproblems_v1`: Fetch a dataset from OpenProblems v1
