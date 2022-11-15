@@ -55,7 +55,7 @@ def _random_embedding(partition):
     from sklearn.preprocessing import LabelEncoder
     from sklearn.preprocessing import OneHotEncoder
 
-    embedding = OneHotEncoder().fit_transform(LabelEncoder.fit_transform(partition))
+    embedding = OneHotEncoder().fit_transform(LabelEncoder().fit_transform(partition))
     embedding = embedding + np.random.uniform(-0.1, 0.1, embedding.shape)
     return embedding
 
