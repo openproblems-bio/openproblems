@@ -1,0 +1,9 @@
+functionality:
+  authors:
+    - name: "Juan A. Cordero Varela"
+      roles: [ contributor ]
+      props: { github: jacorvar, orcid: 0000-0002-7373-5433}
+    - name: Robrecht Cannoodt
+      roles: [ author ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+
