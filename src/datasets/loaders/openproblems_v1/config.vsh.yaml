@@ -1,6 +1,6 @@
 functionality:
   name: "openproblems_v1"
-  namespace: "datasets/loaders/dataset_loader"
+  namespace: "datasets/loaders"
   description: "Fetch a dataset from OpenProblems v1"
   argument_groups:
     - name: Inputs
