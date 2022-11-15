@@ -12,6 +12,6 @@ from . import utils
     image="openproblems-python-extras",
 )
 def tabula_muris_senis_lung_random(test=False):
-    adata = load_tabula_muris_senis(organ_list=["lung"], method_list=["droplet"])
+    adata = load_tabula_muris_senis(test=test, organ_list=["lung"], method_list=["droplet"])
     adata = utils.split_data(adata)
     return adata
