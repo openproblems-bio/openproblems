@@ -20,11 +20,11 @@ SAMPLE_RECEPTOR_NAMES = [
 
 
 def assert_is_subset(
-        subset,
-        superset,
-        subset_name="subset",
-        superset_name="superset",
-        prop_missing_allowed=0,
+    subset,
+    superset,
+    subset_name="subset",
+    superset_name="superset",
+    prop_missing_allowed=0,
 ):
     """Assert `np.all(np.isin(subset, superset))` with a more readable error message"""
     subset = np.asarray(subset)
@@ -218,15 +218,17 @@ def sample_dataset(merge_keys):
             "ligand": rng.choice(adata.var.index, 50),
             "receptor": rng.choice(adata.var.index, 50),
             "source": rng.choice(list(set(adata.obs.label)), 50),
-            "target": rng.choice(list(set(adata.obs.label)), 50)
+            "target": rng.choice(list(set(adata.obs.label)), 50),
         }
     )
     # drop duplicates
-    adata.uns["ccc_target"] = adata.uns["ccc_target"]. \
-        sort_values(merge_keys). \
-        reset_index(). \
-        drop_duplicates(subset=merge_keys, keep='first'). \
-        reset_index()
+    adata.uns["ccc_target"] = (
+        adata.uns["ccc_target"]
+        .sort_values(merge_keys)
+        .reset_index()
+        .drop_duplicates(subset=merge_keys, keep="first")
+        .reset_index()
+    )
 
     n_rows = adata.uns["ccc_target"].shape[0]
     adata.uns["ccc_target"]["response"] = rng.binomial(1, 0.5, n_rows)
@@ -282,16 +284,15 @@ def sample_method(adata, merge_keys):
     df = pd.DataFrame(rng.random((row_num, 1)), columns=["score"])
     df["source"] = rng.choice(np.unique(adata.obs[["label"]]), row_num)
     df["target"] = rng.choice(np.unique(adata.obs[["label"]]), row_num)
-    df["ligand"] = rng.choice(
-        np.unique(resource["ligand_genesymbol"].values), row_num
-    )
+    df["ligand"] = rng.choice(np.unique(resource["ligand_genesymbol"].values), row_num)
     df["receptor"] = rng.choice(
         np.unique(resource["receptor_genesymbol"].values), row_num
     )
 
     # remove duplicates
-    df = df.sort_values(merge_keys + ["score"]). \
-        drop_duplicates(subset=merge_keys, keep='first')
+    df = df.sort_values(merge_keys + ["score"]).drop_duplicates(
+        subset=merge_keys, keep="first"
+    )
 
     # subset columns
     df = df[["score"] + merge_keys]
