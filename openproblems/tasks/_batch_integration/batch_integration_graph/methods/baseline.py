@@ -109,8 +109,8 @@ def batch_random_integration(adata, test=False):
 
 
 @method(
-    method_name="Random Embedding by Celltype",
-    paper_name="Random Embedding by Celltype (baseline)",
+    method_name="Random Graph by Celltype",
+    paper_name="Random Graph by Celltype (baseline)",
     paper_url="https://openproblems.bio",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
