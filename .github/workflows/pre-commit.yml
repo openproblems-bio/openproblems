@@ -8,7 +8,7 @@ on:
 
 jobs:
   pre-commit:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     container:
       image: singlecellopenproblems/openproblems-github-actions:latest
