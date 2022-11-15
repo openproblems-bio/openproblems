@@ -27,3 +27,8 @@ info:
         name: dataset_id
         description: "A unique identifier for the dataset"
         required: true
+      # todo: ?
+      # - dataset_label
+      # - dataset_description
+      # - dataset_doi
+      # - dataset_url (if doi not available)

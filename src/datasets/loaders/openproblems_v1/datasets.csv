@@ -1,7 +1,0 @@
-id,obs_celltype,obs_batch,obs_tissue,layer_counts
-pancreas,celltype,tech,,counts
-immune_cells,final_annotation,batch,tissue,counts
-tenx_1k_pbmc,,,,counts
-tenx_5k_pbmc,,,,counts
-cengen,cell_type,experiment_code,tissue,counts
-zebrafish,cell_type,lab,,counts

@@ -39,12 +39,10 @@ functionality:
       path: test.py
 platforms:
   - type: docker
-    image: "python:3.10"
+    image: singlecellopenproblems/openproblems
     setup:
       - type: python
         packages:
           - scanpy
           - "anndata<0.8"
-        github:
-          - openproblems-bio/openproblems
   - type: nextflow

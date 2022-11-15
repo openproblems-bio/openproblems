@@ -1,7 +1,7 @@
 __inherits__: ../../api/comp_normalization.yaml
 functionality:
   name: "log_cpm"
-  namespace: "common/normalization"
+  namespace: "datasets/normalization"
   description: "Normalize data using Log CPM"
   arguments:
     - name: "--layer_output"

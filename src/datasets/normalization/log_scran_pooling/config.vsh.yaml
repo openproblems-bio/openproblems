@@ -1,7 +1,7 @@
 __inherits__: ../../api/comp_normalization.yaml
 functionality:
   name: "log_scran_pooling"
-  namespace: "common/normalization"
+  namespace: "datasets/normalization"
   description: "Normalize data using scran pooling"
   arguments:
     - name: "--layer_output"
@@ -26,3 +26,5 @@ platforms:
       - type: python
         pip: [ anndata<0.8, scanpy ]
   - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

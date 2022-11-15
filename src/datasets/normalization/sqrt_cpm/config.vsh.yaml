@@ -1,7 +1,7 @@
 __inherits__: ../../api/comp_normalization.yaml
 functionality:
   name: "sqrt_cpm"
-  namespace: "common/normalization"
+  namespace: "datasets/normalization"
   description: "Normalize data using Log Sqrt"
   arguments:
     - name: "--layer_output"

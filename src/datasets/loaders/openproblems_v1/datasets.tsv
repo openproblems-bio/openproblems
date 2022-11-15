@@ -1,9 +1,0 @@
-id	url	obs_celltype	obs_batch	obs_tissue
-pancreas	https://ndownloader.figshare.com/files/24539828	celltype	tech	NA
-immune_cells	https://ndownloader.figshare.com/files/25717328	final_annotation	batch	tissue
-pbmc	https://ndownloader.figshare.com/files/24974582	NA	NA	NA
-tenx_5k_pbmc	https://ndownloader.figshare.com/files/25555739	NA	NA	NA
-cengen	https://github.com/Munfred/wormcells-data/releases/download/taylor2020/taylor2020.h5ad	cell_type	experiment_code	tissue
-zebrafish	https://ndownloader.figshare.com/files/24566651?private_link=e3921450ec1bd0587870	cell_type	lab NA
-tabula_muris_senis_facs_lung	https://ndownloader.figshare.com/files/23872619	free_annotation	mouse.id	NA
-tabula_muris_senis_droplet_lung	https://ndownloader.figshare.com/files/23873012	free_annotation	mouse.id	NA
