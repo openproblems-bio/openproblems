@@ -1,5 +1,6 @@
 functionality:
   name: "dataset_concatenate"
+  status: deprecated
   namespace: "common/data_processing"
   description: "Concatenate datasets"
   arguments:
