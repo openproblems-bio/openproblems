@@ -9,7 +9,7 @@ def generate_matrix():
     suites = _CORE_TEST_SUITES.copy()
     for task in openproblems.TASKS:
         task_name = task.__name__.split(".")[-1]
-        suites.extend([f"({suite} and {task_name})" for suite in _TASK_TEST_SUITES])
+        suites.extend([f"{suite} and {task_name}" for suite in _TASK_TEST_SUITES])
     return suites
 
 
