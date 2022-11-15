@@ -13,7 +13,7 @@ import utils.git
 import utils.name
 
 DATASET_SUMMARY_MINLEN = 40
-DATASET_SUMMARY_MAXLEN = 280
+DATASET_SUMMARY_MAXLEN = 1000
 
 pytestmark = pytest.mark.skipif(
     len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
@@ -94,6 +94,7 @@ class TestDataset(unittest.TestCase):
     def test_sparse(self):
         """Ensure output is sparse."""
         assert scipy.sparse.issparse(self.adata.X)
+        assert isinstance(self.adata.X, scipy.sparse.csr_matrix)
 
     def test_not_bytes(self):
         """Ensure output does not contain byte strings."""

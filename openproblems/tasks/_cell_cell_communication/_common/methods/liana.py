@@ -2,6 +2,7 @@ from .....tools.conversion import r_function
 from .....tools.decorators import method
 from .....tools.normalize import log_cpm
 from .....tools.utils import check_r_version
+from ..utils import aggregate_method_scores
 from ..utils import ligand_receptor_resource
 
 import functools
@@ -30,13 +31,9 @@ _liana_method = functools.partial(
 )
 
 
-@_liana_method(
-    method_name="LIANA",
-)
-def liana(
+def _liana(
     adata,
     score_col="aggregate_rank",
-    ascending=True,
     min_expression_prop=0.1,
     test=False,
     **kwargs,
@@ -58,7 +55,6 @@ def liana(
 
     # Format results
     liana_res["score"] = liana_res[score_col]
-    liana_res.sort_values("score", ascending=ascending, inplace=True)
     adata.uns["ccc_pred"] = liana_res
 
     adata.uns["method_code_version"] = check_r_version("liana")
@@ -67,18 +63,41 @@ def liana(
 
 
 @_liana_method(
-    method_name="CellPhoneDB",
+    method_name="LIANA Rank Aggregate (max)",
+)
+def liana_max(adata, test=False):
+    adata = _liana(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
+
+    return adata
+
+
+@_liana_method(
+    method_name="LIANA Rank Aggregate (sum)",
+)
+def liana_sum(adata, test=False):
+    adata = _liana(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
+
+    return adata
+
+
+_cellphonedb_method = functools.partial(
+    method,
     paper_name="CellPhoneDB: inferring cell–cell communication from "
     "combined expression of multi-subunit ligand–receptor complexes",
     paper_url="https://www.nature.com/articles/s41596-020-0292-x",
     paper_year=2020,
+    code_url="https://github.com/saezlab/liana",
+    image="openproblems-r-extras",
 )
-def cellphonedb(adata, test=False):
-    adata = liana(
+
+
+def _cellphonedb(adata, test=False):
+    adata = _liana(
         adata,
         method="cellphonedb",
         score_col="lr.mean",
-        ascending=False,
         test=test,
         complex_policy="min",
     )
@@ -86,51 +105,153 @@ def cellphonedb(adata, test=False):
     adata.uns["ccc_pred"]["score"] = adata.uns["ccc_pred"].apply(
         lambda x: _p_filt(x.pvalue, x["lr.mean"]), axis=1
     )
-    adata.uns["ccc_pred"].sort_values("score", ascending=False, inplace=True)
 
     return adata
 
 
-@_liana_method(
-    method_name="Connectome",
+@_cellphonedb_method(
+    method_name="CellPhoneDB (max)",
+)
+def cellphonedb_max(adata, test=False):
+    adata = _cellphonedb(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
+
+    return adata
+
+
+@_cellphonedb_method(
+    method_name="CellPhoneDB (sum)",
+)
+def cellphonedb_sum(adata, test=False):
+    adata = _cellphonedb(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
+
+    return adata
+
+
+_connectome_method = functools.partial(
+    method,
     paper_name="Computation and visualization of cell–cell signaling "
     "topologies in single-cell systems data using Connectome",
     paper_url="https://www.nature.com/articles/s41598-022-07959-x",
     paper_year=2022,
+    code_url="https://github.com/saezlab/liana",
+    image="openproblems-r-extras",
 )
-def connectome(adata, test=False):
-    return liana(
-        adata, method="connectome", score_col="weight_sc", ascending=False, test=test
-    )
 
 
-@_liana_method(
-    method_name="Mean log2FC",
+def _connectome(adata, test=False):
+    return _liana(adata, method="connectome", score_col="weight_sc", test=test)
+
+
+@_connectome_method(
+    method_name="Connectome (max)",
 )
-def logfc(adata, test=False):
-    return liana(
-        adata, method="logfc", score_col="logfc_comb", ascending=False, test=test
-    )
+def connectome_max(adata, test=False):
+    adata = _connectome(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
+
+    return adata
 
 
-@_liana_method(
-    method_name="NATMI",
+@_connectome_method(
+    method_name="Connectome (sum)",
+)
+def connectome_sum(adata, test=False):
+    adata = _connectome(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
+
+    return adata
+
+
+def _logfc(adata, test=False):
+    return _liana(adata, method="logfc", score_col="logfc_comb", test=test)
+
+
+@_connectome_method(
+    method_name="Log2FC (max)",
+)
+def logfc_max(adata, test=False):
+    adata = _logfc(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
+
+    return adata
+
+
+@_connectome_method(
+    method_name="Log2FC (sum)",
+)
+def logfc_sum(adata, test=False):
+    adata = _logfc(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
+
+    return adata
+
+
+_natmi_method = functools.partial(
+    method,
     paper_name="Predicting cell-to-cell communication networks using NATMI",
     paper_url="https://www.nature.com/articles/s41467-020-18873-z",
     paper_year=2021,
+    code_url="https://github.com/saezlab/liana",
+    image="openproblems-r-extras",
 )
-def natmi(adata, test=False):
-    return liana(
-        adata, method="natmi", score_col="edge_specificity", ascending=False, test=test
-    )
 
 
-@_liana_method(
-    method_name="SingleCellSignalR",
+def _natmi(adata, test=False):
+    return _liana(adata, method="natmi", score_col="edge_specificity", test=test)
+
+
+@_natmi_method(
+    method_name="NATMI (max)",
+)
+def natmi_max(adata, test=False):
+    adata = _natmi(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
+
+    return adata
+
+
+@_natmi_method(
+    method_name="NATMI (sum)",
+)
+def natmi_sum(adata, test=False):
+    adata = _natmi(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
+
+    return adata
+
+
+_sca_method = functools.partial(
+    method,
     paper_name="SingleCellSignalR: inference of intercellular networks "
     "from single-cell transcriptomics",
     paper_url="https://academic.oup.com/nar/article/48/10/e55/5810485",
     paper_year=2021,
+    code_url="https://github.com/saezlab/liana",
+    image="openproblems-r-extras",
 )
-def sca(adata, test=False):
-    return liana(adata, method="sca", score_col="LRscore", ascending=False, test=test)
+
+
+def _sca(adata, test=False):
+    return _liana(adata, method="sca", score_col="LRscore", test=test)
+
+
+@_sca_method(
+    method_name="SingleCellSignalR (max)",
+)
+def sca_max(adata, test=False):
+    adata = _sca(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
+
+    return adata
+
+
+@_sca_method(
+    method_name="SingleCellSignalR (sum)",
+)
+def sca_sum(adata, test=False):
+    adata = _sca(adata, test=test)
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
+
+    return adata

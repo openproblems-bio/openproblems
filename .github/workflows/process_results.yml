@@ -36,7 +36,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.config.python }}
+        python-version: "3.8"
 
     - name: Install AWS CLI
       run: |
@@ -71,6 +71,52 @@ jobs:
         python openproblems/workflow/parse_nextflow.py /tmp website/data/results
         python openproblems/workflow/generate_website_markdown.py website/content/benchmarks
 
+    - name: Upload results
+      uses: actions/upload-artifact@main
+      with:
+        name: results
+        path: website/data/results
+
+    - name: Upload markdown
+      uses: actions/upload-artifact@main
+      with:
+        name: markdown
+        path: website/content/benchmarks
+
+    - name: Remove raw output
+      if: |
+        github.event_name == 'repository_dispatch' ||
+        endsWith(github.event.head_commit.message, '# publish')
+      run: |
+        rm website/data/results/*/*.raw.json
+
+    - name: Push to openproblems-bio/website
+      if: |
+        github.event_name == 'repository_dispatch' ||
+        endsWith(github.event.head_commit.message, '# publish')
+      shell: bash
+      working-directory: './website'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
+      run: |
+        git push origin "${UPDATE_BRANCH_NAME}"
+
+    - name: Create Pull Request
+      if: |
+        github.event_name == 'repository_dispatch' ||
+        endsWith(github.event.head_commit.message, '# publish')
+      uses: peter-evans/create-pull-request@v4
+      with:
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
+        delete-branch: true
+        base: main
+        title: '[auto] Update benchmark results'
+        reviewers: scottgigante-immunai,rcannood,dburkhardt
+        path: './website'
+        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
+        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        commit-message: "Update benchmark results # ci skip"
+
     - name: AWS S3 cleanup
       if: "github.event_name == 'repository_dispatch'"
       env:
@@ -82,40 +128,3 @@ jobs:
         aws s3 rm --recursive "s3://openproblems-nextflow/cwd_example"
         aws s3 cp --recursive "s3://openproblems-nextflow/cwd_main" "s3://openproblems-nextflow/cwd_example"
         aws s3 rm --recursive "s3://openproblems-nextflow/cwd_main"
-
-    - name: Push to openproblems-bio/website
-      if: "github.event_name == 'repository_dispatch'"
-      shell: bash
-      working-directory: './website'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
-      run: |
-        git push origin "${UPDATE_BRANCH_NAME}"
-
-    - name: Create Pull Request
-      if: "github.event_name == 'repository_dispatch'"
-      uses: peter-evans/create-pull-request@v4
-      with:
-        branch: ${{ env.UPDATE_BRANCH_NAME }}
-        delete-branch: true
-        base: main
-        title: '[auto] Update benchmark results'
-        reviewers: scottgigante, dburkhardt
-        path: './website'
-        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
-        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-        commit-message: "Update benchmark results # ci skip"
-
-    - name: Upload results on test
-      if: "github.event_name != 'repository_dispatch'"
-      uses: actions/upload-artifact@main
-      with:
-        name: results
-        path: website/data/results
-
-    - name: Upload markdown on test
-      if: "github.event_name != 'repository_dispatch'"
-      uses: actions/upload-artifact@main
-      with:
-        name: markdown
-        path: website/content/benchmarks

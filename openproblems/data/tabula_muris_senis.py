@@ -6,11 +6,23 @@ import requests
 import scanpy as sc
 import scprep
 import tempfile
+import time
 
 COLLECTION_ID = "0b9d8a04-bb9d-44da-aa27-705bb65b54eb"
 DOMAIN = "cellxgene.cziscience.com"
 API_BASE = f"https://api.{DOMAIN}"
 METHOD_ALIASES = {"10x 3' v2": "droplet", "Smart-seq2": "facs"}
+
+
+def _get_json(url, retries=5, sleep=0.05, backoff=2):
+    try:
+        res = requests.get(url=url, headers={"Content-Type": "application/json"})
+        return res.json()
+    except Exception:  # pragma: nocover
+        if retries > 0:
+            time.sleep(sleep)
+            return _get_json(url, retries - 1, sleep * backoff, backoff)
+        raise
 
 
 def check_unknown_organs(datasets, organ_list):
@@ -52,8 +64,7 @@ def load_raw_counts(dataset):
         f"/curation/v1/collections/{COLLECTION_ID}/datasets/{dataset_id}/assets"
     )
     url = f"{API_BASE}{assets_path}"
-    res = requests.get(url=url)
-    assets = res.json()
+    assets = _get_json(url)
     assets = [asset for asset in assets if asset["filetype"] == "H5AD"]
     assert len(assets) == 1
     asset = assets[0]
@@ -101,8 +112,7 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
 
     datasets_path = f"/curation/v1/collections/{COLLECTION_ID}"
     url = f"{API_BASE}{datasets_path}"
-    res = requests.get(url=url)
-    datasets = res.json()["datasets"]
+    datasets = _get_json(url)["datasets"]
     check_unknown_organs(datasets, organ_list)
 
     adata_list = []
@@ -112,6 +122,9 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
 
     assert len(adata_list) > 0
     adata = ad.concat(adata_list, join="outer")
+
+    # this obs key causes write errors
+    del adata.obs["is_primary_data"]
 
     if test:
         adata = utils.subsample_even(adata, n_obs=500, even_obs="method")

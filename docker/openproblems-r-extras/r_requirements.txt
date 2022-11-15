@@ -13,7 +13,7 @@ devtools@2.4.5
 dmcable/spacexr@eeb02a2 # master
 downlit@0.4.2
 dplyr@1.0.10
-e1071@1.7-11
+e1071@1.7-12
 ellipsis@0.3.2
 forecast@8.18
 hardhat@1.1.0
@@ -25,10 +25,10 @@ igraph@1.3.5
 lifecycle@1.0.3
 Matrix@1.5-1
 pkgdown@2.0.6
-pkgload@1.3.0
+pkgload@1.3.1
 profvis@0.3.7
 proxy@0.4-27
-ragg@1.2.2
+ragg@1.2.4
 Rcpp@1.0.9
 RcppTOML@0.1.7
 reticulate@1.26
@@ -36,7 +36,7 @@ rlang@1.0.6
 rliger@1.0.0
 rmarkdown@2.2
 RSQLite@2.2.4
-saezlab/liana@0.1.6
+saezlab/liana@0.1.7
 saezlab/OmnipathR@679bb79 # master
 sass@0.4.2
 sctransform@0.3.4
