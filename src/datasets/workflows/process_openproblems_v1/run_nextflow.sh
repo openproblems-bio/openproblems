@@ -11,7 +11,7 @@ export NXF_VER=22.04.5
 bin/nextflow \
   run . \
   -main-script src/datasets/workflows/process_openproblems_v1/main.nf \
-  -resume \
   -profile docker \
+  -resume \
   -params-file src/datasets/loaders/openproblems_v1/datasets.yaml \
   --publish_dir output/datasets

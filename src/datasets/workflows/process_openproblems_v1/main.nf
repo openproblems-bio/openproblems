@@ -9,7 +9,7 @@ include { log_scran_pooling } from "$targetDir/datasets/normalization/log_scran_
 include { sqrt_cpm } from "$targetDir/datasets/normalization/sqrt_cpm/main.nf"
 
 include { readConfig; viashChannel; helpMessage } from sourceDir + "/nxf_utils/WorkflowHelper.nf"
-include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from workflowDir + "/utils/DataFlowHelper.nf"
+include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from sourceDir + "/nxf_utils/DataFlowHelper.nf"
 
 config = readConfig("$projectDir/config.vsh.yaml")
 
@@ -46,7 +46,7 @@ workflow run_wf {
     // run sqrt normalisation and publish
     | getWorkflowArguments(key: "sqrt_cpm")
     | sqrt_cpm.run(
-      auto = [ publish: true ]
+      auto: [ publish: true ]
     )
 
     // clean up channel
