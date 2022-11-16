@@ -22,7 +22,8 @@ hvg = par['hvg']
 scaling = par['scaling']
 
 print('Read adata')
-adata = sc.read(adata_file)
+print(adata_file)
+adata = sc.read_h5ad(adata_file)
 
 if hvg:
     print('Select HVGs')

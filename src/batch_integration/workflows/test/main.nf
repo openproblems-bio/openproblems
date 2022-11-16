@@ -4,6 +4,8 @@ targetDir = "${params.rootDir}/target/nextflow"
 params.download = "$launchDir/src/batch_integration/workflows/download.tsv"
 params.preprocessing = "$launchDir/src/batch_integration/workflows/test/preprocessing.tsv"
 
+include { extract_scores }  from "$targetDir/common/extract_scores/main.nf"    params(params)
+
 // import dataset loaders
 include { download }       from "$targetDir/common/dataset_loader/download/main.nf"              params(params)
 include { subsample }      from "$targetDir/batch_integration/datasets/subsample/main.nf"        params(params)
@@ -48,7 +50,6 @@ workflow process_data {
       additional_params = Channel.fromPath(params.preprocessing)
         | splitCsv(header: true, sep: "\t")
         | map { [ it.name, it ] }
-        | view { "additional_params $it" }
 
       subset = channel_in.join(additional_params)
         | map { id, data, additional ->
@@ -60,7 +61,6 @@ workflow process_data {
         | map { id, data, additional ->
           [ id, [ input: data ] + additional ]
         }
-        | view { "preprocessing $it" }
         | preprocessing
         | join(additional_params)
         | map { id, data, additional ->
@@ -78,17 +78,16 @@ workflow process_data {
 workflow {
     load_data
         | process_data
-        | view{ "process_data: $it" }
-/**
-| (bbknn & combat & scvi & scanorama_embed & scanorama_feature)
-| mix
-| toSortedList
-        | view
+        | view { "integration input $it" }
+        | (bbknn & combat & scvi & scanorama_embed & scanorama_feature)
+        | mix
+        | toSortedList
+        | view { "toSortedList $it" }
+/*
         | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
         | (ari & nmi)
         | extract_scores.run(
             auto: [ publish: true ]
         )
 */
-
 }

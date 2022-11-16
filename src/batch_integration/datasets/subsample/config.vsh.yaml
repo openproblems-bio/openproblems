@@ -43,5 +43,4 @@ functionality:
 platforms:
   - type: docker
     image: mumichae/scib-base:1.0.2
-  - type: native
   - type: nextflow

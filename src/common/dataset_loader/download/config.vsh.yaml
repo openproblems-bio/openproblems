@@ -45,6 +45,5 @@ platforms:
       - type: python
         packages:
           - scanpy
-          - "anndata<0.8"
-  - type: native
+          - "anndata>=0.8"
   - type: nextflow
