@@ -345,6 +345,7 @@ jobs:
         for dir in bucket work cwd; do
           mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
         done
+        mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}/cwd/${{ github.run_id }}_${{ github.run_attempt }}
         ls -l /mnt/openproblems-nextflow/*/${BRANCH}
 
     - name: Install package & dependencies
@@ -414,10 +415,7 @@ jobs:
         AWS_DEFAULT_REGION: us-west-2
       run: |
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
-        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
-        if [ -f results/pipeline_info/execution_trace.txt ]; then
-          rm results/pipeline_info/execution_trace.txt
-        fi
+        cd /mnt/openproblems-nextflow/cwd/${BRANCH}/${{ github.run_id }}_${{ github.run_attempt }}
         nextflow run \
         -revision v1.9 \
         -with-tower \
