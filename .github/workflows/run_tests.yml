@@ -237,8 +237,8 @@ jobs:
       with:
         fetch-depth: 1000
 
-#    - name: Clear space on runner
-#      run: ./scripts/clear_runner_diskspace.sh
+    - name: Clear space on runner
+      run: ./scripts/clear_runner_diskspace.sh
 
     - name: Install system dependencies
       run: |
@@ -355,55 +355,55 @@ jobs:
         python -c "import openproblems"
         openproblems-cli --version
         openproblems-cli --test-hash
-#
-#    - name: Pull Docker images
-#      if: |
-#        startsWith(github.ref, 'refs/heads/main') &&
-#        github.repository == 'openproblems-bio/openproblems'
-#      run: |
-#        cd workflow
-#        snakemake -j $(nproc) docker_pull
-#        cd ..
-#
-#    - name: Build Docker images
-#      if: |
-#        !(
-#          startsWith(github.ref, 'refs/heads/main') &&
-#          github.repository == 'openproblems-bio/openproblems'
-#        )
-#      run: |
-#        cd workflow
-#        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
-#        cd ..
-#
-#    - name: Upload Docker images
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        AWS_DEFAULT_REGION: us-west-2
-#      run: |
-#        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-#        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
-#          docker login --username AWS --password-stdin $ECR_ENDPOINT
-#        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-#          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-#          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-#        done
-#
-#    - name: Upload Docker images for full benchmark
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        AWS_DEFAULT_REGION: us-west-2
-#      if: >-
-#        startsWith(github.ref, 'refs/tags') ||
-#        startsWith(github.ref, 'refs/heads/test_full_benchmark')
-#      run: |
-#        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-#        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-#          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:prod-${image}
-#          docker push --quiet ${ECR_ENDPOINT}/openproblems:prod-${image}
-#        done
+
+    - name: Pull Docker images
+      if: |
+        startsWith(github.ref, 'refs/heads/main') &&
+        github.repository == 'openproblems-bio/openproblems'
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker_pull
+        cd ..
+
+    - name: Build Docker images
+      if: |
+        !(
+          startsWith(github.ref, 'refs/heads/main') &&
+          github.repository == 'openproblems-bio/openproblems'
+        )
+      run: |
+        cd workflow
+        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
+        cd ..
+
+    - name: Upload Docker images
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+          docker login --username AWS --password-stdin $ECR_ENDPOINT
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+        done
+
+    - name: Upload Docker images for full benchmark
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      if: >-
+        startsWith(github.ref, 'refs/tags') ||
+        startsWith(github.ref, 'refs/heads/test_full_benchmark')
+      run: |
+        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:prod-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:prod-${image}
+        done
 
     - name: Run test benchmark
       env:
