@@ -3,7 +3,6 @@ from ....tools.decorators import method
 
 import numpy as np
 import pandas as pd
-import scanpy as sc
 import scipy.sparse
 
 
@@ -70,6 +69,8 @@ def _get_annotation(adata, retries=3):
 
 
 def _filter_mitochondrial(adata):
+    import scanpy as sc
+
     if adata.uns["species"] in ["mus_musculus", "homo_sapiens"]:
         adata.var["mt"] = adata.var.gene_short_name.str.lower().str.startswith(
             "mt-"
@@ -92,6 +93,8 @@ def _filter_n_genes_max(adata):
 
 
 def _filter_n_genes_min(adata):
+    import scanpy as sc
+
     adata_filter = adata.copy()
     sc.pp.filter_cells(adata_filter, min_genes=200)
     if adata_filter.shape[0] > 100:
@@ -100,6 +103,8 @@ def _filter_n_genes_min(adata):
 
 
 def _filter_n_cells(adata):
+    import scanpy as sc
+
     adata_filter = adata.copy()
     sc.pp.filter_genes(adata_filter, min_cells=5)
     if adata_filter.shape[1] > 100:
@@ -117,6 +122,7 @@ def _filter_has_chr(adata):
 def _beta(adata, test=False, top_genes=None, threshold=1):
     """Calculate gene scores and insert into .obsm."""
     import pybedtools
+    import scanpy as sc
 
     if test:
         top_genes = top_genes or 100

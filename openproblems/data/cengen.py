@@ -1,7 +1,6 @@
 from . import utils
 
 import os
-import scanpy as sc
 import scprep
 import tempfile
 
@@ -22,6 +21,8 @@ def load_cengen(test=False):
     To learn about WormBase curation efforts for C. elegans single cell
     data visit https://wormbase.github.io/single-cell/
     """
+    import scanpy as sc
+
     with tempfile.TemporaryDirectory() as tempdir:
         filepath = os.path.join(tempdir, "cengen.h5ad")
         scprep.io.download.download_url(URL, filepath)

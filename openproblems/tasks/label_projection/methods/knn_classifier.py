@@ -4,7 +4,6 @@ from ....tools.normalize import log_scran_pooling
 from .sklearn import classifier
 
 import functools
-import sklearn.neighbors
 
 _knn_classifier_method = functools.partial(
     method,
@@ -20,6 +19,8 @@ _knn_classifier_method = functools.partial(
     method_name="K-neighbors classifier (log CPM)",
 )
 def knn_classifier_log_cpm(adata, test=False):
+    import sklearn.neighbors
+
     adata = log_cpm(adata)
     return classifier(adata, estimator=sklearn.neighbors.KNeighborsClassifier)
 
@@ -29,5 +30,7 @@ def knn_classifier_log_cpm(adata, test=False):
     image="openproblems-r-base",
 )
 def knn_classifier_scran(adata, test=False):
+    import sklearn.neighbors
+
     adata = log_scran_pooling(adata)
     return classifier(adata, estimator=sklearn.neighbors.KNeighborsClassifier)

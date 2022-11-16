@@ -9,15 +9,11 @@ from pathlib import Path
 from scipy.sparse import csr_matrix
 from scipy.spatial.distance import pdist
 from scipy.spatial.distance import squareform
-from sklearn.cluster import AgglomerativeClustering
-from sklearn.decomposition import PCA
-from sklearn.neighbors import kneighbors_graph
 from typing import Optional
 
 import anndata
 import numpy as np
 import pandas as pd
-import scanpy as sc
 
 
 def categorical(p, n_samples):
@@ -66,6 +62,11 @@ def generate_synthetic_dataset(
     K_sampled: Optional[int] = None,  # cells sampled for each spot
     seed: int = 0,
 ):
+    from sklearn.cluster import AgglomerativeClustering
+    from sklearn.decomposition import PCA
+    from sklearn.neighbors import kneighbors_graph
+
+    import scanpy as sc
     import torch
 
     np.random.seed(seed)

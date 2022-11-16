@@ -18,8 +18,6 @@ from ....tools.decorators import metric
 from ....tools.normalize import log_cpm_hvg
 from anndata import AnnData
 from numba import njit
-from scipy.sparse import issparse
-from sklearn.metrics import pairwise_distances
 from typing import Tuple
 
 import numpy as np
@@ -155,6 +153,8 @@ def _metrics(
 
 
 def _high_dim(adata: AnnData) -> np.ndarray:
+    from scipy.sparse import issparse
+
     adata.X = adata.layers["counts"]
     adata = log_cpm_hvg(adata)
     high_dim = adata.X
@@ -164,6 +164,8 @@ def _high_dim(adata: AnnData) -> np.ndarray:
 def _fit(
     X: np.ndarray, E: np.ndarray
 ) -> Tuple[float, float, float, float, float, float, float]:
+    from sklearn.metrics import pairwise_distances
+
     if np.any(np.isnan(E)):
         return 0.0, 0.0, 0.0, 0.5, -np.inf, -np.inf, -np.inf
 
