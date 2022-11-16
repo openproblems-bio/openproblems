@@ -345,7 +345,7 @@ jobs:
         for dir in bucket work cwd; do
           mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
         done
-        mkdir -p /mnt/openproblems-nextflow/cwd/${BRANCH}/cwd/${{ github.run_id }}_${{ github.run_attempt }}
+        mkdir -p /mnt/openproblems-nextflow/cwd/${BRANCH}/${{ github.run_id }}_${{ github.run_attempt }}
         ls -l /mnt/openproblems-nextflow/*/${BRANCH}
 
     - name: Install package & dependencies
