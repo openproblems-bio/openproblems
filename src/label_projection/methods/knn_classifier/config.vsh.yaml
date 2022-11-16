@@ -1,6 +1,7 @@
 __inherits__: ../../api/comp_method.yaml
 functionality:
   name: "knn_classifier"
+  namespace: "label_projection/methods"
   description: "K-Nearest Neighbors classifier"
   info:
     type: method
