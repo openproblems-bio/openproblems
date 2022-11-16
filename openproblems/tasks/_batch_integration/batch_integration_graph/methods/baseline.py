@@ -2,6 +2,7 @@ from .....tools.decorators import method
 from .....tools.utils import check_version
 
 import numpy as np
+import scanpy as sc
 
 
 def _set_uns(adata):
@@ -50,6 +51,17 @@ def _randomize_graph(adata, partition=None):
     return adata
 
 
+def _random_embedding(partition):
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.preprocessing import OneHotEncoder
+
+    embedding = OneHotEncoder().fit_transform(
+        LabelEncoder().fit_transform(partition)[:, None]
+    )
+    embedding = embedding + np.random.uniform(-0.1, 0.1, embedding.shape)
+    return embedding
+
+
 @method(
     method_name="Random Integration",
     paper_name="Random Integration (baseline)",
@@ -94,5 +106,20 @@ def batch_random_integration(adata, test=False):
         adata,
         partition=adata.obs["batch"].to_numpy(),
     )
+    adata.uns["method_code_version"] = check_version("openproblems")
+    return adata
+
+
+@method(
+    method_name="Random Graph by Celltype",
+    paper_name="Random Graph by Celltype (baseline)",
+    paper_url="https://openproblems.bio",
+    paper_year=2022,
+    code_url="https://github.com/openproblems-bio/openproblems",
+    is_baseline=True,
+)
+def celltype_random_graph(adata, test=False):
+    adata.obsm["X_emb"] = _random_embedding(partition=adata.obs["labels"])
+    sc.pp.neighbors(adata, use_rep="X_emb")
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
