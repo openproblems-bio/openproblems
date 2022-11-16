@@ -4,7 +4,6 @@ from ....tools.normalize import log_scran_pooling
 from .sklearn import classifier
 
 import functools
-import sklearn.linear_model
 
 _logistic_regression_method = functools.partial(
     method,
@@ -17,6 +16,8 @@ _logistic_regression_method = functools.partial(
 
 
 def _logistic_regression(adata, test=False, max_iter=None):
+    import sklearn.linear_model
+
     if test:
         max_iter = max_iter or 100
     else:  # pragma: no cover

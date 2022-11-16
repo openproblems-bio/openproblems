@@ -2,8 +2,6 @@ from ....tools.decorators import method
 from ....tools.normalize import log_cpm_hvg
 from ....tools.utils import check_version
 
-import scanpy as sc
-
 
 @method(
     method_name="Principle Component Analysis (PCA) (logCPM, 1kHVG)",
@@ -14,6 +12,8 @@ import scanpy as sc
     "sklearn.decomposition.PCA.html",
 )
 def pca_logCPM_1kHVG(adata, test: bool = False):
+    import scanpy as sc
+
     adata = log_cpm_hvg(adata)
     sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
     adata.obsm["X_emb"] = adata.obsm["X_pca"][:, :2]

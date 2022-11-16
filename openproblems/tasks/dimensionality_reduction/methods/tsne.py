@@ -2,8 +2,6 @@ from ....tools.decorators import method
 from ....tools.normalize import log_cpm_hvg
 from ....tools.utils import check_version
 
-import scanpy as sc
-
 
 @method(
     method_name="“t-Distributed Stochastic Neighbor Embedding (t-SNE) (logCPM, 1kHVG)",
@@ -15,6 +13,8 @@ import scanpy as sc
     image="openproblems-python-extras",
 )
 def tsne_logCPM_1kHVG(adata, test: bool = False, n_pca=50):
+    import scanpy as sc
+
     adata = log_cpm_hvg(adata)
     sc.tl.pca(adata, n_comps=n_pca, svd_solver="arpack")
     sc.tl.tsne(adata, use_rep="X_pca", n_pcs=n_pca)

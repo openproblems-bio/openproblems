@@ -20,6 +20,7 @@ def r_function(filename, args="sce"):
     fun : scprep.run.RFunction
         Python callable evaluating the R code
     """
+
     assert filename.endswith(".R")
 
     # get the path to the module that called `r_function`

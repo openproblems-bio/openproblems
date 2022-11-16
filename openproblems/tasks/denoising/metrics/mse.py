@@ -1,13 +1,12 @@
 from ....tools.decorators import metric
 
-import anndata
-import scanpy as sc
-import sklearn.metrics
-
 
 @metric(metric_name="Mean-squared error", maximize=False)
 def mse(adata):
+    import anndata
+    import scanpy as sc
     import scprep
+    import sklearn.metrics
 
     test_data = anndata.AnnData(X=adata.obsm["test"], obs=adata.obs, var=adata.var)
     denoised_data = anndata.AnnData(
