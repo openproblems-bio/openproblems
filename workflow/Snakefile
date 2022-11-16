@@ -65,7 +65,6 @@ COPY . /usr/src/singlecellopenproblems
 RUN cd /usr/src/singlecellopenproblems && sudo git clean -fxdq
 """) + r"""
 RUN sudo pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
-RUN sudo pip check
 ' > {output}"""
 
 ruleorder: update_docker_image > build_docker_image
