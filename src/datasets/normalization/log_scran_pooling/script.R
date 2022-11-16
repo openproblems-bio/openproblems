@@ -15,10 +15,14 @@ par <- list(
 
 cat(">> Load data\n")
 adata <- anndata::read_h5ad(par$input)
-counts <- as.matrix(t(adata$layers[["counts"]]))
+counts <- as(t(adata$layers[["counts"]]), "CsparseMatrix")
 
 cat(">> Normalizing data\n")
-size_factors <- scran::calculateSumFactors(counts, min.mean=0.1, BPPARAM=BiocParallel::MulticoreParam())
+size_factors <- scran::calculateSumFactors(
+  counts,
+  min.mean = 0.1,
+  BPPARAM = BiocParallel::MulticoreParam()
+)
 lognorm <- log1p(sweep(adata$layers[["counts"]], 1, size_factors, "*"))
 
 cat(">> Storing in anndata\n")
