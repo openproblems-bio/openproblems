@@ -1,0 +1,27 @@
+__inherits__: ../../api/comp_method.yaml
+functionality:
+  name: "random_labels"
+  namespace: "label_projection/control_methods"
+  description: "Negative control method which generates random labels"
+  info:
+    type: negative_control
+    label: Random Labels
+    v1_url: openproblems/tasks/label_projection/methods/baseline.py
+    v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
+  arguments:
+    - name: "--layer_input"
+      type: string
+      default: "counts"
+      description: Which layer to use as input.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - "anndata>=0.8"
+  - type: nextflow

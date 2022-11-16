@@ -3,29 +3,40 @@ import subprocess
 import scanpy as sc
 
 name = "pancreas"
-anndata_file = "dataset.h5ad"
+output = "dataset.h5ad"
 url = "https://ndownloader.figshare.com/files/24539828"
 obs_celltype = "celltype"
 obs_batch = "tech"
 
+layer_counts_output = "foobar"
+
 print(">> Running script")
 out = subprocess.check_output([
-    f"./{meta['functionality_name']}",
+    meta["executable"],
     "--url", url,
     "--name", name,
     "--obs_celltype", obs_celltype,
     "--obs_batch", obs_batch,
-    "--output", anndata_file
+    "--layer_counts", "counts",
+    "--layer_counts_output", layer_counts_output,
+    "--output", output
 ]).decode("utf-8")
 
 print(">> Checking whether file exists")
-assert path.exists(anndata_file)
+assert path.exists(output)
 
 print(">> Read output anndata")
-adata = sc.read_h5ad(anndata_file)
+adata = sc.read_h5ad(output)
+
+print(adata)
 
 print(">> Check that output fits expected API")
-assert "counts" not in adata.layers
+if layer_counts_output is not None:
+    assert adata.X is None
+    assert layer_counts_output in adata.layers
+else:
+    assert adata.X is not None
+    assert layer_counts_output not in adata.layers
 assert adata.uns["dataset_id"] == name
 if obs_celltype:
     assert "celltype" in adata.obs.columns

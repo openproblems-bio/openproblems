@@ -1,0 +1,27 @@
+type: file
+description: "The training data"
+example: "training.h5ad"
+info:
+  short_description: "Training data"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+      - type: double
+        name: log_cpm
+        description: CPM normalized counts, log transformed
+      - type: double
+        name: log_scran_pooling
+        description: Scran pooling normalized counts, log transformed
+    obs:
+      - type: string
+        name: label
+        description: Ground truth cell type labels
+      - type: string
+        name: batch
+        description: Batch information
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"

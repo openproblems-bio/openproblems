@@ -1,0 +1,26 @@
+__inherits__: ../../api/comp_normalization.yaml
+functionality:
+  name: "sqrt_cpm"
+  namespace: "datasets/normalization"
+  description: "Normalize data using Log Sqrt"
+  arguments:
+    - name: "--layer_output"
+      type: string
+      default: "sqrt_cpm"
+      description: The name of the layer in which to store the log normalized data.
+    - name: "--obs_size_factors"
+      type: string
+      default: "size_factors_sqrt_cpm"
+      description: In which .obs slot to store the size factors.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - "anndata>=0.8"
+  - type: nextflow

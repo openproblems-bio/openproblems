@@ -1,29 +1,35 @@
-## VIASH START
-par = {
-    'input': 'ouput.h5ad',
-    'output': 'output.mv.h5ad'
-}
-## VIASH END
 import numpy as np
 import sklearn.preprocessing
-import scanpy as sc
+import anndata as ad
 
+## VIASH START
+par = {
+    'input_prediction': 'resources_test/label_projection/pancreas/knn.h5ad',
+    'input_solution': 'resources_test/label_projection/pancreas/solution.h5ad',
+    'output': 'output.h5ad'
+}
+meta = {
+    'functionality_name': 'accuracy'
+}
+## VIASH END
 
 print("Load data")
-adata = sc.read(par['input'])
+input_prediction = ad.read_h5ad(par['input_prediction'])
+input_solution = ad.read_h5ad(par['input_solution'])
 
-print("Get prediction accuracy")
-encoder = sklearn.preprocessing.LabelEncoder().fit(adata.obs["celltype"])
-test_data = adata[~adata.obs["is_train"]]
+assert (input_prediction.obs_names == input_solution.obs_names).all()
 
-test_data.obs["celltype"] = encoder.transform(test_data.obs["celltype"])
-test_data.obs["celltype_pred"] = encoder.transform(test_data.obs["celltype_pred"])
+print("Encode labels")
+encoder = sklearn.preprocessing.LabelEncoder().fit(input_solution.obs["label"])
+input_solution.obs["label"] = encoder.transform(input_solution.obs["label"])
+input_prediction.obs["label_pred"] = encoder.transform(input_prediction.obs["label_pred"])
 
-accuracy = np.mean(test_data.obs["celltype"] == test_data.obs["celltype_pred"])
+print("Compute prediction accuracy")
+accuracy = np.mean(input_solution.obs["label"] == input_prediction.obs["label_pred"])
 
 print("Store metric value")
-adata.uns["metric_id"] = meta["functionality_name"]
-adata.uns["metric_value"] = accuracy
+input_prediction.uns["metric_ids"] = "accuracy"
+input_prediction.uns["metric_values"] = accuracy
 
 print("Writing adata to file")
-adata.write(par['output'], compression="gzip")
+input_prediction.write_h5ad(par['output'], compression="gzip")

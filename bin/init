@@ -10,7 +10,13 @@ curl -fsSL get.viash.io | bash -s -- \
   --registry ghcr.io \
   --organisation openproblems-bio \
   --target_image_source https://github.com/openproblems-bio/openproblems-v2 \
-  --tag 0.6.0
+  --tag develop
+
+# automatically export the workflow helper
+NXF_UTILS=src/nxf_utils
+[[ -d $NXF_UTILS ]] || mkdir -p $NXF_UTILS
+bin/viash export resource platforms/nextflow/ProfilesHelper.config > $NXF_UTILS/ProfilesHelper.config
+bin/viash export resource platforms/nextflow/WorkflowHelper.nf > $NXF_UTILS/WorkflowHelper.nf
 
 cd bin
 

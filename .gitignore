@@ -19,6 +19,7 @@ target/
 check_results/
 log.txt
 .viash*
+resources/
 resources_test/
 
 # nextflow specific ignores

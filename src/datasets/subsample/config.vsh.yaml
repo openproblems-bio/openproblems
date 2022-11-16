@@ -1,0 +1,50 @@
+functionality:
+  name: "subsample"
+  namespace: "datasets"
+  description: "Subsample an h5ad file"
+  arguments:
+    - name: "--input"
+      type: "file"
+      description: "Input data to be resized"
+      required: true
+      example: input.h5ad
+    - name: "--keep_celltype_categories"
+      type: "string"
+      multiple: true
+      description: "Categories indexes to be selected"
+      required: false
+    - name: "--keep_batch_categories"
+      type: "string"
+      multiple: true
+      description: "Categories indexes to be selected"
+      required: false
+    - name: "--even"
+      type: "boolean_true"
+      description: Subsample evenly from different batches
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: "Output h5ad file"
+      required: true
+    - name: "--seed"
+      type: "integer"
+      description: "A seed for the subsampling."
+      example: 123
+  resources:
+    - type: python_script
+      path: script.py
+  test_resources:
+    - type: python_script
+      path: test_script.py
+    - path: "../../../resources_test/common/pancreas"
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          -  "anndata>=0.8"
+  - type: nextflow

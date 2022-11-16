@@ -23,13 +23,15 @@ functionality:
       description: "Output tsv"
   resources:
     - type: r_script
-      path: ./script.R
+      path: script.R
 platforms:
   - type: docker
-    image: "ghcr.io/data-intuitive/randpy:r4.1_py3.10"
+    image: eddelbuettel/r2u:22.04
     setup:
       - type: r
-        cran: anndata
+        cran: [ anndata]
+      - type: apt
+        packages: [ libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3 ]
       - type: python
-        pypi: anndata
+        pip: [ anndata>=0.8 ]
   - type: nextflow

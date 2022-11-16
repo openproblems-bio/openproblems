@@ -54,4 +54,4 @@ adata.obs["celltype_pred"] = scanvi_scarches(bdata, par['n_hidden'], par['n_late
 adata.uns["method_id"] = meta["functionality_name"]
 
 print("Write data")
-adata.write(par['output'], compression="gzip")
+adata.write_h5ad(par['output'], compression="gzip")

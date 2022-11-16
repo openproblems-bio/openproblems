@@ -2,36 +2,27 @@ nextflow.enable.dsl=2
 
 targetDir = "${params.rootDir}/target/nextflow"
 
-// import dataset loaders
-include { download } from "$targetDir/common/dataset_loader/download/main.nf"
 
-// import preprocess
-include { randomize } from "$targetDir/label_projection/data_processing/randomize/main.nf"
-// for tests
-include { subsample } from "$targetDir/label_projection/data_processing/subsample/main.nf"
-
-// import normalization
-include { log_scran_pooling } from "$targetDir/label_projection/data_processing/normalize/scran/log_scran_pooling/main.nf"
-include { log_cpm } from "$targetDir/label_projection/data_processing/normalize/log_cpm/main.nf"
+// include { split_dataset } from "$targetDir/label_projection/split_dataset/main.nf"
 
 // import methods
-include { all_correct }    from "$targetDir/label_projection/control_methods/all_correct/main.nf"
-include { majority_vote }    from "$targetDir/label_projection/control_methods/majority_vote/main.nf"
-include { random_celltype }  from "$targetDir/label_projection/control_methods/random_celltype/main.nf"
-include { knn_classifier }   from "$targetDir/label_projection/methods/knn_classifier/main.nf"
-include { mlp }              from "$targetDir/label_projection/methods/mlp/main.nf"
+include { all_correct } from "$targetDir/label_projection/control_methods/all_correct/main.nf"
+include { majority_vote } from "$targetDir/label_projection/control_methods/majority_vote/main.nf"
+include { random_labels } from "$targetDir/label_projection/control_methods/random_labels/main.nf"
+include { knn_classifier } from "$targetDir/label_projection/methods/knn_classifier/main.nf"
+include { mlp } from "$targetDir/label_projection/methods/mlp/main.nf"
 include { logistic_regression } from "$targetDir/label_projection/methods/logistic_regression/main.nf"
-include { scanvi_hvg } from "$targetDir/label_projection/methods/scvi/scanvi_hvg/main.nf"
-include { scanvi_all_genes } from "$targetDir/label_projection/methods/scvi/scanvi_all_genes/main.nf"
-include { scarches_scanvi_all_genes } from "$targetDir/label_projection/methods/scvi/scarches_scanvi_all_genes/main.nf"
-include { scarches_scanvi_hvg } from "$targetDir/label_projection/methods/scvi/scarches_scanvi_hvg/main.nf"
+// include { scanvi_hvg } from "$targetDir/label_projection/methods/scvi/scanvi_hvg/main.nf"
+// include { scanvi_all_genes } from "$targetDir/label_projection/methods/scvi/scanvi_all_genes/main.nf"
+// include { scarches_scanvi_all_genes } from "$targetDir/label_projection/methods/scvi/scarches_scanvi_all_genes/main.nf"
+// include { scarches_scanvi_hvg } from "$targetDir/label_projection/methods/scvi/scarches_scanvi_hvg/main.nf"
 
 // import metrics
-include { accuracy }          from "$targetDir/label_projection/metrics/accuracy/main.nf"
-include { f1 }          from "$targetDir/label_projection/metrics/f1/main.nf"
+include { accuracy } from "$targetDir/label_projection/metrics/accuracy/main.nf"
+include { f1 } from "$targetDir/label_projection/metrics/f1/main.nf"
 
 // import helper functions
-include { extract_scores }       from "$targetDir/common/extract_scores/main.nf"
+include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
 
 
 /*******************************************************
@@ -106,7 +97,7 @@ workflow {
         | (log_cpm & log_scran_pooling)
         | mix
         | map { unique_file_name(it) }
-        | (knn_classifier & mlp0 & lr0 & random_celltype & majority_vote & all_correct)
+        | (knn_classifier & mlp0 & lr0 & random_labels & majority_vote & all_correct)
         | mix
         | map { unique_file_name(it) }
         | (accuracy & f1a)

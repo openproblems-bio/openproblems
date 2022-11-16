@@ -49,4 +49,4 @@ if par["test"]:
     adata.uns["dataset_id"] = par["id"] + "_test"
 
 print("Writing adata to file")
-adata.write(par["output"], compression = "gzip")
+adata.write_h5ad(par["output"], compression = "gzip")

@@ -34,7 +34,7 @@ functionality:
   resources:
     - type: r_script
       path: ./script.R
-  tests:
+  test_resources:
     - type: python_script
       path: test.py
     - path: "../../resources/sample_dataset.h5ad"
