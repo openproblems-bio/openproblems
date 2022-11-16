@@ -45,6 +45,7 @@ bin/init
 
 ```bash
 bin/viash run src/common/sync_test_resources/config.vsh.yaml
+bin/viash run src/common/sync_test_resources/config.vsh.yaml -- --input s3://openproblems-data/resources --output resources
 ```
 
 **Step 1, build all the components:** in the `src/` folder as standalone executables in the `target/` folder. Use the `-q 'xxx'` parameter to build only several components of the repository.
