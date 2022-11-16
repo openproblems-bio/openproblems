@@ -39,7 +39,7 @@ if (!is.tibble(liana_res)) {
   liana_res <- liana_res %>%
     liana_aggregate() %>%
     # inverse distribution
-    mutate(aggregate_rank=1-aggregate_rank)
+    mutate(aggregate_rank = 1 - aggregate_rank)
 }
 
 # Return (Keep Complexes [not subunits] for Consistency)
