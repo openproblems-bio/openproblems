@@ -412,7 +412,6 @@ jobs:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         TOWER_WORKSPACE_ID: 53907369739130
         AWS_DEFAULT_REGION: us-west-2
-        NXF_DEFAULT_DSL: 1
       run: |
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd /mnt/openproblems-nextflow/cwd/${BRANCH}
@@ -420,7 +419,7 @@ jobs:
           rm results/pipeline_info/execution_trace.txt
         fi
         nextflow run \
-        -revision master \
+        -revision v1.9 \
         -with-tower \
         -ansi-log false -resume \
         -profile aws,test \
