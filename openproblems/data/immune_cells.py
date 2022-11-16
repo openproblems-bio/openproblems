@@ -1,7 +1,6 @@
 from . import utils
 
 import os
-import scanpy as sc
 import scprep
 import tempfile
 
@@ -12,6 +11,8 @@ URL = "https://ndownloader.figshare.com/files/36086786"
 @utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/s41592-021-01336-8")
 def load_immune(test=False):
     """Download immune human data from figshare."""
+    import scanpy as sc
+
     if test:
         # load full data first, cached if available
         adata = load_immune(test=False)

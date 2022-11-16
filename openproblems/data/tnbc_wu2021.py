@@ -2,7 +2,6 @@ from . import utils
 
 import numpy as np
 import os
-import scanpy as sc
 import scipy.sparse
 import scprep
 import tempfile
@@ -19,6 +18,8 @@ def load_tnbc_data(test=False):
     https://figshare.com/articles/dataset/TNBC_Data_from_Wu_et_al_2021/20338536
 
     """
+    import scanpy as sc
+
     if test:
         # load full data first, cached if available
         adata = load_tnbc_data(test=False)

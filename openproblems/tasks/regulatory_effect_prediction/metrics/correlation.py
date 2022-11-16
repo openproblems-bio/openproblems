@@ -1,11 +1,12 @@
 from ....tools.decorators import metric
 
 import numpy as np
-import scipy.sparse
-import scipy.stats
 
 
 def _correlation(adata, method="pearson"):
+    import scipy.sparse
+    import scipy.stats
+
     if method == "pearson":
         method = scipy.stats.pearsonr
     else:

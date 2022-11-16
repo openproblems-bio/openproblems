@@ -5,7 +5,6 @@ import functools
 import hashlib
 import logging
 import os
-import scanpy as sc
 import scipy.sparse
 
 log = logging.getLogger("openproblems")
@@ -94,6 +93,8 @@ def loader(data_url, data_reference):
 
 def filter_genes_cells(adata):
     """Remove empty cells and genes."""
+    import scanpy as sc
+
     if "var_names_all" not in adata.uns:
         # fill in original var names before filtering
         adata.uns["var_names_all"] = adata.var.index.to_numpy()
@@ -117,6 +118,8 @@ def subsample_even(adata, n_obs, even_obs):
     adata : AnnData
         Subsampled AnnData object
     """
+    import scanpy as sc
+
     values = adata.obs[even_obs].unique()
     adatas = []
     n_obs_per_value = n_obs // len(values)

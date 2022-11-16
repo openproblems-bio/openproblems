@@ -5,7 +5,6 @@ from ....tools.normalize import sqrt_cpm
 from ....tools.utils import check_version
 
 import functools
-import sklearn.decomposition
 
 _harmonic_alignment_method = functools.partial(
     method,
@@ -20,6 +19,7 @@ def _harmonic_alignment(
     adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
 ):
     import harmonicalignment
+    import sklearn.decomposition
 
     if test:
         n_svd = n_svd or 20
