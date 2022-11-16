@@ -89,7 +89,7 @@ jobs:
         title: '[auto] Update docker version'
         reviewers: scottgigante, dburkhardt
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-        commit-message: Update docker version # ci skip
+        commit-message: "Update docker version # ci skip"
         add-paths: docker/.version
 
     - name: Upload check results on fail
