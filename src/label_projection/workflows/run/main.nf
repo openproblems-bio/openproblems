@@ -43,6 +43,12 @@ workflow run_wf {
   input_ch
 
   main:
+  def addSolution = { tup ->
+    out = tup.clone()
+    out[1] = out[1] + [input_solution: out[2].metric.input_solution]
+    out
+  }
+
   output_ch = input_ch
     
     // split params for downstream components
@@ -51,18 +57,34 @@ workflow run_wf {
       metric: [ "input_solution" ]
     )
 
-    // run method
+    // run methods
     | getWorkflowArguments(key: "method")
-    | majority_vote
+    | (
+      true_labels.run(map: addSolution) & 
+      random_labels & 
+      majority_vote & 
+      knn_classifier & 
+      logistic_regression &
+      mlp
+    )
+    | mix
 
-    // run metric
-    | getWorkflowArguments(key: "metric", inputKey: "input_prediction")
+    // construct tuples for metrics
+    | pmap{ id, file, passthrough ->
+      // derive unique ids from output filenames
+      def newId = file.getName().replaceAll(".output.*", "")
+      // combine prediction with solution
+      def newData = [ input_prediction: file, input_solution: passthrough.metric.input_solution ]
+      [ newId, newData ]
+    }
+
+    // run metrics
     | (accuracy & f1)
     | mix
 
     // convert to tsv  
     | toSortedList
-    | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
+    | map{ it -> [ "combined", it.collect{ it[1] } ] }
     | extract_scores.run(
         auto: [ publish: true ]
     )
@@ -70,24 +92,3 @@ workflow run_wf {
   emit:
   output_ch
 }
-// workflow {
-//     load_data
-//         | randomize
-//         | subsample.run(
-//             map: { [it[0], [input: it[1], even: true]] }
-//         )
-//         | (log_cpm & log_scran_pooling)
-//         | mix
-//         | map { unique_file_name(it) }
-//         | (knn_classifier & mlp0 & lr0 & random_labels & majority_vote & true_labels)
-//         | mix
-//         | map { unique_file_name(it) }
-//         | (accuracy & f1a)
-//         | mix
-//         | toSortedList
-//         | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
-//         | extract_scores.run(
-//             args: [column_names: "dataset_id:normalization_method:method_id:metric_id:metric_value"],
-//             auto: [ publish: true ]
-//         )
-// }
