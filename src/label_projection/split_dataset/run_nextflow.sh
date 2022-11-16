@@ -10,8 +10,8 @@ export NXF_VER=22.04.5
 
 bin/nextflow \
   run . \
-  -main-script src/datasets/workflows/process_openproblems_v1/main.nf \
+  -main-script target/nextflow/label_projection/split_dataset/main.nf \
   -profile docker \
   -resume \
-  -params-file src/datasets/workflows/process_openproblems_v1/datasets.yaml \
-  --publish_dir resources/datasets/openproblems_v1
+  -params-file src/label_projection/split_dataset/params.yaml \
+  --publish_dir resources/label_projection/openproblems_v1

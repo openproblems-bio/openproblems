@@ -80,4 +80,4 @@ functionality:
         assert "batch" in output_solution.obs
 
         print(">> All checks succeeded!")
-    - path: ../../../../resources_test/common/pancreas
+    - path: ../../../resources_test/common/pancreas

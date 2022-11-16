@@ -4,7 +4,7 @@ import random
 
 ## VIASH START
 par = {
-    'input': 'resources_test/label_projection/pancreas/dataset.h5ad',
+    'input': 'work/b5/46e5081b30a46ab67d074d4c23eb71/zebrafish.h5ad',
     'method': 'batch',
     'seed': None,
     'obs_batch': 'batch',
@@ -30,11 +30,10 @@ print("adata:", adata)
 print(f">> Process data using {par['method']} method")
 
 if par["method"] == "batch":
-    test_batches = adata.obs[par["obs_batch"]].dtype.categories[[-3, -1]]
-    is_test = [
-        True if adata.obs[par["obs_batch"]][idx] in test_batches else False
-        for idx in adata.obs_names
-    ]
+    batch_info = adata.obs[par["obs_batch"]]
+    batch_categories = batch_info.dtype.categories
+    test_batches = random.sample(list(batch_categories), 1)
+    is_test = [ x in test_batches for x in batch_info ]
 elif par["method"] == "random":
     train_ix = np.random.choice(adata.n_obs, round(adata.n_obs * 0.8), replace=False)
     is_test = [ not x in train_ix for x in range(0, adata.n_obs) ]

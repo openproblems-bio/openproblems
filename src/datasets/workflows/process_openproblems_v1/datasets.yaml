@@ -9,52 +9,44 @@ param_list:
     obs_batch: experiment_code
     obs_tissue: tissue
     layer_counts: counts
-    output: cengen.h5ad
 
   - id: immune_cells
     obs_celltype: final_annotation
     obs_batch: batch
     obs_tissue: tissue
     layer_counts: counts
-    output: immune_cells.h5ad
 
   - id: mouse_blood_olssen_labelled
     obs_celltype: celltype
     layer_counts: counts
-    output: mouse_blood_olssen_labelled.h5ad
 
   - id: mouse_hspc_nestorowa2016
     obs_celltype: cell_type_label
     layer_counts: counts
-    output: mouse_hspc_nestorowa2016.h5ad
 
   - id: pancreas
     obs_celltype: celltype
     obs_batch: tech
     layer_counts: counts
-    output: pancreas.h5ad
 
   - id: tabula_muris_senis_droplet_lung
     obs_celltype: cell_type
     obs_batch: donor_id
     layer_counts: counts
-    output: tabula_muris_senis_droplet_lung.h5ad
 
   - id: tenx_1k_pbmc
     layer_counts: counts
-    output: tenx_1k_pbmc.h5ad
 
   - id: tenx_5k_pbmc
     layer_counts: counts
-    output: tenx_5k_pbmc.h5ad
 
   - id: tnbc_wu2021
     obs_celltype: celltype_minor
     layer_counts: counts
-    output: tnbc_wu2021.h5ad
     
   - id: zebrafish
     obs_celltype: cell_type
     obs_batch: lab
     layer_counts: counts
-    output: zebrafish.h5ad
+
+output: '$id.h5ad'
