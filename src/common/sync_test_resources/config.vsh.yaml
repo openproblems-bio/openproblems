@@ -5,7 +5,7 @@ functionality:
   description: Synchronise the test resources from s3 to resources_test
   usage: |
     sync_test_resources
-    sync_test_resources --input s3://openproblems-data --output resources_test
+    sync_test_resources --input s3://openproblems-data/resources_test --output resources_test
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -16,7 +16,7 @@ functionality:
       alternatives: ["-i"]
       type: string
       description: "Path to the S3 bucket to sync from."
-      default: "s3://openproblems-data"
+      default: "s3://openproblems-data/resources_test"
     - name: "--output"
       alternatives: ["-o"]
       type: file
