@@ -2,7 +2,6 @@ from . import utils
 
 import numpy as np
 import os
-import scanpy as sc
 import scprep
 import tempfile
 
@@ -17,6 +16,8 @@ def load_mouse_brain_atlas(test=False):
     to the dataset is available at:
     https://figshare.com/articles/dataset/allen_brain_h5ad/20338089
     """
+    import scanpy as sc
+
     if test:
         # load full data first, cached if available
         adata = load_mouse_brain_atlas(test=False)

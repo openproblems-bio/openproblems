@@ -1,11 +1,11 @@
 from ....tools.decorators import metric
 
-import scprep
-
 
 @metric(metric_name="Poisson loss", maximize=False, image="openproblems-python-extras")
 def poisson(adata):
     from molecular_cross_validation.mcv_sweep import poisson_nll_loss
+
+    import scprep
 
     test_data = adata.obsm["test"]
     denoised_data = adata.obsm["denoised"]

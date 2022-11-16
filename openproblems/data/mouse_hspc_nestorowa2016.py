@@ -1,7 +1,6 @@
 from . import utils
 
 import os
-import scanpy as sc
 import scprep
 import tempfile
 
@@ -15,6 +14,8 @@ URL = "https://ndownloader.figshare.com/files/36088649"
 )
 def load_mouse_hspc_nestorowa2016(test=False):
     """Download Nesterova data from Figshare."""
+    import scanpy as sc
+
     if test:
         # load full data first, cached if available
         adata = load_mouse_hspc_nestorowa2016(test=False)

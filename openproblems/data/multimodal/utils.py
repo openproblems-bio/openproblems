@@ -1,7 +1,6 @@
 import anndata
 import numpy as np
 import pandas as pd
-import scanpy as sc
 import scprep
 
 
@@ -17,6 +16,8 @@ def subset_mode2_genes(adata, keep_genes):
 
 def filter_joint_data_empty_cells(adata):
     """Remove empty cells and genes from a multimodal dataset."""
+    import scanpy as sc
+
     assert np.all(adata.uns["mode2_obs"] == adata.obs.index)
     # filter cells
     n_cells_mode1 = scprep.utils.toarray(adata.X.sum(axis=1)).flatten()

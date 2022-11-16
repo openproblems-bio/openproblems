@@ -1,7 +1,6 @@
 from . import utils
 
 import os
-import scanpy as sc
 import scprep
 import tempfile
 
@@ -17,6 +16,8 @@ REFERENCE_URL = "https://www.10xgenomics.com/resources/datasets"
 @utils.loader(data_url=PBMC_1K_URL, data_reference=REFERENCE_URL)
 def load_tenx_1k_pbmc(test=False):
     """Download PBMC data from Figshare."""
+    import scanpy as sc
+
     if test:
         adata = load_tenx_1k_pbmc(test=False)
         sc.pp.subsample(adata, n_obs=100)
@@ -34,6 +35,8 @@ def load_tenx_1k_pbmc(test=False):
 @utils.loader(data_url=PBMC_5K_URL, data_reference=REFERENCE_URL)
 def load_tenx_5k_pbmc(test=False):
     """Download 5k PBMCs from 10x Genomics."""
+    import scanpy as sc
+
     if test:
         # load full data first, cached if available
         adata = load_tenx_5k_pbmc(test=False)

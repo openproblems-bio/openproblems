@@ -3,7 +3,6 @@ from . import utils
 import anndata as ad
 import os
 import requests
-import scanpy as sc
 import scprep
 import tempfile
 import time
@@ -59,6 +58,8 @@ def matching_dataset(dataset, method_list, organ_list):
 
 
 def load_raw_counts(dataset):
+    import scanpy as sc
+
     dataset_id = dataset["id"]
     assets_path = (
         f"/curation/v1/collections/{COLLECTION_ID}/datasets/{dataset_id}/assets"

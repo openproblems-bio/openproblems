@@ -2,7 +2,6 @@ from ....data.sample import load_sample_data
 from ....tools.decorators import dataset
 
 import numpy as np
-import scanpy as sc
 
 
 def check_dataset(adata):
@@ -34,6 +33,8 @@ def check_method(adata, is_baseline=False):
 @dataset()
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
+    import scanpy as sc
+
     adata = load_sample_data()
     adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
     adata.layers["log_normalized"] = adata.X
