@@ -345,7 +345,8 @@ jobs:
         for dir in bucket work cwd; do
           mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
         done
-        echo "CWD=/mnt/openproblems-nextflow/cwd/${BRANCH}/${{ github.run_id }}_${{ github.run_attempt }}" >> $GITHUB_ENV
+        CWD=/mnt/openproblems-nextflow/cwd/${BRANCH}/${{ github.run_id }}_${{ github.run_attempt }}
+        echo "CWD=$CWD" >> $GITHUB_ENV
         mkdir -p $CWD
         ls -l /mnt/openproblems-nextflow/*/${BRANCH}
 
