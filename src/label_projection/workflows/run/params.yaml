@@ -1,0 +1,17 @@
+param_list:
+- id: immune_cells
+  input_train: resources/label_projection/openproblems_v1/immune_cells.split_dataset.output_train.h5ad
+  input_test: resources/label_projection/openproblems_v1/immune_cells.split_dataset.output_test.h5ad
+  input_solution: resources/label_projection/openproblems_v1/immune_cells.split_dataset.output_solution.h5ad
+- id: pancreas
+  input_train: resources/label_projection/openproblems_v1/pancreas.split_dataset.output_train.h5ad
+  input_test: resources/label_projection/openproblems_v1/pancreas.split_dataset.output_test.h5ad
+  input_solution: resources/label_projection/openproblems_v1/pancreas.split_dataset.output_solution.h5ad
+- id: tabula_muris_senis_droplet_lung
+  input_train: resources/label_projection/openproblems_v1/tabula_muris_senis_droplet_lung.split_dataset.output_train.h5ad
+  input_test: resources/label_projection/openproblems_v1/tabula_muris_senis_droplet_lung.split_dataset.output_test.h5ad
+  input_solution: resources/label_projection/openproblems_v1/tabula_muris_senis_droplet_lung.split_dataset.output_solution.h5ad
+- id: zebrafish
+  input_train: resources/label_projection/openproblems_v1/zebrafish.split_dataset.output_train.h5ad
+  input_test: resources/label_projection/openproblems_v1/zebrafish.split_dataset.output_test.h5ad
+  input_solution: resources/label_projection/openproblems_v1/zebrafish.split_dataset.output_solution.h5ad

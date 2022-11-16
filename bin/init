@@ -12,6 +12,8 @@ curl -fsSL get.viash.io | bash -s -- \
   --target_image_source https://github.com/openproblems-bio/openproblems-v2 \
   --tag develop
 
+# add --namespace_separator '/' ?
+
 # automatically export the workflow helper
 NXF_UTILS=src/nxf_utils
 [[ -d $NXF_UTILS ]] || mkdir -p $NXF_UTILS
