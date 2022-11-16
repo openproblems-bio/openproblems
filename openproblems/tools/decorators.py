@@ -4,7 +4,6 @@ from . import utils
 import anndata
 import functools
 import logging
-import memory_profiler
 import time
 
 log = logging.getLogger("openproblems")
@@ -180,6 +179,7 @@ def profile(func):
     result : dict
         Contains 'result', 'runtime_s', 'memory_mb', 'memory_leaked_mb'
     """
+    import memory_profiler
 
     @functools.wraps(func)
     def decorated(*args, **kwargs):

@@ -3,7 +3,6 @@ from ....tools.normalize import log_cpm
 from ....tools.utils import check_version
 
 import numpy as np
-import sklearn.decomposition
 
 
 @method(
@@ -15,6 +14,8 @@ import sklearn.decomposition
     is_baseline=True,
 )
 def random_features(adata, test=False, n_svd=20):
+    import sklearn.decomposition
+
     n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
     adata = log_cpm(adata)
     X_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
@@ -35,6 +36,8 @@ def random_features(adata, test=False, n_svd=20):
     is_baseline=True,
 )
 def true_features(adata, test=False, n_svd=20):
+    import sklearn.decomposition
+
     n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
     adata = log_cpm(adata)
     X_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)

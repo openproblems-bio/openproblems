@@ -4,7 +4,6 @@ from ....tools.normalize import log_scran_pooling
 from .sklearn import classifier
 
 import functools
-import sklearn.neural_network
 
 _mlp_method = functools.partial(
     method,
@@ -17,6 +16,8 @@ _mlp_method = functools.partial(
 
 
 def _mlp(adata, test=False, max_iter=None, hidden_layer_sizes=None):
+    import sklearn.neural_network
+
     if test:
         hidden_layer_sizes = hidden_layer_sizes or (20,)
         max_iter = max_iter or 100

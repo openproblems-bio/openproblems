@@ -3,7 +3,6 @@ from ....data.sample import load_sample_data
 import numbers
 import numpy as np
 import pandas as pd
-import scanpy as sc
 
 SAMPLE_RECEPTOR_NAMES = [
     "LGALS9",
@@ -197,6 +196,8 @@ def check_method(adata, merge_keys, is_baseline=False):
 
 def sample_dataset(merge_keys):
     """Create a simple dataset to use for testing methods in this task."""
+    import scanpy as sc
+
     adata = load_sample_data()
     rng = np.random.default_rng(seed=1234)
 

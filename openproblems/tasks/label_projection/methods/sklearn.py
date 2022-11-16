@@ -2,12 +2,13 @@ from ....tools.utils import check_version
 from .utils import pca_op
 
 import numpy as np
-import sklearn.pipeline
-import sklearn.preprocessing
 
 
 def classifier(adata, estimator, n_pca=100, **kwargs):
     """Run a generic scikit-learn classifier."""
+    import sklearn.pipeline
+    import sklearn.preprocessing
+
     adata_train = adata[adata.obs["is_train"]]
     adata_test = adata[~adata.obs["is_train"]].copy()
 

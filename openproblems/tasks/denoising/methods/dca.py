@@ -1,18 +1,19 @@
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
-import scanpy as sc
-
 
 def _dca(adata, test=False, epochs=None):
+    from dca.api import dca
+
+    import anndata
+
     if test:
         epochs = epochs or 30
     else:  # pragma: nocover
         epochs = epochs or 300
-    from dca.api import dca
 
     # make adata object with train counts
-    adata_train = sc.AnnData(adata.obsm["train"])
+    adata_train = anndata.AnnData(adata.obsm["train"])
     # run DCA
     dca(adata_train, epochs=epochs)
 

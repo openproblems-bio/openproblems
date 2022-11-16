@@ -1,8 +1,6 @@
 from .....data.pancreas import load_pancreas
 from .....tools.decorators import dataset
 
-import scanpy as sc
-
 
 @dataset(
     dataset_name="Pancreas (by batch)",
@@ -14,6 +12,8 @@ import scanpy as sc
     image="openproblems",
 )
 def pancreas_batch(test=False):
+    import scanpy as sc
+
     adata = load_pancreas(test)
     adata.obs["labels"] = adata.obs["celltype"]
     adata.obs["batch"] = adata.obs["tech"]
