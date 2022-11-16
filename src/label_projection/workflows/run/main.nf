@@ -60,6 +60,13 @@ workflow run_wf {
     | (accuracy & f1)
     | mix
 
+    // convert to tsv  
+    | toSortedList
+    | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
+    | extract_scores.run(
+        auto: [ publish: true ]
+    )
+
   emit:
   output_ch
 }
