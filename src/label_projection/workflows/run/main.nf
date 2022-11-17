@@ -50,22 +50,23 @@ workflow run_wf {
   }
 
   output_ch = input_ch
+    | filter{it[1].normalization_id == "log_cpm"}
     
     // split params for downstream components
     | setWorkflowArguments(
-      method: ["input_train", "input_test"],
+      method: ["input_train", "input_test", "normalization_id", "dataset_id"],
       metric: [ "input_solution" ]
     )
 
     // run methods
     | getWorkflowArguments(key: "method")
     | (
-      true_labels.run(map: addSolution) & 
-      random_labels & 
-      majority_vote & 
-      knn & 
-      logistic_regression &
-      mlp
+      true_labels.run(map: addSolution, filter: {it[1].normalization_id == "log_cpm"}) & 
+      random_labels.run(filter: {it[1].normalization_id == "log_cpm"}) & 
+      majority_vote.run(filter: {it[1].normalization_id == "log_cpm"}) & 
+      knn.run(filter: {it[1].normalization_id == "log_cpm"}) & 
+      logistic_regression.run(filter: {it[1].normalization_id == "log_cpm"}) &
+      mlp.run(filter: {it[1].normalization_id == "log_cpm"})
     )
     | mix
 

@@ -14,7 +14,6 @@ functionality:
     v1_url: openproblems/tasks/label_projection/methods/knn_classifier.py
     v1_commit: 2097bbb3e996f66e98128c9ac95bc9640a496e0d
     preferred_normalization: log_cpm
-  arguments:
   resources:
     - type: python_script
       path: script.py

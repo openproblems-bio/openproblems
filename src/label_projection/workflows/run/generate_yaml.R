@@ -32,4 +32,4 @@ output <- list(
   # seed = 123L
 )
 
-yaml::write_yaml(output, "src/label_projection/workflows/run/params.yaml")
+yaml::write_yaml(output, "src/label_projection/workflows/run/params_benchmark.yaml")

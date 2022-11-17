@@ -20,7 +20,7 @@ meta = {
 print("Load input data")
 input_train = ad.read_h5ad(par['input_train'])
 input_test = ad.read_h5ad(par['input_test'])
-input_layer = par["layer_input"]
+input_layer = "normalized"
 
 print("Set up classifier pipeline")
 def pca_op(adata_train, adata_test, n_components=100):
