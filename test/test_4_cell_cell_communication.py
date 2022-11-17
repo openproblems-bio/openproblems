@@ -26,14 +26,14 @@ pytestmark = pytest.mark.skipif(
 class TestApi(unittest.TestCase):
     def test_assert_is_subset(self):
         assert (
-                common.api.assert_is_subset(["a"], ["a", "b", "c"], prop_missing_allowed=0)
-                is None
+            common.api.assert_is_subset(["a"], ["a", "b", "c"], prop_missing_allowed=0)
+            is None
         )
         assert (
-                common.api.assert_is_subset(
-                    ["a", "b", "c", "d"], ["a", "b", "c"], prop_missing_allowed=0.25
-                )
-                is None
+            common.api.assert_is_subset(
+                ["a", "b", "c", "d"], ["a", "b", "c"], prop_missing_allowed=0.25
+            )
+            is None
         )
         self.assertRaisesRegex(
             AssertionError,
@@ -101,7 +101,7 @@ class TestApi(unittest.TestCase):
         np.testing.assert_array_equal(
             adata[:, ["one_to_many", "one_to_many", "one_to_many"]].X.toarray(),
             adata_mapped[
-            :, ["many_from_one_1", "many_from_one_2", "many_from_one_3"]
+                :, ["many_from_one_1", "many_from_one_2", "many_from_one_3"]
             ].X.toarray(),
         )
         np.testing.assert_array_equal(
