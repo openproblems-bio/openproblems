@@ -4,6 +4,8 @@ functionality:
       __inherits__: anndata_train.yaml
     - name: "--input_test"
       __inherits__: anndata_test.yaml
+    - name: "--input_solution"
+      __inherits__: anndata_solution.yaml
     - name: "--output"
       __inherits__: anndata_prediction.yaml
       direction: output

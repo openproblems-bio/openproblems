@@ -15,6 +15,8 @@
     - <a href="#test" id="toc-test"><code>Test</code></a>
     - <a href="#train" id="toc-train"><code>Train</code></a>
   - <a href="#component-api" id="toc-component-api">Component API</a>
+    - <a href="#control-method"
+      id="toc-control-method"><code>Control Method</code></a>
     - <a href="#method" id="toc-method"><code>Method</code></a>
     - <a href="#metric" id="toc-metric"><code>Metric</code></a>
     - <a href="#split-dataset"
@@ -53,15 +55,14 @@ labels onto the test set.
 
 Methods for assigning labels from a reference dataset to a new dataset.
 
-| Name                                                                 | Type             | Description                                                                                                 | DOI                                                  | URL                                                                                                    |
-|:---------------------------------------------------------------------|:-----------------|:------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------|:-------------------------------------------------------------------------------------------------------|
-| [KNN](./methods/knn/config.vsh.yaml)                                 | method           | K-Nearest Neighbors classifier                                                                              | [link](https://doi.org/10.1109/TIT.1967.1053964)     | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html)  |
-| [Logistic Regression](./methods/logistic_regression/config.vsh.yaml) | method           | Logistic regression method                                                                                  |                                                      | [link](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) |
-| [Multilayer perceptron](./methods/mlp/config.vsh.yaml)               | method           | Multilayer perceptron                                                                                       | [link](https://doi.org/10.1016/0004-3702(89)90049-0) | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html)    |
-| [Scanvi](./methods/scanvi/config.vsh.yaml)                           | method           | Probabilistic harmonization and annotation of single-cell transcriptomics data with deep generative models. | [link](https://doi.org/10.1101/2020.07.16.205997)    | [link](https://github.com/YosefLab/scvi-tools)                                                         |
-| [Majority Vote](./control_methods/majority_vote/config.vsh.yaml)     | negative_control | Baseline method using majority voting                                                                       |                                                      |                                                                                                        |
-| [Random Labels](./control_methods/random_labels/config.vsh.yaml)     | negative_control | Negative control method which generates random labels                                                       |                                                      |                                                                                                        |
-| [True labels](./control_methods/true_labels/config.vsh.yaml)         | positive_control | Positive control method by returning the true labels                                                        |                                                      |                                                                                                        |
+| Name                                                                 | Type             | Description                                           | DOI                                                  | URL                                                                                                    |
+|:---------------------------------------------------------------------|:-----------------|:------------------------------------------------------|:-----------------------------------------------------|:-------------------------------------------------------------------------------------------------------|
+| [KNN](./methods/knn/config.vsh.yaml)                                 | method           | K-Nearest Neighbors classifier                        | [link](https://doi.org/10.1109/TIT.1967.1053964)     | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html)  |
+| [Logistic Regression](./methods/logistic_regression/config.vsh.yaml) | method           | Logistic regression method                            |                                                      | [link](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) |
+| [Multilayer perceptron](./methods/mlp/config.vsh.yaml)               | method           | Multilayer perceptron                                 | [link](https://doi.org/10.1016/0004-3702(89)90049-0) | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html)    |
+| [Majority Vote](./control_methods/majority_vote/config.vsh.yaml)     | negative_control | Baseline method using majority voting                 |                                                      |                                                                                                        |
+| [Random Labels](./control_methods/random_labels/config.vsh.yaml)     | negative_control | Negative control method which generates random labels |                                                      |                                                                                                        |
+| [True labels](./control_methods/true_labels/config.vsh.yaml)         | positive_control | Positive control method by returning the true labels  |                                                      |                                                                                                        |
 
 ## Metrics
 
@@ -86,14 +87,19 @@ flowchart LR
   anndata_solution(Solution)
   anndata_test(Test)
   anndata_train(Train)
+  comp_control_method[/Control Method/]
   comp_method[/Method/]
   comp_metric[/Metric/]
   comp_split_dataset[/Split Dataset/]
+  anndata_train---comp_control_method
+  anndata_test---comp_control_method
+  anndata_solution---comp_control_method
   anndata_train---comp_method
   anndata_test---comp_method
   anndata_solution---comp_metric
   anndata_prediction---comp_metric
   anndata_dataset---comp_split_dataset
+  comp_control_method-->anndata_prediction
   comp_method-->anndata_prediction
   comp_metric-->anndata_score
   comp_split_dataset-->anndata_train
@@ -136,6 +142,7 @@ The prediction file
 
 Used in:
 
+- [control method](#control%20method): output (as output)
 - [method](#method): output (as output)
 - [metric](#metric): input_prediction (as input)
 
@@ -181,6 +188,7 @@ The solution for the test data
 
 Used in:
 
+- [control method](#control%20method): input_solution (as input)
 - [metric](#metric): input_solution (as input)
 - [split dataset](#split%20dataset): output_solution (as output)
 
@@ -209,6 +217,7 @@ The test data (without labels)
 
 Used in:
 
+- [control method](#control%20method): input_test (as input)
 - [method](#method): input_test (as input)
 - [split dataset](#split%20dataset): output_test (as output)
 
@@ -236,6 +245,7 @@ The training data
 
 Used in:
 
+- [control method](#control%20method): input_train (as input)
 - [method](#method): input_train (as input)
 - [split dataset](#split%20dataset): output_train (as output)
 
@@ -259,6 +269,17 @@ Example:
      layers: 'counts', 'log_cpm', 'log_scran_pooling', 'sqrt_cpm'
 
 ## Component API
+
+### `Control Method`
+
+Arguments:
+
+| Name               | File format               | Direction | Description   |
+|:-------------------|:--------------------------|:----------|:--------------|
+| `--input_train`    | [Train](#train)           | input     | Training data |
+| `--input_test`     | [Test](#test)             | input     | Test data     |
+| `--input_solution` | [Solution](#solution)     | input     | Solution      |
+| `--output`         | [Prediction](#prediction) | output    | Prediction    |
 
 ### `Method`
 

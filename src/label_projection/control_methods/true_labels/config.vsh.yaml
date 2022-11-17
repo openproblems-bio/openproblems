@@ -1,4 +1,4 @@
-__inherits__: ../../api/comp_method.yaml
+__inherits__: ../../api/comp_control_method.yaml
 functionality:
   name: "true_labels"
   namespace: "label_projection/control_methods"
@@ -8,13 +8,7 @@ functionality:
     label: True labels
     v1_url: openproblems/tasks/label_projection/methods/baseline.py
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
-  arguments:
-    - name: "--input_solution"
-      __inherits__: ../../api/anndata_solution.yaml
-    - name: "--layer_input"
-      type: string
-      default: "counts"
-      description: Which layer to use as input.
+    preferred_normalization: counts
   resources:
     - type: python_script
       path: script.py
