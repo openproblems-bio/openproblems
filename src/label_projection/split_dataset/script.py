@@ -48,22 +48,23 @@ def subset_anndata(adata_sub, layers, obs, uns):
     )
 output_train = subset_anndata(
     adata_sub = adata[[not x for x in is_test]], 
-    layers=["counts", "log_cpm", "log_scran_pooling"], 
+    layers=["counts", "normalized"], 
     obs={"label": par["obs_label"], "batch": par["obs_batch"]}, 
     uns=["dataset_id"]
 )
 output_test = subset_anndata(
     adata[is_test], 
-    layers=["counts", "log_cpm", "log_scran_pooling"], 
+    layers=["counts", "normalized"], 
     obs={"batch": par["obs_batch"]}, # do NOT copy label to test obs!
     uns=["dataset_id"]
 )
 output_solution = subset_anndata(
     adata[is_test], 
-    layers=["counts", "log_cpm", "log_scran_pooling"],
+    layers=["counts", "normalized"],
     obs={"label": par["obs_label"], "batch": par["obs_batch"]},
     uns=["dataset_id"]
 )
+# TODO: use .viash_config.yaml to define these subsets
 
 print(">> Writing data")
 output_train.write_h5ad(par["output_train"])

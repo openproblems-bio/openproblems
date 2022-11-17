@@ -64,18 +64,15 @@ functionality:
 
         print(">> Check whether certain slots exist")
         assert "counts" in output_train.layers
-        assert "log_cpm" in output_train.layers
-        assert "log_scran_pooling" in output_train.layers
+        assert "normalized" in output_train.layers
         assert "label" in output_train.obs
         assert "batch" in output_train.obs
         assert "counts" in output_test.layers
-        assert "log_cpm" in output_test.layers
-        assert "log_scran_pooling" in output_test.layers
+        assert "normalized" in output_test.layers
         assert "label" not in output_test.obs # make sure label is /not/ here
         assert "batch" in output_test.obs
         assert "counts" in output_solution.layers
-        assert "log_cpm" in output_solution.layers
-        assert "log_scran_pooling" in output_solution.layers
+        assert "normalized" in output_solution.layers
         assert "label" in output_solution.obs
         assert "batch" in output_solution.obs
 

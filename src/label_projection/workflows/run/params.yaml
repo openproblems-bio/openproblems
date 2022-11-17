@@ -1,0 +1,60 @@
+param_list:
+  resources/datasets/openproblems_v1/allen_brain_atlas.log_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/allen_brain_atlas.sqrt_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/cengen.log_cpm.h5ad:
+    id: cengen.log_cpm
+    input: resources/datasets/openproblems_v1/cengen.log_cpm.h5ad
+  resources/datasets/openproblems_v1/cengen.sqrt_cpm.h5ad:
+    id: cengen.sqrt_cpm
+    input: resources/datasets/openproblems_v1/cengen.sqrt_cpm.h5ad
+  resources/datasets/openproblems_v1/immune_cells.log_cpm.h5ad:
+    id: immune_cells.log_cpm
+    input: resources/datasets/openproblems_v1/immune_cells.log_cpm.h5ad
+  resources/datasets/openproblems_v1/immune_cells.log_scran_pooling.h5ad:
+    id: immune_cells.log_scran_pooling
+    input: resources/datasets/openproblems_v1/immune_cells.log_scran_pooling.h5ad
+  resources/datasets/openproblems_v1/immune_cells.sqrt_cpm.h5ad:
+    id: immune_cells.sqrt_cpm
+    input: resources/datasets/openproblems_v1/immune_cells.sqrt_cpm.h5ad
+  resources/datasets/openproblems_v1/mouse_blood_olssen_labelled.log_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/mouse_blood_olssen_labelled.log_scran_pooling.h5ad: ~
+  resources/datasets/openproblems_v1/mouse_blood_olssen_labelled.sqrt_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/mouse_hspc_nestorowa2016.log_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/mouse_hspc_nestorowa2016.log_scran_pooling.h5ad: ~
+  resources/datasets/openproblems_v1/mouse_hspc_nestorowa2016.sqrt_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/pancreas.log_cpm.h5ad:
+    id: pancreas.log_cpm
+    input: resources/datasets/openproblems_v1/pancreas.log_cpm.h5ad
+  resources/datasets/openproblems_v1/pancreas.log_scran_pooling.h5ad:
+    id: pancreas.log_scran_pooling
+    input: resources/datasets/openproblems_v1/pancreas.log_scran_pooling.h5ad
+  resources/datasets/openproblems_v1/pancreas.sqrt_cpm.h5ad:
+    id: pancreas.sqrt_cpm
+    input: resources/datasets/openproblems_v1/pancreas.sqrt_cpm.h5ad
+  resources/datasets/openproblems_v1/tabula_muris_senis_droplet_lung.log_cpm.h5ad:
+    id: tabula_muris_senis_droplet_lung.log_cpm
+    input: resources/datasets/openproblems_v1/tabula_muris_senis_droplet_lung.log_cpm.h5ad
+  resources/datasets/openproblems_v1/tabula_muris_senis_droplet_lung.log_scran_pooling.h5ad:
+    id: tabula_muris_senis_droplet_lung.log_scran_pooling
+    input: resources/datasets/openproblems_v1/tabula_muris_senis_droplet_lung.log_scran_pooling.h5ad
+  resources/datasets/openproblems_v1/tabula_muris_senis_droplet_lung.sqrt_cpm.h5ad:
+    id: tabula_muris_senis_droplet_lung.sqrt_cpm
+    input: resources/datasets/openproblems_v1/tabula_muris_senis_droplet_lung.sqrt_cpm.h5ad
+  resources/datasets/openproblems_v1/tenx_1k_pbmc.log_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/tenx_1k_pbmc.log_scran_pooling.h5ad: ~
+  resources/datasets/openproblems_v1/tenx_1k_pbmc.sqrt_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/tenx_5k_pbmc.log_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/tenx_5k_pbmc.log_scran_pooling.h5ad: ~
+  resources/datasets/openproblems_v1/tenx_5k_pbmc.sqrt_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/tnbc_wu2021.log_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/tnbc_wu2021.log_scran_pooling.h5ad: ~
+  resources/datasets/openproblems_v1/tnbc_wu2021.sqrt_cpm.h5ad: ~
+  resources/datasets/openproblems_v1/zebrafish.log_cpm.h5ad:
+    id: zebrafish.log_cpm
+    input: resources/datasets/openproblems_v1/zebrafish.log_cpm.h5ad
+  resources/datasets/openproblems_v1/zebrafish.log_scran_pooling.h5ad:
+    id: zebrafish.log_scran_pooling
+    input: resources/datasets/openproblems_v1/zebrafish.log_scran_pooling.h5ad
+  resources/datasets/openproblems_v1/zebrafish.sqrt_cpm.h5ad:
+    id: zebrafish.sqrt_cpm
+    input: resources/datasets/openproblems_v1/zebrafish.sqrt_cpm.h5ad

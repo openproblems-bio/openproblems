@@ -6,9 +6,11 @@ h5ad_files <- fs::dir_ls("resources/datasets/openproblems_v1", recurse = TRUE, r
 param_list <- map(h5ad_files, function(h5ad_file) {
   ad <- anndata::read_h5ad(h5ad_file, backed = "r")
   if (all(c("batch", "celltype") %in% colnames(ad$obs))) {
+    dataset_id <- gsub(".*/", "", ad$uns[["dataset_id"]])
+    normalization_id <- ad$uns[["normalization_id"]]
     list(
-      id = gsub(".*/", "", ad$uns[["dataset_id"]]),
-      input = paste0("../../../", h5ad_file)
+      id = paste0(dataset_id, ".", normalization_id),
+      input = h5ad_file
     )
   } else {
     NULL

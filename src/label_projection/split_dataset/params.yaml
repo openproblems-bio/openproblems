@@ -1,12 +1,32 @@
 param_list:
-- id: immune_cells
-  input: resources/datasets/openproblems_v1/immune_cells.h5ad
-- id: pancreas
-  input: resources/datasets/openproblems_v1/pancreas.h5ad
-- id: tabula_muris_senis_droplet_lung
-  input: resources/datasets/openproblems_v1/tabula_muris_senis_droplet_lung.h5ad
-- id: zebrafish
-  input: resources/datasets/openproblems_v1/zebrafish.h5ad
+- id: cengen.log_cpm
+  input: resources/datasets/openproblems_v1/cengen.log_cpm.h5ad
+- id: cengen.sqrt_cpm
+  input: resources/datasets/openproblems_v1/cengen.sqrt_cpm.h5ad
+- id: immune_cells.log_cpm
+  input: resources/datasets/openproblems_v1/immune_cells.log_cpm.h5ad
+- id: immune_cells.log_scran_pooling
+  input: resources/datasets/openproblems_v1/immune_cells.log_scran_pooling.h5ad
+- id: immune_cells.sqrt_cpm
+  input: resources/datasets/openproblems_v1/immune_cells.sqrt_cpm.h5ad
+- id: pancreas.log_cpm
+  input: resources/datasets/openproblems_v1/pancreas.log_cpm.h5ad
+- id: pancreas.log_scran_pooling
+  input: resources/datasets/openproblems_v1/pancreas.log_scran_pooling.h5ad
+- id: pancreas.sqrt_cpm
+  input: resources/datasets/openproblems_v1/pancreas.sqrt_cpm.h5ad
+- id: tabula_muris_senis_droplet_lung.log_cpm
+  input: resources/datasets/openproblems_v1/tabula_muris_senis_droplet_lung.log_cpm.h5ad
+- id: tabula_muris_senis_droplet_lung.log_scran_pooling
+  input: resources/datasets/openproblems_v1/tabula_muris_senis_droplet_lung.log_scran_pooling.h5ad
+- id: tabula_muris_senis_droplet_lung.sqrt_cpm
+  input: resources/datasets/openproblems_v1/tabula_muris_senis_droplet_lung.sqrt_cpm.h5ad
+- id: zebrafish.log_cpm
+  input: resources/datasets/openproblems_v1/zebrafish.log_cpm.h5ad
+- id: zebrafish.log_scran_pooling
+  input: resources/datasets/openproblems_v1/zebrafish.log_scran_pooling.h5ad
+- id: zebrafish.sqrt_cpm
+  input: resources/datasets/openproblems_v1/zebrafish.sqrt_cpm.h5ad
 obs_label: celltype
 obs_batch: batch
 seed: 123
