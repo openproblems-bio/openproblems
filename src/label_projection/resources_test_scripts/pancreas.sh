@@ -28,7 +28,7 @@ bin/viash run src/label_projection/split_dataset/config.vsh.yaml -- \
     --seed 123
 
 # run one method
-bin/viash run src/label_projection/methods/knn_classifier/config.vsh.yaml -- \
+bin/viash run src/label_projection/methods/knn/config.vsh.yaml -- \
     --input_train $DATASET_DIR/train.h5ad \
     --input_test $DATASET_DIR/test.h5ad \
     --output $DATASET_DIR/knn.h5ad

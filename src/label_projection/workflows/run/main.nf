@@ -9,7 +9,7 @@ include { majority_vote } from "$targetDir/label_projection/control_methods/majo
 include { random_labels } from "$targetDir/label_projection/control_methods/random_labels/main.nf"
 
 // import methods
-include { knn_classifier } from "$targetDir/label_projection/methods/knn_classifier/main.nf"
+include { knn } from "$targetDir/label_projection/methods/knn/main.nf"
 include { mlp } from "$targetDir/label_projection/methods/mlp/main.nf"
 include { logistic_regression } from "$targetDir/label_projection/methods/logistic_regression/main.nf"
 // include { scanvi_hvg } from "$targetDir/label_projection/methods/scvi/scanvi_hvg/main.nf"
@@ -63,7 +63,7 @@ workflow run_wf {
       true_labels.run(map: addSolution) & 
       random_labels & 
       majority_vote & 
-      knn_classifier & 
+      knn & 
       logistic_regression &
       mlp
     )

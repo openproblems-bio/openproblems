@@ -62,7 +62,7 @@ Methods for assigning labels from a reference dataset to a new dataset.
 
 | Name                                                                 | Description                    | DOI                                                  | URL                                                                                                    |
 |:---------------------------------------------------------------------|:-------------------------------|:-----------------------------------------------------|:-------------------------------------------------------------------------------------------------------|
-| [KNN](./methods/knn_classifier/config.vsh.yaml)                      | K-Nearest Neighbors classifier | [link](https://doi.org/10.1109/TIT.1967.1053964)     | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html)  |
+| [KNN](./methods/knn/config.vsh.yaml)                      | K-Nearest Neighbors classifier | [link](https://doi.org/10.1109/TIT.1967.1053964)     | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html)  |
 | [Logistic Regression](./methods/logistic_regression/config.vsh.yaml) | Logistic regression method     |                                                      | [link](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) |
 | [Multilayer perceptron](./methods/mlp/config.vsh.yaml)               | Multilayer perceptron          | [link](https://doi.org/10.1016/0004-3702(89)90049-0) | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html)    |
 

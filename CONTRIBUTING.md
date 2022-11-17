@@ -113,7 +113,7 @@ src/label_projection/workflows/run/run_test.sh
     [39/e1bb01] process > run_wf:true_labels:true_labels_process (1)                 [100%] 1 of 1 ✔
     [3b/d41f8a] process > run_wf:random_labels:random_labels_process (1)             [100%] 1 of 1 ✔
     [c2/0398dd] process > run_wf:majority_vote:majority_vote_process (1)             [100%] 1 of 1 ✔
-    [fd/92edc7] process > run_wf:knn_classifier:knn_classifier_process (1)           [100%] 1 of 1 ✔
+    [fd/92edc7] process > run_wf:knn:knn_process (1)           [100%] 1 of 1 ✔
     [f7/7cdb34] process > run_wf:logistic_regression:logistic_regression_process (1) [100%] 1 of 1 ✔
     [4f/6a67e4] process > run_wf:mlp:mlp_process (1)                                 [100%] 1 of 1 ✔
     [a5/ae6341] process > run_wf:accuracy:accuracy_process (6)                       [100%] 6 of 6 ✔
