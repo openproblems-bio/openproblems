@@ -39,5 +39,5 @@ platforms:
         packages:
           - "anndata>=0.8"
           - scprep
-          - magic
+          - magic-impute
   - type: nextflow
