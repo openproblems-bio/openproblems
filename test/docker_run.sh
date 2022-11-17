@@ -9,7 +9,6 @@ export PYTHONPATH="$WORKDIR"
 
 if [ ! -f ~/.install_complete ]; then
   python3 -m pip install --upgrade pip
-  python3 -m pip check
   python3 -m pip install --upgrade-strategy=only-if-needed --no-cache-dir --editable "${CODEDIR}"
   python3 -m pip install --upgrade coverage
   FREEZE="$(python3 -m pip freeze)"

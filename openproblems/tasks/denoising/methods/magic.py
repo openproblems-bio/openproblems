@@ -60,7 +60,7 @@ def magic_approx(adata, test=False):
 
 
 @method(
-    method_name="KNN Smoothing",
+    method_name="KNN smoothing",
     paper_name="KNN Smoothing (baseline)",
     paper_url="https://openproblems.bio",
     paper_year=2022,

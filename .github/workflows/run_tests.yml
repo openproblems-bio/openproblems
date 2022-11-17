@@ -28,7 +28,7 @@ jobs:
   build_images:
 
     needs: cancel_previous_runs
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       !startsWith(github.ref, 'refs/heads/test_process') &&
@@ -268,7 +268,7 @@ jobs:
 
   run_test_benchmark:
     needs: run_tester
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     if: >-
       always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&

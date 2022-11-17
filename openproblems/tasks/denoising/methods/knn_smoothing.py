@@ -3,7 +3,7 @@ from ....tools.utils import check_version
 
 
 @method(
-    method_name="KNN smoothing",
+    method_name="Iterative KNN smoothing",
     paper_name="K-nearest neighbor smoothing for high-throughput "
     "single-cell RNA-Seq data",
     paper_url="https://doi.org/10.1101/217737",
