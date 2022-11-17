@@ -1,0 +1,26 @@
+functionality:
+  name: "run_benchmark"
+  namespace: "label_projection/workflows"
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - name: "--id"
+          type: "string"
+          description: "The ID of the dataset"
+          required: true
+        - name: "--input_train"
+          type: "file" # todo: replace with includes
+        - name: "--input_test"
+          type: "file" # todo: replace with includes
+        - name: "--input_solution"
+          type: "file" # todo: replace with includes
+    - name: Outputs
+      arguments:
+        - name: "--output"
+          direction: "output"
+          type: file
+          # todo: fix inherits in nxf
+          # __inherits__: ../../api/anndata_raw_dataset.yaml
+  resources:
+    - type: nextflow_script
+      path: main.nf

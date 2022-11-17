@@ -1,0 +1,11 @@
+functionality:
+  authors:
+    - name: "Nikolay Markov"
+      roles: [ author, maintainer ]
+      props: { github: mxposed }
+    - name: "Scott Gigante"
+      roles: [ author ]
+      props: { github: scottgigante }
+    - name: Robrecht Cannoodt
+      roles: [ author ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }

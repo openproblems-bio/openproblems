@@ -1,0 +1,27 @@
+type: file
+description: "The test data (without labels)"
+example: "test.h5ad"
+info:
+  short_description: "Test data"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+      - type: double
+        name: log_cpm
+        description: CPM normalized counts, log transformed
+      - type: double
+        name: log_scran_pooling
+        description: Scran pooling normalized counts, log transformed
+      - type: double
+        name: sqrt_cpm
+        description: CPM normalized counts, sqrt transformed
+    obs:
+      - type: string
+        name: batch
+        description: Batch information
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"

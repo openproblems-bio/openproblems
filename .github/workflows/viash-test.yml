@@ -1,34 +1,50 @@
-name: viash test CI
+name: viash test
 
 on:
+  pull_request:
   push:
     branches: [ '**' ]
 
 jobs:
-  cancel:
-      name: 'Cancel Previous Runs'
-      runs-on: ubuntu-latest
-      timeout-minutes: 3
-      if: github.ref != 'refs/heads/main'
-      steps:
-        - uses: styfle/cancel-workflow-action@0.10.0
-          with:
-            all_but_latest: true
-            access_token: ${{ github.token }}
+  run_ci_check_job:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    runs-on: ubuntu-latest
+    outputs:
+      run_ci: ${{ steps.github_cli.outputs.check }}
+    steps:
+      - name: 'Check if branch has an existing pull request and the trigger was a push'
+        id: github_cli
+        run: |
+          pull_request=$(gh pr list -R openpipelines-bio/openpipeline -H ${{ github.ref_name }} --json url --state open --limit 1 | jq '.[0].url')
+          # If the branch has a PR and this run was triggered by a push event, do not run
+          if [[ "$pull_request" != "null" && "${{ github.event_name == 'push' }}" == "true" && "${{ !contains(github.event.head_commit.message, 'ci force') }}" == "true" ]]; then
+            echo "check=false" >> $GITHUB_OUTPUT
+          else
+            echo "check=true" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GTHB_PAT }}
+
 
   # phase 1
   list_components:
+    needs: run_ci_check_job
     env:
       s3_bucket: s3://openproblems-data/
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
-
+    if: "(!contains(github.event.head_commit.message, 'ci skip')) && needs.run_ci_check_job.outputs.run_ci == 'true'"
+    outputs:
+      matrix: ${{ steps.set_matrix.outputs.matrix }}
+      cachehash: ${{ steps.cachehash.outputs.cachehash }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 
 
     - name: Fetch viash
       run: |
         bin/init
+        tree .
         bin/viash -h
 
     # create cachehash key
@@ -36,7 +52,7 @@ jobs:
       id: cachehash
       run: |
         AWS_EC2_METADATA_DISABLED=true aws s3 ls $s3_bucket --recursive --no-sign-request > bucket-contents.txt
-        echo "::set-output name=cachehash::resources_test__$( md5sum bucket-contents.txt | awk '{ print $1 }' )"
+        echo "cachehash=resources_test__$( md5sum bucket-contents.txt | awk '{ print $1 }' )" >> $GITHUB_OUTPUT
     
     # initialize cache
     - name: Cache resources data
@@ -56,21 +72,51 @@ jobs:
           --delete
         tree resources_test/ -L 3
 
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v34.0.5
+      with:
+        separator: ";"
+        diff_relative: true
+
     # store component locations
-    - id: set_matrix
+    - name: Set matrix to only run tests for components that had their config or resources changed.
+      id: set_matrix
       run: |
-        json=$(bin/viash ns list -p docker --format json | jq -c '[ .[] | { "name": .functionality.name, "config": .info.config } ]')
-        echo "::set-output name=matrix::$json"
-    outputs:
-      matrix: ${{ steps.set_matrix.outputs.matrix }}
-      cachehash: ${{ steps.cachehash.outputs.cachehash }}
+        IFS=$';' read -a changed_files <<< "${{ steps.changed-files.outputs.all_changed_files }}"
+        echo "Changed files: "${changed_files[*]}""
+        readarray -t components < <(bin/viash ns list -p docker --format json | jq -c '[ .[] | 
+                                                                                          (.info.config | capture("^(?<dir>.*\/)").dir) as $dir | 
+                                                                                          { "name": .functionality.name, 
+                                                                                            "config": .info.config, 
+                                                                                            "resources": ([.info.config] + 
+                                                                                                          ([.functionality.resources[].path?, 
+                                                                                                            .functionality.test_resources[].path?] | 
+                                                                                                            map($dir + .)
+                                                                                                            )
+                                                                                                          )
+                                                                                          }
+                                                                                        ][]')
+        declare -a result_array_matrix=()
+        for component in "${components[@]}"; do
+          readarray -t resources < <(jq -cr '.resources[]' <<< "$component")
+          for resource_rel_path in "${resources[@]}"; do
+            resource_project_path=$(realpath --relative-to="$GITHUB_WORKSPACE" "$resource_rel_path")
+            echo "Checking path $resource_project_path"
+            if [[ " ${changed_files[*]} " =~ " ${resource_project_path} " || "$GITHUB_REF" == "refs/heads/main" || "${{ contains(github.event.head_commit.message, 'ci force') }}" == "true" ]]; then
+              result_array_matrix+="$component"
+              break
+            fi
+          done
+        done
+        json=$(jq -cs '.' <<< "${result_array_matrix[*]}")
+        echo "matrix=$json" >> $GITHUB_OUTPUT
 
   # phase 2
   viash_test:
     needs: list_components
-
+    if: ${{ needs.list_components.outputs.matrix != '[]' && needs.list_components.outputs.matrix != '' }}
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
 
     strategy:
       fail-fast: false
@@ -78,21 +124,25 @@ jobs:
         component: ${{ fromJson(needs.list_components.outputs.matrix) }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Fetch viash
       run: |
-        bin/init
+        bin/init -n
         bin/viash -h
 
     # use cache
     - name: Cache resources data
       uses: actions/cache@v3
+      timeout-minutes: 5
       with:
         path: resources_test
         key: ${{ needs.list_components.outputs.cachehash }}
 
     - name: Run test
+      timeout-minutes: 30
       run: |
-        bin/viash test -p docker ${{ matrix.component.config }}
+        bin/viash test -p docker ${{ matrix.component.config }} \
+         -c '.functionality.requirements.cpus := 2' \
+         -c '.functionality.requirements.memory := "5gb"'
 

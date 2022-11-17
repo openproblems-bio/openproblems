@@ -1,0 +1,30 @@
+type: file
+description: "A preprocessed dataset"
+example: "preprocessed.h5ad"
+info:
+  short_description: "Preprocessed dataset"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+      - type: double
+        name: log_cpm
+        description: CPM normalized counts, log transformed
+      - type: double
+        name: log_scran_pooling
+        description: Scran pooling normalized counts, log transformed
+      - type: double
+        name: sqrt_cpm
+        description: CPM normalized counts, sqrt transformed
+    obs:
+      - type: double
+        name: label
+        description: Ground truth cell type labels
+      - type: double
+        name: batch
+        description: Batch information
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"

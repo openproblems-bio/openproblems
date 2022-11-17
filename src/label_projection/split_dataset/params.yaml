@@ -1,0 +1,12 @@
+param_list:
+- id: immune_cells
+  input: resources/datasets/openproblems_v1/immune_cells.h5ad
+- id: pancreas
+  input: resources/datasets/openproblems_v1/pancreas.h5ad
+- id: tabula_muris_senis_droplet_lung
+  input: resources/datasets/openproblems_v1/tabula_muris_senis_droplet_lung.h5ad
+- id: zebrafish
+  input: resources/datasets/openproblems_v1/zebrafish.h5ad
+obs_label: celltype
+obs_batch: batch
+seed: 123

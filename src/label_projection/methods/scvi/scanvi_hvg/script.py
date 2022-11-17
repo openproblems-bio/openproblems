@@ -48,4 +48,4 @@ adata.obs["celltype_pred"] = scanvi(bdata, par['n_hidden'], par['n_latent'], par
 adata.uns["method_id"] = meta["functionality_name"]
 
 print("Write data")
-adata.write(par['output'], compression="gzip")
+adata.write_h5ad(par['output'], compression="gzip")

@@ -1,45 +1,26 @@
+__inherits__: ../../api/comp_method.yaml
 functionality:
   name: "majority_vote"
   namespace: "label_projection/control_methods"
-  version: "dev"
-  description: "Majority vote dummy"
+  description: "Baseline method using majority voting"
   info:
-    type: negative_control
-    label: Random prediction
-  authors:
-    - name: "Scott Gigante"
-      roles: [ author ]
-      props: { github: scottgigante }
-    - name: "Vinicius Chagas"
-      roles: [ maintainer ]
-      props: { github: chagasVinicius }
+    type: baseline
+    label: Majority Vote
+    v1_url: openproblems/tasks/label_projection/methods/baseline.py
+    v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
   arguments:
-    - name: "--input"
-      type: "file"
-      description: "Input data to predict"
-      required: true
-    - name: "--output"
-      alternatives: ["-o"]
-      type: "file"
-      description: "Ouput data containing predictions"
-      direction: "output"
-      example: "output.mv.h5ad"
-      required: true
+    - name: "--layer_input"
+      type: string
+      default: "counts"
+      description: Which layer to use as input.
   resources:
     - type: python_script
       path: script.py
-  tests:
-    - type: python_script
-      path: test_script.py
-    - type: file
-      path: "../../../../resources_test/label_projection/pancreas/toy_preprocessed_data.h5ad"
 platforms:
-  - type: native
   - type: docker
     image: "python:3.8"
     setup:
       - type: python
         packages:
-          - scanpy
-          - "anndata<0.8"
+          - "anndata>=0.8"
   - type: nextflow
