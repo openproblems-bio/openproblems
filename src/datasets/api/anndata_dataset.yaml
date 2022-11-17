@@ -25,6 +25,15 @@ info:
         name: tissue
         description: Tissue information
         required: false
+    var:
+      - type: boolean
+        name: hvg
+        description: Whether or not the feature is considered to be a 'highly variable gene'
+        required: true
+      - type: integer
+        name: hvg_ranking
+        description: A ranking of the features by hvg.
+        required: true
     uns:
       - type: string
         name: dataset_id
@@ -33,4 +42,9 @@ info:
       - type: string
         name: normalization_id
         description: "Which normalization was used"
+        required: true
+    obsm:
+      - type: double
+        name: X_pca
+        description: A PCA embedding of the normalized data.
         required: true

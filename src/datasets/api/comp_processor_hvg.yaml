@@ -1,0 +1,15 @@
+functionality:
+  arguments:
+    - name: "--input"
+      __inherits__: anndata_raw.yaml
+    - name: "--output"
+      direction: output
+      __inherits__: anndata_normalized.yaml
+    - name: "--layer_output"
+      type: string
+      default: "normalized"
+      description: The name of the layer in which to store the normalized data.
+    - name: "--obs_size_factors"
+      type: string
+      default: "size_factors"
+      description: In which .obs slot to store the size factors (if any).

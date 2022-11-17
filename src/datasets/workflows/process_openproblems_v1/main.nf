@@ -7,6 +7,8 @@ include { openproblems_v1 } from "$targetDir/datasets/loaders/openproblems_v1/ma
 include { log_cpm } from "$targetDir/datasets/normalization/log_cpm/main.nf"
 include { log_scran_pooling } from "$targetDir/datasets/normalization/log_scran_pooling/main.nf"
 include { sqrt_cpm } from "$targetDir/datasets/normalization/sqrt_cpm/main.nf"
+include { pca } from "$targetDir/datasets/processors/pca/main.nf"
+include { hvg } from "$targetDir/datasets/processors/hvg/main.nf"
 
 include { readConfig; viashChannel; helpMessage } from sourceDir + "/nxf_utils/WorkflowHelper.nf"
 include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from sourceDir + "/nxf_utils/DataFlowHelper.nf"
@@ -48,12 +50,10 @@ workflow run_wf {
       [ newId, file ]
     }
 
-    // run scran normalisation
-    | log_scran_pooling
+    | pca
 
-    // run sqrt normalisation and publish
-    | getWorkflowArguments(key: "sqrt_cpm")
-    | sqrt_cpm.run(
+    | getWorkflowArguments(key: "output")
+    | hvg.run(
       auto: [ publish: true ]
     )
 
