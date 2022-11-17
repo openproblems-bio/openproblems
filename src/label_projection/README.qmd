@@ -192,11 +192,21 @@ for (file_name in file_info$name) {
   sub_out <- file_slot %>% 
     filter(file_name == !!file_name) %>% 
     select(struct, name, type, description)
+
   used_in <- comp_file %>%
     filter(file_name == !!file_name) %>%
     left_join(comp_info %>% select(comp_name = name, comp_label = label), by = "comp_name") %>%
     mutate(str = paste0("* [", comp_label, "](#", comp_label, "): ", arg_name, " (as ", direction, ")")) %>%
     pull(str)
+
+  example <- sub_out %>%
+    group_by(struct) %>%
+    summarise(
+      str = paste0(unique(struct), ": ", paste0("'", name, "'", collapse = ", "))
+    ) %>%
+    arrange(match(struct, c("obs", "var", "uns", "obsm", "obsp", "varm", "varp", "layers")))
+
+  example_str <- c("    AnnData object", paste0("     ", example$str))
   
   out_str <- strip_margin(glue::glue("
     §### `{str_to_title(arg_info$label)}`
@@ -210,6 +220,11 @@ for (file_name in file_info$name) {
     §Slots:
     §
     §{paste(knitr::kable(sub_out, format = 'pipe'), collapse = '\n')}
+    §
+    §Example:
+    §
+    §{paste(example_str, collapse = '\n')}
+    §
     §"), symbol = "§")
   cat(out_str)
 }
@@ -229,7 +244,7 @@ for (comp_name in comp_info$name) {
     left_join(file_info %>% select(file_name = name, file_desc = description, file_sdesc = short_description, file_label = label), by = "file_name") %>%
     transmute(
       Name = paste0("`--", arg_name, "`"),
-      `File format` = paste0(file_label, ".h5ad"),
+      `File format` = paste0("[", str_to_title(file_label), "](#", file_label, ")"),
       Direction = direction,
       Description = file_sdesc
     )

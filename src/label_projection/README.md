@@ -123,6 +123,13 @@ Slots:
 | obs    | batch             | double  | Batch information                                |
 | uns    | dataset_id        | string  | A unique identifier for the dataset              |
 
+Example:
+
+    AnnData object
+     obs: 'label', 'batch'
+     uns: 'dataset_id'
+     layers: 'counts', 'log_cpm', 'log_scran_pooling', 'sqrt_cpm'
+
 ### `Prediction`
 
 The prediction file
@@ -140,6 +147,12 @@ Slots:
 | uns    | dataset_id | string | A unique identifier for the dataset  |
 | uns    | method_id  | string | A unique identifier for the method   |
 
+Example:
+
+    AnnData object
+     obs: 'label_pred'
+     uns: 'dataset_id', 'method_id'
+
 ### `Score`
 
 Metric score file
@@ -156,6 +169,11 @@ Slots:
 | uns    | method_id     | string | A unique identifier for the method                                                           |
 | uns    | metric_ids    | string | One or more unique metric identifiers                                                        |
 | uns    | metric_values | double | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
+
+Example:
+
+    AnnData object
+     uns: 'dataset_id', 'method_id', 'metric_ids', 'metric_values'
 
 ### `Solution`
 
@@ -178,6 +196,13 @@ Slots:
 | obs    | batch             | string  | Batch information                                |
 | uns    | dataset_id        | string  | A unique identifier for the dataset              |
 
+Example:
+
+    AnnData object
+     obs: 'label', 'batch'
+     uns: 'dataset_id'
+     layers: 'counts', 'log_cpm', 'log_scran_pooling', 'sqrt_cpm'
+
 ### `Test`
 
 The test data (without labels)
@@ -197,6 +222,13 @@ Slots:
 | layers | sqrt_cpm          | double  | CPM normalized counts, sqrt transformed          |
 | obs    | batch             | string  | Batch information                                |
 | uns    | dataset_id        | string  | A unique identifier for the dataset              |
+
+Example:
+
+    AnnData object
+     obs: 'batch'
+     uns: 'dataset_id'
+     layers: 'counts', 'log_cpm', 'log_scran_pooling', 'sqrt_cpm'
 
 ### `Train`
 
@@ -219,35 +251,42 @@ Slots:
 | obs    | batch             | string  | Batch information                                |
 | uns    | dataset_id        | string  | A unique identifier for the dataset              |
 
+Example:
+
+    AnnData object
+     obs: 'label', 'batch'
+     uns: 'dataset_id'
+     layers: 'counts', 'log_cpm', 'log_scran_pooling', 'sqrt_cpm'
+
 ## Component API
 
 ### `Method`
 
 Arguments:
 
-| Name            | File format     | Direction | Description   |
-|:----------------|:----------------|:----------|:--------------|
-| `--input_train` | train.h5ad      | input     | Training data |
-| `--input_test`  | test.h5ad       | input     | Test data     |
-| `--output`      | prediction.h5ad | output    | Prediction    |
+| Name            | File format               | Direction | Description   |
+|:----------------|:--------------------------|:----------|:--------------|
+| `--input_train` | [Train](#train)           | input     | Training data |
+| `--input_test`  | [Test](#test)             | input     | Test data     |
+| `--output`      | [Prediction](#prediction) | output    | Prediction    |
 
 ### `Metric`
 
 Arguments:
 
-| Name                 | File format     | Direction | Description |
-|:---------------------|:----------------|:----------|:------------|
-| `--input_solution`   | solution.h5ad   | input     | Solution    |
-| `--input_prediction` | prediction.h5ad | input     | Prediction  |
-| `--output`           | score.h5ad      | output    | Score       |
+| Name                 | File format               | Direction | Description |
+|:---------------------|:--------------------------|:----------|:------------|
+| `--input_solution`   | [Solution](#solution)     | input     | Solution    |
+| `--input_prediction` | [Prediction](#prediction) | input     | Prediction  |
+| `--output`           | [Score](#score)           | output    | Score       |
 
 ### `Split Dataset`
 
 Arguments:
 
-| Name                | File format   | Direction | Description          |
-|:--------------------|:--------------|:----------|:---------------------|
-| `--input`           | dataset.h5ad  | input     | Preprocessed dataset |
-| `--output_train`    | train.h5ad    | output    | Training data        |
-| `--output_test`     | test.h5ad     | output    | Test data            |
-| `--output_solution` | solution.h5ad | output    | Solution             |
+| Name                | File format           | Direction | Description          |
+|:--------------------|:----------------------|:----------|:---------------------|
+| `--input`           | [Dataset](#dataset)   | input     | Preprocessed dataset |
+| `--output_train`    | [Train](#train)       | output    | Training data        |
+| `--output_test`     | [Test](#test)         | output    | Test data            |
+| `--output_solution` | [Solution](#solution) | output    | Solution             |
