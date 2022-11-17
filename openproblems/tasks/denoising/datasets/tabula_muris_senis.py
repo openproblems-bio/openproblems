@@ -14,7 +14,7 @@ from . import utils
 )
 def tabula_muris_senis_lung_random(test=False):
     adata = load_tabula_muris_senis(
-        test=test, organ_list=["lung"], method_list=["droplet"]
+        organ_list=["lung"], method_list=["droplet"], test=test,
     )
     adata = utils.split_data(adata)
     return adata
