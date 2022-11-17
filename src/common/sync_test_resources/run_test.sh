@@ -5,7 +5,7 @@
 
 echo ">> Run aws s3 sync"
 ./$meta_functionality_name \
-  --input s3://openproblems-data/label_projection/pancreas \
+  --input s3://openproblems-data/resources_test/label_projection/pancreas \
   --output foo \
   --quiet
 

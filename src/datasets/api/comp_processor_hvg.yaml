@@ -1,0 +1,23 @@
+functionality:
+  arguments:
+    - name: "--input"
+      __inherits__: api/anndata_pca.yaml
+    - name: "--layer_input"
+      type: string
+      default: "normalized"
+      description: Which layer to use as input for the PCA.
+    - name: "--output"
+      direction: output
+      __inherits__: api/anndata_hvg.yaml
+    - name: "--var_hvg"
+      type: string
+      default: "hvg"
+      description: "In which .var slot to store whether a feature is considered to be hvg."
+    - name: "--var_hvg_score"
+      type: string
+      default: "hvg_score"
+      description: "In which .var slot to store whether a ranking of the features by variance."
+    - name: "--num_features"
+      type: integer
+      default: 1000
+      description: "The number of HVG to select"

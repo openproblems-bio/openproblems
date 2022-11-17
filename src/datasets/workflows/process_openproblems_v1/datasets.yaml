@@ -2,7 +2,6 @@ param_list:
   - id: allen_brain_atlas
     obs_celltype: label
     layer_counts: counts
-    output: allen_brain_atlas.h5ad
 
   - id: cengen
     obs_celltype: cell_type

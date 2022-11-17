@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## VIASH START
-par_input='s3://openproblems-data'
+par_input='s3://openproblems-data/resources_test'
 par_output='resources_test'
 ## VIASH END
 
