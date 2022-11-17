@@ -58,12 +58,16 @@ jobs:
       with:
         python-version: "3.8"
 
+    - name: Set up environment
+      run: |
+        echo "LINUX_VERSION=$(uname -a)" >> $GITHUB_ENV
+
     - name: Cache Python packages
       uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
-        key: pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: pip-${{ env.pythonLocation }}-
+        key: pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
       run: |
