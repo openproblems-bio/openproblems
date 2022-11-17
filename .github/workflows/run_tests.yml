@@ -259,7 +259,7 @@ jobs:
       with:
         attempt_delay: 5
         action: codecov/codecov-action@v3
-        with:
+        with: |
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unittests
           fail_ci_if_error: ${{ github.repository == 'openproblems-bio/openproblems' }}
