@@ -1,0 +1,26 @@
+__inherits__: ../../api/comp_metric.yaml
+functionality:
+  name: "mse"
+  namespace: "denoising/metrics"
+  description: "Mean Squared Error."
+  info:
+    v1_url: openproblems/tasks/denoising/metrics/mse.py
+    v1_commit: f24fb718b1115ca85130a45f2e56fddb00075d22
+    metrics:
+      - id: mse
+        label: mse
+        description: Mean Squared Error
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scikit-learn
+          - "anndata>=0.8"
+          - scanpy
+          - scprep
+  - type: nextflow
