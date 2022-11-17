@@ -28,6 +28,7 @@ lognorm = np.sqrt(norm["X"])
 print(">> Store output in adata")
 adata.layers[par["layer_output"]] = lognorm
 adata.obs[par["obs_size_factors"]] = norm["norm_factor"]
+adata.uns["normalization_id"] = meta["functionality_name"]
 
 print(">> Write data")
 adata.write_h5ad(par['output'], compression="gzip")

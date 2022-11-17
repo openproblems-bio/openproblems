@@ -28,6 +28,7 @@ lognorm <- log1p(sweep(adata$layers[["counts"]], 1, size_factors, "*"))
 cat(">> Storing in anndata\n")
 adata$obs[[par$obs_size_factors]] <- size_factors
 adata$layers[[par$layer_output]] <- lognorm
+adata$uns[["normalization_id"]] <- meta[["functionality_name"]]
 
 cat(">> Writing to file\n")
 zzz <- adata$write_h5ad(par$output, compression = "gzip")

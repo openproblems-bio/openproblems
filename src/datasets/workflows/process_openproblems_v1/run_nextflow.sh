@@ -7,6 +7,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "$REPO_ROOT"
 
 export NXF_VER=22.04.5
+export TOWER_WORKSPACE_ID=53907369739130
 
 bin/nextflow \
   run . \
