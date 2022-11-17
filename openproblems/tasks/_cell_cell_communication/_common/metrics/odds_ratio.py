@@ -4,6 +4,10 @@ from ..utils import join_truth_and_pred
 import numpy as np
 
 
+def _sigmoid_transform(x):
+    return 1 - 1 / (1 + x / 2)
+
+
 @metric(metric_name="Odds Ratio", maximize=True)
 def odds_ratio(adata):
     # Join benchmark (assumed truth) and ccc results
@@ -35,6 +39,6 @@ def odds_ratio(adata):
             # perfect score
             oddsratio = np.inf
     else:
-        oddsratio = numerator / denominator
+        oddsratio = _sigmoid_transform(numerator / denominator)
 
     return oddsratio
