@@ -59,7 +59,7 @@ file_info <- map_df(file_yamls, function(yaml_file) {
     name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
     description = arg$description,
     example = arg$example,
-    label = name %>% gsub("anndata_", "", .) %>% gsub("_", " ", .)
+    label = arg$info$label %||% (name %>% gsub("anndata_", "", .) %>% gsub("_", " ", .))
   )
 })
 

@@ -3,10 +3,12 @@
   - <a href="#pipeline-topology" id="toc-pipeline-topology">Pipeline
     topology</a>
   - <a href="#file-format-api" id="toc-file-format-api">File format API</a>
-    - <a href="#hvg" id="toc-hvg"><code>Hvg</code></a>
-    - <a href="#normalized" id="toc-normalized"><code>Normalized</code></a>
-    - <a href="#pca" id="toc-pca"><code>Pca</code></a>
-    - <a href="#raw" id="toc-raw"><code>Raw</code></a>
+    - <a href="#datasetpcahvg"
+      id="toc-datasetpcahvg"><code>Dataset+Pca+Hvg</code></a>
+    - <a href="#normalized-dataset"
+      id="toc-normalized-dataset"><code>Normalized Dataset</code></a>
+    - <a href="#datasetpca" id="toc-datasetpca"><code>Dataset+Pca</code></a>
+    - <a href="#raw-dataset" id="toc-raw-dataset"><code>Raw Dataset</code></a>
   - <a href="#component-api" id="toc-component-api">Component API</a>
     - <a href="#dataset-loader"
       id="toc-dataset-loader"><code>Dataset Loader</code></a>
@@ -24,10 +26,10 @@
 ``` mermaid
 %%| column: screen-inset-shaded
 flowchart LR
-  anndata_hvg(Hvg)
-  anndata_normalized(Normalized)
-  anndata_pca(Pca)
-  anndata_raw(Raw)
+  anndata_hvg(Dataset+Pca+Hvg)
+  anndata_normalized(Normalized Dataset)
+  anndata_pca(Dataset+Pca)
+  anndata_raw(Raw Dataset)
   comp_dataset_loader[/Dataset Loader/]
   comp_normalization[/Normalization/]
   comp_processor_hvg[/Processor Hvg/]
@@ -43,7 +45,7 @@ flowchart LR
 
 ## File format API
 
-### `Hvg`
+### `Dataset+Pca+Hvg`
 
 A normalised data with a PCA embedding and HVG selection
 
@@ -79,7 +81,7 @@ Example:
      varm: 'pca_loadings'
      layers: 'counts', 'normalized'
 
-### `Normalized`
+### `Normalized Dataset`
 
 A normalized dataset
 
@@ -108,7 +110,7 @@ Example:
      uns: 'dataset_id', 'normalization_id'
      layers: 'counts', 'normalized'
 
-### `Pca`
+### `Dataset+Pca`
 
 A normalised data with a PCA embedding
 
@@ -142,7 +144,7 @@ Example:
      varm: 'pca_loadings'
      layers: 'counts', 'normalized'
 
-### `Raw`
+### `Raw Dataset`
 
 An unprocessed dataset as output by a dataset loader.
 
@@ -174,44 +176,44 @@ Example:
 
 Arguments:
 
-| Name       | Type        | Direction | Description                                           |
-|:-----------|:------------|:----------|:------------------------------------------------------|
-| `--output` | [Raw](#raw) | output    | An unprocessed dataset as output by a dataset loader. |
+| Name       | Type                          | Direction | Description                                           |
+|:-----------|:------------------------------|:----------|:------------------------------------------------------|
+| `--output` | [Raw Dataset](#Raw%20dataset) | output    | An unprocessed dataset as output by a dataset loader. |
 
 ### `Normalization`
 
 Arguments:
 
-| Name                 | Type                      | Direction | Description                                                  |
-|:---------------------|:--------------------------|:----------|:-------------------------------------------------------------|
-| `--input`            | [Raw](#raw)               | input     | An unprocessed dataset as output by a dataset loader.        |
-| `--output`           | [Normalized](#normalized) | output    | A normalized dataset                                         |
-| `--layer_output`     | `string`                  | input     | The name of the layer in which to store the normalized data. |
-| `--obs_size_factors` | `string`                  | input     | In which .obs slot to store the size factors (if any).       |
+| Name                 | Type                                        | Direction | Description                                                  |
+|:---------------------|:--------------------------------------------|:----------|:-------------------------------------------------------------|
+| `--input`            | [Raw Dataset](#Raw%20dataset)               | input     | An unprocessed dataset as output by a dataset loader.        |
+| `--output`           | [Normalized Dataset](#Normalized%20dataset) | output    | A normalized dataset                                         |
+| `--layer_output`     | `string`                                    | input     | The name of the layer in which to store the normalized data. |
+| `--obs_size_factors` | `string`                                    | input     | In which .obs slot to store the size factors (if any).       |
 
 ### `Processor Hvg`
 
 Arguments:
 
-| Name                | Type        | Direction | Description                                                                |
-|:--------------------|:------------|:----------|:---------------------------------------------------------------------------|
-| `--input`           | [Pca](#pca) | input     | A normalised data with a PCA embedding                                     |
-| `--layer_input`     | `string`    | input     | Which layer to use as input for the PCA.                                   |
-| `--output`          | [Hvg](#hvg) | output    | A normalised data with a PCA embedding and HVG selection                   |
-| `--var_hvg`         | `string`    | input     | In which .var slot to store whether a feature is considered to be hvg.     |
-| `--var_hvg_ranking` | `string`    | input     | In which .var slot to store whether a ranking of the features by variance. |
-| `--num_features`    | `integer`   | input     | The number of HVG to select                                                |
+| Name                | Type                                | Direction | Description                                                                |
+|:--------------------|:------------------------------------|:----------|:---------------------------------------------------------------------------|
+| `--input`           | [Dataset+Pca](#Dataset+PCA)         | input     | A normalised data with a PCA embedding                                     |
+| `--layer_input`     | `string`                            | input     | Which layer to use as input for the PCA.                                   |
+| `--output`          | [Dataset+Pca+Hvg](#Dataset+PCA+HVG) | output    | A normalised data with a PCA embedding and HVG selection                   |
+| `--var_hvg`         | `string`                            | input     | In which .var slot to store whether a feature is considered to be hvg.     |
+| `--var_hvg_ranking` | `string`                            | input     | In which .var slot to store whether a ranking of the features by variance. |
+| `--num_features`    | `integer`                           | input     | The number of HVG to select                                                |
 
 ### `Processor Pca`
 
 Arguments:
 
-| Name               | Type                      | Direction | Description                                                                                                          |
-|:-------------------|:--------------------------|:----------|:---------------------------------------------------------------------------------------------------------------------|
-| `--input`          | [Normalized](#normalized) | input     | A normalized dataset                                                                                                 |
-| `--layer_input`    | `string`                  | input     | Which layer to use as input for the PCA.                                                                             |
-| `--output`         | [Pca](#pca)               | output    | A normalised data with a PCA embedding                                                                               |
-| `--obsm_embedding` | `string`                  | input     | In which .obsm slot to store the resulting embedding.                                                                |
-| `--varm_loadings`  | `string`                  | input     | In which .varm slot to store the resulting loadings matrix.                                                          |
-| `--uns_variance`   | `string`                  | input     | In which .uns slot to store the resulting variance objects.                                                          |
-| `--num_components` | `integer`                 | input     | Number of principal components to compute. Defaults to 50, or 1 - minimum dimension size of selected representation. |
+| Name               | Type                                        | Direction | Description                                                                                                          |
+|:-------------------|:--------------------------------------------|:----------|:---------------------------------------------------------------------------------------------------------------------|
+| `--input`          | [Normalized Dataset](#Normalized%20dataset) | input     | A normalized dataset                                                                                                 |
+| `--layer_input`    | `string`                                    | input     | Which layer to use as input for the PCA.                                                                             |
+| `--output`         | [Dataset+Pca](#Dataset+PCA)                 | output    | A normalised data with a PCA embedding                                                                               |
+| `--obsm_embedding` | `string`                                    | input     | In which .obsm slot to store the resulting embedding.                                                                |
+| `--varm_loadings`  | `string`                                    | input     | In which .varm slot to store the resulting loadings matrix.                                                          |
+| `--uns_variance`   | `string`                                    | input     | In which .uns slot to store the resulting variance objects.                                                          |
+| `--num_components` | `integer`                                   | input     | Number of principal components to compute. Defaults to 50, or 1 - minimum dimension size of selected representation. |
