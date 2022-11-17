@@ -1,7 +1,8 @@
 
 - <a href="#label-projection" id="toc-label-projection">Label
   Projection</a>
-  - <a href="#the-task" id="toc-the-task">The task</a>
+  - <a href="#task-description" id="toc-task-description">Task
+    description</a>
   - <a href="#methods" id="toc-methods">Methods</a>
   - <a href="#metrics" id="toc-metrics">Metrics</a>
   - <a href="#pipeline-topology" id="toc-pipeline-topology">Pipeline
@@ -25,11 +26,12 @@
   - <a href="#component-api" id="toc-component-api">Component API</a>
     - <a href="#method" id="toc-method"><code>method</code></a>
     - <a href="#metric" id="toc-metric"><code>metric</code></a>
-    - <a href="#split" id="toc-split"><code>split</code></a>
+    - <a href="#split-dataset"
+      id="toc-split-dataset"><code>split dataset</code></a>
 
 # Label Projection
 
-## The task
+## Task description
 
 A major challenge for integrating single cell datasets is creating
 matching cell type annotations for each cell. One of the most common
@@ -60,11 +62,12 @@ labels onto the test set.
 
 Methods for assigning labels from a reference dataset to a new dataset.
 
-| Name                                                                 | Description                    | DOI                                                  | URL                                                                                                    |
-|:---------------------------------------------------------------------|:-------------------------------|:-----------------------------------------------------|:-------------------------------------------------------------------------------------------------------|
-| [KNN](./methods/knn/config.vsh.yaml)                      | K-Nearest Neighbors classifier | [link](https://doi.org/10.1109/TIT.1967.1053964)     | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html)  |
-| [Logistic Regression](./methods/logistic_regression/config.vsh.yaml) | Logistic regression method     |                                                      | [link](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) |
-| [Multilayer perceptron](./methods/mlp/config.vsh.yaml)               | Multilayer perceptron          | [link](https://doi.org/10.1016/0004-3702(89)90049-0) | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html)    |
+| Name                                                                 | Description                                                                                                 | DOI                                                  | URL                                                                                                    |
+|:---------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------|:-------------------------------------------------------------------------------------------------------|
+| [KNN](./methods/knn/config.vsh.yaml)                                 | K-Nearest Neighbors classifier                                                                              | [link](https://doi.org/10.1109/TIT.1967.1053964)     | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html)  |
+| [Logistic Regression](./methods/logistic_regression/config.vsh.yaml) | Logistic regression method                                                                                  |                                                      | [link](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) |
+| [Multilayer perceptron](./methods/mlp/config.vsh.yaml)               | Multilayer perceptron                                                                                       | [link](https://doi.org/10.1016/0004-3702(89)90049-0) | [link](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html)    |
+| [Scanvi](./methods/scanvi/config.vsh.yaml)                           | Probabilistic harmonization and annotation of single-cell transcriptomics data with deep generative models. | [link](https://doi.org/10.1101/2020.07.16.205997)    | [link](https://github.com/YosefLab/scvi-tools)                                                         |
 
 ## Metrics
 
@@ -98,17 +101,17 @@ flowchart LR
   anndata_train(train.h5ad)
   comp_method[/method/]
   comp_metric[/metric/]
-  comp_split[/split/]
+  comp_split_dataset[/split dataset/]
   anndata_train---comp_method
   anndata_test---comp_method
   anndata_solution---comp_metric
   anndata_prediction---comp_metric
-  anndata_dataset---comp_split
+  anndata_dataset---comp_split_dataset
   comp_method-->anndata_prediction
   comp_metric-->anndata_score
-  comp_split-->anndata_train
-  comp_split-->anndata_test
-  comp_split-->anndata_solution
+  comp_split_dataset-->anndata_train
+  comp_split_dataset-->anndata_test
+  comp_split_dataset-->anndata_solution
 ```
 
 ## File format API
@@ -119,7 +122,7 @@ A preprocessed dataset
 
 Used in:
 
-- [split](#split): input (as input)
+- [split dataset](#split%20dataset): input (as input)
 
 Slots:
 
@@ -128,6 +131,7 @@ Slots:
 | layers | counts            | integer | Raw counts                                       |
 | layers | log_cpm           | double  | CPM normalized counts, log transformed           |
 | layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
+| layers | sqrt_cpm          | double  | CPM normalized counts, sqrt transformed          |
 | obs    | label             | double  | Ground truth cell type labels                    |
 | obs    | batch             | double  | Batch information                                |
 | uns    | dataset_id        | string  | A unique identifier for the dataset              |
@@ -173,7 +177,7 @@ The solution for the test data
 Used in:
 
 - [metric](#metric): input_solution (as input)
-- [split](#split): output_solution (as output)
+- [split dataset](#split%20dataset): output_solution (as output)
 
 Slots:
 
@@ -182,6 +186,7 @@ Slots:
 | layers | counts            | integer | Raw counts                                       |
 | layers | log_cpm           | double  | CPM normalized counts, log transformed           |
 | layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
+| layers | sqrt_cpm          | double  | CPM normalized counts, sqrt transformed          |
 | obs    | label             | string  | Ground truth cell type labels                    |
 | obs    | batch             | string  | Batch information                                |
 | uns    | dataset_id        | string  | A unique identifier for the dataset              |
@@ -193,7 +198,7 @@ The test data (without labels)
 Used in:
 
 - [method](#method): input_test (as input)
-- [split](#split): output_test (as output)
+- [split dataset](#split%20dataset): output_test (as output)
 
 Slots:
 
@@ -202,6 +207,7 @@ Slots:
 | layers | counts            | integer | Raw counts                                       |
 | layers | log_cpm           | double  | CPM normalized counts, log transformed           |
 | layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
+| layers | sqrt_cpm          | double  | CPM normalized counts, sqrt transformed          |
 | obs    | batch             | string  | Batch information                                |
 | uns    | dataset_id        | string  | A unique identifier for the dataset              |
 
@@ -212,7 +218,7 @@ The training data
 Used in:
 
 - [method](#method): input_train (as input)
-- [split](#split): output_train (as output)
+- [split dataset](#split%20dataset): output_train (as output)
 
 Slots:
 
@@ -221,6 +227,7 @@ Slots:
 | layers | counts            | integer | Raw counts                                       |
 | layers | log_cpm           | double  | CPM normalized counts, log transformed           |
 | layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
+| layers | sqrt_cpm          | double  | CPM normalized counts, sqrt transformed          |
 | obs    | label             | string  | Ground truth cell type labels                    |
 | obs    | batch             | string  | Batch information                                |
 | uns    | dataset_id        | string  | A unique identifier for the dataset              |
@@ -247,7 +254,7 @@ Arguments:
 | `--input_prediction` | prediction.h5ad | input     | Prediction  |
 | `--output`           | score.h5ad      | output    | Score       |
 
-### `split`
+### `split dataset`
 
 Arguments:
 
