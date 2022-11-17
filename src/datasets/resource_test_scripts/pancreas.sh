@@ -32,16 +32,6 @@ bin/viash run src/datasets/subsample/config.vsh.yaml -- \
 # run log cpm normalisation
 bin/viash run src/datasets/normalization/log_cpm/config.vsh.yaml -- \
     --input $DATASET_DIR/temp_dataset0.h5ad \
-    --output $DATASET_DIR/temp_dataset1.h5ad
-
-# run sqrt cpm normalisation
-bin/viash run src/datasets/normalization/sqrt_cpm/config.vsh.yaml -- \
-    --input $DATASET_DIR/temp_dataset1.h5ad \
-    --output $DATASET_DIR/temp_dataset2.h5ad
-
-# run scran pooling normalisation
-bin/viash run src/datasets/normalization/log_scran_pooling/config.vsh.yaml -- \
-    --input $DATASET_DIR/temp_dataset2.h5ad \
     --output $DATASET_DIR/dataset.h5ad
 
 rm -r $DATASET_DIR/temp_*
