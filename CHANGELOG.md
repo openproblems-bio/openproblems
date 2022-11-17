@@ -16,19 +16,27 @@
 
 ### NEW FUNCTIONALITY
 
-* API: Created an explicit api definition for the split, method and metric components.
+* `api/anndata_*`: Created a file format specifications for the h5ad files throughout the pipeline.
 
-* `data_processing/split`: Added a component for splitting raw datasets into task-ready dataset objects.
+* `api/comp_*`: Created an api definition for the split, method and metric components.
+
+* `split_dataset`: Added a component for splitting raw datasets into task-ready dataset objects.
 
 * `resources_test/label_projection/pancreas` with `src/label_projection/resources_test_scripts/pancreas.sh`.
 
 ### V1 MIGRATION
 
-* `methods/knn_classifier`: Migrated from v1.
+* `methods/knn`: Migrated from v1.
 
 * `methods/logistic_regression`: Migrated from v1.
 
 * `methods/mlp`: Migrated from v1.
+
+* `control_methods/majority_vote`: Migrated from v1.
+
+* `control_methods/random_labels`: Migrated from v1.
+
+* `control_methods/true_labels`: Migrated from v1.
 
 * Temporarily disable `scanvi` / `scarches_scanvi`.
 
