@@ -29,16 +29,24 @@ workflow run_wf {
 
     // split params for downstream components
     | setWorkflowArguments(
-      openproblems_v1: ["id", "obs_celltype", "obs_batch", "obs_tissue", "layer_counts", "sparse"],
-      sqrt_cpm: [ "output" ]
+      loader: ["id", "obs_celltype", "obs_batch", "obs_tissue", "layer_counts", "sparse"],
+      output: [ "output" ]
     )
 
     // fetch data from legacy openproblems
-    | getWorkflowArguments(key: "openproblems_v1")
+    | getWorkflowArguments(key: "loader")
     | openproblems_v1
 
-    // run cpm normalisation
-    | log_cpm
+    // run normalization methods
+    | (log_cpm & log_scran_pooling & sqrt_cpm)
+    | mix
+
+    // make id unique again
+    | pmap{ id, file ->
+      // derive unique ids from output filenames
+      def newId = file.getName().replaceAll(".output.*", "")
+      [ newId, file ]
+    }
 
     // run scran normalisation
     | log_scran_pooling
