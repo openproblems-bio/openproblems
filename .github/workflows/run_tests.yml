@@ -130,7 +130,7 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: ${{ github.actor }}
+        username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Export docker images
@@ -138,7 +138,7 @@ jobs:
       run: |
         IMAGES="$(find ./docker -mindepth 1 -type d -exec basename {} \;)"
         for image in ${IMAGES}; do
-          GHCR_IMAGE="ghcr.io/${{ github.actor }}/${image}:${{ github.run_id }}"
+          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           docker tag singlecellopenproblems/$image $GHCR_IMAGE
           docker push $GHCR_IMAGE &
         done
@@ -201,13 +201,13 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: ${{ github.actor }}
+        username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Download docker images
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${{ github.actor }}/${image}:${{ github.run_id }}"
+          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
         done
         wait
@@ -301,13 +301,13 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: ${{ github.actor }}
+        username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Download docker images
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${{ github.actor }}/${image}:${{ github.run_id }}"
+          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
         done
         wait
