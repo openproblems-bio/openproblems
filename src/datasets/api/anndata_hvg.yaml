@@ -1,8 +1,8 @@
 type: file
-description: "A dataset"
+description: "A normalised data with a PCA embedding and HVG selection"
 example: "dataset.h5ad"
 info:
-  short_description: "Dataset+PCA+HVG"
+  label: "Dataset+PCA+HVG"
   slots:
     layers: 
       - type: integer

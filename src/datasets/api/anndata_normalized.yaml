@@ -1,8 +1,8 @@
 type: file
-description: "A dataset"
+description: "A normalized dataset"
 example: "dataset.h5ad"
 info:
-  short_description: "Normalized dataset"
+  label: "Normalized dataset"
   slots:
     layers: 
       - type: integer

@@ -17,7 +17,6 @@ dir <- "."
 
 # Common datasets
 
-TODO: fill in
 
 
 ## Pipeline topology
@@ -32,8 +31,10 @@ comp_file <- map_df(comp_yamls, function(yaml_file) {
   map_df(conf$functionality$arguments, function(arg) {
     df <- tibble(
       comp_name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
+      type = arg$type,
       arg_name = str_replace_all(arg$name, "^-*", ""),
-      direction = arg$direction %||% "input"
+      direction = arg$direction %||% "input",
+      description = arg$description
     )
     if ("__inherits__" %in% names(arg)) {
       df$file_name <- basename(arg$`__inherits__`) %>% gsub("\\.yaml", "", .)
@@ -57,7 +58,6 @@ file_info <- map_df(file_yamls, function(yaml_file) {
   tibble(
     name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
     description = arg$description,
-    short_description = arg$info$short_description,
     example = arg$example,
     label = name %>% gsub("anndata_", "", .) %>% gsub("_", " ", .)
   )
@@ -177,12 +177,16 @@ for (comp_name in comp_info$name) {
   comp <- comp_info %>% filter(name == comp_name)
   sub_out <- comp_file %>% 
     filter(comp_name == !!comp_name) %>%
-    left_join(file_info %>% select(file_name = name, file_desc = description, file_sdesc = short_description, file_label = label), by = "file_name") %>%
+    left_join(file_info %>% select(file_name = name, file_desc = description, file_label = label), by = "file_name") %>%
     transmute(
       Name = paste0("`--", arg_name, "`"),
-      `File format` = paste0("[", str_to_title(file_label), "](#", file_label, ")"),
+      Type = ifelse(
+        is.na(file_label), 
+        paste0("`", type, "`"), 
+        paste0("[", str_to_title(file_label), "](#", file_label, ")")
+      ),
       Direction = direction,
-      Description = file_sdesc
+      Description = description %|% file_desc
     )
   
   out_str <- strip_margin(glue::glue("

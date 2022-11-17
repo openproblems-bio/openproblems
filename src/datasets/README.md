@@ -19,8 +19,6 @@
 
 # Common datasets
 
-TODO: fill in
-
 ## Pipeline topology
 
 ``` mermaid
@@ -47,7 +45,7 @@ flowchart LR
 
 ### `Hvg`
 
-A dataset
+A normalised data with a PCA embedding and HVG selection
 
 Used in:
 
@@ -83,7 +81,7 @@ Example:
 
 ### `Normalized`
 
-A dataset
+A normalized dataset
 
 Used in:
 
@@ -112,7 +110,7 @@ Example:
 
 ### `Pca`
 
-A dataset
+A normalised data with a PCA embedding
 
 Used in:
 
@@ -146,7 +144,7 @@ Example:
 
 ### `Raw`
 
-A raw dataset
+An unprocessed dataset as output by a dataset loader.
 
 Used in:
 
@@ -176,44 +174,44 @@ Example:
 
 Arguments:
 
-| Name       | File format | Direction | Description |
-|:-----------|:------------|:----------|:------------|
-| `--output` | [Raw](#raw) | output    | Raw dataset |
+| Name       | Type        | Direction | Description                                           |
+|:-----------|:------------|:----------|:------------------------------------------------------|
+| `--output` | [Raw](#raw) | output    | An unprocessed dataset as output by a dataset loader. |
 
 ### `Normalization`
 
 Arguments:
 
-| Name                 | File format               | Direction | Description        |
-|:---------------------|:--------------------------|:----------|:-------------------|
-| `--input`            | [Raw](#raw)               | input     | Raw dataset        |
-| `--output`           | [Normalized](#normalized) | output    | Normalized dataset |
-| `--layer_output`     | [NA](#NA)                 | input     | NA                 |
-| `--obs_size_factors` | [NA](#NA)                 | input     | NA                 |
+| Name                 | Type                      | Direction | Description                                                  |
+|:---------------------|:--------------------------|:----------|:-------------------------------------------------------------|
+| `--input`            | [Raw](#raw)               | input     | An unprocessed dataset as output by a dataset loader.        |
+| `--output`           | [Normalized](#normalized) | output    | A normalized dataset                                         |
+| `--layer_output`     | `string`                  | input     | The name of the layer in which to store the normalized data. |
+| `--obs_size_factors` | `string`                  | input     | In which .obs slot to store the size factors (if any).       |
 
 ### `Processor Hvg`
 
 Arguments:
 
-| Name                | File format | Direction | Description     |
-|:--------------------|:------------|:----------|:----------------|
-| `--input`           | [Pca](#pca) | input     | Dataset+PCA     |
-| `--layer_input`     | [NA](#NA)   | input     | NA              |
-| `--output`          | [Hvg](#hvg) | output    | Dataset+PCA+HVG |
-| `--var_hvg`         | [NA](#NA)   | input     | NA              |
-| `--var_hvg_ranking` | [NA](#NA)   | input     | NA              |
-| `--num_features`    | [NA](#NA)   | input     | NA              |
+| Name                | Type        | Direction | Description                                                                |
+|:--------------------|:------------|:----------|:---------------------------------------------------------------------------|
+| `--input`           | [Pca](#pca) | input     | A normalised data with a PCA embedding                                     |
+| `--layer_input`     | `string`    | input     | Which layer to use as input for the PCA.                                   |
+| `--output`          | [Hvg](#hvg) | output    | A normalised data with a PCA embedding and HVG selection                   |
+| `--var_hvg`         | `string`    | input     | In which .var slot to store whether a feature is considered to be hvg.     |
+| `--var_hvg_ranking` | `string`    | input     | In which .var slot to store whether a ranking of the features by variance. |
+| `--num_features`    | `integer`   | input     | The number of HVG to select                                                |
 
 ### `Processor Pca`
 
 Arguments:
 
-| Name               | File format               | Direction | Description        |
-|:-------------------|:--------------------------|:----------|:-------------------|
-| `--input`          | [Normalized](#normalized) | input     | Normalized dataset |
-| `--layer_input`    | [NA](#NA)                 | input     | NA                 |
-| `--output`         | [Pca](#pca)               | output    | Dataset+PCA        |
-| `--obsm_embedding` | [NA](#NA)                 | input     | NA                 |
-| `--varm_loadings`  | [NA](#NA)                 | input     | NA                 |
-| `--uns_variance`   | [NA](#NA)                 | input     | NA                 |
-| `--num_components` | [NA](#NA)                 | input     | NA                 |
+| Name               | Type                      | Direction | Description                                                                                                          |
+|:-------------------|:--------------------------|:----------|:---------------------------------------------------------------------------------------------------------------------|
+| `--input`          | [Normalized](#normalized) | input     | A normalized dataset                                                                                                 |
+| `--layer_input`    | `string`                  | input     | Which layer to use as input for the PCA.                                                                             |
+| `--output`         | [Pca](#pca)               | output    | A normalised data with a PCA embedding                                                                               |
+| `--obsm_embedding` | `string`                  | input     | In which .obsm slot to store the resulting embedding.                                                                |
+| `--varm_loadings`  | `string`                  | input     | In which .varm slot to store the resulting loadings matrix.                                                          |
+| `--uns_variance`   | `string`                  | input     | In which .uns slot to store the resulting variance objects.                                                          |
+| `--num_components` | `integer`                 | input     | Number of principal components to compute. Defaults to 50, or 1 - minimum dimension size of selected representation. |
