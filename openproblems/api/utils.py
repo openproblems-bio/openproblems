@@ -1,5 +1,4 @@
 import openproblems
-import os
 
 
 class NoSuchFunctionError(RuntimeError):
@@ -50,9 +49,3 @@ def print_output(output):
         print("\n".join(output))
     else:
         print(output)
-
-
-def write_h5ad(adata, filename):
-    if os.path.isfile(filename):
-        os.unlink(filename)
-    adata.write_h5ad(filename)
