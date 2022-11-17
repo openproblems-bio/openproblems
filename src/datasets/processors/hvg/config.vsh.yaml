@@ -1,47 +1,8 @@
-
+__inherits__: ../../api/comp_processor_hvg.yaml
 functionality:
   name: "hvg"
   namespace: "datasets/processors"
   description: "Compute HVG"
-  argument_groups:
-    - name: Inputs
-      arguments:
-        - name: "--input"
-          __inherits__: ../../api/anndata_normalized.yaml
-        - name: "--layer_input"
-          type: string
-          default: "normalized"
-          description: Which layer to use as input for the PCA.
-    - name: Outputs
-      arguments:
-        - name: "--output"
-          direction: output
-          __inherits__: ../../api/anndata_normalized.yaml
-          info:
-            slots:
-              var:
-                - type: boolean
-                  name: hvg
-                  description: Whether or not the feature is considered to be a 'highly variable gene'
-                  required: true
-                - type: integer
-                  name: hvg_ranking
-                  description: A ranking of the features by hvg.
-                  required: true
-        - name: "--var_hvg"
-          type: string
-          default: "hvg"
-          description: "In which .var slot to store whether a feature is considered to be hvg."
-        - name: "--var_hvg_ranking"
-          type: string
-          default: "hvg_ranking"
-          description: "In which .var slot to store whether a ranking of the features by variance."
-    - name: Arguments
-      arguments:
-        - name: "--num_features"
-          type: integer
-          default: 1000
-          description: "The number of HVG to select"
   resources:
     - type: python_script
       path: script.py

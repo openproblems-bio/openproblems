@@ -1,0 +1,199 @@
+---
+format: gfm
+toc: true
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(rlang)
+
+strip_margin <- function(text, symbol = "\\|") {
+  str_replace_all(text, paste0("(\n?)[ \t]*", symbol), "\\1") 
+}
+
+dir <- "src/datasets"
+dir <- "."
+```
+
+# Common datasets
+
+TODO: fill in
+
+
+## Pipeline topology
+
+```{r data, include=FALSE}
+comp_yamls <- list.files(paste0(dir, "/api"), pattern = "comp_", full.names = TRUE)
+file_yamls <- list.files(paste0(dir, "/api"), pattern = "anndata_", full.names = TRUE)
+
+comp_file <- map_df(comp_yamls, function(yaml_file) {
+  conf <- yaml::read_yaml(yaml_file)
+
+  map_df(conf$functionality$arguments, function(arg) {
+    df <- tibble(
+      comp_name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
+      arg_name = str_replace_all(arg$name, "^-*", ""),
+      direction = arg$direction %||% "input"
+    )
+    if ("__inherits__" %in% names(arg)) {
+      df$file_name <- basename(arg$`__inherits__`) %>% gsub("\\.yaml", "", .)
+    }
+    df
+  })
+})
+
+comp_info <- map_df(comp_yamls, function(yaml_file) {
+  conf <- yaml::read_yaml(yaml_file)
+
+  tibble(
+    name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
+    label = name %>% gsub("comp_", "", .) %>% gsub("_", " ", .)
+  )
+})
+
+file_info <- map_df(file_yamls, function(yaml_file) {
+  arg <- yaml::read_yaml(yaml_file)
+  
+  tibble(
+    name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
+    description = arg$description,
+    short_description = arg$info$short_description,
+    example = arg$example,
+    label = name %>% gsub("anndata_", "", .) %>% gsub("_", " ", .)
+  )
+})
+
+file_slot <- map_df(file_yamls, function(yaml_file) {
+  arg <- yaml::read_yaml(yaml_file)
+
+  map2_df(names(arg$info$slots), arg$info$slots, function(group_name, slot) {
+    df <- map_df(slot, as.data.frame)
+    df$struct <- group_name
+    df$file_name <- basename(yaml_file) %>% gsub("\\.yaml", "", .)
+    df$multiple <- df$multiple %||% FALSE %|% FALSE
+    as_tibble(df)
+  })
+})
+```
+
+```{r flow, echo=FALSE,warning=FALSE,error=FALSE}
+nodes <- bind_rows(
+  file_info %>%
+    transmute(id = name, label = str_to_title(label), is_comp = FALSE),
+  comp_info %>%
+    transmute(id = name, label = str_to_title(label), is_comp = TRUE)
+) %>%
+  mutate(str = paste0(
+    "  ",
+    id, 
+    ifelse(is_comp, "[/", "("), 
+    label,
+    ifelse(is_comp, "/]", ")")
+  ))
+edges <- bind_rows(
+  comp_file %>%
+    filter(direction == "input", !is.na(file_name)) %>%
+    transmute(
+      from = file_name,
+      to = comp_name,
+      arrow = "---"
+    ),
+  comp_file %>%
+    filter(direction == "output", !is.na(file_name)) %>%
+    transmute(
+      from = comp_name, 
+      to = file_name, 
+      arrow = "-->"
+    )
+) %>%
+  mutate(str = paste0("  ", from, arrow, to))
+
+# note: use ```{mermaid} instead of ```mermaid when rendering to html
+out_str <- strip_margin(glue::glue("
+  §```mermaid
+  §%%| column: screen-inset-shaded
+  §flowchart LR
+  §{paste(nodes$str, collapse = '\n')}
+  §{paste(edges$str, collapse = '\n')}
+  §```
+  §"), symbol = "§")
+knitr::asis_output(out_str)
+```
+
+## File format API
+
+```{r file_api, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
+for (file_name in file_info$name) {
+  arg_info <- file_info %>% filter(name == file_name)
+  sub_out <- file_slot %>% 
+    filter(file_name == !!file_name) %>% 
+    select(struct, name, type, description)
+
+  used_in <- comp_file %>%
+    filter(file_name == !!file_name) %>%
+    left_join(comp_info %>% select(comp_name = name, comp_label = label), by = "comp_name") %>%
+    mutate(str = paste0("* [", comp_label, "](#", comp_label, "): ", arg_name, " (as ", direction, ")")) %>%
+    pull(str)
+
+  example <- sub_out %>%
+    group_by(struct) %>%
+    summarise(
+      str = paste0(unique(struct), ": ", paste0("'", name, "'", collapse = ", "))
+    ) %>%
+    arrange(match(struct, c("obs", "var", "uns", "obsm", "obsp", "varm", "varp", "layers")))
+
+  example_str <- c("    AnnData object", paste0("     ", example$str))
+  
+  out_str <- strip_margin(glue::glue("
+    §### `{str_to_title(arg_info$label)}`
+    §
+    §{arg_info$description}
+    §
+    §Used in:
+    §
+    §{paste(used_in, collapse = '\n')}
+    §
+    §Slots:
+    §
+    §{paste(knitr::kable(sub_out, format = 'pipe'), collapse = '\n')}
+    §
+    §Example:
+    §
+    §{paste(example_str, collapse = '\n')}
+    §
+    §"), symbol = "§")
+  cat(out_str)
+}
+```
+
+
+
+## Component API
+
+```{r comp_api, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
+# todo: add description
+# todo: add required info fields
+for (comp_name in comp_info$name) {
+  comp <- comp_info %>% filter(name == comp_name)
+  sub_out <- comp_file %>% 
+    filter(comp_name == !!comp_name) %>%
+    left_join(file_info %>% select(file_name = name, file_desc = description, file_sdesc = short_description, file_label = label), by = "file_name") %>%
+    transmute(
+      Name = paste0("`--", arg_name, "`"),
+      `File format` = paste0("[", str_to_title(file_label), "](#", file_label, ")"),
+      Direction = direction,
+      Description = file_sdesc
+    )
+  
+  out_str <- strip_margin(glue::glue("
+    §### `{str_to_title(comp$label)}`
+    §
+    §{ifelse(\"description\" %in% names(comp), comp$description, \"\")}
+    §
+    §Arguments:
+    §
+    §{paste(knitr::kable(sub_out, format = 'pipe'), collapse = '\n')}
+    §"), symbol = "§")
+  cat(out_str)
+}
+```

@@ -3,4 +3,3 @@ functionality:
     - name: "--output"
       direction: output
       __inherits__: anndata_raw.yaml
-

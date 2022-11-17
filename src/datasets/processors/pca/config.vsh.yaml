@@ -1,57 +1,8 @@
-
+__inherits__: ../../api/comp_processor_pca.yaml
 functionality:
   name: "pca"
   namespace: "datasets/processors"
   description: "Compute PCA"
-  argument_groups:
-    - name: Inputs
-      arguments:
-        - name: "--input"
-          __inherits__: ../../api/anndata_normalized.yaml
-        - name: "--layer_input"
-          type: string
-          default: "normalized"
-          description: Which layer to use as input for the PCA.
-    - name: Outputs
-      arguments:
-        - name: "--output"
-          direction: output
-          __inherits__: ../../api/anndata_normalized.yaml
-          info:
-            slots:
-              obsm:
-                - type: double
-                  name: X_pca
-                  description: The resulting PCA embedding.
-                  required: true
-              varm:
-                - type: double
-                  name: pca_loadings
-                  description: The PCA loadings matrix.
-                  required: true
-              uns:
-                - type: double
-                  name: pca_variance
-                  description: The PCA variance objects.
-                  required: true
-        - name: "--obsm_embedding"
-          type: string
-          default: "X_pca"
-          description: "In which .obsm slot to store the resulting embedding."
-        - name: "--varm_loadings"
-          type: string
-          default: "pca_loadings"
-          description: "In which .varm slot to store the resulting loadings matrix."
-        - name: "--uns_variance"
-          type: string
-          default: "pca_variance"
-          description: "In which .uns slot to store the resulting variance objects."
-    - name: Arguments
-      arguments:
-        - name: "--num_components"
-          type: integer
-          example: 25
-          description: Number of principal components to compute. Defaults to 50, or 1 - minimum dimension size of selected representation.
   resources:
     - type: python_script
       path: script.py
