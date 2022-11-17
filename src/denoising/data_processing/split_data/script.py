@@ -25,7 +25,13 @@ print(">> Load Data")
 adata = sc.read_h5ad(par["input"])
 
 
-X = adata.layers["counts"]
+# remove all layers except for counts
+for key in list(adata.layers.keys()):
+    if key != "counts":
+        del adata.layers[key]
+
+adata.X = adata.layers["counts"]
+X = adata.X
 
 # for test purposes
 X = X.round()
@@ -42,25 +48,33 @@ X_train, X_test = molecular_cross_validation.util.split_molecules(
     X, 0.9, 0.0, random_state
 )
 
+# Remove no cells that do not have enough reads
+is_missing = X_train.sum(axis=0) == 0
+X_train, X_test = X_train[:, ~is_missing], X_test[:, ~is_missing]
 
+#   copy adata to train_set, test_set
 
-# copy adata to train_set, test_set
-
-output_train = adata
+output_train = adata[:, ~is_missing].copy()
+del output_train.layers["counts"]
 output_train.layers["counts"] = scipy.sparse.csr_matrix(X_train).astype(float)
 
-output_test = adata
+output_test = adata[:, ~is_missing].copy()
+del output_test.layers["counts"]
 output_test.layers["counts"] = scipy.sparse.csr_matrix(X_test).astype(float)
 
-# TODO: remove cells which have not enough reads
+
+# NOTE: remove cells which have not enough reads -> is it possible to remove same cells/genes in test set as in train set a above ?
 #   * first, remove genes with 0 expression
 #   * then, remove cells with 1 count or less
 
-# TODO: remove zero entries -> uncertain how this is done. below code gives error that matrix size is different
-# is_missing = output_train.layers["counts"].sum(axis=0) == 0
-# output_train.layers["counts"], output_test.layers["counts"] = output_train.layers["counts"][:, ~is_missing], output_test.layers["counts"][:, ~is_missing]
+# def filter_genes_cells(adata):
+#     """Remove empty cells and genes."""
+#     sc.pp.filter_genes(adata, min_cells=1)
+#     sc.pp.filter_cells(adata, min_counts=1)
+#     return adata
 
-# TODO: Remove other normalisation methods so that they can be recomputed later
+
+# filter_genes_cells(output_train)
 
 print(">> Writing")
 

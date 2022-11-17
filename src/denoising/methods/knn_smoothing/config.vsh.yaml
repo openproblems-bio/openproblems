@@ -1,0 +1,34 @@
+__inherits__: ../../api/comp_method.yaml
+functionality:
+  status: disabled
+  name: "KNN_smoothing"
+  namespace: "denoising/methods"
+  description: "K-nearest neighbor smoothing"
+  info:
+    type: method
+    label: knn_smooth
+    # paper_name: "K-nearest neighbor smoothing for high-throughput"
+    # paper_url: "https://www.biorxiv.org/content/10.1101/217737v3"
+    # paper_year: 2018
+    paper_doi: "10.1101/217737"
+    code_url: "https://github.com/yanailab/knn-smoothing"
+    v1_url: /openproblems/tasks/denoising/methods/dca.py
+    v1_commit: 903469a532b96b25ef7d727e687c5b4263966323
+  arguments:
+    - name: "--layer_input"
+      type: string
+      default: "counts"
+      description: Which layer to use as input.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - "anndata>=0.8"
+        github:
+          - knn_smooth
+  - type: nextflow
