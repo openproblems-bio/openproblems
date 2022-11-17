@@ -37,8 +37,7 @@ metric_info <- map_df(ns_list_metrics, function(conf) {
 
 df <- scores %>%
   left_join(method_info %>% select(id, type, label) %>% rename_all(function(x) paste0("method_", x)), by = "method_id") %>%
-  left_join(metric_info %>% select(id, label, min, max, maximise) %>% rename_all(function(x) paste0("metric_", x)), by = "metric_id") %>%
-  mutate(method_label = factor(method_label, levels = c("True labels", "Multilayer perceptron")))
+  left_join(metric_info %>% select(id, label, min, max, maximise) %>% rename_all(function(x) paste0("metric_", x)), by = "metric_id")
 
 ordering <- df %>%
   group_by(metric_id, dataset_id) %>%
