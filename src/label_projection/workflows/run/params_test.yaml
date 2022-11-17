@@ -1,0 +1,5 @@
+param_list:
+- id: pancreas
+  input_train: resources_test/label_projection/pancreas/train.h5ad
+  input_test: resources_test/label_projection/pancreas/test.h5ad
+  input_solution: resources_test/label_projection/pancreas/solution.h5ad

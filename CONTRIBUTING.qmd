@@ -1,7 +1,8 @@
 ---
 title: Contributing to OpenProblems
-engine: knitr
 format: gfm
+toc: true
+engine: knitr
 ---
 
 [OpenProblems](https://openproblems.bio) is a community effort, and everyone is welcome to contribute. This project is hosted on [github.com/openproblems-bio/openproblems-v2](https://github.com/openproblems-bio/openproblems-v2).
@@ -15,429 +16,343 @@ We pledge to act and interact in ways that contribute to an open, welcoming, div
 Our full [Code of Conduct](CODE_OF_CONDUCT.md) is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1.
 
 
-## Ways to contribute
+## Requirements
 
-There are many ways to contribute to OpenProblems, with the most common ones being contribution of code or documentation to the project. 
+To use this repository, please install the following dependencies:
 
-Contributing new functionality usually comes in the form of new [datasets](#adding-a-new-dataset), [methods](#adding-a-new-method), [metric](#adding-a-new-metric), or even entire new [tasks](#adding-a-new-task). 
+* Bash
+* Java (Java 11 or higher)
+* Docker (Instructions [here](https://docs.docker.com/get-docker/))
+* Nextflow (Optional, though [very easy to install](https://www.nextflow.io/index.html#GetStarted))
 
-Improving the documentation is no less important than improving the library itself. If you find a typo in the documentation, or have made improvements, do not hesitate to submit a [GitHub pull request](https://github.com/openproblems-bio/openproblems-v2/pulls).
+## Quick start
 
-But there are many other ways to help. In particular helping to [improve, triage, and investigate issues](#bug-triaging) and [reviewing other developers' pull requests](#code-review) are very valuable contributions that decrease the burden on the project maintainers.
+The `src/` folder contains modular software components for running a modality alignment benchmark. Running the full pipeline is quite easy.
 
-Another way to contribute is to report [issues you're facing](#submitting-a-bug-report-or-feature-request), and give a "thumbs up" on issues that others reported and that are relevant to you.  It also helps us if you spread the word: reference the project from your blog and articles, link to it from your website, or simply star to say "I use it":
-
-<a class="github-button" href="https://github.com/openproblems-bio/openproblems-v2" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star openproblems-bio/openproblems-v2 on GitHub">Star</a>
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-
-<!-- wip -->
-
-## Submitting New Features
-
-To submit new features to Open Problems for Single Cell Analysis, follow the steps
-below:
-
-1. Search through the [GitHub
-   Issues](https://github.com/openproblems-bio/openproblems-v2/issues) tracker to make sure
-   there isn't someone already working on the feature you'd like to add. If someone is
-   working on this, post in that issue that you'd like to help or reach out to one of
-   the contributors working on the issue directly.
-2. If there isn't an existing issue tracking this feature, create one! There are several
-   templates you can choose one depending on what type of feature you'd like to add.
-3. Fork <https://github.com/openproblems-bio/openproblems-v2> into your account. If you're
-   new to `git`, you might find the [Fork a
-   repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo)
-   documentation helpful.
-   ![](<https://i.imgur.com/fUcpLYl.png>" width=400px>
-4. Set up [tower.nf](https://tower.nf) and make sure you have access to
-   [`openproblems-bio`](https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch).
-   If you do not have access, please contact us at
-   [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).
-5. Create repository secrets (*not environment secrets*)
-   [https://github.com/USERNAME/openproblems/settings/secrets](https://github.com/USERNAME/openproblems/settings/secrets)
-    * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login
-      details. If you do not have these, please contact us at
-      [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
-    * *TOWER_ACCESS_KEY: log in with GitHub to <https://tower.nf> and create a token at
-      <https://tower.nf/tokens>.*
-    * When you are done with this step, your page should look like this:
-    ![AWS secrets success](static/img/AWS_secret.png)
-
-6. Enable workflows at
-   [https://github.com/USERNAME/openproblems/actions](https://github.com/USERNAME/openproblems/actions).
-7. Set up your git repository to fetch branches from `base` at
-   `openproblems-bio/openproblems`
-
-    ```shell
-    git clone git@github.com:<username>/openproblems.git
-    cd openproblems
-    git remote add base git@github.com:openproblems-bio/openproblems.git
-    git fetch --all
-    git branch --set-upstream-to base/main
-    git pull
-    ```
-
-   **Note:** If you haven't set up SSH keys with your GitHub account, you may see this
-   error message when adding `base` to your repository:
-
-    ```text
-    git@github.com: Permission denied (publickey).
-    fatal: Could not read from remote repository.
-    Please make sure you have the correct access rights
-    ```
-
-   To generate an SSH key and add it to your GitHub account, follow [this tutorial from
-   GitHub](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
-
-8. Create a new branch for your task (**no underscores or spaces allowed**). It is best
-   to coordinate with other people working on the same feature as you so that there
-   aren't clases in images uploaded to our ECR. Here we're creating a branch called
-   `method-method-name-task-name`, but if you were creating a new metric you might use
-   `metric-metric-name-task-name`. In practice you should actually use the name of your
-   method or metric, like `method-meld-differential-abundance` or
-   `metric-mse-label-projection`.
-
-   **Note:** This pushes the branch to your fork, *not to* `base`. You will create a PR
-   to merge your branch to `base` only after all tests are passing.
-
-   **Warning:** Do not edit the `main` branch on your fork! This will not work as
-   expected, and will never pass tests.
-
-    ```shell
-    # IMPORTANT: choose a new branch name, e.g.
-    git checkout -b method-method-name-task-name # or metric-new-metric-name, etc
-    git push -u origin method-method-name-task-name
-    ```
-
-9. Sometimes, changes might be made to the openproblems `base` repository that you want
-   to incorporate into your fork. To sync your fork from `base`, use the following code
-   adapted from the [Syncing a
-   Fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork)
-   tutorial from GitHub.
-
-    ```shell
-    # Fetch the branches and their respective commits from the upstream repository
-    git fetch base
-
-    # Check out your fork's local default branch
-    git checkout main
-
-    # Merge the changes from the upstream default branch
-    git merge base/main
-
-    # Push the changes to your fork
-    git push -u origin
-    ```
-
-   You can now create a [Pull
-   Request](https://guides.github.com/activities/hello-world/#pr) from the default
-   branch on your fork, `main`, into your working branch, e.g.
-   `method-method-name-task-name`.
-
-10. Wait for all tests to pass on your new branch before pushing changes (as this will
-    allow GitHub Actions to cache the workflow setup, which speeds up testing.)
-
-## API
-
-Each task consists of datasets, methods, and metrics.
-
-Datasets should take no arguments and return an AnnData object. If `test is True`, then
-the method should load the full dataset, but only return a small version of the same
-data (preferably <200 cells and <500 genes) for faster downstream analysis.
-
-```text
-function dataset(bool test=False) -> AnnData adata
-```
-
-Methods should take an AnnData object and store a) the output in `adata.obs` /
-`adata.obsm` / etc., according to the specification of the task and b) the version of
-the package used to run the method in `adata.uns["method_code_version"]`. If `test is
-True`, you may modify hyperparameters (e.g. number of iterations) to make the method run
-faster.
-
-```text
-function method(AnnData adata, bool test=False) -> AnnData adata
-```
-
-If your method takes hyperparameters, set them as keyword arguments in the method
-definition. If the hyperparameters change depending on the value of `test`, set the
-keyword argument to `None` and set them to your chosen defaults only if the passed value
-is `None`. For an example, see [harmonic
-alignment](openproblems/tasks/multimodal_data_integration/methods/harmonic_alignment.py).
-
-Metrics should take an AnnData object and return a `float`.
-
-```text
-function metric(AnnData adata) -> float
-```
-
-Task-specific APIs are described in the README for each task.
-
-* [Label Projection](openproblems/tasks/label_projection)
-* [Multimodal Data Integration](openproblems/tasks/multimodal_data_integration)
-
-### Writing functions in R
-
-Metrics and methods can also be written in R. AnnData Python objects are converted to
-and from `SingleCellExperiment` R objects using
-[`anndata2ri`](https://icb-anndata2ri.readthedocs-hosted.com/en/latest/). R methods
-should be written in a `.R` file which assumes the existence of a `SingleCellExperiment`
-object called `sce`, and should return the same object. A simple method implemented in R
-could be written as follows:
-
-```R
-### tasks/<task_name>/methods/pca.R
-# Dependencies
-library(SingleCellExperiment)
-library(stats)
-
-# Method body
-n_pca <- 10
-counts <- t(assay(sce, "X"))
-reducedDim(sce, "pca") <- prcomp(counts)[,1:n_pca]
-
-# Return
-sce
-```
-
-```python
-### tasks/<task_name>/methods/pca.py
-from ....tools.conversion import r_function
-from ....tools.decorators import method
-from ....tools.utils import check_r_version
-
-_pca = r_function("pca.R")
-
-
-@method(
-    method_name="PCA",
-    paper_name="On lines and planes of closest fit to systems of points in space",
-    paper_url="https://www.tandfonline.com/doi/abs/10.1080/14786440109462720",
-    paper_year=1901,
-    code_url="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp",
-    image="openproblems-r-base",
-)
-def pca(adata):
-    adata.uns["method_code_version"] = check_r_version("stats"),
-    return _pca(adata)
-```
-
-See the [`anndata2ri` docs](https://icb-anndata2ri.readthedocs-hosted.com/en/latest/)
-for API details. For a more detailed example of how to use this functionality, see our
-implementation of fastMNN batch correction
-([mnn.R](openproblems/tasks/multimodal_data_integration/methods/mnn.R),
-[mnn.py](openproblems/tasks/multimodal_data_integration/methods/mnn.py)).
-
-### Adding package dependencies
-
-If you are unable to write your method using our base dependencies, you may add to our
-existing Docker images, or create your own. The image you wish to use (if you are not
-using the base image) should be specified in the `image` keyword argument of the
-method/metric decorator. See the [Docker images README](docker/README.md) for details.
-
-For the target method or metric, image-specific packages can then be imported in the
-associated python file (i.e. `f2.py`). Importantly, the import statement must be located
-in the function that calls the method or metric. If this is the `f2` function, the first
-few lines of the function may be structured as follows:
-
-```python
-def f2(adata):
-  import package1
-  import package2
-```
-
-### Adding a new dataset
-
-Datasets are loaded under `openproblems/data`. Each data loading function should
-download the appropriate dataset from a stable location (e.g. from Figshare) be
-decorated with `openproblems.data.utils.loader(data_url="https://data.link",
-data_reference="https://doi.org/10.0/123")` in order to cache the result.
-
-Data should be provided in a raw count format. We assume that `adata.X` contains the raw
-(count) data for the primary modality; this will also be copied to
-`adata.layers["counts"]` for permanent access to the raw data. Additional modalities
-should be stored in `adata.obsm`. Prenormalized data (if available) can be stored in
-`adata.layers`, preferably using a name corresponding to the equivalent [normalization
-function](./openproblems/tools/normalize.py) (e.g.,
-`adata.layers["log_scran_pooling"]`).
-
-To see a gold standard loader, look at
-[openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py](./openproblems/data/Wagner_2018_zebrafish_embryo_CRISPR.py)
-
-This file name should match
-`[First Author Last Name]_[Year Published]_short_Description_of_data.py`. E.g. the
-dataset of zebrafish embryos perturbed with CRISPR published in 2018 by Wagner *et al.*
-becomes `Wagner_2018_zebrafish_embryo_CRISPR.py`
-
-### Adding a dataset / method / metric to a task
-
-To add a dataset, method, or metric to a task, simply create a new `.py` file
-corresponding to your proposed new functionality and import the main function in the
-corresponding `__init__.py`. E.g., to add a "F2" metric to the label projection task, we
-would create `openproblems/tasks/label_projection/metrics/f2.py` and add a line
-
-```python
-from .f2 import f2
-```
-
-to
-[`openproblems/tasks/label_projection/metrics/__init__.py`](openproblems/tasks/label_projection/metrics/__init__.py).
-
-For datasets in particular, these should be loaded using a `loader` function from
-`openproblems.data`, with only task-specific annotations added in the task-specific data
-file.
-
-Datasets, methods, and metrics should all be decorated with the appropriate function in
-`openproblems.tools.decorators` to include metadata required for the evaluation and
-presentation of results.
-
-Note that data is not normalized in the data loader; normalization should be performed
-as part of each method or in the task dataset function if stated in the task API. For
-ease of use, we provide a collection of common normalization functions in
-[`openproblems.tools.normalize`](openproblems/tools/normalize.py). The original data
-stored in `adata.X` is automatically stored in `adata.layers["counts"]` for later
-reference in the case the a metric needs to access the unnormalized data.
-
-#### Testing method performance
-
-To test the performance of a dataset, method, or metric, you can use the command-line
-interface `openproblems-cli test`.
-
-First, you must launch a Docker image containing the relevant dependencies for the
-dataset/method/metric you wish to test. You can then run `openproblems-cli test` with
-any/all of `--dataset`, `--method`, and `--metric` as desired. E.g.,
+**Step 0, fetch viash and nextflow:** run the `bin/init` executable.
 
 ```bash
-cd openproblems
-docker run \
-  -v $(pwd):/usr/src/singlecellopenproblems -v /tmp:/tmp \
-  -it singlecellopenproblems/openproblems-python-extras bash
-openproblems-cli test \
-  --task label_projection \
-  --dataset zebrafish_labels \
-  --method logistic_regression_log_cpm \
-  --metric f1
+bin/init
 ```
 
-which will print the benchmark score for the method evaluated by the metric on the
-dataset you chose.
+    > Using tag develop
+    > Cleanup
+    > Downloading Viash source code @develop
+    > Building Viash from source
+    > Building Viash helper scripts from source
+    > Done, happy viash-ing!
 
-Notes:
+**Step 1, download test resources:** by running the following command.
 
-* If you have updated Docker images to run your method, you must first rebuild the
-  images -- see the [Docker README](docker/README.md) for details.
-* If your dataset/method/metric cannot be run on the same docker image, you may wish to
-  `load`, `run`, and `evaluate` separately. You can do this using each of these commands
-  independently; however, this workflow is not documented.
-* These commands are not guaranteed to work with Apple silicon (M1 chip).
-* If your local machine cannot run the test due to memory constraints or OS
-  incompatibility, you may use your AWS credentials to launch a VM for testing purposes.
-  See the [EC2 README](./EC2.md) for details.
-
-### Adding a new task
-
-The task directory structure is as follows
-
-```text
-openproblems/
-  - tasks/
-    - task_name/
-      - README.md
-      - __init__.py
-      - api.py
-      - datasets/
-        - __init__.py
-        - dataset1.py
-        - ...
-      - methods/
-        - __init__.py
-        - method1.py
-        - ...
-      - metrics/
-        - __init__.py
-        - metric1.py
-        - ...
+```bash
+bin/viash run src/common/sync_test_resources/config.vsh.yaml
 ```
 
-`task_name/__init__.py` can be copied from an existing task.
+    Completed 256.0 KiB/7.2 MiB (302.6 KiB/s) with 6 file(s) remaining
+    Completed 512.0 KiB/7.2 MiB (595.8 KiB/s) with 6 file(s) remaining
+    Completed 768.0 KiB/7.2 MiB (880.3 KiB/s) with 6 file(s) remaining
+    Completed 1.0 MiB/7.2 MiB (1.1 MiB/s) with 6 file(s) remaining    
+    Completed 1.2 MiB/7.2 MiB (1.3 MiB/s) with 6 file(s) remaining
+    ...
 
-`api.py` should implement the following functions:
+**Step 2, build all the components:** in the `src/` folder as standalone executables in the `target/` folder. Use the `-q 'xxx'` parameter to build a subset of components in the repository.
 
-<!-- markdownlint-disable MD013 -->
-```text
-check_dataset(AnnData adata) -> bool # checks that a dataset fits the task-specific schema
-check_method(AnnData adata) -> bool # checks that the output from a method fits the task-specific schema
-sample_dataset() -> AnnData adata # generates a simple dataset the fits the expected API
-sample_method(AnnData adata) -> AnnData adata # applies a simple modification that fits the method API
-```
-<!-- markdownlint-enable MD013 -->
-
-`README.md` should contain a description of the task as will be displayed on the
-website, followed by a description of the task API for dataset/method/metric authors.
-Note: everything after `## API` will be discarded in generating the webpage for the
-task.
-
-For adding datasets, methods and metrics, see above.
-
-### Adding a new Docker container
-
-Datasets, methods and metrics run inside Docker containers. We provide a few to start
-with, but if you have specific requirements, you may need to modify an existing image or
-add a new one. See the [Docker README](docker/README.md) for details.
-
-## Code Style and Testing
-
-`openproblems` is maintained at close to 100% code coverage. For datasets, methods, and
-metrics, tests are generated programatically from each task's `api.py`. See the [Adding
-a new task](#adding-a-new-task) section for instructions on creating this file.
-
-For additions outside this core functionality, contributors are encouraged to write
-tests for their code -- but if you do not know how to do so, please do not feel
-discouraged from contributing code! Others can always help you test your contribution.
-
-Code is tested by GitHub Actions when you push your changes. However, if you wish to
-test locally, you can do so with the following command:
-
-```shell
-cd openproblems
-pip install --editable .[test,r]
-pytest -v
+```bash
+bin/viash_build -q 'label_projection|common'
 ```
 
-You may run specific tests quickly with
+    In development mode with 'dev'.
+    Exporting split_dataset (label_projection) =docker=> target/docker/label_projection/split_dataset
+    Exporting accuracy (label_projection/metrics) =docker=> target/docker/label_projection/metrics/accuracy
+    Exporting random_labels (label_projection/control_methods) =docker=> target/docker/label_projection/control_methods/random_labels
+    [notice] Building container 'label_projection/control_methods_random_labels:dev' with Dockerfile
+    [notice] Building container 'common/data_processing_dataset_concatenate:dev' with Dockerfile
+    [notice] Building container 'label_projection/metrics_accuracy:dev' with Dockerfile
+    ...
 
-```shell
-PYTEST_MAX_RETRIES=0 pytest -k my_task
+These standalone executables you can give to somebody else, and they will be able to run it, provided that they have Bash and Docker installed.
+The command might take a while to run, since it is building a docker container for each of the components. 
+
+**Step 3, run the pipeline with nextflow.** To do so, run the bash script located at `src/label_projection/workflows/run_nextflow.sh`:
+
+```bash
+src/label_projection/workflows/run/run_test.sh
 ```
 
-The test suite also requires Python>=3.7, R>=4.0, and Docker to be installed.
+    N E X T F L O W  ~  version 22.04.5
+    Launching `src/label_projection/workflows/run/main.nf` [small_becquerel] DSL2 - revision: ece87259df
+    executor >  local (19)
+    [39/e1bb01] process > run_wf:true_labels:true_labels_process (1)                 [100%] 1 of 1 ✔
+    [3b/d41f8a] process > run_wf:random_labels:random_labels_process (1)             [100%] 1 of 1 ✔
+    [c2/0398dd] process > run_wf:majority_vote:majority_vote_process (1)             [100%] 1 of 1 ✔
+    [fd/92edc7] process > run_wf:knn_classifier:knn_classifier_process (1)           [100%] 1 of 1 ✔
+    [f7/7cdb34] process > run_wf:logistic_regression:logistic_regression_process (1) [100%] 1 of 1 ✔
+    [4f/6a67e4] process > run_wf:mlp:mlp_process (1)                                 [100%] 1 of 1 ✔
+    [a5/ae6341] process > run_wf:accuracy:accuracy_process (6)                       [100%] 6 of 6 ✔
+    [72/5076e8] process > run_wf:f1:f1_process (6)                                   [100%] 6 of 6 ✔
+    [cf/eccd48] process > run_wf:extract_scores:extract_scores_process               [100%] 1 of 1 ✔
 
-The benchmarking suite is tested by GitHub Actions when you push your changes. However,
-if you wish to test locally, you can do so with the following command:
+## Project structure
 
-```shell
-cd workflow
-snakemake -j 4 docker
-cd ..
-nextflow run -resume -profile test,docker openproblems-bio/nf-openproblems
+    .
+    ├── bin                    Helper scripts for building the project and developing a new component.
+    ├── resources_test         Datasets for testing components. If you don't have this folder, run **Step 1** above.
+    ├── src                    Source files for each component in the pipeline.
+    │   ├── common             Common processing components.
+    │   ├── datasets           Components for ingesting datasets from a source.
+    │   ├── label_projection   Source files related to the 'Label projection' task.
+    │   └── ...                Other tasks.
+    └── target                 Executables generated by viash based on the components listed under `src/`.
+        ├── docker             Bash executables which can be used from a terminal.
+        └── nextflow           Nextflow modules which can be used as a standalone pipeline or as part of a bigger pipeline.
+
+
+    bin/                     Helper scripts for building the project and developing a new component.
+    resources_test/          Datasets for testing components.
+    src/                     Source files for each component in the pipeline.
+      common/                Common processing components.
+      datasets/              Components related to ingesting datasets into OpenProblems v2.
+        api/                 Specs for the data loaders and normalisation methods.
+        loaders/             Components for ingesting datasets from a source.
+        normalization/       Common normalization methods.
+      label_projection/      Source files related to the 'Label projection' task.
+        datasets/            Dataset downloader components.
+        methods/             Modality alignment method components.
+        metrics/             Modality alignment metric components.
+        utils/               Utils functions.
+        workflow/            The pipeline workflow for this task.
+    target/                  Executables generated by viash based on the components listed under `src/`.
+      docker/                Bash executables which can be used from a terminal.
+      nextflow/              Nextflow modules which can be used in a Nextflow pipeline.
+    work/                    A working directory used by Nextflow.
+    output/                  Output generated by the pipeline.
+
+The `src/datasets` folder
+
+src/datasets/
+├── api                      Specs for the data loaders and normalisation methods.
+├── loaders                  Components for ingesting datasets from a source.
+├── normalization            Common normalization methods.
+├── resource_test_scripts    Scripts for generating the objects in the `resources_test` folder.
+└── workflows                A set of Nextflow workflows which tie together various components.
+
+The `src/label_projection` folder
+
+src/label_projection/
+├── api                      Specs for the split_dataset, methods and metrics in this task.
+├── control_methods          Positive and negative control methods for quality control.
+├── methods                  Method components.
+├── metrics                  Metric components.
+├── [README.md](src/label_projection/)                More information on how this task works.
+├── resources_test_scripts   Scripts for generating the objects in the `resources_test` folder.
+├── split_dataset            A component for splitting a common dataset into a `train`, `test` and `solution` object.
+└── workflows                A set of Nextflow workflows which tie together various components.
+
+## Adding a Viash component
+
+[Viash](https://viash.io) allows you to create pipelines
+in Bash or Nextflow by wrapping Python, R, or Bash scripts into reusable components.
+
+
+You can start creating a new component by [creating a Viash component](https://viash.io/guide/component/creation/docker.html). 
+
+
+```{bash, include=FALSE}
+# bin/viash_skeleton --name foo --namespace "label_projection/methods" --language python
+
+mkdir -p src/label_projection/methods/foo
+
+cat > src/label_projection/methods/foo/config.vsh.yaml << HERE
+__inherits__: ../../api/comp_method.yaml
+functionality:
+  name: "foo"
+  namespace: "label_projection/methods"
+  # A multiline description of your method.
+  description: "Todo: fill in"
+  info:
+    type: method
+
+    # a short label of your method
+    label: Foo
+
+    paper_doi: "10.1234/1234.5678.1234567890"
+
+    # if you don't have a Doi, you can specify a name, url and year manually:
+    # paper_name: "Nearest neighbor pattern classification"
+    # paper_url: "https://doi.org/10.1109/TIT.1967.1053964"
+    # paper_year: 1967
+    
+    code_url: "https://github.com/my_organisation/foo"
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - anndata>=0.8
+          - scikit-learn
+  - type: nextflow
+HERE
+
+cat > src/label_projection/methods/foo/script.py << HERE
+import anndata as ad
+import numpy as np
+
+## VIASH START
+# This code-block will automatically be replaced by Viash at runtime.
+par = {
+    'input_train': 'resources_test/label_projection/pancreas/train.h5ad',
+    'input_test': 'resources_test/label_projection/pancreas/test.h5ad',
+    'output': 'output.h5ad'
+}
+meta = {
+    'functionality_name': 'foo'
+}
+## VIASH END
+
+print("Load data")
+input_train = ad.read_h5ad(par['input_train'])
+input_test = ad.read_h5ad(par['input_test'])
+
+print("Create predictions")
+input_test.obs["label_pred"] = "foo"
+
+print("Add method name to uns")
+input_test.uns["method_id"] = meta["functionality_name"]
+
+print("Write output to file")
+input_test.write_h5ad(par["output"], compression="gzip")
+HERE
 ```
 
-The benchmarking suite also requires Python>=3.7, snakemake, nextflow, and Docker to be
-installed.
+For example, to create a new Python-based method named `foo`, create a Viash config at `src/label_projection/methods/foo/config.vsh.yaml`:
 
-Code style is dictated by
-[`black`](https://pypi.org/project/black/#installation-and-usage) and
-[`flake8`](https://flake8.pycqa.org/en/latest/) with
-[`hacking`](https://github.com/openstack/hacking). Code is automatically reformatted by
-[`pre-commit`](https://pre-commit.com/) when you push to GitHub.
+```{embed lang="yaml"}
+src/label_projection/methods/foo/config.vsh.yaml
+```
 
-## Code of Conduct
+And create a script at `src/label_projection/methods/foo/script.py`:
 
-We abide by the principles of openness, respect, and consideration of others
-of the Python Software Foundation: <https://www.python.org/psf/codeofconduct/> and by
-the Contributor Covenant. See our [Code of Conduct](CODE_OF_CONDUCT.md) for details.
+```{embed lang="python"}
+src/label_projection/methods/foo/script.py
+```
 
-## Attribution
 
-This `CONTRIBUTING.md` was adapted from
-[scikit-learn](https://github.com/scikit-learn/scikit-learn/blob/main/CONTRIBUTING.md).
+## Running a component from CLI
+
+You can view the interface of the executable by running the executable with the `-h` or `--help` parameter.
+
+```{bash}
+bin/viash run src/label_projection/methods/foo/config.vsh.yaml -- --help
+```
+
+You can **run the component** as follows:
+
+```{bash}
+bin/viash run src/label_projection/methods/foo/config.vsh.yaml -- \
+  --input_train resources_test/label_projection/pancreas/train.h5ad \
+  --input_test resources_test/label_projection/pancreas/test.h5ad \
+  --output resources_test/label_projection/pancreas/prediction.h5ad
+```
+
+## Building a component
+
+`viash` has several helper functions to help you quickly develop a component.
+
+With **`viash build`**, you can turn the component into a standalone executable. 
+This standalone executable you can give to somebody else, and they will be able to 
+run it, provided that they have Bash and Docker installed.
+
+```{bash}
+bin/viash build src/label_projection/methods/foo/config.vsh.yaml \
+  -o target/docker/label_projection/methods/foo
+```
+
+:::{.callout-note}
+The `bin/viash_build` component does a much better job of setting up 
+a collection of components.
+:::
+
+You can now view the same interface of the executable by running the executable with the `-h` parameter.
+
+```{bash}
+target/docker/label_projection/methods/foo/foo -h
+```
+
+Or **run the component** as follows:
+
+```{bash}
+target/docker/label_projection/methods/foo/foo \
+  --input_train resources_test/label_projection/pancreas/train.h5ad \
+  --input_test resources_test/label_projection/pancreas/test.h5ad \
+  --output resources_test/label_projection/pancreas/prediction.h5ad
+```
+
+
+## Unit testing a component
+
+The [method API specifications](src/label_projection/api/comp_method.yaml) comes with a generic unit test for free. 
+This means you can unit test your component using the **`viash test`** command.
+
+```{bash}
+bin/viash test src/label_projection/methods/foo/config.vsh.yaml
+```
+
+```{bash include=FALSE}
+cat > src/label_projection/methods/foo/script.py << HERE
+import anndata as ad
+import numpy as np
+
+## VIASH START
+# This code-block will automatically be replaced by Viash at runtime.
+par = {
+    'input_train': 'resources_test/label_projection/pancreas/train.h5ad',
+    'input_test': 'resources_test/label_projection/pancreas/test.h5ad',
+    'output': 'output.h5ad'
+}
+meta = {
+    'functionality_name': 'foo'
+}
+## VIASH END
+
+print("Load data")
+input_train = ad.read_h5ad(par['input_train'])
+input_test = ad.read_h5ad(par['input_test'])
+
+print("Not creating any predictions!!!")
+# input_test.obs["label_pred"] = "foo"
+
+print("Not adding method name to uns!!!")
+# input_test.uns["method_id"] = meta["functionality_name"]
+
+print("Write output to file")
+input_test.write_h5ad(par["output"], compression="gzip")
+HERE
+```
+
+Let's introduce a bug in the script and try running the test again. For instance:
+
+```{embed lang="python"}
+src/label_projection/methods/foo/script.py
+```
+
+If we now run the test, we should get an error since we didn't create all of the required output slots.
+
+```{bash error=TRUE}
+bin/viash test src/label_projection/methods/foo/config.vsh.yaml
+```
+
+
+## More information
+
+The [Viash reference docs](https://viash.io/reference/config/) page provides information on all of the available fields in a Viash config, and the [Guide](https://viash.io/guide/) will help you get started with creating components from scratch.
+
+
+<!-- cleaning up temporary files -->
+
+```{bash, echo=FALSE}
+rm -r src/label_projection/methods/foo target/docker/label_projection/methods/foo
+```

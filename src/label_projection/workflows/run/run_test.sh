@@ -13,5 +13,5 @@ bin/nextflow \
   -main-script src/label_projection/workflows/run/main.nf \
   -profile docker \
   -resume \
-  -params-file src/label_projection/workflows/run/params.yaml \
+  -params-file src/label_projection/workflows/run/params_test.yaml \
   --publish_dir output/label_projection
