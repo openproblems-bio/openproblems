@@ -2,7 +2,6 @@ from ...data.sample import load_sample_data
 from ...tools.decorators import dataset
 
 import numpy as np
-import scanpy as sc
 
 
 def check_dataset(adata):
@@ -27,6 +26,8 @@ def sample_dataset():
 
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
+    import scanpy as sc
+
     sc.tl.pca(adata)
     adata.obsm["X_emb"] = adata.obsm["X_pca"][:, :2]
     return adata

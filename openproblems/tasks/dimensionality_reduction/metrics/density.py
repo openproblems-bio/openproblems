@@ -1,7 +1,5 @@
 from anndata import AnnData
 from openproblems.tools.decorators import metric
-from scipy.sparse import issparse
-from scipy.stats import pearsonr
 from typing import Optional
 
 import numpy as np
@@ -100,6 +98,8 @@ def _calculate_radii(
 
 @metric("density preservation", maximize=True, image="openproblems-python-extras")
 def density_preservation(adata: AnnData) -> float:
+    from scipy.sparse import issparse
+    from scipy.stats import pearsonr
     from umap import UMAP
 
     emb = adata.obsm["X_emb"]

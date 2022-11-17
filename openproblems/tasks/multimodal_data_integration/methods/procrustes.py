@@ -2,9 +2,6 @@ from ....tools.decorators import method
 from ....tools.normalize import log_cpm
 from ....tools.utils import check_version
 
-import scipy.spatial
-import sklearn.decomposition
-
 
 @method(
     method_name="Procrustes",
@@ -15,6 +12,9 @@ import sklearn.decomposition
     "scipy.spatial.procrustes.html",
 )
 def procrustes(adata, test=False, n_svd=None):
+    import scipy.spatial
+    import sklearn.decomposition
+
     if test:
         n_svd = n_svd or 20
     else:  # pragma: no cover

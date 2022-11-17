@@ -6,7 +6,6 @@ from typing import List
 from typing import Optional
 
 import functools
-import scanpy as sc
 
 _pancreas_dataset = functools.partial(
     dataset,
@@ -24,6 +23,8 @@ def _pancreas_synthetic(
     n_obs: int = 100,
     keep_techs: Optional[List[str]] = None,
 ):
+    import scanpy as sc
+
     adata = load_pancreas(test=test, keep_techs=keep_techs or ["inDrop3"])
     sc.pp.filter_genes(adata, min_counts=10)
     adata.obs["label"] = adata.obs["celltype"]

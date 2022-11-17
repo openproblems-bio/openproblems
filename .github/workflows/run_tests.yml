@@ -119,7 +119,7 @@ jobs:
         title: '[auto] Update docker version'
         reviewers: scottgigante, dburkhardt
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-        commit-message: Update docker version # ci skip
+        commit-message: "Update docker version # ci skip"
         add-paths: docker/.version
 
     - name: Log in to the Container registry
@@ -380,7 +380,7 @@ jobs:
     - name: Install Nextflow
       env:
           CAPSULE_LOG: none
-          NXF_VER: 22.04.0
+          NXF_VER: 22.10.2
       run: |
         mkdir /tmp/nextflow
         cd /tmp/nextflow
@@ -413,6 +413,9 @@ jobs:
         for dir in bucket work cwd; do
           mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
         done
+        CWD=/mnt/openproblems-nextflow/cwd/${BRANCH}/${{ github.run_id }}_${{ github.run_attempt }}
+        echo "CWD=$CWD" >> $GITHUB_ENV
+        mkdir -p $CWD
         ls -l /mnt/openproblems-nextflow/*/${BRANCH}
 
     - name: Install package & dependencies
@@ -446,7 +449,7 @@ jobs:
         AWS_DEFAULT_REGION: us-west-2
       if: >-
         startsWith(github.ref, 'refs/tags') ||
-        startsWith(github.ref, 'refs/heads/test_benchmark')
+        startsWith(github.ref, 'refs/heads/test_full_benchmark')
       run: |
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
@@ -462,12 +465,11 @@ jobs:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         TOWER_WORKSPACE_ID: 53907369739130
         AWS_DEFAULT_REGION: us-west-2
-        NXF_DEFAULT_DSL: 1
       run: |
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
-        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
+        cd $CWD
         nextflow run \
-        -revision v1.8 \
+        -revision v1.9 \
         -with-tower \
         -ansi-log false -resume \
         -profile aws,test \
@@ -482,13 +484,13 @@ jobs:
 
     - name: Parse results
       run: |
-        python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH} /tmp/website
+        python workflow/parse_nextflow.py $CWD /tmp/website
         python workflow/generate_website_markdown.py /tmp/website
 
     - name: Rename nextflow log
       if: always()
       run: |
-        mv /mnt/openproblems-nextflow/cwd/${{ env.BRANCH }}/.nextflow.log /tmp/nextflow.log
+        mv ${CWD}/.nextflow.log /tmp/nextflow.log
       continue-on-error: true
 
     - name: Upload nextflow log
@@ -511,11 +513,11 @@ jobs:
       github.event_name == 'push' &&
       (
         needs.run_tester.result == 'success' ||
-        startsWith(github.ref, 'refs/heads/test_benchmark')
+        startsWith(github.ref, 'refs/heads/test_full_benchmark')
       ) &&
       (
         startsWith(github.ref, 'refs/tags') ||
-        startsWith(github.ref, 'refs/heads/test_benchmark')
+        startsWith(github.ref, 'refs/heads/test_full_benchmark')
       )
 
     steps:
@@ -524,7 +526,7 @@ jobs:
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
-        TOWER_ACTION_ID: 7jylKuFGbSN65qSA4NfdFY
+        TOWER_ACTION_ID: bVQhVSNah1JmJfnKkfyjg
       run: |
         generate_parameters()
         {

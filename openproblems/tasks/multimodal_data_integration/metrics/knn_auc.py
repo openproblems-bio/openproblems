@@ -1,12 +1,13 @@
 from ....tools.decorators import metric
 
 import numpy as np
-import sklearn.decomposition
-import sklearn.neighbors
 
 
 @metric(metric_name="kNN Area Under the Curve", maximize=True)
 def knn_auc(adata, proportion_neighbors=0.1, n_svd=100):
+    import sklearn.decomposition
+    import sklearn.neighbors
+
     n_svd = min([n_svd, min(adata.X.shape) - 1])
     n_neighbors = int(np.ceil(proportion_neighbors * adata.X.shape[0]))
     X_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
