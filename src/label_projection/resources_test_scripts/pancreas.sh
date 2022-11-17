@@ -20,7 +20,7 @@ fi
 mkdir -p $DATASET_DIR
 
 # split dataset
-bin/viash run src/label_projection/split/config.vsh.yaml -- \
+bin/viash run src/label_projection/split_dataset/config.vsh.yaml -- \
     --input $RAW_DATA \
     --output_train $DATASET_DIR/train.h5ad \
     --output_test $DATASET_DIR/test.h5ad \

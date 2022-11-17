@@ -6,7 +6,7 @@ library(Matrix, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input = "resources_test/label_projection/pancreas/dataset_subsampled.h5ad",
+  input = "resources_test/label_projection/pancreas/datas.h5ad",
   output = "output.scran.h5ad",
   layer_output = "log_scran_pooling",
   obs_size_factors = "size_factors_log_scran_pooling"
