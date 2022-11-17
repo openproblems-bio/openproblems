@@ -1,3 +1,4 @@
+from ..data.utils import write_h5ad
 from . import utils
 
 
@@ -10,4 +11,4 @@ def load_dataset(task_name, function_name, test):
 def main(args):
     """Run the ``load`` subcommand."""
     adata = load_dataset(args.task, args.name, args.test)
-    utils.write_h5ad(adata, args.output)
+    write_h5ad(adata, args.output)
