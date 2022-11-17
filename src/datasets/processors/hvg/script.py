@@ -7,7 +7,7 @@ par = {
   'layer_input': 'normalized',
   'output': 'dataset.h5ad',
   'var_hvg': 'hvg',
-  'var_hvg_ranking': 'hvg_ranking',
+  'var_hvg_score': 'hvg_score',
   'num_features': 100
 }
 ### VIASH END
@@ -29,7 +29,7 @@ out = sc.pp.highly_variable_genes(
 
 print(">> Storing output")
 adata.var[par["var_hvg"]] = out['highly_variable'].values
-adata.var[par["var_hvg_ranking"]] = out['dispersions'].values
+adata.var[par["var_hvg_score"]] = out['dispersions'].values
 
 print(">> Writing data")
 adata.write_h5ad(par['output'])

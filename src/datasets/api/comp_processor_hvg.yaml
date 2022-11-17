@@ -13,9 +13,9 @@ functionality:
       type: string
       default: "hvg"
       description: "In which .var slot to store whether a feature is considered to be hvg."
-    - name: "--var_hvg_ranking"
+    - name: "--var_hvg_score"
       type: string
-      default: "hvg_ranking"
+      default: "hvg_score"
       description: "In which .var slot to store whether a ranking of the features by variance."
     - name: "--num_features"
       type: integer

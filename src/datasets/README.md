@@ -64,7 +64,7 @@ Slots:
 | obs    | tissue           | string  | Tissue information                                                      |
 | obs    | size_factors     | double  | The size factors created by the normalisation method, if any.           |
 | var    | hvg              | boolean | Whether or not the feature is considered to be a ‘highly variable gene’ |
-| var    | hvg_ranking      | integer | A ranking of the features by hvg.                                       |
+| var    | hvg_score      | integer | A ranking of the features by hvg.                                       |
 | obsm   | X_pca            | double  | The resulting PCA embedding.                                            |
 | varm   | pca_loadings     | double  | The PCA loadings matrix.                                                |
 | uns    | dataset_id       | string  | A unique identifier for the dataset                                     |
@@ -75,7 +75,7 @@ Example:
 
     AnnData object
      obs: 'celltype', 'batch', 'tissue', 'size_factors'
-     var: 'hvg', 'hvg_ranking'
+     var: 'hvg', 'hvg_score'
      uns: 'dataset_id', 'normalization_id', 'pca_variance'
      obsm: 'X_pca'
      varm: 'pca_loadings'
@@ -201,7 +201,7 @@ Arguments:
 | `--layer_input`     | `string`                            | input     | Which layer to use as input for the PCA.                                   |
 | `--output`          | [Dataset+Pca+Hvg](#Dataset+PCA+HVG) | output    | A normalised data with a PCA embedding and HVG selection                   |
 | `--var_hvg`         | `string`                            | input     | In which .var slot to store whether a feature is considered to be hvg.     |
-| `--var_hvg_ranking` | `string`                            | input     | In which .var slot to store whether a ranking of the features by variance. |
+| `--var_hvg_score` | `string`                            | input     | In which .var slot to store whether a ranking of the features by variance. |
 | `--num_features`    | `integer`                           | input     | The number of HVG to select                                                |
 
 ### `Processor Pca`
