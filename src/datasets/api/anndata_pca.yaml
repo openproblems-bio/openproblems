@@ -1,0 +1,54 @@
+type: file
+description: "A normalised data with a PCA embedding"
+example: "dataset.h5ad"
+info:
+  label: "Dataset+PCA"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+      - type: double
+        name: normalized
+        description: Normalised expression values
+    obs:
+      - type: string
+        name: celltype
+        description: Cell type information
+        required: false
+      - type: string
+        name: batch
+        description: Batch information
+        required: false
+      - type: string
+        name: tissue
+        description: Tissue information
+        required: false
+      - type: double
+        name: size_factors
+        description: The size factors created by the normalisation method, if any.
+        required: false
+    obsm:
+      - type: double
+        name: X_pca
+        description: The resulting PCA embedding.
+        required: true
+    varm:
+      - type: double
+        name: pca_loadings
+        description: The PCA loadings matrix.
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: normalization_id
+        description: "Which normalization was used"
+        required: true
+      - type: double
+        name: pca_variance
+        description: The PCA variance objects.
+        required: true

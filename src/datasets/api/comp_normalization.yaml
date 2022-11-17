@@ -1,47 +1,18 @@
 functionality:
   arguments:
     - name: "--input"
-      __inherits__: anndata_raw_dataset.yaml
+      __inherits__: anndata_raw.yaml
     - name: "--output"
-      type: file
-      description: "A preprocessed dataset"
-      example: "preprocessed.h5ad"
-      info:
-        short_description: "Preprocessed dataset"
-        slots:
-          layers: 
-            - type: integer
-              name: counts
-              description: Raw counts
-              required: true
-            - type: double
-              name: $par_layer_output
-              description: Log-transformed normalised counts
-          obs:
-            - type: string
-              name: celltype
-              description: Cell type information
-              required: false
-            - type: string
-              name: batch
-              description: Batch information
-              required: false
-            - type: string
-              name: tissue
-              description: Tissue information
-              required: false
-          uns:
-            - type: string
-              name: dataset_id
-              description: "A unique identifier for the dataset"
-              required: true
       direction: output
-    
-    # not including this because we need to override the default
-    # - name: "--layer_output"
-    #   type: string
-    #   default: "log_cpm"
-    #   description: The name of the layer in which to store the log normalized data.
+      __inherits__: anndata_normalized.yaml
+    - name: "--layer_output"
+      type: string
+      default: "normalized"
+      description: The name of the layer in which to store the normalized data.
+    - name: "--obs_size_factors"
+      type: string
+      default: "size_factors"
+      description: In which .obs slot to store the size factors (if any).
   test_resources:
     - type: python_script
       path: generic_test.py
@@ -82,4 +53,3 @@ functionality:
 
         print("All checks succeeded!")
     - path: ../../../../resources_test/common/pancreas
-

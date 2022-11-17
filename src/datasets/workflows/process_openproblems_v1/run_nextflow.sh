@@ -14,4 +14,5 @@ bin/nextflow \
   -profile docker \
   -resume \
   -params-file src/datasets/workflows/process_openproblems_v1/datasets.yaml \
-  --publish_dir resources/datasets/openproblems_v1
+  --publish_dir resources/datasets/openproblems_v1 \
+  -with-tower
