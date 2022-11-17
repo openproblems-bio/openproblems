@@ -345,9 +345,6 @@ jobs:
         for dir in bucket work cwd; do
           mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
         done
-        CWD=/mnt/openproblems-nextflow/cwd/${BRANCH}/${{ github.run_id }}_${{ github.run_attempt }}
-        echo "CWD=$CWD" >> $GITHUB_ENV
-        mkdir -p $CWD
         ls -l /mnt/openproblems-nextflow/*/${BRANCH}
 
     - name: Install package & dependencies
@@ -417,7 +414,7 @@ jobs:
         AWS_DEFAULT_REGION: us-west-2
       run: |
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
-        cd $CWD
+        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
         nextflow run \
         -revision v1.9 \
         -with-tower \
@@ -434,7 +431,7 @@ jobs:
 
     - name: Parse results
       run: |
-        python workflow/parse_nextflow.py $CWD /tmp/website
+        python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH} /tmp/website
         python workflow/generate_website_markdown.py /tmp/website
 
     - name: Rename nextflow log
