@@ -1,46 +1,59 @@
+
+import anndata as ad
 import scvi
-import scanpy as sc
 
 ## VIASH START
 par = {
-    'input': '../../../resources/toy_preprocessed_data.h5ad',
-    'n_top_genes': 2000,
-    'max_epochs': 1,
-    'limit_train_batches': 10,
-    'span': 0.8,
-    'limit_val_batches': 10,
-    'output': 'output.scviallgenes.h5ad'
+    'input_train': 'resources_test/label_projection/pancreas/train.h5ad',
+    'input_test': 'resources_test/label_projection/pancreas/test.h5ad',
+    'output': 'output.h5ad',
+    'hvg': True
+}
+meta = {
+    'functionality_name': 'scanvi'
 }
 ## VIASH END
 
 print("Load input data")
-adata = sc.read(par['input'])
+input_train_orig = ad.read_h5ad(par['input_train'])
+input_test_orig = ad.read_h5ad(par['input_test'])
 
-hvg_kwargs = {
-    "flavor": "seurat_v3",
-    "inplace": False,
-    "n_top_genes": par['n_top_genes'],
-    "batch_key": "batch",
+print("Subsetting to HVG")
+input_train = input_train_orig[:,input_train_orig.var['hvg']]
+input_test = input_test_orig[:,input_test_orig.var['hvg']]
 
-}
+print("Concatenating train and test data")
+input_train.obs['is_test'] = False
+input_test.obs['is_test'] = True
+input_test.obs['label'] = "Unknown"
+adata = ad.concat([input_train, input_test], merge = "same")
 
-# check parameters for test exists
-par.get("span") and hvg_kwargs.update({"span": par['span']})
+print("Setting up adata object")
+adata.obs["scanvi_label"] = adata.obs["label"].to_numpy()
+scvi.model.SCVI.setup_anndata(
+    adata, 
+    batch_key="batch",
+    labels_key="scanvi_label",
+    layer="normalized"
+)
 
-train_kwargs = {
-    "train_size": 0.9,
-    "early_stopping": True,
-}
+print("Train SCVI model")
+train_kwargs = dict(
+    train_size=0.9,
+    early_stopping=True,
+)
+scvi_model = scvi.model.SCVI(adata)
+scvi_model.train(**train_kwargs)
 
-# check parameters for test exists
-par.get("max_epochs") and train_kwargs.update({"max_epochs": par['max_epochs']})
-par.get("limit_train_batches") and train_kwargs.update({"limit_train_batches": par['limit_train_batches']})
-par.get("limit_val_batches") and train_kwargs.update({"limit_val_batches": par['limit_val_batches']})
+print("Train SCANVI model")
+model = scvi.model.SCANVI.from_scvi_model(scvi_model, unlabeled_category="Unknown")
+model.train(**train_kwargs)
 
-hvg_df = hvg(adata, **hvg_kwargs)
-bdata = adata[:, hvg_df.highly_variable].copy()
-adata.obs["celltype_pred"] = scanvi(bdata, par['n_hidden'], par['n_latent'], par['n_layers'],  **train_kwargs)
-adata.uns["method_id"] = meta["functionality_name"]
+print("Make predictions")
+preds = model.predict(adata)
+input_test_orig.obs["label_pred"] = preds[adata.obs['is_test'].values]
 
-print("Write data")
-adata.write_h5ad(par['output'], compression="gzip")
+print("Write output to file")
+input_test_orig.uns["method_id"] = meta["functionality_name"]
+input_test_orig.write_h5ad(par['output'], compression="gzip")
+

@@ -12,10 +12,8 @@ include { random_labels } from "$targetDir/label_projection/control_methods/rand
 include { knn } from "$targetDir/label_projection/methods/knn/main.nf"
 include { mlp } from "$targetDir/label_projection/methods/mlp/main.nf"
 include { logistic_regression } from "$targetDir/label_projection/methods/logistic_regression/main.nf"
-// include { scanvi_hvg } from "$targetDir/label_projection/methods/scvi/scanvi_hvg/main.nf"
-// include { scanvi_all_genes } from "$targetDir/label_projection/methods/scvi/scanvi_all_genes/main.nf"
-// include { scarches_scanvi_all_genes } from "$targetDir/label_projection/methods/scvi/scarches_scanvi_all_genes/main.nf"
-// include { scarches_scanvi_hvg } from "$targetDir/label_projection/methods/scvi/scarches_scanvi_hvg/main.nf"
+include { scanvi } from "$targetDir/label_projection/methods/scanvi/main.nf"
+// include { scarches } from "$targetDir/label_projection/methods/scarches/main.nf"
 
 // import metrics
 include { accuracy } from "$targetDir/label_projection/metrics/accuracy/main.nf"
@@ -67,7 +65,8 @@ workflow run_wf {
       majority_vote.run(filter: {it[1].normalization_id == "log_cpm"}) & 
       knn.run(filter: {it[1].normalization_id == "log_cpm"}) & 
       logistic_regression.run(filter: {it[1].normalization_id == "log_cpm"}) &
-      mlp.run(filter: {it[1].normalization_id == "log_cpm"})
+      mlp.run(filter: {it[1].normalization_id == "log_cpm"}) &
+      scanvi.run(filter: {it[1].normalization_id == "log_cpm"})
     )
     | mix
 
