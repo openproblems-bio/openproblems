@@ -54,5 +54,5 @@ jobs:
         title: "Update ${{ env.PKG_CHANGED }}"
         committer: "openproblems-bio <singlecellopenproblems@protonmail.com>"
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-        commit-message: "Update ${{ env.PKG_CHANGED }}"
+        commit-message: "Update ${{ env.PKG_CHANGED }} # ci skip"
         draft: true
