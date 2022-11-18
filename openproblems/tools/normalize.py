@@ -44,7 +44,9 @@ def log_scran_pooling(adata: ad.AnnData) -> ad.AnnData:
 def _cpm(adata: ad.AnnData):
     import scanpy as sc
 
-    adata.X = sc.pp.normalize_total(adata, target_sum=1e6, key_added="size_factors", inplace=False)["X"]
+    adata.X = sc.pp.normalize_total(
+        adata, target_sum=1e6, key_added="size_factors", inplace=False
+    )["X"]
 
 
 @decorators.normalizer
