@@ -246,6 +246,29 @@ jobs:
         fail_ci_if_error: ${{ github.repository == 'openproblems-bio/openproblems' }}
         verbose: true
 
+    - name: Check if PR exists
+      run: |
+        PR_NUMBER=$(
+          curl \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            "https://api.github.com/repos/openproblems-bio/openproblems/pulls?head=${{ github.repository_owner }}:${{ github.ref_name }}" | \
+          jq '.[]["number"]'
+        )
+        echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
+
+    - name: Upload PR coverage
+      uses: codecov/codecov-action@v3
+      if: |
+        env.PR_NUMBER != ''
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        flags: unittests
+        fail_ci_if_error: ${{ github.repository == 'openproblems-bio/openproblems' }}
+        verbose: true
+        slug: openproblems-bio/openproblems
+        override_pr: ${{ env.PR_NUMBER }}
+
     - name: Upload check results on fail
       if: failure()
       uses: actions/upload-artifact@main
