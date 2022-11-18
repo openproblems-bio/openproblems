@@ -226,6 +226,7 @@ jobs:
       ) &&
       !startsWith(github.ref, 'refs/heads/test_docker') &&
       !startsWith(github.ref, 'refs/heads/test_benchmark') &&
+      !startsWith(github.ref, 'refs/heads/test_full_benchmark') &&
       !startsWith(github.ref, 'refs/heads/test_process')
 
     strategy:
@@ -323,6 +324,17 @@ jobs:
         name: ${{ matrix.config.name }}_results
         path: results
 
+  state_completion:
+    needs: run_tester
+    runs-on: ubuntu-latest
+    if: >-
+      always() &&
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      needs.run_tester.result
+    steps:
+    - name: State that tests succeeded
+      run: |
+        echo "We did it! 🥳🥳🥳"
 
   run_benchmark:
     needs: run_tester
@@ -333,7 +345,8 @@ jobs:
       github.event_name == 'push' &&
       (
         needs.run_tester.result == 'success' ||
-        startsWith(github.ref, 'refs/heads/test_benchmark')
+        startsWith(github.ref, 'refs/heads/test_benchmark') ||
+        startsWith(github.ref, 'refs/heads/test_full_benchmark')
       )
 
     steps:
