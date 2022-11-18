@@ -17,6 +17,7 @@ args <- readRDS("/tmp/openproblems_seurat_args.rds")
 sce_sc <- args$sce_sc
 sce_sp <- args$sce_sp
 n_pcs <- args$n_pcs
+sctransform_n_cells <- args$sctransform_n_cells
 
 # R base for seuratv3.py
 sce_sc <- as.Seurat(sce_sc, counts = "X", data = NULL)
