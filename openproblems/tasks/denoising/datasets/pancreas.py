@@ -15,6 +15,6 @@ from . import utils
 )
 def pancreas(test=False):
     adata = load_pancreas(test=test)
-    adata = adata[adata.obs["celltype"].isin(["inDrop1"])]
+    adata = adata[adata.obs["tech"].isin(["inDrop1"])]
     adata = utils.split_data(adata)
     return adata
