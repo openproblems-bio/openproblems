@@ -294,7 +294,9 @@ jobs:
         # to avoid clashes on ECR
         REPO_PARSED=$(echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6)
         BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[^a-zA-Z0-9]:-:g')
-        if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
+        if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
+          BRANCH="prod"
+        elif [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
           BRANCH=`echo $BRANCH_PARSED | head -c 40`
         else
           BRANCH="${REPO_PARSED}-`echo $BRANCH_PARSED | head -c 33`"
@@ -390,96 +392,24 @@ jobs:
           docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
         done
 
-    - name: Upload Docker images for full benchmark
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      if: >-
-        startsWith(github.ref, 'refs/tags') ||
-        startsWith(github.ref, 'refs/heads/test_full_benchmark')
-      run: |
-        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:prod-${image}
-          docker push --quiet ${ECR_ENDPOINT}/openproblems:prod-${image}
-        done
-
-    - name: Run test benchmark
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
-        TOWER_WORKSPACE_ID: 53907369739130
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
-        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
-        nextflow run \
-        -revision v1.9 \
-        -with-tower \
-        -ansi-log false -resume \
-        -profile aws,test \
-        -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
-        -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
-        -name "${RUN_NAME}" \
-        -e.PYTHONPATH="${PYTHONPATH}" \
-        openproblems-bio/nf-openproblems \
-        --branch ${BRANCH} | \
-        tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
-      shell: /bin/bash -eou pipefail {0}
-
-    - name: Parse results
-      run: |
-        python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH} /tmp/website
-        python workflow/generate_website_markdown.py /tmp/website
-
-    - name: Rename nextflow log
-      if: always()
-      run: |
-        mv ${CWD}/.nextflow.log /tmp/nextflow.log
-      continue-on-error: true
-
-    - name: Upload nextflow log
-      if: always()
-      uses: actions/upload-artifact@main
-      with:
-        name: nextflow.log
-        path: /tmp/nextflow.log
-
-  run_full_benchmark:
-    needs:
-    - run_test_benchmark
-    - run_tester
-    runs-on: ubuntu-latest
-    if: >-
-      always() &&
-      (needs.run_test_benchmark.result == 'success' || needs.run_test_benchmark.result == 'skipped') &&
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      github.event_name == 'push' &&
-      (
-        needs.run_tester.result == 'success' ||
-        startsWith(github.ref, 'refs/heads/test_full_benchmark')
-      ) &&
-      (
-        startsWith(github.ref, 'refs/tags') ||
-        startsWith(github.ref, 'refs/heads/test_full_benchmark')
-      )
-
-    steps:
-
-    - name: Run full benchmark
+    - name: Run benchmark
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
-        TOWER_ACTION_ID: bVQhVSNah1JmJfnKkfyjg
       run: |
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+        if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
+          TOWER_ACTION_ID="bVQhVSNah1JmJfnKkfyjg"
+        else
+          TOWER_ACTION_ID="5BQc88ZvjuXCYbc55Hot27"
+        fi
         generate_parameters()
         {
         cat <<EOF
           {
             "params" : {
-              "branch": "prod"
+              "branch": "$BRANCH",
+              "name": "$RUN_NAME"
             }
           }
         EOF
@@ -492,4 +422,4 @@ jobs:
             tee /dev/stderr | \
             sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
         )
-        echo "Full benchmark running at ${TOWER_WATCH_URL}/${WORKFLOW_ID}" >> $GITHUB_STEP_SUMMARY
+        echo "Benchmark running at ${TOWER_WATCH_URL}/${WORKFLOW_ID}" >> $GITHUB_STEP_SUMMARY
