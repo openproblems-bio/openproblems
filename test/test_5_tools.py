@@ -33,10 +33,15 @@ class TestNormalizeX(unittest.TestCase):
     def setUpClass(cls):
         """Generate and normalize data."""
         cls.adata = utils.data.data()
+        cls.counts = cls.adata.layers["counts"].copy()
         cls.cache_name = cls.normalizer.__name__
         assert utils.asserts.assert_finite(cls.adata.X)
         assert cls.cache_name not in cls.adata.layers
         cls.adata = cls.normalizer(cls.adata)
+
+    def test_not_inplace(self):
+        """Test that normalization does not happen inplace."""
+        utils.asserts.assert_array_equal(self.adata.layers["counts"], self.counts)
 
     def test_finite(self):
         """Test that normalized data is finite."""
