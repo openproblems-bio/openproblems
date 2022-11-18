@@ -32,6 +32,16 @@ bin/viash run src/datasets/subsample/config.vsh.yaml -- \
 # run log cpm normalisation
 bin/viash run src/datasets/normalization/log_cpm/config.vsh.yaml -- \
     --input $DATASET_DIR/temp_dataset0.h5ad \
+    --output $DATASET_DIR/temp_dataset1.h5ad
+
+# run pca
+bin/viash run src/datasets/processors/pca/config.vsh.yaml -- \
+    --input $DATASET_DIR/temp_dataset1.h5ad \
+    --output $DATASET_DIR/temp_dataset2.h5ad
+
+# run log cpm normalisation
+bin/viash run src/datasets/processors/hvg/config.vsh.yaml -- \
+    --input $DATASET_DIR/temp_dataset2.h5ad \
     --output $DATASET_DIR/dataset.h5ad
 
 rm -r $DATASET_DIR/temp_*
