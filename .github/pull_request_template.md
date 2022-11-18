@@ -12,11 +12,11 @@
 
 ### Testing
 
-* [ ] This submission was written on a forked copy of SingleCellOpenProblems
-* [ ] GitHub Actions "Run Benchmark" tests are passing on this base branch of this pull
-  request (include link to passed test: )
-* [ ] If this pull request is not ready for review (including passing the "Run
-  Benchmark" tests), I will open this PR as a draft (click on the down arrow next to the
+* [ ] This submission was written on a forked copy of openproblems
+* [ ] Nextflow test pipeline is passing on this base branch of this pull
+  request (include link to passed test on NF Tower found in GitHub Actions summary: )
+* [ ] If this pull request is not ready for review (including passing the Nextflow test
+  pipeline), I will open this PR as a draft (click on the down arrow next to the
   "Create Pull Request" button)
 
 ### Submission guidelines

@@ -131,6 +131,7 @@ jobs:
       ) &&
       !startsWith(github.ref, 'refs/heads/test_docker') &&
       !startsWith(github.ref, 'refs/heads/test_benchmark') &&
+      !startsWith(github.ref, 'refs/heads/test_full_benchmark') &&
       !startsWith(github.ref, 'refs/heads/test_process')
 
     steps:
@@ -221,8 +222,9 @@ jobs:
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       github.event_name == 'push' &&
       (
-        needs.run_tester.result == 'success' ||
-        startsWith(github.ref, 'refs/heads/test_benchmark')
+        needs.run_tester.result == 'success'||
+        startsWith(github.ref, 'refs/heads/test_benchmark') ||
+        startsWith(github.ref, 'refs/heads/test_full_benchmark')
       )
 
     steps:
@@ -235,15 +237,7 @@ jobs:
 
     - uses: actions/checkout@v3
       with:
-        fetch-depth: 1000
-
-    - name: Clear space on runner
-      run: ./scripts/clear_runner_diskspace.sh
-
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update -qq || (sudo rm /etc/apt/sources.list.d/* && sudo apt-get update -yqq)
-        sudo apt-get install -qy --no-install-recommends libhdf5-dev pandoc gfortran libblas-dev liblapack-dev libedit-dev llvm-dev
+        fetch-depth: 1
 
     - name: Check Tower authentication
       env:
@@ -271,30 +265,15 @@ jobs:
           exit 1
         fi
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.8"
-
-    - name: Set up Java ${{ matrix.java_version }}
-      uses: actions/setup-java@v3
-      with:
-        java-version: 15
-        architecture: x64
-        distribution: zulu
-
     - name: Set up environment
       run: |
-        SCRIPTS_PATH=$(python3 -c 'import os, sysconfig; print(sysconfig.get_path("scripts",f"{os.name}_user"))')
-        echo "PATH=${SCRIPTS_PATH}:${PATH}" >> $GITHUB_ENV
-        echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
-        echo "PYTHON_LOCATION=$(which python3)" >> $GITHUB_ENV
-        echo "UBUNTU_VERSION=`grep DISTRIB_RELEASE /etc/lsb-release | sed 's/.*=//g'`" >> $GITHUB_ENV
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
         REPO_PARSED=$(echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6)
         BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[^a-zA-Z0-9]:-:g')
-        if [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
+        if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
+          BRANCH="prod"
+        elif [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
           BRANCH=`echo $BRANCH_PARSED | head -c 40`
         else
           BRANCH="${REPO_PARSED}-`echo $BRANCH_PARSED | head -c 33`"
@@ -302,184 +281,25 @@ jobs:
         BRANCH=`echo $BRANCH | sed 's/[^a-zA-Z0-9]*$//'`
         echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
 
-    - name: Cache Python packages
-      uses: actions/cache@v3
-      with:
-        path: ${{ env.pythonLocation }}
-        key: ${{ env.UBUNTU_VERSION }}-pip-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{ env.UBUNTU_VERSION}}-pip-${{ env.pythonLocation }}-
-
-    - name: Install Nextflow
-      env:
-          CAPSULE_LOG: none
-          NXF_VER: 22.10.2
-      run: |
-        mkdir /tmp/nextflow
-        cd /tmp/nextflow
-        wget -qO- get.nextflow.io | bash
-        sudo ln -s /tmp/nextflow/nextflow /usr/local/bin/nextflow
-        nextflow -version
-
-    - name: Install AWS CLI
-      run: |
-        mkdir /tmp/awscli
-        cd /tmp/awscli
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip -q awscliv2.zip
-        sudo ./aws/install || sudo ./aws/install --update
-        aws --version
-
-    - name: Set up S3FS
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        sudo apt-get install -qy --no-install-recommends s3fs
-        echo $AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY > ~/.passwd-s3fs
-        chmod 600 ~/.passwd-s3fs
-        sudo mkdir -p /mnt/openproblems-nextflow
-        sudo chown $USER /mnt/openproblems-nextflow
-        s3fs -o umask=0277,uid=$(id -u) openproblems-nextflow /mnt/openproblems-nextflow
-        # Create bucket/ work/ and cwd/
-        for dir in bucket work cwd; do
-          mkdir -p /mnt/openproblems-nextflow/${dir}/${BRANCH}
-        done
-        ls -l /mnt/openproblems-nextflow/*/${BRANCH}
-
-    - name: Install package & dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -U wheel setuptools
-        pip install -U --editable .[evaluate,process]
-        python -c "import openproblems"
-        openproblems-cli --version
-        openproblems-cli --test-hash
-
-    - name: Pull Docker images
-      if: |
-        startsWith(github.ref, 'refs/heads/main') &&
-        github.repository == 'openproblems-bio/openproblems'
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker_pull
-        cd ..
-
-    - name: Build Docker images
-      if: |
-        !(
-          startsWith(github.ref, 'refs/heads/main') &&
-          github.repository == 'openproblems-bio/openproblems'
-        )
-      run: |
-        cd workflow
-        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
-        cd ..
-
-    - name: Upload Docker images
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
-          docker login --username AWS --password-stdin $ECR_ENDPOINT
-        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-        done
-
-    - name: Upload Docker images for full benchmark
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
-      if: >-
-        startsWith(github.ref, 'refs/tags') ||
-        startsWith(github.ref, 'refs/heads/test_full_benchmark')
-      run: |
-        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:prod-${image}
-          docker push --quiet ${ECR_ENDPOINT}/openproblems:prod-${image}
-        done
-
-    - name: Run test benchmark
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
-        TOWER_WORKSPACE_ID: 53907369739130
-        AWS_DEFAULT_REGION: us-west-2
-      run: |
-        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
-        cd /mnt/openproblems-nextflow/cwd/${BRANCH}
-        nextflow run \
-        -revision v1.9 \
-        -with-tower \
-        -ansi-log false -resume \
-        -profile aws,test \
-        -work-dir "/mnt/openproblems-nextflow/work/${BRANCH}" \
-        -bucket-dir "s3://openproblems-nextflow/bucket/${BRANCH}" \
-        -name "${RUN_NAME}" \
-        -e.PYTHONPATH="${PYTHONPATH}" \
-        openproblems-bio/nf-openproblems \
-        --branch ${BRANCH} | \
-        tee >(grep --color=never --line-buffered "Monitor the execution with Nextflow Tower using this url" >> $GITHUB_STEP_SUMMARY)
-      shell: /bin/bash -eou pipefail {0}
-
-    - name: Parse results
-      run: |
-        python workflow/parse_nextflow.py /mnt/openproblems-nextflow/cwd/${BRANCH} /tmp/website
-        python workflow/generate_website_markdown.py /tmp/website
-
-    - name: Rename nextflow log
-      if: always()
-      run: |
-        mv ${CWD}/.nextflow.log /tmp/nextflow.log
-      continue-on-error: true
-
-    - name: Upload nextflow log
-      if: always()
-      uses: actions/upload-artifact@main
-      with:
-        name: nextflow.log
-        path: /tmp/nextflow.log
-
-  run_full_benchmark:
-    needs:
-    - run_test_benchmark
-    - run_tester
-    runs-on: ubuntu-latest
-    if: >-
-      always() &&
-      (needs.run_test_benchmark.result == 'success' || needs.run_test_benchmark.result == 'skipped') &&
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      github.event_name == 'push' &&
-      (
-        needs.run_tester.result == 'success' ||
-        startsWith(github.ref, 'refs/heads/test_full_benchmark')
-      ) &&
-      (
-        startsWith(github.ref, 'refs/tags') ||
-        startsWith(github.ref, 'refs/heads/test_full_benchmark')
-      )
-
-    steps:
-
-    - name: Run full benchmark
+    - name: Run benchmark
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
-        TOWER_ACTION_ID: bVQhVSNah1JmJfnKkfyjg
       run: |
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+        if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
+          TOWER_ACTION_ID="bVQhVSNah1JmJfnKkfyjg"
+          WORKDIR="s3://openproblems-nextflow/work_main"
+        else
+          TOWER_ACTION_ID="5BQc88ZvjuXCYbc55Hot27"
+          WORKDIR="s3://openproblems-nextflow/work/$BRANCH"
+        fi
         generate_parameters()
         {
         cat <<EOF
           {
             "params" : {
-              "branch": "prod"
+              "branch": "$BRANCH"
             }
           }
         EOF
@@ -492,4 +312,4 @@ jobs:
             tee /dev/stderr | \
             sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
         )
-        echo "Full benchmark running at ${TOWER_WATCH_URL}/${WORKFLOW_ID}" >> $GITHUB_STEP_SUMMARY
+        echo "Benchmark running at ${TOWER_WATCH_URL}/${WORKFLOW_ID}" >> $GITHUB_STEP_SUMMARY
