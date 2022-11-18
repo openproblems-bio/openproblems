@@ -2,6 +2,7 @@
 #' @param sce_sc SingleCellExperiment single-cell data
 #' @param sce_sp SingleCellExperiment spatial data
 #' @param n_pcs int Number of principal components
+#' @param sctransform_n_cells int Number of cells sampled to build NB regression
 
 options(error = rlang::entrace)
 
@@ -22,14 +23,21 @@ sce_sc <- as.Seurat(sce_sc, counts = "X", data = NULL)
 sce_sp <- as.Seurat(sce_sp, counts = "X", data = NULL)
 
 # Normalize and do dimred for spatial data
-sce_sp <- SCTransform(sce_sp, assay = "originalexp", verbose = TRUE)
+sce_sp <- SCTransform(
+  sce_sp,
+  assay = "originalexp",
+  ncells = min(sctransform_n_cells, nrow(sce_sp)),
+  verbose = TRUE
+)
 
 sce_sp <- RunPCA(sce_sp, assay = "SCT", verbose = FALSE, n_pcs = n_pcs)
 
 # Normalize and do dimred for single cell data
 sce_sc <- SCTransform(
   sce_sc,
-  assay = "originalexp", ncells = min(3000, nrow(sce_sc)), verbose = TRUE
+  assay = "originalexp",
+  ncells = min(sctransform_n_cells, nrow(sce_sc)),
+  verbose = TRUE
 )
 sce_sc <- RunPCA(sce_sc, verbose = FALSE, n_pcs = n_pcs)
 
