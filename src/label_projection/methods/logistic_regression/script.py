@@ -7,8 +7,8 @@ import scipy.sparse
 
 ## VIASH START
 par = {
-    'input_train': 'resources/label_projection/openproblems_v1/pancreas.split_dataset.output_train.h5ad',
-    'input_test': 'resources/label_projection/openproblems_v1/pancreas.split_dataset.output_test.h5ad',
+    'input_train': 'resources_test/label_projection/pancreas/train.h5ad',
+    'input_test': 'resources_test/label_projection/pancreas/test.h5ad',
     'output': 'output.h5ad',
     'layer_input': 'counts'
 }
