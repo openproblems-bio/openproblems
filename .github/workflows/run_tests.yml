@@ -409,20 +409,16 @@ jobs:
         {
         cat <<EOF
           {
-            "workspaceId" : "$TOWER_WORKSPACE_ID",
             "params" : {
               "branch": "$BRANCH"
-            },
-            "workDir" : "$WORKDIR",
-            "resume" : true,
-            "sessionId" : "$RUN_NAME"
+            }
           }
         EOF
         }
         WORKFLOW_ID=$(
             curl -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
-            https://api.tower.nf/actions/${TOWER_ACTION_ID}/launch \
+            https://api.tower.nf/actions/${TOWER_ACTION_ID}/launch?workspaceId=${TOWER_WORKSPACE_ID} \
             --data "$(generate_parameters)" | \
             tee /dev/stderr | \
             sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
