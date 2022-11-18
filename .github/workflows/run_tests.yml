@@ -253,7 +253,8 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             "https://api.github.com/repos/openproblems-bio/openproblems/pulls?head=${{ github.repository_owner }}:${{ github.ref_name }}" | \
-          jq '.[]["number"]'
+          grep "\"number\":" | \
+          sed 's/[^0-9]*//g'
         )
         echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
 
