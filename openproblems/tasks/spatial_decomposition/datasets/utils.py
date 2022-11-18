@@ -139,7 +139,6 @@ def generate_synthetic_dataset(
     adata_spatial.obsm["n_cells"] = sp_c
     adata_merged = merge_sc_and_sp(adata, adata_spatial, test=test)
     adata_merged.X[adata_merged.X == np.inf] = adata_merged.X.max()  # remove inf
-    adata_merged.layers["counts"] = adata_merged.X.copy()
 
     return adata_merged
 

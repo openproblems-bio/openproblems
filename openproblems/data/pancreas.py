@@ -58,7 +58,6 @@ def load_pancreas(test=False, keep_techs=None):
     # NOTE: adata.X contains log-normalized data, so we're moving it
     adata.layers["log_normalized"] = adata.X
     adata.X = adata.layers["counts"]
-    del adata.layers["counts"]
 
     # Ensure there are no cells or genes with 0 counts
     utils.filter_genes_cells(adata)

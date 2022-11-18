@@ -226,9 +226,6 @@ def generate_synthetic_dataset(
         st_anndata.uns["key_clustering"] = key_list
         st_anndata.uns["target_list"] = [1] + target_list
 
-    sc_anndata.layers["counts"] = sc_anndata.X.copy()
-    st_anndata.layers["counts"] = st_anndata.X.copy()
-
     merged_anndata = merge_sc_and_sp(sc_anndata, st_anndata, test=test)
 
     return merged_anndata

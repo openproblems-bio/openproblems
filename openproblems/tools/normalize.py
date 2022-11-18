@@ -44,7 +44,6 @@ def log_scran_pooling(adata: ad.AnnData) -> ad.AnnData:
 def _cpm(adata: ad.AnnData):
     import scanpy as sc
 
-    adata.layers["counts"] = adata.X.copy()
     sc.pp.normalize_total(adata, target_sum=1e6, key_added="size_factors")
 
 
