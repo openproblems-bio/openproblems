@@ -6,11 +6,18 @@ on:
       - '*'
     branches:
       - '**'
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   cancel_previous_runs:
     if: |
-      !endsWith(github.event.head_commit.message, '# ci skip')
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads') ||
+        startsWith(github.ref, 'refs/tags') ||
+        github.event.pull_request.draft == false
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
@@ -24,14 +31,17 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
-      !startsWith(github.ref, 'refs/heads/test_process')
+      !startsWith(github.ref, 'refs/heads/test_process') &&
+      (
+        github.event_name == 'push' ||
+        startsWith(github.ref, 'refs/heads/test_docker')
+      )
 
     env:
       BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
 
     outputs:
       images: ${{ steps.export-images.outputs.images }}
-      matrix: ${{ steps.generate-matrix.outputs.matrix }}
 
     steps:
     - uses: actions/checkout@v3
@@ -71,16 +81,16 @@ jobs:
         done
         wait
 
-#    - name: Update Docker images
-#      if: |
-#        !(
-#          startsWith(github.ref, 'refs/heads/test_docker') ||
-#          startsWith(github.ref, 'refs/heads/main')
-#        )
-#      run: |
-#        cd workflow
-#        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
-#        cd ..
+    - name: Update Docker images
+      if: |
+        !(
+          startsWith(github.ref, 'refs/heads/test_docker') ||
+          startsWith(github.ref, 'refs/heads/main')
+        )
+      run: |
+        cd workflow
+        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
+        cd ..
 
     - name: Build Docker images
       if: |
@@ -134,6 +144,16 @@ jobs:
         # convert to JSON
         echo "images=[\"$(paste -s -d ' ' <(echo $IMAGES) | sed 's/  */\",\"/g')\"]" >> $GITHUB_OUTPUT
 
+  create_matrix:
+    needs: cancel_previous_runs
+    runs-on: ubuntu-latest
+    if: |
+      !endsWith(github.event.head_commit.message, '# ci skip')
+
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+
+    steps:
     - name: Create test matrix
       id: generate-matrix
       run: |
@@ -162,9 +182,13 @@ jobs:
     needs: build_images
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads') ||
+        startsWith(github.ref, 'refs/tags') ||
+        github.event.pull_request.draft == false
+      ) &&
       !startsWith(github.ref, 'refs/heads/test_docker') &&
       !startsWith(github.ref, 'refs/heads/test_benchmark') &&
-      !startsWith(github.ref, 'refs/heads/test_full_benchmark') &&
       !startsWith(github.ref, 'refs/heads/test_process')
 
     strategy:
@@ -183,12 +207,14 @@ jobs:
 
     - name: Log in to the Container registry
       uses: docker/login-action@v2
+      if: "github.event_name == 'push'"
       with:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Download docker images
+      if: "github.event_name == 'push'"
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
@@ -235,6 +261,13 @@ jobs:
         install_renv("docker/openproblems-github-actions/r_requirements.txt")
       shell: Rscript {0}
 
+    - name: Update Docker docker images
+      if: "github.event_name == 'pull_request'"
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker
+        cd ..
+
     - name: Run tests
       run: pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native -k "${{ matrix.tests }}"
 
@@ -246,34 +279,6 @@ jobs:
         fail_ci_if_error: ${{ github.repository == 'openproblems-bio/openproblems' }}
         verbose: true
 
-    - name: Check if PR exists
-      run: |
-        curl -s \
-                    -H "Accept: application/vnd.github+json" \
-                    -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-                    "https://api.github.com/repos/openproblems-bio/openproblems/pulls?head=${{ github.repository_owner }}:${{ github.ref_name }}"
-        PR_NUMBER=$(
-          curl -s \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-            "https://api.github.com/repos/openproblems-bio/openproblems/pulls?head=${{ github.repository_owner }}:${{ github.ref_name }}" | \
-          grep "\"number\":" | \
-          sed 's/[^0-9]*//g'
-        )
-        echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
-
-    - name: Upload PR coverage
-      uses: codecov/codecov-action@v3
-      if: |
-        env.PR_NUMBER != ''
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        flags: unittests
-        fail_ci_if_error: ${{ github.repository == 'openproblems-bio/openproblems' }}
-        verbose: true
-        slug: openproblems-bio/openproblems
-        override_pr: ${{ env.PR_NUMBER }}
-
     - name: Upload check results on fail
       if: failure()
       uses: actions/upload-artifact@main
@@ -282,7 +287,7 @@ jobs:
         path: results
 
 
-  run_test_benchmark:
+  run_benchmark:
     needs: run_tester
     runs-on: ubuntu-latest
     if: >-
@@ -290,9 +295,8 @@ jobs:
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       github.event_name == 'push' &&
       (
-        needs.run_tester.result == 'success'||
-        startsWith(github.ref, 'refs/heads/test_benchmark') ||
-        startsWith(github.ref, 'refs/heads/test_full_benchmark')
+        needs.run_tester.result == 'success' ||
+        startsWith(github.ref, 'refs/heads/test_benchmark')
       )
 
     steps:
