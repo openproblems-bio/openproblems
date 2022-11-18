@@ -1,3 +1,4 @@
+from ..data.utils import write_h5ad
 from ..utils import temporary
 from . import utils
 
@@ -23,7 +24,7 @@ def main(args):
     """Run the ``run`` subcommand."""
     adata = anndata.read_h5ad(args.input)
     adata = run_method(adata, args.task, args.name, args.test)
-    utils.write_h5ad(adata, args.output)
+    write_h5ad(adata, args.output)
     if args.version_file is not None:
         with open(args.version_file, "w") as handle:
             handle.write(adata.uns["method_code_version"])
