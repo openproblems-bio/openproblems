@@ -6,7 +6,6 @@ import openproblems.tasks._cell_cell_communication._common.api
 import openproblems.tasks._cell_cell_communication._common.utils
 import os
 import pandas as pd
-import pytest
 import tempfile
 import unittest
 import utils.docker
@@ -17,10 +16,6 @@ SUBTASKS = [
     openproblems.tasks.cell_cell_communication_source_target,
     openproblems.tasks.cell_cell_communication_ligand_target,
 ]
-pytestmark = pytest.mark.skipif(
-    any([task not in utils.git.list_modified_tasks() for task in SUBTASKS]),
-    reason="Relevant task has not been modified",
-)
 
 
 class TestApi(unittest.TestCase):
