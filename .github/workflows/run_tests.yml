@@ -232,10 +232,10 @@ jobs:
           echo "Dependabot cannot access Action secrets. Rerun the workflow manually"
           exit 1
         fi
-#
-#    - uses: actions/checkout@v3
-#      with:
-#        fetch-depth: 1000
+
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
 #
 #    - name: Clear space on runner
 #      run: ./scripts/clear_runner_diskspace.sh
@@ -409,6 +409,7 @@ jobs:
         {
         cat <<EOF
           {
+            "workspaceId" : "$TOWER_WORKSPACE_ID",
             "params" : {
               "branch": "$BRANCH"
             },
@@ -421,7 +422,7 @@ jobs:
         WORKFLOW_ID=$(
             curl -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
-            https://api.tower.nf/actions/${TOWER_ACTION_ID}/launch?workspaceId=${TOWER_WORKSPACE_ID} \
+            https://api.tower.nf/actions/${TOWER_ACTION_ID}/launch \
             --data "$(generate_parameters)" | \
             tee /dev/stderr | \
             sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
