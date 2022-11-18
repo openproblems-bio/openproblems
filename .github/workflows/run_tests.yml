@@ -6,18 +6,11 @@ on:
       - '*'
     branches:
       - '**'
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   cancel_previous_runs:
     if: |
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      (
-        startsWith(github.ref, 'refs/heads') ||
-        startsWith(github.ref, 'refs/tags') ||
-        github.event.pull_request.draft == false
-      )
+      !endsWith(github.event.head_commit.message, '# ci skip')
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
@@ -31,12 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
-      !startsWith(github.ref, 'refs/heads/test_process') &&
-      (
-        startsWith(github.ref, 'refs/heads') ||
-        startsWith(github.ref, 'refs/tags') ||
-        github.event.pull_request.draft == false
-      )
+      !startsWith(github.ref, 'refs/heads/test_process')
 
     env:
       BRANCH_NAME: "auto_update_docker_${{ github.run_number }}"
@@ -174,13 +162,9 @@ jobs:
     needs: build_images
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
-      (
-        startsWith(github.ref, 'refs/heads') ||
-        startsWith(github.ref, 'refs/tags') ||
-        github.event.pull_request.draft == false
-      ) &&
       !startsWith(github.ref, 'refs/heads/test_docker') &&
       !startsWith(github.ref, 'refs/heads/test_benchmark') &&
+      !startsWith(github.ref, 'refs/heads/test_full_benchmark') &&
       !startsWith(github.ref, 'refs/heads/test_process')
 
     strategy:
@@ -278,8 +262,9 @@ jobs:
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       github.event_name == 'push' &&
       (
-        needs.run_tester.result == 'success' ||
-        startsWith(github.ref, 'refs/heads/test_benchmark')
+        needs.run_tester.result == 'success'||
+        startsWith(github.ref, 'refs/heads/test_benchmark') ||
+        startsWith(github.ref, 'refs/heads/test_full_benchmark')
       )
 
     steps:
@@ -469,6 +454,7 @@ jobs:
         TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
         TOWER_WORKSPACE_ID: 53907369739130
         AWS_DEFAULT_REGION: us-west-2
+      if: "!startsWith(github.ref, 'refs/heads/test_full_benchmark')"
       run: |
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         cd $CWD
@@ -512,13 +498,10 @@ jobs:
     runs-on: ubuntu-latest
     if: >-
       always() &&
+      needs.build_images.result == 'success' &&
       (needs.run_test_benchmark.result == 'success' || needs.run_test_benchmark.result == 'skipped') &&
+      (needs.run_tester.result == 'success' || needs.run_tester.result == 'skipped') &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
-      github.event_name == 'push' &&
-      (
-        needs.run_tester.result == 'success' ||
-        startsWith(github.ref, 'refs/heads/test_full_benchmark')
-      ) &&
       (
         startsWith(github.ref, 'refs/tags') ||
         startsWith(github.ref, 'refs/heads/test_full_benchmark')
