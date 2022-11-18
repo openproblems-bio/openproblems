@@ -1,7 +1,7 @@
 functionality:
   arguments:
     - name: "--input"
-      __inherits__: anndata_dataset.yaml
+      __inherits__: ../../datasets/api/anndata_dataset.yaml
     - name: "--output_train"
       __inherits__: anndata_train.yaml
       direction: output
