@@ -4,6 +4,7 @@ import anndata
 import functools
 import hashlib
 import logging
+import numpy as np
 import os
 import scipy.sparse
 
@@ -37,9 +38,11 @@ def _cache_path(func, *args, **kwargs):
     return os.path.join(TEMPDIR, filename)
 
 
-def _fix_sparse_format(X):
+def _fix_matrix_format(X):
     if scipy.sparse.issparse(X) and not isinstance(X, scipy.sparse.csr_matrix):
         X = X.tocsr()
+    if isinstance(X, np.matrix):
+        X = X.A
     return X
 
 
@@ -47,11 +50,11 @@ def _fix_adata(adata):
     adata.strings_to_categoricals()
     if "var_names_all" not in adata.uns:
         adata.uns["var_names_all"] = adata.var.index.to_numpy()
-    adata.X = _fix_sparse_format(adata.X)
+    adata.X = _fix_matrix_format(adata.X)
     for layer in adata.layers:
-        adata.layers[layer] = _fix_sparse_format(adata.layers[layer])
+        adata.layers[layer] = _fix_matrix_format(adata.layers[layer])
     for obsm in adata.obsm:
-        adata.obsm[obsm] = _fix_sparse_format(adata.obsm[obsm])
+        adata.obsm[obsm] = _fix_matrix_format(adata.obsm[obsm])
     if "counts" not in adata.layers:
         adata.layers["counts"] = adata.X
 
@@ -80,9 +83,8 @@ def loader(data_url, data_reference):
             else:
                 log.debug(f"Downloading {dataset_name} dataset")
                 adata = func(*args, **kwargs)
-                _fix_adata(adata)
                 adata.uns["_from_cache"] = False
-                adata.write_h5ad(filepath)
+                write_h5ad(adata, filepath)
                 return adata
 
         apply_func.metadata = dict(data_url=data_url, data_reference=data_reference)
@@ -134,3 +136,10 @@ def subsample_even(adata, n_obs, even_obs):
     adata_out.varm = adata.varm
     adata_out.varp = adata.varp
     return adata_out
+
+
+def write_h5ad(adata, filepath):
+    if os.path.isfile(filepath):
+        os.unlink(filepath)
+    _fix_adata(adata)
+    adata.write_h5ad(filepath)
