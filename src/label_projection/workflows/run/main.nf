@@ -55,7 +55,8 @@ workflow run_wf {
     // split params for downstream components
     | setWorkflowArguments(
       method: ["input_train", "input_test", "normalization_id", "dataset_id"],
-      metric: [ "input_solution" ]
+      metric: ["input_solution"],
+      output: ["output"]
     )
 
     // run methods
@@ -76,7 +77,7 @@ workflow run_wf {
       def newId = file.getName().replaceAll(".output.*", "")
       // combine prediction with solution
       def newData = [ input_prediction: file, input_solution: passthrough.metric.input_solution ]
-      [ newId, newData ]
+      [ newId, newData, passthrough ]
     }
 
     // run metrics
@@ -85,7 +86,8 @@ workflow run_wf {
 
     // convert to tsv  
     | toSortedList
-    | map{ it -> [ "combined", it.collect{ it[1] } ] }
+    | map{ it -> [ "combined", it.collect{ it[1] } ] + it[0].drop(2) }
+    | getWorkflowArguments(key: "output")
     | extract_scores.run(
         auto: [ publish: true ]
     )

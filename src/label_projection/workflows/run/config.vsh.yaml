@@ -27,8 +27,7 @@ functionality:
         - name: "--output"
           direction: "output"
           type: file
-          # todo: fix inherits in nxf
-          # __inherits__: ../../api/anndata_raw_dataset.yaml
+          example: output.tsv
   resources:
     - type: nextflow_script
       path: main.nf

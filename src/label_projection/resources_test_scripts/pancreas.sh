@@ -38,3 +38,20 @@ bin/viash run src/label_projection/metrics/accuracy/config.vsh.yaml -- \
     --input_prediction $DATASET_DIR/knn.h5ad \
     --input_solution $DATASET_DIR/solution.h5ad \
     --output $DATASET_DIR/knn_accuracy.h5ad
+
+# run benchmark
+export NXF_VER=22.04.5
+
+bin/nextflow \
+  run . \
+  -main-script src/label_projection/workflows/run/main.nf \
+  -profile docker \
+  -resume \
+  --id pancreas \
+  --dataset_id pancreas \
+  --normalization_id log_cpm \
+  --input_train $DATASET_DIR/train.h5ad \
+  --input_test $DATASET_DIR/test.h5ad \
+  --input_solution $DATASET_DIR/solution.h5ad \
+  --output scores.tsv \
+  --publish_dir $DATASET_DIR/
