@@ -183,7 +183,13 @@ jobs:
       - build_images
       - create_matrix
     if: |
+      always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
+      needs.create_matrix.result == 'success' &&
+      (
+        needs.build_images.result == 'success' ||
+        needs.build_images.result == 'skipped'
+      ) &&
       (
         startsWith(github.ref, 'refs/heads') ||
         startsWith(github.ref, 'refs/tags') ||
