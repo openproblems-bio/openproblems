@@ -38,8 +38,8 @@ jobs:
       with:
         fetch-depth: 1000
 
-    - name: Clear space on runner
-      run: ./scripts/clear_runner_diskspace.sh
+#    - name: Clear space on runner
+#      run: ./scripts/clear_runner_diskspace.sh
 
     - name: Set up Python
       uses: actions/setup-python@v4
