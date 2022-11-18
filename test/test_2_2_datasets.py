@@ -15,10 +15,6 @@ import utils.name
 DATASET_SUMMARY_MINLEN = 40
 DATASET_SUMMARY_MAXLEN = 1000
 
-pytestmark = pytest.mark.skipif(
-    len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
-)
-
 
 def _assert_not_bytes(X):
     if isinstance(X, pd.Series):
@@ -43,7 +39,7 @@ def _assert_not_bytes(X):
     ("dataset", "task", "test", "tempdir"),
     [
         (staticmethod(dataset), task, test, utils.TEMPDIR.name)
-        for task in utils.git.list_modified_tasks()
+        for task in openproblems.TASKS
         for dataset in task.DATASETS
         for test in [True]
     ],
