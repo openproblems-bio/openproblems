@@ -71,16 +71,16 @@ jobs:
         done
         wait
 
-    - name: Update Docker images
-      if: |
-        !(
-          startsWith(github.ref, 'refs/heads/test_docker') ||
-          startsWith(github.ref, 'refs/heads/main')
-        )
-      run: |
-        cd workflow
-        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
-        cd ..
+#    - name: Update Docker images
+#      if: |
+#        !(
+#          startsWith(github.ref, 'refs/heads/test_docker') ||
+#          startsWith(github.ref, 'refs/heads/main')
+#        )
+#      run: |
+#        cd workflow
+#        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
+#        cd ..
 
     - name: Build Docker images
       if: |
