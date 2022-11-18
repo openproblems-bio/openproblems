@@ -36,3 +36,5 @@ platforms:
           - scikit-learn
           - "anndata>=0.8"
   - type: nextflow
+    directives: 
+      label: [ midmem, lowcpu ]
