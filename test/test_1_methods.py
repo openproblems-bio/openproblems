@@ -1,14 +1,10 @@
 import openproblems
 import os
 import parameterized
-import pytest
 import utils.docker
 import utils.git
 import utils.name
 
-pytestmark = pytest.mark.skipif(
-    len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
-)
 RETRIES = (
     int(os.environ["PYTEST_MAX_RETRIES"]) if "PYTEST_MAX_RETRIES" in os.environ else 2
 )
@@ -21,7 +17,7 @@ RETRIES = (
             method.__name__,
             method.metadata["image"],
         )
-        for task in utils.git.list_modified_tasks()
+        for task in openproblems.TASKS
         for method in task.METHODS
     ],
     name_func=utils.name.name_test,
