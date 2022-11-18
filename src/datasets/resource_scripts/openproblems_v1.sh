@@ -1,3 +1,23 @@
+#!/bin/bash
+
+# get the root of the directory
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+# ensure that the command below is run from the root of the repository
+cd "$REPO_ROOT"
+
+export TOWER_WORKSPACE_ID=53907369739130
+
+OUTPUT_DIR="resources/datasets/openproblems_v1"
+
+if [ ! -d "$OUTPUT_DIR" ]; then
+  mkdir -p "$OUTPUT_DIR"
+fi
+
+params_file="$OUTPUT_DIR/params.yaml"
+
+if [ ! -f $params_file ]; then
+  cat > "$params_file" << 'HERE'
 param_list:
   - id: allen_brain_atlas
     obs_celltype: label
@@ -49,3 +69,15 @@ param_list:
     layer_counts: counts
 
 output: '$id.h5ad'
+HERE
+fi
+
+export NXF_VER=22.04.5
+bin/nextflow \
+  run . \
+  -main-script src/datasets/workflows/process_openproblems_v1/main.nf \
+  -profile docker \
+  -resume \
+  -params-file "$params_file" \
+  --publish_dir "$OUTPUT_DIR" \
+  -with-tower
