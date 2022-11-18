@@ -6,6 +6,8 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
+export TOWER_WORKSPACE_ID=53907369739130
+
 DATASETS_DIR="resources/label_projection/datasets/openproblems_v1"
 OUTPUT_DIR="resources/label_projection/benchmarks/openproblems_v1"
 
@@ -22,11 +24,12 @@ import yaml
 dataset_dir = "$DATASETS_DIR"
 output_dir = "$OUTPUT_DIR"
 
-with open(dataset_dir + "/params_split.yaml", "r") as file:
+# read split datasets yaml
+with open(dataset_dir + "/params.yaml", "r") as file:
   split_list = yaml.safe_load(file)
 datasets = split_list['param_list']
 
-
+# figure out where train/test/solution files were stored
 param_list = []
 
 for dataset in datasets:
@@ -45,6 +48,7 @@ for dataset in datasets:
   }
   param_list.append(obj)
 
+# write as output file
 output = {
   "param_list": param_list,
 }
