@@ -154,9 +154,14 @@ jobs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
 
     steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+
     - name: Create test matrix
       id: generate-matrix
       run: |
+        set -eo pipefail
         echo "matrix=$(python scripts/generate_test_matrix.py)" >> $GITHUB_OUTPUT
 
   run_tester:
