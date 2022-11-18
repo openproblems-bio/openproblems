@@ -179,7 +179,9 @@ jobs:
         - /usr/local/lib/android:/opt/remove/android
       options: --user root
 
-    needs: build_images
+    needs:
+      - build_images
+      - create_matrix
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       (
@@ -194,7 +196,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tests: ${{ fromJSON(needs.build_images.outputs.matrix) }}
+        tests: ${{ fromJSON(needs.create_matrix.outputs.matrix) }}
 
     steps:
     - name: Clear space on runner
