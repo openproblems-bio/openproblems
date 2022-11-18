@@ -25,10 +25,10 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: "python:3.8"
+    image: "python:3.10"
     setup:
       - type: python
         packages:
-          - scanpy
+          - pyyaml
           - "anndata>=0.8"
   - type: nextflow
