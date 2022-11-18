@@ -249,10 +249,11 @@ jobs:
     - name: Check if PR exists
       run: |
         PR_NUMBER=$(
-          curl \
+          curl -s \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             "https://api.github.com/repos/openproblems-bio/openproblems/pulls?head=${{ github.repository_owner }}:${{ github.ref_name }}" | \
+          tee /dev/stdout | \
           grep "\"number\":" | \
           sed 's/[^0-9]*//g'
         )
