@@ -58,6 +58,7 @@ workflow run_wf {
     )
 
     // run methods
+    // TODO: these filters don't work atm.
     | getWorkflowArguments(key: "method")
     | (
       true_labels.run(map: addSolution, filter: {it[1].normalization_id == "log_cpm"}) & 

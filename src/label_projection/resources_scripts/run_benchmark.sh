@@ -63,6 +63,20 @@ bin/nextflow \
   run . \
   -main-script src/label_projection/workflows/run/main.nf \
   -profile docker \
-  -resume \
   -params-file "$params_file" \
-  --publish_dir "$OUTPUT_DIR"
+  --publish_dir "$OUTPUT_DIR" \
+  -with-tower
+
+bin/tools/docker/nextflow/process_log/process_log \
+  --output "$OUTPUT_DIR/nextflow_log.tsv"
+
+# bin/viash_build -q label_projection -c '.platforms[.type == "nextflow"].directives.tag := "id: $id, args: $args"'
+# bin/viash_build -q label_projection -c '.platforms[.type == "nextflow"].directives.tag := "$id"'
+
+# bin/nextflow run . \
+#   -main-script target/nextflow/label_projection/control_methods/majority_vote/main.nf \
+#   -profile docker \
+#   --input_train resources_test/label_projection/pancreas/train.h5ad \
+#   --input_test resources_test/label_projection/pancreas/test.h5ad \
+#   --input_solution resources_test/label_projection/pancreas/solution.h5ad \
+#   --publish_dir foo
