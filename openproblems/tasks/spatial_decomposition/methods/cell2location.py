@@ -146,7 +146,9 @@ def _cell2location(
         },
     )
 
-    adata.obsm["proportions_pred"] = adata.obsm["q05_cell_abundance_w_sf"].values
+    prop = adata.obsm["q05_cell_abundance_w_sf"].values
+    prop = (prop.T / prop.sum(1)).T
+    adata.obsm["proportions_pred"] = prop
     adata.uns["method_code_version"] = check_version("cell2location")
     return adata
 
