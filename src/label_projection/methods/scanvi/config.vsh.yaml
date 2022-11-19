@@ -7,7 +7,7 @@ functionality:
     transcriptomics data with deep generative models.
   info:
     type: method
-    label: SCANVI
+    label: scANVI
     paper_doi: "10.1101/2020.07.16.205997"
     code_url: "https://github.com/YosefLab/scvi-tools"
   arguments:
