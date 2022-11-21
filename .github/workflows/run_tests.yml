@@ -307,7 +307,31 @@ jobs:
         cd ..
 
     - name: Run tests
-      run: pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native -k "${{ matrix.tests }}"
+      run: |
+        pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native -k "${{ matrix.tests }}"
+        mv coverage.xml coverage.${{ matrix.tests }}.xml
+
+    - name: Upload coverage to GitHub Actions
+      uses: actions/upload-artifact@main
+      with:
+        name: ${{ matrix.tests }}
+        path: coverage.${{ matrix.tests }}.xml
+
+  upload_coverage:
+    needs:
+    - create_matrix
+    - run_tester
+    runs-on: ubuntu-latest
+    if: >-
+      always() &&
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      needs.run_tester.result == 'success'
+
+    steps:
+    - name: Download coverage from GitHub Actions
+      uses: actions/download-artifact@main
+      with:
+        name: ${{ fromJSON(needs.create_matrix.outputs.matrix) }}
 
     - name: Upload coverage
       uses: codecov/codecov-action@v3
@@ -316,25 +340,6 @@ jobs:
         flags: unittests
         fail_ci_if_error: ${{ github.repository == 'openproblems-bio/openproblems' }}
         verbose: true
-
-    - name: Upload check results on fail
-      if: failure()
-      uses: actions/upload-artifact@main
-      with:
-        name: ${{ matrix.config.name }}_results
-        path: results
-
-  state_completion:
-    needs: run_tester
-    runs-on: ubuntu-latest
-    if: >-
-      always() &&
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      needs.run_tester.result == 'success'
-    steps:
-    - name: State that tests succeeded
-      run: |
-        echo "We did it! 🥳🥳🥳"
 
   run_benchmark:
     needs: run_tester
