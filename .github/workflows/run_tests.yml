@@ -330,7 +330,7 @@ jobs:
     if: >-
       always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
-      needs.run_tester.result
+      needs.run_tester.result == 'success'
     steps:
     - name: State that tests succeeded
       run: |
