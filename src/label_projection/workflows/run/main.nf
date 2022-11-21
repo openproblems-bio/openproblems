@@ -13,6 +13,7 @@ include { knn } from "$targetDir/label_projection/methods/knn/main.nf"
 include { mlp } from "$targetDir/label_projection/methods/mlp/main.nf"
 include { logistic_regression } from "$targetDir/label_projection/methods/logistic_regression/main.nf"
 include { scanvi } from "$targetDir/label_projection/methods/scanvi/main.nf"
+include { seurat_transferdata } from "$targetDir/label_projection/methods/seurat_transferdata/main.nf"
 // include { scarches } from "$targetDir/label_projection/methods/scarches/main.nf"
 
 // import metrics
@@ -67,7 +68,8 @@ workflow run_wf {
       knn.run(filter: {it[1].normalization_id == "log_cpm"}) & 
       logistic_regression.run(filter: {it[1].normalization_id == "log_cpm"}) &
       mlp.run(filter: {it[1].normalization_id == "log_cpm"}) &
-      scanvi.run(filter: {it[1].normalization_id == "log_cpm"})
+      scanvi.run(filter: {it[1].normalization_id == "log_cpm"}) & 
+      seurat_transferdata.run(filter: {it[1].normalization_id == "log_cpm"})
     )
     | mix
 
