@@ -27,6 +27,24 @@ def assert_array_equal(X, Y):
         np.testing.assert_array_equal(X, Y)
 
 
+def assert_array_unequal(X, Y):
+    """Assert two arrays are the same shape and missingness but not the same values."""
+    assert X.shape == Y.shape
+    if scipy.sparse.issparse(X) and scipy.sparse.issparse(Y):
+        X = X.tocsr()
+        Y = Y.tocsr()
+        X.sort_indices()
+        Y.sort_indices()
+        np.testing.assert_array_equal(X.indices, Y.indices)
+        np.testing.assert_array_equal(X.indptr, Y.indptr)
+        assert not np.all(X.data == Y.data)
+    else:
+        X = np.asarray(X)
+        Y = np.asarray(Y)
+        np.testing.assert_array_equal(X == 0, Y == 0)
+        assert not np.all(X == Y)
+
+
 def _response_ok(response):
     if response.ok:
         return True
