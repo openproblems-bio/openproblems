@@ -6,7 +6,6 @@ import openproblems.tasks._cell_cell_communication._common.api
 import openproblems.tasks._cell_cell_communication._common.utils
 import os
 import pandas as pd
-import pytest
 import tempfile
 import unittest
 import utils.docker
@@ -17,10 +16,6 @@ SUBTASKS = [
     openproblems.tasks.cell_cell_communication_source_target,
     openproblems.tasks.cell_cell_communication_ligand_target,
 ]
-pytestmark = pytest.mark.skipif(
-    any([task not in utils.git.list_modified_tasks() for task in SUBTASKS]),
-    reason="Relevant task has not been modified",
-)
 
 
 class TestApi(unittest.TestCase):
@@ -124,13 +119,18 @@ def test_odds_ratio_no_match():
 
     adata = task.api.sample_dataset()
 
+    # check expected output
     adata = task.api.sample_method(adata)
-    m = metric(adata, top_prop=0)  # force numerator exception
-    assert m is np.nan
-
-    m = metric(adata, top_prop=0.5)  # check non-exception output
+    m = metric(adata)
     assert np.issubdtype("float64", m)
+    assert m == 0.813953488372093
 
+    # force perfect score
     adata = task.methods.true_events(adata)
-    m = metric(adata, top_prop=0.9)  # force denominator exception
+    m = metric(adata)
     assert m is np.inf
+
+    # force exception
+    adata.uns["ccc_target"]["response"] = 0
+    m = metric(adata)
+    assert m is np.nan

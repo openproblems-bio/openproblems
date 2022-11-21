@@ -1,13 +1,7 @@
 import openproblems
 import parameterized
-import pytest
 import utils.docker
-import utils.git
 import utils.name
-
-pytestmark = pytest.mark.skipif(
-    len(utils.git.list_modified_tasks()) == 0, reason="No tasks have been modified"
-)
 
 
 @parameterized.parameterized.expand(
@@ -19,7 +13,7 @@ pytestmark = pytest.mark.skipif(
             utils.TEMPDIR.name,
             dataset.metadata["image"],
         )
-        for task in utils.git.list_modified_tasks()
+        for task in openproblems.TASKS
         for dataset in task.DATASETS
         for test in [True]
     ],

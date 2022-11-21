@@ -199,6 +199,7 @@ def sample_dataset(merge_keys):
     import scanpy as sc
 
     adata = load_sample_data()
+    rng = np.random.default_rng(seed=1234)
 
     adata.uns["merge_keys"] = merge_keys
 
@@ -215,19 +216,24 @@ def sample_dataset(merge_keys):
     # generate target interactions
     adata.uns["ccc_target"] = pd.DataFrame(
         {
-            "ligand": np.random.choice(adata.var.index, 50),
-            "receptor": np.random.choice(adata.var.index, 50),
-            "source": np.random.choice(list(set(adata.obs.label)), 50),
-            "target": np.random.choice(list(set(adata.obs.label)), 50),
+            "ligand": rng.choice(adata.var.index, 50),
+            "receptor": rng.choice(adata.var.index, 50),
+            "source": rng.choice(list(set(adata.obs.label)), 50),
+            "target": rng.choice(list(set(adata.obs.label)), 50),
         }
     )
     # drop duplicates
-    adata.uns["ccc_target"] = adata.uns["ccc_target"].drop_duplicates(subset=merge_keys)
-    # ensure positive response class is always present
+    adata.uns["ccc_target"] = (
+        adata.uns["ccc_target"]
+        .sort_values(merge_keys)
+        .reset_index()
+        .drop_duplicates(subset=merge_keys, keep="first")
+        .reset_index()
+    )
+
     n_rows = adata.uns["ccc_target"].shape[0]
-    response = np.zeros(n_rows, dtype=np.int64)
-    response[0 : np.int(n_rows * 0.3)] = 1
-    adata.uns["ccc_target"]["response"] = response
+    adata.uns["ccc_target"]["response"] = rng.binomial(1, 0.5, n_rows)
+
     # subset columns
     adata.uns["ccc_target"] = adata.uns["ccc_target"][["response"] + merge_keys]
 
@@ -236,23 +242,23 @@ def sample_dataset(merge_keys):
     n_complexes = 5
     n_genes = len(adata.var.index)
     ligand_complexes = [
-        "_".join(np.random.choice(adata.var.index, 2)) for _ in range(n_complexes)
+        "_".join(rng.choice(adata.var.index, 2)) for _ in range(n_complexes)
     ]
     receptor_complexes = [
-        "_".join(np.random.choice(adata.var.index, 2)) for _ in range(n_complexes)
+        "_".join(rng.choice(adata.var.index, 2)) for _ in range(n_complexes)
     ]
     adata.uns["ligand_receptor_resource"] = pd.DataFrame(
         {
             "ligand_genesymbol": np.concatenate(
                 [
                     ligand_complexes,
-                    np.random.choice(adata.var.index, n_genes, replace=False),
+                    rng.choice(adata.var.index, n_genes, replace=False),
                 ]
             ),
             "receptor_genesymbol": np.concatenate(
                 [
                     receptor_complexes,
-                    np.random.choice(adata.var.index, n_genes, replace=False),
+                    rng.choice(adata.var.index, n_genes, replace=False),
                 ]
             ),
         }
@@ -264,7 +270,7 @@ def sample_dataset(merge_keys):
 def sample_method(adata, merge_keys):
     """Create sample method output for testing metrics in this task."""
     row_num = 500
-    np.random.seed(1234)
+    rng = np.random.default_rng(seed=1234)
 
     ligand_msk = ~adata.uns["ligand_receptor_resource"]["ligand_genesymbol"].isin(
         adata.var.index
@@ -276,20 +282,21 @@ def sample_method(adata, merge_keys):
     # keep only plausible interactions
     resource = adata.uns["ligand_receptor_resource"][msk]
 
-    df = pd.DataFrame(np.random.random((row_num, 1)), columns=["score"])
-    df["source"] = np.random.choice(np.unique(adata.obs[["label"]]), row_num)
-    df["target"] = np.random.choice(np.unique(adata.obs[["label"]]), row_num)
-    df["ligand"] = np.random.choice(
-        np.unique(resource["ligand_genesymbol"].values), row_num
-    )
-    df["receptor"] = np.random.choice(
+    df = pd.DataFrame(rng.random((row_num, 1)), columns=["score"])
+    df["source"] = rng.choice(np.unique(adata.obs[["label"]]), row_num)
+    df["target"] = rng.choice(np.unique(adata.obs[["label"]]), row_num)
+    df["ligand"] = rng.choice(np.unique(resource["ligand_genesymbol"].values), row_num)
+    df["receptor"] = rng.choice(
         np.unique(resource["receptor_genesymbol"].values), row_num
     )
+
+    # remove duplicates
+    df = df.sort_values(merge_keys + ["score"]).drop_duplicates(
+        subset=merge_keys, keep="first"
+    )
+
     # subset columns
     df = df[["score"] + merge_keys]
-
-    # deduplicate
-    df = df.loc[~df[merge_keys].duplicated()]
 
     adata.uns["ccc_pred"] = df
 
