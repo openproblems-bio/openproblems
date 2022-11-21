@@ -41,7 +41,7 @@ def assert_array_unequal(X, Y):
     else:
         X = np.asarray(X)
         Y = np.asarray(Y)
-        np.testing.assert_array_equal(X == 0, Y == 0)
+        np.testing.assert_array_equal(np.isclose(X, 0), np.isclose(Y, 0))
         assert not np.all(X == Y)
 
 
