@@ -5,9 +5,10 @@ import molecular_cross_validation.util
 
 ## VIASH START
 par = {
-    'input': "resources_test/common/pancreas/dataset.h5ad",
-    'output_train': "output_train.h5ad",
-    'output_test': "output_test.h5ad",
+    'input': "/home/kai/Documents/openroblems/openproblems-v2/resources_test/common/pancreas/dataset.h5ad",
+    'output_train': "output/nextflow/pancreas_split_data_output_train.h5d",
+    'output_test': "output/nextflow/pancreas_split_data_output_test.h5d",
+    'train_frac': 0.9,
     'seed': 0
 }
 meta = {
@@ -31,7 +32,7 @@ for key in list(adata.layers.keys()):
         del adata.layers[key]
 
 adata.X = adata.layers["counts"]
-X = adata.X
+X = np.array(adata.X)
 
 # for test purposes
 X = X.round()
@@ -45,7 +46,7 @@ else:
     raise TypeError("Molecular cross-validation requires integer count data.")
 
 X_train, X_test = molecular_cross_validation.util.split_molecules(
-    X, 0.9, 0.0, random_state
+    X, par["train_frac"], 0.0, random_state
 )
 
 # Remove no cells that do not have enough reads

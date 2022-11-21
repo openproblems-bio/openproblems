@@ -14,6 +14,6 @@ platforms:
         packages:
           - scanpy
           - scprep
-          - "anndata<0.8"
+          - "anndata>=0.8"
           - numpy
   - type: nextflow

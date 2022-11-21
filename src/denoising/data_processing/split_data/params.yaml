@@ -1,0 +1,4 @@
+param_list:
+- id: pancreas
+  input: /home/kai/Documents/openroblems/openproblems-v2/resources_test/common/pancreas/dataset.h5ad
+seed: 123
