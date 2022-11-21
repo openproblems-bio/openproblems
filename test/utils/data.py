@@ -1,11 +1,14 @@
 import anndata
 import numpy as np
+import scipy.sparse
 
 
-def data(obsm=None):
+def data(sparse=False, obsm=None):
     """Create fake data."""
-    adata = anndata.AnnData(np.random.poisson(2, (100, 30)).astype(np.float32))
-    adata.layers["counts"] = adata.X
+    data = np.random.poisson(2, (100, 30)).astype(np.float32)
+    if sparse:
+        data = scipy.sparse.csr_matrix(data)
+    adata = anndata.AnnData(data, layers={"counts": data})
     if obsm is not None:
         adata.obsm[obsm] = adata.X * 2 + 1
         adata.uns["{}_obs".format(obsm)] = np.arange(adata.shape[0]) + 5

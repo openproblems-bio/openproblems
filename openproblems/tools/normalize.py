@@ -78,8 +78,11 @@ def sqrt_cpm(adata: ad.AnnData) -> ad.AnnData:
 def log_cpm_hvg(adata: ad.AnnData, n_genes: int = 1000) -> ad.AnnData:
     """Normalize logCPM HVG
 
-    Normalize data to log counts per million and select n_genes highly
-    variable genes
+    Normalize data to log counts per million and annotate n_genes highly
+    variable genes. In order to subset the data to HVGs, use
+    ```
+    adata = adata[:, adata.var["highly_variable"]].copy()
+    ```
     """
     import scanpy as sc
 
@@ -92,6 +95,5 @@ def log_cpm_hvg(adata: ad.AnnData, n_genes: int = 1000) -> ad.AnnData:
         n_genes = int(adata.n_vars * 0.5)
 
     sc.pp.highly_variable_genes(adata, n_top_genes=n_genes, flavor="cell_ranger")
-    adata = adata[:, adata.var["highly_variable"]].copy()
 
     return adata

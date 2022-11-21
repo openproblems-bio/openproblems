@@ -30,6 +30,7 @@ def _densmap(adata, obsm=None):
 @_densmap_method(method_name="densMAP (logCPM, 1kHVG)")
 def densmap_logCPM_1kHVG(adata, test: bool = False):
     adata = log_cpm_hvg(adata)
+    adata = adata[:, adata.var["highly_variable"]].copy()
     return _densmap(adata)
 
 
@@ -38,5 +39,6 @@ def densmap_pca_logCPM_1kHVG(adata, test: bool = False):
     import scanpy as sc
 
     adata = log_cpm_hvg(adata)
+    adata = adata[:, adata.var["highly_variable"]].copy()
     sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
     return _densmap(adata, obsm="X_pca")

@@ -17,11 +17,12 @@ def _dense_data(X):
 
 
 @parameterized.parameterized_class(
-    ("normalizer"),
+    ("normalizer", "sparse"),
     [
-        (staticmethod(normalizer),)
-        for normalizer in openproblems.utils.get_callable_members(
-            openproblems.tools.normalize
+        (staticmethod(normalizer), sparse)
+        for normalizer, sparse in zip(
+            openproblems.utils.get_callable_members(openproblems.tools.normalize),
+            [True, False],
         )
     ],
     class_name_func=utils.name.name_test,
@@ -32,20 +33,28 @@ class TestNormalizeX(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Generate and normalize data."""
-        cls.adata = utils.data.data()
+        cls.adata = utils.data.data(sparse=cls.sparse)
+        cls.counts = cls.adata.layers["counts"].copy()
         cls.cache_name = cls.normalizer.__name__
-        assert cls.adata.X is cls.adata.layers["counts"]
         assert utils.asserts.assert_finite(cls.adata.X)
         assert cls.cache_name not in cls.adata.layers
         cls.adata = cls.normalizer(cls.adata)
 
-    def test_not_inplace(self):
-        """Test that normalization does not happen inplace."""
-        utils.asserts.assert_array_unequal(self.adata.X, self.adata.layers["counts"])
+    def test_shape(self):
+        """Test that normalized data is the same shape as the input."""
+        assert self.adata.X.shape == self.counts.shape
+
+    def test_class(self):
+        """Test that normalized data is the same class as the input."""
+        assert isinstance(self.adata.X, type(self.counts))
 
     def test_finite(self):
         """Test that normalized data is finite."""
         assert utils.asserts.assert_finite(self.adata.X)
+
+    def test_not_inplace(self):
+        """Test that normalization does not happen inplace."""
+        utils.asserts.assert_array_equal(self.adata.layers["counts"], self.counts)
 
     def test_layers(self):
         """Test that normalized data is cached in adata.layers."""
