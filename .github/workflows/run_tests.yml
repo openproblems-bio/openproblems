@@ -310,12 +310,11 @@ jobs:
       run: |
         pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native -k "${{ matrix.tests }}"
         mkdir -p coverage
-        mv coverage.xml "coverage/coverage.${{ matrix.tests }}.xml"
+        mv coverage.xml "$(echo coverage/coverage.${{ matrix.tests }}.xml | sed 's/[ \(\)]/_/g')"
 
     - name: Upload coverage to GitHub Actions
       uses: actions/upload-artifact@main
       with:
-        name: coverage_${{ matrix.tests }}
         path: coverage/coverage.${{ matrix.tests }}.xml
 
   upload_coverage:
@@ -343,7 +342,7 @@ jobs:
     - name: Delete coverage artifacts
       uses: geekyeggo/delete-artifact@v2
       with:
-          name: "coverage_*"
+          name: "coverage*"
 
   run_benchmark:
     needs: run_tester
