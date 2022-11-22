@@ -40,8 +40,11 @@ info:
         required: true
     obsm:
       - type: double
+        name: X_pca
+        description: The resulting PCA embedding.
+      - type: double
         name: X_emb
-        description: 2D embedding coordinates
+        description: The resulting t-SNE embedding.
     uns:
       - type: string
         name: dataset_id
