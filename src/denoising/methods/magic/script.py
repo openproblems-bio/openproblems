@@ -32,7 +32,7 @@ elif normtype == "log":
 print("processing data")
 
 X, libsize = scprep.normalize.library_size_normalize(
-    input_train.layers[par['counts']], rescale=1, return_library_size=True
+    input_train.layers['counts'], rescale=1, return_library_size=True
 )
 
 X = scprep.utils.matrix_transform(X, norm_fn)
