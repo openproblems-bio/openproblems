@@ -315,7 +315,7 @@ jobs:
     - name: Upload coverage to GitHub Actions
       uses: actions/upload-artifact@main
       with:
-        path: coverage/coverage.${{ matrix.tests }}.xml
+        path: coverage/
 
   upload_coverage:
     needs: run_tester
