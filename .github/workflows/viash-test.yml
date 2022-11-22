@@ -30,7 +30,7 @@ jobs:
   list_components:
     needs: run_ci_check_job
     env:
-      s3_bucket: s3://openproblems-data/resources_test
+      s3_bucket: s3://openproblems-data/resources_test/
     runs-on: ubuntu-latest
     if: "(!contains(github.event.head_commit.message, 'ci skip')) && needs.run_ci_check_job.outputs.run_ci == 'true'"
     outputs:
@@ -43,7 +43,7 @@ jobs:
 
     - name: Fetch viash
       run: |
-        bin/init
+        bin/init -n
         tree .
         bin/viash -h
 
@@ -67,14 +67,14 @@ jobs:
       run: |
         bin/viash run \
           -p native \
-          src/common/sync_test_resources/config.vsh.yaml -- \
+          src/download/sync_test_resources/config.vsh.yaml -- \
           --input $s3_bucket \
           --delete
         tree resources_test/ -L 3
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v34.0.5
+      uses: tj-actions/changed-files@v34.4.3
       with:
         separator: ";"
         diff_relative: true
