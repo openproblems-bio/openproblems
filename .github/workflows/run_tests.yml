@@ -309,18 +309,15 @@ jobs:
     - name: Run tests
       run: |
         pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native -k "${{ matrix.tests }}"
-        mv coverage.xml "coverage.${{ matrix.tests }}.xml"
+        mv coverage.xml "coverage/coverage.${{ matrix.tests }}.xml"
 
     - name: Upload coverage to GitHub Actions
       uses: actions/upload-artifact@main
       with:
-        name: ${{ matrix.tests }}
-        path: coverage.${{ matrix.tests }}.xml
+        path: coverage/coverage.${{ matrix.tests }}.xml
 
   upload_coverage:
-    needs:
-    - create_matrix
-    - run_tester
+    needs: run_tester
     runs-on: ubuntu-latest
     if: >-
       always() &&
@@ -329,9 +326,9 @@ jobs:
 
     steps:
     - name: Download coverage from GitHub Actions
-      uses: actions/download-artifact@main
+      uses: actions/download-artifact@v3
       with:
-        name: ${{ fromJSON(needs.create_matrix.outputs.matrix) }}
+        path: coverage/
 
     - name: Upload coverage
       uses: codecov/codecov-action@v3
