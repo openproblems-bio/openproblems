@@ -18,6 +18,4 @@ adata = ad.read_h5ad(par['input'])
 sc.tl.tsne(adata, use_rep="X_pca", n_pcs=par['n_pca'])
 adata.obsm["X_emb"] = adata.obsm["X_tsne"].copy()
 del(adata.obsm["X_tsne"])
-adata.uns["method_code_version"] = check_version("MulticoreTSNE")
-
 adata.write_h5ad(par['output'], compression="gzip")
