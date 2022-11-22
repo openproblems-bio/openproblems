@@ -1,0 +1,24 @@
+__inherits__: ../../api/comp_metric.yaml
+functionality:
+  name: "rmse"
+  namespace: "dimensionality_reduction/metrics"
+  description: The root mean squared error between the full (or processed) data matrix and a list of dimensionally-reduced matrices
+  info:
+    type: metric
+    label: RMSE
+    v1_url: openproblems/tasks/dimensionality_reduction/metrics/root_mean_square_error.py 
+    v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scikit-learn
+          - numpy
+          - scipy
+          - "anndata>=0.8"
+  - type: nextflow
