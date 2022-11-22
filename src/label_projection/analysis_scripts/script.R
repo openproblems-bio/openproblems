@@ -67,7 +67,7 @@ metric_info <- map_df(ns_list_metrics, function(conf) {
 # get data table
 ranking <- scores %>%
   left_join(metric_info %>% select(metric_id = id, maximise), by = "metric_id") %>%
-  left_join(method_info %>% select(method_id = id, method_label = label), by = "method_id") %>%
+  inner_join(method_info %>% select(method_id = id, method_label = label), by = "method_id") %>%
   group_by(metric_id, dataset_id) %>%
   mutate(rank = rank(ifelse(maximise, -metric_value, metric_value))) %>%
   ungroup() %>%
@@ -79,7 +79,7 @@ df <-
   method_info %>%
   select(id, type, label) %>%
   rename_all(function(x) paste0("method_", x)) %>%
-  left_join(scores %>% spread(metric_id, metric_value), by = "method_id") %>%
+  inner_join(scores %>% spread(metric_id, metric_value), by = "method_id") %>%
   left_join(execution_info, by = c("dataset_id", "method_id")) %>%
   mutate(method_label = factor(method_label, levels = rev(ranking$method_label))) %>%
   arrange(method_label)
