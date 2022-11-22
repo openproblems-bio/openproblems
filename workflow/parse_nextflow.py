@@ -229,7 +229,9 @@ def compute_ranking(dataset_results):
         method_names[method_idx]: rank + 1
         for rank, method_idx in enumerate(np.argsort(metric_sums)[::-1])
     }
-    return final_ranking
+    for method_name, metrics_sum in zip(method_names, metric_sums):
+        dataset_results[method_name]["mean_score"] = metrics_sum / len(metric_names)
+    return dataset_results, final_ranking
 
 
 def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
@@ -239,12 +241,12 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
         name=dataset.metadata["dataset_name"],
         data_url=dataset.metadata["data_url"],
         data_reference=dataset.metadata["data_reference"],
-        headers=dict(names=["Rank"], fixed=["Name", "Paper", "Library"]),
+        headers=dict(names=["Rank", "Mean score"], fixed=["Name", "Paper", "Library"]),
         results=list(),
     )
     dataset_results_raw = normalize_scores(task_name, dataset_results_raw)
     dataset_results = drop_baselines(task_name, dataset_results_raw)
-    ranking = compute_ranking(dataset_results)
+    dataset_results, ranking = compute_ranking(dataset_results)
     metric_names = set()
     for method_name, rank in ranking.items():
         method_results = dataset_results[method_name]
@@ -262,6 +264,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
             "CPU (%)": float(method_results["%cpu"].replace("%", "")),
             "Memory (GB)": parse_size_to_gb(method_results["peak_rss"]),
             "Rank": rank,
+            "Mean score": method_results["mean_score"],
         }
         for metric_name, metric_result in method_results["metrics"].items():
             metric = openproblems.api.utils.get_function(
