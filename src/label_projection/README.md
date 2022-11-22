@@ -111,7 +111,7 @@ flowchart LR
 
 ### `Dataset`
 
-A preprocessed dataset
+A normalised data with a PCA embedding and HVG selection
 
 Used in:
 
@@ -119,22 +119,31 @@ Used in:
 
 Slots:
 
-| struct | name              | type    | description                                      |
-|:-------|:------------------|:--------|:-------------------------------------------------|
-| layers | counts            | integer | Raw counts                                       |
-| layers | log_cpm           | double  | CPM normalized counts, log transformed           |
-| layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
-| layers | sqrt_cpm          | double  | CPM normalized counts, sqrt transformed          |
-| obs    | label             | double  | Ground truth cell type labels                    |
-| obs    | batch             | double  | Batch information                                |
-| uns    | dataset_id        | string  | A unique identifier for the dataset              |
+| struct | name             | type    | description                                                             |
+|:-------|:-----------------|:--------|:------------------------------------------------------------------------|
+| layers | counts           | integer | Raw counts                                                              |
+| layers | normalized       | double  | Normalised expression values                                            |
+| obs    | celltype         | string  | Cell type information                                                   |
+| obs    | batch            | string  | Batch information                                                       |
+| obs    | tissue           | string  | Tissue information                                                      |
+| obs    | size_factors     | double  | The size factors created by the normalisation method, if any.           |
+| var    | hvg              | boolean | Whether or not the feature is considered to be a ‘highly variable gene’ |
+| var    | hvg_score        | integer | A ranking of the features by hvg.                                       |
+| obsm   | X_pca            | double  | The resulting PCA embedding.                                            |
+| varm   | pca_loadings     | double  | The PCA loadings matrix.                                                |
+| uns    | dataset_id       | string  | A unique identifier for the dataset                                     |
+| uns    | normalization_id | string  | Which normalization was used                                            |
+| uns    | pca_variance     | double  | The PCA variance objects.                                               |
 
 Example:
 
     AnnData object
-     obs: 'label', 'batch'
-     uns: 'dataset_id'
-     layers: 'counts', 'log_cpm', 'log_scran_pooling', 'sqrt_cpm'
+     obs: 'celltype', 'batch', 'tissue', 'size_factors'
+     var: 'hvg', 'hvg_score'
+     uns: 'dataset_id', 'normalization_id', 'pca_variance'
+     obsm: 'X_pca'
+     varm: 'pca_loadings'
+     layers: 'counts', 'normalized'
 
 ### `Prediction`
 
@@ -148,17 +157,18 @@ Used in:
 
 Slots:
 
-| struct | name       | type   | description                          |
-|:-------|:-----------|:-------|:-------------------------------------|
-| obs    | label_pred | string | Predicted labels for the test cells. |
-| uns    | dataset_id | string | A unique identifier for the dataset  |
-| uns    | method_id  | string | A unique identifier for the method   |
+| struct | name             | type   | description                          |
+|:-------|:-----------------|:-------|:-------------------------------------|
+| obs    | label_pred       | string | Predicted labels for the test cells. |
+| uns    | dataset_id       | string | A unique identifier for the dataset  |
+| uns    | normalization_id | string | Which normalization was used         |
+| uns    | method_id        | string | A unique identifier for the method   |
 
 Example:
 
     AnnData object
      obs: 'label_pred'
-     uns: 'dataset_id', 'method_id'
+     uns: 'dataset_id', 'normalization_id', 'method_id'
 
 ### `Score`
 
@@ -170,17 +180,18 @@ Used in:
 
 Slots:
 
-| struct | name          | type   | description                                                                                  |
-|:-------|:--------------|:-------|:---------------------------------------------------------------------------------------------|
-| uns    | dataset_id    | string | A unique identifier for the dataset                                                          |
-| uns    | method_id     | string | A unique identifier for the method                                                           |
-| uns    | metric_ids    | string | One or more unique metric identifiers                                                        |
-| uns    | metric_values | double | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
+| struct | name             | type   | description                                                                                  |
+|:-------|:-----------------|:-------|:---------------------------------------------------------------------------------------------|
+| uns    | dataset_id       | string | A unique identifier for the dataset                                                          |
+| uns    | normalization_id | string | Which normalization was used                                                                 |
+| uns    | method_id        | string | A unique identifier for the method                                                           |
+| uns    | metric_ids       | string | One or more unique metric identifiers                                                        |
+| uns    | metric_values    | double | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
 
 Example:
 
     AnnData object
-     uns: 'dataset_id', 'method_id', 'metric_ids', 'metric_values'
+     uns: 'dataset_id', 'normalization_id', 'method_id', 'metric_ids', 'metric_values'
 
 ### `Solution`
 
@@ -194,22 +205,26 @@ Used in:
 
 Slots:
 
-| struct | name              | type    | description                                      |
-|:-------|:------------------|:--------|:-------------------------------------------------|
-| layers | counts            | integer | Raw counts                                       |
-| layers | log_cpm           | double  | CPM normalized counts, log transformed           |
-| layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
-| layers | sqrt_cpm          | double  | CPM normalized counts, sqrt transformed          |
-| obs    | label             | string  | Ground truth cell type labels                    |
-| obs    | batch             | string  | Batch information                                |
-| uns    | dataset_id        | string  | A unique identifier for the dataset              |
+| struct | name             | type    | description                                                             |
+|:-------|:-----------------|:--------|:------------------------------------------------------------------------|
+| layers | counts           | integer | Raw counts                                                              |
+| layers | normalized       | double  | Normalized counts                                                       |
+| obs    | label            | string  | Ground truth cell type labels                                           |
+| obs    | batch            | string  | Batch information                                                       |
+| var    | hvg              | boolean | Whether or not the feature is considered to be a ‘highly variable gene’ |
+| var    | hvg_score        | integer | A ranking of the features by hvg.                                       |
+| obsm   | X_pca            | double  | The resulting PCA embedding.                                            |
+| uns    | dataset_id       | string  | A unique identifier for the dataset                                     |
+| uns    | normalization_id | string  | Which normalization was used                                            |
 
 Example:
 
     AnnData object
      obs: 'label', 'batch'
-     uns: 'dataset_id'
-     layers: 'counts', 'log_cpm', 'log_scran_pooling', 'sqrt_cpm'
+     var: 'hvg', 'hvg_score'
+     uns: 'dataset_id', 'normalization_id'
+     obsm: 'X_pca'
+     layers: 'counts', 'normalized'
 
 ### `Test`
 
@@ -223,21 +238,25 @@ Used in:
 
 Slots:
 
-| struct | name              | type    | description                                      |
-|:-------|:------------------|:--------|:-------------------------------------------------|
-| layers | counts            | integer | Raw counts                                       |
-| layers | log_cpm           | double  | CPM normalized counts, log transformed           |
-| layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
-| layers | sqrt_cpm          | double  | CPM normalized counts, sqrt transformed          |
-| obs    | batch             | string  | Batch information                                |
-| uns    | dataset_id        | string  | A unique identifier for the dataset              |
+| struct | name             | type    | description                                                             |
+|:-------|:-----------------|:--------|:------------------------------------------------------------------------|
+| layers | counts           | integer | Raw counts                                                              |
+| layers | normalized       | double  | Normalized counts                                                       |
+| obs    | batch            | string  | Batch information                                                       |
+| var    | hvg              | boolean | Whether or not the feature is considered to be a ‘highly variable gene’ |
+| var    | hvg_score        | integer | A ranking of the features by hvg.                                       |
+| obsm   | X_pca            | double  | The resulting PCA embedding.                                            |
+| uns    | dataset_id       | string  | A unique identifier for the dataset                                     |
+| uns    | normalization_id | string  | Which normalization was used                                            |
 
 Example:
 
     AnnData object
      obs: 'batch'
-     uns: 'dataset_id'
-     layers: 'counts', 'log_cpm', 'log_scran_pooling', 'sqrt_cpm'
+     var: 'hvg', 'hvg_score'
+     uns: 'dataset_id', 'normalization_id'
+     obsm: 'X_pca'
+     layers: 'counts', 'normalized'
 
 ### `Train`
 
@@ -251,22 +270,26 @@ Used in:
 
 Slots:
 
-| struct | name              | type    | description                                      |
-|:-------|:------------------|:--------|:-------------------------------------------------|
-| layers | counts            | integer | Raw counts                                       |
-| layers | log_cpm           | double  | CPM normalized counts, log transformed           |
-| layers | log_scran_pooling | double  | Scran pooling normalized counts, log transformed |
-| layers | sqrt_cpm          | double  | CPM normalized counts, sqrt transformed          |
-| obs    | label             | string  | Ground truth cell type labels                    |
-| obs    | batch             | string  | Batch information                                |
-| uns    | dataset_id        | string  | A unique identifier for the dataset              |
+| struct | name             | type    | description                                                             |
+|:-------|:-----------------|:--------|:------------------------------------------------------------------------|
+| layers | counts           | integer | Raw counts                                                              |
+| layers | normalized       | double  | Normalized counts                                                       |
+| obs    | label            | string  | Ground truth cell type labels                                           |
+| obs    | batch            | string  | Batch information                                                       |
+| var    | hvg              | boolean | Whether or not the feature is considered to be a ‘highly variable gene’ |
+| var    | hvg_score        | integer | A ranking of the features by hvg.                                       |
+| obsm   | X_pca            | double  | The resulting PCA embedding.                                            |
+| uns    | dataset_id       | string  | A unique identifier for the dataset                                     |
+| uns    | normalization_id | string  | Which normalization was used                                            |
 
 Example:
 
     AnnData object
      obs: 'label', 'batch'
-     uns: 'dataset_id'
-     layers: 'counts', 'log_cpm', 'log_scran_pooling', 'sqrt_cpm'
+     var: 'hvg', 'hvg_score'
+     uns: 'dataset_id', 'normalization_id'
+     obsm: 'X_pca'
+     layers: 'counts', 'normalized'
 
 ## Component API
 
@@ -305,9 +328,9 @@ Arguments:
 
 Arguments:
 
-| Name                | File format           | Direction | Description          |
-|:--------------------|:----------------------|:----------|:---------------------|
-| `--input`           | [Dataset](#dataset)   | input     | Preprocessed dataset |
-| `--output_train`    | [Train](#train)       | output    | Training data        |
-| `--output_test`     | [Test](#test)         | output    | Test data            |
-| `--output_solution` | [Solution](#solution) | output    | Solution             |
+| Name                | File format           | Direction | Description   |
+|:--------------------|:----------------------|:----------|:--------------|
+| `--input`           | [Dataset](#dataset)   | input     | NA            |
+| `--output_train`    | [Train](#train)       | output    | Training data |
+| `--output_test`     | [Test](#test)         | output    | Test data     |
+| `--output_solution` | [Solution](#solution) | output    | Solution      |
