@@ -42,7 +42,7 @@ def check_method(adata: AnnData, is_baseline=False):
     assert np.all(np.isfinite(adata.obsm["proportions_true"]))
     assert adata.obsm["proportions_pred"].shape == adata.obsm["proportions_true"].shape
     proportions_sum = np.sum(adata.obsm["proportions_pred"], axis=1)
-    np.testing.assert_allclose(proportions_sum, 1)
+    np.testing.assert_allclose(proportions_sum, 1, atol=1e-6)
     return True
 
 
