@@ -6,7 +6,6 @@ import anndata as ad
 par = {
     'input_train': 'resources/label_projection/openproblems_v1/pancreas.split_dataset.output_train.h5ad',
     'output': 'output_knn.h5ad',
-    'layer_input': 'counts'
 }
 meta = {
     'functionality_name': 'foo',
@@ -17,10 +16,9 @@ print("Load input data")
 input_train = ad.read_h5ad(par["input_train"])
 
 print("process data")
-
-X = input_train.X.transpose().toarray()
+X = input_train.layers["counts"].transpose().toarray()
 output_denoised = input_train.copy()
-output_denoised.X = (knn_smooth.knn_smoothing(X, k=10)).transpose()
+output_denoised.layers["counts"] = (knn_smooth.knn_smoothing(X, k=10)).transpose()
 
 print("Writing data")
 output_denoised.uns["method_id"] = par["functionality_name"]

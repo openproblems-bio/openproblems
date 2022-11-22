@@ -13,12 +13,9 @@ functionality:
     paper_doi: "0.1038/s41467-018-07931-2"
     code_url: "https://github.com/theislab/dca"
     v1_url: /openproblems/tasks/denoising/methods/dca.py
-    v1_commit: 903469a532b96b25ef7d727e687c5b4263966323
+    v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    preferred_normalization: counts
   arguments:
-    - name: "--layer_input"
-      type: string
-      default: "counts"
-      description: Which layer to use as input.
     - name: "--epochs"
       type: "integer"
       default: 300
@@ -32,6 +29,6 @@ platforms:
     setup:
       - type: python
         packages:
-          - "anndata>=0.8"
+          - "anndata<0.8"
           - dca==0.3.4
   - type: nextflow
