@@ -7,9 +7,10 @@ functionality:
     transcriptomics data with deep generative models.
   info:
     type: method
-    label: scANVI
+    label: SCANVI
     paper_doi: "10.1101/2020.07.16.205997"
     code_url: "https://github.com/YosefLab/scvi-tools"
+    doc_url: https://scarches.readthedocs.io/en/latest/scanvi_surgery_pipeline.html
   arguments:
     - name: "--hvg"
       type: boolean
@@ -26,12 +27,6 @@ platforms:
         packages: 
           - "anndata>=0.8"
           - scvi-tools
-    # image: "python:3.10"
-    # setup:
-    #   - type: python
-    #     packages:
-    #       - "anndata>=0.8"
-    #       - scvi-tools
   - type: nextflow
     directives: 
       label: [ midmem, highcpu, gpu ]
