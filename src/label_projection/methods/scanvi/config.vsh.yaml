@@ -11,6 +11,9 @@ functionality:
     paper_doi: "10.1101/2020.07.16.205997"
     code_url: "https://github.com/YosefLab/scvi-tools"
     doc_url: https://scarches.readthedocs.io/en/latest/scanvi_surgery_pipeline.html
+    v1_url: openproblems/tasks/label_projection/methods/scvi_tools.py
+    v1_commit: 411a416150ecabce25e1f59bde422a029d0a8baa
+    preferred_normalization: log_cpm
   arguments:
     - name: "--hvg"
       type: boolean
