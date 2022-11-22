@@ -1,0 +1,21 @@
+__inherits__: ../../api/comp_processor_pca.yaml
+functionality:
+  name: "pca"
+  namespace: "datasets/processors"
+  description: "Compute PCA"
+  resources:
+    - type: python_script
+      path: script.py
+  # test_resources:
+  #   - type: python_script
+  #     path: test_script.py
+  #   - path: "../../../resources_test/common/pancreas"
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          -  "anndata>=0.8"
+  - type: nextflow

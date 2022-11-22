@@ -1,0 +1,27 @@
+functionality:
+  arguments:
+    - name: "--input"
+      __inherits__: anndata_normalized.yaml
+    - name: "--layer_input"
+      type: string
+      default: "normalized"
+      description: Which layer to use as input for the PCA.
+    - name: "--output"
+      direction: output
+      __inherits__: anndata_pca.yaml
+    - name: "--obsm_embedding"
+      type: string
+      default: "X_pca"
+      description: "In which .obsm slot to store the resulting embedding."
+    - name: "--varm_loadings"
+      type: string
+      default: "pca_loadings"
+      description: "In which .varm slot to store the resulting loadings matrix."
+    - name: "--uns_variance"
+      type: string
+      default: "pca_variance"
+      description: "In which .uns slot to store the resulting variance objects."
+    - name: "--num_components"
+      type: integer
+      example: 25
+      description: Number of principal components to compute. Defaults to 50, or 1 - minimum dimension size of selected representation.

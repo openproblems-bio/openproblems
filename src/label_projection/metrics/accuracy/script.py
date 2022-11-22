@@ -4,8 +4,8 @@ import anndata as ad
 
 ## VIASH START
 par = {
-    'input_prediction': 'resources_test/label_projection/pancreas/dataset_cpm_knn.h5ad',
-    'input_solution': 'resources_test/label_projection/pancreas/dataset_cpm_solution.h5ad',
+    'input_prediction': 'resources_test/label_projection/pancreas/knn.h5ad',
+    'input_solution': 'resources_test/label_projection/pancreas/solution.h5ad',
     'output': 'output.h5ad'
 }
 meta = {
@@ -20,7 +20,8 @@ input_solution = ad.read_h5ad(par['input_solution'])
 assert (input_prediction.obs_names == input_solution.obs_names).all()
 
 print("Encode labels")
-encoder = sklearn.preprocessing.LabelEncoder().fit(input_solution.obs["label"])
+cats = list(input_solution.obs["label"].dtype.categories) + list(input_prediction.obs["label_pred"].dtype.categories)
+encoder = sklearn.preprocessing.LabelEncoder().fit(cats)
 input_solution.obs["label"] = encoder.transform(input_solution.obs["label"])
 input_prediction.obs["label_pred"] = encoder.transform(input_prediction.obs["label_pred"])
 

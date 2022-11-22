@@ -1,0 +1,80 @@
+functionality:
+  arguments:
+    - name: "--input"
+      __inherits__: anndata_dataset.yaml
+    - name: "--output_train"
+      __inherits__: anndata_train.yaml
+      direction: output
+    - name: "--output_test"
+      __inherits__: anndata_test.yaml
+      direction: output
+    - name: "--output_solution"
+      __inherits__: anndata_solution.yaml
+      direction: output
+  test_resources:
+    - type: python_script
+      path: generic_test.py
+      text: |
+        import anndata as ad
+        import subprocess
+        from os import path
+
+        input_path = meta["resources_dir"] + "/pancreas/dataset.h5ad"
+        output_train_path = "output_train.h5ad"
+        output_test_path = "output_test.h5ad"
+        output_solution_path = "output_solution.h5ad"
+
+        cmd = [
+          meta['executable'],
+          "--input", input_path,
+          "--output_train", output_train_path,
+          "--output_test", output_test_path,
+          "--output_solution", output_solution_path
+        ]
+
+        print(">> Running script as test")
+        out = subprocess.check_output(cmd).decode("utf-8")
+
+        print(">> Checking whether output file exists")
+        assert path.exists(output_train_path)
+        assert path.exists(output_test_path)
+        assert path.exists(output_solution_path)
+
+        print(">> Reading h5ad files")
+        input = ad.read_h5ad(input_path)
+        output_train = ad.read_h5ad(output_train_path)
+        output_test = ad.read_h5ad(output_test_path)
+        output_solution = ad.read_h5ad(output_solution_path)
+
+        print("input:", input)
+        print("output_train:", output_train)
+        print("output_test:", output_test)
+        print("output_solution:", output_solution)
+
+        print(">> Checking dimensions, make sure no cells were dropped")
+        assert input.n_obs == output_train.n_obs + output_test.n_obs
+        assert output_test.n_obs == output_solution.n_obs
+        assert input.n_vars == output_train.n_vars
+        assert input.n_vars == output_test.n_vars
+        
+        print(">> Checking whether data from input was copied properly to output")
+        assert output_train.uns["dataset_id"] == input.uns["dataset_id"]
+        assert output_test.uns["dataset_id"] == input.uns["dataset_id"]
+        assert output_solution.uns["dataset_id"] == input.uns["dataset_id"]
+
+        print(">> Check whether certain slots exist")
+        assert "counts" in output_train.layers
+        assert "normalized" in output_train.layers
+        assert "label" in output_train.obs
+        assert "batch" in output_train.obs
+        assert "counts" in output_test.layers
+        assert "normalized" in output_test.layers
+        assert "label" not in output_test.obs # make sure label is /not/ here
+        assert "batch" in output_test.obs
+        assert "counts" in output_solution.layers
+        assert "normalized" in output_solution.layers
+        assert "label" in output_solution.obs
+        assert "batch" in output_solution.obs
+
+        print(">> All checks succeeded!")
+    - path: ../../../resources_test/common/pancreas

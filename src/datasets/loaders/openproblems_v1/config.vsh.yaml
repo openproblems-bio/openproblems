@@ -1,0 +1,48 @@
+functionality:
+  name: "openproblems_v1"
+  namespace: "datasets/loaders"
+  description: "Fetch a dataset from OpenProblems v1"
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - name: "--id"
+          type: "string"
+          description: "The ID of the dataset"
+          required: true
+        - name: "--obs_celltype"
+          type: "string"
+          description: "Location of where to find the observation cell types."
+        - name: "--obs_batch"
+          type: "string"
+          description: "Location of where to find the observation batch IDs."
+        - name: "--obs_tissue"
+          type: "string"
+          description: "Location of where to find the observation tissue information."
+        - name: "--layer_counts"
+          type: "string"
+          description: "In which layer to find the counts matrix. Leave undefined to use `.X`."
+          example: counts
+        - name: "--sparse"
+          type: boolean
+          default: true
+          description: Convert layers to a sparse CSR format.
+    - name: Outputs
+      arguments:
+        - name: "--output"
+          __inherits__: ../../api/anndata_raw.yaml
+          direction: "output"
+  resources:
+    - type: python_script
+      path: script.py
+  test_resources:
+    - type: python_script
+      path: test.py
+platforms:
+  - type: docker
+    image: singlecellopenproblems/openproblems
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - "anndata>=0.8"
+  - type: nextflow

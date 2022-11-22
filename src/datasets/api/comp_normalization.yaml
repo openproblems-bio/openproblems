@@ -1,0 +1,55 @@
+functionality:
+  arguments:
+    - name: "--input"
+      __inherits__: anndata_raw.yaml
+    - name: "--output"
+      direction: output
+      __inherits__: anndata_normalized.yaml
+    - name: "--layer_output"
+      type: string
+      default: "normalized"
+      description: The name of the layer in which to store the normalized data.
+    - name: "--obs_size_factors"
+      type: string
+      default: "size_factors"
+      description: In which .obs slot to store the size factors (if any).
+  test_resources:
+    - type: python_script
+      path: generic_test.py
+      text: |
+        import anndata as ad
+        import subprocess
+        from os import path
+
+        input_path = meta["resources_dir"] + "/pancreas/dataset.h5ad"
+        output_path = "output.h5ad"
+        output_layer = "norm_layer"
+
+        cmd = [
+          meta['executable'],
+          "--input", input_path,
+          "--output", output_path,
+          "--layer_output", output_layer
+        ]
+
+        print(">> Running script as test")
+        out = subprocess.check_output(cmd).decode("utf-8")
+
+        print(">> Checking whether output file exists")
+        assert path.exists(output_path)
+
+        print(">> Reading h5ad files")
+        input = ad.read_h5ad(input_path)
+        output = ad.read_h5ad(output_path)
+        print("input:", input)
+        print("output:", output)
+
+        print(">> Checking whether output data structures were added")
+        assert output_layer in output.layers
+
+        print("Checking whether data from input was copied properly to output")
+        assert input.n_obs == output.n_obs
+        assert input.uns["dataset_id"] == output.uns["dataset_id"]
+
+        print("All checks succeeded!")
+    - path: ../../../../resources_test/common/pancreas

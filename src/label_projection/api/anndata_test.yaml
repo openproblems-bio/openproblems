@@ -1,5 +1,5 @@
 type: file
-description: "The censored test data"
+description: "The test data (without labels)"
 example: "test.h5ad"
 info:
   short_description: "Test data"
@@ -9,8 +9,8 @@ info:
         name: counts
         description: Raw counts
       - type: double
-        name: lognorm
-        description: Log-transformed normalised counts
+        name: normalized
+        description: Normalized counts
     obs:
       - type: string
         name: batch
@@ -19,6 +19,3 @@ info:
       - type: string
         name: dataset_id
         description: "A unique identifier for the dataset"
-      - type: string
-        name: raw_dataset_id
-        description: "A unique identifier for the original dataset (before preprocessing)"

@@ -1,0 +1,21 @@
+__inherits__: ../../api/comp_normalization.yaml
+functionality:
+  name: "log_scran_pooling"
+  namespace: "datasets/normalization"
+  description: "Normalize data using scran pooling"
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: eddelbuettel/r2u:22.04
+    setup:
+      - type: r
+        cran: [ Matrix, scran, BiocParallel, rlang, anndata, bit64 ]
+      - type: apt
+        packages: [ libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3 ]
+      - type: python
+        pip: [ anndata>=0.8, scanpy ]
+  - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

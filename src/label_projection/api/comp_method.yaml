@@ -16,9 +16,9 @@ functionality:
         import subprocess
         from os import path
 
-        input_train_path = meta["resources_dir"] + "/pancreas/dataset_cpm_train.h5ad"
-        input_test_path = meta["resources_dir"] + "/pancreas/dataset_cpm_test.h5ad"
-        input_solution_path = meta["resources_dir"] + "/pancreas/dataset_cpm_solution.h5ad"
+        input_train_path = meta["resources_dir"] + "/pancreas/train.h5ad"
+        input_test_path = meta["resources_dir"] + "/pancreas/test.h5ad"
+        input_solution_path = meta["resources_dir"] + "/pancreas/solution.h5ad"
         output_path = "output.h5ad"
 
         cmd = [
@@ -52,6 +52,5 @@ functionality:
         print("Checking whether data from input was copied properly to output")
         assert input_test.n_obs == output.n_obs
         assert input_test.uns["dataset_id"] == output.uns["dataset_id"]
-        assert input_test.uns["raw_dataset_id"] == output.uns["raw_dataset_id"]
 
         print("All checks succeeded!")

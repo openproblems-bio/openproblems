@@ -13,7 +13,8 @@ par = {
     "obs_celltype": "celltype",
     "obs_batch": "tech",
     "layer_counts": "counts",
-    "output": "test_data.h5ad"
+    "output": "test_data.h5ad",
+    "layer_counts_output": "counts"
 }
 ## VIASH END
 
@@ -31,16 +32,8 @@ with tempfile.TemporaryDirectory() as tempdir:
     print("Reading file")
     adata = sc.read_h5ad(filepath)
 
-if "counts" in adata.layers:
-    print("Copying .layers['counts'] to .X")
-    adata.X = adata.layers["counts"]
-    del adata.layers["counts"]
-
 print("Setting .uns['dataset_id']")
 adata.uns["dataset_id"] = par["name"]
-
-print("Setting .uns['raw_dataset_id']")
-adata.uns["raw_dataset_id"] = par["name"]
 
 print("Setting .obs['celltype']")
 if par["obs_celltype"]:
@@ -64,12 +57,19 @@ if par["obs_tissue"]:
         print(f"Warning: key '{par['obs_tissue']}' could not be found in adata.obs.")
 
 print("Remove cells or genes with 0 counts")
+if par["layer_counts"] and par["layer_counts"] in adata.layers:
+    print(f"  Temporarily copying .layers['{par['layer_counts']}'] to .X")
+    adata.X = adata.layers[par["layer_counts"]]
+    del adata.layers[par["layer_counts"]]
+
+print("  Removing empty genes")
 sc.pp.filter_genes(adata, min_cells=1)
+print("  Removing empty cells")
 sc.pp.filter_cells(adata, min_counts=2)
 
-if par["layer_counts"]:
-    print(f"Copying .X back to .layers['{par['layer_counts']}']")
-    adata.layers[par["layer_counts"]] = adata.X
+if par["layer_counts_output"]:
+    print(f"  Copying .X back to .layers['{par['layer_counts_output']}']")
+    adata.layers[par["layer_counts_output"]] = adata.X
     del adata.X
 
 print("Writing adata to file")

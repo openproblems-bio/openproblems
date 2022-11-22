@@ -1,0 +1,57 @@
+__inherits__: ../../api/comp_method.yaml
+functionality:
+  name: "scanvi"
+  status: disabled
+  namespace: "label_projection/methods"
+  description: "Probabilistic harmonization and annotation of single-cell transcriptomics data with deep generative models."
+  info:
+    type: method
+    label: Scanvi
+    paper_doi: "10.1101/2020.07.16.205997"
+    code_url: "https://github.com/YosefLab/scvi-tools"
+  arguments:
+    - name: "--n_hidden"
+      type: "integer"
+      required: true
+      default: "10"
+    - name: "--n_layers"
+      type: "integer"
+      required: true
+      default: "1"
+    - name: "--n_latent"
+      type: "integer"
+      required: true
+      default: "10"
+    - name: "--n_top_genes"
+      type: "integer"
+      required: true
+      default: "2000"
+    - name: "--span"
+      type: "double"
+      required: false
+    - name: "--max_epochs"
+      type: "integer"
+      required: false
+    - name: "--limit_brain_batches"
+      type: "integer"
+      required: false
+    - name: "--limit_val_batches"
+      type: "integer"
+      required: false
+  resources:
+    - type: python_script
+      path: script.py
+    - path: "../tools.py"
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scikit-learn
+          - "anndata>=0.8"
+          - scanpy
+          - scprep
+          - scvi-tools
+          - scikit-misc
+  - type: nextflow

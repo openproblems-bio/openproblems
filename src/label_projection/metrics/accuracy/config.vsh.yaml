@@ -23,5 +23,5 @@ platforms:
       - type: python
         packages:
           - scikit-learn
-          - "anndata<0.8"
+          - "anndata>=0.8"
   - type: nextflow
