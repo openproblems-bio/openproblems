@@ -1,8 +1,8 @@
 type: file
-description: "A dimensionality reduced dataset"
-example: "reduced.h5ad"
+description: "A normalised data with a PCA embedding and HVG selection"
+example: "dataset.h5ad"
 info:
-  label: "Dataset+HVG+X_emb"
+  label: "Dataset+PCA+HVG"
   slots:
     layers: 
       - type: integer
@@ -40,17 +40,24 @@ info:
         required: true
     obsm:
       - type: double
-        name: X_emb
-        description: 2D embedding coordinates
+        name: X_pca
+        description: The resulting PCA embedding.
+        required: true
+    varm:
+      - type: double
+        name: pca_loadings
+        description: The PCA loadings matrix.
+        required: true
     uns:
       - type: string
         name: dataset_id
         description: "A unique identifier for the dataset"
-      - type: string
-        name: method_id
-        description: "A unique identifier for the method"
+        required: true
       - type: string
         name: normalization_id
         description: "Which normalization was used"
         required: true
-
+      - type: double
+        name: pca_variance
+        description: The PCA variance objects.
+        required: true
