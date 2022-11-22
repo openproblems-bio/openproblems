@@ -314,6 +314,7 @@ jobs:
     - name: Upload coverage to GitHub Actions
       uses: actions/upload-artifact@main
       with:
+        name: coverage_${{ matrix.tests }}
         path: coverage/coverage.${{ matrix.tests }}.xml
 
   upload_coverage:
@@ -337,6 +338,11 @@ jobs:
         flags: unittests
         fail_ci_if_error: ${{ github.repository == 'openproblems-bio/openproblems' }}
         verbose: true
+
+    - name: Delete coverage artifacts
+      uses: geekyeggo/delete-artifact@v2
+      with:
+          name: "coverage_*"
 
   run_benchmark:
     needs: run_tester
