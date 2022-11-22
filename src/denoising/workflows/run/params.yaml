@@ -1,4 +1,4 @@
 param_list:
 - id: pancreas
-  input_train: output/nextflow/pancreas_split_data_output_train.h5d
-  input_test: resources/label_projection/openproblems_v1/pancreas.split_dataset.output_test.h5ad
+  input_train: output/denoising/pancreas.split_data.output_train.h5ad
+  input_test: output/denoising/pancreas.split_data.output_test.h5ad

@@ -21,12 +21,14 @@ functionality:
     - name: "--solver"
       type: "string"
       choices: ["exact", "approximate"]
+      default: "exact"
       description: Which solver to use.
       required: true
     - name: "--norm"
       type: string
       required: true
       choices: ["sqrt", "log"]
+      default: "sqrt"
       description: Normalization method
   resources:
     - type: python_script
