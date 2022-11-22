@@ -8,14 +8,22 @@ info:
       - type: string
         name: dataset_id
         description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: normalization_id
+        description: "Which normalization was used"
+        required: true
       - type: string
         name: method_id
         description: "A unique identifier for the method"
+        required: true
       - type: string
         name: metric_ids
         description: "One or more unique metric identifiers"
         multiple: true
+        required: true
       - type: double
         name: metric_values
         description: "The metric values obtained for the given prediction. Must be of same length as 'metric_ids'."
         multiple: true
+        required: true
