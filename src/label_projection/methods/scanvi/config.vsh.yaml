@@ -29,7 +29,7 @@ platforms:
       - type: python
         packages: 
           - "anndata>=0.8"
-          - scvi-tools
+          - scarches
   - type: nextflow
     directives: 
       label: [ midmem, highcpu, gpu ]
