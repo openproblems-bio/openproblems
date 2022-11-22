@@ -26,7 +26,7 @@
 ``` mermaid
 %%| column: screen-inset-shaded
 flowchart LR
-  anndata_hvg(Dataset+Pca+Hvg)
+  anndata_dataset(Dataset+Pca+Hvg)
   anndata_normalized(Normalized Dataset)
   anndata_pca(Dataset+Pca)
   anndata_raw(Raw Dataset)
@@ -39,7 +39,7 @@ flowchart LR
   anndata_normalized---comp_processor_pca
   comp_dataset_loader-->anndata_raw
   comp_normalization-->anndata_normalized
-  comp_processor_hvg-->anndata_hvg
+  comp_processor_hvg-->anndata_dataset
   comp_processor_pca-->anndata_pca
 ```
 
@@ -64,7 +64,7 @@ Slots:
 | obs    | tissue           | string  | Tissue information                                                      |
 | obs    | size_factors     | double  | The size factors created by the normalisation method, if any.           |
 | var    | hvg              | boolean | Whether or not the feature is considered to be a ‘highly variable gene’ |
-| var    | hvg_score      | integer | A ranking of the features by hvg.                                       |
+| var    | hvg_score        | integer | A ranking of the features by hvg.                                       |
 | obsm   | X_pca            | double  | The resulting PCA embedding.                                            |
 | varm   | pca_loadings     | double  | The PCA loadings matrix.                                                |
 | uns    | dataset_id       | string  | A unique identifier for the dataset                                     |
@@ -195,14 +195,14 @@ Arguments:
 
 Arguments:
 
-| Name                | Type                                | Direction | Description                                                                |
-|:--------------------|:------------------------------------|:----------|:---------------------------------------------------------------------------|
-| `--input`           | [Dataset+Pca](#Dataset+PCA)         | input     | A normalised data with a PCA embedding                                     |
-| `--layer_input`     | `string`                            | input     | Which layer to use as input for the PCA.                                   |
-| `--output`          | [Dataset+Pca+Hvg](#Dataset+PCA+HVG) | output    | A normalised data with a PCA embedding and HVG selection                   |
-| `--var_hvg`         | `string`                            | input     | In which .var slot to store whether a feature is considered to be hvg.     |
+| Name              | Type                                | Direction | Description                                                                |
+|:------------------|:------------------------------------|:----------|:---------------------------------------------------------------------------|
+| `--input`         | [Dataset+Pca](#Dataset+PCA)         | input     | A normalised data with a PCA embedding                                     |
+| `--layer_input`   | `string`                            | input     | Which layer to use as input for the PCA.                                   |
+| `--output`        | [Dataset+Pca+Hvg](#Dataset+PCA+HVG) | output    | A normalised data with a PCA embedding and HVG selection                   |
+| `--var_hvg`       | `string`                            | input     | In which .var slot to store whether a feature is considered to be hvg.     |
 | `--var_hvg_score` | `string`                            | input     | In which .var slot to store whether a ranking of the features by variance. |
-| `--num_features`    | `integer`                           | input     | The number of HVG to select                                                |
+| `--num_features`  | `integer`                           | input     | The number of HVG to select                                                |
 
 ### `Processor Pca`
 
