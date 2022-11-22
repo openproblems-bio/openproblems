@@ -13,15 +13,17 @@ functionality:
     code_url: "https://github.com/czbiohub/molecular-cross-validation"
     v1_url: /openproblems/tasks/denoising/methods/baseline.py
     v1_commit: f24fb718b1115ca85130a45f2e56fddb00075d22
+    preferred_normalization: counts
   arguments:
     - name: "--layer_input"
       type: string
-      default: "denoised"
+      default: "counts"
       description: "Which layer to use as input."
     - name: "--baseline"
       type: "string"
       required: true
       choices: ["no_denoising", "perfect_denoising"]
+      default: "perfect_denoising"
       description: "wich baseline needs to be created"
   resources:
     - type: python_script
