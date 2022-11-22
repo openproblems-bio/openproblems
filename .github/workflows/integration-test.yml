@@ -37,7 +37,7 @@ jobs:
       run: |
         bin/viash run \
           -p native \
-          src/download/sync_test_resources/config.vsh.yaml -- \
+          src/common/sync_test_resources/config.vsh.yaml -- \
           --input $s3_bucket \
           --delete
         tree resources_test/ -L 3

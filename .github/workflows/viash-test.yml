@@ -65,12 +65,9 @@ jobs:
     # sync if need be
     - name: Sync test resources
       run: |
-        bin/viash config view \
-          src/download/sync_test_resources/config.vsh.yaml
-
         bin/viash run \
           -p native \
-          src/download/sync_test_resources/config.vsh.yaml -- \
+          src/common/sync_test_resources/config.vsh.yaml -- \
           --input $s3_bucket \
           --delete
         tree resources_test/ -L 3
