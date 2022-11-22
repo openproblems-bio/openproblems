@@ -15,7 +15,7 @@ jobs:
       - name: 'Check if branch has an existing pull request and the trigger was a push'
         id: github_cli
         run: |
-          pull_request=$(gh pr list -R openpipelines-bio/openpipeline -H ${{ github.ref_name }} --json url --state open --limit 1 | jq '.[0].url')
+          pull_request=$(gh pr list -R ${{ github.repository }} -H ${{ github.ref_name }} --json url --state open --limit 1 | jq '.[0].url')
           # If the branch has a PR and this run was triggered by a push event, do not run
           if [[ "$pull_request" != "null" && "${{ github.event_name == 'push' }}" == "true" && "${{ !contains(github.event.head_commit.message, 'ci force') }}" == "true" ]]; then
             echo "check=false" >> $GITHUB_OUTPUT
