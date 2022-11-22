@@ -14,7 +14,6 @@ from . import utils
     image="openproblems-python-extras",
 )
 def pancreas(test=False):
-    adata = load_pancreas(test=test)
-    adata = adata[adata.obs["tech"].isin(["inDrop1"])]
-    adata = utils.split_data(adata)
+    adata = tmur_den.load_pancreas(test=test, keep_techs=["inDrop1"])
+    adata = tmur_den.split_data(adata)
     return adata
