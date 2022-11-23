@@ -6,6 +6,8 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
+export TOWER_WORKSPACE_ID=53907369739130
+
 DATASETS_DIR="resources/label_projection/datasets/openproblems_v1"
 OUTPUT_DIR="resources/label_projection/benchmarks/openproblems_v1"
 
@@ -22,11 +24,12 @@ import yaml
 dataset_dir = "$DATASETS_DIR"
 output_dir = "$OUTPUT_DIR"
 
-with open(dataset_dir + "/params_split.yaml", "r") as file:
+# read split datasets yaml
+with open(dataset_dir + "/params.yaml", "r") as file:
   split_list = yaml.safe_load(file)
 datasets = split_list['param_list']
 
-
+# figure out where train/test/solution files were stored
 param_list = []
 
 for dataset in datasets:
@@ -45,6 +48,7 @@ for dataset in datasets:
   }
   param_list.append(obj)
 
+# write as output file
 output = {
   "param_list": param_list,
 }
@@ -59,6 +63,20 @@ bin/nextflow \
   run . \
   -main-script src/label_projection/workflows/run/main.nf \
   -profile docker \
-  -resume \
   -params-file "$params_file" \
-  --publish_dir "$OUTPUT_DIR"
+  --publish_dir "$OUTPUT_DIR" \
+  -with-tower
+
+bin/tools/docker/nextflow/process_log/process_log \
+  --output "$OUTPUT_DIR/nextflow_log.tsv"
+
+# bin/viash_build -q label_projection -c '.platforms[.type == "nextflow"].directives.tag := "id: $id, args: $args"'
+# bin/viash_build -q label_projection -c '.platforms[.type == "nextflow"].directives.tag := "$id"'
+
+# bin/nextflow run . \
+#   -main-script target/nextflow/label_projection/control_methods/majority_vote/main.nf \
+#   -profile docker \
+#   --input_train resources_test/label_projection/pancreas/train.h5ad \
+#   --input_test resources_test/label_projection/pancreas/test.h5ad \
+#   --input_solution resources_test/label_projection/pancreas/solution.h5ad \
+#   --publish_dir foo

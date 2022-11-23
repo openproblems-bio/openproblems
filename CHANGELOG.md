@@ -32,13 +32,17 @@
 
 * `methods/mlp`: Migrated from v1.
 
+* `methods/scanvi`: Migrated and adapted from v1.
+
+* `methods/seurat_transferdata`: Migrated and adapted from v1.
+
+* `methods/xgboost`: Migrated from v1.
+
 * `control_methods/majority_vote`: Migrated from v1.
 
 * `control_methods/random_labels`: Migrated from v1.
 
 * `control_methods/true_labels`: Migrated from v1.
-
-* Temporarily disable `scanvi` / `scarches_scanvi`.
 
 * `metric/accuracy`: Migrated from v1.
 

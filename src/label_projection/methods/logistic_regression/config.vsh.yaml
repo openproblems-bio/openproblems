@@ -6,18 +6,14 @@ functionality:
   info:
     type: method
     label: Logistic Regression
-    # paper_name: "Applied Logistic Regression"
-    # paper_url: "https://books.google.com/books?id=64JYAwAAQBAJ"
-    # paper_year: 2013
-    code_url: "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html"
+    paper_name: "Applied Logistic Regression"
+    paper_url: "https://books.google.com/books?id=64JYAwAAQBAJ"
+    paper_year: 2013
+    code_url: https://github.com/scikit-learn/scikit-learn
+    doc_url: "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html"
     v1_url: openproblems/tasks/label_projection/methods/logistic_regression.py
     v1_commit: 2097bbb3e996f66e98128c9ac95bc9640a496e0d
     preferred_normalization: log_cpm
-  arguments:
-    - name: "--max_iter"
-      type: "integer"
-      default: 1000
-      description: "Maximum number of iterations"
   resources:
     - type: python_script
       path: script.py
@@ -30,3 +26,5 @@ platforms:
           - scikit-learn
           - "anndata>=0.8"
   - type: nextflow
+    directives: 
+      label: [ midmem, lowcpu ]

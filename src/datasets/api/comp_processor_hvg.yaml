@@ -8,7 +8,7 @@ functionality:
       description: Which layer to use as input for the PCA.
     - name: "--output"
       direction: output
-      __inherits__: anndata_hvg.yaml
+      __inherits__: anndata_dataset.yaml
     - name: "--var_hvg"
       type: string
       default: "hvg"
