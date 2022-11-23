@@ -1,4 +1,4 @@
-__inherits__: ../../api/comp_method.yaml
+__inherits__: ../../api/comp_control_method.yaml
 functionality:
   name: "perfect_denoising"
   namespace: "denoising/control_methods"
@@ -6,11 +6,6 @@ functionality:
   info:
     type: positive_control
     label: perfect denoising
-    # paper_name: "Molecular Cross-Validation for Single-Cell RNA-seq""
-    # paper_url: "https://doi.org/10.1101/786269"
-    # paper_year: 2019
-    paper_doi: "10.1101/786269"
-    code_url: "https://github.com/czbiohub/molecular-cross-validation"
     v1_url: /openproblems/tasks/denoising/methods/baseline.py
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
     preferred_normalization: counts

@@ -64,20 +64,6 @@ del output_test.layers["counts"]
 output_test.layers["counts"] = scipy.sparse.csr_matrix(X_test).astype(float)
 
 
-# NOTE: remove cells which have not enough reads -> is it possible to remove same cells/genes in test set as in train set a above ?
-#   * first, remove genes with 0 expression
-#   * then, remove cells with 1 count or less
-
-# def filter_genes_cells(adata):
-#     """Remove empty cells and genes."""
-#     sc.pp.filter_genes(adata, min_cells=1)
-#     sc.pp.filter_cells(adata, min_counts=1)
-#     return adata
-
-
-# filter_genes_cells(output_train)
-
 print(">> Writing")
-
 output_train.write_h5ad(par["output_train"])
 output_test.write_h5ad(par["output_test"])
