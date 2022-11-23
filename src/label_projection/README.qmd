@@ -79,7 +79,7 @@ metric_info_view <-
   metric_info %>%
     transmute(
       Name = paste0("[", label, "](", comp_yaml, ")"),
-      Description = paste0(description, " ", ifelse(maximise, "Higher is better.", "Lower is better.")),
+      Description = paste0(description, " ", ifelse(maximize, "Higher is better.", "Lower is better.")),
       Range = paste0("[", min, ", ", max, "]")
     )
 
