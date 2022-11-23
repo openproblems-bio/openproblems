@@ -20,10 +20,8 @@ functionality:
       choices: ["exact", "approximate"]
       default: "exact"
       description: Which solver to use.
-      required: true
     - name: "--norm"
       type: string
-      required: true
       choices: ["sqrt", "log"]
       default: "sqrt"
       description: Normalization method
