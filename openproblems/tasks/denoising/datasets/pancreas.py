@@ -4,7 +4,7 @@ from . import utils
 
 
 @dataset(
-    dataset_name="Pancreas (by batch)",
+    dataset_name="Pancreas (inDrop)",
     data_url=load_pancreas.metadata["data_url"],
     data_reference=load_pancreas.metadata["data_reference"],
     dataset_summary="Human pancreatic islet scRNA-seq data from 6 datasets "
