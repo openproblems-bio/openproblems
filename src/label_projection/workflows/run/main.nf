@@ -36,20 +36,46 @@ workflow {
     | run_wf
 }
 
+/** 
+  * Helper function for making sure the right data gets passed to a method
+  */
+def configureMethod = { module ->
+  // if method is a control method, add the solution to the data field
+  def methodType = module.config.functionality.info.type
+  def mapFun = null
+  if (methodType != "method") {
+    mapFun = { tup ->
+      out = tup.clone()
+      out[1] = out[1] + [input_solution: out[2].metric.input_solution]
+      out
+    }
+  }
+
+  // only let datasets with the right preferred normalization through
+  // if preferred is 'counts', use any normalization method
+  def preferred = module.config.functionality.info.preferred_normalization
+  if (preferred == "counts") {
+    preferred = "log_cpm"
+  }
+
+  def filterFun = { tup ->
+    tup[1].normalization_id == preferred
+  }
+
+  // return module
+  module.run(
+    map: mapFun,
+    filter: filterFun
+  )
+}
 
 workflow run_wf {
   take:
   input_ch
 
   main:
-  def addSolution = { tup ->
-    out = tup.clone()
-    out[1] = out[1] + [input_solution: out[2].metric.input_solution]
-    out
-  }
 
   output_ch = input_ch
-    | filter{it[1].normalization_id == "log_cpm"}
     
     // split params for downstream components
     | setWorkflowArguments(
@@ -59,18 +85,17 @@ workflow run_wf {
     )
 
     // run methods
-    // TODO: these filters don't work atm.
     | getWorkflowArguments(key: "method")
     | (
-      true_labels.run(map: addSolution, filter: {it[1].normalization_id == "log_cpm"}) & 
-      random_labels.run(filter: {it[1].normalization_id == "log_cpm"}) & 
-      majority_vote.run(filter: {it[1].normalization_id == "log_cpm"}) & 
-      knn.run(filter: {it[1].normalization_id == "log_cpm"}) & 
-      logistic_regression.run(filter: {it[1].normalization_id == "log_cpm"}) &
-      mlp.run(filter: {it[1].normalization_id == "log_cpm"}) &
-      scanvi.run(filter: {it[1].normalization_id == "log_cpm"}) & 
-      seurat_transferdata.run(filter: {it[1].normalization_id == "log_cpm"}) &
-      xgboost.run(filter: {it[1].normalization_id == "log_cpm"})
+      configureMethod(true_labels) &
+      configureMethod(random_labels) &
+      configureMethod(majority_vote) &
+      configureMethod(knn) &
+      configureMethod(logistic_regression) &
+      configureMethod(mlp) &
+      configureMethod(scanvi) &
+      configureMethod(seurat_transferdata) &
+      configureMethod(xgboost)
     )
     | mix
 
