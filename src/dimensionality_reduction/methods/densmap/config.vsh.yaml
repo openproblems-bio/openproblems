@@ -1,0 +1,27 @@
+__inherits__: ../../api/comp_method.yaml
+functionality:
+  name: "densmap"
+  namespace: "dimensionality_reduction/methods"
+  description: "density-preserving based on UMAP"
+  info:
+    type: method
+    label: densMAP
+    v1_url: openproblems/tasks/dimensionality_reduction/methods/densmap.py
+    v1_commit: 
+    preferred_normalization: log_cpm
+  arguments:
+    - name: "--no_pca"
+      type: boolean_true
+      description: Do not apply PCA with 50 dimensions before running UMAP.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - "anndata>=0.8"
+  - type: nextflow
