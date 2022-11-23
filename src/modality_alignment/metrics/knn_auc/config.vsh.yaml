@@ -10,7 +10,7 @@ functionality:
   info:
     method_label: "KNN-AUC"
     metric_name: "kNN Area Under the Curve"
-    maximise: "true"
+    maximize: "true"
   arguments:
     - name: "--input"
       alternatives: ["-i"]

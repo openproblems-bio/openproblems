@@ -1,18 +1,23 @@
 __inherits__: ../../api/comp_method.yaml
 functionality:
-  status: disabled
   name: "alra"
   namespace: "denoising/methods"
-  description: ""
+  description: |
+    Adaptively-thresholded Low Rank Approximation (ALRA). 
+    
+    ALRA is a method for imputation of missing values in single cell RNA-sequencing data, 
+    described in the preprint, "Zero-preserving imputation of scRNA-seq data using low-rank approximation" 
+    available [here](https://www.biorxiv.org/content/early/2018/08/22/397588). Given a 
+    scRNA-seq expression matrix, ALRA first computes its rank-k approximation using randomized SVD. 
+    Next, each row (gene) is thresholded by the magnitude of the most negative value of that gene. 
+    Finally, the matrix is rescaled.
   info:
     type: method
-    label: DCA
-    # paper_name: "Single-cell RNA-seq denoising using a deep count autoencoder""
-    # paper_url: "https://www.nature.com/articles/s41467-018-07931-2"
-    # paper_year: 2019
-    paper_doi: "0.1038/s41467-018-07931-2"
-    code_url: "https://github.com/theislab/dca"
-    v1_url: /openproblems/tasks/denoising/methods/dca.py
+    label: ALRA
+    paper_doi: "10.1101/397588"
+    code_url: "https://github.com/KlugerLab/ALRA"
+    doc_url: https://github.com/KlugerLab/ALRA/blob/master/README.md
+    v1_url: /openproblems/tasks/denoising/methods/alra.py
     v1_commit: 411a416150ecabce25e1f59bde422a029d0a8baa
     preferred_normalization: counts
   arguments:
@@ -25,14 +30,18 @@ functionality:
       default: 300
       description: "Number of total epochs in training"
   resources:
-    - type: python_script
-      path: script.py
+    - type: r_script
+      path: script.R
 platforms:
   - type: docker
-    image: "python:3.8"
+    image: eddelbuettel/r2u:22.04
     setup:
+      - type: apt
+        packages: [ libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3, git ]
       - type: python
-        packages:
-          - "anndata>=0.8"
-          - dca==0.3.4
+        pip: [ anndata>=0.8 ]
+      - type: r
+        cran: [ Matrix, anndata, bit64, rsvd ]
+      - type: docker
+        run: git clone https://github.com/KlugerLab/ALRA.git /ALRA
   - type: nextflow

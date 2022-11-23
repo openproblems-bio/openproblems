@@ -10,7 +10,7 @@ functionality:
   info:
     method_label: "MSE"
     metric_name: "Mean Squared Error"
-    maximise: "true"
+    maximize: "true"
   arguments:
     - name: "--input"
       alternatives: ["-i"]

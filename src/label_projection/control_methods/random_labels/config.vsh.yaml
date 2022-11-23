@@ -21,3 +21,5 @@ platforms:
           - scanpy
           - "anndata>=0.8"
   - type: nextflow
+    directives: 
+      label: [ lowmem, lowcpu ]
