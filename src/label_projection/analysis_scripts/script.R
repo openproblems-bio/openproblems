@@ -66,10 +66,10 @@ metric_info <- map_df(ns_list_metrics, function(conf) {
 
 # get data table
 ranking <- scores %>%
-  left_join(metric_info %>% select(metric_id = id, maximise), by = "metric_id") %>%
+  left_join(metric_info %>% select(metric_id = id, maximize), by = "metric_id") %>%
   inner_join(method_info %>% select(method_id = id, method_label = label), by = "method_id") %>%
   group_by(metric_id, dataset_id) %>%
-  mutate(rank = rank(ifelse(maximise, -metric_value, metric_value))) %>%
+  mutate(rank = rank(ifelse(maximize, -metric_value, metric_value))) %>%
   ungroup() %>%
   group_by(method_id, method_label) %>%
   summarise(mean_rank = mean(rank), .groups = "drop") %>%

@@ -1,6 +1,11 @@
-name: integration test
+name: release build
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: Version tag
+        required: true
 
 jobs:
   # phase 1
@@ -16,6 +21,12 @@ jobs:
       run: |
         bin/init
         bin/viash -h
+
+    - name: Fetch viash tools
+      run: |
+
+        bin/init_tools ${{ secrets.GTHB_USER }} ${{ secrets.GTHB_PAT }}
+        tree bin/tools
 
     # create cachehash key
     - name: Create hash key
@@ -51,14 +62,31 @@ jobs:
         sed -i 's#--setup "\\$setup_strat"#--setup donothing#' bin/viash_build
 
         # build target dir
-        bin/viash_build -m release -t integration_build
+        bin/viash_build -m release -t ${{ github.event.inputs.version_tag }}
+
+    - name: Build nextflow schemas & params
+      run: |
+        bin/viash ns list -s src -p nextflow --format json 2> /dev/null > /tmp/ns_list_src.json
+        inputs=$(jq -r '[.[] | .info.config] | join(";")' /tmp/ns_list_src.json)
+        outputs_params=$(jq -r '[.[] | "target/nextflow/" + .functionality.namespace + "/" + .functionality.name + "/nextflow_params.yaml"] | join(";")' /tmp/ns_list_src.json)
+        outputs_schema=$(jq -r '[.[] | "target/nextflow/" + .functionality.namespace + "/" + .functionality.name + "/nextflow_schema.json"] | join(";")' /tmp/ns_list_src.json)
+        bin/tools/docker/nextflow/generate_params/generate_params --input "$inputs" --output "$outputs_params"
+        bin/tools/docker/nextflow/generate_schema/generate_schema --input "$inputs" --output "$outputs_schema"
+
+        bin/viash ns list -s workflows --format json 2> /dev/null > /tmp/ns_list_workflow.json
+        inputs=$(jq -r '[.[] | .info.config] | join(";")' /tmp/ns_list_workflow.json)
+        outputs_params=$(jq -r '[.[] | .info.config | capture("^(?<dir>.*\/)").dir + "/nextflow_params.yaml"] | join(";")' /tmp/ns_list_workflow.json)
+        outputs_schema=$(jq -r '[.[] | .info.config | capture("^(?<dir>.*\/)").dir + "/nextflow_schema.json"] | join(";")' /tmp/ns_list_workflow.json)
+        bin/tools/docker/nextflow/generate_params/generate_params --input "$inputs" --output "$outputs_params"
+        bin/tools/docker/nextflow/generate_schema/generate_schema --input "$inputs" --output "$outputs_schema"
 
     - name: Deploy to target branch
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: .
-        publish_branch: integration_build
+        publish_branch: release
+        full_commit_message: "Deploy for release ${{ github.event.inputs.version_tag }} from ${{ github.sha }}"
 
     # store component locations
     - id: set_matrix
@@ -94,7 +122,7 @@ jobs:
     - name: Build container
       run: |
         SRC_DIR=`dirname ${{ matrix.component.config }}`
-        bin/viash_build -m release -t integration_build -s "$SRC_DIR"
+        bin/viash_build -m release -t ${{ github.event.inputs.version_tag }} -s "$SRC_DIR"
         
     - name: Login to container registry
       uses: docker/login-action@v2
@@ -106,12 +134,13 @@ jobs:
     - name: Push containers
       run: |
         SRC_DIR=`dirname ${{ matrix.component.config }}`
-        bin/viash_push -m release -t integration_build -s "$SRC_DIR" --force
+        bin/viash_push -m release -t ${{ github.event.inputs.version_tag }} -s "$SRC_DIR" --force
 
-  ###################################
+  ###################################3
   # phase 3
   integration_test:
     needs: [ build_containers, list_components ]
+    if: "${{ needs.list_components.outputs.workflow_matrix != '[]' }}"
 
     runs-on: ubuntu-latest
 
@@ -129,14 +158,14 @@ jobs:
         bin/viash -h
 
     # build target dir
-    # use containers from integration_build branch, hopefully these are available
+    # use containers from release branch, hopefully these are available
     - name: Build target dir
       run: |
         # force override viash build strategy to not build containers
         sed -i 's#--setup "\\$setup_strat"#--setup donothing#' bin/viash_build
 
         # build target dir
-        bin/viash_build -m release -t integration_build
+        bin/viash_build -m release -t ${{ github.event.inputs.version_tag }}
 
     # use cache
     - name: Cache resources data
@@ -158,3 +187,40 @@ jobs:
           -entry ${{ matrix.component.entry }} \
           -profile docker,mount_temp,no_publish \
           -c workflows/utils/labels_ci.config
+
+  ###################################3
+  # phase 4
+  component_test:
+    needs: [ build_containers, list_components ]
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        component: ${{ fromJson(needs.list_components.outputs.component_matrix) }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Fetch viash
+      run: |
+        bin/init
+        bin/viash -h
+
+    # use cache
+    - name: Cache resources data
+      uses: actions/cache@v3
+      timeout-minutes: 5
+      with:
+        path: resources_test
+        key: ${{ needs.list_components.outputs.cachehash }}
+
+    - name: Test component
+      timeout-minutes: 30
+      run: |
+        SRC_DIR=`dirname ${{ matrix.component.config }}`
+        bin/viash_test -m release -t ${{ github.event.inputs.version_tag }} \
+          -s "$SRC_DIR" \
+          -c '.functionality.requirements.cpus := 2' \
+          -c '.functionality.requirements.memory := "5gb"'
