@@ -2,8 +2,8 @@ import anndata as ad
 
 ## VIASH START
 par = {
-    'input_train': 'output_train.h5ad',
-    'input_test': 'output_test.h5ad',
+    'input_train': 'output/denoising/pancreas.split_data.output_train.h5ad',
+    'input_test': 'output/denoising/pancreas.split_data.output_test.h5ad',
     'output': 'output_baseline_PD.h5ad',
 }
 meta = {
