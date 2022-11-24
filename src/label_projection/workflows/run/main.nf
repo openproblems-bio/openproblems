@@ -68,9 +68,11 @@ workflow run_wf {
     | controls_can_cheat
 
     // run methods
+    | getWorkflowArguments(key: "method")
     | run_methods
 
     // run metrics
+    | getWorkflowArguments(key: "metric", inputKey: "input_prediction")
     | run_metrics
 
     // convert to tsv  
@@ -149,7 +151,6 @@ workflow run_metrics {
   main:
 
   output_ch = input_ch
-    | getWorkflowArguments(key: "metric", inputKey: "input_prediction")
     | (accuracy & f1)
     | mix
 
