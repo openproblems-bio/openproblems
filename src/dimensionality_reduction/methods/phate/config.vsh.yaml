@@ -1,0 +1,35 @@
+__inherits__: ../../api/comp_method.yaml
+functionality:
+  name: "phate"
+  namespace: "dimensionality_reduction/methods"
+  description: ""
+  info:
+    type: method
+    label: PHATE
+    v1_url: openproblems/tasks/dimensionality_reduction/methods/phate.py
+    v1_commit: 4baa8619e232fec2e3bcb3fb73d2f991d16c6f69
+    preferred_normalization: log_cpm
+  arguments:
+    - name: '--hvg'
+      type: boolean_true
+      description: Use logCPM of 1000 HVGs instead of the square-root CPM transformed expression matrix.
+    - name: '--n_pca'
+      type: integer
+      default: 50
+      description: Number of principal components of PCA to use.
+    - name: '--g0'
+      type: boolean_true
+      description: Set informational distance constant to 0.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - "anndata>=0.8"
+          - phate
+          - scprep
+  - type: nextflow
