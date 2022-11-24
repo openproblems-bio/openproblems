@@ -7,7 +7,7 @@ functionality:
     type: method
     label: densMAP
     v1_url: openproblems/tasks/dimensionality_reduction/methods/densmap.py
-    v1_commit: 
+    v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
     preferred_normalization: log_cpm
   arguments:
     - name: "--no_pca"
