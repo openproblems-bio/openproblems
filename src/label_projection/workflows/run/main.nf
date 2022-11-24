@@ -25,9 +25,15 @@ include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
 
 // import helper functions
 include { readConfig; viashChannel; helpMessage } from sourceDir + "/nxf_utils/WorkflowHelper.nf"
-include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from sourceDir + "/nxf_utils/DataFlowHelper.nf"
+include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap; passthroughFilter as pfilter } from sourceDir + "/nxf_utils/DataFlowHelper.nf"
 
 config = readConfig("$projectDir/config.vsh.yaml")
+
+// construct a map of methods (id -> method_module)
+methods = [ true_labels, majority_vote, random_labels, knn, mlp, logistic_regression, scanvi, seurat_transferdata, xgboost ]
+  .collectEntries{method ->
+    [method.config.functionality.name, method]
+  }
 
 workflow {
   helpMessage(config)
@@ -36,65 +42,135 @@ workflow {
     | run_wf
 }
 
-
 workflow run_wf {
   take:
   input_ch
 
   main:
-  def addSolution = { tup ->
-    out = tup.clone()
-    out[1] = out[1] + [input_solution: out[2].metric.input_solution]
-    out
-  }
-
   output_ch = input_ch
-    | filter{it[1].normalization_id == "log_cpm"}
     
     // split params for downstream components
     | setWorkflowArguments(
-      method: ["input_train", "input_test", "normalization_id", "dataset_id"],
+      preprocess: ["normalization_id", "dataset_id"],
+      method: ["input_train", "input_test"],
       metric: ["input_solution"],
       output: ["output"]
     )
+    
+    // multiply events by the number of method
+    | getWorkflowArguments(key: "preprocess")
+    | add_methods
+
+    // filter the normalization methods that a method actually prefers
+    | check_filtered_normalization_id
+
+    // add input_solution to data for the positive controls
+    | controls_can_cheat
 
     // run methods
-    // TODO: these filters don't work atm.
     | getWorkflowArguments(key: "method")
-    | (
-      true_labels.run(map: addSolution, filter: {it[1].normalization_id == "log_cpm"}) & 
-      random_labels.run(filter: {it[1].normalization_id == "log_cpm"}) & 
-      majority_vote.run(filter: {it[1].normalization_id == "log_cpm"}) & 
-      knn.run(filter: {it[1].normalization_id == "log_cpm"}) & 
-      logistic_regression.run(filter: {it[1].normalization_id == "log_cpm"}) &
-      mlp.run(filter: {it[1].normalization_id == "log_cpm"}) &
-      scanvi.run(filter: {it[1].normalization_id == "log_cpm"}) & 
-      seurat_transferdata.run(filter: {it[1].normalization_id == "log_cpm"}) &
-      xgboost.run(filter: {it[1].normalization_id == "log_cpm"})
-    )
-    | mix
-
-    // construct tuples for metrics
-    | pmap{ id, file, passthrough ->
-      // derive unique ids from output filenames
-      def newId = file.getName().replaceAll(".output.*", "")
-      // combine prediction with solution
-      def newData = [ input_prediction: file, input_solution: passthrough.metric.input_solution ]
-      [ newId, newData, passthrough ]
-    }
+    | run_methods
 
     // run metrics
+    | getWorkflowArguments(key: "metric", inputKey: "input_prediction")
+    | run_metrics
+
+    // convert to tsv  
+    | aggregate_results
+
+  emit:
+  output_ch
+}
+
+workflow add_methods {
+  take: input_ch
+  main:
+  output_ch = Channel.fromList(methods.keySet())
+    | combine(input_ch)
+
+    // generate combined id for method_id and dataset_id
+    | pmap{method_id, dataset_id, data ->
+      def new_id = dataset_id + "." + method_id
+      def new_data = data.clone() + [method_id: method_id]
+      new_data.remove("id")
+      [new_id, new_data]
+    }
+  emit: output_ch
+}
+
+workflow check_filtered_normalization_id {
+  take: input_ch
+  main:
+  output_ch = input_ch
+    | pfilter{id, data ->
+      data = data.clone()
+      def method = methods[data.method_id]
+      def preferred = method.config.functionality.info.preferred_normalization
+      // if a method is just using the counts, we can use any normalization method
+      if (preferred == "counts") {
+        preferred = "log_cpm"
+      }
+      data.normalization_id == preferred
+    }
+  emit: output_ch
+}
+
+workflow controls_can_cheat {
+  take: input_ch
+  main:
+  output_ch = input_ch
+    | pmap{id, data, passthrough ->
+      def method = methods[data.method_id]
+      def method_type = method.config.functionality.info.method_type
+      def new_data = data.clone()
+      if (method_type != "method") {
+        new_data = new_data + [input_solution: passthrough.metric.input_solution]
+      }
+      [id, new_data, passthrough]
+    }
+  emit: output_ch
+}
+
+workflow run_methods {
+  take: input_ch
+  main:
+    // generate one channel per method
+    method_chs = methods.collect { method_id, method_module ->
+        input_ch
+          | filter{it[1].method_id == method_id}
+          | method_module
+      }
+    // mix all results
+    output_ch = method_chs[0].mix(*method_chs.drop(1))
+
+  emit: output_ch
+}
+
+workflow run_metrics {
+  take: input_ch
+  main:
+
+  output_ch = input_ch
     | (accuracy & f1)
     | mix
 
-    // convert to tsv  
+  emit: output_ch
+}
+
+workflow aggregate_results {
+  take: input_ch
+  main:
+
+  output_ch = input_ch
     | toSortedList
-    | map{ it -> [ "combined", it.collect{ it[1] } ] + it[0].drop(2) }
+    | filter{ it.size() > 0 }
+    | map{ it -> 
+      [ "combined", it.collect{ it[1] } ] + it[0].drop(2) 
+    }
     | getWorkflowArguments(key: "output")
     | extract_scores.run(
         auto: [ publish: true ]
     )
 
-  emit:
-  output_ch
+  emit: output_ch
 }
