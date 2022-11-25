@@ -39,6 +39,6 @@ def odds_ratio(adata):
             # perfect score
             oddsratio = np.inf
     else:
-        oddsratio = _sigmoid_transform(numerator / denominator)
+        oddsratio = numerator / denominator
 
-    return oddsratio
+    return _sigmoid_transform(oddsratio)
