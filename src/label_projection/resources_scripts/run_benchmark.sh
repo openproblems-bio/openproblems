@@ -6,6 +6,8 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
+set -e
+
 export TOWER_WORKSPACE_ID=53907369739130
 
 DATASETS_DIR="resources/label_projection/datasets/openproblems_v1"
