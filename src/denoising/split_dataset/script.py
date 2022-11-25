@@ -1,4 +1,4 @@
-import scanpy as sc
+import anndata as ad
 import numpy as np
 import scipy.sparse
 import molecular_cross_validation.util
@@ -23,7 +23,7 @@ Stores "train" and "test" dataset in separate ad files.
 random_state = np.random.RandomState(par['seed'])
 
 print(">> Load Data")
-adata = sc.read_h5ad(par["input"])
+adata = ad.read_h5ad(par["input"])
 
 
 # remove all layers except for counts
@@ -55,13 +55,19 @@ X_train, X_test = X_train[:, ~is_missing], X_test[:, ~is_missing]
 
 #   copy adata to train_set, test_set
 
-output_train = adata[:, ~is_missing].copy()
-del output_train.layers["counts"]
-output_train.layers["counts"] = scipy.sparse.csr_matrix(X_train).astype(float)
+new_adata = adata[:, ~is_missing].copy()
 
-output_test = adata[:, ~is_missing].copy()
-del output_test.layers["counts"]
-output_test.layers["counts"] = scipy.sparse.csr_matrix(X_test).astype(float)
+output_train = ad.AnnData(scipy.sparse.csr_matrix(X_train).astype(float))
+output_train.layers["counts"] = output_train.X
+output_train.uns["dataset_id"] = adata.uns["dataset_id"]
+
+output_test = ad.AnnData(scipy.sparse.csr_matrix(X_test).astype(float))
+output_test.layers["counts"] = output_test.X
+output_test.uns["dataset_id"] = adata.uns["dataset_id"]
+
+# output_test = adata[:, ~is_missing].copy()
+# del output_test.layers["counts"]
+# output_test.layers["counts"] = scipy.sparse.csr_matrix(X_test).astype(float)
 
 
 print(">> Writing")

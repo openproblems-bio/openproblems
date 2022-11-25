@@ -1,6 +1,6 @@
 __inherits__: ../../api/comp_method.yaml
 functionality:
-  name: "KNN_smoothing"
+  name: "knn_smoothing"
   namespace: "denoising/methods"
   description: "iterative K-nearest neighbor smoothing"
   info:
@@ -25,5 +25,5 @@ platforms:
         packages:
           - "anndata>=0.8"
         github:
-          - scottgigante-immunai/knn-smoothing
+          - scottgigante-immunai/knn-smoothing@python_package
   - type: nextflow

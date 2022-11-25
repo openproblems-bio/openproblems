@@ -30,9 +30,9 @@ functionality:
         assert path.exists(output_path)
 
         print(">> Reading h5ad files")
-        input_test = ad.read_h5ad(input_test_path)
+        input_train = ad.read_h5ad(input_train_path)
         output = ad.read_h5ad(output_path)
-        print("input_test:", input_test)
+        print("input_train:", input_train)
         print("output:", output)
 
         print(">> Checking whether predictions were added")
@@ -40,7 +40,7 @@ functionality:
         assert meta['functionality_name'] == output.uns["method_id"]
 
         print("Checking whether data from input was copied properly to output")
-        assert input_test.n_obs == output.n_obs
-        assert input_test.uns["dataset_id"] == output.uns["dataset_id"]
+        assert input_train.n_obs == output.n_obs
+        assert input_train.uns["dataset_id"] == output.uns["dataset_id"]
 
         print("All checks succeeded!")
