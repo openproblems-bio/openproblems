@@ -10,6 +10,9 @@ functionality:
       - id: mse
         label: mse
         description: Mean Squared Error
+        maximize: false
+        min: 0
+        max: +inf
   resources:
     - type: python_script
       path: script.py

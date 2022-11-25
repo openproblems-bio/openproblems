@@ -10,6 +10,9 @@ functionality:
       - id: poisson
         label: poisson
         description: poisson loss
+        maximize: false
+        min: 0
+        max: +inf
   resources:
     - type: python_script
       path: script.py
