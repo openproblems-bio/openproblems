@@ -327,6 +327,11 @@ jobs:
       needs.run_tester.result == 'success'
 
     steps:
+
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
     - name: Download coverage from GitHub Actions
       uses: actions/download-artifact@v3
       with:
