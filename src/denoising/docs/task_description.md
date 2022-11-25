@@ -1,5 +1,3 @@
-# Denoising
-
 ## The task
 
 Single-cell RNA-Seq protocols only detect a fraction of the mRNA molecules present
