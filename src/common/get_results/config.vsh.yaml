@@ -1,0 +1,34 @@
+functionality:
+  name: "get_execution_info"
+  namespace: "common"
+  description: "Extract execution info"
+  arguments:
+    - name: "--input_scores"
+      type: "file"
+      multiple: true
+      example: resources/label_projection/benchmarks/openproblems_v1/combined.extract_scores.output.tsv
+      description: "Scores file"
+    - name: "--input_execution"
+      type: "file"
+      multiple: true
+      example: resources/label_projection/benchmarks/openproblems_v1/nextflow_log.tsv
+      description: "Nextflow log file"
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      default: "output.yaml"
+      description: "Output yaml"
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: eddelbuettel/r2u:22.04
+    setup:
+      - type: r
+        cran: [ anndata, tidyverse ]
+      - type: apt
+        packages: [ libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3 ]
+      - type: python
+        pip: [ anndata>=0.8 ]
+  - type: nextflow
