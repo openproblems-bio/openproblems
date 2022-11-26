@@ -15,6 +15,7 @@ def pancreas_batch(test=False):
     import scanpy as sc
 
     adata = load_pancreas(test)
+    adata.uns["organism"] = "human"
     adata.obs["labels"] = adata.obs["celltype"]
     adata.obs["batch"] = adata.obs["tech"]
 

@@ -15,6 +15,7 @@ def immune_batch(test=False):
     import scanpy as sc
 
     adata = load_immune(test)
+    adata.uns["organism"] = "human"
     adata.obs["labels"] = adata.obs["final_annotation"]
 
     sc.pp.filter_genes(adata, min_counts=1)

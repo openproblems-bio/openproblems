@@ -76,3 +76,21 @@ def batch_random_integration(adata, test=False):
     )
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
+
+
+@method(
+    method_name="Random Integration by Batch",
+    paper_name="Random Integration by Batch (baseline)",
+    paper_url="https://openproblems.bio",
+    paper_year=2022,
+    code_url="https://github.com/openproblems-bio/openproblems",
+    image="openproblems-python-batch-integration",
+    is_baseline=True,
+)
+def cell_cycle_integration(adata, test=False):
+    from scib.preprocessing import score_cell_cycle
+
+    score_cell_cycle(adata, organism=adata.uns["organism"])
+    adata.obsm["X_emb"] = adata.obs[["S_score", "G2M_score"]].to_numpy()
+    adata.uns["method_code_version"] = check_version("openproblems")
+    return adata
