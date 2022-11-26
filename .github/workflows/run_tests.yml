@@ -344,141 +344,141 @@ jobs:
         flags: unittests
         fail_ci_if_error: ${{ github.repository == 'openproblems-bio/openproblems' }}
         verbose: true
-#
-#    - name: Delete coverage artifacts
-#      uses: geekyeggo/delete-artifact@v2
-#      with:
-#          name: coverage
-#
-#  run_benchmark:
-#    needs: run_tester
-#    runs-on: ubuntu-latest
-#    if: >-
-#      always() &&
-#      !endsWith(github.event.head_commit.message, '# ci skip') &&
-#      github.event_name == 'push' &&
-#      (
-#        needs.run_tester.result == 'success' ||
-#        startsWith(github.ref, 'refs/heads/test_benchmark') ||
-#        startsWith(github.ref, 'refs/heads/test_full_benchmark')
-#      )
-#
-#    steps:
-#    - name: Check dependabot
-#      run: |
-#        if [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
-#          echo "Dependabot cannot access Action secrets. Rerun the workflow manually"
-#          exit 1
-#        fi
-#
-#    - name: Check Tower authentication
-#      env:
-#        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
-#        TOWER_ORG_ID: 9180144064527
-#        TOWER_WORKSPACE_ID: 53907369739130
-#      run: |
-#        token_confirmation=$(
-#          curl -X GET "https://api.tower.nf/user-info" \
-#          -H "Accept: application/json" \
-#          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}"
-#        )
-#        if [ -z "${token_confirmation}" ]; then
-#          echo "Tower authentication failed; set TOWER_ACCESS_KEY in repo secrets."
-#          echo "See CONTRIBUTING.md for details."
-#          exit 1
-#        fi
-#        workspace_confirmation=$(
-#          curl -X GET "https://api.tower.nf/orgs/${TOWER_ORG_ID}/workspaces/${TOWER_WORKSPACE_ID}" \
-#          -H "Accept: application/json" \
-#          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}"
-#        )
-#        if [ -z "${workspace_confirmation}" ]; then
-#          echo "Tower authentication failed; email singlecellopenproblems@protonmail.com with a request to be added to the openproblems-bio workspace"
-#          exit 1
-#        fi
-#
-#    - uses: actions/checkout@v3
-#      with:
-#        fetch-depth: 1
-#
-#    - name: Clear space on runner
-#      run: ./scripts/clear_runner_diskspace.sh
-#
-#    - name: Log in to the Container registry
-#      uses: docker/login-action@v2
-#      with:
-#        registry: ghcr.io
-#        username: ${{ github.repository_owner }}
-#        password: ${{ secrets.GITHUB_TOKEN }}
-#
-#    - name: Download docker images
-#      run: |
-#        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-#          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
-#          (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
-#        done
-#        wait
-#
-#    - name: Set up environment
-#      run: |
-#        # If not on the base repository, append first 6 characters of username to the image name
-#        # to avoid clashes on ECR
-#        REPO_PARSED=$(echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6)
-#        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[^a-zA-Z0-9]:-:g')
-#        if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
-#          BRANCH="prod"
-#        elif [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
-#          BRANCH=`echo $BRANCH_PARSED | head -c 40`
-#        else
-#          BRANCH="${REPO_PARSED}-`echo $BRANCH_PARSED | head -c 33`"
-#        fi
-#        BRANCH=`echo $BRANCH | sed 's/[^a-zA-Z0-9]*$//'`
-#        echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
-#
-#    - name: Upload Docker images
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        AWS_DEFAULT_REGION: us-west-2
-#      run: |
-#        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-#        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
-#          docker login --username AWS --password-stdin $ECR_ENDPOINT
-#        for image in $(cd docker && ls -1d */ | tr -d '/'); do
-#          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
-#          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image} &
-#        done
-#        wait
-#
-#    - name: Run benchmark
-#      env:
-#        TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
-#        TOWER_WORKSPACE_ID: 53907369739130
-#      run: |
-#        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
-#        if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
-#          TOWER_ACTION_ID="bVQhVSNah1JmJfnKkfyjg"
-#          WORKDIR="s3://openproblems-nextflow/work_main"
-#        else
-#          TOWER_ACTION_ID="5BQc88ZvjuXCYbc55Hot27"
-#          WORKDIR="s3://openproblems-nextflow/work/$BRANCH"
-#        fi
-#        generate_parameters()
-#        {
-#        cat <<EOF
-#          {
-#            "params" : {
-#              "branch": "$BRANCH"
-#            }
-#          }
-#        EOF
-#        }
-#        WORKFLOW_ID=$(
-#            curl -H "Content-Type: application/json" \
-#            -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
-#            https://api.tower.nf/actions/${TOWER_ACTION_ID}/launch?workspaceId=${TOWER_WORKSPACE_ID} \
-#            --data "$(generate_parameters)" | \
-#            tee /dev/stderr | \
-#            sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
-#        )
-#        echo "Benchmark running at ${TOWER_WATCH_URL}/${WORKFLOW_ID}" >> $GITHUB_STEP_SUMMARY
+
+    - name: Delete coverage artifacts
+      uses: geekyeggo/delete-artifact@v2
+      with:
+          name: coverage
+
+  run_benchmark:
+    needs: run_tester
+    runs-on: ubuntu-latest
+    if: >-
+      always() &&
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      github.event_name == 'push' &&
+      (
+        needs.run_tester.result == 'success' ||
+        startsWith(github.ref, 'refs/heads/test_benchmark') ||
+        startsWith(github.ref, 'refs/heads/test_full_benchmark')
+      )
+
+    steps:
+    - name: Check dependabot
+      run: |
+        if [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+          echo "Dependabot cannot access Action secrets. Rerun the workflow manually"
+          exit 1
+        fi
+
+    - name: Check Tower authentication
+      env:
+        TOWER_ACCESS_TOKEN: ${{ secrets.TOWER_ACCESS_KEY }}
+        TOWER_ORG_ID: 9180144064527
+        TOWER_WORKSPACE_ID: 53907369739130
+      run: |
+        token_confirmation=$(
+          curl -X GET "https://api.tower.nf/user-info" \
+          -H "Accept: application/json" \
+          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}"
+        )
+        if [ -z "${token_confirmation}" ]; then
+          echo "Tower authentication failed; set TOWER_ACCESS_KEY in repo secrets."
+          echo "See CONTRIBUTING.md for details."
+          exit 1
+        fi
+        workspace_confirmation=$(
+          curl -X GET "https://api.tower.nf/orgs/${TOWER_ORG_ID}/workspaces/${TOWER_WORKSPACE_ID}" \
+          -H "Accept: application/json" \
+          -H "Authorization: Bearer ${TOWER_ACCESS_TOKEN}"
+        )
+        if [ -z "${workspace_confirmation}" ]; then
+          echo "Tower authentication failed; email singlecellopenproblems@protonmail.com with a request to be added to the openproblems-bio workspace"
+          exit 1
+        fi
+
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+
+    - name: Clear space on runner
+      run: ./scripts/clear_runner_diskspace.sh
+
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Download docker images
+      run: |
+        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
+          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+          (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
+        done
+        wait
+
+    - name: Set up environment
+      run: |
+        # If not on the base repository, append first 6 characters of username to the image name
+        # to avoid clashes on ECR
+        REPO_PARSED=$(echo ${{ github.repository }} | awk '{print $1}' FS=/ | head -c 6)
+        BRANCH_PARSED=$(echo ${{ github.ref }} | sed 's:refs/[a-z]*/::' | sed 's:[^a-zA-Z0-9]:-:g')
+        if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
+          BRANCH="prod"
+        elif [[ "${{ github.repository }}" == "openproblems-bio/openproblems" ]]; then
+          BRANCH=`echo $BRANCH_PARSED | head -c 40`
+        else
+          BRANCH="${REPO_PARSED}-`echo $BRANCH_PARSED | head -c 33`"
+        fi
+        BRANCH=`echo $BRANCH | sed 's/[^a-zA-Z0-9]*$//'`
+        echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
+
+    - name: Upload Docker images
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-west-2
+      run: |
+        ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+          docker login --username AWS --password-stdin $ECR_ENDPOINT
+        for image in $(cd docker && ls -1d */ | tr -d '/'); do
+          docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
+          docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image} &
+        done
+        wait
+
+    - name: Run benchmark
+      env:
+        TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
+        TOWER_WORKSPACE_ID: 53907369739130
+      run: |
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+        if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
+          TOWER_ACTION_ID="bVQhVSNah1JmJfnKkfyjg"
+          WORKDIR="s3://openproblems-nextflow/work_main"
+        else
+          TOWER_ACTION_ID="5BQc88ZvjuXCYbc55Hot27"
+          WORKDIR="s3://openproblems-nextflow/work/$BRANCH"
+        fi
+        generate_parameters()
+        {
+        cat <<EOF
+          {
+            "params" : {
+              "branch": "$BRANCH"
+            }
+          }
+        EOF
+        }
+        WORKFLOW_ID=$(
+            curl -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
+            https://api.tower.nf/actions/${TOWER_ACTION_ID}/launch?workspaceId=${TOWER_WORKSPACE_ID} \
+            --data "$(generate_parameters)" | \
+            tee /dev/stderr | \
+            sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
+        )
+        echo "Benchmark running at ${TOWER_WATCH_URL}/${WORKFLOW_ID}" >> $GITHUB_STEP_SUMMARY
