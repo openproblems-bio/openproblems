@@ -4,6 +4,7 @@ from .cell2location import cell2location_amortised_detection_alpha_20
 from .cell2location import cell2location_detection_alpha_20
 from .cell2location import cell2location_detection_alpha_20_nb
 from .cell2location import cell2location_detection_alpha_200
+from .cell2location import cell2location_detection_alpha_1
 from .destvi import destvi
 from .nmfreg import nmfreg
 from .nnls import nnls_scipy
