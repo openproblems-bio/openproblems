@@ -18,9 +18,12 @@ def _combat(adata):
     from scib.integration import runCombat
     from scib.preprocessing import reduce_data
 
+    # uns gets trampled
+    organism = adata.uns["organism"]
     adata = runCombat(adata, "batch")
     reduce_data(adata, umap=False)
     adata.obsm["X_emb"] = adata.obsm["X_pca"]
+    adata.uns["organism"] = organism
     adata.uns["method_code_version"] = check_version("scanpy")
     return adata
 
