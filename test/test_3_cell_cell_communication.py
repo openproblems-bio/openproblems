@@ -128,7 +128,7 @@ def test_odds_ratio_no_match():
     # force perfect score
     adata = task.methods.true_events(adata)
     m = metric(adata)
-    assert m is np.inf
+    assert m == 1
 
     # force exception
     adata.uns["ccc_target"]["response"] = 0
