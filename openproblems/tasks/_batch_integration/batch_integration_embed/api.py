@@ -20,6 +20,8 @@ def check_dataset(adata):
 def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
     assert "X_emb" in adata.obsm
+    # check organism was not removed
+    assert "organism" in adata.uns
     return True
 
 
