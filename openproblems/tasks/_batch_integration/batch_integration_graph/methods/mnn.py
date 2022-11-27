@@ -18,7 +18,10 @@ def _mnn(adata):
     from scib.integration import runMNN
     from scib.preprocessing import reduce_data
 
+    # uns gets trampled
+    organism = adata.uns["organism"]
     adata = runMNN(adata, "batch")
+    adata.uns["organism"] = organism
     reduce_data(adata, umap=False)
     adata.obsm["X_emb"] = adata.obsm["X_pca"]
     adata.uns["method_code_version"] = check_version("mnnpy")
