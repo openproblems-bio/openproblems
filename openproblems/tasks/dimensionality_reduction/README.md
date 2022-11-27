@@ -56,11 +56,11 @@ slot as the input to the method. Raw counts are also stored in `adata.layers["co
 by the standard pre-processing functions, if a method performs its own pre-processing it
 should also do this for use by metrics. For most methods a standard pre-processing with
 the `log_cpm_hvg()` function is used which normalizes the expression matrix to counts
-per million (CPM), performs a log transformation and subsets the data to highly-variable
-genes (HVGs) as selected by scanpy's `high_variable_genes(adata, n_top_genes=n_genes,
-flavor="cell_ranger")` (1000 genes by default). Variants of methods can be created by
-applying different pre-processing prior to the method itself (see `phate.py` for an
-example).
+per million (CPM), performs a log transformation and annotates highly-variable
+genes (HVGs) (as selected by scanpy's `high_variable_genes(adata, n_top_genes=1000,
+flavor="cell_ranger")`) to `adata.var["highly_variable"]`. Variants of methods can be
+created by applying different pre-processing prior to the method itself (see `phate.py`
+for an example).
 
 ## The methods
 
