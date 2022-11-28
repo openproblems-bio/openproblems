@@ -34,7 +34,7 @@ def odds_ratio(adata):
     if denominator == 0:
         if numerator == 0:
             # undefined
-            oddsratio = np.nan
+            return np.nan
         else:
             # perfect score
             oddsratio = np.inf
