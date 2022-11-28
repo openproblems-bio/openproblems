@@ -9,25 +9,13 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
-jobs:
-  cancel_previous_runs:
-    if: |
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      (
-        startsWith(github.ref, 'refs/heads') ||
-        startsWith(github.ref, 'refs/tags') ||
-        github.event.pull_request.draft == false
-      )
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ github.token }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
+jobs:
   build_images:
 
-    needs: cancel_previous_runs
     runs-on: ubuntu-latest
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
@@ -145,7 +133,6 @@ jobs:
         echo "images=[\"$(paste -s -d ' ' <(echo $IMAGES) | sed 's/  */\",\"/g')\"]" >> $GITHUB_OUTPUT
 
   create_matrix:
-    needs: cancel_previous_runs
     runs-on: ubuntu-latest
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip')
