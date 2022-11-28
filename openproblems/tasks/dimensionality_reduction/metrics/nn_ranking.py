@@ -157,6 +157,7 @@ def _high_dim(adata: AnnData) -> np.ndarray:
 
     adata.X = adata.layers["counts"]
     adata = log_cpm_hvg(adata)
+    adata = adata[:, adata.var["highly_variable"]].copy()
     high_dim = adata.X
     return high_dim.A if issparse(high_dim) else high_dim
 
