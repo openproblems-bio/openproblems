@@ -10,6 +10,7 @@ import numpy as np
     paper_url="https://openproblems.bio",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
+    is_baseline=True,
 )
 def majority_vote(adata, test=False):
     majority = adata.obs.labels[adata.obs.is_train].value_counts().index[0]
