@@ -1,13 +1,5 @@
 FROM singlecellopenproblems/openproblems-r-base:latest
 
-
-ARG NB_USER="sagemaker-user"
-ARG NB_UID="1000"
-ARG NB_GID="100"
-
-USER root
-WORKDIR /
-
 RUN apt-get update && apt-get install -y \
     libhdf5-dev hdf5-tools libgeos-dev \
     libharfbuzz-dev libfribidi-dev
@@ -24,9 +16,3 @@ RUN R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"
 # Install Python packages
 COPY ./docker/openproblems-r-extras/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Fix permissions
-RUN chown -R $NB_USER:$NB_GID /home/$NB_USER
-
-USER $NB_UID
-WORKDIR /home/$NB_USER

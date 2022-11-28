@@ -3,9 +3,6 @@
 This guide provides instructions on editing the Docker images used to run `methods`,
 `metrics`, and load `datasets` for the Open Problems benchmarking infrastructure.
 
-Note, all images must comply to the [AWS SageMaker Custom Image
-Specifications](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi-specs.html).
-
 ### Table of Contents  <!-- markdownlint-disable-line MD001 -->
 
 - [About Docker images](#about-docker-images)
@@ -30,9 +27,6 @@ Specifications](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-byoi-spec
 
 - [Dockerfile Reference](https://docs.docker.com/engine/reference/builder/)
   - Documentation from Docker on how to write Dockerfiles
-- [SageMaker Studio Custom Image Samples
-  ](https://github.com/aws-samples/sagemaker-studio-custom-image-samples/)
-  - Example images from AWS designed for compatibility with SageMaker
 
 ## About Docker images
 
