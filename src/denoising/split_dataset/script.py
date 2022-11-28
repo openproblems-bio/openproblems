@@ -6,8 +6,8 @@ import molecular_cross_validation.util
 ## VIASH START
 par = {
     'input': "/home/kai/Documents/openroblems/openproblems-v2/resources_test/common/pancreas/dataset.h5ad",
-    'output_train': "output/nextflow/pancreas_split_data_output_train.h5ad",
-    'output_test': "output/nextflow/pancreas_split_data_output_test.h5ad",
+    'output_train': "output/denoising/pancreas_split_data_output_train.h5ad",
+    'output_test': "output/denoising/pancreas_split_data_output_test.h5ad",
     'train_frac': 0.9,
     'seed': 0
 }
@@ -57,11 +57,11 @@ X_train, X_test = X_train[:, ~is_missing], X_test[:, ~is_missing]
 
 new_adata = adata[:, ~is_missing].copy()
 
-output_train = ad.AnnData(scipy.sparse.csr_matrix(X_train).astype(float))
+output_train = ad.AnnData(X_train.astype(float), dtype=float)
 output_train.layers["counts"] = output_train.X
 output_train.uns["dataset_id"] = adata.uns["dataset_id"]
 
-output_test = ad.AnnData(scipy.sparse.csr_matrix(X_test).astype(float))
+output_test = ad.AnnData(X_test.astype(float), dtype=float)
 output_test.layers["counts"] = output_test.X
 output_test.uns["dataset_id"] = adata.uns["dataset_id"]
 

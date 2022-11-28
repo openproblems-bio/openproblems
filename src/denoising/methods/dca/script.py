@@ -1,11 +1,11 @@
 import anndata as ad
+import h5py
+import numpy as np
 from dca.api import dca
-
-# NOTE: pickup later. DCA package uses old keras imports ?
 
 ## VIASH START
 par = {
-    'input_train': 'output_train.h5ad',
+    'input_train': 'output/denoising/pancreas_split_data_output_train.h5ad',
     'output': 'output_dca.h5ad',
     'epochs': 300,
 }
@@ -15,21 +15,28 @@ meta = {
 ## VIASH END
 
 print("load input data")
-input_train = ad.read_h5ad(par['input_train'])
+# input_train = ad.read_h5ad(par['input_train'])
+input_file = h5py.File(par["input_train"], 'r')
+data = np.array(input_file["layers"]["counts"])
+input_train = ad.AnnData(data)
 
 print("process data")
-
-# make adata object with train counts
 # run DCA
 dca(input_train, epochs=par["epochs"])
 
-# set denoised to Xmat
-output_denoised = input_train.copy
-output_denoised.X = input_train.X
 
 print("Writing data")
-output_denoised.uns["method_id"] = meta['functionality_name']
-output_denoised.write_h5ad(par['output'], compression="gzip")
+# input_train.uns["method_id"] = meta['functionality_name']
+# input_train.write_h5ad(par['output'], compression="gzip")
+with h5py.File(par['output'], "w") as output_denoised:
+    for key in input_file.keys():
+        if key == "X":
+            continue
+        input_file.copy(input_file[key], output_denoised)
+    output_denoised["layers"].create_dataset('denoised', data=input_train.X)
+    output_denoised["uns"].create_dataset('method_id', data=meta['functionality_name'])
+
+input_file.close()
 
 
 
