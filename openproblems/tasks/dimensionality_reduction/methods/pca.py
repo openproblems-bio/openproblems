@@ -15,6 +15,7 @@ def pca_logCPM_1kHVG(adata, test: bool = False):
     import scanpy as sc
 
     adata = log_cpm_hvg(adata)
+    adata = adata[:, adata.var["highly_variable"]].copy()
     sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
     adata.obsm["X_emb"] = adata.obsm["X_pca"][:, :2]
     adata.uns["method_code_version"] = check_version("scikit-learn")
