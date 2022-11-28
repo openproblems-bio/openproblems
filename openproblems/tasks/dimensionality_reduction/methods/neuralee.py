@@ -97,4 +97,5 @@ def neuralee_default(adata: AnnData, test: bool = False) -> AnnData:
 @_neuralee_method(method_name="NeuralEE (CPU) (logCPM, 1kHVG)")
 def neuralee_logCPM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
     adata = log_cpm_hvg(adata)
+    adata = adata[:, adata.var["highly_variable"]].copy()
     return _neuralee(adata, test=test, normalize=False, subsample_genes=None)

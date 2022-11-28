@@ -16,6 +16,7 @@ def tsne_logCPM_1kHVG(adata, test: bool = False, n_pca=50):
     import scanpy as sc
 
     adata = log_cpm_hvg(adata)
+    adata = adata[:, adata.var["highly_variable"]].copy()
     sc.tl.pca(adata, n_comps=n_pca, svd_solver="arpack")
     sc.tl.tsne(adata, use_rep="X_pca", n_pcs=n_pca)
     adata.obsm["X_emb"] = adata.obsm["X_tsne"]
