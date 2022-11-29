@@ -161,7 +161,7 @@ jobs:
         path: './nbt2022-reproducibility'
         token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-        commit-message: "Update benchmark results # ci skip"
+        commit-message: "Update benchmark results" # please don't skip ci ;)
 
     - name: AWS S3 cleanup
       if: "github.event_name == 'repository_dispatch'"
