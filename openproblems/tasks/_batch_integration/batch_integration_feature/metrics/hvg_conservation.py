@@ -21,7 +21,7 @@ coefficients.
 @metric(
     metric_name="HVG conservation",
     maximize=True,
-    image="openproblems-python-batch-integration",
+    image="openproblems-r-pytorch",
 )
 def hvg_conservation(adata):
     from scib.metrics import hvg_overlap

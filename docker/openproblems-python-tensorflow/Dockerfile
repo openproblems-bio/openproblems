@@ -7,8 +7,8 @@ ARG NB_GID="100"
 USER root
 WORKDIR /
 
-# Install Python packages
-COPY ./docker/openproblems-python-scvi/requirements.txt ./requirements.txt
+# install dependencies and openproblems
+COPY ./docker/openproblems-python-tensorflow/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 USER $NB_UID
