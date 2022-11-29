@@ -16,7 +16,7 @@ print("Load input data")
 input_train = ad.read_h5ad(par["input_train"])
 
 print("process data")
-X = input_train.layers["counts"].transpose().toarray()
+X = input_train.layers["counts"].transpose()
 input_train.layers["denoised"] = (knn_smooth.knn_smoothing(X, k=10)).transpose()
 
 print("Writing data")

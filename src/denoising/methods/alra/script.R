@@ -27,7 +27,7 @@ cat(">> Run ALRA\n")
 out <- alra(as.matrix(counts))
 
 cat(">> Store output\n")
-adata$layers[["denoised"]] <- as(out$A_norm_rank_k_cor_sc, "CsparseMatrix")
+adata$layers[["denoised"]] <- t(out$A_norm_rank_k_cor_sc)
 adata$uns[["method_id"]] <- meta[["functionality_name"]]
 
 cat(">> Write output to file\n")

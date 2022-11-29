@@ -18,7 +18,7 @@ input_test = ad.read_h5ad(par['input_test'])
 print("Process data")
 output_denoised = input_train.copy()
 
-output_denoised.layers["denoised"] = input_test.layers['counts'].toarray()
+output_denoised.layers["denoised"] = input_test.layers['counts']
 
 output_denoised.uns["method_id"] = meta['functionality_name']
 

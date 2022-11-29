@@ -54,7 +54,6 @@ workflow run_wf {
     )
 
     // multiply events by the number of method
-    | getWorkflowArguments(key: "preprocess")
     | add_methods
 
     // add input_solution to data for the positive controls
