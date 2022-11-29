@@ -28,4 +28,4 @@ R packages:
 Python packages:
 
 * rpy2
-* anndata2ri>=1.0.6
+* anndata2ri>=1.1

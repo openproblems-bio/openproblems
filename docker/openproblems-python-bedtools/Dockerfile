@@ -21,7 +21,7 @@ RUN apt-get update && \
     cd /
 
 # install dependencies and openproblems
-COPY ./docker/openproblems-python-extras/requirements.txt ./requirements.txt
+COPY ./docker/openproblems-python-bedtools/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt --editable /usr/src/singlecellopenproblems
 
 USER $NB_UID

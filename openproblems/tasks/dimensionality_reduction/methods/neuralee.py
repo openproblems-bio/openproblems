@@ -18,7 +18,7 @@ _neuralee_method = functools.partial(
     paper_url="https://www.frontiersin.org/articles/10.3389/fgene.2020.00786/full",
     paper_year=2020,
     code_url="https://github.com/HiBearME/NeuralEE",
-    image="openproblems-python-extras",
+    image="openproblems-python-pytorch",
 )
 
 

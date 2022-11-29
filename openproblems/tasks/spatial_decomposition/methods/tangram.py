@@ -10,7 +10,7 @@ from ..utils import split_sc_and_sp
     paper_url="https://doi.org/10.1038/s41592-021-01264-7",
     paper_year=2021,
     code_url="https://github.com/broadinstitute/Tangram",
-    image="openproblems-python-extras",
+    image="openproblems-python-pytorch",
 )
 def tangram(adata, test=False, num_epochs=None, n_markers=None):
     # analysis based on:
