@@ -9,7 +9,7 @@ WORKDIR /
 
 # install dependencies and openproblems
 COPY ./docker/openproblems-python-pytorch/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt --editable /usr/src/singlecellopenproblems
+RUN pip install --no-cache-dir -r requirements.txt
 
 USER $NB_UID
 WORKDIR /home/$NB_USER

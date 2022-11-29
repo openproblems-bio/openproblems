@@ -53,16 +53,18 @@ FROM singlecellopenproblems/{wildcards.image}:latest AS base
 # Copy requirements files
 COPY ./docker/{wildcards.image}/* ./
 COPY ./scripts/install_renv.R ./
+
+# Install Python packages
+RUN if [ -f requirements.txt ]; then sudo pip install --no-cache-dir -U -r requirements.txt; fi
+
+# Install R packages
+RUN if [ -f r_requirements.txt ]; then sudo R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"; fi
 """ + ("" if "SNAKEMAKE_COPY_SOURCE" not in os.environ else r"""
 # Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
 RUN cd /usr/src/singlecellopenproblems && sudo git clean -fxdq
 """) + r"""
-# Install R packages
-RUN if [ -f r_requirements.txt ]; then sudo R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"; fi
-
-# Install Python packages
-RUN if [ -f requirements.txt ]; then sudo pip install --no-cache-dir -U -r requirements.txt --editable /usr/src/singlecellopenproblems; else sudo pip install --no-cache-dir -U --editable /usr/src/singlecellopenproblems; fi
+RUN sudo pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
 ' > {output}"""
 
 ruleorder: update_docker_image > build_docker_image

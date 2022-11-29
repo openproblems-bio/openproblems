@@ -20,9 +20,9 @@ RUN apt-get update && \
     mv bin/* /usr/local/bin && \
     cd /
 
-# install dependencies and openproblems
+# Install Python packages
 COPY ./docker/openproblems-python-extras/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt --editable /usr/src/singlecellopenproblems
+RUN pip install --no-cache-dir -r requirements.txt
 
 USER $NB_UID
 WORKDIR /home/$NB_USER

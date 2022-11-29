@@ -12,9 +12,10 @@ WORKDIR /
 COPY ./docker/openproblems-r-pytorch/r_requirements.txt ./r_requirements.txt
 RUN R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"
 
-# install dependencies and openproblems
+# Install Python packages
 COPY ./docker/openproblems-r-pytorch/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt --editable /usr/src/singlecellopenproblems[r]
+RUN pip install --no-cache-dir -r requirements.txt
+
 
 USER $NB_UID
 WORKDIR /home/$NB_USER

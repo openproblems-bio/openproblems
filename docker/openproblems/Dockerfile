@@ -27,11 +27,14 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 RUN unzip -q awscliv2.zip
 RUN ./aws/install
 
-# install dependencies and openproblems
+# install dependencies
+COPY ./docker/openproblems/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install single-cell open problems
 COPY . /usr/src/singlecellopenproblems
 RUN cd /usr/src/singlecellopenproblems && git clean -fxdq
-COPY ./docker/openproblems/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt --editable /usr/src/singlecellopenproblems
+RUN pip install --no-cache-dir --editable /usr/src/singlecellopenproblems
 
 # Overwrite kernel.json to use system Python install
 COPY ./docker/openproblems/kernelspec.json /usr/local/share/jupyter/kernels/python3/kernel.json
