@@ -45,4 +45,5 @@ def phate_sqrt(adata, test: bool = False, n_pca: Optional[int] = None):
 @_phate_method(method_name="PHATE (logCPM, 1kHVG)")
 def phate_logCPM_1kHVG(adata, test: bool = False, n_pca: Optional[int] = None):
     adata = log_cpm_hvg(adata)
+    adata = adata[:, adata.var["highly_variable"]].copy()
     return _phate(adata, test=test, n_pca=n_pca)

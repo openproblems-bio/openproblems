@@ -16,6 +16,7 @@ def umap_logCPM_1kHVG(adata, test: bool = False, n_pca=50):
     import scanpy as sc
 
     adata = log_cpm_hvg(adata)
+    adata = adata[:, adata.var["highly_variable"]].copy()
     sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
     sc.pp.neighbors(adata, use_rep="X_pca", n_pcs=n_pca)
     sc.tl.umap(adata)

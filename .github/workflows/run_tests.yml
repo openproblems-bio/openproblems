@@ -9,25 +9,13 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
-jobs:
-  cancel_previous_runs:
-    if: |
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      (
-        startsWith(github.ref, 'refs/heads') ||
-        startsWith(github.ref, 'refs/tags') ||
-        github.event.pull_request.draft == false
-      )
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ github.token }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
+jobs:
   build_images:
 
-    needs: cancel_previous_runs
     runs-on: ubuntu-latest
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
@@ -145,10 +133,14 @@ jobs:
         echo "images=[\"$(paste -s -d ' ' <(echo $IMAGES) | sed 's/  */\",\"/g')\"]" >> $GITHUB_OUTPUT
 
   create_matrix:
-    needs: cancel_previous_runs
     runs-on: ubuntu-latest
     if: |
-      !endsWith(github.event.head_commit.message, '# ci skip')
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      (
+        startsWith(github.ref, 'refs/heads') ||
+        startsWith(github.ref, 'refs/tags') ||
+        github.event.pull_request.draft == false
+      )
 
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
@@ -218,11 +210,6 @@ jobs:
       (
         needs.build_images.result == 'success' ||
         needs.build_images.result == 'skipped'
-      ) &&
-      (
-        startsWith(github.ref, 'refs/heads') ||
-        startsWith(github.ref, 'refs/tags') ||
-        github.event.pull_request.draft == false
       ) &&
       !startsWith(github.ref, 'refs/heads/test_docker') &&
       !startsWith(github.ref, 'refs/heads/test_benchmark') &&
@@ -308,7 +295,35 @@ jobs:
 
     - name: Run tests
       timeout-minutes: 60
-      run: pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native -k "${{ matrix.tests }}"
+      run: |
+        pytest --cov=openproblems --cov-report=xml -vv --durations=15 --tb=native -k "${{ matrix.tests }}"
+        mkdir -p coverage
+        mv coverage.xml "$(echo 'coverage_${{ matrix.tests }}.xml' | sed 's/[^a-z0-9\.]/_/g')"
+
+    - name: Upload coverage to GitHub Actions
+      uses: actions/upload-artifact@main
+      with:
+        path: coverage_*.xml
+        name: coverage
+
+  upload_coverage:
+    needs: run_tester
+    runs-on: ubuntu-latest
+    if: >-
+      always() &&
+      !endsWith(github.event.head_commit.message, '# ci skip') &&
+      needs.run_tester.result == 'success'
+
+    steps:
+
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Download coverage from GitHub Actions
+      uses: actions/download-artifact@v3
+      with:
+        name: coverage
 
     - name: Upload coverage
       uses: codecov/codecov-action@v3
@@ -318,24 +333,10 @@ jobs:
         fail_ci_if_error: ${{ github.repository == 'openproblems-bio/openproblems' }}
         verbose: true
 
-    - name: Upload check results on fail
-      if: failure()
-      uses: actions/upload-artifact@main
+    - name: Delete coverage artifacts
+      uses: geekyeggo/delete-artifact@v2
       with:
-        name: ${{ matrix.config.name }}_results
-        path: results
-
-  state_completion:
-    needs: run_tester
-    runs-on: ubuntu-latest
-    if: >-
-      always() &&
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      needs.run_tester.result == 'success'
-    steps:
-    - name: State that tests succeeded
-      run: |
-        echo "We did it! 🥳🥳🥳"
+          name: coverage
 
   run_benchmark:
     needs: run_tester
