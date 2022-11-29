@@ -5,8 +5,8 @@ from sklearn import decomposition, metrics
 
 ## VIASH START
 par = {
-    'input': 'resources_test/common/pancreas/dataset.h5ad',
-    'output': 'output.h5ad',
+    'input': 'output.h5ad',
+    'output': 'score.h5ad',
 }
 meta = {
     'functionality_name': 'foo',
@@ -36,10 +36,11 @@ kruskal_score = np.sqrt(sum(diff**2) / sum(low_dim_dist_matrix**2))
 print("Store metric value")
 if 'metric_ids' not in adata.uns.keys():
     adata.uns['metric_ids'] = []
-    adata.uns['metric_values'] = []
+    adata.uns['metric_values'] = {}
 
 adata.uns['metric_ids'] += ['kruskal', 'rmse']
-adata.uns['metric_values'] += [kruskal_score, rmse]
+adata.uns['metric_values']['rmse'] = rmse
+adata.uns['metric_values']['kruskal'] = kruskal_score
 adata.obsm['kruskal'] = kruskal_matrix
 
 print("Write data to file")
