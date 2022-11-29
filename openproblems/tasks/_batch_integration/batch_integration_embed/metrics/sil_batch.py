@@ -24,7 +24,7 @@ Here, M is the set of unique cell labels."""
 @metric(
     metric_name="Batch ASW",
     maximize=True,
-    image="openproblems-python-batch-integration",  # only if required
+    image="openproblems-r-pytorch",
 )
 def silhouette_batch(adata):
     from scib.metrics import silhouette_batch
