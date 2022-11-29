@@ -27,6 +27,7 @@ rule docker_refresh:
     input: tools.refresh_images
 
 rule refresh_docker_image:
+    threads: 0
     priority: 50
     input:
         dockerfile = "{}/{{image}}/refresh.Dockerfile".format(tools.IMAGES_DIR),
@@ -78,6 +79,7 @@ rule update_docker_image:
         "touch {output}"
 
 rule build_docker_image:
+    threads: 0.5
     input:
         dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_build_requirements,
