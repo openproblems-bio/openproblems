@@ -1,0 +1,33 @@
+__inherits__: ../../api/comp_control_method.yaml
+functionality:
+  name: "high_dim_pca"
+  namespace: "dimensionality_reduction/control_methods"
+  description: "Positive control method which generates high-dimensional PCA embedding"
+  info:
+    type: positive_control
+    label: High-dimensional PCA
+    v1_url: openproblems/tasks/dimensionality_reduction/methods/baseline.py
+    v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
+    preferred_normalization: counts
+  arguments:
+    - name: "--n_pca"
+      type: integer
+      default: 50
+      description: Number of principal components of PCA to use.
+  resources:
+    - type: python_script
+      path: script.py
+  test_resources:
+    - type: python_script
+      path: test.py
+    - path: ../../../../resources_test/common/pancreas/
+      dest: input
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - "anndata>=0.8"
+  - type: nextflow
