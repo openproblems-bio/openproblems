@@ -126,7 +126,7 @@ jobs:
         path: './website'
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-        commit-message: "Update benchmark results # ci skip"
+        commit-message: "Update benchmark results"
 
     - name: Push to openproblems-bio/nbt2022-reproducibility
       if: |
@@ -153,7 +153,7 @@ jobs:
         path: './nbt2022-reproducibility'
         token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-        commit-message: "Update benchmark results # ci skip"
+        commit-message: "Update benchmark results"
 
     - name: AWS S3 cleanup
       if: "github.event_name == 'repository_dispatch'"
