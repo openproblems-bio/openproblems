@@ -79,7 +79,7 @@ jobs:
           S3_URI="s3://openproblems-nextflow/cwd_example"
         fi
         aws s3 cp --quiet --recursive "${S3_URI}" /tmp/results/
-        rm -r nbt2022-reproducibility/results/*/
+        rm -r nbt2022-reproducibility/results/*/*.json
         rm -r website/data/results/*/
         rm -r website/content/benchmarks/*/
         python openproblems/workflow/parse_nextflow.py /tmp website/data/results
@@ -102,9 +102,8 @@ jobs:
         github.event_name == 'repository_dispatch' ||
         endsWith(github.event.head_commit.message, '# publish')
       run: |
-        cp -r website/data/results nbt2022-reproducibility/
+        rsync -r --include ".*\.raw\.json$" website/data/results/ nbt2022-reproducibility/results
         rm website/data/results/*/*.raw.json
-        ls -1 nbt2022-reproducibility/results/*/*.json | grep -v "\.raw\.json" | xargs rm
 
     - name: Push to openproblems-bio/website
       if: |
