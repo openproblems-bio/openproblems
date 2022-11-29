@@ -186,6 +186,37 @@ def cell2location_detection_alpha_20(
 
 
 @_cell2location_method(
+    method_name="Cell2location (detection_alpha=1, reference hard-coded)"
+)
+def cell2location_detection_alpha_1(
+    adata,
+    detection_alpha=1,
+    n_cells_per_location=20,
+    hard_coded_reference=True,
+    amortised=False,
+    num_samples=None,
+    sc_batch_size=2500,
+    st_batch_size=None,
+    test: bool = False,
+    max_epochs_sc: Optional[int] = None,
+    max_epochs_st: Optional[int] = None,
+):
+    return _cell2location(
+        adata,
+        detection_alpha=detection_alpha,
+        n_cells_per_location=n_cells_per_location,
+        hard_coded_reference=hard_coded_reference,
+        amortised=amortised,
+        num_samples=num_samples,
+        sc_batch_size=sc_batch_size,
+        st_batch_size=st_batch_size,
+        test=test,
+        max_epochs_sc=max_epochs_sc,
+        max_epochs_st=max_epochs_st,
+    )
+
+
+@_cell2location_method(
     method_name="Cell2location (detection_alpha=20, reference NB without batch info)"
 )
 def cell2location_detection_alpha_20_nb(
