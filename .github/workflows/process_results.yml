@@ -27,7 +27,7 @@ jobs:
     - name: Checkout website repo
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0
+        fetch-depth: 1
         repository: openproblems-bio/website
         path: website
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
@@ -35,7 +35,7 @@ jobs:
     - name: Checkout NBT reproduciblity repo
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0
+        fetch-depth: 1
         repository: openproblems-bio/nbt2022-reproducibility
         path: nbt2022-reproducibility
         token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
@@ -85,21 +85,13 @@ jobs:
         aws s3 cp --quiet --recursive "${S3_URI}" /tmp/results/
         rm -r nbt2022-reproducibility/results/*/*.json
         rm -r website/data/results/*/
-        rm -r website/content/benchmarks/*/
         python openproblems/workflow/parse_nextflow.py /tmp website/data/results
-        python openproblems/workflow/generate_website_markdown.py website/content/benchmarks
 
     - name: Upload results
       uses: actions/upload-artifact@main
       with:
         name: results
         path: website/data/results
-
-    - name: Upload markdown
-      uses: actions/upload-artifact@main
-      with:
-        name: markdown
-        path: website/content/benchmarks
 
     - name: Move raw output
       if: |

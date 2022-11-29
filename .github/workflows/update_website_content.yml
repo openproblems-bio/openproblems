@@ -1,0 +1,87 @@
+name: Update website content
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'test_website'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update_content:
+    runs-on: ubuntu-latest
+
+    env:
+      UPDATE_BRANCH_NAME: "auto_update_content_${{ github.run_number }}"
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        path: openproblems
+
+    - name: Checkout website repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        repository: openproblems-bio/website
+        path: website
+        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
+
+    - name: Set up website Git branch
+      working-directory: website
+      run: |
+        git checkout -b $UPDATE_BRANCH_NAME
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.8"
+
+    - name: Install package & dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U wheel setuptools
+        pip install -U --editable ./openproblems[process]
+        python -c "import openproblems"
+
+    - name: Parse results
+      run: |
+        rm -r website/content/benchmarks/*/
+        python openproblems/workflow/generate_website_markdown.py website/content/benchmarks
+
+    - name: Upload markdown
+      uses: actions/upload-artifact@main
+      with:
+        name: markdown
+        path: website/content/benchmarks
+
+    - name: Push to openproblems-bio/website
+      if: |
+        startsWith(github.ref, 'refs/heads/main') ||
+        endsWith(github.event.head_commit.message, '# publish')
+      shell: bash
+      working-directory: './website'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
+      run: |
+        git diff --exit-code --quiet || git push origin "${UPDATE_BRANCH_NAME}"
+
+    - name: Create website Pull Request
+      if: |
+        startsWith(github.ref, 'refs/heads/main') ||
+        endsWith(github.event.head_commit.message, '# publish')
+      uses: peter-evans/create-pull-request@v4
+      with:
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
+        delete-branch: true
+        base: main
+        title: '[auto] Update benchmark content'
+        reviewers: scottgigante-immunai,rcannood,dburkhardt
+        path: './website'
+        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
+        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        commit-message: "Update benchmark content # ci skip"
