@@ -15,7 +15,7 @@ curl -fsSL get.viash.io | bash -s -- \
 # add --namespace_separator '/' ?
 
 # automatically export the workflow helper
-NXF_UTILS=src/nxf_utils
+NXF_UTILS=src/wf_utils
 [[ -d $NXF_UTILS ]] || mkdir -p $NXF_UTILS
 bin/viash export resource platforms/nextflow/ProfilesHelper.config > $NXF_UTILS/ProfilesHelper.config
 bin/viash export resource platforms/nextflow/WorkflowHelper.nf > $NXF_UTILS/WorkflowHelper.nf
