@@ -23,23 +23,24 @@ import yaml
 
 h5ad_files = glob.glob("$COMMON_DATASETS/**.h5ad")
 
-param_list = []
+# this task doesn't use normalizations
+# 
+param_list = {}
 
 for h5ad_file in h5ad_files:
   print(f"Checking {h5ad_file}")
   adata = ad.read_h5ad(h5ad_file, backed=True)
-  if "counst" in adata.layers:
+  if "counts" in adata.layers:
     dataset_id = adata.uns["dataset_id"].replace("/", ".")
-    id = dataset_id
     obj = {
-      'id': id, 
+      'id': dataset_id, 
       'input': h5ad_file,
       'dataset_id': dataset_id,
     }
-    param_list.append(obj)
+    param_list[dataset_id] = obj
 
 output = {
-  "param_list": param_list,
+  "param_list": list(param_list.values()),
   "seed": 123,
   "output_train": "\$id.train.h5ad",
   "output_test": "\$id.test.h5ad"
@@ -58,3 +59,6 @@ bin/nextflow \
   -resume \
   -params-file $params_file \
   --publish_dir "$OUTPUT_DIR"
+
+bin/tools/docker/nextflow/process_log/process_log \
+  --output "$OUTPUT_DIR/nextflow_log.tsv"

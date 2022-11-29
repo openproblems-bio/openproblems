@@ -22,6 +22,7 @@ params_file="$OUTPUT_DIR/params.yaml"
 if [ ! -f $params_file ]; then
   python << HERE
 import yaml
+import os
 
 dataset_dir = "$DATASETS_DIR"
 output_dir = "$OUTPUT_DIR"
@@ -31,22 +32,24 @@ with open(dataset_dir + "/params.yaml", "r") as file:
   split_list = yaml.safe_load(file)
 datasets = split_list['param_list']
 
-# figure out where train/test/solution files were stored
+# figure out where train/test files were stored
 param_list = []
 
 for dataset in datasets:
   id = dataset["id"]
   input_train = dataset_dir + "/" + id + ".train.h5ad"
   input_test = dataset_dir + "/" + id + ".test.h5ad"
-  input_solution = dataset_dir + "/" + id + ".solution.h5ad"
-
-  obj = {
+  
+  if os.path.exists(input_test):
+    obj = {
+      'id': id, 
     'id': id, 
-    'dataset_id': dataset["dataset_id"],
-    'input_train': input_train,
-    'input_test': input_test
-  }
-  param_list.append(obj)
+      'id': id, 
+      'dataset_id': dataset["dataset_id"],
+      'input_train': input_train,
+      'input_test': input_test
+    }
+    param_list.append(obj)
 
 # write as output file
 output = {
