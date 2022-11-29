@@ -52,6 +52,8 @@ jobs:
       run: |
         rm -r website/content/benchmarks/*/
         python openproblems/workflow/generate_website_markdown.py website/content/benchmarks
+        cd website
+        git diff --exit-code --quiet || echo "CHANGED=true" >> $GITHUB_ENV
 
     - name: Upload markdown
       uses: actions/upload-artifact@main
@@ -61,19 +63,25 @@ jobs:
 
     - name: Push to openproblems-bio/website
       if: |
-        startsWith(github.ref, 'refs/heads/main') ||
-        endsWith(github.event.head_commit.message, '# publish')
+        env.CHANGED == 'true' &&
+        (
+          startsWith(github.ref, 'refs/heads/main') ||
+          endsWith(github.event.head_commit.message, '# publish')
+        )
       shell: bash
       working-directory: './website'
       env:
         GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
       run: |
-        git diff --exit-code --quiet || git push origin "${UPDATE_BRANCH_NAME}"
+        git push origin "${UPDATE_BRANCH_NAME}"
 
     - name: Create website Pull Request
       if: |
-        startsWith(github.ref, 'refs/heads/main') ||
-        endsWith(github.event.head_commit.message, '# publish')
+        env.CHANGED == 'true' &&
+        (
+          startsWith(github.ref, 'refs/heads/main') ||
+          endsWith(github.event.head_commit.message, '# publish')
+        )
       uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
