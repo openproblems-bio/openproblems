@@ -106,7 +106,7 @@ jobs:
 #        github.event_name == 'repository_dispatch' ||
 #        endsWith(github.event.head_commit.message, '# publish')
       run: |
-        rsync -v -r --include --include "*.raw.json" --include "*/" --exclude "*" website/data/results/ nbt2022-reproducibility/results
+        rsync -v -r --include "*.raw.json" --include "*/" --exclude "*" website/data/results/ nbt2022-reproducibility/results
         rm website/data/results/*/*.raw.json
 
     - name: Push to openproblems-bio/website
