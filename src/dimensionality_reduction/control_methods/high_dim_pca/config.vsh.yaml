@@ -12,7 +12,7 @@ functionality:
   arguments:
     - name: "--n_pca"
       type: integer
-      default: 50
+      default: 500
       description: Number of principal components of PCA to use.
   resources:
     - type: python_script
