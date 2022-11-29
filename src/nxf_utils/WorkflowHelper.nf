@@ -113,6 +113,11 @@ def processArgument(arg) {
   arg.multiple_sep = arg.multiple_sep ?: ":"
   arg.plainName = arg.name.replaceAll("^-*", "")
 
+  if (arg.type == "file") {
+    arg.must_exist = arg.must_exist ?: true
+    arg.create_parent = arg.create_parent ?: true
+  }
+
   if (arg.type == "file" && arg.direction == "output") {
     def mult = arg.multiple ? "_*" : ""
     def extSearch = ""
