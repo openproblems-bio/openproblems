@@ -11,7 +11,7 @@ _scanvi_method = functools.partial(
     paper_reference="xu2021probabilistic",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-python-batch-integration",
+    image="openproblems-r-pytorch",
 )
 
 

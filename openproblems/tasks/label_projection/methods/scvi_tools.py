@@ -10,7 +10,7 @@ _scanvi_method = functools.partial(
     paper_reference="xu2021probabilistic",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-python-scvi",
+    image="openproblems-python-pytorch",
 )
 
 _scanvi_scarches_method = functools.partial(
@@ -19,7 +19,7 @@ _scanvi_scarches_method = functools.partial(
     paper_reference="lotfollahi2020query",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-python-scvi",
+    image="openproblems-python-pytorch",
 )
 
 

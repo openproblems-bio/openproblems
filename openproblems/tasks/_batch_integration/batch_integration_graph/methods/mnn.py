@@ -10,7 +10,7 @@ _mnn_method = functools.partial(
     paper_reference="haghverdi2018batch",
     paper_year=2018,
     code_url="https://github.com/chriscainx/mnnpy",
-    image="openproblems-python-batch-integration",
+    image="openproblems-r-pytorch",
 )
 
 
