@@ -14,6 +14,7 @@ the scikit-learn27 (v.0.22.1) implementation of NMI.
 
 @metric(
     metric_name="NMI",
+    paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-python-batch-integration",
 )

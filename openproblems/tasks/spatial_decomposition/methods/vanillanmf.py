@@ -8,7 +8,7 @@ from ..utils import split_sc_and_sp
     method_name="Non-Negative Matrix Factorization (NMF)",
     paper_name="Fast local algorithms for large scale nonnegative "
     "matrix and tensor factorizations",
-    paper_url="https://doi.org/10.1587/transfun.E92.A.708",
+    paper_reference="cichocki2009fast",
     paper_year=2009,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.decomposition.NMF.html",

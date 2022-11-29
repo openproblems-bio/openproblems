@@ -8,7 +8,7 @@ def _sigmoid_transform(x):
     return 1 - 1 / (1 + x / 2)
 
 
-@metric(metric_name="Odds Ratio", maximize=True)
+@metric(metric_name="Odds Ratio", paper_reference="bland2000odds", maximize=True)
 def odds_ratio(adata):
     # Join benchmark (assumed truth) and ccc results
     # Get /w ccc_target and a response [0, 1] column

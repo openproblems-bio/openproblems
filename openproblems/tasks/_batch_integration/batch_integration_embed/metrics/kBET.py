@@ -26,6 +26,7 @@ diffusion processes being run.
 
 @metric(
     metric_name="kBET",
+    paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-r-extras",
 )

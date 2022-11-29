@@ -9,7 +9,7 @@ _liger_method = functools.partial(
     method,
     paper_name="Single-Cell Multi-omic Integration Compares and "
     "Contrasts Features of Brain Cell Identity",
-    paper_url="https://doi.org/10.1016/j.cell.2019.05.006",
+    paper_reference="welch2019single",
     paper_year=2019,
     code_url="https://github.com/welch-lab/liger",
     image="openproblems-r-extras",

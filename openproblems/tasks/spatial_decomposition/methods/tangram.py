@@ -7,7 +7,7 @@ from ..utils import split_sc_and_sp
     method_name="Tangram",
     paper_name="Deep learning and alignment of spatially resolved single-cell "
     "transcriptomes with Tangram",
-    paper_url="https://doi.org/10.1038/s41592-021-01264-7",
+    paper_reference="biancalani2021deep",
     paper_year=2021,
     code_url="https://github.com/broadinstitute/Tangram",
     image="openproblems-python-extras",

@@ -8,7 +8,7 @@ import pandas as pd
 @method(
     method_name="Random Events",
     paper_name="Random Events (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,
@@ -37,7 +37,7 @@ def random_events(adata, test=False, n_events=1000):
 @method(
     method_name="True Events",
     paper_name="True Events (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,

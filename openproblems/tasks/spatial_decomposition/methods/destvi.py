@@ -8,7 +8,7 @@ from typing import Optional
     method_name="DestVI",
     paper_name="DestVI identifies continuums of cell types in spatial "
     "transcriptomics data",
-    paper_url="https://doi.org/10.1038/s41587-022-01272-8",
+    paper_reference="lopez2022destvi",
     paper_year=2022,
     code_url="https://github.com/YosefLab/scvi-tools",
     image="openproblems-python-extras",

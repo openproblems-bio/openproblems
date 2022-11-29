@@ -254,7 +254,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
         result = {
             "Name": method.metadata["method_name"],
             "Paper": method.metadata["paper_name"],
-            "Paper URL": method.metadata["paper_url"],
+            "Paper reference": method.metadata["paper_reference"],
             "Year": method.metadata["paper_year"],
             "Library": method.metadata["code_url"],
             "Implementation": "https://github.com/openproblems-bio/openproblems/"

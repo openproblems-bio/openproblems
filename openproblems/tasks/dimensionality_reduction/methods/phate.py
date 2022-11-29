@@ -8,8 +8,9 @@ import functools
 
 _phate_method = functools.partial(
     method,
-    paper_name="Visualizing Transitions and Structure for Biological Data Exploration",
-    paper_url="https://www.nature.com/articles/s41587-019-0336-3",
+    paper_name="Visualizing Structure and Transitions in High-Dimensional Biological"
+    " Data",
+    paper_reference="moon2019visualizing",
     paper_year=2019,
     code_url="https://github.com/KrishnaswamyLab/PHATE/",
     image="openproblems-python-extras",

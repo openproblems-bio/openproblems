@@ -1,6 +1,7 @@
 import openproblems
 import os
 import parameterized
+import utils.asserts
 import utils.docker
 import utils.git
 import utils.name
@@ -73,8 +74,8 @@ def test_method_metadata(method):
     assert isinstance(method.metadata["method_name"], str)
     assert isinstance(method.metadata["paper_name"], str)
     assert isinstance(method.metadata["paper_year"], int)
-    assert isinstance(method.metadata["paper_url"], str)
-    assert utils.asserts.assert_url_accessible(method.metadata["paper_url"])
+    assert isinstance(method.metadata["paper_reference"], str)
+    assert utils.asserts.assert_valid_reference(method.metadata["paper_reference"])
     assert isinstance(method.metadata["code_url"], str)
     assert utils.asserts.assert_url_accessible(method.metadata["code_url"])
     assert isinstance(method.metadata["is_baseline"], bool)

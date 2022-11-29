@@ -8,7 +8,7 @@ import numpy as np
 @method(
     method_name="Random Features",
     paper_name="Random Features (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,
@@ -30,7 +30,7 @@ def random_features(adata, test=False, n_svd=20):
 @method(
     method_name="True Features",
     paper_name="True Features (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,

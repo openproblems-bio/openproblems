@@ -7,7 +7,7 @@ _combat_method = functools.partial(
     method,
     paper_name="Adjusting batch effects in microarray expression data using "
     "empirical Bayes methods",
-    paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
+    paper_reference="hansen2012removing",
     paper_year=2007,
     code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",
     image="openproblems-python-batch-integration",

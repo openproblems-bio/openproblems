@@ -20,6 +20,7 @@ the preintegration variance contribution reduces the score."""
 
 @metric(
     metric_name="Cell Cycle Score",
+    paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-python-batch-integration",  # only if required
 )

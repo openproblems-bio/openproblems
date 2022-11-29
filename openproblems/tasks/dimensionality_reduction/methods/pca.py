@@ -6,7 +6,7 @@ from ....tools.utils import check_version
 @method(
     method_name="Principle Component Analysis (PCA) (logCPM, 1kHVG)",
     paper_name="On lines and planes of closest fit to systems of points in space",
-    paper_url="https://doi.org/10.1080/14786440109462720",
+    paper_reference="https://doi.org/10.1080/14786440109462720",
     paper_year=1901,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.decomposition.PCA.html",

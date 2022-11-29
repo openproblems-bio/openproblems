@@ -40,7 +40,11 @@ def calculate_rmse(adata, n_svd=200):
     return kruskel_matrix, kruskel_score, rms
 
 
-@metric(metric_name="root mean squared error", maximize=True)
+@metric(
+    metric_name="Root mean squared error",
+    paper_reference="kruskal1964mds",
+    maximize=True,
+)
 def rmse(adata):
     """Calculate the root mean squared error.
 
