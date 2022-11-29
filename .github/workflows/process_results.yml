@@ -98,9 +98,9 @@ jobs:
         path: website/content/benchmarks
 
     - name: Move raw output
-      if: |
-        github.event_name == 'repository_dispatch' ||
-        endsWith(github.event.head_commit.message, '# publish')
+#      if: |
+#        github.event_name == 'repository_dispatch' ||
+#        endsWith(github.event.head_commit.message, '# publish')
       run: |
         rsync -r --include ".*\.raw\.json$" website/data/results/ nbt2022-reproducibility/results
         rm website/data/results/*/*.raw.json
