@@ -27,3 +27,5 @@ platforms:
         github:
           - scottgigante-immunai/knn-smoothing@python_package
   - type: nextflow
+    directives: 
+      label: [ midmem, midcpu ]

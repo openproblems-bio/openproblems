@@ -37,3 +37,5 @@ platforms:
           - tensorflow==2.4.3
           - protobuf==3.20.*
   - type: nextflow
+    directives: 
+      label: [ midmem, midcpu ]

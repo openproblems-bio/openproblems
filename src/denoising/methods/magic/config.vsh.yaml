@@ -38,3 +38,5 @@ platforms:
           - scprep
           - magic-impute
   - type: nextflow
+    directives: 
+      label: [ midmem, midcpu ]

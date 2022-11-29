@@ -45,3 +45,5 @@ platforms:
       - type: docker
         run: git clone https://github.com/KlugerLab/ALRA.git /ALRA
   - type: nextflow
+    directives: 
+      label: [ midmem, midcpu ]
