@@ -339,16 +339,18 @@ jobs:
           name: coverage
 
   run_benchmark:
-    needs: run_tester
+    needs:
+    - run_tester
+    - build_images
     runs-on: ubuntu-latest
     if: >-
       always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
+      needs.build_images.result == 'success' &&
       github.event_name == 'push' &&
       (
         needs.run_tester.result == 'success' ||
-        startsWith(github.ref, 'refs/heads/test_benchmark') ||
-        startsWith(github.ref, 'refs/heads/test_full_benchmark')
+        needs.run_tester.result == 'skipped'
       )
 
     steps:
