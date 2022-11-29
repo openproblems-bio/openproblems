@@ -23,7 +23,6 @@ R packages:
 
 * BiocManager
 * scran
-* IRKernel
 
 Python packages:
 

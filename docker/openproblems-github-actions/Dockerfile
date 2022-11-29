@@ -1,8 +1,5 @@
 FROM singlecellopenproblems/openproblems-r-base:latest
 
-USER root
-WORKDIR /
-
 # Install Docker
 RUN apt-get update
 RUN apt-get install -y ca-certificates curl gnupg lsb-release
