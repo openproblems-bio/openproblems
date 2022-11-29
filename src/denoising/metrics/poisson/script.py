@@ -29,7 +29,7 @@ denoised_data = denoised_data * target_sum / initial_sum
 
 error = poisson_nll_loss(scprep.utils.toarray(test_data), denoised_data)
 
-print("Store poission value")
+print("Store poisson value")
 input_denoised.uns["metric_ids"] = meta['functionality_name']
 input_denoised.uns["metric_values"] = error
 
