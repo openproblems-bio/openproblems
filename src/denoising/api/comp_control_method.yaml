@@ -8,7 +8,7 @@ functionality:
       __inherits__: anndata_denoised.yaml
       direction: output
   test_resources:
-    - path: ../../../../output/denoising
+    - path: ../../../../resources_test/denoising
     - type: python_script
       path: generic_test.py
       text: |
