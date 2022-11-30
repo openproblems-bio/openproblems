@@ -88,40 +88,24 @@ edit `adata.obsm["train"]` or `adata.obsm["test"]`.
 
 Methods for assigning labels from a reference dataset to a new dataset.
 
-| Name                                                                                                       | Type   | Description                                           | DOI | URL |
-|:-----------------------------------------------------------------------------------------------------------|:-------|:------------------------------------------------------|:----|:----|
-| [ALRA](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./methods/alra/config.vsh.yaml) | method | Adaptively-thresholded Low Rank Approximation (ALRA). |     |     |
-
-ALRA is a method for imputation of missing values in single cell
-RNA-sequencing data, described in the preprint, “Zero-preserving
-imputation of scRNA-seq data using low-rank approximation” available
-[here](https://www.biorxiv.org/content/early/2018/08/22/397588). Given a
-scRNA-seq expression matrix, ALRA first computes its rank-k
-approximation using randomized SVD. Next, each row (gene) is thresholded
-by the magnitude of the most negative value of that gene. Finally, the
-matrix is
-rescaled.\|[link](https://doi.org/10.1101/397588)\|[link](https://github.com/KlugerLab/ALRA)\|
-\|[knn_smooth](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./methods/knn_smoothing/config.vsh.yaml)\|method
-\|iterative K-nearest neighbor smoothing
-\|[link](https://doi.org/10.1101/217737)\|[link](https://github.com/yanailab/knn-smoothing)\|
-\|[magic](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./methods/magic/config.vsh.yaml)\|method
-\|MAGIC: Markov affinity-based graph imputation of cells
-\|[link](https://doi.org/10.1016/j.cell.2018.05.061)\|[link](https://github.com/KrishnaswamyLab/MAGIC)\|
-\|[no
-denoising](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./control_methods/no_denoising/config.vsh.yaml)\|negative_control
-\|negative control by copying train counts \| \| \| \|[perfect
-denoising](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./control_methods/perfect_denoising/config.vsh.yaml)\|positive_control
-\|Negative control by copying the train counts \| \| \|
+| Name                                                                                                                                         | Type             | Description                                            | DOI                                                | URL                                               |
+|:---------------------------------------------------------------------------------------------------------------------------------------------|:-----------------|:-------------------------------------------------------|:---------------------------------------------------|:--------------------------------------------------|
+| [ALRA](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./methods/alra/config.vsh.yaml)                                   | method           | Adaptively-thresholded Low Rank Approximation (ALRA).  | [link](https://doi.org/10.1101/397588)             | [link](https://github.com/KlugerLab/ALRA)         |
+| [DCA](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./methods/dca/config.vsh.yaml)                                     | method           | Deep Count Autoencoder                                 | [link](https://doi.org/10.1038/s41467-018-07931-2) | [link](https://github.com/theislab/dca)           |
+| [knn_smooth](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./methods/knn_smoothing/config.vsh.yaml)                    | method           | iterative K-nearest neighbor smoothing                 | [link](https://doi.org/10.1101/217737)             | [link](https://github.com/yanailab/knn-smoothing) |
+| [magic](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./methods/magic/config.vsh.yaml)                                 | method           | MAGIC: Markov affinity-based graph imputation of cells | [link](https://doi.org/10.1016/j.cell.2018.05.061) | [link](https://github.com/KrishnaswamyLab/MAGIC)  |
+| [no denoising](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./control_methods/no_denoising/config.vsh.yaml)           | negative_control | negative control by copying train counts               |                                                    |                                                   |
+| [perfect denoising](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./control_methods/perfect_denoising/config.vsh.yaml) | positive_control | Negative control by copying the train counts           |                                                    |                                                   |
 
 ## Metrics
 
 Metrics for label projection aim to characterize how well each
 classifier correctly assigns cell type labels to cells in the test set.
 
-| Name                                                                                                             | Description                         | Range           |
-|:-----------------------------------------------------------------------------------------------------------------|:------------------------------------|:----------------|
-| [mse](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./metrics/mse/config.vsh.yaml)         | Mean Squared Error Lower is better. | \[0, infinity\] |
-| [poisson](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./metrics/poisson/config.vsh.yaml) | poisson loss Lower is better.       | \[0, +inf\]     |
+| Name                                                                                                             | Description                                                                                                                                                                  | Range       |
+|:-----------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------|
+| [mse](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./metrics/mse/config.vsh.yaml)         | The mean squared error between the denoised counts of the training dataset and the true counts of the test dataset after reweighing by the train/test ratio Lower is better. | \[0, +inf\] |
+| [poisson](/home/rcannood/workspace/openproblems/openproblems-v2/src/denoising/./metrics/poisson/config.vsh.yaml) | Poisson loss: measure the mean of the inconsistencies between predicted and target Lower is better.                                                                          | \[0, +inf\] |
 
 ## Pipeline topology
 

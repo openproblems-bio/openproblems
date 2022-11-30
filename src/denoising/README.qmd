@@ -46,7 +46,7 @@ method_info_view <-
     transmute(
       Name = paste0("[", label, "](", comp_yaml, ")"),
       Type = type,
-      Description = description,
+      Description = gsub("\\.[ \n].*", ".", description),
       DOI = ifelse(!is.na(paper_doi), paste0("[link](https://doi.org/", paper_doi, ")"), ""),
       URL = ifelse(!is.na(code_url), paste0("[link](", code_url, ")"), "")
     )
