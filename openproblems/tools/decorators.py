@@ -96,7 +96,7 @@ def method(
     return decorator
 
 
-def metric(metric_name, maximize, image="openproblems"):
+def metric(metric_name, maximize, paper_reference, image="openproblems"):
     """Decorate a metric function.
 
     Parameters
@@ -124,7 +124,10 @@ def metric(metric_name, maximize, image="openproblems"):
             return func(*args, **kwargs)
 
         apply_metric.metadata = dict(
-            metric_name=metric_name, maximize=maximize, image=image
+            metric_name=metric_name,
+            paper_reference=paper_reference,
+            maximize=maximize,
+            image=image,
         )
         return apply_metric
 
