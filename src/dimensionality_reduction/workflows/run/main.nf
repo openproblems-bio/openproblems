@@ -10,9 +10,9 @@ include { random_features } from "$targetDir/dimensionality_reduction/control_me
 // import methods
 include { umap } from "$targetDir/dimensionality_reduction/methods/umap/main.nf"
 include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
-include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
-include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
-include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
+// include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
+// include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
+// include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
 
 // import metrics
 include { rmse } from "$targetDir/dimensionality_reduction/metrics/rmse/main.nf"
