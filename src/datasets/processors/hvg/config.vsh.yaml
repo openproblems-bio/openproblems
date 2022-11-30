@@ -1,4 +1,4 @@
-__inherits__: ../../api/comp_processor_hvg.yaml
+__merge__: ../../api/comp_processor_hvg.yaml
 functionality:
   name: "hvg"
   namespace: "datasets/processors"

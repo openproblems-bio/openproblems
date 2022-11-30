@@ -36,8 +36,8 @@ comp_file <- map_df(comp_yamls, function(yaml_file) {
       direction = arg$direction %||% "input",
       description = arg$description
     )
-    if ("__inherits__" %in% names(arg)) {
-      df$file_name <- basename(arg$`__inherits__`) %>% gsub("\\.yaml", "", .)
+    if ("__merge__" %in% names(arg)) {
+      df$file_name <- basename(arg$`__merge__`) %>% gsub("\\.yaml", "", .)
     }
     df
   })

@@ -32,7 +32,7 @@ functionality:
         - name: "--output"
           direction: "output"
           # todo: fix inherits in nxf
-          # __inherits__: ../../api/anndata_raw.yaml
+          # __merge__: ../../api/anndata_raw.yaml
           type: file
           description: "A raw dataset"
           example: "raw_dataset.h5ad"

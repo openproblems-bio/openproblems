@@ -189,7 +189,7 @@ For example, to create a new Python-based method named `foo`, create a
 Viash config at `src/label_projection/methods/foo/config.vsh.yaml`:
 
 ``` yaml
-__inherits__: ../../api/comp_method.yaml
+__merge__: ../../api/comp_method.yaml
 functionality:
   name: "foo"
   namespace: "label_projection/methods"
@@ -264,7 +264,7 @@ with the `-h` or `--help` parameter.
 bin/viash run src/label_projection/methods/foo/config.vsh.yaml -- --help
 ```
 
-    Warning: Config inheritance (__inherits__) is an experimental feature. Changes to the API are expected.
+    Warning: Config inheritance (__merge__) is an experimental feature. Changes to the API are expected.
     foo
 
     Todo: fill in
@@ -294,7 +294,7 @@ bin/viash run src/label_projection/methods/foo/config.vsh.yaml -- \
   --output resources_test/label_projection/pancreas/prediction.h5ad
 ```
 
-    Warning: Config inheritance (__inherits__) is an experimental feature. Changes to the API are expected.
+    Warning: Config inheritance (__merge__) is an experimental feature. Changes to the API are expected.
     Load data
     Create predictions
     Add method name to uns
@@ -315,7 +315,7 @@ bin/viash build src/label_projection/methods/foo/config.vsh.yaml \
   -o target/docker/label_projection/methods/foo
 ```
 
-    Warning: Config inheritance (__inherits__) is an experimental feature. Changes to the API are expected.
+    Warning: Config inheritance (__merge__) is an experimental feature. Changes to the API are expected.
 
 <div>
 
@@ -378,7 +378,7 @@ using the **`viash test`** command.
 bin/viash test src/label_projection/methods/foo/config.vsh.yaml
 ```
 
-    Warning: Config inheritance (__inherits__) is an experimental feature. Changes to the API are expected.
+    Warning: Config inheritance (__merge__) is an experimental feature. Changes to the API are expected.
     Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo7865291233056269818'
     ====================================================================
     +/home/rcannood/workspace/viash_temp/viash_test_foo7865291233056269818/build_executable/foo ---verbosity 6 ---setup cachedbuild
@@ -472,7 +472,7 @@ all of the required output slots.
 bin/viash test src/label_projection/methods/foo/config.vsh.yaml
 ```
 
-    Warning: Config inheritance (__inherits__) is an experimental feature. Changes to the API are expected.
+    Warning: Config inheritance (__merge__) is an experimental feature. Changes to the API are expected.
     Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo15779522933199950789'
     ====================================================================
     +/home/rcannood/workspace/viash_temp/viash_test_foo15779522933199950789/build_executable/foo ---verbosity 6 ---setup cachedbuild
