@@ -12,7 +12,7 @@ For information about the batch silhouette score, check sil_batch."""
 @metric(
     metric_name="Silhouette",
     maximize=True,
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",  # only if required
 )
 def silhouette(adata):
     from scib.metrics import silhouette

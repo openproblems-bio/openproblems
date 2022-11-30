@@ -30,7 +30,7 @@ def _dca(adata, test=False, epochs=None):
     paper_url="https://www.nature.com/articles/s41467-018-07931-2",
     paper_year=2019,
     code_url="https://github.com/theislab/dca",
-    image="openproblems-python-tensorflow",
+    image="openproblems-python-tf2.4",
 )
 def dca(adata, test=False, epochs=None):
     return _dca(adata, test=test, epochs=epochs)
