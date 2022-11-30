@@ -9,7 +9,7 @@ functionality:
     metrics:
       - id: mse
         label: mse
-        description: Mean Squared Error
+        description: The mean squared error between the denoised counts of the training dataset and the true counts of the test dataset after reweighing by the train/test ratio
         maximize: false
         min: 0
         max: +inf

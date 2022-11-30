@@ -9,7 +9,7 @@ functionality:
     metrics:
       - id: poisson
         label: poisson
-        description: poisson loss
+        description: "Poisson loss: measure the mean of the inconsistencies between predicted and target"
         maximize: false
         min: 0
         max: +inf
