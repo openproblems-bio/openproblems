@@ -27,3 +27,5 @@ platforms:
           - scanpy
           - scprep
   - type: nextflow
+    directives: 
+      label: [ midmem, midcpu ]

@@ -27,3 +27,5 @@ platforms:
         github:
           - czbiohub/molecular-cross-validation
   - type: nextflow
+    directives: 
+      label: [ midmem, midcpu ]
