@@ -1,4 +1,4 @@
-# openproblems-python-extras Docker image
+# openproblems-python-tf2.4 Docker image
 
 Base image: singlecellopenproblems/openproblems
 
@@ -8,5 +8,6 @@ Python: 3.8
 
 Python packages:
 
-* pybedtools
-* pyensembl
+* keras >=2.4,<2.6
+* tensorflow >=2.4,<2.5
+* dca

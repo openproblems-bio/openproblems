@@ -18,7 +18,7 @@ component."""
 @metric(
     metric_name="PC Regression",
     maximize=True,
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",  # only if required
 )
 def pcr(adata):
     from ._utils import _get_split

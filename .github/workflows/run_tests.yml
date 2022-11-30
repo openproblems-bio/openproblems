@@ -62,6 +62,13 @@ jobs:
         pip install --editable .[evaluate]
         python -c "import openproblems"
 
+    - name: Download docker images
+      run: |
+        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
+          docker pull singlecellopenproblems/${image} &
+        done
+        wait
+
     - name: Update Docker images
       if: |
         !(
