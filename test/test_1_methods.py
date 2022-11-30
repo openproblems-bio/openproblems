@@ -61,7 +61,7 @@ def test_method_metadata(method):
     for attr in [
         "method_name",
         "paper_name",
-        "paper_url",
+        "paper_reference",
         "paper_year",
         "code_url",
         "image",
