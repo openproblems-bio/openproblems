@@ -1,6 +1,6 @@
 functionality:
   arguments:
-    - name: "--input_reduced"
+    - name: "--input"
       __inherits__: anndata_reduced.yaml
     - name: "--output"
       __inherits__: anndata_score.yaml
