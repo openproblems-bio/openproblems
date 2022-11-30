@@ -235,7 +235,7 @@ def _beta(adata, test=False, top_genes=None, threshold=1):
     paper_year=2013,
     code_version="1.0",
     code_url="http://cistrome.org/BETA",
-    image="openproblems-python-bedtools",
+    image="openproblems-python-extras",
 )
 def beta(adata, test=False, top_genes=None, threshold=1):
     adata = _beta(adata, test=test, top_genes=top_genes, threshold=threshold)

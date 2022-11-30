@@ -10,7 +10,7 @@ _bbknn_method = functools.partial(
     paper_reference="polanski2020bbknn",
     paper_year=2020,
     code_url="https://github.com/Teichlab/bbknn",
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",  # only if required
 )
 
 

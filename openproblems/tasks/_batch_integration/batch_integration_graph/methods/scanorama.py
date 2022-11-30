@@ -10,7 +10,7 @@ _scanorama_method = functools.partial(
     paper_reference="hie2019efficient",
     paper_year=2019,
     code_url="https://github.com/brianhie/scanorama",
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",
 )
 
 

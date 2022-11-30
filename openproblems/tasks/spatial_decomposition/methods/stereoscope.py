@@ -10,7 +10,7 @@ from ..utils import split_sc_and_sp
     paper_reference="andersson2020single",
     paper_year=2020,
     code_url="https://github.com/scverse/scvi-tools",
-    image="openproblems-python-pytorch",
+    image="openproblems-python-extras",
 )
 def stereoscope(adata, test=False, max_epochs_sc=None, max_epochs_sp=None):
     from scvi.external import RNAStereoscope
