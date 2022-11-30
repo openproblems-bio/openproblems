@@ -1,4 +1,4 @@
-__inherits__: ../api/comp_split_dataset.yaml
+__merge__: ../api/comp_split_dataset.yaml
 functionality:
   name: "split_dataset"
   namespace: "denoising"

@@ -1,11 +1,11 @@
 functionality:
   arguments:
     - name: "--input_test"
-      __inherits__: anndata_test.yaml
+      __merge__: anndata_test.yaml
     - name: "--input_denoised"
-      __inherits__: anndata_denoised.yaml
+      __merge__: anndata_denoised.yaml
     - name: "--output"
-      __inherits__: anndata_score.yaml
+      __merge__: anndata_score.yaml
       direction: output
   test_resources:
     - path: ../../../../resources_test/denoising/
