@@ -1,8 +1,6 @@
 
 - <a href="#denoising" id="toc-denoising">Denoising</a>
   - <a href="#the-task" id="toc-the-task">The task</a>
-  - <a href="#the-metrics" id="toc-the-metrics">The metrics</a>
-  - <a href="#api" id="toc-api">API</a>
   - <a href="#methods" id="toc-methods">Methods</a>
   - <a href="#metrics" id="toc-metrics">Metrics</a>
   - <a href="#pipeline-topology" id="toc-pipeline-topology">Pipeline
@@ -57,32 +55,6 @@ by comparing the result to the test dataset. The authors show that both
 in theory and in practice, the measured denoising accuracy is
 representative of the accuracy that would be obtained on a ground truth
 dataset.
-
-## The metrics
-
-Metrics for data denoising aim to assess denoising accuracy by comparing
-the denoised *training* set to the randomly sampled *test* set.
-
-- **MSE**: The mean squared error between the denoised counts of the
-  training dataset and the true counts of the test dataset after
-  reweighting by the train/test ratio.
-- **Poisson**: The Poisson log likelihood of observing the true counts
-  of the test dataset given the distribution given in the denoised
-  dataset.
-
-## API
-
-Datasets should contain the raw UMI counts in `adata.X`, subsampled to
-training (`adata.obsm["train"]`) and testing (`adata.obsm["test"]`)
-datasets using `openproblems.tasks.denoising.datasets.utils.split_data`.
-
-The task-specific data loader functions should split the provided raw
-UMI counts into a training and a test dataset, as described by [Batson
-et al., 2019](https://www.biorxiv.org/content/10.1101/786269v1). The
-training dataset should be stored in `adata.obsm['train']`, and the test
-dataset should be stored in `adata.obsm['test']`. Methods should store
-the denoising result in `adata.obsm['denoised']`. Methods should not
-edit `adata.obsm["train"]` or `adata.obsm["test"]`.
 
 ## Methods
 
