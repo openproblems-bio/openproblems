@@ -8,7 +8,7 @@ functionality:
       __inherits__: anndata_score.yaml
       direction: output
   test_resources:
-    - path: ../../../../output/denoising/
+    - path: ../../../../resources_test/denoising/
     - type: python_script
       path: format_check.py
       text: |
