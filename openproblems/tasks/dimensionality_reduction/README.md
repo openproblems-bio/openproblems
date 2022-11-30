@@ -9,8 +9,8 @@ other functional elements encoded in mRNA such as lncRNAs). Since its inception,
 scRNA-seq experiments have been growing in terms of the number of cells measured.
 Originally, cutting-edge SmartSeq experiments would yield a few hundred cells, at best.
 Now, it is not uncommon to see experiments that yield over [100,000
-cells](<https://www.nature.com/articles/s41586-018-0590-4>) or even [> 1 million
-cells.](https://doi.org/10.1126/science.aba7721)
+cells](https://openproblems.bio/bibliography#tabula2018single) or even [> 1 million
+cells.](https://openproblems.bio/bibliography#cao2020human)
 
 Each *feature* in a dataset functions as a single dimension. While each of the ~30,000
 dimensions measured in each cell contribute to an underlying data structure, the overall
@@ -28,13 +28,14 @@ data for visualization and interpretation.
   dimension-reduced data.
 * **Trustworthiness**: a measurement of similarity between the rank of each point's
   nearest neighbors in the high-dimensional data and the reduced data ([Venna & Kaski,
-  2001](http://dx.doi.org/10.1007/3-540-44668-0_68)).
+  2001](https://openproblems.bio/bibliography#venna2001neighborhood)).
 * **Density preservation**: similarity between local densities in the high-dimensional
   data and the reduced data ([Narayan, Berger & Cho,
-  2020](https://doi.org/10.1038/s41587-020-00801-7))
+  2020](https://openproblems.bio/bibliography#narayan2021assessing))
 * **NN Ranking**: a set of metrics from
-  [pyDRMetrics](https://doi.org/10.17632/jbjd5fmggh.2) relating to the preservation
-  of nearest neighbors in the high-dimensional data and the reduced data.
+  [pyDRMetrics](https://openproblems.bio/bibliography#zhang2021pydrmetrics) relating to
+  the preservation   of nearest neighbors in the high-dimensional data and the reduced
+  data.
 
 ## API
 
