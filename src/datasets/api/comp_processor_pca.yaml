@@ -1,14 +1,14 @@
 functionality:
   arguments:
     - name: "--input"
-      __inherits__: anndata_normalized.yaml
+      __merge__: anndata_normalized.yaml
     - name: "--layer_input"
       type: string
       default: "normalized"
       description: Which layer to use as input for the PCA.
     - name: "--output"
       direction: output
-      __inherits__: anndata_pca.yaml
+      __merge__: anndata_pca.yaml
     - name: "--obsm_embedding"
       type: string
       default: "X_pca"

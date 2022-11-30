@@ -1,4 +1,4 @@
-__inherits__: ../../api/comp_normalization.yaml
+__merge__: ../../api/comp_normalization.yaml
 functionality:
   name: "sqrt_cpm"
   namespace: "datasets/normalization"
