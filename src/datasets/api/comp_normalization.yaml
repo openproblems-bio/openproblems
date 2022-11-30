@@ -1,10 +1,10 @@
 functionality:
   arguments:
     - name: "--input"
-      __inherits__: anndata_raw.yaml
+      __merge__: anndata_raw.yaml
     - name: "--output"
       direction: output
-      __inherits__: anndata_normalized.yaml
+      __merge__: anndata_normalized.yaml
     - name: "--layer_output"
       type: string
       default: "normalized"

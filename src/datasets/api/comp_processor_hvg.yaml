@@ -1,14 +1,14 @@
 functionality:
   arguments:
     - name: "--input"
-      __inherits__: anndata_pca.yaml
+      __merge__: anndata_pca.yaml
     - name: "--layer_input"
       type: string
       default: "normalized"
       description: Which layer to use as input for the PCA.
     - name: "--output"
       direction: output
-      __inherits__: anndata_dataset.yaml
+      __merge__: anndata_dataset.yaml
     - name: "--var_hvg"
       type: string
       default: "hvg"
