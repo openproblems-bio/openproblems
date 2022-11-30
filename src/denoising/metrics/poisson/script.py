@@ -18,8 +18,8 @@ input_denoised = ad.read_h5ad(par['input_denoised'])
 input_test = ad.read_h5ad(par['input_test'])
 
 
-test_data = input_test.layers["counts"]
-denoised_data = input_denoised.layers["denoised"]
+test_data = input_test.layers["counts"].toarray()
+denoised_data = input_denoised.layers["denoised"].toarray()
 
 print("Compute metric value")
 # scaling

@@ -37,6 +37,7 @@ platforms:
           - "anndata>=0.8"
           - scprep
           - magic-impute
+          - scipy
   - type: nextflow
     directives: 
       label: [ midmem, midcpu ]

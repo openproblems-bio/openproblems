@@ -20,8 +20,8 @@ input_denoised = ad.read_h5ad(par['input_denoised'])
 input_test = ad.read_h5ad(par['input_test'])
 
 
-test_data = ad.AnnData(X=input_test.layers["counts"], obs=input_test.obs, var=input_test.var, dtype="float32")
-denoised_data = ad.AnnData( X=input_denoised.layers["denoised"], obs=input_denoised.obs, var=input_denoised.var, dtype="float32")
+test_data = ad.AnnData(X=input_test.layers["counts"].toarray(), dtype="float")
+denoised_data = ad.AnnData( X=input_denoised.layers["denoised"].toarray(), dtype="float")
 
 print("Normalize data")
 

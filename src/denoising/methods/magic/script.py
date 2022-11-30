@@ -2,6 +2,7 @@ import anndata as ad
 import numpy as np
 import scprep
 from magic import MAGIC
+import scipy
 
 
 ## VIASH START
@@ -45,7 +46,7 @@ Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
 
 output_denoised = input_train.copy()
 output_denoised.uns["method_id"] = meta["functionality_name"]
-output_denoised.layers["denoised"] = Y
+output_denoised.layers["denoised"] = scipy.sparse.csr_matrix(Y)
 
 print("Writing Data")
 output_denoised.write_h5ad(par['output'],compression="gzip")

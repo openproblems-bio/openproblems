@@ -31,31 +31,26 @@ for key in list(adata.layers.keys()):
     if key != "counts":
         del adata.layers[key]
 
-adata.X = adata.layers["counts"]
-X = np.array(adata.X)
+counts_rounded = np.array(adata.layers["counts"]).round()
 
-# for test purposes
-X = X.round()
+counts = counts_rounded.astype(int)
 
 print(">> process and split data")
-if scipy.sparse.issparse(X):
-    X = np.array(X.todense())
-if np.allclose(X, X.astype(int)):
-    X = X.astype(int)
-else:
-    raise TypeError("Molecular cross-validation requires integer count data.")
-
-X_train, X_test = molecular_cross_validation.util.split_molecules(
-    X, par["train_frac"], 0.0, random_state
+train_data, test_data = molecular_cross_validation.util.split_molecules(
+    counts.data, par["train_frac"], 0.0, random_state
 )
 
+X_train = counts.copy()
+X_test = counts.copy()
+X_train.data = train_data
+X_test.data = test_data
 # Remove no cells that do not have enough reads
-is_missing = X_train.sum(axis=0) == 0
-X_train, X_test = X_train[:, ~is_missing], X_test[:, ~is_missing]
+is_missing = np.array(X_train.sum(axis=0) == 0)
+X_train, X_test = X_train[:, ~is_missing.flatten()], X_test[:, ~is_missing.flatten()]
 
 #   copy adata to train_set, test_set
 
-new_adata = adata[:, ~is_missing].copy()
+new_adata = adata[:, ~is_missing.flatten()].copy()
 
 output_train = ad.AnnData(X_train.astype(float), dtype=float)
 output_train.layers["counts"] = output_train.X
