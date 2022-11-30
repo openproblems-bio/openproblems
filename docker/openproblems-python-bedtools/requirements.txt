@@ -1,2 +1,0 @@
-pybedtools==0.9.*
-pyensembl==2.0.*

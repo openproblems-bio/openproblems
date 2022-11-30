@@ -43,10 +43,6 @@ def _liana(
     adata.layers["logcounts"] = adata.layers["log_cpm"]
     del adata.layers["log_cpm"]
 
-    # remove dataframe before R conversion
-    target = adata.uns["ccc_target"]
-    del adata.uns["ccc_target"]
-
     # Run LIANA
     liana_res = _r_liana(
         adata,
@@ -56,9 +52,6 @@ def _liana(
         test=test,
         **kwargs,
     )
-
-    # return target to uns
-    adata.uns["ccc_target"] = target
 
     # Format results
     liana_res["score"] = liana_res[score_col]

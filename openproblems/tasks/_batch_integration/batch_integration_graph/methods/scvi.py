@@ -10,7 +10,7 @@ _scvi_method = functools.partial(
     paper_reference="lopez2018deep",
     paper_year=2018,
     code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",  # only if required
 )
 
 

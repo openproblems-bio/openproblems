@@ -16,7 +16,7 @@ consists of the mean isolated score of all isolated labels.
     metric_name="Isolated label Silhouette",
     paper_reference="luecken2022benchmarking",
     maximize=True,
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",  # only if required
 )
 def isolated_labels_sil(adata):
     from scib.metrics import isolated_labels

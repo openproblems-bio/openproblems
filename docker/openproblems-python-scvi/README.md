@@ -1,4 +1,4 @@
-# openproblems-python-tensorflow Docker image
+# openproblems-python-scvi Docker image
 
 Base image: singlecellopenproblems/openproblems
 
@@ -8,5 +8,4 @@ Python: 3.8
 
 Python packages:
 
-* tensorflow
-* dca
+* scvi-tools

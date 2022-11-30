@@ -11,7 +11,7 @@ from . import utils
     "across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, "
     "and SMARTER-seq). Here we just use the inDrop1 batch, which includes"
     "1937 cells × 15502 genes.",
-    image="openproblems-python-pytorch",
+    image="openproblems-python-extras",
 )
 def pancreas(test=False):
     adata = load_pancreas(test=test, keep_techs=["inDrop1"])

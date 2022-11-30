@@ -22,7 +22,7 @@ coefficients.
     metric_name="HVG conservation",
     paper_reference="luecken2022benchmarking",
     maximize=True,
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",
 )
 def hvg_conservation(adata):
     from scib.metrics import hvg_overlap
