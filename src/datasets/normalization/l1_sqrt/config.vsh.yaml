@@ -1,0 +1,22 @@
+__merge__: ../../api/comp_normalization.yaml
+functionality:
+  name: "l1_sqrt"
+  namespace: "common/normalization"
+  description: "Normalize the square rooted data with L1. 
+    Normalizes data such that the sum of the expr values for each cell sums to 1. Returns
+    the median UMI count per cell scaling all cells as if they were sampled evenly."
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scprep
+          - "anndata>=0.8"
+          - numpy
+  - type: nextflow
+    directives: 
+      label: [ lowmem, lowcpu ]
