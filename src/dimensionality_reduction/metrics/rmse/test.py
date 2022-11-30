@@ -14,7 +14,7 @@ output_path = "score.h5ad"
 n_pca = 50
 cmd = [
     meta['executable'],
-    "--input", input_path,
+    "--input_reduced", input_path,
     "--output", output_path,
 ]
 
