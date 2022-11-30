@@ -38,9 +38,10 @@ if 'metric_ids' not in adata.uns.keys():
     adata.uns['metric_ids'] = []
     adata.uns['metric_values'] = {}
 
-adata.uns['metric_ids'] += ['kruskal', 'rmse']
+adata.uns['metric_ids'] += ['rmse']
+# adata.uns['metric_ids'] += ['kruskal', 'rmse']
 adata.uns['metric_values']['rmse'] = rmse
-adata.uns['metric_values']['kruskal'] = kruskal_score
+# adata.uns['metric_values']['kruskal'] = kruskal_score
 adata.obsm['kruskal'] = kruskal_matrix
 
 print("Write data to file")

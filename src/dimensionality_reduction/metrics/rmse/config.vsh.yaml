@@ -4,10 +4,11 @@ functionality:
   namespace: "dimensionality_reduction/metrics"
   description: The root mean squared error between the full (or processed) data matrix and a list of dimensionally-reduced matrices
   info:
-    type: metric
-    label: RMSE
     v1_url: openproblems/tasks/dimensionality_reduction/metrics/root_mean_square_error.py 
     v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    metrics:
+      - id: rmse
+        label: RMSE
   resources:
     - type: python_script
       path: script.py
