@@ -1,6 +1,5 @@
 from openproblems.tools.utils import assert_finite  # noqa
 
-import bibtexparser
 import functools
 import numpy as np
 import pathlib
@@ -52,6 +51,8 @@ def assert_url_accessible(url):
 
 @functools.lru_cache(None)
 def _load_bibliography():
+    import bibtexparser
+
     bib_path = FILEPATH.parents[2].joinpath("main.bib")
     with open(bib_path, "r") as handle:
         return bibtexparser.load(handle)
