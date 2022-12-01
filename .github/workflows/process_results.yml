@@ -120,7 +120,7 @@ jobs:
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
         delete-branch: true
-        base: main
+        base: refactor/tables_alternate
         title: '[auto] Update benchmark results'
         reviewers: scottgigante-immunai,rcannood,dburkhardt
         path: './website'
