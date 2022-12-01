@@ -39,6 +39,7 @@ jobs:
         repository: openproblems-bio/nbt2022-reproducibility
         path: nbt2022-reproducibility
         token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
+        ref: refactor/tables_alternate
 
     - name: Set up website Git branch
       working-directory: website
