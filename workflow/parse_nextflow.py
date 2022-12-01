@@ -240,7 +240,8 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
     output = dict(
         name=dataset.metadata["dataset_name"],
         data_url=dataset.metadata["data_url"],
-        data_reference=dataset.metadata["data_reference"],
+        data_reference="https://openproblems.bio/"
+        f"bibliography#{dataset.metadata['data_reference']}",
         headers=dict(names=["Rank", "Mean score"], fixed=["Name", "Paper", "Library"]),
         results=list(),
     )
@@ -254,7 +255,8 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
         result = {
             "Name": method.metadata["method_name"],
             "Paper": method.metadata["paper_name"],
-            "Paper reference": method.metadata["paper_reference"],
+            "Paper reference": "https://openproblems.bio/"
+            f"bibliography#{method.metadata['paper_reference']}",
             "Year": method.metadata["paper_year"],
             "Library": method.metadata["code_url"],
             "Implementation": "https://github.com/openproblems-bio/openproblems/"
