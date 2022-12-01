@@ -1,4 +1,0 @@
-param_list:
-- id: pancreas
-  input: resources_test/common/pancreas/dataset.h5ad
-seed: 123
