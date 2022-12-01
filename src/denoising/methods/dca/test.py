@@ -26,21 +26,21 @@ def descend_obj(obj,sep='\t'):
     """
     if type(obj) in [h5py._hl.group.Group,h5py._hl.files.File]:
         for key in obj.keys():
-            print(f"{sep}{key}: {obj[key]}")
+            print(f"{sep}{key}: {obj[key]}", flush=True)
             descend_obj(obj[key],sep=sep+'\t')
     elif type(obj)==h5py._hl.dataset.Dataset:
         for key in obj.attrs.keys():
-            print(f"{sep}\t{key}: {obj.attrs[key]}")
+            print(f"{sep}\t{key}: {obj.attrs[key]}", flush=True)
 
 print(">> Reading h5ad files")
 with h5py.File(input_train_path, 'r') as input_train:
     with h5py.File(output_path, 'r') as output:
-        print("Input:")
+        print("Input:", flush=True)
         descend_obj(input_train)
-        print("Output:")
+        print("Output:", flush=True)
         descend_obj(output)
 
-        print(">> Checking whether predictions were added")
+        print(">> Checking whether predictions were added", flush=True)
         assert "denoised" in output["layers"].keys()
         assert meta['functionality_name'] == np.string_(output["uns/method_id"]).decode('utf-8')
 
