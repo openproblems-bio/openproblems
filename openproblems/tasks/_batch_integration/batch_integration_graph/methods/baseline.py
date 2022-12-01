@@ -58,7 +58,7 @@ def _random_embedding(partition):
     embedding = OneHotEncoder().fit_transform(
         LabelEncoder().fit_transform(partition)[:, None]
     )
-    embedding = embedding + np.random.uniform(-0.1, 0.1, embedding.shape)
+    embedding = embedding + np.random.uniform(-0.01, 0.01, embedding.shape)
     return embedding
 
 

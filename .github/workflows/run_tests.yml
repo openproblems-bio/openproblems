@@ -136,6 +136,11 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
+      !startsWith(github.ref, 'refs/heads/test_docker') &&
+      !startsWith(github.ref, 'refs/heads/test_benchmark') &&
+      !startsWith(github.ref, 'refs/heads/test_full_benchmark') &&
+      !startsWith(github.ref, 'refs/heads/test_process') &&
+      !startsWith(github.ref, 'refs/heads/test_website') &&
       (
         startsWith(github.ref, 'refs/heads') ||
         startsWith(github.ref, 'refs/tags') ||
@@ -210,11 +215,7 @@ jobs:
       (
         needs.build_images.result == 'success' ||
         needs.build_images.result == 'skipped'
-      ) &&
-      !startsWith(github.ref, 'refs/heads/test_docker') &&
-      !startsWith(github.ref, 'refs/heads/test_benchmark') &&
-      !startsWith(github.ref, 'refs/heads/test_full_benchmark') &&
-      !startsWith(github.ref, 'refs/heads/test_process')
+      )
 
     strategy:
       fail-fast: false
@@ -339,16 +340,18 @@ jobs:
           name: coverage
 
   run_benchmark:
-    needs: run_tester
+    needs:
+    - run_tester
+    - build_images
     runs-on: ubuntu-latest
     if: >-
       always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
+      needs.build_images.result == 'success' &&
       github.event_name == 'push' &&
       (
         needs.run_tester.result == 'success' ||
-        startsWith(github.ref, 'refs/heads/test_benchmark') ||
-        startsWith(github.ref, 'refs/heads/test_full_benchmark')
+        needs.run_tester.result == 'skipped'
       )
 
     steps:
