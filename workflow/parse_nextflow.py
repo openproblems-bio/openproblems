@@ -152,7 +152,7 @@ def parse_trace_to_dict(df):
 def parse_metric_results(results_path, results):
     """Add metric results to the trace output."""
     missing_traces = []
-    for filename in os.listdir(os.path.join(results_path, "results/metrics")):
+    for filename in sorted(os.listdir(os.path.join(results_path, "results/metrics"))):
         with open(
             os.path.join(results_path, "results/metrics", filename), "r"
         ) as handle:
