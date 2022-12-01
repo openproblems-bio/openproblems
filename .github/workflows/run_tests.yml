@@ -144,7 +144,10 @@ jobs:
       (
         startsWith(github.ref, 'refs/heads') ||
         startsWith(github.ref, 'refs/tags') ||
-        github.event.pull_request.draft == false
+        (
+          github.event.pull_request.draft == false &&
+          github.actor != 'dependabot[bot]'
+        )
       )
 
     outputs:
