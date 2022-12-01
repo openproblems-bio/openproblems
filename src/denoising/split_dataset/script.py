@@ -65,10 +65,6 @@ is_missing = np.array(X_train.sum(axis=0) == 0)
 output_train = output_train[:, ~is_missing.flatten()]
 output_test = output_test[:, ~is_missing.flatten()]
 
-# output_test = adata[:, ~is_missing].copy()
-# del output_test.layers["counts"]
-# output_test.layers["counts"] = scipy.sparse.csr_matrix(X_test).astype(float)
-
 
 print(">> Writing")
 output_train.write_h5ad(par["output_train"])

@@ -18,7 +18,6 @@ input_train = ad.read_h5ad(par['input_train'])
 
 print("move layer to X")
 input_train.X = input_train.layers["counts"]
-del input_train.layers["counts"]
 
 print("running dca")
 dca(input_train, epochs=par["epochs"])
