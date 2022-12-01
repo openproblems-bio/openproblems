@@ -38,7 +38,7 @@ def _cell2location(
     if test:
         max_epochs_sc = max_epochs_sc or 2
         max_epochs_st = max_epochs_st or 2
-        num_samples = num_samples or 10
+        num_samples = num_samples or 2
     else:  # pragma: nocover
         max_epochs_sc = max_epochs_sc or 250
         max_epochs_st = max_epochs_st or 30000
