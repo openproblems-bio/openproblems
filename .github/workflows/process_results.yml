@@ -31,6 +31,7 @@ jobs:
         repository: openproblems-bio/website
         path: website
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
+        ref: refactor/tables_alternate
 
     - name: Checkout NBT reproduciblity repo
       uses: actions/checkout@v3
@@ -39,7 +40,6 @@ jobs:
         repository: openproblems-bio/nbt2022-reproducibility
         path: nbt2022-reproducibility
         token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
-        ref: refactor/tables_alternate
 
     - name: Set up website Git branch
       working-directory: website
