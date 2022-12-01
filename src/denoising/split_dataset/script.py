@@ -5,9 +5,9 @@ import molecular_cross_validation.util
 
 ## VIASH START
 par = {
-    'input': "/home/kai/Documents/openroblems/openproblems-v2/resources_test/common/pancreas/dataset.h5ad",
-    'output_train': "resources_test/denoising/pancreas/train.h5ad",
-    'output_test': "output/denoising/pancreas_split_data_output_test.h5ad",
+    'input': "resources_test/common/pancreas/dataset.h5ad",
+    'output_train': "train.h5ad",
+    'output_test': "test.h5ad",
     'train_frac': 0.9,
     'seed': 0
 }
@@ -44,21 +44,26 @@ X_train = counts.copy()
 X_test = counts.copy()
 X_train.data = train_data
 X_test.data = test_data
-# Remove no cells that do not have enough reads
-is_missing = np.array(X_train.sum(axis=0) == 0)
-X_train, X_test = X_train[:, ~is_missing.flatten()], X_test[:, ~is_missing.flatten()]
 
 #   copy adata to train_set, test_set
+output_train = ad.AnnData(
+    layers={"counts": X_train.astype(float)},
+    obs=adata.obs[[]],
+    var=adata.var[[]],
+    uns={"dataset_id": adata.uns["dataset_id"]}
+)
+output_test = ad.AnnData(
+    layers={"counts": X_test.astype(float)},
+    obs=adata.obs[[]],
+    var=adata.var[[]],
+    uns={"dataset_id": adata.uns["dataset_id"]}
+)
 
-new_adata = adata[:, ~is_missing.flatten()].copy()
+# Remove no cells that do not have enough reads
+is_missing = np.array(X_train.sum(axis=0) == 0)
 
-output_train = ad.AnnData(X_train.astype(float), dtype=float)
-output_train.layers["counts"] = output_train.X
-output_train.uns["dataset_id"] = adata.uns["dataset_id"]
-
-output_test = ad.AnnData(X_test.astype(float), dtype=float)
-output_test.layers["counts"] = output_test.X
-output_test.uns["dataset_id"] = adata.uns["dataset_id"]
+output_train = output_train[:, ~is_missing.flatten()]
+output_test = output_test[:, ~is_missing.flatten()]
 
 # output_test = adata[:, ~is_missing].copy()
 # del output_test.layers["counts"]
