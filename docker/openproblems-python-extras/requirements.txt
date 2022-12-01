@@ -10,7 +10,7 @@ phate==1.0.*
 pybedtools==0.9.*
 pyensembl==2.0.*
 scalex==1.0.2
-scvi-tools==0.16.*
+scvi-tools==0.19.*
 tangram-sc==1.0.*
 tensorflow-cpu==2.9.*
 torch==1.12.*
