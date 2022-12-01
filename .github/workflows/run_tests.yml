@@ -342,7 +342,7 @@ jobs:
       with:
           name: coverage
 
-  run_benchmark:
+  setup_benchmark:
     needs:
     - run_tester
     - build_images
@@ -356,6 +356,9 @@ jobs:
         needs.run_tester.result == 'success' ||
         needs.run_tester.result == 'skipped'
       )
+
+    outputs:
+      branch: ${{ steps.setup-environment.outputs.branch }}
 
     steps:
     - name: Check dependabot
@@ -414,6 +417,7 @@ jobs:
         wait
 
     - name: Set up environment
+      id: setup-environment
       run: |
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
@@ -428,6 +432,7 @@ jobs:
         fi
         BRANCH=`echo $BRANCH | sed 's/[^a-zA-Z0-9]*$//'`
         echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
+        echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
 
     - name: Upload Docker images
       env:
@@ -444,10 +449,20 @@ jobs:
         done
         wait
 
+  run_benchmark:
+    needs:
+    - setup_benchmark
+    runs-on: ubuntu-latest
+    if: >-
+      always() &&
+      needs.setup_benchmark.result == 'success'
+
+    steps:
     - name: Run benchmark
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
+        BRANCH: ${{ needs.setup_benchmark.branch }}
       run: |
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
@@ -467,12 +482,16 @@ jobs:
           }
         EOF
         }
-        WORKFLOW_ID=$(
+        OUTPUT=$(
             curl -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
             https://api.tower.nf/actions/${TOWER_ACTION_ID}/launch?workspaceId=${TOWER_WORKSPACE_ID} \
-            --data "$(generate_parameters)" | \
-            tee /dev/stderr | \
-            sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
+            --data "$(generate_parameters)"
         )
+        echo "$OUTPUT"
+        if [ $(echo "$OUTPUT" | grep "No more than 5 workflow runs at time are allowed") ]; then
+          echo "Nextflow Tower is currently rate limited. Please wait until fewer jobs are running and then retry failed jobs."
+          exit 1
+        fi
+        WORKFLOW_ID=$(echo "$OUTPUT" | sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/')
         echo "Benchmark running at ${TOWER_WATCH_URL}/${WORKFLOW_ID}" >> $GITHUB_STEP_SUMMARY
