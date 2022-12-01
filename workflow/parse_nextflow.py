@@ -218,7 +218,14 @@ def normalize_scores(task_name, dataset_results):
 
     n_removed = 0
     for metric_name in metric_names:
-        metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
+        try:
+            metric = openproblems.api.utils.get_function(
+                task_name, "metrics", metric_name
+            )
+        except openproblems.api.utils.NoSuchFunctionError as e:
+            print(f"[WARN] {e}")
+            del dataset_results[method_name]["metrics"][metric_name]
+            continue
         metric_scores = np.array(
             [
                 dataset_results[method_name]["metrics"][metric_name]
@@ -265,10 +272,18 @@ def drop_baselines(task_name, dataset_results):
     method_names = list(dataset_results.keys())
     n_removed = 0
     for method_name in method_names:
-        method = openproblems.api.utils.get_function(task_name, "methods", method_name)
-        if method.metadata["is_baseline"]:
-            n_removed += 1
+        try:
+            method = openproblems.api.utils.get_function(
+                task_name, "methods", method_name
+            )
+        except openproblems.api.utils.NoSuchFunctionError as e:
+            print(f"[WARN] {e}")
             del dataset_results[method_name]
+        else:
+            if method.metadata["is_baseline"]:
+                n_removed += 1
+                del dataset_results[method_name]
+
     print(f"Dropped {n_removed} baseline methods")
     return dataset_results
 
@@ -381,17 +396,19 @@ def results_to_json(results, outdir):
                 dataset_results_json, dataset_results_raw = dataset_results_to_json(
                     task_name, dataset_name, dataset_results
                 )
-            except openproblems.api.utils.NoSuchFunctionError:
+            except openproblems.api.utils.NoSuchFunctionError as e:
+                print(f"[WARN] {e}")
                 continue
             with open(filename_raw, "w") as handle:
                 dump_json(
                     dataset_results_raw,
                     handle,
                 )
-            if not workflow_utils.task_is_incomplete(
+            if workflow_utils.task_is_incomplete(
                 openproblems.api.utils.str_to_task(task_name)
             ):
-                # don't write results for incomplete tasks
+                print("Skipping stub task")
+            else:
                 with open(filename, "w") as handle:
                     dump_json(
                         dataset_results_json,
