@@ -1,4 +1,4 @@
-__inherits__: ../../api/comp_control_method.yaml
+__merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "high_dim_pca"
   namespace: "dimensionality_reduction/control_methods"

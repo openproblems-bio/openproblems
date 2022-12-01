@@ -1,7 +1,7 @@
 functionality:
   arguments:
     - name: "--input"
-      __inherits__: anndata_reduced.yaml
+      __merge__: anndata_reduced.yaml
     - name: "--output"
-      __inherits__: anndata_score.yaml
+      __merge__: anndata_score.yaml
       direction: output
