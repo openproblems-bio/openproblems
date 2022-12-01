@@ -59,7 +59,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -U wheel setuptools
-        pip install --editable .[evaluate]
+        pip install --editable .[evaluate] || pip install --force-reinstall --editable .[evaluate]
         python -c "import openproblems"
 
     - name: Download docker images
@@ -178,7 +178,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -U wheel setuptools
-        pip install --editable .[evaluate]
+        pip install --editable .[evaluate] || pip install --force-reinstall --editable .[evaluate]
         python -c "import openproblems"
 
 
@@ -269,7 +269,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -U wheel setuptools
-        pip install -U --editable .[test,r,evaluate]
+        pip install --editable .[test,r,evaluate] || pip install --force-reinstall --editable .[test,r,evaluate]
         python -c "import openproblems"
 
     - name: Cache R packages
