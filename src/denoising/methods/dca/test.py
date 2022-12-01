@@ -4,7 +4,7 @@ import anndata as ad
 import subprocess
 from os import path
 
-input_train_path = meta["resources_dir"] + "denoising/pancreas_split_data_output_train.h5ad"
+input_train_path = meta["resources_dir"] + "/pancreas/train.h5ad"
 output_path = "output.h5ad"
 
 cmd = [

@@ -8,7 +8,7 @@ functionality:
       __merge__: anndata_score.yaml
       direction: output
   test_resources:
-    - path: ../../../../resources_test/denoising/
+    - path: ../../../../resources_test/denoising/pancreas
     - type: python_script
       path: format_check.py
       text: |
@@ -16,8 +16,8 @@ functionality:
         import subprocess
         from os import path
 
-        input_denoised_path = meta["resources_dir"] + "/denoising/output_baseline_PD.h5ad"
-        input_test_path = meta["resources_dir"] + "/denoising/pancreas.split_data.output_test.h5ad"
+        input_denoised_path = meta["resources_dir"] + "/pancreas/magic.h5ad"
+        input_test_path = meta["resources_dir"] + "/pancreas/test.h5ad"
         output_path = "output.h5ad"
 
         cmd = [
