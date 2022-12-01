@@ -52,8 +52,8 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
-        key: pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-
+        key: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
       run: |
@@ -171,8 +171,8 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
-        key: pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-
+        key: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
       run: |
@@ -262,8 +262,8 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
+        key: python-pip-${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
+        restore-keys: python-pip-${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
 
     - name: Install package & dependencies
       run: |
