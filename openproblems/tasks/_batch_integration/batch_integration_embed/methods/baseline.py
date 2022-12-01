@@ -79,18 +79,18 @@ def batch_random_integration(adata, test=False):
 
 
 @method(
-    method_name="Random Integration by Batch",
-    paper_name="Random Integration by Batch (baseline)",
+    method_name="True Features",
+    paper_name="True Features (baseline)",
     paper_url="https://openproblems.bio",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
-    image="openproblems-python-batch-integration",
     is_baseline=True,
 )
-def cell_cycle_integration(adata, test=False):
-    from scib.preprocessing import score_cell_cycle
+def true_features(adata, test=False):
+    adata.obsm["X_emb"] = adata.X
+    if test:
+        adata.obsm["X_emb"] = adata.obsm["X_emb"][:, :100]
 
-    score_cell_cycle(adata, organism=adata.uns["organism"])
-    adata.obsm["X_emb"] = adata.obs[["S_score", "G2M_score"]].to_numpy()
+    adata.obsm["X_emb"] = adata.obsm["X_emb"].toarray()
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata

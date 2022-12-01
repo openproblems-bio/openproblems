@@ -33,5 +33,6 @@ from .baseline import celltype_random_embedding
 from .baseline import celltype_random_integration
 from .baseline import no_integration
 from .baseline import random_integration
+from .baseline import true_features
 from .scalex import scalex_full
 from .scalex import scalex_hvg
