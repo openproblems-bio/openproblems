@@ -1,4 +1,0 @@
-param_list:
-- id: pancreas
-  input_train: output/denoising/pancreas.split_data.output_train.h5ad
-  input_test: output/denoising/pancreas.split_data.output_test.h5ad

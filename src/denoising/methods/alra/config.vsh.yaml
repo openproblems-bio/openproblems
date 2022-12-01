@@ -46,4 +46,4 @@ platforms:
         run: git clone https://github.com/KlugerLab/ALRA.git /ALRA
   - type: nextflow
     directives: 
-      label: [ midmem, midcpu ]
+      label: [ highmem, highcpu ]

@@ -5,7 +5,7 @@ import scipy
 
 ## VIASH START
 par = {
-    'input_train': 'output/denoising/pancreas_split_data_output_train.h5ad',
+    'input_train': 'resources_test/denoising/pancreas/train.h5ad',
     'output': 'output_knn.h5ad',
 }
 meta = {

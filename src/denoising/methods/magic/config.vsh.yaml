@@ -40,4 +40,4 @@ platforms:
           - scipy
   - type: nextflow
     directives: 
-      label: [ midmem, midcpu ]
+      label: [ highmem, highcpu ]

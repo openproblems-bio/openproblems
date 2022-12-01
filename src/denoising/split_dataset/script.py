@@ -6,7 +6,7 @@ import molecular_cross_validation.util
 ## VIASH START
 par = {
     'input': "/home/kai/Documents/openroblems/openproblems-v2/resources_test/common/pancreas/dataset.h5ad",
-    'output_train': "output/denoising/pancreas_split_data_output_train.h5ad",
+    'output_train': "resources_test/denoising/pancreas/train.h5ad",
     'output_test': "output/denoising/pancreas_split_data_output_test.h5ad",
     'train_frac': 0.9,
     'seed': 0
