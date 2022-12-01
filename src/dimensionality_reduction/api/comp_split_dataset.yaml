@@ -1,0 +1,10 @@
+functionality:
+  arguments:
+    - name: "--input"
+      __merge__: anndata_dataset.yaml
+    - name: "--output_train"
+      __merge__: anndata_train.yaml
+      direction: output
+    - name: "--output_test"
+      __merge__: anndata_test.yaml
+      direction: output

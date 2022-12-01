@@ -1,0 +1,16 @@
+type: file
+description: "The test data"
+example: "test.h5ad"
+info:
+  short_description: "Test data"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true

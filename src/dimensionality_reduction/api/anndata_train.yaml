@@ -1,0 +1,25 @@
+type: file
+description: "The training data"
+example: "train.h5ad"
+info:
+  short_description: "Training data"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+      - type: double
+        name: normalized
+        description: Normalized expression values
+        required: true
+    var:
+      - type: integer
+        name: hvg_score
+        description: A ranking of the features by hvg.
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
