@@ -15,11 +15,9 @@ print("Load input data")
 input_train = ad.read_h5ad(par['input_train'])
 
 print("Process data")
-output_denoised = input_train.copy()
+input_train.layers["denoised"] = input_train.layers['counts']
 
-output_denoised.layers["denoised"] = input_train.layers['counts']
-
-output_denoised.uns["method_id"] = meta['functionality_name']
+input_train.uns["method_id"] = meta['functionality_name']
 
 print("Write Data")
-output_denoised.write_h5ad(par['output'],compression="gzip")
+input_train.write_h5ad(par['output'],compression="gzip")
