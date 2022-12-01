@@ -1,3 +1,54 @@
+"""
+Schema:
+
+# results/{task.__name__}/{dataset.__name__}.json
+{
+    "name": dataset.metadata["dataset_name"],
+    "data_url": dataset.metadata["data_url"],
+    "data_reference": dataset.metadata["data_reference"],
+    "headers": {
+        "names": [
+            "Rank",
+            "Name",
+            "Metric1 Raw",
+            "Metric2 Raw",
+            ...,
+            "Mean score Scaled",
+            "Metric1 Scaled",
+            ...,
+            "Memory (GB)",
+            "Runtime (min)",
+            "CPU (%)",
+            "Paper",
+            "Year",
+            "Library"
+        ],
+        "fixed": ["Name", "Paper", "Library"]
+    },
+    "results": [
+        {
+            "Name": method.metadata["method_name"],
+            "Paper": method.metadata["paper_name"],
+            "Paper URL": method.metadata["paper_url"],
+            "Year": method.metadata["year"],
+            "Library": method.metadata["code_url"],
+            "Implementation": "https://github.com/.../path/to/method.py",
+            "Version": method.metadata["method_version"],
+            "Runtime (min)": runtime,
+            "CPU (%)": cpu,
+            "Memory (GB)": memory,
+            "Rank": rank,
+            "Metric1 Raw": metric1_raw,
+            "Metric2 Raw": metric2_raw, .
+            ..,
+            "Mean score Scaled": mean_score,
+            "Metric1 Scaled": metric1,
+            ...
+        },
+        ...
+    ]
+}
+"""
 import collections
 import copy
 import json
@@ -266,18 +317,21 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
             "Rank": rank,
             "Mean score": method_results["mean_score"],
         }
-        for metric_name, metric_result in method_results["metrics"].items():
-            metric = openproblems.api.utils.get_function(
-                task_name, "metrics", metric_name
-            )
-            if np.isnan(metric_result):
-                metric_result = "NaN"
-            elif np.isneginf(metric_result):
-                metric_result = "-Inf"
-            elif np.isinf(metric_result):
-                metric_result = "Inf"
-            result[metric.metadata["metric_name"]] = metric_result
-            metric_names.add(metric.metadata["metric_name"])
+        for metric_type in ["metrics_raw", "metrics"]:
+            metric_type_name = "Raw" if metric_type == "metrics_raw" else "Scaled"
+            for metric_name, metric_result in method_results[metric_type].items():
+                metric = openproblems.api.utils.get_function(
+                    task_name, "metrics", metric_name
+                )
+                if np.isnan(metric_result):
+                    metric_result = "NaN"
+                elif np.isneginf(metric_result):
+                    metric_result = "-Inf"
+                elif np.isinf(metric_result):
+                    metric_result = "Inf"
+                metric_name_fmt = f"{metric.metadata['metric_name']} {metric_type_name}"
+                result[metric_name_fmt] = metric_result
+                metric_names.add(metric_name_fmt)
         output["results"].append(result)
     output["headers"]["names"].extend(list(metric_names))
     output["headers"]["names"].extend(
