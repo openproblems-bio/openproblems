@@ -1,5 +1,6 @@
 import anndata as ad
 from dca.api import dca
+import scipy
 
 ## VIASH START
 par = {
@@ -23,7 +24,7 @@ print("running dca")
 dca(input_train, epochs=par["epochs"])
 
 print("moving X back to layer")
-input_train.layers["denoised"] = input_train.X
+input_train.layers["denoised"] = scipy.sparse.csr_matrix(input_train.X)
 del input_train.X
 
 print("Writing data")
