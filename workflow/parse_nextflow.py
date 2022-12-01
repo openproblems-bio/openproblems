@@ -333,7 +333,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
                 result[metric_name_fmt] = metric_result
                 metric_names.add(metric_name_fmt)
         output["results"].append(result)
-    output["headers"]["names"].extend(list(metric_names))
+    output["headers"]["names"].extend(sorted(list(metric_names)))
     output["headers"]["names"].extend(
         [
             "Memory (GB)",
