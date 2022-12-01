@@ -123,38 +123,38 @@ jobs:
         delete-branch: true
         base: refactor/tables_alternate
         title: '[auto] Update benchmark results'
-        reviewers: scottgigante-immunai,rcannood,dburkhardt
+        reviewers: scottgigante-immunai
         path: './website'
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
         commit-message: "Update benchmark results"
-
-    - name: Push to openproblems-bio/nbt2022-reproducibility
-      if: |
-        github.event_name == 'repository_dispatch' ||
-        endsWith(github.event.head_commit.message, '# publish')
-      shell: bash
-      working-directory: './nbt2022-reproducibility'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
-      run: |
-        git push origin "${UPDATE_BRANCH_NAME}"
-
-    - name: Create nbt2022-reproducibility Pull Request
-      if: |
-        github.event_name == 'repository_dispatch' ||
-        endsWith(github.event.head_commit.message, '# publish')
-      uses: peter-evans/create-pull-request@v4
-      with:
-        branch: ${{ env.UPDATE_BRANCH_NAME }}
-        delete-branch: true
-        base: main
-        title: '[auto] Update benchmark results'
-        reviewers: scottgigante-immunai,rcannood
-        path: './nbt2022-reproducibility'
-        token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
-        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-        commit-message: "Update benchmark results"
+#
+#    - name: Push to openproblems-bio/nbt2022-reproducibility
+#      if: |
+#        github.event_name == 'repository_dispatch' ||
+#        endsWith(github.event.head_commit.message, '# publish')
+#      shell: bash
+#      working-directory: './nbt2022-reproducibility'
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
+#      run: |
+#        git push origin "${UPDATE_BRANCH_NAME}"
+#
+#    - name: Create nbt2022-reproducibility Pull Request
+#      if: |
+#        github.event_name == 'repository_dispatch' ||
+#        endsWith(github.event.head_commit.message, '# publish')
+#      uses: peter-evans/create-pull-request@v4
+#      with:
+#        branch: ${{ env.UPDATE_BRANCH_NAME }}
+#        delete-branch: true
+#        base: main
+#        title: '[auto] Update benchmark results'
+#        reviewers: scottgigante-immunai,rcannood
+#        path: './nbt2022-reproducibility'
+#        token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
+#        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+#        commit-message: "Update benchmark results"
 
     - name: AWS S3 cleanup
       if: "github.event_name == 'repository_dispatch'"

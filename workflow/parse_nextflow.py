@@ -317,6 +317,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
             "Rank": rank,
             "Mean score": method_results["mean_score"],
         }
+        result_metrics = {}
         for metric_type in ["metrics_raw", "metrics"]:
             metric_type_name = "Raw" if metric_type == "metrics_raw" else "Scaled"
             for metric_name, metric_result in method_results[metric_type].items():
@@ -330,8 +331,9 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
                 elif np.isinf(metric_result):
                     metric_result = "Inf"
                 metric_name_fmt = f"{metric.metadata['metric_name']} {metric_type_name}"
-                result[metric_name_fmt] = metric_result
+                result_metrics[metric_name_fmt] = metric_result
                 metric_names.add(metric_name_fmt)
+        result.update(sorted(result_metrics.items()))
         output["results"].append(result)
     output["headers"]["names"].extend(sorted(list(metric_names)))
     output["headers"]["names"].extend(
