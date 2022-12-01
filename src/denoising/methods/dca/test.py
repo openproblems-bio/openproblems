@@ -19,14 +19,26 @@ out = subprocess.run(cmd, check=True, capture_output=True, text=True)
 print(">> Checking whether output file exists")
 assert path.exists(output_path)
 
+# helper functions interpreted from https://stackoverflow.com/questions/44883175/how-to-list-all-datasets-in-h5py-file
+def descend_obj(obj,sep='\t'):
+    """
+    Iterate through groups in a HDF5 file and prints the groups and datasets names and datasets attributes
+    """
+    if type(obj) in [h5py._hl.group.Group,h5py._hl.files.File]:
+        for key in obj.keys():
+            print(f"{sep}{key}: {obj[key]}")
+            descend_obj(obj[key],sep=sep+'\t')
+    elif type(obj)==h5py._hl.dataset.Dataset:
+        for key in obj.attrs.keys():
+            print(f"{sep}\t{key}: {obj.attrs[key]}")
+
 print(">> Reading h5ad files")
 with h5py.File(input_train_path, 'r') as input_train:
     with h5py.File(output_path, 'r') as output:
-        print("input_train:" , input_train.keys())
-        print("input_train:", input_train.get("layers/counts"))
-        print("output:" , output.keys())
-        print("output:", output.get("layers/counts"))
-
+        print("Input:")
+        descend_obj(input_train)
+        print("Output:")
+        descend_obj(output)
 
         print(">> Checking whether predictions were added")
         assert "denoised" in output["layers"].keys()
