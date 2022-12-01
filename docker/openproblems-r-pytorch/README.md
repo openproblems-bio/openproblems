@@ -8,12 +8,12 @@ Python: 3.8
 
 R: 4.0
 
-R packages:
-
-* batchelor
-* sparsesvd
-* dplyr
-
 Python packages:
 
-* harmonic-alignment
+* harmony-pytorch
+* torch
+* bbknn
+* mnnpy
+* scib
+* scanorama
+* scvi-tools
