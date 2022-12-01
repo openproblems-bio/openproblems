@@ -135,11 +135,14 @@ def read_trace(filename):
 
 def parse_trace_to_dict(df):
     """Parse the trace dataframe and convert to dict."""
+    print(f"Parsing {df.shape[0]} trace records")
     results = collections.defaultdict(lambda: collections.defaultdict(dict))
     for task_name in df["task"].unique():
         df_task = df.loc[df["task"] == task_name]
+        print(f"{task_name}: {df_task.shape[0]} records")
         for dataset_name in df_task["dataset"].unique():
             df_dataset = df_task.loc[df_task["dataset"] == dataset_name]
+            print(f"{task_name}.{dataset_name}: {df_task.shape[0]} records")
             for _, row in df_dataset.iterrows():
                 method_name = row["method"]
                 results[task_name][dataset_name][method_name] = row.to_dict()
@@ -152,7 +155,9 @@ def parse_trace_to_dict(df):
 def parse_metric_results(results_path, results):
     """Add metric results to the trace output."""
     missing_traces = []
-    for filename in sorted(os.listdir(os.path.join(results_path, "results/metrics"))):
+    metric_filenames = os.listdir(os.path.join(results_path, "results/metrics"))
+    print(f"Loading {len(metric_filenames)} metric results")
+    for filename in sorted(metric_filenames):
         with open(
             os.path.join(results_path, "results/metrics", filename), "r"
         ) as handle:
@@ -210,6 +215,8 @@ def normalize_scores(task_name, dataset_results):
             dataset_results[method_name]["metrics"]
         )
     metric_names = list(list(dataset_results.values())[0]["metrics"].keys())
+
+    n_removed = 0
     for metric_name in metric_names:
         metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
         metric_scores = np.array(
@@ -219,6 +226,7 @@ def normalize_scores(task_name, dataset_results):
             ]
         )
         if np.all(np.isnan(metric_scores)):
+            n_removed += 1
             for method_name in dataset_results:
                 del dataset_results[method_name]["metrics"][metric_name]
             continue
@@ -246,6 +254,8 @@ def normalize_scores(task_name, dataset_results):
             metric_scores = 1 - metric_scores
         for method_name, score in zip(dataset_results, metric_scores):
             dataset_results[method_name]["metrics"][metric_name] = score
+    if n_removed > 0:
+        print(f"[WARN] Removed {n_removed} all-NaN metrics")
     return dataset_results
 
 
@@ -253,10 +263,13 @@ def drop_baselines(task_name, dataset_results):
     """Remove baseline methods from dataset results."""
     dataset_results = copy.copy(dataset_results)
     method_names = list(dataset_results.keys())
+    n_removed = 0
     for method_name in method_names:
         method = openproblems.api.utils.get_function(task_name, "methods", method_name)
         if method.metadata["is_baseline"]:
+            n_removed += 1
             del dataset_results[method_name]
+    print(f"Dropped {n_removed} baseline methods")
     return dataset_results
 
 
@@ -287,6 +300,9 @@ def compute_ranking(dataset_results):
 
 def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
     """Convert the raw dataset results to pretty JSON for web."""
+    print(
+        f"Formatting {len(dataset_results_raw)} methods for {task_name}.{dataset_name}"
+    )
     dataset = openproblems.api.utils.get_function(task_name, "datasets", dataset_name)
     output = dict(
         name=dataset.metadata["dataset_name"],
