@@ -26,7 +26,7 @@ platforms:
           - "anndata>=0.8"
           - scipy
         github:
-          - yanailab/knn-smoothing@python_package
+          - scottgigante-immunai/knn-smoothing@python_package
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]
