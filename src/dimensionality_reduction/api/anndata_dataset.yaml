@@ -1,5 +1,5 @@
 type: file
-description: "A normalised data with a PCA embedding and HVG selection"
+description: "A normalized data with a PCA embedding and HVG selection"
 example: "dataset.h5ad"
 info:
   label: "Dataset+PCA+HVG"
