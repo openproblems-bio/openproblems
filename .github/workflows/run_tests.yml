@@ -359,6 +359,7 @@ jobs:
 
     outputs:
       branch: ${{ steps.setup-environment.outputs.branch }}
+      run_name: ${{ steps.setup-environment.outputs.run_name }}
 
     steps:
     - name: Check dependabot
@@ -433,6 +434,8 @@ jobs:
         BRANCH=`echo $BRANCH | sed 's/[^a-zA-Z0-9]*$//'`
         echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
         echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+        echo "run_name=${RUN_NAME}" >> $GITHUB_OUTPUT
 
     - name: Upload Docker images
       env:
@@ -463,8 +466,8 @@ jobs:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
         BRANCH: ${{ needs.setup_benchmark.branch }}
+        RUN_NAME: ${{ needs.setup_benchmark.run_name }}
       run: |
-        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
           TOWER_ACTION_ID="bVQhVSNah1JmJfnKkfyjg"
           WORKDIR="s3://openproblems-nextflow/work_main"
