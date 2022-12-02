@@ -1,6 +1,0 @@
-annoy==1.17.1
-bbknn==1.5.*
-git+https://github.com/chriscainx/mnnpy@2097dec  # master
-git+https://github.com/theislab/scib@77ab015
-scanorama==1.7.0
-scvi-tools~=0.16  # pinned in #313
