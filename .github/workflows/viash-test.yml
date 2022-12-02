@@ -84,7 +84,7 @@ jobs:
       run: |
         IFS=$';' read -a changed_files <<< "${{ steps.changed-files.outputs.all_changed_files }}"
         echo "Changed files: "${changed_files[*]}""
-        readarray -t components < <(bin/viash ns list -p docker --format json | jq -c '[ .[] | select(.platforms[] | select(.id == "docker") | length > 0) | 
+        readarray -t components < <(bin/viash ns list -p docker --format json | jq -c '[ .[] | select(.platforms[] |
                                                                                           (.info.config | capture("^(?<dir>.*\/)").dir) as $dir | 
                                                                                           { "name": .functionality.name, 
                                                                                             "config": .info.config, 

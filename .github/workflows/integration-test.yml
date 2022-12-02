@@ -60,7 +60,7 @@ jobs:
     # store component locations
     - id: set_matrix
       run: |
-        component_json=$(bin/viash ns list -p docker --format json | jq -c '[ .[] | { "name": .functionality.name, "config": .info.config } ]')
+        component_json=$(bin/viash ns list -p docker --format json | jq -c '[ .[] |  { "name": .functionality.name, "config": .info.config } ]')
         echo "component_matrix=$component_json" >> $GITHUB_OUTPUT
         workflow_json=$(bin/viash ns list -s workflows --format json | jq -c '[ .[] | { "name": .functionality.name, "config": .info.config, "test_script": .functionality.test_resources[].path, "entry": .functionality.test_resources[].entrypoint } ]')
         echo "workflow_matrix=$workflow_json" >> $GITHUB_OUTPUT
