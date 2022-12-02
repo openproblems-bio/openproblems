@@ -45,11 +45,11 @@ jobs:
 #      working-directory: website
 #      run: |
 #        git checkout -b $UPDATE_BRANCH_NAME
-#
-#    - name: Set up nbt2022-reproducibility Git branch
-#      working-directory: nbt2022-reproducibility
-#      run: |
-#        git checkout -b $UPDATE_BRANCH_NAME
+
+    - name: Set up nbt2022-reproducibility Git branch
+      working-directory: nbt2022-reproducibility
+      run: |
+        git checkout -b $UPDATE_BRANCH_NAME
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -95,27 +95,23 @@ jobs:
         path: website/data/results
 
     - name: Move raw output
-#      if: |
-#        github.event_name == 'repository_dispatch' ||
-#        endsWith(github.event.head_commit.message, '# publish')
+      if: |
+        github.event_name == 'repository_dispatch' ||
+        endsWith(github.event.head_commit.message, '# publish')
       run: |
         rsync -v -r --include "*.raw.json" --include "*/" --exclude "*" website/data/results/ nbt2022-reproducibility/results
         rm website/data/results/*/*.raw.json
 
     - name: Push to openproblems-bio/website
-#      if: |
-#        github.event_name == 'repository_dispatch' ||
-#        endsWith(github.event.head_commit.message, '# publish')
+      if: |
+        github.event_name == 'repository_dispatch' ||
+        endsWith(github.event.head_commit.message, '# publish')
       shell: bash
       working-directory: './website'
       env:
         GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
       run: |
-        git config --global user.email "singlecellopenproblems@protonmail.com"
-        git config --global user.name "openproblems[bot]"
-        git add .
-        git commit -m "[auto] Update benchmark results"
-        git push origin refactor/tables_alternate
+        git push origin "${UPDATE_BRANCH_NAME}"
 
     - name: Create website Pull Request
       if: |
@@ -142,11 +138,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
       run: |
-        git config --global user.email "singlecellopenproblems@protonmail.com"
-        git config --global user.name "openproblems[bot]"
-        git add .
-        git commit -m "[auto] Update benchmark results"
-        git push origin main
+        git push origin "${UPDATE_BRANCH_NAME}"
 
     - name: Create nbt2022-reproducibility Pull Request
       if: |
