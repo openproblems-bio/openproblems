@@ -21,7 +21,7 @@ the preintegration variance contribution reduces the score."""
 @metric(
     metric_name="Cell Cycle Score",
     maximize=True,
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",  # only if required
 )
 def cc_score(adata, test=False):
     from ._utils import _get_split

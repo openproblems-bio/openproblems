@@ -12,7 +12,7 @@ _cell2location_method = functools.partial(
     paper_url="https://doi.org/10.1038/s41587-021-01139-4",
     paper_year=2022,
     code_url="https://github.com/BayraktarLab/cell2location",
-    image="openproblems-python-pytorch",
+    image="openproblems-python-extras",
 )
 
 

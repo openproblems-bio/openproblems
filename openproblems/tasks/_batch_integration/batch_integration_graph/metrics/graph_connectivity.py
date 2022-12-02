@@ -22,7 +22,7 @@ on the kNN graph, it can be used to evaluate all integration outputs.
 @metric(
     metric_name="Graph connectivity",
     maximize=True,
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",  # only if required
 )
 def graph_connectivity(adata):
     import scib.metrics
