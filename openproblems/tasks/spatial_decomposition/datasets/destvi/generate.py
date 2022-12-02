@@ -11,7 +11,7 @@ from openproblems.tools.decorators import dataset
     "from the destVI manuscripts leveraging sparsePCA. Number of cells and "
     "cell types present in each spatial spot is computed via combination of "
     "kernel-based parametrization of a categorical distribution and the NB model.",
-    image="openproblems-python-pytorch",
+    image="openproblems-python-extras",
 )
 def destvi(test=False):
     from .utils import generate_synthetic_dataset

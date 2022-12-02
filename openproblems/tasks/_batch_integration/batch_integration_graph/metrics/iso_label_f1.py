@@ -27,7 +27,7 @@ the mean isolated score of all isolated labels.
 @metric(
     metric_name="Isolated label F1",
     maximize=True,
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",  # only if required
 )
 def isolated_labels_f1(adata):
     from scib.metrics import isolated_labels

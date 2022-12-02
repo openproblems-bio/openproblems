@@ -16,7 +16,7 @@ We also used the scikit-learn (v.0.22.1) implementation of the ARI.
 @metric(
     metric_name="ARI",
     maximize=True,
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",
 )
 def ari(adata):
     from scib.metrics import ari

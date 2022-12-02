@@ -15,7 +15,7 @@ the scikit-learn27 (v.0.22.1) implementation of NMI.
 @metric(
     metric_name="NMI",
     maximize=True,
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",
 )
 def nmi(adata):
     from scib.metrics.clustering import opt_louvain  # isort:skip
