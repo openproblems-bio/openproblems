@@ -241,7 +241,9 @@ def normalize_scores(task_name, dataset_results):
         for method_name in list(dataset_results.keys()):
             try:
                 method = openproblems.api.utils.get_function(
-                    task_name, "methods", method_name
+                    task_name,
+                    "methods",
+                    "true_features" if method_name == "high_dim_pca" else method_name,
                 )
             except openproblems.api.utils.NoSuchFunctionError as e:
                 print(f"[WARN] {e}")
