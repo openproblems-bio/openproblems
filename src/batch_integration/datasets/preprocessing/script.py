@@ -10,7 +10,9 @@ par = {
     'output': './src/batch_integration/datasets/resources/datasets_pancreas.h5ad',
     'debug': True
 }
-resources_dir = './src/batch_integration/datasets'
+meta = {
+    'resources_dir': './resources_test/common/pancreas/',
+}
 ## VIASH END
 
 print('Importing libraries')
@@ -18,7 +20,8 @@ import scanpy as sc
 import scib
 from pprint import pprint
 import sys
-sys.path.append(resources_dir)
+
+sys.path.append(meta['resources_dir'])
 from _hvg_batch import hvg_batch
 
 if par['debug']:
@@ -37,7 +40,7 @@ adata = sc.read_h5ad(adata_file)
 print('Rename columns')
 adata.obs['label'] = adata.obs[label]
 adata.obs['batch'] = adata.obs[batch]
-adata.layers['counts'] = adata.X.copy()
+adata.X = adata.layers['counts'].copy()
 
 print('Normalise and log-transform data')
 sc.pp.normalize_total(adata)

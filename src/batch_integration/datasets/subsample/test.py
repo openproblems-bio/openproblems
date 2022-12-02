@@ -4,8 +4,8 @@ import scanpy as sc
 import numpy as np
 
 name = 'subsample'
-anndata_in = 'pancreas.h5ad'
-anndata_out = 'pancreas_sub.h5ad'
+anndata_in = 'dataset.h5ad'
+anndata_out = 'dataset_sub.h5ad'
 
 print('>> Running script')
 n_hvgs = 100

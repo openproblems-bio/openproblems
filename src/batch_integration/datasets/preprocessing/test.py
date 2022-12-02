@@ -1,10 +1,11 @@
+import os
 from os import path
 import subprocess
 import scanpy as sc
 import numpy as np
 
 name = 'preprocessing'
-anndata_in = 'data_loader_pancreas.h5ad'
+anndata_in = meta["resources_dir"] + '/pancreas/dataset.h5ad'
 anndata_out = 'datasets_pancreas.h5ad'
 
 print('>> Running script')

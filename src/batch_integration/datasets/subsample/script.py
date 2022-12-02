@@ -9,7 +9,9 @@ par = {
     'output': 'src/batch_integration/resources/data_loader_pancreas.h5ad',
     'debug': True
 }
-resources_dir = './src/batch_integration/datasets'
+meta = {
+    'resources_dir': './src/batch_integration/datasets',
+}
 ## VIASH END
 
 print('Importing libraries')
@@ -19,6 +21,7 @@ from pprint import pprint
 if par['debug']:
     pprint(par)
 
+resources_dir = meta['resources_dir']
 adata_file = par['input']
 label = par['label']
 batch = par['batch']
