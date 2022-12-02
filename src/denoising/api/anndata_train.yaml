@@ -1,0 +1,18 @@
+type: file
+description: "The training data"
+example: "training.h5ad"
+info:
+  short_description: "Training data"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+    obs:
+      - type: string
+        name: n_counts
+        description: Raw counts
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"

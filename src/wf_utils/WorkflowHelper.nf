@@ -113,6 +113,11 @@ def processArgument(arg) {
   arg.multiple_sep = arg.multiple_sep ?: ":"
   arg.plainName = arg.name.replaceAll("^-*", "")
 
+  if (arg.type == "file") {
+    arg.must_exist = arg.must_exist ?: true
+    arg.create_parent = arg.create_parent ?: true
+  }
+
   if (arg.type == "file" && arg.direction == "output") {
     def mult = arg.multiple ? "_*" : ""
     def extSearch = ""
@@ -233,7 +238,7 @@ def processConfig(config) {
 }
 
 def readConfig(file) {
-  def config = readYaml(file)
+  def config = readYaml(file ?: "$projectDir/config.vsh.yaml")
   processConfig(config)
 }
 
@@ -518,12 +523,17 @@ def paramsToList(params, config) {
     // combine params
     def combinedArgs = defaultArgs + paramArgs + multiParam
 
-    // check whether required arguments exist
-    config.functionality.allArguments
-      .findAll { it.required }
-      .forEach { par ->
-        assert combinedArgs.containsKey(par.plainName): "Argument ${par.plainName} is required but does not have a value"
-      }
+    if (workflow.stubRun) {
+      // if stub run, explicitly add an id if missing
+      combinedArgs = [id: "stub"] + combinedArgs
+    } else {
+      // else check whether required arguments exist
+      config.functionality.allArguments
+        .findAll { it.required }
+        .forEach { par ->
+          assert combinedArgs.containsKey(par.plainName): "Argument ${par.plainName} is required but does not have a value"
+        }
+    }
     
     // process arguments
     def inputs = config.functionality.allArguments
