@@ -243,7 +243,7 @@ def normalize_scores(task_name, dataset_results):
                 method = openproblems.api.utils.get_function(
                     task_name,
                     "methods",
-                    "true_features" if method_name == "high_dim_pca" else method_name,
+                    method_name,
                 )
             except openproblems.api.utils.NoSuchFunctionError as e:
                 print(f"[WARN] {e}")
@@ -281,7 +281,7 @@ def drop_baselines(task_name, dataset_results):
         method = openproblems.api.utils.get_function(
             task_name,
             "methods",
-            "true_features" if method_name == "high_dim_pca" else method_name,
+            method_name,
         )
         if method.metadata["is_baseline"]:
             n_removed += 1
@@ -338,7 +338,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
         method = openproblems.api.utils.get_function(
             task_name,
             "methods",
-            "true_features" if method_name == "high_dim_pca" else method_name,
+            method_name,
         )
         result = {
             "Name": method.metadata["method_name"],

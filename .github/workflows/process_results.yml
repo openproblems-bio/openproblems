@@ -31,7 +31,6 @@ jobs:
         repository: openproblems-bio/website
         path: website
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
-        ref: refactor/tables_alternate
 
     - name: Checkout NBT reproduciblity repo
       uses: actions/checkout@v3
@@ -120,7 +119,7 @@ jobs:
         delete-branch: true
         base: main
         title: '[auto] Update benchmark results'
-        reviewers: scottgigante-immunai
+        reviewers: scottgigante-immunai,rcannood,dburkhardt
         path: './website'
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
