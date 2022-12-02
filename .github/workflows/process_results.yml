@@ -138,6 +138,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
       run: |
+        git commit -am "[auto] Update benchmark results"
         git push origin "${UPDATE_BRANCH_NAME}"
 
     - name: Create nbt2022-reproducibility Pull Request
