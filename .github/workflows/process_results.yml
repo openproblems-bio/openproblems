@@ -45,11 +45,11 @@ jobs:
 #      working-directory: website
 #      run: |
 #        git checkout -b $UPDATE_BRANCH_NAME
-
-    - name: Set up nbt2022-reproducibility Git branch
-      working-directory: nbt2022-reproducibility
-      run: |
-        git checkout -b $UPDATE_BRANCH_NAME
+#
+#    - name: Set up nbt2022-reproducibility Git branch
+#      working-directory: nbt2022-reproducibility
+#      run: |
+#        git checkout -b $UPDATE_BRANCH_NAME
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -142,7 +142,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
       run: |
-        git push origin "${UPDATE_BRANCH_NAME}"
+        git config --global user.email "singlecellopenproblems@protonmail.com"
+        git config --global user.name "openproblems[bot]"
+        git add .
+        git commit -m "[auto] Update benchmark results"
+        git push origin main
 
     - name: Create nbt2022-reproducibility Pull Request
       if: |
