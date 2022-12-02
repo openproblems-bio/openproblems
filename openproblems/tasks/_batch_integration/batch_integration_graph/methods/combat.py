@@ -10,7 +10,7 @@ _combat_method = functools.partial(
     paper_url="https://academic.oup.com/biostatistics/article/8/1/118/252073",
     paper_year=2007,
     code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",
-    image="openproblems-r-pytorch",
+    image="openproblems-python-batch-integration",
 )
 
 
