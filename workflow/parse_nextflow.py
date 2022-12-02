@@ -332,7 +332,13 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
     metric_names = set()
     for method_name, rank in ranking.items():
         method_results = dataset_results[method_name]
-        method = openproblems.api.utils.get_function(task_name, "methods", method_name)
+        try:
+            method = openproblems.api.utils.get_function(
+                task_name, "methods", method_name
+            )
+        except openproblems.api.utils.NoSuchFunctionError as e:
+            print(f"[WARN] {e}")
+            continue
         result = {
             "Name": method.metadata["method_name"],
             "Paper": method.metadata["paper_name"],
