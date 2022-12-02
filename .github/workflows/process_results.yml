@@ -98,33 +98,33 @@ jobs:
       run: |
         rsync -v -r --include "*.raw.json" --include "*/" --exclude "*" website/data/results/ nbt2022-reproducibility/results
         rm website/data/results/*/*.raw.json
-#
-#    - name: Push to openproblems-bio/website
-#      if: |
-#        github.event_name == 'repository_dispatch' ||
-#        endsWith(github.event.head_commit.message, '# publish')
-#      shell: bash
-#      working-directory: './website'
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
-#      run: |
-#        git push origin "${UPDATE_BRANCH_NAME}"
-#
-#    - name: Create website Pull Request
-#      if: |
-#        github.event_name == 'repository_dispatch' ||
-#        endsWith(github.event.head_commit.message, '# publish')
-#      uses: peter-evans/create-pull-request@v4
-#      with:
-#        branch: ${{ env.UPDATE_BRANCH_NAME }}
-#        delete-branch: true
-#        base: main
-#        title: '[auto] Update benchmark results'
-#        reviewers: scottgigante-immunai
-#        path: './website'
-#        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
-#        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-#        commit-message: "Update benchmark results"
+
+    - name: Push to openproblems-bio/website
+      if: |
+        github.event_name == 'repository_dispatch' ||
+        endsWith(github.event.head_commit.message, '# publish')
+      shell: bash
+      working-directory: './website'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
+      run: |
+        git push origin "${UPDATE_BRANCH_NAME}"
+
+    - name: Create website Pull Request
+      if: |
+        github.event_name == 'repository_dispatch' ||
+        endsWith(github.event.head_commit.message, '# publish')
+      uses: peter-evans/create-pull-request@v4
+      with:
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
+        delete-branch: true
+        base: main
+        title: '[auto] Update benchmark results'
+        reviewers: scottgigante-immunai
+        path: './website'
+        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
+        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        commit-message: "Update benchmark results"
 
     - name: Push to openproblems-bio/nbt2022-reproducibility
       if: |
