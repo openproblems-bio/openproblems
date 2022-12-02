@@ -36,12 +36,12 @@ functionality:
   resources:
     - type: python_script
       path: script.py
-  tests:
+  test_resources:
     - type: python_script
       path: test.py
     - type: python_script
       path: test_scaled_hvg.py
-    - path: '../../../resources/datasets_pancreas.h5ad'
+    - path: ../../../../../resources_test/batch_integration/pancreas/processed.h5ad
 platforms:
   - type: docker
     image: mumichae/scib-base:1.0.2

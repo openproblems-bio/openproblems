@@ -11,7 +11,7 @@ output_file = method + '_scaled_hvg.h5ad'
 print(">> Running script")
 out = subprocess.check_output([
     "./" + method,
-    "--input", 'datasets_pancreas.h5ad',
+    "--input", 'processed.h5ad',
     "--hvg", 'True',
     "--scaling", 'True',
     "--output", output_file
@@ -23,7 +23,7 @@ assert path.exists(output_file)
 print('>> Checking API')
 adata = sc.read(output_file)
 
-assert 'name' in adata.uns
+assert 'dataset_id' in adata.uns
 assert 'label' in adata.obs.columns
 assert 'batch' in adata.obs.columns
 assert 'highly_variable' in adata.var
@@ -44,6 +44,7 @@ assert adata.n_vars == 100
 assert 'scaled' in adata.uns
 assert adata.uns['scaled'] == True
 assert -0.0000001 <= np.mean(adata.X) <= 0.0000001
-assert 0.8 <= np.var(adata.X) <= 1
+print(np.var(adata.X))
+assert 0.7 <= np.var(adata.X) <= 1
 
 print(">> All tests passed successfully")

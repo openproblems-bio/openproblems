@@ -11,7 +11,7 @@ output_file = method + '.h5ad'
 print(">> Running script")
 out = subprocess.check_output([
     "./" + method,
-    "--input", 'datasets_pancreas.h5ad',
+    "--input", 'processed.h5ad',
     "--hvg", 'False',
     "--scaling", 'False',
     "--output", output_file
@@ -23,7 +23,7 @@ assert path.exists(output_file)
 print('>> Checking API')
 adata = sc.read(output_file)
 
-assert 'name' in adata.uns
+assert 'dataset_id' in adata.uns
 assert 'label' in adata.obs.columns
 assert 'batch' in adata.obs.columns
 assert 'highly_variable' in adata.var

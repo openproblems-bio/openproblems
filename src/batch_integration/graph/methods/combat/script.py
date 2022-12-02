@@ -35,7 +35,7 @@ else:
     adata.X = adata.layers['logcounts']
 
 print('Integrate')
-adata = combat(adata, batch='batch')
+adata.X = combat(adata, batch='batch').X
 
 print('Postprocess data')
 sc.pp.pca(

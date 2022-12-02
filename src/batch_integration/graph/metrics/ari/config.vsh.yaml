@@ -29,11 +29,11 @@ functionality:
   tests:
     - type: python_script
       path: test.py
-    - path: '../../../resources/graph_pancreas_bbknn.h5ad'
+    - path: ../../../../../resources_test/batch_integration/graph/methods/bbknn.h5ad
     - type: python_script
       path: test_combat.py
-    - path: '../../../resources/graph_pancreas_combat.h5ad'
+    - path: ../../../../../resources_test/batch_integration/graph/methods/combat.h5ad
 platforms:
   - type: docker
-    image: mumichae/scib-base:1.0.0
+    image: mumichae/scib-base:1.0.2
   - type: nextflow

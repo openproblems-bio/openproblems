@@ -23,7 +23,7 @@ output = par['output']
 
 print('Read adata')
 adata = sc.read(adata_file)
-name = adata.uns['name']
+name = adata.uns['dataset_id']
 
 print('clustering')
 opt_louvain(
