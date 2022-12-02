@@ -150,12 +150,6 @@ jobs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
 
     steps:
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJSON(github) }}
-      run: |
-        echo "$GITHUB_CONTEXT"
-        exit 1
     - uses: actions/checkout@v3
       with:
         fetch-depth: 1
