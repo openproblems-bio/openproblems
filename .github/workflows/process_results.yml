@@ -111,6 +111,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
       run: |
+        git config --global user.email "singlecellopenproblems@protonmail.com"
+        git config --global user.name "openproblems[bot]"
         git commit -am "[auto] Update benchmark results"
         git push origin refactor/tables_alternate
 
