@@ -22,3 +22,14 @@ functionality:
     - name: --show_history
       type: boolean_true
       description: Whether or not to include the full history of SHAs for each file.
+  resources: 
+    - path: ../../../src
+    - type: python_script
+      path: script.py
+  test_resources:
+    - type: python_script
+      path: test.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+  - type: nextflow
