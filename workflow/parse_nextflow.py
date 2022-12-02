@@ -238,7 +238,7 @@ def normalize_scores(task_name, dataset_results):
                 del dataset_results[method_name]["metrics"][metric_name]
             continue
         baseline_methods = []
-        for method_name in dataset_results:
+        for method_name in list(dataset_results.keys()):
             try:
                 method = openproblems.api.utils.get_function(
                     task_name, "methods", method_name
