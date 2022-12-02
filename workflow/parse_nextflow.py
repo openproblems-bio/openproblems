@@ -397,7 +397,7 @@ def results_to_json(results, outdir):
                     task_name, dataset_name, dataset_results
                 )
             except openproblems.api.utils.NoSuchFunctionError as e:
-                print(f"[WARN] {e}")
+                print(f"[ERROR] {e}")
                 continue
             with open(filename_raw, "w") as handle:
                 dump_json(
