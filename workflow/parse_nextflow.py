@@ -237,13 +237,17 @@ def normalize_scores(task_name, dataset_results):
             for method_name in dataset_results:
                 del dataset_results[method_name]["metrics"][metric_name]
             continue
-        baseline_methods = [
-            method_name
-            for method_name in dataset_results
-            if openproblems.api.utils.get_function(
-                task_name, "methods", method_name
-            ).metadata["is_baseline"]
-        ]
+        baseline_methods = []
+        for method_name in dataset_results:
+            try:
+                method = openproblems.api.utils.get_function(
+                    task_name, "methods", method_name
+                )
+            except openproblems.api.utils.NoSuchFunctionError as e:
+                print(f"[WARN] {e}")
+                del dataset_results[method_name]
+            if method.metadata["is_baseline"]:
+                baseline_methods.append(method_name)
         if len(baseline_methods) < 2:
             # just use all methods as a fallback
             baseline_methods = dataset_results.keys()
