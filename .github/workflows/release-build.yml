@@ -186,7 +186,7 @@ jobs:
           -main-script "$script" \
           -entry ${{ matrix.component.entry }} \
           -profile docker,mount_temp,no_publish \
-          -c workflows/utils/labels_ci.config
+          -c src/wf_utils/labels_ci.config
 
   ###################################3
   # phase 4
