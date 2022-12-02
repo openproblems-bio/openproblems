@@ -95,9 +95,9 @@ jobs:
         path: website/data/results
 
     - name: Move raw output
-      if: |
-        github.event_name == 'repository_dispatch' ||
-        endsWith(github.event.head_commit.message, '# publish')
+#      if: |
+#        github.event_name == 'repository_dispatch' ||
+#        endsWith(github.event.head_commit.message, '# publish')
       run: |
         rsync -v -r --include "*.raw.json" --include "*/" --exclude "*" website/data/results/ nbt2022-reproducibility/results
         rm website/data/results/*/*.raw.json
@@ -113,7 +113,8 @@ jobs:
       run: |
         git config --global user.email "singlecellopenproblems@protonmail.com"
         git config --global user.name "openproblems[bot]"
-        git commit -am "[auto] Update benchmark results"
+        git add .
+        git commit -m "[auto] Update benchmark results"
         git push origin refactor/tables_alternate
 
     - name: Create website Pull Request
