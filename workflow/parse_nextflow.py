@@ -398,13 +398,9 @@ def results_to_json(results, outdir):
                 os.mkdir(results_dir)
             filename = os.path.join(results_dir, "{}.json".format(dataset_name))
             filename_raw = os.path.join(results_dir, "{}.raw.json".format(dataset_name))
-            try:
-                dataset_results_json, dataset_results_raw = dataset_results_to_json(
-                    task_name, dataset_name, dataset_results
-                )
-            except openproblems.api.utils.NoSuchFunctionError as e:
-                print(f"[ERROR] {e}")
-                continue
+            dataset_results_json, dataset_results_raw = dataset_results_to_json(
+                task_name, dataset_name, dataset_results
+            )
             with open(filename_raw, "w") as handle:
                 dump_json(
                     dataset_results_raw,
