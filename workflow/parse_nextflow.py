@@ -276,17 +276,14 @@ def drop_baselines(task_name, dataset_results):
     method_names = list(dataset_results.keys())
     n_removed = 0
     for method_name in method_names:
-        try:
-            method = openproblems.api.utils.get_function(
-                task_name, "methods", method_name
-            )
-        except openproblems.api.utils.NoSuchFunctionError as e:
-            print(f"[WARN] {e}")
+        method = openproblems.api.utils.get_function(
+            task_name,
+            "methods",
+            "true_features" if method_name == "high_dim_pca" else method_name,
+        )
+        if method.metadata["is_baseline"]:
+            n_removed += 1
             del dataset_results[method_name]
-        else:
-            if method.metadata["is_baseline"]:
-                n_removed += 1
-                del dataset_results[method_name]
 
     print(f"Dropped {n_removed} baseline methods")
     return dataset_results
@@ -336,13 +333,11 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
     metric_names = set()
     for method_name, rank in ranking.items():
         method_results = dataset_results[method_name]
-        try:
-            method = openproblems.api.utils.get_function(
-                task_name, "methods", method_name
-            )
-        except openproblems.api.utils.NoSuchFunctionError as e:
-            print(f"[WARN] {e}")
-            continue
+        method = openproblems.api.utils.get_function(
+            task_name,
+            "methods",
+            "true_features" if method_name == "high_dim_pca" else method_name,
+        )
         result = {
             "Name": method.metadata["method_name"],
             "Paper": method.metadata["paper_name"],
