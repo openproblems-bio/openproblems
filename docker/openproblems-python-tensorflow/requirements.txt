@@ -1,4 +1,4 @@
 git+https://github.com/Avsecz/kopt@6a5c890  # master
 git+https://github.com/scottgigante-immunai/dca@1f4edbc  # patch-1 contains tf version bump
 protobuf==3.20.*
-tensorflow==2.9.0
+tensorflow==2.9.3
