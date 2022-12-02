@@ -22,7 +22,7 @@ l1_sqrt, libsize = scprep.normalize.library_size_normalize(sqrt_data, rescale=1,
 l1_sqrt = l1_sqrt.tocsr()
 
 print("Store output in adata")
-adata.layers["normalized"] = l1_sqrt
+adata.layers[par["layer_output"]] = l1_sqrt
 adata.uns["normalization_id"] = meta['functionality_name']
 
 print("Write data")
