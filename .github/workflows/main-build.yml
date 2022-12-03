@@ -124,4 +124,4 @@ jobs:
     - name: Push containers
       run: |
         SRC_DIR=`dirname ${{ matrix.component.config }}`
-        bin/viash ns build --config_mod ".functionality.version := 'main_build'" -s "$SRC_DIR" --push --setup donothing
+        bin/viash ns build --config_mod ".functionality.version := 'main_build'" -s "$SRC_DIR" --setup push
