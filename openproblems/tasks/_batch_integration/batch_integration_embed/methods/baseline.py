@@ -106,4 +106,5 @@ def no_integration_batch(adata, test=False):
             svd_solver=solver,
             copy=True,
         ).obsm["X_pca"]
+    adata.uns["method_code_version"] = check_version("openproblems")
     return adata
