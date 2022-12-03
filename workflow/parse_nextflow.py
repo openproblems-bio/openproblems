@@ -216,7 +216,6 @@ def normalize_scores(task_name, dataset_results):
         )
     metric_names = list(list(dataset_results.values())[0]["metrics"].keys())
 
-    n_removed = 0
     for metric_name in metric_names:
         try:
             metric = openproblems.api.utils.get_function(
@@ -232,11 +231,6 @@ def normalize_scores(task_name, dataset_results):
                 for method_name in dataset_results
             ]
         )
-        if np.all(np.isnan(metric_scores)):
-            n_removed += 1
-            for method_name in dataset_results:
-                del dataset_results[method_name]["metrics"][metric_name]
-            continue
         baseline_methods = []
         for method_name in list(dataset_results.keys()):
             try:
@@ -267,8 +261,6 @@ def normalize_scores(task_name, dataset_results):
             metric_scores = 1 - metric_scores
         for method_name, score in zip(dataset_results, metric_scores):
             dataset_results[method_name]["metrics"][metric_name] = score
-    if n_removed > 0:
-        print(f"[WARN] Removed {n_removed} all-NaN metrics")
     return dataset_results
 
 
@@ -288,6 +280,26 @@ def drop_baselines(task_name, dataset_results):
             del dataset_results[method_name]
 
     print(f"Dropped {n_removed} baseline methods")
+    return dataset_results
+
+
+def drop_nan_metrics(dataset_results):
+    n_removed = 0
+    metric_names = list(list(dataset_results.values())[0]["metrics"].keys())
+    for metric_name in metric_names:
+        metric_scores = np.array(
+            [
+                dataset_results[method_name]["metrics"][metric_name]
+                for method_name in dataset_results
+            ]
+        )
+        if np.all(np.isnan(metric_scores)):
+            n_removed += 1
+            for method_name in dataset_results:
+                del dataset_results[method_name]["metrics"][metric_name]
+                del dataset_results[method_name]["metrics_raw"][metric_name]
+    if n_removed > 0:
+        print(f"[WARN] Removed {n_removed} all-NaN metrics")
     return dataset_results
 
 
@@ -331,6 +343,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
     )
     dataset_results_raw = normalize_scores(task_name, dataset_results_raw)
     dataset_results = drop_baselines(task_name, dataset_results_raw)
+    dataset_results = drop_nan_metrics(dataset_results)
     dataset_results, ranking = compute_ranking(dataset_results)
     metric_names = set()
     for method_name, rank in ranking.items():

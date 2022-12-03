@@ -1,8 +1,8 @@
 import json
 import openproblems
 
-_CORE_TEST_SUITES = ["(test_0_ or test_3_)"]
-_TASK_TEST_SUITES = ["test_1_", "test_2_"]
+_CORE_TEST_SUITES = ["test_core"]
+_TASK_TEST_SUITES = ["test_task"]
 
 
 def generate_matrix():
