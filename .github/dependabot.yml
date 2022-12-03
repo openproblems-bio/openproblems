@@ -22,7 +22,7 @@ updates:
     rebase-strategy: "disabled"
 
   - package-ecosystem: "pip"
-    directory: "/docker/openproblems-python-batch-integration"
+    directory: "/docker/openproblems-python-pytorch"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
