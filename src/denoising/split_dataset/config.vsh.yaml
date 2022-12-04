@@ -2,7 +2,11 @@ __merge__: ../api/comp_split_dataset.yaml
 functionality:
   name: "split_dataset"
   namespace: "denoising"
-  description: "Splits molecules into two (potentially overlapping) groups using a fraction ratio."
+  description: |
+    Split data using molecular cross-validation.
+  
+    Splits molecules into two (potentially overlapping) groups using a fraction ratio.
+    Thise are output as two separate AnnData objects.
   arguments:
     - name: "--method"
       type: "string"
@@ -20,6 +24,7 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+    - path: helper.py
 platforms:
   - type: docker
     image: "python:3.10"
@@ -29,6 +34,4 @@ platforms:
           - "anndata>=0.8"
           - numpy
           - scipy
-        github:
-          - czbiohub/molecular-cross-validation
   - type: nextflow
