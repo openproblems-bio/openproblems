@@ -10,14 +10,15 @@ install_requires = [
     "scprep>=1.2.1",
     "scipy>=1.8,<1.10",
     "scanpy>=1.6",
-    "louvain==0.7.*",
-    "python-igraph<0.10",
+    "louvain==0.8.*",
+    "python-igraph==0.10.*",
     "decorator<5.0",  # pinned in #324
     "memory-profiler==0.60",
     "colorama==0.4.*",
     "packaging==21.3",
     "umap-learn==0.5.*",
     "requests==2.28.*",
+    "pandas==1.5.*",
 ]
 
 r_requires = [
