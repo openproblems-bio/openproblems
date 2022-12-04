@@ -18,7 +18,7 @@ install_requires = [
     "packaging==21.3",
     "umap-learn==0.5.*",
     "requests==2.28.*",
-    "pandas==1.5.*",
+    "pandas==1.3.5",
 ]
 
 r_requires = [
