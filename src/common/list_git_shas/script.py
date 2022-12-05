@@ -9,7 +9,7 @@ par = {
     'show_history': True
 }
 meta = {
-    'functionality_name': 'dca',
+    'functionality_name': 'foo',
 }
 ## VIASH END
 
@@ -48,7 +48,7 @@ for relative_path in git_ls_files(par['input']):
 
     # get git file info
     git_file_info = get_git_file_info(path, full_history=par["show_history"])
-    last = git_file_info[len(git_file_info)-1]
+    last = git_file_info[0]
     out = {
         "path": relative_path,
         "last_modified": last[1],
