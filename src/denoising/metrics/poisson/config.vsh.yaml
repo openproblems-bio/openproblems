@@ -24,8 +24,6 @@ platforms:
         packages:
           - "anndata>=0.8"
           - scprep
-        github:
-          - czbiohub/molecular-cross-validation
   - type: nextflow
     directives: 
       label: [ midmem, midcpu ]

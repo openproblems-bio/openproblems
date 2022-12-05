@@ -58,21 +58,21 @@ jobs:
         # build target dir
         bin/viash ns build --config_mod ".functionality.version := 'main_build'" --parallel  --setup donothing
 
-    - name: Build nextflow schemas & params
-      run: |
-        bin/viash ns list -s src -p nextflow --format json 2> /dev/null > /tmp/ns_list_src.json
-        inputs=$(jq -r '[.[] | .info.config] | join(";")' /tmp/ns_list_src.json)
-        outputs_params=$(jq -r '[.[] | "target/nextflow/" + .functionality.namespace + "/" + .functionality.name + "/nextflow_params.yaml"] | join(";")' /tmp/ns_list_src.json)
-        outputs_schema=$(jq -r '[.[] | "target/nextflow/" + .functionality.namespace + "/" + .functionality.name + "/nextflow_schema.json"] | join(";")' /tmp/ns_list_src.json)
-        bin/tools/docker/nextflow/generate_params/generate_params --input "$inputs" --output "$outputs_params"
-        bin/tools/docker/nextflow/generate_schema/generate_schema --input "$inputs" --output "$outputs_schema"
+    # - name: Build nextflow schemas & params
+    #   run: |
+    #     bin/viash ns list -s src -p nextflow --format json 2> /dev/null > /tmp/ns_list_src.json
+    #     inputs=$(jq -r '[.[] | .info.config] | join(";")' /tmp/ns_list_src.json)
+    #     outputs_params=$(jq -r '[.[] | "target/nextflow/" + .functionality.namespace + "/" + .functionality.name + "/nextflow_params.yaml"] | join(";")' /tmp/ns_list_src.json)
+    #     outputs_schema=$(jq -r '[.[] | "target/nextflow/" + .functionality.namespace + "/" + .functionality.name + "/nextflow_schema.json"] | join(";")' /tmp/ns_list_src.json)
+    #     bin/tools/docker/nextflow/generate_params/generate_params --input "$inputs" --output "$outputs_params"
+    #     bin/tools/docker/nextflow/generate_schema/generate_schema --input "$inputs" --output "$outputs_schema"
 
-        bin/viash ns list -s workflows --format json 2> /dev/null > /tmp/ns_list_workflow.json
-        inputs=$(jq -r '[.[] | .info.config] | join(";")' /tmp/ns_list_workflow.json)
-        outputs_params=$(jq -r '[.[] | .info.config | capture("^(?<dir>.*\/)").dir + "/nextflow_params.yaml"] | join(";")' /tmp/ns_list_workflow.json)
-        outputs_schema=$(jq -r '[.[] | .info.config | capture("^(?<dir>.*\/)").dir + "/nextflow_schema.json"] | join(";")' /tmp/ns_list_workflow.json)
-        bin/tools/docker/nextflow/generate_params/generate_params --input "$inputs" --output "$outputs_params"
-        bin/tools/docker/nextflow/generate_schema/generate_schema --input "$inputs" --output "$outputs_schema"
+    #     bin/viash ns list -s workflows --format json 2> /dev/null > /tmp/ns_list_workflow.json
+    #     inputs=$(jq -r '[.[] | .info.config] | join(";")' /tmp/ns_list_workflow.json)
+    #     outputs_params=$(jq -r '[.[] | .info.config | capture("^(?<dir>.*\/)").dir + "/nextflow_params.yaml"] | join(";")' /tmp/ns_list_workflow.json)
+    #     outputs_schema=$(jq -r '[.[] | .info.config | capture("^(?<dir>.*\/)").dir + "/nextflow_schema.json"] | join(";")' /tmp/ns_list_workflow.json)
+    #     bin/tools/docker/nextflow/generate_params/generate_params --input "$inputs" --output "$outputs_params"
+    #     bin/tools/docker/nextflow/generate_schema/generate_schema --input "$inputs" --output "$outputs_schema"
 
     - name: Deploy to target branch
       uses: peaceiris/actions-gh-pages@v3
@@ -124,4 +124,4 @@ jobs:
     - name: Push containers
       run: |
         SRC_DIR=`dirname ${{ matrix.component.config }}`
-        bin/viash ns build --config_mod ".functionality.version := 'main_build'" -s "$SRC_DIR" --push --setup donothing
+        bin/viash ns build --config_mod ".functionality.version := 'main_build'" -s "$SRC_DIR" --setup push

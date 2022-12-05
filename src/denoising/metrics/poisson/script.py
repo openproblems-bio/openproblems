@@ -1,6 +1,6 @@
 import anndata as ad
 import scprep
-from molecular_cross_validation.mcv_sweep import poisson_nll_loss
+import numpy as np
 
 ## VIASH START
 par = {
@@ -17,7 +17,6 @@ print("Load Data")
 input_denoised = ad.read_h5ad(par['input_denoised'])
 input_test = ad.read_h5ad(par['input_test'])
 
-
 test_data = input_test.layers["counts"].toarray()
 denoised_data = input_denoised.layers["denoised"].toarray()
 
@@ -26,6 +25,11 @@ print("Compute metric value")
 initial_sum = input_denoised.layers["counts"].sum()
 target_sum = test_data.sum()
 denoised_data = denoised_data * target_sum / initial_sum
+
+# from molecular_cross_validation.mcv_sweep import poisson_nll_loss
+# copied from: https://github.com/czbiohub/molecular-cross-validation/blob/master/src/molecular_cross_validation/mcv_sweep.py
+def poisson_nll_loss(y_pred: np.ndarray, y_true: np.ndarray) -> float:
+    return (y_pred - y_true * np.log(y_pred + 1e-6)).mean()
 
 error = poisson_nll_loss(scprep.utils.toarray(test_data), denoised_data)
 
