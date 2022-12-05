@@ -1,8 +1,8 @@
 annoy==1.17.1
 bbknn==1.5.*
 git+https://github.com/chriscainx/mnnpy@2097dec  # master
+git+https://github.com/theislab/scib@77ab015
 harmony-pytorch==0.1.*
 scanorama==1.7.0
-scib==1.0.5
 scvi-tools~=0.16  # pinned in #313
 torch==1.13.*
