@@ -38,7 +38,7 @@ def rmse_spectral(adata, n_comps=200):
     import umap.spectral
 
     print(n_comps, adata.shape, adata.X.shape)
-    n_comps = min(n_comps, min(adata.shape) - 1)
+    n_comps = min(n_comps, min(adata.shape) - 2)
 
     graph = umap.UMAP(transform_mode="graph").fit_transform(adata.X)
     print(n_comps, graph.shape)
