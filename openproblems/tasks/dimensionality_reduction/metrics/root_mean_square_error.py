@@ -37,8 +37,10 @@ def rmse_spectral(adata, n_comps=200):
     import umap
     import umap.spectral
 
+    print(n_comps, adata.shape, adata.X.shape)
     n_comps = min(n_comps, min(adata.shape) - 1)
 
     graph = umap.UMAP(transform_mode="graph").fit_transform(adata.X)
+    print(n_comps, graph.shape)
     X = umap.spectral.spectral_layout(adata.X, graph, n_comps, random_state=None)
     return _rmse(X, adata.obsm["X_emb"])
