@@ -13,7 +13,7 @@ def _rmse(X, X_emb):
     return rmse
 
 
-@metric(metric_name="RMSE", maximize=True)
+@metric(metric_name="RMSE", maximize=False)
 def rmse(adata, n_svd=200):
     """Calculate the root mean squared error.
 
