@@ -11,7 +11,7 @@ par = {
 meta = {
     'functionality_name': 'dca',
 }
-## VIASH STOP
+## VIASH END
 
 # to do: what to do with untracked files?
 
