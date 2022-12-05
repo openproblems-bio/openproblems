@@ -24,7 +24,7 @@ data for visualization and interpretation.
 ## The metrics
 
 * **Root mean square error**: the square root of the mean squared difference between
-  Euclidean distances in the high-dimensional data and distances in the
+  ground truth distances in the high-dimensional data and Euclidean distances in the
   dimension-reduced data, invariant to scalar multiplication. *RMSE* computes
   high-dimensional distances in Euclidean space, while *RMSE (spectral)* computes
   [diffusion distances](http://dx.doi.org/10.1016/j.acha.2006.04.006) (i.e. Euclidean
