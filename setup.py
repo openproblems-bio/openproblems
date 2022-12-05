@@ -4,11 +4,11 @@ from setuptools import setup
 import os
 
 install_requires = [
-    "numpy>=1.22,<1.24",
-    "scikit-learn==1.1.*",
+    "numpy>=1.21,<1.24",
+    "scikit-learn>=1.0.*,<=1.1.*",
     "anndata==0.8.*",
     "scprep>=1.2.1",
-    "scipy>=1.8,<1.10",
+    "scipy>=1.7,<1.10",
     "scanpy>=1.6",
     "louvain==0.8.*",
     "python-igraph==0.10.*",
@@ -22,8 +22,8 @@ install_requires = [
 ]
 
 r_requires = [
-    "rpy2<3.5.6",
-    "anndata2ri==1.1.*",
+    "rpy2>=3.4,<3.4.3",
+    "anndata2ri==1.0.6",
 ]
 
 evaluate_requires = ["snakemake>=7.8,<7.17", "tabulate<0.9"]
