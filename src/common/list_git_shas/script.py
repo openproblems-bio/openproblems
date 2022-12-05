@@ -33,21 +33,17 @@ def get_git_file_info(file, full_history=False):
     cmd.extend(["--", file])
     
     # run command
-    out = subprocess.run(cmd, capture_output=True, text=True).stdout
+    out = subprocess.run(cmd, capture_output=True, text=True, cwd=par["input"]).stdout
 
     # split output
     split = [line.split("\t") for line in out.split("\n") if "\t" in line]
 
     return split
 
-
-
 for relative_path in git_ls_files(par['input']):
-    # construct path
-    path = os.path.join(par["input"], relative_path)
 
     # get git file info
-    git_file_info = get_git_file_info(path, full_history=par["show_history"])
+    git_file_info = get_git_file_info(relative_path, full_history=par["show_history"])
     last = git_file_info[0]
     out = {
         "path": relative_path,
