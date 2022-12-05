@@ -2,7 +2,7 @@ import subprocess
 from os import path
 import json
 
-input_path = meta["resources_dir"] + "/openproblems-v2"
+input_path = "/openproblems-v2"
 output_path = "output.json"
 
 cmd = [

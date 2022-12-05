@@ -27,10 +27,12 @@ functionality:
     - type: python_script
       path: script.py
   test_resources:
-    - path: ../../../../openproblems-v2
     - type: python_script
       path: test.py
 platforms:
   - type: docker
     image: "python:3.10"
+    test_setup:
+      - type: docker
+        run: [git clone https://github.com/openproblems-bio/openproblems-v2.git]
   - type: nextflow
