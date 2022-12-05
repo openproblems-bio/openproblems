@@ -24,3 +24,21 @@ def rmse(adata, n_svd=200):
 
     X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
     return _rmse(X, adata.obsm["X_emb"])
+
+
+@metric(metric_name="RMSE (spectral)", maximize=False)
+def rmse_spectral(adata, n_comps=200):
+    """Calculate the spectral root mean squared error
+
+    Computes (RMSE) between high-dimensional Laplacian eigenmaps on the full (or
+    processed) data matrix and the dimensionally-reduced matrix, invariant to scalar
+    multiplication
+    """
+    import umap
+    import umap.spectral
+
+    n_comps = min(n_comps, min(adata.shape) - 1)
+
+    graph = umap.UMAP(transform_mode="graph").fit_transform(adata.X)
+    X = umap.spectral.spectral_layout(adata.X, graph, n_comps, random_state=None)
+    return _rmse(X, adata.obsm["X_emb"])
