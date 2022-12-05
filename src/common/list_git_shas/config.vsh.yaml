@@ -9,12 +9,13 @@ functionality:
       example: /path/to/repo
     - name: --output
       type: file
+      direction: output
       description: |
         A json containing a list of entries. Each entry must have the
         following values: 
   
         * "path" `string`: Path a file in the repository
-        * "last_modified" `string`: Date of then the file was last modified, in `yyyy-mm-dd HH:mm:ss` format.
+        * "last_modified" `string`: Date of when the file was last modified, in `yyyy-mm-dd HH:mm:ss` format.
         * "sha" `string`: Sha of the commit in which the file was last modified
         * "history_sha" `string` (optional): A list of SHAs during which the file was modified
       required: true
@@ -23,7 +24,6 @@ functionality:
       type: boolean_true
       description: Whether or not to include the full history of SHAs for each file.
   resources: 
-    - path: ../../../src
     - type: python_script
       path: script.py
   test_resources:
