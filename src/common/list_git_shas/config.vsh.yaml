@@ -27,6 +27,7 @@ functionality:
     - type: python_script
       path: script.py
   test_resources:
+    - path: ../../../../openproblems-v2
     - type: python_script
       path: test.py
 platforms:
