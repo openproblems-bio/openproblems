@@ -6,12 +6,11 @@ from os import path
 meta = {
     'executable': './target/docker/dimensionality_reduction/umap',
     'resources_dir': './resources_test/common/',
-    'cpus': 2
 }
 ## VIASH END
 
 input_path = meta["resources_dir"] + "/input/dataset.h5ad"
-output_path = "output.h5ad"
+output_path = "reduced.h5ad"
 cmd = [
     meta['executable'],
     "--input", input_path,
@@ -32,7 +31,6 @@ input = ad.read_h5ad(input_path)
 output = ad.read_h5ad(output_path)
 
 print("input:", input)
-
 print("output:", output)
 
 print(">> Checking whether predictions were added")
