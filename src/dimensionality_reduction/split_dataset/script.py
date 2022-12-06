@@ -60,35 +60,6 @@ def subset_anndata(adata_sub, slot_info):
 print(">> Load Data")
 adata = ad.read_h5ad(par["input"])
 
-# print(">> Remove not required data")
-# # remove all obs metadata
-# del adata.obs
-
-# # remove all var metadata except hvg_score
-# for key in adata.var.keys():
-#     if key != "hvg_score":
-#         del adata.var[key]
-
-# # Remove obsm/varm matrices
-# del adata.varm
-# del adata.obsm
-
-# # remove all unstructured except dataset_id
-# for key in list(adata.uns.keys()):
-#     if key != "dataset_id":
-#         del adata.uns[key]
-
-# # remove all unstructured except dataset_id
-# for key in list(adata.layers.keys()):
-#     if key not in ['counts', 'normalized']:
-#         del adata.layers[key]
-
-# print(">> Create train/test data")
-# output_train = adata.copy()
-# output_test = adata.copy()
-# del output_test.var
-# del output_test.layers['normalized']
-
 print(">> Figuring out which data needs to be copied to which output file")
 slot_info_per_output = read_slots(par, meta)
 
