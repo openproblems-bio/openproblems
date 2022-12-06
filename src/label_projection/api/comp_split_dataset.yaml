@@ -1,15 +1,15 @@
 functionality:
   arguments:
     - name: "--input"
-      __inherits__: ../../datasets/api/anndata_dataset.yaml
+      __merge__: ../../datasets/api/anndata_dataset.yaml
     - name: "--output_train"
-      __inherits__: anndata_train.yaml
+      __merge__: anndata_train.yaml
       direction: output
     - name: "--output_test"
-      __inherits__: anndata_test.yaml
+      __merge__: anndata_test.yaml
       direction: output
     - name: "--output_solution"
-      __inherits__: anndata_solution.yaml
+      __merge__: anndata_solution.yaml
       direction: output
   test_resources:
     - type: python_script

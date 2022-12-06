@@ -6,20 +6,16 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
-curl -fsSL get.viash.io | bash -s -- \
-  --registry ghcr.io \
-  --organisation openproblems-bio \
-  --target_image_source https://github.com/openproblems-bio/openproblems-v2 \
-  --tag develop
+curl -fsSL get.viash.io | bash -s -- --tools false
 
 # add --namespace_separator '/' ?
 
 # automatically export the workflow helper
-NXF_UTILS=src/nxf_utils
+NXF_UTILS=src/wf_utils
 [[ -d $NXF_UTILS ]] || mkdir -p $NXF_UTILS
 bin/viash export resource platforms/nextflow/ProfilesHelper.config > $NXF_UTILS/ProfilesHelper.config
 bin/viash export resource platforms/nextflow/WorkflowHelper.nf > $NXF_UTILS/WorkflowHelper.nf
-bin/viash export resource platforms/nextflow/DataflowHelper.config > $NXF_UTILS/DataFlowHelper.config
+bin/viash export resource platforms/nextflow/DataflowHelper.nf > $NXF_UTILS/DataflowHelper.nf
 
 cd bin
 

@@ -163,7 +163,7 @@ You can start creating a new component by [creating a Viash component](https://v
 mkdir -p src/label_projection/methods/foo
 
 cat > src/label_projection/methods/foo/config.vsh.yaml << HERE
-__inherits__: ../../api/comp_method.yaml
+__merge__: ../../api/comp_method.yaml
 functionality:
   name: "foo"
   namespace: "label_projection/methods"
