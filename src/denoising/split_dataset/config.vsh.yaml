@@ -6,7 +6,7 @@ functionality:
     Split data using molecular cross-validation.
   
     Splits molecules into two (potentially overlapping) groups using a fraction ratio.
-    Thise are output as two separate AnnData objects.
+    These are output as two separate AnnData objects.
   arguments:
     - name: "--method"
       type: "string"
