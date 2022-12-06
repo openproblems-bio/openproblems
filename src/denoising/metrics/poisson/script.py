@@ -34,8 +34,18 @@ def poisson_nll_loss(y_pred: np.ndarray, y_true: np.ndarray) -> float:
 error = poisson_nll_loss(scprep.utils.toarray(test_data), denoised_data)
 
 print("Store poisson value")
-input_denoised.uns["metric_ids"] = meta['functionality_name']
-input_denoised.uns["metric_values"] = error
+output_metric = ad.AnnData(
+    layers={},
+    obs=input_denoised.obs[[]],
+    var=input_denoised.var[[]],
+    uns={}
+)
+
+for key in input_denoised.uns_keys():
+    output_metric.uns[key] = input_denoised.uns[key]
+    
+output_metric.uns["metric_ids"] = meta['functionality_name']
+output_metric.uns["metric_values"] = error
 
 print("Write adata to file")
-input_denoised.write_h5ad(par['output'], compression="gzip")
+output_metric.write_h5ad(par['output'], compression="gzip")
