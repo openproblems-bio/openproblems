@@ -34,11 +34,14 @@ def rmse_spectral(adata, n_comps=200):
     processed) data matrix and the dimensionally-reduced matrix, invariant to scalar
     multiplication
     """
+    import numpy as np
     import umap
     import umap.spectral
 
     n_comps = min(n_comps, min(adata.shape) - 2)
 
     graph = umap.UMAP(transform_mode="graph").fit_transform(adata.X)
-    X = umap.spectral.spectral_layout(adata.X, graph, n_comps, random_state=None)
+    X = umap.spectral.spectral_layout(
+        adata.X, graph, n_comps, random_state=np.random.default_rng()
+    )
     return _rmse(X, adata.obsm["X_emb"])
