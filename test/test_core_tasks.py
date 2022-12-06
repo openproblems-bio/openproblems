@@ -40,7 +40,7 @@ class TestTask(unittest.TestCase):
             for method in method_list:
                 assert callable(method)
 
-    def test_task_api_members(self):
+    def test_api_members(self):
         """Test that task.api has the required members"""
         assert hasattr(self.task.api, "check_dataset")
         assert hasattr(self.task.api, "check_method")
@@ -52,7 +52,7 @@ class TestTask(unittest.TestCase):
         assert callable(self.task.api.sample_method)
         assert hasattr(self.task.api.sample_dataset, "metadata")
 
-    def test_task_api_is_consistent(self):
+    def test_api_is_consistent(self):
         """Test that a task's API is self-consistent"""
         adata = self.task.api.sample_dataset()
         assert self.task.api.check_dataset(adata)

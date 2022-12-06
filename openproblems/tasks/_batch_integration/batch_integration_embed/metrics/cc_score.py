@@ -28,7 +28,9 @@ def cc_score(adata, test=False):
     from scib.metrics import cell_cycle
 
     try:
-        cc = cell_cycle(*_get_split(adata), "batch", embed="X_emb", organism="human")
+        cc = cell_cycle(
+            *_get_split(adata), "batch", embed="X_emb", organism=adata.uns["organism"]
+        )
 
     except ValueError:
         cc = 0

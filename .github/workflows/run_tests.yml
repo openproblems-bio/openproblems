@@ -21,8 +21,12 @@ jobs:
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       !startsWith(github.ref, 'refs/heads/test_process') &&
       (
-        github.event_name == 'push' ||
-        startsWith(github.ref, 'refs/heads/test_docker')
+        github.event_name != 'pull_request' ||
+        (
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.draft == false &&
+          github.event.pull_request.head.repo.owner.id == github.event.pull_request.base.repo.owner.id
+        )
       )
 
     env:
@@ -52,8 +56,8 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
-        key: pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-
+        key: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
       run: |
@@ -61,13 +65,6 @@ jobs:
         pip install -U wheel setuptools
         pip install --editable .[evaluate]
         python -c "import openproblems"
-
-    - name: Download docker images
-      run: |
-        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          docker pull singlecellopenproblems/${image} &
-        done
-        wait
 
     - name: Update Docker images
       if: |
@@ -142,9 +139,9 @@ jobs:
       !startsWith(github.ref, 'refs/heads/test_process') &&
       !startsWith(github.ref, 'refs/heads/test_website') &&
       (
-        startsWith(github.ref, 'refs/heads') ||
-        startsWith(github.ref, 'refs/tags') ||
+        github.event_name != 'pull_request' ||
         (
+          github.event_name == 'pull_request' &&
           github.event.pull_request.draft == false &&
           github.actor != 'dependabot[bot]'
         )
@@ -171,8 +168,8 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
-        key: pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-
+        key: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+        restore-keys: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-
 
     - name: Install package & dependencies
       run: |
@@ -236,14 +233,14 @@ jobs:
 
     - name: Log in to the Container registry
       uses: docker/login-action@v2
-      if: "github.event_name == 'push'"
+      if: "needs.build_images.result == 'success'"
       with:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Download docker images
-      if: "github.event_name == 'push'"
+      if: "needs.build_images.result == 'success'"
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
@@ -262,8 +259,8 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
-        key: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
-        restore-keys: ${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
+        key: python-pip-${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-${{ hashFiles('setup.py') }}
+        restore-keys: python-pip-${{env.LINUX_VERSION}}-pip-${{ env.PYTHON_VERSION }}-
 
     - name: Install package & dependencies
       run: |
@@ -291,7 +288,7 @@ jobs:
       shell: Rscript {0}
 
     - name: Update Docker docker images
-      if: "github.event_name == 'pull_request'"
+      if: "needs.build_images.result == 'skipped'"
       run: |
         cd workflow
         snakemake -j $(nproc) docker
@@ -342,7 +339,7 @@ jobs:
       with:
           name: coverage
 
-  run_benchmark:
+  setup_benchmark:
     needs:
     - run_tester
     - build_images
@@ -351,11 +348,15 @@ jobs:
       always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       needs.build_images.result == 'success' &&
-      github.event_name == 'push' &&
+      github.event_name != 'pull_request' &&
       (
         needs.run_tester.result == 'success' ||
         needs.run_tester.result == 'skipped'
       )
+
+    outputs:
+      branch: ${{ steps.setup-environment.outputs.branch }}
+      run_name: ${{ steps.setup-environment.outputs.run_name }}
 
     steps:
     - name: Check dependabot
@@ -414,6 +415,7 @@ jobs:
         wait
 
     - name: Set up environment
+      id: setup-environment
       run: |
         # If not on the base repository, append first 6 characters of username to the image name
         # to avoid clashes on ECR
@@ -428,6 +430,9 @@ jobs:
         fi
         BRANCH=`echo $BRANCH | sed 's/[^a-zA-Z0-9]*$//'`
         echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
+        echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
+        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
+        echo "run_name=${RUN_NAME}" >> $GITHUB_OUTPUT
 
     - name: Upload Docker images
       env:
@@ -444,35 +449,48 @@ jobs:
         done
         wait
 
+  run_benchmark:
+    needs:
+    - setup_benchmark
+    runs-on: ubuntu-latest
+    if: >-
+      always() &&
+      needs.setup_benchmark.result == 'success'
+
+    steps:
     - name: Run benchmark
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
+        BRANCH: ${{ needs.setup_benchmark.outputs.branch }}
       run: |
-        RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
           TOWER_ACTION_ID="bVQhVSNah1JmJfnKkfyjg"
           WORKDIR="s3://openproblems-nextflow/work_main"
         else
           TOWER_ACTION_ID="5BQc88ZvjuXCYbc55Hot27"
-          WORKDIR="s3://openproblems-nextflow/work/$BRANCH"
+          WORKDIR="s3://openproblems-nextflow/work/${BRANCH}"
         fi
         generate_parameters()
         {
         cat <<EOF
           {
             "params" : {
-              "branch": "$BRANCH"
+              "branch": "${BRANCH}"
             }
           }
         EOF
         }
-        WORKFLOW_ID=$(
+        OUTPUT=$(
             curl -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.TOWER_ACCESS_KEY }}" \
             https://api.tower.nf/actions/${TOWER_ACTION_ID}/launch?workspaceId=${TOWER_WORKSPACE_ID} \
-            --data "$(generate_parameters)" | \
-            tee /dev/stderr | \
-            sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/'
+            --data "$(generate_parameters)"
         )
+        echo "$OUTPUT"
+        if [ $(echo "$OUTPUT" | grep "No more than 5 workflow runs at time are allowed") ]; then
+          echo "Nextflow Tower is currently rate limited. Please wait until fewer jobs are running and then retry failed jobs."
+          exit 1
+        fi
+        WORKFLOW_ID=$(echo "$OUTPUT" | sed 's/.*"\([a-zA-Z0-9]*\)".*/\1/')
         echo "Benchmark running at ${TOWER_WATCH_URL}/${WORKFLOW_ID}" >> $GITHUB_STEP_SUMMARY
