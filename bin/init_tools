@@ -12,7 +12,7 @@ function clean_up {
 }
 trap clean_up EXIT
 
-VERSION=0.1.0
+VERSION=0.2.0
 
 if [ $# -eq 2 ]; then
   git clone --depth 1 --branch $VERSION https://$1:$2@github.com/viash-io/viash_tools.git $tmpdir/

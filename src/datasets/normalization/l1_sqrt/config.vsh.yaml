@@ -1,0 +1,29 @@
+__merge__: ../../api/comp_normalization.yaml
+functionality:
+  name: "l1_sqrt"
+  namespace: "common/normalization"
+  description: |
+    Scaled L1 sqrt normalization.
+
+    This normalization method causes all cells to have the same sum of values.
+
+    Steps:
+
+    * Compute the square root of the counts.
+    * Apply L1 normalization (rescaled such that the sum of the values of each cell sum to 1).
+    * Multiply by the median UMI count per cell, causing all cells to have the sum of values.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scprep
+          - "anndata>=0.8"
+          - numpy
+  - type: nextflow
+    directives: 
+      label: [ lowmem, lowcpu ]

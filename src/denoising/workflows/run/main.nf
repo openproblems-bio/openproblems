@@ -4,33 +4,30 @@ sourceDir = params.rootDir + "/src"
 targetDir = params.rootDir + "/target/nextflow"
 
 // import control methods
-include { true_labels } from "$targetDir/label_projection/control_methods/true_labels/main.nf"
-include { majority_vote } from "$targetDir/label_projection/control_methods/majority_vote/main.nf"
-include { random_labels } from "$targetDir/label_projection/control_methods/random_labels/main.nf"
+include { no_denoising } from "$targetDir/denoising/control_methods/no_denoising/main.nf"
+include { perfect_denoising } from "$targetDir/denoising/control_methods/perfect_denoising/main.nf"
 
 // import methods
-include { knn } from "$targetDir/label_projection/methods/knn/main.nf"
-include { mlp } from "$targetDir/label_projection/methods/mlp/main.nf"
-include { logistic_regression } from "$targetDir/label_projection/methods/logistic_regression/main.nf"
-include { scanvi } from "$targetDir/label_projection/methods/scanvi/main.nf"
-include { seurat_transferdata } from "$targetDir/label_projection/methods/seurat_transferdata/main.nf"
-include { xgboost } from "$targetDir/label_projection/methods/xgboost/main.nf"
+include { alra } from "$targetDir/denoising/methods/alra/main.nf"
+include { dca } from "$targetDir/denoising/methods/dca/main.nf"
+include { knn_smoothing } from "$targetDir/denoising/methods/knn_smoothing/main.nf"
+include { magic } from "$targetDir/denoising/methods/magic/main.nf"
 
 // import metrics
-include { accuracy } from "$targetDir/label_projection/metrics/accuracy/main.nf"
-include { f1 } from "$targetDir/label_projection/metrics/f1/main.nf"
+include { mse } from "$targetDir/denoising/metrics/mse/main.nf"
+include { poisson } from "$targetDir/denoising/metrics/poisson/main.nf"
 
 // tsv generation component
 include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
 
 // import helper functions
 include { readConfig; viashChannel; helpMessage } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap; passthroughFilter as pfilter } from sourceDir + "/wf_utils/DataflowHelper.nf"
+include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from sourceDir + "/wf_utils/DataflowHelper.nf"
 
 config = readConfig("$projectDir/config.vsh.yaml")
 
 // construct a map of methods (id -> method_module)
-methods = [ true_labels, majority_vote, random_labels, knn, mlp, logistic_regression, scanvi, seurat_transferdata, xgboost ]
+methods = [ no_denoising, perfect_denoising, alra, dca, knn_smoothing, magic]
   .collectEntries{method ->
     [method.config.functionality.name, method]
   }
@@ -48,21 +45,16 @@ workflow run_wf {
 
   main:
   output_ch = input_ch
-    
+
     // split params for downstream components
     | setWorkflowArguments(
-      preprocess: ["normalization_id", "dataset_id"],
-      method: ["input_train", "input_test"],
-      metric: ["input_solution"],
+      method: ["input_train"],
+      metric: ["input_test"],
       output: ["output"]
     )
-    
-    // multiply events by the number of method
-    | getWorkflowArguments(key: "preprocess")
-    | add_methods
 
-    // filter the normalization methods that a method actually prefers
-    | check_filtered_normalization_id
+    // multiply events by the number of method
+    | add_methods
 
     // add input_solution to data for the positive controls
     | controls_can_cheat
@@ -71,10 +63,19 @@ workflow run_wf {
     | getWorkflowArguments(key: "method")
     | run_methods
 
+    // construct tuples for metrics
+    | pmap{ id, file, passthrough ->
+      // derive unique ids from output filenames
+      def newId = file.getName().replaceAll(".output.*", "")
+      // combine prediction with solution
+      def newData = [ input_denoised: file, input_test: passthrough.metric.input_test ]
+      [ newId, newData, passthrough ]
+    }
+    
     // run metrics
-    | getWorkflowArguments(key: "metric", inputKey: "input_prediction")
+    | getWorkflowArguments(key: "metric")
     | run_metrics
-
+    
     // convert to tsv  
     | aggregate_results
 
@@ -98,22 +99,22 @@ workflow add_methods {
   emit: output_ch
 }
 
-workflow check_filtered_normalization_id {
-  take: input_ch
-  main:
-  output_ch = input_ch
-    | pfilter{id, data ->
-      data = data.clone()
-      def method = methods[data.method_id]
-      def preferred = method.config.functionality.info.preferred_normalization
-      // if a method is just using the counts, we can use any normalization method
-      if (preferred == "counts") {
-        preferred = "log_cpm"
-      }
-      data.normalization_id == preferred
-    }
-  emit: output_ch
-}
+// workflow check_filtered_normalization_id {
+//   take: input_ch
+//   main:
+//   output_ch = input_ch
+//     | pfilter{id, data ->
+//       data = data.clone()
+//       def method = methods[data.method_id]
+//       def preferred = method.config.functionality.info.preferred_normalization
+//       // if a method is just using the counts, we can use any normalization method
+//       if (preferred == "counts") {
+//         preferred = "log_cpm"
+//       }
+//       data.normalization_id == preferred
+//     }
+//   emit: output_ch
+// }
 
 workflow controls_can_cheat {
   take: input_ch
@@ -124,7 +125,7 @@ workflow controls_can_cheat {
       def method_type = method.config.functionality.info.method_type
       def new_data = data.clone()
       if (method_type != "method") {
-        new_data = new_data + [input_solution: passthrough.metric.input_solution]
+        new_data = new_data + [input_test: passthrough.metric.input_test]
       }
       [id, new_data, passthrough]
     }
@@ -151,7 +152,7 @@ workflow run_metrics {
   main:
 
   output_ch = input_ch
-    | (accuracy & f1)
+    | (mse & poisson)
     | mix
 
   emit: output_ch

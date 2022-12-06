@@ -10,8 +10,8 @@ include { sqrt_cpm } from "$targetDir/datasets/normalization/sqrt_cpm/main.nf"
 include { pca } from "$targetDir/datasets/processors/pca/main.nf"
 include { hvg } from "$targetDir/datasets/processors/hvg/main.nf"
 
-include { readConfig; viashChannel; helpMessage } from sourceDir + "/nxf_utils/WorkflowHelper.nf"
-include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from sourceDir + "/nxf_utils/DataFlowHelper.nf"
+include { readConfig; viashChannel; helpMessage } from sourceDir + "/wf_utils/WorkflowHelper.nf"
+include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from sourceDir + "/wf_utils/DataflowHelper.nf"
 
 config = readConfig("$projectDir/config.vsh.yaml")
 

@@ -7,7 +7,6 @@ on:
 
 jobs:
   run_ci_check_job:
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
     runs-on: ubuntu-latest
     outputs:
       run_ci: ${{ steps.github_cli.outputs.check }}
@@ -32,7 +31,7 @@ jobs:
     env:
       s3_bucket: s3://openproblems-data/resources_test/
     runs-on: ubuntu-latest
-    if: "(!contains(github.event.head_commit.message, 'ci skip')) && needs.run_ci_check_job.outputs.run_ci == 'true'"
+    if: "needs.run_ci_check_job.outputs.run_ci == 'true'"
     outputs:
       matrix: ${{ steps.set_matrix.outputs.matrix }}
       cachehash: ${{ steps.cachehash.outputs.cachehash }}
@@ -85,7 +84,7 @@ jobs:
       run: |
         IFS=$';' read -a changed_files <<< "${{ steps.changed-files.outputs.all_changed_files }}"
         echo "Changed files: "${changed_files[*]}""
-        readarray -t components < <(bin/viash ns list -p docker --format json | jq -c '[ .[] | 
+        readarray -t components < <(bin/viash ns list -p docker --format json | jq -c '[ .[] |
                                                                                           (.info.config | capture("^(?<dir>.*\/)").dir) as $dir | 
                                                                                           { "name": .functionality.name, 
                                                                                             "config": .info.config, 

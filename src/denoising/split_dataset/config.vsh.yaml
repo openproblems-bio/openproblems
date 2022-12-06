@@ -1,0 +1,37 @@
+__merge__: ../api/comp_split_dataset.yaml
+functionality:
+  name: "split_dataset"
+  namespace: "denoising"
+  description: |
+    Split data using molecular cross-validation.
+  
+    Splits molecules into two (potentially overlapping) groups using a fraction ratio.
+    Thise are output as two separate AnnData objects.
+  arguments:
+    - name: "--method"
+      type: "string"
+      description: "The process method to assign train/test."
+      choices: ["mcv"]
+      default: "mcv"
+    - name: "--train_frac"
+      type: "double"
+      description: "The fraction the molecules need to be split to train dataset"
+      default: 0.9
+    - name: "--seed"
+      type: "integer"
+      description: "A seed for the subsampling."
+      example: 123
+  resources:
+    - type: python_script
+      path: script.py
+    - path: helper.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - "anndata>=0.8"
+          - numpy
+          - scipy
+  - type: nextflow
