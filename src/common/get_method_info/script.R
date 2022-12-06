@@ -4,7 +4,7 @@ library(rlang)
 ## VIASH START
 par <- list(
   input = "src/label_projection",
-  output = "resources/label_projection/output/method_info.yaml"
+  output = "temp/method_info.json"
 )
 ## VIASH END
 
@@ -26,5 +26,7 @@ df <- map_df(configs, function(config) {
 }) %>%
   select(id, type, label, everything())
 
-yaml::write_yaml(purrr::transpose(df), par$output)
+# yaml::write_yaml(purrr::transpose(df), par$output)
+
+jsonlite::write_json(purrr::transpose(df), par$output, auto_unbox = TRUE)
 
