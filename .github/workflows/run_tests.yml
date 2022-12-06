@@ -120,12 +120,17 @@ jobs:
       id: export-images
       run: |
         IMAGES="$(find ./docker -mindepth 1 -type d -exec basename {} \;)"
+        PIDS=()
         for image in ${IMAGES}; do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           docker tag singlecellopenproblems/$image $GHCR_IMAGE
           docker push $GHCR_IMAGE &
+          PIDS+=$!
         done
-        wait
+        for pid in "$PIDS[@]"; do
+          # ensure exited with status 0
+          wait $pid
+        done
         # convert to JSON
         echo "images=[\"$(paste -s -d ' ' <(echo $IMAGES) | sed 's/  */\",\"/g')\"]" >> $GITHUB_OUTPUT
 
@@ -242,11 +247,16 @@ jobs:
     - name: Download docker images
       if: "needs.build_images.result == 'success'"
       run: |
+        PIDS=()
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
+          PIDS+=$!
         done
-        wait
+        for pid in "$PIDS[@]"; do
+          # ensure exited with status 0
+          wait $pid
+        done
 
     - name: Set up environment
       run: |
@@ -408,11 +418,16 @@ jobs:
 
     - name: Download docker images
       run: |
+        PIDS=()
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
+          PIDS+=$!
         done
-        wait
+        for pid in "$PIDS[@]"; do
+          # ensure exited with status 0
+          wait $pid
+        done
 
     - name: Set up environment
       id: setup-environment
@@ -443,11 +458,16 @@ jobs:
         ECR_ENDPOINT="490915662541.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
           docker login --username AWS --password-stdin $ECR_ENDPOINT
+        PIDS=()
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
           docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image} &
+          PIDS+=$!
         done
-        wait
+        for pid in "$PIDS[@]"; do
+          # ensure exited with status 0
+          wait $pid
+        done
 
   run_benchmark:
     needs:
