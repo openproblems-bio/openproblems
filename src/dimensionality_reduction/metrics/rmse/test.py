@@ -9,17 +9,19 @@ meta = {
 }
 ## VIASH END
 
-input_path = meta["resources_dir"] + "/input/reduced.h5ad"
+input_reduced_path = meta["resources_dir"] + "/input/reduced.h5ad"
+input_test_path = meta["resources_dir"] + "/input/test.h5ad"
 output_path = "score.h5ad"
-n_pca = 50
 cmd = [
     meta['executable'],
-    "--input", input_path,
+    "--input_reduced", input_reduced_path,
+    "--input_test", input_reduced_path,
     "--output", output_path,
 ]
 
-print(">> Checking whether input file exists")
-assert path.exists(input_path)
+print(">> Checking whether input files exist")
+assert path.exists(input_reduced_path)
+assert path.exists(input_test_path)
 
 print(">> Running script as test")
 out = subprocess.run(cmd, check=True, capture_output=True, text=True)
@@ -28,11 +30,12 @@ print(">> Checking whether output file exists")
 assert path.exists(output_path)
 
 print(">> Reading h5ad files")
-input = ad.read_h5ad(input_path)
+input_reduced = ad.read_h5ad(input_reduced_path)
+input_test = ad.read_h5ad(input_test_path)
 output = ad.read_h5ad(output_path)
 
-print("input:", input)
-
+print("input reduced:", input_reduced)
+print("input test:", input_test)
 print("output:", output)
 
 print(">> Checking whether metrics were added")
@@ -44,7 +47,9 @@ print(">> Checking whether metrics are float")
 assert isinstance(output.uns['metric_values'][meta['functionality_name']], float)
 
 print(">> Checking whether data from input was copied properly to output")
-assert input.n_obs == output.n_obs
-assert input.uns["dataset_id"] == output.uns["dataset_id"]
+assert input_reduced.uns["dataset_id"] == output.uns["dataset_id"]
+assert input_reduced.uns["normalization_id"] == output.uns["normalization_id"]
+assert input_reduced.uns["method_id"] == output.uns["method_id"]
+
 
 print("All checks succeeded!")

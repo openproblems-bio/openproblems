@@ -1,7 +1,9 @@
 functionality:
   arguments:
-    - name: "--input"
+    - name: "--input_reduced"
       __merge__: anndata_reduced.yaml
+    - name: "--input_test"
+      __merge__: anndata_test.yaml
     - name: "--output"
       __merge__: anndata_score.yaml
       direction: output

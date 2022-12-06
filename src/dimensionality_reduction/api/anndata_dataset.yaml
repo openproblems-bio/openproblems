@@ -2,7 +2,7 @@ type: file
 description: "A normalized data with a PCA embedding and HVG selection"
 example: "dataset.h5ad"
 info:
-  label: "Dataset+PCA+HVG"
+  short_description: "Dataset+PCA+HVG"
   slots:
     layers: 
       - type: integer
