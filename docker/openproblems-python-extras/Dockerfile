@@ -9,7 +9,7 @@ WORKDIR /
 
 # Install Python packages
 COPY ./docker/openproblems-python-extras/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --editable /usr/src/singlecellopenproblems
 
 USER $NB_UID
 WORKDIR /home/$NB_USER
