@@ -11,6 +11,8 @@
 
 * Created test data `resources_test/pancreas` with `src/common/resources_test_scripts/pancreas.sh`.
 
+* `list_git_shas`: create list of latest commit hashes of all files in repo.
+
 
 ## label_projection
 
