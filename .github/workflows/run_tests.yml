@@ -127,7 +127,7 @@ jobs:
           docker push $GHCR_IMAGE &
           PIDS+=$!
         done
-        for pid in "$PIDS[@]"; do
+        for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
           wait $pid
         done
@@ -253,7 +253,7 @@ jobs:
           (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
           PIDS+=$!
         done
-        for pid in "$PIDS[@]"; do
+        for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
           wait $pid
         done
@@ -424,7 +424,7 @@ jobs:
           (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
           PIDS+=$!
         done
-        for pid in "$PIDS[@]"; do
+        for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
           wait $pid
         done
@@ -464,7 +464,7 @@ jobs:
           docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image} &
           PIDS+=$!
         done
-        for pid in "$PIDS[@]"; do
+        for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
           wait $pid
         done
