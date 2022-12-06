@@ -8,9 +8,9 @@ functionality:
     label: PHATE
     v1_url: openproblems/tasks/dimensionality_reduction/methods/phate.py
     v1_commit: 4baa8619e232fec2e3bcb3fb73d2f991d16c6f69
-    preferred_normalization: log_cpm
+    preferred_normalization: sqrt_cpm
   arguments:
-    - name: '--hvg'
+    - name: '--log_cpm'
       type: boolean_true
       description: Use logCPM of 1000 HVGs instead of the square-root CPM transformed expression matrix.
     - name: '--n_pca'
@@ -32,4 +32,5 @@ platforms:
           - "anndata>=0.8"
           - phate
           - scprep
+          - pyyaml
   - type: nextflow

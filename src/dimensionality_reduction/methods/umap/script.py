@@ -1,38 +1,46 @@
 import anndata as ad
 import scanpy as sc
+import yaml
 
 ## VIASH START
 par = {
-    'input': 'resources_test/common/pancreas/dataset.h5ad',
-    'output': 'output.h5ad',
+    'input': 'resources_test/common/pancreas/train.h5ad',
+    'output': 'reduced.h5ad',
     'n_pca': 50,
 }
 meta = {
-    'functionality_name': 'foo',
+    'functionality_name': 'umap',
+    'config': 'src/dimensionality_reduction/methods/umap/config.vsh.yaml'
 }
 ## VIASH END
 
 print("Load input data")
-adata = ad.read_h5ad(par['input'])
+input = ad.read_h5ad(par['input'])
 
 print('Select top 1000 high variable genes')
 n_genes = 1000
-idx = adata.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
+idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
 
 print('Apply PCA with 50 dimensions')
-adata.obsm['X_pca_hvg'] = sc.tl.pca(adata.layers['normalized'][:, idx], n_comps=par['n_pca'], svd_solver="arpack")
+input.obsm['X_pca_hvg'] = sc.tl.pca(input.layers['normalized'][:, idx], n_comps=par['n_pca'], svd_solver="arpack")
 
 print('Calculate a nearest-neighbour graph')
-sc.pp.neighbors(adata, use_rep="X_pca_hvg", n_pcs=par['n_pca'])
+sc.pp.neighbors(input, use_rep="X_pca_hvg", n_pcs=par['n_pca'])
 
 print("Run UMAP")
-sc.tl.umap(adata)
+sc.tl.umap(input)
+input.obsm["X_emb"] = input.obsm["X_umap"].copy()
 
-adata.obsm["X_emb"] = adata.obsm["X_umap"].copy()
+print("Delete layers and var")
+del input.layers
+del input.var
 
-# Update .uns
-adata.uns['method_id'] = 'umap'
-adata.uns['normalization_id'] = 'log_cpm'
+print('Add method and normalization ID')
+input.uns['method_id'] = meta['functionality_name']
+with open(meta['config'], 'r') as config_file:
+    config = yaml.safe_load(config_file)
+
+input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
 
 print("Write output to file")
-adata.write_h5ad(par['output'], compression="gzip")
+input.write_h5ad(par['output'], compression="gzip")

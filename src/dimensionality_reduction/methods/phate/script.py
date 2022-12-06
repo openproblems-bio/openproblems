@@ -1,49 +1,50 @@
 import anndata as ad
 from phate import PHATE
 import scprep as sc
-# import yaml
+import yaml
 
 ## VIASH START
 par = {
-    'input': 'resources_test/common/pancreas/dataset.h5ad',
-    'output': 'output.h5ad',
+    'input': 'resources_test/common/pancreas/train.h5ad',
+    'output': 'reduced.h5ad',
     'n_pca': 50,
     'g0': False,
-    'hvg': False
+    'log_cpm': False
 }
 meta = {
-    'functionality_name': 'foo',
+    'functionality_name': 'phate',
     'config': 'src/dimensionality_reduction/methods/phate/config.vsh.yaml'
 }
 ## VIASH END
-# with open(meta['config'], 'r') as config_file:
-#     config = yaml.safe_load(config_file)
-
-# config['functionality']['info']['preferred_normalization']
-# print(meta)
 
 print("Load input data")
-adata = ad.read_h5ad(par['input'])
+input = ad.read_h5ad(par['input'])
 
 print("Run PHATE...")
 gamma = 0 if par['g0'] else 1
 print('... with gamma=' + str(gamma) + ' and...')
 phate_op = PHATE(n_pca=par['n_pca'], verbose=False, n_jobs=-1, gamma=gamma)
 
-if par['hvg']:
+if par['log_cpm']:
     print('... using logCPM data')
     n_genes = 1000
-    idx = adata.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
-    adata.obsm["X_emb"] = phate_op.fit_transform(adata.layers['normalized'][:, idx])
-    adata.uns['normalization_id'] = 'log_cpm'
+    idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
+    input.obsm["X_emb"] = phate_op.fit_transform(input.layers['normalized'][:, idx])
+    input.uns['normalization_id'] = 'log_cpm'
 else:
     print('... using sqrt-CPM data')
-    adata.layers['sqrt_cpm'] = sc.transform.sqrt(adata.layers['normalized'].expm1())
-    adata.obsm["X_emb"] = phate_op.fit_transform(adata.layers['sqrt_cpm'])
-    adata.uns['normalization_id'] = 'sqrt_cpm'
+    input.layers['sqrt_cpm'] = sc.transform.sqrt(input.layers['normalized'].expm1())
+    input.obsm["X_emb"] = phate_op.fit_transform(input.layers['sqrt_cpm'])
+    with open(meta['config'], 'r') as config_file:
+        config = yaml.safe_load(config_file)
+    input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
 
-# Update .uns
-adata.uns['method_id'] = 'phate'
+print("Delete layers and var")
+del input.layers
+del input.var
+
+print('Add method')
+input.uns['method_id'] = meta['functionality_name']
 
 print("Write output to file")
-adata.write_h5ad(par['output'], compression="gzip")
+input.write_h5ad(par['output'], compression="gzip")

@@ -1,39 +1,46 @@
 import anndata as ad
 from umap import UMAP
 import scanpy as sc
+import yaml
 
 ## VIASH START
 par = {
-    'input': 'resources_test/common/pancreas/dataset.h5ad',
-    'output': 'output.h5ad',
+    'input': 'resources_test/common/pancreas/train.h5ad',
+    'output': 'reduced.h5ad',
     'no_pca': False,
 }
 meta = {
-    'functionality_name': 'foo',
+    'functionality_name': 'densmap',
+    'config': 'src/dimensionality_reduction/methods/densmap/config.vsh.yaml'
 }
 ## VIASH END
 
 print("Load input data")
-adata = ad.read_h5ad(par['input'])
+input = ad.read_h5ad(par['input'])
 
 print('Select top 1000 high variable genes')
 n_genes = 1000
-idx = adata.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
+idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
 
 print("Run UMAP...")
 if par['no_pca']:
     print('... using logCPM data')
-    adata.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(adata.layers['normalized'][:, idx])
+    input.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(input.layers['normalized'][:, idx])
 else:
     print('... after applying PCA with 50 dimensions to logCPM data')
-    adata.obsm['X_pca_hvg'] = sc.tl.pca(adata.layers['normalized'][:, idx], n_comps=50, svd_solver="arpack")
-    adata.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(adata.obsm['X_pca_hvg'])
+    input.obsm['X_pca_hvg'] = sc.tl.pca(input.layers['normalized'][:, idx], n_comps=50, svd_solver="arpack")
+    input.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(input.obsm['X_pca_hvg'])
 
-print(adata.obsm['X_emb'][:10,:])
+print("Delete layers and var")
+del input.layers
+del input.var
 
-# Update .uns
-adata.uns['method_id'] = 'densmap'
-adata.uns['normalization_id'] = 'log_cpm'
+print('Add method and normalization ID')
+input.uns['method_id'] = meta['functionality_name']
+with open(meta['config'], 'r') as config_file:
+    config = yaml.safe_load(config_file)
+
+input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
 
 print("Write output to file")
-adata.write_h5ad(par['output'], compression="gzip")
+input.write_h5ad(par['output'], compression="gzip")
