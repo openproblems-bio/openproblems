@@ -125,7 +125,7 @@ jobs:
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           docker tag singlecellopenproblems/$image $GHCR_IMAGE
           docker push $GHCR_IMAGE &
-          PIDS+=$!
+          PIDS+=( $! )
         done
         for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
@@ -251,7 +251,7 @@ jobs:
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
-          PIDS+=$!
+          PIDS+=( $! )
         done
         for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
@@ -422,7 +422,7 @@ jobs:
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
-          PIDS+=$!
+          PIDS+=( $! )
         done
         for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
@@ -462,7 +462,7 @@ jobs:
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
           docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image} &
-          PIDS+=$!
+          PIDS+=( $! )
         done
         for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
