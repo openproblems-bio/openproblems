@@ -25,19 +25,20 @@ def setWorkflowArguments(Map args) {
     main:
     output_ = input_
       | map{ tup -> 
-        id = tup[0]
-        data = tup[1]
-        passthrough = tup.drop(2)
+        assert tup.size() : "Event should have length 2 or greater. Expected format: [id, data]."
+        def id = tup[0]
+        def data = tup[1]
+        def passthrough = tup.drop(2)
 
         // determine new data
-        toRemove = args.collectMany{ _, dataKeys -> 
+        def toRemove = args.collectMany{ _, dataKeys -> 
           // dataKeys is a map but could also be a list
           dataKeys instanceof List ? dataKeys : dataKeys.values()
         }.unique()
-        newData = data.findAll{!toRemove.contains(it.key)}
+        def newData = data.findAll{!toRemove.contains(it.key)}
 
         // determine splitargs
-        splitArgs = args.
+        def splitArgs = args.
           collectEntries{procKey, dataKeys -> 
           // dataKeys is a map but could also be a list
           newSplitData = dataKeys
@@ -76,18 +77,23 @@ def getWorkflowArguments(Map args) {
 
     main:
     output_ = input_
-      | map{ tup -> 
-        id = tup[0]
-        data = tup[1]
-        splitArgs = tup[2].clone()
+      | map{ tup ->
+        assert tup.size() : "Event should have length 3 or greater. Expected format: [id, data, splitArgs]."
+
+        def id = tup[0]
+        def data = tup[1]
+        def splitArgs = tup[2].clone()
         
-        passthrough = tup.drop(3)
+        def passthrough = tup.drop(3)
 
         // try to infer arg name
         if (data !instanceof Map) {
           data = [[ inputKey, data ]].collectEntries()
         }
-        newData = data + splitArgs.remove(args.key)
+        assert splitArgs instanceof Map: "Third element of event (id: $id) should be a map"
+        assert splitArgs.containsKey(args.key): "Third element of event (id: $id) should have a key ${args.key}"
+        
+        def newData = data + splitArgs.remove(args.key)
 
         [ id, newData, splitArgs] + passthrough
       }
@@ -134,7 +140,7 @@ def passthroughMap(Closure clos) {
     main:
     output_ = input_
       | map{ tup -> 
-        out = clos(tup.take(numArgs))
+        def out = clos(tup.take(numArgs))
         out + tup.drop(numArgs)
       }
 
@@ -155,9 +161,10 @@ def passthroughFlatMap(Closure clos) {
     main:
     output_ = input_
       | flatMap{ tup -> 
-        out = clos(tup.take(numArgs))
+        def out = clos(tup.take(numArgs))
+        def pt = tup.drop(numArgs)
         for (o in out) {
-          o.addAll(tup.drop(numArgs))
+          o.addAll(pt)
         }
         out
       }
@@ -167,4 +174,24 @@ def passthroughFlatMap(Closure clos) {
   }
 
   return passthroughFlatMapWf
+}
+
+def passthroughFilter(Closure clos) {
+  def numArgs = clos.class.methods.find{it.name == "call"}.parameterCount
+  
+  workflow passthroughFilterWf {
+    take:
+    input_
+
+    main:
+    output_ = input_
+      | filter{ tup -> 
+        clos(tup.take(numArgs))
+      }
+
+    emit:
+    output_
+  }
+
+  return passthroughFilterWf
 }
