@@ -248,12 +248,17 @@ jobs:
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
-          (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
+          docker pull $GHCR_IMAGE &
           PIDS+=( $! )
         done
         for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
           wait $pid
+        done
+        # tag images
+        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
+          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+          docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest
         done
 
     - name: Set up environment
@@ -418,12 +423,17 @@ jobs:
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
-          (docker pull $GHCR_IMAGE && docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest) &
+          docker pull $GHCR_IMAGE &
           PIDS+=( $! )
         done
         for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
           wait $pid
+        done
+        # tag images
+        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
+          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+          docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest
         done
 
     - name: Set up environment
