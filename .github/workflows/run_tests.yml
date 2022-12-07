@@ -244,11 +244,14 @@ jobs:
 
     - name: Download docker images
       if: "needs.build_images.result == 'success'"
+      env:
+        REPO_OWNER: ${{ github.repository_owner }}
+        RUN_ID: ${{ github.run_id }}
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:3642825692"
+          GHCR_IMAGE="ghcr.io/${REPO_OWNER}/${image}:${RUN_ID}"
           docker pull $GHCR_IMAGE &
-          PIDS+=( $! )
+          PIDS+=("${!}")
         done
         for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
@@ -256,10 +259,9 @@ jobs:
         done
         # tag images
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+          GHCR_IMAGE="ghcr.io/${REPO_OWNER}/${image}:${RUN_ID}"
           docker tag $GHCR_IMAGE singlecellopenproblems/${image}:latest
         done
-      shell: bash -ex {0}
 
     - name: Set up environment
       run: |
