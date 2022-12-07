@@ -6,8 +6,8 @@ import scprep
 
 ## VIASH START
 par = {
-    'input_test': 'output_test.h5ad',
-    'input_denoised': 'output_magic.h5ad',
+    'input_test': 'resources_test/denoising/pancreas/test.h5ad',
+    'input_denoised': 'resources_test/denoising/pancreas/magic.h5ad',
     'output': 'output_mse.h5ad'
 }
 meta = {
@@ -39,10 +39,20 @@ error = sklearn.metrics.mean_squared_error(
     scprep.utils.toarray(test_data.X), denoised_data.X
 )
 
-print("Store metric value")
-input_denoised.uns["metric_ids"] = meta['functionality_name']
-input_denoised.uns["metric_values"] = error
+print("Store mse value")
+output_metric = ad.AnnData(
+    layers={},
+    obs=input_denoised.obs[[]],
+    var=input_denoised.var[[]],
+    uns={}
+)
+
+for key in input_denoised.uns_keys():
+    output_metric.uns[key] = input_denoised.uns[key]
+
+output_metric.uns["metric_ids"] = meta['functionality_name']
+output_metric.uns["metric_values"] = error
 
 print("Write adata to file")
-input_denoised.write_h5ad(par['output'], compression="gzip")
+output_metric.write_h5ad(par['output'], compression="gzip")
 
