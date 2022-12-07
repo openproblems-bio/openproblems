@@ -246,7 +246,7 @@ jobs:
       if: "needs.build_images.result == 'success'"
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:3642825692"
           docker pull $GHCR_IMAGE &
           PIDS+=( $! )
         done
