@@ -119,6 +119,7 @@ jobs:
     - name: Export docker images
       id: export-images
       run: |
+        set -x
         IMAGES="$(find ./docker -mindepth 1 -type d -exec basename {} \;)"
         for image in ${IMAGES}; do
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
