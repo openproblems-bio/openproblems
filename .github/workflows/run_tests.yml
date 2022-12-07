@@ -222,7 +222,7 @@ jobs:
       )
 
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         tests: ${{ fromJSON(needs.create_matrix.outputs.matrix) }}
 
