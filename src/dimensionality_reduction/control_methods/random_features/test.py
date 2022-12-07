@@ -14,7 +14,8 @@ print(">> Checking whether input file exists")
 assert path.exists(input_path)
 
 print(">> Running script as test")
-out = subprocess.run(cmd, check=True, capture_output=True, text=True)
+out = subprocess.run(cmd)
+# out = subprocess.run(cmd, check=True, capture_output=True, text=True)
 
 print(">> Checking whether output file exists")
 assert path.exists(output_path)
@@ -24,7 +25,6 @@ input = ad.read_h5ad(input_path)
 output = ad.read_h5ad(output_path)
 
 print("input:", input)
-
 print("output:", output)
 
 print(">> Checking whether predictions were added")

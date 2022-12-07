@@ -2,8 +2,8 @@ import anndata as ad
 import subprocess
 from os import path
 
-input_path = meta["resources_dir"] + "/input/dataset.h5ad"
-output_path = "output.h5ad"
+input_path = meta["resources_dir"] + "/input/train.h5ad"
+output_path = "reduced.h5ad"
 n_pca = 50
 cmd = [
     meta['executable'],
@@ -27,7 +27,6 @@ input = ad.read_h5ad(input_path)
 output = ad.read_h5ad(output_path)
 
 print("input:", input)
-
 print("output:", output)
 
 print(">> Checking whether predictions were added")

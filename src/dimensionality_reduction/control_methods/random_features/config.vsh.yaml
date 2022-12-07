@@ -25,4 +25,5 @@ platforms:
         packages:
           - numpy
           - "anndata>=0.8"
+          - pyyaml
   - type: nextflow
