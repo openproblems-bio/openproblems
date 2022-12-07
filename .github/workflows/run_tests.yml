@@ -36,103 +36,103 @@ jobs:
       images: ${{ steps.export-images.outputs.images }}
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 1000
-
-    - name: Clear space on runner
-      run: ./scripts/clear_runner_diskspace.sh
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.8"
+#    - uses: actions/checkout@v3
+#      with:
+#        fetch-depth: 1000
+#
+#    - name: Clear space on runner
+#      run: ./scripts/clear_runner_diskspace.sh
+#
+#    - name: Set up Python
+#      uses: actions/setup-python@v4
+#      with:
+#        python-version: "3.8"
 
     - name: Set up environment
       run: |
         echo "LINUX_VERSION=$(uname -rs)" >> $GITHUB_ENV
 
-    - name: Cache Python packages
-      uses: actions/cache@v3
-      with:
-        path: ${{ env.pythonLocation }}
-        key: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
-        restore-keys: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-
-
-    - name: Install package & dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -U wheel setuptools
-        pip install --editable .[evaluate]
-        python -c "import openproblems"
-
-    - name: Update Docker images
-      if: |
-        !(
-          startsWith(github.ref, 'refs/heads/test_docker') ||
-          startsWith(github.ref, 'refs/heads/main')
-        )
-      run: |
-        cd workflow
-        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
-        cd ..
-
-    - name: Build Docker images
-      if: |
-        startsWith(github.ref, 'refs/heads/test_docker')
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker_build
-        cd ..
-
-    - name: Build and push Docker images
-      if: |
-        startsWith(github.ref, 'refs/heads/main')
-      env:
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      run: |
-        cd workflow
-        snakemake -j $(nproc) docker_build docker_push
-        cd ..
-        echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
-
-    - name: Create Pull Request
-      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
-      uses: peter-evans/create-pull-request@v4
-      with:
-        branch: ${{ env.BRANCH_NAME }}
-        delete-branch: true
-        base: main
-        title: '[auto] Update docker version'
-        reviewers: scottgigante, dburkhardt
-        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-        commit-message: "Update docker version # ci skip"
-        add-paths: docker/.version
-
-    - name: Log in to the Container registry
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Export docker images
-      id: export-images
-      run: |
-        set -x
-        IMAGES="$(find ./docker -mindepth 1 -type d -exec basename {} \;)"
-        for image in ${IMAGES}; do
-          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
-          docker tag singlecellopenproblems/$image $GHCR_IMAGE
-          docker push $GHCR_IMAGE &
-          PIDS+=( $! )
-        done
-        for pid in "${PIDS[@]}"; do
-          # ensure exited with status 0
-          wait $pid
-        done
-        # convert to JSON
-        echo "images=[\"$(paste -s -d ' ' <(echo $IMAGES) | sed 's/  */\",\"/g')\"]" >> $GITHUB_OUTPUT
+#    - name: Cache Python packages
+#      uses: actions/cache@v3
+#      with:
+#        path: ${{ env.pythonLocation }}
+#        key: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}
+#        restore-keys: python-pip-${{ env.LINUX_VERSION }}-${{ env.pythonLocation }}-
+#
+#    - name: Install package & dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install -U wheel setuptools
+#        pip install --editable .[evaluate]
+#        python -c "import openproblems"
+#
+#    - name: Update Docker images
+#      if: |
+#        !(
+#          startsWith(github.ref, 'refs/heads/test_docker') ||
+#          startsWith(github.ref, 'refs/heads/main')
+#        )
+#      run: |
+#        cd workflow
+#        SNAKEMAKE_COPY_SOURCE=1 snakemake -j $(nproc) docker
+#        cd ..
+#
+#    - name: Build Docker images
+#      if: |
+#        startsWith(github.ref, 'refs/heads/test_docker')
+#      run: |
+#        cd workflow
+#        snakemake -j $(nproc) docker_build
+#        cd ..
+#
+#    - name: Build and push Docker images
+#      if: |
+#        startsWith(github.ref, 'refs/heads/main')
+#      env:
+#        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+#      run: |
+#        cd workflow
+#        snakemake -j $(nproc) docker_build docker_push
+#        cd ..
+#        echo "CHANGED=`git diff --exit-code > /dev/null && echo false || echo true`" >> $GITHUB_ENV
+#
+#    - name: Create Pull Request
+#      if: env.CHANGED == 'true' && startsWith(github.ref, 'refs/heads/main')
+#      uses: peter-evans/create-pull-request@v4
+#      with:
+#        branch: ${{ env.BRANCH_NAME }}
+#        delete-branch: true
+#        base: main
+#        title: '[auto] Update docker version'
+#        reviewers: scottgigante, dburkhardt
+#        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+#        commit-message: "Update docker version # ci skip"
+#        add-paths: docker/.version
+#
+#    - name: Log in to the Container registry
+#      uses: docker/login-action@v2
+#      with:
+#        registry: ghcr.io
+#        username: ${{ github.repository_owner }}
+#        password: ${{ secrets.GITHUB_TOKEN }}
+#
+#    - name: Export docker images
+#      id: export-images
+#      run: |
+#        set -x
+#        IMAGES="$(find ./docker -mindepth 1 -type d -exec basename {} \;)"
+#        for image in ${IMAGES}; do
+#          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+#          docker tag singlecellopenproblems/$image $GHCR_IMAGE
+#          docker push $GHCR_IMAGE &
+#          PIDS+=( $! )
+#        done
+#        for pid in "${PIDS[@]}"; do
+#          # ensure exited with status 0
+#          wait $pid
+#        done
+#        # convert to JSON
+#        echo "images=[\"$(paste -s -d ' ' <(echo $IMAGES) | sed 's/  */\",\"/g')\"]" >> $GITHUB_OUTPUT
 
   create_matrix:
     runs-on: ubuntu-latest
