@@ -19,7 +19,7 @@ print(">> Checking whether output file exists")
 assert path.exists(output_path)
 
 print(">> Reading json file")
-with open(output_path) as f:
+with open(output_path, 'r') as f:
     out = json.load(f)
     print(out[0])
 

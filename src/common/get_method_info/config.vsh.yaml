@@ -22,6 +22,8 @@ platforms:
     setup:
       - type: r
         cran: [ tidyverse ]
+      - type: apt
+        packages: [ curl, default-jdk ]
       - type: docker
-        run: "curl -fsSL get.viash.io | bash -s -- --bin /usr/local/bin"
+        run: "curl -fsSL get.viash.io | bash -s -- --bin /usr/local/bin/"
   - type: nextflow
