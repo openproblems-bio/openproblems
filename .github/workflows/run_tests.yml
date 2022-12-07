@@ -211,11 +211,9 @@ jobs:
 
     needs:
       - build_images
-      - create_matrix
     if: |
       always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
-      needs.create_matrix.result == 'success' &&
       (
         needs.build_images.result == 'success' ||
         needs.build_images.result == 'skipped'
@@ -224,7 +222,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        tests: ${{ fromJSON(needs.create_matrix.outputs.matrix) }}
+        tests:
+          - test_core
 
     steps:
     - name: Clear space on runner
