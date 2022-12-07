@@ -13,13 +13,20 @@ functionality:
           description: "The ID of the dataset"
           required: true
         - name: "--input"
-          type: "file" # todo: replace with includes
+          type: "file"
+          required: true
+        - name: "--input_test"
+          type: "file"
+          required: true
+        - name: "--normalization_id"
+          type: "string" 
     - name: Outputs
       arguments:
         - name: "--output"
           direction: "output"
           type: file
           example: output.tsv
+          required: true
   resources:
     - type: nextflow_script
       path: main.nf

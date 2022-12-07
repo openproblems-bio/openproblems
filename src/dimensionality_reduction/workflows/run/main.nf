@@ -9,25 +9,26 @@ include { random_features } from "$targetDir/dimensionality_reduction/control_me
 
 // import methods
 include { umap } from "$targetDir/dimensionality_reduction/methods/umap/main.nf"
+include { densmap } from "$targetDir/dimensionality_reduction/methods/densmap/main.nf"
 include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
-// include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
-// include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
-// include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
+include { tsne } from "$targetDir/dimensionality_reduction/methods/tsne/main.nf"
 
 // import metrics
 include { rmse } from "$targetDir/dimensionality_reduction/metrics/rmse/main.nf"
+include { trustworthiness } from "$targetDir/dimensionality_reduction/metrics/trustworthiness/main.nf"
+include { density } from "$targetDir/dimensionality_reduction/metrics/density/main.nf"
 
 // tsv generation component
 include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
 
 // import helper functions
-include { readConfig; viashChannel; helpMessage } from sourceDir + "/nxf_utils/WorkflowHelper.nf"
-include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap; passthroughFilter as pfilter } from sourceDir + "/nxf_utils/DataFlowHelper.nf"
+include { readConfig; viashChannel; helpMessage } from sourceDir + "/wf_utils/WorkflowHelper.nf"
+include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap; passthroughFilter as pfilter } from sourceDir + "/wf_utils/DataflowHelper.nf"
 
 config = readConfig("$projectDir/config.vsh.yaml")
 
 // construct a map of methods (id -> method_module)
-methods = [ random_features, high_dim_pca, umap, phate ]
+methods = [ random_features, high_dim_pca, umap, densmap, phate ]
   .collectEntries{method ->
     [method.config.functionality.name, method]
   }
@@ -47,29 +48,34 @@ workflow run_wf {
   output_ch = input_ch
     
     // split params for downstream components
+    | view{"step 0: $it"}
     | setWorkflowArguments(
-      preprocess: ["dataset_id"],
+      preprocess: ["dataset_id", "normalization_id"],
       method: ["input"],
-      metric: [],
+      metric: ["input_test"],
       output: ["output"]
     )
-    
     // multiply events by the number of method
     | getWorkflowArguments(key: "preprocess")
     | add_methods
+    | view{"step 1: $it"}
 
     // filter the normalization methods that a method actually prefers
-    //| check_filtered_normalization_id
+    | check_filtered_normalization_id
+    | view{"step 2: $it"}
 
     // add input_solution to data for the positive controls
     | controls_can_cheat
+    | view{"step 3: $it"}
 
     // run methods
     | getWorkflowArguments(key: "method")
     | run_methods
+    | view{"step 4: $it"}
 
     // run metrics
-    | getWorkflowArguments(key: "metric", inputKey: "input")
+    | getWorkflowArguments(key: "metric", inputKey: "input_reduced")
+    | view{"step 5: $it"}
     | run_metrics
 
     // convert to tsv  
@@ -148,8 +154,8 @@ workflow run_metrics {
   main:
 
   output_ch = input_ch
-    | rmse
-    // | mix
+    | (rmse & trustworthiness)
+    | mix
 
   emit: output_ch
 }
