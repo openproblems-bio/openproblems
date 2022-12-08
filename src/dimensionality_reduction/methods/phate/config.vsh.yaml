@@ -2,7 +2,7 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "phate"
   namespace: "dimensionality_reduction/methods"
-  description: ""
+  description: "Potential of heat-diffusion for affinity-based transition embedding"
   info:
     type: method
     label: PHATE
