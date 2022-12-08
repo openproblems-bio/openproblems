@@ -15,7 +15,7 @@ output_path = "score.h5ad"
 cmd = [
     meta['executable'],
     "--input_reduced", input_reduced_path,
-    "--input_test", input_reduced_path,
+    "--input_test", input_test_path,
     "--output", output_path,
 ]
 
@@ -44,7 +44,7 @@ assert "metric_values" in output.uns
 assert meta['functionality_name'] in output.uns["metric_ids"]
 
 print(">> Checking whether metrics are float")
-assert isinstance(output.uns['metric_values'][meta['functionality_name']], float)
+assert isinstance(output.uns['metric_values'], float)
 
 print(">> Checking whether data from input was copied properly to output")
 assert input_reduced.uns["dataset_id"] == output.uns["dataset_id"]

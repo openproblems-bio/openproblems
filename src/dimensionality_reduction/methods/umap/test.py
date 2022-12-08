@@ -9,7 +9,7 @@ meta = {
 }
 ## VIASH END
 
-input_path = meta["resources_dir"] + "/input/dataset.h5ad"
+input_path = meta["resources_dir"] + "/input/train.h5ad"
 output_path = "reduced.h5ad"
 cmd = [
     meta['executable'],
