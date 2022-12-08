@@ -1,26 +1,21 @@
 __merge__: ../../api/comp_metric.yaml
 functionality:
-  name: ""
+  name: "density"
   namespace: "dimensionality_reduction/metrics"
-  description: ""
+  description: "density preservation: correlation of local radius with the local radii in the original data space"
   info:
     v1_url: openproblems/tasks/dimensionality_reduction/metrics/density.py 
     v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
     metrics:
-      - id: 
-        label: 
-        description: 
+      - id: density
+        label: Density
+        description: "density preservation: correlation of local radius with the local radii in the original data space"
         min: 0
         max: -1
-        minimize: true
+        maximize: true
   resources:
     - type: python_script
       path: script.py
-  test_resources:
-    - type: python_script
-      path: test.py
-    - path: ../../../../resources_test/common/pancreas/
-      dest: input
 platforms:
   - type: docker
     image: "python:3.10"
@@ -31,5 +26,5 @@ platforms:
           - numpy
           - "anndata>=0.8"
           - typing
-          - umap
+          - umap-learn
   - type: nextflow

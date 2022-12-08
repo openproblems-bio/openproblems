@@ -17,11 +17,6 @@ functionality:
   resources:
     - type: python_script
       path: script.py
-  test_resources:
-    - type: python_script
-      path: test.py
-    - path: ../../../../resources_test/common/pancreas/
-      dest: input
 platforms:
   - type: docker
     image: "python:3.10"

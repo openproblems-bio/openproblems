@@ -25,4 +25,5 @@ platforms:
           - scanpy
           - "anndata>=0.8"
           - pyyaml
+          - umap-learn
   - type: nextflow

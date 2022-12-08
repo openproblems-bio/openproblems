@@ -9,14 +9,13 @@ functionality:
     metrics:
       - id: rmse
         label: RMSE
+        description: "The root mean squared error between the full (or processed) data matrix and a list of dimensionally-reduced matrices"
+        min: 0
+        max: Inf
+        maximize: true
   resources:
     - type: python_script
       path: script.py
-  test_resources:
-    - type: python_script
-      path: test.py
-    - path: ../../../../resources_test/common/pancreas/
-      dest: input
 platforms:
   - type: docker
     image: "python:3.10"
