@@ -1,8 +1,5 @@
 ---
 format: gfm
-info:
-  v1_url: openproblems/tasks/label_projection/README.md
-  v1_commit: 817ea64a526c7251f74c9a7a6dba98e8602b94a8
 toc: true
 ---
 
@@ -20,11 +17,8 @@ dir <- "."
 
 # Label Projection
 
-```{r description, echo=FALSE}
-lines <- readr::read_lines(paste0(dir, "/docs/task_description.md"))
-lines2 <- gsub("^#", "##", lines)
-knitr::asis_output(lines2)
-```
+## Task description
+{{< include docs/task_description.qmd >}}
 
 ## Methods
 
