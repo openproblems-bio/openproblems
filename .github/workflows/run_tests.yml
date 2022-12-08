@@ -441,6 +441,7 @@ jobs:
           GHCR_IMAGE="ghcr.io/${REPO_OWNER}/${image}:${RUN_ID}"
           docker tag $GHCR_IMAGE singlecellopenproblems/${image}:latest
         done
+      shell: bash -e {0}
 
     - name: Set up environment
       id: setup-environment
@@ -480,6 +481,7 @@ jobs:
           # ensure exited with status 0
           wait $pid
         done
+      shell: bash -e {0}
 
   run_benchmark:
     needs:
