@@ -100,6 +100,14 @@
 
 * `metrics/poisson`: Migrated from v1.
 
+### Changes from V1
+
+* Anndata layers are used to store data instead of obsm
+  
+* extended the use of sparse data in methods unless it was not possible
+
+* split_dataset also removes unnecessary data from train and test datasets not needed by the methods and metrics.
+
 ## Dimensionality reduction
 ### New functionality
 * `api/anndata_*`: Created a file format specifications for the h5ad files throughout the pipeline.
@@ -133,10 +141,12 @@
 
 ### Changes from V1
 
-* Anndata layers are used to store data instead of obsm
+* Anndata layers are used to store normalized and raw counts instead of `.X`.
+
+* Metrics are stored in `.uns` data.
   
-* extended the use of sparse data in methods unless it was not possible
+* `split_dataset` removes nonessential data from train and test datasets for the methods and metrics.
 
-* split_dataset also removes unnecessary data from train and test datasets not needed by the methods and metrics.
+* Higher dimensional data used to obtain the metrics is calculated from test data instead of the whole dataset. So far test and train data contain the same counts values, but this may change eventually.
 
-
+* Test data is used instead of the whole dataset in control (baseline) methods.
