@@ -1,5 +1,4 @@
 #!/bin/bash
-#
 #make sure the following command has been executed
 #bin/viash_build -q 'dimensionality_reduction|common'
 
@@ -20,7 +19,6 @@ fi
 mkdir -p $DATASET_DIR
 
 # split dataset
-# TODO: implement
 bin/viash run src/dimensionality_reduction/split_dataset/config.vsh.yaml -- \
     --input $RAW_DATA \
     --output_train $DATASET_DIR/train.h5ad \
@@ -42,19 +40,6 @@ bin/viash run src/dimensionality_reduction/metrics/rmse/config.vsh.yaml -- \
 export NXF_VER=22.04.5
 
 # after having added a split dataset component
-# bin/nextflow \
-#   run . \
-#   -main-script src/dimensionality_reduction/workflows/run/main.nf \
-#   -profile docker \
-#   -resume \
-#   --id pancreas \
-#   --dataset_id pancreas \
-#   --normalization_id log_cpm \
-#   --input_dataset $DATASET_DIR/dataset.h5ad \
-#   --input_solution $DATASET_DIR/solution.h5ad \
-#   --output scores.tsv \
-#   --publish_dir $DATASET_DIR/
-
 bin/nextflow \
   run . \
   -main-script src/dimensionality_reduction/workflows/run/main.nf \
@@ -63,5 +48,6 @@ bin/nextflow \
   --dataset_id pancreas \
   --normalization_id log_cpm \
   --input $DATASET_DIR/train.h5ad \
+  --input_test $DATASET_DIR/test.h5ad \
   --output scores.tsv \
   --publish_dir $DATASET_DIR/

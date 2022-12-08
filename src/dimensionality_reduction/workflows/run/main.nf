@@ -28,7 +28,7 @@ include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap; pa
 config = readConfig("$projectDir/config.vsh.yaml")
 
 // construct a map of methods (id -> method_module)
-methods = [ random_features, high_dim_pca, umap, densmap, phate ]
+methods = [ random_features, high_dim_pca, umap, densmap, phate, tsne ]
   .collectEntries{method ->
     [method.config.functionality.name, method]
   }
@@ -58,24 +58,18 @@ workflow run_wf {
     // multiply events by the number of method
     | getWorkflowArguments(key: "preprocess")
     | add_methods
-    | view{"step 1: $it"}
 
     // filter the normalization methods that a method actually prefers
     | check_filtered_normalization_id
-    | view{"step 2: $it"}
-
     // add input_solution to data for the positive controls
     | controls_can_cheat
-    | view{"step 3: $it"}
 
     // run methods
     | getWorkflowArguments(key: "method")
     | run_methods
-    | view{"step 4: $it"}
 
     // run metrics
     | getWorkflowArguments(key: "metric", inputKey: "input_reduced")
-    | view{"step 5: $it"}
     | run_metrics
 
     // convert to tsv  
@@ -154,7 +148,7 @@ workflow run_metrics {
   main:
 
   output_ch = input_ch
-    | (rmse & trustworthiness)
+    | (rmse & trustworthiness & density)
     | mix
 
   emit: output_ch
