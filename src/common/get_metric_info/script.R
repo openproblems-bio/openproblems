@@ -18,7 +18,7 @@ configs <- yaml::yaml.load(ns_list$stdout)
 df <- map_df(configs, function(config) {
   info <- as_tibble(map_df(config$functionality$info$metrics, as.data.frame))
   info$config_path <- gsub(".*\\./", "", config$info$config)
-  info$id <- config$functionality$name
+  info$component_id <- config$functionality$name
   info$namespace <- config$functionality$namespace
   info$description <- config$functionality$description
   info
