@@ -18,7 +18,7 @@ dir <- "src/dimensionality_reduction"
 dir <- "."
 ```
 
-# Label Projection
+# Dimensionality reduction
 
 ```{r description, echo=FALSE}
 lines <- readr::read_lines(paste0(dir, "/docs/task_description.md"))
@@ -28,7 +28,7 @@ knitr::asis_output(lines2)
 
 ## Methods
 
-Methods for assigning labels from a reference dataset to a new dataset.
+Methods to assign dimensionally-reduced 2D embedding coordinates to adata.obsm['X_emb'].
 
 ```{r methods, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
 method_ns_list <- processx::run("viash", c("ns", "list", "-q", "methods", "--src", "."), wd = dir)
@@ -63,7 +63,7 @@ cat(paste(knitr::kable(method_info_view, format = 'pipe'), collapse = "\n"))
 
 ## Metrics
 
-Metrics for label projection aim to characterize how well each classifier correctly assigns cell type labels to cells in the test set.
+Metrics for dimensionality reduction aim to compare the dimensionality reduced dataset (the embedding) with a whole or a higher dimensional dataset. The more similar they are, the better the reduction is.
 
 ```{r metrics, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
 metric_ns_list <- processx::run("viash", c("ns", "list", "-q", "metrics", "--src", "."), wd = dir)
