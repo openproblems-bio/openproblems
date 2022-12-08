@@ -124,7 +124,7 @@ jobs:
           GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
           docker tag singlecellopenproblems/$image $GHCR_IMAGE
           docker push $GHCR_IMAGE &
-          PIDS+=( $! )
+          PIDS+=("${!}")
         done
         for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
@@ -132,6 +132,7 @@ jobs:
         done
         # convert to JSON
         echo "images=[\"$(paste -s -d ' ' <(echo $IMAGES) | sed 's/  */\",\"/g')\"]" >> $GITHUB_OUTPUT
+      shell: bash -e {0}
 
   create_matrix:
     runs-on: ubuntu-latest
@@ -245,11 +246,14 @@ jobs:
 
     - name: Download docker images
       if: "needs.build_images.result == 'success'"
+      env:
+        REPO_OWNER: ${{ github.repository_owner }}
+        RUN_ID: ${{ github.run_id }}
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+          GHCR_IMAGE="ghcr.io/${REPO_OWNER}/${image}:${RUN_ID}"
           docker pull $GHCR_IMAGE &
-          PIDS+=( $! )
+          PIDS+=("${!}")
         done
         for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
@@ -257,9 +261,10 @@ jobs:
         done
         # tag images
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
-          docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest
+          GHCR_IMAGE="ghcr.io/${REPO_OWNER}/${image}:${RUN_ID}"
+          docker tag $GHCR_IMAGE singlecellopenproblems/${image}:latest
         done
+      shell: bash -e {0}
 
     - name: Set up environment
       run: |
@@ -420,11 +425,14 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Download docker images
+      env:
+        REPO_OWNER: ${{ github.repository_owner }}
+        RUN_ID: ${{ github.run_id }}
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+          GHCR_IMAGE="ghcr.io/${REPO_OWNER}/${image}:${RUN_ID}"
           docker pull $GHCR_IMAGE &
-          PIDS+=( $! )
+          PIDS+=("${!}")
         done
         for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
@@ -432,9 +440,10 @@ jobs:
         done
         # tag images
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
-          docker tag $GHCR_IMAGE singlecellopenproblems/$image:latest
+          GHCR_IMAGE="ghcr.io/${REPO_OWNER}/${image}:${RUN_ID}"
+          docker tag $GHCR_IMAGE singlecellopenproblems/${image}:latest
         done
+      shell: bash -e {0}
 
     - name: Set up environment
       id: setup-environment
@@ -468,12 +477,13 @@ jobs:
         for image in $(cd docker && ls -1d */ | tr -d '/'); do
           docker tag singlecellopenproblems/${image} ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image}
           docker push --quiet ${ECR_ENDPOINT}/openproblems:${BRANCH}-${image} &
-          PIDS+=( $! )
+          PIDS+=("${!}")
         done
         for pid in "${PIDS[@]}"; do
           # ensure exited with status 0
           wait $pid
         done
+      shell: bash -e {0}
 
   run_benchmark:
     needs:
