@@ -11,7 +11,7 @@ from . import utils
         "1k Peripheral Blood Mononuclear Cells (PBMCs) from a healthy donor. "
         "Sequenced on 10X v3 chemistry in November 2018 by 10X Genomics."
     ),
-    image="openproblems-python-extras",
+    image="openproblems-python-pytorch",
 )
 def pbmc(test=False):
     adata = load_tenx_1k_pbmc(test=test)

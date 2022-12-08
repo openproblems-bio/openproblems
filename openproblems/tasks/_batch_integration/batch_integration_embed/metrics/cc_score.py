@@ -22,14 +22,16 @@ the preintegration variance contribution reduces the score."""
     metric_name="Cell Cycle Score",
     paper_reference="luecken2022benchmarking",
     maximize=True,
-    image="openproblems-python-batch-integration",  # only if required
+    image="openproblems-r-pytorch",
 )
 def cc_score(adata, test=False):
     from ._utils import _get_split
     from scib.metrics import cell_cycle
 
     try:
-        cc = cell_cycle(*_get_split(adata), "batch", embed="X_emb", organism="human")
+        cc = cell_cycle(
+            *_get_split(adata), "batch", embed="X_emb", organism=adata.uns["organism"]
+        )
 
     except ValueError:
         cc = 0

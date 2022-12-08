@@ -11,7 +11,7 @@ from typing import Optional
     paper_reference="lopez2022destvi",
     paper_year=2022,
     code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-python-extras",
+    image="openproblems-python-pytorch",
 )
 def destvi(
     adata,

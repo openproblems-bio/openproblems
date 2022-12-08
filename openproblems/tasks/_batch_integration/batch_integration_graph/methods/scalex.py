@@ -11,7 +11,7 @@ _scalex_method = functools.partial(
     paper_reference="xiong2021online",
     paper_year=2022,
     code_url="https://github.com/jsxlei/SCALEX",
-    image="openproblems-python-extras",
+    image="openproblems-python-pytorch",
 )
 
 

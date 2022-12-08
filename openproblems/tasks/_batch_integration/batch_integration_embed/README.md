@@ -67,6 +67,7 @@ Datasets should contain the following attributes:
 * `adata.obsm['X_uni']` with a pre-integration embedding (PCA)
 * `adata.layers['log_normalized']` with log-normalized data
 * `adata.X` with log-normalized data
+* `adata.uns["organism"]` with either `"mouse"` or `"human"`
 
 Methods should assign output to `adata.obsm['X_emb']`.
 

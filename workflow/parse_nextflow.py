@@ -1,3 +1,54 @@
+"""
+Schema:
+
+# results/{task.__name__}/{dataset.__name__}.json
+{
+    "name": dataset.metadata["dataset_name"],
+    "data_url": dataset.metadata["data_url"],
+    "data_reference": dataset.metadata["data_reference"],
+    "headers": {
+        "names": [
+            "Rank",
+            "Name",
+            "Metric1 Raw",
+            "Metric2 Raw",
+            ...,
+            "Mean score Scaled",
+            "Metric1 Scaled",
+            ...,
+            "Memory (GB)",
+            "Runtime (min)",
+            "CPU (%)",
+            "Paper",
+            "Year",
+            "Library"
+        ],
+        "fixed": ["Name", "Paper", "Library"]
+    },
+    "results": [
+        {
+            "Name": method.metadata["method_name"],
+            "Paper": method.metadata["paper_name"],
+            "Paper URL": method.metadata["paper_url"],
+            "Year": method.metadata["year"],
+            "Library": method.metadata["code_url"],
+            "Implementation": "https://github.com/.../path/to/method.py",
+            "Version": method.metadata["method_version"],
+            "Runtime (min)": runtime,
+            "CPU (%)": cpu,
+            "Memory (GB)": memory,
+            "Rank": rank,
+            "Metric1 Raw": metric1_raw,
+            "Metric2 Raw": metric2_raw, .
+            ..,
+            "Mean score Scaled": mean_score,
+            "Metric1 Scaled": metric1,
+            ...
+        },
+        ...
+    ]
+}
+"""
 import collections
 import copy
 import json
@@ -84,11 +135,14 @@ def read_trace(filename):
 
 def parse_trace_to_dict(df):
     """Parse the trace dataframe and convert to dict."""
+    print(f"Parsing {df.shape[0]} trace records")
     results = collections.defaultdict(lambda: collections.defaultdict(dict))
     for task_name in df["task"].unique():
         df_task = df.loc[df["task"] == task_name]
+        print(f"{task_name}: {df_task.shape[0]} records")
         for dataset_name in df_task["dataset"].unique():
             df_dataset = df_task.loc[df_task["dataset"] == dataset_name]
+            print(f"{task_name}.{dataset_name}: {df_task.shape[0]} records")
             for _, row in df_dataset.iterrows():
                 method_name = row["method"]
                 results[task_name][dataset_name][method_name] = row.to_dict()
@@ -101,7 +155,9 @@ def parse_trace_to_dict(df):
 def parse_metric_results(results_path, results):
     """Add metric results to the trace output."""
     missing_traces = []
-    for filename in os.listdir(os.path.join(results_path, "results/metrics")):
+    metric_filenames = os.listdir(os.path.join(results_path, "results/metrics"))
+    print(f"Loading {len(metric_filenames)} metric results")
+    for filename in sorted(metric_filenames):
         with open(
             os.path.join(results_path, "results/metrics", filename), "r"
         ) as handle:
@@ -159,25 +215,35 @@ def normalize_scores(task_name, dataset_results):
             dataset_results[method_name]["metrics"]
         )
     metric_names = list(list(dataset_results.values())[0]["metrics"].keys())
+
     for metric_name in metric_names:
-        metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
+        try:
+            metric = openproblems.api.utils.get_function(
+                task_name, "metrics", metric_name
+            )
+        except openproblems.api.utils.NoSuchFunctionError as e:
+            print(f"[WARN] {e}")
+            del dataset_results[method_name]["metrics"][metric_name]
+            continue
         metric_scores = np.array(
             [
                 dataset_results[method_name]["metrics"][metric_name]
                 for method_name in dataset_results
             ]
         )
-        if np.all(np.isnan(metric_scores)):
-            for method_name in dataset_results:
-                del dataset_results[method_name]["metrics"][metric_name]
-            continue
-        baseline_methods = [
-            method_name
-            for method_name in dataset_results
-            if openproblems.api.utils.get_function(
-                task_name, "methods", method_name
-            ).metadata["is_baseline"]
-        ]
+        baseline_methods = []
+        for method_name in list(dataset_results.keys()):
+            try:
+                method = openproblems.api.utils.get_function(
+                    task_name,
+                    "methods",
+                    method_name,
+                )
+            except openproblems.api.utils.NoSuchFunctionError as e:
+                print(f"[WARN] {e}")
+                del dataset_results[method_name]
+            if method.metadata["is_baseline"]:
+                baseline_methods.append(method_name)
         if len(baseline_methods) < 2:
             # just use all methods as a fallback
             baseline_methods = dataset_results.keys()
@@ -202,10 +268,38 @@ def drop_baselines(task_name, dataset_results):
     """Remove baseline methods from dataset results."""
     dataset_results = copy.copy(dataset_results)
     method_names = list(dataset_results.keys())
+    n_removed = 0
     for method_name in method_names:
-        method = openproblems.api.utils.get_function(task_name, "methods", method_name)
+        method = openproblems.api.utils.get_function(
+            task_name,
+            "methods",
+            method_name,
+        )
         if method.metadata["is_baseline"]:
+            n_removed += 1
             del dataset_results[method_name]
+
+    print(f"Dropped {n_removed} baseline methods")
+    return dataset_results
+
+
+def drop_nan_metrics(dataset_results):
+    n_removed = 0
+    metric_names = list(list(dataset_results.values())[0]["metrics"].keys())
+    for metric_name in metric_names:
+        metric_scores = np.array(
+            [
+                dataset_results[method_name]["metrics"][metric_name]
+                for method_name in dataset_results
+            ]
+        )
+        if np.all(np.isnan(metric_scores)):
+            n_removed += 1
+            for method_name in dataset_results:
+                del dataset_results[method_name]["metrics"][metric_name]
+                del dataset_results[method_name]["metrics_raw"][metric_name]
+    if n_removed > 0:
+        print(f"[WARN] Removed {n_removed} all-NaN metrics")
     return dataset_results
 
 
@@ -236,6 +330,9 @@ def compute_ranking(dataset_results):
 
 def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
     """Convert the raw dataset results to pretty JSON for web."""
+    print(
+        f"Formatting {len(dataset_results_raw)} methods for {task_name}.{dataset_name}"
+    )
     dataset = openproblems.api.utils.get_function(task_name, "datasets", dataset_name)
     output = dict(
         name=dataset.metadata["dataset_name"],
@@ -247,11 +344,16 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
     )
     dataset_results_raw = normalize_scores(task_name, dataset_results_raw)
     dataset_results = drop_baselines(task_name, dataset_results_raw)
+    dataset_results = drop_nan_metrics(dataset_results)
     dataset_results, ranking = compute_ranking(dataset_results)
     metric_names = set()
     for method_name, rank in ranking.items():
         method_results = dataset_results[method_name]
-        method = openproblems.api.utils.get_function(task_name, "methods", method_name)
+        method = openproblems.api.utils.get_function(
+            task_name,
+            "methods",
+            method_name,
+        )
         result = {
             "Name": method.metadata["method_name"],
             "Paper": method.metadata["paper_name"],
@@ -268,20 +370,25 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
             "Rank": rank,
             "Mean score": method_results["mean_score"],
         }
-        for metric_name, metric_result in method_results["metrics"].items():
-            metric = openproblems.api.utils.get_function(
-                task_name, "metrics", metric_name
-            )
-            if np.isnan(metric_result):
-                metric_result = "NaN"
-            elif np.isneginf(metric_result):
-                metric_result = "-Inf"
-            elif np.isinf(metric_result):
-                metric_result = "Inf"
-            result[metric.metadata["metric_name"]] = metric_result
-            metric_names.add(metric.metadata["metric_name"])
+        result_metrics = {}
+        for metric_type in ["metrics_raw", "metrics"]:
+            metric_type_name = "Raw" if metric_type == "metrics_raw" else "Scaled"
+            for metric_name, metric_result in method_results[metric_type].items():
+                metric = openproblems.api.utils.get_function(
+                    task_name, "metrics", metric_name
+                )
+                if np.isnan(metric_result):
+                    metric_result = "NaN"
+                elif np.isneginf(metric_result):
+                    metric_result = "-Inf"
+                elif np.isinf(metric_result):
+                    metric_result = "Inf"
+                metric_name_fmt = f"{metric.metadata['metric_name']} {metric_type_name}"
+                result_metrics[metric_name_fmt] = metric_result
+                metric_names.add(metric_name_fmt)
+        result.update(sorted(result_metrics.items()))
         output["results"].append(result)
-    output["headers"]["names"].extend(list(metric_names))
+    output["headers"]["names"].extend(sorted(list(metric_names)))
     output["headers"]["names"].extend(
         [
             "Memory (GB)",
@@ -307,21 +414,19 @@ def results_to_json(results, outdir):
                 os.mkdir(results_dir)
             filename = os.path.join(results_dir, "{}.json".format(dataset_name))
             filename_raw = os.path.join(results_dir, "{}.raw.json".format(dataset_name))
-            try:
-                dataset_results_json, dataset_results_raw = dataset_results_to_json(
-                    task_name, dataset_name, dataset_results
-                )
-            except openproblems.api.utils.NoSuchFunctionError:
-                continue
+            dataset_results_json, dataset_results_raw = dataset_results_to_json(
+                task_name, dataset_name, dataset_results
+            )
             with open(filename_raw, "w") as handle:
                 dump_json(
                     dataset_results_raw,
                     handle,
                 )
-            if not workflow_utils.task_is_incomplete(
+            if workflow_utils.task_is_incomplete(
                 openproblems.api.utils.str_to_task(task_name)
             ):
-                # don't write results for incomplete tasks
+                print("Skipping stub task")
+            else:
                 with open(filename, "w") as handle:
                     dump_json(
                         dataset_results_json,

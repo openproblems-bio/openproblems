@@ -11,6 +11,8 @@ def check_dataset(adata):
     assert "batch" in adata.obs
     assert "labels" in adata.obs
     assert "log_normalized" in adata.layers
+    assert "organism" in adata.uns
+    assert adata.uns["organism"] in ["mouse", "human"]
 
     return True
 
@@ -18,6 +20,8 @@ def check_dataset(adata):
 def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
     assert "X_emb" in adata.obsm
+    # check organism was not removed
+    assert "organism" in adata.uns
     return True
 
 
@@ -27,6 +31,7 @@ def sample_dataset():
     import scanpy as sc
 
     adata = load_sample_data()
+    adata.uns["organism"] = "human"
 
     adata.var.index = adata.var.gene_short_name.astype(str)
     sc.pp.normalize_total(adata)

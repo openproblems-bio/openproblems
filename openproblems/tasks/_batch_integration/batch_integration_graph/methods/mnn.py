@@ -10,7 +10,7 @@ _mnn_method = functools.partial(
     paper_reference="haghverdi2018batch",
     paper_year=2018,
     code_url="https://github.com/chriscainx/mnnpy",
-    image="openproblems-python-batch-integration",
+    image="openproblems-r-pytorch",
 )
 
 
@@ -18,7 +18,10 @@ def _mnn(adata):
     from scib.integration import runMNN
     from scib.preprocessing import reduce_data
 
+    # mnn clears adata.uns
+    uns = adata.uns
     adata = runMNN(adata, "batch")
+    adata.uns = uns
     reduce_data(adata, umap=False)
     adata.obsm["X_emb"] = adata.obsm["X_pca"]
     adata.uns["method_code_version"] = check_version("mnnpy")

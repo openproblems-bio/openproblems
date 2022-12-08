@@ -1,60 +1,55 @@
 from ....tools.decorators import metric
 
-import numpy as np
 
-
-def calculate_squareform_pairwise_distance(data):
-    """Calculate pairwise distances.
-
-    Compute pairwise distance between points in a matrix / vector and then format this
-    into a squareform vector.
-    """
+def _rmse(X, X_emb):
+    import scipy.optimize
     import scipy.spatial
 
-    return scipy.spatial.distance.squareform(scipy.spatial.distance.pdist(data))
-
-
-def calculate_rmse(adata, n_svd=200):
-    """Calculate dimensional reduction stress via root mean square error."""
-    import sklearn.decomposition
-    import sklearn.metrics
-
-    X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
-    high_dimensional_distance_matrix = calculate_squareform_pairwise_distance(X)
-
-    low_dimensional_distance_matrix = calculate_squareform_pairwise_distance(
-        adata.obsm["X_emb"]
+    high_dimensional_distance_vector = scipy.spatial.distance.pdist(X)
+    low_dimensional_distance_vector = scipy.spatial.distance.pdist(X_emb)
+    scale, rmse = scipy.optimize.nnls(
+        low_dimensional_distance_vector[:, None], high_dimensional_distance_vector
     )
-
-    diff = high_dimensional_distance_matrix - low_dimensional_distance_matrix
-
-    kruskel_matrix = np.sqrt(diff**2 / sum(low_dimensional_distance_matrix**2))
-
-    kruskel_score = np.sqrt(sum(diff**2) / sum(low_dimensional_distance_matrix**2))
-
-    y_actual = high_dimensional_distance_matrix
-    y_predic = low_dimensional_distance_matrix
-
-    rms = np.sqrt(sklearn.metrics.mean_squared_error(y_actual, y_predic))
-
-    return kruskel_matrix, kruskel_score, rms
+    return rmse
 
 
 @metric(
-    metric_name="Root mean squared error",
+    metric_name="RMSE",
+    maximize=False,
     paper_reference="kruskal1964mds",
-    maximize=True,
 )
-def rmse(adata):
+def rmse(adata, n_svd=200):
     """Calculate the root mean squared error.
 
-    Computes  (RMSE) between the full (or processed) data matrix and a list of
-    dimensionally-reduced matrices.
+    Computes (RMSE) between the full (or processed) data matrix and the
+    dimensionally-reduced matrix, invariant to scalar multiplication
     """
-    (
-        adata.obsp["kruskel_matrix"],
-        adata.uns["kruskel_score"],
-        adata.uns["rmse_score"],
-    ) = calculate_rmse(adata)
+    import sklearn.decomposition
 
-    return float(adata.uns["rmse_score"])
+    X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
+    return _rmse(X, adata.obsm["X_emb"])
+
+
+@metric(
+    metric_name="RMSE (spectral)",
+    maximize=False,
+    paper_reference="coifman2006diffusion",
+)
+def rmse_spectral(adata, n_comps=200):
+    """Calculate the spectral root mean squared error
+
+    Computes (RMSE) between high-dimensional Laplacian eigenmaps on the full (or
+    processed) data matrix and the dimensionally-reduced matrix, invariant to scalar
+    multiplication
+    """
+    import numpy as np
+    import umap
+    import umap.spectral
+
+    n_comps = min(n_comps, min(adata.shape) - 2)
+
+    graph = umap.UMAP(transform_mode="graph").fit_transform(adata.X)
+    X = umap.spectral.spectral_layout(
+        adata.X, graph, n_comps, random_state=np.random.default_rng()
+    )
+    return _rmse(X, adata.obsm["X_emb"])
