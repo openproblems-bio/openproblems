@@ -11,7 +11,7 @@ functionality:
         label: RMSE
         description: "The root mean squared error between the full (or processed) data matrix and a list of dimensionally-reduced matrices"
         min: 0
-        max: Inf
+        # max: 
         maximize: true
   resources:
     - type: python_script
