@@ -14,12 +14,20 @@ functionality:
     - name: "--output"
       type: "file"
       direction: "output"
-      default: "output.csv"
-      description: "Output csv"
+      default: "output.yaml"
+      description: "Output yaml file with migration status"
   resources:
     - type: python_script
       path: script.py
+  test_resources:
+    - path: ../../../temp
+    - type: python_script
+      path: test.py
 platforms:
   - type: docker
     image: python:3.10
+    setup:
+      - type: python
+        pip:
+          - pyyaml
   - type: nextflow
