@@ -14,6 +14,7 @@ functionality:
     doc_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html"
     v1_url: openproblems/tasks/label_projection/methods/knn_classifier.py
     v1_commit: 2097bbb3e996f66e98128c9ac95bc9640a496e0d
+    v1_comp_id: knn_classifier_log_cpm
     preferred_normalization: log_cpm
   resources:
     - type: python_script

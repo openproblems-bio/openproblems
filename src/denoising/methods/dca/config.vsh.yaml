@@ -13,6 +13,7 @@ functionality:
     code_url: "https://github.com/theislab/dca"
     v1_url: /openproblems/tasks/denoising/methods/dca.py
     v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    v1_comp_id: "dca"
     preferred_normalization: counts
   arguments:
     - name: "--epochs"

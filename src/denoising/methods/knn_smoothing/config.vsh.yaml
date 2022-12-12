@@ -13,6 +13,7 @@ functionality:
     code_url: "https://github.com/yanailab/knn-smoothing"
     v1_url: /openproblems/tasks/denoising/methods/knn_smoothing.py
     v1_commit: bbecf4e9ad90007c2711394e7fbd8e49cbd3e4a1
+    v1_comp_id: "knn_smoothing"
     preferred_normalization: counts
   resources:
     - type: python_script

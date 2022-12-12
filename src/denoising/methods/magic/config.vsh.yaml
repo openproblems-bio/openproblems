@@ -13,6 +13,7 @@ functionality:
     code_url: "https://github.com/KrishnaswamyLab/MAGIC"
     v1_url: /openproblems/tasks/denoising/methods/magic.py
     v1_commit: 2fbc2d4c8d3ff955ea948fc082635cf779b1927e
+    v1_comp_id: "magic"
     preferred_normalization: counts
   arguments:
     - name: "--solver"

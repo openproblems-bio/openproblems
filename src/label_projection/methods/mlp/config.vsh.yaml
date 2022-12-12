@@ -14,6 +14,7 @@ functionality:
     doc_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html"
     v1_url: openproblems/tasks/label_projection/methods/mlp.py
     v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    v1_comp_id: mlp_log_cpm
     preferred_normalization: log_cpm
   arguments:
     - name: "--hidden_layer_sizes"

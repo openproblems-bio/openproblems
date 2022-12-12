@@ -13,6 +13,7 @@ functionality:
     doc_url: https://scarches.readthedocs.io/en/latest/scanvi_surgery_pipeline.html
     v1_url: openproblems/tasks/label_projection/methods/scvi_tools.py
     v1_commit: 411a416150ecabce25e1f59bde422a029d0a8baa
+    v1_comp_id: scarches_scanvi_hvg
     preferred_normalization: log_cpm
   arguments:
     - name: "--hvg"
