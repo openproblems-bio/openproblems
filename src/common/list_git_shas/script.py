@@ -1,5 +1,4 @@
 import subprocess
-import os
 import json
 
 ## VIASH START

@@ -16,14 +16,23 @@ functionality:
   resources:
     - type: r_script
       path: script.R
+  test_resources:
+    - path: ../../../src
+    - type: python_script
+      path: test.py
 platforms:
   - type: docker
     image: eddelbuettel/r2u:22.04
     setup:
       - type: r
-        cran: [ anndata, tidyverse ]
+        cran: [ tidyverse ]
       - type: apt
-        packages: [ libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3 ]
+        packages: [ curl, default-jdk ]
+      - type: docker
+        run: "curl -fsSL get.viash.io | bash -s -- --bin /usr/local/bin/"
+    test_setup:
+      - type: apt
+        packages: [libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3, git]
       - type: python
-        pip: [ anndata>=0.8 ]
+        pip: [ pyyaml ]
   - type: nextflow
