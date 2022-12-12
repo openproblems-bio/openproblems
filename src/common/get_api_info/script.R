@@ -20,7 +20,7 @@ comp_file <- map_df(comp_yamls, function(yaml_file) {
       comp_name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
       arg_name = str_replace_all(arg$name, "^-*", ""),
       direction = arg$direction %||% "input",
-      file_name = basename(arg$`__inherits__`) %>% gsub("\\.yaml", "", .)
+      file_name = basename(arg$`__merge__`) %>% gsub("\\.yaml", "", .)
     )
   })
 })
