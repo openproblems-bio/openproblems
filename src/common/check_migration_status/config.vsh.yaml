@@ -20,7 +20,7 @@ functionality:
     - type: python_script
       path: script.py
   test_resources:
-    - path: ../../../temp
+    - path: ../../../resources_test
     - type: python_script
       path: test.py
 platforms:

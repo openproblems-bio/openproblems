@@ -1,6 +1,7 @@
 functionality:
   name: list_git_shas
   namespace: common
+  description: "Extract git file info from a git repo"
   arguments:
     - name: --input
       type: file
@@ -34,5 +35,5 @@ platforms:
     image: "python:3.10"
     test_setup:
       - type: docker
-        run: [git clone https://github.com/openproblems-bio/openproblems-v2.git]
+        run: "git clone https://github.com/openproblems-bio/openproblems-v2.git"
   - type: nextflow

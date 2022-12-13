@@ -4,7 +4,7 @@ library(rlang)
 ## VIASH START
 par <- list(
   input = "src/label_projection",
-  output = "resources/label_projection/output/api.yaml"
+  output = "resources/label_projection/output/api.json"
 )
 ## VIASH END
 
@@ -68,4 +68,4 @@ out <- list(
   file_schema = purrr::transpose(file_slot)
 )
 
-yaml::write_yaml(out, par$output)
+jsonlite::write_json(purrr::transpose(out), par$output, auto_unbox = TRUE)

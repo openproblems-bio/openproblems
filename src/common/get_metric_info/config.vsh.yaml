@@ -11,8 +11,8 @@ functionality:
     - name: "--output"
       type: "file"
       direction: "output"
-      default: "output.yaml"
-      description: "Output yaml"
+      default: "output.json"
+      description: "Output json"
   resources:
     - type: r_script
       path: script.R
@@ -33,6 +33,4 @@ platforms:
     test_setup:
       - type: apt
         packages: [libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3, git]
-      - type: python
-        pip: [ pyyaml ]
   - type: nextflow

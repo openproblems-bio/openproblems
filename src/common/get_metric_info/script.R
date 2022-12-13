@@ -4,7 +4,7 @@ library(rlang)
 ## VIASH START
 par <- list(
   input = "src/denoising",
-  output = "temp/denoising_metrics.yaml"
+  output = "temp/denoising_metrics.json"
 )
 ## VIASH END
 
@@ -28,4 +28,4 @@ df <- map_df(configs, function(config) {
 }) %>%
   select(id, everything())
 
-yaml::write_yaml(purrr::transpose(df), par$output)
+jsonlite::write_json(purrr::transpose(df), par$output, auto_unbox = TRUE)

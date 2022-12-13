@@ -38,5 +38,4 @@ execution_info <- nxf_log %>%
 
 df <- full_join(raw_scores, execution_info, by = c("method_id", "dataset_id"))
 
-yaml::write_yaml(purrr::transpose(df), par$output)
-
+jsonlite::write_json(purrr::transpose(df), par$output, auto_unbox = TRUE)

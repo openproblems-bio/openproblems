@@ -1,5 +1,4 @@
 import json
-from yaml import load, CSafeLoader, dump
 
 ## VIASH START
 
@@ -17,7 +16,7 @@ with open(par['git_sha'], 'r') as f1:
     git = json.load(f1)
 
     with open(par['comp_info'], 'r') as f2:
-        comp = load(f2, Loader = CSafeLoader)
+        comp = json.load(f2)
         for comp_item in comp:
             if comp_item['namespace'] not in output:
                 output[comp_item['namespace']] = {}
@@ -33,7 +32,7 @@ with open(par['git_sha'], 'r') as f1:
 
 
 with open(par['output'], 'w') as outf:
-    dump(output, outf)
+    json.dump(output, outf)
 
 
 

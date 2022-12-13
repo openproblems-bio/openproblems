@@ -4,7 +4,7 @@ import json
 ## VIASH START
 par = {
     'input': '.',
-    'output': 'output/output.json',
+    'output': 'resources_test/input_git_sha.json',
     'show_history': True
 }
 meta = {
@@ -12,7 +12,7 @@ meta = {
 }
 ## VIASH END
 
-# to do: what to do with untracked files?
+#? to do: what to do with untracked files?
 
 output = []
 
@@ -55,7 +55,7 @@ for relative_path in git_ls_files(par['input']):
     output.append(out)
 
 with open(par['output'], 'w') as f:
-    json.dump(output, f, indent=4)
+    json.dump(output, f)
 
 
 
