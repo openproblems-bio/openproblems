@@ -36,7 +36,7 @@ rlang@1.0.6
 rliger@1.0.0
 rmarkdown@2.2
 RSQLite@2.2.4
-saezlab/liana@d081087 # 0.1.9 last commit
+saezlab/liana@0.1.9
 saezlab/OmnipathR@679bb79 # master
 sass@0.4.2
 sctransform@0.3.4
