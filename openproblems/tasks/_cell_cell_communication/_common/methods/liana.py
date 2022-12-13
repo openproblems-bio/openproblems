@@ -17,7 +17,8 @@ def _p_filt(x, y):
 
 
 _r_liana = r_function(
-    "liana.R", args="sce, op_resource, min_expression_prop, idents_col, test, ..."
+    "liana.R",
+    args="sce, op_resource, min_expression_prop, idents_col, test, aggregate_how, ...",
 )
 
 _liana_method = functools.partial(
@@ -36,6 +37,7 @@ def _liana(
     score_col="aggregate_rank",
     min_expression_prop=0.1,
     test=False,
+    aggregate_how=None,
     **kwargs,
 ):
     # log-normalize
@@ -50,6 +52,7 @@ def _liana(
         min_expression_prop=min_expression_prop,
         idents_col="label",
         test=test,
+        aggregate_how=aggregate_how,
         **kwargs,
     )
 
@@ -63,20 +66,40 @@ def _liana(
 
 
 @_liana_method(
-    method_name="LIANA Rank Aggregate (max)",
+    method_name="Specificity Rank Aggregate (max)",
 )
-def liana_max(adata, test=False):
-    adata = _liana(adata, test=test)
+def specificity_max(adata, test=False):
+    adata = _liana(adata, test=test, aggregate_how="specificity")
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
 
     return adata
 
 
 @_liana_method(
-    method_name="LIANA Rank Aggregate (sum)",
+    method_name="Specificity Rank Aggregate (sum)",
 )
-def liana_sum(adata, test=False):
-    adata = _liana(adata, test=test)
+def specificity_sum(adata, test=False):
+    adata = _liana(adata, test=test, aggregate_how="specificity")
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
+
+    return adata
+
+
+@_liana_method(
+    method_name="Magnitude Rank Aggregate (max)",
+)
+def magnitude_max(adata, test=False):
+    adata = _liana(adata, test=test, aggregate_how="magnitude")
+    adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="max")
+
+    return adata
+
+
+@_liana_method(
+    method_name="Magnitude Rank Aggregate (sum)",
+)
+def magnitude_sum(adata, test=False):
+    adata = _liana(adata, test=test, aggregate_how="magnitude")
     adata.uns["ccc_pred"] = aggregate_method_scores(adata, how="sum")
 
     return adata

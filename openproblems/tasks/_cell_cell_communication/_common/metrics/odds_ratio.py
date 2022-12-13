@@ -9,12 +9,12 @@ def _sigmoid_transform(x):
 
 
 @metric(metric_name="Odds Ratio", maximize=True)
-def odds_ratio(adata):
+def odds_ratio(adata, top_prop=0.05):
     # Join benchmark (assumed truth) and ccc results
     # Get /w ccc_target and a response [0, 1] column
     gt = join_truth_and_pred(adata)
     gt = gt.sort_values("score", ascending=False)
-    top_n = np.sum(adata.uns["ccc_target"].response)
+    top_n = int(adata.uns["ccc_target"].shape[0] * top_prop)
 
     # assign the top rank interactions to 1
     a = np.zeros(len(gt["score"]))
