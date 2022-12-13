@@ -7,5 +7,5 @@ scalex==1.0.2
 scikit-misc==0.1.*
 scvi-tools~=0.17  # pinned in #313
 tangram-sc==1.0.*
-torch==1.12.*
+torch==1.13.*
 xgboost==1.6.*
