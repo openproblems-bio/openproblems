@@ -37,7 +37,7 @@ liana_res <- liana_wrap(sce,
 # Aggregate if a run /w multiple methods
 if (!is.tibble(liana_res)) {
   liana_res <- liana_res %>%
-    liana_aggregate(aggregate_how=aggregate_how) %>%
+    liana_aggregate(aggregate_how = aggregate_how) %>%
     # inverse distribution
     mutate(aggregate_rank = 1 - aggregate_rank)
 }
