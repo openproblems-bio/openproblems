@@ -9,6 +9,11 @@ info:
         name: counts
         description: Raw counts
         required: true
+    var:
+      - type: float
+        name: hvg_score
+        description: high variability gene score. The greater, the more variable.
+        required: true
     uns:
       - type: string
         name: dataset_id
