@@ -29,7 +29,7 @@ out = sc.pp.highly_variable_genes(
 
 print(">> Storing output")
 adata.var[par["var_hvg"]] = out['highly_variable'].values
-adata.var[par["var_hvg_score"]] = out['dispersions'].values
+adata.var[par["var_hvg_score"]] = out['dispersions_norm'].values
 
 print(">> Writing data")
 adata.write_h5ad(par['output'])
