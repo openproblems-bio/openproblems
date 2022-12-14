@@ -121,16 +121,16 @@ def test_odds_ratio_no_match():
 
     # check expected output
     adata = task.api.sample_method(adata)
-    m = metric(adata)
+    m = metric(adata, top_prop=0.4)
     assert np.issubdtype("float64", m)
-    assert m == 0.813953488372093
+    assert m == 0.7
 
     # force perfect score
     adata = task.methods.true_events(adata)
-    m = metric(adata)
+    m = metric(adata, top_prop=0.4)
     assert m == 1
 
     # force exception
     adata.uns["ccc_target"]["response"] = 0
-    m = metric(adata)
+    m = metric(adata, top_prop=0.4)
     assert m is np.nan
