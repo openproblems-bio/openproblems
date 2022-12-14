@@ -58,5 +58,7 @@ functionality:
         assert "normalized" in output_train.layers
         assert 'hvg_score' in output_train.var
         assert "counts" in output_test.layers
+        assert "normalized" in output_test.layers
+        assert 'hvg_score' in output_test.var
 
         print("All checks succeeded!")

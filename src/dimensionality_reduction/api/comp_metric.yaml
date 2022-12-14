@@ -50,9 +50,6 @@ functionality:
         assert "metric_values" in output.uns
         assert meta['functionality_name'] in output.uns["metric_ids"]
 
-        print(">> Checking whether metrics are float")
-        assert isinstance(output.uns['metric_values'], float)
-
         print(">> Checking whether data from input was copied properly to output")
         assert input_reduced.uns["dataset_id"] == output.uns["dataset_id"]
         assert input_reduced.uns["normalization_id"] == output.uns["normalization_id"]
