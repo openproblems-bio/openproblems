@@ -10,7 +10,8 @@ WORKDIR /
 
 RUN apt-get update && apt-get install -y \
     libhdf5-dev hdf5-tools libgeos-dev \
-    libharfbuzz-dev libfribidi-dev
+    libharfbuzz-dev libfribidi-dev \
+    libgsl-dev
 
 RUN apt-get clean autoclean && \
     apt-get autoremove --yes && \
