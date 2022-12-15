@@ -11,8 +11,10 @@ functionality:
         label: RMSE
         description: "The root mean squared error between the full (or processed) data matrix and a list of dimensionally-reduced matrices"
         min: 0
-        # max: 
-        maximize: true
+  arguments:
+    - name: "--spectral"
+      type: boolean_true
+      description: Calculate the spectral root mean squared error.
   resources:
     - type: python_script
       path: script.py
@@ -22,6 +24,7 @@ platforms:
     setup:
       - type: python
         packages:
+          - umap-learn
           - scikit-learn
           - numpy
           - scipy

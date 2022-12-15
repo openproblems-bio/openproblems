@@ -1,5 +1,7 @@
 import anndata as ad
+from umap import UMAP, spectral
 import scipy.spatial.distance as dist
+from scipy.optimize import nnls
 import numpy as np
 from sklearn import decomposition, metrics
 
@@ -19,21 +21,25 @@ input_reduced = ad.read_h5ad(par['input_reduced'])
 input_test = ad.read_h5ad(par['input_test'])
 
 print('Reduce dimensionality of raw data')
-input_reduced.obsm['svd'] = decomposition.TruncatedSVD(n_components = 200).fit_transform(input_test.layers['counts'])
+n_comps = 200
+if not par['spectral']:
+    input_reduced.obsm['high_dim'] = decomposition.TruncatedSVD(n_components = n_comps).fit_transform(input_test.layers['counts'])
+    print('Compute RMSE between the full (or processed) data matrix and a dimensionally-reduced matrix, invariant to scalar multiplication')
+else:
+    n_comps = min(n_comps, min(input_test.shape) - 2)
+    graph = UMAP(transform_mode="graph").fit_transform(input_test.layers['counts'])
+    input_reduced.obsm['high_dim'] = spectral.spectral_layout(
+        input_test.layers['counts'], graph, n_comps, random_state=np.random.default_rng()
+    )
+    meta['functionality_name'] += ' spectral'
+    print('Computes (RMSE) between high-dimensional Laplacian eigenmaps on the full (or processed) data matrix and the dimensionally-reduced matrix, invariant to scalar multiplication')
 
-print('Compute pairwise distance between points in a matrix and format it into a squared-form vector.')
-high_dim_dist_matrix = dist.squareform(dist.pdist(input_reduced.obsm['svd']))
-low_dim_dist_matrix = dist.squareform(dist.pdist(input_reduced.obsm["X_emb"]))
+high_dim_dist = dist.pdist(input_reduced.obsm['high_dim'])
+low_dim_dist = dist.pdist(input_reduced.obsm["X_emb"])
 
-print('Compute RMSE between the full (or processed) data matrix and a dimensionally-reduced matrix')
-y_actual = high_dim_dist_matrix
-y_predict = low_dim_dist_matrix
-rmse = np.sqrt(metrics.mean_squared_error(y_actual, y_predict))
-
-print('Compute Kruskal stress between the full (or processed) data matrix and a dimensionally-reduced matrix')
-diff = high_dim_dist_matrix - low_dim_dist_matrix
-kruskal_matrix = np.sqrt(diff**2 / sum(low_dim_dist_matrix**2))
-kruskal_score = np.sqrt(sum(diff**2) / sum(low_dim_dist_matrix**2))
+scale, rmse = nnls(
+        low_dim_dist[:, None], high_dim_dist
+        )
 
 print("Store metric value")
 input_reduced.uns['metric_ids'] =  meta['functionality_name']
