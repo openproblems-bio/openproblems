@@ -9,7 +9,6 @@ par = {
     'output': 'reduced.h5ad',
     'n_pca': 50,
     'g0': False,
-    'log_cpm': False
 }
 meta = {
     'functionality_name': 'phate',
