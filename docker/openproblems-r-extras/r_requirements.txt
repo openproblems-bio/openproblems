@@ -11,7 +11,7 @@ conos@1.5.0
 crayon@1.5.2
 dbplyr@2.2.1
 devtools@2.4.5
-dmcable/spacexr@eeb02a2 # master
+dmcable/spacexr@56787ee # master
 downlit@0.4.2
 dplyr@1.0.10
 e1071@1.7-12
@@ -42,7 +42,7 @@ saezlab/liana@0.1.9
 saezlab/OmnipathR@679bb79 # master
 sass@0.4.2
 sctransform@0.3.4
-Seurat@4.1.1
+Seurat@4.3.0
 SeuratObject@4.1.1
 shiny@1.4.0.2
 sparsesvd@0.2
