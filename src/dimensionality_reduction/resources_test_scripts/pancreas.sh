@@ -1,6 +1,6 @@
 #!/bin/bash
 #make sure the following command has been executed
-#bin/viash_build -q 'dimensionality_reduction|common'
+#viash ns build -q 'dimensionality_reduction|common'
 
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -19,19 +19,19 @@ fi
 mkdir -p $DATASET_DIR
 
 # split dataset
-bin/viash run src/dimensionality_reduction/split_dataset/config.vsh.yaml -- \
+viash run src/dimensionality_reduction/split_dataset/config.vsh.yaml -- \
     --input $RAW_DATA \
     --output_train $DATASET_DIR/train.h5ad \
     --output_test $DATASET_DIR/test.h5ad
 
 
 # run one method
-bin/viash run src/dimensionality_reduction/methods/densmap/config.vsh.yaml -- \
+viash run src/dimensionality_reduction/methods/densmap/config.vsh.yaml -- \
     --input $DATASET_DIR/train.h5ad \
     --output $DATASET_DIR/reduced.h5ad
 
 # run one metric
-bin/viash run src/dimensionality_reduction/metrics/rmse/config.vsh.yaml -- \
+viash run src/dimensionality_reduction/metrics/rmse/config.vsh.yaml -- \
     --input_reduced $DATASET_DIR/reduced.h5ad \
     --input_test $DATASET_DIR/test.h5ad \
     --output $DATASET_DIR/score.h5ad
