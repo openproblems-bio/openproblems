@@ -12,11 +12,14 @@ include { umap } from "$targetDir/dimensionality_reduction/methods/umap/main.nf"
 include { densmap } from "$targetDir/dimensionality_reduction/methods/densmap/main.nf"
 include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
 include { tsne } from "$targetDir/dimensionality_reduction/methods/tsne/main.nf"
+include { pca } from "$targetDir/dimensionality_reduction/methods/pca/main.nf"
+include { neuralee } from "$targetDir/dimensionality_reduction/methods/neuralee/main.nf"
 
 // import metrics
 include { rmse } from "$targetDir/dimensionality_reduction/metrics/rmse/main.nf"
 include { trustworthiness } from "$targetDir/dimensionality_reduction/metrics/trustworthiness/main.nf"
 include { density } from "$targetDir/dimensionality_reduction/metrics/density/main.nf"
+include { nn_ranking } from "$targetDir/dimensionality_reduction/metrics/nn_ranking/main.nf"
 
 // tsv generation component
 include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
@@ -28,7 +31,7 @@ include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap; pa
 config = readConfig("$projectDir/config.vsh.yaml")
 
 // construct a map of methods (id -> method_module)
-methods = [ random_features, high_dim_pca, umap, densmap, phate, tsne ]
+methods = [ random_features, high_dim_pca, umap, densmap, phate, tsne, pca, neuralee ]
   .collectEntries{method ->
     [method.config.functionality.name, method]
   }
