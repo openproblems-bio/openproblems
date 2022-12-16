@@ -58,7 +58,7 @@ bin/viash run src/common/sync_test_resources/config.vsh.yaml
 **Step 2, build all the components:** in the `src/` folder as standalone executables in the `target/` folder. Use the `-q 'xxx'` parameter to build a subset of components in the repository.
 
 ```bash
-bin/viash_build -q 'label_projection|common'
+bin/viash ns build -q 'label_projection|common' --parallel
 ```
 
     In development mode with 'dev'.

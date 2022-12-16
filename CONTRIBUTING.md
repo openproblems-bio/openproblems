@@ -83,7 +83,7 @@ executables in the `target/` folder. Use the `-q 'xxx'` parameter to
 build a subset of components in the repository.
 
 ``` bash
-bin/viash_build -q 'label_projection|common'
+bin/viash nas build -q 'label_projection|common' --parallel
 ```
 
     In development mode with 'dev'.
