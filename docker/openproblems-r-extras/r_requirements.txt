@@ -43,7 +43,7 @@ saezlab/OmnipathR@679bb79 # master
 sass@0.4.2
 sctransform@0.3.4
 Seurat@4.3.0
-SeuratObject@4.1.1
+SeuratObject@4.1.3
 shiny@1.4.0.2
 sparsesvd@0.2
 systemfonts@1.0.4
