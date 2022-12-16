@@ -36,19 +36,15 @@ param_list = []
 
 for dataset in datasets:
   id = dataset["id"]
-  # TODO: uncomment this
-  # input_dataset = dataset_dir + "/" + id + ".dataset.h5ad"
-  # input_solution = dataset_dir + "/" + id + ".solution.h5ad"
-  input_dataset = dataset_dir + "/" + id + ".h5ad"
+  input_train = dataset_dir + "/" + id + ".train.h5ad"
+  input_test = dataset_dir + "/" + id + ".test.h5ad"
 
   obj = {
     'id': id, 
     'dataset_id': dataset["dataset_id"],
     'normalization_id': dataset["normalization_id"],
-    # TODO: uncomment this when the file exists
-    # 'input_dataset': input_dataset,
-    # 'input_solution': input_solution
-    'input': input_dataset
+    'input': input_train,
+    'input_test': input_test
   }
   param_list.append(obj)
 
@@ -67,6 +63,7 @@ bin/nextflow \
   run . \
   -main-script src/dimensionality_reduction/workflows/run/main.nf \
   -profile docker \
+  -resume \
   -params-file "$params_file" \
   --publish_dir "$OUTPUT_DIR" \
   -with-tower

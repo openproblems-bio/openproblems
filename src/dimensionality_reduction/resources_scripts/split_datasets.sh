@@ -47,8 +47,8 @@ output = {
   "obs_label": "celltype",
   "obs_batch": "batch",
   "seed": 123,
-  "output_dataset": "\$id.dataset.h5ad",
-  "output_solution": "\$id.solution.h5ad"
+  "output_train": "\$id.train.h5ad",
+  "output_test": "\$id.test.h5ad"
 }
 
 with open("$params_file", "w") as file:
@@ -56,11 +56,11 @@ with open("$params_file", "w") as file:
 HERE
 fi
 
-# export NXF_VER=22.04.5
-# bin/nextflow \
-#   run . \
-#   -main-script target/nextflow/dimensionality_reduction/split_dataset/main.nf \
-#   -profile docker \
-#   -resume \
-#   -params-file $params_file \
-#   --publish_dir "$OUTPUT_DIR"
+export NXF_VER=22.04.5
+bin/nextflow \
+  run . \
+  -main-script target/nextflow/dimensionality_reduction/split_dataset/main.nf \
+  -profile docker \
+  -resume \
+  -params-file $params_file \
+  --publish_dir "$OUTPUT_DIR"
