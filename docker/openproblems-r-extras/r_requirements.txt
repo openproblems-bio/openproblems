@@ -17,7 +17,7 @@ dplyr@1.0.10
 e1071@1.7-12
 ellipsis@0.3.2
 forecast@8.18
-hardhat@1.1.0
+hardhat@1.2.0
 here@1.0.1
 hexbin@1.28.2
 htmltools@0.5.3
