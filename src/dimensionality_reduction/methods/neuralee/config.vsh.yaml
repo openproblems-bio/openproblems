@@ -29,3 +29,5 @@ platforms:
           - torch
           - "git+https://github.com/michalk8/neuralee@8946abf"
   - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

@@ -32,3 +32,5 @@ platforms:
           - pyyaml
           - "scikit-learn<1.2"
   - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

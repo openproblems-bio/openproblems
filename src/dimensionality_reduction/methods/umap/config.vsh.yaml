@@ -27,3 +27,5 @@ platforms:
           - "anndata>=0.8"
           - pyyaml
   - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

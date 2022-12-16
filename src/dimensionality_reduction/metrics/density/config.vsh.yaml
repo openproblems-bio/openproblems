@@ -28,3 +28,5 @@ platforms:
           - typing
           - umap-learn
   - type: nextflow
+    directives: 
+      label: [ lowmem, midcpu ]

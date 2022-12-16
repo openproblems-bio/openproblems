@@ -27,3 +27,5 @@ platforms:
           - pyyaml
           - umap-learn
   - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]
