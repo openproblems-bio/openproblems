@@ -43,7 +43,8 @@ my_rctd <- create.RCTD(
   fc_cutoff = fc_cutoff,
   fc_cutoff_reg = fc_cutoff_reg,
   test_mode = FALSE,
-  UMI_min_sigma = 100
+  UMI_min_sigma = 100,
+  CELL_MIN_INSTANCE = 1
 )
 # run analysis and get results
 my_rctd <- run.RCTD(my_rctd)
