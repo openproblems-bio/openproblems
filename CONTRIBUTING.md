@@ -52,23 +52,29 @@ To use this repository, please install the following dependencies:
 The `src/` folder contains modular software components for running a
 modality alignment benchmark. Running the full pipeline is quite easy.
 
-**Step 0, fetch viash and nextflow:** run the `bin/init` executable.
+**Step 0, fetch Viash and Nextflow**
 
 ``` bash
-bin/init
+mkdir $HOME/bin
+curl -fsSL get.viash.io | bash -s -- --bin $HOME/bin --tools false
+curl -s https://get.nextflow.io | bash; mv nextflow $HOME/bin
 ```
 
-    > Using tag develop
-    > Cleanup
-    > Downloading Viash source code @develop
-    > Building Viash from source
-    > Building Viash helper scripts from source
-    > Done, happy viash-ing!
+Make sure that Viash and Nextflow are on the \$PATH by checking whether
+the following commands work:
+
+``` bash
+viash -v
+nextflow -v
+```
+
+    viash 0.6.6 (c) 2020 Data Intuitive
+    nextflow version 22.10.4.5836
 
 **Step 1, download test resources:** by running the following command.
 
 ``` bash
-bin/viash run src/common/sync_test_resources/config.vsh.yaml
+viash run src/common/sync_test_resources/config.vsh.yaml
 ```
 
     Completed 256.0 KiB/7.2 MiB (302.6 KiB/s) with 6 file(s) remaining
@@ -83,7 +89,7 @@ executables in the `target/` folder. Use the `-q 'xxx'` parameter to
 build a subset of components in the repository.
 
 ``` bash
-bin/viash nas build -q 'label_projection|common' --parallel
+viash ns build --query 'label_projection|common' --parallel --setup cachedbuild
 ```
 
     In development mode with 'dev'.
@@ -95,10 +101,16 @@ bin/viash nas build -q 'label_projection|common' --parallel
     [notice] Building container 'label_projection/metrics_accuracy:dev' with Dockerfile
     ...
 
-These standalone executables you can give to somebody else, and they
-will be able to run it, provided that they have Bash and Docker
-installed. The command might take a while to run, since it is building a
-docker container for each of the components.
+Viash will build a whole namespace (`ns`) into executables and Nextflow
+pipelines into the `target/docker` and `target/nextflow` folders
+respectively. By adding the `-q/--query` flag, you can filter which
+components to build using a regex. By adding the `--parallel` flag,
+these components are built in parallel (otherwise it will take a really
+long time). The flag `--setup cachedbuild` will automatically start
+building Docker containers for each of these methods.
+
+The command might take a while to run, since it is building a docker
+container for each of the components.
 
 **Step 3, run the pipeline with nextflow.** To do so, run the bash
 script located at `src/label_projection/workflows/run_nextflow.sh`:
@@ -108,73 +120,58 @@ src/label_projection/workflows/run/run_test.sh
 ```
 
     N E X T F L O W  ~  version 22.04.5
-    Launching `src/label_projection/workflows/run/main.nf` [small_becquerel] DSL2 - revision: ece87259df
-    executor >  local (19)
-    [39/e1bb01] process > run_wf:true_labels:true_labels_process (1)                 [100%] 1 of 1 ✔
-    [3b/d41f8a] process > run_wf:random_labels:random_labels_process (1)             [100%] 1 of 1 ✔
-    [c2/0398dd] process > run_wf:majority_vote:majority_vote_process (1)             [100%] 1 of 1 ✔
-    [fd/92edc7] process > run_wf:knn:knn_process (1)           [100%] 1 of 1 ✔
-    [f7/7cdb34] process > run_wf:logistic_regression:logistic_regression_process (1) [100%] 1 of 1 ✔
-    [4f/6a67e4] process > run_wf:mlp:mlp_process (1)                                 [100%] 1 of 1 ✔
-    [a5/ae6341] process > run_wf:accuracy:accuracy_process (6)                       [100%] 6 of 6 ✔
-    [72/5076e8] process > run_wf:f1:f1_process (6)                                   [100%] 6 of 6 ✔
-    [cf/eccd48] process > run_wf:extract_scores:extract_scores_process               [100%] 1 of 1 ✔
+    Launching `src/label_projection/workflows/run/main.nf` [pensive_turing] DSL2 - revision: 16b7b0c332
+    executor >  local (28)
+    [f6/f89435] process > run_wf:run_methods:true_labels:true_labels_process (pancreas.true_labels)                         [100%] 1 of 1 ✔
+    [ed/d674a2] process > run_wf:run_methods:majority_vote:majority_vote_process (pancreas.majority_vote)                   [100%] 1 of 1 ✔
+    [15/f0a427] process > run_wf:run_methods:random_labels:random_labels_process (pancreas.random_labels)                   [100%] 1 of 1 ✔
+    [02/969d05] process > run_wf:run_methods:knn:knn_process (pancreas.knn)                                                 [100%] 1 of 1 ✔
+    [90/5fdf9a] process > run_wf:run_methods:mlp:mlp_process (pancreas.mlp)                                                 [100%] 1 of 1 ✔
+    [c7/dee2e5] process > run_wf:run_methods:logistic_regression:logistic_regression_process (pancreas.logistic_regression) [100%] 1 of 1 ✔
+    [83/3ba0c9] process > run_wf:run_methods:scanvi:scanvi_process (pancreas.scanvi)                                        [100%] 1 of 1 ✔
+    [e3/2c298e] process > run_wf:run_methods:seurat_transferdata:seurat_transferdata_process (pancreas.seurat_transferdata) [100%] 1 of 1 ✔
+    [d6/7212ab] process > run_wf:run_methods:xgboost:xgboost_process (pancreas.xgboost)                                     [100%] 1 of 1 ✔
+    [b6/7dc1a7] process > run_wf:run_metrics:accuracy:accuracy_process (pancreas.scanvi)                                    [100%] 9 of 9 ✔
+    [be/7d4da4] process > run_wf:run_metrics:f1:f1_process (pancreas.scanvi)                                                [100%] 9 of 9 ✔
+    [89/dcd77a] process > run_wf:aggregate_results:extract_scores:extract_scores_process (combined)                         [100%] 1 of 1 ✔
 
 ## Project structure
 
-    .
-    ├── bin                    Helper scripts for building the project and developing a new component.
-    ├── resources_test         Datasets for testing components. If you don't have this folder, run **Step 1** above.
-    ├── src                    Source files for each component in the pipeline.
-    │   ├── common             Common processing components.
-    │   ├── datasets           Components for ingesting datasets from a source.
-    │   ├── label_projection   Source files related to the 'Label projection' task.
-    │   └── ...                Other tasks.
-    └── target                 Executables generated by viash based on the components listed under `src/`.
-        ├── docker             Bash executables which can be used from a terminal.
-        └── nextflow           Nextflow modules which can be used as a standalone pipeline or as part of a bigger pipeline.
+High level overview: . ├── bin Helper scripts for building the project
+and developing a new component. ├── resources_test Datasets for testing
+components. If you don’t have this folder, run **Step 1** above. ├── src
+Source files for each component in the pipeline. │ ├── common Common
+processing components. │ ├── datasets Components and pipelines for
+building the ‘Common datasets’ │ ├── label_projection Source files
+related to the ‘Label projection’ task. │ └── … Other tasks. └── target
+Executables generated by viash based on the components listed under
+`src/`. ├── docker Bash executables which can be used from a terminal.
+└── nextflow Nextflow modules which can be used as a standalone pipeline
+or as part of a bigger pipeline.
 
+Detailed overview of a task folder (e.g. `src/label_projection`):
 
-    bin/                     Helper scripts for building the project and developing a new component.
-    resources_test/          Datasets for testing components.
-    src/                     Source files for each component in the pipeline.
-      common/                Common processing components.
-      datasets/              Components related to ingesting datasets into OpenProblems v2.
-        api/                 Specs for the data loaders and normalisation methods.
-        loaders/             Components for ingesting datasets from a source.
-        normalization/       Common normalization methods.
-      label_projection/      Source files related to the 'Label projection' task.
-        datasets/            Dataset downloader components.
-        methods/             Modality alignment method components.
-        metrics/             Modality alignment metric components.
-        utils/               Utils functions.
-        workflow/            The pipeline workflow for this task.
-    target/                  Executables generated by viash based on the components listed under `src/`.
-      docker/                Bash executables which can be used from a terminal.
-      nextflow/              Nextflow modules which can be used in a Nextflow pipeline.
-    work/                    A working directory used by Nextflow.
-    output/                  Output generated by the pipeline.
+    src/label_projection/
+    ├── api                    Specs for the components in this task.
+    ├── control_methods        Control methods which serve as quality control checks for the benchmark.
+    ├── docs                   Task documentation
+    ├── methods                Label projection method components.
+    ├── metrics                Label projection metric components.
+    ├── resources_scripts      The scripts needed to run the benchmark.
+    ├── resources_test_scripts The scripts needed to generate the test resources (which are needed for unit testing).
+    ├── split_dataset          A component that masks a common dataset for use in the benchmark
+    └── workflows              The benchmarking workflow.
 
-The `src/datasets` folder
+Detailed overview of the `src/datasets` folder:
 
-src/datasets/ ├── api Specs for the data loaders and normalisation
-methods. ├── loaders Components for ingesting datasets from a source.
-├── normalization Common normalization methods. ├──
-resource_test_scripts Scripts for generating the objects in the
-`resources_test` folder. └── workflows A set of Nextflow workflows which
-tie together various components.
-
-The `src/label_projection` folder
-
-src/label_projection/ ├── api Specs for the split_dataset, methods and
-metrics in this task. ├── control_methods Positive and negative control
-methods for quality control. ├── methods Method components. ├── metrics
-Metric components. ├── [README.md](src/label_projection/) More
-information on how this task works. ├── resources_test_scripts Scripts
-for generating the objects in the `resources_test` folder. ├──
-split_dataset A component for splitting a common dataset into a `train`,
-`test` and `solution` object. └── workflows A set of Nextflow workflows
-which tie together various components.
+    src/datasets/
+    ├── api                    Specs for the data loaders and normalisation methods.
+    ├── loaders                Components for ingesting datasets from a source.
+    ├── normalization          Normalization method components.
+    ├── processors             Other preprocessing components (e.g. HVG and PCA).
+    ├── resource_scripts       The scripts needed to generate the common datasets.
+    ├── resource_test_scripts  The scripts needed to generate the test resources (which are needed for unit testing).
+    └── workflows              The workflow which generates the common datasets.
 
 ## Adding a Viash component
 
@@ -264,24 +261,23 @@ with the `-h` or `--help` parameter.
 bin/viash run src/label_projection/methods/foo/config.vsh.yaml -- --help
 ```
 
-    Warning: Config inheritance (__merge__) is an experimental feature. Changes to the API are expected.
-    foo
+    foo dev
 
     Todo: fill in
 
     Arguments:
         --input_train
-            type: file
+            type: file, file must exist
             example: training.h5ad
             The training data
 
         --input_test
-            type: file
+            type: file, file must exist
             example: test.h5ad
             The test data (without labels)
 
         --output
-            type: file, output
+            type: file, output, file must exist
             example: prediction.h5ad
             The prediction file
 
@@ -294,7 +290,9 @@ bin/viash run src/label_projection/methods/foo/config.vsh.yaml -- \
   --output resources_test/label_projection/pancreas/prediction.h5ad
 ```
 
-    Warning: Config inheritance (__merge__) is an experimental feature. Changes to the API are expected.
+    [notice] Checking if Docker image is available at 'ghcr.io/openproblems-bio/label_projection/methods_foo:dev'
+    [warning] Could not pull from 'ghcr.io/openproblems-bio/label_projection/methods_foo:dev'. Docker image doesn't exist or is not accessible.
+    [notice] Building container 'ghcr.io/openproblems-bio/label_projection/methods_foo:dev' with Dockerfile
     Load data
     Create predictions
     Add method name to uns
@@ -315,8 +313,6 @@ bin/viash build src/label_projection/methods/foo/config.vsh.yaml \
   -o target/docker/label_projection/methods/foo
 ```
 
-    Warning: Config inheritance (__merge__) is an experimental feature. Changes to the API are expected.
-
 <div>
 
 > **Note**
@@ -333,23 +329,23 @@ executable with the `-h` parameter.
 target/docker/label_projection/methods/foo/foo -h
 ```
 
-    foo
+    foo dev
 
     Todo: fill in
 
     Arguments:
         --input_train
-            type: file
+            type: file, file must exist
             example: training.h5ad
             The training data
 
         --input_test
-            type: file
+            type: file, file must exist
             example: test.h5ad
             The test data (without labels)
 
         --output
-            type: file, output
+            type: file, output, file must exist
             example: prediction.h5ad
             The prediction file
 
@@ -378,53 +374,56 @@ using the **`viash test`** command.
 bin/viash test src/label_projection/methods/foo/config.vsh.yaml
 ```
 
-    Warning: Config inheritance (__merge__) is an experimental feature. Changes to the API are expected.
-    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo7865291233056269818'
+    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo17760509097337858011'
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo7865291233056269818/build_executable/foo ---verbosity 6 ---setup cachedbuild
-    [notice] Building container 'label_projection/methods_foo:test_rIrBSI' with Dockerfile
-    [info] Running 'docker build -t label_projection/methods_foo:test_rIrBSI /home/rcannood/workspace/viash_temp/viash_test_foo7865291233056269818/build_executable -f /home/rcannood/workspace/viash_temp/viash_test_foo7865291233056269818/build_executable/tmp/dockerbuild-foo-y7Hdos/Dockerfile'
-    Sending build context to Docker daemon  37.89kB
+    +/home/rcannood/workspace/viash_temp/viash_test_foo17760509097337858011/build_executable/foo ---verbosity 6 ---setup cachedbuild
+    [notice] Building container 'ghcr.io/openproblems-bio/label_projection/methods_foo:test_nGvjdE' with Dockerfile
+    [info] Running 'docker build -t ghcr.io/openproblems-bio/label_projection/methods_foo:test_nGvjdE /home/rcannood/workspace/viash_temp/viash_test_foo17760509097337858011/build_executable -f /home/rcannood/workspace/viash_temp/viash_test_foo17760509097337858011/build_executable/tmp/dockerbuild-foo-C7VuUU/Dockerfile'
+    Sending build context to Docker daemon  39.94kB
 
     Step 1/7 : FROM python:3.10
-     ---> ecbdd6bafdb5
+     ---> 465483cdaa4e
     Step 2/7 : RUN pip install --upgrade pip &&   pip install --upgrade --no-cache-dir "anndata>=0.8" "scikit-learn"
      ---> Using cache
-     ---> f1fbd09c8ccd
+     ---> 91f658ec0590
     Step 3/7 : LABEL org.opencontainers.image.description="Companion container for running component label_projection/methods foo"
      ---> Using cache
-     ---> 063049300b14
-    Step 4/7 : LABEL org.opencontainers.image.created="2022-11-17T07:37:39+01:00"
-     ---> Running in 5d3bda2ec79c
-    Removing intermediate container 5d3bda2ec79c
-     ---> e77cbb1b5502
-    Step 5/7 : LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems-v2.git"
-     ---> Running in fed5d3371cea
-    Removing intermediate container fed5d3371cea
-     ---> 9db7959fd7af
-    Step 6/7 : LABEL org.opencontainers.image.revision="8f9371ddfa5f5c20df01612342040a2003274da3"
-     ---> Running in 9a2f654aedb9
-    Removing intermediate container 9a2f654aedb9
-     ---> 912628903c90
-    Step 7/7 : LABEL org.opencontainers.image.version="test_rIrBSI"
-     ---> Running in 82b6f860d949
-    Removing intermediate container 82b6f860d949
-     ---> e0720a8407a9
-    Successfully built e0720a8407a9
-    Successfully tagged label_projection/methods_foo:test_rIrBSI
+     ---> f1ace85a71b0
+    Step 4/7 : LABEL org.opencontainers.image.created="2022-12-17T08:47:34+01:00"
+     ---> Running in 299ea3924905
+    Removing intermediate container 299ea3924905
+     ---> 6fc97da56de8
+    Step 5/7 : LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems-v2"
+     ---> Running in bf60068c5fe8
+    Removing intermediate container bf60068c5fe8
+     ---> 20ff545ec27a
+    Step 6/7 : LABEL org.opencontainers.image.revision="8a4877920fc79009dcb1e4bb16674b3b441c75ab"
+     ---> Running in c4410d3a7c78
+    Removing intermediate container c4410d3a7c78
+     ---> 1a57a0d9a7e5
+    Step 7/7 : LABEL org.opencontainers.image.version="test_nGvjdE"
+     ---> Running in 81d7a66aa40a
+    Removing intermediate container 81d7a66aa40a
+     ---> 9d84592b1c1e
+    Successfully built 9d84592b1c1e
+    Successfully tagged ghcr.io/openproblems-bio/label_projection/methods_foo:test_nGvjdE
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo7865291233056269818/test_generic_test/test_executable
+    +/home/rcannood/workspace/viash_temp/viash_test_foo17760509097337858011/test_generic_test/test_executable
     >> Running script as test
     >> Checking whether output file exists
     >> Reading h5ad files
-    input_test: AnnData object with n_obs × n_vars = 307 × 443
+    input_test: AnnData object with n_obs × n_vars = 130 × 443
         obs: 'batch'
-        uns: 'dataset_id'
-        layers: 'counts', 'log_cpm', 'log_scran_pooling'
-    output: AnnData object with n_obs × n_vars = 307 × 443
+        var: 'hvg', 'hvg_score'
+        uns: 'dataset_id', 'normalization_id'
+        obsm: 'X_pca'
+        layers: 'counts', 'normalized'
+    output: AnnData object with n_obs × n_vars = 130 × 443
         obs: 'batch', 'label_pred'
-        uns: 'dataset_id', 'method_id'
-        layers: 'counts', 'log_cpm', 'log_scran_pooling'
+        var: 'hvg', 'hvg_score'
+        uns: 'dataset_id', 'method_id', 'normalization_id'
+        obsm: 'X_pca'
+        layers: 'counts', 'normalized'
     >> Checking whether predictions were added
     Checking whether data from input was copied properly to output
     All checks succeeded!
@@ -472,57 +471,60 @@ all of the required output slots.
 bin/viash test src/label_projection/methods/foo/config.vsh.yaml
 ```
 
-    Warning: Config inheritance (__merge__) is an experimental feature. Changes to the API are expected.
-    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo15779522933199950789'
+    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128'
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo15779522933199950789/build_executable/foo ---verbosity 6 ---setup cachedbuild
-    [notice] Building container 'label_projection/methods_foo:test_5q5NGA' with Dockerfile
-    [info] Running 'docker build -t label_projection/methods_foo:test_5q5NGA /home/rcannood/workspace/viash_temp/viash_test_foo15779522933199950789/build_executable -f /home/rcannood/workspace/viash_temp/viash_test_foo15779522933199950789/build_executable/tmp/dockerbuild-foo-GRvLt9/Dockerfile'
-    Sending build context to Docker daemon  37.89kB
+    +/home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128/build_executable/foo ---verbosity 6 ---setup cachedbuild
+    [notice] Building container 'ghcr.io/openproblems-bio/label_projection/methods_foo:test_lnevgh' with Dockerfile
+    [info] Running 'docker build -t ghcr.io/openproblems-bio/label_projection/methods_foo:test_lnevgh /home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128/build_executable -f /home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128/build_executable/tmp/dockerbuild-foo-VUcsWQ/Dockerfile'
+    Sending build context to Docker daemon  39.94kB
 
     Step 1/7 : FROM python:3.10
-     ---> ecbdd6bafdb5
+     ---> 465483cdaa4e
     Step 2/7 : RUN pip install --upgrade pip &&   pip install --upgrade --no-cache-dir "anndata>=0.8" "scikit-learn"
      ---> Using cache
-     ---> f1fbd09c8ccd
+     ---> 91f658ec0590
     Step 3/7 : LABEL org.opencontainers.image.description="Companion container for running component label_projection/methods foo"
      ---> Using cache
-     ---> 063049300b14
-    Step 4/7 : LABEL org.opencontainers.image.created="2022-11-17T07:38:03+01:00"
-     ---> Running in 2211c2f3d253
-    Removing intermediate container 2211c2f3d253
-     ---> 4a7607ecb7b4
-    Step 5/7 : LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems-v2.git"
-     ---> Running in 21c85f7d64bc
-    Removing intermediate container 21c85f7d64bc
-     ---> ad15f8b03066
-    Step 6/7 : LABEL org.opencontainers.image.revision="8f9371ddfa5f5c20df01612342040a2003274da3"
-     ---> Running in 94c15d5c9736
-    Removing intermediate container 94c15d5c9736
-     ---> 423d9a6d04e2
-    Step 7/7 : LABEL org.opencontainers.image.version="test_5q5NGA"
-     ---> Running in d31d99d449ef
-    Removing intermediate container d31d99d449ef
-     ---> 7f9635195fe8
-    Successfully built 7f9635195fe8
-    Successfully tagged label_projection/methods_foo:test_5q5NGA
+     ---> f1ace85a71b0
+    Step 4/7 : LABEL org.opencontainers.image.created="2022-12-17T08:47:52+01:00"
+     ---> Running in ae1e366b6410
+    Removing intermediate container ae1e366b6410
+     ---> 458c1b49e8b4
+    Step 5/7 : LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems-v2"
+     ---> Running in 06a244e7be1e
+    Removing intermediate container 06a244e7be1e
+     ---> cc48147df9e8
+    Step 6/7 : LABEL org.opencontainers.image.revision="8a4877920fc79009dcb1e4bb16674b3b441c75ab"
+     ---> Running in 2372d2bddd3d
+    Removing intermediate container 2372d2bddd3d
+     ---> 7bcad47b5d1b
+    Step 7/7 : LABEL org.opencontainers.image.version="test_lnevgh"
+     ---> Running in 6499fcfa63af
+    Removing intermediate container 6499fcfa63af
+     ---> 2213de86e5bc
+    Successfully built 2213de86e5bc
+    Successfully tagged ghcr.io/openproblems-bio/label_projection/methods_foo:test_lnevgh
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo15779522933199950789/test_generic_test/test_executable
+    +/home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128/test_generic_test/test_executable
     Traceback (most recent call last):
     >> Running script as test
-      File "/viash_automount/home/rcannood/workspace/viash_temp/viash_test_foo15779522933199950789/test_generic_test/tmp//viash-run-foo-j6Jfba", line 56, in <module>
     >> Checking whether output file exists
-        assert "label_pred" in output.obs
+      File "/viash_automount/home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128/test_generic_test/tmp//viash-run-foo-BVsf0m.py", line 57, in <module>
     >> Reading h5ad files
+        assert "label_pred" in output.obs
+    input_test: AnnData object with n_obs × n_vars = 130 × 443
     AssertionError
-    input_test: AnnData object with n_obs × n_vars = 307 × 443
         obs: 'batch'
-        uns: 'dataset_id'
-        layers: 'counts', 'log_cpm', 'log_scran_pooling'
-    output: AnnData object with n_obs × n_vars = 307 × 443
+        var: 'hvg', 'hvg_score'
+        uns: 'dataset_id', 'normalization_id'
+        obsm: 'X_pca'
+        layers: 'counts', 'normalized'
+    output: AnnData object with n_obs × n_vars = 130 × 443
         obs: 'batch'
-        uns: 'dataset_id'
-        layers: 'counts', 'log_cpm', 'log_scran_pooling'
+        var: 'hvg', 'hvg_score'
+        uns: 'dataset_id', 'normalization_id'
+        obsm: 'X_pca'
+        layers: 'counts', 'normalized'
     >> Checking whether predictions were added
     ====================================================================
     [31mERROR! Only 0 out of 1 test scripts succeeded![0m
@@ -530,12 +532,12 @@ bin/viash test src/label_projection/methods/foo/config.vsh.yaml
     create an issue at https://github.com/viash-io/viash/issues containing
     a reproducible example and the stack trace below.
 
-    viash - 0.6.3
+    viash - 0.6.6
     Stacktrace:
     java.lang.RuntimeException: Only 0 out of 1 test scripts succeeded!
-        at io.viash.ViashTest$.apply(ViashTest.scala:110)
-        at io.viash.Main$.internalMain(Main.scala:99)
-        at io.viash.Main$.main(Main.scala:39)
+        at io.viash.ViashTest$.apply(ViashTest.scala:111)
+        at io.viash.Main$.internalMain(Main.scala:185)
+        at io.viash.Main$.main(Main.scala:77)
         at io.viash.Main.main(Main.scala)
 
 ## More information
