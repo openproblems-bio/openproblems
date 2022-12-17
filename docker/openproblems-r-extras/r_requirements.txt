@@ -11,13 +11,13 @@ conos@1.5.0
 crayon@1.5.2
 dbplyr@2.2.1
 devtools@2.4.5
-dmcable/spacexr@eeb02a2 # master
+dmcable/spacexr@56787ee # master
 downlit@0.4.2
 dplyr@1.0.10
 e1071@1.7-12
 ellipsis@0.3.2
 forecast@8.18
-hardhat@1.1.0
+hardhat@1.2.0
 here@1.0.1
 hexbin@1.28.2
 htmltools@0.5.3
@@ -41,9 +41,9 @@ RSQLite@2.2.4
 saezlab/liana@0.1.9
 saezlab/OmnipathR@679bb79 # master
 sass@0.4.2
-sctransform@0.3.4
-Seurat@4.1.1
-SeuratObject@4.1.1
+sctransform@0.3.5
+Seurat@4.3.0
+SeuratObject@4.1.3
 shiny@1.4.0.2
 sparsesvd@0.2
 systemfonts@1.0.4
