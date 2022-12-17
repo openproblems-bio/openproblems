@@ -32,7 +32,7 @@ def rctd(
         fc_cutoff_reg = fc_cutoff_reg or 0.75
     # extract single cell reference data
     adata_sc, adata = split_sc_and_sp(adata)
-    labels = np.unique(adata_sc.obs["labels"])
+    labels = np.unique(adata_sc.obs["label"])
 
     # set spatial coordinates for the single cell data
     adata_sc.obsm["spatial"] = np.ones((adata_sc.shape[0], 2))
