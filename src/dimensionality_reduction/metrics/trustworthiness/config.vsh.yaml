@@ -1,0 +1,30 @@
+__merge__: ../../api/comp_metric.yaml
+functionality:
+  name: "trustworthiness"
+  namespace: "dimensionality_reduction/metrics"
+  description: "To what extent the local structure is retained in a low-dimensional embedding in a value between 0 and 1."
+  info:
+    v1_url: openproblems/tasks/dimensionality_reduction/metrics/trustworthiness.py 
+    v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    metrics:
+      - id: trustworthiness
+        label: Trustworthiness
+        description: To what extent the local structure is retained in a low-dimensional embedding in a value between 0 and 1.
+        min: 0
+        max: 1
+        maximize: true
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scikit-learn
+          - numpy
+          - "anndata>=0.8"
+  - type: nextflow
+    directives: 
+      label: [ midmem, lowcpu ]

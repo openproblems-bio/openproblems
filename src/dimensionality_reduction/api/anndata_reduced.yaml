@@ -1,0 +1,22 @@
+type: file
+description: "A dimensionally reduced dataset"
+example: "reduced.h5ad"
+info:
+  short_description: "Training data"
+  slots:
+    obsm:
+      - type: double
+        name: X_emb
+        description: The dimensionally reduced embedding.
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"
+      - type: string
+        name: normalization_id
+        description: "Which normalization was used"
+        required: true
+
