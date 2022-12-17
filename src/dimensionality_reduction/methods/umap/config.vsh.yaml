@@ -1,0 +1,31 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "umap"
+  namespace: "dimensionality_reduction/methods"
+  description: "Uniform manifold approximation and projection"
+  info:
+    type: method
+    label: UMAP
+    v1_url: openproblems/tasks/dimensionality_reduction/methods/umap.py
+    v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    preferred_normalization: log_cpm
+  arguments:
+    - name: "--n_pca"
+      type: integer
+      default: 50
+      description: Number of principal components of PCA to use.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - "anndata>=0.8"
+          - pyyaml
+  - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

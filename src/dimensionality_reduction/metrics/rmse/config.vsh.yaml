@@ -1,0 +1,34 @@
+__merge__: ../../api/comp_metric.yaml
+functionality:
+  name: "rmse"
+  namespace: "dimensionality_reduction/metrics"
+  description: The root mean squared error between the full (or processed) data matrix and a list of dimensionally-reduced matrices
+  info:
+    v1_url: openproblems/tasks/dimensionality_reduction/metrics/root_mean_square_error.py 
+    v1_commit: b353a462f6ea353e0fc43d0f9fcbbe621edc3a0b
+    metrics:
+      - id: rmse
+        label: RMSE
+        description: "The root mean squared error between the full (or processed) data matrix and a list of dimensionally-reduced matrices"
+        min: 0
+  arguments:
+    - name: "--spectral"
+      type: boolean_true
+      description: Calculate the spectral root mean squared error.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - umap-learn
+          - scikit-learn
+          - numpy
+          - scipy
+          - "anndata>=0.8"
+  - type: nextflow
+    directives: 
+      label: [ midmem, midcpu ]
