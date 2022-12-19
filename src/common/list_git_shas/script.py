@@ -55,7 +55,7 @@ for relative_path in git_ls_files(par['input']):
     output.append(out)
 
 with open(par['output'], 'w') as f:
-    json.dump(output, f)
+    json.dump(output, f, indent=2)
 
 
 
