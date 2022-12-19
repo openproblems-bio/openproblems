@@ -26,4 +26,9 @@ df <- map_df(configs, function(config) {
 }) %>%
   select(id, type, label, everything())
 
-jsonlite::write_json(purrr::transpose(df), par$output, auto_unbox = TRUE)
+jsonlite::write_json(
+  purrr::transpose(df),
+  par$output,
+  auto_unbox = TRUE,
+  pretty = TRUE
+)

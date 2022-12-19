@@ -38,4 +38,9 @@ execution_info <- nxf_log %>%
 
 df <- full_join(raw_scores, execution_info, by = c("method_id", "dataset_id"))
 
-jsonlite::write_json(purrr::transpose(df), par$output, auto_unbox = TRUE)
+jsonlite::write_json(
+  purrr::transpose(df),
+  par$output,
+  auto_unbox = TRUE,
+  pretty = TRUE
+)
