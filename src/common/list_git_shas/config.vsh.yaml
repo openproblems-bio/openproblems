@@ -37,3 +37,4 @@ platforms:
       - type: docker
         run: "git clone https://github.com/openproblems-bio/openproblems-v2.git"
   - type: nextflow
+  - type: native
