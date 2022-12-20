@@ -5,9 +5,11 @@ functionality:
   arguments:
     - name: "--input"
       type: "file"
-      multiple: true
-      example: src/label_projection
+      example: src
+    - name: "--query"
+      type: "file"
       description: "A task dir"
+      example: label_projection
     - name: "--output"
       type: "file"
       direction: "output"
