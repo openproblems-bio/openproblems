@@ -4,12 +4,12 @@ from typing import Dict, List
 ## VIASH START
 par = {
     'git_sha': 'temp/openproblems-v1.json',
-    'comp_info': 'temp/denoising_metrics.yaml',
-    'output': 'temp/migration_status.yaml'
+    'comp_info': 'temp/denoising_metrics.json',
+    'output': 'temp/migration_status.json'
 }
 ## VIASH END
 
-def check_status(comp_item: Dict[str, str], git_objects: List[Dict[str, str]]) -> str:
+def check_status(comp_item: List[Dict[str, str]], git_objects: List[Dict[str, str]]) -> str:
     """Looks for the comp_item's matching git_object 
     based on the comp_item["v1_url"] and git_object["path"].
     If found, checks whether the comp_item["v1_commit"] equals
