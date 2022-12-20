@@ -68,4 +68,9 @@ out <- list(
   file_schema = purrr::transpose(file_slot)
 )
 
-jsonlite::write_json(purrr::transpose(out), par$output, auto_unbox = TRUE)
+jsonlite::write_json(
+  out,
+  par$output,
+  auto_unbox = TRUE,
+  pretty = TRUE
+)

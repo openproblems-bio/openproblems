@@ -31,3 +31,4 @@ platforms:
         pip:
           - pyyaml
   - type: nextflow
+  - type: native

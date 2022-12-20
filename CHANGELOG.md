@@ -120,3 +120,46 @@
 * extended the use of sparse data in methods unless it was not possible
 
 * split_dataset also removes unnecessary data from train and test datasets not needed by the methods and metrics.
+
+## Dimensionality reduction
+### New functionality
+* `api/anndata_*`: Created a file format specifications for the h5ad files throughout the pipeline.
+
+* `api/comp_*`: Created an api definition for the split, control method, method and metric components.
+
+* `split_dataset`: Added a component for splitting raw datasets into task-ready dataset objects.
+
+* `control_methods`: Added a component for baseline methods specifically.
+
+* `resources_test/dimensionality_reduction/pancreas` with `src/dimensionality_reduction/resources_test_scripts/pancreas.sh`.
+
+### V1 migration
+* `control_methods/high_dim_pca`: Migrated from v1. Extracted from baseline method `High-dimensional PCA`.
+
+* `control_methods/random_features`: Migrated from v1. Extracted from baseline method `Random Features`.
+
+* `methods/umap`: Migrated from v1.
+
+* `methods/tsne`: Migrated and adapted from v1.
+
+* `methods/densmap`: Migrated and adapted from v1.
+
+* `methods/phate`: Migrated from v1.
+
+* `metrics/rmse`: Migrated from v1.
+
+* `metrics/trustworthiness`: Migrated from v1.
+
+* `metrics/density`: Migrated from v1.
+
+### Changes from V1
+
+* Anndata layers are used to store normalized and raw counts instead of `.X`.
+
+* Metrics are stored in `.uns` data.
+  
+* `split_dataset` removes nonessential data from train and test datasets for the methods and metrics.
+
+* Higher dimensional data used to obtain the metrics is calculated from test data instead of the whole dataset. So far test and train data contain the same counts values, but this may change eventually.
+
+* Test data is used instead of the whole dataset in control (baseline) methods.

@@ -1,0 +1,18 @@
+__merge__: ../api/comp_split_dataset.yaml
+functionality:
+  name: "split_dataset"
+  namespace: "dimensionality_reduction"
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - pyyaml
+          - "anndata>=0.8"
+  - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

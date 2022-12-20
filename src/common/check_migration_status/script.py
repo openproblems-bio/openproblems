@@ -49,4 +49,4 @@ for comp_item in comp_items:
 
 # write to file
 with open(par['output'], 'w') as outf:
-    json.dump(output, outf)
+    json.dump(output, outf, indent=2)
