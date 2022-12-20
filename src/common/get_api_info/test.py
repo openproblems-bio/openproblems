@@ -20,6 +20,6 @@ assert path.exists(output_path)
 print(">> Reading json file")
 with open(output_path, 'r') as f:
     out = json.load(f)
-    print(out[0])
+    print(out)
 
 print("All checks succeeded!")
