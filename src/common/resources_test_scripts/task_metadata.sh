@@ -15,6 +15,7 @@ if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"
 fi
 
+# Create small git sha input file
 sha_file="$OUTPUT_DIR/input_git_sha.json"
 
 cat <<EOT > $sha_file
@@ -112,7 +113,7 @@ cat <<EOT > $sha_file
 ]
 EOT
     
-
+# Create a method info json
 bin/viash run src/common/get_method_info/config.vsh.yaml -- \
     --input "src/denoising" \
      --output $OUTPUT_DIR/"method_info.json"
