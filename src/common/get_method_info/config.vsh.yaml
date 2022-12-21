@@ -7,7 +7,7 @@ functionality:
       type: "file"
       example: src
     - name: "--query"
-      type: "file"
+      type: "string"
       description: "A task dir"
       example: label_projection
     - name: "--output"

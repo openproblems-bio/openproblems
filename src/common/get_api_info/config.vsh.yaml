@@ -9,7 +9,7 @@ functionality:
       example: src
       description: "A source dir"
     - name: "--query"
-      type: "file"
+      type: "string"
       description: "A task dir"
       example: label_projection
     - name: "--output"

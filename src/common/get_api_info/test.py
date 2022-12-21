@@ -2,12 +2,14 @@ import subprocess
 from os import path
 import json
 
-input_path = meta["resources_dir"] + "src/label_projection"
+input_path = meta["resources_dir"] + "src"
+query = "denoising"
 output_path = "output.json"
 
 cmd = [
     meta['executable'],
     "--input", input_path,
+    "--query", query,
     "--output", output_path,
 ]
 
