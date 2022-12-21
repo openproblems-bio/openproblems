@@ -3,8 +3,8 @@ info:
   name: Denoising
   v1_url: openproblems/tasks/denoising/README.md
   v1_commit: 3fe9251ba906061b6769eed2ac9da0db5f8e26bb
-  short_description: Denoising describes the task of estimating the true expression level of each gene in each cell.
-  description: |
+  description: "Removing noise in sparse single-cell RNA-sequencing count data"
+  full_description: |
     Single-cell RNA-Seq protocols only detect a fraction of the mRNA molecules present
     in each cell. As a result, the measurements (UMI counts) observed for each gene and each
     cell are associated with generally high levels of technical noise ([Grün et al.,
