@@ -2,10 +2,14 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "tsne"
   namespace: "dimensionality_reduction/methods"
-  description: "t-distributed stochastic neighbor embedding"
+  description: "t-Distributed Stochastic Neighbor Embedding (t-SNE)"
   info:
     type: method
     label: t-SNE
+    paper_name: "Visualizing Data using t-SNE"
+    paper_url: "https://www.jmlr.org/papers/v9/vandermaaten08a.html"
+    paper_year: 2008
+    code_url: https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html#sklearn.manifold.TSNE
     v1_url: openproblems/tasks/dimensionality_reduction/methods/tsne.py
     v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
     preferred_normalization: log_cpm

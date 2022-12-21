@@ -6,6 +6,8 @@ functionality:
   info:
     type: method
     label: NeuralEE
+    paper_doi: "10.3389/fgene.2020.00786"
+    code_url: https://github.com/HiBearME/NeuralEE
     v1_url: openproblems/tasks/dimensionality_reduction/methods/neuralee.py
     v1_commit: 4bb8a7e04545a06c336d3d9364a1dd84fa2af1a4
     preferred_normalization: counts

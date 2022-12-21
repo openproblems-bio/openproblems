@@ -2,10 +2,12 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "pca"
   namespace: "dimensionality_reduction/methods"
-  description: "Principal component analysis"
+  description: "Principal component analysis (PCA)"
   info:
     type: method
     label: PCA
+    paper_doi: "10.1080/14786440109462720"
+    code_url: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
     v1_url: openproblems/tasks/dimensionality_reduction/methods/pca.py
     v1_commit: a796e02e13a43e8861b124edbb9d287f162d4a14
     preferred_normalization: log_cpm
