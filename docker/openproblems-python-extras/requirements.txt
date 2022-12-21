@@ -4,4 +4,4 @@ git+https://github.com/KrishnaswamyLab/harmonic-alignment@v0.1#subdirectory=pyth
 git+https://github.com/scottgigante-immunai/knn-smoothing@python_package
 magic-impute==3.0.*
 phate==1.0.*
-xgboost==1.6.*
+xgboost==1.7.*
