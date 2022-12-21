@@ -1,8 +1,5 @@
 ---
 format: gfm
-info:
-  v1_url: openproblems/tasks/denoising/README.md
-  v1_commit: null # todo: fill in
 toc: true
 ---
 
