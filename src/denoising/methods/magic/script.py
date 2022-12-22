@@ -10,7 +10,9 @@ par = {
     'input_train': 'output_train.h5ad',
     'output': 'output_magic.h5ad',
     'solver': 'exact',
-    'norm': 'sqrt'
+    'norm': 'sqrt',
+    'decay': 1,
+    't': 3,
 }
 meta = {
     'functionality_name': 'foo',
@@ -37,7 +39,7 @@ X, libsize = scprep.normalize.library_size_normalize(
 )
 
 X = scprep.utils.matrix_transform(X, norm_fn)
-Y = MAGIC(solver=par['solver'], verbose=False).fit_transform(
+Y = MAGIC(solver=par['solver'], verbose=False, decay=par['decay'], t=par['t']).fit_transform(
     X, genes="all_genes"
 )
 
