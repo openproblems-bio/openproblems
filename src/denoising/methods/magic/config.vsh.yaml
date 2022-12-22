@@ -11,8 +11,9 @@ functionality:
     # paper_year: 2018
     paper_doi: "10.1016/j.cell.2018.05.061"
     code_url: "https://github.com/KrishnaswamyLab/MAGIC"
-    v1_url: /openproblems/tasks/denoising/methods/magic.py
+    v1_url: openproblems/tasks/denoising/methods/magic.py
     v1_commit: 2fbc2d4c8d3ff955ea948fc082635cf779b1927e
+    v1_comp_id: "magic"
     preferred_normalization: counts
   arguments:
     - name: "--solver"
@@ -33,11 +34,7 @@ platforms:
     image: "python:3.10"
     setup:
       - type: python
-        packages:
-          - "anndata>=0.8"
-          - scprep
-          - magic-impute
-          - scipy
+        pip: [ "anndata>=0.8", scprep, magic-impute, scipy, scikit-learn<1.2]
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]

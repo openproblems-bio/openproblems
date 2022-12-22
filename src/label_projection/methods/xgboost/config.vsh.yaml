@@ -11,6 +11,7 @@ functionality:
     doc_url: "https://xgboost.readthedocs.io/en/stable/index.html"
     v1_url: openproblems/tasks/label_projection/methods/xgboost.py
     v1_commit: 123bb7b39c51c58e19ddf0fbbc1963c3dffde14c
+    v1_comp_id: xgboost_log_cpm
     preferred_normalization: log_cpm
   resources:
     - type: python_script

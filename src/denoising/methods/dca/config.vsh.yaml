@@ -11,8 +11,9 @@ functionality:
     # paper_year: 2019
     paper_doi: "10.1038/s41467-018-07931-2"
     code_url: "https://github.com/theislab/dca"
-    v1_url: /openproblems/tasks/denoising/methods/dca.py
+    v1_url: openproblems/tasks/denoising/methods/dca.py
     v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    v1_comp_id: "dca"
     preferred_normalization: counts
   arguments:
     - name: "--epochs"
