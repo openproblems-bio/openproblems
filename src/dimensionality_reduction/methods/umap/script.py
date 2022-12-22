@@ -4,7 +4,7 @@ import yaml
 
 ## VIASH START
 par = {
-    'input': 'resources_test/common/pancreas/train.h5ad',
+    'input': 'resources_test/dimensionality_reduction/pancreas/train.h5ad',
     'output': 'reduced.h5ad',
     'n_pca': 50,
 }
@@ -30,6 +30,7 @@ sc.pp.neighbors(input, use_rep="X_pca_hvg", n_pcs=par['n_pca'])
 print("Run UMAP")
 sc.tl.umap(input)
 input.obsm["X_emb"] = input.obsm["X_umap"].copy()
+del input.obsm["X_umap"]
 
 print("Delete layers and var")
 del input.layers
