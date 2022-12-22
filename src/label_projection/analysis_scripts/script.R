@@ -2,67 +2,25 @@ library(tidyverse)
 
 out_dir <- "resources/label_projection/benchmarks/openproblems_v1/"
 
-# read scores
-scores <- read_tsv(paste0(out_dir, "combined.extract_scores.output.tsv")) %>%
-  rename(metric_id = metric_ids, metric_value = metric_values)
-
-# read nxf log
-output_regex <- "^(.*)\\.([^\\.]*)\\.output[^\\.]*\\.h5ad"
-nxf_log <- read_tsv(paste0(out_dir, "nextflow_log.tsv")) %>%
-  mutate(
-    output_file = gsub(".*output=([^,]*).*", "\\1", params),
-    id = gsub(output_regex, "\\1", output_file),
-    dataset_id = gsub("^([^\\.]*)\\.([^\\.]*).*", "\\1/\\2", id),
-    component_id = gsub(output_regex, "\\2", output_file)
-  )
-nxf_log %>% select(id:component_id)
-
-# process execution info
-execution_info <- nxf_log %>%
-  filter(component_id %in% method_info$id) %>%
-  transmute(
-    method_id = component_id,
-    dataset_id,
-    status,
-    realtime = lubridate::duration(toupper(realtime)),
-    pcpu = as.numeric(gsub("%", "", pcpu)),
-    vmem_gb = as.numeric(gsub(" GB", "", vmem)),
-    peak_vmem_gb = as.numeric(gsub(" GB", "", peak_vmem)),
-    read_bytes_mb = as.numeric(gsub(" MB", "", read_bytes)),
-    write_bytes_mb = as.numeric(gsub(" MB", "", write_bytes))
-  )
+# read results
+results <- map_df(
+  yaml::read_yaml("resources/label_projection/output/results.yaml"),
+  as_tibble
+)
 
 # get method info
-ns_list_methods <- yaml::yaml.load(processx::run("viash", c("ns", "list", "-q", "label_projection.*methods"))$stdout)
-
-method_info <- map_df(ns_list_methods, function(conf) {
-  tryCatch({
-    info <- c(
-      list(
-        id = conf$functionality$name,
-        namespace = conf$functionality$namespace,
-        description = conf$functionality$description
-      ),
-      conf$functionality$info
-    )
-    as.data.frame(info)
-  }, error = function(err) {
-    cat(err$message, "\n", sep = "")
-    data.frame(id = conf$functionality$name)
-  })
-})
+method_info <- map_df(
+  yaml::read_yaml("resources/label_projection/output/method_info.yaml"),
+  as_tibble
+)
 
 # get metric info
-ns_list_metrics <- yaml::yaml.load(processx::run("viash", c("ns", "list", "-q", "label_projection.*metrics"))$stdout)
+metric_info <- map_df(
+  yaml::read_yaml("resources/label_projection/output/metric_info.yaml"),
+  as_tibble
+)
 
-metric_info <- map_df(ns_list_metrics, function(conf) {
-  tryCatch({
-    map_df(conf$functionality$info$metrics, as.data.frame)
-  }, error = function(err) {
-    cat(err$message, "\n", sep = "")
-    data.frame(id = conf$functionality$name)
-  })
-})
+
 
 # get data table
 ranking <- scores %>%

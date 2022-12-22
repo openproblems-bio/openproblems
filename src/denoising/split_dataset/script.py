@@ -67,6 +67,6 @@ is_missing = np.array(X_train.sum(axis=0) == 0)
 output_train = output_train[:, ~is_missing.flatten()]
 output_test = output_test[:, ~is_missing.flatten()]
 
-print(">> Writ to file")
+print(">> Write to file")
 output_train.write_h5ad(par["output_train"])
 output_test.write_h5ad(par["output_test"])

@@ -13,6 +13,19 @@
 
 * `list_git_shas`: create list of latest commit hashes of all files in repo.
 
+* `get_api_info`: extract api info from tasks
+
+* `get_method_info`: extract method info vrom config yaml
+
+* `get_metric_info`: extract metric info vrom config yaml
+
+* `check_migration_status`: compare git shas from methods with v1
+
+* `get_results`: extract benchmark scores 
+
+
+
+
 
 ## label_projection
 
