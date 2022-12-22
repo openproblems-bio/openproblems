@@ -12,7 +12,8 @@ par = {
     'output_test': "test.h5ad",
 }
 meta = {
-    "functionality_name": "split_data"
+    "functionality_name": "split_data",
+    "config": "src/dimensionality_reduction/split_dataset/.config.vsh.yaml"
 }
 ## VIASH END
 
