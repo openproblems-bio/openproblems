@@ -6,7 +6,10 @@ functionality:
   info:
     type: method
     label: PHATE
+    paper_doi: "10.1038/s41587-019-0336-3"
+    code_url: https://github.com/KrishnaswamyLab/PHATE/
     v1_url: openproblems/tasks/dimensionality_reduction/methods/phate.py
+    v1_comp_id: "PHATE (default)"
     v1_commit: 4baa8619e232fec2e3bcb3fb73d2f991d16c6f69
     preferred_normalization: sqrt_cpm
     variants:

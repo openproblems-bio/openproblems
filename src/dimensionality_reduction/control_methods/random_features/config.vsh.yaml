@@ -6,7 +6,12 @@ functionality:
   info:
     type: negative_control
     label: Random features
+    paper_name: "Random Features (baseline)"
+    paper_url: "https://openproblems.bio"
+    paper_year: 2022
+    code_url: "https://github.com/openproblems-bio/openproblems"
     v1_url: openproblems/tasks/dimensionality_reduction/methods/baseline.py
+    v1_comp_id: "Random Features"
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
     preferred_normalization: counts
   resources:
