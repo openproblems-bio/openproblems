@@ -73,7 +73,7 @@ jobs:
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v34.5.1
+      uses: tj-actions/changed-files@v34.6.2
       with:
         separator: ";"
         diff_relative: true

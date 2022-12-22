@@ -16,8 +16,63 @@ functionality:
     - name: "--var_hvg_score"
       type: string
       default: "hvg_score"
-      description: "In which .var slot to store whether a ranking of the features by variance."
+      description: "In which .var slot to store the gene variance score (normalized dispersion)."
     - name: "--num_features"
       type: integer
       default: 1000
       description: "The number of HVG to select"
+  test_resources:
+    - path: ../../../../resources_test/common/pancreas
+    - type: python_script
+      path: generic_test.py
+      text: |
+        import anndata as ad
+        import subprocess
+        from os import path
+        import yaml
+
+        input_path = meta["resources_dir"] + "/pancreas/dataset.h5ad"
+        output_path = "output.h5ad"
+
+        cmd = [
+          meta['executable'],
+          "--input", input_path,
+          "--output", output_path,
+        ]
+
+        with open(meta["config"], "r") as file:
+            config = yaml.safe_load(file)
+        
+        for arg in config["functionality"]["arguments"]:
+          if arg['name'] == '--layer_input':
+            layer_input = arg['default'][0]
+            cmd += ['--layer_input', layer_input]
+          elif arg['name'] == '--var_hvg':
+            var_hvg = arg['default'][0]
+            cmd += ['--var_hvg', var_hvg]
+          elif arg['name'] == '--var_hvg_score':
+            var_hvg_score = arg['default'][0]
+            cmd += ['--var_hvg_score', var_hvg_score]
+
+        print(">> Running script as test")
+        out = subprocess.check_output(cmd)
+
+        print(">> Checking whether output file exists")
+        assert path.exists(output_path)
+
+        print(">> Reading h5ad files")
+        input = ad.read_h5ad(input_path)
+        output = ad.read_h5ad(output_path)
+        print("input:", input)
+        print("output:", output)
+
+        print(">> Checking whether output data structures were added")
+        assert layer_input in output.layers
+        assert var_hvg in output.var
+        assert var_hvg_score in output.var
+
+        print("Checking whether data from input was copied properly to output")
+        assert input.n_obs == output.n_obs
+        assert input.uns["dataset_id"] == output.uns["dataset_id"]
+
+        print("All checks succeeded!")

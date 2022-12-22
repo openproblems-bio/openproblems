@@ -29,23 +29,25 @@ To use this repository, please install the following dependencies:
 
 The `src/` folder contains modular software components for running a modality alignment benchmark. Running the full pipeline is quite easy.
 
-**Step 0, fetch viash and nextflow:** run the `bin/init` executable.
+**Step 0, fetch Viash and Nextflow**
 
 ```bash
-bin/init
+mkdir $HOME/bin
+curl -fsSL get.viash.io | bash -s -- --bin $HOME/bin --tools false
+curl -s https://get.nextflow.io | bash; mv nextflow $HOME/bin
 ```
 
-    > Using tag develop
-    > Cleanup
-    > Downloading Viash source code @develop
-    > Building Viash from source
-    > Building Viash helper scripts from source
-    > Done, happy viash-ing!
+Make sure that Viash and Nextflow are on the $PATH by checking whether the following commands work:
+
+```{bash}
+viash -v
+nextflow -v
+```
 
 **Step 1, download test resources:** by running the following command.
 
 ```bash
-bin/viash run src/common/sync_test_resources/config.vsh.yaml
+viash run src/common/sync_test_resources/config.vsh.yaml
 ```
 
     Completed 256.0 KiB/7.2 MiB (302.6 KiB/s) with 6 file(s) remaining
@@ -58,7 +60,7 @@ bin/viash run src/common/sync_test_resources/config.vsh.yaml
 **Step 2, build all the components:** in the `src/` folder as standalone executables in the `target/` folder. Use the `-q 'xxx'` parameter to build a subset of components in the repository.
 
 ```bash
-bin/viash_build -q 'label_projection|common'
+viash ns build --query 'label_projection|common' --parallel --setup cachedbuild
 ```
 
     In development mode with 'dev'.
@@ -70,7 +72,11 @@ bin/viash_build -q 'label_projection|common'
     [notice] Building container 'label_projection/metrics_accuracy:dev' with Dockerfile
     ...
 
-These standalone executables you can give to somebody else, and they will be able to run it, provided that they have Bash and Docker installed.
+Viash will build a whole namespace (`ns`) into executables and Nextflow pipelines into the `target/docker` and `target/nextflow` folders respectively.
+By adding the `-q/--query` flag, you can filter which components to build using a regex.
+By adding the `--parallel` flag, these components are built in parallel (otherwise it will take a really long time).
+The flag `--setup cachedbuild` will automatically start building Docker containers for each of these methods.
+
 The command might take a while to run, since it is building a docker container for each of the components. 
 
 **Step 3, run the pipeline with nextflow.** To do so, run the bash script located at `src/label_projection/workflows/run_nextflow.sh`:
@@ -80,73 +86,60 @@ src/label_projection/workflows/run/run_test.sh
 ```
 
     N E X T F L O W  ~  version 22.04.5
-    Launching `src/label_projection/workflows/run/main.nf` [small_becquerel] DSL2 - revision: ece87259df
-    executor >  local (19)
-    [39/e1bb01] process > run_wf:true_labels:true_labels_process (1)                 [100%] 1 of 1 ✔
-    [3b/d41f8a] process > run_wf:random_labels:random_labels_process (1)             [100%] 1 of 1 ✔
-    [c2/0398dd] process > run_wf:majority_vote:majority_vote_process (1)             [100%] 1 of 1 ✔
-    [fd/92edc7] process > run_wf:knn:knn_process (1)           [100%] 1 of 1 ✔
-    [f7/7cdb34] process > run_wf:logistic_regression:logistic_regression_process (1) [100%] 1 of 1 ✔
-    [4f/6a67e4] process > run_wf:mlp:mlp_process (1)                                 [100%] 1 of 1 ✔
-    [a5/ae6341] process > run_wf:accuracy:accuracy_process (6)                       [100%] 6 of 6 ✔
-    [72/5076e8] process > run_wf:f1:f1_process (6)                                   [100%] 6 of 6 ✔
-    [cf/eccd48] process > run_wf:extract_scores:extract_scores_process               [100%] 1 of 1 ✔
+    Launching `src/label_projection/workflows/run/main.nf` [pensive_turing] DSL2 - revision: 16b7b0c332
+    executor >  local (28)
+    [f6/f89435] process > run_wf:run_methods:true_labels:true_labels_process (pancreas.true_labels)                         [100%] 1 of 1 ✔
+    [ed/d674a2] process > run_wf:run_methods:majority_vote:majority_vote_process (pancreas.majority_vote)                   [100%] 1 of 1 ✔
+    [15/f0a427] process > run_wf:run_methods:random_labels:random_labels_process (pancreas.random_labels)                   [100%] 1 of 1 ✔
+    [02/969d05] process > run_wf:run_methods:knn:knn_process (pancreas.knn)                                                 [100%] 1 of 1 ✔
+    [90/5fdf9a] process > run_wf:run_methods:mlp:mlp_process (pancreas.mlp)                                                 [100%] 1 of 1 ✔
+    [c7/dee2e5] process > run_wf:run_methods:logistic_regression:logistic_regression_process (pancreas.logistic_regression) [100%] 1 of 1 ✔
+    [83/3ba0c9] process > run_wf:run_methods:scanvi:scanvi_process (pancreas.scanvi)                                        [100%] 1 of 1 ✔
+    [e3/2c298e] process > run_wf:run_methods:seurat_transferdata:seurat_transferdata_process (pancreas.seurat_transferdata) [100%] 1 of 1 ✔
+    [d6/7212ab] process > run_wf:run_methods:xgboost:xgboost_process (pancreas.xgboost)                                     [100%] 1 of 1 ✔
+    [b6/7dc1a7] process > run_wf:run_metrics:accuracy:accuracy_process (pancreas.scanvi)                                    [100%] 9 of 9 ✔
+    [be/7d4da4] process > run_wf:run_metrics:f1:f1_process (pancreas.scanvi)                                                [100%] 9 of 9 ✔
+    [89/dcd77a] process > run_wf:aggregate_results:extract_scores:extract_scores_process (combined)                         [100%] 1 of 1 ✔
 
 ## Project structure
 
+High level overview:
     .
     ├── bin                    Helper scripts for building the project and developing a new component.
     ├── resources_test         Datasets for testing components. If you don't have this folder, run **Step 1** above.
     ├── src                    Source files for each component in the pipeline.
     │   ├── common             Common processing components.
-    │   ├── datasets           Components for ingesting datasets from a source.
+    │   ├── datasets           Components and pipelines for building the 'Common datasets'
     │   ├── label_projection   Source files related to the 'Label projection' task.
     │   └── ...                Other tasks.
     └── target                 Executables generated by viash based on the components listed under `src/`.
         ├── docker             Bash executables which can be used from a terminal.
         └── nextflow           Nextflow modules which can be used as a standalone pipeline or as part of a bigger pipeline.
 
+Detailed overview of a task folder (e.g. `src/label_projection`):
 
-    bin/                     Helper scripts for building the project and developing a new component.
-    resources_test/          Datasets for testing components.
-    src/                     Source files for each component in the pipeline.
-      common/                Common processing components.
-      datasets/              Components related to ingesting datasets into OpenProblems v2.
-        api/                 Specs for the data loaders and normalisation methods.
-        loaders/             Components for ingesting datasets from a source.
-        normalization/       Common normalization methods.
-      label_projection/      Source files related to the 'Label projection' task.
-        datasets/            Dataset downloader components.
-        methods/             Modality alignment method components.
-        metrics/             Modality alignment metric components.
-        utils/               Utils functions.
-        workflow/            The pipeline workflow for this task.
-    target/                  Executables generated by viash based on the components listed under `src/`.
-      docker/                Bash executables which can be used from a terminal.
-      nextflow/              Nextflow modules which can be used in a Nextflow pipeline.
-    work/                    A working directory used by Nextflow.
-    output/                  Output generated by the pipeline.
+    src/label_projection/
+    ├── api                    Specs for the components in this task.
+    ├── control_methods        Control methods which serve as quality control checks for the benchmark.
+    ├── docs                   Task documentation
+    ├── methods                Label projection method components.
+    ├── metrics                Label projection metric components.
+    ├── resources_scripts      The scripts needed to run the benchmark.
+    ├── resources_test_scripts The scripts needed to generate the test resources (which are needed for unit testing).
+    ├── split_dataset          A component that masks a common dataset for use in the benchmark
+    └── workflows              The benchmarking workflow.
 
-The `src/datasets` folder
 
-src/datasets/
-├── api                      Specs for the data loaders and normalisation methods.
-├── loaders                  Components for ingesting datasets from a source.
-├── normalization            Common normalization methods.
-├── resource_test_scripts    Scripts for generating the objects in the `resources_test` folder.
-└── workflows                A set of Nextflow workflows which tie together various components.
+Detailed overview of the `src/datasets` folder:
 
-The `src/label_projection` folder
-
-src/label_projection/
-├── api                      Specs for the split_dataset, methods and metrics in this task.
-├── control_methods          Positive and negative control methods for quality control.
-├── methods                  Method components.
-├── metrics                  Metric components.
-├── [README.md](src/label_projection/)                More information on how this task works.
-├── resources_test_scripts   Scripts for generating the objects in the `resources_test` folder.
-├── split_dataset            A component for splitting a common dataset into a `train`, `test` and `solution` object.
-└── workflows                A set of Nextflow workflows which tie together various components.
+    src/datasets/
+    ├── api                    Specs for the data loaders and normalisation methods.
+    ├── loaders                Components for ingesting datasets from a source.
+    ├── normalization          Normalization method components.
+    ├── processors             Other preprocessing components (e.g. HVG and PCA).
+    ├── resource_scripts       The scripts needed to generate the common datasets.
+    ├── resource_test_scripts  The scripts needed to generate the test resources (which are needed for unit testing).
+    └── workflows              The workflow which generates the common datasets.
 
 ## Adding a Viash component
 
