@@ -19,6 +19,7 @@ df <- map_df(configs, function(config) {
   if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") return(NULL)
   info <- as_tibble(map_df(config$functionality$info$metrics, as.data.frame))
   info$config_path <- gsub(".*\\./", "", config$info$config)
+  info$task_id <- par$query
   info$component_id <- config$functionality$name
   info$namespace <- config$functionality$namespace
   info$component_description <- config$functionality$description
@@ -26,7 +27,7 @@ df <- map_df(configs, function(config) {
   info$v1_commit <- config$functionality$info$v1_commit
   info
 }) %>%
-  select(id, everything())
+  select(metric_id, everything())
 
 jsonlite::write_json(
   purrr::transpose(df),

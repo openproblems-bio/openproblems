@@ -13,7 +13,7 @@ functionality:
     Finally, the matrix is rescaled.
   info:
     type: method
-    label: ALRA
+    method_name: ALRA
     paper_doi: "10.1101/397588"
     code_url: "https://github.com/KlugerLab/ALRA"
     doc_url: https://github.com/KlugerLab/ALRA/blob/master/README.md

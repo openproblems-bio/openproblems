@@ -19,12 +19,17 @@ df <- map_df(configs, function(config) {
   if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") return(NULL)
   info <- as_tibble(config$functionality$info)
   info$config_path <- gsub(".*\\./", "", config$info$config)
-  info$id <- config$functionality$name
+  info$task_id <- par$query
+  info$method_id <- config$functionality$name
   info$namespace <- config$functionality$namespace
   info$description <- config$functionality$description
+  info$is_baseline <- FALSE
+  if (grepl("control", info$type)) {
+    info$is_baseline <- TRUE
+  }
   info
 }) %>%
-  select(id, type, label, everything())
+  select(method_id, type, method_name, everything())
 
 jsonlite::write_json(
   purrr::transpose(df),
