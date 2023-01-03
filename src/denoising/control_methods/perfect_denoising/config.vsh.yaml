@@ -8,7 +8,8 @@ functionality:
     label: perfect denoising
     v1_url: openproblems/tasks/denoising/methods/baseline.py
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
-    v1_comp_id: perfect_denoising
+    variants: 
+      perfect_denoising:
     preferred_normalization: counts
   resources:
     - type: python_script

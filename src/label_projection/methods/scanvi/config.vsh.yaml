@@ -12,14 +12,17 @@ functionality:
     code_url: "https://github.com/YosefLab/scvi-tools"
     doc_url: https://scarches.readthedocs.io/en/latest/scanvi_surgery_pipeline.html
     v1_url: openproblems/tasks/label_projection/methods/scvi_tools.py
-    v1_commit: 411a416150ecabce25e1f59bde422a029d0a8baa
+    v1_commit: 4bb8a7e04545a06c336d3d9364a1dd84fa2af1a4
     v1_comp_id: scarches_scanvi_hvg
     preferred_normalization: log_cpm
+    variants:
+      scanvi_all_genes:
+      scanvi_hvg:
+        num_hvg: 2000
   arguments:
-    - name: "--hvg"
-      type: boolean
-      default: true
-      description: "Whether or not to reduce the input matrix to the set of HVG genes before training the model."
+    - name: "--num_hvg"
+      type: integer
+      description: "The number of HVG genes to subset to."
   resources:
     - type: python_script
       path: script.py
