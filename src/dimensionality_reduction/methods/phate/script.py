@@ -22,7 +22,7 @@ print("Run PHATE", flush=True)
 phate_op = PHATE(n_pca=par['n_pca'], verbose=False, n_jobs=-1, gamma=par['gamma'])
 X_mat = input.layers['normalized']
 
-if par["num_hvg_genes"]:
+if par["num_hvg_genes"] and input.uns['normalization_id'] == 'log_cpm':
     print("Subsetting to hvg genes", flush=True)
     num_features = par["num_hvg_genes"]
     hvg_idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:num_features]
@@ -31,12 +31,18 @@ if par["num_hvg_genes"]:
 # store embedding
 input.obsm["X_emb"] = phate_op.fit_transform(X_mat)
 
-print("Delete layers and var", flush=True)
-del input.layers
-del input.var
-
 print('Add method', flush=True)
 input.uns['method_id'] = meta['functionality_name']
 
+print('Copy data to new AnnData object', flush=True)
+output = ad.AnnData(
+    obs=input.obs[[]],
+    uns={}
+)
+output.obsm['X_emb'] = input.obsm['X_emb']
+output.uns['dataset_id'] = input.uns['dataset_id']
+output.uns['normalization_id'] = input.uns['normalization_id']
+output.uns['method_id'] = input.uns['method_id']
+
 print("Write output to file", flush=True)
-input.write_h5ad(par['output'], compression="gzip")
+output.write_h5ad(par['output'], compression="gzip")

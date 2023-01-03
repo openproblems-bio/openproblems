@@ -58,24 +58,24 @@ def subset_anndata(adata_sub, slot_info):
 
     return ad.AnnData(**kwargs)
 
-print(">> Load Data")
+print(">> Load Data", flush=True)
 adata = ad.read_h5ad(par["input"])
 
-print(">> Figuring out which data needs to be copied to which output file")
+print(">> Figuring out which data needs to be copied to which output file", flush=True)
 slot_info_per_output = read_slots(par, meta)
 
-print(">> Creating train data")
+print(">> Creating train data", flush=True)
 output_train = subset_anndata(
     adata_sub=adata, 
     slot_info=slot_info_per_output['train']
 )
 
-print(">> Creating test data")
+print(">> Creating test data", flush=True)
 output_test = subset_anndata(
     adata_sub=adata,
     slot_info=slot_info_per_output['test']
 )
 
-print(">> Writing")
+print(">> Writing", flush=True)
 output_train.write_h5ad(par["output_train"])
 output_test.write_h5ad(par["output_test"])

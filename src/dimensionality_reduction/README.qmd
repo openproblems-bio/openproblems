@@ -28,7 +28,7 @@ knitr::asis_output(lines2)
 
 ## Methods
 
-Methods to assign dimensionally-reduced 2D embedding coordinates to adata.obsm['X_emb'].
+Methods to assign dimensionally-reduced 2D embedding coordinates to `adata.obsm['X_emb']`.
 
 ```{r methods, echo=FALSE,warning=FALSE,error=FALSE,output="asis"}
 method_ns_list <- processx::run("viash", c("ns", "list", "-q", "methods", "--src", "."), wd = dir)
@@ -60,7 +60,8 @@ method_info_view <-
 cat(paste(knitr::kable(method_info_view, format = 'pipe'), collapse = "\n"))
 ```
 
-
+To-do list:
+  - Add specific options for unit tests only (such as `--max-iter` in *NeuralEE*).
 ## Metrics
 
 Metrics for dimensionality reduction aim to compare the dimensionality reduced dataset (the embedding) with a whole or a higher dimensional dataset. The more similar they are, the better the reduction is.

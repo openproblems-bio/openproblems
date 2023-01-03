@@ -12,6 +12,8 @@ functionality:
     v1_comp_id: pca_logCPM_1kHVG
     v1_commit: a796e02e13a43e8861b124edbb9d287f162d4a14
     preferred_normalization: log_cpm
+    variants:
+      pca_logCPM_1kHVG:
   resources:
     - type: python_script
       path: script.py

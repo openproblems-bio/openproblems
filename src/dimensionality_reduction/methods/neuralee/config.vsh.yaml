@@ -12,6 +12,13 @@ functionality:
     v1_comp_id: "NeuralEE (CPU) (Default)"
     v1_commit: 4bb8a7e04545a06c336d3d9364a1dd84fa2af1a4
     preferred_normalization: counts
+    variants:
+      neuralee_default:
+      neuralee_logCPM_1kHVG:
+        normalize: False
+        subsample_genes: None
+        preferred_normalization: log_cpm
+  # To-do: add specific options for unit tests such as --maxit
   arguments:
     - name: "--maxit"
       type: integer

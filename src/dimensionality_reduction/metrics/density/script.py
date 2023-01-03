@@ -79,21 +79,28 @@ else:
     _K = 30  # number of neighbors
     _SEED = 42
     
-    print('Reduce dimensionality of raw data')
+    print('Reduce dimensionality of raw data', flush=True)
     _, ro, _ = UMAP(
         n_neighbors=_K, random_state=_SEED, densmap=True, output_dens=True
     ).fit_transform(input_test.layers['counts'])
     re = _calculate_radii(input_reduced.obsm['X_emb'], n_neighbors=_K, random_state=_SEED)
     
-    print('Compute Density between the full (or processed) data matrix and a dimensionally-reduced matrix')
+    print('Compute Density between the full (or processed) data matrix and a dimensionally-reduced matrix', flush=True)
     density = pearsonr(ro, re)[0]
 
-print("Store metric value")
+print("Store metric value", flush=True)
 input_reduced.uns['metric_ids'] =  meta['functionality_name']
 input_reduced.uns['metric_values'] = density
 
-print("Delete obs matrix")
-del input_reduced.obsm
+print("Copy data to new AnnData object", flush=True)
+output = ad.AnnData(
+    uns={}
+)
+output.uns['normalization_id'] = input_reduced.uns['normalization_id']
+output.uns['method_id'] = input_reduced.uns['method_id']
+output.uns['dataset_id'] = input_reduced.uns['dataset_id']
+output.uns['metric_ids'] =  input_reduced.uns['metric_ids']
+output.uns['metric_values'] = input_reduced.uns['metric_values']
 
-print("Write data to file")
-input_reduced.write_h5ad(par['output'], compression="gzip")
+print("Write data to file", flush=True)
+output.write_h5ad(par['output'], compression="gzip")

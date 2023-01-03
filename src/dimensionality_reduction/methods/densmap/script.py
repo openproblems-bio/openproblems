@@ -15,32 +15,39 @@ meta = {
 }
 ## VIASH END
 
-print("Load input data")
+print("Load input data", flush=True)
 input = ad.read_h5ad(par['input'])
 
-print('Select top 1000 high variable genes')
+print('Select top 1000 high variable genes', flush=True)
 n_genes = 1000
 idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
+input = input[:, idx].copy()
 
-print("Run UMAP...")
+print("Run UMAP...", flush=True)
 if par['no_pca']:
-    print('... using logCPM data')
-    input.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(input.layers['normalized'][:, idx])
+    print('... using logCPM data', flush=True)
+    input.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(input.layers['normalized'])
 else:
-    print('... after applying PCA with 50 dimensions to logCPM data')
-    input.obsm['X_pca_hvg'] = sc.tl.pca(input.layers['normalized'][:, idx], n_comps=50, svd_solver="arpack")
+    print('... after applying PCA with 50 dimensions to logCPM data', flush=True)
+    input.obsm['X_pca_hvg'] = sc.tl.pca(input.layers['normalized'], n_comps=50, svd_solver="arpack")
     input.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(input.obsm['X_pca_hvg'])
 
-print("Delete layers and var")
-del input.layers
-del input.var
-
-print('Add method and normalization ID')
+print('Add method and normalization ID', flush=True)
 input.uns['method_id'] = meta['functionality_name']
 with open(meta['config'], 'r') as config_file:
     config = yaml.safe_load(config_file)
 
 input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
 
-print("Write output to file")
-input.write_h5ad(par['output'], compression="gzip")
+print('Copy data to new AnnData object', flush=True)
+output = ad.AnnData(
+    obs=input.obs[[]],
+    uns={}
+)
+output.obsm['X_emb'] = input.obsm['X_emb']
+output.uns['dataset_id'] = input.uns['dataset_id']
+output.uns['normalization_id'] = input.uns['normalization_id']
+output.uns['method_id'] = input.uns['method_id']
+
+print("Write output to file", flush=True)
+output.write_h5ad(par['output'], compression="gzip")

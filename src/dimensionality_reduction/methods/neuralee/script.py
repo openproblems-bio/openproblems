@@ -17,10 +17,10 @@ meta = {
 }
 ## VIASH END
 
-print("Load input data")
+print("Load input data", flush=True)
 input = ad.read_h5ad(par['input'])
 
-print('Add method and normalization ID')
+print('Add method and normalization ID', flush=True)
 with open(meta['config'], 'r') as config_file:
     config = yaml.safe_load(config_file)
 
@@ -28,7 +28,7 @@ input.uns['normalization_id'] = config['functionality']['info']['preferred_norma
 input.uns['method_id'] = meta['functionality_name']
 
 if input.uns['normalization_id'] == 'counts':
-    print('Select top 500 high variable genes')
+    print('Select top 500 high variable genes', flush=True)
     # idx = input.var['hvg_score'].to_numpy().argsort()[-500:]
     # dataset = GeneExpressionDataset(input.layers['counts'][:, idx])
     dataset = GeneExpressionDataset(input.layers['counts'])
@@ -36,11 +36,11 @@ if input.uns['normalization_id'] == 'counts':
     dataset.subsample_genes(500)
     dataset.standardscale()
 elif input.uns['normalization_id'] == 'log_cpm':
-    print('Select top 1000 high variable genes')
-    # idx = input.var['hvg_score'].to_numpy().argsort()[-1000:]
-    # dataset = GeneExpressionDataset(input.layers['normalized'][:, idx])
+    n_genes = 1000
+    print('Select top 1000 high variable genes', flush=True)
+    idx = input.var['hvg_score'].to_numpy().argsort()[-n_genes:]
+    input = input[:, idx].copy()
     dataset = GeneExpressionDataset(input.layers['normalized'])
-    dataset.subsample_genes(500)
 
 
 # 1000 cells as a batch to estimate the affinity matrix
@@ -53,9 +53,15 @@ res = NEE.fine_tune(**fine_tune_kwargs)
 
 input.obsm["X_emb"] = res["X"].detach().cpu().numpy()
 
-print("Delete layers and var")
-del input.layers
-del input.var
+print('Copy data to new AnnData object', flush=True)
+output = ad.AnnData(
+    obs=input.obs[[]],
+    uns={}
+)
+output.obsm['X_emb'] = input.obsm['X_emb']
+output.uns['dataset_id'] = input.uns['dataset_id']
+output.uns['normalization_id'] = input.uns['normalization_id']
+output.uns['method_id'] = input.uns['method_id']
 
-print("Write output to file")
-input.write_h5ad(par['output'], compression="gzip")
+print("Write output to file", flush=True)
+output.write_h5ad(par['output'], compression="gzip")

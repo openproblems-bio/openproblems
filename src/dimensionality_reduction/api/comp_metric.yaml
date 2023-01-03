@@ -26,33 +26,33 @@ functionality:
             "--output", output_path,
         ]
 
-        print(">> Checking whether input files exist")
+        print(">> Checking whether input files exist", flush=True)
         assert path.exists(input_reduced_path)
         assert path.exists(input_test_path)
 
-        print(">> Running script as test")
+        print(">> Running script as test", flush=True)
         out = subprocess.run(cmd, check=True, capture_output=True, text=True)
 
-        print(">> Checking whether output file exists")
+        print(">> Checking whether output file exists", flush=True)
         assert path.exists(output_path)
 
-        print(">> Reading h5ad files")
+        print(">> Reading h5ad files", flush=True)
         input_reduced = ad.read_h5ad(input_reduced_path)
         input_test = ad.read_h5ad(input_test_path)
         output = ad.read_h5ad(output_path)
 
-        print("input reduced:", input_reduced)
-        print("input test:", input_test)
-        print("output:", output)
+        print("input reduced:", input_reduced, flush=True)
+        print("input test:", input_test, flush=True)
+        print("output:", output, flush=True)
 
-        print(">> Checking whether metrics were added")
+        print(">> Checking whether metrics were added", flush=True)
         assert "metric_ids" in output.uns
         assert "metric_values" in output.uns
         assert meta['functionality_name'] in output.uns["metric_ids"]
 
-        print(">> Checking whether data from input was copied properly to output")
+        print(">> Checking whether data from input was copied properly to output", flush=True)
         assert input_reduced.uns["dataset_id"] == output.uns["dataset_id"]
         assert input_reduced.uns["normalization_id"] == output.uns["normalization_id"]
         assert input_reduced.uns["method_id"] == output.uns["method_id"]
 
-        print("All checks succeeded!")
+        print("All checks succeeded!", flush=True)

@@ -27,33 +27,33 @@ functionality:
             "--output_test", output_test_path
         ]
 
-        print(">> Checking whether input file exists")
+        print(">> Checking whether input file exists", flush=True)
         assert path.exists(input_path)
 
-        print(">> Running script as test")
+        print(">> Running script as test", flush=True)
         out = subprocess.run(cmd, check=True, capture_output=True, text=True)
 
-        print(">> Checking whether output files exist")
+        print(">> Checking whether output files exist", flush=True)
         assert path.exists(output_train_path)
         assert path.exists(output_test_path)
 
-        print(">> Reading h5ad files")
+        print(">> Reading h5ad files", flush=True)
         input = ad.read_h5ad(input_path)
         output_train = ad.read_h5ad(output_train_path)
         output_test = ad.read_h5ad(output_test_path)
 
-        print("input:", input)
-        print("output_train:", output_train)
-        print("output_test:", output_test)
+        print("input:", input, flush=True)
+        print("output_train:", output_train, flush=True)
+        print("output_test:", output_test, flush=True)
 
-        print(">> Checking whether data from input was copied properly to output")
+        print(">> Checking whether data from input was copied properly to output", flush=True)
         assert input.n_obs == output_train.n_obs 
         assert input.n_obs == output_test.n_obs
         assert input.uns["dataset_id"] == output_train.uns["dataset_id"] 
         assert input.uns["dataset_id"] == output_test.uns["dataset_id"]
 
 
-        print(">> Check whether certain slots exist")
+        print(">> Check whether certain slots exist", flush=True)
         assert "counts" in output_train.layers
         assert "normalized" in output_train.layers
         assert 'hvg_score' in output_train.var
@@ -61,4 +61,4 @@ functionality:
         assert "normalized" in output_test.layers
         assert 'hvg_score' in output_test.var
 
-        print("All checks succeeded!")
+        print("All checks succeeded!", flush=True)
