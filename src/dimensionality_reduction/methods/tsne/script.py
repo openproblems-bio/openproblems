@@ -28,10 +28,6 @@ print('Run t-SNE')
 sc.tl.tsne(input, use_rep="X_pca_hvg", n_pcs=par['n_pca'])
 input.obsm["X_emb"] = input.obsm["X_tsne"].copy()
 
-print("Delete layers and var")
-del input.layers
-del input.var
-
 print('Add method and normalization ID')
 input.uns['method_id'] = meta['functionality_name']
 with open(meta['config'], 'r') as config_file:
@@ -39,5 +35,15 @@ with open(meta['config'], 'r') as config_file:
 
 input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
 
+print('Copy data to new AnnData object')
+output = ad.AnnData(
+    obs=input.obs[[]],
+    uns={}
+)
+output.obsm['X_emb'] = input.obsm['X_emb']
+output.uns['dataset_id'] = input.uns['dataset_id']
+output.uns['normalization_id'] = input.uns['normalization_id']
+output.uns['method_id'] = input.uns['method_id']
+
 print("Write output to file")
-input.write_h5ad(par['output'], compression="gzip")
+output.write_h5ad(par['output'], compression="gzip")

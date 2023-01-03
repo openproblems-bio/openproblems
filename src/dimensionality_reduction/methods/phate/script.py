@@ -38,12 +38,18 @@ elif input.uns['normalization_id'] == 'log_cpm':
     input = input[:, idx].copy()
     input.obsm["X_emb"] = phate_op.fit_transform(input.layers['normalized'])
 
-print("Delete layers and var")
-del input.layers
-del input.var
-
 print('Add method')
 input.uns['method_id'] = meta['functionality_name']
 
+print('Copy data to new AnnData object')
+output = ad.AnnData(
+    obs=input.obs[[]],
+    uns={}
+)
+output.obsm['X_emb'] = input.obsm['X_emb']
+output.uns['dataset_id'] = input.uns['dataset_id']
+output.uns['normalization_id'] = input.uns['normalization_id']
+output.uns['method_id'] = input.uns['method_id']
+
 print("Write output to file")
-input.write_h5ad(par['output'], compression="gzip")
+output.write_h5ad(par['output'], compression="gzip")
