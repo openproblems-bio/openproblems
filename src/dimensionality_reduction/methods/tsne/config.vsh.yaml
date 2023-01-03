@@ -11,9 +11,10 @@ functionality:
     paper_year: 2008
     code_url: https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html#sklearn.manifold.TSNE
     v1_url: openproblems/tasks/dimensionality_reduction/methods/tsne.py
-    v1_comp_id: tsne_logCPM_1kHVG
     v1_commit: a796e02e13a43e8861b124edbb9d287f162d4a14
     preferred_normalization: log_cpm
+    variants:
+      tsne_logCPM_1kHVG:
   arguments:
     - name: "--n_pca"
       type: integer
