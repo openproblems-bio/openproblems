@@ -1,0 +1,67 @@
+allen_brain_atlas:
+  dataset_id: 'allen_brain_atlas'
+  dataset_name:
+  data_url:
+  data_reference:
+  dataset_summary: 
+cengen:
+  dataset_id: 'cengen'
+  dataset_name:
+  data_url:
+  data_reference:
+  dataset_summary:
+immune_cells:
+  dataset_id: 'immune_cells'
+  dataset_name:
+  data_url:
+  data_reference:
+  dataset_summary:
+mouse_blood_olssen_labelled:
+  dataset_id: 'mouse_blood_olssen_labelled'
+  dataset_name:
+  data_url:
+  data_reference:
+  dataset_summary:
+pancreas:
+  dataset_id: 'pancreas'
+  dataset_name:
+  data_url:
+  data_reference:
+  dataset_summary:
+mouse_hspc_nestorowa2016:
+  dataset_id: 'mouse_hspc_nestorowa2016'
+  dataset_name:
+  data_url:
+  data_reference:
+  dataset_summary:
+tabula_muris_senis_droplet_lung:
+  dataset_id: 'tabula_muris_senis_droplet_lung'
+  dataset_name:
+  data_url:
+  data_reference:
+  dataset_summary:
+tenx_1k_pbmc:
+  dataset_id: 'tenx_1k_pbmc'
+  dataset_name:
+  data_url:
+  data_reference:
+  dataset_summary:
+tenx_5k_pbmc:
+  dataset_id: 'tenx_5k_pbmc'
+  dataset_name:
+  data_url:
+  data_reference:
+  dataset_summary:
+tnbc_wu2021:
+  dataset_id: 'tnbc_wu2021'
+  dataset_name:
+  data_url:
+  data_reference:
+  dataset_summary:
+zebrafish:
+  dataset_id: 'zebrafish'
+  dataset_name:
+  data_url:
+  data_reference:
+  dataset_summary:
+
