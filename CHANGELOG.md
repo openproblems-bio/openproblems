@@ -133,8 +133,10 @@
 
 * `resources_test/dimensionality_reduction/pancreas` with `src/dimensionality_reduction/resources_test_scripts/pancreas.sh`.
 
+* Added `variant` key to config files to store variants (different input parameters) of every component.
+
 ### V1 migration
-* `control_methods/high_dim_pca`: Migrated from v1. Extracted from baseline method `High-dimensional PCA`.
+* `control_methods/true_features`: Migrated from v1. Extracted from baseline method `True Features`.
 
 * `control_methods/random_features`: Migrated from v1. Extracted from baseline method `Random Features`.
 
@@ -145,6 +147,10 @@
 * `methods/densmap`: Migrated and adapted from v1.
 
 * `methods/phate`: Migrated from v1.
+
+* `methods/pca`: Migrated from v1.
+
+* `methods/neuralee`: Migrated from v1.
 
 * `metrics/rmse`: Migrated from v1.
 
