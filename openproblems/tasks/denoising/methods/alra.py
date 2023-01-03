@@ -52,6 +52,7 @@ def alra_sqrt(adata, test=False):
     adata.uns["method_code_version"] = "1.0.0"
     return adata
 
+
 @method(
     method_name="ALRA (log norm)",
     paper_name="Zero-preserving imputation of scRNA-seq data using "
@@ -92,7 +93,7 @@ def alra_log(adata, test=False):
     # transform back into original space
     Y = scprep.utils.matrix_transform(Y, np.exp)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
-    Y = Y-1
+    Y = Y - 1
     adata.obsm["denoised"] = Y
 
     adata.uns["method_code_version"] = "1.0.0"
