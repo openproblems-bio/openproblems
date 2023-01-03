@@ -11,9 +11,10 @@ functionality:
     paper_year: 2022
     code_url: "https://github.com/openproblems-bio/openproblems"
     v1_url: openproblems/tasks/dimensionality_reduction/methods/baseline.py
-    v1_comp_id: "True Features"
     v1_commit: 4a0ee9b3731ff10d8cd2e584726a61b502aef613
     preferred_normalization: counts
+    variants:
+      true_features:
   arguments:
     - name: "--n_comps"
       type: integer

@@ -9,9 +9,10 @@ functionality:
     paper_doi: "10.21105/joss.00861"
     code_url: https://github.com/lmcinnes/umap
     v1_url: openproblems/tasks/dimensionality_reduction/methods/umap.py
-    v1_comp_id: umap_logCPM_1kHVG
     v1_commit: a796e02e13a43e8861b124edbb9d287f162d4a14
     preferred_normalization: log_cpm
+    variants:
+      umap_logCPM_1kHVG:
   arguments:
     - name: "--n_pca"
       type: integer

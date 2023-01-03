@@ -9,9 +9,14 @@ functionality:
     paper_doi: "10.1038/s41587-019-0336-3"
     code_url: https://github.com/KrishnaswamyLab/PHATE/
     v1_url: openproblems/tasks/dimensionality_reduction/methods/phate.py
-    v1_comp_id: "PHATE (default)"
     v1_commit: a796e02e13a43e8861b124edbb9d287f162d4a14
     preferred_normalization: sqrt_cpm
+    variants:
+      phate_default:
+      phate_sqrt:
+        gamma: 0
+      phate_logCPM_1kHVG:
+        preferred_normalization: log_cpm
   arguments:
     - name: '--n_pca'
       type: integer
