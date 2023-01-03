@@ -17,10 +17,10 @@ meta = {
 }
 ## VIASH END
 
-print("Load input data")
+print("Load input data", flush=True)
 input = ad.read_h5ad(par['input'])
 
-print('Add method and normalization ID')
+print('Add method and normalization ID', flush=True)
 with open(meta['config'], 'r') as config_file:
     config = yaml.safe_load(config_file)
 
@@ -28,7 +28,7 @@ input.uns['normalization_id'] = config['functionality']['info']['preferred_norma
 input.uns['method_id'] = meta['functionality_name']
 
 if input.uns['normalization_id'] == 'counts':
-    print('Select top 500 high variable genes')
+    print('Select top 500 high variable genes', flush=True)
     # idx = input.var['hvg_score'].to_numpy().argsort()[-500:]
     # dataset = GeneExpressionDataset(input.layers['counts'][:, idx])
     dataset = GeneExpressionDataset(input.layers['counts'])
@@ -37,7 +37,7 @@ if input.uns['normalization_id'] == 'counts':
     dataset.standardscale()
 elif input.uns['normalization_id'] == 'log_cpm':
     n_genes = 1000
-    print('Select top 1000 high variable genes')
+    print('Select top 1000 high variable genes', flush=True)
     idx = input.var['hvg_score'].to_numpy().argsort()[-n_genes:]
     input = input[:, idx].copy()
     dataset = GeneExpressionDataset(input.layers['normalized'])
@@ -53,7 +53,7 @@ res = NEE.fine_tune(**fine_tune_kwargs)
 
 input.obsm["X_emb"] = res["X"].detach().cpu().numpy()
 
-print('Copy data to new AnnData object')
+print('Copy data to new AnnData object', flush=True)
 output = ad.AnnData(
     obs=input.obs[[]],
     uns={}
@@ -63,5 +63,5 @@ output.uns['dataset_id'] = input.uns['dataset_id']
 output.uns['normalization_id'] = input.uns['normalization_id']
 output.uns['method_id'] = input.uns['method_id']
 
-print("Write output to file")
+print("Write output to file", flush=True)
 output.write_h5ad(par['output'], compression="gzip")

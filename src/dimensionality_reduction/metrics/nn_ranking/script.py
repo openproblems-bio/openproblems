@@ -136,7 +136,7 @@ meta = {
 }
 ## VIASH END
 
-print("Load data")
+print("Load data", flush=True)
 input_reduced = ad.read_h5ad(par['input_reduced'])
 input_test = ad.read_h5ad(par['input_test'])
 
@@ -156,7 +156,7 @@ Q = _coranking_matrix(Rx, Re)
 
 T, C, QNN, AUC, LCMC, _kmax, Qlocal, Qglobal = _metrics(Q)
 
-print("Store metric value")
+print("Store metric value", flush=True)
 input_reduced.uns['metric_ids'] =  {meta['functionality_name']: ['continuity', 'co-KNN size', 'co-KNN AUC', 'local continuity meta criterion', 'local property', 'global property']}
 if np.any(np.isnan(input_reduced.obsm["X_emb"])):
     input_reduced.uns['metric_values'] = [0.0, 0.0, 0.0, 0.5, -np.inf, -np.inf, -np.inf]
@@ -164,7 +164,7 @@ else:
     input_reduced.uns['metric_values'] = [C[_K], QNN[_K], AUC, LCMC[_K], Qlocal, Qglobal]
 
 
-print("Copy data to new AnnData object")
+print("Copy data to new AnnData object", flush=True)
 output = ad.AnnData(
     uns={}
 )
@@ -174,5 +174,5 @@ output.uns['dataset_id'] = input_reduced.uns['dataset_id']
 output.uns['metric_ids'] =  input_reduced.uns['metric_ids']
 output.uns['metric_values'] = input_reduced.uns['metric_values']
 
-print("Write data to file")
+print("Write data to file", flush=True)
 output.write_h5ad(par['output'], compression="gzip")
