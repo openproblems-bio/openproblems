@@ -1,14 +1,13 @@
 import anndata as ad
 from phate import PHATE
-import scprep as sc
-import yaml
 
 ## VIASH START
 par = {
     'input': 'resources_test/dimensionality_reduction/pancreas/train.h5ad',
     'output': 'reduced.h5ad',
     'n_pca': 50,
-    'g0': False,
+    'gamma': 1,
+    'num_hvg_genes': None
 }
 meta = {
     'functionality_name': 'phate',
@@ -19,24 +18,18 @@ meta = {
 print("Load input data", flush=True)
 input = ad.read_h5ad(par['input'])
 
-print("Run PHATE...", flush=True)
-gamma = 0 if par['g0'] else 1
-print('... with gamma=' + str(gamma) + ' and...', flush=True)
-phate_op = PHATE(n_pca=par['n_pca'], verbose=False, n_jobs=-1, gamma=gamma)
+print("Run PHATE", flush=True)
+phate_op = PHATE(n_pca=par['n_pca'], verbose=False, n_jobs=-1, gamma=par['gamma'])
+X_mat = input.layers['normalized']
 
-with open(meta['config'], 'r') as config_file:
-    config = yaml.safe_load(config_file)
-input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
+if par["num_hvg_genes"] and input.uns['normalization_id'] == 'log_cpm':
+    print("Subsetting to hvg genes", flush=True)
+    num_features = par["num_hvg_genes"]
+    hvg_idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:num_features]
+    X_mat = X_mat[:, hvg_idx]
 
-if input.uns['normalization_id'] == 'sqrt_cpm':
-    print('... using sqrt-CPM data', flush=True)
-    input.obsm["X_emb"] = phate_op.fit_transform(input.layers['normalized'])
-elif input.uns['normalization_id'] == 'log_cpm':
-    print('... using logCPM data', flush=True)
-    n_genes = 1000
-    idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
-    input = input[:, idx].copy()
-    input.obsm["X_emb"] = phate_op.fit_transform(input.layers['normalized'])
+# store embedding
+input.obsm["X_emb"] = phate_op.fit_transform(X_mat)
 
 print('Add method', flush=True)
 input.uns['method_id'] = meta['functionality_name']

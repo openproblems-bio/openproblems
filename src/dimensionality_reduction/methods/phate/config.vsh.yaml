@@ -16,15 +16,22 @@ functionality:
       phate_sqrt:
         gamma: 0
       phate_logCPM_1kHVG:
+        num_hvg_genes: 1000
         preferred_normalization: log_cpm
   arguments:
     - name: '--n_pca'
       type: integer
       default: 50
       description: Number of principal components of PCA to use.
-    - name: '--g0'
-      type: boolean_true
-      description: Set informational distance constant to 0.
+    - name: '--gamma'
+      type: double
+      description: Gamma value
+      default: 1
+    - name: '--num_hvg_genes'
+      type: integer
+      description: |
+        Subset to the highly variable genes as specified
+        by the .var['hvg_score'] column.
   resources:
     - type: python_script
       path: script.py

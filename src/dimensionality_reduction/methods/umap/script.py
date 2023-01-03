@@ -31,6 +31,7 @@ sc.pp.neighbors(input, use_rep="X_pca_hvg", n_pcs=par['n_pca'])
 print("Run UMAP", flush=True)
 sc.tl.umap(input)
 input.obsm["X_emb"] = input.obsm["X_umap"].copy()
+del input.obsm["X_umap"]
 
 print('Add method and normalization ID', flush=True)
 input.uns['method_id'] = meta['functionality_name']
