@@ -5,7 +5,7 @@ import yaml
 
 ## VIASH START
 par = {
-    'input': 'resources_test/common/pancreas/train.h5ad',
+    'input': 'resources_test/dimensionality_reduction/pancreas/train.h5ad',
     'output': 'reduced.h5ad',
     'n_pca': 50,
     'g0': False,
@@ -35,7 +35,8 @@ elif input.uns['normalization_id'] == 'log_cpm':
     print('... using logCPM data')
     n_genes = 1000
     idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
-    input.obsm["X_emb"] = phate_op.fit_transform(input.layers['normalized'][:, idx])
+    input = input[:, idx].copy()
+    input.obsm["X_emb"] = phate_op.fit_transform(input.layers['normalized'])
 
 print("Delete layers and var")
 del input.layers

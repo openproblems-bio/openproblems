@@ -36,11 +36,11 @@ if input.uns['normalization_id'] == 'counts':
     dataset.subsample_genes(500)
     dataset.standardscale()
 elif input.uns['normalization_id'] == 'log_cpm':
+    n_genes = 1000
     print('Select top 1000 high variable genes')
-    # idx = input.var['hvg_score'].to_numpy().argsort()[-1000:]
-    # dataset = GeneExpressionDataset(input.layers['normalized'][:, idx])
+    idx = input.var['hvg_score'].to_numpy().argsort()[-n_genes:]
+    input = input[:, idx].copy()
     dataset = GeneExpressionDataset(input.layers['normalized'])
-    dataset.subsample_genes(500)
 
 
 # 1000 cells as a batch to estimate the affinity matrix

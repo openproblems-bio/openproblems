@@ -21,14 +21,15 @@ input = ad.read_h5ad(par['input'])
 print('Select top 1000 high variable genes')
 n_genes = 1000
 idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
+input = input[:, idx].copy()
 
 print("Run UMAP...")
 if par['no_pca']:
     print('... using logCPM data')
-    input.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(input.layers['normalized'][:, idx])
+    input.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(input.layers['normalized'])
 else:
     print('... after applying PCA with 50 dimensions to logCPM data')
-    input.obsm['X_pca_hvg'] = sc.tl.pca(input.layers['normalized'][:, idx], n_comps=50, svd_solver="arpack")
+    input.obsm['X_pca_hvg'] = sc.tl.pca(input.layers['normalized'], n_comps=50, svd_solver="arpack")
     input.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(input.obsm['X_pca_hvg'])
 
 print("Delete layers and var")

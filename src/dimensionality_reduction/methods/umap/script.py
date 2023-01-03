@@ -20,9 +20,10 @@ input = ad.read_h5ad(par['input'])
 print('Select top 1000 high variable genes')
 n_genes = 1000
 idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
+input = input[:, idx].copy()
 
 print('Apply PCA with 50 dimensions')
-input.obsm['X_pca_hvg'] = sc.tl.pca(input.layers['normalized'][:, idx], n_comps=par['n_pca'], svd_solver="arpack")
+input.obsm['X_pca_hvg'] = sc.tl.pca(input.layers['normalized'], n_comps=par['n_pca'], svd_solver="arpack")
 
 print('Calculate a nearest-neighbour graph')
 sc.pp.neighbors(input, use_rep="X_pca_hvg", n_pcs=par['n_pca'])

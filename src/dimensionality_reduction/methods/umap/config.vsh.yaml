@@ -10,7 +10,7 @@ functionality:
     code_url: https://github.com/lmcinnes/umap
     v1_url: openproblems/tasks/dimensionality_reduction/methods/umap.py
     v1_comp_id: umap_logCPM_1kHVG
-    v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    v1_commit: a796e02e13a43e8861b124edbb9d287f162d4a14
     preferred_normalization: log_cpm
   arguments:
     - name: "--n_pca"
