@@ -26,5 +26,15 @@ input.uns['normalization_id'] = config['functionality']['info']['preferred_norma
 print('Create high dimensionally embedding with all features')
 input.obsm["X_emb"] = input.layers['counts'][:, :par['n_comps']].toarray()
 
+print('Copy data to new AnnData object')
+output = ad.AnnData(
+    obs=input.obs[[]],
+    uns={}
+)
+output.obsm['X_emb'] = input.obsm['X_emb']
+output.uns['dataset_id'] = input.uns['dataset_id']
+output.uns['normalization_id'] = input.uns['normalization_id']
+output.uns['method_id'] = input.uns['method_id']
+
 print("Write output to file")
-input.write_h5ad(par['output'], compression="gzip")
+output.write_h5ad(par['output'], compression="gzip")
