@@ -17,7 +17,7 @@ log = logging.getLogger("openproblems")
     code_url="https://github.com/KlugerLab/ALRA",
     image="openproblems-r-extras",
 )
-def alra(adata, test=False):
+def alra_sqrt(adata, test=False):
     import numpy as np
     import rpy2.rinterface_lib.embedded
     import scprep
@@ -61,7 +61,7 @@ def alra(adata, test=False):
     code_url="https://github.com/KlugerLab/ALRA",
     image="openproblems-r-extras",
 )
-def alra(adata, test=False):
+def alra_log(adata, test=False):
     import numpy as np
     import rpy2.rinterface_lib.embedded
     import scprep
