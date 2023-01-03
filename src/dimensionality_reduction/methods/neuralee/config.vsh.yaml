@@ -17,6 +17,7 @@ functionality:
         normalize: False
         subsample_genes: None
         preferred_normalization: log_cpm
+  # To-do: add specific options for unit tests such as --maxit
   arguments:
     - name: "--maxit"
       type: integer
