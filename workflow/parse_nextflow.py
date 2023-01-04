@@ -357,7 +357,7 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
         result = {
             "Name": method.metadata["method_name"],
             "Paper": method.metadata["paper_name"],
-            "Paper reference": "https://openproblems.bio/"
+            "Paper URL": "https://openproblems.bio/"
             f"bibliography#{method.metadata['paper_reference']}",
             "Year": method.metadata["paper_year"],
             "Library": method.metadata["code_url"],
