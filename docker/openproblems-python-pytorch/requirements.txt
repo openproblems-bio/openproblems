@@ -3,7 +3,7 @@ git+https://github.com/czbiohub/molecular-cross-validation@04d9df0
 git+https://github.com/michalk8/neuralee@8946abf  # contains gradient error fix
 jax==0.3.25
 jaxlib==0.3.25
-pymde=0.1.15
+pymde==0.1.15
 scalex==1.0.2
 scikit-misc==0.1.*
 scvi-tools~=0.17  # pinned in #313
