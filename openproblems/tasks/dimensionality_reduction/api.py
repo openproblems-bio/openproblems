@@ -1,5 +1,6 @@
 from ...data.sample import load_sample_data
 from ...tools.decorators import dataset
+from ...tools.normalize import log_cpm
 
 import numpy as np
 
@@ -8,8 +9,6 @@ def check_dataset(adata):
     """Check that dataset output fits expected API."""
     assert "n_genes" in adata.uns
     assert adata.uns["n_genes"] == adata.shape[1]
-    assert "log_cpm" in adata.layers
-    assert adata.X is adata.layers["log_cpm"]
     return True
 
 
@@ -30,6 +29,7 @@ def check_method(adata, is_baseline=False):
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()
+    adata = log_cpm(adata)
     adata.uns["n_genes"] = adata.shape[1]
     return adata
 

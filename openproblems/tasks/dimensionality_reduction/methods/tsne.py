@@ -16,7 +16,7 @@ _tsne_method = functools.partial(
 )
 
 
-def _tsne(adata, genes=None, n_pca=50):
+def _tsne(adata, genes=None, test=False, n_pca=50):
     import scanpy as sc
 
     if genes is not None:
