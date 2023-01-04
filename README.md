@@ -29,7 +29,7 @@ Formalizing and benchmarking open problems in single-cell genomics.
 **Core** (_alphabetically_):
 
 * Daniel Burkhardt (@dburkhardt), Cellarity
-* Robrecht Cannoodt (@rcannoodt), Data Intuitive
+* Robrecht Cannoodt (@rcannood), Data Intuitive
 * Scott Gigante (@scottgigante-immunai), Immunai
 * Christopher Lance (@xlancelottx), Helmholtz Munich
 * Malte Luecken (@LuckyMD), Helmholtz Munich
