@@ -8,5 +8,9 @@ from .pca import pca_logCPM_1kHVG
 from .phate import phate_default
 from .phate import phate_logCPM_1kHVG
 from .phate import phate_sqrt
+from .pymde import pymde_distances_log_cpm
+from .pymde import pymde_distances_log_cpm_hvg
+from .pymde import pymde_neighbors_log_cpm
+from .pymde import pymde_neighbors_log_cpm_hvg
 from .tsne import tsne_logCPM_1kHVG
 from .umap import umap_logCPM_1kHVG
