@@ -3,17 +3,22 @@ from .....tools.utils import check_version
 from ...batch_integration_graph.methods.baseline import _random_embedding
 from ...batch_integration_graph.methods.baseline import _randomize_features
 
+import functools
 import numpy as np
 import scanpy as sc
 
-
-@method(
-    method_name="No Integration",
-    paper_name="No Integration (baseline)",
+_baseline_method = functools.partial(
+    method,
+    paper_name="Open Problems for Single Cell Analysis",
     paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,
+)
+
+
+@_baseline_method(
+    method_name="No Integration",
 )
 def no_integration(adata, test=False):
     adata.obsm["X_emb"] = adata.obsm["X_uni_pca"]
@@ -21,13 +26,8 @@ def no_integration(adata, test=False):
     return adata
 
 
-@method(
+@_baseline_method(
     method_name="Random Integration",
-    paper_name="Random Integration (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
 )
 def random_integration(adata, test=False):
     adata.obsm["X_emb"] = _randomize_features(adata.obsm["X_uni_pca"])
@@ -51,13 +51,8 @@ def celltype_random_integration(adata, test=False):
     return adata
 
 
-@method(
+@_baseline_method(
     method_name="Random Embedding by Celltype",
-    paper_name="Random Embedding by Celltype (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
 )
 def celltype_random_embedding(adata, test=False):
     adata.obsm["X_emb"] = _random_embedding(partition=adata.obs["labels"])
@@ -65,13 +60,8 @@ def celltype_random_embedding(adata, test=False):
     return adata
 
 
-@method(
+@_baseline_method(
     method_name="Random Integration by Batch",
-    paper_name="Random Integration by Batch (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
 )
 def batch_random_integration(adata, test=False):
     adata.obsm["X_emb"] = _randomize_features(
@@ -81,13 +71,8 @@ def batch_random_integration(adata, test=False):
     return adata
 
 
-@method(
+@_baseline_method(
     method_name="No Integration by Batch",
-    paper_name="No Integration by Batch (baseline)",
-    paper_url="https://openproblems.bio",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
 )
 def no_integration_batch(adata, test=False):
     """Compute PCA independently on each batch
