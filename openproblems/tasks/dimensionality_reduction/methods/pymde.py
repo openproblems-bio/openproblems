@@ -10,20 +10,26 @@ import scanpy as sc
 def _pymde(
     adata,
     method: str = "neighbors",
+    genes=None,
     test: bool = False,
     max_iter: Optional[int] = None,
     memory_size: Optional[int] = None,
 ):
     import pymde
 
+    if genes is not None:
+        adata_input = adata[:, genes].copy()
+    else:
+        adata_input = adata
+
     embed_kwargs = {}
     if test:
-        sc.tl.pca(adata, n_comps=20, svd_solver="arpack")
-        X = adata.obsm["X_pca"]
+        sc.tl.pca(adata_input, n_comps=20, svd_solver="arpack")
+        X = adata_input.obsm["X_pca"]
         embed_kwargs["max_iter"] = max_iter or 20
         embed_kwargs["memory_size"] = memory_size or 2
     else:
-        X = adata.X
+        X = adata_input.X
         if max_iter is not None:
             embed_kwargs["max_iter"] = max_iter
         if memory_size is not None:
@@ -34,8 +40,11 @@ def _pymde(
         mde_fn = pymde.preserve_distances
     else:
         raise NotImplementedError
-    adata.obsm["X_emb"] = mde_fn(X, embedding_dim=2, verbose=True).embed(
-        **embed_kwargs, verbose=True
+    adata.obsm["X_emb"] = (
+        mde_fn(X, embedding_dim=2, verbose=True)
+        .embed(**embed_kwargs, verbose=True)
+        .detach()
+        .numpy()
     )
     adata.uns["method_code_version"] = check_version("pymde")
     return adata
@@ -77,7 +86,12 @@ def pymde_neighbors_log_cpm_hvg(
 ):
     adata = log_cpm_hvg(adata)
     return _pymde(
-        adata, method="neighbors", test=test, max_iter=max_iter, memory_size=memory_size
+        adata,
+        method="neighbors",
+        genes=adata.var["highly_variable"],
+        test=test,
+        max_iter=max_iter,
+        memory_size=memory_size,
     )
 
 
@@ -117,5 +131,10 @@ def pymde_distances_log_cpm_hvg(
 ):
     adata = log_cpm_hvg(adata)
     return _pymde(
-        adata, method="distances", test=test, max_iter=max_iter, memory_size=memory_size
+        adata,
+        method="distances",
+        genes=adata.var["highly_variable"],
+        test=test,
+        max_iter=max_iter,
+        memory_size=memory_size,
     )
