@@ -6,11 +6,19 @@ import numpy as np
 
 def check_dataset(adata):
     """Check that dataset output fits expected API."""
+    assert "n_genes" in adata.uns
+    assert adata.uns["n_genes"] == adata.shape[1]
+    assert "log_cpm" in adata.layers
+    assert adata.X is adata.layers["log_cpm"]
     return True
 
 
 def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
+    # check adata.X has not changed
+    assert adata.uns["n_genes"] == adata.shape[1]
+    assert adata.X is adata.layers["log_cpm"]
+    # check output
     assert "X_emb" in adata.obsm
     if not is_baseline:
         assert adata.obsm["X_emb"].shape[1] == 2
@@ -21,7 +29,9 @@ def check_method(adata, is_baseline=False):
 @dataset()
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
-    return load_sample_data()
+    adata = load_sample_data()
+    adata.uns["n_genes"] = adata.shape[1]
+    return adata
 
 
 def sample_method(adata):

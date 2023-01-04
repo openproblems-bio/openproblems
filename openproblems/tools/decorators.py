@@ -31,6 +31,7 @@ def normalizer(func, *args, **kwargs):
             if func.__name__ in adata.layers:
                 adata.X = adata.layers[func.__name__]
             else:
+                adata.X = adata.layers["counts"]
                 adata = func(adata, *args, **kwargs)
                 adata.layers[func.__name__] = adata.X
 

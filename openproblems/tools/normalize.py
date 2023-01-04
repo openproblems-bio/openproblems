@@ -74,7 +74,6 @@ def sqrt_cpm(adata: ad.AnnData) -> ad.AnnData:
     return adata
 
 
-@decorators.normalizer
 def log_cpm_hvg(adata: ad.AnnData, n_genes: int = 1000) -> ad.AnnData:
     """Normalize logCPM HVG
 
