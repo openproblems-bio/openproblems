@@ -20,11 +20,7 @@ meta = {
 print("Load input data", flush=True)
 input = ad.read_h5ad(par['input'])
 
-print('Add method and normalization ID', flush=True)
-with open(meta['config'], 'r') as config_file:
-    config = yaml.safe_load(config_file)
-
-input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
+print('Add method ID', flush=True)
 input.uns['method_id'] = meta['functionality_name']
 
 if input.uns['normalization_id'] == 'counts':

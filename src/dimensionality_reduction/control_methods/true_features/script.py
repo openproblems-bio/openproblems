@@ -16,12 +16,8 @@ meta = {
 print("Load input data", flush=True)
 input = ad.read_h5ad(par['input'])
 
-print('Add method and normalization ID', flush=True)
+print('Add method ID', flush=True)
 input.uns['method_id'] = meta['functionality_name']
-with open(meta['config'], 'r') as config_file:
-    config = yaml.safe_load(config_file)
-
-input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
 
 print('Create high dimensionally embedding with all features', flush=True)
 input.obsm["X_emb"] = input.layers['counts'][:, :par['n_comps']].toarray()

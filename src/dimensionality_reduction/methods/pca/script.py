@@ -23,12 +23,8 @@ idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
 print('Apply PCA with 50 dimensions', flush=True)
 input.obsm["X_emb"] = sc.tl.pca(input.layers['normalized'][:, idx], n_comps=50, svd_solver="arpack")[:, :2]
 
-print('Add method and normalization ID', flush=True)
+print('Add method ID', flush=True)
 input.uns['method_id'] = meta['functionality_name']
-with open(meta['config'], 'r') as config_file:
-    config = yaml.safe_load(config_file)
-
-input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
 
 print('Copy data to new AnnData object', flush=True)
 output = ad.AnnData(

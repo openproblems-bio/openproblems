@@ -28,12 +28,8 @@ print('Run t-SNE', flush=True)
 sc.tl.tsne(input, use_rep="X_pca_hvg", n_pcs=par['n_pca'])
 input.obsm["X_emb"] = input.obsm["X_tsne"].copy()
 
-print('Add method and normalization ID', flush=True)
+print('Add method ID', flush=True)
 input.uns['method_id'] = meta['functionality_name']
-with open(meta['config'], 'r') as config_file:
-    config = yaml.safe_load(config_file)
-
-input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
 
 print('Copy data to new AnnData object', flush=True)
 output = ad.AnnData(

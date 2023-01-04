@@ -32,12 +32,8 @@ else:
     input.obsm['X_pca_hvg'] = sc.tl.pca(input.layers['normalized'], n_comps=50, svd_solver="arpack")
     input.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(input.obsm['X_pca_hvg'])
 
-print('Add method and normalization ID', flush=True)
+print('Add method ID', flush=True)
 input.uns['method_id'] = meta['functionality_name']
-with open(meta['config'], 'r') as config_file:
-    config = yaml.safe_load(config_file)
-
-input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
 
 print('Copy data to new AnnData object', flush=True)
 output = ad.AnnData(
