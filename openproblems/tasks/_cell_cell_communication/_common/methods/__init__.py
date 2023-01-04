@@ -4,11 +4,13 @@ from .liana import cellphonedb_max
 from .liana import cellphonedb_sum
 from .liana import connectome_max
 from .liana import connectome_sum
-from .liana import liana_max
-from .liana import liana_sum
 from .liana import logfc_max
 from .liana import logfc_sum
+from .liana import magnitude_max
+from .liana import magnitude_sum
 from .liana import natmi_max
 from .liana import natmi_sum
 from .liana import sca_max
 from .liana import sca_sum
+from .liana import specificity_max
+from .liana import specificity_sum

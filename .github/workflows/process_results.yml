@@ -36,7 +36,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 1
-        repository: openproblems-bio/nbt2022-reproducibility
+        repository: openproblems-bio/website-experimental
         path: nbt2022-reproducibility
         token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
 
