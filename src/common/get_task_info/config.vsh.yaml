@@ -1,33 +1,19 @@
+__merge__: ../api/get_info.yaml
 functionality:
   name: "get_task_info"
   namespace: "common"
   description: "Extract task info"
-  arguments:
-    - name: "--input"
-      type: "file"
-      example: src
-      description: "A s dir"
-    - name: "--query"
-      type: "string"
-      description: "A task dir"
-      example: label_projection
-    - name: "--output"
-      type: "file"
-      direction: "output"
-      default: "output.json"
-      description: "Output json"
   resources:
     - type: python_script
       path: script.py
-  test_resources:
-    - path: ../../../src 
-    - type: python_script
-      path: test.py
 platforms:
   - type: docker
     image: python:3.10
     setup:
       - type: python
         pip: [ pyyaml ]
+    test_setup:
+      - type: docker
+        run: "git clone https://github.com/openproblems-bio/openproblems-v2.git"
   - type: nextflow
   - type: native

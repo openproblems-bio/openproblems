@@ -4,13 +4,13 @@ library(rlang)
 ## VIASH START
 par <- list(
   input = "src",
-  query = "label_projection",
+  task_id = "label_projection",
   output = "output/api.json"
 )
 ## VIASH END
 
-comp_yamls <- list.files(paste(par$input, par$query, "api", sep = "/"), pattern = "comp_", full.names = TRUE)
-file_yamls <- list.files(paste(par$input, par$query, "api", sep = "/"), pattern = "anndata_", full.names = TRUE)
+comp_yamls <- list.files(paste(par$input, 'src', par$task_id, "api", sep = "/"), pattern = "comp_", full.names = TRUE)
+file_yamls <- list.files(paste(par$input, 'src', par$task_id, "api", sep = "/"), pattern = "anndata_", full.names = TRUE)
 
 # list component - file args links
 comp_file <- map_df(comp_yamls, function(yaml_file) {

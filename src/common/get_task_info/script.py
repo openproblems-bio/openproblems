@@ -5,7 +5,7 @@ import json
 ## VIASH START
 par = {
     "input" : "src",
-    "query" : "denoising",
+    "task_id" : "denoising",
     "output": "output/task.json",
 
 }
@@ -13,7 +13,7 @@ meta = { "functionality" : "foo" }
 
 ## VIASH END
 
-task_info_path = path.join(par['input'], par['query'], "docs", "task_description.yaml")
+task_info_path = path.join(par['input'], 'src', par['task_id'], "docs", "task_info.yaml")
 
 
 

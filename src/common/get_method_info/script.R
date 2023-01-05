@@ -4,14 +4,14 @@ library(rlang)
 ## VIASH START
 par <- list(
   input = "src",
-  query = "label_projection",
+  task_id = "label_projection",
   output = "output/method_info.json"
 )
 ## VIASH END
 
 ns_list <- processx::run(
   "viash",
-  c("ns", "list", "-q", "methods", "--src", par$query),
+  c("ns", "list", "-q", "methods", "--src", paste("src", par$task_id, sep = "/")),
   wd = par$input
 )
 configs <- yaml::yaml.load(ns_list$stdout)
