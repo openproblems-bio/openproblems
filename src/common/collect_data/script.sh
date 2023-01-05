@@ -18,14 +18,14 @@ for task_id in label_projection dimensionality_reduction denoising; do
 
   # generate task info
   viash run src/common/get_task_info/config.vsh.yaml -- \
-    --input "src" \
-    --query $task_id \
+    --input "../openproblems-v2" \
+    --task_id $task_id \
     --output "$out_dir/task_info.json"
 
   # generate method info
   viash run src/common/get_method_info/config.vsh.yaml -- \
-    --input "src" \
-    --query $task_id \
+    --input "../openproblems-v2" \
+    --task_id $task_id \
     --output "$out_dir/temp_method_info.json"
   viash run src/common/check_migration_status/config.vsh.yaml -- \
     --git_sha "openproblems_git.json" \
@@ -35,8 +35,8 @@ for task_id in label_projection dimensionality_reduction denoising; do
 
   # generate metric info
   viash run src/common/get_metric_info/config.vsh.yaml -- \
-    --input "src" \
-    --query $task_id \
+    --input "../openproblems-v2" \
+    --task_id $task_id \
     --output "$out_dir/temp_metric_info.json"
   viash run src/common/check_migration_status/config.vsh.yaml -- \
     --git_sha "openproblems_git.json" \
@@ -52,7 +52,7 @@ for task_id in label_projection dimensionality_reduction denoising; do
   
   # generate api info
   viash run src/common/get_api_info/config.vsh.yaml -- \
-    --input "src" \
-    --query $task_id \
+    --input "../openproblems-v2" \
+    --task_id $task_id \
     --output "$out_dir/api.json"
 done
