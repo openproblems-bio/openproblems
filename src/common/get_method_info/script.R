@@ -23,10 +23,7 @@ df <- map_df(configs, function(config) {
   info$method_id <- config$functionality$name
   info$namespace <- config$functionality$namespace
   info$description <- config$functionality$description
-  info$is_baseline <- FALSE
-  if (grepl("control", info$type)) {
-    info$is_baseline <- TRUE
-  }
+  info$is_baseline <- grepl("control", info$type)
   info
 }) %>%
   select(method_id, type, method_name, everything())
