@@ -1,2 +1,4 @@
+gtfparse==1.3.*
+polars==0.14.*
 pybedtools==0.9.*
 pyensembl==2.0.*
