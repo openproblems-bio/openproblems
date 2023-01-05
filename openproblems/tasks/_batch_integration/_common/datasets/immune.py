@@ -1,6 +1,6 @@
 from .....data.immune_cells import load_immune
 from .....tools.decorators import dataset
-from .utils import filter_celltypes
+from ..utils import filter_celltypes
 from typing import Optional
 
 
@@ -20,7 +20,7 @@ def immune_batch(test: bool = False, min_celltype_count: Optional[int] = None):
     adata.uns["organism"] = "human"
     adata.obs["labels"] = adata.obs["final_annotation"]
 
-    adata = filter_celltypes(adata, test=test, min_celltype_count=min_celltype_count)
+    adata = filter_celltypes(adata, min_celltype_count=min_celltype_count)
 
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)

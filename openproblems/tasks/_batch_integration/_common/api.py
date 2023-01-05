@@ -1,5 +1,6 @@
 from ....data.sample import load_sample_data
 from ....tools.decorators import dataset
+from .utils import filter_celltypes
 
 import numpy as np
 
@@ -31,6 +32,7 @@ def sample_dataset(run_pca: bool = False, run_neighbors: bool = False):
 
     adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
     adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
+    adata = filter_celltypes(adata)
     adata.var_names_make_unique()
     adata.obs_names_make_unique()
     if run_pca:
