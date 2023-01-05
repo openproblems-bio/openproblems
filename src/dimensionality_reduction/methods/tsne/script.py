@@ -34,12 +34,9 @@ input.uns['method_id'] = meta['functionality_name']
 print('Copy data to new AnnData object', flush=True)
 output = ad.AnnData(
     obs=input.obs[[]],
-    uns={}
+    obsm={"X_emb": input.obsm["X_emb"]},
+    uns={key: input.uns[key] for key in ["dataset_id", "normalization_id", "method_id"]}
 )
-output.obsm['X_emb'] = input.obsm['X_emb']
-output.uns['dataset_id'] = input.uns['dataset_id']
-output.uns['normalization_id'] = input.uns['normalization_id']
-output.uns['method_id'] = input.uns['method_id']
 
 print("Write output to file", flush=True)
 output.write_h5ad(par['output'], compression="gzip")

@@ -166,13 +166,8 @@ else:
 
 print("Copy data to new AnnData object", flush=True)
 output = ad.AnnData(
-    uns={}
+    uns={key: input_reduced.uns[key] for key in ["dataset_id", "normalization_id", "method_id", 'metric_ids', 'metric_values']}
 )
-output.uns['normalization_id'] = input_reduced.uns['normalization_id']
-output.uns['method_id'] = input_reduced.uns['method_id']
-output.uns['dataset_id'] = input_reduced.uns['dataset_id']
-output.uns['metric_ids'] =  input_reduced.uns['metric_ids']
-output.uns['metric_values'] = input_reduced.uns['metric_values']
 
 print("Write data to file", flush=True)
 output.write_h5ad(par['output'], compression="gzip")
