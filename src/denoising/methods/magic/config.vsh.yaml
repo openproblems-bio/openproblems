@@ -13,7 +13,14 @@ functionality:
     code_url: "https://github.com/KrishnaswamyLab/MAGIC"
     v1_url: openproblems/tasks/denoising/methods/magic.py
     v1_commit: 2fbc2d4c8d3ff955ea948fc082635cf779b1927e
-    v1_comp_id: "magic"
+    variants: 
+      magic:
+      magic_approx:
+        solver: approximate
+      knn_naive:
+        norm: log
+        decay: none
+        t: 1
     preferred_normalization: counts
   arguments:
     - name: "--solver"
@@ -26,6 +33,14 @@ functionality:
       choices: ["sqrt", "log"]
       default: "sqrt"
       description: Normalization method
+    - name: "--decay"
+      type: integer
+      default: 1
+      description: sets decay rate of kernel tails
+    - name: "--t"
+      type: integer
+      default: 3
+      description: power to which the diffusion operator is powered
   resources:
     - type: python_script
       path: script.py
@@ -34,11 +49,7 @@ platforms:
     image: "python:3.10"
     setup:
       - type: python
-        packages:
-          - "anndata>=0.8"
-          - scprep
-          - magic-impute
-          - scipy
+        pip: [ "anndata>=0.8", scprep, magic-impute, scipy, scikit-learn<1.2]
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]
