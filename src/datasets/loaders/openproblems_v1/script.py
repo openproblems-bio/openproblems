@@ -37,7 +37,7 @@ dataset_funs = {
 adata = dataset_funs[par['id']]()
 
 print("Setting .uns metadata")
-with open( "src/datasets/loaders/openproblems_v1/metadata.yaml") as md:
+with open( "metadata.yaml") as md:
     metadata = yaml.safe_load(md)
 
 for key, value in metadata[par["id"]].items():
