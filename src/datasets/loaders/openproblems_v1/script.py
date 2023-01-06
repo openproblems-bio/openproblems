@@ -2,6 +2,7 @@ print("Importing libraries")
 import openproblems as op
 import scanpy as sc
 import scipy
+import yaml
 
 ## VIASH START
 par = {
@@ -11,7 +12,6 @@ par = {
     "obs_tissue": "tissue",
     "layer_counts": "counts",
     "output": "test_data.h5ad",
-    "layer_counts_output": "counts"
 }
 ## VIASH END
 
@@ -36,8 +36,13 @@ dataset_funs = {
 
 adata = dataset_funs[par['id']]()
 
-print("Setting .uns['dataset_id']")
-adata.uns["dataset_id"] = "openproblems_v1/" + par["id"]
+print("Setting .uns metadata")
+
+with open( "metadata.yaml") as md:
+    metadata = yaml.safe_load(md)
+    
+for key in metadata[par["id"]]:
+    adata.uns[key] = metadata[par["id"]][key]
 
 print("Setting .obs['celltype']")
 if par["obs_celltype"]:

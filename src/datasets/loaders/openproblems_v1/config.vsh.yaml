@@ -34,6 +34,8 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+    - type: file
+      path: metadata.yaml
   test_resources:
     - type: python_script
       path: test.py
@@ -45,4 +47,5 @@ platforms:
         packages:
           - scanpy
           - "anndata>=0.8"
+          - pyyaml
   - type: nextflow
