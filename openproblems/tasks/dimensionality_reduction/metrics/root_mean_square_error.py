@@ -1,4 +1,5 @@
 from ....tools.decorators import metric
+from ....tools.normalize import log_cpm
 
 
 def _rmse(X, X_emb):
@@ -22,6 +23,8 @@ def rmse(adata, n_svd=200):
     """
     import sklearn.decomposition
 
+    adata = log_cpm(adata)
+
     X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
     return _rmse(X, adata.obsm["X_emb"])
 
@@ -37,6 +40,8 @@ def rmse_spectral(adata, n_comps=200):
     import numpy as np
     import umap
     import umap.spectral
+
+    adata = log_cpm(adata)
 
     n_comps = min(n_comps, min(adata.shape) - 2)
 
