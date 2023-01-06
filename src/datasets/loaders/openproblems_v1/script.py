@@ -37,12 +37,11 @@ dataset_funs = {
 adata = dataset_funs[par['id']]()
 
 print("Setting .uns metadata")
-
-with open( "metadata.yaml") as md:
+with open( "src/datasets/loaders/openproblems_v1/metadata.yaml") as md:
     metadata = yaml.safe_load(md)
-    
-for key in metadata[par["id"]]:
-    adata.uns[key] = metadata[par["id"]][key]
+
+for key, value in metadata[par["id"]].items():
+    adata.uns[key] = value
 
 print("Setting .obs['celltype']")
 if par["obs_celltype"]:
