@@ -1,6 +1,5 @@
+from ....tools.decorators import dataset
 from .._common import api
-
-import functools
 
 MIN_CELLS_PER_CELLTYPE = 50
 
@@ -30,7 +29,9 @@ def check_method(adata, is_baseline=False):
     return True
 
 
-sample_dataset = functools.partial(api.sample_dataset, run_pca=True, run_neighbors=True)
+@dataset()
+def sample_dataset():
+    return api.sample_dataset(run_pca=True, run_neighbors=True)
 
 
 def sample_method(adata):

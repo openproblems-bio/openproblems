@@ -1,6 +1,5 @@
+from ....tools.decorators import dataset
 from .._common import api
-
-import functools
 
 
 def check_dataset(adata):
@@ -22,7 +21,9 @@ def check_method(adata, is_baseline=False):
     return True
 
 
-sample_dataset = functools.partial(api.sample_dataset, run_pca=True)
+@dataset()
+def sample_dataset():
+    return api.sample_dataset(run_pca=True)
 
 
 def sample_method(adata):
