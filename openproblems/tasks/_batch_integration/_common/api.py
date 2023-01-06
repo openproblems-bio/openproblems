@@ -34,7 +34,7 @@ def sample_dataset(run_pca: bool = False, run_neighbors: bool = False):
     adata.layers["log_normalized"] = adata.X
 
     adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
-    adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
+    adata.obs["labels"] = np.random.choice(3, adata.shape[0], replace=True).astype(str)
     adata = filter_celltypes(adata)
     if run_pca:
         adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
