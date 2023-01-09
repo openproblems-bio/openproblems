@@ -9,7 +9,7 @@ par = {
     'input_train': 'resources_test/label_projection/pancreas/train.h5ad',
     'input_test': 'resources_test/label_projection/pancreas/test.h5ad',
     'output': 'output.h5ad',
-    'hvg': True
+    'num_hvg': 2000
 }
 meta = {
     'functionality_name': 'scanvi'
@@ -20,10 +20,11 @@ print("Load input data", flush=True)
 input_train_orig = ad.read_h5ad(par['input_train'])
 input_test_orig = ad.read_h5ad(par['input_test'])
 
-if par["hvg"]:
+if par["num_hvg"]:
     print("Subsetting to HVG", flush=True)
-    input_train = input_train_orig[:,input_train_orig.var['hvg']]
-    input_test = input_test_orig[:,input_test_orig.var['hvg']]
+    hvg_idx = input_train_orig.var['hvg_score'].to_numpy().argsort()[:par["num_hvg"]]
+    input_train = input_train_orig[:,hvg_idx]
+    input_test = input_test_orig[:,hvg_idx]
 else:
     input_train = input_train_orig
     input_test = input_test_orig

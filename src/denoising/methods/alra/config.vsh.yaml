@@ -19,7 +19,8 @@ functionality:
     doc_url: https://github.com/KlugerLab/ALRA/blob/master/README.md
     v1_url: openproblems/tasks/denoising/methods/alra.py
     v1_commit: 411a416150ecabce25e1f59bde422a029d0a8baa
-    v1_comp_id: "alra"
+    variants: 
+      alra:
     preferred_normalization: counts
   arguments:
     - name: "--layer_input"

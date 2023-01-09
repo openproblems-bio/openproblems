@@ -8,7 +8,8 @@ functionality:
     label: Majority Vote
     v1_url: openproblems/tasks/label_projection/methods/baseline.py
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
-    v1_comp_id: majority_vote
+    variants:
+      majority_vote:
     preferred_normalization: counts
   resources:
     - type: python_script
