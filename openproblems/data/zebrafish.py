@@ -11,7 +11,7 @@ URL = (
 )
 
 
-@utils.loader(data_url=URL, data_reference="https://doi.org/10.1126/science.aar4362")
+@utils.loader(data_url=URL, data_reference="wagner2018single")
 def load_zebrafish(test=False):
     """Download zebrafish data from figshare."""
     with tempfile.TemporaryDirectory() as tempdir:

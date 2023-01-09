@@ -13,7 +13,7 @@ _seurat = r_function(
 @method(
     method_name="Seurat reference mapping (SCTransform)",
     paper_name="Integrated analysis of multimodal single-cell data",
-    paper_url="https://doi.org/10.1016/j.cell.2021.04.048",
+    paper_reference="hao2021integrated",
     paper_year=2021,
     code_url="https://github.com/satijalab/seurat",
     image="openproblems-r-extras",

@@ -20,6 +20,7 @@ coefficients.
 
 @metric(
     metric_name="HVG conservation",
+    paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-r-pytorch",
 )

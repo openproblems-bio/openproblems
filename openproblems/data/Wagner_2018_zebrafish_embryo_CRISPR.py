@@ -6,7 +6,7 @@ import scprep
 
 @utils.loader(
     data_url="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE112294",
-    data_reference="https://doi.org/10.1126/science.aar4362",
+    data_reference="wagner2018single",
 )
 def load_zebrafish_chd_tyr(test=False):
     """Download zebrafish data from GEO accession GSE112294"""

@@ -39,3 +39,8 @@ repos:
     hooks:
       - id: markdownlint-fix
         exclude: (SAGEMAKER.md|.github/ISSUE_TEMPLATE/bug_report.md|.github/pull_request_template.md)
+  - repo: https://github.com/FlamingTempura/bibtex-tidy
+    rev: "8838095"
+    hooks:
+    - id: bibtex-tidy
+      args: ['--omit', 'abstract', '--sort', '--duplicates', '--drop-all-caps', '--sort-fields', '--trailing-commas']

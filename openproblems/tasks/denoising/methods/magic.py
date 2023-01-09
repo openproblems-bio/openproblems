@@ -9,7 +9,7 @@ _magic_method = functools.partial(
     method,
     paper_name="Recovering Gene Interactions from Single-Cell Data "
     "Using Data Diffusion",
-    paper_url="https://doi.org/10.1016/j.cell.2018.05.061",
+    paper_reference="https://doi.org/10.1016/j.cell.2018.05.061",
     paper_year=2018,
     code_url="https://github.com/KrishnaswamyLab/MAGIC",
     image="openproblems-python-extras",
@@ -62,7 +62,7 @@ def magic_approx(adata, test=False):
 @method(
     method_name="KNN smoothing",
     paper_name="KNN Smoothing (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     image="openproblems-python-extras",

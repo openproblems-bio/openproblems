@@ -28,5 +28,5 @@ Metrics for this task can be divided into those that assess the removal of batch
 effects, and assessments of the conservation of biological variation. This can be a
 helpful distinction when devising new metrics. This task, including the subtask
 structure, was taken from a [benchmarking study of data integration
-methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2). This is a useful
+methods](https://openproblems.bio/bibliography#luecken2022benchmarking). This is a useful
 reference for more background reading on the task and the above concepts.
