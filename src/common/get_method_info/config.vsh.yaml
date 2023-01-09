@@ -18,8 +18,6 @@ platforms:
         run: "curl -fsSL get.viash.io | bash -s -- --bin /usr/local/bin/"
     test_setup:
       - type: apt
-        packages: [libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3, git]
-      - type: docker
-        run: "git clone https://github.com/openproblems-bio/openproblems-v2.git"
+        packages: [python3, python3-pip, python3-dev, python-is-python3]
   - type: nextflow
   - type: native

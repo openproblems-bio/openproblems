@@ -15,6 +15,10 @@ functionality:
       default: "output.json"
       description: "Output json"
   test_resources: 
+    - path: ../../../src
+      dest: openproblems-v2/src
+    - path: ../../../_viash.yaml
+      dest: openproblems-v2/_viash.yaml
     - type: python_script
       path: generic_test.py
       text: |
@@ -22,7 +26,7 @@ functionality:
         from os import path
         import json
 
-        input_path = "/openproblems-v2"
+        input_path = meta["resources_dir"] + "/openproblems-v2"
         task_id = "denoising"
         output_path = "output.json"
 
