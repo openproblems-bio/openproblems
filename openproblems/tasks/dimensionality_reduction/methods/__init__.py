@@ -1,5 +1,7 @@
 from .baseline import random_features
 from .baseline import true_features
+from .baseline import true_features_log_cpm
+from .baseline import true_features_log_cpm_hvg
 from .neuralee import neuralee_default
 from .neuralee import neuralee_logCPM_1kHVG
 from .pca import pca_logCPM
