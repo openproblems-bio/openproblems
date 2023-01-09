@@ -9,7 +9,7 @@ _umap_method = functools.partial(
     method,
     paper_name="UMAP: Uniform Manifold Approximation and Projection for "
     "Dimension Reduction",
-    paper_url="https://arxiv.org/abs/1802.03426",
+    paper_reference="mcinnes2018umap",
     paper_year=2018,
     code_url="https://github.com/lmcinnes/umap",
 )

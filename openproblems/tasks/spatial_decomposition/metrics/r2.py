@@ -1,7 +1,7 @@
 from ....tools.decorators import metric
 
 
-@metric(metric_name="r2", maximize=True)
+@metric(metric_name="r2", maximize=True, paper_reference="miles2005rsquared")
 def r2(adata):
     import sklearn.metrics
 

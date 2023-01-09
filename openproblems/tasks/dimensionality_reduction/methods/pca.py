@@ -8,7 +8,7 @@ import functools
 _pca_method = functools.partial(
     method,
     paper_name="On lines and planes of closest fit to systems of points in space",
-    paper_url="https://doi.org/10.1080/14786440109462720",
+    paper_reference="pearson1901pca",
     paper_year=1901,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.decomposition.PCA.html",

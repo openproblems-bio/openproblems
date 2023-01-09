@@ -15,7 +15,7 @@ _neuralee_method = functools.partial(
     paper_name="NeuralEE: A GPU-Accelerated Elastic Embedding "
     "Dimensionality Reduction Method for "
     "Visualizing Large-Scale scRNA-Seq Data",
-    paper_url="https://www.frontiersin.org/articles/10.3389/fgene.2020.00786/full",
+    paper_reference="xiong2020neuralee",
     paper_year=2020,
     code_url="https://github.com/HiBearME/NeuralEE",
     image="openproblems-python-pytorch",

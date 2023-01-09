@@ -176,32 +176,36 @@ def _fit(
     return T[_K], C[_K], QNN[_K], AUC, LCMC[_K], Qlocal, Qglobal
 
 
-@metric("continuity", maximize=True)
+@metric("continuity", paper_reference="zhang2021pydrmetrics", maximize=True)
 def continuity(adata: AnnData) -> float:
     _, C, _, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
     return float(np.clip(C, 0.0, 1.0))  # in [0, 1]
 
 
-@metric("co-KNN size", maximize=True)
+@metric("co-KNN size", paper_reference="zhang2021pydrmetrics", maximize=True)
 def qnn(adata: AnnData) -> float:
     _, _, QNN, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
     # normalized in the code to [0, 1]
     return float(np.clip(QNN, 0.0, 1.0))
 
 
-@metric("co-KNN AUC", maximize=True)
+@metric("co-KNN AUC", paper_reference="zhang2021pydrmetrics", maximize=True)
 def qnn_auc(adata: AnnData) -> float:
     _, _, _, AUC, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
     return float(np.clip(AUC, 0.5, 1.0))  # in [0.5, 1]
 
 
-@metric("local continuity meta criterion", maximize=True)
+@metric(
+    "local continuity meta criterion",
+    paper_reference="zhang2021pydrmetrics",
+    maximize=True,
+)
 def lcmc(adata: AnnData) -> float:
     *_, LCMC, _, _ = _fit(_high_dim(adata), adata.obsm["X_emb"])
     return LCMC
 
 
-@metric("local property", maximize=True)
+@metric("local property", paper_reference="zhang2021pydrmetrics", maximize=True)
 def qlocal(adata: AnnData) -> float:
     # according to authors, this is usually preferred to
     # qglobal, because human are more sensitive to nearer neighbors
@@ -209,7 +213,7 @@ def qlocal(adata: AnnData) -> float:
     return Qlocal
 
 
-@metric("global property", maximize=True)
+@metric("global property", paper_reference="zhang2021pydrmetrics", maximize=True)
 def qglobal(adata: AnnData) -> float:
     *_, Qglobal = _fit(_high_dim(adata), adata.obsm["X_emb"])
     return Qglobal

@@ -7,7 +7,7 @@ import numpy as np
 @method(
     method_name="Majority Vote",
     paper_name="Majority Vote (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
 )
@@ -23,7 +23,7 @@ def majority_vote(adata, test=False):
 @method(
     method_name="Random Labels",
     paper_name="Random Labels (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,
@@ -46,7 +46,7 @@ def random_labels(adata, test=False):
 @method(
     method_name="True Labels",
     paper_name="True Labels (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,

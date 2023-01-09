@@ -6,7 +6,7 @@ from ....tools.utils import check_version
 @method(
     method_name="Procrustes",
     paper_name="Generalized Procrustes analysis",
-    paper_url="https://link.springer.com/content/pdf/10.1007/BF02291478.pdf",
+    paper_reference="gower1975generalized",
     paper_year=1975,
     code_url="https://docs.scipy.org/doc/scipy/reference/generated/"
     "scipy.spatial.procrustes.html",
