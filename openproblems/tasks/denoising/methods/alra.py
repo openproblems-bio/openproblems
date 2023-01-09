@@ -58,7 +58,7 @@ def alra_sqrt(adata, test=False):
     method_name="ALRA (log norm)",
     paper_name="Zero-preserving imputation of scRNA-seq data using "
     "low-rank approximation",
-    paper_url="https://doi.org/10.1101/397588",
+    paper_reference="linderman2018zero",
     paper_year=2018,
     code_url="https://github.com/KlugerLab/ALRA",
     image="openproblems-r-extras",
