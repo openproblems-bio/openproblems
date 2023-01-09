@@ -69,17 +69,17 @@ def alra_log(adata, test=False):
     import scprep
 
     # libsize and log norm
-    #add pseudocount
+    # add pseudocount
     adata.obsm["train_norm"] = adata.obsm["train"] + 1
-    #lib norm
+    # lib norm
     adata.obsm["train_norm"], libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train_norm"], rescale=1, return_library_size=True
     )
-    #log
+    # log
     adata.obsm["train_norm"] = scprep.utils.matrix_transform(
         adata.obsm["train_norm"], np.log
     )
-    #to csr
+    # to csr
     adata.obsm["train_norm"] = adata.obsm["train_norm"].tocsr()
     # run alra
     # _alra takes sparse array, returns dense array
