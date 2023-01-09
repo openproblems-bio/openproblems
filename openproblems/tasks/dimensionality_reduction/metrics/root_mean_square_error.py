@@ -14,7 +14,11 @@ def _rmse(X, X_emb):
     return rmse
 
 
-@metric(metric_name="RMSE", maximize=False)
+@metric(
+    metric_name="RMSE",
+    maximize=False,
+    paper_reference="kruskal1964mds",
+)
 def rmse(adata, n_svd=200):
     """Calculate the root mean squared error.
 
@@ -29,7 +33,11 @@ def rmse(adata, n_svd=200):
     return _rmse(X, adata.obsm["X_emb"])
 
 
-@metric(metric_name="RMSE (spectral)", maximize=False)
+@metric(
+    metric_name="RMSE (spectral)",
+    maximize=False,
+    paper_reference="coifman2006diffusion",
+)
 def rmse_spectral(adata, n_comps=200):
     """Calculate the spectral root mean squared error
 
