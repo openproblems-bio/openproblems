@@ -3,7 +3,7 @@ library(rlang)
 
 ## VIASH START
 par <- list(
-  input = "src",
+  input = ".",
   task_id = "label_projection",
   output = "output/method_info.json"
 )
@@ -27,7 +27,7 @@ df <- map_df(configs, function(config) {
   info$is_baseline <- grepl("control", info$type)
   info
 }) %>%
-  select(method_id, type, method_name, everything())
+  select(method_id, type, one_of("method_name"), everything())
 
 jsonlite::write_json(
   purrr::transpose(df),
