@@ -338,7 +338,9 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
         name=dataset.metadata["dataset_name"],
         data_url=dataset.metadata["data_url"],
         data_reference=dataset.metadata["data_reference"],
-        headers=dict(names=["Rank", "Mean score"], fixed=["Name", "Paper", "Library"]),
+        headers=dict(
+            names=["Rank", "Name", "Mean score"], fixed=["Name", "Paper", "Library"]
+        ),
         results=list(),
     )
     dataset_results_raw = normalize_scores(task_name, dataset_results_raw)
@@ -392,7 +394,6 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
             "Memory (GB)",
             "Runtime (min)",
             "CPU (%)",
-            "Name",
             "Paper",
             "Year",
             "Library",
