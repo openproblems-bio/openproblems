@@ -41,7 +41,7 @@ data for visualization and interpretation.
 
 ## API
 
-WARNING: other than most tasks, `adata.X` should contain log-normalized data.
+WARNING: other than most tasks, `adata.X` should contain log CPM-normalized data,
    This is the case as we are computing ground truth metrics on normalized data,
    which means methods which use this same normalization are likely to score more
    highly on these metrics.
@@ -67,7 +67,9 @@ by the standard pre-processing functions, if a method performs its own pre-proce
 For most methods a standard pre-processing from `log_cpm()`, which normalizes the
 expression matrix to counts per million (CPM), can be used directly from `adata.X`.
 Variants of methods can be created by applying different pre-processing prior to the
-method itself (see `phate.py` for an example).
+method itself (see `phate.py` for an example). *Note that using a normalization method
+different from that used for the metrics (log CPM) may lead to artificially poor method
+performance.*
 
 ## The methods
 
