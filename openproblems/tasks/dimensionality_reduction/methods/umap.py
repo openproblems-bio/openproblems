@@ -17,7 +17,7 @@ _densmap_method = functools.partial(
     method,
     paper_name="Assessing single-cell transcriptomic variability through"
     " density-preserving data visualization",
-    paper_url="https://www.nature.com/articles/s41587-020-00801-7",
+    paper_reference="narayan2021assessing",
     paper_year=2021,
     code_url="https://github.com/lmcinnes/umap",
     image="openproblems-python-extras",
