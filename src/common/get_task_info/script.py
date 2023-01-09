@@ -4,7 +4,7 @@ import json
 
 ## VIASH START
 par = {
-    "input" : "src",
+    "input" : ".",
     "task_id" : "denoising",
     "output": "output/task.json",
 
