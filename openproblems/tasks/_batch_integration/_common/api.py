@@ -7,7 +7,15 @@ import numpy as np
 MIN_CELLS_PER_CELLTYPE = 50
 
 
-def check_dataset(adata):
+def check_neighbors(adata, neighbors_key, connectivities_key, distances_key):
+    assert neighbors_key in adata.uns
+    assert adata.uns[neighbors_key]["connectivities_key"] == connectivities_key
+    assert adata.uns[neighbors_key]["distances_key"] == distances_key
+    assert connectivities_key in adata.obsp
+    assert distances_key in adata.obsp
+
+
+def check_dataset(adata, do_check_pca=False, do_check_neighbors=False):
     """Check that dataset output fits expected API."""
 
     assert "batch" in adata.obs
@@ -15,6 +23,20 @@ def check_dataset(adata):
     assert (adata.obs["labels"].value_counts() >= MIN_CELLS_PER_CELLTYPE).all()
 
     assert "log_normalized" in adata.layers
+    assert "counts" in adata.layers
+
+    assert adata.var_names.is_unique
+    assert adata.obs_names.is_unique
+
+    assert "organism" in adata.uns
+    assert adata.uns["organism"] in ["mouse", "human"]
+
+    if do_check_pca:
+        assert "X_uni_pca" in adata.obsm
+
+    if do_check_neighbors:
+        check_neighbors(adata, "uni", "uni_connectivities", "uni_distances")
+
     return True
 
 

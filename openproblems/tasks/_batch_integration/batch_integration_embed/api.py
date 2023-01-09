@@ -1,16 +1,9 @@
 from ....tools.decorators import dataset
 from .._common import api
 
+import functools
 
-def check_dataset(adata):
-    """Check that dataset output fits expected API."""
-    api.check_dataset(adata)
-
-    assert "X_uni_pca" in adata.obsm
-    assert "organism" in adata.uns
-    assert adata.uns["organism"] in ["mouse", "human"]
-
-    return True
+check_dataset = functools.partial(api.check_dataset, do_check_pca=True)
 
 
 def check_method(adata, is_baseline=False):

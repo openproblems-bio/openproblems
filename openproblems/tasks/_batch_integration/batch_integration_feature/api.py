@@ -1,15 +1,6 @@
 from .._common import api
 
-
-def check_dataset(adata):
-    """Check that dataset output fits expected API."""
-    api.check_dataset(adata)
-
-    assert "counts" in adata.layers
-    assert adata.var_names.is_unique
-    assert adata.obs_names.is_unique
-
-    return True
+check_dataset = api.check_dataset
 
 
 def check_method(adata, is_baseline=False):
