@@ -4,7 +4,17 @@ from ....tools.normalize import log_cpm_hvg
 from ....tools.utils import check_version
 from typing import Optional
 
+import functools
 import scanpy as sc
+
+_pymde_method = functools.partial(
+    method,
+    paper_name="Minimum-Distortion Embedding",
+    paper_url="http://dx.doi.org/10.1561/2200000090",
+    paper_year=2021,
+    code_url="https://pymde.org/",
+    image="openproblems-python-pytorch",
+)
 
 
 def _pymde(
@@ -50,13 +60,8 @@ def _pymde(
     return adata
 
 
-@method(
+@_pymde_method(
     method_name="PyMDE Preserve Neighbors (logCPM)",
-    paper_name="Minimum-Distortion Embedding",
-    paper_url="http://dx.doi.org/10.1561/2200000090",
-    paper_year=2021,
-    code_url="https://pymde.org/",
-    image="openproblems-python-pytorch",
 )
 def pymde_neighbors_log_cpm(
     adata,
@@ -70,13 +75,8 @@ def pymde_neighbors_log_cpm(
     )
 
 
-@method(
+@_pymde_method(
     method_name="PyMDE Preserve Neighbors (logCPM, 1kHVG)",
-    paper_name="Minimum-Distortion Embedding",
-    paper_url="http://dx.doi.org/10.1561/2200000090",
-    paper_year=2021,
-    code_url="https://pymde.org/",
-    image="openproblems-python-pytorch",
 )
 def pymde_neighbors_log_cpm_hvg(
     adata,
@@ -95,13 +95,8 @@ def pymde_neighbors_log_cpm_hvg(
     )
 
 
-@method(
+@_pymde_method(
     method_name="PyMDE Preserve Distances (logCPM)",
-    paper_name="Minimum-Distortion Embedding",
-    paper_url="http://dx.doi.org/10.1561/2200000090",
-    paper_year=2021,
-    code_url="https://pymde.org/",
-    image="openproblems-python-pytorch",
 )
 def pymde_distances_log_cpm(
     adata,
@@ -115,13 +110,8 @@ def pymde_distances_log_cpm(
     )
 
 
-@method(
+@_pymde_method(
     method_name="PyMDE Preserve Distances (logCPM, 1kHVG)",
-    paper_name="Minimum-Distortion Embedding",
-    paper_url="http://dx.doi.org/10.1561/2200000090",
-    paper_year=2021,
-    code_url="https://pymde.org/",
-    image="openproblems-python-pytorch",
 )
 def pymde_distances_log_cpm_hvg(
     adata,
