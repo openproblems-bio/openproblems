@@ -1,0 +1,16 @@
+__merge__: ../api/get_info.yaml
+functionality:
+  name: "get_task_info"
+  namespace: "common"
+  description: "Extract task info"
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: python:3.10
+    setup:
+      - type: python
+        pip: [ pyyaml ]
+  - type: nextflow
+  - type: native

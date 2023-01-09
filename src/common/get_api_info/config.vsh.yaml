@@ -1,25 +1,11 @@
+__merge__: ../api/get_info.yaml
 functionality:
   name: "get_api_info"
   namespace: "common"
   description: "Extract api info"
-  arguments:
-    - name: "--input"
-      type: "file"
-      multiple: true
-      example: src/label_projection
-      description: "A task dir"
-    - name: "--output"
-      type: "file"
-      direction: "output"
-      default: "output.json"
-      description: "Output json"
   resources:
     - type: r_script
       path: script.R
-  test_resources:
-    - path: ../../../src 
-    - type: python_script
-      path: test.py
 platforms:
   - type: docker
     image: eddelbuettel/r2u:22.04
@@ -28,6 +14,6 @@ platforms:
         cran: [ tidyverse ]
     test_setup:
       - type: apt
-        packages: [ libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3 ]
+        packages: [ python3, python3-pip, python3-dev, python-is-python3 ]
   - type: nextflow
   - type: native
