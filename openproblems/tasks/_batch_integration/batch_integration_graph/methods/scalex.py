@@ -8,7 +8,7 @@ _scalex_method = functools.partial(
     method,
     paper_name="Online single-cell data integration through projecting heterogeneous "
     "datasets into a common cell-embedding space",
-    paper_url="https://doi.org/10.1038/s41467-022-33758-z",
+    paper_reference="xiong2021online",
     paper_year=2022,
     code_url="https://github.com/jsxlei/SCALEX",
     image="openproblems-python-pytorch",

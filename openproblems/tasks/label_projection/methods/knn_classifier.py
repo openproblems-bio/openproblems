@@ -8,7 +8,7 @@ import functools
 _knn_classifier_method = functools.partial(
     method,
     paper_name="Nearest neighbor pattern classification",
-    paper_url="https://doi.org/10.1109/TIT.1967.1053964",
+    paper_reference="cover1967nearest",
     paper_year=1967,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.neighbors.KNeighborsClassifier.html",

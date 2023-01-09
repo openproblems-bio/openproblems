@@ -16,7 +16,7 @@ for:
 * [embeddings](../batch_integration_embed/)
 
 This sub-task was taken from a [benchmarking study of data integration
-methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
+methods](https://openproblems.bio/bibliography#luecken2022benchmarking).
 
 ## The metrics
 

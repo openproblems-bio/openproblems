@@ -96,7 +96,12 @@ def _calculate_radii(
     return np.log(epsilon + (re / mu_sum))
 
 
-@metric("density preservation", maximize=True, image="openproblems-python-extras")
+@metric(
+    "density preservation",
+    paper_reference="narayan2021assessing",
+    maximize=True,
+    image="openproblems-python-extras",
+)
 def density_preservation(adata: AnnData) -> float:
     from scipy.sparse import issparse
     from scipy.stats import pearsonr

@@ -3,7 +3,11 @@ from ....tools.decorators import metric
 import numpy as np
 
 
-@metric(metric_name="kNN Area Under the Curve", maximize=True)
+@metric(
+    metric_name="kNN Area Under the Curve",
+    paper_reference="stanley2020harmonic",
+    maximize=True,
+)
 def knn_auc(adata, proportion_neighbors=0.1, n_svd=100):
     import sklearn.decomposition
     import sklearn.neighbors

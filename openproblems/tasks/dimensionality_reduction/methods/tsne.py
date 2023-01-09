@@ -6,7 +6,7 @@ from ....tools.utils import check_version
 @method(
     method_name="“t-Distributed Stochastic Neighbor Embedding (t-SNE) (logCPM, 1kHVG)",
     paper_name="Visualizing Data using t-SNE",
-    paper_url="https://www.jmlr.org/papers/v9/vandermaaten08a.html",
+    paper_reference="vandermaaten2008visualizing",
     paper_year=2008,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.manifold.TSNE.html#sklearn.manifold.TSNE",

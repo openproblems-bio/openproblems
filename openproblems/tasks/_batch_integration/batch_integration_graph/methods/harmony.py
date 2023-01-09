@@ -8,7 +8,7 @@ _harmony_method = functools.partial(
     method,
     paper_name="Fast, sensitive and accurate integration "
     "of single-cell data with Harmony",
-    paper_url="https://www.nature.com/articles/s41592-019-0619-0",
+    paper_reference="korsunsky2019fast",
     paper_year=2019,
     code_url="https://github.com/lilab-bcb/harmony-pytorch",
     image="openproblems-r-pytorch",

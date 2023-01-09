@@ -9,7 +9,7 @@ import tempfile
 URL = "https://figshare.com/ndownloader/files/36872214"
 
 
-@utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/nature19348")
+@utils.loader(data_url=URL, data_reference="olsson2016single")
 def load_olsson_2016_mouse_blood(test=False):
     """Download Olsson, 2016_mouse_blood, Nature, 2016 data from Figshare."""
     import scanpy as sc

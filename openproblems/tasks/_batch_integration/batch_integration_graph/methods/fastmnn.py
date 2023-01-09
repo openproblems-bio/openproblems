@@ -8,7 +8,7 @@ import functools
 _fastmnn_method = functools.partial(
     method,
     paper_name="A description of the theory behind the fastMNN algorithm",
-    paper_url="https://marionilab.github.io/FurtherMNN2018/theory/description.html",
+    paper_reference="lun2019fastmnn",
     paper_year=2019,
     code_url="https://doi.org/doi:10.18129/B9.bioc.batchelor",
     image="openproblems-r-extras",
