@@ -43,4 +43,4 @@ repos:
     rev: "8838095"
     hooks:
     - id: bibtex-tidy
-      args: ['--omit', 'abstract', '--sort', '--duplicates', '--drop-all-caps', '--sort-fields', '--trailing-commas']
+      args: ['--omit', 'abstract', '--sort', '--duplicates', '--sort-fields', '--trailing-commas']
