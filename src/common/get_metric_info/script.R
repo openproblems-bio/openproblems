@@ -20,7 +20,7 @@ df <- map_df(configs, function(config) {
   if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") return(NULL)
   info <- as_tibble(map_df(config$functionality$info$metrics, as.data.frame))
   info$config_path <- gsub(".*\\./", "", config$info$config)
-  info$task_id <- par$query
+  info$task_id <- par$task_id
   info$component_id <- config$functionality$name
   info$namespace <- config$functionality$namespace
   info$component_description <- config$functionality$description
