@@ -46,7 +46,8 @@ WARNING: other than most tasks, `adata.X` should contain log CPM-normalized data
    which means methods which use this same normalization are likely to score more
    highly on these metrics.
 
-**Datasets** should provide *log CPM normalized counts* in `adata.X`.
+**Datasets** should provide *log CPM normalized counts* in `adata.X` and store the
+original number of genes (i.e., `adata.shape[1]`) in `adata.uns["n_genes"]`.
 
 **Methods** should assign dimensionally-reduced 2D embedding coordinates to
 `adata.obsm['X_emb']`. They *should not* modify the dimensionality of `adata.X` (e.g.
