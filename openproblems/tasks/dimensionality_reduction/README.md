@@ -42,10 +42,18 @@ data for visualization and interpretation.
 
 ## API
 
-**Datasets** should provide un-normalized raw counts in `adata.X`.
+WARNING: other than most tasks, `adata.X` should contain log CPM-normalized data,
+   This is the case as we are computing ground truth metrics on normalized data,
+   which means methods which use this same normalization are likely to score more
+   highly on these metrics.
+
+**Datasets** should provide *log CPM normalized counts* in `adata.X` and store the
+original number of genes (i.e., `adata.shape[1]`) in `adata.uns["n_genes"]`.
 
 **Methods** should assign dimensionally-reduced 2D embedding coordinates to
-`adata.obsm['X_emb']`.
+`adata.obsm['X_emb']`. They *should not* modify the dimensionality of `adata.X` (e.g.
+by subsetting to highly variable features, which should be done on a local copy of the
+data without modifying the AnnData object that is returned.)
 
 **Metrics** should calculate the quality or "goodness of fit" of a dimensional reduction
 **method**. If the un-normalized input counts matrix is required by the matrix it can be
@@ -57,14 +65,13 @@ Different methods can require different pre-processing of the data. Standard
 pre-processing functions are available as part of the `tools` module. Where possible
 each **method** should first call one of these functions and use the processed `adata.X`
 slot as the input to the method. Raw counts are also stored in `adata.layers["counts"]`
-by the standard pre-processing functions, if a method performs its own pre-processing it
-should also do this for use by metrics. For most methods a standard pre-processing with
-the `log_cpm_hvg()` function is used which normalizes the expression matrix to counts
-per million (CPM), performs a log transformation and annotates highly-variable
-genes (HVGs) (as selected by scanpy's `high_variable_genes(adata, n_top_genes=1000,
-flavor="cell_ranger")`) to `adata.var["highly_variable"]`. Variants of methods can be
-created by applying different pre-processing prior to the method itself (see `phate.py`
-for an example).
+by the standard pre-processing functions, if a method performs its own pre-processing.
+For most methods a standard pre-processing from `log_cpm()`, which normalizes the
+expression matrix to counts per million (CPM), can be used directly from `adata.X`.
+Variants of methods can be created by applying different pre-processing prior to the
+method itself (see `phate.py` for an example). *Note that using a normalization method
+different from that used for the metrics (log CPM) may lead to artificially poor method
+performance.*
 
 ## The methods
 
