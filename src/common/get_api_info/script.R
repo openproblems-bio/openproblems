@@ -3,7 +3,7 @@ library(rlang)
 
 ## VIASH START
 par <- list(
-  input = "src",
+  input = ".",
   task_id = "label_projection",
   output = "output/api.json"
 )
