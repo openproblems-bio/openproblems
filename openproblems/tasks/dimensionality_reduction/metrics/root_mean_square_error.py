@@ -8,7 +8,7 @@ def _rmse(X, X_emb):
 
     high_dimensional_distance_vector = scipy.spatial.distance.pdist(X)
     low_dimensional_distance_vector = scipy.spatial.distance.pdist(X_emb)
-    scale, rmse = scipy.optimize.nnls(
+    _, rmse = scipy.optimize.nnls(
         low_dimensional_distance_vector[:, None], high_dimensional_distance_vector
     )
     return rmse
