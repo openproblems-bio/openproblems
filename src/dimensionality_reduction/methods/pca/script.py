@@ -1,37 +1,41 @@
 import anndata as ad
 import scanpy as sc
-import yaml
 
 ## VIASH START
 par = {
-    'input': 'resources_test/common/pancreas/train.h5ad',
-    'output': 'reduced.h5ad',
+    "input": "resources_test/dimensionality_reduction/pancreas/train.h5ad",
+    "output": "reduced.h5ad",
+    "n_hvg": 1000,
 }
 meta = {
-    'functionality_name': 'umap',
-    'config': 'src/dimensionality_reduction/methods/PCA/config.vsh.yaml'
+    "functionality_name": "pca",
 }
 ## VIASH END
 
 print("Load input data", flush=True)
-input = ad.read_h5ad(par['input'])
+input = ad.read_h5ad(par["input"])
+X_mat = input.layers["normalized"]
 
-print('Select top 1000 high variable genes', flush=True)
-n_genes = 1000
-idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
+if par["n_hvg"]:
+    print(f"Select top {par['n_hvg']} high variable genes", flush=True)
+    idx = input.var["hvg_score"].to_numpy().argsort()[::-1][:par["n_hvg"]]
+    X_mat = X_mat[:, idx]
 
-print('Apply PCA with 50 dimensions', flush=True)
-input.obsm["X_emb"] = sc.tl.pca(input.layers['normalized'][:, idx], n_comps=50, svd_solver="arpack")[:, :2]
+print(f"Running PCA", flush=True)
+X_emb = sc.tl.pca(X_mat, n_comps=2, svd_solver="arpack")[:, :2]
 
-print('Add method ID', flush=True)
-input.uns['method_id'] = meta['functionality_name']
-
-print('Copy data to new AnnData object', flush=True)
+print("Create output AnnData", flush=True)
 output = ad.AnnData(
     obs=input.obs[[]],
-    obsm={"X_emb": input.obsm["X_emb"]},
-    uns={key: input.uns[key] for key in ["dataset_id", "normalization_id", "method_id"]}
+    obsm={
+        "X_emb": X_emb
+    },
+    uns={
+        "dataset_id": input.uns["dataset_id"],
+        "normalization_id": input.uns["normalization_id"],
+        "method_id": meta["functionality_name"]
+    }
 )
 
 print("Write output to file", flush=True)
-output.write_h5ad(par['output'], compression="gzip")
+output.write_h5ad(par["output"], compression="gzip")

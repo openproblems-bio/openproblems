@@ -5,14 +5,20 @@ functionality:
   description: "Principal component analysis (PCA)"
   info:
     type: method
-    label: PCA
-    paper_doi: "10.1080/14786440109462720"
+    method_name: "PCA"
+    paper_reference: pearson1901pca
     code_url: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
     v1_url: openproblems/tasks/dimensionality_reduction/methods/pca.py
-    v1_commit: a796e02e13a43e8861b124edbb9d287f162d4a14
+    v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
     preferred_normalization: log_cpm
     variants:
+      pca_logCPM:
       pca_logCPM_1kHVG:
+        n_hvg: 1000
+  arguments:
+    - name: "--n_hvg"
+      type: integer
+      description: Number of highly variable genes to subset to. If not specified, the input matrix will not be subset.
   resources:
     - type: python_script
       path: script.py

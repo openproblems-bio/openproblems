@@ -1,36 +1,43 @@
 import anndata as ad
-import scanpy as sc
-import yaml
 
 ## VIASH START
 par = {
-    'input': 'resources_test/common/pancreas/test.h5ad',
-    'output': 'reduced.h5ad',
-    'n_comps': 100,
+    "input": "resources_test/dimensionality_reduction/pancreas/test.h5ad",
+    "output": "reduced.h5ad",
+    "n_hvg": 100,
+    "use_normalized_layer": False
 }
 meta = {
-    'functionality_name': 'true_features',
+    "functionality_name": "true_features",
 }
 ## VIASH END
 
 print("Load input data", flush=True)
-input = ad.read_h5ad(par['input'])
+input = ad.read_h5ad(par["input"])
 
-print('Add method ID', flush=True)
-input.uns['method_id'] = meta['functionality_name']
+print("Create high dimensionally embedding with all features", flush=True)
+if par["use_normalized_layer"]:
+    X_emb = input.layers["counts"].toarray()
+else:
+    X_emb = input.layers["normalized"].toarray()
 
-print('Create high dimensionally embedding with all features', flush=True)
-input.obsm["X_emb"] = input.layers['counts'][:, :par['n_comps']].toarray()
+if par["n_hvg"]:
+    print(f"Select top {par['n_hvg']} high variable genes", flush=True)
+    idx = input.var["hvg_score"].to_numpy().argsort()[::-1][:par["n_hvg"]]
+    X_emb = X_emb[:, idx]
 
-print('Copy data to new AnnData object', flush=True)
+print("Create output AnnData", flush=True)
 output = ad.AnnData(
     obs=input.obs[[]],
-    uns={}
+    obsm={
+        "X_emb": X_emb
+    },
+    uns={
+        "dataset_id": input.uns["dataset_id"],
+        "normalization_id": input.uns["normalization_id"],
+        "method_id": meta["functionality_name"]
+    }
 )
-output.obsm['X_emb'] = input.obsm['X_emb']
-output.uns['dataset_id'] = input.uns['dataset_id']
-output.uns['normalization_id'] = input.uns['normalization_id']
-output.uns['method_id'] = input.uns['method_id']
 
 print("Write output to file", flush=True)
-output.write_h5ad(par['output'], compression="gzip")
+output.write_h5ad(par["output"], compression="gzip")

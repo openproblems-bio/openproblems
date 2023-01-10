@@ -5,24 +5,31 @@ functionality:
   description: "A neural network implementation of elastic embedding implemented in the [NeuralEE package](https://neuralee.readthedocs.io/en/latest/)."
   info:
     type: method
-    label: NeuralEE
-    paper_doi: "10.3389/fgene.2020.00786"
+    method_name: NeuralEE
+    paper_reference: "xiong2020neuralee"
     code_url: https://github.com/HiBearME/NeuralEE
     v1_url: openproblems/tasks/dimensionality_reduction/methods/neuralee.py
-    v1_commit: 4bb8a7e04545a06c336d3d9364a1dd84fa2af1a4
-    preferred_normalization: counts
+    v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+    preferred_normalization: log_cpm
     variants:
       neuralee_default:
+        normalize: true
+        n_hvg: 500
       neuralee_logCPM_1kHVG:
-        normalize: False
-        subsample_genes: None
-        preferred_normalization: log_cpm
-  # To-do: add specific options for unit tests such as --maxit
+        normalize: false
+        n_hvg: 1000
   arguments:
-    - name: "--maxit"
+    - name: "--n_iter"
       type: integer
-      default: 100
-      description: "max number of iterations for NeuralEE."
+      description: Number of iterations.
+    - name: "--n_hvg"
+      type: integer
+      description: Number of highly variable genes to subset to. If not specified, the input matrix will not be subset.
+      default: 1000
+    - name: "--normalize"
+      type: boolean
+      default: false
+      description: Whether to perform own normalization
   resources:
     - type: python_script
       path: script.py
@@ -34,7 +41,6 @@ platforms:
         packages:
           - scanpy
           - "anndata>=0.8"
-          - pyyaml
           - torch
           - "git+https://github.com/michalk8/neuralee@8946abf"
   - type: nextflow

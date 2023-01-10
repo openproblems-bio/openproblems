@@ -2,22 +2,32 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "umap"
   namespace: "dimensionality_reduction/methods"
-  description: "Uniform Manifold Approximation and Projection (UMAP) as implemented by scanpy"
+  description: "Uniform Manifold Approximation and Projection for Dimension Reduction"
   info:
     type: method
     label: UMAP
-    paper_doi: "10.21105/joss.00861"
+    paper_doi: "10.1038/s41587-020-00801-7"
     code_url: https://github.com/lmcinnes/umap
     v1_url: openproblems/tasks/dimensionality_reduction/methods/umap.py
-    v1_commit: a796e02e13a43e8861b124edbb9d287f162d4a14
+    v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
     preferred_normalization: log_cpm
     variants:
+      umap_logCPM:
+      umap_pca_logCPM:
+        n_pca_dims: 50
       umap_logCPM_1kHVG:
+        n_hvg: 1000
+      umap_pca_logCPM_1kHVG:
+        n_pca_dims: 50
+        n_hvg: 1000
   arguments:
-    - name: "--n_pca"
+    - name: "--n_hvg"
       type: integer
-      default: 50
-      description: Number of principal components of PCA to use.
+      description: Number of highly variable genes to subset to. If not specified, the input matrix will not be subset.
+      default: 1000
+    - name: "--n_pca_dims"
+      type: integer
+      description: Number of PCA dimensions to use. If not specified, no PCA will be performed.
   resources:
     - type: python_script
       path: script.py
@@ -29,7 +39,7 @@ platforms:
         packages:
           - scanpy
           - "anndata>=0.8"
-          - pyyaml
+          - umap-learn
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]
