@@ -10,10 +10,9 @@ PBMC_1K_URL = "https://ndownloader.figshare.com/files/36088667"
 
 # TODO(@LuckyMD): document relevant link at figshare.com/articles/*
 PBMC_5K_URL = "https://ndownloader.figshare.com/files/25555739"
-REFERENCE_URL = "https://www.10xgenomics.com/resources/datasets"
 
 
-@utils.loader(data_url=PBMC_1K_URL, data_reference=REFERENCE_URL)
+@utils.loader(data_url=PBMC_1K_URL, data_reference="10x2018pbmc")
 def load_tenx_1k_pbmc(test=False):
     """Download PBMC data from Figshare."""
     import scanpy as sc
@@ -32,7 +31,7 @@ def load_tenx_1k_pbmc(test=False):
     return adata
 
 
-@utils.loader(data_url=PBMC_5K_URL, data_reference=REFERENCE_URL)
+@utils.loader(data_url=PBMC_5K_URL, data_reference="10x2019pbmc")
 def load_tenx_5k_pbmc(test=False):
     """Download 5k PBMCs from 10x Genomics."""
     import scanpy as sc

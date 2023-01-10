@@ -17,6 +17,7 @@ component."""
 
 @metric(
     metric_name="PC Regression",
+    paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-r-pytorch",
 )

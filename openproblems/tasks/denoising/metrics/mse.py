@@ -1,7 +1,11 @@
 from ....tools.decorators import metric
 
 
-@metric(metric_name="Mean-squared error", maximize=False)
+@metric(
+    metric_name="Mean-squared error",
+    paper_reference="batson2019molecular",
+    maximize=False,
+)
 def mse(adata):
     import anndata
     import scanpy as sc

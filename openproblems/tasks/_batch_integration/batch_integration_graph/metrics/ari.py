@@ -16,6 +16,7 @@ We also used the scikit-learn (v.0.22.1) implementation of the ARI.
 @metric(
     metric_name="ARI",
     maximize=True,
+    paper_reference="luecken2022benchmarking",
     image="openproblems-r-pytorch",
 )
 def ari(adata):

@@ -52,6 +52,7 @@ jobs:
       run: |
         rm -r website/content/benchmarks/*/
         python openproblems/workflow/generate_website_markdown.py website/content/benchmarks
+        cp openproblems/main.bib website/static/bibliography
         cd website
         git diff --exit-code --quiet || echo "CHANGED=true" >> $GITHUB_ENV
 

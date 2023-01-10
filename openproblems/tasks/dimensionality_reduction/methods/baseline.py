@@ -3,16 +3,21 @@ from ....tools.normalize import log_cpm
 from ....tools.normalize import log_cpm_hvg
 from ....tools.utils import check_version
 
+import functools
 import numpy as np
 
-
-@method(
-    method_name="Random Features",
-    paper_name="Random Features (baseline)",
-    paper_url="https://openproblems.bio",
+_baseline_method = functools.partial(
+    method,
+    paper_name="Open Problems for Single Cell Analysis",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,
+)
+
+
+@_baseline_method(
+    method_name="Random Features",
 )
 def random_features(adata, test=False):
     adata.obsm["X_emb"] = np.random.normal(0, 1, (adata.shape[0], 2))
@@ -20,13 +25,8 @@ def random_features(adata, test=False):
     return adata
 
 
-@method(
+@_baseline_method(
     method_name="True Features",
-    paper_name="True Features (baseline)",
-    paper_url="https://openproblems.bio",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
 )
 def true_features(adata, test=False):
     adata.obsm["X_emb"] = adata.X
@@ -38,13 +38,8 @@ def true_features(adata, test=False):
     return adata
 
 
-@method(
+@_baseline_method(
     method_name="True Features (logCPM)",
-    paper_name="True Features (baseline)",
-    paper_url="https://openproblems.bio",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
 )
 def true_features_log_cpm(adata, test=False):
     adata = log_cpm(adata)
@@ -57,13 +52,8 @@ def true_features_log_cpm(adata, test=False):
     return adata
 
 
-@method(
+@_baseline_method(
     method_name="True Features (logCPM, 1kHVG)",
-    paper_name="True Features (baseline)",
-    paper_url="https://openproblems.bio",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
 )
 def true_features_log_cpm_hvg(adata, test=False):
     adata = log_cpm_hvg(adata)

@@ -26,6 +26,7 @@ website, or simply star it in GitHub to say "I use it".
 * [API](#api)
   * [Writing functions in R](#writing-functions-in-r)
   * [Adding package dependencies](#adding-package-dependencies)
+  * [Adding paper references](#adding-paper-references)
   * [Adding a new dataset](#adding-a-new-dataset)
   * [Adding a dataset / method / metric to a
     task](#adding-a-dataset--method--metric-to-a-task)
@@ -218,7 +219,7 @@ _pca = r_function("pca.R")
 @method(
     method_name="PCA",
     paper_name="On lines and planes of closest fit to systems of points in space",
-    paper_url="https://www.tandfonline.com/doi/abs/10.1080/14786440109462720",
+    paper_reference="pearson1901pca",
     paper_year=1901,
     code_url="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp",
     image="openproblems-r-base",
@@ -252,12 +253,24 @@ def f2(adata):
   import package2
 ```
 
+### Adding paper references
+
+All papers cited in the `openproblems` repository should be cited in [`main.bib`](main.bib)
+and referenced in the corresponding dataset / method / metric decorator by its BibTeX
+reference, generally of the form `author1900papername`. BibTeX entries should be retrieved
+from [doi2bib.org](https://www.doi2bib.org/) where feasible, except for arXiv and bioRxiv
+which provide more correct BibTeX entries on the paper abstract page.
+
+When referencing a paper in markdown (e.g. in a task README), you should link directly
+to the bibliography entry on the Open Problems website using the BibTeX reference, e.g.
+[`https://openproblems.bio/bibliography#openproblems`](https://openproblems.bio/bibliography#openproblems).
+
 ### Adding a new dataset
 
 Datasets are loaded under `openproblems/data`. Each data loading function should
 download the appropriate dataset from a stable location (e.g. from Figshare) be
 decorated with `openproblems.data.utils.loader(data_url="https://data.link",
-data_reference="https://doi.org/10.0/123")` in order to cache the result.
+data_reference="author1900papername")` in order to cache the result.
 
 Data should be provided in a raw count format. We assume that `adata.X` contains the raw
 (count) data for the primary modality; this will also be copied to

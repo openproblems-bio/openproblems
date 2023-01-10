@@ -25,7 +25,7 @@ _liana_method = functools.partial(
     method,
     paper_name="Comparison of methods and resources for cell-cell "
     "communication inference from single-cell RNA-Seq data",
-    paper_url="https://www.nature.com/articles/s41467-022-30755-0",
+    paper_reference="dimitrov2022comparison",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
     image="openproblems-r-extras",
@@ -109,7 +109,7 @@ _cellphonedb_method = functools.partial(
     method,
     paper_name="CellPhoneDB: inferring cell–cell communication from "
     "combined expression of multi-subunit ligand–receptor complexes",
-    paper_url="https://www.nature.com/articles/s41596-020-0292-x",
+    paper_reference="efremova2020cellphonedb",
     paper_year=2020,
     code_url="https://github.com/saezlab/liana",
     image="openproblems-r-extras",
@@ -156,7 +156,7 @@ _connectome_method = functools.partial(
     method,
     paper_name="Computation and visualization of cell–cell signaling "
     "topologies in single-cell systems data using Connectome",
-    paper_url="https://www.nature.com/articles/s41598-022-07959-x",
+    paper_reference="raredon2022computation",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
     image="openproblems-r-extras",
@@ -214,7 +214,7 @@ def logfc_sum(adata, test=False):
 _natmi_method = functools.partial(
     method,
     paper_name="Predicting cell-to-cell communication networks using NATMI",
-    paper_url="https://www.nature.com/articles/s41467-020-18873-z",
+    paper_reference="hou2020predicting",
     paper_year=2021,
     code_url="https://github.com/saezlab/liana",
     image="openproblems-r-extras",
@@ -249,7 +249,7 @@ _sca_method = functools.partial(
     method,
     paper_name="SingleCellSignalR: inference of intercellular networks "
     "from single-cell transcriptomics",
-    paper_url="https://academic.oup.com/nar/article/48/10/e55/5810485",
+    paper_reference="cabello2020singlecellsignalr",
     paper_year=2021,
     code_url="https://github.com/saezlab/liana",
     image="openproblems-r-extras",

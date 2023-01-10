@@ -7,7 +7,7 @@ import numpy as np
 @method(
     method_name="Random Scores",
     paper_name="Random Scores (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,
@@ -23,7 +23,7 @@ def random_scores(adata, test=False):
 @method(
     method_name="True Scores",
     paper_name="True Scores (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,

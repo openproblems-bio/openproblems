@@ -7,7 +7,7 @@ _scanvi_method = functools.partial(
     method,
     paper_name="Probabilistic harmonization and annotation of single-cell"
     " transcriptomics data with deep generative models",
-    paper_url="https://doi.org/10.15252/msb.20209620",
+    paper_reference="xu2021probabilistic",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
     image="openproblems-python-pytorch",
@@ -16,7 +16,7 @@ _scanvi_method = functools.partial(
 _scanvi_scarches_method = functools.partial(
     method,
     paper_name="Query to reference single-cell integration with transfer learning",
-    paper_url="https://doi.org/10.1101/2020.07.16.205997",
+    paper_reference="lotfollahi2020query",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
     image="openproblems-python-pytorch",

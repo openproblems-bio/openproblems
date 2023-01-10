@@ -10,8 +10,8 @@ Different tools propose distinct preprocessing steps with diverse
 scoring functions, that are challenging to compare and evaluate.
 Furthermore, each tool typically comes with its own set of prior knowledge.
 To harmonize these, [Dimitrov et
-al, 2022](https://doi.org/10.1038/s41467-022-30755-0) recently developed the
-[LIANA](https://github.com/saezlab/liana) framework, which was used
+al, 2022](https://openproblems.bio/bibliography#dimitrov2022comparison) recently
+developed the [LIANA](https://github.com/saezlab/liana) framework, which was used
 as a foundation for this task.
 
 The challenges in evaluating the tools are further exacerbated by the
