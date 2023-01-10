@@ -22,18 +22,20 @@ website, or simply star it in GitHub to say "I use it".
 
 ### Table of Contents  <!-- markdownlint-disable-line MD001 -->
 
-* [Submitting New Features](#submitting-new-features)
-* [API](#api)
-  * [Writing functions in R](#writing-functions-in-r)
-  * [Adding package dependencies](#adding-package-dependencies)
-  * [Adding a new dataset](#adding-a-new-dataset)
-  * [Adding a dataset / method / metric to a
-    task](#adding-a-dataset--method--metric-to-a-task)
-  * [Adding a new task](#adding-a-new-task)
-  * [Adding a new Docker container](#adding-a-new-docker-container)
-* [Code Style and Testing](#code-style-and-testing)
-* [Code of Conduct](#code-of-conduct)
-* [Attribution](#attribution)
+- [Contributing to Open Problems for Single Cell Analysis](#contributing-to-open-problems-for-single-cell-analysis)
+    - [Table of Contents  ](#table-of-contents--)
+  - [Submitting New Features](#submitting-new-features)
+  - [API](#api)
+    - [Writing functions in R](#writing-functions-in-r)
+    - [Adding package dependencies](#adding-package-dependencies)
+    - [Adding a new dataset](#adding-a-new-dataset)
+    - [Adding a dataset / method / metric to a task](#adding-a-dataset--method--metric-to-a-task)
+      - [Testing method performance](#testing-method-performance)
+    - [Adding a new task](#adding-a-new-task)
+    - [Adding a new Docker container](#adding-a-new-docker-container)
+  - [Code Style and Testing](#code-style-and-testing)
+  - [Code of Conduct](#code-of-conduct)
+  - [Attribution](#attribution)
 
 <!-- Table of contents generated with
 [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/) -->
@@ -320,7 +322,7 @@ docker run \
   -it singlecellopenproblems/openproblems-python-extras bash
 openproblems-cli test \
   --task label_projection \
-  --dataset zebrafish_labels \
+  --dataset zebrafish_labs \
   --method logistic_regression_log_cpm \
   --metric f1
 ```
