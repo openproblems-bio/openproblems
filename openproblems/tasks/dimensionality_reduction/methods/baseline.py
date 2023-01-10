@@ -57,8 +57,7 @@ def true_features_log_cpm(adata, test=False):
 )
 def true_features_log_cpm_hvg(adata, test=False):
     adata = log_cpm_hvg(adata)
-    adata = adata[:, adata.var["highly_variable"]].copy()
-    adata.obsm["X_emb"] = adata.X
+    adata.obsm["X_emb"] = adata[:, adata.var["highly_variable"]].copy().X
     if test:
         adata.obsm["X_emb"] = adata.obsm["X_emb"][:, :100]
 

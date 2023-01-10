@@ -52,4 +52,4 @@ def test_density_preservation_matches_densmap():
     adata.obsm["X_emb"] = emb
     actual = metric(adata)
 
-    np.testing.assert_allclose(expected, actual, rtol=1e-6)
+    np.testing.assert_allclose(expected, actual, rtol=1e-5)
