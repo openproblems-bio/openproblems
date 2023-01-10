@@ -75,7 +75,7 @@ def alra_log(adata, test=False):
     )
     # log
     adata.obsm["train_norm"] = scprep.utils.matrix_transform(
-        adata.obsm["train_norm"], np.log
+        adata.obsm["train_norm"], np.log1p
     )
     # to csr
     adata.obsm["train_norm"] = adata.obsm["train_norm"].tocsr()
@@ -94,7 +94,7 @@ def alra_log(adata, test=False):
                 raise
 
     # transform back into original space
-    Y = scprep.utils.matrix_transform(Y, np.exp)
+    Y = scprep.utils.matrix_transform(Y, np.expm1)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
 
