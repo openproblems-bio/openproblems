@@ -10,7 +10,7 @@ import scanpy as sc
 _pymde_method = functools.partial(
     method,
     paper_name="Minimum-Distortion Embedding",
-    paper_url="http://dx.doi.org/10.1561/2200000090",
+    paper_reference="agrawal2021mde",
     paper_year=2021,
     code_url="https://pymde.org/",
     image="openproblems-python-pytorch",
