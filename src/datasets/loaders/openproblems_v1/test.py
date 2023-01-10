@@ -1,6 +1,6 @@
 from os import path
 import subprocess
-import scanpy as sc
+import anndata as ad
 
 name = "pancreas"
 output = "dataset.h5ad"
@@ -8,24 +8,23 @@ obs_celltype = "celltype"
 obs_batch = "tech"
 
 print(">> Running script", flush=True)
-out = subprocess.run([
-    meta["executable"],
-    "--id", name,
-    "--obs_celltype", obs_celltype,
-    "--obs_batch", obs_batch,
-    "--layer_counts", "counts",
-    "--output", output],
-    capture_output=True,
-    text=True
+out = subprocess.run(
+    [
+        meta["executable"],
+        "--id", name,
+        "--obs_celltype", obs_celltype,
+        "--obs_batch", obs_batch,
+        "--layer_counts", "counts",
+        "--output", output
+    ],
+    check=True
 )
-
-print(out.stdout)
 
 print(">> Checking whether file exists", flush=True)
 assert path.exists(output)
 
 print(">> Read output anndata", flush=True)
-adata = sc.read_h5ad(output)
+adata = ad.read_h5ad(output)
 
 print(adata)
 
