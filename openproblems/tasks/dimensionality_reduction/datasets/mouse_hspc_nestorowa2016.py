@@ -1,5 +1,6 @@
 from ....data.mouse_hspc_nestorowa2016 import load_mouse_hspc_nestorowa2016
 from ....tools.decorators import dataset
+from ....tools.normalize import log_cpm
 
 
 @dataset(
@@ -11,4 +12,6 @@ from ....tools.decorators import dataset
     "1920 cells x 43258 features with 3 cell type labels",
 )
 def mouse_hspc_nestorowa2016(test=False):
-    return load_mouse_hspc_nestorowa2016(test=test)
+    adata = load_mouse_hspc_nestorowa2016(test=test)
+    adata.uns["n_genes"] = adata.shape[1]
+    return log_cpm(adata)

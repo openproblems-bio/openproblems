@@ -29,7 +29,7 @@ class TestTask(unittest.TestCase):
         assert len(self.task._task_summary) < TASK_SUMMARY_MAXLEN
         assert hasattr(self.task, "DEFAULT_LAYER")
         assert isinstance(self.task.DEFAULT_LAYER, str)
-        assert self.task.DEFAULT_LAYER in ["counts", "log_normalized"]
+        assert self.task.DEFAULT_LAYER in ["counts", "log_normalized", "log_cpm"]
         assert hasattr(self.task, "api")
         assert isinstance(self.task.api, MODULE)
         for list_name in ["DATASETS", "METHODS", "METRICS"]:
