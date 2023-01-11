@@ -11,6 +11,7 @@ print('Importing libraries')
 import pprint
 import scanpy as sc
 from scib.metrics import cell_cycle
+from scipy.sparse import csr_matrix
 
 if par['debug']:
     pprint.pprint(par)
@@ -26,6 +27,8 @@ print('Read adata')
 adata = sc.read(adata_file)
 adata_int = adata.copy()
 name = adata.uns['dataset_id']
+
+adata.X = adata.layers['logcounts']
 
 print('compute score')
 score = cell_cycle(

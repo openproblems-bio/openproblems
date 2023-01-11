@@ -2,11 +2,14 @@ from os import path
 import subprocess
 import pandas as pd
 import numpy as np
+import scanpy as sc
 
 np.random.seed(42)
 
 metric = 'cell_cycle_conservation'
 metric_file = metric + '.tsv'
+
+print(sc.read('combat.h5ad'))
 
 print(">> Running script")
 out = subprocess.check_output([
@@ -26,6 +29,7 @@ score = result.loc[0, 'value']
 print(score)
 
 assert 0 < score < 1
-assert 0.9380807 <= score <= 0.938081
+
+assert score == 0.9495255717047036
 
 print(">> All tests passed successfully")
