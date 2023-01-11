@@ -21,7 +21,7 @@ print(">> Checking whether file exists")
 assert path.exists(output_file)
 
 print('>> Checking API')
-adata = sc.read(output_file)
+adata = sc.read(output_file, as_sparse='X')
 
 assert 'dataset_id' in adata.uns
 assert 'label' in adata.obs.columns
@@ -42,5 +42,9 @@ assert 'hvg' in adata.uns
 assert adata.uns['hvg'] == False
 assert 'scaled' in adata.uns
 assert adata.uns['scaled'] == False
+
+unintegrated = sc.read('processed.h5ad', as_sparse='X')
+assert len(unintegrated.X.data) != len(adata.X.data)
+assert not np.any(np.not_equal(unintegrated.obsm['X_pca'], adata.obsm['X_pca']))
 
 print(">> All tests passed successfully")
