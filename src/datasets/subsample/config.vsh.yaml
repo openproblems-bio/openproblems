@@ -8,6 +8,10 @@ functionality:
       description: "Input data to be resized"
       required: true
       example: input.h5ad
+    - name: "--keep_features"
+      type: string
+      multiple: true
+      description: A list of genes to keep.
     - name: "--keep_celltype_categories"
       type: "string"
       multiple: true

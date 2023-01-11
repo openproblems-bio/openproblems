@@ -34,11 +34,14 @@ assert input.n_vars == output.n_vars
 
 print(">> Runing script as test for specific batch and celltype categories")
 output2_path = "output.h5ad"
+
+keep_features = ["HMGB2", "CDK1", "NUSAP1", "UBE2C"]
 out = subprocess.check_output([
     meta["executable"],
     "--input", input_path,
     "--keep_celltype_categories", "acinar:beta",
     "--keep_batch_categories", "celseq:inDrop4:smarter",
+    "--keep_features", ":".join(keep_features),
     "--output", output_path,
     "--seed", "123"
 ]).decode("utf-8")
@@ -50,3 +53,4 @@ output2 = sc.read_h5ad(output2_path)
 
 assert input.n_obs >= output2.n_obs
 assert input.n_vars == output2.n_vars
+assert set(keep_features).issubset(output2.var_names)
