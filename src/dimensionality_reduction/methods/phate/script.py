@@ -6,11 +6,11 @@ par = {
     "input": "resources_test/dimensionality_reduction/pancreas/train.h5ad",
     "output": "reduced.h5ad",
     "n_pca_dims": 50,
-    "gamma": 1,
-    "n_hvg": None
+    "n_hvg": 1000,
+    "gamma": 1
 }
 meta = {
-    "functionality_name": "phate",
+    "functionality_name": "foo",
 }
 ## VIASH END
 

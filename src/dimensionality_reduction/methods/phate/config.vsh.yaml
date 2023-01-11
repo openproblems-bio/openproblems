@@ -18,7 +18,7 @@ functionality:
       phate_logCPM:
         preferred_normalization: log_cpm
       phate_logCPM_1kHVG:
-        num_hvg_genes: 1000
+        n_hvg: 1000
         preferred_normalization: log_cpm
   arguments:
     - name: '--n_pca_dims'

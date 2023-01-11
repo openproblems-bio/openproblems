@@ -11,11 +11,11 @@ par = {
     "input": "resources_test/dimensionality_reduction/pancreas/train.h5ad",
     "output": "reduced.h5ad",
     "n_hvg": 1000,
-    "normalize": False,
-    "n_iter": None
+    "n_iter": 10,
+    "normalize": True
 }
 meta = {
-    "functionality_name": "neuralee",
+    "functionality_name": "foo",
 }
 ## VIASH END
 

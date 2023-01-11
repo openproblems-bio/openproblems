@@ -4,14 +4,13 @@ import scanpy as sc
 
 ## VIASH START
 par = {
-    "input": "resources_test/common/pancreas/train.h5ad",
+    "input": "resources_test/dimensionality_reduction/pancreas/train.h5ad",
     "output": "reduced.h5ad",
-    "n_pca_dims": False,
+    "n_pca_dims": 50,
     "n_hvg": 1000
 }
 meta = {
-    "functionality_name": "densmap",
-    "config": "src/dimensionality_reduction/methods/densmap/config.vsh.yaml"
+    "functionality_name": "foo",
 }
 ## VIASH END
 

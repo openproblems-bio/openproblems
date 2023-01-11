@@ -5,10 +5,10 @@ import scanpy as sc
 par = {
     "input": "resources_test/dimensionality_reduction/pancreas/train.h5ad",
     "output": "reduced.h5ad",
-    "n_hvg": 1000,
+    "n_hvg": 1000
 }
 meta = {
-    "functionality_name": "pca",
+    "functionality_name": "foo",
 }
 ## VIASH END
 
