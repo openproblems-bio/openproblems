@@ -29,11 +29,6 @@ output = par['output']
 g2m_file = f'{resources_dir}/g2m_genes_tirosh_hm.txt'
 s_file = f'{resources_dir}/s_genes_tirosh_hm.txt'
 
-print(g2m_file)
-import os
-print(os.getcwd())
-print(os.listdir())
-
 print('Read adata')
 adata = sc.read_h5ad(adata_file)
 
