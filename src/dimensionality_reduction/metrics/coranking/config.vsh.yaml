@@ -1,0 +1,77 @@
+__merge__: ../../api/comp_metric.yaml
+functionality:
+  name: "coranking"
+  namespace: "dimensionality_reduction/metrics"
+  description: |
+    This is a set of metrics which all use a co-ranking matrix as the basis of the metric.
+  info:
+    v1_url: openproblems/tasks/dimensionality_reduction/metrics/nn_ranking.py 
+    v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+    v1_note: |
+      The original v1 implementations consisted of a lot of helper functions which were 
+      derived from the pyDRMetrics package. This version uses the coRanking package
+      to avoid reimplementing and potentially introducing a lot of bugs in how
+      the various metrics are computed.
+
+      In addition, the references for each of the metrics were looked up to
+      properly attribute the original authors of each of the metrics.
+    paper_reference: kraemer2018dimred
+    metrics:
+      - id: continuity_at_k30
+        name: Continuity at k=30
+        paper_reference: venna2006local
+        min: 0
+        max: 1
+        maximize: true
+      - id: trustworthiness_at_k30
+        name: Trustworthiness at k=30
+        paper_reference: venna2006local
+        min: 0
+        max: 1
+        maximize: true
+      - id: qnx_at_k30
+        name: The value for QNX at k=30
+        paper_reference: lee2009quality
+        min: 0
+        max: 1
+        maximize: true
+      - id: lcmc_at_k30
+        name: The value for LCMC at k=30
+        paper_reference: chen2009local
+        min: 0
+        max: 1
+        maximize: true
+      - id: qnx_auc
+        name: Area under the QNX curve
+        paper_reference: lueks2011evaluate
+        min: 0
+        max: 1
+        maximize: true
+      - id: qlocal
+        name: Local quality measure
+        paper_reference: lueks2011evaluate
+        min: 0
+        max: 1
+        maximize: true
+      - id: qglobal
+        name: Global quality measure
+        paper_reference: lueks2011evaluate
+        min: 0
+        max: 1
+        maximize: true
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: eddelbuettel/r2u:22.04
+    setup:
+      - type: r
+        cran: [ anndata, coRanking ]
+      - type: apt
+        packages: [ libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3 ]
+      - type: python
+        pip: [ anndata>=0.8 ]
+  - type: nextflow
+    directives: 
+      label: [ highmem, midcpu ]

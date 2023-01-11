@@ -31,7 +31,7 @@ functionality:
         assert path.exists(input_test_path)
 
         print(">> Running script as test", flush=True)
-        out = subprocess.run(cmd, check=True, capture_output=True, text=True)
+        subprocess.run(cmd, check=True)
 
         print(">> Checking whether output file exists", flush=True)
         assert path.exists(output_path)
