@@ -25,6 +25,6 @@ score = result.loc[0, 'value']
 print(score)
 
 assert 0 < score < 1
-assert score == 0.3418185548452759
+assert score == 0.8705271595688995
 
 print(">> All tests passed successfully")

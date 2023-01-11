@@ -26,7 +26,7 @@ adata = sc.read_h5ad(adata_file)
 
 if hvg:
     print('Select HVGs')
-    adata = adata[:, adata.var['highly_variable']]
+    adata = adata[:, adata.var['highly_variable']].copy()
 
 if scaling:
     print('Scale')
@@ -36,6 +36,7 @@ else:
 
 print('Integrate')
 adata.X = sc.pp.combat(adata, key='batch', inplace=False)
+adata.X = csr_matrix(adata.X)
 
 print('Postprocess data')
 adata.obsm['X_emb'] = sc.pp.pca(
