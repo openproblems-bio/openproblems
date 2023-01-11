@@ -38,7 +38,7 @@ def _pymde(
         X = adata_input.obsm["X_pca"]
         embed_kwargs["max_iter"] = max_iter or 20
         embed_kwargs["memory_size"] = memory_size or 2
-    else:
+    else:  # pragma: nocover
         X = adata_input.X
         if max_iter is not None:
             embed_kwargs["max_iter"] = max_iter
