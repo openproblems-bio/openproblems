@@ -1,0 +1,44 @@
+# see https://github.com/openproblems-bio/openproblems/blob/9ebb777b3b76337e731a3b99f4bf39462a15c4cc/openproblems/tasks/dimensionality_reduction/methods/ivis.py
+
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "ivis"
+  namespace: "dimensionality_reduction/methods"
+  description: |
+    ivis is a machine learning library for reducing dimensionality of very large datasets using Siamese Neural Networks.
+    ivis preserves global data structures in a low-dimensional space, adds new data points to existing embeddings using
+    a parametric mapping function, and scales linearly to millions of observations.
+  info:
+    type: method
+    method_name: "ivis"
+    paper_reference: szubert2019structurepreserving
+    code_url: https://github.com/beringresearch/ivis
+    v1_url: openproblems/tasks/dimensionality_reduction/methods/ivis.py
+    v1_commit: 9ebb777b3b76337e731a3b99f4bf39462a15c4cc
+    preferred_normalization: log_cpm
+    variants:
+      ivis_logCPM_1kHVG:
+  arguments:
+    - name: '--n_pca_dims'
+      type: integer
+      default: 50
+      description: Number of principal components of PCA to use.
+    - name: "--n_hvg"
+      type: integer
+      description: Number of highly variable genes to subset to. If not specified, the input matrix will not be subset.
+      default: 1000
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - "anndata>=0.8"
+          - ivis[cpu]
+  - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]
