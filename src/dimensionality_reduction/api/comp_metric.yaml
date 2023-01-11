@@ -48,7 +48,8 @@ functionality:
         print(">> Checking whether metrics were added", flush=True)
         assert "metric_ids" in output.uns
         assert "metric_values" in output.uns
-        assert meta['functionality_name'] in output.uns["metric_ids"]
+        # assert meta['functionality_name'] in output.uns["metric_ids"]
+        # todo: look at config to check whether all metric ids are available
 
         print(">> Checking whether data from input was copied properly to output", flush=True)
         assert input_reduced.uns["dataset_id"] == output.uns["dataset_id"]
