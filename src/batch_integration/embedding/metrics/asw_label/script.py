@@ -9,7 +9,7 @@ par = {
 print('Importing libraries')
 import pprint
 import scanpy as sc
-from scIB.metrics import silhouette
+from scib.metrics import silhouette
 
 if par['debug']:
     pprint.pprint(par)
@@ -22,7 +22,7 @@ output = par['output']
 
 print('Read adata')
 adata = sc.read(adata_file)
-name = adata.uns['name']
+name = adata.uns['dataset_id']
 
 print('compute score')
 score = silhouette(adata, group_key='label', embed='X_emb')

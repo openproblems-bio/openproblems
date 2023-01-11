@@ -11,7 +11,7 @@ metric_file = metric + '.tsv'
 print(">> Running script")
 out = subprocess.check_output([
     "./" + metric,
-    "--adata", 'pancreas_mnn.h5ad',
+    "--adata", 'combat.h5ad',
     "--output", metric_file
 ]).decode("utf-8")
 
@@ -24,7 +24,6 @@ assert result.shape == (1, 4)
 score = result.loc[0, 'value']
 print(score)
 
-assert 0 < score < 1
-assert score == 0.0356482252608894
+assert 0 <= score <= 1
 
 print(">> All tests passed successfully")

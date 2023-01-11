@@ -9,7 +9,7 @@ par = {
 print('Importing libraries')
 import pprint
 import scanpy as sc
-from scIB.metrics import silhouette_batch
+from scib.metrics import silhouette_batch
 
 if par['debug']:
     pprint.pprint(par)
@@ -23,17 +23,15 @@ output = par['output']
 
 print('Read adata')
 adata = sc.read(adata_file)
-name = adata.uns['name']
+name = adata.uns['dataset_id']
 
 print('compute score')
-_, sil_clus = silhouette_batch(
+score = silhouette_batch(
     adata,
     batch_key='batch',
     group_key='label',
     embed=EMBEDDING,
-    verbose=False
 )
-score = sil_clus['silhouette_score'].mean()
 
 with open(output, 'w') as file:
     header = ['dataset', 'output_type', 'metric', 'value']

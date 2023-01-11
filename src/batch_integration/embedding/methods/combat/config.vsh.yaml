@@ -1,0 +1,46 @@
+functionality:
+  name: combat
+  namespace: batch_integration/embedding/methods
+  version: dev
+  description: Run Combat
+  authors:
+    - name: Michaela Mueller
+      roles: [ maintainer, author ]
+      props: { github: mumichae }
+  arguments:
+    - name: --output
+      alternatives: [ -o ]
+      type: file
+      direction: output
+      description: Anndata HDF5 file of the integrated graph in adata.obsp['connectivities']
+      required: true
+    - name: --input
+      type: file
+      description: Unintegrated anndata HDF5 file
+      required: true
+    - name: --hvg
+      type: boolean
+      description: Whether to subset to highly variable genes
+      default: true
+      required: false
+    - name: --scaling
+      type: boolean
+      description: Whether to scale the data or not
+      default: false
+      required: false
+    - name: --debug
+      type: boolean
+      description: Verbose output for debugging
+      default: false
+      required: false
+  resources:
+    - type: python_script
+      path: script.py
+  test_resources:
+    - type: python_script
+      path: test.py
+    - path: ../../../../../resources_test/batch_integration/pancreas/processed.h5ad
+platforms:
+  - type: docker
+    image: mumichae/scib-base:1.0.2
+  - type: nextflow

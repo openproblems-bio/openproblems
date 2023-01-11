@@ -9,7 +9,7 @@ par = {
 print('Importing libraries')
 import pprint
 import scanpy as sc
-from scIB.metrics import pcr_comparison
+from scib.metrics import pcr_comparison
 
 if par['debug']:
     pprint.pprint(par)
@@ -23,7 +23,7 @@ output = par['output']
 print('Read adata')
 adata = sc.read(adata_file)
 adata_int = adata.copy()
-name = adata.uns['name']
+name = adata.uns['dataset_id']
 
 print('compute score')
 score = pcr_comparison(
