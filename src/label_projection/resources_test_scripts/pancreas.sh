@@ -42,7 +42,7 @@ bin/viash run src/label_projection/metrics/accuracy/config.vsh.yaml -- \
 # run benchmark
 export NXF_VER=22.04.5
 
-bin/nextflow \
+nextflow \
   run . \
   -main-script src/label_projection/workflows/run/main.nf \
   -profile docker \
