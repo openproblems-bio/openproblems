@@ -2,7 +2,7 @@ bioc::batchelor@1.12.3
 bioc::ComplexHeatmap@2.12.1
 bioc::dir.expiry
 bioc::scater@1.24.0
-bioc::scran@1.24.1
+bioc::scran@1.24.0
 bioc::scuttle@1.6.3
 bslib@0.4.0
 caret@6.0-93
