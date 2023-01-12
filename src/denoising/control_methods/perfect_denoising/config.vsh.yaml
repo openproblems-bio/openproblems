@@ -5,9 +5,9 @@ functionality:
   description: "Negative control by copying the train counts"
   info:
     type: positive_control
-    label: perfect denoising
+    method_name: Perfect Denoising
     v1_url: openproblems/tasks/denoising/methods/baseline.py
-    v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
+    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     variants: 
       perfect_denoising:
     preferred_normalization: counts
