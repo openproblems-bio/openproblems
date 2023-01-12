@@ -19,7 +19,7 @@ compare_version <- function(v1, v2) {
 }
 
 check_available <- function(remote) {
-  remote <- renv:::renv_remotes_resolve(remote)
+  remote <- with_retries(renv:::renv_remotes_resolve, spec = remote)
   tryCatch(
     {
       version <- packageVersion(remote$Package)
@@ -39,24 +39,24 @@ strip_comments <- function(remote) {
   gsub("\\s*#.*", "", remote)
 }
 
-install_with_retries <- function(remotes,
-                                 attempts = 3,
-                                 sleep = 3,
-                                 backoff = 2,
-                                 ...) {
+with_retries <- function(func,
+                         attempts = 3,
+                         sleep = 3,
+                         backoff = 2,
+                         ...) {
   result <- NULL
   attempt <- 1
   while (is.null(result) && attempt <= attempts - 1) {
     attempt <- attempt + 1
     try(
-      result <- renv::install(remotes, ...)
+      result <- func(...)
     )
     Sys.sleep(sleep)
     sleep <- sleep * backoff
   }
   if (is.null(result)) {
     # last attempt
-    renv::install(remotes, ...)
+    renv::install(...)
   }
 }
 
@@ -67,6 +67,6 @@ install_renv <- function(requirements_file, ...) {
   remotes_to_install <- remotes[!remotes_installed]
   message(paste0("Installing ", length(remotes_to_install), " packages"))
   if (length(remotes_to_install) > 0) {
-    install_with_retries(remotes_to_install, ...)
+    with_retries(renv::install, packages = remotes_to_install, ...)
   }
 }
