@@ -65,6 +65,7 @@ install_renv <- function(requirements_file, ...) {
   remotes <- sapply(remotes, strip_comments)
   remotes_installed <- sapply(remotes, check_available)
   remotes_to_install <- remotes[!remotes_installed]
+  message(paste0("Installing ", length(remotes_to_install), " packages"))
   if (length(remotes_to_install) > 0) {
     install_with_retries(remotes_to_install, ...)
   }
