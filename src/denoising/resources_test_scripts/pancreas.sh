@@ -40,7 +40,7 @@ bin/viash run src/denoising/metrics/poisson/config.vsh.yaml -- \
 # run benchmark
 export NXF_VER=22.04.5
 
-bin/nextflow \
+nextflow \
   run . \
   -main-script src/denoising/workflows/run/main.nf \
   -profile docker \

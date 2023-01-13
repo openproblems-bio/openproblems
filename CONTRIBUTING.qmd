@@ -151,7 +151,6 @@ You can start creating a new component by [creating a Viash component](https://v
 
 
 ```{bash, include=FALSE}
-# bin/viash_skeleton --name foo --namespace "label_projection/methods" --language python
 
 mkdir -p src/label_projection/methods/foo
 
@@ -239,13 +238,13 @@ src/label_projection/methods/foo/script.py
 You can view the interface of the executable by running the executable with the `-h` or `--help` parameter.
 
 ```{bash}
-bin/viash run src/label_projection/methods/foo/config.vsh.yaml -- --help
+viash run src/label_projection/methods/foo/config.vsh.yaml -- --help
 ```
 
 You can **run the component** as follows:
 
 ```{bash}
-bin/viash run src/label_projection/methods/foo/config.vsh.yaml -- \
+viash run src/label_projection/methods/foo/config.vsh.yaml -- \
   --input_train resources_test/label_projection/pancreas/train.h5ad \
   --input_test resources_test/label_projection/pancreas/test.h5ad \
   --output resources_test/label_projection/pancreas/prediction.h5ad
@@ -260,12 +259,12 @@ This standalone executable you can give to somebody else, and they will be able 
 run it, provided that they have Bash and Docker installed.
 
 ```{bash}
-bin/viash build src/label_projection/methods/foo/config.vsh.yaml \
+viash build src/label_projection/methods/foo/config.vsh.yaml \
   -o target/docker/label_projection/methods/foo
 ```
 
 :::{.callout-note}
-The `bin/viash_build` component does a much better job of setting up 
+The `viash ns build` component does a much better job of setting up 
 a collection of components.
 :::
 
@@ -291,7 +290,7 @@ The [method API specifications](src/label_projection/api/comp_method.yaml) comes
 This means you can unit test your component using the **`viash test`** command.
 
 ```{bash}
-bin/viash test src/label_projection/methods/foo/config.vsh.yaml
+viash test src/label_projection/methods/foo/config.vsh.yaml
 ```
 
 ```{bash include=FALSE}
@@ -335,7 +334,7 @@ src/label_projection/methods/foo/script.py
 If we now run the test, we should get an error since we didn't create all of the required output slots.
 
 ```{bash error=TRUE}
-bin/viash test src/label_projection/methods/foo/config.vsh.yaml
+viash test src/label_projection/methods/foo/config.vsh.yaml
 ```
 
 
