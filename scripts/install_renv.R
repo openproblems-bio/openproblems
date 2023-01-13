@@ -40,7 +40,7 @@ strip_comments <- function(remote) {
 }
 
 with_retries <- function(func,
-                         attempts = 3,
+                         attempts = 5,
                          sleep = 3,
                          backoff = 2,
                          ...) {
@@ -51,12 +51,13 @@ with_retries <- function(func,
     try(
       result <- func(...)
     )
+    closeAllConnections()
     Sys.sleep(sleep)
     sleep <- sleep * backoff
   }
   if (is.null(result)) {
     # last attempt
-    renv::install(...)
+    func(...)
   }
 }
 
