@@ -8,9 +8,9 @@ functionality:
     v1_url: openproblems/tasks/dimensionality_reduction/metrics/density.py 
     v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     metrics:
-      - id: density_preservation
-        label: Density preservation
-        description: |
+      - metric_id: density_preservation
+        metric_name: Density preservation
+        metric_description: |
           Similarity between local densities in the high-dimensional data and the reduced data.
 
           This is computed as the pearson correlation of local radii with the local radii in the original data space.

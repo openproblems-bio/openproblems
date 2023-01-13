@@ -1,54 +1,58 @@
 import anndata as ad
-from umap import UMAP, spectral
-import scipy.spatial.distance as dist
-from scipy.optimize import nnls
 import numpy as np
-from sklearn import decomposition, metrics
+import sklearn.decomposition
+import scipy.optimize
+import scipy.spatial
+from sklearn.metrics import pairwise_distances
+import umap
+import umap.spectral
 
 ## VIASH START
 par = {
-    'input_reduced': 'reduced.h5ad',
-    'input_test': 'test.h5ad',
-    'output': 'score.h5ad',
-}
-meta = {
-    'functionality_name': 'rmse',
+    "input_reduced": "resources_test/dimensionality_reduction/pancreas/reduced.h5ad",
+    "input_test": "resources_test/dimensionality_reduction/pancreas/test.h5ad",
+    "output": "score.h5ad",
 }
 ## VIASH END
 
-print("Load data", flush=True)
-input_reduced = ad.read_h5ad(par['input_reduced'])
-input_test = ad.read_h5ad(par['input_test'])
-
-print('Reduce dimensionality of raw data', flush=True)
-n_comps = 200
-if not par['spectral']:
-    input_reduced.obsm['high_dim'] = decomposition.TruncatedSVD(n_components = n_comps).fit_transform(input_test.layers['counts'])
-    print('Compute RMSE between the full (or processed) data matrix and a dimensionally-reduced matrix, invariant to scalar multiplication', flush=True)
-else:
-    n_comps = min(n_comps, min(input_test.shape) - 2)
-    graph = UMAP(transform_mode="graph").fit_transform(input_test.layers['counts'])
-    input_reduced.obsm['high_dim'] = spectral.spectral_layout(
-        input_test.layers['counts'], graph, n_comps, random_state=np.random.default_rng()
+def _rmse(X, X_emb):
+    high_dimensional_distance_vector = scipy.spatial.distance.pdist(X)
+    low_dimensional_distance_vector = scipy.spatial.distance.pdist(X_emb)
+    _, rmse = scipy.optimize.nnls(
+        low_dimensional_distance_vector[:, None], high_dimensional_distance_vector
     )
-    meta['functionality_name'] += ' spectral'
-    print('Computes (RMSE) between high-dimensional Laplacian eigenmaps on the full (or processed) data matrix and the dimensionally-reduced matrix, invariant to scalar multiplication', flush=True)
+    return rmse
 
-high_dim_dist = dist.pdist(input_reduced.obsm['high_dim'])
-low_dim_dist = dist.pdist(input_reduced.obsm["X_emb"])
+print("Load data", flush=True)
+input_test = ad.read_h5ad(par["input_test"])
+input_reduced = ad.read_h5ad(par["input_reduced"])
 
-scale, rmse = nnls(
-        low_dim_dist[:, None], high_dim_dist
-        )
+high_dim = input_test.layers["normalized"]
+X_emb = input_reduced.obsm["X_emb"]
 
-print("Store metric value", flush=True)
-input_reduced.uns['metric_ids'] =  meta['functionality_name']
-input_reduced.uns['metric_values'] = rmse
+print("Compute NNLS residual after SVD", flush=True)
+n_svd = 200
+svd_emb = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(high_dim)
+rmse = _rmse(svd_emb, X_emb)
 
-print("Copy data to new AnnData object", flush=True)
+print("Compute NLSS residual after spectral embedding", flush=True)
+n_comps = min(200, min(input_test.shape) - 2)
+umap_graph = umap.UMAP(transform_mode="graph").fit_transform(high_dim)
+spectral_emb = umap.spectral.spectral_layout(
+    high_dim, umap_graph, n_comps, random_state=np.random.default_rng()
+)
+rmse_spectral = _rmse(spectral_emb, X_emb)
+
+print("Create output AnnData object", flush=True)
 output = ad.AnnData(
-    uns={key: input_reduced.uns[key] for key in ["dataset_id", "normalization_id", "method_id", 'metric_ids', 'metric_values']}
+    uns={
+        "dataset_id": input_test.uns["dataset_id"],
+        "normalization_id": input_test.uns["normalization_id"],
+        "method_id": input_reduced.uns["method_id"],
+        "metric_ids": [ "rmse", "rmse_spectral" ],
+        "metric_values": [ rmse, rmse_spectral ]
+    }
 )
 
 print("Write data to file", flush=True)
-output.write_h5ad(par['output'], compression="gzip")
+output.write_h5ad(par["output"], compression="gzip")

@@ -17,44 +17,44 @@ functionality:
       properly attribute the original authors of each of the metrics.
     paper_reference: kraemer2018dimred
     metrics:
-      - id: continuity_at_k30
-        name: Continuity at k=30
+      - metric_id: continuity_at_k30
+        metric_name: Continuity at k=30
         paper_reference: venna2006local
         min: 0
         max: 1
         maximize: true
-      - id: trustworthiness_at_k30
-        name: Trustworthiness at k=30
+      - metric_id: trustworthiness_at_k30
+        metric_name: Trustworthiness at k=30
         paper_reference: venna2006local
         min: 0
         max: 1
         maximize: true
-      - id: qnx_at_k30
-        name: The value for QNX at k=30
+      - metric_id: qnx_at_k30
+        metric_name: The value for QNX at k=30
         paper_reference: lee2009quality
         min: 0
         max: 1
         maximize: true
-      - id: lcmc_at_k30
-        name: The value for LCMC at k=30
+      - metric_id: lcmc_at_k30
+        metric_name: The value for LCMC at k=30
         paper_reference: chen2009local
         min: 0
         max: 1
         maximize: true
-      - id: qnx_auc
-        name: Area under the QNX curve
+      - metric_id: qnx_auc
+        metric_name: Area under the QNX curve
         paper_reference: lueks2011evaluate
         min: 0
         max: 1
         maximize: true
-      - id: qlocal
-        name: Local quality measure
+      - metric_id: qlocal
+        metric_name: Local quality measure
         paper_reference: lueks2011evaluate
         min: 0
         max: 1
         maximize: true
-      - id: qglobal
-        name: Global quality measure
+      - metric_id: qglobal
+        metric_name: Global quality measure
         paper_reference: lueks2011evaluate
         min: 0
         max: 1

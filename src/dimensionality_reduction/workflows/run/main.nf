@@ -16,10 +16,10 @@ include { pca } from "$targetDir/dimensionality_reduction/methods/pca/main.nf"
 include { neuralee } from "$targetDir/dimensionality_reduction/methods/neuralee/main.nf"
 
 // import metrics
+include { density_preservation } from "$targetDir/dimensionality_reduction/metrics/density_preservation/main.nf"
+include { coranking } from "$targetDir/dimensionality_reduction/metrics/coranking/main.nf"
 include { rmse } from "$targetDir/dimensionality_reduction/metrics/rmse/main.nf"
 include { trustworthiness } from "$targetDir/dimensionality_reduction/metrics/trustworthiness/main.nf"
-include { density } from "$targetDir/dimensionality_reduction/metrics/density/main.nf"
-include { nn_ranking } from "$targetDir/dimensionality_reduction/metrics/nn_ranking/main.nf"
 
 // tsv generation component
 include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
@@ -151,7 +151,7 @@ workflow run_metrics {
   main:
 
   output_ch = input_ch
-    | (rmse & trustworthiness & density)
+    | (density_preservation & coranking & rmse & trustworthiness)
     | mix
 
   emit: output_ch
