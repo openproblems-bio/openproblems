@@ -1,3 +1,4 @@
+bioc::basilisk@1.10.2
 bioc::batchelor@1.14.1
 bioc::ComplexHeatmap@2.14.0
 bioc::dir.expiry
