@@ -7,9 +7,11 @@ include { openproblems_v1 } from "$targetDir/datasets/loaders/openproblems_v1/ma
 include { log_cpm } from "$targetDir/datasets/normalization/log_cpm/main.nf"
 include { log_scran_pooling } from "$targetDir/datasets/normalization/log_scran_pooling/main.nf"
 include { sqrt_cpm } from "$targetDir/datasets/normalization/sqrt_cpm/main.nf"
+include { pca } from "$targetDir/datasets/processors/pca/main.nf"
+include { hvg } from "$targetDir/datasets/processors/hvg/main.nf"
 
-include { readConfig; viashChannel; helpMessage } from sourceDir + "/nxf_utils/WorkflowHelper.nf"
-include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from sourceDir + "/nxf_utils/DataFlowHelper.nf"
+include { readConfig; viashChannel; helpMessage } from sourceDir + "/wf_utils/WorkflowHelper.nf"
+include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from sourceDir + "/wf_utils/DataflowHelper.nf"
 
 config = readConfig("$projectDir/config.vsh.yaml")
 
@@ -29,23 +31,29 @@ workflow run_wf {
 
     // split params for downstream components
     | setWorkflowArguments(
-      openproblems_v1: ["id", "obs_celltype", "obs_batch", "obs_tissue", "layer_counts", "sparse"],
-      sqrt_cpm: [ "output" ]
+      loader: ["id", "obs_celltype", "obs_batch", "obs_tissue", "layer_counts", "sparse"],
+      output: [ "output" ]
     )
 
     // fetch data from legacy openproblems
-    | getWorkflowArguments(key: "openproblems_v1")
+    | getWorkflowArguments(key: "loader")
     | openproblems_v1
 
-    // run cpm normalisation
-    | log_cpm
+    // run normalization methods
+    | (log_cpm & log_scran_pooling & sqrt_cpm)
+    | mix
 
-    // run scran normalisation
-    | log_scran_pooling
+    // make id unique again
+    | pmap{ id, file ->
+      // derive unique ids from output filenames
+      def newId = file.getName().replaceAll(".output.*", "")
+      [ newId, file ]
+    }
 
-    // run sqrt normalisation and publish
-    | getWorkflowArguments(key: "sqrt_cpm")
-    | sqrt_cpm.run(
+    | pca
+
+    | getWorkflowArguments(key: "output")
+    | hvg.run(
       auto: [ publish: true ]
     )
 

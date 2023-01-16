@@ -1,0 +1,26 @@
+__merge__: ../../api/comp_control_method.yaml
+functionality:
+  name: "no_denoising"
+  namespace: "denoising/control_methods"
+  description: "negative control by copying train counts"
+  info:
+    type: negative_control
+    label: no denoising
+    v1_url: openproblems/tasks/denoising/methods/baseline.py
+    v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
+    variants:
+      no_denoising:
+    preferred_normalization: counts
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - "anndata>=0.8"
+  - type: nextflow
+    directives: 
+      label: [ midmem, midcpu ]

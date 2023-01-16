@@ -1,17 +1,12 @@
 functionality:
   arguments:
     - name: "--input_train"
-      __inherits__: anndata_train.yaml
+      __merge__: anndata_train.yaml
     - name: "--input_test"
-      __inherits__: anndata_test.yaml
+      __merge__: anndata_test.yaml
     - name: "--output"
-      __inherits__: anndata_prediction.yaml
+      __merge__: anndata_prediction.yaml
       direction: output
-    # TODO: currently needs to be manually specified since the default value needs to be overrideable
-    # - name: "--layer_input"
-    #   type: string
-    #   default: "log_cpm"
-    #   description: Which layer to use as input.
   test_resources:
     - path: ../../../../resources_test/label_projection/pancreas
     - type: python_script

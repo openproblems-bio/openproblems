@@ -7,7 +7,6 @@ on:
 
 jobs:
   run_ci_check_job:
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
     runs-on: ubuntu-latest
     outputs:
       run_ci: ${{ steps.github_cli.outputs.check }}
@@ -15,7 +14,7 @@ jobs:
       - name: 'Check if branch has an existing pull request and the trigger was a push'
         id: github_cli
         run: |
-          pull_request=$(gh pr list -R openpipelines-bio/openpipeline -H ${{ github.ref_name }} --json url --state open --limit 1 | jq '.[0].url')
+          pull_request=$(gh pr list -R ${{ github.repository }} -H ${{ github.ref_name }} --json url --state open --limit 1 | jq '.[0].url')
           # If the branch has a PR and this run was triggered by a push event, do not run
           if [[ "$pull_request" != "null" && "${{ github.event_name == 'push' }}" == "true" && "${{ !contains(github.event.head_commit.message, 'ci force') }}" == "true" ]]; then
             echo "check=false" >> $GITHUB_OUTPUT
@@ -30,9 +29,9 @@ jobs:
   list_components:
     needs: run_ci_check_job
     env:
-      s3_bucket: s3://openproblems-data/
+      s3_bucket: s3://openproblems-data/resources_test/
     runs-on: ubuntu-latest
-    if: "(!contains(github.event.head_commit.message, 'ci skip')) && needs.run_ci_check_job.outputs.run_ci == 'true'"
+    if: "needs.run_ci_check_job.outputs.run_ci == 'true'"
     outputs:
       matrix: ${{ steps.set_matrix.outputs.matrix }}
       cachehash: ${{ steps.cachehash.outputs.cachehash }}
@@ -43,7 +42,7 @@ jobs:
 
     - name: Fetch viash
       run: |
-        bin/init
+        bin/init -n
         tree .
         bin/viash -h
 
@@ -74,7 +73,7 @@ jobs:
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v34.0.5
+      uses: tj-actions/changed-files@v35.4.0
       with:
         separator: ";"
         diff_relative: true
@@ -85,7 +84,7 @@ jobs:
       run: |
         IFS=$';' read -a changed_files <<< "${{ steps.changed-files.outputs.all_changed_files }}"
         echo "Changed files: "${changed_files[*]}""
-        readarray -t components < <(bin/viash ns list -p docker --format json | jq -c '[ .[] | 
+        readarray -t components < <(bin/viash ns list -p docker --format json | jq -c '[ .[] |
                                                                                           (.info.config | capture("^(?<dir>.*\/)").dir) as $dir | 
                                                                                           { "name": .functionality.name, 
                                                                                             "config": .info.config, 

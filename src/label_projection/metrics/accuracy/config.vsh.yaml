@@ -1,4 +1,4 @@
-__inherits__: ../../api/comp_metric.yaml
+__merge__: ../../api/comp_metric.yaml
 functionality:
   name: "accuracy"
   namespace: "label_projection/metrics"
@@ -12,7 +12,7 @@ functionality:
         description: The percentage of correctly predicted labels.
         min: 0
         max: 1
-        maximise: true
+        maximize: true
   resources:
     - type: python_script
       path: script.py

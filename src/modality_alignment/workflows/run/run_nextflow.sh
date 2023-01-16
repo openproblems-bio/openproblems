@@ -12,7 +12,7 @@ cd "$REPO_ROOT"
 # choose a particular version of nextflow
 export NXF_VER=21.10.6
 
-bin/nextflow \
+nextflow \
   run . \
   -main-script src/modality_alignment/workflows/run/main.nf \
   --publish_dir output/modality_alignment \

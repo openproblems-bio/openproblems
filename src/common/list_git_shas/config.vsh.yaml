@@ -1,0 +1,40 @@
+functionality:
+  name: list_git_shas
+  namespace: common
+  description: "Extract git file info from a git repo"
+  arguments:
+    - name: --input
+      type: file
+      description: Path to a git repository
+      required: true
+      example: /path/to/repo
+    - name: --output
+      type: file
+      direction: output
+      description: |
+        A json containing a list of entries. Each entry must have the
+        following values: 
+  
+        * "path" `string`: Path a file in the repository
+        * "last_modified" `string`: Date of when the file was last modified, in `yyyy-mm-dd HH:mm:ss` format.
+        * "sha" `string`: Sha of the commit in which the file was last modified
+        * "history_sha" `string` (optional): A list of SHAs during which the file was modified
+      required: true
+      example: output.json
+    - name: --show_history
+      type: boolean_true
+      description: Whether or not to include the full history of SHAs for each file.
+  resources: 
+    - type: python_script
+      path: script.py
+  test_resources:
+    - type: python_script
+      path: test.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    test_setup:
+      - type: docker
+        run: "git clone https://github.com/openproblems-bio/openproblems-v2.git"
+  - type: nextflow
+  - type: native

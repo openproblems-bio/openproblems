@@ -1,0 +1,39 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "scanvi"
+  namespace: "label_projection/methods"
+  description: |
+    Probabilistic harmonization and annotation of single-cell 
+    transcriptomics data with deep generative models.
+  info:
+    type: method
+    label: SCANVI
+    paper_doi: "10.1101/2020.07.16.205997"
+    code_url: "https://github.com/YosefLab/scvi-tools"
+    doc_url: https://scarches.readthedocs.io/en/latest/scanvi_surgery_pipeline.html
+    v1_url: openproblems/tasks/label_projection/methods/scvi_tools.py
+    v1_commit: 4bb8a7e04545a06c336d3d9364a1dd84fa2af1a4
+    v1_comp_id: scarches_scanvi_hvg
+    preferred_normalization: log_cpm
+    variants:
+      scanvi_all_genes:
+      scanvi_hvg:
+        num_hvg: 2000
+  arguments:
+    - name: "--num_hvg"
+      type: integer
+      description: "The number of HVG genes to subset to."
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: nvcr.io/nvidia/pytorch:22.09-py3
+    setup:
+      - type: python
+        packages: 
+          - "anndata>=0.8"
+          - scarches
+  - type: nextflow
+    directives: 
+      label: [ midmem, highcpu, gpu ]

@@ -1,0 +1,31 @@
+__merge__: ../../api/comp_metric.yaml
+functionality:
+  name: "mse"
+  namespace: "denoising/metrics"
+  description: "Mean Squared Error."
+  info:
+    v1_url: openproblems/tasks/denoising/metrics/mse.py
+    v1_commit: f24fb718b1115ca85130a45f2e56fddb00075d22
+    metrics:
+      - metric_id: mse
+        metric_name: Mean-squared error
+        metric_description: The mean squared error between the denoised counts of the training dataset and the true counts of the test dataset after reweighing by the train/test ratio
+        maximize: false
+        min: 0
+        max: +inf
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scikit-learn
+          - "anndata>=0.8"
+          - scanpy
+          - scprep
+  - type: nextflow
+    directives: 
+      label: [ midmem, midcpu ]

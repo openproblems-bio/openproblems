@@ -1,0 +1,32 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "xgboost"
+  namespace: "label_projection/methods"
+  description: "XGBoost: A Scalable Tree Boosting System"
+  info:
+    type: method
+    label: XGBoost
+    paper_doi: 10.1145/2939672.2939785
+    code_url: "https://github.com/dmlc/xgboost"
+    doc_url: "https://xgboost.readthedocs.io/en/stable/index.html"
+    v1_url: openproblems/tasks/label_projection/methods/xgboost.py
+    v1_commit: 123bb7b39c51c58e19ddf0fbbc1963c3dffde14c
+    preferred_normalization: log_cpm
+    variants:
+      xgboost_log_cpm:
+      xgboost_scran:
+        preferred_normalization: log_scran_pooling
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - "anndata>=0.8"
+          - xgboost
+  - type: nextflow
+    directives: 
+      label: [ midmem, midcpu ]

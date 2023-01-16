@@ -1,0 +1,34 @@
+type: file
+description: "An unprocessed dataset as output by a dataset loader."
+example: "raw_dataset.h5ad"
+info:
+  label: "Raw dataset"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+    obs:
+      - type: string
+        name: celltype
+        description: Cell type information
+        required: false
+      - type: string
+        name: batch
+        description: Batch information
+        required: false
+      - type: string
+        name: tissue
+        description: Tissue information
+        required: false
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      # todo: ?
+      # - dataset_label
+      # - dataset_description
+      # - dataset_doi
+      # - dataset_url (if doi not available)

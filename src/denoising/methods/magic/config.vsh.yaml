@@ -1,0 +1,55 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "magic"
+  namespace: "denoising/methods"
+  description: "MAGIC: Markov affinity-based graph imputation of cells"
+  info:
+    type: method
+    label: magic
+    # paper_name: "Recovering Gene Interactions from Single-Cell Data using Data Diffusion"
+    # paper_url: "https://doi.org/10.1016/j.cell.2018.05.061"
+    # paper_year: 2018
+    paper_doi: "10.1016/j.cell.2018.05.061"
+    code_url: "https://github.com/KrishnaswamyLab/MAGIC"
+    v1_url: openproblems/tasks/denoising/methods/magic.py
+    v1_commit: 2fbc2d4c8d3ff955ea948fc082635cf779b1927e
+    variants: 
+      magic:
+      magic_approx:
+        solver: approximate
+      knn_naive:
+        norm: log
+        decay: none
+        t: 1
+    preferred_normalization: counts
+  arguments:
+    - name: "--solver"
+      type: "string"
+      choices: ["exact", "approximate"]
+      default: "exact"
+      description: Which solver to use.
+    - name: "--norm"
+      type: string
+      choices: ["sqrt", "log"]
+      default: "sqrt"
+      description: Normalization method
+    - name: "--decay"
+      type: integer
+      default: 1
+      description: sets decay rate of kernel tails
+    - name: "--t"
+      type: integer
+      default: 3
+      description: power to which the diffusion operator is powered
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        pip: [ "anndata>=0.8", scprep, magic-impute, scipy, scikit-learn<1.2]
+  - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

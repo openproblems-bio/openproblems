@@ -1,0 +1,14 @@
+functionality:
+  authors:
+    - name: "Wesley Lewis"
+      roles: [ author, maintainer ]
+      props: { github: wes-lewis }
+    - name: "Scott Gigante"
+      roles: [ author, maintainer ]
+      props: { github: scottgigante }
+    - name: Robrecht Cannoodt
+      roles: [ author ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+    - name: Kai Waldrant
+      roles: [ author ]
+      props: { github: KaiWaldrant }

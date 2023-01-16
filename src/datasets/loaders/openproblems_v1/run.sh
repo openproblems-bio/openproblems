@@ -8,7 +8,7 @@ cd "$REPO_ROOT"
 
 export NXF_VER=22.04.5
 
-bin/nextflow \
+nextflow \
   run . \
   -main-script target/nextflow/datasets/loaders/openproblems_v1/main.nf \
   -resume \

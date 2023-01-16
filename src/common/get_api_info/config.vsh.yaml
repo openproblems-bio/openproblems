@@ -1,0 +1,19 @@
+__merge__: ../api/get_info.yaml
+functionality:
+  name: "get_api_info"
+  namespace: "common"
+  description: "Extract api info"
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: eddelbuettel/r2u:22.04
+    setup:
+      - type: r
+        cran: [ tidyverse ]
+    test_setup:
+      - type: apt
+        packages: [ python3, python3-pip, python3-dev, python-is-python3 ]
+  - type: nextflow
+  - type: native

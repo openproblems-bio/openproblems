@@ -1,11 +1,11 @@
 functionality:
   arguments:
     - name: "--input_solution"
-      __inherits__: anndata_solution.yaml
+      __merge__: anndata_solution.yaml
     - name: "--input_prediction"
-      __inherits__: anndata_prediction.yaml
+      __merge__: anndata_prediction.yaml
     - name: "--output"
-      __inherits__: anndata_score.yaml
+      __merge__: anndata_score.yaml
       direction: output
   test_resources:
     - path: ../../../../resources_test/label_projection/pancreas

@@ -1,0 +1,221 @@
+name: release build
+
+on: 
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: Version tag
+        required: true
+
+jobs:
+  # phase 1
+  list_components:
+    env:
+      s3_bucket: s3://openproblems-data/resources_test/
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Fetch viash
+      run: |
+        bin/init
+        bin/viash -h
+
+    - name: Fetch viash tools
+      run: |
+
+        bin/init_tools ${{ secrets.GTHB_USER }} ${{ secrets.GTHB_PAT }}
+        tree bin/tools
+
+    # create cachehash key
+    - name: Create hash key
+      id: cachehash
+      run: |
+        AWS_EC2_METADATA_DISABLED=true aws s3 ls $s3_bucket --recursive --no-sign-request > bucket-contents.txt
+        echo "cachehash=resources_test__$( md5sum bucket-contents.txt | awk '{ print $1 }' )" >> $GITHUB_OUTPUT
+    
+    # initialize cache
+    - name: Cache resources data
+      uses: actions/cache@v3
+      with:
+        path: resources_test
+        key: ${{ steps.cachehash.outputs.cachehash }}
+        restore-keys: resources_test_
+
+    # sync if need be
+    - name: Sync test resources
+      run: |
+        bin/viash run \
+          -p native \
+          src/common/sync_test_resources/config.vsh.yaml -- \
+          --input $s3_bucket \
+          --delete
+        tree resources_test/ -L 3
+
+    - name: Build target dir
+      run: |
+        # allow publishing the target folder
+        sed -i '/^target.*/d' .gitignore
+
+        # build target dir
+        bin/viash ns build --config_mod ".functionality.version := '${{ github.event.inputs.version_tag }}'" --parallel  --setup donothing
+
+    - name: Build nextflow schemas & params
+      run: |
+        bin/viash ns list -s src -p nextflow --format json 2> /dev/null > /tmp/ns_list_src.json
+        inputs=$(jq -r '[.[] | .info.config] | join(";")' /tmp/ns_list_src.json)
+        outputs_params=$(jq -r '[.[] | "target/nextflow/" + .functionality.namespace + "/" + .functionality.name + "/nextflow_params.yaml"] | join(";")' /tmp/ns_list_src.json)
+        outputs_schema=$(jq -r '[.[] | "target/nextflow/" + .functionality.namespace + "/" + .functionality.name + "/nextflow_schema.json"] | join(";")' /tmp/ns_list_src.json)
+        bin/tools/docker/nextflow/generate_params/generate_params --input "$inputs" --output "$outputs_params"
+        bin/tools/docker/nextflow/generate_schema/generate_schema --input "$inputs" --output "$outputs_schema"
+
+        bin/viash ns list -s workflows --format json 2> /dev/null > /tmp/ns_list_workflow.json
+        inputs=$(jq -r '[.[] | .info.config] | join(";")' /tmp/ns_list_workflow.json)
+        outputs_params=$(jq -r '[.[] | .info.config | capture("^(?<dir>.*\/)").dir + "/nextflow_params.yaml"] | join(";")' /tmp/ns_list_workflow.json)
+        outputs_schema=$(jq -r '[.[] | .info.config | capture("^(?<dir>.*\/)").dir + "/nextflow_schema.json"] | join(";")' /tmp/ns_list_workflow.json)
+        bin/tools/docker/nextflow/generate_params/generate_params --input "$inputs" --output "$outputs_params"
+        bin/tools/docker/nextflow/generate_schema/generate_schema --input "$inputs" --output "$outputs_schema"
+
+    - name: Deploy to target branch
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .
+        publish_branch: release
+        full_commit_message: "Deploy for release ${{ github.event.inputs.version_tag }} from ${{ github.sha }}"
+
+    # store component locations
+    - id: set_matrix
+      run: |
+        component_json=$(bin/viash ns list -p docker --format json | jq -c '[ .[] | { "name": .functionality.name, "config": .info.config } ]')
+        echo "component_matrix=$component_json" >> $GITHUB_OUTPUT
+        workflow_json=$(bin/viash ns list -s workflows --format json | jq -c '[ .[] | { "name": .functionality.name, "config": .info.config, "test_script": .functionality.test_resources[].path, "entry": .functionality.test_resources[].entrypoint } ]')
+        echo "workflow_matrix=$workflow_json" >> $GITHUB_OUTPUT
+    outputs:
+      component_matrix: ${{ steps.set_matrix.outputs.component_matrix }}
+      workflow_matrix: ${{ steps.set_matrix.outputs.workflow_matrix }}
+      cachehash: ${{ steps.cachehash.outputs.cachehash }}
+
+  # phase 2
+  build_containers:
+    needs: list_components
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        component: ${{ fromJson(needs.list_components.outputs.component_matrix) }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Fetch viash
+      run: |
+        bin/init
+        bin/viash -h
+
+    - name: Build container
+      run: |
+        SRC_DIR=`dirname ${{ matrix.component.config }}`
+        bin/viash ns build --config_mod ".functionality.version := '${{ github.event.inputs.version_tag }}'" -s "$SRC_DIR" --setup build
+        
+    - name: Login to container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ secrets.GTHB_USER }}
+        password: ${{ secrets.GTHB_PAT }}
+
+    - name: Push containers
+      run: |
+        SRC_DIR=`dirname ${{ matrix.component.config }}`
+        bin/viash ns build --config_mod ".functionality.version := '${{ github.event.inputs.version_tag }}'" -s "$SRC_DIR" --push --setup donothing
+
+  ###################################3
+  # phase 3
+  integration_test:
+    needs: [ build_containers, list_components ]
+    if: "${{ needs.list_components.outputs.workflow_matrix != '[]' }}"
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        component: ${{ fromJson(needs.list_components.outputs.workflow_matrix) }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Fetch viash
+      run: |
+        bin/init
+        bin/viash -h
+
+    # build target dir
+    # use containers from release branch, hopefully these are available
+    - name: Build target dir
+      run: |
+        # build target dir
+        bin/viash ns build --config_mod ".functionality.version := '${{ github.event.inputs.version_tag }}'" --parallel --setup donothing
+
+    # use cache
+    - name: Cache resources data
+      uses: actions/cache@v3
+      timeout-minutes: 5
+      with:
+        path: resources_test
+        key: ${{ needs.list_components.outputs.cachehash }}
+
+    - name: Run integration test
+      timeout-minutes: 45
+      run: |
+        # todo: replace with viash test command
+        config_dir=`dirname ${{ matrix.component.config }}`
+        script="$config_dir/${{ matrix.component.test_script }}"
+        export NXF_VER=22.04.5
+        bin/nextflow run . \
+          -main-script "$script" \
+          -entry ${{ matrix.component.entry }} \
+          -profile docker,mount_temp,no_publish \
+          -c src/wf_utils/labels_ci.config
+
+  ###################################3
+  # phase 4
+  component_test:
+    needs: [ build_containers, list_components ]
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        component: ${{ fromJson(needs.list_components.outputs.component_matrix) }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Fetch viash
+      run: |
+        bin/init
+        bin/viash -h
+
+    # use cache
+    - name: Cache resources data
+      uses: actions/cache@v3
+      timeout-minutes: 5
+      with:
+        path: resources_test
+        key: ${{ needs.list_components.outputs.cachehash }}
+
+    - name: Test component
+      timeout-minutes: 30
+      run: |
+        SRC_DIR=`dirname ${{ matrix.component.config }}`
+        bin/viash ns test --config_mod ".functionality.version := '${{ github.event.inputs.version_tag }}'" \
+          -s "$SRC_DIR" \
+          -c '.functionality.requirements.cpus := 2' \
+          -c '.functionality.requirements.memory := "5gb"' \
+          --setup build

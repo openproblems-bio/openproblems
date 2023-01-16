@@ -29,7 +29,7 @@ functionality:
     - name: Outputs
       arguments:
         - name: "--output"
-          __inherits__: ../../api/anndata_raw_dataset.yaml
+          __merge__: ../../api/anndata_raw.yaml
           direction: "output"
   resources:
     - type: python_script

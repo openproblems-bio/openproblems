@@ -1,0 +1,33 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "neuralee"
+  namespace: "dimensionality_reduction/methods"
+  description: "A neural network implementation of elastic embedding implemented in the [NeuralEE package](https://neuralee.readthedocs.io/en/latest/)."
+  info:
+    type: method
+    label: NeuralEE
+    v1_url: openproblems/tasks/dimensionality_reduction/methods/neuralee.py
+    v1_commit: 4bb8a7e04545a06c336d3d9364a1dd84fa2af1a4
+    preferred_normalization: counts
+  arguments:
+    - name: "--maxit"
+      type: integer
+      default: 100
+      description: "max number of iterations for NeuralEE."
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - "anndata>=0.8"
+          - pyyaml
+          - torch
+          - "git+https://github.com/michalk8/neuralee@8946abf"
+  - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

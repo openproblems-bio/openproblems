@@ -2,5 +2,4 @@ functionality:
   arguments:
     - name: "--output"
       direction: output
-      __inherits__: anndata_raw_dataset.yaml
-
+      __merge__: anndata_raw.yaml

@@ -1,0 +1,52 @@
+functionality:
+  arguments:
+    - name: "--input"
+      type: "file"
+      multiple: false
+      example: ../openproblems-v2
+      description: "the root repo"
+    - name: "--task_id"
+      type: "string"
+      description: "A task dir"
+      example: label_projection
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      default: "output.json"
+      description: "Output json"
+  test_resources: 
+    - path: ../../../src
+      dest: openproblems-v2/src
+    - path: ../../../_viash.yaml
+      dest: openproblems-v2/_viash.yaml
+    - type: python_script
+      path: generic_test.py
+      text: |
+        import subprocess
+        from os import path
+        import json
+
+        input_path = meta["resources_dir"] + "/openproblems-v2"
+        task_id = "denoising"
+        output_path = "output.json"
+
+        cmd = [
+            meta['executable'],
+            "--input", input_path,
+            "--task_id", task_id,
+            "--output", output_path,
+        ]
+
+        print(">> Running script as test", flush=True)
+        out = subprocess.run(cmd, capture_output=True, text=True)
+        print(out.stderr)
+
+        print(">> Checking whether output file exists", flush=True)
+        assert path.exists(output_path)
+
+        print(">> Reading json file", flush=True)
+        with open(output_path, 'r') as f:
+            out = json.load(f)
+            print(out)
+
+        print("All checks succeeded!", flush=True)

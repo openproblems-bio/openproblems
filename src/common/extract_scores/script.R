@@ -1,18 +1,18 @@
-## VIASH START
-par <- list(
-  input = list.files("work", full.names = TRUE, pattern = "*.h5ad"),
-  output = "out_bash/modality_alignment/scores.tsv"
-)
-inp <- par$input[[2]]
-## VIASH END
-
 cat("Loading dependencies\n")
 library(anndata, warn.conflicts = FALSE)
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
 library(assertthat)
 
-cat("Reading input h5ad files")
+## VIASH START
+par <- list(
+  input = "resources_test/label_projection/pancreas/knn_accuracy.h5ad",
+  output = "scores.tsv"
+)
+inp <- par$input[[1]]
+## VIASH END
+
+cat("Reading input h5ad files\n")
 scores <- map_df(par$input, function(inp) {
   cat("Reading '", inp, "'\n", sep = "")
   ad <- read_h5ad(inp)
@@ -24,7 +24,7 @@ scores <- map_df(par$input, function(inp) {
     )
   }
 
-  as_tibble(ad$uns[par$column_names])
+  data.frame(ad$uns[par$column_names])
 })
 
 write_tsv(scores, par$output)

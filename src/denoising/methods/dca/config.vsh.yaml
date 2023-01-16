@@ -1,0 +1,41 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "dca"
+  namespace: "denoising/methods"
+  description: |
+    Deep Count Autoencoder
+
+    Removes the dropout effect by taking the count structure, overdispersed nature and sparsity of the data into account 
+    using a deep autoencoder with zero-inflated negative binomial (ZINB) loss function.
+  info:
+    type: method
+    method_name: DCA
+    # paper_name: "Single-cell RNA-seq denoising using a deep count autoencoder"
+    # paper_url: "https://www.nature.com/articles/s41467-018-07931-2"
+    # paper_year: 2019
+    paper_doi: "10.1038/s41467-018-07931-2"
+    code_url: "https://github.com/theislab/dca"
+    v1_url: openproblems/tasks/denoising/methods/dca.py
+    v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    variants: 
+      dca:
+    preferred_normalization: counts
+  arguments:
+    - name: "--epochs"
+      type: "integer"
+      default: 300
+      description: "Number of total epochs in training"
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - anndata>=0.8
+          - "git+https://github.com/scottgigante-immunai/dca.git@patch-1"
+  - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

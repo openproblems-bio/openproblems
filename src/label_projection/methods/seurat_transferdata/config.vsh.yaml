@@ -1,0 +1,34 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "seurat_transferdata"
+  namespace: "label_projection/methods"
+  description: |
+    The Seurat v3 anchoring procedure is designed to integrate
+    diverse single-cell datasets across technologies and modalities. 
+  info:
+    type: method
+    label: Seurat TransferData
+    paper_doi: "10.1101/460147"
+    code_url: "https://github.com/satijalab/seurat"
+    doc_url: "https://satijalab.org/seurat/articles/integration_mapping.html"
+    v1_url: openproblems/tasks/label_projection/methods/seurat.py
+    v1_commit: 3f19f0e87a8bc8b59c7521ba01917580aff81bc8
+    preferred_normalization: log_cpm
+    variants:
+      seurat:
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: eddelbuettel/r2u:22.04
+    setup:
+      - type: r
+        cran: [ Matrix, Seurat, rlang, anndata, bit64 ]
+      - type: apt
+        packages: [ libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3 ]
+      - type: python
+        pip: [ anndata>=0.8 ]
+  - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

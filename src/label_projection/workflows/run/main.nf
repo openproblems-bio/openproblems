@@ -1,111 +1,176 @@
 nextflow.enable.dsl=2
 
-targetDir = "${params.rootDir}/target/nextflow"
+sourceDir = params.rootDir + "/src"
+targetDir = params.rootDir + "/target/nextflow"
 
-
-// include { split_dataset } from "$targetDir/label_projection/split_dataset/main.nf"
-
-// import methods
-include { all_correct } from "$targetDir/label_projection/control_methods/all_correct/main.nf"
+// import control methods
+include { true_labels } from "$targetDir/label_projection/control_methods/true_labels/main.nf"
 include { majority_vote } from "$targetDir/label_projection/control_methods/majority_vote/main.nf"
 include { random_labels } from "$targetDir/label_projection/control_methods/random_labels/main.nf"
-include { knn_classifier } from "$targetDir/label_projection/methods/knn_classifier/main.nf"
+
+// import methods
+include { knn } from "$targetDir/label_projection/methods/knn/main.nf"
 include { mlp } from "$targetDir/label_projection/methods/mlp/main.nf"
 include { logistic_regression } from "$targetDir/label_projection/methods/logistic_regression/main.nf"
-// include { scanvi_hvg } from "$targetDir/label_projection/methods/scvi/scanvi_hvg/main.nf"
-// include { scanvi_all_genes } from "$targetDir/label_projection/methods/scvi/scanvi_all_genes/main.nf"
-// include { scarches_scanvi_all_genes } from "$targetDir/label_projection/methods/scvi/scarches_scanvi_all_genes/main.nf"
-// include { scarches_scanvi_hvg } from "$targetDir/label_projection/methods/scvi/scarches_scanvi_hvg/main.nf"
+include { scanvi } from "$targetDir/label_projection/methods/scanvi/main.nf"
+include { seurat_transferdata } from "$targetDir/label_projection/methods/seurat_transferdata/main.nf"
+include { xgboost } from "$targetDir/label_projection/methods/xgboost/main.nf"
 
 // import metrics
 include { accuracy } from "$targetDir/label_projection/metrics/accuracy/main.nf"
 include { f1 } from "$targetDir/label_projection/metrics/f1/main.nf"
 
-// import helper functions
+// tsv generation component
 include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
 
+// import helper functions
+include { readConfig; viashChannel; helpMessage } from sourceDir + "/wf_utils/WorkflowHelper.nf"
+include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap; passthroughFilter as pfilter } from sourceDir + "/wf_utils/DataflowHelper.nf"
 
-/*******************************************************
-*             Dataset processor workflows              *
-*******************************************************/
-// This workflow reads in a tsv containing some metadata about each dataset.
-// For each entry in the metadata, a dataset is generated, usually by downloading
-// and processing some files. The end result of each of these workflows
-// should be simply a channel of [id, h5adfile] triplets.
-//
-// If the need arises, these workflows could be split off into a separate file.
+config = readConfig("$projectDir/config.vsh.yaml")
 
-params.tsv = "$launchDir/src/label_projection/data_processing/anndata_loader.tsv"
-
-workflow load_data {
-    main:
-        output_ = Channel.fromPath(params.tsv)
-            | splitCsv(header: true, sep: "\t")
-            | filter{ it.name != "tabula_muris_senis_facs_lung" || it.name != "tabula_muris_senis_droplet_lung" } //TODO
-            | map{ [ it.name, it ] }
-            | download
-    emit:
-        output_
-}
-
-def mlp0 = mlp.run(
-        args: [max_iter: 100, hidden_layer_sizes: 20]
-)
-
-def lr0 = logistic_regression.run(
-        args: [max_iter: 100]
-)
-
-def scvi_hvg0 = scanvi_hvg.run(
-    args: [n_hidden: 32, n_layers: 1, n_latent: 10, n_top_genes: 2000,
-           span: 0.8, max_epochs: 1, limit_train_batches: 10, limit_val_batches: 10]
-)
-
-def scvi_allgns0 = scanvi_all_genes.run(
-    args: [n_hidden: 32, n_layers: 1, n_latent: 10, n_top_genes: 2000,
-           span: 0.8, max_epochs: 1, limit_train_batches: 10, limit_val_batches: 10]
-)
-
-def scarches_hvg0 = scarches_scanvi_hvg.run(
-    args: [n_hidden: 32, n_layers: 1, n_latent: 10, n_top_genes: 2000,
-           span: 0.8, max_epochs: 1, limit_train_batches: 10, limit_val_batches: 10]
-)
-
-def scarches_allgns0 = scarches_scanvi_all_genes.run(
-    args: [n_hidden: 32, n_layers: 1, n_latent: 10, n_top_genes: 2000,
-           span: 0.8, max_epochs: 1, limit_train_batches: 10, limit_val_batches: 10]
-)
-
-def f1a = f1.run(
-    args: [average: "weighted"]
-)
-
-def unique_file_name(tuple) {
-    return [tuple[1].baseName.replaceAll('\\.output$', ''), tuple[1]]
-}
-
-/*******************************************************
-*                    Main workflow                     *
-*******************************************************/
+// construct a map of methods (id -> method_module)
+methods = [ true_labels, majority_vote, random_labels, knn, mlp, logistic_regression, scanvi, seurat_transferdata, xgboost ]
+  .collectEntries{method ->
+    [method.config.functionality.name, method]
+  }
 
 workflow {
-    load_data
-        | randomize
-        | subsample.run(
-            map: { [it[0], [input: it[1], even: true]] }
-        )
-        | (log_cpm & log_scran_pooling)
-        | mix
-        | map { unique_file_name(it) }
-        | (knn_classifier & mlp0 & lr0 & random_labels & majority_vote & all_correct)
-        | mix
-        | map { unique_file_name(it) }
-        | (accuracy & f1a)
-        | mix
-        | toSortedList
-        | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
-        | extract_scores.run(
-            args: [column_names: "dataset_id:normalization_method:method_id:metric_id:metric_value"],
-            auto: [ publish: true ]
-        )
+  helpMessage(config)
+
+  viashChannel(params, config)
+    | run_wf
+}
+
+workflow run_wf {
+  take:
+  input_ch
+
+  main:
+  output_ch = input_ch
+    
+    // split params for downstream components
+    | setWorkflowArguments(
+      preprocess: ["normalization_id", "dataset_id"],
+      method: ["input_train", "input_test"],
+      metric: ["input_solution"],
+      output: ["output"]
+    )
+    
+    // multiply events by the number of method
+    | getWorkflowArguments(key: "preprocess")
+    | add_methods
+
+    // filter the normalization methods that a method actually prefers
+    | check_filtered_normalization_id
+
+    // add input_solution to data for the positive controls
+    | controls_can_cheat
+
+    // run methods
+    | getWorkflowArguments(key: "method")
+    | run_methods
+
+    // run metrics
+    | getWorkflowArguments(key: "metric", inputKey: "input_prediction")
+    | run_metrics
+
+    // convert to tsv  
+    | aggregate_results
+
+  emit:
+  output_ch
+}
+
+workflow add_methods {
+  take: input_ch
+  main:
+  output_ch = Channel.fromList(methods.keySet())
+    | combine(input_ch)
+
+    // generate combined id for method_id and dataset_id
+    | pmap{method_id, dataset_id, data ->
+      def new_id = dataset_id + "." + method_id
+      def new_data = data.clone() + [method_id: method_id]
+      new_data.remove("id")
+      [new_id, new_data]
+    }
+  emit: output_ch
+}
+
+workflow check_filtered_normalization_id {
+  take: input_ch
+  main:
+  output_ch = input_ch
+    | pfilter{id, data ->
+      data = data.clone()
+      def method = methods[data.method_id]
+      def preferred = method.config.functionality.info.preferred_normalization
+      // if a method is just using the counts, we can use any normalization method
+      if (preferred == "counts") {
+        preferred = "log_cpm"
+      }
+      data.normalization_id == preferred
+    }
+  emit: output_ch
+}
+
+workflow controls_can_cheat {
+  take: input_ch
+  main:
+  output_ch = input_ch
+    | pmap{id, data, passthrough ->
+      def method = methods[data.method_id]
+      def method_type = method.config.functionality.info.method_type
+      def new_data = data.clone()
+      if (method_type != "method") {
+        new_data = new_data + [input_solution: passthrough.metric.input_solution]
+      }
+      [id, new_data, passthrough]
+    }
+  emit: output_ch
+}
+
+workflow run_methods {
+  take: input_ch
+  main:
+    // generate one channel per method
+    method_chs = methods.collect { method_id, method_module ->
+        input_ch
+          | filter{it[1].method_id == method_id}
+          | method_module
+      }
+    // mix all results
+    output_ch = method_chs[0].mix(*method_chs.drop(1))
+
+  emit: output_ch
+}
+
+workflow run_metrics {
+  take: input_ch
+  main:
+
+  output_ch = input_ch
+    | (accuracy & f1)
+    | mix
+
+  emit: output_ch
+}
+
+workflow aggregate_results {
+  take: input_ch
+  main:
+
+  output_ch = input_ch
+    | toSortedList
+    | filter{ it.size() > 0 }
+    | map{ it -> 
+      [ "combined", it.collect{ it[1] } ] + it[0].drop(2) 
+    }
+    | getWorkflowArguments(key: "output")
+    | extract_scores.run(
+        auto: [ publish: true ]
+    )
+
+  emit: output_ch
 }

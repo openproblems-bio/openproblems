@@ -1,18 +1,16 @@
-__inherits__: ../../api/comp_method.yaml
+__merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "majority_vote"
   namespace: "label_projection/control_methods"
   description: "Baseline method using majority voting"
   info:
-    type: baseline
+    type: negative_control
     label: Majority Vote
     v1_url: openproblems/tasks/label_projection/methods/baseline.py
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
-  arguments:
-    - name: "--layer_input"
-      type: string
-      default: "counts"
-      description: Which layer to use as input.
+    variants:
+      majority_vote:
+    preferred_normalization: counts
   resources:
     - type: python_script
       path: script.py
@@ -24,3 +22,5 @@ platforms:
         packages:
           - "anndata>=0.8"
   - type: nextflow
+    directives: 
+      label: [ lowmem, lowcpu ]

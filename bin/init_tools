@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# get the root of the directory
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+# ensure that the command below is run from the root of the repository
+cd "$REPO_ROOT"
+
+tmpdir=$(mktemp -d)
+function clean_up {
+    rm -rf "$tmpdir"
+}
+trap clean_up EXIT
+
+VERSION=0.2.0
+
+if [ $# -eq 2 ]; then
+  git clone --depth 1 --branch $VERSION https://$1:$2@github.com/viash-io/viash_tools.git $tmpdir/
+else
+  git clone --depth 1 --branch $VERSION git@github.com:viash-io/viash_tools.git $tmpdir/
+fi
+
+[ -d bin/tools ] && rm -r bin/tools
+
+cp -r $tmpdir/target bin/tools

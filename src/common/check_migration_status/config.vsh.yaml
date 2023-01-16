@@ -1,0 +1,34 @@
+functionality:
+  name: "check_migration_status"
+  namespace: "common"
+  description: "Check migration status"
+  arguments:
+    - name: "--git_sha"
+      type: "file"
+      example: git_sha.json
+      description: "a json with git sha info"
+    - name: "--comp_info"
+      type: "file"
+      example: comp_info.json
+      description: "a json with component info"
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      default: "output.yaml"
+      description: "Output yaml file with migration status"
+  resources:
+    - type: python_script
+      path: script.py
+  test_resources:
+    - path: ../../../resources_test
+    - type: python_script
+      path: test.py
+platforms:
+  - type: docker
+    image: python:3.10
+    setup:
+      - type: python
+        pip:
+          - pyyaml
+  - type: nextflow
+  - type: native
