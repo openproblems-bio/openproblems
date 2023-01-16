@@ -297,6 +297,8 @@ jobs:
           ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
 
     - name: Install R packages
+      env:
+        BIOCVERSION: '3.16'
       run: |
         if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
         renv::restore()
