@@ -8,6 +8,14 @@ functionality:
       description: "Input data to be resized"
       required: true
       example: input.h5ad
+    - name: "--n_obs"
+      type: integer
+      description: Maximum number of observations to be kept. It might end up being less because empty cells / genes are removed.
+      default: 500
+    - name: "--n_vars"
+      type: integer
+      description: Maximum number of variables to be kept. It might end up being less because empty cells / genes are removed.
+      default: 500
     - name: "--keep_features"
       type: string
       multiple: true
