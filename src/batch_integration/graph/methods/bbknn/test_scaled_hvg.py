@@ -23,6 +23,8 @@ assert path.exists(output_file)
 print('>> Checking API')
 adata = sc.read(output_file)
 
+adata.X = adata.X.todense()
+
 assert 'dataset_id' in adata.uns
 assert 'label' in adata.obs.columns
 assert 'batch' in adata.obs.columns
@@ -44,7 +46,6 @@ assert adata.n_vars == 100
 assert 'scaled' in adata.uns
 assert adata.uns['scaled'] == True
 assert -0.0000001 <= np.mean(adata.X) <= 0.0000001
-print(np.var(adata.X))
-assert 0.7 <= np.var(adata.X) <= 1
+assert 0.8 <= np.var(adata.X) <= 1
 
 print(">> All tests passed successfully")

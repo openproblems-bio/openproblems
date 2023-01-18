@@ -10,6 +10,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
+RAW_DATA=resources_test/common/pancreas/dataset.h5ad
 DATASET_DIR=resources_test/batch_integration
 
 if [ ! -f $RAW_DATA ]; then
@@ -22,27 +23,10 @@ mkdir -p $DATASET_DIR
 # build components
 bin/viash_build -q batch
 
-# load data
-echo load data...
-bin/viash run src/common/dataset_loader/download/config.vsh.yaml -- \
-  --output $DATASET_DIR/pancreas/download.h5ad \
-  --url https://ndownloader.figshare.com/files/24539828 \
-  --name pancreas \
-  --obs_cell_type celltype \
-  --obs_batch tech
-
-# subset data
-echo subset data...
-bin/viash run src/batch_integration/datasets/subsample/config.vsh.yaml -- \
-  --input $DATASET_DIR/pancreas/download.h5ad \
-  --output $DATASET_DIR/pancreas/subsample.h5ad \
-  --label celltype \
-  --batch tech
-
 # process dataset
 echo process data...
 bin/viash run src/batch_integration/datasets/preprocessing/config.vsh.yaml -- \
-  --input $DATASET_DIR/pancreas/subsample.h5ad \
+  --input $RAW_DATA \
   --output $DATASET_DIR/pancreas/processed.h5ad \
   --label celltype \
   --batch tech \

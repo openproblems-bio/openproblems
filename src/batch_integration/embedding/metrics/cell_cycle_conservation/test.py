@@ -30,6 +30,6 @@ print(score)
 
 assert 0 < score < 1
 
-assert score == 0.9495255717047036
+assert score == 0.932432887041937
 
 print(">> All tests passed successfully")
