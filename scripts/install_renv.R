@@ -42,7 +42,7 @@ strip_comments <- function(remote) {
 with_retries <- function(func,
                          attempts = 5,
                          sleep = 3,
-                         backoff = 4,
+                         backoff = 2,
                          ...) {
   result <- NULL
   attempt <- 1
