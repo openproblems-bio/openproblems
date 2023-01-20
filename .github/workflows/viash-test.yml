@@ -141,6 +141,8 @@ jobs:
     - name: Run test
       timeout-minutes: 30
       run: |
+        export VIASH_TEMP="$HOME/tmp"
+        mkdir -p "$VIASH_TEMP"
         bin/viash test -p docker ${{ matrix.component.config }} \
          -c '.functionality.requirements.cpus := 2' \
          -c '.functionality.requirements.memory := "5gb"'
