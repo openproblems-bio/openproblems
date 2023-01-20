@@ -15,16 +15,15 @@
 
 * `get_api_info`: extract api info from tasks
 
-* `get_method_info`: extract method info vrom config yaml
+* `get_method_info`: extract method info from config yaml
 
-* `get_metric_info`: extract metric info vrom config yaml
+* `get_metric_info`: extract metric info from config yaml
 
 * `check_migration_status`: compare git shas from methods with v1
 
 * `get_results`: extract benchmark scores 
 
-
-
+* `get_task_info`: extract task info
 
 
 ## label_projection

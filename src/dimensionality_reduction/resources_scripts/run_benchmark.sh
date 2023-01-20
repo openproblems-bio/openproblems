@@ -59,7 +59,7 @@ HERE
 fi
 
 export NXF_VER=22.04.5
-bin/nextflow \
+nextflow \
   run . \
   -main-script src/dimensionality_reduction/workflows/run/main.nf \
   -profile docker \

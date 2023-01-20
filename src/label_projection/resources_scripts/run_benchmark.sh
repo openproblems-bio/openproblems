@@ -61,7 +61,7 @@ HERE
 fi
 
 export NXF_VER=22.04.5
-bin/nextflow \
+nextflow \
   run . \
   -main-script src/label_projection/workflows/run/main.nf \
   -profile docker \
@@ -72,10 +72,10 @@ bin/nextflow \
 bin/tools/docker/nextflow/process_log/process_log \
   --output "$OUTPUT_DIR/nextflow_log.tsv"
 
-# bin/viash_build -q label_projection -c '.platforms[.type == "nextflow"].directives.tag := "id: $id, args: $args"'
-# bin/viash_build -q label_projection -c '.platforms[.type == "nextflow"].directives.tag := "$id"'
+# viash ns build -q label_projection -c '.platforms[.type == "nextflow"].directives.tag := "id: $id, args: $args"'
+# viash ns build -q label_projection -c '.platforms[.type == "nextflow"].directives.tag := "$id"'
 
-# bin/nextflow run . \
+# nextflow run . \
 #   -main-script target/nextflow/label_projection/control_methods/majority_vote/main.nf \
 #   -profile docker \
 #   --input_train resources_test/label_projection/pancreas/train.h5ad \

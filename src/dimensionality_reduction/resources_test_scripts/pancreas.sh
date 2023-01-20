@@ -40,7 +40,7 @@ viash run src/dimensionality_reduction/metrics/rmse/config.vsh.yaml -- \
 export NXF_VER=22.04.5
 
 # after having added a split dataset component
-bin/nextflow \
+nextflow \
   run . \
   -main-script src/dimensionality_reduction/workflows/run/main.nf \
   -profile docker \
