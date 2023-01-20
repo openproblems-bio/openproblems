@@ -41,11 +41,13 @@ strip_comments <- function(remote) {
 
 with_retries <- function(func,
                          attempts = 5,
-                         sleep = 3,
-                         backoff = 4,
+                         sleep_once = 3,
+                         sleep_multiple = 60,
+                         backoff = 2,
                          ...) {
   result <- NULL
   attempt <- 1
+  sleep <- sleep_once
   while (is.null(result) && attempt < attempts) {
     attempt <- attempt + 1
     try(
@@ -53,7 +55,11 @@ with_retries <- function(func,
     )
     closeAllConnections()
     Sys.sleep(sleep)
-    sleep <- sleep * backoff
+    if (sleep == sleep_once) {
+      sleep <- sleep_multiple
+    } else {
+      sleep <- sleep * backoff
+    }
   }
   if (is.null(result)) {
     # last attempt
