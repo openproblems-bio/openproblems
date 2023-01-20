@@ -42,11 +42,11 @@ strip_comments <- function(remote) {
 with_retries <- function(func,
                          attempts = 5,
                          sleep = 3,
-                         backoff = 2,
+                         backoff = 4,
                          ...) {
   result <- NULL
   attempt <- 1
-  while (is.null(result) && attempt <= attempts - 1) {
+  while (is.null(result) && attempt < attempts) {
     attempt <- attempt + 1
     try(
       result <- func(...)
@@ -57,8 +57,9 @@ with_retries <- function(func,
   }
   if (is.null(result)) {
     # last attempt
-    func(...)
+    result <- func(...)
   }
+  result
 }
 
 install_renv <- function(requirements_file, ...) {
