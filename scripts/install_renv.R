@@ -68,7 +68,26 @@ with_retries <- function(func,
   result
 }
 
+patch_renv <- function() {
+  if (!requireNamespace("memoise", quietly = TRUE)) install.packages("memoise")
+  renv_env <- parent.env(getNamespace("renv"))
+  parent_env <- parent.env(renv_env)
+  hack <- "__hack__"
+  # set the new env between renv imports and base env, only if not already done
+  if (!exists(hack, envir = parent.env(renv_env))) {
+    # make a new env, with memoized renv_remotes_resolve
+    renv_remotes_resolve_memoised <- memoise::memoise(
+      renv:::renv_remotes_resolve
+    )
+    env <- new.env(parent = parent_env)
+    assign(hack, TRUE, envir = env)
+    assign("renv_remotes_resolve", renv_remotes_resolve_memoised, envir = env)
+    parent.env(renv_env) <- env ### insert our custom env
+  }
+}
+
 install_renv <- function(requirements_file, ...) {
+  patch_renv()
   remotes <- scan(requirements_file, what = character(), sep = "\n")
   remotes <- sapply(remotes, strip_comments)
   remotes_installed <- sapply(remotes, check_available)
