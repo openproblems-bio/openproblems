@@ -81,7 +81,7 @@ def alra_log(adata, test=False):
         adata.obsm["train_norm"], np.log1p
     )
     # to csr
-    adata.obsm["train_norm"] = scipy.sparse.csr_matrix(adata.obsm["train_norm"]
+    adata.obsm["train_norm"] = scipy.sparse.csr_matrix(adata.obsm["train_norm"])
     # run alra
     # _alra takes sparse array, returns dense array
     Y=None
