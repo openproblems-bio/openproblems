@@ -1,5 +1,7 @@
 from .....data.immune_cells import load_immune
 from .....tools.decorators import dataset
+from ..utils import filter_celltypes
+from typing import Optional
 
 
 @dataset(
@@ -11,12 +13,14 @@ from .....tools.decorators import dataset
     "Smart-seq2).",
     image="openproblems",
 )
-def immune_batch(test=False):
+def immune_batch(test: bool = False, min_celltype_count: Optional[int] = None):
     import scanpy as sc
 
     adata = load_immune(test)
     adata.uns["organism"] = "human"
     adata.obs["labels"] = adata.obs["final_annotation"]
+
+    adata = filter_celltypes(adata, min_celltype_count=min_celltype_count)
 
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)
