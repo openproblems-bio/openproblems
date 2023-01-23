@@ -62,12 +62,12 @@ below:
    [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).
 5. Create repository secrets (*not environment secrets*)
    [https://github.com/USERNAME/openproblems/settings/secrets](https://github.com/USERNAME/openproblems/settings/secrets)
-    - *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login
+    * *AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are included in your AWS login
       details. If you do not have these, please contact us at
       [singlecellopenproblems@protonmail.com](mailto:singlecellopenproblems@protonmail.com).*
-    - *TOWER_ACCESS_KEY: log in with GitHub to <https://tower.nf> and create a token at
+    * *TOWER_ACCESS_KEY: log in with GitHub to <https://tower.nf> and create a token at
       <https://tower.nf/tokens>.*
-    - When you are done with this step, your page should look like this:
+    * When you are done with this step, your page should look like this:
     ![AWS secrets success](static/img/AWS_secret.png)
 
 6. Enable workflows at
@@ -180,8 +180,8 @@ function metric(AnnData adata) -> float
 
 Task-specific APIs are described in the README for each task.
 
-- [Label Projection](openproblems/tasks/label_projection)
-- [Multimodal Data Integration](openproblems/tasks/multimodal_data_integration)
+* [Label Projection](openproblems/tasks/label_projection)
+* [Multimodal Data Integration](openproblems/tasks/multimodal_data_integration)
 
 ### Writing functions in R
 
@@ -343,13 +343,13 @@ dataset you chose.
 
 Notes:
 
-- If you have updated Docker images to run your method, you must first rebuild the
+* If you have updated Docker images to run your method, you must first rebuild the
   images -- see the [Docker README](docker/README.md) for details.
-- If your dataset/method/metric cannot be run on the same docker image, you may wish to
+* If your dataset/method/metric cannot be run on the same docker image, you may wish to
   `load`, `run`, and `evaluate` separately. You can do this using each of these commands
   independently; however, this workflow is not documented.
-- These commands are not guaranteed to work with Apple silicon (M1 chip).
-- If your local machine cannot run the test due to memory constraints or OS
+* These commands are not guaranteed to work with Apple silicon (M1 chip).
+* If your local machine cannot run the test due to memory constraints or OS
   incompatibility, you may use your AWS credentials to launch a VM for testing purposes.
   See the [EC2 README](./EC2.md) for details.
 
