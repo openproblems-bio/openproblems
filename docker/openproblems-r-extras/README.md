@@ -20,3 +20,4 @@ Python packages:
 
 * harmonic-alignment
 * xgboost
+* scipy
