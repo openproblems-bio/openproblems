@@ -40,7 +40,7 @@ rule refresh_docker_image:
         label = tools.build_type,
         hash = tools.build_hash,
     shell:
-        "docker build --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+        "docker build --progress=plain --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule refresh_dockerfile:
     priority: 50
@@ -92,7 +92,7 @@ rule build_docker_image:
         label = tools.build_type,
         hash = tools.build_hash,
     shell:
-        "docker build --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+        "docker build --progress=plain --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule password_docker:
     output:
