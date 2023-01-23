@@ -14,6 +14,7 @@ consists of the mean isolated score of all isolated labels.
 
 @metric(
     metric_name="Isolated label Silhouette",
+    paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-r-pytorch",
 )

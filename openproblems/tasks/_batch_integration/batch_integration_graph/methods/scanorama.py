@@ -7,7 +7,7 @@ _scanorama_method = functools.partial(
     method,
     paper_name="Efficient integration of heterogeneous single-cell "
     "transcriptomes using Scanorama",
-    paper_url="https://www.nature.com/articles/s41587-019-0113-3",
+    paper_reference="hie2019efficient",
     paper_year=2019,
     code_url="https://github.com/brianhie/scanorama",
     image="openproblems-r-pytorch",

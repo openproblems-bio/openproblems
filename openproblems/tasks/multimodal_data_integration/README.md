@@ -5,12 +5,12 @@
 Cellular function is regulated by the complex interplay of different types of biological
 molecules (DNA, RNA, proteins, etc.), which determine the state of a cell. Several
 recently described technologies allow for simultaneous measurement of different aspects
-of cellular state. For example, [sci-CAR](https://doi.org/10.1126/science.aau0730)
+of cellular state. For example, [sci-CAR](https://openproblems.bio/bibliography#cao2018joint)
 jointly profiles RNA expression and chromatin accessibility on the same cell and
-[CITE-seq](https://doi.org/10.1038/nmeth.4380) measures surface protein abundance and
-RNA expression from each cell. These technologies enable us to better understand
-cellular function, however datasets are still rare and there are tradeoffs that these
-measurements make for to profile multiple modalities.
+[CITE-seq](https://openproblems.bio/bibliography#stoeckius2017simultaneous) measures
+surface protein abundance and RNA expression from each cell. These technologies enable
+us to better understand cellular function, however datasets are still rare and there are
+tradeoffs that these measurements make for to profile multiple modalities.
 
 Joint methods can be more expensive or lower throughput or more noisy than measuring a
 single modality at a time. Therefore it is useful to develop methods that are capable

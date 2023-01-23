@@ -15,7 +15,7 @@ _neuralee_method = functools.partial(
     paper_name="NeuralEE: A GPU-Accelerated Elastic Embedding "
     "Dimensionality Reduction Method for "
     "Visualizing Large-Scale scRNA-Seq Data",
-    paper_url="https://www.frontiersin.org/articles/10.3389/fgene.2020.00786/full",
+    paper_reference="xiong2020neuralee",
     paper_year=2020,
     code_url="https://github.com/HiBearME/NeuralEE",
     image="openproblems-python-pytorch",
@@ -49,6 +49,7 @@ def _create_neuralee_dataset(
 
 def _neuralee(
     adata,
+    genes=None,
     d: int = 2,
     test: bool = False,
     subsample_genes: Optional[int] = None,
@@ -58,17 +59,22 @@ def _neuralee(
 
     import torch
 
+    if genes is not None:
+        adata_input = adata[:, genes].copy()
+    else:
+        adata_input = adata
+
     # this can fail due to sparseness of data; if so, retry with more genes
     # note that this is a deviation from the true default behavior, which fails
     # see https://github.com/openproblems-bio/openproblems/issues/375
     while True:
         try:
             dataset = _create_neuralee_dataset(
-                adata, normalize=normalize, subsample_genes=subsample_genes
+                adata_input, normalize=normalize, subsample_genes=subsample_genes
             )
         except ValueError:
-            if subsample_genes is not None and subsample_genes < adata.n_vars:
-                subsample_genes = min(adata.n_vars, int(subsample_genes * 1.2))
+            if subsample_genes is not None and subsample_genes < adata_input.n_vars:
+                subsample_genes = min(adata_input.n_vars, int(subsample_genes * 1.2))
                 log.warning(
                     "ValueError in neuralee_default. "
                     f"Increased subsample_genes to {subsample_genes}"
@@ -97,5 +103,10 @@ def neuralee_default(adata: AnnData, test: bool = False) -> AnnData:
 @_neuralee_method(method_name="NeuralEE (CPU) (logCPM, 1kHVG)")
 def neuralee_logCPM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
     adata = log_cpm_hvg(adata)
-    adata = adata[:, adata.var["highly_variable"]].copy()
-    return _neuralee(adata, test=test, normalize=False, subsample_genes=None)
+    return _neuralee(
+        adata,
+        genes=adata.var["highly_variable"],
+        test=test,
+        normalize=False,
+        subsample_genes=None,
+    )

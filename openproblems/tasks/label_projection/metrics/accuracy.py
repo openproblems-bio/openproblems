@@ -3,7 +3,7 @@ from ....tools.decorators import metric
 import numpy as np
 
 
-@metric(metric_name="Accuracy", maximize=True)
+@metric(metric_name="Accuracy", paper_reference="grandini2020metrics", maximize=True)
 def accuracy(adata):
     import sklearn.preprocessing
 

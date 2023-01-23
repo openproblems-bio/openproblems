@@ -8,7 +8,7 @@ import functools
 _mlp_method = functools.partial(
     method,
     paper_name="Connectionist learning procedures",
-    paper_url="https://doi.org/10.1016/0004-3702(89)90049-0",
+    paper_reference="hinton1989connectionist",
     paper_year=1990,
     code_url="https://scikit-learn.org/stable/modules/generated/"
     "sklearn.neural_network.MLPClassifier.html",

@@ -6,7 +6,7 @@ from ....tools.utils import check_version
     method_name="Iterative KNN smoothing",
     paper_name="K-nearest neighbor smoothing for high-throughput "
     "single-cell RNA-Seq data",
-    paper_url="https://doi.org/10.1101/217737",
+    paper_reference="wagner2018knearest",
     paper_year=2018,
     code_url="https://github.com/yanailab/knn-smoothing",
     image="openproblems-python-extras",

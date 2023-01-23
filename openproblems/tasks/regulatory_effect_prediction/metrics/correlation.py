@@ -26,11 +26,19 @@ def _correlation(adata, method="pearson"):
     return np.median(cors[~np.isnan(cors)])
 
 
-@metric(metric_name="Median Pearson correlation", maximize=True)
+@metric(
+    metric_name="Median Pearson correlation",
+    paper_reference="schober2018correlation",
+    maximize=True,
+)
 def pearson_correlation(adata):
     return _correlation(adata)
 
 
-@metric(metric_name="Median Spearman correlation", maximize=True)
+@metric(
+    metric_name="Median Spearman correlation",
+    paper_reference="schober2018correlation",
+    maximize=True,
+)
 def spearman_correlation(adata):
     return _correlation(adata, method="spearman")

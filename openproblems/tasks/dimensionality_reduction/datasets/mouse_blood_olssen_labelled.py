@@ -1,5 +1,6 @@
 from ....data.mouse_blood_olssen_labelled import load_olsson_2016_mouse_blood
 from ....tools.decorators import dataset
+from ....tools.normalize import log_cpm
 
 
 @dataset(
@@ -11,4 +12,6 @@ from ....tools.decorators import dataset
     "660 cells x 112815 features with 4 cell type labels",
 )
 def olsson_2016_mouse_blood(test=False):
-    return load_olsson_2016_mouse_blood(test=test)
+    adata = load_olsson_2016_mouse_blood(test=test)
+    adata.uns["n_genes"] = adata.shape[1]
+    return log_cpm(adata)
