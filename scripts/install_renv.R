@@ -19,7 +19,7 @@ compare_version <- function(v1, v2) {
 }
 
 check_available <- function(remote) {
-  remote <- renv:::renv_remotes_resolve(remote)
+  remote <- with_retries(renv:::renv_remotes_resolve, spec = remote)
   tryCatch(
     {
       version <- packageVersion(remote$Package)
@@ -39,33 +39,59 @@ strip_comments <- function(remote) {
   gsub("\\s*#.*", "", remote)
 }
 
-install_with_retries <- function(remotes,
-                                 attempts = 3,
-                                 sleep = 3,
-                                 backoff = 2,
-                                 ...) {
+with_retries <- function(func,
+                         attempts = 5,
+                         sleep_once = 3,
+                         sleep_multiple = 60,
+                         backoff = 2,
+                         ...) {
   result <- NULL
   attempt <- 1
-  while (is.null(result) && attempt <= attempts - 1) {
+  sleep <- sleep_once
+  while (is.null(result) && attempt < attempts) {
     attempt <- attempt + 1
     try(
-      result <- renv::install(remotes, ...)
+      result <- func(...)
     )
+    closeAllConnections()
     Sys.sleep(sleep)
-    sleep <- sleep * backoff
+    if (sleep == sleep_once) {
+      sleep <- sleep_multiple
+    } else {
+      sleep <- sleep * backoff
+    }
   }
   if (is.null(result)) {
     # last attempt
-    renv::install(remotes, ...)
+    result <- func(...)
+  }
+  result
+}
+
+patch_renv <- function() {
+  if (!requireNamespace("memoise", quietly = TRUE)) install.packages("memoise")
+  # set the new env between renv imports and base env, only if not already done
+  if (!is(renv:::renv_remotes_resolve, "memoised")) {
+    # memoize renv_remotes_resolve
+    renv_remotes_resolve_memoised <- memoise::memoise(
+      renv:::renv_remotes_resolve
+    )
+    assignInNamespace(
+      "renv_remotes_resolve",
+      renv_remotes_resolve_memoised,
+      "renv"
+    )
   }
 }
 
 install_renv <- function(requirements_file, ...) {
+  patch_renv()
   remotes <- scan(requirements_file, what = character(), sep = "\n")
   remotes <- sapply(remotes, strip_comments)
   remotes_installed <- sapply(remotes, check_available)
   remotes_to_install <- remotes[!remotes_installed]
+  message(paste0("Installing ", length(remotes_to_install), " packages"))
   if (length(remotes_to_install) > 0) {
-    install_with_retries(remotes_to_install, ...)
+    with_retries(renv::install, packages = remotes_to_install, ...)
   }
 }
