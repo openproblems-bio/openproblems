@@ -297,6 +297,8 @@ jobs:
           ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
 
     - name: Install R packages
+      env:
+        BIOCVERSION: '3.16'
       run: |
         if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
         renv::restore()
@@ -305,7 +307,7 @@ jobs:
         install_renv("docker/openproblems-github-actions/r_requirements.txt")
       shell: Rscript {0}
 
-    - name: Update Docker docker images
+    - name: Update Docker images
       if: "needs.build_images.result == 'skipped'"
       run: |
         cd workflow

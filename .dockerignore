@@ -2,3 +2,12 @@ nf-openproblems
 workflow
 website
 .github
+.snakemake
+static
+test
+*.egg-info
+.coverage*
+.pytest_cache
+.idea
+.vscode
+*.md
