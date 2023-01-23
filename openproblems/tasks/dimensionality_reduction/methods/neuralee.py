@@ -97,7 +97,12 @@ def _neuralee(
 
 @_neuralee_method(method_name="NeuralEE (CPU) (Default)")
 def neuralee_default(adata: AnnData, test: bool = False) -> AnnData:
-    return _neuralee(adata, test=test, normalize=True, subsample_genes=500)
+    # neuralee needs raw counts
+    adata.X = adata.layers["counts"]
+    adata = _neuralee(adata, test=test, normalize=True, subsample_genes=500)
+    # revert to expected values
+    adata.X = adata.layers["log_cpm"]
+    return adata
 
 
 @_neuralee_method(method_name="NeuralEE (CPU) (logCPM, 1kHVG)")
