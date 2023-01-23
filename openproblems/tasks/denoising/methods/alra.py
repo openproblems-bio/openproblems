@@ -68,6 +68,7 @@ def alra_log(adata, test=False):
     import numpy as np
     import rpy2.rinterface_lib.embedded
     import scprep
+    import scipy
 
     # libsize and log norm
     # lib norm
