@@ -4,7 +4,11 @@ from anndata import AnnData
 import numpy as np
 
 
-@metric(metric_name="trustworthiness", maximize=True)
+@metric(
+    metric_name="trustworthiness",
+    paper_reference="venna2001neighborhood",
+    maximize=True,
+)
 def trustworthiness(adata: AnnData) -> float:
     from sklearn import manifold
 

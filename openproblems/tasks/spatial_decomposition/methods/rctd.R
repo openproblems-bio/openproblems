@@ -4,6 +4,13 @@
 #'
 #' @param sce_sc SingleCellExperiment single-cell dataset
 #' @param sce_sp SingleCellExperiment spatial dataset
+#' @param fc_cutoff minimum log-fold-change (across cell types) for genes to be
+#' included in the platform effect normalization step.
+#' @param fc_cutoff_reg minimum log-fold-change (across cell types) for genes to
+#' be included in the RCTD step.
+#' @param max_cores for parallel processing, the number of cores used. If set to
+#' 1, parallel processing is not used. The system will additionally be checked
+#' for number of available cores.
 #' @return sce_sp SingleCellExperiment spatial dataset with predictions in obs
 
 library(spacexr)
@@ -30,9 +37,14 @@ colnames(sp_counts) <- colnames(sce_sp)
 puck <- SpatialRNA(sp_coords, sp_counts)
 # create RCTD object from reference and spatialRNA objects
 my_rctd <- create.RCTD(
-  puck, reference,
-  max_cores = 1,
-  test_mode = FALSE, UMI_min_sigma = 100
+  puck,
+  reference,
+  max_cores = max_cores,
+  fc_cutoff = fc_cutoff,
+  fc_cutoff_reg = fc_cutoff_reg,
+  test_mode = FALSE,
+  UMI_min_sigma = 100,
+  CELL_MIN_INSTANCE = 1
 )
 # run analysis and get results
 my_rctd <- run.RCTD(my_rctd)

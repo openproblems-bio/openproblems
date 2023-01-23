@@ -149,4 +149,4 @@ def test_dataset_metadata(dataset):
     assert isinstance(dataset.metadata["data_url"], str)
     assert utils.asserts.assert_url_accessible(dataset.metadata["data_url"])
     assert isinstance(dataset.metadata["data_reference"], str)
-    assert utils.asserts.assert_url_accessible(dataset.metadata["data_reference"])
+    assert utils.asserts.assert_valid_reference(dataset.metadata["data_reference"])

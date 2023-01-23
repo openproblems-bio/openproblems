@@ -7,7 +7,7 @@ import functools
 _bbknn_method = functools.partial(
     method,
     paper_name="BBKNN: fast batch alignment of single cell transcriptomes",
-    paper_url="https://academic.oup.com/bioinformatics/article/36/3/964/5545955",
+    paper_reference="polanski2020bbknn",
     paper_year=2020,
     code_url="https://github.com/Teichlab/bbknn",
     image="openproblems-r-pytorch",

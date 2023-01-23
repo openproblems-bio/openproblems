@@ -1,4 +1,5 @@
 from ....tools.decorators import metric
+from ....tools.normalize import log_cpm
 
 
 def _rmse(X, X_emb):
@@ -7,13 +8,17 @@ def _rmse(X, X_emb):
 
     high_dimensional_distance_vector = scipy.spatial.distance.pdist(X)
     low_dimensional_distance_vector = scipy.spatial.distance.pdist(X_emb)
-    scale, rmse = scipy.optimize.nnls(
+    _, rmse = scipy.optimize.nnls(
         low_dimensional_distance_vector[:, None], high_dimensional_distance_vector
     )
     return rmse
 
 
-@metric(metric_name="RMSE", maximize=False)
+@metric(
+    metric_name="RMSE",
+    maximize=False,
+    paper_reference="kruskal1964mds",
+)
 def rmse(adata, n_svd=200):
     """Calculate the root mean squared error.
 
@@ -22,11 +27,17 @@ def rmse(adata, n_svd=200):
     """
     import sklearn.decomposition
 
+    adata = log_cpm(adata)
+
     X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
     return _rmse(X, adata.obsm["X_emb"])
 
 
-@metric(metric_name="RMSE (spectral)", maximize=False)
+@metric(
+    metric_name="RMSE (spectral)",
+    maximize=False,
+    paper_reference="coifman2006diffusion",
+)
 def rmse_spectral(adata, n_comps=200):
     """Calculate the spectral root mean squared error
 
@@ -37,6 +48,8 @@ def rmse_spectral(adata, n_comps=200):
     import numpy as np
     import umap
     import umap.spectral
+
+    adata = log_cpm(adata)
 
     n_comps = min(n_comps, min(adata.shape) - 2)
 

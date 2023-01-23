@@ -1,5 +1,6 @@
 import openproblems
 import parameterized
+import utils.asserts
 import utils.docker
 import utils.name
 
@@ -17,6 +18,8 @@ def test_metric_metadata(metric):
     assert isinstance(metric.metadata["metric_name"], str)
     assert isinstance(metric.metadata["image"], str)
     assert metric.metadata["image"].startswith("openproblems")
+    assert isinstance(metric.metadata["paper_reference"], str)
+    assert utils.asserts.assert_valid_reference(metric.metadata["paper_reference"])
 
 
 @parameterized.parameterized.expand(

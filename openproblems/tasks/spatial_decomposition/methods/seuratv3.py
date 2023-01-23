@@ -15,7 +15,7 @@ _seuratv3 = r_function(
 @method(
     method_name="SeuratV3",
     paper_name="Comprehensive Integration of Single-Cell Data",
-    paper_url="https://doi.org/10.1016/j.cell.2019.05.031",
+    paper_reference="stuart2019comprehensive",
     paper_year=2019,
     code_url="https://satijalab.org/seurat/archive/v3.2/spatial_vignette.html",
     image="openproblems-r-extras",

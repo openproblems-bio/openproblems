@@ -10,7 +10,8 @@ WORKDIR /
 
 RUN apt-get update && apt-get install -y \
     libhdf5-dev hdf5-tools libgeos-dev \
-    libharfbuzz-dev libfribidi-dev
+    libharfbuzz-dev libfribidi-dev \
+    libgsl-dev
 
 RUN apt-get clean autoclean && \
     apt-get autoremove --yes && \
@@ -19,6 +20,7 @@ RUN apt-get clean autoclean && \
 
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
+COPY ./scripts/install_renv.R ./install_renv.R
 RUN R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"
 
 # install dependencies and openproblems

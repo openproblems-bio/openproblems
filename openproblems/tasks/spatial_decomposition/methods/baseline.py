@@ -8,7 +8,7 @@ import numpy as np
 @method(
     method_name="Random Proportions",
     paper_name="Random Proportions (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,
@@ -28,7 +28,7 @@ def random_proportions(adata, test=False):
 @method(
     method_name="True Proportions",
     paper_name="True Proportions (baseline)",
-    paper_url="https://openproblems.bio",
+    paper_reference="openproblems",
     paper_year=2022,
     code_url="https://github.com/openproblems-bio/openproblems",
     is_baseline=True,

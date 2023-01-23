@@ -24,13 +24,19 @@ def normalizer(func, *args, **kwargs):
             else:
                 obs = adata.uns[obs] if obs else adata.obs
                 var = adata.uns[var] if var else adata.var
-                adata_temp = anndata.AnnData(adata.obsm[obsm], obs=obs, var=var)
+                adata_temp = anndata.AnnData(
+                    adata.obsm[obsm],
+                    obs=obs,
+                    var=var,
+                    layers={"counts": adata.obsm[obsm]},
+                )
                 adata_temp = func(adata_temp, *args, **kwargs)
                 adata.obsm[obsm] = adata.obsm[cache_name] = adata_temp.X
         else:
             if func.__name__ in adata.layers:
                 adata.X = adata.layers[func.__name__]
             else:
+                adata.X = adata.layers["counts"]
                 adata = func(adata, *args, **kwargs)
                 adata.layers[func.__name__] = adata.X
 
@@ -48,7 +54,7 @@ def _backport_code_version(apply_method, code_version):
 def method(
     method_name,
     paper_name,
-    paper_url,
+    paper_reference,
     paper_year,
     code_url,
     code_version=None,
@@ -63,8 +69,8 @@ def method(
         Unique human readable name of the method
     paper_name : str
         Title of the seminal paper describing the method
-    paper_url : str
-        Link to the paper, preferably a DOI URL
+    paper_reference : str
+        BibTex key from `main.bib` referring to the paper
     paper_year : int
         Year the paper was published
     code_url : str
@@ -84,7 +90,7 @@ def method(
         apply_method.metadata = dict(
             method_name=method_name,
             paper_name=paper_name,
-            paper_url=paper_url,
+            paper_reference=paper_reference,
             paper_year=paper_year,
             code_url=code_url,
             image=image,
@@ -96,7 +102,7 @@ def method(
     return decorator
 
 
-def metric(metric_name, maximize, image="openproblems"):
+def metric(metric_name, maximize, paper_reference, image="openproblems"):
     """Decorate a metric function.
 
     Parameters
@@ -108,6 +114,9 @@ def metric(metric_name, maximize, image="openproblems"):
     ----------
     metric_name : str
         Unique human readable name of the metric
+    paper_reference : str
+        BibTex key from `main.bib` referring to the seminal paper in which the metric
+        was defined
     maximize : bool
         If True, the metric should be maximized. If False, it should be minimized.
     image : str, optional (default: "openproblems")
@@ -121,7 +130,10 @@ def metric(metric_name, maximize, image="openproblems"):
             return func(*args, **kwargs)
 
         apply_metric.metadata = dict(
-            metric_name=metric_name, maximize=maximize, image=image
+            metric_name=metric_name,
+            paper_reference=paper_reference,
+            maximize=maximize,
+            image=image,
         )
         return apply_metric
 
@@ -144,7 +156,8 @@ def dataset(
     data_url : str
         Link to the original source of the dataset
     data_reference : str
-        Link to the paper describing how the dataset was generated
+        BibTex key from `main.bib` referring to the paper describing how the dataset was
+        generated
     dataset_summary : str
         Short (<80 character) summary of the dataset
     image : str, optional (default: "openproblems")
