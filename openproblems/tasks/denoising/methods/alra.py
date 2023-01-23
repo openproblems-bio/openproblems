@@ -21,6 +21,7 @@ def alra_sqrt(adata, test=False):
     import numpy as np
     import rpy2.rinterface_lib.embedded
     import scprep
+    import scipy
 
     # libsize and sqrt norm
     adata.obsm["train_norm"] = scprep.utils.matrix_transform(
