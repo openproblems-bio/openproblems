@@ -84,11 +84,11 @@ def alra_log(adata, test=False):
     adata.obsm["train_norm"] = scipy.sparse.csr_matrix(adata.obsm["train_norm"])
     # run alra
     # _alra takes sparse array, returns dense array
-    Y=None
-    attempts=0
+    Y = None
+    attempts = 0
     while Y is None:
         try:
-            Y=_alra(adata)
+            Y = _alra(adata)
         except rpy2.rinterface_lib.embedded.RRuntimeError:  # pragma: no cover
             if attempts < 10:
                 attempts += 1
@@ -97,9 +97,9 @@ def alra_log(adata, test=False):
                 raise
 
     # transform back into original space
-    Y=scprep.utils.matrix_transform(Y, np.expm1)
-    Y=scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
-    adata.obsm["denoised"]=Y
+    Y = scprep.utils.matrix_transform(Y, np.expm1)
+    Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
+    adata.obsm["denoised"] = Y
 
-    adata.uns["method_code_version"]="1.0.0"
+    adata.uns["method_code_version"] = "1.0.0"
     return adata
