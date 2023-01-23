@@ -29,7 +29,7 @@ def alra_sqrt(adata, test=False):
     adata.obsm["train_norm"], libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train_norm"], rescale=1, return_library_size=True
     )
-    adata.obsm["train_norm"] = adata.obsm["train_norm"].tocsr()
+    adata.obsm["train_norm"] = scipy.sparse.csr_matrix(adata.obsm["train_norm"])
     # run alra
     # _alra takes sparse array, returns dense array
     Y = None
@@ -79,7 +79,7 @@ def alra_log(adata, test=False):
         adata.obsm["train_norm"], np.log1p
     )
     # to csr
-    adata.obsm["train_norm"] = adata.obsm["train_norm"].tocsr()
+    adata.obsm["train_norm"] = scipy.sparse.csr_matrix(adata.obsm["train_norm"]
     # run alra
     # _alra takes sparse array, returns dense array
     Y = None
