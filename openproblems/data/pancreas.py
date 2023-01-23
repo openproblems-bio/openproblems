@@ -9,7 +9,7 @@ import tempfile
 URL = "https://ndownloader.figshare.com/files/36086813"
 
 
-@utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/s41592-021-01336-8")
+@utils.loader(data_url=URL, data_reference="luecken2022benchmarking")
 def load_pancreas(test=False, keep_techs=None):
     """Download pancreas data from figshare."""
     import scanpy as sc

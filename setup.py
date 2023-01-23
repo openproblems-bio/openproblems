@@ -38,6 +38,7 @@ test_requires = [
     "codecov==2.1.*",
     "parameterized==0.8.*",
     "requests==2.28.*",
+    "bibtexparser==1.4.*",
 ]
 
 version_py = os.path.join(os.path.dirname(__file__), "openproblems", "version.py")

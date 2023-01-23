@@ -12,7 +12,7 @@ _mnn_method = functools.partial(
     method,
     paper_name="Batch effects in single-cell RNA-sequencing data are corrected by "
     "matching mutual nearest neighbors",
-    paper_url="https://www.nature.com/articles/nbt.4091",
+    paper_reference="haghverdi2018batch",
     paper_year=2018,
     code_url="https://github.com/LTLA/batchelor",
     image="openproblems-r-extras",

@@ -13,7 +13,11 @@ def _square(X):
         return scprep.utils.toarray(X) ** 2
 
 
-@metric(metric_name="Mean squared error", maximize=False)
+@metric(
+    metric_name="Mean squared error",
+    paper_reference="lance2022multimodal",
+    maximize=False,
+)
 def mse(adata):
     X = scprep.utils.toarray(adata.obsm["aligned"])
     Y = scprep.utils.toarray(adata.obsm["mode2_aligned"])

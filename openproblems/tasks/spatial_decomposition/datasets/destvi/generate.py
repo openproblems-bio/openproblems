@@ -6,7 +6,7 @@ from openproblems.tools.decorators import dataset
     "DestVI",
     data_url="https://github.com/romain-lopez/DestVI-reproducibility/"
     "blob/master/simulations/make_dataset.py",
-    data_reference="https://doi.org/10.1038/s41587-022-01272-8",
+    data_reference="lopez2022destvi",
     dataset_summary="scRNA-seq is generated based on learn NB parameters "
     "from the destVI manuscripts leveraging sparsePCA. Number of cells and "
     "cell types present in each spatial spot is computed via combination of "
