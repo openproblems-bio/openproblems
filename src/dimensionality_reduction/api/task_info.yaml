@@ -2,7 +2,7 @@ task_id: dimensionality_reduction
 task_name: "Dimensionality reduction for visualization"
 v1_url: openproblems/tasks/dimensionality_reduction/README.md
 v1_commit: b353a462f6ea353e0fc43d0f9fcbbe621edc3a0b
-short_description: Reduction of high-dimensional datasets to 2D for visualization & interpretation
+summary: Reduction of high-dimensional datasets to 2D for visualization & interpretation
 description: |
   Dimensionality reduction is one of the key challenges in single-cell data representation.
   Routine single-cell RNA sequencing (scRNA-seq) experiments measure cells in roughly

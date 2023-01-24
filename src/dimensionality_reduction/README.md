@@ -1,35 +1,23 @@
+# Dimensionality reduction
 
-# Dimensionality reduction for visualization
+Structure of this task:
 
-Reduction of high-dimensional datasets to 2D for visualization &
-interpretation
+    src/dimensionality_reduction
+    ├── api                          Interface specifications for components and datasets in this task
+    ├── control_methods              Baseline (random/ground truth) methods to compare methods against
+    ├── methods                      Methods to be benchmarked
+    ├── metrics                      Metrics used to quantify performance of methods
+    ├── README.md                    This file
+    ├── resources_scripts            Scripts to process the datasets
+    ├── resources_test_scripts       Scripts to process the test resources
+    ├── split_dataset                Component to prepare common datasets
+    └── workflows                    Pipelines to run the full benchmark
 
-## Task description
+Relevant links:
 
-Dimensionality reduction is one of the key challenges in single-cell
-data representation. Routine single-cell RNA sequencing (scRNA-seq)
-experiments measure cells in roughly 20,000-30,000 dimensions (i.e.,
-features - mostly gene transcripts but also other functional elements
-encoded in mRNA such as lncRNAs). Since its inception,scRNA-seq
-experiments have been growing in terms of the number of cells measured.
-Originally, cutting-edge SmartSeq experiments would yield a few hundred
-cells, at best. Now, it is not uncommon to see experiments that yield
-over [100,000 cells](https://www.nature.com/articles/s41586-018-0590-4)
-or even [\> 1 million cells](https://doi.org/10.1126/science.aba7721).
+* [Description and results at openproblems.bio](https://openproblems.bio/benchmarks/dimensionality_reduction/)
 
-Each *feature* in a dataset functions as a single dimension. While each
-of the \~30,000 dimensions measured in each cell contribute to an
-underlying data structure, the overall structure of the data is
-challenging to display in few dimensions due to data sparsity and the
-[*“curse of
-dimensionality”*](https://en.wikipedia.org/wiki/Curse_of_dimensionality)
-(distances in high dimensional data don’t distinguish data points well).
-Thus, we need to find a way to [dimensionally
-reduce](https://en.wikipedia.org/wiki/Dimensionality_reduction) the data
-for visualization and interpretation.
+* [Experimental results](https://openproblems-experimental.netlify.app/results/dimensionality_reduction/)
 
-## More information
-
-- [Benchmarking
-  results](https://openproblems-experimental.netlify.app/results_v2/dimensionality_reduction/)
-- [Documentation](https://openproblems-experimental.netlify.app/results_v2/dimensionality_reduction/documentation)
+<!-- update this to openproblems.bio/guide when possible -->
+* [Contribution guide](https://github.com/openproblems-bio/openproblems-v2/blob/main/CONTRIBUTING.md)

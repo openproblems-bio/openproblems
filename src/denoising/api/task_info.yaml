@@ -2,7 +2,7 @@ task_id: denoising
 task_name: Denoising
 v1_url: openproblems/tasks/denoising/README.md
 v1_commit: 3fe9251ba906061b6769eed2ac9da0db5f8e26bb
-short_description: "Removing noise in sparse single-cell RNA-sequencing count data"
+summary: "Removing noise in sparse single-cell RNA-sequencing count data"
 description: |
   Single-cell RNA-Seq protocols only detect a fraction of the mRNA molecules present
   in each cell. As a result, the measurements (UMI counts) observed for each gene and each
