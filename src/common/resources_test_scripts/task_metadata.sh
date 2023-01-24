@@ -114,6 +114,6 @@ cat <<EOT > $sha_file
 EOT
     
 # Create a method info json
-bin/viash run src/common/get_method_info/config.vsh.yaml -- \
+viash run src/common/get_method_info/config.vsh.yaml -- \
     --input "src/denoising" \
      --output $OUTPUT_DIR/"method_info.json"

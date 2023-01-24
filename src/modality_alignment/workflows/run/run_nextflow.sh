@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run this prior to executing this script:
-# bin/viash_build -q 'modality_alignment|utils'
+# viash_build -q 'modality_alignment|utils'
 
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
