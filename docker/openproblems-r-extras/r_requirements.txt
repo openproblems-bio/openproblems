@@ -1,9 +1,9 @@
-bioc::batchelor@1.12.3
-bioc::ComplexHeatmap@2.12.1
+bioc::basilisk@1.10.2
+bioc::batchelor@1.14.1
+bioc::ComplexHeatmap@2.14.0
 bioc::dir.expiry
-bioc::scater@1.24.0
-bioc::scran@1.24.1
-bioc::scuttle@1.6.3
+bioc::scater@1.26.1
+bioc::scuttle@1.8.3
 bslib@0.4.0
 caret@6.0-93
 cli@3.4.1
@@ -11,7 +11,7 @@ conos@1.5.0
 crayon@1.5.2
 dbplyr@2.2.1
 devtools@2.4.5
-dmcable/spacexr@56787ee # master
+dmcable/spacexr@9461a8d # master
 downlit@0.4.2
 dplyr@1.0.10
 e1071@1.7-12
@@ -24,7 +24,7 @@ htmltools@0.5.3
 htmlwidgets@1.5.4
 igraph@1.3.5
 lifecycle@1.0.3
-LTLA/basilisk.utils # required for liana0.1.9
+LTLA/basilisk.utils@411502f # required for liana0.1.9
 Matrix@1.5-1
 pkgdown@2.0.6
 pkgload@1.3.1
@@ -39,7 +39,7 @@ rliger@1.0.0
 rmarkdown@2.2
 RSQLite@2.2.4
 saezlab/liana@0.1.9
-saezlab/OmnipathR@679bb79 # master
+saezlab/OmnipathR@edf276b # master
 sass@0.4.2
 sctransform@0.3.5
 Seurat@4.3.0
