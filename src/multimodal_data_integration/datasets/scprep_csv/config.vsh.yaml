@@ -1,0 +1,55 @@
+functionality:
+  name: "scprep_csv"
+  namespace: "multimodal_data_integration/datasets"
+  version: "dev"
+  description: "Create a modality alignment dataset from CSV using scprep."
+  authors:
+    - name: "Scott Gigante"
+      roles: [ maintainer, author ]
+      props: { github: scottgigante }
+  arguments:
+    - name: "--id"
+      type: "string"
+      default: "citeseq_cbmc"
+      description: "The id of the output dataset id"
+    - name: "--input1"
+      type: "file"
+      default: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DRNA%5Fumi%2Ecsv%2Egz"
+      description: "Path or URL to the RNA counts as a gzipped csv file."
+    - name: "--input2"
+      type: "file"
+      default: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE100866&format=file&file=GSE100866%5FCBMC%5F8K%5F13AB%5F10X%2DADT%5Fumi%2Ecsv%2Egz"
+      description: "Path or URL to the ADT counts as a gzipped csv file."
+    - name: "--compression"
+      type: "string"
+      default: "gzip"
+      description: "For on-the-fly decompression of on-disk data. If 'infer' and filepath_or_buffer is path-like, then detect compression from the following extensions: '.gz', '.bz2', '.zip', or '.xz' (otherwise no decompression). If using 'zip', the ZIP file must contain only one data file to be read in. Set to None for no decompression."
+    - name: "--test"
+      type: "boolean_true"
+      description: "Subset the dataset"
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file containing both input matrices data"
+      required: true
+  resources:
+    - type: python_script
+      path: script.py
+    - path: "../../utils/utils.py"
+  test_resources:
+    - type: python_script
+      path: test.py
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - scprep
+          - anndata # needed by utils.py
+          - pandas # needed by utils.py
+          - scanpy # needed by utils.py
+          - numpy # needed by utils.py
+  - type: nextflow

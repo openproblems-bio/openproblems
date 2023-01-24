@@ -12,10 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Fetch viash
-      run: |
-        bin/init
-        bin/viash -h
+    - uses: viash-io/viash-actions/setup@v1.0.0
 
     # create cachehash key
     - name: Create hash key
@@ -35,7 +32,7 @@ jobs:
     # sync if need be
     - name: Sync test resources
       run: |
-        bin/viash run \
+        viash run \
           -p native \
           src/common/sync_test_resources/config.vsh.yaml -- \
           --input $s3_bucket \
@@ -48,7 +45,7 @@ jobs:
         sed -i '/^target.*/d' .gitignore
 
         # build target dir
-        bin/viash ns build --config_mod ".functionality.version := 'integration_build'" --parallel  --setup donothing
+        viash ns build --config_mod ".functionality.version := 'integration_build'" --parallel  --setup donothing
 
     - name: Deploy to target branch
       uses: peaceiris/actions-gh-pages@v3
@@ -60,9 +57,9 @@ jobs:
     # store component locations
     - id: set_matrix
       run: |
-        component_json=$(bin/viash ns list -p docker --format json | jq -c '[ .[] |  { "name": .functionality.name, "config": .info.config } ]')
+        component_json=$(viash ns list -p docker --format json | jq -c '[ .[] | { "name": .functionality.name, "config": .info.config } ]')
         echo "component_matrix=$component_json" >> $GITHUB_OUTPUT
-        workflow_json=$(bin/viash ns list -s workflows --format json | jq -c '[ .[] | { "name": .functionality.name, "config": .info.config, "test_script": .functionality.test_resources[].path, "entry": .functionality.test_resources[].entrypoint } ]')
+        workflow_json=$(viash ns list -s workflows --format json | jq -c '[ .[] | { "name": .functionality.name, "config": .info.config, "test_script": .functionality.test_resources[].path, "entry": .functionality.test_resources[].entrypoint } ]')
         echo "workflow_matrix=$workflow_json" >> $GITHUB_OUTPUT
     outputs:
       component_matrix: ${{ steps.set_matrix.outputs.component_matrix }}
@@ -83,15 +80,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Fetch viash
-      run: |
-        bin/init
-        bin/viash -h
+    - uses: viash-io/viash-actions/setup@v1.0.0
 
     - name: Build container
       run: |
         SRC_DIR=`dirname ${{ matrix.component.config }}`
-        bin/viash ns build --config_mod ".functionality.version := 'integration_build'" -s "$SRC_DIR" --setup build
+        viash ns build --config_mod ".functionality.version := 'integration_build'" -s "$SRC_DIR" --setup build
         
     - name: Login to container registry
       uses: docker/login-action@v2
@@ -103,7 +97,7 @@ jobs:
     - name: Push containers
       run: |
         SRC_DIR=`dirname ${{ matrix.component.config }}`
-        bin/viash ns build --config_mod ".functionality.version := 'integration_build'" -s "$SRC_DIR" --setup donothing --push
+        viash ns build --config_mod ".functionality.version := 'integration_build'" -s "$SRC_DIR" --setup push
 
   ###################################
   # phase 3
@@ -120,17 +114,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Fetch viash
-      run: |
-        bin/init
-        bin/viash -h
+    - uses: viash-io/viash-actions/setup@v1.0.0
+    - uses: nf-core/setup-nextflow@v1.2.0
 
     # build target dir
     # use containers from integration_build branch, hopefully these are available
     - name: Build target dir
       run: |
         # build target dir
-        bin/viash ns build --config_mod ".functionality.version := 'integration_build'" --parallel  --setup donothing
+        viash ns build --config_mod ".functionality.version := 'integration_build'" --parallel  --setup donothing
 
     # use cache
     - name: Cache resources data
@@ -147,7 +139,7 @@ jobs:
         config_dir=`dirname ${{ matrix.component.config }}`
         script="$config_dir/${{ matrix.component.test_script }}"
         export NXF_VER=22.04.5
-        bin/nextflow run . \
+        nextflow run . \
           -main-script "$script" \
           -entry ${{ matrix.component.entry }} \
           -profile docker,mount_temp,no_publish \

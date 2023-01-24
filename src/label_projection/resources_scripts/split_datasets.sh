@@ -56,7 +56,7 @@ HERE
 fi
 
 export NXF_VER=22.04.5
-bin/nextflow \
+nextflow \
   run . \
   -main-script target/nextflow/label_projection/split_dataset/main.nf \
   -profile docker \

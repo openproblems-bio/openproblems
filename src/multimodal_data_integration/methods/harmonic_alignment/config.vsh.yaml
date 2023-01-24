@@ -1,0 +1,58 @@
+functionality:
+  name: "harmonic_alignment"
+  namespace: "multimodal_data_integration/methods"
+  version: "dev"
+  description: "Run Harmonic Alignment"
+  authors:
+    - name: "Scott Gigante"
+      roles: [ maintainer, author ]
+      props: { github: scottgigante }
+  info:
+    method_name: "Harmonic Alignment"
+    paper_name: "Harmonic Alignment"
+    paper_doi: "10.1137/1.9781611976236.36"
+    paper_year: "2020"
+    code_url: "https://github.com/KrishnaswamyLab/harmonic-alignment"
+  arguments:
+    - name: "--input_mod1"
+      type: "file"
+      default: "dataset_mod1_censored.h5ad"
+      description: "Input h5ad file containing at least `ad.X` and `ad.obsm['mode2']`."
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file containing both RNA and ADT data"
+    - name: "--n_svd"
+      type: "integer"
+      default: 100
+      description: "Number of SVDs to use. Bounded by the number of columns in `ad.X` and `ad.obsm['mode2']`."
+    - name: "--n_pca_XY"
+      type: "integer"
+      default: 100
+      description: "Default number of principal components on which to build graph."
+    - name: "--n_eigenvectors"
+      type: "integer"
+      default: 100
+      description: "Number of eigenvectors of the normalized Laplacian on which to perform alignment."
+  resources:
+    - type: python_script
+      path: script.py
+    - path: "../../utils/preprocessing.py"
+  test_resources:
+    - type: python_script
+      path: test.py
+    - path: "../../resources/sample_dataset.h5ad"
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - anndata # needed by utils.py
+          - scanpy # needed by utils.py
+          - numpy # needed by utils.py
+          - scprep # needed by utils.py
+          - sklearn
+          - git+https://github.com/KrishnaswamyLab/harmonic-alignment#subdirectory=python
+  - type: nextflow

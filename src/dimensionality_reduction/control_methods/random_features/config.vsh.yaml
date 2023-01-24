@@ -2,13 +2,15 @@ __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "random_features"
   namespace: "dimensionality_reduction/control_methods"
-  description: "Negative control method which generates a random embedding "
+  description: "Uses a normal distribution to generate random embeddings."
   info:
     type: negative_control
-    label: Random features
+    method_name: Random Features
     v1_url: openproblems/tasks/dimensionality_reduction/methods/baseline.py
-    v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
+    v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
     preferred_normalization: counts
+    variants:
+      random_features:
   resources:
     - type: python_script
       path: script.py
@@ -18,9 +20,7 @@ platforms:
     setup:
       - type: python
         packages:
-          - numpy
           - "anndata>=0.8"
-          - pyyaml
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]

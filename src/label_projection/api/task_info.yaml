@@ -2,7 +2,7 @@ task_id: label_projection
 task_name: Label projection
 v1_url: openproblems/tasks/label_projection/README.md
 v1_commit: 817ea64a526c7251f74c9a7a6dba98e8602b94a8
-short_description: Automated cell type annotation from rich, labeled reference data
+summary: Automated cell type annotation from rich, labeled reference data
 description: |
   A major challenge for integrating single cell datasets is creating matching
   cell type annotations for each cell. One of the most common strategies for

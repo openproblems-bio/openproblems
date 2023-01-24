@@ -73,7 +73,7 @@ HERE
 fi
 
 export NXF_VER=22.04.5
-bin/nextflow \
+nextflow \
   run . \
   -main-script src/datasets/workflows/process_openproblems_v1/main.nf \
   -profile docker \

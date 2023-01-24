@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 #make sure the following command has been executed
-#bin/viash_build -q 'label_projection|common'
+#viash_build -q 'label_projection|common'
 
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -20,7 +20,7 @@ fi
 # run benchmark
 export NXF_VER=22.04.5
 
-bin/nextflow \
+nextflow \
   run . \
   -main-script src/label_projection/workflows/run/main.nf \
   -profile docker \
