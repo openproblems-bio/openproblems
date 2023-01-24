@@ -76,7 +76,8 @@
 
 * `normalization/l1_sqrt`: A scaled L1 sqrt normalization. extracted from Alra method in the denoising task from v1
 
-* `subsample`: Subsample an h5ad file.
+* `subsample`: Subsample an h5ad file. Allows keeping observations from specific batches and celltypes, 
+  also allows keeping certain features.
 
 ### V1 MIGRATION
 

@@ -11,6 +11,8 @@ cd "$REPO_ROOT"
 
 DATASET_DIR=resources_test/common/pancreas
 
+set -e
+
 mkdir -p $DATASET_DIR
 
 # download dataset
@@ -21,11 +23,16 @@ viash run src/datasets/loaders/openproblems_v1/config.vsh.yaml -- \
     --layer_counts "counts" \
     --output $DATASET_DIR/temp_dataset_full.h5ad
 
+wget https://raw.githubusercontent.com/theislab/scib/c993ffd9ccc84ae0b1681928722ed21985fb91d1/scib/resources/g2m_genes_tirosh_hm.txt -O $DATASET_DIR/temp_g2m_genes_tirosh_hm.txt
+wget https://raw.githubusercontent.com/theislab/scib/c993ffd9ccc84ae0b1681928722ed21985fb91d1/scib/resources/s_genes_tirosh_hm.txt -O $DATASET_DIR/temp_s_genes_tirosh_hm.txt
+KEEP_FEATURES=`cat $DATASET_DIR/temp_g2m_genes_tirosh_hm.txt $DATASET_DIR/temp_s_genes_tirosh_hm.txt | paste -sd ":" -`
+
 # subsample
 viash run src/datasets/subsample/config.vsh.yaml -- \
     --input $DATASET_DIR/temp_dataset_full.h5ad \
     --keep_celltype_categories "acinar:beta" \
     --keep_batch_categories "celseq:inDrop4:smarter" \
+    --keep_features "$KEEP_FEATURES" \
     --output $DATASET_DIR/temp_dataset0.h5ad \
     --seed 123
 
