@@ -115,5 +115,6 @@ EOT
     
 # Create a method info json
 viash run src/common/get_method_info/config.vsh.yaml -- \
-    --input "src/denoising" \
-     --output $OUTPUT_DIR/"method_info.json"
+  --input . \
+  --task_id "denoising" \
+  --output "$OUTPUT_DIR/method_info.json"
