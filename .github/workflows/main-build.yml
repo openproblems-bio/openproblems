@@ -14,13 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: viash-io/viash-actions/setup@v1.0.0
-    - name: Fetch viash tools
-      uses: actions/checkout@v3
-      with:
-        repository: "viash-io/viash_tools"
-        token: ${{ secrets.GTHB_PAT }}
-        ref: "main_build"
-        path: "../viash_tools"
 
     # create cachehash key
     - name: Create hash key
@@ -53,23 +46,11 @@ jobs:
         sed -i '/^target.*/d' .gitignore
 
         # build target dir
-        viash ns build --config_mod ".functionality.version := 'main_build'" --parallel  --setup donothing
+        viash ns build --config_mod ".functionality.version := 'main_build'" --parallel --setup donothing
 
-    - name: Build nextflow schemas & params
-      run: |
-        viash ns list -s src -p nextflow --format json 2> /dev/null > /tmp/ns_list_src.json
-        inputs=$(jq -r '[.[] | .info.config] | join(";")' /tmp/ns_list_src.json)
-        outputs_params=$(jq -r '[.[] | "target/nextflow/" + .functionality.namespace + "/" + .functionality.name + "/nextflow_params.yaml"] | join(";")' /tmp/ns_list_src.json)
-        outputs_schema=$(jq -r '[.[] | "target/nextflow/" + .functionality.namespace + "/" + .functionality.name + "/nextflow_schema.json"] | join(";")' /tmp/ns_list_src.json)
-        ../viash_tools/target/docker/nextflow/generate_params/generate_params --input "$inputs" --output "$outputs_params"
-        ../viash_tools/target/docker/nextflow/generate_schema/generate_schema --input "$inputs" --output "$outputs_schema"
-
-        viash ns list -s workflows --format json 2> /dev/null > /tmp/ns_list_workflow.json
-        inputs=$(jq -r '[.[] | .info.config] | join(";")' /tmp/ns_list_workflow.json)
-        outputs_params=$(jq -r '[.[] | .info.config | capture("^(?<dir>.*\/)").dir + "/nextflow_params.yaml"] | join(";")' /tmp/ns_list_workflow.json)
-        outputs_schema=$(jq -r '[.[] | .info.config | capture("^(?<dir>.*\/)").dir + "/nextflow_schema.json"] | join(";")' /tmp/ns_list_workflow.json)
-        ../viash_tools/target/docker/nextflow/generate_params/generate_params --input "$inputs" --output "$outputs_params"
-        ../viash_tools/target/docker/nextflow/generate_schema/generate_schema --input "$inputs" --output "$outputs_schema"
+    - uses: viash-io/viash-actions/build_nextflow_schemas@build_nextflow_schemas
+      with: 
+        token: ${{ secrets.GTHB_PAT }}
 
     - name: Deploy to target branch
       uses: peaceiris/actions-gh-pages@v3
