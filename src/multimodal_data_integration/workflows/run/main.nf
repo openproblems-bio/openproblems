@@ -8,18 +8,18 @@ nextflow.enable.dsl=2
 targetDir = "${params.rootDir}/target/nextflow"
 
 // import dataset loaders
-include { sample_dataset }       from "$targetDir/modality_alignment/datasets/sample_dataset/main.nf"     params(params)
-include { scprep_csv }           from "$targetDir/modality_alignment/datasets/scprep_csv/main.nf"         params(params)
+include { sample_dataset }       from "$targetDir/multimodal_data_integration/datasets/sample_dataset/main.nf"     params(params)
+include { scprep_csv }           from "$targetDir/multimodal_data_integration/datasets/scprep_csv/main.nf"         params(params)
 
 // import methods
-include { sample_method }        from "$targetDir/modality_alignment/methods/sample_method/main.nf"       params(params)
-include { mnn }                  from "$targetDir/modality_alignment/methods/mnn/main.nf"                 params(params)
-include { scot }                 from "$targetDir/modality_alignment/methods/scot/main.nf"                params(params)
-include { harmonic_alignment }   from "$targetDir/modality_alignment/methods/harmonic_alignment/main.nf"  params(params)
+include { sample_method }        from "$targetDir/multimodal_data_integration/methods/sample_method/main.nf"       params(params)
+include { mnn }                  from "$targetDir/multimodal_data_integration/methods/mnn/main.nf"                 params(params)
+include { scot }                 from "$targetDir/multimodal_data_integration/methods/scot/main.nf"                params(params)
+include { harmonic_alignment }   from "$targetDir/multimodal_data_integration/methods/harmonic_alignment/main.nf"  params(params)
 
 // import metrics
-include { knn_auc }              from "$targetDir/modality_alignment/metrics/knn_auc/main.nf"             params(params)
-include { mse }                  from "$targetDir/modality_alignment/metrics/mse/main.nf"                 params(params)
+include { knn_auc }              from "$targetDir/multimodal_data_integration/metrics/knn_auc/main.nf"             params(params)
+include { mse }                  from "$targetDir/multimodal_data_integration/metrics/mse/main.nf"                 params(params)
 
 // import helper functions
 include { extract_scores }       from "$targetDir/common/extract_scores/main.nf"                           params(params)
@@ -37,7 +37,7 @@ include { extract_scores }       from "$targetDir/common/extract_scores/main.nf"
 
 workflow get_scprep_csv_datasets {
     main:
-        output_ = Channel.fromPath("$launchDir/src/modality_alignment/datasets/datasets_scprep_csv.tsv")
+        output_ = Channel.fromPath("$launchDir/src/multimodal_data_integration/datasets/datasets_scprep_csv.tsv")
             | splitCsv(header: true, sep: "\t")
             | map { row ->
                 [ row.id, [ "input1": file(row.input1), "input2": file(row.input2), "id": row.id ]]

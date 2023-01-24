@@ -1,6 +1,6 @@
 functionality:
   name: "mse"
-  namespace: "modality_alignment/metrics"
+  namespace: "multimodal_data_integration/metrics"
   version: "dev"
   description: "Compute the mean squared error"
   authors:

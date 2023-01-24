@@ -1,6 +1,6 @@
 functionality:
   name: "knn_auc"
-  namespace: "modality_alignment/metrics"
+  namespace: "multimodal_data_integration/metrics"
   version: "dev"
   description: "Compute the kNN Area Under the Curve"
   authors:

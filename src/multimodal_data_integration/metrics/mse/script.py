@@ -2,8 +2,8 @@
 # The code between the the comments above and below gets stripped away before 
 # execution. Here you can put anything that helps the prototyping of your script.
 par = {
-    "input": "out_bash/modality_alignment/methods/citeseq_cbmc_mnn.h5ad",
-    "output": "out_bash/modality_alignment/metrics/citeseq_cbmc_mnn_knn_auc.h5ad"
+    "input": "out_bash/multimodal_data_integration/methods/citeseq_cbmc_mnn.h5ad",
+    "output": "out_bash/multimodal_data_integration/metrics/citeseq_cbmc_mnn_knn_auc.h5ad"
 }
 ## VIASH END
 

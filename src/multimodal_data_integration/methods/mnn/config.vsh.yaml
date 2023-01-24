@@ -1,6 +1,6 @@
 functionality:
   name: "mnn"
-  namespace: "modality_alignment/methods"
+  namespace: "multimodal_data_integration/methods"
   version: "dev"
   description: "Run Mutual Nearest Neighbours"
   authors:
