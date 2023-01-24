@@ -121,6 +121,7 @@
 * split_dataset also removes unnecessary data from train and test datasets not needed by the methods and metrics.
 
 ## Dimensionality reduction
+
 ### New functionality
 * `api/anndata_*`: Created a file format specifications for the h5ad files throughout the pipeline.
 
@@ -132,12 +133,16 @@
 
 * `resources_test/dimensionality_reduction/pancreas` with `src/dimensionality_reduction/resources_test_scripts/pancreas.sh`.
 
+* Added `variant` key to config files to store variants (different input parameters) of every component.
+
 ### V1 migration
-* `control_methods/high_dim_pca`: Migrated from v1. Extracted from baseline method `High-dimensional PCA`.
+* `control_methods/true_features`: Migrated from v1. Extracted from baseline method `True Features`.
 
 * `control_methods/random_features`: Migrated from v1. Extracted from baseline method `Random Features`.
 
 * `methods/umap`: Migrated from v1.
+
+* `methods/ivis`: Migrated from v1.
 
 * `methods/tsne`: Migrated and adapted from v1.
 
@@ -145,20 +150,31 @@
 
 * `methods/phate`: Migrated from v1.
 
-* `metrics/rmse`: Migrated from v1.
+* `methods/pca`: Migrated from v1.
 
-* `metrics/trustworthiness`: Migrated from v1.
+* `methods/neuralee`: Migrated from v1.
 
-* `metrics/density`: Migrated from v1.
+* `metrics/rmse`: Migrated from v1, but will likely be removed.
+
+* `metrics/trustworthiness`: Migrated from v1, but will likely be removed.
+
+* `metrics/density_preservation`: Migrated from v1.
+
+* `metrics/coranking`: Migrated from v1. This script originally called `nn_ranking.py` and written in Python.
 
 ### Changes from V1
 
-* Anndata layers are used to store normalized and raw counts instead of `.X`.
-
-* Metrics are stored in `.uns` data.
+* Raw counts and normalized expression data is stored in `.layers["counts"]` and `.layers["normalized"]`, respectively,
+  instead of in `.X`.
   
-* `split_dataset` removes nonessential data from train and test datasets for the methods and metrics.
+* A `split_dataset` has been implemented to make a distinction between the data a method is allowed to see
+  (here called the train data) and what a metric is allowed to see (here called the test data).
 
-* Higher dimensional data used to obtain the metrics is calculated from test data instead of the whole dataset. So far test and train data contain the same counts values, but this may change eventually.
+* `methods/ivis` had originally been removed from the v1 (temporarily) but has been added back to the v2.
 
-* Test data is used instead of the whole dataset in control (baseline) methods.
+* The metrics as defined in the `nn_ranking.py` script have been documented and refactored into an R
+  component `metrics/coranking`.
+
+* `metrics/rmse` should be removed because RMSE metrics don't really make sense here.
+
+* `metrics/trustworthiness` should be removed because it is already included in `metrics/coranking`.

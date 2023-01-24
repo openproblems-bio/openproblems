@@ -1,46 +1,54 @@
 import anndata as ad
 from umap import UMAP
 import scanpy as sc
-import yaml
 
 ## VIASH START
 par = {
-    'input': 'resources_test/common/pancreas/train.h5ad',
-    'output': 'reduced.h5ad',
-    'no_pca': False,
+    "input": "resources_test/dimensionality_reduction/pancreas/train.h5ad",
+    "output": "reduced.h5ad",
+    "n_pca_dims": 50,
+    "n_hvg": 1000
 }
 meta = {
-    'functionality_name': 'densmap',
-    'config': 'src/dimensionality_reduction/methods/densmap/config.vsh.yaml'
+    "functionality_name": "foo",
 }
 ## VIASH END
 
-print("Load input data")
-input = ad.read_h5ad(par['input'])
+print("Load input data", flush=True)
+input = ad.read_h5ad(par["input"])
+X_mat = input.layers["normalized"]
 
-print('Select top 1000 high variable genes')
-n_genes = 1000
-idx = input.var['hvg_score'].to_numpy().argsort()[::-1][:n_genes]
+if par["n_hvg"]:
+    print(f"Select top {par['n_hvg']} high variable genes", flush=True)
+    idx = input.var["hvg_score"].to_numpy().argsort()[::-1][:par["n_hvg"]]
+    X_mat = X_mat[:, idx]
 
-print("Run UMAP...")
-if par['no_pca']:
-    print('... using logCPM data')
-    input.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(input.layers['normalized'][:, idx])
+if par["n_pca_dims"]:
+    print("Apply PCA to normalized data", flush=True)
+    umap_input = sc.tl.pca(
+        X_mat,
+        n_comps=par["n_pca_dims"],
+        svd_solver="arpack"
+    )
 else:
-    print('... after applying PCA with 50 dimensions to logCPM data')
-    input.obsm['X_pca_hvg'] = sc.tl.pca(input.layers['normalized'][:, idx], n_comps=50, svd_solver="arpack")
-    input.obsm["X_emb"] = UMAP(densmap=True, random_state=42).fit_transform(input.obsm['X_pca_hvg'])
+    print("Use normalized data as input for UMAP", flush=True)
+    umap_input = X_mat
 
-print("Delete layers and var")
-del input.layers
-del input.var
+print("Run densMAP", flush=True)
+X_emb = UMAP(densmap=True, random_state=42).fit_transform(umap_input)
 
-print('Add method and normalization ID')
-input.uns['method_id'] = meta['functionality_name']
-with open(meta['config'], 'r') as config_file:
-    config = yaml.safe_load(config_file)
+print("Create output AnnData", flush=True)
+output = ad.AnnData(
+    obs=input.obs[[]],
+    obsm={
+        "X_emb": X_emb
+    },
+    uns={
+        "dataset_id": input.uns["dataset_id"],
+        "normalization_id": input.uns["normalization_id"],
+        "method_id": meta["functionality_name"]
+    }
+)
 
-input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
-
-print("Write output to file")
-input.write_h5ad(par['output'], compression="gzip")
+print("Write output to file", flush=True)
+output.write_h5ad(par["output"], compression="gzip")

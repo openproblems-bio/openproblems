@@ -6,10 +6,11 @@ functionality:
   info:
     v1_url: openproblems/tasks/dimensionality_reduction/metrics/trustworthiness.py 
     v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    v1_note: This metric is already included in the 'coranking' component and can be removed.
     metrics:
-      - id: trustworthiness
-        label: Trustworthiness
-        description: To what extent the local structure is retained in a low-dimensional embedding in a value between 0 and 1.
+      - method_id: trustworthiness
+        metric_name: Trustworthiness at k=15
+        paper_reference: venna2006local
         min: 0
         max: 1
         maximize: true

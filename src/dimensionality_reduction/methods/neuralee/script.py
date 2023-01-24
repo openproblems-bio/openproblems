@@ -1,61 +1,78 @@
 import anndata as ad
-import scanpy as sc
-import yaml
 import torch
 from neuralee.embedding import NeuralEE
 from neuralee.dataset import GeneExpressionDataset
 
+# todo: allow gpu
+device = torch.device("cpu")
+
 ## VIASH START
 par = {
-    'input': 'resources_test/dimensionality_reduction/pancreas/train.h5ad',
-    'output': 'reduced.h5ad',
-    'no_pca': False,
+    "input": "resources_test/dimensionality_reduction/pancreas/train.h5ad",
+    "output": "reduced.h5ad",
+    "n_hvg": 1000,
+    "n_iter": 10,
+    "normalize": True
 }
 meta = {
-    'functionality_name': 'neuralee',
-    'config': 'src/dimensionality_reduction/methods/neuralee/config.vsh.yaml'
+    "functionality_name": "foo",
 }
 ## VIASH END
 
-print("Load input data")
-input = ad.read_h5ad(par['input'])
+print("Load input data", flush=True)
+input = ad.read_h5ad(par["input"])
 
-print('Add method and normalization ID')
-with open(meta['config'], 'r') as config_file:
-    config = yaml.safe_load(config_file)
-
-input.uns['normalization_id'] = config['functionality']['info']['preferred_normalization']
-input.uns['method_id'] = meta['functionality_name']
-
-if input.uns['normalization_id'] == 'counts':
-    print('Select top 500 high variable genes')
-    # idx = input.var['hvg_score'].to_numpy().argsort()[-500:]
-    # dataset = GeneExpressionDataset(input.layers['counts'][:, idx])
-    dataset = GeneExpressionDataset(input.layers['counts'])
+if par["normalize"]:
+    print("Performing own normalization", flush=True)
+    # perform own normalization based on the "recommended" preprocessing taken from example notebooks, e.g.:
+    # https://github.com/HiBearME/NeuralEE/blob/master/tests/notebooks/retina_dataset.ipynb
+    dataset = GeneExpressionDataset(input.layers["counts"])
     dataset.log_shift()
-    dataset.subsample_genes(500)
+    if par["n_hvg"]:
+        dataset.subsample_genes(par["n_hvg"])
     dataset.standardscale()
-elif input.uns['normalization_id'] == 'log_cpm':
-    print('Select top 1000 high variable genes')
-    # idx = input.var['hvg_score'].to_numpy().argsort()[-1000:]
-    # dataset = GeneExpressionDataset(input.layers['normalized'][:, idx])
-    dataset = GeneExpressionDataset(input.layers['normalized'])
-    dataset.subsample_genes(500)
+
+else:
+    X_mat = input.layers["normalized"]
+
+    if par["n_hvg"]:
+        print(f"Select top {par['n_hvg']} high variable genes", flush=True)
+        idx = input.var["hvg_score"].to_numpy().argsort()[-par["n_hvg"]:]
+        X_mat = X_mat[:, idx]
+    
+    print("Using pre-normalized data", flush=True)
+    dataset = GeneExpressionDataset(X_mat)
 
 
-# 1000 cells as a batch to estimate the affinity matrix
-dataset.affinity_split(N_small=min(1000, input.n_obs))
-NEE = NeuralEE(dataset, d=2, device=torch.device("cpu"))
+# estimate the affinity matrix
+batch_size = min(1000, input.n_obs)
+print(f"Use {batch_size} cells as batch to estimate the affinity matrix", flush=True)
+dataset.affinity_split(N_small=batch_size)
+
+print("Create NeuralEE object", flush=True)
+NEE = NeuralEE(dataset, d=2, device=device)
 fine_tune_kwargs = dict(verbose=False)
-fine_tune_kwargs["maxit"] = par['maxit']
-fine_tune_kwargs["maxit"] = 10
+
+if par["n_iter"]:
+    fine_tune_kwargs["maxit"] = par["n_iter"]
+
+print("Run NeuralEE", flush=True)
 res = NEE.fine_tune(**fine_tune_kwargs)
 
-input.obsm["X_emb"] = res["X"].detach().cpu().numpy()
+X_emb = res["X"].detach().cpu().numpy()
 
-print("Delete layers and var")
-del input.layers
-del input.var
+print("Create output AnnData", flush=True)
+output = ad.AnnData(
+    obs=input.obs[[]],
+    obsm={
+        "X_emb": X_emb
+    },
+    uns={
+        "dataset_id": input.uns["dataset_id"],
+        "normalization_id": input.uns["normalization_id"],
+        "method_id": meta["functionality_name"]
+    }
+)
 
-print("Write output to file")
-input.write_h5ad(par['output'], compression="gzip")
+print("Write output to file", flush=True)
+output.write_h5ad(par["output"], compression="gzip")

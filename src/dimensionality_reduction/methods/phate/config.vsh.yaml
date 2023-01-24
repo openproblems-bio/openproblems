@@ -5,18 +5,33 @@ functionality:
   description: "Potential of heat-diffusion for affinity-based transition embedding"
   info:
     type: method
-    label: PHATE
+    method_name: PHATE
+    paper_reference: "moon2019visualizing"
+    code_url: https://github.com/KrishnaswamyLab/PHATE/
     v1_url: openproblems/tasks/dimensionality_reduction/methods/phate.py
-    v1_commit: 4baa8619e232fec2e3bcb3fb73d2f991d16c6f69
+    v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
     preferred_normalization: sqrt_cpm
+    variants:
+      phate_default:
+      phate_sqrt:
+        gamma: 0
+      phate_logCPM:
+        preferred_normalization: log_cpm
+      phate_logCPM_1kHVG:
+        n_hvg: 1000
+        preferred_normalization: log_cpm
   arguments:
-    - name: '--n_pca'
+    - name: '--n_pca_dims'
       type: integer
       default: 50
       description: Number of principal components of PCA to use.
-    - name: '--g0'
-      type: boolean_true
-      description: Set informational distance constant to 0.
+    - name: "--n_hvg"
+      type: integer
+      description: Number of highly variable genes to subset to. If not specified, the input matrix will not be subset.
+    - name: '--gamma'
+      type: double
+      description: Gamma value
+      default: 1
   resources:
     - type: python_script
       path: script.py
@@ -29,7 +44,6 @@ platforms:
           - "anndata>=0.8"
           - phate==1.0.*
           - scprep
-          - pyyaml
           - "scikit-learn<1.2"
   - type: nextflow
     directives: 

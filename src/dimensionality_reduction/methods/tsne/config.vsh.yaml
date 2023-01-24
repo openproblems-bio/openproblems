@@ -2,18 +2,27 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "tsne"
   namespace: "dimensionality_reduction/methods"
-  description: "t-distributed stochastic neighbor embedding"
+  description: "t-Distributed Stochastic Neighbor Embedding (t-SNE)"
   info:
     type: method
-    label: t-SNE
+    method_name: t-SNE
+    paper_reference: vandermaaten2008visualizing
+    code_url: https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html#sklearn.manifold.TSNE
     v1_url: openproblems/tasks/dimensionality_reduction/methods/tsne.py
-    v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
     preferred_normalization: log_cpm
+    variants:
+      tsne_logCPM:
+      tsne_logCPM_1kHVG:
+        n_hvg: 1000
   arguments:
-    - name: "--n_pca"
+    - name: "--n_hvg"
       type: integer
+      description: Number of highly variable genes to subset to. If not specified, the input matrix will not be subset.
+    - name: "--n_pca_dims"
+      type: integer
+      description: Number of PCA dimensions to use. If not specified, no PCA will be performed.
       default: 50
-      description: Number of principal components of PCA to use.
   resources:
     - type: python_script
       path: script.py
@@ -21,11 +30,15 @@ platforms:
   - type: docker
     image: "python:3.10"
     setup:
+      - type: apt
+        packages:
+          - cmake
+          - gcc
       - type: python
         packages:
           - scanpy
           - "anndata>=0.8"
-          - pyyaml
+          - MulticoreTSNE
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]

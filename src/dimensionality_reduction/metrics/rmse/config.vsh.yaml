@@ -6,11 +6,22 @@ functionality:
   info:
     v1_url: openproblems/tasks/dimensionality_reduction/metrics/root_mean_square_error.py 
     v1_commit: b353a462f6ea353e0fc43d0f9fcbbe621edc3a0b
+    v1_note: This metric was ported but will probably be removed soon.
     metrics:
-      - id: rmse
-        label: RMSE
-        description: "The root mean squared error between the full (or processed) data matrix and a list of dimensionally-reduced matrices"
+      - metric_id: rmse
+        metric_name: RMSE
+        metric_description: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of an SVD."
+        paper_reference: kruskal1964mds
         min: 0
+        max: +inf
+        maximize: false
+      - metric_id: rmse_spectral
+        metric_name: RMSE Spectral
+        metric_description: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of a spectral embedding."
+        paper_reference: coifman2006diffusion
+        min: 0
+        max: +inf
+        maximize: false
   arguments:
     - name: "--spectral"
       type: boolean_true

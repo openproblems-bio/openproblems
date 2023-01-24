@@ -22,29 +22,29 @@ functionality:
             "--output", output_path
         ]
 
-        print(">> Checking whether input file exists")
+        print(">> Checking whether input file exists", flush=True)
         assert path.exists(input_path)
 
-        print(">> Running script as test")
-        out = subprocess.run(cmd, check=True, capture_output=True, text=True)
+        print(">> Running script as test", flush=True)
+        subprocess.run(cmd, check=True)
 
-        print(">> Checking whether output file exists")
+        print(">> Checking whether output file exists", flush=True)
         assert path.exists(output_path)
 
-        print(">> Reading h5ad files")
+        print(">> Reading h5ad files", flush=True)
         input = ad.read_h5ad(input_path)
         output = ad.read_h5ad(output_path)
 
-        print("input:", input)
-        print("output:", output)
+        print("input:", input, flush=True)
+        print("output:", output, flush=True)
 
-        print(">> Checking whether predictions were added")
+        print(">> Checking whether predictions were added", flush=True)
         assert "X_emb" in output.obsm
         assert meta['functionality_name'] == output.uns["method_id"]
         assert 'normalization_id' in output.uns
 
-        print(">> Checking whether data from input was copied properly to output")
+        print(">> Checking whether data from input was copied properly to output", flush=True)
         assert input.n_obs == output.n_obs
         assert input.uns["dataset_id"] == output.uns["dataset_id"]
 
-        print("All checks succeeded!")
+        print("All checks succeeded!", flush=True)
