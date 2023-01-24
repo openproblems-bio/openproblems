@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 #make sure the following command has been executed
-#bin/viash_build -q 'label_projection|common'
+#viash_build -q 'label_projection|common'
 
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)

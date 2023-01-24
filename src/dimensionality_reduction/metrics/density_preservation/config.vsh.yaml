@@ -1,0 +1,36 @@
+__merge__: ../../api/comp_metric.yaml
+functionality:
+  name: "density_preservation"
+  namespace: "dimensionality_reduction/metrics"
+  description: |
+    Similarity between local densities in the high-dimensional data and the reduced data.
+  info:
+    v1_url: openproblems/tasks/dimensionality_reduction/metrics/density.py 
+    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+    metrics:
+      - metric_id: density_preservation
+        metric_name: Density preservation
+        metric_description: |
+          Similarity between local densities in the high-dimensional data and the reduced data.
+
+          This is computed as the pearson correlation of local radii with the local radii in the original data space.
+        paper_reference: narayan2021assessing
+        min: -1
+        max: 1
+        maximize: true
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.10"
+    setup:
+      - type: python
+        packages:
+          - scipy
+          - numpy
+          - "anndata>=0.8"
+          - umap-learn
+  - type: nextflow
+    directives: 
+      label: [ lowmem, midcpu ]

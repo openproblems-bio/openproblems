@@ -258,7 +258,7 @@ You can view the interface of the executable by running the executable
 with the `-h` or `--help` parameter.
 
 ``` bash
-bin/viash run src/label_projection/methods/foo/config.vsh.yaml -- --help
+viash run src/label_projection/methods/foo/config.vsh.yaml -- --help
 ```
 
     foo dev
@@ -284,7 +284,7 @@ bin/viash run src/label_projection/methods/foo/config.vsh.yaml -- --help
 You can **run the component** as follows:
 
 ``` bash
-bin/viash run src/label_projection/methods/foo/config.vsh.yaml -- \
+viash run src/label_projection/methods/foo/config.vsh.yaml -- \
   --input_train resources_test/label_projection/pancreas/train.h5ad \
   --input_test resources_test/label_projection/pancreas/test.h5ad \
   --output resources_test/label_projection/pancreas/prediction.h5ad
@@ -309,7 +309,7 @@ and they will be able to run it, provided that they have Bash and Docker
 installed.
 
 ``` bash
-bin/viash build src/label_projection/methods/foo/config.vsh.yaml \
+viash build src/label_projection/methods/foo/config.vsh.yaml \
   -o target/docker/label_projection/methods/foo
 ```
 
@@ -317,7 +317,7 @@ bin/viash build src/label_projection/methods/foo/config.vsh.yaml \
 
 > **Note**
 >
-> The `bin/viash_build` component does a much better job of setting up a
+> The `viash_build` component does a much better job of setting up a
 > collection of components.
 
 </div>
@@ -371,7 +371,7 @@ generic unit test for free. This means you can unit test your component
 using the **`viash test`** command.
 
 ``` bash
-bin/viash test src/label_projection/methods/foo/config.vsh.yaml
+viash test src/label_projection/methods/foo/config.vsh.yaml
 ```
 
     Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo17760509097337858011'
@@ -468,7 +468,7 @@ If we now run the test, we should get an error since we didn’t create
 all of the required output slots.
 
 ``` bash
-bin/viash test src/label_projection/methods/foo/config.vsh.yaml
+viash test src/label_projection/methods/foo/config.vsh.yaml
 ```
 
     Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128'

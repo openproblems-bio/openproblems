@@ -1,0 +1,44 @@
+functionality:
+  name: "mse"
+  namespace: "multimodal_data_integration/metrics"
+  version: "dev"
+  description: "Compute the mean squared error"
+  authors:
+    - name: "Scott Gigante"
+      roles: [ maintainer, author ]
+      props: { github: scottgigante }
+  info:
+    method_label: "MSE"
+    metric_name: "Mean Squared Error"
+    maximize: "true"
+  arguments:
+    - name: "--input"
+      alternatives: ["-i"]
+      type: "file"
+      default: "input.h5ad"
+      description: "File to input h5ad containing: `ad.X`, `ad.obsm['aligned']`, `ad.obsm['mode2_aligned']`"
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file containing `ad.uns['metric_value']`"
+  resources:
+    - type: python_script
+      path: ./script.py
+  test_resources:
+    - type: python_script
+      path: test.py
+    - path: ../../resources/sample_output.h5ad
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - anndata
+          - numpy
+          - scipy
+          - scprep
+          - scanpy
+  - type: nextflow

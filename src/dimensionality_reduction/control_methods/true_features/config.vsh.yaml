@@ -7,13 +7,27 @@ functionality:
     type: positive_control
     label: True Features
     v1_url: openproblems/tasks/dimensionality_reduction/methods/baseline.py
+    v1_comp_id: "True Features"
     v1_commit: 4a0ee9b3731ff10d8cd2e584726a61b502aef613
     preferred_normalization: counts
+    variants:
+      true_features:
+      true_features_log_cpm:
+        preferred_normalization: log_cpm
+        use_normalized_layer: true
+      true_features_log_cpm_hvg:
+        preferred_normalization: log_cpm
+        use_normalized_layer: true
+        n_hvg: 1000
   arguments:
-    - name: "--n_comps"
+    - name: "--use_normalized_layer"
+      type: boolean
+      default: false
+      description: Whether to work with the raw counts or the normalized counts.
+    - name: "--n_hvg"
       type: integer
-      default: 100
-      description: Number of principal components to use.
+      description: Number of highly variable genes to subset to. If not specified, the input matrix will not be subset.
+      default: 1000
   resources:
     - type: python_script
       path: script.py
@@ -25,7 +39,6 @@ platforms:
         packages:
           - scanpy
           - "anndata>=0.8"
-          - pyyaml
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]

@@ -1,0 +1,57 @@
+functionality:
+  name: "scot"
+  namespace: "multimodal_data_integration/methods"
+  version: "dev"
+  description: "Run Single Cell Optimal Transport"
+  authors:
+    - name: "Alex Tong"
+      roles: [ maintainer, author ]
+      props: { github: atong01 }
+  info:
+    method_label: "SCOT"
+    method_name: "Single Cell Optimal Transport"
+    paper_name: "Gromov-Wasserstein optimal transport to align single-cell multi-omics data"
+    paper_doi: "10.1101/2020.04.28.066787"
+    paper_year: "2020"
+    code_url: "https://github.com/rsinghlab/SCOT"
+    code_version: "0.2.0"
+  arguments:
+    - name: "--input"
+      alternatives: ["-i"]
+      type: "file"
+      default: "input.h5ad"
+      description: "Input h5ad file containing at least `ad.X` and `ad.obsm['mode2']`."
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.scot.h5ad"
+      description: "Output h5ad file containing both RNA and ADT data"
+    - name: "--n_svd"
+      type: "integer"
+      default: 100
+      description: "Number of SVDs to use. Bounded by the number of columns in `ad.X` and `ad.obsm['mode2']`."
+    - name: "--balanced"
+      type: "boolean_true"
+      description: "Determines whether balanced or unbalanced optimal transport. In the balanced case, the target and source distributions are assumed to have equal mass."
+  resources:
+    - type: python_script
+      path: script.py
+    - path: "../../utils/preprocessing.py"
+  test_resources:
+    - type: python_script
+      path: test.py
+    - path: "../../resources/sample_dataset.h5ad"
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - anndata # needed by utils.py
+          - scanpy # needed by utils.py
+          - numpy # needed by utils.py
+          - scprep # needed by utils.py
+          - sklearn
+          - git+https://github.com/atong01/SCOT
+  - type: nextflow
