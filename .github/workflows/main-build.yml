@@ -48,9 +48,17 @@ jobs:
         # build target dir
         viash ns build --config_mod ".functionality.version := 'main_build'" --parallel --setup donothing
 
-    - uses: viash-io/viash-actions/build_nextflow_schemas@build_nextflow_schemas
-      with: 
-        token: ${{ secrets.GTHB_PAT }}
+    # - name: Generate schemas
+    #   uses: viash-io/viash-actions/build_nextflow_schemas@build_nextflow_schemas
+    #   with: 
+    #     token: ${{ secrets.GTHB_PAT }}
+    #     input_dir: src
+
+    # - name: Generate params
+    #   uses: viash-io/viash-actions/build_nextflow_params@build_nextflow_params
+    #   with: 
+    #     token: ${{ secrets.GTHB_PAT }}
+    #     input_dir: src
 
     - name: Deploy to target branch
       uses: peaceiris/actions-gh-pages@v3
@@ -97,4 +105,4 @@ jobs:
 
     - name: Push containers
       run: |
-        viash build ${{ matrix.component.config }} -p docker --config_mod ".functionality.version := 'main_build'"  --setup push
+        viash build ${{ matrix.component.config }} -p docker --config_mod ".functionality.version := 'main_build'" --setup push
