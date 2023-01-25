@@ -5,14 +5,11 @@ functionality:
   description: "iterative K-nearest neighbor smoothing"
   info:
     type: method
-    label: knn_smooth
-    # paper_name: "K-nearest neighbor smoothing for high-throughput"
-    # paper_url: "https://www.biorxiv.org/content/10.1101/217737v3"
-    # paper_year: 2018
-    paper_doi: "10.1101/217737"
+    method_name: KNN Smoothing
+    paper_reference: "wagner2018knearest"
     code_url: "https://github.com/yanailab/knn-smoothing"
     v1_url: openproblems/tasks/denoising/methods/knn_smoothing.py
-    v1_commit: bbecf4e9ad90007c2711394e7fbd8e49cbd3e4a1
+    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     variants: 
       knn_smoothing:
     preferred_normalization: counts

@@ -4,8 +4,9 @@ functionality:
   namespace: "denoising/metrics"
   description: "Mean Squared Error."
   info:
+    paper_reference: "batson2019molecular"
     v1_url: openproblems/tasks/denoising/metrics/mse.py
-    v1_commit: f24fb718b1115ca85130a45f2e56fddb00075d22
+    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     metrics:
       - metric_id: mse
         metric_name: Mean-squared error
