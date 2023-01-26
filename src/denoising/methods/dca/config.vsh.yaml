@@ -32,6 +32,7 @@ platforms:
       - type: python
         packages:
           - anndata>=0.8
+          - pyyaml
           - "git+https://github.com/scottgigante-immunai/dca.git@patch-1"
   - type: nextflow
     directives: 

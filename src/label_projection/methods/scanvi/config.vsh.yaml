@@ -32,6 +32,7 @@ platforms:
     setup:
       - type: python
         packages: 
+          - pyyaml
           - "anndata>=0.8"
           - scarches
   - type: nextflow

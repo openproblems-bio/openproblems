@@ -38,6 +38,7 @@ platforms:
       - type: python
         packages:
           - scanpy
+          - pyyaml
           - "anndata>=0.8"
   - type: nextflow
     directives: 

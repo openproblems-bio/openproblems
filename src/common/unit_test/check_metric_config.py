@@ -29,8 +29,11 @@ with open(meta["config"], "r") as file:
 
 info = config['functionality']['info']
 
+print("check general fields", flush=True)
+assert "namespace" in config["functionality"] is not None, "namespace not a field or is empty"
+
+
 print("Check info fields", flush=True)
-# NOTE: also add general namespace, description and name ?
 assert "metrics" in info, "metrics not an info field"
 for metric in info["metrics"]:
     check_metric(metric)

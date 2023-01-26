@@ -26,6 +26,7 @@ platforms:
       - type: python
         packages:
           - "anndata>=0.8"
+          - pyyaml
           - xgboost
   - type: nextflow
     directives: 

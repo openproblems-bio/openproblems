@@ -25,6 +25,7 @@ platforms:
         packages:
           - scikit-learn
           - numpy
+          - pyyaml
           - "anndata>=0.8"
   - type: nextflow
     directives: 

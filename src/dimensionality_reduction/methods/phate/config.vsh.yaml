@@ -44,6 +44,7 @@ platforms:
           - "anndata>=0.8"
           - phate==1.0.*
           - scprep
+          - pyyaml
           - "scikit-learn<1.2"
   - type: nextflow
     directives: 

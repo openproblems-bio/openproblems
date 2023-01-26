@@ -10,6 +10,8 @@ functionality:
   test_resources:
     - path: ../../../../resources_test/denoising/pancreas
     - type: python_script
+      path: ../../../common/unit_test/check_method_config.py
+    - type: python_script
       path: generic_test.py
       text: |
         import anndata as ad

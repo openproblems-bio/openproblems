@@ -21,6 +21,7 @@ platforms:
       - type: python
         packages:
           - "anndata>=0.8"
+          - pyyaml
   - type: nextflow
     directives: 
       label: [ lowmem, lowcpu ]

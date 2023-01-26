@@ -39,6 +39,7 @@ platforms:
           - scanpy
           - "anndata>=0.8"
           - ivis[cpu]
+          - pyyaml
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]

@@ -41,6 +41,7 @@ platforms:
         packages:
           - scanpy
           - "anndata>=0.8"
+          - pyyaml
           - torch
           - "git+https://github.com/michalk8/neuralee@8946abf"
   - type: nextflow

@@ -22,6 +22,7 @@ platforms:
     setup:
       - type: python
         packages:
+          - pyyaml
           - scikit-learn
           - "anndata>=0.8"
   - type: nextflow
