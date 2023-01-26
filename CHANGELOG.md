@@ -25,6 +25,8 @@
 
 * `get_task_info`: extract task info
 
+* `unit_test`: Common unit test that can be used by all tasks
+
 
 ## label_projection
 
