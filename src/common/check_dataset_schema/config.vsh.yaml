@@ -1,0 +1,45 @@
+functionality:
+  name: check_dataset_schema
+  namespace: common
+  description:
+  argument_groups:
+    - name:  Inputs
+      arguments:
+        - name: --input
+          type: file
+          required: true
+          description: A h5ad file.
+        - name: --schema
+          type: file
+          required: true
+          description: A schema file for the h5ad object.
+    - name: Arguments
+      arguments:
+        - name: --stop_on_error
+          type: boolean
+          default: false
+          description: Whether or not to stop with exit code 1 if the input file does not adhere to the schema.
+        - name: --copy_output
+          type: boolean_true
+          description: Wether a output needs to be created for further analysis.
+    - name: Output
+      arguments:
+        - name: --json
+          type: file
+          required: false
+          description: If specified, this file will contain a structured log of which checks succeeded (or not).
+        - name: --output
+          type: file
+          required: false
+          description: If specified, the output file will be a copy of the input file.
+  resources:
+    - type: python_script
+      path: script.py
+platform:
+  - type: docker
+    image: python:3.10
+    setup:
+      - type: python
+        pip: [anndata>=0.8, pyyaml]
+  - type: nextflow
+
