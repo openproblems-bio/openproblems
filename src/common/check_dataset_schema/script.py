@@ -1,6 +1,7 @@
-
 import anndata as ad
 import yaml
+import shutil
+import json
 
 
 ## VIASH START
@@ -10,8 +11,8 @@ par = {
   'schema': 'src/denoising/api/anndata_dataset.yaml',
   'stop_on_error': 'false',
   'copy_output': 'false',
-  # 'json': '/path/to/file',
-  # 'output': '/path/to/file'
+  'json': 'output/error.json',
+  'output': 'output/output.h5ad'
 }
 meta = {
   'functionality_name': 'foo',
@@ -28,11 +29,16 @@ def check_structure (slot_info, adata_slot):
 
   return missing
 
+def write_json(output):
+  if par['json'] is not None:
+    with open(par["json"], "w") as outf:
+      json.dump(output, outf, indent=2)
+
 
 print('Load data', flush=True)
-adata = ad.read_h5ad(par['dataset'])
+adata = ad.read_h5ad(par['input'])
 
-with open(par['structure'], 'r') as f:
+with open(par['schema'], 'r') as f:
   data_struct = yaml.safe_load(f)
 
 
@@ -40,17 +46,25 @@ def_slots = data_struct['info']['slots']
 
 out={
   'exit_code' : 0,
-  'error': {}
+  'data_schema': 'ok',
+  'error': {
+    
+  }
 }
 
 for slot in def_slots:
-  if slot not in out['error']:
-    out['error'][slot]
   check = check_structure(def_slots[slot], getattr(adata, slot))
-  if check is not None:
+  if bool(check):
     out['exit_code'] = 1
+    out['data_schema'] = 'not ok'
     out['error'][slot] = check
 
+if par['stop_on_error'] == 'true':
+  write_json(out)
+  exit(out['exit_code'])
 
-exit(out['exit_code'])
-
+if par['copy_output'] == 'true':
+  assert par['output'] is not None, 'No output defined'
+  write_json(out)
+  shutil.copyfile(par["input"], par["output"])
+  

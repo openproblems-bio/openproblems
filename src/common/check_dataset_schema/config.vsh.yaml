@@ -1,7 +1,7 @@
 functionality:
   name: check_dataset_schema
   namespace: common
-  description:
+  description: Checks if the dataset has the necessary slots that are predefined in a schema.
   argument_groups:
     - name:  Inputs
       arguments:
