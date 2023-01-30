@@ -37,7 +37,7 @@ def hvg_conservation(adata):
         batch_key="batch",
         inplace=False,
     )
-    hvg_unint = hvg_unint[hvg_unint.highly_variable]
+    hvg_unint = hvg_unint[hvg_unint.highly_variable].index
     hvg_both = list(set(hvg_unint).intersection(adata.var_names))
 
     return hvg_overlap(adata_unint, adata[:, hvg_both], "batch")
