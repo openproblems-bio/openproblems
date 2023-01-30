@@ -52,7 +52,8 @@ jobs:
       uses: viash-io/viash-actions/build_nextflow_schemas@build_nextflow_schemas
       with: 
         token: ${{ secrets.GTHB_PAT }}
-        input_dir: src
+        components: src
+        workflows: src
 
     # - name: Generate params
     #   uses: viash-io/viash-actions/build_nextflow_params@build_nextflow_params
