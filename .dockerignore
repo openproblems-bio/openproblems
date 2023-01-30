@@ -11,3 +11,4 @@ test
 .idea
 .vscode
 *.md
+!./README.md
