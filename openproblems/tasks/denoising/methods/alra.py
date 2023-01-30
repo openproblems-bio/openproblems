@@ -72,9 +72,9 @@ def alra_log(adata, test=False):
 
     # libsize and log norm
     # lib norm
-    adata.obsm["train_norm"] = adata.obsm["train"]  # .todense()
+    adata.obsm["train"] = adata.obsm["train"]  # .todense()
     adata.obsm["train_norm"], libsize = scprep.normalize.library_size_normalize(
-        adata.obsm["train_norm"], rescale=1, return_library_size=True
+        adata.obsm["train"], rescale=1, return_library_size=True
     )
     # log
     adata.obsm["train_norm"] = scprep.utils.matrix_transform(
