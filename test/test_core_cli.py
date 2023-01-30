@@ -160,7 +160,7 @@ def test_hash_docker_api():
 @parameterized.parameterized.expand(
     [
         (dataset, method, metric)
-        for dataset in ["zebrafish_labels", None]
+        for dataset in ["zebrafish_labs", None]
         for method in ["logistic_regression_log_cpm", None]
         for metric in ["accuracy", None]
     ],
@@ -232,7 +232,7 @@ def test_pipeline():
                 "--test",
                 "--output",
                 dataset_file,
-                "zebrafish_labels",
+                "zebrafish_labs",
             ],
             do_print=False,
         )

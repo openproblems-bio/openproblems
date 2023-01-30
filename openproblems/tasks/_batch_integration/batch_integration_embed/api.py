@@ -1,20 +1,9 @@
-from ....data.sample import load_sample_data
 from ....tools.decorators import dataset
+from .._common import api
 
-import numpy as np
+import functools
 
-
-def check_dataset(adata):
-    """Check that dataset output fits expected API."""
-
-    assert "X_uni_pca" in adata.obsm
-    assert "batch" in adata.obs
-    assert "labels" in adata.obs
-    assert "log_normalized" in adata.layers
-    assert "organism" in adata.uns
-    assert adata.uns["organism"] in ["mouse", "human"]
-
-    return True
+check_dataset = functools.partial(api.check_dataset, do_check_pca=True)
 
 
 def check_method(adata, is_baseline=False):
@@ -27,22 +16,7 @@ def check_method(adata, is_baseline=False):
 
 @dataset()
 def sample_dataset():
-    """Create a simple dataset to use for testing methods in this task."""
-    import scanpy as sc
-
-    adata = load_sample_data()
-    adata.uns["organism"] = "human"
-
-    adata.var.index = adata.var.gene_short_name.astype(str)
-    sc.pp.normalize_total(adata)
-    sc.pp.log1p(adata)
-    adata.layers["log_normalized"] = adata.X
-    adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
-    adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
-    adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
-    adata.var_names_make_unique()
-    adata.obs_names_make_unique()
-    return adata
+    return api.sample_dataset(run_pca=True)
 
 
 def sample_method(adata):

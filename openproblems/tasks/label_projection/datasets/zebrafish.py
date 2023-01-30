@@ -5,14 +5,16 @@ import numpy as np
 
 
 @dataset(
-    "Zebrafish (by labels)",
+    "Zebrafish (by laboratory)",
     data_url=load_zebrafish.metadata["data_url"],
     data_reference=load_zebrafish.metadata["data_reference"],
     dataset_summary="90k cells from zebrafish embryos throughout the first day of "
     "development, with and without a knockout of chordin, an important developmental "
-    "gene. Split into train/test by laboratory.",
+    "gene. Split into train/test by laboratory. "
+    "Dimensions: 26022 cells, 25258 genes. 24 cell types "
+    "(avg. 1084±1156 cells per cell type).",
 )
-def zebrafish_labels(test=False):
+def zebrafish_labs(test=False):
     adata = load_zebrafish(test=test)
     adata.obs["labels"] = adata.obs["cell_type"]
     adata.obs["batch"] = adata.obs["lab"]
@@ -26,7 +28,9 @@ def zebrafish_labels(test=False):
     data_reference=load_zebrafish.metadata["data_reference"],
     dataset_summary="90k cells from zebrafish embryos throughout the first day of "
     "development, with and without a knockout of chordin, an important developmental "
-    "gene. Split into train/test randomly.",
+    "gene. Split into train/test randomly. "
+    "Dimensions: 26022 cells, 25258 genes. 24 cell types "
+    "(avg. 1084±1156 cells per cell type).",
 )
 def zebrafish_random(test=False):
     adata = load_zebrafish(test=test)
