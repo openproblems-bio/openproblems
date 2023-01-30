@@ -248,6 +248,7 @@ jobs:
         echo "REPO_OWNER_LOWER=${OWNER,,}" >> ${GITHUB_ENV}
       env:
         OWNER: '${{ github.repository_owner }}'
+      shell: bash -e {0}
 
     - name: Log in to the Container registry
       uses: docker/login-action@v2
