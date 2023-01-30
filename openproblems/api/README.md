@@ -63,7 +63,7 @@ You can then list the avaiable datasets, methods, and metrics for a partiular ta
 > openproblems-cli list --datasets --task label_projection
 pancreas_batch
 pancreas_random
-zebrafish_labels
+zebrafish_labs
 zebrafish_random
 
 > openproblems-cli list --methods --task label_projection
@@ -96,7 +96,7 @@ multimodal_data_integration
 $ openproblems-cli list --datasets --task label_projection
 pancreas_batch
 pancreas_random
-zebrafish_labels
+zebrafish_labs
 zebrafish_random
 $ openproblems-cli load --task label_projection --output dataset.h5ad pancreas_batch
 $ openproblems-cli list --methods --task label_projection
@@ -141,7 +141,7 @@ multimodal_data_integration
 $ openproblems-cli list --datasets --task label_projection
 pancreas_batch
 pancreas_random
-zebrafish_labels
+zebrafish_labs
 zebrafish_random
 $ openproblems-cli image --datasets --task label_projection pancreas_batch
 openproblems

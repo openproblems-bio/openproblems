@@ -333,7 +333,7 @@ docker run \
   -it singlecellopenproblems/openproblems-python-extras bash
 openproblems-cli test \
   --task label_projection \
-  --dataset zebrafish_labels \
+  --dataset zebrafish_labs \
   --method logistic_regression_log_cpm \
   --metric f1
 ```
