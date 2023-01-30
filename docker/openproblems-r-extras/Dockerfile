@@ -20,6 +20,7 @@ RUN apt-get clean autoclean && \
 
 # Install R packages
 COPY ./docker/openproblems-r-extras/r_requirements.txt ./r_requirements.txt
+COPY ./scripts/install_renv.R ./install_renv.R
 RUN R -e "source(\"install_renv.R\"); install_renv(\"r_requirements.txt\")"
 
 # install dependencies and openproblems
