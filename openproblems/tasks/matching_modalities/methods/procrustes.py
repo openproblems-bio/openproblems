@@ -4,7 +4,7 @@ from ....tools.utils import check_version
 
 
 @method(
-    method_name="Procrustes",
+    method_name="Procrustes superimposition",
     paper_name="Generalized Procrustes analysis",
     paper_reference="gower1975generalized",
     paper_year=1975,
