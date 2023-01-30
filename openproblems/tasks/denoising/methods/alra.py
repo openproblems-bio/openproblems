@@ -72,7 +72,6 @@ def alra_log(adata, test=False):
 
     # libsize and log norm
     # lib norm
-    adata.obsm["train"] = adata.obsm["train"]  # .todense()
     adata.obsm["train_norm"], libsize = scprep.normalize.library_size_normalize(
         adata.obsm["train"], rescale=1, return_library_size=True
     )
