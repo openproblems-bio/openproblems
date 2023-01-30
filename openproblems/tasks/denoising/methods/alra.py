@@ -20,7 +20,6 @@ log = logging.getLogger("openproblems")
 def alra_sqrt(adata, test=False):
     import numpy as np
     import rpy2.rinterface_lib.embedded
-    import scipy
     import scprep
 
     # libsize and sqrt norm
@@ -67,7 +66,6 @@ def alra_sqrt(adata, test=False):
 def alra_log(adata, test=False):
     import numpy as np
     import rpy2.rinterface_lib.embedded
-    import scipy
     import scprep
 
     # libsize and log norm
