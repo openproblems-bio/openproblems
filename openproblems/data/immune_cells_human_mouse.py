@@ -10,7 +10,7 @@ URL = "https://figshare.com/ndownloader/files/25717166"
 
 @utils.loader(data_url=URL, data_reference="luecken2022benchmarking")
 def load_immune_human_mouse(test=False):
-    """Download immune human data from figshare."""
+    """Download immune human mouse data from figshare."""
     import scanpy as sc
 
     if test:
