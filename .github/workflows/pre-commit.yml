@@ -27,6 +27,10 @@ jobs:
 
     steps:
 
+      - name: Debug
+        run: |
+          echo ${{ github.event.pull_request.review.state }}
+
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
