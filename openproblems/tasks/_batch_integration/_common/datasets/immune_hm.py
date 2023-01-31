@@ -3,10 +3,10 @@ from .....tools.decorators import dataset
 
 
 @dataset(
-    dataset_name="Immune (human/mouse)(by batch)",
+    dataset_name="Immune (human/mouse)",
     data_url=load_immune_human_mouse.metadata["data_url"],
     data_reference=load_immune_human_mouse.metadata["data_reference"],
-    dataset_summary="Human and Mouse immune cells from peripheral blood and bone marrow "
+    dataset_summary="Human and Mouse immune cells from peripheral blood and bone marrow"
     "taken from 8 datasets with 23 batches across 5 technologies (10X 3 v2,"
     "10x 3 v3, microwell seq and Smart-seq2). The data contains 97861 cells in total."
     "Mouse gene names are mapped to human gene names by capitalisation.",
