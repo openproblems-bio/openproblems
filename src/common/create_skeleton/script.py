@@ -110,21 +110,54 @@ if par['platform'] == 'python':
 
 
 # Create python template
-task_api = f'/src/{par["task"]}/api'
+task_api = f'src/{par["task"]}/api'
 api_conf = f'{task_api}/comp_{merge}.yaml'
 
 with open(api_conf, 'r') as f:
   api_data = yaml.safe_load(f)
 
-args = api_data['arguments']
+args = api_data['functionality']['arguments']
 
 templ_par = {}
 
 for arg in args:
-  templ_par[arg.replace('--','')] = ''
+  templ_par[arg['name'].replace('--','')] = ''
 
-script_templ = f'''
-  
+script_templ = f'''import anndata as ad
+
+## VIASH START
+
+par = {templ_par}
+
+meta = {{
+  'functionality_name': 'foo'
+}}
+
+## VIASH END
+
+print('Load input data', flush=True)
+adata=ad.read_h5ad(par['{list(templ_par.keys())[0]}'])
+
+print('Process data', flush=True)
+# insert code block here where pred is the prediction
+
+pred = adata
+
+# Create output anndata
+output = ad.AnnData(
+  obs = {{}},
+  vars = {{}},
+  uns = {{
+    'dataset_id': adata.uns['dataset_id'],
+    'method_id': meta['functionality_name']
+  }},
+  layers = adata.layers
+)
+
+output.layers['denoised'] = pred
+
+print('Write Data', flush=True)
+output.write_h5ad(par['output'],compression='gzip')
 
 '''
 
@@ -132,3 +165,6 @@ script_templ = f'''
 # Write output
 with open('config.vsh.yaml', 'w') as f:
   yaml.safe_dump(skeleton_config, f, sort_keys=False)
+
+with open(script_outf, 'w') as fpy:
+  fpy.write(script_templ)
