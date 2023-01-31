@@ -11,8 +11,9 @@ def check_method(adata, is_baseline=False):
     return True
 
 
-sample_dataset = api.sample_dataset
-
+@dataset()
+def sample_dataset():
+    return api.sample_dataset(run_pca=True)
 
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
