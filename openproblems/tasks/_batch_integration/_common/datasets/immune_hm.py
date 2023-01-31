@@ -1,5 +1,7 @@
 from .....data.immune_cells_human_mouse import load_immune_human_mouse
 from .....tools.decorators import dataset
+from ..utils import filter_celltypes
+from typing import Optional
 
 
 @dataset(
@@ -12,13 +14,15 @@ from .....tools.decorators import dataset
     "Mouse gene names are mapped to human gene names by capitalisation.",
     image="openproblems",
 )
-def immune_human_mouse_batch(test=False):
+def immune_human_mouse_batch(test: bool = False, min_celltype_count: Optional[int] = None):
     import scanpy as sc
 
     adata = load_immune_human_mouse(test)
     adata.uns["organism"] = "human"
     adata.obs["labels"] = adata.obs["final_annotation"]
     # No need to rename batch column as it already exists
+
+    adata = filter_celltypes(adata, min_celltype_count=min_celltype_count)
 
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)
