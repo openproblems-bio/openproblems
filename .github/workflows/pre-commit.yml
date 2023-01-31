@@ -19,11 +19,7 @@ jobs:
       options: --user root
 
     if: >-
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      (
-        startsWith(github.ref, 'refs/heads') ||
-        github.event.pull_request.draft == false
-      )
+      !endsWith(github.event.head_commit.message, '# ci skip')
 
     steps:
 
