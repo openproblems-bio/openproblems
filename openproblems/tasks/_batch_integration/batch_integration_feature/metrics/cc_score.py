@@ -25,9 +25,8 @@ the preintegration variance contribution reduces the score."""
     image="openproblems-r-pytorch",
 )
 def cc_score(adata, test=False):
-    from ...batch_integration_embed.metrics.cc_score import (
-        cc_score as embed_metric
-    )
+    from ...batch_integration_embed.metrics.cc_score import cc_score as embed_metric
     from scanpy.tl import pca
+
     adata.obsm["X_emb"] = pca(adata.X)
     return embed_metric(adata)

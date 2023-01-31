@@ -16,9 +16,8 @@ For information about the batch silhouette score, check sil_batch."""
     image="openproblems-r-pytorch",
 )
 def silhouette(adata):
-    from ...batch_integration_embed.metrics.silhouette import (
-        silhouette as embed_metric
-    )
+    from ...batch_integration_embed.metrics.silhouette import silhouette as embed_metric
     from scanpy.tl import pca
+
     adata.obsm["X_emb"] = pca(adata.X)
     return embed_metric(adata)

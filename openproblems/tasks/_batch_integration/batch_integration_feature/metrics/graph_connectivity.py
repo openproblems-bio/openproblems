@@ -27,10 +27,11 @@ on the kNN graph, it can be used to evaluate all integration outputs.
 )
 def graph_connectivity(adata):
     from ...batch_integration_graph.metrics.graph_connectivity import (
-        graph_connectivity as graph_metric
+        graph_connectivity as graph_metric,
     )
     from scanpy.pp import neighbors
     from scanpy.tl import pca
+
     adata.obsm["X_emb"] = pca(adata.X)
     neighbors(adata, use_rep="X_emb")
     return graph_metric(adata)

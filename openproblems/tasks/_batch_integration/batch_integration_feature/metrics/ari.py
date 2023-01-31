@@ -20,11 +20,10 @@ We also used the scikit-learn (v.0.22.1) implementation of the ARI.
     image="openproblems-r-pytorch",
 )
 def ari(adata):
-    from ...batch_integration_graph.metrics.ari import (
-        ari as graph_metric
-    )
+    from ...batch_integration_graph.metrics.ari import ari as graph_metric
     from scanpy.pp import neighbors
     from scanpy.tl import pca
+
     adata.obsm["X_emb"] = pca(adata.X)
     neighbors(adata, use_rep="X_emb")
     return graph_metric(adata)

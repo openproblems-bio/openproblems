@@ -32,11 +32,11 @@ the mean isolated score of all isolated labels.
 )
 def isolated_labels_f1(adata):
     from ...batch_integration_graph.metrics.iso_label_f1 import (
-        isolated_labels_f1 as graph_metric
+        isolated_labels_f1 as graph_metric,
     )
     from scanpy.pp import neighbors
     from scanpy.tl import pca
+
     adata.obsm["X_emb"] = pca(adata.X)
     neighbors(adata, use_rep="X_emb")
     return graph_metric(adata)
-

@@ -19,13 +19,10 @@ the scikit-learn27 (v.0.22.1) implementation of NMI.
     image="openproblems-r-pytorch",
 )
 def nmi(adata):
-    from ...batch_integration_graph.metrics.nmi import (
-        nmi as graph_metric
-    )
+    from ...batch_integration_graph.metrics.nmi import nmi as graph_metric
     from scanpy.pp import neighbors
     from scanpy.tl import pca
+
     adata.obsm["X_emb"] = pca(adata.X)
     neighbors(adata, use_rep="X_emb")
     return graph_metric(adata)
-
-

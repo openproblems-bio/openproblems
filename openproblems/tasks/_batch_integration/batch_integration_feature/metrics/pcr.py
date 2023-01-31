@@ -22,9 +22,8 @@ component."""
     image="openproblems-r-pytorch",
 )
 def pcr(adata):
-    from ...batch_integration_embed.metrics.pcr import (
-        pcr as embed_metric
-    )
+    from ...batch_integration_embed.metrics.pcr import pcr as embed_metric
     from scanpy.tl import pca
+
     adata.obsm["X_emb"] = pca(adata.X)
     return embed_metric(adata)
