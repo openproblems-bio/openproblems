@@ -1,4 +1,4 @@
-from ....data.mouse_blood_olssen_labelled import load_olsson_2016_mouse_blood
+from ....data.mouse_blood_olsson_labelled import load_olsson_2016_mouse_blood
 from ....tools.decorators import dataset
 from ....tools.normalize import log_cpm
 
