@@ -6,8 +6,9 @@ on:
       - '*'
     branches:
       - '**'
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+  pull_request_review:
+    types:
+      - 'approved'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -21,12 +22,8 @@ jobs:
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       !startsWith(github.ref, 'refs/heads/test_process') &&
       (
-        github.event_name != 'pull_request' ||
-        (
-          github.event_name == 'pull_request' &&
-          github.event.pull_request.review.state == 'APPROVED' &&
-          github.event.pull_request.head.repo.owner.id == github.event.pull_request.base.repo.owner.id
-        )
+        (github.event_name != 'pull_request_review') ||
+        (github.event.pull_request.head.repo.owner.id == github.event.pull_request.base.repo.owner.id)
       )
 
     env:
@@ -145,15 +142,7 @@ jobs:
       !startsWith(github.ref, 'refs/heads/test_benchmark') &&
       !startsWith(github.ref, 'refs/heads/test_full_benchmark') &&
       !startsWith(github.ref, 'refs/heads/test_process') &&
-      !startsWith(github.ref, 'refs/heads/test_website') &&
-      (
-        github.event_name != 'pull_request' ||
-        (
-          github.event_name == 'pull_request' &&
-          github.event.pull_request.review.state == "APPROVED" &&
-          github.actor != 'dependabot[bot]'
-        )
-      )
+      !startsWith(github.ref, 'refs/heads/test_website')
 
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
@@ -374,7 +363,7 @@ jobs:
       always() &&
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       needs.build_images.result == 'success' &&
-      github.event_name != 'pull_request' &&
+      github.event_name != 'pull_request_review' &&
       (
         needs.run_tester.result == 'success' ||
         needs.run_tester.result == 'skipped'

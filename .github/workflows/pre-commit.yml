@@ -3,8 +3,9 @@ on:
   push:
     branches-ignore:
       - 'main'
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+  pull_request_review:
+    types:
+      - 'approved'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -19,17 +20,10 @@ jobs:
       options: --user root
 
     if: >-
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      (
-        startsWith(github.ref, 'refs/heads') ||
-        github.event.pull_request.draft == false
-      )
+      !endsWith(github.event.head_commit.message, '# ci skip') ||
+      (github.event_name == 'pull_request_review')
 
     steps:
-
-      - name: Debug
-        run: |
-          echo "${{ toJSON(github.event.pull_request) }}"
 
       - uses: actions/checkout@v3
         with:
