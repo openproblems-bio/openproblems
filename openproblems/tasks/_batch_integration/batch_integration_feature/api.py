@@ -1,3 +1,4 @@
+from ....tools.decorators import dataset
 from .._common import api
 
 check_dataset = api.check_dataset
