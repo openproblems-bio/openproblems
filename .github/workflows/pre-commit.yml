@@ -29,7 +29,7 @@ jobs:
 
       - name: Debug
         run: |
-          echo ${{ github.event.pull_request.review.state }}
+          echo "${{ toJSON(github.event.pull_request) }}"
 
       - uses: actions/checkout@v3
         with:
