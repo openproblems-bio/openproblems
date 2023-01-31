@@ -8,7 +8,7 @@ on:
       - '**'
   pull_request_review:
     types:
-      - 'approved'
+      - 'submitted'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -23,7 +23,10 @@ jobs:
       !startsWith(github.ref, 'refs/heads/test_process') &&
       (
         (github.event_name != 'pull_request_review') ||
-        (github.event.pull_request.head.repo.owner.id == github.event.pull_request.base.repo.owner.id)
+        (
+          github.event.review.state == 'approved' &&
+          github.event.pull_request.head.repo.owner.id == github.event.pull_request.base.repo.owner.id
+        )
       )
 
     env:
@@ -142,7 +145,11 @@ jobs:
       !startsWith(github.ref, 'refs/heads/test_benchmark') &&
       !startsWith(github.ref, 'refs/heads/test_full_benchmark') &&
       !startsWith(github.ref, 'refs/heads/test_process') &&
-      !startsWith(github.ref, 'refs/heads/test_website')
+      !startsWith(github.ref, 'refs/heads/test_website') &&
+      (
+        github.event_name != 'pull_request_review' ||
+        github.event.review.state == 'approved'
+      )
 
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
