@@ -130,7 +130,7 @@ def test_help(capsys):
 @parameterized.parameterized.expand(
     [
         ("label_projection", "--datasets", "pancreas_batch"),
-        ("multimodal_data_integration", "--methods", "mnn_log_scran_pooling"),
+        ("matching_modalities", "--methods", "mnn_log_scran_pooling"),
     ],
     name_func=utils.name.name_test,
 )
