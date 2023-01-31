@@ -51,6 +51,9 @@ jobs:
     - name: Set up environment
       run: |
         echo "LINUX_VERSION=$(uname -rs)" >> $GITHUB_ENV
+        echo "REPO_OWNER_LOWER=${OWNER,,}" >> ${GITHUB_ENV}
+      env:
+        OWNER: '${{ github.repository_owner }}'
 
     - name: Cache Python packages
       uses: actions/cache@v3
@@ -113,7 +116,7 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: ${{ github.repository_owner }}
+        username: ${{ env.REPO_OWNER_LOWER }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Export docker images
@@ -121,7 +124,7 @@ jobs:
       run: |
         IMAGES="$(find ./docker -mindepth 1 -type d -exec basename {} \;)"
         for image in ${IMAGES}; do
-          GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/${image}:${{ github.run_id }}"
+          GHCR_IMAGE="ghcr.io/${REPO_OWNER_LOWER}/${image}:${{ github.run_id }}"
           docker tag singlecellopenproblems/$image $GHCR_IMAGE
           docker push $GHCR_IMAGE &
           PIDS+=("${!}")
@@ -236,22 +239,32 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Set up environment
+      run: |
+        echo "LINUX_VERSION=$(uname -rs)" >> $GITHUB_ENV
+        echo "pythonLocation=$(which python)" >> $GITHUB_ENV
+        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
+        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
+        echo "REPO_OWNER_LOWER=${OWNER,,}" >> ${GITHUB_ENV}
+      env:
+        OWNER: '${{ github.repository_owner }}'
+      shell: bash -e {0}
+
     - name: Log in to the Container registry
       uses: docker/login-action@v2
       if: "needs.build_images.result == 'success'"
       with:
         registry: ghcr.io
-        username: ${{ github.repository_owner }}
+        username: ${{ env.REPO_OWNER_LOWER }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Download docker images
       if: "needs.build_images.result == 'success'"
       env:
-        REPO_OWNER: ${{ github.repository_owner }}
         RUN_ID: ${{ github.run_id }}
       run: |
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${REPO_OWNER}/${image}:${RUN_ID}"
+          GHCR_IMAGE="ghcr.io/${REPO_OWNER_LOWER}/${image}:${RUN_ID}"
           docker pull $GHCR_IMAGE &
           PIDS+=("${!}")
         done
@@ -261,17 +274,10 @@ jobs:
         done
         # tag images
         for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${REPO_OWNER}/${image}:${RUN_ID}"
+          GHCR_IMAGE="ghcr.io/${REPO_OWNER_LOWER}/${image}:${RUN_ID}"
           docker tag $GHCR_IMAGE singlecellopenproblems/${image}:latest
         done
       shell: bash -e {0}
-
-    - name: Set up environment
-      run: |
-        echo "LINUX_VERSION=$(uname -rs)" >> $GITHUB_ENV
-        echo "pythonLocation=$(which python)" >> $GITHUB_ENV
-        echo "PYTHON_VERSION=$(python --version)" >> $GITHUB_ENV
-        echo "R_VERSION=$(R --version | head -n 1)" >> $GITHUB_ENV
 
     - name: Cache Python packages
       uses: actions/cache@v3
@@ -297,6 +303,8 @@ jobs:
           ${{ env.LINUX_VERSION }}-renv-${{ env.R_VERSION }}-
 
     - name: Install R packages
+      env:
+        BIOCVERSION: '3.16'
       run: |
         if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
         renv::restore()
@@ -305,7 +313,7 @@ jobs:
         install_renv("docker/openproblems-github-actions/r_requirements.txt")
       shell: Rscript {0}
 
-    - name: Update Docker docker images
+    - name: Update Docker images
       if: "needs.build_images.result == 'skipped'"
       run: |
         cd workflow
@@ -417,34 +425,6 @@ jobs:
     - name: Clear space on runner
       run: ./scripts/clear_runner_diskspace.sh
 
-    - name: Log in to the Container registry
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Download docker images
-      env:
-        REPO_OWNER: ${{ github.repository_owner }}
-        RUN_ID: ${{ github.run_id }}
-      run: |
-        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${REPO_OWNER}/${image}:${RUN_ID}"
-          docker pull $GHCR_IMAGE &
-          PIDS+=("${!}")
-        done
-        for pid in "${PIDS[@]}"; do
-          # ensure exited with status 0
-          wait $pid
-        done
-        # tag images
-        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
-          GHCR_IMAGE="ghcr.io/${REPO_OWNER}/${image}:${RUN_ID}"
-          docker tag $GHCR_IMAGE singlecellopenproblems/${image}:latest
-        done
-      shell: bash -e {0}
-
     - name: Set up environment
       id: setup-environment
       run: |
@@ -464,6 +444,36 @@ jobs:
         echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
         RUN_NAME="$(echo "$BRANCH" | sed "s/[^a-zA-Z0-9]/_/g")_$(git rev-parse --short HEAD)_${GITHUB_RUN_ATTEMPT}"
         echo "run_name=${RUN_NAME}" >> $GITHUB_OUTPUT
+        echo "REPO_OWNER_LOWER=${OWNER,,}" >> ${GITHUB_ENV}
+      env:
+        OWNER: '${{ github.repository_owner }}'
+
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ env.REPO_OWNER_LOWER }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Download docker images
+      env:
+        RUN_ID: ${{ github.run_id }}
+      run: |
+        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
+          GHCR_IMAGE="ghcr.io/${REPO_OWNER_LOWER}/${image}:${RUN_ID}"
+          docker pull $GHCR_IMAGE &
+          PIDS+=("${!}")
+        done
+        for pid in "${PIDS[@]}"; do
+          # ensure exited with status 0
+          wait $pid
+        done
+        # tag images
+        for image in $(find ./docker -mindepth 1 -type d -exec basename {} \;); do
+          GHCR_IMAGE="ghcr.io/${REPO_OWNER_LOWER}/${image}:${RUN_ID}"
+          docker tag $GHCR_IMAGE singlecellopenproblems/${image}:latest
+        done
+      shell: bash -e {0}
 
     - name: Upload Docker images
       env:
