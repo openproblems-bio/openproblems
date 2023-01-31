@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: debug
+      run: |
+        echo "${{ toJSON(github.event.pull_request.head }}"
+
     - uses: thollander/actions-comment-pull-request@v2
       with:
         message: |
