@@ -187,11 +187,22 @@ def connectome_sum(adata, test=False):
     return adata
 
 
+_logfc_method = functools.partial(
+    method,
+    paper_name="Comparison of methods and resources for cell-cell "
+    "communication inference from single-cell RNA-Seq data",
+    paper_reference="dimitrov2022comparison",
+    paper_year=2022,
+    code_url="https://github.com/saezlab/liana",
+    image="openproblems-r-extras",
+)
+
+
 def _logfc(adata, test=False):
     return _liana(adata, method="logfc", score_col="logfc_comb", test=test)
 
 
-@_connectome_method(
+@_logfc_method(
     method_name="Log2FC (max)",
 )
 def logfc_max(adata, test=False):
@@ -201,7 +212,7 @@ def logfc_max(adata, test=False):
     return adata
 
 
-@_connectome_method(
+@_logfc_method(
     method_name="Log2FC (sum)",
 )
 def logfc_sum(adata, test=False):
