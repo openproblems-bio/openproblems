@@ -313,7 +313,7 @@ jobs:
       if: "needs.build_images.result == 'skipped'"
       run: |
         cd workflow
-        snakemake -j $(nproc) docker
+        snakemake -j $(nproc) docker_pull
         cd ..
 
     - name: Run tests
@@ -355,6 +355,7 @@ jobs:
         flags: unittests
         fail_ci_if_error: ${{ github.repository == 'openproblems-bio/openproblems' }}
         verbose: true
+        override_pr: ${{ github.event.pull_request.number }}
 
     - name: Delete coverage artifacts
       uses: geekyeggo/delete-artifact@v2
