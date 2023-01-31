@@ -1,0 +1,31 @@
+functionality:
+  name: create_skeleton
+  namespace: common
+  description: Create a skeleton directory containing a viash config file and python or r script file based on the task api.
+  arguments:
+    - type: string
+      name: --task
+      example: denoising
+      description:
+    - type: string
+      name: --comp_type
+      example: metric
+      description:
+      choices: ['metric', 'method', 'negative_control', 'positive_control']
+    - type: string
+      name: --platform
+      example: python
+      description:
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: python:3.10
+    setup:
+      - type: python
+        pip: 
+          - pyyaml
+  - type: nextflow
+
+
