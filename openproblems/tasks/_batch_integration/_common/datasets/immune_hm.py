@@ -1,22 +1,24 @@
-from .....data.immune_cells_human_mouse import load_immune_hm
+from .....data.immune_cells_human_mouse import load_immune_human_mouse
 from .....tools.decorators import dataset
 
 
 @dataset(
     dataset_name="Immune (human/mouse)(by batch)",
-    data_url=load_immune_hm.metadata["data_url"],
-    data_reference=load_immune_hm.metadata["data_reference"],
+    data_url=load_immune_human_mouse.metadata["data_url"],
+    data_reference=load_immune_human_mouse.metadata["data_reference"],
     dataset_summary="Human and Mouse immune cells from peripheral blood and bone marrow "
-    "taken from multiple datasets across technologies (10X, "
-    "Smart-seq2).",
+    "taken from 8 datasets with 23 batches across 5 technologies (10X 3 v2,"
+    "10x 3 v3, microwell seq and Smart-seq2). The data contains 97861 cells in total."
+    "Mouse gene names are mapped to human gene names by capitalisation.",
     image="openproblems",
 )
-def immune_hm_batch(test=False):
+def immune_human_mouse_batch(test=False):
     import scanpy as sc
 
-    adata = load_immune_hm(test)
+    adata = load_immune_human_mouse(test)
     adata.uns["organism"] = "human"
     adata.obs["labels"] = adata.obs["final_annotation"]
+    # No need to rename batch column as it already exists
 
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)

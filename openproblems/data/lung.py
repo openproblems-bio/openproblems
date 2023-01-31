@@ -19,8 +19,8 @@ def load_lung(test=False):
 
         # Subsample immune data to two batches with 250 cells each
         adata = adata[:, :500].copy()
-        batch1 = adata[adata.obs.dataset == "10x_Biopsy"][:250]
-        batch2 = adata[adata.obs.dataset == "10x_Transplant"][:250]
+        batch1 = adata[adata.obs.batch == "4"][:250]
+        batch2 = adata[adata.obs.batch == "A6"][:250]
         adata = batch1.concatenate(batch2)
         # Note: could also use 200-500 HVGs rather than 200 random genes
 

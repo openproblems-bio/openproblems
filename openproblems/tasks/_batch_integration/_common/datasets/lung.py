@@ -6,9 +6,8 @@ from .....tools.decorators import dataset
     dataset_name="Lung (by batch)",
     data_url=load_lung.metadata["data_url"],
     data_reference=load_lung.metadata["data_reference"],
-    dataset_summary="Human pancreatic islet scRNA-seq data from 6 datasets "
-    "across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, "
-    "and SMARTER-seq).",
+    dataset_summary="Human lung scRNA-seq data from 3 datasets with 32,472 cells."
+    "From Vieira Braga et al. Technologies: 10X and Drop-seq.",
     image="openproblems",
 )
 def lung_batch(test=False):
@@ -17,6 +16,7 @@ def lung_batch(test=False):
     adata = load_lung(test)
     adata.uns["organism"] = "human"
     adata.obs["labels"] = adata.obs["cell_type"]
+    # No need to rename batch column as it already exists
 
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)
