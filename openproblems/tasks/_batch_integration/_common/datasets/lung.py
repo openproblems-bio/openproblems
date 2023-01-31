@@ -3,7 +3,7 @@ from .....tools.decorators import dataset
 
 
 @dataset(
-    dataset_name="Lung (by batch)",
+    dataset_name="Lung (Viera Braga et al.)",
     data_url=load_lung.metadata["data_url"],
     data_reference=load_lung.metadata["data_reference"],
     dataset_summary="Human lung scRNA-seq data from 3 datasets with 32,472 cells."
