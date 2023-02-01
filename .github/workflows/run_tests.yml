@@ -313,7 +313,7 @@ jobs:
       if: "needs.build_images.result == 'skipped'"
       run: |
         cd workflow
-        snakemake -j $(nproc) docker_pull
+        snakemake -j $(nproc) docker
         cd ..
 
     - name: Run tests
