@@ -1,15 +1,7 @@
 nextflow.enable.dsl=2
- 
-targetDir = "${params.rootDir}/target/nextflow"
-params.download = "$launchDir/src/batch_integration/workflows/download.tsv"
-params.preprocessing = "$launchDir/src/batch_integration/workflows/test/preprocessing.tsv"
 
-include { extract_scores }  from "$targetDir/common/extract_scores/main.nf"    params(params)
-
-// import dataset loaders
-include { download }       from "$targetDir/common/dataset_loader/download/main.nf"              params(params)
-include { subsample }      from "$targetDir/batch_integration/datasets/subsample/main.nf"        params(params)
-include { preprocessing }  from "$targetDir/batch_integration/datasets/preprocessing/main.nf"    params(params)
+sourceDir = params.rootDir + "/src"
+targetDir = params.rootDir + "/target/nextflow"
 
 // import methods
 include { bbknn }              from "$targetDir/batch_integration/graph/methods/bbknn/main.nf"            params(params)
@@ -22,63 +14,66 @@ include { scvi }               from "$targetDir/batch_integration/graph/methods/
 include { ari }       from "$targetDir/batch_integration/graph/metrics/ari/main.nf"    params(params)
 include { nmi }       from "$targetDir/batch_integration/graph/metrics/nmi/main.nf"    params(params)
 
-/*******************************************************
-*             Dataset processor workflows              *
-*******************************************************/
-// This workflow reads in a tsv containing some metadata about each dataset.
-// For each entry in the metadata, a dataset is generated, usually by downloading
-// and processing some files. The end result of each of these workflows
-// should be simply a channel of [id, h5adfile, params] triplets.
-//
-// If the need arises, these workflows could be split off into a separate file.
+// tsv generation component
+include { extract_scores }  from "$targetDir/common/extract_scores/main.nf"    params(params)
 
+// import helper functions
+include { readConfig; viashChannel; helpMessage } from sourceDir + "/wf_utils/WorkflowHelper.nf"
+include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from sourceDir + "/wf_utils/DataflowHelper.nf"
 
-workflow load_data {
-    main:
-        output_ = Channel.fromPath(params.download)
-            | splitCsv(header: true, sep: "\t")
-            | map { [ it.name, it ] }
-            | download
-    emit:
-        output_
-}
+config = readConfig("$projectDir/config.vsh.yaml")
 
-workflow process_data {
-    take:
-      channel_in
-    main:
-      additional_params = Channel.fromPath(params.preprocessing)
-        | splitCsv(header: true, sep: "\t")
-        | map { [ it.name, it ] }
+workflow {
+  helpMessage(config)
 
-      subset = channel_in.join(additional_params)
-        | map { id, data, additional ->
-          [ id, [ input: data ] + additional ]
-        }
-        | subsample
-
-      output_ = subset.join(additional_params)
-        | map { id, data, additional ->
-          [ id, [ input: data ] + additional ]
-        }
-        | preprocessing
-        | join(additional_params)
-        | map { id, data, additional ->
-          [ id, [ input: data ] + additional ]
-        }
-
-    emit:
-        output_
+  viashChannel(params, config)
+    | run_wf
 }
 
 /*******************************************************
 *                    Main workflow                     *
 *******************************************************/
 
-workflow {
-    load_data
-        | process_data
-        | view { "integration input $it" }
+workflow run_wf {
+  take:
+  input_ch
+
+  main:
+  output_ch = input_ch
+
+      // split params for downstream components
+    | setWorkflowArguments(
+      method: ["input"],
+      metric: [],
+      output: ["output"]
+    )
+
+    // multiply events by the number of method
+    | add_methods
+
+    // run methods
+    | getWorkflowArguments(key: "method")
+    | run_methods
+
+    // construct tuples for metrics
+    | pmap{ id, file, passthrough ->
+      // derive unique ids from output filenames
+      def newId = file.getName().replaceAll(".output.*", "")
+      // combine prediction with solution
+      def newData = [ adata: file ]
+      [ newId, newData, passthrough ]
+    }
+    
+    // run metrics
+    | getWorkflowArguments(key: "metric")
+    | run_metrics
+    
+    // convert to tsv  
+    | aggregate_results
+
+  emit:
+  output_ch
+/*
         | (bbknn & combat & scvi & scanorama_embed & scanorama_feature)
         | mix
         | toSortedList
@@ -90,4 +85,74 @@ workflow {
             auto: [ publish: true ]
         )
 */
+}
+
+/*******************************************************
+*                    Sub workflows                     *
+*******************************************************/
+
+// construct a map of methods (id -> method_module)
+methods = [ bbknn, combat, scanorama_embed, scanorama_feature, scvi]
+  .collectEntries{method ->
+    [method.config.functionality.name, method]
+  }
+
+workflow add_methods {
+  take: input_ch
+  main:
+  output_ch = Channel.fromList(methods.keySet())
+    | combine(input_ch)
+
+    // generate combined id for method_id and dataset_id
+    | pmap{method_id, dataset_id, data ->
+      def new_id = dataset_id + "." + method_id
+      def new_data = data.clone() + [method_id: method_id]
+      new_data.remove("id")
+      [new_id, new_data]
+    }
+  emit: output_ch
+}
+
+workflow run_methods {
+  take: input_ch
+  main:
+    // generate one channel per method
+    method_chs = methods.collect { method_id, method_module ->
+        input_ch
+          | filter{it[1].method_id == method_id}
+          | method_module
+      }
+    // mix all results
+    output_ch = method_chs[0].mix(*method_chs.drop(1))
+
+  emit: output_ch
+}
+
+workflow run_metrics {
+  take: input_ch
+  main:
+
+  output_ch = input_ch
+    | (ari & nmi)
+    | mix
+
+  emit: output_ch
+}
+
+workflow aggregate_results {
+  take: input_ch
+  main:
+
+  output_ch = input_ch
+    | toSortedList
+    | filter{ it.size() > 0 }
+    | map{ it -> 
+      [ "combined", it.collect{ it[1] } ] + it[0].drop(2) 
+    }
+    | getWorkflowArguments(key: "output")
+    | extract_scores.run(
+        auto: [ publish: true ]
+    )
+
+  emit: output_ch
 }

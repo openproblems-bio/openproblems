@@ -1,0 +1,22 @@
+functionality:
+  name: "run_benchmark"
+  namespace: "batch_integration/workflows"
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - name: "--id"
+          type: "string"
+          description: "The ID of the dataset"
+          required: true
+        - name: "--input"
+          type: "file" # todo: replace with includes
+    - name: Outputs
+      arguments:
+        - name: "--output"
+          direction: "output"
+          type: file
+  resources:
+    - type: nextflow_script
+      path: main.nf
+platforms:
+  - type: nextflow
