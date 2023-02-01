@@ -11,7 +11,7 @@ URL = "https://ndownloader.figshare.com/files/36088649"
 
 @utils.loader(data_url=URL, data_reference="nestorowa2016single")
 def load_mouse_hspc_nestorowa2016(test=False):
-    """Download Nesterova data from Figshare."""
+    """Download Nestorowa data from Figshare."""
     import scanpy as sc
 
     if test:
