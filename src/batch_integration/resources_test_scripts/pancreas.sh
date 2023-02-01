@@ -1,8 +1,4 @@
 #!/bin/bash
-set -xe
-#
-#make sure the following command has been executed
-#bin/viash_build -q 'batch_integration|common'
 
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -20,12 +16,9 @@ fi
 
 mkdir -p $DATASET_DIR
 
-# build components
-bin/viash_build -q batch
-
 # process dataset
 echo process data...
-bin/viash run src/batch_integration/datasets/preprocessing/config.vsh.yaml -- \
+viash run src/batch_integration/datasets/preprocessing/config.vsh.yaml -- \
   --input $RAW_DATA \
   --output $DATASET_DIR/pancreas/processed.h5ad \
   --label celltype \
@@ -36,16 +29,16 @@ bin/viash run src/batch_integration/datasets/preprocessing/config.vsh.yaml -- \
 echo run methods...
 
 # Graph methods
-bin/viash run src/batch_integration/graph/methods/bbknn/config.vsh.yaml -- \
+viash run src/batch_integration/graph/methods/bbknn/config.vsh.yaml -- \
   --input $DATASET_DIR/pancreas/processed.h5ad \
   --output $DATASET_DIR/graph/methods/bbknn.h5ad
 
-bin/viash run src/batch_integration/graph/methods/combat/config.vsh.yaml -- \
+viash run src/batch_integration/graph/methods/combat/config.vsh.yaml -- \
   --input $DATASET_DIR/pancreas/processed.h5ad \
   --output $DATASET_DIR/graph/methods/combat.h5ad
 
 # Embedding method
-bin/viash run src/batch_integration/embedding/methods/combat/config.vsh.yaml -- \
+viash run src/batch_integration/embedding/methods/combat/config.vsh.yaml -- \
   --input $DATASET_DIR/pancreas/processed.h5ad \
   --output $DATASET_DIR/embedding/methods/combat.h5ad
 
