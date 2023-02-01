@@ -1,6 +1,7 @@
 from .....data.lung import load_lung
 from .....tools.decorators import dataset
-
+from ..utils import filter_celltypes
+from typing import Optional
 
 @dataset(
     dataset_name="Lung (Viera Braga et al.)",
@@ -10,7 +11,7 @@ from .....tools.decorators import dataset
     "From Vieira Braga et al. Technologies: 10X and Drop-seq.",
     image="openproblems",
 )
-def lung_batch(test=False):
+def lung_batch(test: bool = False, min_celltype_count: Optional[int] = None):
     import scanpy as sc
 
     adata = load_lung(test)
@@ -18,9 +19,11 @@ def lung_batch(test=False):
     adata.obs["labels"] = adata.obs["cell_type"]
     # No need to rename batch column as it already exists
 
+    adata = filter_celltypes(adata, min_celltype_count=min_celltype_count)
+
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)
-
+    
     adata.X = adata.layers["log_normalized"]
 
     sc.tl.pca(
