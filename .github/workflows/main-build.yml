@@ -77,13 +77,13 @@ jobs:
 
     - id: set_matrix
       run: |
-        echo "matrix=$(jq -c ${{ steps.ns_list.outputs.output }}) '[ .[] | 
+        echo "matrix=$(jq -c ${{ steps.ns_list.outputs.output }} '[ .[] | 
         { 
           "name": .functionality.name, 
           "namespace": .functionality.namespace, 
           "config": .info.config, 
           "dir": .info.config | capture("^(?<dir>.*\/)").dir 
-        } ]'" >> $GITHUB_OUTPUT
+        } ]')" >> $GITHUB_OUTPUT
 
     outputs:
       components_json: ${{ steps.set_matrix.outputs.matrix }}
@@ -111,7 +111,7 @@ jobs:
         config_mod: .functionality.version := 'main_build'
         setup: build
         src: ${{ matrix.dir }}
-        
+
     - name: Login to container registry
       uses: docker/login-action@v2
       with:
