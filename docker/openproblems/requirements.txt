@@ -5,3 +5,4 @@ pip
 sagemaker==2.116.*
 setuptools
 wheel
+urllib>=1.26.11
