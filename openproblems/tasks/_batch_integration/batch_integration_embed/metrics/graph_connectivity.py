@@ -1,5 +1,4 @@
 from .....tools.decorators import metric
-
 from ...batch_integration_graph.metrics import graph_connectivity as graph_metric
 
 """
