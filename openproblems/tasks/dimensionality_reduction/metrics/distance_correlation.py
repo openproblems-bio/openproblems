@@ -3,8 +3,8 @@ from ....tools.normalize import log_cpm
 
 
 def _distance_correlation(X, X_emb):
-    import scipy.optimize
     import scipy.spatial
+    import scipy.stats
 
     high_dimensional_distance_vector = scipy.spatial.distance.pdist(X)
     low_dimensional_distance_vector = scipy.spatial.distance.pdist(X_emb)
