@@ -1,7 +1,8 @@
+import functools
 from ....tools.decorators import dataset
 from .._common import api
 
-check_dataset = api.check_dataset
+check_dataset = functools.partial(api.check_dataset, do_check_pca=True)
 
 
 def check_method(adata, is_baseline=False):
