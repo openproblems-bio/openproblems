@@ -1,4 +1,4 @@
-git+https://github.com/BayraktarLab/cell2location.git@7e7aa231cc61ff460da14402fa3b9a1fa3ec69ac
+git+https://github.com/BayraktarLab/cell2location.git@47c8d6dc90dd3f1ab639861e8617c6ef0b62bb89
 git+https://github.com/czbiohub/molecular-cross-validation@04d9df0
 git+https://github.com/michalk8/neuralee@8946abf  # contains gradient error fix
 jax==0.3.25
@@ -6,7 +6,7 @@ jaxlib==0.3.25
 pymde==0.1.18
 scalex==1.0.2
 scikit-misc==0.1.*
-scvi-tools~=0.17  # pinned in #313
+scvi-tools~=0.19
 tangram-sc==1.0.*
 torch==1.12.*
 xgboost==1.6.*
