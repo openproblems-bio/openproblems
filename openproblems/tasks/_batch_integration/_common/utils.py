@@ -1,5 +1,5 @@
-from typing import Optional
 from scanpy.pp import highly_variable_genes
+from typing import Optional
 
 
 def filter_celltypes(adata, min_celltype_count: Optional[int] = None):

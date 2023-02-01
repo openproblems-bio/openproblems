@@ -17,7 +17,8 @@ def check_neighbors(adata, neighbors_key, connectivities_key, distances_key):
 
 
 def check_dataset(
-    adata, do_check_pca=False,
+    adata,
+    do_check_pca=False,
     do_check_neighbors=False,
     do_check_hvg=False,
 ):
