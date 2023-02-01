@@ -52,10 +52,17 @@ def test_method(task_name, method_name, image):
 
 
 @parameterized.parameterized.expand(
-    [(method,) for task in openproblems.TASKS for method in task.METHODS],
+    [
+        (
+            task.__name__.split(".")[-1],
+            method,
+        )
+        for task in openproblems.TASKS
+        for method in task.METHODS
+    ],
     name_func=utils.name.name_test,
 )
-def test_method_metadata(method):
+def test_method_metadata(task_name, method):
     """Test for existence of method metadata."""
     assert hasattr(method, "metadata")
     for attr in [

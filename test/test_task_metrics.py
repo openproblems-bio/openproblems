@@ -6,10 +6,17 @@ import utils.name
 
 
 @parameterized.parameterized.expand(
-    [(metric,) for task in openproblems.TASKS for metric in task.METRICS],
+    [
+        (
+            task.__name__.split(".")[-1],
+            metric,
+        )
+        for task in openproblems.TASKS
+        for metric in task.METRICS
+    ],
     name_func=utils.name.name_test,
 )
-def test_metric_metadata(metric):
+def test_metric_metadata(task_name, metric):
     """Test for existence of metric metadata."""
     assert hasattr(metric, "metadata")
     for attr in ["metric_name", "maximize", "image"]:
