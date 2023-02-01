@@ -4,5 +4,5 @@ jupyter==1.0.*
 pip
 sagemaker==2.116.*
 setuptools
-wheel
 urllib>=1.26.11
+wheel
