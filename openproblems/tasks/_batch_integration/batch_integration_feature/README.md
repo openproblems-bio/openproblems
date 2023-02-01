@@ -45,7 +45,9 @@ Datasets should contain the following attributes:
 * `adata.layers['counts']` with raw, integer UMI count data,
 * `adata.layers['log_normalized']` with log-normalized data and
 * `adata.X` with log-normalized data
-* `adata.uns['n_genes_pre'] with the number of genes present before integration
+* `adata.uns['n_genes_pre']` with the number of genes present before integration
+* `adata.uns['hvg_unint']` with a list of 2000 highly variable genes
+   prior to integration (for the hvg conservation metric)
 
 Methods should store their a batch-corrected gene expression matrix in `adata.X`.
 

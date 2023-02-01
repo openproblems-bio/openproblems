@@ -1,6 +1,7 @@
 from .....data.pancreas import load_pancreas
 from .....tools.decorators import dataset
 from ..utils import filter_celltypes
+from ..utils import precomp_hvg
 from typing import Optional
 
 
@@ -35,15 +36,7 @@ def pancreas_batch(test: bool = False, min_celltype_count: Optional[int] = None)
     )
     adata.obsm["X_uni_pca"] = adata.obsm["X_pca"]
 
-    hvg_unint = sc.pp.highly_variable_genes(
-        adata,
-        n_top_genes=2000,
-        layer="log_normalized",
-        flavor="cell_ranger",
-        batch_key="batch",
-        inplace=False,
-    )
-    adata.uns["hvg_unint"] = list(hvg_unint[hvg_unint.highly_variable].index)
+    adata.uns["hvg_unint"] = precomp_hvg(adata, 2000)
     adata.uns["n_genes_pre"] = adata.n_vars
 
     sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")

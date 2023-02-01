@@ -1,6 +1,7 @@
 from ....data.sample import load_sample_data
 from ....tools.decorators import dataset
 from .utils import filter_celltypes
+from .utils import precomp_hvg
 
 import numpy as np
 
@@ -15,7 +16,11 @@ def check_neighbors(adata, neighbors_key, connectivities_key, distances_key):
     assert distances_key in adata.obsp
 
 
-def check_dataset(adata, do_check_pca=False, do_check_neighbors=False):
+def check_dataset(
+    adata, do_check_pca=False,
+    do_check_neighbors=False,
+    do_check_hvg=False,
+):
     """Check that dataset output fits expected API."""
 
     assert "batch" in adata.obs
@@ -35,6 +40,9 @@ def check_dataset(adata, do_check_pca=False, do_check_neighbors=False):
 
     if do_check_pca:
         assert "X_uni_pca" in adata.obsm
+
+    if do_check_hvg:
+        assert "hvg_unint" in adata.uns
 
     if do_check_neighbors:
         check_neighbors(adata, "uni", "uni_connectivities", "uni_distances")
@@ -61,15 +69,7 @@ def sample_dataset(run_pca: bool = False, run_neighbors: bool = False):
     adata.obs["labels"] = np.random.choice(3, adata.shape[0], replace=True).astype(str)
     adata = filter_celltypes(adata)
 
-    hvg_unint = sc.pp.highly_variable_genes(
-        adata,
-        n_top_genes=2000,
-        layer="log_normalized",
-        flavor="cell_ranger",
-        batch_key="batch",
-        inplace=False,
-    )
-    adata.uns["hvg_unint"] = list(hvg_unint[hvg_unint.highly_variable].index)
+    adata.uns["hvg_unint"] = precomp_hvg(adata, 2000)
     adata.uns["n_genes_pre"] = adata.n_vars
 
     if run_pca:
