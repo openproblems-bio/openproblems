@@ -16,7 +16,7 @@ jobs:
         run: |
           pull_request=$(gh pr list -R ${{ github.repository }} -H ${{ github.ref_name }} --json url --state open --limit 1 | jq '.[0].url')
           # If the branch has a PR and this run was triggered by a push event, do not run
-          if [[ "$pull_request" != "null" && "${{ github.event_name == 'push' }}" == "true" && "${{ !contains(github.event.head_commit.message, 'ci force') }}" == "true" ]]; then
+          if [[ "$pull_request" != "null" && "$GITHUB_REF_NAME" != "main" && "${{ github.event_name == 'push' }}" == "true" && "${{ !contains(github.event.head_commit.message, 'ci force') }}" == "true" ]]; then
             echo "check=false" >> $GITHUB_OUTPUT
           else
             echo "check=true" >> $GITHUB_OUTPUT
@@ -40,11 +40,7 @@ jobs:
       with:
         fetch-depth: 0 
 
-    - name: Fetch viash
-      run: |
-        bin/init -n
-        tree .
-        bin/viash -h
+    - uses: viash-io/viash-actions/setup@v1.0.0
 
     # create cachehash key
     - name: Create hash key
@@ -64,7 +60,7 @@ jobs:
     # sync if need be
     - name: Sync test resources
       run: |
-        bin/viash run \
+        viash run \
           -p native \
           src/common/sync_test_resources/config.vsh.yaml -- \
           --input $s3_bucket \
@@ -73,7 +69,7 @@ jobs:
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v35.4.0
+      uses: tj-actions/changed-files@v35.4.1
       with:
         separator: ";"
         diff_relative: true
@@ -84,7 +80,7 @@ jobs:
       run: |
         IFS=$';' read -a changed_files <<< "${{ steps.changed-files.outputs.all_changed_files }}"
         echo "Changed files: "${changed_files[*]}""
-        readarray -t components < <(bin/viash ns list -p docker --format json | jq -c '[ .[] |
+        readarray -t components < <(viash ns list -p docker --format json | jq -c '[ .[] |
                                                                                           (.info.config | capture("^(?<dir>.*\/)").dir) as $dir | 
                                                                                           { "name": .functionality.name, 
                                                                                             "config": .info.config, 
@@ -124,16 +120,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
-    - name: Fetch viash
-      run: |
-        bin/init -n
-        bin/viash -h
+    - uses: viash-io/viash-actions/setup@v1.0.0
 
     # use cache
     - name: Cache resources data
       uses: actions/cache@v3
-      timeout-minutes: 5
+      timeout-minutes: 10
       with:
         path: resources_test
         key: ${{ needs.list_components.outputs.cachehash }}
@@ -141,7 +133,7 @@ jobs:
     - name: Run test
       timeout-minutes: 30
       run: |
-        bin/viash test -p docker ${{ matrix.component.config }} \
-         -c '.functionality.requirements.cpus := 2' \
-         -c '.functionality.requirements.memory := "5gb"'
+        viash test -p docker ${{ matrix.component.config }} \
+        --cpus 2 \
+        --memory "5gb"
 

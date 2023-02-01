@@ -1,0 +1,55 @@
+functionality:
+  name: "mnn"
+  namespace: "multimodal_data_integration/methods"
+  version: "dev"
+  description: "Run Mutual Nearest Neighbours"
+  authors:
+    - name: "Scott Gigante"
+      roles: [ maintainer, author ]
+      props: { github: scottgigante }
+  info:
+    method_label: "MNN"
+    method_name: "Mutual Nearest Neighbors"
+    paper_name: "Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors"
+    paper_doi: "10.1038/nbt.4091"
+    paper_year: "2018"
+    code_url: "https://github.com/LTLA/batchelor"
+    code_version: "1.7.14"
+  arguments:
+    - name: "--input"
+      alternatives: ["-i"]
+      type: "file"
+      default: "input.h5ad"
+      description: "Input h5ad file containing at least `ad.X` and `ad.obsm['mode2']`."
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file containing both RNA and ADT data"
+    - name: "--n_svd"
+      type: "integer"
+      default: 100
+      description: "Number of SVDs to use. Bounded by the number of columns in `ad.X` and `ad.obsm['mode2']`."
+  resources:
+    - type: r_script
+      path: ./script.R
+  test_resources:
+    - type: python_script
+      path: test.py
+    - path: "../../resources/sample_dataset.h5ad"
+platforms:
+  - type: docker
+    image: "dataintuitive/randpy:r4.0_py3.8_bioc3.12" # already includes some R, bioconductor & anndata packages
+    setup:
+      - type: r
+        cran:
+          - anndata
+          - Matrix
+          - sparsesvd
+        bioc:
+          - batchelor
+      - type: python
+        packages:
+          - scanpy # needed by tests
+  - type: nextflow

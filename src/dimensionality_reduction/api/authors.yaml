@@ -1,9 +1,20 @@
 functionality:
   authors:
+    - name: Luke Zappia
+      roles: [ maintainer, author ]
+      props: { github: lazappi }
+    - name: Michal Klein
+      roles: [ author ]
+      props: { github: michalk8 }
+    - name: "Scott Gigante"
+      roles: [ author ]
+      props: { github: scottgigante }
+    - name: Ben DeMeo
+      roles: [ author ]
+      props: { github: bendemeo }
     - name: "Juan A. Cordero Varela"
       roles: [ contributor ]
       props: { github: jacorvar, orcid: 0000-0002-7373-5433}
     - name: Robrecht Cannoodt
-      roles: [ author ]
+      roles: [ contributor ]
       props: { github: rcannood, orcid: "0000-0003-3641-729X" }
-

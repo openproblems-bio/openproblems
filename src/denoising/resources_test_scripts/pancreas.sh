@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 #make sure the following command has been executed
-#bin/viash_build -q 'denoising|common'
+#viash_build -q 'denoising|common'
 
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -20,19 +20,19 @@ fi
 mkdir -p $DATASET_DIR
 
 # split dataset
-bin/viash run src/denoising/split_dataset/config.vsh.yaml -- \
+viash run src/denoising/split_dataset/config.vsh.yaml -- \
     --input $RAW_DATA \
     --output_train $DATASET_DIR/train.h5ad \
     --output_test $DATASET_DIR/test.h5ad \
     --seed 123
 
 # run one method
-bin/viash run src/denoising/methods/magic/config.vsh.yaml -- \
+viash run src/denoising/methods/magic/config.vsh.yaml -- \
     --input_train $DATASET_DIR/train.h5ad \
     --output $DATASET_DIR/magic.h5ad
 
 # run one metric
-bin/viash run src/denoising/metrics/poisson/config.vsh.yaml -- \
+viash run src/denoising/metrics/poisson/config.vsh.yaml -- \
     --input_denoised $DATASET_DIR/magic.h5ad \
     --input_test $DATASET_DIR/test.h5ad \
     --output $DATASET_DIR/magic_poisson.h5ad

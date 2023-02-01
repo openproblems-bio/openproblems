@@ -1,0 +1,51 @@
+functionality:
+  name: "knn_auc"
+  namespace: "multimodal_data_integration/metrics"
+  version: "dev"
+  description: "Compute the kNN Area Under the Curve"
+  authors:
+    - name: "Scott Gigante"
+      roles: [ maintainer, author ]
+      props: { github: scottgigante }
+  info:
+    method_label: "KNN-AUC"
+    metric_name: "kNN Area Under the Curve"
+    maximize: "true"
+  arguments:
+    - name: "--input"
+      alternatives: ["-i"]
+      type: "file"
+      default: "input.h5ad"
+      description: "File to input h5ad containing: `ad.X`, `ad.obsm['aligned']`, `ad.obsm['mode2_aligned']`"
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.h5ad"
+      description: "Output h5ad file containing `ad.uns['metric_value']`"
+    - name: "--proportion_neighbors"
+      type: "double"
+      default: 0.1
+      description: The propotion of neighbours to use in computing the KNN.
+    - name: "--n_svd"
+      type: integer
+      default: 100
+      description: The maximum number of SVDs to use.
+  resources:
+    - type: python_script
+      path: script.py
+  test_resources:
+    - type: python_script
+      path: test.py
+    - path: ../../resources/sample_output.h5ad
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        packages:
+          - anndata
+          - numpy
+          - sklearn
+          - scanpy
+  - type: nextflow
