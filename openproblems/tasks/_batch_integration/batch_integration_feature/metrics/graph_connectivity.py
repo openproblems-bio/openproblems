@@ -27,7 +27,7 @@ on the kNN graph, it can be used to evaluate all integration outputs.
 )
 def graph_connectivity(adata):
     from ...batch_integration_graph.metrics.graph_connectivity import (
-        graph_connectivity as graph_metric,  # noqa: H301
+        graph_connectivity as graph_metric,
     )
     from scanpy.pp import neighbors
     from scanpy.tl import pca
