@@ -1,5 +1,4 @@
 from .....tools.decorators import metric
-
 from ...batch_integration_graph import metrics as graph_metrics
 
 """
