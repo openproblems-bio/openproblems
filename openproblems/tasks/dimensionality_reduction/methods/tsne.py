@@ -1,6 +1,6 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
-from ....tools.normalize import log_cpm_hvg
+from ....tools.normalize import log_cp10k
+from ....tools.normalize import log_cp10k_hvg
 from ....tools.utils import check_version
 
 import functools
@@ -32,16 +32,16 @@ def _tsne(adata, genes=None, test=False, n_pca=50):
 
 
 @_tsne_method(
-    method_name="t-Distributed Stochastic Neighbor Embedding (t-SNE) (logCPM, 1kHVG)"
+    method_name="t-Distributed Stochastic Neighbor Embedding (t-SNE) (logCP10k, 1kHVG)"
 )
-def tsne_logCPM_1kHVG(adata, test: bool = False, n_pca=50):
-    adata = log_cpm_hvg(adata)
+def tsne_logCP10k_1kHVG(adata, test: bool = False, n_pca=50):
+    adata = log_cp10k_hvg(adata)
     return _tsne(adata, genes=adata.var["highly_variable"], test=test, n_pca=n_pca)
 
 
 @_tsne_method(
-    method_name="t-Distributed Stochastic Neighbor Embedding (t-SNE) (logCPM)"
+    method_name="t-Distributed Stochastic Neighbor Embedding (t-SNE) (logCP10k)"
 )
-def tsne_logCPM(adata, test: bool = False, n_pca=50):
-    adata = log_cpm(adata)
+def tsne_logCP10k(adata, test: bool = False, n_pca=50):
+    adata = log_cp10k(adata)
     return _tsne(adata, test=test, n_pca=n_pca)

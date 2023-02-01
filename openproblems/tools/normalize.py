@@ -41,42 +41,42 @@ def log_scran_pooling(adata: ad.AnnData) -> ad.AnnData:
     return adata
 
 
-def _cpm(adata: ad.AnnData):
+def _cp10k(adata: ad.AnnData):
     import scanpy as sc
 
     adata.X = sc.pp.normalize_total(
-        adata, target_sum=1e6, key_added="size_factors", inplace=False
+        adata, target_sum=1e4, key_added="size_factors", inplace=False
     )["X"]
 
 
 @decorators.normalizer
-def cpm(adata: ad.AnnData) -> ad.AnnData:
+def cp10k(adata: ad.AnnData) -> ad.AnnData:
     """Normalize data to counts per million."""
-    _cpm(adata)
+    _cp10k(adata)
     return adata
 
 
 @decorators.normalizer
-def log_cpm(adata: ad.AnnData) -> ad.AnnData:
+def log_cp10k(adata: ad.AnnData) -> ad.AnnData:
     """Normalize data to log counts per million."""
     import scanpy as sc
 
-    _cpm(adata)
+    _cp10k(adata)
     sc.pp.log1p(adata)
     return adata
 
 
 @decorators.normalizer
-def sqrt_cpm(adata: ad.AnnData) -> ad.AnnData:
+def sqrt_cp10k(adata: ad.AnnData) -> ad.AnnData:
     """Normalize data to sqrt counts per million."""
-    _cpm(adata)
+    _cp10k(adata)
     adata.X = scprep.transform.sqrt(adata.X)
     return adata
 
 
 @decorators.normalizer
-def log_cpm_hvg(adata: ad.AnnData, n_genes: int = 1000) -> ad.AnnData:
-    """Normalize logCPM HVG
+def log_cp10k_hvg(adata: ad.AnnData, n_genes: int = 1000) -> ad.AnnData:
+    """Normalize logCP10k HVG
 
     Normalize data to log counts per million and annotate n_genes highly
     variable genes. In order to subset the data to HVGs, use
@@ -86,7 +86,7 @@ def log_cpm_hvg(adata: ad.AnnData, n_genes: int = 1000) -> ad.AnnData:
     """
     import scanpy as sc
 
-    adata = log_cpm(adata)
+    adata = log_cp10k(adata)
 
     if adata.n_vars < n_genes:
         log.warning(
