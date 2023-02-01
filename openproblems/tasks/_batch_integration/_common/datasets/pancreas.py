@@ -39,7 +39,7 @@ def pancreas_batch(test: bool = False, min_celltype_count: Optional[int] = None)
     sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
 
     adata.var_names_make_unique()
-    
+
     adata.uns["hvg_unint"] = precompute_hvg(adata)
     adata.uns["n_genes_pre"] = adata.n_vars
     return adata
