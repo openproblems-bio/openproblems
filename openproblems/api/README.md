@@ -39,7 +39,7 @@ For example:
 # Download a task-specific dataset and save it to `dataset.h5ad`
 openproblems-cli load --task label_projection --output dataset.h5ad pancreas_batch
 # Run a method on a datasets and save output to `method.h5ad`
-openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cpm
+openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cp10k
 # Evaluate the performance of a previously run method using the `accuracy` metric
 openproblems-cli evaluate --task label_projection --input method.h5ad accuracy
 ```
@@ -67,11 +67,11 @@ zebrafish_labs
 zebrafish_random
 
 > openproblems-cli list --methods --task label_projection
-knn_classifier_log_cpm
+knn_classifier_log_cp10k
 knn_classifier_scran
-logistic_regression_log_cpm
+logistic_regression_log_cp10k
 logistic_regression_scran
-mlp_log_cpm
+mlp_log_cp10k
 mlp_scran
 
 > openproblems-cli list --metrics --task label_projection
@@ -100,11 +100,11 @@ zebrafish_labs
 zebrafish_random
 $ openproblems-cli load --task label_projection --output dataset.h5ad pancreas_batch
 $ openproblems-cli list --methods --task label_projection
-logistic_regression_log_cpm
+logistic_regression_log_cp10k
 logistic_regression_scran
-mlp_log_cpm
+mlp_log_cp10k
 mlp_scran
-$ openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cpm
+$ openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cp10k
 $ openproblems-cli list --metrics --task label_projection
 $ openproblems-cli evaluate --task label_projection --input method.h5ad accuracy
 0.9521233432512848
@@ -121,7 +121,7 @@ openproblems-cli image --datasets --task label_projection pancreas_batch
 docker run -dt openproblems-cli load --task label_projection --output dataset.h5ad pancreas_batch
 openproblems-cli list --methods --task label_projection
 openproblems-cli image --methods --task label_projection logistic_regression_scran
-openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cpm
+openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cp10k
 openproblems-cli list --metrics --task label_projection
 openproblems-cli image --metrics --task label_projection accuracy
 openproblems-cli evaluate --task label_projection --input method.h5ad accuracy
@@ -147,13 +147,13 @@ $ openproblems-cli image --datasets --task label_projection pancreas_batch
 openproblems
 $ docker run -dt singlecellopenproblems/openproblems openproblems-cli load --task label_projection --output dataset.h5ad pancreas_batch
 $ openproblems-cli list --methods --task label_projection
-logistic_regression_log_cpm
+logistic_regression_log_cp10k
 logistic_regression_scran
-mlp_log_cpm
+mlp_log_cp10k
 mlp_scran
 $ openproblems-cli image --methods --task label_projection logistic_regression_scran
 openproblems-r-base
-$ docker run -dt singlecellopenproblems/openproblems-r-base openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cpm
+$ docker run -dt singlecellopenproblems/openproblems-r-base openproblems-cli run --task label_projection --input dataset.h5ad --output method.h5ad logistic_regression_log_cp10k
 $ openproblems-cli list --metrics --task label_projection
 accuracy
 f1

@@ -130,7 +130,7 @@ def test_help(capsys):
 @parameterized.parameterized.expand(
     [
         ("label_projection", "--datasets", "pancreas_batch"),
-        ("multimodal_data_integration", "--methods", "mnn_log_scran_pooling"),
+        ("matching_modalities", "--methods", "mnn_log_scran_pooling"),
     ],
     name_func=utils.name.name_test,
 )
@@ -161,7 +161,7 @@ def test_hash_docker_api():
     [
         (dataset, method, metric)
         for dataset in ["zebrafish_labs", None]
-        for method in ["logistic_regression_log_cpm", None]
+        for method in ["logistic_regression_log_cp10k", None]
         for metric in ["accuracy", None]
     ],
     name_func=utils.name.name_test,
@@ -248,7 +248,7 @@ def test_pipeline():
                 method_file,
                 "--version-file",
                 version_file,
-                "logistic_regression_log_cpm",
+                "logistic_regression_log_cp10k",
             ],
             do_print=False,
         )
