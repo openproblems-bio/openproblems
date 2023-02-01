@@ -20,7 +20,7 @@ consists of the mean isolated score of all isolated labels.
 )
 def isolated_labels_sil(adata):
     from ...batch_integration_embed.metrics.iso_label_sil import (
-        isolated_labels_sil as embed_metric,
+        isolated_labels_sil as embed_metric,  # noqa: H301
     )
     from scanpy.tl import pca
 
