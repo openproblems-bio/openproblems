@@ -334,7 +334,7 @@ docker run \
 openproblems-cli test \
   --task label_projection \
   --dataset zebrafish_labs \
-  --method logistic_regression_log_cpm \
+  --method logistic_regression_log_cp10k \
   --metric f1
 ```
 

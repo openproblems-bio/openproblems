@@ -1,5 +1,5 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
+from ....tools.normalize import log_cp10k
 from ....tools.normalize import log_scran_pooling
 from .sklearn import classifier
 
@@ -33,10 +33,10 @@ def _mlp(adata, test=False, max_iter=None, hidden_layer_sizes=None):
 
 
 @_mlp_method(
-    method_name="Multilayer perceptron (log CPM)",
+    method_name="Multilayer perceptron (log CP10k)",
 )
-def mlp_log_cpm(adata, test=False, max_iter=None, hidden_layer_sizes=None):
-    adata = log_cpm(adata)
+def mlp_log_cp10k(adata, test=False, max_iter=None, hidden_layer_sizes=None):
+    adata = log_cp10k(adata)
     return _mlp(
         adata, test=test, max_iter=max_iter, hidden_layer_sizes=hidden_layer_sizes
     )

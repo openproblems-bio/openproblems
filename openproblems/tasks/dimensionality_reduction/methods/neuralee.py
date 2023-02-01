@@ -1,5 +1,5 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm_hvg
+from ....tools.normalize import log_cp10k_hvg
 from ....tools.utils import check_version
 from anndata import AnnData
 from typing import Optional
@@ -101,13 +101,13 @@ def neuralee_default(adata: AnnData, test: bool = False) -> AnnData:
     adata.X = adata.layers["counts"]
     adata = _neuralee(adata, test=test, normalize=True, subsample_genes=500)
     # revert to expected values
-    adata.X = adata.layers["log_cpm"]
+    adata.X = adata.layers["log_cp10k"]
     return adata
 
 
-@_neuralee_method(method_name="NeuralEE (CPU) (logCPM, 1kHVG)")
-def neuralee_logCPM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
-    adata = log_cpm_hvg(adata)
+@_neuralee_method(method_name="NeuralEE (CPU) (logCP10k, 1kHVG)")
+def neuralee_logCP10k_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
+    adata = log_cp10k_hvg(adata)
     return _neuralee(
         adata,
         genes=adata.var["highly_variable"],
