@@ -48,8 +48,7 @@ def check_dataset(
 
     if do_check_hvg:
         assert "hvg_unint" in adata.uns
-        assert isinstance(adata.uns["hvg_unint"], list)
-        assert len(adata.uns["hvg_unint"]) == N_HVG_UNINT
+        assert len(adata.uns["hvg_unint"]) == min(N_HVG_UNINT, adata.n_vars)
         assert np.all(np.isin(adata.uns["hvg_unint"], adata.var.index))
 
     if do_check_neighbors:
