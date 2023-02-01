@@ -3,7 +3,9 @@ from .._common import api
 
 import functools
 
-check_dataset = functools.partial(api.check_dataset, do_check_hvg=True, do_check_pca=True)
+check_dataset = functools.partial(
+    api.check_dataset, do_check_hvg=True, do_check_pca=True
+)
 
 
 def check_method(adata, is_baseline=False):
