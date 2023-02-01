@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - uses: viash-io/viash-actions/setup@v1.0.0
+    - uses: viash-io/viash-actions/setup@v2
 
     # create cachehash key
     - name: Create hash key
@@ -49,17 +49,18 @@ jobs:
         viash ns build --config_mod ".functionality.version := 'main_build'" --parallel --setup donothing
 
     - name: Generate schemas
-      uses: viash-io/viash-actions/build_nextflow_schemas@build_nextflow_schemas
+      uses: viash-io/viash-actions/build-nextflow-schemas@v2
       with: 
         token: ${{ secrets.GTHB_PAT }}
         components: src
         workflows: src
 
-    # - name: Generate params
-    #   uses: viash-io/viash-actions/build_nextflow_params@build_nextflow_params
-    #   with: 
-    #     token: ${{ secrets.GTHB_PAT }}
-    #     input_dir: src
+    - name: Generate params
+      uses: viash-io/viash-actions/build-nextflow-params@v2
+      with: 
+        token: ${{ secrets.GTHB_PAT }}
+        components: src
+        workflows: src
 
     - name: Deploy to target branch
       uses: peaceiris/actions-gh-pages@v3
@@ -68,14 +69,15 @@ jobs:
         publish_dir: .
         publish_branch: main_build
 
-    # store component locations
-    - id: set_matrix
-      run: |
-        component_json=$(viash ns list -p docker --format json | jq -c '[ .[] | { "name": .functionality.name, "namespace": .functionality.namespace, "config": .info.config } ]')
-        echo "component_matrix=$component_json" >> $GITHUB_OUTPUT
+
+    - id: ns_list
+      uses: viash-io/viash-actions/ns-list@v2
+      with:
+        platform: docker
+        format: json
 
     outputs:
-      component_matrix: ${{ steps.set_matrix.outputs.component_matrix }}
+      components_json: ${{ steps.ns_list.outputs.output }}
       cachehash: ${{ steps.cachehash.outputs.cachehash }}
 
   # phase 2
@@ -87,14 +89,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: ${{ fromJson(needs.list_components.outputs.component_matrix) }}
+        component: ${{ fromJson(needs.list_components.outputs.components_json) }}
 
     steps:
     - uses: actions/checkout@v3
-    - uses: viash-io/viash-actions/setup@v1.0.0
+    - uses: viash-io/viash-actions/setup@v2
     - name: Build container
       run: |
-        SRC_DIR=`dirname ${{ matrix.component.config }}`
+        SRC_DIR=`dirname ${{ matrix.component.info.config }}`
         viash ns build --config_mod ".functionality.version := 'main_build'" -s "$SRC_DIR" --setup build
         
     - name: Login to container registry
@@ -106,4 +108,4 @@ jobs:
 
     - name: Push containers
       run: |
-        viash build ${{ matrix.component.config }} -p docker --config_mod ".functionality.version := 'main_build'" --setup push
+        viash build ${{ matrix.component.info.config }} -p docker --config_mod ".functionality.version := 'main_build'" --setup push
