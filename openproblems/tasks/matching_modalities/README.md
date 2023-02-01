@@ -1,4 +1,4 @@
-# Multimodal data integration
+# Matching modalities
 
 ## The task
 
@@ -25,13 +25,13 @@ observations sharing the same coordinates in the latent space.
 
 ## The metrics
 
-Metrics for multimodal data integration aim to characterize how well the aligned
+Metrics for matching modalities aim to characterize how well the aligned
 datasets correspond to the ground truth.
 
-* **kNN AUC**: Let $f(i) ∈ F$ be the scRNA-seq measurement of cell $i$, and $g(i) ∈ G$
-  be the scATAC- seq measurement of cell $i$. kNN-AUC calculates the average percentage
-  overlap of neighborhoods of $f(i)$ in $F$ with neighborhoods of $g(i)$ in $G$. Higher
-  is better.
+* **kNN AUC**: Let $f(i) ∈ F$ be the modality 1 (e.g., scRNA-seq) measurement of cell $i$,
+  and $g(i) ∈ G$ be the modality 2 (e.g., scATAC-seq) measurement of cell $i$. kNN-AUC
+  calculates the average percentage overlap of neighborhoods of $f(i)$ in $F$ with
+  neighborhoods of $g(i)$ in $G$. Higher is better.
 * **MSE**: Mean squared error (MSE) is the average distance between each pair of matched
   observations of the same cell in the learned latent space. Lower is better.
 
