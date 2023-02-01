@@ -14,7 +14,9 @@ from typing import Optional
     "Mouse gene names are mapped to human gene names by capitalisation.",
     image="openproblems",
 )
-def immune_human_mouse_batch(test: bool = False, min_celltype_count: Optional[int] = None):
+def immune_human_mouse_batch(
+    test: bool = False, min_celltype_count: Optional[int] = None
+):
     import scanpy as sc
 
     adata = load_immune_human_mouse(test)
