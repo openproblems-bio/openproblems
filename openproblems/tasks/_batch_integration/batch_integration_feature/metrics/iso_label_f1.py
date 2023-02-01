@@ -1,5 +1,5 @@
 from .....tools.decorators import metric
-import ...batch_integration_graph.metrics as graph_metrics
+from ...batch_integration_graph.metrics import isolated_labels_f1 as graph_metric
 
 """
 We developed two isolated label scores to evaluate how well the data integration methods
@@ -37,4 +37,4 @@ def isolated_labels_f1(adata):
 
     adata.obsm["X_emb"] = pca(adata.X)
     neighbors(adata, use_rep="X_emb")
-    return graph_metrics.isolated_labels_f1(adata)
+    return graph_metric(adata)
