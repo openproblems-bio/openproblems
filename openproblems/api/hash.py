@@ -46,8 +46,10 @@ def docker_token(image_name):
             [
                 "curl",
                 "--silent",
-                f"https://auth.docker.io/token?scope=repository:{image_name}:"
-                "pull&service=registry.docker.io",
+                (
+                    f"https://auth.docker.io/token?scope=repository:{image_name}:"
+                    "pull&service=registry.docker.io"
+                ),
             ]
         )
     )
