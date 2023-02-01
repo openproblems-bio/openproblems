@@ -12,7 +12,7 @@ def filter_celltypes(adata, min_celltype_count: Optional[int] = None):
     return adata[keep_cells].copy()
 
 
-def precomp_hvg(adata, n_genes):
+def precompute_hvg(adata, n_genes=2000):
     hvg_unint = highly_variable_genes(
         adata,
         n_top_genes=n_genes,

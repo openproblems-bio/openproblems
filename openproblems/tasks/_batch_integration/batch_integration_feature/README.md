@@ -50,6 +50,7 @@ Datasets should contain the following attributes:
    prior to integration (for the hvg conservation metric)
 
 Methods should store their a batch-corrected gene expression matrix in `adata.X`.
+The output should should contain at least 2000 features.
 
 The `openproblems-python-batch-integration` docker container is used for the methods
 that

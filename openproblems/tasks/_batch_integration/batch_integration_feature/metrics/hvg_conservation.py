@@ -27,13 +27,6 @@ coefficients.
 def hvg_conservation(adata):
     from scib.metrics import hvg_overlap
 
-    hvg = 2000
-
-    if adata.uns["n_genes_pre"] < hvg and adata.uns["n_genes_pre"] is not adata.n_vars:
-        return -1
-    if adata.n_vars < hvg:
-        return -1
-
     adata_unint = adata.copy()
     adata_unint.X = adata_unint.layers["log_normalized"]
     hvg_both = list(set(adata.uns["hvg_unint"]).intersection(adata.var_names))

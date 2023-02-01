@@ -1,7 +1,7 @@
 from ....data.sample import load_sample_data
 from ....tools.decorators import dataset
 from .utils import filter_celltypes
-from .utils import precomp_hvg
+from .utils import precompute_hvg
 
 import numpy as np
 
@@ -35,6 +35,7 @@ def check_dataset(
     assert adata.obs_names.is_unique
 
     assert "n_genes_pre" in adata.uns
+    assert len(set(adata.uns["hvg_unint"]).intersection(set(adata.var_names))) == 2000
 
     assert "organism" in adata.uns
     assert adata.uns["organism"] in ["mouse", "human"]
@@ -70,7 +71,7 @@ def sample_dataset(run_pca: bool = False, run_neighbors: bool = False):
     adata.obs["labels"] = np.random.choice(3, adata.shape[0], replace=True).astype(str)
     adata = filter_celltypes(adata)
 
-    adata.uns["hvg_unint"] = precomp_hvg(adata, 2000)
+    adata.uns["hvg_unint"] = precompute_hvg(adata)
     adata.uns["n_genes_pre"] = adata.n_vars
 
     if run_pca:
