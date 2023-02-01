@@ -16,7 +16,7 @@ _magic_method = functools.partial(
 )
 
 
-def _magic(adata, solver, normtype="sqrt", **kwargs):
+def _magic(adata, solver, normtype="sqrt", reverse_norm_order=False, **kwargs):
     from magic import MAGIC
 
     if normtype == "sqrt":
@@ -28,11 +28,19 @@ def _magic(adata, solver, normtype="sqrt", **kwargs):
     else:
         raise NotImplementedError
 
-    X, libsize = scprep.normalize.library_size_normalize(
-        adata.obsm["train"], rescale=1, return_library_size=True
-    )
+    X = adata.obsm["train"]
+    if reverse_norm_order:
+        # inexplicably, this sometimes performs better
+        X = scprep.utils.matrix_transform(X, norm_fn)
+        X, libsize = scprep.normalize.library_size_normalize(
+            X, rescale=1, return_library_size=True
+        )
+    else:
+        X, libsize = scprep.normalize.library_size_normalize(
+            X, rescale=1, return_library_size=True
+        )
+        X = scprep.utils.matrix_transform(X, norm_fn)
 
-    X = scprep.utils.matrix_transform(X, norm_fn)
     Y = MAGIC(solver=solver, **kwargs, verbose=False).fit_transform(
         X, genes="all_genes"
     )
@@ -53,10 +61,24 @@ def magic(adata, test=False):
 
 
 @_magic_method(
+    method_name="MAGIC (reversed normalization)",
+)
+def magic_reverse_norm(adata, test=False):
+    return _magic(adata, solver="exact", normtype="sqrt", reverse_norm_order=True)
+
+
+@_magic_method(
     method_name="MAGIC (approximate)",
 )
 def magic_approx(adata, test=False):
     return _magic(adata, solver="approximate", normtype="sqrt")
+
+
+@_magic_method(
+    method_name="MAGIC (approximate, reversed normalization)",
+)
+def magic_approx_reverse_norm(adata, test=False):
+    return _magic(adata, solver="approximate", normtype="sqrt", reverse_norm_order=True)
 
 
 @method(

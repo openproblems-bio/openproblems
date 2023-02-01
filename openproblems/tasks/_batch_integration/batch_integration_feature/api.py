@@ -1,3 +1,4 @@
+from ....tools.decorators import dataset
 from .._common import api
 
 check_dataset = api.check_dataset
@@ -14,6 +15,7 @@ def check_method(adata, is_baseline=False):
 @dataset()
 def sample_dataset():
     return api.sample_dataset(run_pca=True)
+
 
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
