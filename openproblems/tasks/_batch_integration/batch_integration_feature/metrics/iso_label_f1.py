@@ -32,7 +32,7 @@ the mean isolated score of all isolated labels.
 )
 def isolated_labels_f1(adata):
     from ...batch_integration_graph.metrics.iso_label_f1 import (
-        isolated_labels_f1 as graph_metric, # noqa: H301
+        isolated_labels_f1 as graph_metric,  # noqa: H301
     )
     from scanpy.pp import neighbors
     from scanpy.tl import pca
