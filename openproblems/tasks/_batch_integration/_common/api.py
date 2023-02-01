@@ -37,7 +37,7 @@ def check_dataset(
     assert adata.obs_names.is_unique
 
     assert "n_genes_pre" in adata.uns
-    assert isinstance("n_genes_pre", numbers.Integral)
+    assert isinstance(adata.uns["n_genes_pre"], numbers.Integral)
     assert adata.uns["n_genes_pre"] == adata.n_vars
 
     assert "organism" in adata.uns
