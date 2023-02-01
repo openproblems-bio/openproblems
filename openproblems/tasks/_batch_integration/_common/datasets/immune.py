@@ -45,6 +45,7 @@ def immune_batch(test: bool = False, min_celltype_count: Optional[int] = None):
         inplace=False,
     )
     adata.uns["hvg_unint"] = list(hvg_unint[hvg_unint.highly_variable].index)
+    adata.uns["n_genes_pre"] = adata.n_vars
 
     sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
     adata.var_names_make_unique()

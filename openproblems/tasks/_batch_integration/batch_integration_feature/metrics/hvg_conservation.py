@@ -27,13 +27,22 @@ coefficients.
 def hvg_conservation(adata):
     from scanpy.pp import highly_variable_genes
     from scib.metrics import hvg_overlap
+    n_hvg = 2000
+
+    if (
+        adata.uns["n_genes_pre"] < n_hvg and
+        adata.uns["n_genes_pre"] is not adata.n_vars
+    ):
+        return -1
+    if adata.n_vars < n_hvg:
+        return -1
 
     adata_unint = adata.copy()
     adata_unint.X = adata_unint.layers["log_normalized"]
     if "hvg_unint" not in adata_unint.uns:
         hvg_unint = highly_variable_genes(
             adata_unint,
-            n_top_genes=2000,
+            n_top_genes=n_hvg,
             flavor="cell_ranger",
             batch_key="batch",
             inplace=False,

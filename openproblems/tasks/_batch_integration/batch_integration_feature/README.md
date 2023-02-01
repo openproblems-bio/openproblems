@@ -45,6 +45,7 @@ Datasets should contain the following attributes:
 * `adata.layers['counts']` with raw, integer UMI count data,
 * `adata.layers['log_normalized']` with log-normalized data and
 * `adata.X` with log-normalized data
+* `adata.uns['n_genes_pre'] with the number of genes present before integration
 
 Methods should store their a batch-corrected gene expression matrix in `adata.X`.
 

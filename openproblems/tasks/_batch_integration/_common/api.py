@@ -28,6 +28,8 @@ def check_dataset(adata, do_check_pca=False, do_check_neighbors=False):
     assert adata.var_names.is_unique
     assert adata.obs_names.is_unique
 
+    assert "n_genes_pre" in adata.uns
+
     assert "organism" in adata.uns
     assert adata.uns["organism"] in ["mouse", "human"]
 
@@ -68,6 +70,7 @@ def sample_dataset(run_pca: bool = False, run_neighbors: bool = False):
         inplace=False,
     )
     adata.uns["hvg_unint"] = list(hvg_unint[hvg_unint.highly_variable].index)
+    adata.uns["n_genes_pre"] = adata.n_vars
 
     if run_pca:
         adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
