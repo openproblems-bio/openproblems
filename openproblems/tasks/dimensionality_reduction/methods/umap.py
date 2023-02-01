@@ -1,6 +1,6 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
-from ....tools.normalize import log_cpm_hvg
+from ....tools.normalize import log_cp10k
+from ....tools.normalize import log_cp10k_hvg
 from ....tools.utils import check_version
 
 import functools
@@ -45,49 +45,49 @@ def _umap(adata, n_comps=None, genes=None, densmap=False):
     return adata
 
 
-@_umap_method(method_name="UMAP (logCPM, 1kHVG)")
-def umap_logCPM_1kHVG(adata, test: bool = False):
-    adata = log_cpm_hvg(adata)
+@_umap_method(method_name="UMAP (logCP10k, 1kHVG)")
+def umap_logCP10k_1kHVG(adata, test: bool = False):
+    adata = log_cp10k_hvg(adata)
     return _umap(adata, genes=adata.var["highly_variable"])
 
 
-@_umap_method(method_name="UMAP PCA (logCPM, 1kHVG)")
-def umap_pca_logCPM_1kHVG(adata, test: bool = False):
-    adata = log_cpm_hvg(adata)
+@_umap_method(method_name="UMAP PCA (logCP10k, 1kHVG)")
+def umap_pca_logCP10k_1kHVG(adata, test: bool = False):
+    adata = log_cp10k_hvg(adata)
     return _umap(adata, n_comps=50, genes=adata.var["highly_variable"])
 
 
-@_umap_method(method_name="UMAP (logCPM)")
-def umap_logCPM(adata, test: bool = False):
-    adata = log_cpm(adata)
+@_umap_method(method_name="UMAP (logCP10k)")
+def umap_logCP10k(adata, test: bool = False):
+    adata = log_cp10k(adata)
     return _umap(adata)
 
 
-@_umap_method(method_name="UMAP PCA (logCPM)")
-def umap_pca_logCPM(adata, test: bool = False):
-    adata = log_cpm(adata)
+@_umap_method(method_name="UMAP PCA (logCP10k)")
+def umap_pca_logCP10k(adata, test: bool = False):
+    adata = log_cp10k(adata)
     return _umap(adata, n_comps=50)
 
 
-@_densmap_method(method_name="densMAP (logCPM, 1kHVG)")
-def densmap_logCPM_1kHVG(adata, test: bool = False):
-    adata = log_cpm_hvg(adata)
+@_densmap_method(method_name="densMAP (logCP10k, 1kHVG)")
+def densmap_logCP10k_1kHVG(adata, test: bool = False):
+    adata = log_cp10k_hvg(adata)
     return _umap(adata, densmap=True, genes=adata.var["highly_variable"])
 
 
-@_densmap_method(method_name="densMAP PCA (logCPM, 1kHVG)")
-def densmap_pca_logCPM_1kHVG(adata, test: bool = False):
-    adata = log_cpm_hvg(adata)
+@_densmap_method(method_name="densMAP PCA (logCP10k, 1kHVG)")
+def densmap_pca_logCP10k_1kHVG(adata, test: bool = False):
+    adata = log_cp10k_hvg(adata)
     return _umap(adata, densmap=True, n_comps=50, genes=adata.var["highly_variable"])
 
 
-@_densmap_method(method_name="densMAP (logCPM)")
-def densmap_logCPM(adata, test: bool = False):
-    adata = log_cpm(adata)
+@_densmap_method(method_name="densMAP (logCP10k)")
+def densmap_logCP10k(adata, test: bool = False):
+    adata = log_cp10k(adata)
     return _umap(adata, densmap=True)
 
 
-@_densmap_method(method_name="densMAP PCA (logCPM)")
-def densmap_pca_logCPM(adata, test: bool = False):
-    adata = log_cpm(adata)
+@_densmap_method(method_name="densMAP PCA (logCP10k)")
+def densmap_pca_logCP10k(adata, test: bool = False):
+    adata = log_cp10k(adata)
     return _umap(adata, densmap=True, n_comps=50)

@@ -1,6 +1,6 @@
 from ....data.tenx import load_tenx_5k_pbmc
 from ....tools.decorators import dataset
-from ....tools.normalize import log_cpm
+from ....tools.normalize import log_cp10k
 
 
 @dataset(
@@ -16,4 +16,4 @@ from ....tools.normalize import log_cpm
 def tenx_5k_pbmc(test=False):
     adata = load_tenx_5k_pbmc(test=test)
     adata.uns["n_genes"] = adata.shape[1]
-    return log_cpm(adata)
+    return log_cp10k(adata)
