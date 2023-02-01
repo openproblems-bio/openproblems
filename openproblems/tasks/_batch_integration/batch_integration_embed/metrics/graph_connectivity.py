@@ -1,6 +1,6 @@
 from .....tools.decorators import metric
 
-import ...batch_integration_graph.metrics as graph_metrics
+from ...batch_integration_graph import metrics as graph_metrics
 
 """
 The graph connectivity metric assesses whether the kNN graph representation,
