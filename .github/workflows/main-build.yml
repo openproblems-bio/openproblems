@@ -77,14 +77,7 @@ jobs:
 
     - id: set_matrix
       run: |
-        matrix_out=$(jq -c ${{ steps.ns_list.outputs.output }} '[ .[] | 
-          { 
-            "name": .functionality.name, 
-            "namespace": .functionality.namespace, 
-            "config": .info.config, 
-            "dir": .info.config | capture("^(?<dir>.*\/)").dir 
-          }
-        ]')
+        matrix_out=$(jq -c ${{ steps.ns_list.outputs.output }} '[ .[] | { "name": (.functionality.namespace + "/" + .functionality.name, "config": .info.config, "dir": .info.config | capture("^(?<dir>.*\/)").dir } ]')
         echo "matrix=matrix_out" >> $GITHUB_OUTPUT
 
     outputs:
