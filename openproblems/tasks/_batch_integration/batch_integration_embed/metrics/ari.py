@@ -1,4 +1,5 @@
 from .....tools.decorators import metric
+from ...batch_integration_graph import metrics as graph_metrics
 
 """
 The Rand index compares the overlap of two clusterings;
@@ -20,8 +21,7 @@ We also used the scikit-learn (v.0.22.1) implementation of the ARI.
     image="openproblems-r-pytorch",
 )
 def ari(adata):
-    from ...batch_integration_graph.metrics.ari import ari as graph_metric
     from scanpy.pp import neighbors
 
     neighbors(adata, use_rep="X_emb")
-    return graph_metric(adata)
+    return graph_metrics.ari(adata)

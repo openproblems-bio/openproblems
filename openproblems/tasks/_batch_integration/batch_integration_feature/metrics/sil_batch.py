@@ -1,5 +1,5 @@
 from .....tools.decorators import metric
-from ...batch_integration_embed.metrics import silhouette_batch as embed_metric
+from ...batch_integration_embed import metrics as embed_metrics
 
 """
 We consider the absolute silhouette width, s(i), on
@@ -32,4 +32,4 @@ def silhouette_batch(adata):
     from scanpy.tl import pca
 
     adata.obsm["X_emb"] = pca(adata.X)
-    return embed_metric(adata)
+    return embed_metrics.silhouette_batch(adata)
