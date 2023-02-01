@@ -229,6 +229,7 @@ def _beta(adata, test=False, top_genes=None, threshold=1):
 
 @method(
     method_name="BETA",
+    method_summary="TODO",
     paper_name=(
         "Target analysis by integration of transcriptome and ChIP-seq data with BETA"
     ),

@@ -1,3 +1,4 @@
+from ....tools.decorators import baseline_method
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
@@ -83,13 +84,10 @@ def magic_approx_reverse_norm(adata, test=False):
     return _magic(adata, solver="approximate", normtype="sqrt", reverse_norm_order=True)
 
 
-@method(
+@baseline_method(
     method_name="KNN smoothing",
-    paper_name="KNN Smoothing (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    image="openproblems-python-extras",
+    method_summary="TODO",
+    is_baseline=False,
 )
 def knn_naive(adata, test=False):
     return _magic(adata, solver="exact", normtype="log", decay=None, t=1)
