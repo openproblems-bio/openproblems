@@ -1,6 +1,7 @@
-import functools
 from ....tools.decorators import dataset
 from .._common import api
+
+import functools
 
 check_dataset = functools.partial(api.check_dataset, do_check_pca=True)
 
