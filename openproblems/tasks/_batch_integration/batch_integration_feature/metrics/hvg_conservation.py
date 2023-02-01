@@ -27,11 +27,12 @@ coefficients.
 def hvg_conservation(adata):
     from scanpy.pp import highly_variable_genes
     from scib.metrics import hvg_overlap
+
     n_hvg = 2000
 
     if (
-        adata.uns["n_genes_pre"] < n_hvg and
-        adata.uns["n_genes_pre"] is not adata.n_vars
+        adata.uns["n_genes_pre"] < n_hvg
+        and adata.uns["n_genes_pre"] is not adata.n_vars
     ):
         return -1
     if adata.n_vars < n_hvg:
