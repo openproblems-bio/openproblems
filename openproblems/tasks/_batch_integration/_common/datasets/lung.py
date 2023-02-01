@@ -3,6 +3,7 @@ from .....tools.decorators import dataset
 from ..utils import filter_celltypes
 from typing import Optional
 
+
 @dataset(
     dataset_name="Lung (Viera Braga et al.)",
     data_url=load_lung.metadata["data_url"],
@@ -23,7 +24,7 @@ def lung_batch(test: bool = False, min_celltype_count: Optional[int] = None):
 
     sc.pp.filter_genes(adata, min_counts=1)
     sc.pp.filter_genes(adata, min_cells=1)
-    
+
     adata.X = adata.layers["log_normalized"]
 
     sc.tl.pca(
