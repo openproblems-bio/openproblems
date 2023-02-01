@@ -58,6 +58,17 @@ def sample_dataset(run_pca: bool = False, run_neighbors: bool = False):
     adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
     adata.obs["labels"] = np.random.choice(3, adata.shape[0], replace=True).astype(str)
     adata = filter_celltypes(adata)
+    
+    hvg_unint = sc.pp.highly_variable_genes(
+        adata,
+        n_top_genes=2000,
+        layer="log_normalized",
+        flavor="cell_ranger",
+        batch_key="batch",
+        inplace=False,
+    )
+    adata.uns['hvg_unint'] = hvg_unint[hvg_unint.highly_variable].index
+
     if run_pca:
         adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
     if run_neighbors:

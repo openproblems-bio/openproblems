@@ -30,14 +30,15 @@ def hvg_conservation(adata):
 
     adata_unint = adata.copy()
     adata_unint.X = adata_unint.layers["log_normalized"]
-    hvg_unint = highly_variable_genes(
-        adata_unint,
-        n_top_genes=2000,
-        flavor="cell_ranger",
-        batch_key="batch",
-        inplace=False,
-    )
-    hvg_unint = hvg_unint[hvg_unint.highly_variable].index
-    hvg_both = list(set(hvg_unint).intersection(adata.var_names))
+    if "hvg_unint" not in adata_unint.uns:
+        hvg_unint = highly_variable_genes(
+            adata_unint,
+            n_top_genes=2000,
+            flavor="cell_ranger",
+            batch_key="batch",
+            inplace=False,
+        )
+        adata.uns["hvg_unint"] = hvg_unint[hvg_unint.highly_variable].index
+    hvg_both = list(set(adata.uns["hvg_unint"]).intersection(adata.var_names))
 
     return hvg_overlap(adata_unint, adata[:, hvg_both], "batch")

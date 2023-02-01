@@ -35,6 +35,16 @@ def pancreas_batch(test: bool = False, min_celltype_count: Optional[int] = None)
     )
     adata.obsm["X_uni_pca"] = adata.obsm["X_pca"]
 
+    hvg_unint = sc.pp.highly_variable_genes(
+        adata,
+        n_top_genes=2000,
+        layer="log_normalized",
+        flavor="cell_ranger",
+        batch_key="batch",
+        inplace=False,
+    )
+    adata.uns['hvg_unint'] = hvg_unint[hvg_unint.highly_variable].index
+
     sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
 
     adata.var_names_make_unique()
