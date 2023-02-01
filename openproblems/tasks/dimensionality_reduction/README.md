@@ -23,12 +23,12 @@ data for visualization and interpretation.
 
 ## The metrics
 
-* **Root mean square error**: the square root of the mean squared difference between
+* **Distance correlation**: the Spearman correlation between
   ground truth distances in the high-dimensional data and Euclidean distances in the
-  dimension-reduced data, invariant to scalar multiplication. *RMSE* computes
-  high-dimensional distances in Euclidean space, while *RMSE (spectral)* computes
-  [diffusion distances](http://dx.doi.org/10.1016/j.acha.2006.04.006) (i.e. Euclidean
-  distances on the [Laplacian Eigenmap](http://dx.doi.org/10.1162/089976603321780317)).
+  dimension-reduced data, invariant to scalar multiplication. *Distance correlation*
+  computes high-dimensional distances in Euclidean space, while *Distance correlation
+  (spectral)* computes [diffusion distances](http://dx.doi.org/10.1016/j.acha.2006.04.006)
+  (i.e. Euclidean distances on the [Laplacian Eigenmap](http://dx.doi.org/10.1162/089976603321780317)).
 * **Trustworthiness**: a measurement of similarity between the rank of each point's
   nearest neighbors in the high-dimensional data and the reduced data ([Venna & Kaski,
   2001](https://openproblems.bio/bibliography#venna2001neighborhood)).

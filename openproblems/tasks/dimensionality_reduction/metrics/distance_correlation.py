@@ -2,24 +2,23 @@ from ....tools.decorators import metric
 from ....tools.normalize import log_cp10k
 
 
-def _rmse(X, X_emb):
-    import scipy.optimize
+def _distance_correlation(X, X_emb):
     import scipy.spatial
+    import scipy.stats
 
     high_dimensional_distance_vector = scipy.spatial.distance.pdist(X)
     low_dimensional_distance_vector = scipy.spatial.distance.pdist(X_emb)
-    _, rmse = scipy.optimize.nnls(
-        low_dimensional_distance_vector[:, None], high_dimensional_distance_vector
-    )
-    return rmse
+    return scipy.stats.spearmanr(
+        low_dimensional_distance_vector, high_dimensional_distance_vector
+    )[0]
 
 
 @metric(
-    metric_name="RMSE",
-    maximize=False,
-    paper_reference="kruskal1964mds",
+    metric_name="Distance correlation",
+    maximize=True,
+    paper_reference="schober2018correlation",
 )
-def rmse(adata, n_svd=200):
+def distance_correlation(adata, n_svd=200):
     """Calculate the root mean squared error.
 
     Computes (RMSE) between the full (or processed) data matrix and the
@@ -30,15 +29,15 @@ def rmse(adata, n_svd=200):
     adata = log_cp10k(adata)
 
     X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
-    return _rmse(X, adata.obsm["X_emb"])
+    return _distance_correlation(X, adata.obsm["X_emb"])
 
 
 @metric(
-    metric_name="RMSE (spectral)",
-    maximize=False,
+    metric_name="Distance correlation (spectral)",
+    maximize=True,
     paper_reference="coifman2006diffusion",
 )
-def rmse_spectral(adata, n_comps=200):
+def distance_correlation_spectral(adata, n_comps=200):
     """Calculate the spectral root mean squared error
 
     Computes (RMSE) between high-dimensional Laplacian eigenmaps on the full (or
@@ -57,4 +56,4 @@ def rmse_spectral(adata, n_comps=200):
     X = umap.spectral.spectral_layout(
         adata.X, graph, n_comps, random_state=np.random.default_rng()
     )
-    return _rmse(X, adata.obsm["X_emb"])
+    return _distance_correlation(X, adata.obsm["X_emb"])
