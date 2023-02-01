@@ -6,7 +6,7 @@ on:
 
 jobs:
   # phase 1
-  list_components:
+  list:
     env:
       s3_bucket: s3://openproblems-data/resources_test/
     runs-on: ubuntu-latest
@@ -90,15 +90,15 @@ jobs:
       cachehash: ${{ steps.cachehash.outputs.cachehash }}
 
   # phase 2
-  build_containers:
-    needs: list_components
+  build:
+    needs: list
 
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        component: ${{ fromJson(needs.list_components.outputs.components_json) }}
+        component: ${{ fromJson(needs.list.outputs.components_json) }}
 
     steps:
     - uses: actions/checkout@v3
