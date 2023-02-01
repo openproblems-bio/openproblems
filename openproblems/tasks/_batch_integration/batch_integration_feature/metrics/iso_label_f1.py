@@ -1,4 +1,5 @@
 from .....tools.decorators import metric
+from ...batch_integration_graph import metrics as graph_metrics
 
 """
 We developed two isolated label scores to evaluate how well the data integration methods
@@ -9,7 +10,7 @@ The score evaluates how well these isolated labels separate from other cell iden
 We implemented the isolated label metric in two versions:
 (1) the best clustering of the isolated label (F1 score) and
 (2) the global ASW of the isolated label. For the cluster-based score,
-we first optimize the cluster assignment of the isolated label using the F1 score
+we first optimize the cluster assignment of the isolated label using the F1 score˚
 across louvain clustering resolutions ranging from 0.1 to 2 in resolution steps of 0.1.
 The optimal F1 score for the isolated label is then used as the metric score.
 The F1 score is a weighted mean of precision and recall given by the equation:
@@ -31,13 +32,9 @@ the mean isolated score of all isolated labels.
     image="openproblems-r-pytorch",
 )
 def isolated_labels_f1(adata):
-    from scib.metrics import isolated_labels
+    from scanpy.pp import neighbors
+    from scanpy.tl import pca
 
-    return isolated_labels(
-        adata,
-        label_key="labels",
-        batch_key="batch",
-        embed=None,
-        cluster=True,
-        verbose=False,
-    )
+    adata.obsm["X_emb"] = pca(adata.X)
+    neighbors(adata, use_rep="X_emb")
+    return graph_metrics.isolated_labels_f1(adata)

@@ -42,6 +42,7 @@ Datasets should contain the following attributes:
 
 * `adata.obs["batch"]` with the batch covariate, and
 * `adata.obs["label"]` with the cell identity label
+* `adata.obs["X_uni_pca"]` with a PCA embedding of the uncorrected data
 * `adata.layers['counts']` with raw, integer UMI count data,
 * `adata.layers['log_normalized']` with log-normalized data and
 * `adata.X` with log-normalized data

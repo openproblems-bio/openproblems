@@ -1,6 +1,6 @@
 from ...data.sample import load_sample_data
 from ...tools.decorators import dataset
-from ...tools.normalize import log_cpm
+from ...tools.normalize import log_cp10k
 
 import numpy as np
 
@@ -16,7 +16,7 @@ def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
     # check adata.X has not changed
     assert adata.uns["n_genes"] == adata.shape[1]
-    assert adata.X is adata.layers["log_cpm"]
+    assert adata.X is adata.layers["log_cp10k"]
     # check output
     assert "X_emb" in adata.obsm
     if not is_baseline:
@@ -29,7 +29,7 @@ def check_method(adata, is_baseline=False):
 def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     adata = load_sample_data()
-    adata = log_cpm(adata)
+    adata = log_cp10k(adata)
     adata.uns["n_genes"] = adata.shape[1]
     return adata
 
