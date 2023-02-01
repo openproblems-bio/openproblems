@@ -67,7 +67,7 @@ def sample_dataset(run_pca: bool = False, run_neighbors: bool = False):
         batch_key="batch",
         inplace=False,
     )
-    adata.uns['hvg_unint'] = hvg_unint[hvg_unint.highly_variable].index
+    adata.uns['hvg_unint'] = list(hvg_unint[hvg_unint.highly_variable].index)
 
     if run_pca:
         adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)

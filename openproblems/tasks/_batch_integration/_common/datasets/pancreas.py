@@ -43,7 +43,7 @@ def pancreas_batch(test: bool = False, min_celltype_count: Optional[int] = None)
         batch_key="batch",
         inplace=False,
     )
-    adata.uns['hvg_unint'] = hvg_unint[hvg_unint.highly_variable].index
+    adata.uns['hvg_unint'] = list(hvg_unint[hvg_unint.highly_variable].index)
 
     sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
 
