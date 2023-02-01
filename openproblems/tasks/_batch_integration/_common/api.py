@@ -6,6 +6,7 @@ from .utils import precompute_hvg
 import numpy as np
 
 MIN_CELLS_PER_CELLTYPE = 50
+N_HVG_UNINT = 2000
 
 
 def check_neighbors(adata, neighbors_key, connectivities_key, distances_key):
@@ -35,7 +36,8 @@ def check_dataset(
     assert adata.obs_names.is_unique
 
     assert "n_genes_pre" in adata.uns
-    assert len(set(adata.uns["hvg_unint"]).intersection(set(adata.var_names))) == 2000
+    assert isinstance("n_genes_pre", int)
+    assert adata.uns["n_genes_pre"] == adata.n_vars
 
     assert "organism" in adata.uns
     assert adata.uns["organism"] in ["mouse", "human"]
@@ -45,6 +47,9 @@ def check_dataset(
 
     if do_check_hvg:
         assert "hvg_unint" in adata.uns
+        assert isinstance(adata.uns["hvg_unint"], list)
+        assert len(adata.uns["hvg_unint"]) == N_HVG_UNINT
+        assert np.all(np.isin(adata.uns["hvg_unint"], adata.var.index))
 
     if do_check_neighbors:
         check_neighbors(adata, "uni", "uni_connectivities", "uni_distances")
