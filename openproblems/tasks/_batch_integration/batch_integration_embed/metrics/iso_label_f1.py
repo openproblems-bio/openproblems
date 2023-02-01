@@ -25,12 +25,7 @@ the mean isolated score of all isolated labels.
 """
 
 
-@metric(
-    metric_name="Isolated label F1",
-    paper_reference="luecken2022benchmarking",
-    maximize=True,
-    image="openproblems-r-pytorch",
-)
+@metric(**graph_metrics.isolated_labels_f1.metadata)
 def isolated_labels_f1(adata):
     from scanpy.pp import neighbors
 

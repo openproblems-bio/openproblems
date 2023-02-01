@@ -10,12 +10,7 @@ where C denotes the set of all cell identity labels.
 For information about the batch silhouette score, check sil_batch."""
 
 
-@metric(
-    metric_name="Silhouette",
-    paper_reference="luecken2022benchmarking",
-    maximize=True,
-    image="openproblems-r-pytorch",
-)
+@metric(**embed_metrics.silhouette.metadata)
 def silhouette(adata):
     from scanpy.tl import pca
 

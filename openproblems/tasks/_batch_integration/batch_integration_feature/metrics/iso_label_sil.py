@@ -13,12 +13,7 @@ consists of the mean isolated score of all isolated labels.
 """
 
 
-@metric(
-    metric_name="Isolated label Silhouette",
-    paper_reference="luecken2022benchmarking",
-    maximize=True,
-    image="openproblems-r-pytorch",
-)
+@metric(**embed_metrics.isolated_labels_sil.metadata)
 def isolated_labels_sil(adata):
     from scanpy.tl import pca
 

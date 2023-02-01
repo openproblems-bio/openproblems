@@ -19,12 +19,7 @@ remains unchanged within each batch for complete conservation, while any deviati
 the preintegration variance contribution reduces the score."""
 
 
-@metric(
-    metric_name="Cell Cycle Score",
-    paper_reference="luecken2022benchmarking",
-    maximize=True,
-    image="openproblems-r-pytorch",
-)
+@metric(**embed_metrics.cc_score.metadata)
 def cc_score(adata, test=False):
     from scanpy.tl import pca
 

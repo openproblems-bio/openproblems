@@ -53,7 +53,7 @@ def assert_url_accessible(url):
 def _load_bibliography():
     import bibtexparser
 
-    bib_path = FILEPATH.parents[2].joinpath("main.bib")
+    bib_path = FILEPATH.parents[3].joinpath("main.bib")
     with open(bib_path, "r") as handle:
         return bibtexparser.load(handle)
 
