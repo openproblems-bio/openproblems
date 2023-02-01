@@ -31,9 +31,8 @@ the mean isolated score of all isolated labels.
     image="openproblems-r-pytorch",
 )
 def isolated_labels_f1(adata):
-    from ...batch_integration_graph.metrics.iso_label_f1 import (
-        isolated_labels_f1 as graph_metric,
-    )
+    from ...batch_integration_graph.metrics.iso_label_f1 import isolated_labels_f1\
+        as graph_metric
     from scanpy.pp import neighbors
     from scanpy.tl import pca
 
