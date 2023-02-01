@@ -3,6 +3,7 @@ from ....tools.decorators import dataset
 from .utils import filter_celltypes
 from .utils import precompute_hvg
 
+import numbers
 import numpy as np
 
 MIN_CELLS_PER_CELLTYPE = 50
@@ -36,7 +37,7 @@ def check_dataset(
     assert adata.obs_names.is_unique
 
     assert "n_genes_pre" in adata.uns
-    assert isinstance("n_genes_pre", int)
+    assert isinstance("n_genes_pre", numbers.Integral)
     assert adata.uns["n_genes_pre"] == adata.n_vars
 
     assert "organism" in adata.uns
