@@ -1,4 +1,5 @@
 from .....tools.decorators import metric
+import ...batch_integration_embed.metrics as embed_metrics
 
 """
 We consider the absolute silhouette width, s(i), on
@@ -28,10 +29,7 @@ Here, M is the set of unique cell labels."""
     image="openproblems-r-pytorch",
 )
 def silhouette_batch(adata):
-    from ...batch_integration_embed.metrics.sil_batch import (
-        silhouette_batch as embed_metric,
-    )
     from scanpy.tl import pca
 
     adata.obsm["X_emb"] = pca(adata.X)
-    return embed_metric(adata)
+    return embed_metrics.silhouette_batch(adata)
