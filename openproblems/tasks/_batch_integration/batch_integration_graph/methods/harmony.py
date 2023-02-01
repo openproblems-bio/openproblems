@@ -6,8 +6,10 @@ import functools
 
 _harmony_method = functools.partial(
     method,
-    paper_name="Fast, sensitive and accurate integration "
-    "of single-cell data with Harmony",
+    method_summary="TODO",
+    paper_name=(
+        "Fast, sensitive and accurate integration of single-cell data with Harmony"
+    ),
     paper_reference="korsunsky2019fast",
     paper_year=2019,
     code_url="https://github.com/lilab-bcb/harmony-pytorch",

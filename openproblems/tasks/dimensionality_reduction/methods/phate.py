@@ -9,8 +9,10 @@ import functools
 
 _phate_method = functools.partial(
     method,
-    paper_name="Visualizing Structure and Transitions in High-Dimensional Biological"
-    " Data",
+    method_summary="TODO",
+    paper_name=(
+        "Visualizing Structure and Transitions in High-Dimensional Biological Data"
+    ),
     paper_reference="moon2019visualizing",
     paper_year=2019,
     code_url="https://github.com/KrishnaswamyLab/PHATE/",

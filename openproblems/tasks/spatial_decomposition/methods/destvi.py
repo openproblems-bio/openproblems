@@ -6,8 +6,10 @@ from typing import Optional
 
 @method(
     method_name="DestVI",
-    paper_name="DestVI identifies continuums of cell types in spatial "
-    "transcriptomics data",
+    method_summary="TODO",
+    paper_name=(
+        "DestVI identifies continuums of cell types in spatial transcriptomics data"
+    ),
     paper_reference="lopez2022destvi",
     paper_year=2022,
     code_url="https://github.com/YosefLab/scvi-tools",

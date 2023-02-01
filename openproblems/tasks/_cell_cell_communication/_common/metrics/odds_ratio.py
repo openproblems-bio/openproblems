@@ -8,7 +8,19 @@ def _sigmoid_transform(x):
     return 1 - 1 / (1 + x / 2)
 
 
-@metric(metric_name="Odds Ratio", paper_reference="bland2000odds", maximize=True)
+@metric(
+    metric_name="Odds Ratio",
+    metric_summary=(
+        "The odds ratio represents the ratio of true and false "
+        "positives within a set of prioritized interactions (top ranked hits) versus "
+        "the same ratio for the remainder of the interactions. Thus, in this "
+        "scenario odds ratios quantify the strength of association between the "
+        "ability of methods to prioritize interactions and those interactions "
+        "assigned to the positive class."
+    ),
+    paper_reference="bland2000odds",
+    maximize=True,
+)
 def odds_ratio(adata, top_prop=0.05):
     # Join benchmark (assumed truth) and ccc results
     # Get /w ccc_target and a response [0, 1] column

@@ -1,15 +1,11 @@
-from ....tools.decorators import method
+from ....tools.decorators import baseline_method
 from ....tools.utils import check_version
 
 import numpy as np
 
 
-@method(
-    method_name="Majority Vote",
-    paper_name="Majority Vote (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
+@baseline_method(
+    method_name="Majority Vote", method_summary="TODO", baseline_method=False
 )
 def majority_vote(adata, test=False):
     majority = adata.obs.labels[adata.obs.is_train].value_counts().index[0]
@@ -20,14 +16,7 @@ def majority_vote(adata, test=False):
     return adata
 
 
-@method(
-    method_name="Random Labels",
-    paper_name="Random Labels (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
+@baseline_method(method_name="Random Labels", paper_name="TODO")
 def random_labels(adata, test=False):
     label_distribution = adata.obs.labels[adata.obs.is_train].value_counts()
     label_distribution = label_distribution / label_distribution.sum()
@@ -43,14 +32,7 @@ def random_labels(adata, test=False):
     return adata
 
 
-@method(
-    method_name="True Labels",
-    paper_name="True Labels (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
+@baseline_method(method_name="True Labels", paper_name="TODO")
 def true_labels(adata, test=False):
     adata.obs["labels_pred"] = adata.obs["labels"]
     adata.uns["method_code_version"] = check_version("openproblems")

@@ -7,11 +7,14 @@ import functools
 
 _tsne_method = functools.partial(
     method,
+    method_summary="TODO",
     paper_name="Visualizing Data using t-SNE",
     paper_reference="vandermaaten2008visualizing",
     paper_year=2008,
-    code_url="https://scikit-learn.org/stable/modules/generated/"
-    "sklearn.manifold.TSNE.html#sklearn.manifold.TSNE",
+    code_url=(
+        "https://scikit-learn.org/stable/modules/generated/"
+        "sklearn.manifold.TSNE.html#sklearn.manifold.TSNE"
+    ),
     image="openproblems-python-extras",
 )
 

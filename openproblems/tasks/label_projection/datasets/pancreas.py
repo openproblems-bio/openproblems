@@ -9,11 +9,13 @@ import numpy as np
     "Pancreas (by batch)",
     data_url=load_pancreas.metadata["data_url"],
     data_reference=load_pancreas.metadata["data_reference"],
-    dataset_summary="Human pancreatic islet scRNA-seq data from 6 datasets "
-    "across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, "
-    "and SMARTER-seq). Split into train/test by experimental batch. "
-    "Dimensions: 16382 cells, 18771 genes. 14 cell types "
-    "(avg. 1170±1703 cells per cell type).",
+    dataset_summary=(
+        "Human pancreatic islet scRNA-seq data from 6 datasets "
+        "across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, "
+        "and SMARTER-seq). Split into train/test by experimental batch. "
+        "Dimensions: 16382 cells, 18771 genes. 14 cell types "
+        "(avg. 1170±1703 cells per cell type)."
+    ),
 )
 def pancreas_batch(test=False):
     adata = load_pancreas(test=test)
@@ -34,11 +36,13 @@ def pancreas_batch(test=False):
     "Pancreas (random split)",
     data_url=load_pancreas.metadata["data_url"],
     data_reference=load_pancreas.metadata["data_reference"],
-    dataset_summary="Human pancreatic islet scRNA-seq data from 6 datasets "
-    "across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, "
-    "and SMARTER-seq). Split into train/test randomly. "
-    "Dimensions: 16382 cells, 18771 genes. 14 cell types "
-    "(avg. 1170±1703 cells per cell type).",
+    dataset_summary=(
+        "Human pancreatic islet scRNA-seq data from 6 datasets "
+        "across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, "
+        "and SMARTER-seq). Split into train/test randomly. "
+        "Dimensions: 16382 cells, 18771 genes. 14 cell types "
+        "(avg. 1170±1703 cells per cell type)."
+    ),
 )
 def pancreas_random(test=False):
     adata = load_pancreas(test=test)
@@ -57,11 +61,13 @@ def pancreas_random(test=False):
     "Pancreas (random split with label noise)",
     data_url=load_pancreas.metadata["data_url"],
     data_reference=load_pancreas.metadata["data_reference"],
-    dataset_summary="Human pancreatic islet scRNA-seq data from 6 datasets "
-    "across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, "
-    "and SMARTER-seq). Split into train/test randomly with 20% label noise. "
-    "Dimensions: 16382 cells, 18771 genes. 14 cell types "
-    "(avg. 1170±1703 cells per cell type).",
+    dataset_summary=(
+        "Human pancreatic islet scRNA-seq data from 6 datasets "
+        "across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, "
+        "and SMARTER-seq). Split into train/test randomly with 20% label noise. "
+        "Dimensions: 16382 cells, 18771 genes. 14 cell types "
+        "(avg. 1170±1703 cells per cell type)."
+    ),
 )
 def pancreas_random_label_noise(test=False):
     adata = load_pancreas(test=test)

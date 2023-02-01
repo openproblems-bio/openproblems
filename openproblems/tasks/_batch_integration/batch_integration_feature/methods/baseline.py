@@ -1,28 +1,20 @@
-from .....tools.decorators import method
+from .....tools.decorators import baseline_method
 from .....tools.utils import check_version
 from ...batch_integration_graph.methods.baseline import _randomize_features
 
 
-@method(
+@baseline_method(
     method_name="No Integration",
-    paper_name="No Integration (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary="TODO",
 )
 def no_integration(adata, test=False):
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
 
 
-@method(
+@baseline_method(
     method_name="Random Integration",
-    paper_name="Random Integration (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary="TODO",
 )
 def random_integration(adata, test=False):
     adata.X = _randomize_features(adata.X)
@@ -30,13 +22,9 @@ def random_integration(adata, test=False):
     return adata
 
 
-@method(
+@baseline_method(
     method_name="Random Integration by Celltype",
-    paper_name="Random Integration by Celltype (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary="TODO",
 )
 def celltype_random_integration(adata, test=False):
     adata.X = _randomize_features(adata.X, partition=adata.obs["labels"])
@@ -44,13 +32,9 @@ def celltype_random_integration(adata, test=False):
     return adata
 
 
-@method(
+@baseline_method(
     method_name="Random Integration by Batch",
-    paper_name="Random Integration by Batch (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary="TODO",
 )
 def batch_random_integration(adata, test=False):
     adata.X = _randomize_features(adata.X, partition=adata.obs["batch"])

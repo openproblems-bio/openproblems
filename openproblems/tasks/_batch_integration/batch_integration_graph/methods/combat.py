@@ -5,8 +5,11 @@ import functools
 
 _combat_method = functools.partial(
     method,
-    paper_name="Adjusting batch effects in microarray expression data using "
-    "empirical Bayes methods",
+    method_summary="TODO",
+    paper_name=(
+        "Adjusting batch effects in microarray expression data using "
+        "empirical Bayes methods"
+    ),
     paper_reference="hansen2012removing",
     paper_year=2007,
     code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",

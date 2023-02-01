@@ -26,6 +26,11 @@ the mean isolated score of all isolated labels.
 
 @metric(
     metric_name="Isolated label F1",
+    metric_summary=(
+        "Isolated cell labels are identified as the labels present in the least number"
+        " of batches in the integration task. The score evaluates how well these"
+        " isolated labels separate from other cell identities based on clustering."
+    ),
     paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-r-pytorch",

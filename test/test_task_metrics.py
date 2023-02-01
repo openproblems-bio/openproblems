@@ -4,6 +4,9 @@ import utils.asserts
 import utils.docker
 import utils.name
 
+METRIC_SUMMARY_MINLEN = 40
+METRIC_SUMMARY_MAXLEN = 400
+
 
 @parameterized.parameterized.expand(
     [(metric,) for task in openproblems.TASKS for metric in task.METRICS],
@@ -12,10 +15,13 @@ import utils.name
 def test_metric_metadata(metric):
     """Test for existence of metric metadata."""
     assert hasattr(metric, "metadata")
-    for attr in ["metric_name", "maximize", "image"]:
+    for attr in ["metric_name", "metric_summary", "maximize", "image"]:
         assert attr in metric.metadata
     assert isinstance(metric.metadata["maximize"], bool)
     assert isinstance(metric.metadata["metric_name"], str)
+    assert isinstance(metric.metadata["metric_summary"], str)
+    assert len(metric.metadata["metric_summary"]) > METRIC_SUMMARY_MINLEN
+    assert len(metric.metadata["metric_summary"]) < METRIC_SUMMARY_MAXLEN
     assert isinstance(metric.metadata["image"], str)
     assert metric.metadata["image"].startswith("openproblems")
     assert isinstance(metric.metadata["paper_reference"], str)

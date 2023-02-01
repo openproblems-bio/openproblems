@@ -8,9 +8,11 @@ from typing import Optional
     dataset_name="Immune (by batch)",
     data_url=load_immune.metadata["data_url"],
     data_reference=load_immune.metadata["data_reference"],
-    dataset_summary="Human immune cells from peripheral blood and bone marrow "
-    "taken from 5 datasets comprising 10 batches across technologies (10X, "
-    "Smart-seq2).",
+    dataset_summary=(
+        "Human immune cells from peripheral blood and bone marrow "
+        "taken from 5 datasets comprising 10 batches across technologies (10X, "
+        "Smart-seq2)."
+    ),
     image="openproblems",
 )
 def immune_batch(test: bool = False, min_celltype_count: Optional[int] = None):

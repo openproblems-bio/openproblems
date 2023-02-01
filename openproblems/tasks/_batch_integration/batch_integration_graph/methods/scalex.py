@@ -6,8 +6,11 @@ import functools
 
 _scalex_method = functools.partial(
     method,
-    paper_name="Online single-cell data integration through projecting heterogeneous "
-    "datasets into a common cell-embedding space",
+    method_summary="TODO",
+    paper_name=(
+        "Online single-cell data integration through projecting heterogeneous "
+        "datasets into a common cell-embedding space"
+    ),
     paper_reference="xiong2021online",
     paper_year=2022,
     code_url="https://github.com/jsxlei/SCALEX",

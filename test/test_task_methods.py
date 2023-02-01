@@ -10,6 +10,9 @@ RETRIES = (
     int(os.environ["PYTEST_MAX_RETRIES"]) if "PYTEST_MAX_RETRIES" in os.environ else 2
 )
 
+METHOD_SUMMARY_MINLEN = 40
+METHOD_SUMMARY_MAXLEN = 400
+
 
 @parameterized.parameterized.expand(
     [
@@ -60,6 +63,7 @@ def test_method_metadata(method):
     assert hasattr(method, "metadata")
     for attr in [
         "method_name",
+        "method_summary",
         "paper_name",
         "paper_reference",
         "paper_year",
@@ -72,6 +76,9 @@ def test_method_metadata(method):
     assert isinstance(method.metadata["image"], str)
     assert method.metadata["image"].startswith("openproblems")
     assert isinstance(method.metadata["method_name"], str)
+    assert isinstance(method.metadata["method_summary"], str)
+    assert len(method.metadata["method_summary"]) > METHOD_SUMMARY_MINLEN
+    assert len(method.metadata["method_summary"]) < METHOD_SUMMARY_MAXLEN
     assert isinstance(method.metadata["paper_name"], str)
     assert isinstance(method.metadata["paper_year"], int)
     assert isinstance(method.metadata["paper_reference"], str)

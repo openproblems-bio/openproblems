@@ -1,17 +1,13 @@
-from ....tools.decorators import method
+from ....tools.decorators import baseline_method
 from ....tools.normalize import log_cpm
 from ....tools.utils import check_version
 
 import numpy as np
 
 
-@method(
+@baseline_method(
     method_name="Random Features",
-    paper_name="Random Features (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary="TODO",
 )
 def random_features(adata, test=False, n_svd=20):
     import sklearn.decomposition
@@ -27,13 +23,9 @@ def random_features(adata, test=False, n_svd=20):
     return adata
 
 
-@method(
+@baseline_method(
     method_name="True Features",
-    paper_name="True Features (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary="TODO",
 )
 def true_features(adata, test=False, n_svd=20):
     import sklearn.decomposition

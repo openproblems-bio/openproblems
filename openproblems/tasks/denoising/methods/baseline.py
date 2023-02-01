@@ -1,15 +1,8 @@
-from ....tools.decorators import method
+from ....tools.decorators import baseline_method
 from ....tools.utils import check_version
 
 
-@method(
-    method_name="No denoising",
-    paper_name="Molecular Cross-Validation for Single-Cell RNA-seq",
-    paper_reference="batson2019molecular",
-    paper_year=2019,
-    code_url="https://github.com/czbiohub/molecular-cross-validation",
-    is_baseline=True,
-)
+@baseline_method(method_name="No denoising", method_summary="TODO")
 def no_denoising(adata, test=False):
     """Do nothing."""
     adata.obsm["denoised"] = adata.obsm["train"].toarray()
@@ -17,14 +10,7 @@ def no_denoising(adata, test=False):
     return adata
 
 
-@method(
-    method_name="Perfect denoising",
-    paper_name="Molecular Cross-Validation for Single-Cell RNA-seq",
-    paper_reference="batson2019molecular",
-    paper_year=2019,
-    code_url="https://github.com/czbiohub/molecular-cross-validation",
-    is_baseline=True,
-)
+@baseline_method(method_name="Perfect denoising", method_summary="TODO")
 def perfect_denoising(adata, test=False):
     """Cheat."""
     adata.obsm["denoised"] = adata.obsm["test"].toarray()

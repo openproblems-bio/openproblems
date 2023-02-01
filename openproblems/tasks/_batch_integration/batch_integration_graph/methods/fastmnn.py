@@ -7,6 +7,7 @@ import functools
 
 _fastmnn_method = functools.partial(
     method,
+    method_summary="TODO",
     paper_name="A description of the theory behind the fastMNN algorithm",
     paper_reference="lun2019fastmnn",
     paper_year=2019,

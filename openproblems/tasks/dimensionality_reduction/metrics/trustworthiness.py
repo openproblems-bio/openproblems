@@ -6,6 +6,10 @@ import numpy as np
 
 @metric(
     metric_name="trustworthiness",
+    metric_summary=(
+        "a measurement of similarity between the rank of each point's "
+        "nearest neighbors in the high-dimensional data and the reduced data."
+    ),
     paper_reference="venna2001neighborhood",
     maximize=True,
 )

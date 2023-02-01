@@ -8,6 +8,7 @@ import functools
 
 _harmonic_alignment_method = functools.partial(
     method,
+    method_summary="TODO",
     paper_name="Harmonic Alignment",
     paper_reference="stanley2020harmonic",
     paper_year=2020,

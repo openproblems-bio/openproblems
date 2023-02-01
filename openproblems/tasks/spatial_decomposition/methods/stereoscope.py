@@ -5,8 +5,11 @@ from ..utils import split_sc_and_sp
 
 @method(
     method_name="Stereoscope",
-    paper_name="Single-cell and spatial transcriptomics enables probabilistic "
-    "inference of cell type topography",
+    method_summary="TODO",
+    paper_name=(
+        "Single-cell and spatial transcriptomics enables probabilistic "
+        "inference of cell type topography"
+    ),
     paper_reference="andersson2020single",
     paper_year=2020,
     code_url="https://github.com/scverse/scvi-tools",

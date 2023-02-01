@@ -9,6 +9,7 @@ import scanpy as sc
 
 _pymde_method = functools.partial(
     method,
+    method_summary="TODO",
     paper_name="Minimum-Distortion Embedding",
     paper_reference="agrawal2021mde",
     paper_year=2021,

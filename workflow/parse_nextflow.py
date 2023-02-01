@@ -337,8 +337,10 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
     output = dict(
         name=dataset.metadata["dataset_name"],
         data_url=dataset.metadata["data_url"],
-        data_reference="https://openproblems.bio/"
-        f"bibliography#{dataset.metadata['data_reference']}",
+        data_reference=(
+            "https://openproblems.bio/"
+            f"bibliography#{dataset.metadata['data_reference']}"
+        ),
         headers=dict(
             names=["Rank", "Name", "Mean score"], fixed=["Name", "Paper", "Library"]
         ),
@@ -359,12 +361,16 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results_raw):
         result = {
             "Name": method.metadata["method_name"],
             "Paper": method.metadata["paper_name"],
-            "Paper URL": "https://openproblems.bio/"
-            f"bibliography#{method.metadata['paper_reference']}",
+            "Paper URL": (
+                "https://openproblems.bio/"
+                f"bibliography#{method.metadata['paper_reference']}"
+            ),
             "Year": method.metadata["paper_year"],
             "Library": method.metadata["code_url"],
-            "Implementation": "https://github.com/openproblems-bio/openproblems/"
-            f"blob/main/{method.__module__.replace('.', '/')}.py",
+            "Implementation": (
+                "https://github.com/openproblems-bio/openproblems/"
+                f"blob/main/{method.__module__.replace('.', '/')}.py"
+            ),
             "Version": method_results["code_version"],
             "Runtime (min)": parse_time_to_min(method_results["realtime"]),
             "CPU (%)": float(method_results["%cpu"].replace("%", "")),

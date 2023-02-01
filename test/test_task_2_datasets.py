@@ -13,7 +13,7 @@ import utils.git
 import utils.name
 
 DATASET_SUMMARY_MINLEN = 40
-DATASET_SUMMARY_MAXLEN = 1000
+DATASET_SUMMARY_MAXLEN = 400
 
 
 def _assert_not_bytes(X):

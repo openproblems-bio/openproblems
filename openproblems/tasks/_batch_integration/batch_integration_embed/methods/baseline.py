@@ -1,24 +1,15 @@
-from .....tools.decorators import method
+from .....tools.decorators import baseline_method
 from .....tools.utils import check_version
 from ...batch_integration_graph.methods.baseline import _random_embedding
 from ...batch_integration_graph.methods.baseline import _randomize_features
 
-import functools
 import numpy as np
 import scanpy as sc
 
-_baseline_method = functools.partial(
-    method,
-    paper_name="Open Problems for Single Cell Analysis",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
 
-
-@_baseline_method(
+@baseline_method(
     method_name="No Integration",
+    method_summary="TODO",
 )
 def no_integration(adata, test=False):
     adata.obsm["X_emb"] = adata.obsm["X_uni_pca"]
@@ -26,8 +17,9 @@ def no_integration(adata, test=False):
     return adata
 
 
-@_baseline_method(
+@baseline_method(
     method_name="Random Integration",
+    method_summary="TODO",
 )
 def random_integration(adata, test=False):
     adata.obsm["X_emb"] = _randomize_features(adata.obsm["X_uni_pca"])
@@ -35,13 +27,9 @@ def random_integration(adata, test=False):
     return adata
 
 
-@method(
+@baseline_method(
     method_name="Random Integration by Celltype",
-    paper_name="Random Integration by Celltype (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary="TODO",
 )
 def celltype_random_integration(adata, test=False):
     adata.obsm["X_emb"] = _randomize_features(
@@ -51,8 +39,9 @@ def celltype_random_integration(adata, test=False):
     return adata
 
 
-@_baseline_method(
+@baseline_method(
     method_name="Random Embedding by Celltype",
+    method_summary="TODO",
 )
 def celltype_random_embedding(adata, test=False):
     adata.obsm["X_emb"] = _random_embedding(partition=adata.obs["labels"])
@@ -60,8 +49,9 @@ def celltype_random_embedding(adata, test=False):
     return adata
 
 
-@_baseline_method(
+@baseline_method(
     method_name="Random Integration by Batch",
+    method_summary="TODO",
 )
 def batch_random_integration(adata, test=False):
     adata.obsm["X_emb"] = _randomize_features(
@@ -71,8 +61,9 @@ def batch_random_integration(adata, test=False):
     return adata
 
 
-@_baseline_method(
+@baseline_method(
     method_name="No Integration by Batch",
+    method_summary="TODO",
 )
 def no_integration_batch(adata, test=False):
     """Compute PCA independently on each batch
