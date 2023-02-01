@@ -1,6 +1,6 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
-from ....tools.normalize import log_cpm_hvg
+from ....tools.normalize import log_cp10k
+from ....tools.normalize import log_cp10k_hvg
 from ....tools.utils import check_version
 from typing import Optional
 
@@ -61,30 +61,30 @@ def _pymde(
 
 
 @_pymde_method(
-    method_name="PyMDE Preserve Neighbors (logCPM)",
+    method_name="PyMDE Preserve Neighbors (logCP10k)",
 )
-def pymde_neighbors_log_cpm(
+def pymde_neighbors_log_cp10k(
     adata,
     test: bool = False,
     max_iter: Optional[int] = None,
     memory_size: Optional[int] = None,
 ):
-    adata = log_cpm(adata)
+    adata = log_cp10k(adata)
     return _pymde(
         adata, method="neighbors", test=test, max_iter=max_iter, memory_size=memory_size
     )
 
 
 @_pymde_method(
-    method_name="PyMDE Preserve Neighbors (logCPM, 1kHVG)",
+    method_name="PyMDE Preserve Neighbors (logCP10k, 1kHVG)",
 )
-def pymde_neighbors_log_cpm_hvg(
+def pymde_neighbors_log_cp10k_hvg(
     adata,
     test: bool = False,
     max_iter: Optional[int] = None,
     memory_size: Optional[int] = None,
 ):
-    adata = log_cpm_hvg(adata)
+    adata = log_cp10k_hvg(adata)
     return _pymde(
         adata,
         method="neighbors",
@@ -96,30 +96,30 @@ def pymde_neighbors_log_cpm_hvg(
 
 
 @_pymde_method(
-    method_name="PyMDE Preserve Distances (logCPM)",
+    method_name="PyMDE Preserve Distances (logCP10k)",
 )
-def pymde_distances_log_cpm(
+def pymde_distances_log_cp10k(
     adata,
     test: bool = False,
     max_iter: Optional[int] = None,
     memory_size: Optional[int] = None,
 ):
-    adata = log_cpm(adata)
+    adata = log_cp10k(adata)
     return _pymde(
         adata, method="distances", test=test, max_iter=max_iter, memory_size=memory_size
     )
 
 
 @_pymde_method(
-    method_name="PyMDE Preserve Distances (logCPM, 1kHVG)",
+    method_name="PyMDE Preserve Distances (logCP10k, 1kHVG)",
 )
-def pymde_distances_log_cpm_hvg(
+def pymde_distances_log_cp10k_hvg(
     adata,
     test: bool = False,
     max_iter: Optional[int] = None,
     memory_size: Optional[int] = None,
 ):
-    adata = log_cpm_hvg(adata)
+    adata = log_cp10k_hvg(adata)
     return _pymde(
         adata,
         method="distances",
