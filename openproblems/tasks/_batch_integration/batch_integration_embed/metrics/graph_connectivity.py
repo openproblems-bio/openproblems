@@ -1,6 +1,6 @@
 from .....tools.decorators import metric
 
-from ...batch_integration_graph.metrics import graph_connectivity as graph_metrics
+from ...batch_integration_graph.metrics import graph_connectivity as graph_metric
 
 """
 The graph connectivity metric assesses whether the kNN graph representation,
@@ -31,4 +31,4 @@ def graph_connectivity(adata):
     from scanpy.pp import neighbors
 
     neighbors(adata, use_rep="X_emb")
-    return graph_metrics.graph_connectivity(adata)
+    return graph_metric(adata)
