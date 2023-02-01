@@ -37,7 +37,7 @@ def isolated_labels_f1(adata):
         adata,
         label_key="labels",
         batch_key="batch",
-        embed="X_pca",
+        embed=None,
         cluster=True,
         verbose=False,
     )
