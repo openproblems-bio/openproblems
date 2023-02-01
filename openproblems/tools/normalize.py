@@ -51,14 +51,14 @@ def _cp10k(adata: ad.AnnData):
 
 @decorators.normalizer
 def cp10k(adata: ad.AnnData) -> ad.AnnData:
-    """Normalize data to counts per million."""
+    """Normalize data to counts per 10,000."""
     _cp10k(adata)
     return adata
 
 
 @decorators.normalizer
 def log_cp10k(adata: ad.AnnData) -> ad.AnnData:
-    """Normalize data to log counts per million."""
+    """Normalize data to log counts per 10,000."""
     import scanpy as sc
 
     _cp10k(adata)
@@ -68,7 +68,7 @@ def log_cp10k(adata: ad.AnnData) -> ad.AnnData:
 
 @decorators.normalizer
 def sqrt_cp10k(adata: ad.AnnData) -> ad.AnnData:
-    """Normalize data to sqrt counts per million."""
+    """Normalize data to sqrt counts per 10,000."""
     _cp10k(adata)
     adata.X = scprep.transform.sqrt(adata.X)
     return adata
@@ -78,7 +78,7 @@ def sqrt_cp10k(adata: ad.AnnData) -> ad.AnnData:
 def log_cp10k_hvg(adata: ad.AnnData, n_genes: int = 1000) -> ad.AnnData:
     """Normalize logCP10k HVG
 
-    Normalize data to log counts per million and annotate n_genes highly
+    Normalize data to log counts per 10,000 and annotate n_genes highly
     variable genes. In order to subset the data to HVGs, use
     ```
     adata = adata[:, adata.var["highly_variable"]].copy()

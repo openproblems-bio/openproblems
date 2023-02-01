@@ -67,7 +67,7 @@ each **method** should first call one of these functions and use the processed `
 slot as the input to the method. Raw counts are also stored in `adata.layers["counts"]`
 by the standard pre-processing functions, if a method performs its own pre-processing.
 For most methods a standard pre-processing from `log_cp10k()`, which normalizes the
-expression matrix to counts per million (CP10k), can be used directly from `adata.X`.
+expression matrix to counts per 10,000 (CP10k), can be used directly from `adata.X`.
 Variants of methods can be created by applying different pre-processing prior to the
 method itself (see `phate.py` for an example). *Note that using a normalization method
 different from that used for the metrics (log CP10k) may lead to artificially poor method
