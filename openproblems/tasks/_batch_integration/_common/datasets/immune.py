@@ -14,7 +14,11 @@ from typing import Optional
     "Smart-seq2).",
     image="openproblems",
 )
-def immune_batch(test: bool = False, min_celltype_count: Optional[int] = None):
+def immune_batch(
+    test: bool = False,
+    min_celltype_count: Optional[int] = None,
+    n_hvg: Optional[int] = None,
+):
     import scanpy as sc
 
     adata = load_immune(test)
@@ -40,6 +44,6 @@ def immune_batch(test: bool = False, min_celltype_count: Optional[int] = None):
     sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
     adata.var_names_make_unique()
 
-    adata.uns["hvg_unint"] = precompute_hvg(adata)
+    adata.uns["hvg_unint"] = precompute_hvg(adata, n_genes=n_hvg)
     adata.uns["n_genes_pre"] = adata.n_vars
     return adata
