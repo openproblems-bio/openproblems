@@ -8,7 +8,7 @@ from typing import Optional
     dataset_name="Lung (Viera Braga et al.)",
     data_url=load_lung.metadata["data_url"],
     data_reference=load_lung.metadata["data_reference"],
-    dataset_summary="Human lung scRNA-seq data from 3 datasets with 32,472 cells."
+    dataset_summary="Human lung scRNA-seq data from 3 datasets with 32,472 cells. "
     "From Vieira Braga et al. Technologies: 10X and Drop-seq.",
     image="openproblems",
 )
