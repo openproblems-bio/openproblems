@@ -27,14 +27,11 @@ coefficients.
 def hvg_conservation(adata):
     from scib.metrics import hvg_overlap
 
-    n_hvg = 2000
+    hvg = 2000
 
-    if (
-        adata.uns["n_genes_pre"] < n_hvg
-        and adata.uns["n_genes_pre"] is not adata.n_vars
-    ):
+    if adata.uns["n_genes_pre"] < hvg and adata.uns["n_genes_pre"] is not adata.n_vars:
         return -1
-    if adata.n_vars < n_hvg:
+    if adata.n_vars < hvg:
         return -1
 
     adata_unint = adata.copy()
