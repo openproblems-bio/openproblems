@@ -1,4 +1,5 @@
 from .....tools.decorators import metric
+from ...batch_integration_graph import metrics as graph_metrics
 
 """
 We developed two isolated label scores to evaluate how well the data integration methods
@@ -31,13 +32,7 @@ the mean isolated score of all isolated labels.
     image="openproblems-r-pytorch",
 )
 def isolated_labels_f1(adata):
-    from scib.metrics import isolated_labels
+    from scanpy.pp import neighbors
 
-    return isolated_labels(
-        adata,
-        label_key="labels",
-        batch_key="batch",
-        embed=None,
-        cluster=True,
-        verbose=False,
-    )
+    neighbors(adata, use_rep="X_emb")
+    return graph_metrics.isolated_labels_f1(adata)

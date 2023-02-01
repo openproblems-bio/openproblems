@@ -146,14 +146,12 @@ nf-openproblems
 
 # Editor
 .idea
+.vscode
 
 scratch/
 openproblems/results/
 openproblems/work/
 batch_embed.txt
-immune.h5ad
+*.h5ad
 
-immune.h5ad
-batch_embed.txt
-.vscode/launch.json
 run_bbknn.py
