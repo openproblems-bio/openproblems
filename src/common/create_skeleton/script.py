@@ -1,5 +1,5 @@
-
-import yaml
+from ruamel.yaml import YAML
+from pathlib import Path
 
 
 ## VIASH START
@@ -7,7 +7,8 @@ import yaml
 par = {
   'task': 'denoising',
   'comp_type': 'metric',
-  'platform': 'python'
+  'language': 'python',
+  'name': 'new_comp'
 }
 meta = {
 }
@@ -15,48 +16,9 @@ meta = {
 ## VIASH END
 
 
-
-
-if 'control' in par['comp_type']:
-  merge = 'control_method'
-else:
-  merge = par['comp_type']
-
-skeleton_config = {
-  '__merge__' : f'../../api/comp_{merge}.yaml',
-  'functionality': {
-    'name' : 'new_method_name',
-    'namespace': f'{par["task"]}/{merge}s',
-    'description': 'Description what this component does',
-    'info' : {
-      'type': par['comp_type']
-    },
-    'resources': [
-      {
-        'type': '',
-        'path': '',
-      }
-    ],
-    'test_resources': [{
-      'type': '',
-      'path': ''
-    }]
-  },
-  'platforms': [
-      {
-        'type' : 'nextflow',
-        'directives': {
-          'label': ['midmem', 'midcpu']
-        }
-      }
-    ]
-}
-
-# Add component specific config data
-
-if par['comp_type'] == 'metric':
-
-  skeleton_config['functionality']['info']['metrics'] = [{
+def add_metric_config(tmpl):
+  
+  tmpl['functionality']['info']['metrics'] = [{
       'metric_id': 'metric_id',
       'metric_name': 'Metric Name',
       'metric_description': 'metric description',
@@ -65,66 +27,67 @@ if par['comp_type'] == 'metric':
       'maximize': 'true',
     }
     ]
+  
+  return tmpl
 
-else:
-  method_info = {
+def add_method_config(tmpl):
+
+  tmpl['functionality']['info'].update({
     'method_name': 'Method name',
-    'preferred_normalization': 'log_cpm',
+    'preferred_normalization': '',
     'variants': {
       'method_name': '',
       'method_variant1': {
-        'preferred_normalization': 'sqrt_cpm'
+        'preferred_normalization': ''
       }
     }
-  }
-  if par['comp_type'] == 'method':
-    method_info['paper_reference']= ''
-
-  skeleton_config['functionality']['info'].update(method_info)
-
-# add elements depending on platform
-if par['platform'] == 'python':
-
-  script_outf = 'script.py'
-
-  skeleton_config['functionality']['resources'][0]['type'] = 'python_script'
-  skeleton_config['functionality']['resources'][0]['path'] = script_outf
-
-  skeleton_config['functionality']['test_resources'][0]['type'] = 'python_script'
-  skeleton_config['functionality']['test_resources'][0]['path'] = script_outf
-
-  skeleton_config['platforms'].append({
-    'type': 'docker',
-    'image': 'python:3.10',
-    'setup': [{
-      'type': 'python',
-      'pip': [
-        "anndata>=0.8",
-        "pyyaml"
-      ]
-    }]
   })
 
+  return tmpl
+
+def add_python_setup(conf):
+
+  conf['functionality']['resources'][0]['type'] = 'python_script'
+  conf['functionality']['resources'][0]['path'] = 'script.py'
+
+  conf['functionality']['test_resources'][0]['type'] = 'python_script'
+  conf['functionality']['test_resources'][0]['path'] = 'script.py'
+
+  for i, platform in enumerate(conf['platforms']):
+    if platform['type'] == 'docker':
+      conf['platforms'][i]['image'] = 'python:3.10'
+
+  return conf
+
+def add_r_setup(conf):
+
+  conf['functionality']['resources'][0]['type'] = 'r_script'
+  conf['functionality']['resources'][0]['path'] = 'script.r'
+
+  conf['functionality']['test_resources'][0]['type'] = 'r_script'
+  conf['functionality']['test_resources'][0]['path'] = 'script.r'
+
+  for i, platform in enumerate(conf['platforms']):
+    if platform['type'] == 'docker':
+      pltf = conf['platforms'][i]
+      pltf['image'] = 'eddelbuettel/r2u:22.04'
+      pltf['setup'].append(
+        {
+          'type': 'r',
+          'cran': [ 'anndata'],
+          'bioc': ''
+        },
+        {
+          'type': 'apt',
+          'packages': ['libhdf5-dev', 'libgeos-dev', 'python3', 'python3-pip', 'python3-dev', 'python-is-python3']
+        }
+      )
+
+  return conf
 
 
-
-
-# Create python template
-task_api = f'src/{par["task"]}/api'
-api_conf = f'{task_api}/comp_{merge}.yaml'
-
-with open(api_conf, 'r') as f:
-  api_data = yaml.safe_load(f)
-
-args = api_data['functionality']['arguments']
-
-templ_par = {}
-
-for arg in args:
-  templ_par[arg['name'].replace('--','')] = ''
-
-script_templ = f'''import anndata as ad
-
+def create_python_script(tmpl_par):
+  script_templ = f'''import anndata as ad
 ## VIASH START
 
 par = {templ_par}
@@ -145,8 +108,6 @@ pred = adata
 
 # Create output anndata
 output = ad.AnnData(
-  obs = {{}},
-  vars = {{}},
   uns = {{
     'dataset_id': adata.uns['dataset_id'],
     'method_id': meta['functionality_name']
@@ -158,13 +119,118 @@ output.layers['denoised'] = pred
 
 print('Write Data', flush=True)
 output.write_h5ad(par['output'],compression='gzip')
-
 '''
 
+  return script_templ
 
-# Write output
-with open('config.vsh.yaml', 'w') as f:
-  yaml.safe_dump(skeleton_config, f, sort_keys=False)
+def create_r_script(tmpl_par):
+  ''
 
-with open(script_outf, 'w') as fpy:
-  fpy.write(script_templ)
+
+## Create config file
+if 'control' in par['comp_type']:
+  merge = 'control_method'
+else:
+  merge = par['comp_type']
+
+config_tmpl = f'''
+# points to global config e.g. parameters
+__merge__: ../../api/comp_{merge}.yaml
+functionality:
+  name: {par['name']}
+  namespace: {par["task"]}/{merge}s 
+  description: # add description
+  info: 
+    type: {par["comp_type"]}
+
+  # additional parameters specific for method. always set default if required
+  parameters:
+
+  # files your script needs
+  resources:
+    - type: 
+      path:
+
+  # resources for unit testing your component
+  test_resources:
+    - type: python_script
+      path: test.py
+    - path: sample_data
+
+# target platforms
+platforms:
+  - type: docker
+    image:
+    setup:
+      - type: python
+        pip:
+          - pyyaml
+          - anndata>=0.8
+  - type: nextflow
+    directives:
+      label: ['midmem', 'midcpu']
+'''
+
+yaml = YAML()
+conf_tmpl_dict = yaml.load(config_tmpl)
+
+# Add component specific config data
+
+if par['comp_type'] == 'metric':
+
+  config_out = add_metric_config(conf_tmpl_dict)
+
+else:
+  
+  config_out = add_method_config(conf_tmpl_dict)
+ 
+  if par['comp_type'] == 'method':
+    config_out['functionality']['info']['paper_reference']= ''
+
+
+# add elements depending on language
+if par['language'] == 'python':
+
+  config_out = add_python_setup(config_out)
+
+if par['language'] == 'r':
+
+  config_out = add_r_setup(config_out)
+
+
+## Create script template
+task_api = f'src/{par["task"]}/api'
+api_conf = f'{task_api}/comp_{merge}.yaml'
+
+with open(api_conf, 'r') as f:
+  api_data = yaml.load(f)
+
+args = api_data['functionality']['arguments']
+
+templ_par = {}
+
+for arg in args:
+  templ_par[arg['name'].replace('--','')] = ''
+
+if par['language'] == 'python':
+
+  script_out = create_python_script(templ_par)
+
+if par['language'] == 'r':
+
+  script_out = create_r_script(templ_par)
+
+
+
+## Write output
+out_dir= Path(par['name'])
+
+out_dir.mkdir(exist_ok=True)
+
+with open(f'{out_dir}/config.vsh.yaml', 'w') as f:
+  yaml.dump(config_out, f)
+
+script_f = config_out['functionality']['resources'][0]['path']
+
+with open(f'{out_dir}/{script_f}', 'w') as fpy:
+  fpy.write(script_out)

@@ -13,9 +13,13 @@ functionality:
       description:
       choices: ['metric', 'method', 'negative_control', 'positive_control']
     - type: string
-      name: --platform
+      name: --language
       example: python
-      description:
+      description: script language
+    - type: string
+      name: --name
+      example: new_comp
+      description: name of the new method in snake case
   resources:
     - type: python_script
       path: script.py
@@ -25,7 +29,7 @@ platforms:
     setup:
       - type: python
         pip: 
-          - pyyaml
+          - ruamel.yaml
   - type: nextflow
 
 
