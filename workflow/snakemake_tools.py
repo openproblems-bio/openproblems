@@ -16,10 +16,12 @@ TEST_DIR = os.path.join(SCRIPTS_DIR, "..", "test")
 IMAGES_DIR = os.path.join("..", "docker")
 VERSION_FILE = os.path.join(IMAGES_DIR, ".version")
 DOCKER_EXEC = (
-    "CONTAINER=$(  docker run -dt --rm  --mount"
-    ' type=bind,source="{mountdir}",target=/opt/openproblems'
-    " singlecellopenproblems/{{image}}) bash -c '  docker exec $CONTAINER /bin/bash"
-    " /opt/openproblems/scripts/docker_run.sh"
+    "CONTAINER=$("
+    "  docker run -dt --rm"
+    '  --mount type=bind,source="{mountdir}",target=/opt/openproblems'
+    "  singlecellopenproblems/{{image}}"
+    ") bash -c '"
+    "  docker exec $CONTAINER /bin/bash /opt/openproblems/scripts/docker_run.sh"
 ).format(mountdir=os.path.dirname(SCRIPTS_DIR))
 try:
     DOCKER_PASSWORD = os.environ["DOCKER_PASSWORD"]
