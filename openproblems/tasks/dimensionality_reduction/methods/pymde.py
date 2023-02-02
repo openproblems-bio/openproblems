@@ -21,6 +21,7 @@ def _pymde(
     adata,
     method: str = "neighbors",
     genes=None,
+    n_pca: Optional[int] = None,
     test: bool = False,
     max_iter: Optional[int] = None,
     memory_size: Optional[int] = None,
@@ -34,16 +35,17 @@ def _pymde(
 
     embed_kwargs = {}
     if test:
-        sc.tl.pca(adata_input, n_comps=20, svd_solver="arpack")
-        X = adata_input.obsm["X_pca"]
+        n_pca = n_pca or 20
         embed_kwargs["max_iter"] = max_iter or 20
         embed_kwargs["memory_size"] = memory_size or 2
     else:  # pragma: nocover
-        X = adata_input.X
+        n_pca = n_pca or 100
         if max_iter is not None:
             embed_kwargs["max_iter"] = max_iter
         if memory_size is not None:
             embed_kwargs["memory_size"] = memory_size
+    sc.tl.pca(adata_input, n_comps=n_pca, svd_solver="arpack")
+    X = adata_input.obsm["X_pca"]
     if method == "neighbors":
         mde_fn = pymde.preserve_neighbors
     elif method == "distances":
