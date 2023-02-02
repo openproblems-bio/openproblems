@@ -1,6 +1,7 @@
 from .....data.lung import load_lung
 from .....tools.decorators import dataset
 from ..utils import filter_celltypes
+from ..utils import precompute_hvg
 from typing import Optional
 
 
@@ -12,7 +13,11 @@ from typing import Optional
     "From Vieira Braga et al. Technologies: 10X and Drop-seq.",
     image="openproblems",
 )
-def lung_batch(test: bool = False, min_celltype_count: Optional[int] = None):
+def lung_batch(
+    test: bool = False,
+    min_celltype_count: Optional[int] = None,
+    n_hvg: Optional[int] = None,
+):
     import scanpy as sc
 
     adata = load_lung(test)
@@ -37,4 +42,7 @@ def lung_batch(test: bool = False, min_celltype_count: Optional[int] = None):
     sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
 
     adata.var_names_make_unique()
+
+    adata.uns["hvg_unint"] = precompute_hvg(adata, n_genes=n_hvg)
+    adata.uns["n_genes_pre"] = adata.n_vars
     return adata
