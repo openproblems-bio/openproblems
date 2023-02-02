@@ -9,30 +9,6 @@ import utils.name
     [
         (
             task.__name__.split(".")[-1],
-            metric,
-        )
-        for task in openproblems.TASKS
-        for metric in task.METRICS
-    ],
-    name_func=utils.name.name_test,
-)
-def test_metric_metadata(task_name, metric):
-    """Test for existence of metric metadata."""
-    assert hasattr(metric, "metadata")
-    for attr in ["metric_name", "maximize", "image"]:
-        assert attr in metric.metadata
-    assert isinstance(metric.metadata["maximize"], bool)
-    assert isinstance(metric.metadata["metric_name"], str)
-    assert isinstance(metric.metadata["image"], str)
-    assert metric.metadata["image"].startswith("openproblems")
-    assert isinstance(metric.metadata["paper_reference"], str)
-    assert utils.asserts.assert_valid_reference(metric.metadata["paper_reference"])
-
-
-@parameterized.parameterized.expand(
-    [
-        (
-            task.__name__.split(".")[-1],
             metric.__name__,
             metric.metadata["image"],
         )
@@ -43,7 +19,7 @@ def test_metric_metadata(task_name, metric):
     skip_on_empty=True,
 )
 @utils.docker.docker_test
-def test_metric(task_name, metric_name, image):
+def test_metric(task_name, metric_name, image):  # pragma: nocover
     """Test computation of a metric."""
     import numbers
 

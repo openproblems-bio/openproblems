@@ -11,11 +11,7 @@ import unittest
 import utils.docker
 import utils.git
 
-# global skip
-SUBTASKS = [
-    openproblems.tasks.cell_cell_communication_source_target,
-    openproblems.tasks.cell_cell_communication_ligand_target,
-]
+TASK = openproblems.tasks.cell_cell_communication_source_target
 
 
 class TestApi(unittest.TestCase):
@@ -54,7 +50,7 @@ class TestApi(unittest.TestCase):
         )
 
     def test_map_gene_symbols(self):
-        adata = common.api.sample_dataset(SUBTASKS[0].api.MERGE_KEYS)
+        adata = common.api.sample_dataset(TASK.api.MERGE_KEYS)
         index = adata.var.index.to_numpy()
         index[0] = "many_to_one_1"
         index[1] = "many_to_one_2"
@@ -106,8 +102,8 @@ class TestApi(unittest.TestCase):
         self.assertNotIn("one_from_none", adata_mapped.var.index)
 
 
-@utils.docker.docker_test(image=SUBTASKS[0].metrics.odds_ratio.metadata["image"])
-def test_odds_ratio_no_match():
+@utils.docker.docker_test(image=TASK.metrics.odds_ratio.metadata["image"])
+def test_odds_ratio_no_match():  # pragma: nocover
     import numpy as np
 
     task = openproblems.tasks.cell_cell_communication_source_target

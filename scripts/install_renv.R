@@ -40,7 +40,7 @@ strip_comments <- function(remote) {
 }
 
 with_retries <- function(func,
-                         attempts = 5,
+                         attempts = 10,
                          sleep_once = 3,
                          sleep_multiple = 60,
                          backoff = 2,
