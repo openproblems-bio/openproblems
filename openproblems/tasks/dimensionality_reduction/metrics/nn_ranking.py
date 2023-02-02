@@ -178,7 +178,10 @@ def _fit(
 
 @metric(
     "continuity",
-    metric_summary="TODO",
+    metric_summary=(
+        "Continuity measures error of hard extrusions based on nearest neighbor"
+        " coranking"
+    ),
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
@@ -189,7 +192,10 @@ def continuity(adata: AnnData) -> float:
 
 @metric(
     "co-KNN size",
-    metric_summary="TODO",
+    metric_summary=(
+        "co-KNN size counts how many points are in both k-nearest neighbors before and"
+        " after the dimensionality reduction"
+    ),
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
@@ -201,7 +207,7 @@ def qnn(adata: AnnData) -> float:
 
 @metric(
     "co-KNN AUC",
-    metric_summary="TODO",
+    metric_summary="co-KNN AUC is area under the co-KNN curve",
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
@@ -212,7 +218,10 @@ def qnn_auc(adata: AnnData) -> float:
 
 @metric(
     "local continuity meta criterion",
-    metric_summary="TODO",
+    metric_summary=(
+        "The local continuity meta criterion is the co-KNN size with baseline removal"
+        " which favors locality"
+    ),
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
@@ -223,7 +232,7 @@ def lcmc(adata: AnnData) -> float:
 
 @metric(
     "local property",
-    metric_summary="TODO",
+    metric_summary="The local property metric is a summary of the local co-KNN",
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
@@ -236,7 +245,7 @@ def qlocal(adata: AnnData) -> float:
 
 @metric(
     "global property",
-    metric_summary="TODO",
+    metric_summary="The global property metric is a summary of the global co-KNN",
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )

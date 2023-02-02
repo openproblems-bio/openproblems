@@ -10,7 +10,14 @@ _mnn = r_function("mnn.R")
 
 _mnn_method = functools.partial(
     method,
-    method_summary="TODO",
+    method_summary=(
+        "Mutual nearest neighbors (MNN) embeds cellular data from each modality into a"
+        " common space by computing a mapping between modality-specific 100-dimensional"
+        " SVD embeddings. The embeddings are integrated using the FastMNN version of"
+        " the MNN algorithm, which generates an embedding of the second modality mapped"
+        " to the SVD space of the first. This corrected joint SVD space is used as"
+        " output for the task."
+    ),
     paper_name=(
         "Batch effects in single-cell RNA-sequencing data are corrected by matching"
         " mutual nearest neighbors"

@@ -7,7 +7,11 @@ import numpy as np
 
 @baseline_method(
     method_name="Random Features",
-    method_summary="TODO",
+    method_summary=(
+        "20-dimensional SVD is computed on the first modality, and is then randomly"
+        " permuted twice, once for use as the output for each modality, producing"
+        " random features with no correlation between modalities."
+    ),
 )
 def random_features(adata, test=False, n_svd=20):
     import sklearn.decomposition
@@ -25,7 +29,11 @@ def random_features(adata, test=False, n_svd=20):
 
 @baseline_method(
     method_name="True Features",
-    method_summary="TODO",
+    method_summary=(
+        "20-dimensional SVD is computed on the first modality, and this same embedding"
+        " is used as output for both modalities, producing perfectly aligned features"
+        " from each modality."
+    ),
 )
 def true_features(adata, test=False, n_svd=20):
     import sklearn.decomposition

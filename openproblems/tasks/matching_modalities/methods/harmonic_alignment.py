@@ -8,7 +8,14 @@ import functools
 
 _harmonic_alignment_method = functools.partial(
     method,
-    method_summary="TODO",
+    method_summary=(
+        "Harmonic alignment embeds cellular data from each modality into a common space"
+        " by computing a mapping between the 100-dimensional diffusion maps of each"
+        " modality. This mapping is computed by computing an isometric transformation"
+        " of the eigenmaps, and concatenating the resulting diffusion maps together"
+        " into a joint 200-dimensional space. This joint diffusion map space is used as"
+        " output for the task."
+    ),
     paper_name="Harmonic Alignment",
     paper_reference="stanley2020harmonic",
     paper_year=2020,

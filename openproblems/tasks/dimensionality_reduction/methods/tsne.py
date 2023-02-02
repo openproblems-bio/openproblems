@@ -7,7 +7,14 @@ import functools
 
 _tsne_method = functools.partial(
     method,
-    method_summary="TODO",
+    method_summary=(
+        "t-SNE or t-distributed Stochastic Neighbor Embedding converts similarities"
+        " between data points to joint probabilities and tries to minimize the"
+        " Kullback-Leibler divergence between the joint probabilities of the"
+        " low-dimensional embedding and the high-dimensional data. We use the"
+        " implementation in the scanpy package with the result of PCA on the logCPM"
+        " expression matrix (with and without HVG selection)."
+    ),
     paper_name="Visualizing Data using t-SNE",
     paper_reference="vandermaaten2008visualizing",
     paper_year=2008,

@@ -12,7 +12,12 @@ log = logging.getLogger("openproblems")
 
 _neuralee_method = functools.partial(
     method,
-    method_summary="TODO",
+    method_summary=(
+        "NeuralEE is a neural network implementation of elastic embedding. It is"
+        " computed on both the recommended input from the package authors of 500 HVGs"
+        " selected from a logged expression matrix (without sequencing depth scaling)"
+        " and the default logCPM matrix with 1000 HVGs."
+    ),
     paper_name=(
         "NeuralEE: A GPU-Accelerated Elastic Embedding Dimensionality Reduction Method"
         " for Visualizing Large-Scale scRNA-Seq Data"

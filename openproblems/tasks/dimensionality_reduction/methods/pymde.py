@@ -9,7 +9,11 @@ import scanpy as sc
 
 _pymde_method = functools.partial(
     method,
-    method_summary="TODO",
+    method_summary=(
+        "PyMDE is a Python implementation of minimum-distortion embedding. It is"
+        " computed with options to preserve distances between cells or neighbourhoods"
+        " and with the logCPM matrix with and without HVG selection as input."
+    ),
     paper_name="Minimum-Distortion Embedding",
     paper_reference="agrawal2021mde",
     paper_year=2021,
