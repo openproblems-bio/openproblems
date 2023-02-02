@@ -13,12 +13,7 @@ the scikit-learn27 (v.0.22.1) implementation of NMI.
 """
 
 
-@metric(
-    metric_name="NMI",
-    paper_reference="luecken2022benchmarking",
-    maximize=True,
-    image="openproblems-r-pytorch",
-)
+@metric(**graph_metrics.nmi.metadata)
 def nmi(adata):
     from scanpy.pp import neighbors
     from scanpy.tl import pca

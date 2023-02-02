@@ -10,7 +10,7 @@ def test_temporary_version_missing():
     """Test temporary decorator behavior with missing version."""
 
     @openproblems.utils.temporary
-    def test_fn():
+    def test_fn():  # pragma: nocover
         pass
 
     np.testing.assert_raises_regex(
@@ -27,7 +27,7 @@ def test_temporary_version_future():
         temp_version = "{}.{}".format(version.major - 1, 0)
 
     @openproblems.utils.temporary(version=temp_version)
-    def test_fn():
+    def test_fn():  # pragma: nocover
         pass
 
     np.testing.assert_raises_regex(

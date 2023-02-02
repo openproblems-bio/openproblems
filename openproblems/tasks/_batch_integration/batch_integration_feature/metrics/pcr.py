@@ -16,12 +16,7 @@ where Var(C|PCi) is the variance of the data matrix C explained by the ith princ
 component."""
 
 
-@metric(
-    metric_name="PC Regression",
-    paper_reference="luecken2022benchmarking",
-    maximize=True,
-    image="openproblems-r-pytorch",
-)
+@metric(**embed_metrics.pcr.metadata)
 def pcr(adata):
     from scanpy.tl import pca
 

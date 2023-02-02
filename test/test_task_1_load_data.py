@@ -21,7 +21,7 @@ import utils.name
     skip_on_empty=True,
 )
 @utils.docker.docker_test(retries=2)
-def test_load_dataset(task_name, dataset_name, test, tempdir, image):
+def test_load_dataset(task_name, dataset_name, test, tempdir, image):  # pragma: nocover
     """Test loading and caching of a dataset."""
     import utils.asserts
     import utils.cache

@@ -25,12 +25,7 @@ diffusion processes being run.
 """
 
 
-@metric(
-    metric_name="kBET",
-    paper_reference="bttner2018test",
-    maximize=True,
-    image="openproblems-r-extras",
-)
+@metric(**embed_metrics.kBET.metadata)
 def kBET(adata):
     from scanpy.tl import pca
 

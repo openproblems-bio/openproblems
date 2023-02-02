@@ -62,7 +62,7 @@ def assert_valid_reference(ref):
     bib = _load_bibliography()
     assert ref in bib.entries_dict
     bibentry = bib.entries_dict[ref]
-    if not bibentry["ENTRYTYPE"] == "misc" or ref in _MISSING_DOIS:
+    if not (bibentry["ENTRYTYPE"] == "misc" or ref in _MISSING_DOIS):
         assert "doi" in bibentry
         assert assert_url_accessible(f"https://doi.org/{bibentry['doi']}")
     return True
