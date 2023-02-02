@@ -8,7 +8,13 @@ import utils.git
 import utils.name
 
 DATASET_SUMMARY_MINLEN = 40
-DATASET_SUMMARY_MAXLEN = 1000
+DATASET_SUMMARY_MAXLEN = 400
+
+METHOD_SUMMARY_MINLEN = 40
+METHOD_SUMMARY_MAXLEN = 400
+
+METRIC_SUMMARY_MINLEN = 40
+METRIC_SUMMARY_MAXLEN = 400
 
 
 @parameterized.parameterized.expand(
@@ -61,6 +67,9 @@ def test_method_metadata(method):
     assert isinstance(method.metadata["image"], str)
     assert method.metadata["image"].startswith("openproblems")
     assert isinstance(method.metadata["method_name"], str)
+    assert isinstance(method.metadata["method_summary"], str)
+    assert len(method.metadata["method_summary"]) > METHOD_SUMMARY_MINLEN
+    assert len(method.metadata["method_summary"]) < METHOD_SUMMARY_MAXLEN
     assert isinstance(method.metadata["paper_name"], str)
     assert isinstance(method.metadata["paper_year"], int)
     assert isinstance(method.metadata["paper_reference"], str)
@@ -81,6 +90,9 @@ def test_metric_metadata(metric):
         assert attr in metric.metadata
     assert isinstance(metric.metadata["maximize"], bool)
     assert isinstance(metric.metadata["metric_name"], str)
+    assert isinstance(metric.metadata["metric_summary"], str)
+    assert len(metric.metadata["metric_summary"]) > METRIC_SUMMARY_MINLEN
+    assert len(metric.metadata["metric_summary"]) < METRIC_SUMMARY_MAXLEN
     assert isinstance(metric.metadata["image"], str)
     assert metric.metadata["image"].startswith("openproblems")
     assert isinstance(metric.metadata["paper_reference"], str)
