@@ -8,7 +8,7 @@ TASK = openproblems.tasks.dimensionality_reduction
 
 
 @utils.docker.docker_test(image=TASK.metrics.trustworthiness.metadata["image"])
-def test_trustworthiness_sparse():
+def test_trustworthiness_sparse():  # pragma: nocover
     from scipy.sparse import csr_matrix
 
     task = openproblems.tasks.dimensionality_reduction
@@ -27,7 +27,7 @@ def test_trustworthiness_sparse():
 
 
 @utils.docker.docker_test(image=TASK.metrics.density_preservation.metadata["image"])
-def test_density_preservation_matches_densmap():
+def test_density_preservation_matches_densmap():  # pragma: nocover
     from openproblems.tasks.dimensionality_reduction.metrics.density import _K
     from openproblems.tasks.dimensionality_reduction.metrics.density import _SEED
     from scipy.stats import pearsonr

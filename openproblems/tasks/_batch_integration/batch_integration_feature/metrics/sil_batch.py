@@ -22,12 +22,7 @@ batchASW=1|𝑀|∑𝑗∈𝑀batchASW𝑗.
 Here, M is the set of unique cell labels."""
 
 
-@metric(
-    metric_name="Batch ASW",
-    paper_reference="luecken2022benchmarking",
-    maximize=True,
-    image="openproblems-r-pytorch",
-)
+@metric(**embed_metrics.silhouette_batch.metadata)
 def silhouette_batch(adata):
     from scanpy.tl import pca
 

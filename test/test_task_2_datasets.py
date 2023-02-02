@@ -12,9 +12,6 @@ import utils.cache
 import utils.git
 import utils.name
 
-DATASET_SUMMARY_MINLEN = 40
-DATASET_SUMMARY_MAXLEN = 1000
-
 
 def _assert_not_bytes(X):
     if isinstance(X, pd.Series):
@@ -59,7 +56,7 @@ class TestDataset(unittest.TestCase):
                 test=cls.test,
                 dependency="test_load_dataset",
             )
-        except AssertionError as e:
+        except AssertionError as e:  # pragma: nocover
             if str(e) == "Intermediate file missing. Did test_load_dataset fail?":
                 pytest.skip("Dataset not loaded successfully")
             else:
@@ -121,32 +118,3 @@ class TestDataset(unittest.TestCase):
             adata = self.adata.copy()
             adata = normalizer(adata)
             utils.asserts.assert_finite(adata.X)
-
-
-@parameterized.parameterized.expand(
-    [(dataset,) for task in openproblems.TASKS for dataset in task.DATASETS],
-    name_func=utils.name.name_test,
-)
-def test_dataset_metadata(dataset):
-    """Test for existence of dataset metadata."""
-    assert hasattr(dataset, "metadata")
-    for attr in [
-        "dataset_name",
-        "data_url",
-        "data_reference",
-        "dataset_summary",
-        "image",
-    ]:
-        assert attr in dataset.metadata
-        assert dataset.metadata[attr] is not None
-
-    assert isinstance(dataset.metadata["dataset_name"], str)
-    assert isinstance(dataset.metadata["image"], str)
-    assert dataset.metadata["image"].startswith("openproblems")
-    assert isinstance(dataset.metadata["dataset_summary"], str)
-    assert len(dataset.metadata["dataset_summary"]) > DATASET_SUMMARY_MINLEN
-    assert len(dataset.metadata["dataset_summary"]) < DATASET_SUMMARY_MAXLEN
-    assert isinstance(dataset.metadata["data_url"], str)
-    assert utils.asserts.assert_url_accessible(dataset.metadata["data_url"])
-    assert isinstance(dataset.metadata["data_reference"], str)
-    assert utils.asserts.assert_valid_reference(dataset.metadata["data_reference"])

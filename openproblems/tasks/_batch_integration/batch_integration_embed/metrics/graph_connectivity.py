@@ -20,12 +20,7 @@ on the kNN graph, it can be used to evaluate all integration outputs.
 """
 
 
-@metric(
-    metric_name="Graph connectivity",
-    paper_reference="luecken2022benchmarking",
-    maximize=True,
-    image="openproblems-r-pytorch",
-)
+@metric(**graph_metrics.graph_connectivity.metadata)
 def graph_connectivity(adata):
     from scanpy.pp import neighbors
 
