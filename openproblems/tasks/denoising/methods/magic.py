@@ -9,7 +9,7 @@ _magic_method = functools.partial(
     method,
     paper_name="Recovering Gene Interactions from Single-Cell Data "
     "Using Data Diffusion",
-    paper_reference="vandijk2018recovering",
+    paper_reference="van2018recovering",
     paper_year=2018,
     code_url="https://github.com/KrishnaswamyLab/MAGIC",
     image="openproblems-python-extras",
