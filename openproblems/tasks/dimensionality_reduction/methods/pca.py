@@ -1,6 +1,6 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
-from ....tools.normalize import log_cpm_hvg
+from ....tools.normalize import log_cp10k
+from ....tools.normalize import log_cp10k_hvg
 from ....tools.utils import check_version
 
 import functools
@@ -31,13 +31,13 @@ def _pca(adata, genes=None):
     return adata
 
 
-@_pca_method(method_name="Principle Component Analysis (PCA) (logCPM)")
-def pca_logCPM(adata, test: bool = False):
-    adata = log_cpm(adata)
+@_pca_method(method_name="Principle Component Analysis (PCA) (logCP10k)")
+def pca_logCP10k(adata, test: bool = False):
+    adata = log_cp10k(adata)
     return _pca(adata)
 
 
-@_pca_method(method_name="Principle Component Analysis (PCA) (logCPM, 1kHVG)")
-def pca_logCPM_1kHVG(adata, test: bool = False):
-    adata = log_cpm_hvg(adata)
+@_pca_method(method_name="Principle Component Analysis (PCA) (logCP10k, 1kHVG)")
+def pca_logCP10k_1kHVG(adata, test: bool = False):
+    adata = log_cp10k_hvg(adata)
     return _pca(adata, genes=adata.var["highly_variable"])

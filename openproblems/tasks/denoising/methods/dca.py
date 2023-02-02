@@ -28,7 +28,7 @@ def _dca(adata, test=False, epochs=None):
     method_name="DCA",
     method_summary="TODO",
     paper_name="Single-cell RNA-seq denoising using a deep count autoencoder",
-    paper_reference="https://www.nature.com/articles/s41467-018-07931-2",
+    paper_reference="eraslan2019single",
     paper_year=2019,
     code_url="https://github.com/theislab/dca",
     image="openproblems-python-tensorflow",

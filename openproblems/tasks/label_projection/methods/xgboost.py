@@ -1,5 +1,5 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
+from ....tools.normalize import log_cp10k
 from ....tools.normalize import log_scran_pooling
 from ....tools.utils import check_version
 from typing import Optional
@@ -56,11 +56,11 @@ def _xgboost(adata, test: bool = False, num_round: Optional[int] = None):
 
 
 @_xgboost_method(
-    method_name="XGBoost (log CPM)",
+    method_name="XGBoost (log CP10k)",
     image="openproblems-python-extras",
 )
-def xgboost_log_cpm(adata, test: bool = False, num_round: Optional[int] = None):
-    adata = log_cpm(adata)
+def xgboost_log_cp10k(adata, test: bool = False, num_round: Optional[int] = None):
+    adata = log_cp10k(adata)
     return _xgboost(adata, test=test, num_round=num_round)
 
 

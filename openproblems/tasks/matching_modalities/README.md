@@ -1,4 +1,4 @@
-# Multimodal data integration
+# Matching modalities
 
 ## The task
 

@@ -1,4 +1,4 @@
 git+https://github.com/KrishnaswamyLab/harmonic-alignment@v0.1#subdirectory=python
 rpy2<3.4.3
-scib==1.0.5
+scib==1.1.3
 xgboost==1.6.*

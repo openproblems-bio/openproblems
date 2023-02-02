@@ -1,6 +1,6 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
-from ....tools.normalize import log_cpm_hvg
+from ....tools.normalize import log_cp10k
+from ....tools.normalize import log_cp10k_hvg
 from ....tools.utils import check_version
 from typing import Optional
 
@@ -22,6 +22,7 @@ def _pymde(
     adata,
     method: str = "neighbors",
     genes=None,
+    n_pca: Optional[int] = None,
     test: bool = False,
     max_iter: Optional[int] = None,
     memory_size: Optional[int] = None,
@@ -35,16 +36,17 @@ def _pymde(
 
     embed_kwargs = {}
     if test:
-        sc.tl.pca(adata_input, n_comps=20, svd_solver="arpack")
-        X = adata_input.obsm["X_pca"]
+        n_pca = n_pca or 20
         embed_kwargs["max_iter"] = max_iter or 20
         embed_kwargs["memory_size"] = memory_size or 2
     else:  # pragma: nocover
-        X = adata_input.X
+        n_pca = n_pca or 100
         if max_iter is not None:
             embed_kwargs["max_iter"] = max_iter
         if memory_size is not None:
             embed_kwargs["memory_size"] = memory_size
+    sc.tl.pca(adata_input, n_comps=n_pca, svd_solver="arpack")
+    X = adata_input.obsm["X_pca"]
     if method == "neighbors":
         mde_fn = pymde.preserve_neighbors
     elif method == "distances":
@@ -62,30 +64,30 @@ def _pymde(
 
 
 @_pymde_method(
-    method_name="PyMDE Preserve Neighbors (logCPM)",
+    method_name="PyMDE Preserve Neighbors (logCP10k)",
 )
-def pymde_neighbors_log_cpm(
+def pymde_neighbors_log_cp10k(
     adata,
     test: bool = False,
     max_iter: Optional[int] = None,
     memory_size: Optional[int] = None,
 ):
-    adata = log_cpm(adata)
+    adata = log_cp10k(adata)
     return _pymde(
         adata, method="neighbors", test=test, max_iter=max_iter, memory_size=memory_size
     )
 
 
 @_pymde_method(
-    method_name="PyMDE Preserve Neighbors (logCPM, 1kHVG)",
+    method_name="PyMDE Preserve Neighbors (logCP10k, 1kHVG)",
 )
-def pymde_neighbors_log_cpm_hvg(
+def pymde_neighbors_log_cp10k_hvg(
     adata,
     test: bool = False,
     max_iter: Optional[int] = None,
     memory_size: Optional[int] = None,
 ):
-    adata = log_cpm_hvg(adata)
+    adata = log_cp10k_hvg(adata)
     return _pymde(
         adata,
         method="neighbors",
@@ -97,30 +99,30 @@ def pymde_neighbors_log_cpm_hvg(
 
 
 @_pymde_method(
-    method_name="PyMDE Preserve Distances (logCPM)",
+    method_name="PyMDE Preserve Distances (logCP10k)",
 )
-def pymde_distances_log_cpm(
+def pymde_distances_log_cp10k(
     adata,
     test: bool = False,
     max_iter: Optional[int] = None,
     memory_size: Optional[int] = None,
 ):
-    adata = log_cpm(adata)
+    adata = log_cp10k(adata)
     return _pymde(
         adata, method="distances", test=test, max_iter=max_iter, memory_size=memory_size
     )
 
 
 @_pymde_method(
-    method_name="PyMDE Preserve Distances (logCPM, 1kHVG)",
+    method_name="PyMDE Preserve Distances (logCP10k, 1kHVG)",
 )
-def pymde_distances_log_cpm_hvg(
+def pymde_distances_log_cp10k_hvg(
     adata,
     test: bool = False,
     max_iter: Optional[int] = None,
     memory_size: Optional[int] = None,
 ):
-    adata = log_cpm_hvg(adata)
+    adata = log_cp10k_hvg(adata)
     return _pymde(
         adata,
         method="distances",

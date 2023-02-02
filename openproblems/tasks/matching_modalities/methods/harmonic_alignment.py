@@ -1,7 +1,7 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
+from ....tools.normalize import log_cp10k
 from ....tools.normalize import log_scran_pooling
-from ....tools.normalize import sqrt_cpm
+from ....tools.normalize import sqrt_cp10k
 from ....tools.utils import check_version
 
 import functools
@@ -52,13 +52,13 @@ def _harmonic_alignment(
 
 
 @_harmonic_alignment_method(
-    method_name="Harmonic Alignment (sqrt CPM)", image="openproblems-python-extras"
+    method_name="Harmonic Alignment (sqrt CP10k)", image="openproblems-python-extras"
 )
-def harmonic_alignment_sqrt_cpm(
+def harmonic_alignment_sqrt_cp10k(
     adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
 ):
-    adata = sqrt_cpm(adata)
-    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
+    adata = sqrt_cp10k(adata)
+    adata = log_cp10k(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _harmonic_alignment(
         adata,
         test=test,
@@ -77,7 +77,7 @@ def harmonic_alignment_log_scran_pooling(
     adata, test=False, n_svd=None, n_eigenvectors=None, n_pca_XY=None, n_filters=None
 ):
     adata = log_scran_pooling(adata)
-    adata = log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
+    adata = log_cp10k(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
     _harmonic_alignment(
         adata,
         test=test,

@@ -33,5 +33,6 @@ def hvg_conservation(adata):
 
     adata_unint = adata.copy()
     adata_unint.X = adata_unint.layers["log_normalized"]
+    hvg_both = list(set(adata.uns["hvg_unint"]).intersection(adata.var_names))
 
-    return hvg_overlap(adata_unint, adata, "batch")
+    return hvg_overlap(adata_unint, adata[:, hvg_both], "batch")

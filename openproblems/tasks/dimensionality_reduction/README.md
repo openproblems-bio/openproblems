@@ -23,12 +23,12 @@ data for visualization and interpretation.
 
 ## API
 
-WARNING: other than most tasks, `adata.X` should contain log CPM-normalized data,
+WARNING: other than most tasks, `adata.X` should contain log CP10k-normalized data,
    This is the case as we are computing ground truth metrics on normalized data,
    which means methods which use this same normalization are likely to score more
    highly on these metrics.
 
-**Datasets** should provide *log CPM normalized counts* in `adata.X` and store the
+**Datasets** should provide *log CP10k normalized counts* in `adata.X` and store the
 original number of genes (i.e., `adata.shape[1]`) in `adata.uns["n_genes"]`.
 
 **Methods** should assign dimensionally-reduced 2D embedding coordinates to
@@ -47,11 +47,11 @@ pre-processing functions are available as part of the `tools` module. Where poss
 each **method** should first call one of these functions and use the processed `adata.X`
 slot as the input to the method. Raw counts are also stored in `adata.layers["counts"]`
 by the standard pre-processing functions, if a method performs its own pre-processing.
-For most methods a standard pre-processing from `log_cpm()`, which normalizes the
-expression matrix to counts per million (CPM), can be used directly from `adata.X`.
+For most methods a standard pre-processing from `log_cp10k()`, which normalizes the
+expression matrix to counts per 10,000 (CP10k), can be used directly from `adata.X`.
 Variants of methods can be created by applying different pre-processing prior to the
 method itself (see `phate.py` for an example). *Note that using a normalization method
-different from that used for the metrics (log CPM) may lead to artificially poor method
+different from that used for the metrics (log CP10k) may lead to artificially poor method
 performance.*
 
 ## The methods
@@ -119,7 +119,7 @@ from [umap-learn](https://umap-learn.readthedocs.io/en/latest/densmap_demo.html)
 
 **Variants:**
 
-* The (logCPM-normalized, 1000 HVG) expression matrix
+* The (logCP10k-normalized, 1000 HVG) expression matrix
 * 50 principal components
 
 ### Potential of heat-diffusion for affinity-based transition embedding (PHATE)
@@ -138,8 +138,8 @@ This implementation is from the [phate package](https://phate.readthedocs.io/en/
 
 **Variants:**
 
-* The square-root CPM transformed expression matrix
-* 50 principal components of the logCPM-normalised, 1000 HVG expression matrix
+* The square-root CP10k transformed expression matrix
+* 50 principal components of the logCP10k-normalised, 1000 HVG expression matrix
 
 ### ivis
 
@@ -158,7 +158,7 @@ package](https://neuralee.readthedocs.io/en/latest/).
 **Variants:**
 
 * Scaled 500 HVGs from a logged expression matrix (no library size normalization)
-* LogCPM-normalised, 1000 HVG expression matrix
+* LogCP10k-normalised, 1000 HVG expression matrix
 
 ### scvis
 

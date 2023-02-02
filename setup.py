@@ -7,7 +7,7 @@ install_requires = [
     "numpy>=1.21,<1.24",
     "scikit-learn>=1.0,<1.2",
     "anndata==0.8.*",
-    "scprep>=1.2.1",
+    "scprep>=1.2.2",
     "scipy>=1.7,<1.10",
     "scanpy>=1.6",
     "louvain==0.8.*",
@@ -33,6 +33,7 @@ process_requires = ["numpyencoder==0.3.*"]
 test_requires = [
     "pytest==7.1.*",
     "pytest-cov>=3.0,<4.1",
+    "pytest-timestamper==0.0.9",
     "black==22.10.0",
     "coverage>=6.4,<6.6",
     "codecov==2.1.*",

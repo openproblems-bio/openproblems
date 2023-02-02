@@ -1,10 +1,10 @@
 from ....tools.decorators import metric
-from ....tools.normalize import log_cpm
+from ....tools.normalize import log_cp10k
 
 
 def _distance_correlation(X, X_emb):
-    import scipy.optimize
     import scipy.spatial
+    import scipy.stats
 
     high_dimensional_distance_vector = scipy.spatial.distance.pdist(X)
     low_dimensional_distance_vector = scipy.spatial.distance.pdist(X_emb)
@@ -30,7 +30,7 @@ def distance_correlation(adata, n_svd=200):
     """
     import sklearn.decomposition
 
-    adata = log_cpm(adata)
+    adata = log_cp10k(adata)
 
     X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
     return _distance_correlation(X, adata.obsm["X_emb"])
@@ -56,7 +56,7 @@ def distance_correlation_spectral(adata, n_comps=200):
     import umap
     import umap.spectral
 
-    adata = log_cpm(adata)
+    adata = log_cp10k(adata)
 
     n_comps = min(n_comps, min(adata.shape) - 2)
 

@@ -1,5 +1,5 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
+from ....tools.normalize import log_cp10k
 from ....tools.normalize import log_scran_pooling
 from .sklearn import classifier
 
@@ -19,12 +19,12 @@ _knn_classifier_method = functools.partial(
 
 
 @_knn_classifier_method(
-    method_name="K-neighbors classifier (log CPM)",
+    method_name="K-neighbors classifier (log CP10k)",
 )
-def knn_classifier_log_cpm(adata, test=False):
+def knn_classifier_log_cp10k(adata, test=False):
     import sklearn.neighbors
 
-    adata = log_cpm(adata)
+    adata = log_cp10k(adata)
     return classifier(adata, estimator=sklearn.neighbors.KNeighborsClassifier)
 
 

@@ -1,10 +1,13 @@
 from ....data.sample import load_sample_data
 from ....tools.decorators import dataset
 from .utils import filter_celltypes
+from .utils import precompute_hvg
 
+import numbers
 import numpy as np
 
 MIN_CELLS_PER_CELLTYPE = 50
+N_HVG_UNINT = 2000
 
 
 def check_neighbors(adata, neighbors_key, connectivities_key, distances_key):
@@ -15,7 +18,12 @@ def check_neighbors(adata, neighbors_key, connectivities_key, distances_key):
     assert distances_key in adata.obsp
 
 
-def check_dataset(adata, do_check_pca=False, do_check_neighbors=False):
+def check_dataset(
+    adata,
+    do_check_pca=False,
+    do_check_neighbors=False,
+    do_check_hvg=False,
+):
     """Check that dataset output fits expected API."""
 
     assert "batch" in adata.obs
@@ -28,11 +36,20 @@ def check_dataset(adata, do_check_pca=False, do_check_neighbors=False):
     assert adata.var_names.is_unique
     assert adata.obs_names.is_unique
 
+    assert "n_genes_pre" in adata.uns
+    assert isinstance(adata.uns["n_genes_pre"], numbers.Integral)
+    assert adata.uns["n_genes_pre"] == adata.n_vars
+
     assert "organism" in adata.uns
     assert adata.uns["organism"] in ["mouse", "human"]
 
     if do_check_pca:
         assert "X_uni_pca" in adata.obsm
+
+    if do_check_hvg:
+        assert "hvg_unint" in adata.uns
+        assert len(adata.uns["hvg_unint"]) == min(N_HVG_UNINT, adata.n_vars)
+        assert np.all(np.isin(adata.uns["hvg_unint"], adata.var.index))
 
     if do_check_neighbors:
         check_neighbors(adata, "uni", "uni_connectivities", "uni_distances")
@@ -58,6 +75,10 @@ def sample_dataset(run_pca: bool = False, run_neighbors: bool = False):
     adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
     adata.obs["labels"] = np.random.choice(3, adata.shape[0], replace=True).astype(str)
     adata = filter_celltypes(adata)
+
+    adata.uns["hvg_unint"] = precompute_hvg(adata)
+    adata.uns["n_genes_pre"] = adata.n_vars
+
     if run_pca:
         adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
     if run_neighbors:

@@ -1,6 +1,6 @@
 from ....data.mouse_hspc_nestorowa2016 import load_mouse_hspc_nestorowa2016
 from ....tools.decorators import dataset
-from ....tools.normalize import log_cpm
+from ....tools.normalize import log_cp10k
 
 
 @dataset(
@@ -16,4 +16,4 @@ from ....tools.normalize import log_cpm
 def mouse_hspc_nestorowa2016(test=False):
     adata = load_mouse_hspc_nestorowa2016(test=test)
     adata.uns["n_genes"] = adata.shape[1]
-    return log_cpm(adata)
+    return log_cp10k(adata)

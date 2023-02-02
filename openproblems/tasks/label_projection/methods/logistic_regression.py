@@ -1,5 +1,5 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
+from ....tools.normalize import log_cp10k
 from ....tools.normalize import log_scran_pooling
 from .sklearn import classifier
 
@@ -31,10 +31,10 @@ def _logistic_regression(adata, test=False, max_iter=None):
 
 
 @_logistic_regression_method(
-    method_name="Logistic regression (log CPM)",
+    method_name="Logistic regression (log CP10k)",
 )
-def logistic_regression_log_cpm(adata, test=False, max_iter=None):
-    adata = log_cpm(adata)
+def logistic_regression_log_cp10k(adata, test=False, max_iter=None):
+    adata = log_cp10k(adata)
     return _logistic_regression(adata, test=test, max_iter=max_iter)
 
 
