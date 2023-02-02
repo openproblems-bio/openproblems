@@ -8,11 +8,10 @@ from ..._common.utils import ligand_receptor_resource
     data_url=load_mouse_brain_atlas.metadata["data_url"],
     data_reference=load_mouse_brain_atlas.metadata["data_reference"],
     dataset_summary=(
-        "A murine brain atlas with adjacent cell types as assumed "
-        "benchmark truth, inferred from deconvolution proportion "
-        "correlations using matching 10x Visium slides "
-        "(see Dimitrov et al., 2022). "
-        "14249 cells x 34617 features with 23 cell type labels."
+        "A murine brain atlas with adjacent cell types as assumed benchmark truth,"
+        " inferred from deconvolution proportion correlations using matching 10x Visium"
+        " slides (see Dimitrov et al., 2022). 14249 cells x 34617 features with 23 cell"
+        " type labels."
     ),
     image="openproblems-r-extras",
 )

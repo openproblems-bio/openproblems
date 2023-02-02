@@ -8,8 +8,8 @@ from ..utils import split_sc_and_sp
     method_name="Non-Negative Matrix Factorization (NMF)",
     method_summary="TODO",
     paper_name=(
-        "Fast local algorithms for large scale nonnegative "
-        "matrix and tensor factorizations"
+        "Fast local algorithms for large scale nonnegative matrix and tensor"
+        " factorizations"
     ),
     paper_reference="cichocki2009fast",
     paper_year=2009,

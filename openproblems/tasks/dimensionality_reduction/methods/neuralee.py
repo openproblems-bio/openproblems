@@ -14,9 +14,8 @@ _neuralee_method = functools.partial(
     method,
     method_summary="TODO",
     paper_name=(
-        "NeuralEE: A GPU-Accelerated Elastic Embedding "
-        "Dimensionality Reduction Method for "
-        "Visualizing Large-Scale scRNA-Seq Data"
+        "NeuralEE: A GPU-Accelerated Elastic Embedding Dimensionality Reduction Method"
+        " for Visualizing Large-Scale scRNA-Seq Data"
     ),
     paper_reference="xiong2020neuralee",
     paper_year=2020,
@@ -79,8 +78,8 @@ def _neuralee(
             if subsample_genes is not None and subsample_genes < adata_input.n_vars:
                 subsample_genes = min(adata_input.n_vars, int(subsample_genes * 1.2))
                 log.warning(
-                    "ValueError in neuralee_default. "
-                    f"Increased subsample_genes to {subsample_genes}"
+                    "ValueError in neuralee_default. Increased subsample_genes to"
+                    f" {subsample_genes}"
                 )
             else:
                 raise

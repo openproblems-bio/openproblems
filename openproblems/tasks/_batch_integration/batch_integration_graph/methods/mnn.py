@@ -7,8 +7,8 @@ _mnn_method = functools.partial(
     method,
     method_summary="TODO",
     paper_name=(
-        "Batch effects in single-cell RNA-sequencing "
-        "data are corrected by matching mutual nearest neighbors"
+        "Batch effects in single-cell RNA-sequencing data are corrected by matching"
+        " mutual nearest neighbors"
     ),
     paper_reference="haghverdi2018batch",
     paper_year=2018,

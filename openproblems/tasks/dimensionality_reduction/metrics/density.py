@@ -99,8 +99,8 @@ def _calculate_radii(
 @metric(
     "Density preservation",
     metric_summary=(
-        "Similarity between local densities in the high-dimensional "
-        "data and the reduced data."
+        "Similarity between local densities in the high-dimensional data and the"
+        " reduced data."
     ),
     paper_reference="narayan2021assessing",
     maximize=True,

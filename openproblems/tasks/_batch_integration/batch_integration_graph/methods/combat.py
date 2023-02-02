@@ -7,8 +7,8 @@ _combat_method = functools.partial(
     method,
     method_summary="TODO",
     paper_name=(
-        "Adjusting batch effects in microarray expression data using "
-        "empirical Bayes methods"
+        "Adjusting batch effects in microarray expression data using empirical Bayes"
+        " methods"
     ),
     paper_reference="hansen2012removing",
     paper_year=2007,

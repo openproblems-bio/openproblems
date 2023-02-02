@@ -9,8 +9,8 @@ import numpy as np
     method_name="NMF-reg",
     method_summary="TODO",
     paper_name=(
-        "Slide-seq: A scalable technology for measuring genome-wide"
-        " expression at high spatial resolution"
+        "Slide-seq: A scalable technology for measuring genome-wide expression at high"
+        " spatial resolution"
     ),
     paper_reference="rodriques2019slide",
     paper_year=2019,

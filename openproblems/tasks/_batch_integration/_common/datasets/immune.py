@@ -10,9 +10,8 @@ from typing import Optional
     data_url=load_immune.metadata["data_url"],
     data_reference=load_immune.metadata["data_reference"],
     dataset_summary=(
-        "Human immune cells from peripheral blood and bone marrow "
-        "taken from 5 datasets comprising 10 batches across technologies (10X, "
-        "Smart-seq2)."
+        "Human immune cells from peripheral blood and bone marrow taken from 5 datasets"
+        " comprising 10 batches across technologies (10X, Smart-seq2)."
     ),
     image="openproblems",
 )

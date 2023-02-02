@@ -21,8 +21,8 @@ coefficients.
 @metric(
     metric_name="HVG conservation",
     metric_summary=(
-        "This metric computes the average percentage of overlapping "
-        "highly variable genes per batch before and after integration."
+        "This metric computes the average percentage of overlapping highly variable"
+        " genes per batch before and after integration."
     ),
     paper_reference="luecken2022benchmarking",
     maximize=True,

@@ -29,8 +29,8 @@ def _correlation(adata, method="pearson"):
 @metric(
     metric_name="Median Pearson correlation",
     metric_summary=(
-        "Median Pearson correlation between predicted and true gene "
-        "expression over all genes."
+        "Median Pearson correlation between predicted and true gene expression over all"
+        " genes."
     ),
     paper_reference="schober2018correlation",
     maximize=True,
@@ -42,8 +42,8 @@ def pearson_correlation(adata):
 @metric(
     metric_name="Median Spearman correlation",
     metric_summary=(
-        "Median Spearman correlation between predicted and true gene "
-        "expression over all genes."
+        "Median Spearman correlation between predicted and true gene expression over"
+        " all genes."
     ),
     paper_reference="schober2018correlation",
     maximize=True,

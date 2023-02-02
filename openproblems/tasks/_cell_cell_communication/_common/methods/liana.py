@@ -25,8 +25,8 @@ _liana_method = functools.partial(
     method,
     method_summary="TODO",
     paper_name=(
-        "Comparison of methods and resources for cell-cell "
-        "communication inference from single-cell RNA-Seq data"
+        "Comparison of methods and resources for cell-cell communication inference from"
+        " single-cell RNA-Seq data"
     ),
     paper_reference="dimitrov2022comparison",
     paper_year=2022,
@@ -112,8 +112,8 @@ _cellphonedb_method = functools.partial(
     _liana_method,
     method_summary="TODO",
     paper_name=(
-        "CellPhoneDB: inferring cell–cell communication from "
-        "combined expression of multi-subunit ligand–receptor complexes"
+        "CellPhoneDB: inferring cell–cell communication from combined expression of"
+        " multi-subunit ligand–receptor complexes"
     ),
     paper_reference="efremova2020cellphonedb",
     paper_year=2020,
@@ -159,8 +159,8 @@ def cellphonedb_sum(adata, test=False):
 _connectome_method = functools.partial(
     _liana_method,
     paper_name=(
-        "Computation and visualization of cell–cell signaling "
-        "topologies in single-cell systems data using Connectome"
+        "Computation and visualization of cell–cell signaling topologies in single-cell"
+        " systems data using Connectome"
     ),
     paper_reference="raredon2022computation",
     paper_year=2022,
@@ -258,8 +258,8 @@ _sca_method = functools.partial(
     _liana_method,
     method_summary="TODO",
     paper_name=(
-        "SingleCellSignalR: inference of intercellular networks "
-        "from single-cell transcriptomics"
+        "SingleCellSignalR: inference of intercellular networks from single-cell"
+        " transcriptomics"
     ),
     paper_reference="cabello2020singlecellsignalr",
     paper_year=2021,

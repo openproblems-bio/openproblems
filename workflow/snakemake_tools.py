@@ -16,12 +16,10 @@ TEST_DIR = os.path.join(SCRIPTS_DIR, "..", "test")
 IMAGES_DIR = os.path.join("..", "docker")
 VERSION_FILE = os.path.join(IMAGES_DIR, ".version")
 DOCKER_EXEC = (
-    "CONTAINER=$("
-    "  docker run -dt --rm"
-    '  --mount type=bind,source="{mountdir}",target=/opt/openproblems'
-    "  singlecellopenproblems/{{image}}"
-    ") bash -c '"
-    "  docker exec $CONTAINER /bin/bash /opt/openproblems/scripts/docker_run.sh"
+    "CONTAINER=$(  docker run -dt --rm  --mount"
+    ' type=bind,source="{mountdir}",target=/opt/openproblems'
+    " singlecellopenproblems/{{image}}) bash -c '  docker exec $CONTAINER /bin/bash"
+    " /opt/openproblems/scripts/docker_run.sh"
 ).format(mountdir=os.path.dirname(SCRIPTS_DIR))
 try:
     DOCKER_PASSWORD = os.environ["DOCKER_PASSWORD"]
@@ -173,9 +171,9 @@ def docker_image_age(image, pull_on_error=True):
             return docker_image_age(image, pull_on_error=False)
         elif date_string == "":
             warnings.warn(
-                "Docker image singlecellopenproblems/{} not found; "
-                "assuming needs rebuild. If you think this message is in error, "
-                "you can fix this by running `snakemake -j 1 docker_pull`".format(image)
+                "Docker image singlecellopenproblems/{} not found; assuming needs"
+                " rebuild. If you think this message is in error, you can fix this by"
+                " running `snakemake -j 1 docker_pull`".format(image)
             )
             return -1
         else:

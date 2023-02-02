@@ -7,8 +7,8 @@ _scanorama_method = functools.partial(
     method,
     method_summary="TODO",
     paper_name=(
-        "Efficient integration of heterogeneous single-cell "
-        "transcriptomes using Scanorama"
+        "Efficient integration of heterogeneous single-cell transcriptomes using"
+        " Scanorama"
     ),
     paper_reference="hie2019efficient",
     paper_year=2019,

@@ -11,12 +11,11 @@ def _sigmoid_transform(x):
 @metric(
     metric_name="Odds Ratio",
     metric_summary=(
-        "The odds ratio represents the ratio of true and false "
-        "positives within a set of prioritized interactions (top ranked hits) versus "
-        "the same ratio for the remainder of the interactions. Thus, in this "
-        "scenario odds ratios quantify the strength of association between the "
-        "ability of methods to prioritize interactions and those interactions "
-        "assigned to the positive class."
+        "The odds ratio represents the ratio of true and false positives within a set"
+        " of prioritized interactions (top ranked hits) versus the same ratio for the"
+        " remainder of the interactions. Thus, in this scenario odds ratios quantify"
+        " the strength of association between the ability of methods to prioritize"
+        " interactions and those interactions assigned to the positive class."
     ),
     paper_reference="bland2000odds",
     maximize=True,

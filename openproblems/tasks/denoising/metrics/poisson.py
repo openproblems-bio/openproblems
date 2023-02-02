@@ -4,8 +4,8 @@ from ....tools.decorators import metric
 @metric(
     metric_name="Poisson loss",
     metric_summary=(
-        "The Poisson log likelihood of observing the true counts of the "
-        "test dataset given the distribution given in the denoised dataset."
+        "The Poisson log likelihood of observing the true counts of the test dataset"
+        " given the distribution given in the denoised dataset."
     ),
     paper_reference="batson2019molecular",
     maximize=False,

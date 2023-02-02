@@ -21,8 +21,8 @@ the preintegration variance contribution reduces the score."""
 @metric(
     metric_name="Cell Cycle Score",
     metric_summary=(
-        "The cell-cycle conservation score evaluates how well the "
-        "cell-cycle effect can be captured before and after integration."
+        "The cell-cycle conservation score evaluates how well the cell-cycle effect can"
+        " be captured before and after integration."
     ),
     paper_reference="luecken2022benchmarking",
     maximize=True,

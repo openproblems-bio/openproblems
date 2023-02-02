@@ -9,8 +9,8 @@ _liger_method = functools.partial(
     method,
     method_summary="TODO",
     paper_name=(
-        "Single-Cell Multi-omic Integration Compares and "
-        "Contrasts Features of Brain Cell Identity"
+        "Single-Cell Multi-omic Integration Compares and Contrasts Features of Brain"
+        " Cell Identity"
     ),
     paper_reference="welch2019single",
     paper_year=2019,

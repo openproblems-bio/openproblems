@@ -7,8 +7,8 @@ _scanvi_method = functools.partial(
     method,
     method_summary="TODO",
     paper_name=(
-        "Probabilistic harmonization and annotation of single-cell"
-        " transcriptomics data with deep generative models"
+        "Probabilistic harmonization and annotation of single-cell transcriptomics data"
+        " with deep generative models"
     ),
     paper_reference="xu2021probabilistic",
     paper_year=2021,

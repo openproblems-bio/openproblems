@@ -8,8 +8,8 @@ from . import utils
     data_url=load_tenx_1k_pbmc.metadata["data_url"],
     data_reference=load_tenx_1k_pbmc.metadata["data_reference"],
     dataset_summary=(
-        "1k Peripheral Blood Mononuclear Cells (PBMCs) from a healthy donor. "
-        "Sequenced on 10X v3 chemistry in November 2018 by 10X Genomics."
+        "1k Peripheral Blood Mononuclear Cells (PBMCs) from a healthy donor. Sequenced"
+        " on 10X v3 chemistry in November 2018 by 10X Genomics."
     ),
     image="openproblems-python-pytorch",
 )

@@ -7,8 +7,8 @@ from ..utils import split_sc_and_sp
     method_name="Stereoscope",
     method_summary="TODO",
     paper_name=(
-        "Single-cell and spatial transcriptomics enables probabilistic "
-        "inference of cell type topography"
+        "Single-cell and spatial transcriptomics enables probabilistic inference of"
+        " cell type topography"
     ),
     paper_reference="andersson2020single",
     paper_year=2020,

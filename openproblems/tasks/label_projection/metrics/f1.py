@@ -19,8 +19,7 @@ def _f1(adata, average="weighted"):
 @metric(
     metric_name="F1 score",
     metric_summary=(
-        "The [F1"
-        " score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html)"  # noqa: E501
+        "The [F1 score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html)"  # noqa: E501
         " is a weighted average of the precision and recall over all class labels,"
         " where an F1 score reaches its best value at 1 and worst score at 0, where"
         " each class contributes to the score relative to its frequency in the dataset."
@@ -35,8 +34,8 @@ def f1(adata):
 @metric(
     metric_name="Macro F1 score",
     metric_summary=(
-        "The macro F1 score is an unweighted F1 score, where each class "
-        "contributes equally, regardless of its frequency."
+        "The macro F1 score is an unweighted F1 score, where each class contributes"
+        " equally, regardless of its frequency."
     ),
     paper_reference="grandini2020metrics",
     maximize=True,

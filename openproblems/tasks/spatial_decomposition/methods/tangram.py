@@ -7,8 +7,8 @@ from ..utils import split_sc_and_sp
     method_name="Tangram",
     method_summary="TODO",
     paper_name=(
-        "Deep learning and alignment of spatially resolved single-cell "
-        "transcriptomes with Tangram"
+        "Deep learning and alignment of spatially resolved single-cell transcriptomes"
+        " with Tangram"
     ),
     paper_reference="biancalani2021deep",
     paper_year=2021,

@@ -19,8 +19,8 @@ _densmap_method = functools.partial(
     method,
     method_summary="TODO",
     paper_name=(
-        "Assessing single-cell transcriptomic variability through"
-        " density-preserving data visualization"
+        "Assessing single-cell transcriptomic variability through density-preserving"
+        " data visualization"
     ),
     paper_reference="narayan2021assessing",
     paper_year=2021,

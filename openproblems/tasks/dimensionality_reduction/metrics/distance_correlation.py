@@ -16,8 +16,8 @@ def _distance_correlation(X, X_emb):
 @metric(
     metric_name="Distance correlation",
     metric_summary=(
-        "Spearman correlation between all pairwise Euclidean "
-        "distances in the original and dimension-reduced data"
+        "Spearman correlation between all pairwise Euclidean distances in the original"
+        " and dimension-reduced data"
     ),
     maximize=True,
     paper_reference="schober2018correlation",
@@ -39,8 +39,8 @@ def distance_correlation(adata, n_svd=200):
 @metric(
     metric_name="Distance correlation (spectral)",
     metric_summary=(
-        "Spearman correlation between all pairwise diffusion "
-        "distances in the original and dimension-reduced data"
+        "Spearman correlation between all pairwise diffusion distances in the original"
+        " and dimension-reduced data"
     ),
     maximize=True,
     paper_reference="coifman2006diffusion",
