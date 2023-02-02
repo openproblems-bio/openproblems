@@ -56,7 +56,7 @@ class TestDataset(unittest.TestCase):
                 test=cls.test,
                 dependency="test_load_dataset",
             )
-        except AssertionError as e:
+        except AssertionError as e:  # pragma: nocover
             if str(e) == "Intermediate file missing. Did test_load_dataset fail?":
                 pytest.skip("Dataset not loaded successfully")
             else:
