@@ -88,6 +88,7 @@ def magic_approx_reverse_norm(adata, test=False):
     method_name="KNN smoothing",
     method_summary="TODO",
     is_baseline=False,
+    image="openproblems-python-extras",
 )
 def knn_naive(adata, test=False):
     return _magic(adata, solver="exact", normtype="log", decay=None, t=1)
