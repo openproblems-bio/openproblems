@@ -14,7 +14,7 @@ import time
 import warnings
 
 TESTDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASEDIR = os.path.dirname(os.path.dirname(TESTDIR))
+BASEDIR = os.path.dirname(TESTDIR)
 DOCKER_BASEDIR = BASEDIR.replace("/__w", "/home/runner/work")
 CACHEDIR = os.path.join(os.environ["HOME"], ".singularity")
 os.environ["SINGULARITY_CACHEDIR"] = CACHEDIR
