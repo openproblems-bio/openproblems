@@ -17,9 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: viash-io/viash-actions/setup@v1
+    - uses: viash-io/viash-actions/setup@v3
 
-    - uses: viash-io/viash-actions/project/sync-and-cache-s3@restructure_and_extend
+    - uses: viash-io/viash-actions/project/sync-and-cache-s3@v3
       id: cache
       with:
         s3_bucket: $s3_bucket
@@ -31,7 +31,7 @@ jobs:
         # allow publishing the target folder
         sed -i '/^target.*/d' .gitignore
 
-    - uses: viash-io/viash-actions/ns-build@v2
+    - uses: viash-io/viash-actions/ns-build@v3
       with:
         config_mod: .functionality.version := 'integration_build'
         parallel: true
@@ -44,14 +44,14 @@ jobs:
         publish_branch: integration_build
 
     - id: ns_list_components
-      uses: viash-io/viash-actions/ns-list@v2
+      uses: viash-io/viash-actions/ns-list@v3
       with:
         platform: docker
         src: src
         format: json
 
     - id: ns_list_workflows
-      uses: viash-io/viash-actions/ns-list@v2
+      uses: viash-io/viash-actions/ns-list@v3
       with:
         src: workflows
         format: json
@@ -87,10 +87,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: viash-io/viash-actions/setup@v1
+    - uses: viash-io/viash-actions/setup@v3
 
     - name: Build container
-      uses: viash-io/viash-actions/ns-build@v2
+      uses: viash-io/viash-actions/ns-build@v3
       with:
         config_mod: .functionality.version := 'integration_build'
         setup: build
@@ -104,7 +104,7 @@ jobs:
         password: ${{ secrets.GTHB_PAT }}
 
     - name: Push container
-      uses: viash-io/viash-actions/ns-build@v2
+      uses: viash-io/viash-actions/ns-build@v3
       with:
         config_mod: .functionality.version := 'integration_build'
         platform: docker
@@ -127,14 +127,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: viash-io/viash-actions/setup@v1
+    - uses: viash-io/viash-actions/setup@v3
 
     - uses: nf-core/setup-nextflow@v1.2.0
 
     # build target dir
     # use containers from integration_build branch, hopefully these are available
     - name: Build target dir
-      uses: viash-io/viash-actions/ns-build@v2
+      uses: viash-io/viash-actions/ns-build@v3
       with:
         config_mod: ".functionality.version := 'integration_build'"
         parallel: true

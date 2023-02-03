@@ -41,9 +41,9 @@ jobs:
       with:
         fetch-depth: 0 
 
-    - uses: viash-io/viash-actions/setup@v1
+    - uses: viash-io/viash-actions/setup@v3
 
-    - uses: viash-io/viash-actions/project/sync-and-cache-s3@restructure_and_extend
+    - uses: viash-io/viash-actions/project/sync-and-cache-s3@v3
       id: cache
       with:
         s3_bucket: $s3_bucket
@@ -58,13 +58,13 @@ jobs:
         diff_relative: true
 
     - id: ns_list
-      uses: viash-io/viash-actions/ns-list@v2
+      uses: viash-io/viash-actions/ns-list@v3
       with:
         platform: docker
         format: json
 
     - id: ns_list_filtered
-      uses: viash-io/viash-actions/project/detect-changed-components@restructure_and_extend
+      uses: viash-io/viash-actions/project/detect-changed-components@v3
       with:
         input_file: "${{ steps.ns_list.outputs.output_file }}"
 
@@ -91,7 +91,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: viash-io/viash-actions/setup@v1
+    - uses: viash-io/viash-actions/setup@v3
 
     # use cache
     - name: Cache resources data
