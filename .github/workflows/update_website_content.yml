@@ -66,10 +66,10 @@ jobs:
         cd website
         git diff --exit-code --quiet || echo "CHANGED=true" >> $GITHUB_ENV
 
-    - name: Upload markdown
+    - name: Upload json
       uses: actions/upload-artifact@main
       with:
-        name: markdown
+        name: json
         path: website/content/benchmarks
 
     - name: Push to openproblems-bio/website
