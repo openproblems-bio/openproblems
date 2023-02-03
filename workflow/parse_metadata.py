@@ -13,7 +13,7 @@ HEADING_PATTERN = re.compile(r"^# ")
 
 @functools.lru_cache()
 def get_sha():
-    repo = git.Repo(openproblems.__path__)
+    repo = git.Repo(openproblems.__path__[0])
     assert not repo.bare
     return repo.head.commit.hexsha
 
