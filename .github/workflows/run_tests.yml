@@ -505,13 +505,15 @@ jobs:
       env:
         TOWER_WATCH_URL: https://tower.nf/orgs/openproblems-bio/workspaces/openproblems-bio/watch
         TOWER_WORKSPACE_ID: 53907369739130
+        TOWER_TEST_ACTION_ID: "6yMzmbRXXDZMoVqVkEozQo"
+        TOWER_FULL_ACTION_ID: "bVQhVSNah1JmJfnKkfyjg"
         BRANCH: ${{ needs.setup_benchmark.outputs.branch }}
       run: |
         if [[ ${{ startsWith(github.ref, 'refs/tags') || startsWith(github.ref, 'refs/heads/test_full_benchmark') }} == true ]]; then
-          TOWER_ACTION_ID="bVQhVSNah1JmJfnKkfyjg"
+          TOWER_ACTION_ID="${TOWER_FULL_ACTION_ID}"
           WORKDIR="s3://openproblems-nextflow/work_main"
         else
-          TOWER_ACTION_ID="5BQc88ZvjuXCYbc55Hot27"
+          TOWER_ACTION_ID="${TOWER_TEST_ACTION_ID}"
           WORKDIR="s3://openproblems-nextflow/work/${BRANCH}"
         fi
         generate_parameters()
