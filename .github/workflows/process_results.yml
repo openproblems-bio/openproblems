@@ -84,9 +84,7 @@ jobs:
           S3_URI="s3://openproblems-nextflow/cwd_example"
         fi
         aws s3 cp --quiet --recursive "${S3_URI}" /tmp/results/
-        rm -r nbt2022-reproducibility/results/*/*.json
-        rm -r website/data/results/*/
-        python openproblems/workflow/parse_nextflow.py /tmp website/data/results
+        python openproblems/workflow/parse_nextflow.py /tmp website/content/benchmarks
 
     - name: Upload results
       uses: actions/upload-artifact@main
@@ -94,10 +92,9 @@ jobs:
         name: results
         path: website/data/results
 
-    - name: Move raw output
+    - name: Copy raw output
       run: |
-        rsync -v -r --include "*.raw.json" --include "*/" --exclude "*" website/data/results/ nbt2022-reproducibility/results
-        rm website/data/results/*/*.raw.json
+        rsync -v -r --include "results.json" --include "*/" --exclude "*" website/content/benchmarks/ nbt2022-reproducibility/results
 
     - name: Push to openproblems-bio/website
       if: |

@@ -134,15 +134,13 @@ def parse_trace_to_dict(df):
     return results
 
 
-def parse_metric_results(results_path, results):
+def parse_metric_results(results_path: pathlib.Path, results):
     """Add metric results to the trace output."""
     missing_traces = []
-    metric_filenames = os.listdir(os.path.join(results_path, "results/metrics"))
+    metric_filenames = os.listdir(results_path.joinpath("results", "metrics"))
     print(f"Loading {len(metric_filenames)} metric results")
     for filename in sorted(metric_filenames):
-        with open(
-            os.path.join(results_path, "results/metrics", filename), "r"
-        ) as handle:
+        with open(results_path.joinpath("results", "metrics", filename), "r") as handle:
             result = float(handle.read().strip())
         task_name, dataset_name, method_name, metric_name = filename.replace(
             ".metric.txt", ""
@@ -163,12 +161,12 @@ def parse_metric_results(results_path, results):
     return results
 
 
-def parse_method_versions(results_path, results):
+def parse_method_versions(results_path: pathlib.Path, results):
     """Add method versions to the trace output."""
     missing_traces = []
-    for filename in os.listdir(os.path.join(results_path, "results/method_versions")):
+    for filename in os.listdir(results_path.joinpath("results", "method_versions")):
         with open(
-            os.path.join(results_path, "results/method_versions", filename), "r"
+            results_path.joinpath("results", "method_versions", filename), "r"
         ) as handle:
             code_version = handle.read().strip()
         task_name, dataset_name, method_name = filename.replace(
@@ -308,11 +306,9 @@ def results_to_json(results, outdir: pathlib.Path):
             dump_json(task_results_out, handle)
 
 
-def main(results_path, outdir):
+def main(results_path: pathlib.Path, outdir: pathlib.Path):
     """Parse the nextflow output."""
-    df = read_trace(
-        os.path.join(results_path, "results/pipeline_info/execution_trace.txt")
-    )
+    df = read_trace(results_path.joinpath("results/pipeline_info/execution_trace.txt"))
     results = parse_trace_to_dict(df)
     results = parse_metric_results(results_path, results)
     results = parse_method_versions(results_path, results)
@@ -321,4 +317,4 @@ def main(results_path, outdir):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    main(pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]))
