@@ -8,7 +8,7 @@ import utils.name
 @parameterized.parameterized.expand(
     [
         (
-            task.__name__.split(".")[-1],
+            openproblems.utils.get_member_id(task),
             metric.__name__,
             metric.metadata["image"],
         )

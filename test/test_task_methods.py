@@ -14,7 +14,7 @@ RETRIES = (
 @parameterized.parameterized.expand(
     [
         (
-            task.__name__.split(".")[-1],
+            openproblems.utils.get_member_id(task),
             method.__name__,
             method.metadata["image"],
         )
