@@ -1,5 +1,3 @@
-import functools
-import git
 import json
 import openproblems
 import pathlib
@@ -9,13 +7,6 @@ import workflow_utils
 
 API_PATTERN = re.compile(r"^#.*API$")
 HEADING_PATTERN = re.compile(r"^# ")
-
-
-@functools.lru_cache()
-def get_sha():
-    repo = git.Repo(pathlib.Path(openproblems.__path__[0]).parent)
-    assert not repo.bare
-    return repo.head.commit.hexsha
 
 
 def get_task_description(task):
@@ -36,7 +27,7 @@ def get_task_description(task):
 def write_task_json(task, outdir: pathlib.Path):
     data = {
         "id": openproblems.utils.get_member_id(task),
-        "commit_sha": get_sha(),
+        "commit_sha": workflow_utils.get_sha(),
         "task_name": task._task_name,
         "task_summary": task._task_summary,
         "task_description": get_task_description(task),
@@ -52,7 +43,7 @@ def _write_function_json(task, outdir: pathlib.Path, functions, function_type: s
         function.metadata.update(
             {
                 "task_id": openproblems.utils.get_member_id(task),
-                "commit_sha": get_sha(),
+                "commit_sha": workflow_utils.get_sha(),
                 f"{function_type}_id": openproblems.utils.get_member_id(function),
             }
         )
