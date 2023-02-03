@@ -28,7 +28,7 @@ jobs:
       with:
         fetch-depth: 1
         repository: openproblems-bio/website
-        branch: update_wowchemy_and_benchmarks
+        ref: update_wowchemy_and_benchmarks
         path: website
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
 
@@ -97,7 +97,7 @@ jobs:
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
         delete-branch: true
-        base: main
+        base: update_wowchemy_and_benchmarks
         title: '[auto] Update benchmark content'
         reviewers: scottgigante-immunai,rcannood,dburkhardt
         path: './website'
