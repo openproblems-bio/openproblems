@@ -43,7 +43,7 @@ def write_task_json(task, outdir: pathlib.Path):
         "repo": "openproblems-bio/openproblems",
     }
     with open(outdir.joinpath("task_info.json"), "w") as handle:
-        json.dump(data, handle)
+        json.dump(data, handle, indent=4)
 
 
 def _write_function_json(task, outdir: pathlib.Path, functions, function_type: str):
@@ -59,7 +59,7 @@ def _write_function_json(task, outdir: pathlib.Path, functions, function_type: s
         data.append(function.metadata)
 
     with open(outdir.joinpath(f"{function_type}_info.json"), "w") as handle:
-        json.dump(data, handle)
+        json.dump(data, handle, indent=4)
 
 
 def write_dataset_json(task, outdir: pathlib.Path):
