@@ -28,6 +28,7 @@ jobs:
       with:
         fetch-depth: 1
         repository: openproblems-bio/website
+        branch: update_wowchemy_and_benchmarks
         path: website
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
 
