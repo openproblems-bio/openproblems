@@ -88,4 +88,4 @@ def main(outdir: pathlib.Path):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(pathlib.Path(sys.argv[1]))
