@@ -54,7 +54,7 @@ jobs:
         for task in $(ls -1 website/content/benchmarks); do
           if [ -d website/content/benchmarks/${task} ]; then
             if [ -f website/content/benchmarks/${task}/data/task_info.json ]; then
-              if grep -q '"repo": "openproblems-bio/openproblems"' website/content/benchmarks/${task}/data/task_info.json; then
+              if grep -q '"task_description": null' website/content/benchmarks/${task}/data/task_info.json; then
                 # this task was created by this repo; clean it out
                 rm -r website/content/benchmarks/${task}/data
               fi
