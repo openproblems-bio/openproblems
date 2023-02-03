@@ -69,6 +69,17 @@ jobs:
         pip install --editable .[evaluate]
         python -c "import openproblems"
 
+    - name: Pull Docker images
+      if: |
+        (
+          startsWith(github.ref, 'refs/heads/test_benchmark') ||
+          startsWith(github.ref, 'refs/heads/test_full_benchmark')
+        )
+      run: |
+        cd workflow
+        snakemake -j $(nproc) docker_pull
+        cd ..
+
     - name: Update Docker images
       if: |
         !(
