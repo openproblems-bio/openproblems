@@ -83,7 +83,6 @@ jobs:
           S3_URI="s3://openproblems-nextflow/cwd_example"
         fi
         aws s3 cp --quiet --recursive "${S3_URI}" /tmp/results/
-        rm -r nbt2022-reproducibility/results/*/*.json
         rm -r website/data/results/*/
         python openproblems/workflow/parse_nextflow.py /tmp website/data/results
 
