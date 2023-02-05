@@ -90,7 +90,7 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         name: results
-        path: website/data/results
+        path: website/content/benchmarks
 
     - name: Copy raw output
       run: |
