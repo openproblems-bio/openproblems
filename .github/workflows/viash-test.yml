@@ -104,7 +104,7 @@ jobs:
     - name: Run test
       timeout-minutes: 30
       run: |
-        viash test \
+        VIASH_TEMP=$RUNNER_TEMP/viash viash test \
           "${{ matrix.component.config }}" \
           --cpus 2 \
           --memory "5gb"
