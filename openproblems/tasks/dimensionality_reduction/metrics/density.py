@@ -100,7 +100,6 @@ def _calculate_radii(
     "density preservation",
     paper_reference="narayan2021assessing",
     maximize=True,
-    image="openproblems-python-extras",
 )
 def density_preservation(adata: AnnData) -> float:
     from scipy.sparse import issparse
