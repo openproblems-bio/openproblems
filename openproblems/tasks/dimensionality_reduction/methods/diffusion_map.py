@@ -10,7 +10,7 @@ from ....tools.utils import check_version
     paper_year=2006,
     code_url="https://github.com/openproblems-bio/openproblems",
 )
-def diffusion_map(adata, n_comps: int = 2, t=1):
+def diffusion_map(adata, n_comps: int = 2, t: int = 1, test: bool = False):
     import numpy as np
     import scipy.sparse
     import umap
