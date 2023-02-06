@@ -105,7 +105,6 @@ jobs:
       timeout-minutes: 30
       run: |
         viash test \
-          --config_mod ".functionality.version := '${{ github.event.inputs.version_tag }}'" \
           "${{ matrix.component.config }}" \
           --cpus 2 \
           --memory "5gb"
