@@ -73,7 +73,7 @@ jobs:
         echo "matrix=$(jq -c '[ .[] | 
           { 
             "name": (.functionality.namespace + "/" + .functionality.name),
-            "dir": .info.config | capture("^(?<dir>.*\/)").dir
+            "config": .info.config
           }
         ]' ${{ steps.ns_list_filtered.outputs.output_file }} )" >> $GITHUB_OUTPUT
 
@@ -104,9 +104,9 @@ jobs:
     - name: Run test
       timeout-minutes: 30
       run: |
-        viash ns test \
+        viash test \
           --config_mod ".functionality.version := '${{ github.event.inputs.version_tag }}'" \
-          -s "${{ matrix.component.dir }}" \
+          "${{ matrix.component.config }}" \
           --cpus 2 \
           --memory "5gb"
 
