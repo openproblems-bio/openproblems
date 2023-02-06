@@ -47,6 +47,8 @@ def _write_function_json(task, outdir: pathlib.Path, functions, function_type: s
                 f"{function_type}_id": openproblems.utils.get_member_id(function),
             }
         )
+        if f"{function_type}_description" not in function.metadata:
+            function.metadata[f"{function_type}_description"] = ""
         data.append(function.metadata)
 
     with open(outdir.joinpath(f"{function_type}_info.json"), "w") as handle:
