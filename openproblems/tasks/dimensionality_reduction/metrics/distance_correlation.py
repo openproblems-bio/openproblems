@@ -19,7 +19,7 @@ def _distance_correlation(X, X_emb):
     maximize=True,
     paper_reference="schober2018correlation",
 )
-def distance_correlation(adata, n_svd=1000):
+def distance_correlation(adata, n_svd=500):
     """Calculate the root mean squared error.
 
     Computes (RMSE) between the full (or processed) data matrix and the
