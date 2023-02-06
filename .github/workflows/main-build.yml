@@ -31,7 +31,7 @@ jobs:
     - name: Build nextflow schemas
       uses: viash-io/viash-actions/pro/build-nextflow-schemas@v3
       with:
-        workflows: workflows
+        workflows: src
         components: src
         viash_pro_token: ${{ secrets.GTHB_PAT }}
         tools_version: 'main_build'
@@ -39,7 +39,7 @@ jobs:
     - name: Build parameter files
       uses: viash-io/viash-actions/pro/build-nextflow-params@v3
       with:
-        workflows: workflows
+        workflows: src
         components: src
         viash_pro_token: ${{ secrets.GTHB_PAT }}
         tools_version: 'main_build'
