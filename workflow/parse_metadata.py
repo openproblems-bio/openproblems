@@ -26,7 +26,7 @@ def get_task_description(task):
 
 def write_task_json(task, outdir: pathlib.Path):
     data = {
-        "id": openproblems.utils.get_member_id(task),
+        "task_id": openproblems.utils.get_member_id(task),
         "commit_sha": workflow_utils.get_sha(),
         "task_name": task._task_name,
         "task_summary": task._task_summary,
