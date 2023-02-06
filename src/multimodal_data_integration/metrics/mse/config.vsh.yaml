@@ -1,4 +1,5 @@
 functionality:
+  status: disabled
   name: "mse"
   namespace: "multimodal_data_integration/metrics"
   version: "dev"
