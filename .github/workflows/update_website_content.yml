@@ -28,12 +28,24 @@ jobs:
       with:
         fetch-depth: 1
         repository: openproblems-bio/website
-        ref: update_wowchemy_and_benchmarks
         path: website
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
 
+    - name: Checkout NBT reproduciblity repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        repository: openproblems-bio/website-experimental
+        path: nbt2022-reproducibility
+        token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
+
     - name: Set up website Git branch
       working-directory: website
+      run: |
+        git checkout -b $UPDATE_BRANCH_NAME
+
+    - name: Set up nbt2022-reproducibility Git branch
+      working-directory: nbt2022-reproducibility
       run: |
         git checkout -b $UPDATE_BRANCH_NAME
 
@@ -52,6 +64,7 @@ jobs:
     - name: Parse metadata
       run: |
         python openproblems/workflow/parse_metadata.py website/content/benchmarks
+        python openproblems/workflow/parse_metadata.py nbt2022-reproducibility/results
         cp openproblems/main.bib website/static/bibliography
         cd website
         git diff --exit-code --quiet || echo "CHANGED=true" >> $GITHUB_ENV
@@ -92,5 +105,30 @@ jobs:
         reviewers: scottgigante-immunai,rcannood,dburkhardt
         path: './website'
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
+        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        commit-message: "Update benchmark content # ci skip"
+
+    - name: Push to openproblems-bio/nbt2022-reproducibility
+      if: |
+        env.CHANGED == 'true'
+      shell: bash
+      working-directory: './nbt2022-reproducibility'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
+      run: |
+        git push origin "${UPDATE_BRANCH_NAME}"
+
+    - name: Create nbt2022-reproducibility Pull Request
+      if: |
+        env.CHANGED == 'true'
+      uses: peter-evans/create-pull-request@v4
+      with:
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
+        delete-branch: true
+        base: main
+        title: '[auto] Update benchmark content'
+        reviewers: scottgigante-immunai,rcannood
+        path: './nbt2022-reproducibility'
+        token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
         commit-message: "Update benchmark content # ci skip"
