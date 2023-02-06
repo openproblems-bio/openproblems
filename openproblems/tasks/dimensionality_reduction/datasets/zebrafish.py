@@ -1,5 +1,6 @@
 from ....data.zebrafish import load_zebrafish
 from ....tools.decorators import dataset
+from ....tools.normalize import log_cp10k
 
 
 @dataset(
@@ -13,4 +14,5 @@ from ....tools.decorators import dataset
 )
 def zebrafish_labs(test=False):
     adata = load_zebrafish(test=test)
-    return adata
+    adata.uns["n_genes"] = adata.shape[1]
+    return log_cp10k(adata)
