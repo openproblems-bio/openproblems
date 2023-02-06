@@ -67,7 +67,10 @@ jobs:
         python openproblems/workflow/parse_metadata.py nbt2022-reproducibility/results
         cp openproblems/main.bib website/static/bibliography
         cd website
-        git diff --exit-code --quiet || echo "CHANGED=true" >> $GITHUB_ENV
+        git diff --exit-code --quiet || echo "WEBSITE_CHANGED=true" >> $GITHUB_ENV
+        cd ../nbt2022-reproducibility
+        git diff --exit-code --quiet || echo "NBT_REPRODUCIBILITY_CHANGED=true" >> $GITHUB_ENV
+
 
     - name: Upload json
       uses: actions/upload-artifact@main
@@ -77,7 +80,7 @@ jobs:
 
     - name: Push to openproblems-bio/website
       if: |
-        env.CHANGED == 'true' &&
+        env.WEBSITE_CHANGED == 'true' &&
         (
           startsWith(github.ref, 'refs/heads/main') ||
           endsWith(github.event.head_commit.message, '# publish')
@@ -91,7 +94,7 @@ jobs:
 
     - name: Create website Pull Request
       if: |
-        env.CHANGED == 'true' &&
+        env.WEBSITE_CHANGED == 'true' &&
         (
           startsWith(github.ref, 'refs/heads/main') ||
           endsWith(github.event.head_commit.message, '# publish')
@@ -110,7 +113,7 @@ jobs:
 
     - name: Push to openproblems-bio/nbt2022-reproducibility
       if: |
-        env.CHANGED == 'true'
+        env.NBT_REPRODUCIBILITY_CHANGED == 'true'
       shell: bash
       working-directory: './nbt2022-reproducibility'
       env:
@@ -120,7 +123,7 @@ jobs:
 
     - name: Create nbt2022-reproducibility Pull Request
       if: |
-        env.CHANGED == 'true'
+        env.NBT_REPRODUCIBILITY_CHANGED == 'true'
       uses: peter-evans/create-pull-request@v4
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
