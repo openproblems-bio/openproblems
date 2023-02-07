@@ -9,7 +9,7 @@ log = logging.getLogger("openproblems")
 
 
 @method(
-    method_name="ALRA (sqrt norm)",
+    method_name="ALRA (sqrt norm, reversed normalization)",
     paper_name="Zero-preserving imputation of scRNA-seq data using "
     "low-rank approximation",
     paper_reference="linderman2018zero",
