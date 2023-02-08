@@ -1,4 +1,5 @@
 functionality:
+  status: disabled
   name: "sample_dataset"
   namespace: "multimodal_data_integration/datasets"
   version: "dev"

@@ -6,60 +6,43 @@ on:
 
 jobs:
   # phase 1
-  list_components:
-    env:
-      s3_bucket: s3://openproblems-data/resources_test/
+  list:
     runs-on: ubuntu-latest
+
+    outputs:
+      component_matrix: ${{ steps.set_matrix.outputs.matrix }}
+      cache_key: ${{ steps.cache.outputs.cache_key }}
 
     steps:
     - uses: actions/checkout@v3
-    - uses: viash-io/viash-actions/setup@v1.0.0
 
-    # create cachehash key
-    - name: Create hash key
-      id: cachehash
-      run: |
-        AWS_EC2_METADATA_DISABLED=true aws s3 ls $s3_bucket --recursive --no-sign-request > bucket-contents.txt
-        echo "cachehash=resources_test__$( md5sum bucket-contents.txt | awk '{ print $1 }' )" >> $GITHUB_OUTPUT
-    
-    # initialize cache
-    - name: Cache resources data
-      uses: actions/cache@v3
-      with:
-        path: resources_test
-        key: ${{ steps.cachehash.outputs.cachehash }}
-        restore-keys: resources_test_
+    - uses: viash-io/viash-actions/setup@v3
 
-    # sync if need be
-    - name: Sync test resources
-      run: |
-        viash run \
-          -p native \
-          src/common/sync_test_resources/config.vsh.yaml -- \
-          --input $s3_bucket \
-          --delete
-        tree resources_test/ -L 3
-
-    - name: Build target dir
+    - name: Remove target folder from .gitignore
       run: |
         # allow publishing the target folder
         sed -i '/^target.*/d' .gitignore
 
-        # build target dir
-        viash ns build --config_mod ".functionality.version := 'main_build'" --parallel --setup donothing
+    - uses: viash-io/viash-actions/ns-build@v3
+      with:
+        config_mod: .functionality.version := 'main_build'
+        parallel: true
 
-    - name: Generate schemas
-      uses: viash-io/viash-actions/build_nextflow_schemas@build_nextflow_schemas
-      with: 
-        token: ${{ secrets.GTHB_PAT }}
-        components: src
+    - name: Build nextflow schemas
+      uses: viash-io/viash-actions/pro/build-nextflow-schemas@v3
+      with:
         workflows: src
-
-    # - name: Generate params
-    #   uses: viash-io/viash-actions/build_nextflow_params@build_nextflow_params
-    #   with: 
-    #     token: ${{ secrets.GTHB_PAT }}
-    #     input_dir: src
+        components: src
+        viash_pro_token: ${{ secrets.GTHB_PAT }}
+        tools_version: 'main_build'
+   
+    - name: Build parameter files
+      uses: viash-io/viash-actions/pro/build-nextflow-params@v3
+      with:
+        workflows: src
+        components: src
+        viash_pro_token: ${{ secrets.GTHB_PAT }}
+        tools_version: 'main_build'
 
     - name: Deploy to target branch
       uses: peaceiris/actions-gh-pages@v3
@@ -68,34 +51,45 @@ jobs:
         publish_dir: .
         publish_branch: main_build
 
-    # store component locations
+    - id: ns_list
+      uses: viash-io/viash-actions/ns-list@v3
+      with:
+        platform: docker
+        src: src
+        format: json
+
     - id: set_matrix
       run: |
-        component_json=$(viash ns list -p docker --format json | jq -c '[ .[] | { "name": .functionality.name, "namespace": .functionality.namespace, "config": .info.config } ]')
-        echo "component_matrix=$component_json" >> $GITHUB_OUTPUT
-
-    outputs:
-      component_matrix: ${{ steps.set_matrix.outputs.component_matrix }}
-      cachehash: ${{ steps.cachehash.outputs.cachehash }}
+        echo "matrix=$(jq -c '[ .[] | 
+          { 
+            "name": (.functionality.namespace + "/" + .functionality.name),
+            "dir": .info.config | capture("^(?<dir>.*\/)").dir
+          }
+        ]' ${{ steps.ns_list.outputs.output_file }} )" >> $GITHUB_OUTPUT
 
   # phase 2
-  build_containers:
-    needs: list_components
+  build:
+    needs: list
 
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        component: ${{ fromJson(needs.list_components.outputs.component_matrix) }}
+        component: ${{ fromJson(needs.list.outputs.component_matrix) }}
 
     steps:
     - uses: actions/checkout@v3
-    - uses: viash-io/viash-actions/setup@v1.0.0
+
+    - uses: viash-io/viash-actions/setup@v3
+
     - name: Build container
-      run: |
-        SRC_DIR=`dirname ${{ matrix.component.config }}`
-        viash ns build --config_mod ".functionality.version := 'main_build'" -s "$SRC_DIR" --setup build
+      uses: viash-io/viash-actions/ns-build@v3
+      with:
+        config_mod: .functionality.version := 'main_build'
+        platform: docker
+        src: ${{ matrix.component.dir }}
+        setup: build
         
     - name: Login to container registry
       uses: docker/login-action@v2
@@ -104,6 +98,10 @@ jobs:
         username: ${{ secrets.GTHB_USER }}
         password: ${{ secrets.GTHB_PAT }}
 
-    - name: Push containers
-      run: |
-        viash build ${{ matrix.component.config }} -p docker --config_mod ".functionality.version := 'main_build'" --setup push
+    - name: Push container
+      uses: viash-io/viash-actions/ns-build@v3
+      with:
+        config_mod: .functionality.version := 'main_build'
+        platform: docker
+        src: ${{ matrix.component.dir }}
+        setup: push
