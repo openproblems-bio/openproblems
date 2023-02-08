@@ -1,8 +1,8 @@
 type: file
-description: "A normalised data with a PCA embedding and HVG selection"
+description: "A normalised data with a PCA embedding, HVG selection and a kNN graph"
 example: "dataset.h5ad"
 info:
-  label: "Dataset+PCA+HVG"
+  label: "Dataset+PCA+HVG+kNN"
   slots:
     layers: 
       - type: integer
@@ -43,6 +43,15 @@ info:
         name: X_pca
         description: The resulting PCA embedding.
         required: true
+    obsp:
+      - type: double
+        name: knn_distances
+        description: K nearest neighbors distance matrix.
+        required: true
+      - type: double
+        name: knn_connectivities
+        description: K nearest neighbors connectivities matrix.
+        required: true
     varm:
       - type: double
         name: pca_loadings
@@ -61,3 +70,6 @@ info:
         name: pca_variance
         description: The PCA variance objects.
         required: true
+      - type: object
+        name: knn
+        description: Neighbors data.

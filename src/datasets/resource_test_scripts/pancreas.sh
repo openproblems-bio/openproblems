@@ -46,9 +46,14 @@ viash run src/datasets/processors/pca/config.vsh.yaml -- \
     --input $DATASET_DIR/temp_dataset1.h5ad \
     --output $DATASET_DIR/temp_dataset2.h5ad
 
-# run log cpm normalisation
+# run hvg
 viash run src/datasets/processors/hvg/config.vsh.yaml -- \
     --input $DATASET_DIR/temp_dataset2.h5ad \
+    --output $DATASET_DIR/temp_dataset3.h5ad
+
+# run knn
+viash run src/datasets/processors/knn/config.vsh.yaml -- \
+    --input $DATASET_DIR/temp_dataset3.h5ad \
     --output $DATASET_DIR/dataset.h5ad
 
 rm -r $DATASET_DIR/temp_*

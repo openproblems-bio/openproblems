@@ -9,6 +9,7 @@ include { log_scran_pooling } from "$targetDir/datasets/normalization/log_scran_
 include { sqrt_cpm } from "$targetDir/datasets/normalization/sqrt_cpm/main.nf"
 include { pca } from "$targetDir/datasets/processors/pca/main.nf"
 include { hvg } from "$targetDir/datasets/processors/hvg/main.nf"
+include { knn } from "$targetDir/datasets/processors/knn/main.nf"
 
 include { readConfig; viashChannel; helpMessage } from sourceDir + "/wf_utils/WorkflowHelper.nf"
 include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from sourceDir + "/wf_utils/DataflowHelper.nf"
@@ -51,9 +52,10 @@ workflow run_wf {
     }
 
     | pca
+    | hvg
 
     | getWorkflowArguments(key: "output")
-    | hvg.run(
+    | knn.run(
       auto: [ publish: true ]
     )
 

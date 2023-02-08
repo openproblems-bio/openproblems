@@ -13,7 +13,7 @@ par = {
 ### VIASH END
 
 print(">> Load data")
-adata = sc.read(par['input'])
+adata = sc.read_h5ad(par['input'])
 
 print(">> Look for layer")
 layer = adata.X if not par['layer_input'] else adata.layers[par['layer_input']]
