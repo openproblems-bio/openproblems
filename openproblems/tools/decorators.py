@@ -126,9 +126,9 @@ def metric(metric_name, maximize, paper_reference, image="openproblems"):
 
     def decorator(func):
         @functools.wraps(func)
-        def apply_metric(*args, **kwargs):
+        def apply_metric(adata: anndata.AnnData, *args, **kwargs):
             log.debug("Running {} metric".format(func.__name__))
-            return func(*args, **kwargs)
+            return func(adata.copy(), *args, **kwargs)
 
         apply_metric.metadata = dict(
             metric_name=metric_name,

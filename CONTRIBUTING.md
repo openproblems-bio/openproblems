@@ -178,6 +178,9 @@ Metrics should take an AnnData object and return a `float`.
 function metric(AnnData adata) -> float
 ```
 
+Note that the AnnData object is passed to the metric function as a copy, so there is no
+need to copy it internally, even if you modify the object.
+
 Task-specific APIs are described in the README for each task.
 
 * [Label Projection](openproblems/tasks/label_projection)
