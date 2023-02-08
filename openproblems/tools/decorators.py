@@ -83,9 +83,10 @@ def method(
 
     def decorator(func):
         @functools.wraps(func)
-        def apply_method(*args, **kwargs):
+        def apply_method(adata: anndata.AnnData, *args, **kwargs):
             log.debug("Running {} method".format(func.__name__))
-            return func(*args, **kwargs)
+            adata.uns["is_baseline"] = is_baseline
+            return func(adata, *args, **kwargs)
 
         apply_method.metadata = dict(
             method_name=method_name,
