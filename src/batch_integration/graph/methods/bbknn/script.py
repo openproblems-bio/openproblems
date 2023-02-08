@@ -1,45 +1,29 @@
+import anndata as ad
+from scib.integration import bbknn
+
 ## VIASH START
 par = {
-    'input': './src/batch_integration/resources/datasets_pancreas.h5ad',
-    'output': './src/batch_integration/resources/pancreas_bbknn.h5ad',
+    'input': 'resources_test/batch_integration/pancreas/unintegrated.h5ad',
+    'output': 'output.h5ad',
     'hvg': True,
-    'scaling': True,
-    'debug': True
+}
+meta = {
+    'functionality_name': 'foo'
 }
 ## VIASH END
 
-print('Importing libraries')
-from pprint import pprint
-import scanpy as sc
-from scib.integration import bbknn
+print('Read input', flush=True)
+input = ad.read_h5ad(par['input'])
 
-if par['debug']:
-    pprint(par)
+if par['hvg']:
+    print('Select HVGs', flush=True)
+    input = input[:, input.var['hvg']].copy()
 
-adata_file = par['input']
-output = par['output']
-hvg = par['hvg']
-scaling = par['scaling']
+print('Run BBKNN', flush=True)
+input.X = input.layers['normalized']
+input = bbknn(input, batch='batch')
+del input.X
 
-print('Read adata')
-adata = sc.read_h5ad(adata_file)
-
-if hvg:
-    print('Select HVGs')
-    adata = adata[:, adata.var['highly_variable']]
-
-if scaling:
-    print('Scale')
-    adata.X = adata.layers['logcounts_scaled']
-else:
-    adata.X = adata.layers['logcounts']
-
-print('Integrate')
-adata = bbknn(adata, batch='batch')
-
-print('Save HDF5')
-adata.uns['method_id'] = meta['functionality_name']
-adata.uns['hvg'] = hvg
-adata.uns['scaled'] = scaling
-
-adata.write(output, compression='gzip')
+print("Store outputs", flush=True)
+input.uns['method_id'] = meta['functionality_name']
+input.write_h5ad(par['output'], compression='gzip')

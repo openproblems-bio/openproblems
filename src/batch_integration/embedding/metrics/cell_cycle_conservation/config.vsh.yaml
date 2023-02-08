@@ -3,12 +3,7 @@ __merge__: ../../../api/comp_metric.yaml
 functionality:
   name: cell_cycle_conservation
   namespace: batch_integration/embedding/metrics
-  version: dev
   description: Cell cycle conservation score based on cell cycle gene scoring
-  authors:
-    - name: Michaela Mueller
-      roles: [ maintainer, author ]
-      props: { github: mumichae }
   arguments:
     - name: --organism
       type: string
@@ -17,11 +12,10 @@ functionality:
   resources:
     - type: python_script
       path: script.py
-  test_resources:
-    - type: python_script
-      path: test.py
-    - path: ../../../../../resources_test/batch_integration/embedding/methods/combat.h5ad
 platforms:
   - type: docker
     image: mumichae/scib-base:1.0.2
+    setup:
+      - type: python
+        pypi: pyyaml
   - type: nextflow

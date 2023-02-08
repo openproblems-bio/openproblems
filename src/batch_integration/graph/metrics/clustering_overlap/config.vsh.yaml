@@ -1,0 +1,51 @@
+# use metric api spec
+__merge__: ../../../api/comp_metric.yaml
+functionality:
+  name: clustering_overlap
+  namespace: batch_integration/graph/metrics
+  description: Metrics that are based on computing the clustering overlap.
+  info:
+    output_type: graph
+    metrics:
+      - metric_id: ari
+        metric_name: ARI
+        metric_description: |
+          The Adjusted Rand Index (ARI) compares the overlap of two clusterings;
+          it considers both correct clustering overlaps while also counting correct
+          disagreements between two clusterings.
+          We compared the cell-type labels with the NMI-optimized
+          Louvain clustering computed on the integrated dataset.
+          The adjustment of the Rand index corrects for randomly correct labels.
+          An ARI of 0 or 1 corresponds to random labeling or a perfect match,
+          respectively.
+          We used the scikit-learn implementation of the ARI.
+        paper_reference: hubert1985comparing
+        min: 0
+        max: 1
+        maximize: true
+      - metric_id: nmi
+        metric_name: NMI
+        metric_description: |
+          Normalized Mutual Information (NMI) compares the overlap of two clusterings.
+          We used NMI to compare the cell-type labels with Louvain clusters computed on
+          the integrated dataset. The overlap was scaled using the mean of the entropy terms
+          for cell-type and cluster labels. Thus, NMI scores of 0 or 1 correspond to uncorrelated
+          clustering or a perfect match, respectively. We performed optimized Louvain clustering
+          for this metric to obtain the best match between clusters and labels.
+          Louvain clustering was performed at a resolution range of 0.1 to 2 in steps of 0.1,
+          and the clustering output with the highest NMI with the label set was used. We
+          the scikit-learn implementation of NMI.
+        paper_reference: amelio2015normalized
+        min: 0
+        max: 1
+        maximize: true
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: mumichae/scib-base:1.0.2
+    setup:
+      - type: python
+        pypi: pyyaml
+  - type: nextflow

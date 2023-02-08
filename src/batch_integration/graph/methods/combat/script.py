@@ -1,44 +1,34 @@
-## VIASH START
-par = {
-    'input': './src/batch_integration/resources/datasets_pancreas.h5ad',
-    'output': './src/batch_integration/resources/pancreas_bbknn.h5ad',
-    'hvg': True,
-    'scaling': True,
-    'debug': True
-}
-## VIASH END
+# TODO: this should be a output_type: features method.
 
-print('Importing libraries')
-from pprint import pprint
 import scanpy as sc
 from scipy.sparse import csr_matrix
 
-if par['debug']:
-    pprint(par)
+## VIASH START
+par = {
+    'input': 'resources_test/batch_integration/pancreas/unintegrated.h5ad',
+    'output': 'output.h5ad',
+    'hvg': True
+}
 
-adata_file = par['input']
-output = par['output']
-hvg = par['hvg']
-scaling = par['scaling']
+meta = {
+    'funcionality_name': 'foo'
+}
 
-print('Read adata')
-adata = sc.read_h5ad(adata_file)
+## VIASH END
 
-if hvg:
-    print('Select HVGs')
-    adata = adata[:, adata.var['highly_variable']].copy()
+print('Read input', flush=True)
+adata = sc.read_h5ad(par['input'])
 
-if scaling:
-    print('Scale')
-    adata.X = adata.layers['logcounts_scaled']
-else:
-    adata.X = adata.layers['logcounts']
+if par['hvg']:
+    print('Select HVGs', flush=True)
+    adata = adata[:, adata.var['hvg']].copy()
 
-print('Integrate')
+print('Run Combat', flush=True)
+adata.X = adata.layers['normalized']
 adata.X = sc.pp.combat(adata, key='batch', inplace=False)
 adata.X = csr_matrix(adata.X)
 
-print('Postprocess data')
+print("Run PCA", flush=True)
 adata.obsm['X_emb'] = sc.pp.pca(
     adata.X,
     n_comps=50,
@@ -46,11 +36,11 @@ adata.obsm['X_emb'] = sc.pp.pca(
     svd_solver='arpack',
     return_info=False
 )
+del adata.X
+
+print("Run KNN", flush=True)
 sc.pp.neighbors(adata, use_rep='X_emb')
 
-print('Save HDF5')
+print("Store outputs", flush=True)
 adata.uns['method_id'] = meta['functionality_name']
-adata.uns['hvg'] = hvg
-adata.uns['scaled'] = scaling
-
-adata.write(output, compression='gzip')
+adata.write_h5ad(par['output'], compression='gzip')

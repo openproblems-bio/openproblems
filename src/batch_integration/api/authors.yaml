@@ -1,0 +1,14 @@
+functionality:
+  authors:
+    - name: Michaela Mueller
+      roles: [ maintainer, author ]
+      props: { github: mumichae }
+    - name: Kai Waldrant
+      roles: [ contributor ]
+      props: { github: KaiWaldrant }
+    - name: Robrecht Cannoodt
+      roles: [ contributor ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+    - name: Daniel Strobl
+      roles: [ author ]
+      props: { github: danielStrobl }

@@ -1,26 +1,28 @@
 # use method api spec
-__merge__: ../../../api/comp_method.yaml
+__merge__: ../../../api/comp_method_graph.yaml
 functionality:
   name: scanorama_feature
-  namespace: batch_integration/graph/methods
-  version: dev
-  description: Run Scanorama on adata object, use full feature output
-  authors:
-    - name: Michaela Mueller
-      roles: [ maintainer, author ]
-      props: { github: mumichae }
+  description: Run Scanorama on adata object, use feature output
+  info:
+    type: method
+    output_type: graph
+    method_name: Scanorama
+    # paper_reference: "xxxxxxxxxxx"
+    # code_url: xxxxxxxxxxx
+    # v1_url: openproblems/tasks/xxxxxx/methods/xxxxxx.py
+    # v1_commit: xxxxxxxxxxxxxx
+    # preferred_normalization: log_cpm
+    # variants:
+    #   combat:
   resources:
     - type: python_script
       path: script.py
-  test_resources:
-    - type: python_script
-      path: test.py
-    - path: ../../../../../resources_test/batch_integration/pancreas/processed.h5ad
 platforms:
   - type: docker
     image: mumichae/scib-base:1.0.2
     setup:
       - type: python
-        packages:
+        pypi:
           - scanorama
+          - pyyaml
   - type: nextflow

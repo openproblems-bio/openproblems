@@ -4,18 +4,17 @@ sourceDir = params.rootDir + "/src"
 targetDir = params.rootDir + "/target/nextflow"
 
 // import methods
-include { bbknn }              from "$targetDir/batch_integration/graph/methods/bbknn/main.nf"            params(params)
-include { combat }             from "$targetDir/batch_integration/graph/methods/combat/main.nf"           params(params)
-include { scanorama_embed }    from "$targetDir/batch_integration/graph/methods/scanorama_embed/main.nf"  params(params)
-include { scanorama_feature }    from "$targetDir/batch_integration/graph/methods/scanorama_feature/main.nf"  params(params)
-include { scvi }               from "$targetDir/batch_integration/graph/methods/scvi/main.nf"             params(params)
+include { bbknn } from "$targetDir/batch_integration/graph/methods/bbknn/main.nf"
+include { combat } from "$targetDir/batch_integration/graph/methods/combat/main.nf"
+include { scanorama_embed } from "$targetDir/batch_integration/graph/methods/scanorama_embed/main.nf"
+include { scanorama_feature } from "$targetDir/batch_integration/graph/methods/scanorama_feature/main.nf"
+include { scvi } from "$targetDir/batch_integration/graph/methods/scvi/main.nf"
 
 // import metrics
-include { ari }       from "$targetDir/batch_integration/graph/metrics/ari/main.nf"    params(params)
-include { nmi }       from "$targetDir/batch_integration/graph/metrics/nmi/main.nf"    params(params)
+include { clustering_overlap } from "$targetDir/batch_integration/graph/metrics/clustering_overlap/main.nf"
 
 // tsv generation component
-include { extract_scores }  from "$targetDir/common/extract_scores/main.nf"    params(params)
+include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
 
 // import helper functions
 include { readConfig; viashChannel; helpMessage } from sourceDir + "/wf_utils/WorkflowHelper.nf"

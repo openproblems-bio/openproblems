@@ -1,47 +1,49 @@
 from os import path
 import subprocess
 import numpy as np
-import scanpy as sc
+import anndata as ad
 
-np.random.seed(42)
 
-method = 'combat'
-output_file = method + '.h5ad'
+print(">> Running script", flush=True)
 
-print(">> Running script")
-out = subprocess.check_output([
-    "./" + method,
-    "--input", 'processed.h5ad',
-    "--hvg", 'False',
-    "--scaling", 'False',
-    "--output", output_file
-]).decode("utf-8")
+input_path = meta["resources_dir"] + "/pancreas/processed.h5ad"
+output_path = "inegrated.h5ad"
+cmd = [
+    meta['executable'],
+    "--input", input_path,
+    "--output", output_path
+]
 
-print(">> Checking whether file exists")
-assert path.exists(output_file)
+print(">> Checking whether input file exists", flush=True)
+assert path.exists(input_path)
 
-print('>> Checking API')
-adata = sc.read(output_file)
+print(">> Running script as test", flush=True)
+subprocess.run(cmd, check=True)
 
-assert 'dataset_id' in adata.uns
-assert 'label' in adata.obs.columns
-assert 'batch' in adata.obs.columns
-assert 'highly_variable' in adata.var
-assert 'counts' in adata.layers
-assert 'logcounts' in adata.layers
-assert 'logcounts_scaled' in adata.layers
-assert 'X_pca' in adata.obsm
-assert 'X_emb' in adata.obsm
-assert 'X_uni' in adata.obsm
-assert 'uni' in adata.uns
+print(">> Checking whether output file exists", flush=True)
+assert path.exists(output_path)
 
-assert 'hvg' in adata.uns
-assert adata.uns['hvg'] == False
-assert 'scaled' in adata.uns
-assert adata.uns['scaled'] == False
+print(">> Reading h5ad files", flush=True)
+input = ad.read_h5ad(input_path)
+output = ad.read_h5ad(output_path)
 
-unintegrated = sc.read('processed.h5ad')
-assert len(unintegrated.X.data) != len(adata.X.data)
-assert not np.any(np.not_equal(unintegrated.obsm['X_pca'], adata.obsm['X_pca']))
+print(">> Checking whether predictions were added", flush=True)
+assert 'dataset_id' in output.uns
+assert 'X_pca' in output.obsm
+assert 'X_emb' in output.obsm
+assert 'normalization_id' in output.uns
+assert 'method_id' in output.uns
+assert meta['fuctionality_name'] == output.uns['method_id']
+
+assert 'hvg' in output.uns
+assert output.uns['hvg'] == False
+assert 'scaled' in output.uns
+assert output.uns['scaled'] == False
+
+print(">> Checking whether data from input was copied properly to output", flush=True)
+assert input.n_obs == output.n_obs
+assert input.uns["dataset_id"] == output.uns["dataset_id"]
+
+assert not np.any(np.not_equal(input.obsm['X_pca'], output.obsm['X_pca']))
 
 print(">> All tests passed successfully")

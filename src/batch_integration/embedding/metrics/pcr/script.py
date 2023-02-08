@@ -1,18 +1,13 @@
 ## VIASH START
 par = {
     'input': './src/batch_integration/embedding/resources/mnn_pancreas.h5ad',
-    'output': './src/batch_integration/embedding/resources/cc_score_pancreas_mnn.tsv',
-    'debug': True
+    'output': './src/batch_integration/embedding/resources/cc_score_pancreas_mnn.tsv'
 }
 ## VIASH END
 
-print('Importing libraries')
 import pprint
 import scanpy as sc
 from scib.metrics import pcr_comparison
-
-if par['debug']:
-    pprint.pprint(par)
 
 OUTPUT_TYPE = 'embedding'
 METRIC = 'pcr'
@@ -20,7 +15,7 @@ METRIC = 'pcr'
 adata_file = par['input']
 output = par['output']
 
-print('Read adata')
+print('Read input', flush=True)
 adata = sc.read(adata_file)
 adata_int = adata.copy()
 name = adata.uns['dataset_id']

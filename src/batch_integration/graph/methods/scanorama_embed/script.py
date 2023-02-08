@@ -1,49 +1,33 @@
-## VIASH START
-par = {
-    'input': './src/batch_integration/resources/datasets_pancreas.h5ad',
-    'output': './src/batch_integration/resources/pancreas_bbknn.h5ad',
-    'hvg': True,
-    'scaling': True,
-    'debug': True
-}
-## VIASH END
-
-print('Importing libraries')
-from pprint import pprint
+# TODO: this should be a output_type: embedding method.
 import scanpy as sc
 from scib.integration import scanorama
 
-if par['debug']:
-    pprint(par)
+## VIASH START
+par = {
+    'input': 'resources_test/batch_integration/pancreas/unintegrated.h5ad',
+    'output': 'output.h5ad',
+    'hvg': True,
+}
+meta = {
+    'functionality_name': 'foo'
+}
+## VIASH END
 
-adata_file = par['input']
-output = par['output']
-hvg = par['hvg']
-scaling = par['scaling']
+print('Read input', flush=True)
+adata = sc.read_h5ad(par['input'])
 
-print('Read adata')
-print(adata_file)
-adata = sc.read_h5ad(adata_file)
+if par['hvg']:
+    print('Select HVGs', flush=True)
+    adata = adata[:, adata.var['hvg']].copy()
 
-if hvg:
-    print('Select HVGs')
-    adata = adata[:, adata.var['highly_variable']]
-
-if scaling:
-    print('Scale')
-    adata.X = adata.layers['logcounts_scaled']
-else:
-    adata.X = adata.layers['logcounts']
-
-print('Integrate')
+print('Run scanorama', flush=True)
+adata.X = adata.layers['normalized']
 adata.obsm['X_emb'] = scanorama(adata, batch='batch').obsm['X_emb']
+del adata.X
 
-print('Postprocess data')
+print('Run kNN', flush=True)
 sc.pp.neighbors(adata, use_rep='X_emb')
 
-print('Save HDF5')
+print("Store outputs", flush=True)
 adata.uns['method_id'] = meta['functionality_name']
-adata.uns['hvg'] = hvg
-adata.uns['scaled'] = scaling
-
-adata.write(output, compression='gzip')
+adata.write(par['output'], compression='gzip')

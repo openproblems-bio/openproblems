@@ -2,19 +2,14 @@
 par = {
     'input': './src/batch_integration/embedding/resources/mnn_pancreas.h5ad',
     'output': './src/batch_integration/embedding/resources/cc_score_pancreas_mnn.tsv',
-    'organism': 'human',
-    'debug': True
+    'organism': 'human'
 }
 ## VIASH END
 
-print('Importing libraries')
 import pprint
 import scanpy as sc
 from scib.metrics import cell_cycle
 from scipy.sparse import csr_matrix
-
-if par['debug']:
-    pprint.pprint(par)
 
 OUTPUT_TYPE = 'embedding'
 METRIC = 'cell_cycle_conservation'
@@ -23,7 +18,7 @@ adata_file = par['input']
 organism = par['organism']
 output = par['output']
 
-print('Read adata')
+print('Read input', flush=True)
 adata = sc.read(adata_file)
 adata_int = adata.copy()
 name = adata.uns['dataset_id']
