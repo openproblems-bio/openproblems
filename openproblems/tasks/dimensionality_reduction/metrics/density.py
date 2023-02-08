@@ -47,7 +47,7 @@ def _calculate_radii(
 
     # directly taken from: https://github.com/lmcinnes/umap/blob/
     # 317ce81dc64aec9e279aa1374ac809d9ced236f6/umap/umap_.py#L1190-L1243
-    (knn_indices, knn_dists, rp_forest,) = nearest_neighbors(
+    knn_indices, knn_dists, _ = nearest_neighbors(
         X,
         n_neighbors,
         "euclidean",
@@ -57,7 +57,7 @@ def _calculate_radii(
         verbose=False,
     )
 
-    emb_graph, emb_sigmas, emb_rhos, emb_dists = fuzzy_simplicial_set(
+    emb_graph, _, _, emb_dists = fuzzy_simplicial_set(
         X,
         n_neighbors,
         random_state,
@@ -100,21 +100,15 @@ def _calculate_radii(
     "density preservation",
     paper_reference="narayan2021assessing",
     maximize=True,
-    image="openproblems-python-extras",
 )
 def density_preservation(adata: AnnData) -> float:
     from scipy.sparse import issparse
     from scipy.stats import pearsonr
-    from umap import UMAP
 
     emb = adata.obsm["X_emb"]
-    if np.any(np.isnan(emb)):
-        return 0.0
 
     high_dim = adata.X.A if issparse(adata.X) else adata.X
-    _, ro, _ = UMAP(
-        n_neighbors=_K, random_state=_SEED, densmap=True, output_dens=True
-    ).fit_transform(high_dim)
+    ro = _calculate_radii(high_dim, n_neighbors=_K, random_state=_SEED)
     # in principle, we could just call _calculate_radii(high_dim, ...)
     # this is made sure that the test pass (otherwise, there was .02 difference in corr)
     re = _calculate_radii(emb, n_neighbors=_K, random_state=_SEED)
