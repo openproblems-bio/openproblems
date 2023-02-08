@@ -55,7 +55,7 @@ modality alignment benchmark. Running the full pipeline is quite easy.
 **Step 0, fetch Viash and Nextflow**
 
 ``` bash
-mkdir $HOME/bin
+mkdir -p $HOME/bin
 curl -fsSL get.viash.io | bash -s -- --bin $HOME/bin --tools false
 curl -s https://get.nextflow.io | bash; mv nextflow $HOME/bin
 ```
