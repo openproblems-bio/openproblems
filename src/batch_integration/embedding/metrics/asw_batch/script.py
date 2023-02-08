@@ -1,6 +1,6 @@
 ## VIASH START
 par = {
-    'adata': './src/batch_integration/embedding/resources/mnn_pancreas.h5ad',
+    'input': './src/batch_integration/embedding/resources/mnn_pancreas.h5ad',
     'output': './src/batch_integration/embedding/resources/asw_batch_pancreas_mnn.tsv',
     'debug': True
 }
@@ -18,7 +18,7 @@ OUTPUT_TYPE = 'embedding'
 METRIC = 'asw_batch'
 EMBEDDING = 'X_emb'
 
-adata_file = par['adata']
+adata_file = par['input']
 output = par['output']
 
 print('Read adata')

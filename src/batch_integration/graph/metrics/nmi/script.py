@@ -1,6 +1,6 @@
 ## VIASH START
 par = {
-    'adata': './src/batch_integration/graph/resources/mnn_pancreas.h5ad',
+    'input': './src/batch_integration/graph/resources/mnn_pancreas.h5ad',
     'output': './src/batch_integration/graph/resources/nmi_pancreas_mnn.tsv',
     'debug': True
 }
@@ -18,7 +18,7 @@ if par['debug']:
 OUTPUT_TYPE = 'graph'
 METRIC = 'nmi'
 
-adata_file = par['adata']
+adata_file = par['input']
 output = par['output']
 
 print('Read adata')

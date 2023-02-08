@@ -38,6 +38,7 @@ print('Integrate')
 adata = bbknn(adata, batch='batch')
 
 print('Save HDF5')
+adata.uns['method_id'] = meta['functionality_name']
 adata.uns['hvg'] = hvg
 adata.uns['scaled'] = scaling
 

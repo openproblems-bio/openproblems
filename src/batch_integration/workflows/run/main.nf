@@ -60,7 +60,7 @@ workflow run_wf {
       // derive unique ids from output filenames
       def newId = file.getName().replaceAll(".output.*", "")
       // combine prediction with solution
-      def newData = [ adata: file ]
+      def newData = [ input: file ]
       [ newId, newData, passthrough ]
     }
     

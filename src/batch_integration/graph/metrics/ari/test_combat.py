@@ -11,7 +11,7 @@ metric_file = metric + '.tsv'
 print(">> Running script")
 out = subprocess.check_output([
     "./" + metric,
-    "--adata", 'combat.h5ad',
+    "--input", 'combat.h5ad',
     "--output", metric_file
 ]).decode("utf-8")
 

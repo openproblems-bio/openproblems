@@ -48,6 +48,7 @@ adata.obsm['X_emb'] = sc.pp.pca(
 )
 
 print('Save HDF5')
+adata.uns['method_id'] = meta['functionality_name']
 adata.uns['hvg'] = hvg
 adata.uns['scaled'] = scaling
 

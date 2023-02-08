@@ -1,0 +1,19 @@
+functionality:
+  arguments:
+    - name: --input
+      type: file
+      description: Integrated AnnData HDF5 file.
+      required: true
+      example: input.h5ad
+    - name: --output
+      alternatives: [ -o ]
+      type: file
+      direction: output
+      description: Output tsv file of the metric
+      required: true
+      example: output.tsv
+    - name: --debug
+      type: boolean
+      description: Verbose output for debugging
+      default: False
+      required: false

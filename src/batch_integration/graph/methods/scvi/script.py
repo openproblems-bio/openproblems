@@ -41,6 +41,7 @@ print('Postprocess data')
 sc.pp.neighbors(adata, use_rep='X_emb')
 
 print('Save HDF5')
+adata.uns['method_id'] = meta['functionality_name']
 adata.uns['hvg'] = hvg
 adata.uns['scaled'] = scaling
 

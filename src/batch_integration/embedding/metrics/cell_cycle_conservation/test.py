@@ -14,7 +14,7 @@ print(sc.read('combat.h5ad'))
 print(">> Running script")
 out = subprocess.check_output([
     "./" + metric,
-    "--adata", 'combat.h5ad',
+    "--input", 'combat.h5ad',
     "--organism", "human",
     "--output", metric_file
 ]).decode("utf-8")

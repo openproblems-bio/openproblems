@@ -1,6 +1,6 @@
 ## VIASH START
 par = {
-    'adata': './src/batch_integration/embedding/resources/mnn_pancreas.h5ad',
+    'input': './src/batch_integration/embedding/resources/mnn_pancreas.h5ad',
     'output': './src/batch_integration/embedding/resources/cc_score_pancreas_mnn.tsv',
     'organism': 'human',
     'debug': True
@@ -19,7 +19,7 @@ if par['debug']:
 OUTPUT_TYPE = 'embedding'
 METRIC = 'cell_cycle_conservation'
 
-adata_file = par['adata']
+adata_file = par['input']
 organism = par['organism']
 output = par['output']
 

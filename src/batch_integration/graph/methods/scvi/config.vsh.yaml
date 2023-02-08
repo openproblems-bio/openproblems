@@ -1,3 +1,5 @@
+# use method api spec
+__merge__: ../../../api/comp_method.yaml
 functionality:
   name: scvi
   namespace: batch_integration/graph/methods
@@ -7,32 +9,6 @@ functionality:
     - name: Michaela Mueller
       roles: [ maintainer, author ]
       props: { github: mumichae }
-  arguments:
-    - name: --output
-      alternatives: [ -o ]
-      type: file
-      direction: output
-      description: Anndata HDF5 file of the integrated graph in adata.obsp['connectivities']
-      required: true
-    - name: --input
-      type: file
-      description: Unintegrated anndata HDF5 file
-      required: true
-    - name: --hvg
-      type: boolean
-      description: Whether to subset to highly variable genes
-      default: false
-      required: false
-    - name: --scaling
-      type: boolean
-      description: Whether to scale the data or not
-      default: false
-      required: false
-    - name: --debug
-      type: boolean
-      description: Verbose output for debugging
-      default: false
-      required: false
   resources:
     - type: python_script
       path: script.py

@@ -1,3 +1,5 @@
+# use metric api spec
+__merge__: ../../../api/comp_metric.yaml
 functionality:
   name: cell_cycle_conservation
   namespace: batch_integration/embedding/metrics
@@ -8,25 +10,10 @@ functionality:
       roles: [ maintainer, author ]
       props: { github: mumichae }
   arguments:
-    - name: --output
-      alternatives: [ -o ]
-      type: file
-      direction: output
-      description: Output tsv file of the metric
-      required: true
-    - name: --adata
-      type: file
-      description: Anndata HDF5 file with embedding in adata.obsm['X_emb']
-      required: true
     - name: --organism
       type: string
       description: Name of organism to compute cell cycle scores on
       required: true
-    - name: --debug
-      type: boolean
-      description: Verbose output for debugging
-      default: False
-      required: false
   resources:
     - type: python_script
       path: script.py
