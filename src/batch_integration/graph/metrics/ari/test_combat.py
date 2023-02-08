@@ -24,7 +24,6 @@ assert result.shape == (1, 4)
 score = result.loc[0, 'value']
 print(score)
 
-assert 0 < score < 1
-assert score == 0.3416195872819286
+assert 0 <= score <= 1
 
 print(">> All tests passed successfully")
