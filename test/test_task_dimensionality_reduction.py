@@ -67,3 +67,21 @@ def test_density_preservation_perfect():
     actual = metric(adata)
 
     np.testing.assert_allclose(1, actual)
+
+
+def test_diffusion_map_no_convergence():
+    import numpy as np
+    import scipy.sparse.linalg
+
+    adata = (
+        openproblems.tasks.dimensionality_reduction.datasets.olsson_2016_mouse_blood()
+    )
+    # no exception with retries
+    adata = openproblems.tasks.dimensionality_reduction.methods.diffusion_map(adata)
+    # exception with no retries
+    np.testing.assert_raises(
+        scipy.sparse.linalg.ArpackNoConvergence,
+        openproblems.tasks.dimensionality_reduction.methods.diffusion_map,
+        adata,
+        n_retries=0,
+    )
