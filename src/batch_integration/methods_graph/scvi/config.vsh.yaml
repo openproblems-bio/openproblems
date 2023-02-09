@@ -5,15 +5,16 @@ functionality:
   description: Run scVI on adata object, use feature output
   info:
     type: method
-    output_type: graph
     method_name: scVI
-    # paper_reference: "xxxxxxxxxxx"
-    # code_url: xxxxxxxxxxx
-    # v1_url: openproblems/tasks/xxxxxx/methods/xxxxxx.py
-    # v1_commit: xxxxxxxxxxxxxx
-    # preferred_normalization: log_cpm
-    # variants:
-    #   combat:
+    paper_reference: "lopez2018deep"
+    code_url: https://github.com/YosefLab/scvi-tools"
+    v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/methods/scvi.py
+    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+    preferred_normalization: log_cpm
+    variants:
+      scvi_full_unscaled:
+      scvi_hvg_unscaled:
+        hvg: true
   resources:
     - type: python_script
       path: script.py
