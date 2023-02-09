@@ -17,6 +17,6 @@ the scikit-learn27 (v.0.22.1) implementation of NMI.
 def nmi(adata):
     from scanpy.pp import neighbors
 
-    if not adata.uns['is_baseline']:
+    if not adata.uns["is_baseline"]:
         neighbors(adata, use_rep="X_emb")
     return graph_metrics.nmi(adata)

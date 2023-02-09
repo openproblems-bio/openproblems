@@ -18,6 +18,6 @@ We also used the scikit-learn (v.0.22.1) implementation of the ARI.
 def ari(adata):
     from scanpy.pp import neighbors
 
-    if not adata.uns['is_baseline']:
+    if not adata.uns["is_baseline"]:
         neighbors(adata, use_rep="X_emb")
     return graph_metrics.ari(adata)

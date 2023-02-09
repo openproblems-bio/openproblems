@@ -30,7 +30,7 @@ def isolated_labels_f1(adata):
     from scanpy.pp import neighbors
     from scanpy.tl import pca
 
-    if not adata.uns['is_baseline']:
+    if not adata.uns["is_baseline"]:
         adata.obsm["X_emb"] = pca(adata.X)
         neighbors(adata, use_rep="X_emb")
     return graph_metrics.isolated_labels_f1(adata)

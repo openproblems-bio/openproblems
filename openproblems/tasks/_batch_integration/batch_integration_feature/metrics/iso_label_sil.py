@@ -17,6 +17,6 @@ consists of the mean isolated score of all isolated labels.
 def isolated_labels_sil(adata):
     from scanpy.tl import pca
 
-    if not adata.uns['is_baseline']:
+    if not adata.uns["is_baseline"]:
         adata.obsm["X_emb"] = pca(adata.X)
     return embed_metrics.isolated_labels_sil(adata)
