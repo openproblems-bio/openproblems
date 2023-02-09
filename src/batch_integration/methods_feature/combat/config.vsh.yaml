@@ -1,24 +1,24 @@
 # use method api spec
 __merge__: ../../api/comp_method_graph.yaml
 functionality:
-  name: bbknn
-  namespace: batch_integration/methods_graph
-  description: "BBKNN: fast batch alignment of single cell transcriptomes"
+  name: combat
+  description: "Adjusting batch effects in microarray expression data using
+    empirical Bayes methods"
   info:
     type: method
-    method_name: BBKNN
-    paper_reference: "polanski2020bbknn"
-    code_url: https://github.com/Teichlab/bbknn
-    v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/methods/bbknn.py
+    method_name: Combat
+    paper_reference: "hansen2012removing"
+    code_url: https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html
+    v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/methods/combat.py
     v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     preferred_normalization: log_cpm
     variants:
-      bbknn_full_unscaled:
-      bbknn_hvg_unscaled:
+      combat_full_unscaled:
+      combat_hvg_unscaled:
         hvg: true
-      bbknn_hvg_scaled:
+      combat_full_scaled:
         preferred_normalization: log_cpm_scaled
-      bbknn_full_scaled:
+      combat_hvg_scaled:
         hvg: true
         preferred_normalization: log_cpm_scaled
   resources:
@@ -29,7 +29,6 @@ platforms:
     image: mumichae/scib-base:1.0.2
     setup:
       - type: python
-        pypi:
-          - bbknn
+        pypi: 
           - pyyaml
   - type: nextflow

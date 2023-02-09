@@ -1,18 +1,20 @@
 # use method api spec
-__merge__: ../../api/comp_method.yaml
+__merge__: ../../api/comp_method_embedding.yaml
 functionality:
   name: combat
-  namespace: batch_integration/embedding/methods
+  namespace: batch_integration/methods_embedding
   description: Run Combat
   info:
-    output_type: embedding
+    type: method
+    method_name: Combat
+    paper_refernce: hansen2012removing
+    v1_url:
+    v1 commit:
+    variants:
+      combat:
   resources:
     - type: python_script
       path: script.py
-  test_resources:
-    - type: python_script
-      path: test.py
-    - path: ../../../../../resources_test/batch_integration/pancreas/unintegrated.h5ad
 platforms:
   - type: docker
     image: mumichae/scib-base:1.0.2

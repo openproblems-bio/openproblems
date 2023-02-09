@@ -28,19 +28,6 @@ adata.X = adata.layers['normalized']
 adata.X = sc.pp.combat(adata, key='batch', inplace=False)
 adata.X = csr_matrix(adata.X)
 
-print("Run PCA", flush=True)
-adata.obsm['X_emb'] = sc.pp.pca(
-    adata.X,
-    n_comps=50,
-    use_highly_variable=False,
-    svd_solver='arpack',
-    return_info=False
-)
-del adata.X
-
-print("Run KNN", flush=True)
-sc.pp.neighbors(adata, use_rep='X_emb')
-
 print("Store outputs", flush=True)
 adata.uns['method_id'] = meta['functionality_name']
 adata.write_h5ad(par['output'], compression='gzip')

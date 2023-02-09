@@ -1,0 +1,11 @@
+__merge__: "anndata_unintegrated.yaml"
+type: file
+description: Integrated AnnData HDF5 file.
+example: input.h5ad
+info:
+  short_description: "Integrated Graph"
+  slots:
+    X:
+      - type: double
+        description: integrated feature
+        required: true

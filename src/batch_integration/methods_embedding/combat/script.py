@@ -6,7 +6,6 @@ par = {
     'input': 'resources_test/batch_integration/pancreas/processed.h5ad',
     'output': 'output.h5ad',
     'hvg': True,
-    'scaling': True
 }
 
 meta = {
@@ -14,25 +13,15 @@ meta = {
 }
 ## VIASH END
 
-adata_file = par['input']
-output = par['output']
-hvg = par['hvg']
-scaling = par['scaling']
-
 print('Read input', flush=True)
-adata = sc.read_h5ad(adata_file)
+adata = sc.read_h5ad(par['input'])
 
-if hvg:
+if par['hvg']:
     print('Select HVGs', flush=True)
     adata = adata[:, adata.var['highly_variable']].copy()
 
-if scaling:
-    print('Scale', flush=True)
-    adata.X = adata.layers['logcounts_scaled']
-else:
-    adata.X = adata.layers['logcounts']
-
-print('Integrate', flush=True)
+print('Run Combat', flush=True)
+adata.X = adata.layers['normalized']
 adata.X = sc.pp.combat(adata, key='batch', inplace=False)
 adata.X = csr_matrix(adata.X)
 
@@ -47,7 +36,7 @@ X_emb = sc.pp.pca(
 
 print('Create output AnnData object', flush=True)
 output = sc.AnnData(
-    obs= adata.obs[[]],
+    obs= adata.obs,
     obsm={
         'X_emb': X_emb
     },
@@ -55,11 +44,10 @@ output = sc.AnnData(
         'dataset_id': adata.uns['dataset_id'],
         'normalization_id': adata.uns['normalization_id'],
         'method_id': meta['functionality_name'],
-        'scaled': par['scaling'],
-        'hvg': par('hvg')
+        'hvg': par['hvg']
     },
-    layers = adata.layers
+    layers = {key: value for key, value in adata.layers.items()}
 )
 
 print('Write to output', flush=True)
-adata.write_h5ad(par['output'], compression='gzip')
+output.write_h5ad(par['output'], compression='gzip')

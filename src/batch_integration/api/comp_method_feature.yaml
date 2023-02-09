@@ -1,11 +1,11 @@
 functionality:
-  namespace: batch_integration/graph/methods
+  namespace: batch_integration/methods_feature
   info:
-    output_type: graph
+    output_type: feature
   arguments:
     - __merge__: anndata_unintegrated.yaml
       name: --input
-    - __merge__: anndata_integrated_graph.yaml
+    - __merge__: anndata_integrated_feature.yaml
       name: --output
       direction: output
     - name: --hvg
@@ -14,7 +14,7 @@ functionality:
       default: false
       required: false
   test_resources:
-    - path: ../../../../resources_test/batch_integration/pancreas/
+    - path: ../../../../resources_test/batch_integration/feature/
     - type: python_script
       path: generic_test.py
       text: |
@@ -47,8 +47,7 @@ functionality:
 
         print(">> Checking whether predictions were added", flush=True)
         # TODO: use helper function to check whether the required fields are defined
-        assert 'connectivities' in output.obsp
-        assert 'distances' in output.obsp
+        assert output.X
 
         print(">> Check values", flush=True)
         assert meta['functionality_name'] == output.uns['method_id']
