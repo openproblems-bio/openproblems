@@ -26,5 +26,6 @@ Here, M is the set of unique cell labels."""
 def silhouette_batch(adata):
     from scanpy.tl import pca
 
-    adata.obsm["X_emb"] = pca(adata.X)
+    if not adata.uns['is_baseline']:
+        adata.obsm["X_emb"] = pca(adata.X)
     return embed_metrics.silhouette_batch(adata)

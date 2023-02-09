@@ -29,5 +29,6 @@ the mean isolated score of all isolated labels.
 def isolated_labels_f1(adata):
     from scanpy.pp import neighbors
 
-    neighbors(adata, use_rep="X_emb")
+    if not adata.uns['is_baseline']:
+        neighbors(adata, use_rep="X_emb")
     return graph_metrics.isolated_labels_f1(adata)

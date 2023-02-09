@@ -23,5 +23,6 @@ the preintegration variance contribution reduces the score."""
 def cc_score(adata, test=False):
     from scanpy.tl import pca
 
-    adata.obsm["X_emb"] = pca(adata.X)
+    if not adata.uns['is_baseline']:
+        adata.obsm["X_emb"] = pca(adata.X)
     return embed_metrics.cc_score(adata)
