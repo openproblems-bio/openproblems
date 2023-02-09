@@ -1,13 +1,13 @@
 # use method api spec
-__merge__: ../../../api/comp_method_graph.yaml
+__merge__: ../../api/comp_method_graph.yaml
 functionality:
   name: bbknn
-  description: Run BBKNN on adata object
+  description: "BBKNN: fast batch alignment of single cell transcriptomes"
   info:
     type: method
     method_name: BBKNN
-    # paper_reference: "xxxxxxxxxxx"
-    # code_url: xxxxxxxxxxx
+    paper_reference: "polanski2020bbknn"
+    code_url: https://github.com/Teichlab/bbknn
     # v1_url: openproblems/tasks/xxxxxx/methods/xxxxxx.py
     # v1_commit: xxxxxxxxxxxxxx
     # preferred_normalization: log_cpm

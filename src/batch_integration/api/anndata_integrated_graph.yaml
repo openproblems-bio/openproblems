@@ -7,10 +7,6 @@ info:
   slots:
     obsp:
       - type: double
-        name: integration_distances
-        description: Neighbors distance matrix.
-        required: true
-      - type: double
-        name: integration_connectivities
+        name: connectivities
         description: Neighbors connectivities matrix.
         required: true

@@ -1,11 +1,12 @@
 # use method api spec
-__merge__: ../../../api/comp_method_graph.yaml
+__merge__: ../../api/comp_method_graph.yaml
 functionality:
-  name: combat
+  name: scanorama_embed
+  description: Run Scanorama on adata object, use embedding output
   info:
     type: method
     output_type: graph
-    method_name: Combat
+    method_name: Scanorama
     # paper_reference: "xxxxxxxxxxx"
     # code_url: xxxxxxxxxxx
     # v1_url: openproblems/tasks/xxxxxx/methods/xxxxxx.py
@@ -21,5 +22,7 @@ platforms:
     image: mumichae/scib-base:1.0.2
     setup:
       - type: python
-        pypi: pyyaml
+        pypi:
+          - scanorama
+          - pyyaml
   - type: nextflow

@@ -1,9 +1,9 @@
 # use metric api spec
-__merge__: ../../../api/comp_metric.yaml
+__merge__: ../../api/comp_metric.yaml
 functionality:
-  name: asw_label
+  name: pcr
   namespace: batch_integration/embedding/metrics
-  description: Average silhouette of labels
+  description: PCA regression
   resources:
     - type: python_script
       path: script.py

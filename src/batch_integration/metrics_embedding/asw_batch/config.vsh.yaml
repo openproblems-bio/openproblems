@@ -1,9 +1,12 @@
 # use metric api spec
-__merge__: ../../../api/comp_metric.yaml
+__merge__: ../../api/comp_metric.yaml
 functionality:
-  name: pcr
+  name: asw_batch
   namespace: batch_integration/embedding/metrics
-  description: PCA regression
+  description: Average silhouette of batches per label
+  info:
+    output_type: embedding
+    integrated_embedding: X_emb
   resources:
     - type: python_script
       path: script.py

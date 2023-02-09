@@ -1,5 +1,5 @@
 # use metric api spec
-__merge__: ../../../api/comp_metric.yaml
+__merge__: ../../api/comp_metric.yaml
 functionality:
   name: clustering_overlap
   namespace: batch_integration/graph/metrics

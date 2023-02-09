@@ -22,3 +22,42 @@ TODO:
   log_cpm -> log_cpm_batchscaled
 * Rename knn_connectivities to connectivities in solution
 * Simplify renaming fields in split_dataset, e.g. celltype -> label, knn_connectivities -> connectivities.
+
+## proposed batch integration structure
+
+* split_dataset
+  - input: common dataset
+  - output_unintegrated: for methods. important slots:
+    .layers["normalized"]
+    .obs["batch"]
+    .obs["label"]? (probably not)
+    .var["hvg"]
+    .obsm["X_pca"]? (probably not)
+  - output_solution: for metrics
+    .obs["batch"]
+    .obs["label"]
+    .obsp["knn_connectivities"] -- could be renamed to connectivities
+* methods_graph
+  example: bbknn
+  output_slots:
+    .obsp["connectivities"]
+* methods_embed
+  example: scanorama_embed
+  output_slots:
+    .obsm["X_emb"]
+* methods_feature
+  example: scanorama_feature
+  output_slots:
+    .X
+* converters
+  - feature_to_embed: runs PCA on .X
+  - embed_to_graph: runs sc.pp.neighbors on .obsm["X_emb"]
+* metrics_graph
+* metrics_embed
+* metrics_feature
+
+New todos:
+
+- move methods and metrics to the correct folders (e.g. scanorama_embed to `methods_embed/scanorama_embed`)
+- create API files for all of the above componenent types
+- compare current components with v1, list the ones that are missing

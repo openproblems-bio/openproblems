@@ -1,12 +1,9 @@
 # use metric api spec
-__merge__: ../../../api/comp_metric.yaml
+__merge__: ../../api/comp_metric.yaml
 functionality:
-  name: asw_batch
+  name: asw_label
   namespace: batch_integration/embedding/metrics
-  description: Average silhouette of batches per label
-  info:
-    output_type: embedding
-    integrated_embedding: X_emb
+  description: Average silhouette of labels
   resources:
     - type: python_script
       path: script.py

@@ -1,12 +1,11 @@
 # use method api spec
-__merge__: ../../../api/comp_method_graph.yaml
+__merge__: ../../api/comp_method_graph.yaml
 functionality:
-  name: scvi
-  description: Run scVI on adata object, use feature output
+  name: combat
   info:
     type: method
     output_type: graph
-    method_name: scVI
+    method_name: Combat
     # paper_reference: "xxxxxxxxxxx"
     # code_url: xxxxxxxxxxx
     # v1_url: openproblems/tasks/xxxxxx/methods/xxxxxx.py
@@ -22,7 +21,5 @@ platforms:
     image: mumichae/scib-base:1.0.2
     setup:
       - type: python
-        pypi:
-          - scvi
-          - pyyaml
+        pypi: pyyaml
   - type: nextflow

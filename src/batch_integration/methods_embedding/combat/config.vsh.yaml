@@ -1,5 +1,5 @@
 # use method api spec
-__merge__: ../../../api/comp_method.yaml
+__merge__: ../../api/comp_method.yaml
 functionality:
   name: combat
   namespace: batch_integration/embedding/methods

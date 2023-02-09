@@ -1,8 +1,8 @@
 # use method api spec
-__merge__: ../../../api/comp_method_graph.yaml
+__merge__: ../../api/comp_method_graph.yaml
 functionality:
-  name: scanorama_embed
-  description: Run Scanorama on adata object, use embedding output
+  name: scanorama_feature
+  description: Run Scanorama on adata object, use feature output
   info:
     type: method
     output_type: graph

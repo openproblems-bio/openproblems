@@ -1,12 +1,12 @@
 # use method api spec
-__merge__: ../../../api/comp_method_graph.yaml
+__merge__: ../../api/comp_method_graph.yaml
 functionality:
-  name: scanorama_feature
-  description: Run Scanorama on adata object, use feature output
+  name: scvi
+  description: Run scVI on adata object, use feature output
   info:
     type: method
     output_type: graph
-    method_name: Scanorama
+    method_name: scVI
     # paper_reference: "xxxxxxxxxxx"
     # code_url: xxxxxxxxxxx
     # v1_url: openproblems/tasks/xxxxxx/methods/xxxxxx.py
@@ -23,6 +23,6 @@ platforms:
     setup:
       - type: python
         pypi:
-          - scanorama
+          - scvi
           - pyyaml
   - type: nextflow
