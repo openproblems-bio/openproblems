@@ -1,5 +1,6 @@
 from .....tools.decorators import metric
 from ...batch_integration_graph import metrics as graph_metrics
+from .utils import embedding_to_graph
 
 """
 The Rand index compares the overlap of two clusterings;
@@ -16,8 +17,4 @@ We also used the scikit-learn (v.0.22.1) implementation of the ARI.
 
 @metric(**graph_metrics.ari.metadata)
 def ari(adata):
-    from scanpy.pp import neighbors
-
-    if not (adata.uns["is_baseline"] and "neighbors" in adata.uns):
-        neighbors(adata, use_rep="X_emb")
-    return graph_metrics.ari(adata)
+    return graph_metrics.ari(embedding_to_graph(adata))

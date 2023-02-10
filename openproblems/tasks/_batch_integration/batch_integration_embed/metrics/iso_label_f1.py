@@ -1,5 +1,6 @@
 from .....tools.decorators import metric
 from ...batch_integration_graph import metrics as graph_metrics
+from .utils import embedding_to_graph
 
 """
 We developed two isolated label scores to evaluate how well the data integration methods
@@ -27,8 +28,4 @@ the mean isolated score of all isolated labels.
 
 @metric(**graph_metrics.isolated_labels_f1.metadata)
 def isolated_labels_f1(adata):
-    from scanpy.pp import neighbors
-
-    if not (adata.uns["is_baseline"] and "neighbors" in adata.uns):
-        neighbors(adata, use_rep="X_emb")
-    return graph_metrics.isolated_labels_f1(adata)
+    return graph_metrics.isolated_labels_f1(embedding_to_graph(adata))
