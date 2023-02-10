@@ -84,7 +84,10 @@ jobs:
       if: |
         !(
           startsWith(github.ref, 'refs/heads/test_docker') ||
-          startsWith(github.ref, 'refs/heads/main')
+          (
+            startsWith(github.ref, 'refs/heads/main') &&
+            github.repository == 'openproblems-bio/openproblems'
+          )
         )
       run: |
         cd workflow
@@ -101,7 +104,8 @@ jobs:
 
     - name: Build and push Docker images
       if: |
-        startsWith(github.ref, 'refs/heads/main')
+        startsWith(github.ref, 'refs/heads/main') &&
+        github.repository == 'openproblems-bio/openproblems'
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
