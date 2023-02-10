@@ -24,6 +24,6 @@ on the kNN graph, it can be used to evaluate all integration outputs.
 def graph_connectivity(adata):
     from scanpy.pp import neighbors
 
-    if not adata.uns["is_baseline"]:
+    if not (adata.uns["is_baseline"] and "neighbors" in adata.uns):
         neighbors(adata, use_rep="X_emb")
     return graph_metrics.graph_connectivity(adata)
