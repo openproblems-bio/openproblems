@@ -45,8 +45,8 @@ def destvi(
     st_model = DestVI.from_rna_model(adata, sc_model)
     st_model.train(
         max_epochs=max_epochs_sp,
-        batch_size=min(int(adata.n_obs/20 + 3), 128),
-        plan_kwargs={'min_kl_weight': 3., 'max_kl_weight': 3}
+        batch_size=min(int(adata.n_obs / 20 + 3), 128),
+        plan_kwargs={"min_kl_weight": 3.0, "max_kl_weight": 3},
     )
     adata.obsm["proportions_pred"] = st_model.get_proportions().to_numpy()
     adata.uns["method_code_version"] = check_version("scvi-tools")
