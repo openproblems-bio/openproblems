@@ -1,5 +1,6 @@
 from .....tools.decorators import metric
 from ...batch_integration_embed import metrics as embed_metrics
+from .utils import feature_to_embedding
 
 """
 The kBET algorithm (v.0.99.6, release 4c9dafa) determines whether the label composition
@@ -27,7 +28,4 @@ diffusion processes being run.
 
 @metric(**embed_metrics.kBET.metadata)
 def kBET(adata):
-    from scanpy.tl import pca
-
-    adata.obsm["X_emb"] = pca(adata.X)
-    return embed_metrics.kBET(adata)
+    return embed_metrics.kBET(feature_to_embedding(adata))
