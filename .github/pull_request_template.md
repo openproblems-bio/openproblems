@@ -12,7 +12,8 @@
 
 ### Testing
 
-* [ ] This submission was written on a forked copy of openproblems
+* [ ] This submission was written on a branch other than `main` in a forked copy of
+  openproblems
 * [ ] Nextflow test pipeline is passing on this base branch of this pull
   request (include link to passed test on NF Tower found in GitHub Actions summary: )
 
