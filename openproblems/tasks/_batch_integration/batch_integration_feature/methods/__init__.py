@@ -28,10 +28,6 @@ from ...batch_integration_graph.methods.scanorama import scanorama_feature_full_
 from ...batch_integration_graph.methods.scanorama import scanorama_feature_full_unscaled
 from ...batch_integration_graph.methods.scanorama import scanorama_feature_hvg_scaled
 from ...batch_integration_graph.methods.scanorama import scanorama_feature_hvg_unscaled
-from .baseline import batch_random_integration
-from .baseline import celltype_random_integration
-from .baseline import no_integration
-from .baseline import random_integration
 from .scalex import scalex_full
 from .scalex import scalex_hvg
 
@@ -49,3 +45,10 @@ from .scalex import scalex_hvg
 # from ...batch_integration_graph.methods.seuratrpca import seuratrpca_full_unscaled
 # from ...batch_integration_graph.methods.seuratrpca import seuratrpca_hvg_scaled
 # from ...batch_integration_graph.methods.seuratrpca import seuratrpca_hvg_unscaled
+from ..._common.methods.baseline import batch_random_integration
+from ..._common.methods.baseline import celltype_random_integration
+from ..._common.methods.baseline import no_integration
+from ..._common.methods.baseline import no_integration_batch
+from ..._common.methods.baseline import random_integration
+from ...batch_integration_embed.methods.baseline import celltype_random_embedding
+from ...batch_integration_graph.methods.baseline import celltype_random_graph
