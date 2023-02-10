@@ -20,6 +20,6 @@ component."""
 def pcr(adata):
     from scanpy.tl import pca
 
-    if not adata.uns["is_baseline"]:
+    if not (adata.uns["is_baseline"] and "X_emb" in adata.obsm):
         adata.obsm["X_emb"] = pca(adata.X)
     return embed_metrics.pcr(adata)
