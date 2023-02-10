@@ -1,5 +1,6 @@
 from .....tools.decorators import metric
 from ...batch_integration_graph import metrics as graph_metrics
+from .utils import feature_to_graph
 
 """
 The graph connectivity metric assesses whether the kNN graph representation,
@@ -22,10 +23,4 @@ on the kNN graph, it can be used to evaluate all integration outputs.
 
 @metric(**graph_metrics.graph_connectivity.metadata)
 def graph_connectivity(adata):
-    from scanpy.pp import neighbors
-    from scanpy.tl import pca
-
-    if not (adata.uns["is_baseline"] and "X_emb" in adata.obsm):
-        adata.obsm["X_emb"] = pca(adata.X)
-        neighbors(adata, use_rep="X_emb")
-    return graph_metrics.graph_connectivity(adata)
+    return graph_metrics.graph_connectivity(feature_to_graph(adata))

@@ -1,5 +1,6 @@
 from .....tools.decorators import metric
 from ...batch_integration_embed import metrics as embed_metrics
+from .utils import feature_to_embedding
 
 """
 Isolated cell labels are defined as the labels present in the least number
@@ -15,8 +16,4 @@ consists of the mean isolated score of all isolated labels.
 
 @metric(**embed_metrics.isolated_labels_sil.metadata)
 def isolated_labels_sil(adata):
-    from scanpy.tl import pca
-
-    if not (adata.uns["is_baseline"] and "X_emb" in adata.obsm):
-        adata.obsm["X_emb"] = pca(adata.X)
-    return embed_metrics.isolated_labels_sil(adata)
+    return embed_metrics.isolated_labels_sil(feature_to_embedding(adata))

@@ -1,5 +1,6 @@
 from .....tools.decorators import metric
 from ...batch_integration_embed import metrics as embed_metrics
+from .utils import feature_to_embedding
 
 """
 We consider the absolute silhouette width, s(i), on
@@ -24,8 +25,4 @@ Here, M is the set of unique cell labels."""
 
 @metric(**embed_metrics.silhouette_batch.metadata)
 def silhouette_batch(adata):
-    from scanpy.tl import pca
-
-    if not (adata.uns["is_baseline"] and "X_emb" in adata.obsm):
-        adata.obsm["X_emb"] = pca(adata.X)
-    return embed_metrics.silhouette_batch(adata)
+    return embed_metrics.silhouette_batch(feature_to_embedding(adata))

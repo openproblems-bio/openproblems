@@ -1,5 +1,6 @@
 from .....tools.decorators import metric
 from ...batch_integration_embed import metrics as embed_metrics
+from .utils import feature_to_embedding
 
 """
 The cell-cycle conservation score evaluates how well the cell-cycle effect can be
@@ -20,9 +21,5 @@ the preintegration variance contribution reduces the score."""
 
 
 @metric(**embed_metrics.cc_score.metadata)
-def cc_score(adata, test=False):
-    from scanpy.tl import pca
-
-    if not (adata.uns["is_baseline"] and "X_emb" in adata.obsm):
-        adata.obsm["X_emb"] = pca(adata.X)
-    return embed_metrics.cc_score(adata)
+def cc_score(adata):
+    return embed_metrics.cc_score(feature_to_embedding(adata))

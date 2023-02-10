@@ -1,5 +1,6 @@
 from .....tools.decorators import metric
 from ...batch_integration_graph import metrics as graph_metrics
+from .utils import feature_to_graph
 
 """NMI compares the overlap of two clusterings.
 We used NMI to compare the cell-type labels with Louvain clusters computed on
@@ -15,10 +16,4 @@ the scikit-learn27 (v.0.22.1) implementation of NMI.
 
 @metric(**graph_metrics.nmi.metadata)
 def nmi(adata):
-    from scanpy.pp import neighbors
-    from scanpy.tl import pca
-
-    if not (adata.uns["is_baseline"] and "X_emb" in adata.obsm):
-        adata.obsm["X_emb"] = pca(adata.X)
-        neighbors(adata, use_rep="X_emb")
-    return graph_metrics.nmi(adata)
+    return graph_metrics.nmi(feature_to_graph(adata))
