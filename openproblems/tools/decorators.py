@@ -85,8 +85,9 @@ def method(
         @functools.wraps(func)
         def apply_method(adata: anndata.AnnData, *args, **kwargs):
             log.debug("Running {} method".format(func.__name__))
+            adata = func(adata, *args, **kwargs)
             adata.uns["is_baseline"] = is_baseline
-            return func(adata, *args, **kwargs)
+            return adata
 
         apply_method.metadata = dict(
             method_name=method_name,
