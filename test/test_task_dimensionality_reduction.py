@@ -1,5 +1,6 @@
 """Specific tests for the dimensionality_reduction task"""
 import openproblems
+import parameterized
 import utils.docker
 import utils.git
 
@@ -50,6 +51,26 @@ def test_density_preservation_matches_densmap():
 
     adata.obsm["X_emb"] = emb
     actual = metric(adata)
+
+    np.testing.assert_allclose(expected, actual, rtol=1e-3)
+
+
+@parameterized.parameterized.expand(
+    [(200,), (1000,)],
+    name_func=utils.name.name_test,
+)
+def test_distance_correlation_with_svd(n_svd):
+    import numpy as np
+
+    task = openproblems.tasks.dimensionality_reduction
+    metric = openproblems.tasks.dimensionality_reduction.metrics.distance_correlation
+
+    adata = task.api.sample_dataset()
+    adata = task.api.sample_method(adata)
+    adata.obsm["X_emb"] = adata.X.toarray()
+
+    expected = 1
+    actual = metric(adata, n_svd=n_svd)
 
     np.testing.assert_allclose(expected, actual, rtol=1e-3)
 
