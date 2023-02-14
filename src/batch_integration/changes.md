@@ -61,3 +61,27 @@ New todos:
 - move methods and metrics to the correct folders (e.g. scanorama_embed to `methods_embed/scanorama_embed`)
 - create API files for all of the above componenent types
 - compare current components with v1, list the ones that are missing
+
+missing methods:
+
+- `control_methods`: add the baseline methods as control methods to all subtasks
+- `fastmnn`: feature and embed method (convert to Rscript?)
+- `harmony`: embed method (convert to Rscript?)
+- `liger`: embed method (convert to Rscript?)
+- `mnn`: feature method
+- `scalex`: feature and embed method
+- `scanvi`: embed method
+
+missing metrics:
+
+- `ari`: embedding, feature
+- `graph_connectivity`: embedding, graph, feature
+- `hvg_cons`: feature
+- `isolabel_f1`: embedding, graph, feature
+- `isolabel_sil`: embedding, feature
+- `kBET`: embedding, feature
+- `nmi`: embedding, feature
+- `pcr`: feature
+- `asw_batch`: feature
+- `asw_label`: feature
+- 
