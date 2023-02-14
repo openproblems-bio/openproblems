@@ -8,7 +8,7 @@ functionality:
       direction: output
       __merge__: anndata_score.yaml
   test_resources:
-    - path: ../../../../../resources_test/batch_integration
+    - path: ../../../../resources_test/batch_integration
     - type: python_script
       dest: test.py
       text: |
@@ -34,18 +34,14 @@ functionality:
 
         output_type = config["functionality"].get("info", {}).get("output_type")
 
-        print(">> Construct input arguments", flush=True)
-        if output_type == "graph":
-            input_file = f"{meta['resources_dir']}/batch_integration/graph/methods/bbknn.h5ad"
-        elif output_type == "embedding":
-            input_file = f"{meta['resources_dir']}/batch_integration/embedding/methods/combat.h5ad"
-        else:
-            sys.exit("Unrecognized .functionality.info.output_type")
+        input_file = f"{meta['resources_dir']}/batch_integration/graph/bbknn.h5ad"
+        sol_file = f"{meta['resources_dir']}/batch_integration/pancreas/solution.h5ad"
         output_file = "output.h5ad"
 
         cmd_args = [
             meta["executable"],
-            "--input", input_file,
+            "--input_integrated", input_file,
+            "--input_solution", sol_file,
             "--output", output_file
         ]
 

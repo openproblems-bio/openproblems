@@ -8,7 +8,7 @@ functionality:
       direction: output
       __merge__: anndata_score.yaml
   test_resources:
-    - path: ../../../../../resources_test/batch_integration
+    - path: ../../../../resources_test/batch_integration
     - type: python_script
       dest: test.py
       text: |
@@ -21,8 +21,8 @@ functionality:
 
         ## VIASH START
         meta = {
-            "resources_dir": "resources_test/batch_integration/graph/methods",
-            "config": "src/batch_integration/graph/metrics/ari/config.vsh.yaml"
+            "resources_dir": "resources_test/batch_integration",
+            "config": "src/batch_integration/metric_graph/ari/config.vsh.yaml"
         }
         ## VIASH END
 
@@ -32,20 +32,14 @@ functionality:
         with open(meta['config'], 'r', encoding="utf8") as file:
             config = yaml.safe_load(file)
 
-        output_type = config["functionality"].get("info", {}).get("output_type")
-
-        print(">> Construct input arguments", flush=True)
-        if output_type == "graph":
-            input_file = f"{meta['resources_dir']}/batch_integration/graph/methods/bbknn.h5ad"
-        elif output_type == "embedding":
-            input_file = f"{meta['resources_dir']}/batch_integration/embedding/methods/combat.h5ad"
-        else:
-            sys.exit("Unrecognized .functionality.info.output_type")
+        input_file = f"{meta['resources_dir']}/batch_integration/embedding/scvi.h5ad"
+        sol_file = f"{meta['resources_dir']}/batch_integration/pancreas/solution.h5ad"
         output_file = "output.h5ad"
 
         cmd_args = [
             meta["executable"],
-            "--input", input_file,
+            "--input_integrated", input_file,
+            "--input_solution", sol_file,
             "--output", output_file
         ]
 
