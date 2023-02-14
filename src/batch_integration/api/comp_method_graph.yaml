@@ -14,7 +14,7 @@ functionality:
       default: false
       required: false
   test_resources:
-    - path: ../../../../resources_test/batch_integration/pancreas/
+    - path: ../../../../resources_test/batch_integration/
     - type: python_script
       path: generic_test.py
       text: |
@@ -22,7 +22,10 @@ functionality:
         import subprocess
         import anndata as ad
 
-        input_path = meta["resources_dir"] + "/pancreas/unintegrated.h5ad"
+        if meta["functionality_name"] == 'embed_to_graph':
+          input_path = meta["resources_dir"] + "/batch_integration/embedding/scvi.h5ad"
+        else:
+          input_path = meta["resources_dir"] + "/batch_integration/pancreas/unintegrated.h5ad"
         output_path = "inegrated.h5ad"
         cmd = [
             meta['executable'],
@@ -34,7 +37,8 @@ functionality:
         assert os.path.exists(input_path)
 
         print(">> Running script as test", flush=True)
-        subprocess.run(cmd, check=True)
+        out = subprocess.run(cmd, stderr=subprocess.STDOUT).stdout
+        print(out, flush=True)
 
         print(">> Checking whether file exists", flush=True)
         assert os.path.exists(output_path)
@@ -53,5 +57,7 @@ functionality:
         print(">> Check values", flush=True)
         assert meta['functionality_name'] == output.uns['method_id']
         assert input.uns["dataset_id"] == output.uns["dataset_id"]
+        if meta["functionality_name"] == 'embed_to_graph':
+          assert 'parent_method_id' in output.uns
 
         print(">> All tests passed successfully")

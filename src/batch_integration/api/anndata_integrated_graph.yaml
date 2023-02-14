@@ -10,3 +10,20 @@ info:
         name: connectivities
         description: Neighbors connectivities matrix.
         required: true
+    uns:
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"
+        required: true
+      - type: string
+        name: parent_method_id
+        description: if anndata passed from a previous method
+        required: false
+      - type: boolean
+        name: hvg
+        description: If the method was done on hvg or full
+        required: true
+      - type: string
+        name: output_id
+        description: what kind of output has been generated
+        required: true

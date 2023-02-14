@@ -1,5 +1,5 @@
 # use method api spec
-__merge__: ../../api/comp_method_graph.yaml
+__merge__: ../../api/comp_method_embedding.yaml
 functionality:
   name: scvi
   description: Run scVI on adata object, use feature output
@@ -24,6 +24,6 @@ platforms:
     setup:
       - type: python
         pypi:
-          - scvi
+          - scvi-tools
           - pyyaml
   - type: nextflow

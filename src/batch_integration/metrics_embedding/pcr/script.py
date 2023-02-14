@@ -1,24 +1,27 @@
+import anndata as ad
+from scib.metrics import pcr_comparison
+
 ## VIASH START
 par = {
-    'input': './src/batch_integration/embedding/resources/mnn_pancreas.h5ad',
-    'output': './src/batch_integration/embedding/resources/cc_score_pancreas_mnn.tsv'
+    'input_integrated': 'resources_test/batch_integration/embedding/scvi.h5ad',
+    'input_solution': 'resources_test/batch_integration/pancreas/solution.h5ad',
+    'output': 'output.h5ad',
+}
+
+meta = {
+    'functionality_name': 'foo',
 }
 ## VIASH END
 
-import pprint
-import scanpy as sc
-from scib.metrics import pcr_comparison
-
-OUTPUT_TYPE = 'embedding'
-METRIC = 'pcr'
-
-adata_file = par['input']
-output = par['output']
-
 print('Read input', flush=True)
-adata = sc.read(adata_file)
+adata = ad.read_h5ad(par['input_integrated'])
+adata_solution= ad.read_h5ad(par['input_solution'])
+
+
+print('Transfer obs annotations', flush=True)
+adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
+
 adata_int = adata.copy()
-name = adata.uns['dataset_id']
 
 print('compute score')
 score = pcr_comparison(
@@ -29,8 +32,21 @@ score = pcr_comparison(
     verbose=False
 )
 
-with open(output, 'w') as file:
-    header = ['dataset', 'output_type', 'metric', 'value']
-    entry = [name, OUTPUT_TYPE, METRIC, score]
-    file.write('\t'.join(header) + '\n')
-    file.write('\t'.join([str(x) for x in entry]))
+print('Create output AnnData object', flush=True)
+output = ad.AnnData(
+    uns={
+        'dataset_id': adata.uns['dataset_id'],
+        'normalization_id': adata.uns['normalization_id'],
+        'method_id': adata.uns['method_id'],
+        'metric_ids': [ meta['functionality_name'] ],
+        'metric_values': [ score ],
+        'hvg': adata.uns['hvg'],
+        'output_type': adata.uns['output_type'],
+    }
+)
+
+if 'parent_method_id' in adata.uns:
+    output.uns['parent_method_id'] = adata.uns['parent_method_id']
+
+print('Write data to file', flush=True)
+output.write_h5ad(par['output'], compression='gzip')

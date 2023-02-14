@@ -1,5 +1,5 @@
-# TODO: this should be a output_type: embedding method.
-import scanpy as sc
+import yaml
+import anndata as ad
 from scib.integration import scanorama
 
 ## VIASH START
@@ -9,12 +9,18 @@ par = {
     'hvg': True,
 }
 meta = {
-    'functionality_name': 'foo'
+    'functionality_name': 'foo',
+    'config': 'bar'
 }
 ## VIASH END
 
+with open(meta['config'], 'r', encoding="utf8") as file:
+    config = yaml.safe_load(file)
+
+output_type = config["functionality"]["info"]["output_type"]
+
 print('Read input', flush=True)
-adata = sc.read_h5ad(par['input'])
+adata = ad.read_h5ad(par['input'])
 
 if par['hvg']:
     print('Select HVGs', flush=True)
@@ -25,9 +31,8 @@ adata.X = adata.layers['normalized']
 adata.obsm['X_emb'] = scanorama(adata, batch='batch').obsm['X_emb']
 del adata.X
 
-print('Run kNN', flush=True)
-sc.pp.neighbors(adata, use_rep='X_emb')
-
 print("Store outputs", flush=True)
+adata.uns['output_type'] = output_type
+adata.uns['hvg'] = par['hvg']
 adata.uns['method_id'] = meta['functionality_name']
 adata.write(par['output'], compression='gzip')

@@ -1,50 +1,49 @@
-import pprint
 import anndata as ad
 from scib.metrics import silhouette_batch
 import yaml
 
 ## VIASH START
 par = {
-    'input': 'resources_test/batch_integration/pancreas/processed.h5ad',
+    'input_integrated': 'resources_test/batch_integration/embedding/scvi.h5ad',
+    'input_solution': 'resources_test/batch_integration/pancreas/solution.h5ad',
     'output': 'output.h5ad',
-    'hvg': False,
-    'scaling': False
 }
 meta = {
     'functionality_name': 'foo',
-    'config': 'src/batch_integration/embedding/metrics/asw_batch/config.vsh.yaml'
 }
 ## VIASH END
 
-with open(meta['config'], 'r', encoding="utf8") as file:
-    config = yaml.safe_load(file)
-
-output_type = config["functionality"]["info"]["output_type"]
-integrated_embedding = config["functionality"]["info"]["integrated_embedding"]
-
 print('Read input', flush=True)
-adata = ad.read_h5ad(par['input'])
+adata = ad.read_h5ad(par['input_integrated'])
+adata_solution= ad.read_h5ad(par['input_solution'])
 
-print('compute score')
+print('Transfer obs annotations', flush=True)
+adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
+adata.obs['label'] = adata_solution.obs['label'][adata.obs_names]
+
+print('compute score', flush=True)
 score = silhouette_batch(
     adata,
     batch_key='batch',
     group_key='label',
-    embed=integrated_embedding,
+    embed='X_emb',
 )
 
-print("Create output AnnData object")
+print('Create output AnnData object', flush=True)
 output = ad.AnnData(
     uns={
-        "dataset_id": adata.uns['dataset_id'],
-        "method_id": adata.uns['method_id'],
-        "metric_ids": [ meta['functionality_name'] ],
-        "metric_values": [ score ],
-        "hvg": adata.uns['hvg'],
-        "scaled": adata.uns['scaled'],
-        "output_type": output_type,
+        'dataset_id': adata.uns['dataset_id'],
+        'normalization_id': adata.uns['normalization_id'],
+        'method_id': adata.uns['method_id'],
+        'metric_ids': [ meta['functionality_name'] ],
+        'metric_values': [ score ],
+        'hvg': adata.uns['hvg'],
+        'output_type': adata.uns['output_type'],
     }
 )
 
-print("Write data to file", flush=True)
-output.write_h5ad(par["output"], compression="gzip")
+if 'parent_method_id' in adata.uns:
+    output.uns['parent_method_id'] = adata.uns['parent_method_id']
+
+print('Write data to file', flush=True)
+output.write_h5ad(par['output'], compression='gzip')

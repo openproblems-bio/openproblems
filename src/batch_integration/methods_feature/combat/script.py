@@ -1,5 +1,4 @@
-# TODO: this should be a output_type: features method.
-
+import yaml
 import scanpy as sc
 from scipy.sparse import csr_matrix
 
@@ -11,10 +10,16 @@ par = {
 }
 
 meta = {
-    'funcionality_name': 'foo'
+    'funcionality_name': 'foo',
+    'config': 'bar'
 }
 
 ## VIASH END
+
+with open(meta['config'], 'r', encoding="utf8") as file:
+    config = yaml.safe_load(file)
+
+output_type = config["functionality"]["info"]["output_type"]
 
 print('Read input', flush=True)
 adata = sc.read_h5ad(par['input'])
@@ -29,5 +34,7 @@ adata.X = sc.pp.combat(adata, key='batch', inplace=False)
 adata.X = csr_matrix(adata.X)
 
 print("Store outputs", flush=True)
+adata.uns['output_type'] = output_type
+adata.uns['hvg'] = par['hvg']
 adata.uns['method_id'] = meta['functionality_name']
 adata.write_h5ad(par['output'], compression='gzip')

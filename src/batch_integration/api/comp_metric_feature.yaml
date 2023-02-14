@@ -1,17 +1,12 @@
 functionality:
   arguments:
-    - name: --input
-      type: file
-      description: Integrated AnnData HDF5 file.
-      required: true
-      example: input.h5ad
+    - name: --input_integrated
+      __merge__: anndata_integrated_feature.yaml
+    - name: --input_solution
+      __merge__: anndata_solution.yaml
     - name: --output
-      alternatives: [ -o ]
-      type: file
       direction: output
-      description: Output tsv file of the metric
-      required: true
-      example: output.tsv
+      __merge__: anndata_score.yaml
   test_resources:
     - path: ../../../../../resources_test/batch_integration
     - type: python_script

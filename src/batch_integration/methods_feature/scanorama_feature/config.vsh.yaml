@@ -1,9 +1,9 @@
 # use method api spec
-__merge__: ../../api/comp_method_graph.yaml
+__merge__: ../../api/comp_method_feature.yaml
 functionality:
-  name: scanorama_embed
-  namespace: batch_integration/methods_embedding
-  description: "Efficient integration of heterogeneous single-cell 
+  name: scanorama_feature
+  namespace: batch_integration/methods_feauture
+  description: "Efficient integration of heterogeneous single-cell
     transcriptomes using Scanorama"
   info:
     type: method
@@ -14,13 +14,13 @@ functionality:
     v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     preferred_normalization: log_cpm
     variants:
-      scanorama_embed_full_unscaled:
-      scanorama_embed_hvg_unscaled:
+      scanorama_feature_full_unscaled:
+      scanorama_feature_hvg_unscaled:
         hvg: true
-      scanorama_embed_hvg_scaled:
+      scanorama_feature_hvg_scaled:
         hvg: true
         preferred_normalization: log_cpm_scaled
-      scanorama_embed_full_scaled:
+      scanorama_feature_full_scaled:
         preferred_normalization: log_cpm_scaled
   resources:
     - type: python_script

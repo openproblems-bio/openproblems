@@ -1,0 +1,86 @@
+functionality:
+  arguments:
+    - name: --input_integrated
+      __merge__: anndata_integrated_graph.yaml
+    - name: --input_solution
+      __merge__: anndata_solution.yaml
+    - name: --output
+      direction: output
+      __merge__: anndata_score.yaml
+  test_resources:
+    - path: ../../../../../resources_test/batch_integration
+    - type: python_script
+      dest: test.py
+      text: |
+        import sys
+        from os import path
+        import subprocess
+        import numpy as np
+        import anndata as ad
+        import yaml
+
+        ## VIASH START
+        meta = {
+            "resources_dir": "resources_test/batch_integration/graph/methods",
+            "config": "src/batch_integration/graph/metrics/ari/config.vsh.yaml"
+        }
+        ## VIASH END
+
+        np.random.seed(42)
+
+        print(">> Read metric config", flush=True)
+        with open(meta['config'], 'r', encoding="utf8") as file:
+            config = yaml.safe_load(file)
+
+        output_type = config["functionality"].get("info", {}).get("output_type")
+
+        print(">> Construct input arguments", flush=True)
+        if output_type == "graph":
+            input_file = f"{meta['resources_dir']}/batch_integration/graph/methods/bbknn.h5ad"
+        elif output_type == "embedding":
+            input_file = f"{meta['resources_dir']}/batch_integration/embedding/methods/combat.h5ad"
+        else:
+            sys.exit("Unrecognized .functionality.info.output_type")
+        output_file = "output.h5ad"
+
+        cmd_args = [
+            meta["executable"],
+            "--input", input_file,
+            "--output", output_file
+        ]
+
+        print(">> Running script", flush=True)
+        subprocess.run(cmd_args, check=True)
+
+        print(">> Checking whether file exists", flush=True)
+        assert path.exists(output_file)
+        input = ad.read_h5ad(input_file)
+        output = ad.read_h5ad(output_file)
+
+        print(">> Print AnnData contents", flush=True)
+        print("input:", input, flush=True)
+        print("output:", output, flush=True)
+
+        print(">> Checking whether metrics were added", flush=True)
+        assert "metric_ids" in output.uns
+        assert "metric_values" in output.uns
+        assert len(output.uns["metric_ids"]) == len(output.uns["metric_values"])
+
+        print(">> Checking whether data from input was copied properly to output", flush=True)
+        assert input.uns["dataset_id"] == output.uns["dataset_id"]
+        assert input.uns["method_id"] == output.uns["method_id"]
+
+        print(">> Check that score makes sense", flush=True)
+        metrics_info = {
+            metric["metric_id"]: metric
+            for metric in config["functionality"]["info"]["metrics"]
+        }
+
+        for metric_id, metric_value in zip(output.uns["metric_ids"], output.uns["metric_values"]):
+            assert metric_id in metrics_info, f"Metric id {metric_id} not found in .functionality.info.metrics"
+            info = metrics_info[metric_id]
+
+            assert info["min"] <= metric_value
+            assert metric_value <= info["max"]
+
+        print(">> All tests passed successfully")

@@ -28,18 +28,19 @@ viash run src/batch_integration/split_dataset/config.vsh.yaml -- \
 echo run methods...
 
 # Graph methods
-viash run src/batch_integration/graph/methods/bbknn/config.vsh.yaml -- \
+viash run src/batch_integration/methods_graph/bbknn/config.vsh.yaml -- \
   --input $DATASET_DIR/pancreas/unintegrated.h5ad \
-  --output $DATASET_DIR/graph/methods/bbknn.h5ad
-
-viash run src/batch_integration/graph/methods/combat/config.vsh.yaml -- \
-  --input $DATASET_DIR/pancreas/unintegrated.h5ad \
-  --output $DATASET_DIR/graph/methods/combat.h5ad
+  --output $DATASET_DIR/graph/bbknn.h5ad
 
 # Embedding method
-viash run src/batch_integration/embedding/methods/combat/config.vsh.yaml -- \
+viash run src/batch_integration/methods_embedding/scvi/config.vsh.yaml -- \
   --input $DATASET_DIR/pancreas/unintegrated.h5ad \
-  --output $DATASET_DIR/embedding/methods/combat.h5ad
+  --output $DATASET_DIR/embedding/scvi.h5ad
+
+# feature method
+viash run src/batch_integration/methods_feature/combat/config.vsh.yaml -- \
+  --input $DATASET_DIR/pancreas/unintegrated.h5ad \
+  --output $DATASET_DIR/feature/combat.h5ad
 
 # run one metric
 echo run metrics...

@@ -1,5 +1,5 @@
-# TODO: this should be a output_type: feature method.
-import scanpy as sc
+import yaml
+import anndata as ad
 from scib.integration import scanorama
 
 ## VIASH START
@@ -9,12 +9,18 @@ par = {
     'hvg': True,
 }
 meta = {
-    'functionality_name': 'foo'
+    'functionality_name': 'foo',
+    'config': 'bar'
 }
 ## VIASH END
 
+with open(meta['config'], 'r', encoding="utf8") as file:
+    config = yaml.safe_load(file)
+
+output_type = config["functionality"]["info"]["output_type"]
+
 print('Read input', flush=True)
-adata = sc.read_h5ad(par['input'])
+adata = ad.read_h5ad(par['input'])
 
 if par['hvg']:
     print('Select HVGs', flush=True)
@@ -24,19 +30,18 @@ print('Run scanorama', flush=True)
 adata.X = adata.layers['normalized']
 adata.X = scanorama(adata, batch='batch').X
 
-print("Run PCA", flush=True)
-sc.pp.pca(
-    adata,
-    n_comps=50,
-    use_highly_variable=False,
-    svd_solver='arpack',
-    return_info=True
-)
-del adata.X
-
-print("Run KNN", flush=True)
-sc.pp.neighbors(adata, use_rep='X_pca')
+# ? Create new comp feature_to_graph?
+# print("Run PCA", flush=True)
+# sc.pp.pca(
+#     adata,
+#     n_comps=50,
+#     use_highly_variable=False,
+#     svd_solver='arpack',
+#     return_info=True
+# )
 
 print("Store outputs", flush=True)
+adata.uns['output_type'] = output_type
+adata.uns['hvg'] = par['hvg']
 adata.uns['method_id'] = meta['functionality_name']
 adata.write_h5ad(par['output'], compression='gzip')

@@ -1,11 +1,11 @@
 # use metric api spec
-__merge__: ../../api/comp_metric.yaml
+__merge__: ../../api/comp_metric_graph.yaml
 functionality:
   name: clustering_overlap
-  namespace: batch_integration/graph/metrics
+  namespace: batch_integration/metrics_graph
   description: Metrics that are based on computing the clustering overlap.
   info:
-    output_type: graph
+    type: metric
     metrics:
       - metric_id: ari
         metric_name: ARI
@@ -23,6 +23,8 @@ functionality:
         min: 0
         max: 1
         maximize: true
+        v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/metrics/ari.py
+        v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
       - metric_id: nmi
         metric_name: NMI
         metric_description: |
@@ -39,6 +41,8 @@ functionality:
         min: 0
         max: 1
         maximize: true
+        v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/metrics/nmi.py
+        v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
   resources:
     - type: python_script
       path: script.py
@@ -47,5 +51,6 @@ platforms:
     image: mumichae/scib-base:1.0.2
     setup:
       - type: python
-        pypi: pyyaml
+        pypi: 
+          - pyyaml
   - type: nextflow
