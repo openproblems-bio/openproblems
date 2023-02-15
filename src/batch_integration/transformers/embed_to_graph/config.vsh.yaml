@@ -1,14 +1,16 @@
-# use method api spec
-__merge__: ../../api/comp_method_graph.yaml
 functionality:
   name: embed_to_graph
-  namespace: batch_integration/methods_graph
+  namespace: batch_integration/transformers
   description: "Transform an embedded integration to a graph integration"
   info:
     type: method
     method_name: Embedding to Graph
-    variants:
-      embed_to_graph:
+  arguments:
+    - __merge__: ../../api/anndata_integrated_embedding.yaml
+      name: --input
+    - __merge__: ../../api/anndata_integrated_graph.yaml
+      name: --output
+      direction: output
   resources:
     - type: python_script
       path: script.py

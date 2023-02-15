@@ -1,14 +1,16 @@
-# use method api spec
-__merge__: ../../api/comp_method_feature.yaml
 functionality:
   name: feature_to_embed
+  namespace: batch_integration/transformers
   description: "Transform a feature integration to an embedded integration"
   info:
     type: method
     method_name: Feature to Embed
-    preferred_normalization: log_cpm
-    variants:
-      feature_to_embed:
+  arguments:
+    - __merge__: ../../api/anndata_integrated_feature.yaml
+      name: --input
+    - __merge__: ../../api/anndata_integrated_embedding.yaml
+      name: --output
+      direction: output
   resources:
     - type: python_script
       path: script.py
