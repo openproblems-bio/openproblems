@@ -2,7 +2,7 @@ from ..._common.methods.baseline import batch_random_integration
 from ..._common.methods.baseline import celltype_random_integration
 from ..._common.methods.baseline import no_integration
 from .baseline import celltype_random_graph
-from .baseline import random_integration
+from ..._common.methods.baseline import random_integration
 from .bbknn import bbknn_full_scaled
 from .bbknn import bbknn_full_unscaled
 from .bbknn import bbknn_hvg_scaled
