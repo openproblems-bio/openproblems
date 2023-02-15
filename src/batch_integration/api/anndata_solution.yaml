@@ -50,3 +50,7 @@ info:
         name: normalization_id
         description: "Which normalization was used"
         required: true
+      - type: string
+        name: organism
+        description: "Which normalization was used"
+        required: true

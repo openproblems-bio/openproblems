@@ -14,7 +14,7 @@ functionality:
       default: false
       required: false
   test_resources:
-    - path: ../../../../resources_test/batch_integration/feature/
+    - path: ../../../../resources_test/batch_integration/
     - type: python_script
       path: generic_test.py
       text: |
@@ -22,8 +22,8 @@ functionality:
         import subprocess
         import anndata as ad
 
-        input_path = meta["resources_dir"] + "/pancreas/unintegrated.h5ad"
-        output_path = "inegrated.h5ad"
+        input_path = meta["resources_dir"] + "/batch_integration/pancreas/unintegrated.h5ad"
+        output_path = "integrated.h5ad"
         cmd = [
             meta['executable'],
             "--input", input_path,
@@ -47,7 +47,7 @@ functionality:
 
         print(">> Checking whether predictions were added", flush=True)
         # TODO: use helper function to check whether the required fields are defined
-        assert output.X
+        assert output.X is not None
 
         print(">> Check values", flush=True)
         assert meta['functionality_name'] == output.uns['method_id']

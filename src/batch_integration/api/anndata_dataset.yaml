@@ -73,3 +73,7 @@ info:
       - type: object
         name: knn
         description: Neighbors data.
+      - type: string
+        name: organism
+        description: "Which normalization was used"
+        required: true

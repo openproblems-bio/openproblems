@@ -10,7 +10,7 @@ par = {
 }
 
 meta = {
-    'funcionality_name': 'foo',
+    'functionality_name': 'foo',
     'config': 'bar'
 }
 

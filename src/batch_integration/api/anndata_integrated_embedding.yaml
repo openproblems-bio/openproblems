@@ -3,6 +3,7 @@ type: file
 description: Integrated AnnData HDF5 file.
 example: input.h5ad
 info:
+  prediction_type: embedding
   short_description: "Integrated embedding"
   slots:
     obsm:

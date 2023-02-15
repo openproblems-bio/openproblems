@@ -3,6 +3,7 @@ type: file
 description: Integrated AnnData HDF5 file.
 example: input.h5ad
 info:
+  prediction_type: feature
   short_description: "Integrated Graph"
   slots:
     X:

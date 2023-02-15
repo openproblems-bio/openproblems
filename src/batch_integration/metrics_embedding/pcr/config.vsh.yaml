@@ -1,9 +1,21 @@
 # use metric api spec
-__merge__: ../../api/comp_metric.yaml
+__merge__: ../../api/comp_metric_embedding.yaml
 functionality:
   name: pcr
-  namespace: batch_integration/embedding/metrics
+  namespace: batch_integration/metrics_embedding
   description: PCA regression
+  info:
+    type: metric
+    v1_url: openproblems/tasks/_batch_integration/batch_integration_embed/metrics/pcr.py
+    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+    paper_reference: luecken2022benchmarking
+    metrics:
+      - metric_id: pcr
+        metric_name: PCR
+        min: 0
+        max: 1
+        maximize: true
+
   resources:
     - type: python_script
       path: script.py
@@ -12,5 +24,6 @@ platforms:
     image: mumichae/scib-base:1.0.2
     setup:
       - type: python
-        pypi: pyyaml
+        pypi: 
+          - pyyaml
   - type: nextflow

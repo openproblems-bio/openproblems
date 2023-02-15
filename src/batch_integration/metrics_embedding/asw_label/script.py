@@ -35,8 +35,8 @@ output = ad.AnnData(
         "method_id": adata.uns['method_id'],
         "hvg": adata.uns['hvg'],
         "output_type": adata.uns['output_type'],
-        "metric_ids": meta['functionality_name'],
-        "metric_value": score
+        "metric_ids": [meta['functionality_name']],
+        "metric_values": [score]
     }
 )
 

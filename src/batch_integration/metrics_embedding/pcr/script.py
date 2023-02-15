@@ -20,7 +20,7 @@ adata_solution= ad.read_h5ad(par['input_solution'])
 
 print('Transfer obs annotations', flush=True)
 adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
-
+adata.X = adata.layers['normalized']
 adata_int = adata.copy()
 
 print('compute score')

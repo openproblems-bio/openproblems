@@ -23,12 +23,7 @@ functionality:
         import anndata as ad
 
 
-        print(">> Running script", flush=True)
-        if meta["functionality_name"] == 'feature_to_embed':
-          input_path = meta["resources_dir"] + "/batch_integration/feature/scvi.h5ad"
-        else:
-          input_path = meta["resources_dir"] + "/batch_integration/pancreas/unintegrated.h5ad"
-        input_path = meta["resources_dir"] + "/pancreas/processed.h5ad"
+        input_path = meta["resources_dir"] + "/batch_integration/pancreas/unintegrated.h5ad"
         output_path = "embeddding.h5ad"
         cmd = [
             meta['executable'],
@@ -59,9 +54,7 @@ functionality:
         assert 'X_emb' in output.obsm
         assert 'normalization_id' in output.uns
         assert 'method_id' in output.uns
-        assert meta['fuctionality_name'] == output.uns['method_id']
-        if meta["functionality_name"] == 'feature_to_embed':
-          assert 'parent_method_id' in output.uns
+        assert meta['functionality_name'] == output.uns['method_id']
 
         assert 'hvg' in output.uns
 
