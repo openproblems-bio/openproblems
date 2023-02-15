@@ -1,5 +1,6 @@
 from .....tools.decorators import metric
 from ...batch_integration_embed import metrics as embed_metrics
+from .utils import feature_to_embedding
 
 """
 For the bio-conservation score, the ASW was computed on cell identity labels and
@@ -12,7 +13,4 @@ For information about the batch silhouette score, check sil_batch."""
 
 @metric(**embed_metrics.silhouette.metadata)
 def silhouette(adata):
-    from scanpy.tl import pca
-
-    adata.obsm["X_emb"] = pca(adata.X)
-    return embed_metrics.silhouette(adata)
+    return embed_metrics.silhouette(feature_to_embedding(adata))

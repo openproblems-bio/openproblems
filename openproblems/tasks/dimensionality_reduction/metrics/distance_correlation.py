@@ -28,8 +28,11 @@ def distance_correlation(adata, n_svd=500):
     import sklearn.decomposition
 
     adata = log_cp10k(adata)
-
-    X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
+    X = adata.X
+    if n_svd < min(X.shape):
+        X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(X)
+    else:
+        X = X.toarray()
     return _distance_correlation(X, adata.obsm["X_emb"])
 
 

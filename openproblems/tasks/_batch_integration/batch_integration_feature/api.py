@@ -29,4 +29,5 @@ def sample_dataset():
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
     adata.X = adata.X.multiply(2)
+    adata.uns["is_baseline"] = False
     return adata

@@ -1,4 +1,5 @@
 from .....tools.decorators import metric
+from .utils import get_split
 
 """
 The cell-cycle conservation score evaluates how well the cell-cycle effect can be
@@ -24,13 +25,12 @@ the preintegration variance contribution reduces the score."""
     maximize=True,
     image="openproblems-r-pytorch",
 )
-def cc_score(adata, test=False):
-    from ._utils import _get_split
+def cc_score(adata):
     from scib.metrics import cell_cycle
 
     try:
         cc = cell_cycle(
-            *_get_split(adata), "batch", embed="X_emb", organism=adata.uns["organism"]
+            *get_split(adata), "batch", embed="X_emb", organism=adata.uns["organism"]
         )
 
     except ValueError:

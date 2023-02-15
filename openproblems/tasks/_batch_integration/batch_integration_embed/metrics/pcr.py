@@ -1,4 +1,5 @@
 from .....tools.decorators import metric
+from .utils import get_split
 
 """
 Principal component regression, derived from PCA, has previously been used to quantify
@@ -22,7 +23,6 @@ component."""
     image="openproblems-r-pytorch",
 )
 def pcr(adata):
-    from ._utils import _get_split
     from scib.metrics import pcr_comparison
 
-    return pcr_comparison(*_get_split(adata), "batch", embed="X_emb")
+    return pcr_comparison(*get_split(adata), "batch", embed="X_emb")

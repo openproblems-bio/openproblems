@@ -23,4 +23,5 @@ def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
 
     adata.obsm["X_emb"] = adata.obsm["X_uni_pca"]
+    adata.uns["is_baseline"] = False
     return adata
