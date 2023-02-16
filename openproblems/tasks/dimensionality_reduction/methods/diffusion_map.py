@@ -42,6 +42,10 @@ def _diffusion_map(graph, n_comps, t, n_retries=1):
 
 @method(
     method_name="Diffusion maps",
+    method_summary="Diffusion maps is an affinity-based method that attempts to preserve"
+        " \"diffusion distances\", or graph random walk distances, by embedding data using"
+        " the eigenvalue-weighted eigenvectors of the graph Laplacian. Diffusion maps is"
+        " calculated on the logCPM expression matrix.",
     paper_reference="coifman2006diffusion",
     paper_name="Diffusion maps",
     paper_year=2006,
