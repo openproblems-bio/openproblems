@@ -20,8 +20,6 @@ def check_neighbors(adata, neighbors_key, connectivities_key, distances_key):
 
 def check_dataset(
     adata,
-    do_check_pca=False,
-    do_check_neighbors=False,
     do_check_hvg=False,
 ):
     """Check that dataset output fits expected API."""
@@ -43,22 +41,20 @@ def check_dataset(
     assert "organism" in adata.uns
     assert adata.uns["organism"] in ["mouse", "human"]
 
-    if do_check_pca:
-        assert "X_uni_pca" in adata.obsm
+    assert "X_uni_pca" in adata.obsm
 
     if do_check_hvg:
         assert "hvg_unint" in adata.uns
         assert len(adata.uns["hvg_unint"]) == min(N_HVG_UNINT, adata.n_vars)
         assert np.all(np.isin(adata.uns["hvg_unint"], adata.var.index))
 
-    if do_check_neighbors:
-        check_neighbors(adata, "uni", "uni_connectivities", "uni_distances")
+    check_neighbors(adata, "uni", "uni_connectivities", "uni_distances")
 
     return True
 
 
 @dataset()
-def sample_dataset(run_pca: bool = False, run_neighbors: bool = False):
+def sample_dataset():
     """Create a simple dataset to use for testing methods in this task."""
     import scanpy as sc
 
@@ -79,8 +75,6 @@ def sample_dataset(run_pca: bool = False, run_neighbors: bool = False):
     adata.uns["hvg_unint"] = precompute_hvg(adata)
     adata.uns["n_genes_pre"] = adata.n_vars
 
-    if run_pca:
-        adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
-    if run_neighbors:
-        sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
+    adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
+    sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
     return adata
