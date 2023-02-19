@@ -66,7 +66,7 @@ def _alra(adata, normtype="log", reverse_norm_order=False, test=False):
 
     # transform back into original space
     # functions are reversed!
-    Y = scprep.utils.matrix_transform(Y, np.square)
+    Y = scprep.utils.matrix_transform(Y, denorm_fn)
     Y = scprep.utils.matrix_vector_elementwise_multiply(Y, libsize, axis=0)
     adata.obsm["denoised"] = Y
 
