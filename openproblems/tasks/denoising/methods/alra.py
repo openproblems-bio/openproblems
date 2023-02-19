@@ -8,7 +8,7 @@ _alra = r_function("alra.R")
 log = logging.getLogger("openproblems")
 
 
-method_name="ALRA (sqrt norm, reversed normalization)",
+method_name = ("ALRA (sqrt norm, reversed normalization)",)
 _alra_method = functools.partial(
     method,
     paper_name="Zero-preserving imputation of scRNA-seq data using "
@@ -20,11 +20,11 @@ _alra_method = functools.partial(
 )
 
 
-def _alra(adata, normtype = "log", reverse_norm_order=False, test=False):
+def _alra(adata, normtype="log", reverse_norm_order=False, test=False):
     import numpy as np
     import rpy2.rinterface_lib.embedded
     import scprep
-    
+
     if normtype == "sqrt":
         norm_fn = np.sqrt
         denorm_fn = np.square
@@ -33,11 +33,13 @@ def _alra(adata, normtype = "log", reverse_norm_order=False, test=False):
         denorm_fn = np.expm1
     else:
         raise NotImplementedError
-    
+
     X = adata.obsm["train"]
     if reverse_norm_order:
         # inexplicably, this sometimes performs better
-        adata.obsm["train"] = scprep.utils.matrix_transform(adata.obsm["train"], norm_fn)
+        adata.obsm["train"] = scprep.utils.matrix_transform(
+            adata.obsm["train"], norm_fn
+        )
         adata.obsm["train"], libsize = scprep.normalize.library_size_normalize(
             adata.obsm["train"], rescale=1, return_library_size=True
         )
@@ -71,26 +73,30 @@ def _alra(adata, normtype = "log", reverse_norm_order=False, test=False):
     adata.uns["method_code_version"] = "1.0.0"
     return adata
 
+
 @_alra_method(
     method_name="ALRA (sqrt norm, reversed normalization)",
 )
 def alra_sqrt_reversenorm(adata, test=False):
-    return _alra(adata, normtype = "log", reverse_norm_order=True, test=False)
+    return _alra(adata, normtype="log", reverse_norm_order=True, test=False)
+
 
 @_alra_method(
     method_name="ALRA (log norm, reversed normalization)",
 )
 def alra_log_reversenorm(adata, test=False):
-    return _alra(adata, normtype = "log", reverse_norm_order=True, test=False)
+    return _alra(adata, normtype="log", reverse_norm_order=True, test=False)
+
 
 @_alra_method(
     method_name="ALRA (sqrt norm)",
 )
 def alra_sqrt(adata, test=False):
-    return _alra(adata, normtype = "log", reverse_norm_order=False, test=False)
+    return _alra(adata, normtype="log", reverse_norm_order=False, test=False)
+
 
 @_alra_method(
     method_name="ALRA (log norm)",
 )
 def alra_log(adata, test=False):
-    return _alra(adata, normtype = "log", reverse_norm_order=False, test=False)
+    return _alra(adata, normtype="log", reverse_norm_order=False, test=False)
