@@ -2,6 +2,7 @@ from ....tools.conversion import r_function
 from ....tools.decorators import method
 
 import logging
+import functools
 
 _alra = r_function("alra.R")
 
