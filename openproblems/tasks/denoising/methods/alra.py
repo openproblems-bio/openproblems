@@ -1,8 +1,8 @@
 from ....tools.conversion import r_function
 from ....tools.decorators import method
 
-import logging
 import functools
+import logging
 
 _alra = r_function("alra.R")
 
