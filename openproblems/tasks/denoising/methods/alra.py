@@ -21,7 +21,7 @@ _alra_method = functools.partial(
 )
 
 
-def _alra(adata, normtype="log", reverse_norm_order=False, test=False):
+def alra(adata, normtype="log", reverse_norm_order=False, test=False):
     import numpy as np
     import rpy2.rinterface_lib.embedded
     import scprep
@@ -79,25 +79,25 @@ def _alra(adata, normtype="log", reverse_norm_order=False, test=False):
     method_name="ALRA (sqrt norm, reversed normalization)",
 )
 def alra_sqrt_reversenorm(adata, test=False):
-    return _alra(adata, normtype="log", reverse_norm_order=True, test=False)
+    return alra(adata, normtype="log", reverse_norm_order=True, test=False)
 
 
 @_alra_method(
     method_name="ALRA (log norm, reversed normalization)",
 )
 def alra_log_reversenorm(adata, test=False):
-    return _alra(adata, normtype="log", reverse_norm_order=True, test=False)
+    return alra(adata, normtype="log", reverse_norm_order=True, test=False)
 
 
 @_alra_method(
     method_name="ALRA (sqrt norm)",
 )
 def alra_sqrt(adata, test=False):
-    return _alra(adata, normtype="log", reverse_norm_order=False, test=False)
+    return alra(adata, normtype="log", reverse_norm_order=False, test=False)
 
 
 @_alra_method(
     method_name="ALRA (log norm)",
 )
 def alra_log(adata, test=False):
-    return _alra(adata, normtype="log", reverse_norm_order=False, test=False)
+    return alra(adata, normtype="log", reverse_norm_order=False, test=False)
