@@ -4,5 +4,5 @@ git+https://github.com/chriscainx/mnnpy@2097dec  # master
 harmony-pytorch==0.1.*
 scanorama==1.7.0
 scib==1.1.3
-scvi-tools~=0.19
+scvi-tools~=0.20
 torch==1.13.*
