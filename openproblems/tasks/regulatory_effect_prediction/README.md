@@ -1,5 +1,7 @@
 # Chromatin accessibility prediction
 
+## The task
+
 Chromatin accessibility prediction refers to the gene expression prediction of a cell or
 cell type from ATAC-seq peaks. For a summary of all relevant models, see gene score
 methods in [Jeffrey M. Granja et
