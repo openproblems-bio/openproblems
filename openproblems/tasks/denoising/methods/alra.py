@@ -4,7 +4,7 @@ from ....tools.decorators import method
 import functools
 import logging
 
-_alra = r_function("alra.R")
+_R_alra = r_function("alra.R")
 
 log = logging.getLogger("openproblems")
 
@@ -21,7 +21,7 @@ _alra_method = functools.partial(
 )
 
 
-def alra(adata, normtype="log", reverse_norm_order=False, test=False):
+def _alra(adata, normtype="log", reverse_norm_order=False, test=False):
     import numpy as np
     import rpy2.rinterface_lib.embedded
     import scprep
@@ -52,12 +52,12 @@ def alra(adata, normtype="log", reverse_norm_order=False, test=False):
 
     adata.obsm["train"] = adata.obsm["train"].tocsr()
     # run alra
-    # _alra takes sparse array, returns dense array
+    # _R_alra takes sparse array, returns dense array
     Y = None
     attempts = 0
     while Y is None:
         try:
-            Y = _alra(adata)
+            Y = _R_alra(adata)
         except rpy2.rinterface_lib.embedded.RRuntimeError:  # pragma: no cover
             if attempts < 10:
                 attempts += 1
@@ -79,25 +79,25 @@ def alra(adata, normtype="log", reverse_norm_order=False, test=False):
     method_name="ALRA (sqrt norm, reversed normalization)",
 )
 def alra_sqrt_reversenorm(adata, test=False):
-    return alra(adata, normtype="log", reverse_norm_order=True, test=False)
+    return _alra(adata, normtype="log", reverse_norm_order=True, test=False)
 
 
 @_alra_method(
     method_name="ALRA (log norm, reversed normalization)",
 )
 def alra_log_reversenorm(adata, test=False):
-    return alra(adata, normtype="log", reverse_norm_order=True, test=False)
+    return _alra(adata, normtype="log", reverse_norm_order=True, test=False)
 
 
 @_alra_method(
     method_name="ALRA (sqrt norm)",
 )
 def alra_sqrt(adata, test=False):
-    return alra(adata, normtype="log", reverse_norm_order=False, test=False)
+    return _alra(adata, normtype="log", reverse_norm_order=False, test=False)
 
 
 @_alra_method(
     method_name="ALRA (log norm)",
 )
 def alra_log(adata, test=False):
-    return alra(adata, normtype="log", reverse_norm_order=False, test=False)
+    return _alra(adata, normtype="log", reverse_norm_order=False, test=False)
