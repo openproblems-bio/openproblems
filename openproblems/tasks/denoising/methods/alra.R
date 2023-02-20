@@ -5,7 +5,7 @@ library(SingleCellExperiment)
 source("https://raw.githubusercontent.com/wes-lewis/ALRA/master/alra.R")
 
 # fetch the matrix of the obsm variable train_norm
-train_matrix <- reducedDim(sce, "train_norm")
+train_matrix <- reducedDim(sce, "train")
 train_matrix <- t(as.matrix(train_matrix))
 
 alra_output <- alra(train_matrix)
