@@ -35,7 +35,6 @@ def _alra(adata, normtype="log", reverse_norm_order=False, test=False):
     else:
         raise NotImplementedError
 
-    X = adata.obsm["train"]
     if reverse_norm_order:
         # inexplicably, this sometimes performs better
         adata.obsm["train"] = scprep.utils.matrix_transform(
