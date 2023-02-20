@@ -1,17 +1,13 @@
-from ....tools.decorators import method
+from ....tools.decorators import baseline_method
 from ....tools.utils import check_version
 from ..utils import split_sc_and_sp
 
 import numpy as np
 
 
-@method(
+@baseline_method(
     method_name="Random Proportions",
-    paper_name="Random Proportions (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary="TODO",
 )
 def random_proportions(adata, test=False):
     adata_sc, adata = split_sc_and_sp(adata)
@@ -25,13 +21,9 @@ def random_proportions(adata, test=False):
     return adata
 
 
-@method(
+@baseline_method(
     method_name="True Proportions",
-    paper_name="True Proportions (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary="TODO",
 )
 def true_proportions(adata, test=False):
     _, adata = split_sc_and_sp(adata)

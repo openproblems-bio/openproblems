@@ -6,6 +6,7 @@ import functools
 
 _bbknn_method = functools.partial(
     method,
+    method_summary="TODO",
     paper_name="BBKNN: fast batch alignment of single cell transcriptomes",
     paper_reference="polanski2020bbknn",
     paper_year=2020,

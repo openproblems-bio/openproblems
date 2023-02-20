@@ -81,7 +81,7 @@ class TestNormalizeX(unittest.TestCase):
 
 
 @parameterized.parameterized_class(
-    ("normalizer"),
+    "normalizer",
     [
         (staticmethod(normalizer),)
         for normalizer in openproblems.utils.get_callable_members(

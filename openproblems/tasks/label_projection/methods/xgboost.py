@@ -9,6 +9,7 @@ import numpy as np
 
 _xgboost_method = functools.partial(
     method,
+    method_summary="TODO",
     paper_name="XGBoost: A Scalable Tree Boosting System",
     paper_reference="chen2016xgboost",
     paper_year=2016,

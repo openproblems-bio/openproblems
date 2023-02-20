@@ -1,3 +1,4 @@
+from ....tools.decorators import baseline_method
 from ....tools.decorators import method
 from ....tools.utils import check_version
 
@@ -7,8 +8,10 @@ import scprep
 
 _magic_method = functools.partial(
     method,
-    paper_name="Recovering Gene Interactions from Single-Cell Data "
-    "Using Data Diffusion",
+    method_summary="TODO",
+    paper_name=(
+        "Recovering Gene Interactions from Single-Cell Data Using Data Diffusion"
+    ),
     paper_reference="van2018recovering",
     paper_year=2018,
     code_url="https://github.com/KrishnaswamyLab/MAGIC",
@@ -81,12 +84,10 @@ def magic_approx_reverse_norm(adata, test=False):
     return _magic(adata, solver="approximate", normtype="sqrt", reverse_norm_order=True)
 
 
-@method(
+@baseline_method(
     method_name="KNN smoothing",
-    paper_name="KNN Smoothing (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
+    method_summary="TODO",
+    is_baseline=False,
     image="openproblems-python-extras",
 )
 def knn_naive(adata, test=False):

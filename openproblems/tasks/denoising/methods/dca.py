@@ -26,6 +26,7 @@ def _dca(adata, test=False, epochs=None):
 
 @method(
     method_name="DCA",
+    method_summary="TODO",
     paper_name="Single-cell RNA-seq denoising using a deep count autoencoder",
     paper_reference="eraslan2019single",
     paper_year=2019,

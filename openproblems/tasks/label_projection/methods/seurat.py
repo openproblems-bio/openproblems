@@ -12,6 +12,7 @@ _seurat = r_function(
 
 @method(
     method_name="Seurat reference mapping (SCTransform)",
+    method_summary="TODO",
     paper_name="Integrated analysis of multimodal single-cell data",
     paper_reference="hao2021integrated",
     paper_year=2021,

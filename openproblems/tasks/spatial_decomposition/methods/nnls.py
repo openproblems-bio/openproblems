@@ -9,11 +9,13 @@ import numpy as np
 
 @method(
     method_name="Non-Negative Least Squares",
+    method_summary="TODO",
     paper_name="Solving Least Squares Problems",
     paper_reference="lawson1995solving",
     paper_year=1987,
-    code_url="https://docs.scipy.org/doc/scipy/"
-    "reference/generated/scipy.optimize.nnls.html",
+    code_url=(
+        "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.nnls.html"
+    ),
 )
 def nnls_scipy(adata, test=False):
     from scipy.optimize import nnls

@@ -21,25 +21,6 @@ high dimensional data don’t distinguish data points well). Thus, we need to fi
 to [dimensionally reduce](https://en.wikipedia.org/wiki/Dimensionality_reduction) the
 data for visualization and interpretation.
 
-## The metrics
-
-* **Distance correlation**: the Spearman correlation between
-  ground truth distances in the high-dimensional data and Euclidean distances in the
-  dimension-reduced data, invariant to scalar multiplication. *Distance correlation*
-  computes high-dimensional distances in Euclidean space, while *Distance correlation
-  (spectral)* computes [diffusion distances](http://dx.doi.org/10.1016/j.acha.2006.04.006)
-  (i.e. Euclidean distances on the [Laplacian Eigenmap](http://dx.doi.org/10.1162/089976603321780317)).
-* **Trustworthiness**: a measurement of similarity between the rank of each point's
-  nearest neighbors in the high-dimensional data and the reduced data ([Venna & Kaski,
-  2001](https://openproblems.bio/bibliography#venna2001neighborhood)).
-* **Density preservation**: similarity between local densities in the high-dimensional
-  data and the reduced data ([Narayan, Berger & Cho,
-  2020](https://openproblems.bio/bibliography#narayan2021assessing))
-* **NN Ranking**: a set of metrics from
-  [pyDRMetrics](https://openproblems.bio/bibliography#zhang2021pydrmetrics) relating to
-  the preservation   of nearest neighbors in the high-dimensional data and the reduced
-  data.
-
 ## API
 
 WARNING: other than most tasks, `adata.X` should contain log CP10k-normalized data,

@@ -1,16 +1,12 @@
-from ....tools.decorators import method
+from ....tools.decorators import baseline_method
 from ....tools.utils import check_version
 
 import numpy as np
 
 
-@method(
+@baseline_method(
     method_name="Random Scores",
-    paper_name="Random Scores (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary="TODO",
 )
 def random_scores(adata, test=False):
     adata.obsm["gene_score"] = adata.X[
@@ -20,13 +16,9 @@ def random_scores(adata, test=False):
     return adata
 
 
-@method(
+@baseline_method(
     method_name="True Scores",
-    paper_name="True Scores (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary="TODO",
 )
 def true_scores(adata, test=False):
     adata.obsm["gene_score"] = adata.X

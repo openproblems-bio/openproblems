@@ -1,5 +1,6 @@
 from .....tools.decorators import metric
 from ...batch_integration_embed import metrics as embed_metrics
+from .utils import feature_to_embedding
 
 """
 Principal component regression, derived from PCA, has previously been used to quantify
@@ -18,7 +19,4 @@ component."""
 
 @metric(**embed_metrics.pcr.metadata)
 def pcr(adata):
-    from scanpy.tl import pca
-
-    adata.obsm["X_emb"] = pca(adata.X)
-    return embed_metrics.pcr(adata)
+    return embed_metrics.pcr(feature_to_embedding(adata))

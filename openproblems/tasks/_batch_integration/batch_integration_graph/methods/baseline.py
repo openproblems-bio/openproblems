@@ -1,4 +1,4 @@
-from .....tools.decorators import method
+from .....tools.decorators import baseline_method
 from .....tools.utils import check_version
 
 import numpy as np
@@ -11,14 +11,7 @@ def _set_uns(adata):
     adata.uns["neighbors"]["distances_key"] = "distances"
 
 
-@method(
-    method_name="No Integration",
-    paper_name="No Integration (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
+@baseline_method(method_name="No Integration", method_summary="TODO")
 def no_integration(adata, test=False):
     adata.obsp["connectivities"] = adata.obsp["uni_connectivities"]
     adata.obsp["distances"] = adata.obsp["uni_distances"]
@@ -62,28 +55,14 @@ def _random_embedding(partition):
     return embedding
 
 
-@method(
-    method_name="Random Integration",
-    paper_name="Random Integration (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
+@baseline_method(method_name="Random Integration", method_summary="TODO")
 def random_integration(adata, test=False):
     adata = _randomize_graph(adata)
     adata.uns["method_code_version"] = check_version("openproblems")
     return adata
 
 
-@method(
-    method_name="Random Integration by Celltype",
-    paper_name="Random Integration by Celltype (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
+@baseline_method(method_name="Random Integration by Celltype", method_summary="TODO")
 def celltype_random_integration(adata, test=False):
     adata = _randomize_graph(
         adata,
@@ -93,14 +72,7 @@ def celltype_random_integration(adata, test=False):
     return adata
 
 
-@method(
-    method_name="Random Integration by Batch",
-    paper_name="Random Integration by Batch (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
+@baseline_method(method_name="Random Integration by Batch", method_summary="TODO")
 def batch_random_integration(adata, test=False):
     adata = _randomize_graph(
         adata,
@@ -110,14 +82,7 @@ def batch_random_integration(adata, test=False):
     return adata
 
 
-@method(
-    method_name="Random Graph by Celltype",
-    paper_name="Random Graph by Celltype (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
+@baseline_method(method_name="Random Graph by Celltype", method_summary="TODO")
 def celltype_random_graph(adata, test=False):
     adata.obsm["X_emb"] = _random_embedding(partition=adata.obs["labels"])
     sc.pp.neighbors(adata, use_rep="X_emb")

@@ -1,18 +1,11 @@
-from .....tools.decorators import method
+from .....tools.decorators import baseline_method
 from .....tools.utils import check_version
 
 import numpy as np
 import pandas as pd
 
 
-@method(
-    method_name="Random Events",
-    paper_name="Random Events (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
+@baseline_method(method_name="Random Events", method_summary="TODO")
 def random_events(adata, test=False, n_events=1000):
     rng = np.random.default_rng(seed=1)
 
@@ -36,14 +29,7 @@ def random_events(adata, test=False, n_events=1000):
     return adata
 
 
-@method(
-    method_name="True Events",
-    paper_name="True Events (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
+@baseline_method(method_name="True Events", method_summary="TODO")
 def true_events(adata, test=False):
     adata.uns["ccc_pred"] = adata.uns["ccc_target"].rename(
         {"response": "score"}, axis=1

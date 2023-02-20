@@ -5,8 +5,11 @@ from ..utils import split_sc_and_sp
 
 @method(
     method_name="Tangram",
-    paper_name="Deep learning and alignment of spatially resolved single-cell "
-    "transcriptomes with Tangram",
+    method_summary="TODO",
+    paper_name=(
+        "Deep learning and alignment of spatially resolved single-cell transcriptomes"
+        " with Tangram"
+    ),
     paper_reference="biancalani2021deep",
     paper_year=2021,
     code_url="https://github.com/broadinstitute/Tangram",

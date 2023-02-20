@@ -5,8 +5,11 @@ import functools
 
 _scanorama_method = functools.partial(
     method,
-    paper_name="Efficient integration of heterogeneous single-cell "
-    "transcriptomes using Scanorama",
+    method_summary="TODO",
+    paper_name=(
+        "Efficient integration of heterogeneous single-cell transcriptomes using"
+        " Scanorama"
+    ),
     paper_reference="hie2019efficient",
     paper_year=2019,
     code_url="https://github.com/brianhie/scanorama",

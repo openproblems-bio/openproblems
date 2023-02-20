@@ -1,22 +1,27 @@
 from ....tools.conversion import r_function
 from ....tools.decorators import method
 
+import functools
 import logging
 
 _alra = r_function("alra.R")
 
 log = logging.getLogger("openproblems")
 
-
-@method(
-    method_name="ALRA (sqrt norm)",
-    paper_name="Zero-preserving imputation of scRNA-seq data using "
-    "low-rank approximation",
+_alra_method = functools.partial(
+    method,
+    method_summary="TODO",
+    paper_name=(
+        "Zero-preserving imputation of scRNA-seq data using low-rank approximation"
+    ),
     paper_reference="linderman2018zero",
     paper_year=2018,
     code_url="https://github.com/KlugerLab/ALRA",
     image="openproblems-r-extras",
 )
+
+
+@_alra_method(method_name="ALRA (sqrt norm, reversed normalization)")
 def alra_sqrt(adata, test=False):
     import numpy as np
     import rpy2.rinterface_lib.embedded
@@ -54,15 +59,7 @@ def alra_sqrt(adata, test=False):
     return adata
 
 
-@method(
-    method_name="ALRA (log norm)",
-    paper_name="Zero-preserving imputation of scRNA-seq data using "
-    "low-rank approximation",
-    paper_reference="linderman2018zero",
-    paper_year=2018,
-    code_url="https://github.com/KlugerLab/ALRA",
-    image="openproblems-r-extras",
-)
+@_alra_method(method_name="ALRA (log norm)")
 def alra_log(adata, test=False):
     import numpy as np
     import rpy2.rinterface_lib.embedded

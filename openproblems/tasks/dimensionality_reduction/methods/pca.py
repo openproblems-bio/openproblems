@@ -7,11 +7,19 @@ import functools
 
 _pca_method = functools.partial(
     method,
+    method_summary=(
+        "PCA is a linear dimensionality reduction using singular value decomposition of"
+        " the data to project it to a lower dimensional space. We select only the first"
+        " two principal components as the two-dimensional embedding. PCA is calculated"
+        " on the logCPM expression matrix with and without selecting 1000 HVGs."
+    ),
     paper_name="On lines and planes of closest fit to systems of points in space",
     paper_reference="pearson1901pca",
     paper_year=1901,
-    code_url="https://scikit-learn.org/stable/modules/generated/"
-    "sklearn.decomposition.PCA.html",
+    code_url=(
+        "https://scikit-learn.org/stable/modules/generated/"
+        "sklearn.decomposition.PCA.html"
+    ),
 )
 
 

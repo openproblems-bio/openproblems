@@ -7,11 +7,14 @@ import functools
 
 _logistic_regression_method = functools.partial(
     method,
+    method_summary="TODO",
     paper_name="Applied Logistic Regression",
     paper_reference="hosmer2013applied",
     paper_year=2013,
-    code_url="https://scikit-learn.org/stable/modules/generated/"
-    "sklearn.linear_model.LogisticRegression.html",
+    code_url=(
+        "https://scikit-learn.org/stable/modules/generated/"
+        "sklearn.linear_model.LogisticRegression.html"
+    ),
 )
 
 

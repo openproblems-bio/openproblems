@@ -7,11 +7,14 @@ import functools
 
 _mlp_method = functools.partial(
     method,
+    method_summary="TODO",
     paper_name="Connectionist learning procedures",
     paper_reference="hinton1989connectionist",
     paper_year=1990,
-    code_url="https://scikit-learn.org/stable/modules/generated/"
-    "sklearn.neural_network.MLPClassifier.html",
+    code_url=(
+        "https://scikit-learn.org/stable/modules/generated/"
+        "sklearn.neural_network.MLPClassifier.html"
+    ),
 )
 
 

@@ -12,6 +12,7 @@ _rctd = r_function("rctd.R", args="sce_sc, sce_sp, fc_cutoff, fc_cutoff_reg, max
 
 @method(
     method_name="RCTD",
+    method_summary="TODO",
     paper_name="Robust decomposition of cell type mixtures in spatial transcriptomics",
     paper_reference="cable2021robust",
     paper_year=2020,

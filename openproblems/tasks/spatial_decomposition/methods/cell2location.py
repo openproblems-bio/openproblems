@@ -8,6 +8,7 @@ import numpy as np
 
 _cell2location_method = functools.partial(
     method,
+    method_summary="TODO",
     paper_name="Cell2location maps fine-grained cell types in spatial transcriptomics",
     paper_reference="kleshchevnikov2022cell2location",
     paper_year=2022,

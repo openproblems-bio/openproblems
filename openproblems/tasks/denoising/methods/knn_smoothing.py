@@ -4,8 +4,10 @@ from ....tools.utils import check_version
 
 @method(
     method_name="Iterative KNN smoothing",
-    paper_name="K-nearest neighbor smoothing for high-throughput "
-    "single-cell RNA-Seq data",
+    method_summary="TODO",
+    paper_name=(
+        "K-nearest neighbor smoothing for high-throughput single-cell RNA-Seq data"
+    ),
     paper_reference="wagner2018knearest",
     paper_year=2018,
     code_url="https://github.com/yanailab/knn-smoothing",
