@@ -4,7 +4,7 @@ from ....tools.decorators import method
 import functools
 import logging
 
-_R_alra = r_function("alra.R")
+_r_alra = r_function("alra.R")
 
 log = logging.getLogger("openproblems")
 
@@ -52,12 +52,12 @@ def _alra(adata, normtype="log", reverse_norm_order=False, test=False):
 
     adata.obsm["train"] = adata.obsm["train"].tocsr()
     # run alra
-    # _R_alra takes sparse array, returns dense array
+    # _r_alra takes sparse array, returns dense array
     Y = None
     attempts = 0
     while Y is None:
         try:
-            Y = _R_alra(adata)
+            Y = _r_alra(adata)
         except rpy2.rinterface_lib.embedded.RRuntimeError:  # pragma: no cover
             if attempts < 10:
                 attempts += 1
