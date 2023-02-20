@@ -5,22 +5,25 @@ import re
 import sys
 import workflow_utils
 
-API_PATTERN = re.compile(r"^#.*API$")
-HEADING_PATTERN = re.compile(r"^# ")
+NEXTHEADING_PATTERN = re.compile(r"^##?[^#].*")
+HEADING_PATTERN = re.compile(r"^## The task$")
 
 
 def get_task_description(task):
     description = ""
     readme_file = task.__file__.replace("__init__.py", "README.md")
     with open(readme_file, "r") as readme_handle:
+        is_description = False
         for line in readme_handle:
             if HEADING_PATTERN.match(line):
-                # exclude top-level headings
+                # exclude everything until "## The task"
+                is_description = True
                 continue
-            if API_PATTERN.match(line):
-                # exclude everything after ## API
+            elif is_description and NEXTHEADING_PATTERN.match(line):
+                # exclude everything that is not part of the "The task"-section
                 break
-            description += line
+            if is_description:
+                description += line
     return description
 
 
