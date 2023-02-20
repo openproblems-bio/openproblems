@@ -38,9 +38,7 @@ def _alra(adata, normtype="log", reverse_norm_order=False, test=False):
     X = adata.obsm["train"].copy()
     if reverse_norm_order:
         # inexplicably, this sometimes performs better
-        X = scprep.utils.matrix_transform(
-            X, norm_fn
-        )
+        X = scprep.utils.matrix_transform(X, norm_fn)
         X, libsize = scprep.normalize.library_size_normalize(
             X, rescale=1, return_library_size=True
         )
