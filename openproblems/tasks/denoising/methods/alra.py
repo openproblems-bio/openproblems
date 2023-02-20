@@ -35,21 +35,22 @@ def _alra(adata, normtype="log", reverse_norm_order=False, test=False):
     else:
         raise NotImplementedError
 
+    X = adata.obsm["train"].copy()
     if reverse_norm_order:
         # inexplicably, this sometimes performs better
-        adata.obsm["train"] = scprep.utils.matrix_transform(
-            adata.obsm["train"], norm_fn
+        X = scprep.utils.matrix_transform(
+            X, norm_fn
         )
-        adata.obsm["train"], libsize = scprep.normalize.library_size_normalize(
-            adata.obsm["train"], rescale=1, return_library_size=True
+        X, libsize = scprep.normalize.library_size_normalize(
+            X, rescale=1, return_library_size=True
         )
     else:
-        adata.obsm["train"], libsize = scprep.normalize.library_size_normalize(
-            adata.obsm["train"], rescale=1, return_library_size=True
+        X, libsize = scprep.normalize.library_size_normalize(
+            X, rescale=1, return_library_size=True
         )
-        adata.obsm["train"] = scprep.utils.matrix_transform(X, norm_fn)
+        X = scprep.utils.matrix_transform(X, norm_fn)
 
-    adata.obsm["train"] = adata.obsm["train"].tocsr()
+    adata.obsm["train_norm"] = X.tocsr()
     # run alra
     # _r_alra takes sparse array, returns dense array
     Y = None
