@@ -35,14 +35,15 @@ def _randomize_graph(adata, partition=None):
     return adata
 
 
-def _random_embedding(partition):
+def _random_embedding(partition, jitter=0.01):
     from sklearn.preprocessing import LabelEncoder
     from sklearn.preprocessing import OneHotEncoder
 
     embedding = OneHotEncoder().fit_transform(
         LabelEncoder().fit_transform(partition)[:, None]
     )
-    embedding = embedding + np.random.uniform(-0.01, 0.01, embedding.shape)
+    if jitter is not None:
+        embedding = embedding + np.random.uniform(-1 * jitter, jitter, embedding.shape)
     return embedding
 
 
