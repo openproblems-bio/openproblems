@@ -34,6 +34,7 @@ from ...batch_integration_graph.methods.scanvi import scanvi_hvg_unscaled
 from ...batch_integration_graph.methods.scvi import scvi_full_unscaled
 from ...batch_integration_graph.methods.scvi import scvi_hvg_unscaled
 from .baseline import celltype_random_embedding
+from .baseline import celltype_random_embedding_jitter
 from .baseline import no_integration_batch
 from .scalex import scalex_full
 from .scalex import scalex_hvg
