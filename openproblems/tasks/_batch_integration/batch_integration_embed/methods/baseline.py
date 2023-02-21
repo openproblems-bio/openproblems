@@ -17,6 +17,15 @@ _baseline_method = functools.partial(
 
 
 @_baseline_method(
+    method_name="Random Embedding by Celltype (with jitter)",
+)
+def celltype_random_embedding_jitter(adata, test=False):
+    adata.obsm["X_emb"] = _random_embedding(partition=adata.obs["labels"], jitter=0.01)
+    adata.uns["method_code_version"] = check_version("openproblems")
+    return adata
+
+
+@_baseline_method(
     method_name="Random Embedding by Celltype",
 )
 def celltype_random_embedding(adata, test=False):
