@@ -77,7 +77,7 @@ def _alra(adata, normtype="log", reverse_norm_order=False, test=False):
     method_name="ALRA (sqrt norm, reversed normalization)",
 )
 def alra_sqrt_reversenorm(adata, test=False):
-    return _alra(adata, normtype="log", reverse_norm_order=True, test=False)
+    return _alra(adata, normtype="sqrt", reverse_norm_order=True, test=False)
 
 
 @_alra_method(
@@ -91,7 +91,7 @@ def alra_log_reversenorm(adata, test=False):
     method_name="ALRA (sqrt norm)",
 )
 def alra_sqrt(adata, test=False):
-    return _alra(adata, normtype="log", reverse_norm_order=False, test=False)
+    return _alra(adata, normtype="sqrt", reverse_norm_order=False, test=False)
 
 
 @_alra_method(
