@@ -84,7 +84,7 @@ jobs:
         if [[ ${{ github.event_name }} == "repository_dispatch" ]]; then
           S3_URI="s3://openproblems-nextflow/cwd_main"
         else
-          S3_URI="s3://openproblems-nextflow/cwd_main"
+          S3_URI="s3://openproblems-nextflow/cwd_example"
         fi
         aws s3 cp --quiet --recursive "${S3_URI}" /tmp/results/
         python openproblems/workflow/parse_nextflow.py /tmp website/content/benchmarks
