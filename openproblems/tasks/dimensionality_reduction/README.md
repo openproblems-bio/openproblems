@@ -50,7 +50,7 @@ WARNING: other than most tasks, `adata.X` should contain log CP10k-normalized da
 **Datasets** should provide *log CP10k normalized counts* in `adata.X` and store the
 original number of genes (i.e., `adata.shape[1]`) in `adata.uns["n_genes"]`. Datasets
 should also contain the nearest-neighbor ranking matrix, required for the `nn_ranking`
-metrics, as computed by `utils.ranking_matrix(adata.X)` on normalized counts.
+metrics, as computed by `_utils.ranking_matrix(adata.X)` on normalized counts.
 
 **Methods** should assign dimensionally-reduced 2D embedding coordinates to
 `adata.obsm['X_emb']`. They *should not* modify the dimensionality of `adata.X` (e.g.

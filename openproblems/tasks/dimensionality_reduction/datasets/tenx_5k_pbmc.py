@@ -1,7 +1,7 @@
 from ....data.tenx import load_tenx_5k_pbmc
 from ....tools.decorators import dataset
 from ....tools.normalize import log_cp10k
-from ..utils import ranking_matrix
+from .._utils import ranking_matrix
 
 
 @dataset(

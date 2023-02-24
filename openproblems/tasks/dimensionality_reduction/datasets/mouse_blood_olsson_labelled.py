@@ -1,7 +1,7 @@
 from ....data.mouse_blood_olsson_labelled import load_olsson_2016_mouse_blood
 from ....tools.decorators import dataset
 from ....tools.normalize import log_cp10k
-from ..utils import ranking_matrix
+from .._utils import ranking_matrix
 
 
 @dataset(

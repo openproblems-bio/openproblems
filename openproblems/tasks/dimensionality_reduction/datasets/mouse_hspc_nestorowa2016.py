@@ -1,7 +1,7 @@
 from ....data.mouse_hspc_nestorowa2016 import load_mouse_hspc_nestorowa2016
 from ....tools.decorators import dataset
 from ....tools.normalize import log_cp10k
-from ..utils import ranking_matrix
+from .._utils import ranking_matrix
 
 
 @dataset(

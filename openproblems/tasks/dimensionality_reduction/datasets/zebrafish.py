@@ -1,7 +1,7 @@
 from ....data.zebrafish import load_zebrafish
 from ....tools.decorators import dataset
 from ....tools.normalize import log_cp10k
-from ..utils import ranking_matrix
+from .._utils import ranking_matrix
 
 
 @dataset(

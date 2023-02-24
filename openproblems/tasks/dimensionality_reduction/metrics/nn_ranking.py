@@ -15,7 +15,7 @@ The following changes have been made:
 """
 
 from ....tools.decorators import metric
-from ..utils import ranking_matrix
+from .._utils import ranking_matrix
 from anndata import AnnData
 from numba import njit
 from typing import Tuple
