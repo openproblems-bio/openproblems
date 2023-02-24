@@ -115,35 +115,35 @@ jobs:
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
         commit-message: "Update benchmark content # ci skip"
 
-    # - name: Push to openproblems-bio/nbt2022-reproducibility
-    #   if: |
-    #     env.NBT_REPRODUCIBILITY_CHANGED == 'true' &&
-    #     (
-    #       startsWith(github.ref, 'refs/heads/main') ||
-    #       endsWith(github.event.head_commit.message, '# publish')
-    #     )
-    #   shell: bash
-    #   working-directory: './nbt2022-reproducibility'
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
-    #   run: |
-    #     git push origin "${UPDATE_BRANCH_NAME}"
+    - name: Push to openproblems-bio/nbt2022-reproducibility
+      if: |
+        env.NBT_REPRODUCIBILITY_CHANGED == 'true' &&
+        (
+          startsWith(github.ref, 'refs/heads/main') ||
+          endsWith(github.event.head_commit.message, '# publish')
+        )
+      shell: bash
+      working-directory: './nbt2022-reproducibility'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
+      run: |
+        git push origin "${UPDATE_BRANCH_NAME}"
 
-    # - name: Create nbt2022-reproducibility Pull Request
-    #   if: |
-    #     env.NBT_REPRODUCIBILITY_CHANGED == 'true' &&
-    #     (
-    #       startsWith(github.ref, 'refs/heads/main') ||
-    #       endsWith(github.event.head_commit.message, '# publish')
-    #     )
-    #   uses: peter-evans/create-pull-request@v4
-    #   with:
-    #     branch: ${{ env.UPDATE_BRANCH_NAME }}
-    #     delete-branch: true
-    #     base: main
-    #     title: '[auto] Update benchmark content'
-    #     reviewers: scottgigante-immunai,rcannood
-    #     path: './nbt2022-reproducibility'
-    #     token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
-    #     author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-    #     commit-message: "Update benchmark content # ci skip"
+    - name: Create nbt2022-reproducibility Pull Request
+      if: |
+        env.NBT_REPRODUCIBILITY_CHANGED == 'true' &&
+        (
+          startsWith(github.ref, 'refs/heads/main') ||
+          endsWith(github.event.head_commit.message, '# publish')
+        )
+      uses: peter-evans/create-pull-request@v4
+      with:
+        branch: ${{ env.UPDATE_BRANCH_NAME }}
+        delete-branch: true
+        base: main
+        title: '[auto] Update benchmark content'
+        reviewers: scottgigante-immunai,rcannood
+        path: './nbt2022-reproducibility'
+        token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
+        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
+        commit-message: "Update benchmark content # ci skip"
