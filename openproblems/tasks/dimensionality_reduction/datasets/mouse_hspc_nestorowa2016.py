@@ -1,6 +1,7 @@
 from ....data.mouse_hspc_nestorowa2016 import load_mouse_hspc_nestorowa2016
 from ....tools.decorators import dataset
 from ....tools.normalize import log_cp10k
+from ..utils import ranking_matrix
 
 
 @dataset(
@@ -14,4 +15,6 @@ from ....tools.normalize import log_cp10k
 def mouse_hspc_nestorowa2016(test=False):
     adata = load_mouse_hspc_nestorowa2016(test=test)
     adata.uns["n_genes"] = adata.shape[1]
-    return log_cp10k(adata)
+    adata = log_cp10k(adata)
+    adata.obsm["X_ranking"] = ranking_matrix(adata.X)
+    return adata

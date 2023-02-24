@@ -9,6 +9,8 @@ def check_dataset(adata):
     """Check that dataset output fits expected API."""
     assert "n_genes" in adata.uns
     assert adata.uns["n_genes"] == adata.shape[1]
+    assert "X_ranking" in adata.obsm
+    assert adata.obsm["X_ranking"].shape == (adata.shape[0], adata.shape[0])
     return True
 
 

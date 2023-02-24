@@ -1,6 +1,7 @@
 from ....data.zebrafish import load_zebrafish
 from ....tools.decorators import dataset
 from ....tools.normalize import log_cp10k
+from ..utils import ranking_matrix
 
 
 @dataset(
@@ -15,4 +16,6 @@ from ....tools.normalize import log_cp10k
 def zebrafish_labs(test=False):
     adata = load_zebrafish(test=test)
     adata.uns["n_genes"] = adata.shape[1]
-    return log_cp10k(adata)
+    adata = log_cp10k(adata)
+    adata.obsm["X_ranking"] = ranking_matrix(adata.X)
+    return adata
