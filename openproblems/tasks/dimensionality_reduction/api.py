@@ -1,6 +1,7 @@
 from ...data.sample import load_sample_data
 from ...tools.decorators import dataset
 from ...tools.normalize import log_cp10k
+from . import _utils
 
 import numpy as np
 
@@ -9,8 +10,6 @@ def check_dataset(adata):
     """Check that dataset output fits expected API."""
     assert "n_genes" in adata.uns
     assert adata.uns["n_genes"] == adata.shape[1]
-    assert "X_ranking" in adata.obsm
-    assert adata.obsm["X_ranking"].shape == (adata.shape[0], adata.shape[0])
     return True
 
 
@@ -33,6 +32,7 @@ def sample_dataset():
     adata = load_sample_data()
     adata = log_cp10k(adata)
     adata.uns["n_genes"] = adata.shape[1]
+    adata.obsm["X_ranking"] = _utils.ranking_matrix(adata.X)
     return adata
 
 
