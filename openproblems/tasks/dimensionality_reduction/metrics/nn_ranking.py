@@ -106,9 +106,6 @@ def _fit(adata: AnnData) -> Tuple[float, float, float, float, float, float, floa
     Rx = adata.obsm["X_ranking"]
     E = adata.obsm["X_emb"]
 
-    if np.any(np.isnan(E)):
-        return 0.0, 0.0, 0.0, 0.5, -np.inf, -np.inf, -np.inf
-
     Re = ranking_matrix(E)
     Q = _coranking_matrix(Rx, Re)
     Q = Q[1:, 1:]
