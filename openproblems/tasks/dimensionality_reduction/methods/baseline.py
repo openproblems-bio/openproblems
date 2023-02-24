@@ -1,7 +1,8 @@
 from ....tools.decorators import method
 from ....tools.normalize import log_cp10k
-from ....tools.normalize import log_cp10k_hvg
 from ....tools.utils import check_version
+from .diffusion_map import diffusion_map
+from typing import Optional
 
 import functools
 import numpy as np
@@ -29,19 +30,6 @@ def random_features(adata, test=False):
     method_name="True Features",
 )
 def true_features(adata, test=False):
-    adata.obsm["X_emb"] = adata.X
-    if test:
-        adata.obsm["X_emb"] = adata.obsm["X_emb"][:, :100]
-
-    adata.obsm["X_emb"] = adata.obsm["X_emb"].toarray()
-    adata.uns["method_code_version"] = check_version("openproblems")
-    return adata
-
-
-@_baseline_method(
-    method_name="True Features (logCP10k)",
-)
-def true_features_log_cp10k(adata, test=False):
     adata = log_cp10k(adata)
     adata.obsm["X_emb"] = adata.X
     if test:
@@ -53,14 +41,15 @@ def true_features_log_cp10k(adata, test=False):
 
 
 @_baseline_method(
-    method_name="True Features (logCP10k, 1kHVG)",
+    method_name="Spectral Features",
 )
-def true_features_log_cp10k_hvg(adata, test=False):
-    adata = log_cp10k_hvg(adata)
-    adata.obsm["X_emb"] = adata[:, adata.var["highly_variable"]].copy().X
-    if test:
-        adata.obsm["X_emb"] = adata.obsm["X_emb"][:, :100]
+def spectral_features(adata, test=False, n_comps: Optional[int] = None):
 
-    adata.obsm["X_emb"] = adata.obsm["X_emb"].toarray()
-    adata.uns["method_code_version"] = check_version("openproblems")
-    return adata
+    if test:
+        n_comps = n_comps or 20
+    else:
+        n_comps = n_comps or 1000
+
+    n_comps = min(n_comps, min(adata.shape) - 2)
+
+    return diffusion_map(adata, n_comps=n_comps)

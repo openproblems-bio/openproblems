@@ -4,21 +4,22 @@ from setuptools import setup
 import os
 
 install_requires = [
-    "numpy>=1.21,<1.24",
-    "scikit-learn>=1.0,<1.2",
     "anndata==0.8.*",
-    "scprep>=1.2.2",
-    "scipy>=1.7,<1.10",
-    "scanpy>=1.6",
-    "louvain==0.8.*",
-    "python-igraph==0.10.*",
-    "decorator<5.0",  # pinned in #324
-    "memory-profiler==0.60",
     "colorama==0.4.*",
+    "decorator<5.0",  # pinned in #324
+    "louvain==0.8.*",
+    "matplotlib<3.7.0",
+    "memory-profiler==0.60",
+    "numpy>=1.21,<1.24",
     "packaging==21.3",
+    "pandas==1.3.5",
+    "python-igraph==0.10.*",
+    "scanpy>=1.6",
+    "scipy>=1.7,<1.10",
+    "scikit-learn>=1.0,<1.2",
+    "scprep>=1.2.2",
     "umap-learn==0.5.*",
     "requests==2.28.*",
-    "pandas==1.3.5",
 ]
 
 r_requires = [

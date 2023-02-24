@@ -83,9 +83,11 @@ def method(
 
     def decorator(func):
         @functools.wraps(func)
-        def apply_method(*args, **kwargs):
+        def apply_method(adata: anndata.AnnData, *args, **kwargs):
             log.debug("Running {} method".format(func.__name__))
-            return func(*args, **kwargs)
+            adata = func(adata, *args, **kwargs)
+            adata.uns["is_baseline"] = is_baseline
+            return adata
 
         apply_method.metadata = dict(
             method_name=method_name,
@@ -125,9 +127,9 @@ def metric(metric_name, maximize, paper_reference, image="openproblems"):
 
     def decorator(func):
         @functools.wraps(func)
-        def apply_metric(*args, **kwargs):
+        def apply_metric(adata: anndata.AnnData, *args, **kwargs):
             log.debug("Running {} metric".format(func.__name__))
-            return func(*args, **kwargs)
+            return func(adata.copy(), *args, **kwargs)
 
         apply_metric.metadata = dict(
             metric_name=metric_name,
