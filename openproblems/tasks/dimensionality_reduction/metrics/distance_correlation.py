@@ -1,5 +1,6 @@
 from ....tools.decorators import metric
 from ....tools.normalize import log_cp10k
+from ..methods.diffusion_map import diffusion_map
 
 
 def _distance_correlation(X, X_emb):
@@ -18,7 +19,7 @@ def _distance_correlation(X, X_emb):
     maximize=True,
     paper_reference="schober2018correlation",
 )
-def distance_correlation(adata, n_svd=200):
+def distance_correlation(adata, n_svd=500):
     """Calculate the root mean squared error.
 
     Computes (RMSE) between the full (or processed) data matrix and the
@@ -27,8 +28,11 @@ def distance_correlation(adata, n_svd=200):
     import sklearn.decomposition
 
     adata = log_cp10k(adata)
-
-    X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
+    X = adata.X
+    if n_svd < min(X.shape):
+        X = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(X)
+    else:
+        X = X.toarray()
     return _distance_correlation(X, adata.obsm["X_emb"])
 
 
@@ -37,23 +41,13 @@ def distance_correlation(adata, n_svd=200):
     maximize=True,
     paper_reference="coifman2006diffusion",
 )
-def distance_correlation_spectral(adata, n_comps=200):
+def distance_correlation_spectral(adata, n_comps=1000):
     """Calculate the spectral root mean squared error
 
     Computes (RMSE) between high-dimensional Laplacian eigenmaps on the full (or
     processed) data matrix and the dimensionally-reduced matrix, invariant to scalar
     multiplication
     """
-    import numpy as np
-    import umap
-    import umap.spectral
-
-    adata = log_cp10k(adata)
-
     n_comps = min(n_comps, min(adata.shape) - 2)
-
-    graph = umap.UMAP(transform_mode="graph").fit_transform(adata.X)
-    X = umap.spectral.spectral_layout(
-        adata.X, graph, n_comps, random_state=np.random.default_rng()
-    )
-    return _distance_correlation(X, adata.obsm["X_emb"])
+    adata_true = diffusion_map(adata.copy(), n_comps=n_comps)
+    return _distance_correlation(adata_true.obsm["X_emb"], adata.obsm["X_emb"])

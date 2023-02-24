@@ -64,7 +64,9 @@ Datasets should contain the following attributes:
 
 * `adata.obs["batch"]` with the batch covariate, and
 * `adata.obs["label"]` with the cell identity label
-* `adata.obsm['X_uni']` with a pre-integration embedding (PCA)
+* `adata.obsm['X_uni_pca']` with the PCA embedding of the unintegrated representation
+* `adata.obsp['uni_connectivities']` with an unintegrated connectivity matrix generated
+  by  `scanpy.pp.neighbors()`
 * `adata.layers['log_normalized']` with log-normalized data
 * `adata.X` with log-normalized data
 * `adata.uns["organism"]` with either `"mouse"` or `"human"`
