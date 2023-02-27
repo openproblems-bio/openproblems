@@ -7,11 +7,19 @@ import functools
 
 _logistic_regression_method = functools.partial(
     method,
+    method_summary=(
+        "Logistic Regression estimates parameters of a logistic function for"
+        " multivariate classification tasks. Here, we use 100-dimensional whitened PCA"
+        " coordinates as independent variables, and the model minimises the cross"
+        " entropy loss over all cell type classes. "
+    ),
     paper_name="Applied Logistic Regression",
     paper_reference="hosmer2013applied",
     paper_year=2013,
-    code_url="https://scikit-learn.org/stable/modules/generated/"
-    "sklearn.linear_model.LogisticRegression.html",
+    code_url=(
+        "https://scikit-learn.org/stable/modules/generated/"
+        "sklearn.linear_model.LogisticRegression.html"
+    ),
 )
 
 

@@ -5,8 +5,15 @@ import functools
 
 _scanorama_method = functools.partial(
     method,
-    paper_name="Efficient integration of heterogeneous single-cell "
-    "transcriptomes using Scanorama",
+    method_summary=(
+        "Scanorama is an extension of the MNN method. Other then MNN, it finds mutual"
+        " nearest neighbours over all batches and embeds observations into a joint"
+        " hyperplane."
+    ),
+    paper_name=(
+        "Efficient integration of heterogeneous single-cell transcriptomes using"
+        " Scanorama"
+    ),
     paper_reference="hie2019efficient",
     paper_year=2019,
     code_url="https://github.com/brianhie/scanorama",

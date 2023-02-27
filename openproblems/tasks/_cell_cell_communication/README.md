@@ -40,21 +40,6 @@ More subtasks may be defined that infer communication events on any of the `sour
 cell type, the `target` cell type, the `ligand` molecule, and the receptor.
 More aspects of the communication may also be added in the future.
 
-## The metrics
-
-Metrics for cell-cell communication aim to characterize how good are
-the different scoring methods at prioritizing assumed truth predictions.
-
-* **Odds ratio**: The odds ratio represents the ratio of true and false
-positives within a set of prioritized interactions (top ranked hits) versus
-the same ratio for the remainder of the interactions. Thus, in this
-scenario odds ratios quantify the strength of association between the
-ability of methods to prioritize interactions and those interactions
-assigned to the positive class.
-
-* **AUPRC**: a single number _[0-1]_ that summarizes the area under the curve where
-x is the recall and y is the precision.
-
 ## API
 
 ### Datasets

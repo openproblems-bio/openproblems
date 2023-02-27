@@ -176,20 +176,41 @@ def _fit(
     return T[_K], C[_K], QNN[_K], AUC, LCMC[_K], Qlocal, Qglobal
 
 
-@metric("continuity", paper_reference="zhang2021pydrmetrics", maximize=True)
+@metric(
+    "continuity",
+    metric_summary=(
+        "Continuity measures error of hard extrusions based on nearest neighbor"
+        " coranking"
+    ),
+    paper_reference="zhang2021pydrmetrics",
+    maximize=True,
+)
 def continuity(adata: AnnData) -> float:
     _, C, _, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
     return float(np.clip(C, 0.0, 1.0))  # in [0, 1]
 
 
-@metric("co-KNN size", paper_reference="zhang2021pydrmetrics", maximize=True)
+@metric(
+    "co-KNN size",
+    metric_summary=(
+        "co-KNN size counts how many points are in both k-nearest neighbors before and"
+        " after the dimensionality reduction"
+    ),
+    paper_reference="zhang2021pydrmetrics",
+    maximize=True,
+)
 def qnn(adata: AnnData) -> float:
     _, _, QNN, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
     # normalized in the code to [0, 1]
     return float(np.clip(QNN, 0.0, 1.0))
 
 
-@metric("co-KNN AUC", paper_reference="zhang2021pydrmetrics", maximize=True)
+@metric(
+    "co-KNN AUC",
+    metric_summary="co-KNN AUC is area under the co-KNN curve",
+    paper_reference="zhang2021pydrmetrics",
+    maximize=True,
+)
 def qnn_auc(adata: AnnData) -> float:
     _, _, _, AUC, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
     return float(np.clip(AUC, 0.5, 1.0))  # in [0.5, 1]
@@ -197,6 +218,10 @@ def qnn_auc(adata: AnnData) -> float:
 
 @metric(
     "local continuity meta criterion",
+    metric_summary=(
+        "The local continuity meta criterion is the co-KNN size with baseline removal"
+        " which favors locality"
+    ),
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
@@ -205,7 +230,12 @@ def lcmc(adata: AnnData) -> float:
     return LCMC
 
 
-@metric("local property", paper_reference="zhang2021pydrmetrics", maximize=True)
+@metric(
+    "local property",
+    metric_summary="The local property metric is a summary of the local co-KNN",
+    paper_reference="zhang2021pydrmetrics",
+    maximize=True,
+)
 def qlocal(adata: AnnData) -> float:
     # according to authors, this is usually preferred to
     # qglobal, because human are more sensitive to nearer neighbors
@@ -213,7 +243,12 @@ def qlocal(adata: AnnData) -> float:
     return Qlocal
 
 
-@metric("global property", paper_reference="zhang2021pydrmetrics", maximize=True)
+@metric(
+    "global property",
+    metric_summary="The global property metric is a summary of the global co-KNN",
+    paper_reference="zhang2021pydrmetrics",
+    maximize=True,
+)
 def qglobal(adata: AnnData) -> float:
     *_, Qglobal = _fit(_high_dim(adata), adata.obsm["X_emb"])
     return Qglobal

@@ -53,6 +53,7 @@ def _backport_code_version(apply_method, code_version):
 
 def method(
     method_name,
+    method_summary,
     paper_name,
     paper_reference,
     paper_year,
@@ -67,6 +68,8 @@ def method(
     ----------
     method_name : str
         Unique human readable name of the method
+    method_summary : str
+        Short summary of the method
     paper_name : str
         Title of the seminal paper describing the method
     paper_reference : str
@@ -91,6 +94,7 @@ def method(
 
         apply_method.metadata = dict(
             method_name=method_name,
+            method_summary=method_summary,
             paper_name=paper_name,
             paper_reference=paper_reference,
             paper_year=paper_year,
@@ -104,7 +108,19 @@ def method(
     return decorator
 
 
-def metric(metric_name, maximize, paper_reference, image="openproblems"):
+baseline_method = functools.partial(
+    method,
+    paper_name="Open Problems for Single Cell Analysis",
+    paper_reference="openproblems",
+    paper_year=2022,
+    code_url="https://github.com/openproblems-bio/openproblems",
+    is_baseline=True,
+)
+
+
+def metric(
+    metric_name, maximize, metric_summary, paper_reference, image="openproblems"
+):
     """Decorate a metric function.
 
     Parameters
@@ -116,6 +132,8 @@ def metric(metric_name, maximize, paper_reference, image="openproblems"):
     ----------
     metric_name : str
         Unique human readable name of the metric
+    metric_summary : str
+        Short summary of the metric
     paper_reference : str
         BibTex key from `main.bib` referring to the seminal paper in which the metric
         was defined
@@ -133,6 +151,7 @@ def metric(metric_name, maximize, paper_reference, image="openproblems"):
 
         apply_metric.metadata = dict(
             metric_name=metric_name,
+            metric_summary=metric_summary,
             paper_reference=paper_reference,
             maximize=maximize,
             image=image,
@@ -161,7 +180,7 @@ def dataset(
         BibTex key from `main.bib` referring to the paper describing how the dataset was
         generated
     dataset_summary : str
-        Short (<80 character) summary of the dataset
+        Short summary of the dataset
     image : str, optional (default: "openproblems")
         Name of the Docker image to be used for this dataset
     """

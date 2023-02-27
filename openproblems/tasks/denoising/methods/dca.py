@@ -26,6 +26,14 @@ def _dca(adata, test=False, epochs=None):
 
 @method(
     method_name="DCA",
+    method_summary=(
+        "DCA (Deep Count Autoencoder) is a method to remove the effect of dropout in"
+        " scRNA-seq data. DCA takes into account the count structure, overdispersed"
+        " nature and sparsity of scRNA-seq datatypes using a deep autoencoder with a"
+        " zero-inflated negative binomial (ZINB) loss. The autoencoder is then applied"
+        " to the dataset, where the mean of the fitted negative binomial distributions"
+        " is used to fill each entry of the imputed matrix."
+    ),
     paper_name="Single-cell RNA-seq denoising using a deep count autoencoder",
     paper_reference="eraslan2019single",
     paper_year=2019,

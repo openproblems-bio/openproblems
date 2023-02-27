@@ -23,6 +23,11 @@ Here, M is the set of unique cell labels."""
 
 @metric(
     metric_name="Batch ASW",
+    metric_summary=(
+        "The absolute silhouette width is computed over batch labels per cell. As 0"
+        " then indicates that batches are well mixed and any deviation from 0 indicates"
+        " a batch effect, we use the 1-abs(ASW) to map the score to the scale [0;1]."
+    ),
     paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-r-pytorch",

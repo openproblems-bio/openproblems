@@ -1,7 +1,6 @@
-from .....tools.decorators import method
+from .....tools.decorators import baseline_method
 from .....tools.utils import check_version
 
-import functools
 import numpy as np
 
 
@@ -47,18 +46,12 @@ def _random_embedding(partition, jitter=0.01):
     return embedding
 
 
-_baseline_method = functools.partial(
-    method,
-    paper_name="Open Problems for Single Cell Analysis",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
-
-
-@_baseline_method(
+@baseline_method(
     method_name="No Integration",
+    method_summary=(
+        "Cells are embedded by PCA on the unintegrated data. A graph is built on this"
+        " PCA embedding."
+    ),
 )
 def no_integration(adata, test=False):
     adata.obsp["connectivities"] = adata.obsp["uni_connectivities"]
@@ -69,8 +62,12 @@ def no_integration(adata, test=False):
     return adata
 
 
-@_baseline_method(
+@baseline_method(
     method_name="Random Integration",
+    method_summary=(
+        "Feature values, embedding coordinates, and graph connectivity are all randomly"
+        " permuted"
+    ),
 )
 def random_integration(adata, test=False):
     adata.X = _randomize_features(adata.X)
@@ -80,13 +77,12 @@ def random_integration(adata, test=False):
     return adata
 
 
-@_baseline_method(
+@baseline_method(
     method_name="Random Integration by Celltype",
-    paper_name="Random Integration by Celltype (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary=(
+        "Feature values, embedding coordinates, and graph connectivity are all randomly"
+        " permuted within each celltype label"
+    ),
 )
 def celltype_random_integration(adata, test=False):
     adata.obsm["X_emb"] = _randomize_features(
@@ -101,8 +97,12 @@ def celltype_random_integration(adata, test=False):
     return adata
 
 
-@_baseline_method(
+@baseline_method(
     method_name="Random Integration by Batch",
+    method_summary=(
+        "Feature values, embedding coordinates, and graph connectivity are all randomly"
+        " permuted within each batch label"
+    ),
 )
 def batch_random_integration(adata, test=False):
     adata.obsm["X_emb"] = _randomize_features(
