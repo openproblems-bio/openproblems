@@ -32,8 +32,8 @@ def test_temporary_version_future():
 
     np.testing.assert_raises_regex(
         RuntimeError,
-        "Temporary function {}.{} is temporary and should not be used "
-        "after version {}".format(test_fn.__module__, test_fn.__name__, temp_version),
+        "Temporary function {}.{} is temporary and should not be used after version {}"
+        .format(test_fn.__module__, test_fn.__name__, temp_version),
         test_fn,
     )
 

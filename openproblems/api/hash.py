@@ -46,8 +46,10 @@ def docker_token(image_name):
             [
                 "curl",
                 "--silent",
-                f"https://auth.docker.io/token?scope=repository:{image_name}:"
-                "pull&service=registry.docker.io",
+                (
+                    f"https://auth.docker.io/token?scope=repository:{image_name}:"
+                    "pull&service=registry.docker.io"
+                ),
             ]
         )
     )
@@ -88,8 +90,8 @@ def docker_hash(image_name):
             return docker_labels_from_api(image_name)["bio.openproblems.hash"]
     except Exception:  # pragma: nocover
         warnings.warn(
-            "Failed to access docker or the docker API; docker image hash failed. "
-            f"All jobs using {image_name} will not be cached."
+            "Failed to access docker or the docker API; docker image hash failed. All"
+            f" jobs using {image_name} will not be cached."
         )
         return str(random.getrandbits(256))
 
