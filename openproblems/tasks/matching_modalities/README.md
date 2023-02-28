@@ -1,7 +1,5 @@
 # Matching modalities
 
-## The task
-
 Cellular function is regulated by the complex interplay of different types of biological
 molecules (DNA, RNA, proteins, etc.), which determine the state of a cell. Several
 recently described technologies allow for simultaneous measurement of different aspects
