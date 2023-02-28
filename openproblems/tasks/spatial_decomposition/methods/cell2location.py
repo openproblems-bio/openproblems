@@ -8,6 +8,11 @@ import numpy as np
 
 _cell2location_method = functools.partial(
     method,
+    method_summary=(
+        "Cell2location is a decomposition method based on Negative Binomial regression"
+        " that is able to account for batch effects in estimating the single-cell gene"
+        " expression signature used for the spatial decomposition step."
+    ),
     paper_name="Cell2location maps fine-grained cell types in spatial transcriptomics",
     paper_reference="kleshchevnikov2022cell2location",
     paper_year=2022,

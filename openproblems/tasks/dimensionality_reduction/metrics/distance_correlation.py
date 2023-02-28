@@ -16,14 +16,18 @@ def _distance_correlation(X, X_emb):
 
 @metric(
     metric_name="Distance correlation",
+    metric_summary=(
+        "Spearman correlation between all pairwise Euclidean distances in the original"
+        " and dimension-reduced data"
+    ),
     maximize=True,
     paper_reference="schober2018correlation",
 )
 def distance_correlation(adata, n_svd=500):
-    """Calculate the root mean squared error.
+    """Calculate the distance correlation
 
-    Computes (RMSE) between the full (or processed) data matrix and the
-    dimensionally-reduced matrix, invariant to scalar multiplication
+    Computes Spearman correlations between distances on the full (or processed) data
+    matrix and the dimensionally-reduced matrix
     """
     import sklearn.decomposition
 
@@ -38,15 +42,19 @@ def distance_correlation(adata, n_svd=500):
 
 @metric(
     metric_name="Distance correlation (spectral)",
+    metric_summary=(
+        "Spearman correlation between all pairwise diffusion distances in the original"
+        " and dimension-reduced data"
+    ),
     maximize=True,
     paper_reference="coifman2006diffusion",
 )
 def distance_correlation_spectral(adata, n_comps=1000):
-    """Calculate the spectral root mean squared error
+    """Calculate the spectral distance correlation
 
-    Computes (RMSE) between high-dimensional Laplacian eigenmaps on the full (or
-    processed) data matrix and the dimensionally-reduced matrix, invariant to scalar
-    multiplication
+    Computes Spearman correlations between distances on high-dimensional Laplacian
+    eigenmaps on the full (or processed) data matrix and the dimensionally-reduced
+    matrix
     """
     n_comps = min(n_comps, min(adata.shape) - 2)
     adata_true = diffusion_map(adata.copy(), n_comps=n_comps)
