@@ -7,8 +7,10 @@ import numpy as np
 
 @method(
     method_name="NMF-reg",
-    paper_name="Slide-seq: A scalable technology for measuring genome-wide"
-    " expression at high spatial resolution",
+    paper_name=(
+        "Slide-seq: A scalable technology for measuring genome-wide"
+        " expression at high spatial resolution"
+    ),
     paper_reference="rodriques2019slide",
     paper_year=2019,
     code_url="https://github.com/tudaga/NMFreg_tutorial",

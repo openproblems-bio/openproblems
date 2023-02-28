@@ -8,8 +8,10 @@ from ....tools.utils import check_version
     paper_name="Generalized Procrustes analysis",
     paper_reference="gower1975generalized",
     paper_year=1975,
-    code_url="https://docs.scipy.org/doc/scipy/reference/generated/"
-    "scipy.spatial.procrustes.html",
+    code_url=(
+        "https://docs.scipy.org/doc/scipy/reference/generated/"
+        "scipy.spatial.procrustes.html"
+    ),
 )
 def procrustes(adata, test=False, n_svd=None):
     import scipy.spatial

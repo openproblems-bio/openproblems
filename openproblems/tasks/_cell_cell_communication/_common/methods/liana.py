@@ -23,8 +23,10 @@ _r_liana = r_function(
 
 _liana_method = functools.partial(
     method,
-    paper_name="Comparison of methods and resources for cell-cell "
-    "communication inference from single-cell RNA-Seq data",
+    paper_name=(
+        "Comparison of methods and resources for cell-cell "
+        "communication inference from single-cell RNA-Seq data"
+    ),
     paper_reference="dimitrov2022comparison",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
@@ -107,8 +109,10 @@ def magnitude_sum(adata, test=False):
 
 _cellphonedb_method = functools.partial(
     method,
-    paper_name="CellPhoneDB: inferring cell–cell communication from "
-    "combined expression of multi-subunit ligand–receptor complexes",
+    paper_name=(
+        "CellPhoneDB: inferring cell–cell communication from "
+        "combined expression of multi-subunit ligand–receptor complexes"
+    ),
     paper_reference="efremova2020cellphonedb",
     paper_year=2020,
     code_url="https://github.com/saezlab/liana",
@@ -154,8 +158,10 @@ def cellphonedb_sum(adata, test=False):
 
 _connectome_method = functools.partial(
     method,
-    paper_name="Computation and visualization of cell–cell signaling "
-    "topologies in single-cell systems data using Connectome",
+    paper_name=(
+        "Computation and visualization of cell–cell signaling "
+        "topologies in single-cell systems data using Connectome"
+    ),
     paper_reference="raredon2022computation",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
@@ -189,8 +195,10 @@ def connectome_sum(adata, test=False):
 
 _logfc_method = functools.partial(
     method,
-    paper_name="Comparison of methods and resources for cell-cell "
-    "communication inference from single-cell RNA-Seq data",
+    paper_name=(
+        "Comparison of methods and resources for cell-cell "
+        "communication inference from single-cell RNA-Seq data"
+    ),
     paper_reference="dimitrov2022comparison",
     paper_year=2022,
     code_url="https://github.com/saezlab/liana",
@@ -258,8 +266,10 @@ def natmi_sum(adata, test=False):
 
 _sca_method = functools.partial(
     method,
-    paper_name="SingleCellSignalR: inference of intercellular networks "
-    "from single-cell transcriptomics",
+    paper_name=(
+        "SingleCellSignalR: inference of intercellular networks "
+        "from single-cell transcriptomics"
+    ),
     paper_reference="cabello2020singlecellsignalr",
     paper_year=2021,
     code_url="https://github.com/saezlab/liana",

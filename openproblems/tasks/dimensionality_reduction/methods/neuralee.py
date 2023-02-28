@@ -12,9 +12,11 @@ log = logging.getLogger("openproblems")
 
 _neuralee_method = functools.partial(
     method,
-    paper_name="NeuralEE: A GPU-Accelerated Elastic Embedding "
-    "Dimensionality Reduction Method for "
-    "Visualizing Large-Scale scRNA-Seq Data",
+    paper_name=(
+        "NeuralEE: A GPU-Accelerated Elastic Embedding "
+        "Dimensionality Reduction Method for "
+        "Visualizing Large-Scale scRNA-Seq Data"
+    ),
     paper_reference="xiong2020neuralee",
     paper_year=2020,
     code_url="https://github.com/HiBearME/NeuralEE",

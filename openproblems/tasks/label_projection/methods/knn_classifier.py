@@ -10,8 +10,10 @@ _knn_classifier_method = functools.partial(
     paper_name="Nearest neighbor pattern classification",
     paper_reference="cover1967nearest",
     paper_year=1967,
-    code_url="https://scikit-learn.org/stable/modules/generated/"
-    "sklearn.neighbors.KNeighborsClassifier.html",
+    code_url=(
+        "https://scikit-learn.org/stable/modules/generated/"
+        "sklearn.neighbors.KNeighborsClassifier.html"
+    ),
 )
 
 

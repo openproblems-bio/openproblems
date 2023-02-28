@@ -12,8 +12,9 @@ log = logging.getLogger("openproblems")
 method_name = ("ALRA (sqrt norm, reversed normalization)",)
 _alra_method = functools.partial(
     method,
-    paper_name="Zero-preserving imputation of scRNA-seq data using "
-    "low-rank approximation",
+    paper_name=(
+        "Zero-preserving imputation of scRNA-seq data using low-rank approximation"
+    ),
     paper_reference="linderman2018zero",
     paper_year=2018,
     code_url="https://github.com/KlugerLab/ALRA",
