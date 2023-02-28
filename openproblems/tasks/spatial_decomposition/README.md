@@ -18,21 +18,6 @@ scNuc-seq) to guide the inference process, while the latter only work with the
 spatial data. We require that all datasets have an associated reference single
 cell data set, but methods are free to ignore this information.
 
-## Metrics
-
-### R2
-
-R2 pronounced as "R squared", also known as the "coefficient of determination". R2
-reports the fraction of the true proportion values' (`adata.obsm["proportions_true"]`)
-variance that can be explained by the predicted proportion values
-(`adata.obsm["proportion_pred"]`). The **best score**, and upper bound, is 1.0. There is
-no fixed lower bound for the metric. The _uniform/non-weighted average_ across all cell
-types/states is used to summarize performance. See the
-[sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html)
-documentation for details on the implementation and the
-[wikipedia](https://en.wikipedia.org/wiki/Coefficient_of_determination) site for more
-general information regarding the metric.
-
 ## API
 
 Datasets consists of 2 `anndata.AnnData` objects, concatenated by key

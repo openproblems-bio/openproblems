@@ -1,17 +1,16 @@
-from .....tools.decorators import method
+from .....tools.decorators import baseline_method
 from .....tools.utils import check_version
 
 import numpy as np
 import pandas as pd
 
 
-@method(
+@baseline_method(
     method_name="Random Events",
-    paper_name="Random Events (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary=(
+        "Random generation of cell-cell communication events by random selection of"
+        " ligand, receptor, source, target, and score"
+    ),
 )
 def random_events(adata, test=False, n_events=1000):
     rng = np.random.default_rng(seed=1)
@@ -36,13 +35,11 @@ def random_events(adata, test=False, n_events=1000):
     return adata
 
 
-@method(
+@baseline_method(
     method_name="True Events",
-    paper_name="True Events (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary=(
+        "Perfect prediction of cell-cell communication events from target data"
+    ),
 )
 def true_events(adata, test=False):
     adata.uns["ccc_pred"] = adata.uns["ccc_target"].rename(

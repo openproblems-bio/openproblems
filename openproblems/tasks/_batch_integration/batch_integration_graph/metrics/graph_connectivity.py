@@ -21,6 +21,11 @@ on the kNN graph, it can be used to evaluate all integration outputs.
 
 @metric(
     metric_name="Graph connectivity",
+    metric_summary=(
+        "The graph connectivity metric assesses whether the kNN graph representation,"
+        " G, of the integrated data connects all cells with the same cell identity"
+        " label."
+    ),
     paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-r-pytorch",
