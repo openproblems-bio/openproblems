@@ -18,8 +18,8 @@ def temporary(func, version=None, *args, **kwargs):
         raise TypeError("temporary() missing 1 required keyword argument: 'version'")
     if packaging.version.parse(__version__) >= packaging.version.parse(version):
         raise RuntimeError(
-            "Temporary function {}.{} is temporary and should not be used "
-            "after version {} (current version: {})".format(
+            "Temporary function {}.{} is temporary and should not be used after version"
+            " {} (current version: {})".format(
                 func.__module__, func.__name__, version, __version__
             )
         )

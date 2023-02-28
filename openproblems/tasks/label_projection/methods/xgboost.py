@@ -9,6 +9,12 @@ import numpy as np
 
 _xgboost_method = functools.partial(
     method,
+    method_summary=(
+        "XGBoost is a gradient boosting decision tree model that learns multiple tree"
+        " structures in the form of a series of input features and their values,"
+        " leading to a prediction decision, and averages predictions from all its"
+        " trees. Here, input features are normalised gene expression values."
+    ),
     paper_name="XGBoost: A Scalable Tree Boosting System",
     paper_reference="chen2016xgboost",
     paper_year=2016,

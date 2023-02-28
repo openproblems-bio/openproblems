@@ -41,8 +41,8 @@ def test_method(task_name, method_name, image):  # pragma: nocover
     assert task.api.check_method(adata, is_baseline=method.metadata["is_baseline"])
     if "method_code_version" not in adata.uns:
         openproblems.utils.future_warning(
-            "Setting code_version in the method decorator is deprecated. "
-            "Store code version in `adata.uns['method_code_version']` instead.",
+            "Setting code_version in the method decorator is deprecated. Store code"
+            " version in `adata.uns['method_code_version']` instead.",
             error_version="1.0",
             error_category=TypeError,
         )

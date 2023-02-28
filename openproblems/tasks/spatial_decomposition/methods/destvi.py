@@ -6,8 +6,15 @@ from typing import Optional
 
 @method(
     method_name="DestVI",
-    paper_name="DestVI identifies continuums of cell types in spatial "
-    "transcriptomics data",
+    method_summary=(
+        "destVI is a decomposition method that leverages a conditional generative model"
+        " of spatial transcriptomics down to the sub-cell-type variation level, which"
+        " is then used to decompose the cell-type proportions determining the spatial"
+        " organization of a tissue."
+    ),
+    paper_name=(
+        "DestVI identifies continuums of cell types in spatial transcriptomics data"
+    ),
     paper_reference="lopez2022destvi",
     paper_year=2022,
     code_url="https://github.com/YosefLab/scvi-tools",

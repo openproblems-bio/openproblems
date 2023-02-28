@@ -52,7 +52,7 @@ def _download_aftp(
     if timeout:
         wget_command_list += ["-T", str(timeout)]
 
-    log.debug("Running: %s" % (" ".join(wget_command_list)))
+    log.debug("Running: %s" % " ".join(wget_command_list))
     subprocess.call(wget_command_list)
     return tmp_path
 

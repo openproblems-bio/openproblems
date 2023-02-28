@@ -1,23 +1,17 @@
-from .....tools.decorators import method
+from .....tools.decorators import baseline_method
 from .....tools.utils import check_version
 from ..._common.methods.baseline import _random_embedding
 
-import functools
 import numpy as np
 import scanpy as sc
 
-_baseline_method = functools.partial(
-    method,
-    paper_name="Open Problems for Single Cell Analysis",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
-)
 
-
-@_baseline_method(
+@baseline_method(
     method_name="Random Embedding by Celltype (with jitter)",
+    method_summary=(
+        "Cells are embedded as a one-hot encoding of celltype labels, with a small"
+        " amount of random noise added to the embedding"
+    ),
 )
 def celltype_random_embedding_jitter(adata, test=False):
     adata.obsm["X_emb"] = _random_embedding(partition=adata.obs["labels"], jitter=0.01)
@@ -25,8 +19,9 @@ def celltype_random_embedding_jitter(adata, test=False):
     return adata
 
 
-@_baseline_method(
+@baseline_method(
     method_name="Random Embedding by Celltype",
+    method_summary="Cells are embedded as a one-hot encoding of celltype labels",
 )
 def celltype_random_embedding(adata, test=False):
     adata.obsm["X_emb"] = _random_embedding(partition=adata.obs["labels"], jitter=None)
@@ -34,8 +29,9 @@ def celltype_random_embedding(adata, test=False):
     return adata
 
 
-@_baseline_method(
+@baseline_method(
     method_name="No Integration by Batch",
+    method_summary="Cells are embedded by computing PCA independently on each batch",
 )
 def no_integration_batch(adata, test=False):
     """Compute PCA independently on each batch

@@ -18,6 +18,12 @@ component."""
 
 @metric(
     metric_name="PC Regression",
+    metric_summary=(
+        "This compares the explained variance by batch before and after integration. It"
+        " returns a score between 0 and 1 (scaled=True) with 0 if the variance"
+        " contribution hasn’t changed. The larger the score, the more different the"
+        " variance contributions are before and after integration."
+    ),
     paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-r-pytorch",

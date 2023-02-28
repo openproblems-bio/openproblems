@@ -3,7 +3,10 @@ from ..utils import join_truth_and_pred
 
 
 @metric(
-    metric_name="Precision-recall AUC", paper_reference="davis2006prauc", maximize=True
+    metric_name="Precision-recall AUC",
+    metric_summary="Area under the precision-recall curve.",
+    paper_reference="davis2006prauc",
+    maximize=True,
 )
 def auprc(adata):
     from sklearn.metrics import auc
