@@ -4,10 +4,7 @@ from ..utils import join_truth_and_pred
 
 @metric(
     metric_name="Precision-recall AUC",
-    metric_summary=(
-        "a single number _[0-1]_ that summarizes the area under the curve where x is"
-        " the recall and y is the precision."
-    ),
+    metric_summary="Area under the precision-recall curve.",
     paper_reference="davis2006prauc",
     maximize=True,
 )
