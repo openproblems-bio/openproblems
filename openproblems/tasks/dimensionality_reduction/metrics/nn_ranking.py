@@ -15,6 +15,7 @@ The following changes have been made:
 """
 
 from ....tools.decorators import metric
+from .._utils import ranking_matrix
 from anndata import AnnData
 from numba import njit
 from typing import Tuple
@@ -34,22 +35,6 @@ _K = 30
 
 
 @njit(cache=True, fastmath=True)
-def _ranking_matrix(D: np.ndarray) -> np.ndarray:  # pragma: no cover
-    assert D.shape[0] == D.shape[1]
-    R = np.zeros(D.shape)
-    m = len(R)
-    ks = np.arange(m)
-
-    for i in range(m):
-        for j in range(m):
-            R[i, j] = np.sum(
-                (D[i, :] < D[i, j]) | ((ks < j) & (np.abs(D[i, :] - D[i, j]) <= 1e-12))
-            )
-
-    return R
-
-
-@njit(cache=True, fastmath=True)
 def _coranking_matrix(R1: np.ndarray, R2: np.ndarray) -> np.ndarray:  # pragma: no cover
     assert R1.shape == R2.shape
     Q = np.zeros(R1.shape, dtype=np.int32)
@@ -61,22 +46,6 @@ def _coranking_matrix(R1: np.ndarray, R2: np.ndarray) -> np.ndarray:  # pragma: 
             Q[k, l] += 1
 
     return Q
-
-
-@njit(cache=True, fastmath=True)
-def _trustworthiness(Q: np.ndarray, m: int) -> np.ndarray:  # pragma: no cover
-
-    T = np.zeros(m - 1)  # trustworthiness
-
-    for k in range(m - 1):
-        Qs = Q[k:, :k]
-        # a column vector of weights. weight = rank error = actual_rank - k
-        W = np.arange(Qs.shape[0]).reshape(-1, 1)
-        # 1 - normalized hard-k-intrusions. lower-left region.
-        # weighted by rank error (rank - k)
-        T[k] = 1 - np.sum(Qs * W) / ((k + 1) * m * (m - 1 - k))
-
-    return T
 
 
 @njit(cache=True, fastmath=True)
@@ -133,47 +102,16 @@ def _qnn_auc(QNN: np.ndarray) -> float:
     return AUC  # type: ignore
 
 
-def _metrics(
-    Q: np.ndarray,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, float, np.ndarray, int, float, float]:
+def _fit(adata: AnnData) -> Tuple[float, float, float, float, float, float, float]:
+    Rx = adata.obsm["X_ranking"]
+    E = adata.obsm["X_emb"]
+
+    Re = ranking_matrix(E)
+    Q = _coranking_matrix(Rx, Re)
     Q = Q[1:, 1:]
     m = len(Q)
 
-    T = _trustworthiness(Q, m)
-    C = _continuity(Q, m)
-    QNN = _qnn(Q, m)
-    LCMC = _lcmc(QNN, m)
-    kmax = _kmax(LCMC)
-    Qlocal = _q_local(QNN, kmax)
-    Qglobal = _q_global(QNN, kmax, m)
-    AUC = _qnn_auc(QNN)
-
-    return T, C, QNN, AUC, LCMC, kmax, Qlocal, Qglobal
-
-
-def _high_dim(adata: AnnData) -> np.ndarray:
-    from scipy.sparse import issparse
-
-    high_dim = adata.X
-    return high_dim.A if issparse(high_dim) else high_dim
-
-
-def _fit(
-    X: np.ndarray, E: np.ndarray
-) -> Tuple[float, float, float, float, float, float, float]:
-    from sklearn.metrics import pairwise_distances
-
-    if np.any(np.isnan(E)):
-        return 0.0, 0.0, 0.0, 0.5, -np.inf, -np.inf, -np.inf
-
-    Dx = pairwise_distances(X)
-    De = pairwise_distances(E)
-    Rx, Re = _ranking_matrix(Dx), _ranking_matrix(De)
-    Q = _coranking_matrix(Rx, Re)
-
-    T, C, QNN, AUC, LCMC, _kmax, Qlocal, Qglobal = _metrics(Q)
-
-    return T[_K], C[_K], QNN[_K], AUC, LCMC[_K], Qlocal, Qglobal
+    return Q, m
 
 
 @metric(
@@ -186,7 +124,8 @@ def _fit(
     maximize=True,
 )
 def continuity(adata: AnnData) -> float:
-    _, C, _, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    Q, m = _fit(adata)
+    C = _continuity(Q, m)[_K]
     return float(np.clip(C, 0.0, 1.0))  # in [0, 1]
 
 
@@ -200,7 +139,8 @@ def continuity(adata: AnnData) -> float:
     maximize=True,
 )
 def qnn(adata: AnnData) -> float:
-    _, _, QNN, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    Q, m = _fit(adata)
+    QNN = _qnn(Q, m)[_K]
     # normalized in the code to [0, 1]
     return float(np.clip(QNN, 0.0, 1.0))
 
@@ -212,7 +152,9 @@ def qnn(adata: AnnData) -> float:
     maximize=True,
 )
 def qnn_auc(adata: AnnData) -> float:
-    _, _, _, AUC, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    Q, m = _fit(adata)
+    QNN = _qnn(Q, m)
+    AUC = _qnn_auc(QNN)
     return float(np.clip(AUC, 0.5, 1.0))  # in [0.5, 1]
 
 
@@ -226,7 +168,9 @@ def qnn_auc(adata: AnnData) -> float:
     maximize=True,
 )
 def lcmc(adata: AnnData) -> float:
-    *_, LCMC, _, _ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    Q, m = _fit(adata)
+    QNN = _qnn(Q, m)
+    LCMC = _lcmc(QNN, m)[_K]
     return LCMC
 
 
@@ -239,7 +183,11 @@ def lcmc(adata: AnnData) -> float:
 def qlocal(adata: AnnData) -> float:
     # according to authors, this is usually preferred to
     # qglobal, because human are more sensitive to nearer neighbors
-    *_, Qlocal, _ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    Q, m = _fit(adata)
+    QNN = _qnn(Q, m)
+    LCMC = _lcmc(QNN, m)
+    kmax = _kmax(LCMC)
+    Qlocal = _q_local(QNN, kmax)
     return Qlocal
 
 
@@ -250,5 +198,9 @@ def qlocal(adata: AnnData) -> float:
     maximize=True,
 )
 def qglobal(adata: AnnData) -> float:
-    *_, Qglobal = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    Q, m = _fit(adata)
+    QNN = _qnn(Q, m)
+    LCMC = _lcmc(QNN, m)
+    kmax = _kmax(LCMC)
+    Qglobal = _q_global(QNN, kmax, m)
     return Qglobal
