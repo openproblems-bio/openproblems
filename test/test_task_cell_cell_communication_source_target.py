@@ -28,8 +28,8 @@ class TestApi(unittest.TestCase):
         )
         self.assertRaisesRegex(
             AssertionError,
-            r"test_subset is not a subset of test_superset\. "
-            "d missing from test_superset",
+            r"test_subset is not a subset of test_superset\. d missing from"
+            r" test_superset",
             common.api.assert_is_subset,
             ["a", "b", "c", "d"],
             ["a", "b", "c"],
@@ -39,8 +39,8 @@ class TestApi(unittest.TestCase):
         )
         self.assertRaisesRegex(
             AssertionError,
-            r"Allowed proportion \(0.24\) of missing test_subset elements exceeded "
-            r"\(0\.25\)\. d missing from test_superset",
+            r"Allowed proportion \(0.24\) of missing test_subset elements exceeded"
+            r" \(0\.25\)\. d missing from test_superset",
             common.api.assert_is_subset,
             ["a", "b", "c", "d"],
             ["a", "b", "c"],
