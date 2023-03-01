@@ -43,7 +43,7 @@ workflow run_wf {
       // split params for downstream components
     | setWorkflowArguments(
       method: ["input"],
-      metric: [],
+      metric: ["input_solution"],
       output: ["output"]
     )
 
