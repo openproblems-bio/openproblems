@@ -11,7 +11,10 @@ _cell2location_method = functools.partial(
     method_summary=(
         "Cell2location is a decomposition method based on Negative Binomial regression"
         " that is able to account for batch effects in estimating the single-cell gene"
-        " expression signature used for the spatial decomposition step."
+        " expression signature used for the spatial decomposition step. Note that since"
+        " batch information is unavailable in this task, here we use either a"
+        " hard-coded reference, or a negative-binomial learned reference without batch"
+        " labels. The parameter alpha refers to the detection efficiency prior."
     ),
     paper_name="Cell2location maps fine-grained cell types in spatial transcriptomics",
     paper_reference="kleshchevnikov2022cell2location",
@@ -159,9 +162,7 @@ def _cell2location(
     return adata
 
 
-@_cell2location_method(
-    method_name="Cell2location (detection_alpha=20, reference hard-coded)"
-)
+@_cell2location_method(method_name="Cell2location (alpha=20, reference hard-coded)")
 def cell2location_detection_alpha_20(
     adata,
     detection_alpha=20,
@@ -190,9 +191,7 @@ def cell2location_detection_alpha_20(
     )
 
 
-@_cell2location_method(
-    method_name="Cell2location (detection_alpha=1, reference hard-coded)"
-)
+@_cell2location_method(method_name="Cell2location (alpha=1, reference hard-coded)")
 def cell2location_detection_alpha_1(
     adata,
     detection_alpha=1,
@@ -221,9 +220,7 @@ def cell2location_detection_alpha_1(
     )
 
 
-@_cell2location_method(
-    method_name="Cell2location (detection_alpha=20, reference NB without batch info)"
-)
+@_cell2location_method(method_name="Cell2location (alpha=20, NB reference)")
 def cell2location_detection_alpha_20_nb(
     adata,
     detection_alpha=20,
@@ -252,9 +249,7 @@ def cell2location_detection_alpha_20_nb(
     )
 
 
-@_cell2location_method(
-    method_name="Cell2location (detection_alpha=200, reference hard-coded)"
-)
+@_cell2location_method(method_name="Cell2location (alpha=200, reference hard-coded)")
 def cell2location_detection_alpha_200(
     adata,
     detection_alpha=200,
@@ -283,9 +278,7 @@ def cell2location_detection_alpha_200(
     )
 
 
-@_cell2location_method(
-    method_name="Cell2location, amortised (detection_alpha=20, reference hard-coded)"
-)
+@_cell2location_method(method_name="Cell2location (alpha=20, amortised, hard-coded)")
 def cell2location_amortised_detection_alpha_20(
     adata,
     detection_alpha=20,

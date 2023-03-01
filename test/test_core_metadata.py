@@ -10,6 +10,7 @@ import utils.name
 DATASET_SUMMARY_MINLEN = 40
 DATASET_SUMMARY_MAXLEN = 400
 
+METHOD_NAME_MAXLEN = 50
 METHOD_SUMMARY_MINLEN = 40
 METHOD_SUMMARY_MAXLEN = 1000
 
@@ -67,6 +68,7 @@ def test_method_metadata(method):
     assert isinstance(method.metadata["image"], str)
     assert method.metadata["image"].startswith("openproblems")
     assert isinstance(method.metadata["method_name"], str)
+    assert len(method.metadata["method_name"]) < METHOD_NAME_MAXLEN
     assert isinstance(method.metadata["method_summary"], str)
     assert len(method.metadata["method_summary"]) > METHOD_SUMMARY_MINLEN
     assert len(method.metadata["method_summary"]) < METHOD_SUMMARY_MAXLEN
