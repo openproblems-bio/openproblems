@@ -5,7 +5,7 @@ functionality:
     - name: "--layer_input"
       type: string
       default: "normalized"
-      description: Which layer to use as input for the PCA.
+      description: Which layer to use as input.
     - name: "--output"
       direction: output
       __merge__: anndata_pca.yaml

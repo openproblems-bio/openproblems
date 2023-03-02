@@ -1,8 +1,8 @@
-__merge__: ../../api/comp_processor_hvg.yaml
+__merge__: ../../api/comp_processor_knn.yaml
 functionality:
-  name: "hvg"
+  name: "knn"
   namespace: "datasets/processors"
-  description: "Compute HVG"
+  description: "Compute KNN"
   resources:
     - type: python_script
       path: script.py

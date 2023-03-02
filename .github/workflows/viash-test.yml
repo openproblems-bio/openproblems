@@ -24,103 +24,74 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GTHB_PAT }}
 
-
   # phase 1
-  list_components:
+  list:
     needs: run_ci_check_job
     env:
       s3_bucket: s3://openproblems-data/resources_test/
     runs-on: ubuntu-latest
     if: "needs.run_ci_check_job.outputs.run_ci == 'true'"
+
     outputs:
       matrix: ${{ steps.set_matrix.outputs.matrix }}
-      cachehash: ${{ steps.cachehash.outputs.cachehash }}
+      cache_key: ${{ steps.cache.outputs.cache_key }}
+
     steps:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0 
 
-    - uses: viash-io/viash-actions/setup@v1.0.0
+    - uses: viash-io/viash-actions/setup@v3
 
-    # create cachehash key
-    - name: Create hash key
-      id: cachehash
-      run: |
-        AWS_EC2_METADATA_DISABLED=true aws s3 ls $s3_bucket --recursive --no-sign-request > bucket-contents.txt
-        echo "cachehash=resources_test__$( md5sum bucket-contents.txt | awk '{ print $1 }' )" >> $GITHUB_OUTPUT
-    
-    # initialize cache
-    - name: Cache resources data
-      uses: actions/cache@v3
+    - uses: viash-io/viash-actions/project/sync-and-cache-s3@v3
+      id: cache
       with:
-        path: resources_test
-        key: ${{ steps.cachehash.outputs.cachehash }}
-        restore-keys: resources_test_
-
-    # sync if need be
-    - name: Sync test resources
-      run: |
-        viash run \
-          -p native \
-          src/common/sync_test_resources/config.vsh.yaml -- \
-          --input $s3_bucket \
-          --delete
-        tree resources_test/ -L 3
+        s3_bucket: $s3_bucket
+        dest_path: resources_test
+        cache_key_prefix: resources_test__
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v35.4.1
+      uses: tj-actions/changed-files@v35.5.0
       with:
         separator: ";"
         diff_relative: true
 
-    # store component locations
-    - name: Set matrix to only run tests for components that had their config or resources changed.
-      id: set_matrix
+    - id: ns_list
+      uses: viash-io/viash-actions/ns-list@v3
+      with:
+        platform: docker
+        format: json
+
+    - id: ns_list_filtered
+      uses: viash-io/viash-actions/project/detect-changed-components@v3
+      with:
+        input_file: "${{ steps.ns_list.outputs.output_file }}"
+
+    - id: set_matrix
       run: |
-        IFS=$';' read -a changed_files <<< "${{ steps.changed-files.outputs.all_changed_files }}"
-        echo "Changed files: "${changed_files[*]}""
-        readarray -t components < <(viash ns list -p docker --format json | jq -c '[ .[] |
-                                                                                          (.info.config | capture("^(?<dir>.*\/)").dir) as $dir | 
-                                                                                          { "name": .functionality.name, 
-                                                                                            "config": .info.config, 
-                                                                                            "resources": ([.info.config] + 
-                                                                                                          ([.functionality.resources[].path?, 
-                                                                                                            .functionality.test_resources[].path?] | 
-                                                                                                            map($dir + .)
-                                                                                                            )
-                                                                                                          )
-                                                                                          }
-                                                                                        ][]')
-        declare -a result_array_matrix=()
-        for component in "${components[@]}"; do
-          readarray -t resources < <(jq -cr '.resources[]' <<< "$component")
-          for resource_rel_path in "${resources[@]}"; do
-            resource_project_path=$(realpath --relative-to="$GITHUB_WORKSPACE" "$resource_rel_path")
-            echo "Checking path $resource_project_path"
-            if [[ " ${changed_files[*]} " =~ " ${resource_project_path} " || "$GITHUB_REF" == "refs/heads/main" || "${{ contains(github.event.head_commit.message, 'ci force') }}" == "true" ]]; then
-              result_array_matrix+="$component"
-              break
-            fi
-          done
-        done
-        json=$(jq -cs '.' <<< "${result_array_matrix[*]}")
-        echo "matrix=$json" >> $GITHUB_OUTPUT
+        echo "matrix=$(jq -c '[ .[] | 
+          { 
+            "name": (.functionality.namespace + "/" + .functionality.name),
+            "config": .info.config
+          }
+        ]' ${{ steps.ns_list_filtered.outputs.output_file }} )" >> $GITHUB_OUTPUT
 
   # phase 2
   viash_test:
-    needs: list_components
-    if: ${{ needs.list_components.outputs.matrix != '[]' && needs.list_components.outputs.matrix != '' }}
+    needs: list
+    if: ${{ needs.list.outputs.matrix != '[]' && needs.list.outputs.matrix != '' }}
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        component: ${{ fromJson(needs.list_components.outputs.matrix) }}
+        component: ${{ fromJson(needs.list.outputs.matrix) }}
 
     steps:
     - uses: actions/checkout@v3
-    - uses: viash-io/viash-actions/setup@v1.0.0
+
+    - uses: viash-io/viash-actions/setup@v3
 
     # use cache
     - name: Cache resources data
@@ -128,12 +99,13 @@ jobs:
       timeout-minutes: 10
       with:
         path: resources_test
-        key: ${{ needs.list_components.outputs.cachehash }}
+        key: ${{ needs.list.outputs.cache_key }}
 
     - name: Run test
       timeout-minutes: 30
       run: |
-        viash test -p docker ${{ matrix.component.config }} \
-        --cpus 2 \
-        --memory "5gb"
+        VIASH_TEMP=$RUNNER_TEMP/viash viash test \
+          "${{ matrix.component.config }}" \
+          --cpus 2 \
+          --memory "5gb"
 
