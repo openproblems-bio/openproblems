@@ -38,13 +38,13 @@ def _pca(adata, genes=None):
     return adata
 
 
-@_pca_method(method_name="Principle Component Analysis (PCA) (logCP10k)")
+@_pca_method(method_name="PCA (logCP10k)")
 def pca_logCP10k(adata, test: bool = False):
     adata = log_cp10k(adata)
     return _pca(adata)
 
 
-@_pca_method(method_name="Principle Component Analysis (PCA) (logCP10k, 1kHVG)")
+@_pca_method(method_name="PCA (logCP10k, 1kHVG)")
 def pca_logCP10k_1kHVG(adata, test: bool = False):
     adata = log_cp10k_hvg(adata)
     return _pca(adata, genes=adata.var["highly_variable"])
