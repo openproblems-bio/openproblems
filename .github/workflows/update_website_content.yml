@@ -70,6 +70,7 @@ jobs:
         python openproblems/workflow/parse_metadata.py website/content/benchmarks
         python openproblems/workflow/parse_metadata.py nbt2022-reproducibility/results
         cp openproblems/main.bib website/static/bibliography
+        cp openproblems/main.bib nbt2022-reproducibility/bibliography/library.bib
         cd website
         git diff --exit-code --quiet || echo "WEBSITE_CHANGED=true" >> $GITHUB_ENV
         cd ../nbt2022-reproducibility
