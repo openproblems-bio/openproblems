@@ -76,12 +76,11 @@ def add_r_setup(conf):
           'type': 'r',
           'cran': [ 'anndata'],
           'bioc': ''
-        },
-        {
+        })
+      pltf['setup'].append({
           'type': 'apt',
           'packages': ['libhdf5-dev', 'libgeos-dev', 'python3', 'python3-pip', 'python3-dev', 'python-is-python3']
-        }
-      )
+        })
 
   return conf
 
@@ -90,7 +89,12 @@ def create_python_script(tmpl_par):
   script_templ = f'''import anndata as ad
 ## VIASH START
 
-par = {templ_par}
+par = {{
+  # Required arguments for the task
+  {templ_par}
+  # Optional method-specific arguments
+  'n_neighbors': 5,
+  }}
 
 meta = {{
   'functionality_name': 'foo'
@@ -98,33 +102,72 @@ meta = {{
 
 ## VIASH END
 
-print('Load input data', flush=True)
-adata=ad.read_h5ad(par['{list(templ_par.keys())[0]}'])
+## Data reader
+print('Reading input files', flush=True)
 
-print('Process data', flush=True)
-# insert code block here where pred is the prediction
+input_train =ad.read_h5ad(par['{list(templ_par.keys())[0]}'])
 
-pred = adata
+print('processing Data', flush=True)
+# ... preprocessing ... 
+# ... train model ...
+# ... generate predictions ...
 
-# Create output anndata
-output = ad.AnnData(
-  uns = {{
-    'dataset_id': adata.uns['dataset_id'],
-    'method_id': meta['functionality_name']
-  }},
-  layers = adata.layers
+# write output to file
+adata = ad.AnnData(
+    X=y_pred,
+    uns={
+        'dataset_id': input_train.uns['dataset_id'],
+        'method_id': meta['functionality_name'],
+    },
 )
 
-output.layers['denoised'] = pred
-
-print('Write Data', flush=True)
-output.write_h5ad(par['output'],compression='gzip')
+print('writing to output files', flush=True)
+adata.write_h5ad(par['output'], compress='gzip')
 '''
 
   return script_templ
 
 def create_r_script(tmpl_par):
-  ''
+  newline = "\n"
+  script_templ = f'''library(anndata, warn.conflicts = FALSE)
+
+## VIASH START
+
+par <- list(
+  # Required arguments for the task
+  {newline.join(f"{key} = {value}," for key, value in tmpl_par.items())}
+  # Optional method-specific arguments
+  n_neighbors = 5,
+)
+
+meta <- list(
+  functionality_name = "foo"
+)
+
+## VIASH END
+
+## Data reader
+cat("Reading input files\\n")
+input_train <- read_h5ad(par["{list(templ_par.keys())[0]}"])
+
+cat("processing Data\\n")
+# ... preprocessing ...
+# ... train model ...
+# ... generate predictions ...
+
+# write output to file
+adata <- anndata::AnnData(
+  X = y_pred,
+  uns = list(
+    dataset_id = input_train$uns$dataset_id,
+    method_id = meta$functionality_name,
+  )
+)
+
+cat("writing to output files\\n")
+zzz <- adata$write_h5ad(par$output, compression = "gzip")
+'''
+  return script_templ
 
 
 ## Create config file
@@ -137,19 +180,32 @@ config_tmpl = f'''
 # points to global config e.g. parameters
 __merge__: ../../api/comp_{merge}.yaml
 functionality:
+  # a unique name for your method, same as what is being output by the script.
+  # must match the regex [a-z][a-z0-9_]*
   name: {par['name']}
-  namespace: {par["task"]}/{merge}s 
-  description: # add description
+  namespace: {par["task"]}/{merge}s
+  # metadata for your method
+  description: A description for your method.
   info: 
     type: {par["comp_type"]}
 
-  # additional parameters specific for method. always set default if required
-  parameters:
+  # component parameters
+  arguments:
+    # Method-specific parameters. 
+    # Change these to expose parameters of your method to Nextflow (optional)
+    - name: "--n_neighbors"
+      type: "integer"
+      default: 5
+      description: Number of neighbors to use.
 
   # files your script needs
   resources:
+    # the script itself
     - type: 
       path:
+    # additional resources your script needs (optional)
+    - type: file
+      path: weights.pt
 
   # resources for unit testing your component
   test_resources:
@@ -159,13 +215,21 @@ functionality:
 
 # target platforms
 platforms:
+  # By specifying 'docker' platform, viash will build a standalone
+  # executable which uses docker in the back end to run your method.
   - type: docker
+    #  you need to specify a base image that contains at least bash and python
     image:
+    # You can specify additional dependencies with 'setup'.
     setup:
       - type: python
         pip:
           - pyyaml
           - anndata>=0.8
+
+  # By specifying a 'nextflow', viash will also build a viash module
+  # which uses the docker container built above to also be able to
+  # run your method as part of a nextflow pipeline.
   - type: nextflow
     directives:
       label: ['midmem', 'midcpu']
