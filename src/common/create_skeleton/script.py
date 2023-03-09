@@ -36,7 +36,7 @@ def add_method_config(tmpl):
     'method_name': 'Method name',
     'preferred_normalization': '',
     'variants': {
-      'method_name': '',
+      par['name']: '',
       'method_variant1': {
         'preferred_normalization': ''
       }
@@ -199,7 +199,10 @@ if par['language'] == 'r':
 
 
 ## Create script template
-task_api = f'src/{par["task"]}/api'
+
+resource_dir = meta["resources_dir"] + "/openproblems-v2"
+
+task_api = f'{resource_dir}/src/{par["task"]}/api'
 api_conf = f'{task_api}/comp_{merge}.yaml'
 
 with open(api_conf, 'r') as f:
@@ -223,7 +226,7 @@ if par['language'] == 'r':
 
 
 ## Write output
-out_dir= Path(par['name'])
+out_dir= Path(par["output"])
 
 out_dir.mkdir(exist_ok=True)
 
@@ -231,6 +234,8 @@ with open(f'{out_dir}/config.vsh.yaml', 'w') as f:
   yaml.dump(config_out, f)
 
 script_f = config_out['functionality']['resources'][0]['path']
+
+print(script_f)
 
 with open(f'{out_dir}/{script_f}', 'w') as fpy:
   fpy.write(script_out)

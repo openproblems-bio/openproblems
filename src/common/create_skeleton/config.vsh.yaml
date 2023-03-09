@@ -5,24 +5,31 @@ functionality:
   arguments:
     - type: string
       name: --task
+      description: Which task the component will be added
       example: denoising
-      description:
     - type: string
       name: --comp_type
       example: metric
-      description:
+      description: type of component to create
       choices: ['metric', 'method', 'negative_control', 'positive_control']
     - type: string
       name: --language
       example: python
       description: script language
+      default: python
     - type: string
       name: --name
       example: new_comp
       description: name of the new method in snake case
+    - type: file
+      name: --output
+      direction: output
+      default: "my_method"
   resources:
     - type: python_script
       path: script.py
+    - path: ../../../src
+      dest: openproblems-v2/src
 platforms:
   - type: docker
     image: python:3.10
