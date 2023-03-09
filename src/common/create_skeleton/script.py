@@ -58,11 +58,12 @@ def add_python_setup(conf):
 
 def add_r_setup(conf):
 
+
   conf['functionality']['resources'][0]['type'] = 'r_script'
-  conf['functionality']['resources'][0]['path'] = 'script.r'
+  conf['functionality']['resources'][0]['path'] = 'script.R'
 
   conf['functionality']['test_resources'][0]['type'] = 'r_script'
-  conf['functionality']['test_resources'][0]['path'] = 'script.r'
+  conf['functionality']['test_resources'][0]['path'] = 'script.R'
 
   for i, platform in enumerate(conf['platforms']):
     if platform['type'] == 'docker':
