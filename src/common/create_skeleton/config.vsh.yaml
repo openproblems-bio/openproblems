@@ -3,6 +3,10 @@ functionality:
   namespace: common
   description: Create a skeleton directory containing a viash config file and python or r script file based on the task api.
   arguments:
+    - name: "--src"
+      type: "file"
+      default: "./src"
+      description: "The src directory of the openproblems-v2 repository."
     - type: string
       name: --task
       description: Which task the component will be added
@@ -24,12 +28,10 @@ functionality:
     - type: file
       name: --output
       direction: output
-      default: "my_method"
+      required: true
   resources:
     - type: python_script
       path: script.py
-    - path: ../../../src
-      dest: openproblems-v2/src
 platforms:
   - type: docker
     image: python:3.10
