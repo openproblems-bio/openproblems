@@ -16,8 +16,6 @@ meta = {
 ## VIASH END
 
 
-def add_metric_config(tmpl):
-  
   tmpl['functionality']['info']['metrics'] = [{
       'metric_id': 'metric_id',
       'metric_name': 'Metric Name',
@@ -25,8 +23,7 @@ def add_metric_config(tmpl):
       'min': 0,
       'max': 1,
       'maximize': 'true',
-    }
-    ]
+    }]
   
   return tmpl
 
