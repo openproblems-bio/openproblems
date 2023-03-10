@@ -85,13 +85,14 @@ def add_r_setup(conf):
   return conf
 
 
-def create_python_script(tmpl_par):
+def create_python_script(tmpl_par, comp_type):
+  newline = "\n"
   script_templ = f'''import anndata as ad
 ## VIASH START
 
 par = {{
   # Required arguments for the task
-  {templ_par}
+  {newline.join(f"'{key}': '{value}'," for key, value in tmpl_par.items())}
   # Optional method-specific arguments
   'n_neighbors': 5,
   }}
@@ -105,29 +106,47 @@ meta = {{
 ## Data reader
 print('Reading input files', flush=True)
 
-input_train =ad.read_h5ad(par['{list(templ_par.keys())[0]}'])
+adata = ad.read_h5ad(par['{list(templ_par.keys())[0]}'])
 
 print('processing Data', flush=True)
 # ... preprocessing ... 
 # ... train model ...
 # ... generate predictions ...
 
-# write output to file
-adata = ad.AnnData(
+'''
+
+  if comp_type == 'metric':
+    script_templ = script_templ + '''# write output to file
+out = ad.AnnData(
+    uns={
+        'dataset_id': adata.uns['dataset_id'],
+        'method_id': adata.uns['method_id'],
+        'metric_values': [''],
+        'metric_ids': [meta['functionality_name']], # if multiple values, add ids explicitly e.g. ['asw', 'asw_batch']
+    },
+)
+
+print('writing to output files', flush=True)
+out.write_h5ad(par['output'], compress='gzip')
+    '''
+  else :
+    script_templ = script_templ + '''# write output to file
+out = ad.AnnData(
     X=y_pred,
     uns={
-        'dataset_id': input_train.uns['dataset_id'],
+        'dataset_id': adata.uns['dataset_id'],
         'method_id': meta['functionality_name'],
     },
 )
 
 print('writing to output files', flush=True)
-adata.write_h5ad(par['output'], compress='gzip')
-'''
+out.write_h5ad(par['output'], compress='gzip')
+    '''
+
 
   return script_templ
 
-def create_r_script(tmpl_par):
+def create_r_script(tmpl_par, comp_type):
   newline = "\n"
   script_templ = f'''library(anndata, warn.conflicts = FALSE)
 
@@ -135,7 +154,7 @@ def create_r_script(tmpl_par):
 
 par <- list(
   # Required arguments for the task
-  {newline.join(f"{key} = {value}," for key, value in tmpl_par.items())}
+  {newline.join(f'{key} = "{value}",' for key, value in tmpl_par.items())}
   # Optional method-specific arguments
   n_neighbors = 5,
 )
@@ -148,25 +167,49 @@ meta <- list(
 
 ## Data reader
 cat("Reading input files\\n")
-input_train <- read_h5ad(par["{list(templ_par.keys())[0]}"])
+adata <- read_h5ad(par["{list(templ_par.keys())[0]}"])
 
 cat("processing Data\\n")
 # ... preprocessing ...
 # ... train model ...
 # ... generate predictions ...
 
-# write output to file
-adata <- anndata::AnnData(
+'''
+
+  if comp_type == 'metric':
+    script_templ = script_templ + '''# write output to file
+out <- anndata::AnnData(
+  shape = c(0, 0),
+  uns = list(
+    dataset_id = adata$uns$dataset_id,
+    method_id = adata$uns$method_id,
+    metric_values = list(""),
+    metric_ids = list(meta$functionality_name), # if multiple values, add ids explicitly e.g. list('asw', 'asw_batch')
+  )
+)
+
+out("writing to output files\\n")
+zzz <- adata$write_h5ad(par$output, compression = "gzip")
+    '''
+  
+  else:
+        script_templ = script_templ + '''# write output to file
+out <- anndata::AnnData(
   X = y_pred,
   uns = list(
-    dataset_id = input_train$uns$dataset_id,
+    dataset_id = adata$uns$dataset_id,
     method_id = meta$functionality_name,
   )
 )
 
-cat("writing to output files\\n")
+out("writing to output files\\n")
 zzz <- adata$write_h5ad(par$output, compression = "gzip")
-'''
+    '''
+
+
+
+
+
   return script_templ
 
 
@@ -281,11 +324,11 @@ for arg in args:
 
 if par['language'] == 'python':
 
-  script_out = create_python_script(templ_par)
+  script_out = create_python_script(templ_par, par['comp_type'])
 
 if par['language'] == 'r':
 
-  script_out = create_r_script(templ_par)
+  script_out = create_r_script(templ_par, par['comp_type'])
 
 
 
