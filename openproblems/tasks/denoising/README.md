@@ -1,7 +1,5 @@
 # Denoising
 
-## The task
-
 Single-cell RNA-Seq protocols only detect a fraction of the mRNA molecules present
 in each cell. As a result, the measurements (UMI counts) observed for each gene and each
 cell are associated with generally high levels of technical noise ([Grün et al.,

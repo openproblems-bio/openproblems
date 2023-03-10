@@ -24,11 +24,13 @@ def test_print(capsys):
 def test_tasks(capsys):
     """Test task listing."""
     result = np.array(main(["tasks"], do_print=False))
-    expected = np.array([task.__name__.split(".")[-1] for task in openproblems.TASKS])
+    expected = np.array(
+        [openproblems.utils.get_member_id(task) for task in openproblems.TASKS]
+    )
     assert np.all(result == expected)
     result = np.array(main(["tasks"], do_print=True))
-    expected = (
-        "\n".join([task.__name__.split(".")[-1] for task in openproblems.TASKS]) + "\n"
+    expected = "\n".join(
+        [openproblems.utils.get_member_id(task) for task in openproblems.TASKS] + [""]
     )
     captured = capsys.readouterr()
     assert captured.out == expected
@@ -42,7 +44,7 @@ def test_list(task):
     """Test function listing."""
     result = np.array(
         main(
-            ["list", "--task", task.__name__.split(".")[-1], "--datasets"],
+            ["list", "--task", openproblems.utils.get_member_id(task), "--datasets"],
             do_print=False,
         )
     )
@@ -51,7 +53,7 @@ def test_list(task):
 
     result = np.array(
         main(
-            ["list", "--task", task.__name__.split(".")[-1], "--methods"],
+            ["list", "--task", openproblems.utils.get_member_id(task), "--methods"],
             do_print=False,
         )
     )
@@ -60,7 +62,7 @@ def test_list(task):
 
     result = np.array(
         main(
-            ["list", "--task", task.__name__.split(".")[-1], "--metrics"],
+            ["list", "--task", openproblems.utils.get_member_id(task), "--metrics"],
             do_print=False,
         )
     )
@@ -73,7 +75,7 @@ def _test_image(task, function_type, function):
         [
             "image",
             "--task",
-            task.__name__.split(".")[-1],
+            openproblems.utils.get_member_id(task),
             function_type,
             function.__name__,
         ],
@@ -204,7 +206,7 @@ def test_zero_metric():
             [
                 "evaluate",
                 "--task",
-                task.__name__.split(".")[-1],
+                openproblems.utils.get_member_id(task),
                 "--input",
                 dataset_file,
                 metric_name,

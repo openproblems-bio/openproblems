@@ -26,6 +26,7 @@ jobs:
     if: |
       !endsWith(github.event.head_commit.message, '# ci skip') &&
       !startsWith(github.ref, 'refs/heads/test_process') &&
+      !startsWith(github.ref, 'refs/heads/test_website') &&
       (
         (github.event_name != 'pull_request_review') ||
         (

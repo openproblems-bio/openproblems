@@ -1,7 +1,5 @@
 # Dimensionality reduction for visualisation
 
-## The task
-
 Dimensionality reduction is one of the key challenges in single-cell data
 representation. Routine single-cell RNA sequencing (scRNA-seq) experiments measure cells
 in roughly 20,000-30,000 dimensions (i.e., features - mostly gene transcripts but also
