@@ -1,5 +1,6 @@
 import subprocess
 from os import path
+from ruamel.yaml import YAML
 
 
 ## VIASH START
@@ -33,6 +34,19 @@ conf_f = path.join(output_path, 'config.vsh.yaml')
 assert path.exists(conf_f)
 script_f = path.join(output_path, "script.py")
 assert path.exists(script_f)
+
+print('>> Checking file contents', flush=True)
+yaml = YAML()
+with open(conf_f) as f:
+    conf_data = yaml.load(f)
+
+assert conf_data['functionality']['name'] == 'test_method'
+assert conf_data['functionality']['namespace'] == 'label_projection/methods'
+assert conf_data['functionality']['info']['type'] == 'method'
+
+assert conf_data['platforms'][0]['image'] == 'python:3.10'
+
+
 
 print('all checks succeeded!', flush=True)
 
