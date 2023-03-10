@@ -38,34 +38,45 @@ workflow run_wf {
   input_ch
 
   main:
-  output_ch = input_ch
 
-      // split params for downstream components
-    | setWorkflowArguments(
-      method: ["input"],
-      metric: ["input_solution"],
-      output: ["output"]
-    )
+  // run feature methods
+  meth_feature = input_ch
+    | (combat & scanorama_feature)
+    | mix
+  // run embed methods
+  meth_embed = input_ch
+    | (scanorama_embed & scvi)
+    | mix
+  // run graph methods
+  meth_graph = input_ch
+    | (bbknn)
 
-    // multiply events by the number of method
-    | add_methods
+  // apply feature metrics on feature outputs
+  // metr_feat = meth_feature
+  //   | (asw_batch & asw_label & cell_cycle_conservation & pcr)
 
-    // run methods
-    | getWorkflowArguments(key: "method")
-    | run_methods
+  // convert feature outputs to embedding outputs
+  meth_feat_to_embed = meth_feature
+    | feature_to_embed
 
-    // construct tuples for metrics
-    | pmap{ id, file, passthrough ->
-      // derive unique ids from output filenames
-      def newId = file.getName().replaceAll(".output.*", "")
-      // combine prediction with solution
-      def newData = [ input: file ]
-      [ newId, newData, passthrough ]
-    }
-    
-    // run metrics
-    | getWorkflowArguments(key: "metric")
-    | run_metrics
+  // apply embedding metrics to embedding outputs
+  metr_embed = meth_embed
+    | mix(meth_feat_to_embed)
+    | (asw_batch & asw_label & cell_cycle_conservation & pcr)
+    | mix
+  
+  // convert embedding outputs to graph outputs
+  meth_embed_to_graph = meth_embed
+    | mix(meth_feat_to_embed)
+    | embed_to_graph
+  
+  // apply graph metrics to graph outputs
+  metr_graph = meth_graph
+    | mix(meth_embed_to_graph)
+    | (clustering_overlap)
+
+  
+  output_ch = metr_embed.mix(metr_graph)
     
     // convert to tsv  
     | aggregate_results
