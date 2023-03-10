@@ -33,15 +33,18 @@ def get_module(fun):
 
 
 def git_hash(obj):
-    """Get the git commit hash associated with a file."""
+    """Get the git commit hash associated with the latest change to a file."""
     if isinstance(obj, str) and os.path.isfile(obj):
+       # if it's a file, run git log to get the hash
         return _run(
             ["git", "log", "-n", "1", "--pretty=format:%H", "--", obj],
             cwd=os.path.dirname(__file__),
         )
     elif hasattr(obj, "__file__"):
+        # if it's a module, get the associated file
         return git_hash(obj.__file__)
     elif callable(obj):
+        # if it's a function, get the associated module
         return git_hash(importlib.import_module(get_module(obj)))
 
 
