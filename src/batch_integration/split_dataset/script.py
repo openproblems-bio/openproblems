@@ -87,18 +87,11 @@ adata_with_hvg = compute_batched_hvg(input, n_hvgs=par['hvgs'])
 print(">> Figuring out which data needs to be copied to which output file", flush=True)
 slot_info_per_output = read_slots(par, meta)
 
-print(">> Create unintegrated object", flush=True)
-output_unintegrated = subset_anndata(
+print(">> Create output object", flush=True)
+output = subset_anndata(
     adata_sub=adata_with_hvg, 
-    slot_info=slot_info_per_output["unintegrated"]
-)
-
-print(">> Create solution object", flush=True)
-output_solution = subset_anndata(
-    adata_sub=adata_with_hvg, 
-    slot_info=slot_info_per_output["solution"]
+    slot_info=slot_info_per_output["output"]
 )
 
 print('Writing adatas to file', flush=True)
-output_unintegrated.write(par['output_unintegrated'], compression='gzip')
-output_solution.write(par['output_solution'], compression='gzip')
+output.write(par['output'], compression='gzip')

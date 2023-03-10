@@ -32,6 +32,11 @@ info:
         name: X_pca
         description: The resulting PCA embedding.
         required: true
+    obsp:
+      - type: double
+        name: knn_connectivities
+        description: K nearest neighbors connectivities matrix.
+        required: true
     uns:
       - type: string
         name: dataset_id

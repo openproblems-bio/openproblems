@@ -3,7 +3,7 @@ functionality:
     - name: --input_integrated
       __merge__: anndata_integrated_graph.yaml
     - name: --input_solution
-      __merge__: anndata_solution.yaml
+      __merge__: anndata_unintegrated.yaml
     - name: --output
       direction: output
       __merge__: anndata_score.yaml

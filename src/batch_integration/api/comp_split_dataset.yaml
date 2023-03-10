@@ -2,11 +2,8 @@ functionality:
   arguments:
     - name: "--input"
       __merge__: anndata_dataset.yaml
-    - name: "--output_unintegrated"
+    - name: "--output"
       __merge__: anndata_unintegrated.yaml
-      direction: output
-    - name: "--output_solution"
-      __merge__: anndata_solution.yaml
       direction: output
   # test_resources:
   #   - path: ../../../resources_test/common/pancreas/
