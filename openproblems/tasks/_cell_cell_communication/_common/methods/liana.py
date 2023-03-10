@@ -23,9 +23,13 @@ _r_liana = r_function(
 
 _liana_method = functools.partial(
     method,
+    method_summary=(
+        "RobustRankAggregate generates a consensus rank of all methods implemented in"
+        " LIANA providing either specificity or magnitude scores."
+    ),
     paper_name=(
-        "Comparison of methods and resources for cell-cell "
-        "communication inference from single-cell RNA-Seq data"
+        "Comparison of methods and resources for cell-cell communication inference from"
+        " single-cell RNA-Seq data"
     ),
     paper_reference="dimitrov2022comparison",
     paper_year=2022,
@@ -108,15 +112,19 @@ def magnitude_sum(adata, test=False):
 
 
 _cellphonedb_method = functools.partial(
-    method,
+    _liana_method,
+    method_summary=(
+        "CellPhoneDBv2 calculates a mean of ligand-receptor expression as a measure of"
+        " interaction magnitude, along with a permutation-based p-value as a measure of"
+        " specificity. Here, we use the former to prioritize interactions, subsequent"
+        " to filtering according to p-value less than 0.05."
+    ),
     paper_name=(
-        "CellPhoneDB: inferring cell–cell communication from "
-        "combined expression of multi-subunit ligand–receptor complexes"
+        "CellPhoneDB: inferring cell–cell communication from combined expression of"
+        " multi-subunit ligand–receptor complexes"
     ),
     paper_reference="efremova2020cellphonedb",
     paper_year=2020,
-    code_url="https://github.com/saezlab/liana",
-    image="openproblems-r-extras",
 )
 
 
@@ -157,15 +165,18 @@ def cellphonedb_sum(adata, test=False):
 
 
 _connectome_method = functools.partial(
-    method,
+    _liana_method,
+    method_summary=(
+        "Connectome uses the product of ligand-receptor expression as a measure of"
+        " magnitude, and the average of the z-transformed expression of ligand and"
+        " receptor as a measure of specificity."
+    ),
     paper_name=(
-        "Computation and visualization of cell–cell signaling "
-        "topologies in single-cell systems data using Connectome"
+        "Computation and visualization of cell–cell signaling topologies in single-cell"
+        " systems data using Connectome"
     ),
     paper_reference="raredon2022computation",
     paper_year=2022,
-    code_url="https://github.com/saezlab/liana",
-    image="openproblems-r-extras",
 )
 
 
@@ -194,15 +205,12 @@ def connectome_sum(adata, test=False):
 
 
 _logfc_method = functools.partial(
-    method,
-    paper_name=(
-        "Comparison of methods and resources for cell-cell "
-        "communication inference from single-cell RNA-Seq data"
+    _liana_method,
+    method_summary=(
+        "logFC (implemented in LIANA and inspired by iTALK) combines both expression"
+        " and magnitude, and represents the average of one-versus-the-rest log2-fold"
+        " change of ligand and receptor expression per cell type."
     ),
-    paper_reference="dimitrov2022comparison",
-    paper_year=2022,
-    code_url="https://github.com/saezlab/liana",
-    image="openproblems-r-extras",
 )
 
 
@@ -231,12 +239,19 @@ def logfc_sum(adata, test=False):
 
 
 _natmi_method = functools.partial(
-    method,
+    _liana_method,
+    method_summary=(
+        "NATMI uses the product of ligand-receptor expression as a measure of"
+        " magnitude. As a measure of specificity, NATMI proposes $specificity.edge ="
+        r" \frac{l}{l_s} \cdot \frac{r}{r_s}$; where $l$ and $r$ represent the average"
+        " expression of ligand and receptor per cell type, and $l_s$ and $r_s$"
+        " represent the sums of the average ligand and receptor expression across all"
+        " cell types. We use its specificity measure, as recommended by the authors for"
+        " single-context predictions."
+    ),
     paper_name="Predicting cell-to-cell communication networks using NATMI",
     paper_reference="hou2020predicting",
     paper_year=2021,
-    code_url="https://github.com/saezlab/liana",
-    image="openproblems-r-extras",
 )
 
 
@@ -265,15 +280,19 @@ def natmi_sum(adata, test=False):
 
 
 _sca_method = functools.partial(
-    method,
+    _liana_method,
+    method_summary=(
+        "SingleCellSignalR provides a magnitude score as $LRscore ="
+        r" \frac{\sqrt{lr}}{\mu+\sqrt{lr}}$; where $l$ and $r$ are the average ligand"
+        r" and receptor expression per cell type, and $\mu$ is the mean of the"
+        " expression matrix."
+    ),
     paper_name=(
-        "SingleCellSignalR: inference of intercellular networks "
-        "from single-cell transcriptomics"
+        "SingleCellSignalR: inference of intercellular networks from single-cell"
+        " transcriptomics"
     ),
     paper_reference="cabello2020singlecellsignalr",
     paper_year=2021,
-    code_url="https://github.com/saezlab/liana",
-    image="openproblems-r-extras",
 )
 
 

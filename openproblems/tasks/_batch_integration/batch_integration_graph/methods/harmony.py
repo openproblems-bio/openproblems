@@ -6,6 +6,13 @@ import functools
 
 _harmony_method = functools.partial(
     method,
+    method_summary=(
+        "Harmony is a method that uses PCA to group the cells into multi-dataset"
+        " clusters, and then computes cluster-specific linear correction factors. Each"
+        " cell is then corrected by its cell-specific linear factor using the"
+        " cluster-weighted average. The method keeps iterating these four steps until"
+        " cell clusters are stable."
+    ),
     paper_name=(
         "Fast, sensitive and accurate integration of single-cell data with Harmony"
     ),

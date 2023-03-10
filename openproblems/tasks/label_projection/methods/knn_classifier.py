@@ -7,6 +7,15 @@ import functools
 
 _knn_classifier_method = functools.partial(
     method,
+    method_summary=(
+        'K-neighbors classifier uses the "k-nearest neighbours" approach, which is a'
+        " popular machine learning algorithm for classification and regression tasks."
+        " The assumption underlying KNN in this context is that cells with similar gene"
+        " expression profiles tend to belong to the same cell type. For each unlabelled"
+        " cell, this method computes the $k$ labelled cells (in this case, 5) with the"
+        " smallest distance in PCA space, and assigns that cell the most common cell"
+        " type among its $k$ nearest neighbors."
+    ),
     paper_name="Nearest neighbor pattern classification",
     paper_reference="cover1967nearest",
     paper_year=1967,

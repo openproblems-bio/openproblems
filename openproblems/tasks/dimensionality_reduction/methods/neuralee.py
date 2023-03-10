@@ -12,10 +12,19 @@ log = logging.getLogger("openproblems")
 
 _neuralee_method = functools.partial(
     method,
+    method_summary=(
+        "NeuralEE is a neural network implementation of elastic embedding. It is a"
+        " non-linear method that preserves pairwise distances between data points."
+        " NeuralEE uses a neural network to optimize an objective function that"
+        " measures the difference between pairwise distances in the original"
+        " high-dimensional space and the two-dimensional space. It is computed on both"
+        " the recommended input from the package authors of 500 HVGs selected from a"
+        " logged expression matrix (without sequencing depth scaling) and the default"
+        " logCPM matrix with 1000 HVGs."
+    ),
     paper_name=(
-        "NeuralEE: A GPU-Accelerated Elastic Embedding "
-        "Dimensionality Reduction Method for "
-        "Visualizing Large-Scale scRNA-Seq Data"
+        "NeuralEE: A GPU-Accelerated Elastic Embedding Dimensionality Reduction Method"
+        " for Visualizing Large-Scale scRNA-Seq Data"
     ),
     paper_reference="xiong2020neuralee",
     paper_year=2020,
@@ -78,8 +87,8 @@ def _neuralee(
             if subsample_genes is not None and subsample_genes < adata_input.n_vars:
                 subsample_genes = min(adata_input.n_vars, int(subsample_genes * 1.2))
                 log.warning(
-                    "ValueError in neuralee_default. "
-                    f"Increased subsample_genes to {subsample_genes}"
+                    "ValueError in neuralee_default. Increased subsample_genes to"
+                    f" {subsample_genes}"
                 )
             else:
                 raise

@@ -9,9 +9,18 @@ _r_alra = r_function("alra.R")
 log = logging.getLogger("openproblems")
 
 
-method_name = ("ALRA (sqrt norm, reversed normalization)",)
 _alra_method = functools.partial(
     method,
+    method_summary=(
+        "ALRA (Adaptively-thresholded Low Rank Approximation) is a method for"
+        " imputation of missing values in single cell RNA-sequencing data. Given a"
+        " normalised scRNA-seq expression matrix, it first imputes values using rank-k"
+        " approximation, using singular value decomposition. Next, a symmetric"
+        " distribution is fitted to the near-zero imputed values for each gene (row) of"
+        " the matrix. The right “tail” of this distribution is then used to threshold"
+        " the accepted nonzero entries. This same threshold is then used to rescale the"
+        " matrix, once the “biological zeros” have been removed."
+    ),
     paper_name=(
         "Zero-preserving imputation of scRNA-seq data using low-rank approximation"
     ),

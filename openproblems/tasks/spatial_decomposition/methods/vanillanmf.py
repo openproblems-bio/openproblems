@@ -6,9 +6,17 @@ from ..utils import split_sc_and_sp
 
 @method(
     method_name="Non-Negative Matrix Factorization (NMF)",
+    method_summary=(
+        "NMF is a decomposition method based on Non-negative Matrix Factorization (NMF)"
+        " that reconstructs expression of each spatial location as a weighted"
+        " combination of cell-type signatures defined by scRNA-seq. It is a simpler"
+        " baseline than NMFreg as it only performs the NMF step based on mean"
+        " expression signatures of cell types, returning the weights loading of the NMF"
+        " as (normalized) cell type proportions, without the regression step."
+    ),
     paper_name=(
-        "Fast local algorithms for large scale nonnegative "
-        "matrix and tensor factorizations"
+        "Fast local algorithms for large scale nonnegative matrix and tensor"
+        " factorizations"
     ),
     paper_reference="cichocki2009fast",
     paper_year=2009,

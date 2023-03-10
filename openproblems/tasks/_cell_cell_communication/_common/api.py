@@ -35,8 +35,8 @@ def assert_is_subset(
             msg = f"{subset_name} is not a subset of {superset_name}. "
         else:
             msg = (
-                f"Allowed proportion ({prop_missing_allowed}) of missing "
-                f"{subset_name} elements exceeded ({prop_missing:.2f}). "
+                f"Allowed proportion ({prop_missing_allowed}) of missing"
+                f" {subset_name} elements exceeded ({prop_missing:.2f}). "
             )
         x_missing = ",".join([x for x in subset[is_missing]])
         raise AssertionError(msg + f"{x_missing} missing from {superset_name}")

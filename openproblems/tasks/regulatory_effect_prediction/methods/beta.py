@@ -229,6 +229,15 @@ def _beta(adata, test=False, top_genes=None, threshold=1):
 
 @method(
     method_name="BETA",
+    method_summary=(
+        "Binding and expression target analysis (BETA) is a software package that"
+        " integrates ChIP-seq of TFs or chromatin regulators with differential gene"
+        " expression data to infer direct target genes. BETA has three functions: (i)"
+        " to predict whether the factor has activating or repressive function; (ii) to"
+        " infer the factor's target genes; and (iii) to identify the motif of the"
+        " factor and its collaborators, which might modulate the factor's activating or"
+        " repressive function."
+    ),
     paper_name=(
         "Target analysis by integration of transcriptome and ChIP-seq data with BETA"
     ),

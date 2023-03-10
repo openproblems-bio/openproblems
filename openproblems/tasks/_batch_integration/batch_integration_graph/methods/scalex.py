@@ -6,9 +6,15 @@ import functools
 
 _scalex_method = functools.partial(
     method,
+    method_summary=(
+        "SCALEX is a method for integrating heterogeneous single-cell data online using"
+        " a VAE framework. Its generalised encoder disentangles batch-related"
+        " components from batch-invariant biological components, which are then"
+        " projected into a common cell-embedding space."
+    ),
     paper_name=(
-        "Online single-cell data integration through projecting heterogeneous "
-        "datasets into a common cell-embedding space"
+        "Online single-cell data integration through projecting heterogeneous datasets"
+        " into a common cell-embedding space"
     ),
     paper_reference="xiong2021online",
     paper_year=2022,

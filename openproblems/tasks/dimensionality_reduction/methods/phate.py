@@ -9,6 +9,16 @@ import functools
 
 _phate_method = functools.partial(
     method,
+    method_summary=(
+        "PHATE or “Potential of Heat - diffusion for Affinity - based Transition"
+        " Embedding” uses the potential of heat diffusion to preserve trajectories in a"
+        " dataset via a diffusion process. It is an affinity - based method that"
+        " creates an embedding by finding the dominant eigenvalues of a Markov"
+        " transition matrix. We evaluate several variants including using the"
+        " recommended square - root transformed CPM matrix as input, this input with"
+        " the gamma parameter set to zero and the normal logCPM transformed matrix with"
+        " and without HVG selection."
+    ),
     paper_name=(
         "Visualizing Structure and Transitions in High-Dimensional Biological Data"
     ),

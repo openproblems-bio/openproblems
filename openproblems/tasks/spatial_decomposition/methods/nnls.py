@@ -9,9 +9,16 @@ import numpy as np
 
 @method(
     method_name="Non-Negative Least Squares",
-    paper_name="Solving Least Squares Problems",
-    paper_reference="lawson1995solving",
-    paper_year=1987,
+    method_summary=(
+        "NNLS13 is a decomposition method based on Non-Negative Least Square Regression"
+        " (NNLS). It was originally introduced by the method AutoGenes"
+    ),
+    paper_name=(
+        "AutoGeneS: Automatic gene selection using multi-objective optimization for"
+        " RNA-seq deconvolution"
+    ),
+    paper_reference="aliee2021autogenes",
+    paper_year=2021,
     code_url=(
         "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.nnls.html"
     ),
