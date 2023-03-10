@@ -45,6 +45,10 @@ def _write_function_json(task, outdir: pathlib.Path, functions, function_type: s
                 "task_id": openproblems.utils.get_member_id(task),
                 "commit_sha": workflow_utils.get_sha(),
                 f"{function_type}_id": openproblems.utils.get_member_id(function),
+                "code_url": (
+                    "https://github.com/openproblems-bio/openproblems/"
+                    f"blob/main/{function.__module__.replace('.', '/')}.py"
+                ),
             }
         )
         data.append(function.metadata)
