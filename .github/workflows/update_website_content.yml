@@ -89,6 +89,7 @@ jobs:
         )
       uses: peter-evans/create-pull-request@v4
       with:
+        base: main
         branch: ${{ env.UPDATE_BRANCH_NAME }}
         delete-branch: true
         title: '[auto] Update benchmark content'
