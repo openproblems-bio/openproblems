@@ -1,8 +1,8 @@
 type: file
-description: Unintegrated AnnData HDF5 file.
+description: Solution AnnData HDF5 file.
 example: input.h5ad
 info:
-  short_description: "Unintegrated"
+  short_description: "Solution"
   slots:
     layers: 
       - type: integer
