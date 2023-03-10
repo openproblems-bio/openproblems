@@ -57,7 +57,7 @@ jobs:
         python openproblems/workflow/parse_metadata.py website/results
         cp openproblems/main.bib website/bibliography/library.bib
         cd website
-        git diff --exit-code --quiet || echo "WEBSITE_CHANGED=true" >> $GITHUB_ENV
+        git diff --exit-code --quiet || echo "CHANGED=true" >> $GITHUB_ENV
 
 
     - name: Upload json
@@ -68,7 +68,7 @@ jobs:
 
     - name: Push to openproblems-bio/website
       if: |
-        env.WEBSITE_CHANGED == 'true' &&
+        env.CHANGED == 'true' &&
         (
           startsWith(github.ref, 'refs/heads/main') ||
           endsWith(github.event.head_commit.message, '# publish')
@@ -82,7 +82,7 @@ jobs:
 
     - name: Create website Pull Request
       if: |
-        env.WEBSITE_CHANGED == 'true' &&
+        env.CHANGED == 'true' &&
         (
           startsWith(github.ref, 'refs/heads/main') ||
           endsWith(github.event.head_commit.message, '# publish')
