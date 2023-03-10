@@ -15,7 +15,6 @@ The following changes have been made:
 """
 
 from ....tools.decorators import metric
-from .._utils import ranking_matrix
 from anndata import AnnData
 from numba import njit
 from typing import Tuple
@@ -31,7 +30,32 @@ __license_link__ = (
 )
 
 
+_MAX_SAMPLES = 10000
 _K = 30
+
+
+@njit(cache=True, fastmath=True)
+def _ranking_matrix(D: np.ndarray) -> np.ndarray:  # pragma: no cover
+    assert D.shape[0] == D.shape[1]
+    R = np.zeros(D.shape)
+    m = len(R)
+    ks = np.arange(m)
+
+    for i in range(m):
+        for j in range(m):
+            R[i, j] = np.sum(
+                (D[i, :] < D[i, j]) | ((ks < j) & (np.abs(D[i, :] - D[i, j]) <= 1e-12))
+            )
+
+    return R
+
+
+def ranking_matrix(X):
+    from sklearn.metrics import pairwise_distances
+
+    D = pairwise_distances(X)
+    R = _ranking_matrix(D)
+    return R
 
 
 @njit(cache=True, fastmath=True)
@@ -103,10 +127,17 @@ def _qnn_auc(QNN: np.ndarray) -> float:
 
 
 def _fit(adata: AnnData) -> Tuple[float, float, float, float, float, float, float]:
-    Rx = adata.obsm["X_ranking"]
-    E = adata.obsm["X_emb"]
+    if adata.shape[0] > _MAX_SAMPLES:
+        import scanpy as sc
 
+        sc.pp.subsample(adata, n_obs=_MAX_SAMPLES)
+
+    E = adata.obsm["X_emb"]
     Re = ranking_matrix(E)
+
+    X = adata.X
+    Rx = ranking_matrix(X)
+
     Q = _coranking_matrix(Rx, Re)
     Q = Q[1:, 1:]
     m = len(Q)
