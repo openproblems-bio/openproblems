@@ -1,7 +1,9 @@
 from openproblems.api.hash import docker_labels_from_api
+from openproblems.api.hash import git_hash
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
 
+import importlib
 import numpy as np
 import openproblems
 import os
@@ -157,6 +159,20 @@ def test_hash_docker_api():
     assert isinstance(labels["bio.openproblems.build"], str)
     assert isinstance(labels["bio.openproblems.hash"], str)
     assert labels["bio.openproblems.build"] in ["github_actions", "local"]
+
+
+@parameterized.parameterized.expand(
+    [
+        (openproblems.tasks.label_projection.datasets.zebrafish_labs,),
+        (openproblems.tasks.label_projection.methods.knn_classifier_log_cp10k,),
+    ],
+    name_func=utils.name.name_test,
+)
+def test_git_hash(func):
+    h1 = git_hash(func)
+    module = importlib.import_module(func.__wrapped__.__module__)
+    assert git_hash(module) == h1
+    assert git_hash(module.__file__) == h1
 
 
 @parameterized.parameterized.expand(

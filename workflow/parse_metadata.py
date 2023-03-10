@@ -1,7 +1,6 @@
 import json
 import openproblems
 import openproblems.api.hash
-import os
 import pathlib
 import re
 import sys
@@ -29,7 +28,7 @@ def get_task_description(task):
 def write_task_json(task, outdir: pathlib.Path):
     data = {
         "task_id": openproblems.utils.get_member_id(task),
-        "commit_sha": openproblems.api.hash.git_hash(os.path.dirname(task.__file__)),
+        "commit_sha": openproblems.api.hash.git_hash(task),
         "task_name": task._task_name,
         "task_summary": task._task_summary,
         "task_description": get_task_description(task),
@@ -45,7 +44,7 @@ def _write_function_json(task, outdir: pathlib.Path, functions, function_type: s
         function.metadata.update(
             {
                 "task_id": openproblems.utils.get_member_id(task),
-                "commit_sha": openproblems.api.hash.git_hash(function.__file__),
+                "commit_sha": openproblems.api.hash.git_hash(function),
                 f"{function_type}_id": openproblems.utils.get_member_id(function),
                 "implementation_url": (
                     "https://github.com/openproblems-bio/openproblems/"
