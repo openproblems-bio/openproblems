@@ -2,8 +2,6 @@ functionality:
   arguments:
     - name: --input_integrated
       __merge__: anndata_integrated_feature.yaml
-    - name: --input_solution
-      __merge__: anndata_unintegrated.yaml
     - name: --output
       direction: output
       __merge__: anndata_score.yaml
@@ -33,13 +31,11 @@ functionality:
             config = yaml.safe_load(file)
 
         input_file = f"{meta['resources_dir']}/batch_integration/feature/combat.h5ad"
-        sol_file = f"{meta['resources_dir']}/batch_integration/pancreas/solution.h5ad"
         output_file = "output.h5ad"
 
         cmd_args = [
             meta["executable"],
             "--input_integrated", input_file,
-            "--input_solution", sol_file,
             "--output", output_file
         ]
 

@@ -2,8 +2,6 @@ functionality:
   arguments:
     - name: --input_integrated
       __merge__: anndata_integrated_graph.yaml
-    - name: --input_solution
-      __merge__: anndata_unintegrated.yaml
     - name: --output
       direction: output
       __merge__: anndata_score.yaml
@@ -35,13 +33,11 @@ functionality:
         output_type = config["functionality"].get("info", {}).get("output_type")
 
         input_file = f"{meta['resources_dir']}/batch_integration/graph/bbknn.h5ad"
-        sol_file = f"{meta['resources_dir']}/batch_integration/pancreas/solution.h5ad"
         output_file = "output.h5ad"
 
         cmd_args = [
             meta["executable"],
             "--input_integrated", input_file,
-            "--input_solution", sol_file,
             "--output", output_file
         ]
 
