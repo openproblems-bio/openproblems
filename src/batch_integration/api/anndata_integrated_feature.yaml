@@ -6,9 +6,10 @@ info:
   prediction_type: feature
   short_description: "Integrated Graph"
   slots:
-    X:
+    layers:
       - type: double
-        description: integrated feature
+        name: corrected_counts
+        description: Corrected counts after integration
         required: true
     uns:
       - type: string
