@@ -1,7 +1,5 @@
 # Spatial Decomposition/Deconvolution
 
-## The task
-
 Spatial decomposition (also often referred to as Spatial deconvolution) is
 applicable to spatial transcriptomics data where the transcription profile of
 each capture location (spot, voxel, bead, etc.) do not share a bijective

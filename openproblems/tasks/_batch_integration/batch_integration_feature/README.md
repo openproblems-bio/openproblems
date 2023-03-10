@@ -1,8 +1,4 @@
-<!--- TODO: add links --->
-
 # Batch integration feature
-
-## The task
 
 This is a sub-task of the overall batch integration task. Batch (or data) integration
 integrates datasets across batches that arise from various biological and technical

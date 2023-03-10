@@ -1,6 +1,4 @@
-# Cell-cell Communication
-
-## The task
+# Cell-cell Communication (ligand-target)
 
 The growing availability of single-cell data has sparked an increased
 interest in the inference of cell-cell communication (CCC),

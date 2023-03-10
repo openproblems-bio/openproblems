@@ -1,7 +1,5 @@
 # Label Projection
 
-## The task
-
 A major challenge for integrating single cell datasets is creating matching cell type
 annotations for each cell. One of the most common strategies for annotating cell types
 is referred to as
