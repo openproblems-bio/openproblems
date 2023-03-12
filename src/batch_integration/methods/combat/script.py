@@ -31,7 +31,9 @@ if par['hvg']:
 print('Run Combat', flush=True)
 adata.X = adata.layers['normalized']
 adata.X = sc.pp.combat(adata, key='batch', inplace=False)
-adata.X = csr_matrix(adata.X)
+adata.layers['corrected_counts'] = csr_matrix(adata.X)
+
+del(adata.X)
 
 print("Store outputs", flush=True)
 adata.uns['output_type'] = output_type

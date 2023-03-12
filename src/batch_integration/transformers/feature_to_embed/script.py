@@ -23,18 +23,16 @@ output_type = config["functionality"]["info"]["output_type"]
 print('Read input', flush=True)
 adata= sc.read_h5ad(par['input'])
 
+
 print('Run PCA', flush=True)
 adata.obsm['X_emb'] = sc.pp.pca(
-    adata.X,
+    adata.layers["corrected_counts"],
     n_comps=50,
     use_highly_variable=False,
     svd_solver='arpack',
     return_info=False
 )
-del adata.X
 
 print('Store outputs', flush=True)
 adata.uns['output_type'] = output_type
-adata.uns['parent_method_id'] = adata.uns['method_id']
-adata.uns['method_id'] = meta['functionality_name']
 adata.write_h5ad(par['output'], compression='gzip')

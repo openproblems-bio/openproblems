@@ -5,7 +5,6 @@ from scib.metrics import ari, nmi
 ## VIASH START
 par = {
     'input_integrated': 'resources_test/batch_integration/graph/bbknn.h5ad',
-    'input_solution': 'resources_test/batch_integration/pancreas/solution.h5ad',
     'output': 'output.h5ad',
 }
 
@@ -16,10 +15,6 @@ meta = {
 
 print('Read input', flush=True)
 input = ad.read_h5ad(par['input_integrated'])
-solution = ad.read_h5ad(par['input_solution'])
-
-print('Transfer obs annotations', flush=True)
-input.obs['label'] = solution.obs['label'][input.obs_names]
 
 print('Run Louvain clustering', flush=True)
 opt_louvain(

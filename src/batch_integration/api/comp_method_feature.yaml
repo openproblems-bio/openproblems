@@ -47,7 +47,7 @@ functionality:
 
         print(">> Checking whether predictions were added", flush=True)
         # TODO: use helper function to check whether the required fields are defined
-        assert output.X is not None
+        assert output.layers['corrected_counts'] is not None
 
         print(">> Check values", flush=True)
         assert meta['functionality_name'] == output.uns['method_id']

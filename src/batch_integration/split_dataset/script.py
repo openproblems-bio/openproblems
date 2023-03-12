@@ -43,8 +43,8 @@ def read_slots(par, meta):
 
     # fetch info on which slots should be copied to which file
     for arg in config["functionality"]["arguments"]:
-        if re.match("--output_", arg["name"]):
-            file = re.sub("--output_", "", arg["name"])
+        if re.match("--output", arg["name"]):
+            file = "output"
             
             struct_slots = arg['info']['slots']
             out = {}

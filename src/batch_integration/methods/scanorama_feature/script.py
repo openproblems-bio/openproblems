@@ -28,7 +28,9 @@ if par['hvg']:
 
 print('Run scanorama', flush=True)
 adata.X = adata.layers['normalized']
-adata.X = scanorama(adata, batch='batch').X
+adata.layers['corrected_counts'] = scanorama(adata, batch='batch').X
+
+del(adata.X)
 
 # ? Create new comp feature_to_graph?
 # print("Run PCA", flush=True)

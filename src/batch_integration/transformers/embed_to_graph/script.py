@@ -28,6 +28,4 @@ sc.pp.neighbors(adata, use_rep='X_emb')
 
 print("Store outputs", flush=True)
 adata.uns['output_type'] = output_type
-adata.uns['parent_method_id'] = adata.uns['method_id']
-adata.uns['method_id'] = meta['functionality_name']
 adata.write_h5ad(par['output'], compression='gzip')
