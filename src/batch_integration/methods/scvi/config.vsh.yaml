@@ -2,6 +2,7 @@
 __merge__: ../../api/comp_method_embedding.yaml
 functionality:
   name: scvi
+  namespace: batch_integration/methods_graph
   description: Run scVI on adata object, use feature output
   info:
     type: method

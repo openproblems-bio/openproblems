@@ -4,14 +4,22 @@ sourceDir = params.rootDir + "/src"
 targetDir = params.rootDir + "/target/nextflow"
 
 // import methods
-include { bbknn } from "$targetDir/batch_integration/graph/methods/bbknn/main.nf"
-include { combat } from "$targetDir/batch_integration/graph/methods/combat/main.nf"
-include { scanorama_embed } from "$targetDir/batch_integration/graph/methods/scanorama_embed/main.nf"
-include { scanorama_feature } from "$targetDir/batch_integration/graph/methods/scanorama_feature/main.nf"
-include { scvi } from "$targetDir/batch_integration/graph/methods/scvi/main.nf"
+include { bbknn } from "$targetDir/batch_integration/methods_graph/bbknn/main.nf"
+include { combat } from "$targetDir/batch_integration/methods_feature/combat/main.nf"
+include { scanorama_embed } from "$targetDir/batch_integration/methods_embedding/scanorama_embed/main.nf"
+include { scanorama_feature } from "$targetDir/batch_integration/methods_feature/scanorama_feature/main.nf"
+include { scvi } from "$targetDir/batch_integration/methods_graph/scvi/main.nf"
+
+// import transformers
+include ( feature_to_embed ) from "$targetDir/batch_integration/methods_feature/feature_to_embed/main.nf"
+include ( embed_to_graph ) from "$targetDir/batch_integration/methods_graph/embed_to_graph/main.nf"
 
 // import metrics
-include { clustering_overlap } from "$targetDir/batch_integration/graph/metrics/clustering_overlap/main.nf"
+include { clustering_overlap } from "$targetDir/batch_integration/metrics_graph/clustering_overlap/main.nf"
+include { asw_batch } from "$targetDir/batch_integration/metrics_embedding/asw_batch/main.nf"
+include { asw_label } from "$targetDir/batch_integration/metrics_embedding/asw_label/main.nf"
+include { ccc } from "$targetDir/batch_integration/metrics_embedding/cel_cycle_conservation/main.nf"
+include { pcr } from "$targetDir/batch_integration/metrics_embedding/pcr/main.nf"
 
 // tsv generation component
 include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
