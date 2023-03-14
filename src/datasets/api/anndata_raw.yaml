@@ -27,8 +27,27 @@ info:
         name: dataset_id
         description: "A unique identifier for the dataset"
         required: true
-      # todo: ?
-      # - dataset_label
-      # - dataset_description
-      # - dataset_doi
-      # - dataset_url (if doi not available)
+      - name: dataset_name
+        type: string
+        description: Nicely formatted name.
+        required: true
+      - type: string
+        name: data_url
+        description: Link to the original source of the dataset.
+        required: false
+      - name: data_reference
+        type: string
+        description: Bibtex reference of the paper in which the dataset was published.
+        required: false
+      - name: dataset_summary
+        type: string
+        description: Short description of the dataset.
+        required: true
+      - name: dataset_description
+        type: string
+        description: Long description of the dataset.
+        required: true
+      - name: dataset_organism
+        type: string
+        description: The organism of the dataset.
+        required: false

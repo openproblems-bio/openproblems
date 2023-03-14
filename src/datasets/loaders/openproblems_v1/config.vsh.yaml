@@ -5,7 +5,7 @@ functionality:
   argument_groups:
     - name: Inputs
       arguments:
-        - name: "--id"
+        - name: "--dataset_id"
           type: "string"
           description: "The ID of the dataset"
           required: true
@@ -26,6 +26,32 @@ functionality:
           type: boolean
           default: true
           description: Convert layers to a sparse CSR format.
+    - name: Metadata
+      arguments:
+        - name: "--dataset_name"
+          type: string
+          description: Nicely formatted name.
+          required: true
+        - name: "--data_url"
+          type: string
+          description: Link to the original source of the dataset.
+          required: false
+        - name: "--data_reference"
+          type: string
+          description: Bibtex reference of the paper in which the dataset was published.
+          required: false
+        - name: "--dataset_summary"
+          type: string
+          description: Short description of the dataset.
+          required: true
+        - name: "--dataset_description"
+          type: string
+          description: Long description of the dataset.
+          required: true
+        - name: "--dataset_organism"
+          type: string
+          description: The organism of the dataset.
+          required: false
     - name: Outputs
       arguments:
         - name: "--output"
@@ -39,10 +65,13 @@ functionality:
       path: test.py
 platforms:
   - type: docker
-    image: singlecellopenproblems/openproblems
+    image: python:3.8
     setup:
-      - type: python
-        packages:
-          - scanpy
-          - "anndata>=0.8"
+      - type: apt
+        packages: git
+      - type: docker
+        run: |
+          git clone https://github.com/openproblems-bio/openproblems.git /opt/openproblems && \
+            pip install --no-cache-dir -r /opt/openproblems/docker/openproblems/requirements.txt && \
+            pip install --no-cache-dir --editable /opt/openproblems
   - type: nextflow
