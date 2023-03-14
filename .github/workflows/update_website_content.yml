@@ -23,7 +23,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        fetch-depth: 1
+        fetch-depth: 0
         path: openproblems
 
     - name: Checkout website repo
@@ -31,6 +31,7 @@ jobs:
       with:
         fetch-depth: 1
         repository: openproblems-bio/website
+        ref: main
         path: website
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
 
@@ -51,18 +52,18 @@ jobs:
         pip install -U --editable ./openproblems[process]
         python -c "import openproblems"
 
-    - name: Parse results
+    - name: Parse metadata
       run: |
-        rm -r website/content/benchmarks/*/
-        python openproblems/workflow/generate_website_markdown.py website/content/benchmarks
-        cp openproblems/main.bib website/static/bibliography
+        python openproblems/workflow/parse_metadata.py website/results
+        cp openproblems/main.bib website/bibliography/library.bib
         cd website
         git diff --exit-code --quiet || echo "CHANGED=true" >> $GITHUB_ENV
 
-    - name: Upload markdown
+
+    - name: Upload json
       uses: actions/upload-artifact@main
       with:
-        name: markdown
+        name: json
         path: website/content/benchmarks
 
     - name: Push to openproblems-bio/website
@@ -88,11 +89,11 @@ jobs:
         )
       uses: peter-evans/create-pull-request@v4
       with:
+        base: main
         branch: ${{ env.UPDATE_BRANCH_NAME }}
         delete-branch: true
-        base: main
         title: '[auto] Update benchmark content'
-        reviewers: scottgigante-immunai,rcannood,dburkhardt
+        reviewers: scottgigante-immunai,rcannood
         path: './website'
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"

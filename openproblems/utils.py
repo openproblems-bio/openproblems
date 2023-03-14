@@ -48,3 +48,8 @@ def get_members(module):
 def get_callable_members(module):
     """Get all callable public members from a module."""
     return [member for member in get_members(module) if callable(member)]
+
+
+def get_member_id(member):
+    """Get the submodule or function name for a task, dataset, method or metric"""
+    return member.__name__.split(".")[-1]

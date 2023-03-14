@@ -1,7 +1,5 @@
 # Cell-cell Communication
 
-## The task
-
 The growing availability of single-cell data has sparked an increased
 interest in the inference of cell-cell communication (CCC),
 with an ever-growing number of computational tools developed for this purpose.
