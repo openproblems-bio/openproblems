@@ -4,7 +4,6 @@ from . import utils
 import anndata
 import functools
 import logging
-import memory_profiler
 import time
 
 log = logging.getLogger("openproblems")
@@ -25,13 +24,19 @@ def normalizer(func, *args, **kwargs):
             else:
                 obs = adata.uns[obs] if obs else adata.obs
                 var = adata.uns[var] if var else adata.var
-                adata_temp = anndata.AnnData(adata.obsm[obsm], obs=obs, var=var)
+                adata_temp = anndata.AnnData(
+                    adata.obsm[obsm],
+                    obs=obs,
+                    var=var,
+                    layers={"counts": adata.obsm[obsm]},
+                )
                 adata_temp = func(adata_temp, *args, **kwargs)
                 adata.obsm[obsm] = adata.obsm[cache_name] = adata_temp.X
         else:
             if func.__name__ in adata.layers:
                 adata.X = adata.layers[func.__name__]
             else:
+                adata.X = adata.layers["counts"]
                 adata = func(adata, *args, **kwargs)
                 adata.layers[func.__name__] = adata.X
 
@@ -48,12 +53,14 @@ def _backport_code_version(apply_method, code_version):
 
 def method(
     method_name,
+    method_summary,
     paper_name,
-    paper_url,
+    paper_reference,
     paper_year,
     code_url,
     code_version=None,
     image="openproblems",
+    is_baseline=False,
 ):
     """Decorate a method function.
 
@@ -61,31 +68,39 @@ def method(
     ----------
     method_name : str
         Unique human readable name of the method
+    method_summary : str
+        Short summary of the method
     paper_name : str
         Title of the seminal paper describing the method
-    paper_url : str
-        Link to the paper, preferably a DOI URL
+    paper_reference : str
+        BibTex key from `main.bib` referring to the paper
     paper_year : int
         Year the paper was published
     code_url : str
         Link to the code base providing the canonical implementation
     image : str, optional (default: "openproblems")
         Name of the Docker image to be used for this method
+    is_baseline : bool, optional (default: False)
+        If True, this method serves as a baseline for the task
     """
 
     def decorator(func):
         @functools.wraps(func)
-        def apply_method(*args, **kwargs):
+        def apply_method(adata: anndata.AnnData, *args, **kwargs):
             log.debug("Running {} method".format(func.__name__))
-            return func(*args, **kwargs)
+            adata = func(adata, *args, **kwargs)
+            adata.uns["is_baseline"] = is_baseline
+            return adata
 
         apply_method.metadata = dict(
             method_name=method_name,
+            method_summary=method_summary,
             paper_name=paper_name,
-            paper_url=paper_url,
+            paper_reference=paper_reference,
             paper_year=paper_year,
             code_url=code_url,
             image=image,
+            is_baseline=is_baseline,
         )
         apply_method = _backport_code_version(apply_method, code_version)
         return apply_method
@@ -93,7 +108,19 @@ def method(
     return decorator
 
 
-def metric(metric_name, maximize, image="openproblems"):
+baseline_method = functools.partial(
+    method,
+    paper_name="Open Problems for Single Cell Analysis",
+    paper_reference="openproblems",
+    paper_year=2022,
+    code_url="https://github.com/openproblems-bio/openproblems",
+    is_baseline=True,
+)
+
+
+def metric(
+    metric_name, maximize, metric_summary, paper_reference, image="openproblems"
+):
     """Decorate a metric function.
 
     Parameters
@@ -105,6 +132,11 @@ def metric(metric_name, maximize, image="openproblems"):
     ----------
     metric_name : str
         Unique human readable name of the metric
+    metric_summary : str
+        Short summary of the metric
+    paper_reference : str
+        BibTex key from `main.bib` referring to the seminal paper in which the metric
+        was defined
     maximize : bool
         If True, the metric should be maximized. If False, it should be minimized.
     image : str, optional (default: "openproblems")
@@ -113,12 +145,16 @@ def metric(metric_name, maximize, image="openproblems"):
 
     def decorator(func):
         @functools.wraps(func)
-        def apply_metric(*args, **kwargs):
+        def apply_metric(adata: anndata.AnnData, *args, **kwargs):
             log.debug("Running {} metric".format(func.__name__))
-            return func(*args, **kwargs)
+            return func(adata.copy(), *args, **kwargs)
 
         apply_metric.metadata = dict(
-            metric_name=metric_name, maximize=maximize, image=image
+            metric_name=metric_name,
+            metric_summary=metric_summary,
+            paper_reference=paper_reference,
+            maximize=maximize,
+            image=image,
         )
         return apply_metric
 
@@ -141,9 +177,10 @@ def dataset(
     data_url : str
         Link to the original source of the dataset
     data_reference : str
-        Link to the paper describing how the dataset was generated
+        BibTex key from `main.bib` referring to the paper describing how the dataset was
+        generated
     dataset_summary : str
-        Short (<80 character) summary of the dataset
+        Short summary of the dataset
     image : str, optional (default: "openproblems")
         Name of the Docker image to be used for this dataset
     """
@@ -176,6 +213,7 @@ def profile(func):
     result : dict
         Contains 'result', 'runtime_s', 'memory_mb', 'memory_leaked_mb'
     """
+    import memory_profiler
 
     @functools.wraps(func)
     def decorated(*args, **kwargs):

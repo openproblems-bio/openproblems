@@ -1,10 +1,44 @@
+"""
+Schema:
+
+# content/benchmarks/{task.__name__}/data/results.json
+[
+    {
+        "task_id": task.__name__,
+        "commit_sha": "abc123",
+        "method_id": method.__name__,
+        "dataset_id": dataset.__name__,
+        "submission_time": "1970-01-01 00:00:00.000",
+        "code_version": openproblems.__version__,
+        "resources": {
+            "duration_sec": 100.0,
+            "cpu_pct": 100.0,
+            "peak_memory_mb": 1000.0,
+            "disk_read_mb": 1000.0,
+            "disk_write_mb": 1000.0,
+        }
+        "metric_values": {
+            metric.__name__: 1.0,
+            ...
+        }
+        "scaled_scores": {
+            metric.__name__: 1.0,
+            ...
+        },
+        "mean_score": 1.0
+    },
+    ...
+]
+"""
 import collections
+import copy
 import json
 import numpy as np
 import numpyencoder
 import openproblems.api.utils
 import os
 import pandas as pd
+import pathlib
 import sys
 import warnings
 import workflow_utils
@@ -26,36 +60,36 @@ def dump_json(obj, fp):
 size_units = {"B": 1, "KB": 10**3, "MB": 10**6, "GB": 10**9, "TB": 10**12}
 
 
-def parse_size_to_gb(size):
-    """Convert a file size to an integer in GB.
+def parse_size_to_mb(size):
+    """Convert a file size to an integer in MB.
 
     Example
     -------
-    >>> parse_size_to_gb("1000 MB")
-    1
+    >>> parse_size_to_gb("1 GB")
+    1000
     """
     number, unit = [string.strip() for string in size.split()]
-    return int(float(number) * size_units[unit]) / size_units["GB"]
+    return int(float(number) * size_units[unit]) / size_units["MB"]
 
 
 time_units = {"s": 1, "m": 60, "h": 3600, "d": 3600 * 24}
 
 
-def parse_time_to_min(time):
-    """Convert a duration to an integer in minutes.
+def parse_time_to_sec(time):
+    """Convert a duration to an integer in seconds.
 
     Example
     -------
     >>> parse_time_to_min("2m 30s")
-    2.5
+    150
     """
     if " " in time:
-        return sum([parse_time_to_min(t) for t in time.split(" ")])
+        return sum([parse_time_to_sec(t) for t in time.split(" ")])
     time = time.strip()
     for unit, value in time_units.items():
         if time.endswith(unit):
             number = float(time.replace(unit, ""))
-            return number * value / time_units["m"]
+            return number * value / time_units["s"]
 
 
 def read_trace(filename):
@@ -83,11 +117,14 @@ def read_trace(filename):
 
 def parse_trace_to_dict(df):
     """Parse the trace dataframe and convert to dict."""
+    print(f"Parsing {df.shape[0]} trace records")
     results = collections.defaultdict(lambda: collections.defaultdict(dict))
     for task_name in df["task"].unique():
         df_task = df.loc[df["task"] == task_name]
+        print(f"{task_name}: {df_task.shape[0]} records")
         for dataset_name in df_task["dataset"].unique():
             df_dataset = df_task.loc[df_task["dataset"] == dataset_name]
+            print(f"{task_name}.{dataset_name}: {df_task.shape[0]} records")
             for _, row in df_dataset.iterrows():
                 method_name = row["method"]
                 results[task_name][dataset_name][method_name] = row.to_dict()
@@ -97,13 +134,13 @@ def parse_trace_to_dict(df):
     return results
 
 
-def parse_metric_results(results_path, results):
+def parse_metric_results(results_path: pathlib.Path, results):
     """Add metric results to the trace output."""
     missing_traces = []
-    for filename in os.listdir(os.path.join(results_path, "results/metrics")):
-        with open(
-            os.path.join(results_path, "results/metrics", filename), "r"
-        ) as handle:
+    metric_filenames = os.listdir(results_path.joinpath("results", "metrics"))
+    print(f"Loading {len(metric_filenames)} metric results")
+    for filename in sorted(metric_filenames):
+        with open(results_path.joinpath("results", "metrics", filename), "r") as handle:
             result = float(handle.read().strip())
         task_name, dataset_name, method_name, metric_name = filename.replace(
             ".metric.txt", ""
@@ -124,12 +161,12 @@ def parse_metric_results(results_path, results):
     return results
 
 
-def parse_method_versions(results_path, results):
+def parse_method_versions(results_path: pathlib.Path, results):
     """Add method versions to the trace output."""
     missing_traces = []
-    for filename in os.listdir(os.path.join(results_path, "results/method_versions")):
+    for filename in os.listdir(results_path.joinpath("results", "method_versions")):
         with open(
-            os.path.join(results_path, "results/method_versions", filename), "r"
+            results_path.joinpath("results", "method_versions", filename), "r"
         ) as handle:
             code_version = handle.read().strip()
         task_name, dataset_name, method_name = filename.replace(
@@ -150,116 +187,128 @@ def parse_method_versions(results_path, results):
     return results
 
 
-def compute_ranking(task_name, dataset_results):
-    """Rank all methods on a specific dataset."""
-    rankings = np.zeros(len(dataset_results))
-    metric_names = list(dataset_results.values())[0]["metrics"].keys()
+def normalize_scores(task_name, dataset_results):
+    """Normalize method scores to [0, 1] based on baseline method scores."""
+    for method_name in dataset_results:
+        # store original unnormalized results
+        dataset_results[method_name]["metrics_raw"] = copy.copy(
+            dataset_results[method_name]["metrics"]
+        )
+    metric_names = list(list(dataset_results.values())[0]["metrics"].keys())
+
     for metric_name in metric_names:
-        metric = openproblems.api.utils.get_function(task_name, "metrics", metric_name)
-        sorted_order = np.argsort(
+        try:
+            metric = openproblems.api.utils.get_function(
+                task_name, "metrics", metric_name
+            )
+        except openproblems.api.utils.NoSuchFunctionError as e:
+            print(f"[WARN] {e}")
+            del dataset_results[method_name]["metrics"][metric_name]
+            continue
+        metric_scores = np.array(
             [
                 dataset_results[method_name]["metrics"][metric_name]
                 for method_name in dataset_results
             ]
         )
-        if metric.metadata["maximize"]:
-            sorted_order = sorted_order[::-1]
-        rankings += np.argsort(sorted_order)
-
-    method_names = list(dataset_results.keys())
-    final_ranking = {
-        method_names[method_idx]: rank + 1
-        for method_idx, rank in zip(
-            np.argsort(rankings), np.arange(len(dataset_results))
+        baseline_methods = []
+        for method_name in list(dataset_results.keys()):
+            try:
+                method = openproblems.api.utils.get_function(
+                    task_name,
+                    "methods",
+                    method_name,
+                )
+            except openproblems.api.utils.NoSuchFunctionError as e:
+                print(f"[WARN] {e}")
+                del dataset_results[method_name]
+            if method.metadata["is_baseline"]:
+                baseline_methods.append(method_name)
+        if len(baseline_methods) < 2:
+            # just use all methods as a fallback
+            baseline_methods = dataset_results.keys()
+        baseline_scores = np.array(
+            [
+                dataset_results[method_name]["metrics"][metric_name]
+                for method_name in baseline_methods
+            ]
         )
-    }
-    return final_ranking
+        baseline_min = np.nanmin(baseline_scores)
+        baseline_range = np.nanmax(baseline_scores) - baseline_min
+        metric_scores -= baseline_min
+        metric_scores /= np.where(baseline_range != 0, baseline_range, 1)
+        if not metric.metadata["maximize"]:
+            metric_scores = 1 - metric_scores
+        for method_name, score in zip(dataset_results, metric_scores):
+            dataset_results[method_name]["metrics"][metric_name] = score
+    return dataset_results
+
+
+def fix_values(metric_result):
+    if np.isnan(metric_result):
+        return "NaN"
+    if np.isneginf(metric_result):
+        return "-Inf"
+    if np.isinf(metric_result):
+        return "Inf"
+    return metric_result
+
+
+def fix_values_scaled(metric_result):
+    if np.isnan(metric_result) or np.isinf(metric_result):
+        return 0
+    return metric_result
 
 
 def dataset_results_to_json(task_name, dataset_name, dataset_results):
-    """Convert the raw dataset results to pretty JSON for web."""
-    dataset = openproblems.api.utils.get_function(task_name, "datasets", dataset_name)
-    output = dict(
-        name=dataset.metadata["dataset_name"],
-        data_url=dataset.metadata["data_url"],
-        data_reference=dataset.metadata["data_reference"],
-        headers=dict(names=["Rank"], fixed=["Name", "Paper", "Website", "Code"]),
-        results=list(),
-    )
-    ranking = compute_ranking(task_name, dataset_results)
-    metric_names = set()
-    for method_name, rank in ranking.items():
-        method_results = dataset_results[method_name]
-        method = openproblems.api.utils.get_function(task_name, "methods", method_name)
-        result = {
-            "Name": method.metadata["method_name"],
-            "Paper": method.metadata["paper_name"],
-            "Paper URL": method.metadata["paper_url"],
-            "Year": method.metadata["paper_year"],
-            "Library": method.metadata["code_url"],
-            "Implementation": "https://github.com/openproblems-bio/openproblems/"
-            f"blob/main/{method.__module__.replace('.', '/')}",
-            "Version": method_results["code_version"],
-            "Runtime (min)": parse_time_to_min(method_results["realtime"]),
-            "CPU (%)": float(method_results["%cpu"].replace("%", "")),
-            "Memory (GB)": parse_size_to_gb(method_results["peak_rss"]),
-            "Rank": rank,
+    dataset_results = normalize_scores(task_name, dataset_results)
+    out = []
+    for method_name, method_results in dataset_results.items():
+        raw = {k: fix_values(v) for k, v in method_results["metrics_raw"].items()}
+        scaled = {k: fix_values_scaled(v) for k, v in method_results["metrics"].items()}
+        resources = {
+            "duration_sec": parse_time_to_sec(method_results["duration"]),
+            "cpu_pct": float(method_results["%cpu"].replace("%", "")),
+            "peak_memory_mb": parse_size_to_mb(method_results["peak_rss"]),
+            "disk_read_mb": parse_size_to_mb(method_results["rchar"]),
+            "disk_write_mb": parse_size_to_mb(method_results["wchar"]),
         }
-        for metric_name, metric_result in method_results["metrics"].items():
-            metric = openproblems.api.utils.get_function(
-                task_name, "metrics", metric_name
-            )
-            result[metric.metadata["metric_name"]] = metric_result
-            metric_names.add(metric.metadata["metric_name"])
-        output["results"].append(result)
-    output["headers"]["names"].extend(list(metric_names))
-    output["headers"]["names"].extend(
-        [
-            "Memory (GB)",
-            "Runtime (min)",
-            "CPU (%)",
-            "Name",
-            "Paper",
-            "Code",
-            "Year",
-        ]
-    )
-    return output
+        result = {
+            "task_id": task_name,
+            "commit_sha": workflow_utils.get_sha(),
+            "method_id": method_name,
+            "dataset_id": dataset_name,
+            "submission_time": method_results["submit"],
+            "code_version": method_results["code_version"],
+            "resources": resources,
+            "metric_values": raw,
+            "scaled_scores": scaled,
+            "mean_score": np.array(list(scaled.values())).mean(),
+        }
+        out.append(result)
+    return out
 
 
-def results_to_json(results, outdir):
+def results_to_json(results, outdir: pathlib.Path):
     """Convert the full results to pretty JSON for web."""
-    if not os.path.isdir(outdir):
-        os.mkdir(outdir)
     for task_name, task_results in results.items():
-        if workflow_utils.task_is_incomplete(
-            openproblems.api.utils.str_to_task(task_name)
-        ):
-            # don't write results for incomplete tasks
-            continue
+        task_results_out = []
+        task_dir = outdir.joinpath(task_name, "data")
+        task_dir.mkdir(parents=True, exist_ok=True)
         for dataset_name, dataset_results in task_results.items():
             results_dir = os.path.join(outdir, task_name)
             if not os.path.isdir(results_dir):
                 os.mkdir(results_dir)
-            filename = os.path.join(results_dir, "{}.json".format(dataset_name))
-            try:
-                dataset_results_json = dataset_results_to_json(
-                    task_name, dataset_name, dataset_results
-                )
-            except openproblems.api.utils.NoSuchFunctionError:
-                continue
-            with open(filename, "w") as handle:
-                dump_json(
-                    dataset_results_json,
-                    handle,
-                )
+            task_results_out.extend(
+                dataset_results_to_json(task_name, dataset_name, dataset_results)
+            )
+        with open(task_dir.joinpath("results.json"), "w") as handle:
+            dump_json(task_results_out, handle)
 
 
-def main(results_path, outdir):
+def main(results_path: pathlib.Path, outdir: pathlib.Path):
     """Parse the nextflow output."""
-    df = read_trace(
-        os.path.join(results_path, "results/pipeline_info/execution_trace.txt")
-    )
+    df = read_trace(results_path.joinpath("results/pipeline_info/execution_trace.txt"))
     results = parse_trace_to_dict(df)
     results = parse_metric_results(results_path, results)
     results = parse_method_versions(results_path, results)
@@ -268,4 +317,4 @@ def main(results_path, outdir):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    main(pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]))

@@ -1,10 +1,11 @@
 import anndata
+import openproblems
 import os
 
 
 def _cache_name(tempdir, task, dataset, test=None, method=None):
     if not isinstance(task, str):
-        task = task.__name__.split(".")[-1]
+        task = openproblems.utils.get_member_id(task)
     if not isinstance(dataset, str):
         dataset = dataset.__name__
     if method is not None:

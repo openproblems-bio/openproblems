@@ -12,8 +12,17 @@ _seurat = r_function(
 
 @method(
     method_name="Seurat reference mapping (SCTransform)",
+    method_summary=(
+        "Seurat reference mapping is a cell type label transfer method provided by the"
+        " Seurat package. Gene expression counts are first normalised by SCTransform"
+        " before computing PCA. Then it finds mutual nearest neighbours, known as"
+        " transfer anchors, between the labelled and unlabelled part of the data in PCA"
+        " space, and computes each cell’s distance to each of the anchor pairs."
+        " Finally, it uses the labelled anchors to predict cell types for unlabelled"
+        " cells based on these distances."
+    ),
     paper_name="Integrated analysis of multimodal single-cell data",
-    paper_url="https://doi.org/10.1016/j.cell.2021.04.048",
+    paper_reference="hao2021integrated",
     paper_year=2021,
     code_url="https://github.com/satijalab/seurat",
     image="openproblems-r-extras",

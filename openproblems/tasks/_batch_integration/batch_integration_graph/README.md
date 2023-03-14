@@ -1,8 +1,4 @@
-<!--- TODO: add links --->
-
 # Batch integration (graph)
-
-## The task
 
 This is a sub-task of the overall batch integration task. Batch (or data) integration
 methods integrate datasets across batches that arise from various biological and
@@ -17,14 +13,7 @@ sub-tasks for batch integration can be found for:
 * [corrected features](../batch_integration_feature/)
 
 This sub-task was taken from a [benchmarking study of data integration
-methods](https://www.biorxiv.org/content/10.1101/2020.05.22.111161v2).
-
-## The metrics
-
-Metrics for batch integration (graph) aim to TODO
-
-* **TODO**: TODO
-* **TODO**: TODO
+methods](https://openproblems.bio/bibliography#luecken2022benchmarking).
 
 ## API
 
@@ -40,7 +29,7 @@ Datasets should contain the following attributes:
 * `adata.obs["batch"]` with the batch covariate,
 * `adata.obs["label"]` with the cell identity label,
 * `adata.layers['counts']` with raw, integer UMI count data, and
-* `adata.obsm['X_uni']` with the PCA embedding of the unintegrated representation
+* `adata.obsm['X_uni_pca']` with the PCA embedding of the unintegrated representation
 * `adata.obsp['uni_connectivities']` with an unintegrated connectivity matrix generated
   by  `scanpy.pp.neighbors()`
 * `adata.X` with log-normalized data

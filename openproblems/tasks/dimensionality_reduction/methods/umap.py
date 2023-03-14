@@ -1,24 +1,108 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm_hvg
+from ....tools.normalize import log_cp10k
+from ....tools.normalize import log_cp10k_hvg
 from ....tools.utils import check_version
 
-import scanpy as sc
+import functools
 
-
-@method(
-    method_name="Uniform Manifold Approximation and Projection (UMAP), "
-    "as implemented by scanpy (logCPM, 1kHVG)",
-    paper_name="UMAP: Uniform Manifold Approximation and Projection for "
-    "Dimension Reduction",
-    paper_url="https://arxiv.org/abs/1802.03426",
+_umap_method = functools.partial(
+    method,
+    method_summary=(
+        "UMAP or Uniform Manifold Approximation and Projection is an algorithm for"
+        " dimension reduction based on manifold learning techniques and ideas from"
+        " topological data analysis. We perform UMAP on the logCPM expression matrix"
+        " before and after HVG selection and with and without PCA as a pre-processing"
+        " step."
+    ),
+    paper_name=(
+        "UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction"
+    ),
+    paper_reference="mcinnes2018umap",
     paper_year=2018,
     code_url="https://github.com/lmcinnes/umap",
 )
-def umap_logCPM_1kHVG(adata, test: bool = False, n_pca=50):
-    adata = log_cpm_hvg(adata)
-    sc.tl.pca(adata, n_comps=50, svd_solver="arpack")
-    sc.pp.neighbors(adata, use_rep="X_pca", n_pcs=n_pca)
-    sc.tl.umap(adata)
-    adata.obsm["X_emb"] = adata.obsm["X_umap"]
+_densmap_method = functools.partial(
+    method,
+    method_summary=(
+        "densMAP is a modification of UMAP that adds an extra cost term in order to"
+        " preserve information about the relative local density of the data. It is"
+        " performed on the same inputs as UMAP."
+    ),
+    paper_name=(
+        "Assessing single-cell transcriptomic variability through density-preserving"
+        " data visualization"
+    ),
+    paper_reference="narayan2021assessing",
+    paper_year=2021,
+    code_url="https://github.com/lmcinnes/umap",
+    image="openproblems-python-extras",
+)
+
+
+def _umap(adata, n_comps=None, genes=None, densmap=False):
+    from umap import UMAP
+
+    import scanpy as sc
+
+    if genes is not None:
+        adata_input = adata[:, genes].copy()
+    else:
+        adata_input = adata
+
+    if n_comps is not None:
+        sc.tl.pca(adata_input, n_comps=n_comps, svd_solver="arpack")
+        X = adata_input.obsm["X_pca"]
+    else:
+        X = adata_input.X
+
+    adata.obsm["X_emb"] = UMAP(densmap=densmap, random_state=42).fit_transform(X)
     adata.uns["method_code_version"] = check_version("umap-learn")
     return adata
+
+
+@_umap_method(method_name="UMAP (logCP10k, 1kHVG)")
+def umap_logCP10k_1kHVG(adata, test: bool = False):
+    adata = log_cp10k_hvg(adata)
+    return _umap(adata, genes=adata.var["highly_variable"])
+
+
+@_umap_method(method_name="UMAP PCA (logCP10k, 1kHVG)")
+def umap_pca_logCP10k_1kHVG(adata, test: bool = False):
+    adata = log_cp10k_hvg(adata)
+    return _umap(adata, n_comps=50, genes=adata.var["highly_variable"])
+
+
+@_umap_method(method_name="UMAP (logCP10k)")
+def umap_logCP10k(adata, test: bool = False):
+    adata = log_cp10k(adata)
+    return _umap(adata)
+
+
+@_umap_method(method_name="UMAP PCA (logCP10k)")
+def umap_pca_logCP10k(adata, test: bool = False):
+    adata = log_cp10k(adata)
+    return _umap(adata, n_comps=50)
+
+
+@_densmap_method(method_name="densMAP (logCP10k, 1kHVG)")
+def densmap_logCP10k_1kHVG(adata, test: bool = False):
+    adata = log_cp10k_hvg(adata)
+    return _umap(adata, densmap=True, genes=adata.var["highly_variable"])
+
+
+@_densmap_method(method_name="densMAP PCA (logCP10k, 1kHVG)")
+def densmap_pca_logCP10k_1kHVG(adata, test: bool = False):
+    adata = log_cp10k_hvg(adata)
+    return _umap(adata, densmap=True, n_comps=50, genes=adata.var["highly_variable"])
+
+
+@_densmap_method(method_name="densMAP (logCP10k)")
+def densmap_logCP10k(adata, test: bool = False):
+    adata = log_cp10k(adata)
+    return _umap(adata, densmap=True)
+
+
+@_densmap_method(method_name="densMAP PCA (logCP10k)")
+def densmap_pca_logCP10k(adata, test: bool = False):
+    adata = log_cp10k(adata)
+    return _umap(adata, densmap=True, n_comps=50)

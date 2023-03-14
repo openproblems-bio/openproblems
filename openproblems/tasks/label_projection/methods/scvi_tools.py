@@ -7,21 +7,39 @@ import functools
 
 _scanvi_method = functools.partial(
     method,
-    paper_name="Probabilistic harmonization and annotation of single-cell"
-    " transcriptomics data with deep generative models",
-    paper_url="https://doi.org/10.15252/msb.20209620",
+    method_summary=(
+        'scANVI or "single-cell ANnotation using Variational Inference" is a'
+        " semi-supervised variant of the scVI(Lopez et al. 2018) algorithm. Like scVI,"
+        " scANVI uses deep neural networks and stochastic optimization to model"
+        " uncertainty caused by technical noise and bias in single - cell"
+        " transcriptomics measurements. However, scANVI also leverages cell type labels"
+        " in the generative modelling. In this approach, scANVI is used to predict the"
+        " cell type labels of the unlabelled test data."
+    ),
+    paper_name=(
+        "Probabilistic harmonization and annotation of single-cell transcriptomics data"
+        " with deep generative models"
+    ),
+    paper_reference="xu2021probabilistic",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-python-scvi",
+    image="openproblems-python-pytorch",
 )
 
 _scanvi_scarches_method = functools.partial(
     method,
+    method_summary=(
+        'scArches+scANVI or "Single-cell architecture surgery" is a deep learning'
+        " method for mapping new datasets onto a pre-existing reference model, using"
+        " transfer learning and parameter optimization. It first uses scANVI to build a"
+        " reference model from the training data, and then apply scArches to map the"
+        " test data onto the reference model and make predictions."
+    ),
     paper_name="Query to reference single-cell integration with transfer learning",
-    paper_url="https://doi.org/10.1101/2020.07.16.205997",
+    paper_reference="lotfollahi2020query",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-python-scvi",
+    image="openproblems-python-pytorch",
 )
 
 

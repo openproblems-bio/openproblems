@@ -6,26 +6,25 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pre-commit:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     container:
       image: singlecellopenproblems/openproblems-github-actions:latest
       options: --user root
 
     if: >-
-      !endsWith(github.event.head_commit.message, '# ci skip') &&
-      (
-        startsWith(github.ref, 'refs/heads') ||
-        github.event.pull_request.draft == false
-      )
+      !endsWith(github.event.head_commit.message, '# ci skip')
 
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.10.1
-        with:
-          access_token: ${{ github.token }}
 
       - uses: actions/checkout@v3
         with:

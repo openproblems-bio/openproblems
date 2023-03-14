@@ -2,14 +2,13 @@ from . import utils
 
 import numpy as np
 import os
-import scanpy as sc
 import scprep
 import tempfile
 
 URL = "https://figshare.com/ndownloader/files/36509385"
 
 
-@utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/nn.4216")
+@utils.loader(data_url=URL, data_reference="tasic2016adult")
 def load_mouse_brain_atlas(test=False):
     """Download Allen Brain (Taisc et al.,2016) data from Figshare.
 
@@ -17,6 +16,8 @@ def load_mouse_brain_atlas(test=False):
     to the dataset is available at:
     https://figshare.com/articles/dataset/allen_brain_h5ad/20338089
     """
+    import scanpy as sc
+
     if test:
         # load full data first, cached if available
         adata = load_mouse_brain_atlas(test=False)

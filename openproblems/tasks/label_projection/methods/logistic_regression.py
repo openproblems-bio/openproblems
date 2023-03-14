@@ -1,22 +1,31 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm
+from ....tools.normalize import log_cp10k
 from ....tools.normalize import log_scran_pooling
 from .sklearn import classifier
 
 import functools
-import sklearn.linear_model
 
 _logistic_regression_method = functools.partial(
     method,
+    method_summary=(
+        "Logistic Regression estimates parameters of a logistic function for"
+        " multivariate classification tasks. Here, we use 100-dimensional whitened PCA"
+        " coordinates as independent variables, and the model minimises the cross"
+        " entropy loss over all cell type classes. "
+    ),
     paper_name="Applied Logistic Regression",
-    paper_url="https://books.google.com/books?id=64JYAwAAQBAJ",
+    paper_reference="hosmer2013applied",
     paper_year=2013,
-    code_url="https://scikit-learn.org/stable/modules/generated/"
-    "sklearn.linear_model.LogisticRegression.html",
+    code_url=(
+        "https://scikit-learn.org/stable/modules/generated/"
+        "sklearn.linear_model.LogisticRegression.html"
+    ),
 )
 
 
 def _logistic_regression(adata, test=False, max_iter=None):
+    import sklearn.linear_model
+
     if test:
         max_iter = max_iter or 100
     else:  # pragma: no cover
@@ -27,10 +36,10 @@ def _logistic_regression(adata, test=False, max_iter=None):
 
 
 @_logistic_regression_method(
-    method_name="Logistic regression (log CPM)",
+    method_name="Logistic regression (log CP10k)",
 )
-def logistic_regression_log_cpm(adata, test=False, max_iter=None):
-    adata = log_cpm(adata)
+def logistic_regression_log_cp10k(adata, test=False, max_iter=None):
+    adata = log_cp10k(adata)
     return _logistic_regression(adata, test=test, max_iter=max_iter)
 
 

@@ -5,12 +5,19 @@ import functools
 
 _scanorama_method = functools.partial(
     method,
-    paper_name="Efficient integration of heterogeneous single-cell "
-    "transcriptomes using Scanorama",
-    paper_url="https://www.nature.com/articles/s41587-019-0113-3",
+    method_summary=(
+        "Scanorama is an extension of the MNN method. Other then MNN, it finds mutual"
+        " nearest neighbours over all batches and embeds observations into a joint"
+        " hyperplane."
+    ),
+    paper_name=(
+        "Efficient integration of heterogeneous single-cell transcriptomes using"
+        " Scanorama"
+    ),
+    paper_reference="hie2019efficient",
     paper_year=2019,
     code_url="https://github.com/brianhie/scanorama",
-    image="openproblems-python-batch-integration",
+    image="openproblems-r-pytorch",
 )
 
 
@@ -18,10 +25,12 @@ def _scanorama(adata, use_rep, pca):
     from scib.integration import scanorama
     from scib.preprocessing import reduce_data
 
-    # scanorama clears adata.layers
+    # scanorama clears adata.layers and uns
     layers = adata.layers
+    uns = adata.uns
     adata = scanorama(adata, "batch")
     adata.layers = layers
+    adata.uns = uns
     reduce_data(adata, umap=False, use_rep=use_rep, pca=pca)
     adata.uns["method_code_version"] = check_version("scanorama")
     return adata

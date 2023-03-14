@@ -4,8 +4,9 @@ import anndata
 import functools
 import hashlib
 import logging
+import numpy as np
 import os
-import scanpy as sc
+import scipy.sparse
 
 log = logging.getLogger("openproblems")
 
@@ -27,10 +28,35 @@ def _hash_function(func, *args, **kwargs):
 
 
 def _cache_path(func, *args, **kwargs):
+    try:
+        os.mkdir(TEMPDIR)
+    except OSError:
+        pass
     if hasattr(func, "__wrapped__"):
         func = func.__wrapped__
     filename = "openproblems_{}.h5ad".format(_hash_function(func, *args, **kwargs))
     return os.path.join(TEMPDIR, filename)
+
+
+def _fix_matrix_format(X):
+    if scipy.sparse.issparse(X) and not isinstance(X, scipy.sparse.csr_matrix):
+        X = X.tocsr()
+    if isinstance(X, np.matrix):
+        X = X.A
+    return X
+
+
+def _fix_adata(adata):
+    adata.strings_to_categoricals()
+    if "var_names_all" not in adata.uns:
+        adata.uns["var_names_all"] = adata.var.index.to_numpy()
+    adata.X = _fix_matrix_format(adata.X)
+    for layer in adata.layers:
+        adata.layers[layer] = _fix_matrix_format(adata.layers[layer])
+    for obsm in adata.obsm:
+        adata.obsm[obsm] = _fix_matrix_format(adata.obsm[obsm])
+    if "counts" not in adata.layers:
+        adata.layers["counts"] = adata.X
 
 
 def loader(data_url, data_reference):
@@ -48,31 +74,17 @@ def loader(data_url, data_reference):
         @functools.wraps(func)
         def apply_func(*args, **kwargs):
             filepath = _cache_path(func, *args, **kwargs)
+            dataset_name = f"{func.__name__}({args}, {kwargs})"
             if os.path.isfile(filepath):
-                log.debug(
-                    "Loading cached {}({}, {}) dataset".format(
-                        func.__name__, args, kwargs
-                    )
-                )
+                log.debug(f"Loading cached {dataset_name} dataset")
                 adata = anndata.read_h5ad(filepath)
                 adata.uns["_from_cache"] = True
                 return adata
             else:
-                log.debug(
-                    "Downloading {}({}, {}) dataset".format(func.__name__, args, kwargs)
-                )
+                log.debug(f"Downloading {dataset_name} dataset")
                 adata = func(*args, **kwargs)
-                adata.strings_to_categoricals()
                 adata.uns["_from_cache"] = False
-                if "var_names_all" not in adata.uns:
-                    adata.uns["var_names_all"] = adata.var.index.to_numpy()
-                if "counts" not in adata.layers:
-                    adata.layers["counts"] = adata.X
-                try:
-                    os.mkdir(TEMPDIR)
-                except OSError:
-                    pass
-                adata.write_h5ad(filepath)
+                write_h5ad(adata, filepath)
                 return adata
 
         apply_func.metadata = dict(data_url=data_url, data_reference=data_reference)
@@ -83,6 +95,8 @@ def loader(data_url, data_reference):
 
 def filter_genes_cells(adata):
     """Remove empty cells and genes."""
+    import scanpy as sc
+
     if "var_names_all" not in adata.uns:
         # fill in original var names before filtering
         adata.uns["var_names_all"] = adata.var.index.to_numpy()
@@ -106,6 +120,8 @@ def subsample_even(adata, n_obs, even_obs):
     adata : AnnData
         Subsampled AnnData object
     """
+    import scanpy as sc
+
     values = adata.obs[even_obs].unique()
     adatas = []
     n_obs_per_value = n_obs // len(values)
@@ -120,3 +136,10 @@ def subsample_even(adata, n_obs, even_obs):
     adata_out.varm = adata.varm
     adata_out.varp = adata.varp
     return adata_out
+
+
+def write_h5ad(adata, filepath):
+    if os.path.isfile(filepath):
+        os.unlink(filepath)
+    _fix_adata(adata)
+    adata.write_h5ad(filepath)

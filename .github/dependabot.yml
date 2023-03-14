@@ -5,63 +5,74 @@ updates:
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "pip"
     directory: "/docker/openproblems"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "pip"
     directory: "/docker/openproblems-github-actions"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "pip"
-    directory: "/docker/openproblems-python-batch-integration"
+    directory: "/docker/openproblems-python-pytorch"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "pip"
     directory: "/docker/openproblems-python-extras"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "pip"
     directory: "/docker/openproblems-python-scvi"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "pip"
-    directory: "/docker/openproblems-python-tf2.4"
+    directory: "/docker/openproblems-python-tensorflow"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "pip"
     directory: "/docker/openproblems-r-base"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "pip"
     directory: "/docker/openproblems-r-extras"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "pip"
     directory: "/docker/openproblems-r-pytorch"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 1
+    rebase-strategy: "disabled"

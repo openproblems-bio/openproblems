@@ -26,6 +26,13 @@ diffusion processes being run.
 
 @metric(
     metric_name="kBET",
+    metric_summary=(
+        "kBET determines whether the label composition of a k nearest neighborhood of a"
+        " cell is similar to the expected (global) label composition. The test is"
+        " repeated for a random subset of cells, and the results are summarized as a"
+        " rejection rate over all tested neighborhoods."
+    ),
+    paper_reference="bttner2018test",
     maximize=True,
     image="openproblems-r-extras",
 )

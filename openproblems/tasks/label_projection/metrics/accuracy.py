@@ -1,11 +1,17 @@
 from ....tools.decorators import metric
 
 import numpy as np
-import sklearn.preprocessing
 
 
-@metric(metric_name="Accuracy", maximize=True)
+@metric(
+    metric_name="Accuracy",
+    metric_summary="Average number of correctly applied labels.",
+    paper_reference="grandini2020metrics",
+    maximize=True,
+)
 def accuracy(adata):
+    import sklearn.preprocessing
+
     encoder = sklearn.preprocessing.LabelEncoder().fit(adata.obs["labels"])
     test_data = adata[~adata.obs["is_train"]]
 

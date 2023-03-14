@@ -26,8 +26,14 @@ the mean isolated score of all isolated labels.
 
 @metric(
     metric_name="Isolated label F1",
+    metric_summary=(
+        "Isolated cell labels are identified as the labels present in the least number"
+        " of batches in the integration task. The score evaluates how well these"
+        " isolated labels separate from other cell identities based on clustering."
+    ),
+    paper_reference="luecken2022benchmarking",
     maximize=True,
-    image="openproblems-python-batch-integration",  # only if required
+    image="openproblems-r-pytorch",
 )
 def isolated_labels_f1(adata):
     from scib.metrics import isolated_labels
@@ -36,7 +42,7 @@ def isolated_labels_f1(adata):
         adata,
         label_key="labels",
         batch_key="batch",
-        embed="X_pca",
+        embed=None,
         cluster=True,
         verbose=False,
     )

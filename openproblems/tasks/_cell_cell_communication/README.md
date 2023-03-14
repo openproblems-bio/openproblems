@@ -1,7 +1,5 @@
 # Cell-cell Communication
 
-## The task
-
 The growing availability of single-cell data has sparked an increased
 interest in the inference of cell-cell communication (CCC),
 with an ever-growing number of computational tools developed for this purpose.
@@ -10,14 +8,14 @@ Different tools propose distinct preprocessing steps with diverse
 scoring functions, that are challenging to compare and evaluate.
 Furthermore, each tool typically comes with its own set of prior knowledge.
 To harmonize these, [Dimitrov et
-al, 2022](https://doi.org/10.1038/s41467-022-30755-0) recently developed the
-[LIANA](https://github.com/saezlab/liana) framework, which was used
+al, 2022](https://openproblems.bio/bibliography#dimitrov2022comparison) recently
+developed the [LIANA](https://github.com/saezlab/liana) framework, which was used
 as a foundation for this task.
 
 The challenges in evaluating the tools are further exacerbated by the
 lack of a gold standard to benchmark the performance of CCC methods. In an
 attempt to address this, Dimitrov et al use alternative data modalities, including
-the spatial proximity of cell types and inferred
+the spatial proximity of cell types and
 downstream cytokine activities, to generate an inferred ground truth. However,
 these modalities are only approximations of biological reality and come
 with their own assumptions and limitations. In time, the inclusion of more
@@ -40,18 +38,6 @@ More subtasks may be defined that infer communication events on any of the `sour
 cell type, the `target` cell type, the `ligand` molecule, and the receptor.
 More aspects of the communication may also be added in the future.
 
-## The metrics
-
-Metrics for cell-cell communication aim to characterize how good are
-the different scoring methods at prioritizing assumed truth predictions.
-
-* **Odds ratio**: The odds ratio represents the ratio of true and false
-positives within a set of prioritized interactions (top ranked hits) versus
-the same ratio for the remainder of the interactions. Thus, in this
-scenario odds ratios quantify the strength of association between the
-ability of methods to prioritize interactions and those interactions
-assigned to the positive class.
-
 ## API
 
 ### Datasets
@@ -63,41 +49,53 @@ al](https://doi.org/10.1038/s41467-022-30755-0) for more details.
 
 `adata.uns["ccc_target"]` should be a Pandas DataFrame containing:
 
-* `response`: `int`, binary response variable indicating whether an interaction is
-  assumed to have occurred
-
-and at least one of the following columns:
+* `response`: `int`, binary response variable _[0; 1]_ indicating whether an interaction
+  is assumed to have occurred and at least one of the following columns:
 
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
 * `ligand`: `str`, gene symbol of the ligand in an interaction
 * `receptor`: `str`, gene symbol of the receptor in an interaction
 
-The datasets should also include a
-[NCBI taxonomy ID](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi)
+The datasets should also include a [NCBI taxonomy ID](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi)
 in `adata.uns["target_organism"]` - used to convert the (typically human) prior
 knowledge of the CCC methods to the corresponding gene homologs.
 `adata.X` should contain the raw counts matrix.
-
-For subtasks including ligands or receptors in the inferred interactions, provide a
-prior-k
 
 ### Methods
 
 Methods should predict interactions between cell types without using
 `adata.uns["ccc_target"]`. Predicted interactions should be stored in
-`adata.uns["ccc_pred"]` as a Pandas DataFrame containing all of the following columns:
+`adata.uns["ccc_pred"]` as a Pandas DataFrame containing:
 
 * `score`: `float`, score between `-inf` to `+inf` giving a predicted strength of the
   inferred interaction
+
+and at least two of the following columns:
+
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
 * `ligand`: `str`, gene symbol of the ligand in an interaction
 * `receptor`: `str`, gene symbol of the receptor in an interaction
 
-Methods should infer a score for each _intersecting interaction_ in the harmonized
-prior-knowledge resource provided by LIANA. We define _intersecting interactions_ as
-those for which the relevant genes are both present in the dataset and the resource.
+The relevance of these columns is determined by the subtask in question
+via `adata.uns["merge_keys"]`, a list of at least two columns from the
+aforementioned columns corresponding to the assumed
+truth in `adata.uns["ccc_target"]`.
+
+Methods should infer a score for each _intersecting interaction_,
+where these represent the intersecting columns between `adata.uns["ccc_pred"]` and
+`adata.uns["ccc_target"]`.
+
+In case, `ligand` and/or `receptor` columns are present
+in `adata.uns["ccc_target"]`, we further define _intersecting interactions_ as
+those for which the relevant genes are present in both the dataset and
+the prior-knowledge resource provided by LIANA.
+
+The predictions of any method which do not uniquely map
+to the columns in `adata.uns["merge_keys"]` are to be **aggregated**.
+By default, aggregation is carried as the `max` and `sum`
+according to columns in the `merge_keys`.
 
 The prior-knowledge resource is available via the
 `cell_cell_communication.utils.ligand_receptor_resource` function, which returns a

@@ -1,3 +1,8 @@
-git+https://github.com/theislab/scib@v1.0.2
+annoy==1.17.1
+bbknn==1.5.*
+git+https://github.com/chriscainx/mnnpy@2097dec  # master
 harmony-pytorch==0.1.*
-torch==1.12.*
+scanorama==1.7.0
+scib==1.1.3
+scvi-tools~=0.19
+torch==1.13.*

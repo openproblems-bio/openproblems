@@ -1,40 +1,15 @@
-from ....data.sample import load_sample_data
-from ....tools.decorators import dataset
+from .._common import api
 
-import numpy as np
-import scanpy as sc
+MIN_CELLS_PER_CELLTYPE = 50
 
-
-def check_dataset(adata):
-    """Check that dataset output fits expected API."""
-
-    assert "X_uni_pca" in adata.obsm
-    assert "batch" in adata.obs
-    assert "labels" in adata.obs
-    assert "uni_connectivities" in adata.obsp
-    assert "log_normalized" in adata.layers
-
-    return True
+check_dataset = api.check_dataset
+sample_dataset = api.sample_dataset
 
 
-def check_method(adata):
+def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
-    assert "connectivities" in adata.obsp
-    assert "distances" in adata.obsp
+    api.check_neighbors(adata, "neighbors", "connectivities", "distances")
     return True
-
-
-@dataset()
-def sample_dataset():
-    """Create a simple dataset to use for testing methods in this task."""
-    adata = load_sample_data()
-    adata.obsm["X_uni_pca"] = sc.pp.pca(adata.X)
-    adata.layers["log_normalized"] = adata.X
-    adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
-    adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
-
-    sc.pp.neighbors(adata, use_rep="X_uni_pca", key_added="uni")
-    return adata
 
 
 def sample_method(adata):

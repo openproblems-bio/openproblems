@@ -9,15 +9,11 @@ from pathlib import Path
 from scipy.sparse import csr_matrix
 from scipy.spatial.distance import pdist
 from scipy.spatial.distance import squareform
-from sklearn.cluster import AgglomerativeClustering
-from sklearn.decomposition import PCA
-from sklearn.neighbors import kneighbors_graph
 from typing import Optional
 
 import anndata
 import numpy as np
 import pandas as pd
-import scanpy as sc
 
 
 def categorical(p, n_samples):
@@ -66,6 +62,11 @@ def generate_synthetic_dataset(
     K_sampled: Optional[int] = None,  # cells sampled for each spot
     seed: int = 0,
 ):
+    from sklearn.cluster import AgglomerativeClustering
+    from sklearn.decomposition import PCA
+    from sklearn.neighbors import kneighbors_graph
+
+    import scanpy as sc
     import torch
 
     np.random.seed(seed)
@@ -137,7 +138,7 @@ def generate_synthetic_dataset(
     )
     sc_anndata.obs["cell_type"] = cell_types_sc[:, :K_sampled].reshape(-1, 1)
     sc_anndata.obs["label"] = sc_anndata.obs["cell_type"].astype(str).astype("category")
-    sc_anndata.obs["n_counts"] = np.sum(sc_anndata.X, axis=1)
+    sc_anndata.obs["n_counts"] = np.sum(sc_anndata.X, axis=1).A.flatten()
     sc_anndata.obsm["gamma"] = gamma_sc[:, :K_sampled].reshape(-1, gamma.shape[-1])
     sc_anndata.obsm["spatial"] = location_sc[:, :K_sampled].reshape(-1, 2)
     if n_cells is not None:
@@ -224,9 +225,6 @@ def generate_synthetic_dataset(
         st_anndata.obs["n_counts"] = np.sum(st_anndata.X, axis=1)
         st_anndata.uns["key_clustering"] = key_list
         st_anndata.uns["target_list"] = [1] + target_list
-
-    sc_anndata.layers["counts"] = sc_anndata.X.copy()
-    st_anndata.layers["counts"] = st_anndata.X.copy()
 
     merged_anndata = merge_sc_and_sp(sc_anndata, st_anndata, test=test)
 

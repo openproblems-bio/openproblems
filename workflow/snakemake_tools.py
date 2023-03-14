@@ -173,9 +173,9 @@ def docker_image_age(image, pull_on_error=True):
             return docker_image_age(image, pull_on_error=False)
         elif date_string == "":
             warnings.warn(
-                "Docker image singlecellopenproblems/{} not found; "
-                "assuming needs rebuild. If you think this message is in error, "
-                "you can fix this by running `snakemake -j 1 docker_pull`".format(image)
+                "Docker image singlecellopenproblems/{} not found; assuming needs"
+                " rebuild. If you think this message is in error, you can fix this by"
+                " running `snakemake -j 1 docker_pull`".format(image)
             )
             return -1
         else:
@@ -264,6 +264,7 @@ def docker_image_label(image, label):
     return output
 
 
+@functools.lru_cache(None)
 def docker_imagespec_changed(image, dockerfile):
     """Check if the Dockerfile has changed
 
@@ -273,6 +274,17 @@ def docker_imagespec_changed(image, dockerfile):
     If working with a github actions-built image, check if there is any diff
     between the Dockerfile and base/main
     """
+    base_image = _docker_base(image)
+    if base_image is not None:
+        base_docker_path = os.path.join(IMAGES_DIR, base_image)
+        base_dockerfile = os.path.join(base_docker_path, "Dockerfile")
+        if docker_imagespec_changed(base_image, base_dockerfile):
+            print(
+                "{}: base image spec changed".format(image),
+                file=sys.stderr,
+            )
+            return True
+
     if not docker_image_exists(image):
         # will be downloaded from dockerhub
         build_type = "github_actions"

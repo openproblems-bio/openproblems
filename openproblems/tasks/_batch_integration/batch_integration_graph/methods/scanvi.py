@@ -6,12 +6,18 @@ import functools
 
 _scanvi_method = functools.partial(
     method,
-    paper_name="Probabilistic harmonization and annotation of single‐cell "
-    "transcriptomics data with deep generative models",
-    paper_url="https://doi.org/10.15252/msb.20209620",
+    method_summary=(
+        "ScanVI is an extension of scVI but instead using a Bayesian semi-supervised"
+        " approach for more principled cell annotation."
+    ),
+    paper_name=(
+        "Probabilistic harmonization and annotation of single‐cell transcriptomics data"
+        " with deep generative models"
+    ),
+    paper_reference="xu2021probabilistic",
     paper_year=2021,
     code_url="https://github.com/YosefLab/scvi-tools",
-    image="openproblems-python-batch-integration",
+    image="openproblems-r-pytorch",
 )
 
 

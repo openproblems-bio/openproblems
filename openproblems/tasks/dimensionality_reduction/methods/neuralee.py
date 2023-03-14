@@ -1,5 +1,5 @@
 from ....tools.decorators import method
-from ....tools.normalize import log_cpm_hvg
+from ....tools.normalize import log_cp10k_hvg
 from ....tools.utils import check_version
 from anndata import AnnData
 from typing import Optional
@@ -12,13 +12,24 @@ log = logging.getLogger("openproblems")
 
 _neuralee_method = functools.partial(
     method,
-    paper_name="NeuralEE: A GPU-Accelerated Elastic Embedding "
-    "Dimensionality Reduction Method for "
-    "Visualizing Large-Scale scRNA-Seq Data",
-    paper_url="https://www.frontiersin.org/articles/10.3389/fgene.2020.00786/full",
+    method_summary=(
+        "NeuralEE is a neural network implementation of elastic embedding. It is a"
+        " non-linear method that preserves pairwise distances between data points."
+        " NeuralEE uses a neural network to optimize an objective function that"
+        " measures the difference between pairwise distances in the original"
+        " high-dimensional space and the two-dimensional space. It is computed on both"
+        " the recommended input from the package authors of 500 HVGs selected from a"
+        " logged expression matrix (without sequencing depth scaling) and the default"
+        " logCPM matrix with 1000 HVGs."
+    ),
+    paper_name=(
+        "NeuralEE: A GPU-Accelerated Elastic Embedding Dimensionality Reduction Method"
+        " for Visualizing Large-Scale scRNA-Seq Data"
+    ),
+    paper_reference="xiong2020neuralee",
     paper_year=2020,
     code_url="https://github.com/HiBearME/NeuralEE",
-    image="openproblems-python-extras",
+    image="openproblems-python-pytorch",
 )
 
 
@@ -49,6 +60,7 @@ def _create_neuralee_dataset(
 
 def _neuralee(
     adata,
+    genes=None,
     d: int = 2,
     test: bool = False,
     subsample_genes: Optional[int] = None,
@@ -58,20 +70,25 @@ def _neuralee(
 
     import torch
 
+    if genes is not None:
+        adata_input = adata[:, genes].copy()
+    else:
+        adata_input = adata
+
     # this can fail due to sparseness of data; if so, retry with more genes
     # note that this is a deviation from the true default behavior, which fails
     # see https://github.com/openproblems-bio/openproblems/issues/375
     while True:
         try:
             dataset = _create_neuralee_dataset(
-                adata, normalize=normalize, subsample_genes=subsample_genes
+                adata_input, normalize=normalize, subsample_genes=subsample_genes
             )
         except ValueError:
-            if subsample_genes is not None and subsample_genes < adata.n_vars:
-                subsample_genes = min(adata.n_vars, int(subsample_genes * 1.2))
+            if subsample_genes is not None and subsample_genes < adata_input.n_vars:
+                subsample_genes = min(adata_input.n_vars, int(subsample_genes * 1.2))
                 log.warning(
-                    "ValueError in neuralee_default. "
-                    f"Increased subsample_genes to {subsample_genes}"
+                    "ValueError in neuralee_default. Increased subsample_genes to"
+                    f" {subsample_genes}"
                 )
             else:
                 raise
@@ -91,10 +108,21 @@ def _neuralee(
 
 @_neuralee_method(method_name="NeuralEE (CPU) (Default)")
 def neuralee_default(adata: AnnData, test: bool = False) -> AnnData:
-    return _neuralee(adata, test=test, normalize=True, subsample_genes=500)
+    # neuralee needs raw counts
+    adata.X = adata.layers["counts"]
+    adata = _neuralee(adata, test=test, normalize=True, subsample_genes=500)
+    # revert to expected values
+    adata.X = adata.layers["log_cp10k"]
+    return adata
 
 
-@_neuralee_method(method_name="NeuralEE (CPU) (logCPM, 1kHVG)")
-def neuralee_logCPM_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
-    adata = log_cpm_hvg(adata)
-    return _neuralee(adata, test=test, normalize=False, subsample_genes=None)
+@_neuralee_method(method_name="NeuralEE (CPU) (logCP10k, 1kHVG)")
+def neuralee_logCP10k_1kHVG(adata: AnnData, test: bool = False) -> AnnData:
+    adata = log_cp10k_hvg(adata)
+    return _neuralee(
+        adata,
+        genes=adata.var["highly_variable"],
+        test=test,
+        normalize=False,
+        subsample_genes=None,
+    )

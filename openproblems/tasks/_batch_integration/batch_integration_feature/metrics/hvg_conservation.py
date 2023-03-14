@@ -20,13 +20,19 @@ coefficients.
 
 @metric(
     metric_name="HVG conservation",
+    metric_summary=(
+        "This metric computes the average percentage of overlapping highly variable"
+        " genes per batch before and after integration."
+    ),
+    paper_reference="luecken2022benchmarking",
     maximize=True,
-    image="openproblems-python-batch-integration",
+    image="openproblems-r-pytorch",
 )
 def hvg_conservation(adata):
     from scib.metrics import hvg_overlap
 
     adata_unint = adata.copy()
     adata_unint.X = adata_unint.layers["log_normalized"]
+    hvg_both = list(set(adata.uns["hvg_unint"]).intersection(adata.var_names))
 
-    return hvg_overlap(adata_unint, adata, "batch")
+    return hvg_overlap(adata_unint, adata[:, hvg_both], "batch")

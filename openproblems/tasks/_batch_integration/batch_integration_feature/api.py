@@ -1,51 +1,26 @@
-from ....data.sample import load_sample_data
-from ....tools.decorators import dataset
+from .._common import api
 
-import numpy as np
-import scanpy as sc
+import functools
 
-
-def check_dataset(adata):
-    """Check that dataset output fits expected API."""
-
-    assert "batch" in adata.obs
-    assert "labels" in adata.obs
-    assert "log_normalized" in adata.layers
-    assert "counts" in adata.layers
-    assert adata.var_names.is_unique
-    assert adata.obs_names.is_unique
-
-    return True
+check_dataset = functools.partial(api.check_dataset, do_check_hvg=True)
+sample_dataset = api.sample_dataset
 
 
-def check_method(adata):
+def check_method(adata, is_baseline=False):
     """Check that method output fits expected API."""
     assert "log_normalized" in adata.layers
-    assert adata.layers["log_normalized"] is not adata.X
+    # check hvg_unint is still there
+    assert "hvg_unint" in adata.uns
+    # check n_vars is not too small
+    assert "n_genes_pre" in adata.uns
+    assert adata.n_vars >= min(api.N_HVG_UNINT, adata.uns["n_genes_pre"])
+    if not is_baseline:
+        assert adata.layers["log_normalized"] is not adata.X
     return True
-
-
-@dataset()
-def sample_dataset():
-    """Create a simple dataset to use for testing methods in this task."""
-    adata = load_sample_data()
-
-    adata.var.index = adata.var.gene_short_name.astype(str)
-    sc.pp.normalize_total(adata)
-
-    adata.obsm["X_uni"] = sc.pp.pca(adata.X)
-    adata.obs["batch"] = np.random.choice(2, adata.shape[0], replace=True).astype(str)
-    adata.obs["labels"] = np.random.choice(5, adata.shape[0], replace=True).astype(str)
-    adata.layers["counts"] = adata.X
-    adata.layers["log_normalized"] = adata.X.multiply(
-        10000 / adata.X.sum(axis=1)
-    ).tocsr()
-    adata.var_names_make_unique()
-    adata.obs_names_make_unique()
-    return adata
 
 
 def sample_method(adata):
     """Create sample method output for testing metrics in this task."""
     adata.X = adata.X.multiply(2)
+    adata.uns["is_baseline"] = False
     return adata

@@ -1,4 +1,5 @@
 from .....tools.decorators import metric
+from .utils import get_split
 
 """
 Principal component regression, derived from PCA, has previously been used to quantify
@@ -17,11 +18,17 @@ component."""
 
 @metric(
     metric_name="PC Regression",
+    metric_summary=(
+        "This compares the explained variance by batch before and after integration. It"
+        " returns a score between 0 and 1 (scaled=True) with 0 if the variance"
+        " contribution hasn’t changed. The larger the score, the more different the"
+        " variance contributions are before and after integration."
+    ),
+    paper_reference="luecken2022benchmarking",
     maximize=True,
-    image="openproblems-python-batch-integration",  # only if required
+    image="openproblems-r-pytorch",
 )
 def pcr(adata):
-    from ._utils import _get_split
     from scib.metrics import pcr_comparison
 
-    return pcr_comparison(*_get_split(adata), "batch", embed="X_emb")
+    return pcr_comparison(*get_split(adata), "batch", embed="X_emb")

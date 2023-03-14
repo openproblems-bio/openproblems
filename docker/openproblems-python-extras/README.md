@@ -9,8 +9,6 @@ Python: 3.8
 Python packages:
 
 * harmonic-alignment
-* pybedtools
-* pyensembl
 * magic-impute
 * molecular-cross-validation
 * MulticoreTSNE

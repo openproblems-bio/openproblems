@@ -18,8 +18,8 @@ def temporary(func, version=None, *args, **kwargs):
         raise TypeError("temporary() missing 1 required keyword argument: 'version'")
     if packaging.version.parse(__version__) >= packaging.version.parse(version):
         raise RuntimeError(
-            "Temporary function {}.{} is temporary and should not be used "
-            "after version {} (current version: {})".format(
+            "Temporary function {}.{} is temporary and should not be used after version"
+            " {} (current version: {})".format(
                 func.__module__, func.__name__, version, __version__
             )
         )
@@ -48,3 +48,8 @@ def get_members(module):
 def get_callable_members(module):
     """Get all callable public members from a module."""
     return [member for member in get_members(module) if callable(member)]
+
+
+def get_member_id(member):
+    """Get the submodule or function name for a task, dataset, method or metric"""
+    return member.__name__.split(".")[-1]

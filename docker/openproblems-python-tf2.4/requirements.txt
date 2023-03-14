@@ -1,4 +1,0 @@
-dca==0.3.*
-keras>=2.4,<2.6  # pinned in dca
-pyyaml==6.0  # pinned in #431
-tensorflow-cpu==2.4.*  # pinned in dca

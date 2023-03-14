@@ -5,12 +5,20 @@ from ..utils import split_sc_and_sp
 
 @method(
     method_name="Tangram",
-    paper_name="Deep learning and alignment of spatially resolved single-cell "
-    "transcriptomes with Tangram",
-    paper_url="https://doi.org/10.1038/s41592-021-01264-7",
+    method_summary=(
+        "Tangram is a method to map gene expression signatures from scRNA-seq data to"
+        " spatial data. It performs the cell type mapping by learning a similarity"
+        " matrix between single-cell and spatial locations based on gene expression"
+        " profiles."
+    ),
+    paper_name=(
+        "Deep learning and alignment of spatially resolved single-cell transcriptomes"
+        " with Tangram"
+    ),
+    paper_reference="biancalani2021deep",
     paper_year=2021,
     code_url="https://github.com/broadinstitute/Tangram",
-    image="openproblems-python-extras",
+    image="openproblems-python-pytorch",
 )
 def tangram(adata, test=False, num_epochs=None, n_markers=None):
     # analysis based on:

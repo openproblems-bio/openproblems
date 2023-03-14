@@ -2,7 +2,6 @@ from . import utils
 
 import numpy as np
 import os
-import scanpy as sc
 import scipy.sparse
 import scprep
 import tempfile
@@ -10,7 +9,7 @@ import tempfile
 URL = "https://figshare.com/ndownloader/files/37593188"
 
 
-@utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/s41588-021-00911-1")
+@utils.loader(data_url=URL, data_reference="wu2021single")
 def load_tnbc_data(test=False):
     """Download TNBC data (Wu et al., 2021) from Figshare.
 
@@ -19,6 +18,8 @@ def load_tnbc_data(test=False):
     https://figshare.com/articles/dataset/TNBC_Data_from_Wu_et_al_2021/20338536
 
     """
+    import scanpy as sc
+
     if test:
         # load full data first, cached if available
         adata = load_tnbc_data(test=False)

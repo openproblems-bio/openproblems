@@ -1,8 +1,12 @@
 [run]
 parallel = true
 branch = true
-source = openproblems
-omit = */__init__.py
+source =
+    openproblems
+    test
+omit =
+    */__init__.py
+    test/utils/*.py
 
 [report]
 exclude_lines =

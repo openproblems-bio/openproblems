@@ -26,6 +26,7 @@ website, or simply star it in GitHub to say "I use it".
 * [API](#api)
   * [Writing functions in R](#writing-functions-in-r)
   * [Adding package dependencies](#adding-package-dependencies)
+  * [Adding paper references](#adding-paper-references)
   * [Adding a new dataset](#adding-a-new-dataset)
   * [Adding a dataset / method / metric to a
     task](#adding-a-dataset--method--metric-to-a-task)
@@ -177,6 +178,9 @@ Metrics should take an AnnData object and return a `float`.
 function metric(AnnData adata) -> float
 ```
 
+Note that the AnnData object is passed to the metric function as a copy, so there is no
+need to copy it internally, even if you modify the object.
+
 Task-specific APIs are described in the README for each task.
 
 * [Label Projection](openproblems/tasks/label_projection)
@@ -218,7 +222,7 @@ _pca = r_function("pca.R")
 @method(
     method_name="PCA",
     paper_name="On lines and planes of closest fit to systems of points in space",
-    paper_url="https://www.tandfonline.com/doi/abs/10.1080/14786440109462720",
+    paper_reference="pearson1901pca",
     paper_year=1901,
     code_url="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp",
     image="openproblems-r-base",
@@ -252,12 +256,24 @@ def f2(adata):
   import package2
 ```
 
+### Adding paper references
+
+All papers cited in the `openproblems` repository should be cited in [`main.bib`](main.bib)
+and referenced in the corresponding dataset / method / metric decorator by its BibTeX
+reference, generally of the form `author1900papername`. BibTeX entries should be retrieved
+from [doi2bib.org](https://www.doi2bib.org/) where feasible, except for arXiv and bioRxiv
+which provide more correct BibTeX entries on the paper abstract page.
+
+When referencing a paper in markdown (e.g. in a task README), you should link directly
+to the bibliography entry on the Open Problems website using the BibTeX reference, e.g.
+[`https://openproblems.bio/bibliography#openproblems`](https://openproblems.bio/bibliography#openproblems).
+
 ### Adding a new dataset
 
 Datasets are loaded under `openproblems/data`. Each data loading function should
 download the appropriate dataset from a stable location (e.g. from Figshare) be
 decorated with `openproblems.data.utils.loader(data_url="https://data.link",
-data_reference="https://doi.org/10.0/123")` in order to cache the result.
+data_reference="author1900papername")` in order to cache the result.
 
 Data should be provided in a raw count format. We assume that `adata.X` contains the raw
 (count) data for the primary modality; this will also be copied to
@@ -304,14 +320,47 @@ ease of use, we provide a collection of common normalization functions in
 stored in `adata.X` is automatically stored in `adata.layers["counts"]` for later
 reference in the case the a metric needs to access the unnormalized data.
 
-To test the performance of a dataset, method, or metric, you can use the command-line
-interface:
+#### Testing method performance
 
-```shell
-openproblems-cli test --help
+To test the performance of a dataset, method, or metric, you can use the command-line
+interface `openproblems-cli test`.
+
+First, you must launch a Docker image containing the relevant dependencies for the
+dataset/method/metric you wish to test. You can then run `openproblems-cli test` with
+any/all of `--dataset`, `--method`, and `--metric` as desired. E.g.,
+
+```bash
+cd openproblems
+docker run \
+  -v $(pwd):/usr/src/singlecellopenproblems -v /tmp:/tmp \
+  -it singlecellopenproblems/openproblems-python-extras bash
+openproblems-cli test \
+  --task label_projection \
+  --dataset zebrafish_labs \
+  --method logistic_regression_log_cp10k \
+  --metric f1
 ```
 
+which will print the benchmark score for the method evaluated by the metric on the
+dataset you chose.
+
+Notes:
+
+* If you have updated Docker images to run your method, you must first rebuild the
+  images -- see the [Docker README](docker/README.md) for details.
+* If your dataset/method/metric cannot be run on the same docker image, you may wish to
+  `load`, `run`, and `evaluate` separately. You can do this using each of these commands
+  independently; however, this workflow is not documented.
+* These commands are not guaranteed to work with Apple silicon (M1 chip).
+* If your local machine cannot run the test due to memory constraints or OS
+  incompatibility, you may use your AWS credentials to launch a VM for testing purposes.
+  See the [EC2 README](./EC2.md) for details.
+
 ### Adding a new task
+
+To add a new task, you must provide a task description, dataset and method API, and at
+least one dataset, one method, and one metric. In order to appear on the website, a task
+must have at least three methods.
 
 The task directory structure is as follows
 

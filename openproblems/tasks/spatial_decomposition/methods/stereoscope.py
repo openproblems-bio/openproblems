@@ -5,12 +5,20 @@ from ..utils import split_sc_and_sp
 
 @method(
     method_name="Stereoscope",
-    paper_name="Single-cell and spatial transcriptomics enables probabilistic "
-    "inference of cell type topography",
-    paper_url="https://doi.org/10.1038/s41587-022-01272-8",
+    method_summary=(
+        "Stereoscope is a decomposition method based on Negative Binomial regression."
+        " It is similar in scope and implementation to cell2location but less flexible"
+        " to incorporate additional covariates such as batch effects and other type of"
+        " experimental design annotations."
+    ),
+    paper_name=(
+        "Single-cell and spatial transcriptomics enables probabilistic inference of"
+        " cell type topography"
+    ),
+    paper_reference="andersson2020single",
     paper_year=2020,
     code_url="https://github.com/scverse/scvi-tools",
-    image="openproblems-python-extras",
+    image="openproblems-python-pytorch",
 )
 def stereoscope(adata, test=False, max_epochs_sc=None, max_epochs_sp=None):
     from scvi.external import RNAStereoscope

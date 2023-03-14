@@ -91,7 +91,7 @@ def map_gene_symbols(adata, map_filename: Union[str, pathlib.Path]):
             )
 
     return anndata.AnnData(
-        X=scipy.sparse.hstack([adata_one_to_any.X] + many_to_one_X),
+        X=scipy.sparse.hstack([adata_one_to_any.X] + many_to_one_X).tocsr(),
         obs=adata.obs,
         var=pd.DataFrame(
             index=np.concatenate([adata_one_to_any.var.index, many_to_one_genes])
@@ -99,9 +99,30 @@ def map_gene_symbols(adata, map_filename: Union[str, pathlib.Path]):
         layers={
             layer_name: scipy.sparse.hstack(
                 [adata_one_to_any.layers[layer_name]] + many_to_one_layers[layer_name]
-            )
+            ).tocsr()
             for layer_name in adata.layers
         },
         uns=adata.uns,
         obsm=adata.obsm,
+    )
+
+
+# Join predictions to target
+def join_truth_and_pred(adata):
+    merge_keys = list(adata.uns["merge_keys"])
+    gt = adata.uns["ccc_target"].merge(adata.uns["ccc_pred"], on=merge_keys, how="left")
+
+    gt.loc[gt["response"].isna(), "response"] = 0
+    gt.loc[gt["score"].isna(), "score"] = np.nanmin(gt["score"]) - np.finfo(float).eps
+
+    return gt
+
+
+def aggregate_method_scores(adata, how):
+    merge_keys = list(adata.uns["merge_keys"])
+    return (
+        adata.uns["ccc_pred"]
+        .groupby(merge_keys)
+        .agg(score=("score", how))
+        .reset_index()
     )

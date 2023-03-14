@@ -1,0 +1,41 @@
+from ....tools.decorators import method
+from ....tools.normalize import log_cp10k
+from ....tools.utils import check_version
+
+
+@method(
+    method_name="Procrustes superimposition",
+    method_summary=(
+        "Procrustes superimposition embeds cellular data from each modality into a"
+        " common space by aligning the 100-dimensional SVD embeddings to one another by"
+        " using an isomorphic transformation that minimizes the root mean squared"
+        " distance between points. The unmodified SVD embedding and the transformed"
+        " second modality are used as output for the task."
+    ),
+    paper_name="Generalized Procrustes analysis",
+    paper_reference="gower1975generalized",
+    paper_year=1975,
+    code_url=(
+        "https://docs.scipy.org/doc/scipy/reference/generated/"
+        "scipy.spatial.procrustes.html"
+    ),
+)
+def procrustes(adata, test=False, n_svd=None):
+    import scipy.spatial
+    import sklearn.decomposition
+
+    if test:
+        n_svd = n_svd or 20
+    else:  # pragma: no cover
+        n_svd = n_svd or 100
+    n_svd = min([n_svd, min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
+    adata = log_cp10k(adata)
+    adata = log_cp10k(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
+    X_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
+    Y_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
+    X_proc, Y_proc, _ = scipy.spatial.procrustes(X_pca, Y_pca)
+    adata.obsm["aligned"] = X_proc
+    adata.obsm["mode2_aligned"] = Y_proc
+
+    adata.uns["method_code_version"] = check_version("scipy")
+    return adata

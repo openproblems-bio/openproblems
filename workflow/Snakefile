@@ -27,6 +27,7 @@ rule docker_refresh:
     input: tools.refresh_images
 
 rule refresh_docker_image:
+    threads: 0
     priority: 50
     input:
         dockerfile = "{}/{{image}}/refresh.Dockerfile".format(tools.IMAGES_DIR),
@@ -39,7 +40,7 @@ rule refresh_docker_image:
         label = tools.build_type,
         hash = tools.build_hash,
     shell:
-        "docker build --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+        "docker build --progress=plain --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule refresh_dockerfile:
     priority: 50
@@ -78,6 +79,7 @@ rule update_docker_image:
         "touch {output}"
 
 rule build_docker_image:
+    threads: 0.5
     input:
         dockerfile = "{}/{{image}}/Dockerfile".format(tools.IMAGES_DIR),
         requirements = tools.docker_build_requirements,
@@ -90,7 +92,7 @@ rule build_docker_image:
         label = tools.build_type,
         hash = tools.build_hash,
     shell:
-        "docker build --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
+        "docker build --progress=plain --label bio.openproblems.build={params.label} --label bio.openproblems.hash={params.hash} -f {input.dockerfile} -t {params.user}/{wildcards.image} .."
 
 rule password_docker:
     output:
@@ -108,6 +110,7 @@ rule login_docker:
         "docker login --username=singlecellopenproblems --password=$(cat {input})"
 
 rule push_docker_image:
+    threads: 0
     input:
         build = "{}/{{image}}/.docker_update".format(tools.IMAGES_DIR),
         login = ".docker_login",
@@ -117,6 +120,7 @@ rule push_docker_image:
         "docker push --quiet singlecellopenproblems/{wildcards.image}"
 
 rule pull_docker_image:
+    threads: 0
     output:
         temp(touch("{}/{{image}}/.docker_pull".format(tools.IMAGES_DIR)))
     shell:

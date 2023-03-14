@@ -7,8 +7,15 @@ import functools
 
 _fastmnn_method = functools.partial(
     method,
+    method_summary=(
+        "fastMNN performs a multi-sample PCA to reduce dimensionality, identifying MNN"
+        " paris in the low-dimensional space, and then correcting the target batch"
+        " towards the reference using locally weighted correction vectors. The"
+        " corrected target batch is then merged with the reference. The process is"
+        " repeated with the next target batch except for the PCA step."
+    ),
     paper_name="A description of the theory behind the fastMNN algorithm",
-    paper_url="https://marionilab.github.io/FurtherMNN2018/theory/description.html",
+    paper_reference="lun2019fastmnn",
     paper_year=2019,
     code_url="https://doi.org/doi:10.18129/B9.bioc.batchelor",
     image="openproblems-r-extras",

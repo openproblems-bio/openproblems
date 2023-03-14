@@ -1,7 +1,5 @@
 # Dimensionality reduction for visualisation
 
-## The task
-
 Dimensionality reduction is one of the key challenges in single-cell data
 representation. Routine single-cell RNA sequencing (scRNA-seq) experiments measure cells
 in roughly 20,000-30,000 dimensions (i.e., features - mostly gene transcripts but also
@@ -9,8 +7,8 @@ other functional elements encoded in mRNA such as lncRNAs). Since its inception,
 scRNA-seq experiments have been growing in terms of the number of cells measured.
 Originally, cutting-edge SmartSeq experiments would yield a few hundred cells, at best.
 Now, it is not uncommon to see experiments that yield over [100,000
-cells](<https://www.nature.com/articles/s41586-018-0590-4>) or even [> 1 million
-cells.](https://doi.org/10.1126/science.aba7721)
+cells](https://openproblems.bio/bibliography#tabula2018single) or even [> 1 million
+cells.](https://openproblems.bio/bibliography#cao2020human)
 
 Each *feature* in a dataset functions as a single dimension. While each of the ~30,000
 dimensions measured in each cell contribute to an underlying data structure, the overall
@@ -21,27 +19,22 @@ high dimensional data don’t distinguish data points well). Thus, we need to fi
 to [dimensionally reduce](https://en.wikipedia.org/wiki/Dimensionality_reduction) the
 data for visualization and interpretation.
 
-## The metrics
-
-* **Root mean square error**: the square root of the mean squared difference between
-  Euclidean distances in the high-dimensional data and Euclidean distances in the
-  dimension-reduced data.
-* **Trustworthiness**: a measurement of similarity between the rank of each point's
-  nearest neighbors in the high-dimensional data and the reduced data ([Venna & Kaski,
-  2001](http://dx.doi.org/10.1007/3-540-44668-0_68)).
-* **Density preservation**: similarity between local densities in the high-dimensional
-  data and the reduced data ([Narayan, Berger & Cho,
-  2020](https://doi.org/10.1038/s41587-020-00801-7))
-* **NN Ranking**: a set of metrics from
-  [pyDRMetrics](https://doi.org/10.17632/jbjd5fmggh.2) relating to the preservation
-  of nearest neighbors in the high-dimensional data and the reduced data.
-
 ## API
 
-**Datasets** should provide un-normalized raw counts in `adata.X`.
+WARNING: other than most tasks, `adata.X` should contain log CP10k-normalized data,
+   This is the case as we are computing ground truth metrics on normalized data,
+   which means methods which use this same normalization are likely to score more
+   highly on these metrics.
+
+**Datasets** should provide *log CP10k normalized counts* in `adata.X` and store the
+original number of genes (i.e., `adata.shape[1]`) in `adata.uns["n_genes"]`. Datasets
+should also contain the nearest-neighbor ranking matrix, required for the `nn_ranking`
+metrics, as computed by `_utils.ranking_matrix(adata.X)` on normalized counts.
 
 **Methods** should assign dimensionally-reduced 2D embedding coordinates to
-`adata.obsm['X_emb']`.
+`adata.obsm['X_emb']`. They *should not* modify the dimensionality of `adata.X` (e.g.
+by subsetting to highly variable features, which should be done on a local copy of the
+data without modifying the AnnData object that is returned.)
 
 **Metrics** should calculate the quality or "goodness of fit" of a dimensional reduction
 **method**. If the un-normalized input counts matrix is required by the matrix it can be
@@ -53,14 +46,13 @@ Different methods can require different pre-processing of the data. Standard
 pre-processing functions are available as part of the `tools` module. Where possible
 each **method** should first call one of these functions and use the processed `adata.X`
 slot as the input to the method. Raw counts are also stored in `adata.layers["counts"]`
-by the standard pre-processing functions, if a method performs its own pre-processing it
-should also do this for use by metrics. For most methods a standard pre-processing with
-the `log_cpm_hvg()` function is used which normalizes the expression matrix to counts
-per million (CPM), performs a log transformation and subsets the data to highly-variable
-genes (HVGs) as selected by scanpy's `high_variable_genes(adata, n_top_genes=n_genes,
-flavor="cell_ranger")` (1000 genes by default). Variants of methods can be created by
-applying different pre-processing prior to the method itself (see `phate.py` for an
-example).
+by the standard pre-processing functions, if a method performs its own pre-processing.
+For most methods a standard pre-processing from `log_cp10k()`, which normalizes the
+expression matrix to counts per 10,000 (CP10k), can be used directly from `adata.X`.
+Variants of methods can be created by applying different pre-processing prior to the
+method itself (see `phate.py` for an example). *Note that using a normalization method
+different from that used for the metrics (log CP10k) may lead to artificially poor method
+performance.*
 
 ## The methods
 
@@ -127,7 +119,7 @@ from [umap-learn](https://umap-learn.readthedocs.io/en/latest/densmap_demo.html)
 
 **Variants:**
 
-* The (logCPM-normalized, 1000 HVG) expression matrix
+* The (logCP10k-normalized, 1000 HVG) expression matrix
 * 50 principal components
 
 ### Potential of heat-diffusion for affinity-based transition embedding (PHATE)
@@ -146,8 +138,8 @@ This implementation is from the [phate package](https://phate.readthedocs.io/en/
 
 **Variants:**
 
-* The square-root CPM transformed expression matrix
-* 50 principal components of the logCPM-normalised, 1000 HVG expression matrix
+* The square-root CP10k transformed expression matrix
+* 50 principal components of the logCP10k-normalised, 1000 HVG expression matrix
 
 ### ivis
 
@@ -166,7 +158,7 @@ package](https://neuralee.readthedocs.io/en/latest/).
 **Variants:**
 
 * Scaled 500 HVGs from a logged expression matrix (no library size normalization)
-* LogCPM-normalised, 1000 HVG expression matrix
+* LogCP10k-normalised, 1000 HVG expression matrix
 
 ### scvis
 

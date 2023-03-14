@@ -1,12 +1,21 @@
 from ....tools.decorators import metric
 from anndata import AnnData
-from sklearn import manifold
 
 import numpy as np
 
 
-@metric(metric_name="trustworthiness", maximize=True)
+@metric(
+    metric_name="trustworthiness",
+    metric_summary=(
+        "a measurement of similarity between the rank of each point's nearest neighbors"
+        " in the high-dimensional data and the reduced data."
+    ),
+    paper_reference="venna2001neighborhood",
+    maximize=True,
+)
 def trustworthiness(adata: AnnData) -> float:
+    from sklearn import manifold
+
     high_dim, low_dim = adata.X, adata.obsm["X_emb"]
 
     score = manifold.trustworthiness(

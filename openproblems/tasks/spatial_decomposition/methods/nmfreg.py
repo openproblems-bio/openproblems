@@ -7,9 +7,17 @@ import numpy as np
 
 @method(
     method_name="NMF-reg",
-    paper_name="Slide-seq: A scalable technology for measuring genome-wide"
-    " expression at high spatial resolution",
-    paper_url="https://doi.org/10.1126/science.aaw1219",
+    method_summary=(
+        "NMFreg is a decomposition method based on Non-negative Matrix Factorization"
+        " Regression (NMFreg) that reconstructs expression of each spatial location as"
+        " a weighted combination of cell-type signatures defined by scRNA-seq. It was"
+        " originally developed for Slide-seq data."
+    ),
+    paper_name=(
+        "Slide-seq: A scalable technology for measuring genome-wide expression at high"
+        " spatial resolution"
+    ),
+    paper_reference="rodriques2019slide",
     paper_year=2019,
     code_url="https://github.com/tudaga/NMFreg_tutorial",
 )

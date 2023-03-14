@@ -1,7 +1,18 @@
 from ....tools.decorators import metric
 
 
-@metric(metric_name="r2", maximize=True)
+@metric(
+    metric_name="r2",
+    metric_summary=(
+        "R2, or the “coefficient of determination”, reports the fraction of the true"
+        " proportion values’ variance that can be explained by the predicted proportion"
+        " values. The best score, and upper bound, is 1.0. There is no fixed lower"
+        " bound for the metric. The uniform/non-weighted average across all cell"
+        " types/states is used to summarise performance."
+    ),
+    maximize=True,
+    paper_reference="miles2005rsquared",
+)
 def r2(adata):
     import sklearn.metrics
 

@@ -1,11 +1,12 @@
 from ....tools.decorators import metric
 
 import numpy as np
-import scipy.sparse
-import scipy.stats
 
 
 def _correlation(adata, method="pearson"):
+    import scipy.sparse
+    import scipy.stats
+
     if method == "pearson":
         method = scipy.stats.pearsonr
     else:
@@ -25,11 +26,27 @@ def _correlation(adata, method="pearson"):
     return np.median(cors[~np.isnan(cors)])
 
 
-@metric(metric_name="Median Pearson correlation", maximize=True)
+@metric(
+    metric_name="Median Pearson correlation",
+    metric_summary=(
+        "Median Pearson correlation between predicted and true gene expression over all"
+        " genes."
+    ),
+    paper_reference="schober2018correlation",
+    maximize=True,
+)
 def pearson_correlation(adata):
     return _correlation(adata)
 
 
-@metric(metric_name="Median Spearman correlation", maximize=True)
+@metric(
+    metric_name="Median Spearman correlation",
+    metric_summary=(
+        "Median Spearman correlation between predicted and true gene expression over"
+        " all genes."
+    ),
+    paper_reference="schober2018correlation",
+    maximize=True,
+)
 def spearman_correlation(adata):
     return _correlation(adata, method="spearman")

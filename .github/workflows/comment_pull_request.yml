@@ -1,0 +1,20 @@
+name: Comment on Pull Request Status
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  comment_pr:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: thollander/actions-comment-pull-request@v2
+      with:
+        message: |
+          [![Current build status](https://img.shields.io/github/actions/workflow/status/${{ github.event.pull_request.head.repo.full_name }}/run_tests.yml?branch=${{ github.event.pull_request.head.ref }})](https://github.com/${{ github.event.pull_request.head.repo.full_name }}/actions/workflows/run_tests.yml?query=branch%3A${{ github.event.pull_request.head.ref }})
+        comment_tag: build_status

@@ -1,7 +1,6 @@
 from . import utils
 
 import os
-import scanpy as sc
 import scprep
 import tempfile
 
@@ -9,9 +8,11 @@ import tempfile
 URL = "https://ndownloader.figshare.com/files/36086786"
 
 
-@utils.loader(data_url=URL, data_reference="https://doi.org/10.1038/s41592-021-01336-8")
+@utils.loader(data_url=URL, data_reference="luecken2022benchmarking")
 def load_immune(test=False):
     """Download immune human data from figshare."""
+    import scanpy as sc
+
     if test:
         # load full data first, cached if available
         adata = load_immune(test=False)
@@ -37,7 +38,6 @@ def load_immune(test=False):
             # NOTE: adata.X contains log-normalized data, so we're moving it
             adata.layers["log_normalized"] = adata.X
             adata.X = adata.layers["counts"]
-            del adata.layers["counts"]
 
             # Ensure there are no cells or genes with 0 counts
             utils.filter_genes_cells(adata)

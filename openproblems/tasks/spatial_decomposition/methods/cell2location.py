@@ -8,11 +8,19 @@ import numpy as np
 
 _cell2location_method = functools.partial(
     method,
+    method_summary=(
+        "Cell2location is a decomposition method based on Negative Binomial regression"
+        " that is able to account for batch effects in estimating the single-cell gene"
+        " expression signature used for the spatial decomposition step. Note that since"
+        " batch information is unavailable in this task, here we use either a"
+        " hard-coded reference, or a negative-binomial learned reference without batch"
+        " labels. The parameter alpha refers to the detection efficiency prior."
+    ),
     paper_name="Cell2location maps fine-grained cell types in spatial transcriptomics",
-    paper_url="https://doi.org/10.1038/s41587-021-01139-4",
+    paper_reference="kleshchevnikov2022cell2location",
     paper_year=2022,
     code_url="https://github.com/BayraktarLab/cell2location",
-    image="openproblems-python-extras",
+    image="openproblems-python-pytorch",
 )
 
 
@@ -22,7 +30,7 @@ def _cell2location(
     n_cells_per_location=20,
     hard_coded_reference=True,
     amortised=False,
-    num_samples=1000,
+    num_samples=None,
     sc_batch_size=2500,
     st_batch_size=None,
     test=False,
@@ -38,7 +46,7 @@ def _cell2location(
     if test:
         max_epochs_sc = max_epochs_sc or 2
         max_epochs_st = max_epochs_st or 2
-        num_samples = num_samples or 10
+        num_samples = num_samples or 2
     else:  # pragma: nocover
         max_epochs_sc = max_epochs_sc or 250
         max_epochs_st = max_epochs_st or 30000
@@ -147,20 +155,21 @@ def _cell2location(
     )
 
     adata.obsm["proportions_pred"] = adata.obsm["q05_cell_abundance_w_sf"].values
+    adata.obsm["proportions_pred"] /= adata.obsm["proportions_pred"].sum(axis=1)[
+        :, None
+    ]
     adata.uns["method_code_version"] = check_version("cell2location")
     return adata
 
 
-@_cell2location_method(
-    method_name="Cell2location (detection_alpha=20, reference hard-coded)"
-)
+@_cell2location_method(method_name="Cell2location (alpha=20, reference hard-coded)")
 def cell2location_detection_alpha_20(
     adata,
     detection_alpha=20,
     n_cells_per_location=20,
     hard_coded_reference=True,
     amortised=False,
-    num_samples=1000,
+    num_samples=None,
     sc_batch_size=2500,
     st_batch_size=None,
     test: bool = False,
@@ -182,16 +191,43 @@ def cell2location_detection_alpha_20(
     )
 
 
-@_cell2location_method(
-    method_name="Cell2location (detection_alpha=20, reference NB without batch info)"
-)
+@_cell2location_method(method_name="Cell2location (alpha=1, reference hard-coded)")
+def cell2location_detection_alpha_1(
+    adata,
+    detection_alpha=1,
+    n_cells_per_location=20,
+    hard_coded_reference=True,
+    amortised=False,
+    num_samples=None,
+    sc_batch_size=2500,
+    st_batch_size=None,
+    test: bool = False,
+    max_epochs_sc: Optional[int] = None,
+    max_epochs_st: Optional[int] = None,
+):
+    return _cell2location(
+        adata,
+        detection_alpha=detection_alpha,
+        n_cells_per_location=n_cells_per_location,
+        hard_coded_reference=hard_coded_reference,
+        amortised=amortised,
+        num_samples=num_samples,
+        sc_batch_size=sc_batch_size,
+        st_batch_size=st_batch_size,
+        test=test,
+        max_epochs_sc=max_epochs_sc,
+        max_epochs_st=max_epochs_st,
+    )
+
+
+@_cell2location_method(method_name="Cell2location (alpha=20, NB reference)")
 def cell2location_detection_alpha_20_nb(
     adata,
     detection_alpha=20,
     n_cells_per_location=20,
     hard_coded_reference=False,
     amortised=False,
-    num_samples=1000,
+    num_samples=None,
     sc_batch_size=2500,
     st_batch_size=None,
     test: bool = False,
@@ -213,16 +249,14 @@ def cell2location_detection_alpha_20_nb(
     )
 
 
-@_cell2location_method(
-    method_name="Cell2location (detection_alpha=200, reference hard-coded)"
-)
+@_cell2location_method(method_name="Cell2location (alpha=200, reference hard-coded)")
 def cell2location_detection_alpha_200(
     adata,
     detection_alpha=200,
     n_cells_per_location=20,
     hard_coded_reference=True,
     amortised=False,
-    num_samples=1000,
+    num_samples=None,
     sc_batch_size=2500,
     st_batch_size=None,
     test: bool = False,
@@ -244,16 +278,14 @@ def cell2location_detection_alpha_200(
     )
 
 
-@_cell2location_method(
-    method_name="Cell2location, amortised (detection_alpha=20, reference hard-coded)"
-)
+@_cell2location_method(method_name="Cell2location (alpha=20, amortised, hard-coded)")
 def cell2location_amortised_detection_alpha_20(
     adata,
     detection_alpha=20,
     n_cells_per_location=20,
     hard_coded_reference=True,
     amortised=True,
-    num_samples=1000,
+    num_samples=None,
     sc_batch_size=2500,
     st_batch_size=1024,
     test: bool = False,

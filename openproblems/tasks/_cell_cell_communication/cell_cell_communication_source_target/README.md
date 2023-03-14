@@ -1,6 +1,4 @@
-# Cell-cell Communication
-
-## The task
+# Cell-cell Communication (source-target)
 
 The growing availability of single-cell data has sparked an increased
 interest in the inference of cell-cell communication (CCC),
@@ -10,14 +8,14 @@ Different tools propose distinct preprocessing steps with diverse
 scoring functions, that are challenging to compare and evaluate.
 Furthermore, each tool typically comes with its own set of prior knowledge.
 To harmonize these, [Dimitrov et
-al, 2022](https://doi.org/10.1038/s41467-022-30755-0) recently developed the
-[LIANA](https://github.com/saezlab/liana) framework, which was used
+al, 2022](https://openproblems.bio/bibliography#dimitrov2022comparison) recently
+developed the [LIANA](https://github.com/saezlab/liana) framework, which was used
 as a foundation for this task.
 
 The challenges in evaluating the tools are further exacerbated by the
 lack of a gold standard to benchmark the performance of CCC methods. In an
 attempt to address this, Dimitrov et al use alternative data modalities, including
-the spatial proximity of cell types and inferred
+the spatial proximity of cell types and
 downstream cytokine activities, to generate an inferred ground truth. However,
 these modalities are only approximations of biological reality and come
 with their own assumptions and limitations. In time, the inclusion of more
@@ -29,18 +27,6 @@ be better understood.
 spatially-adjacent source cell types and target cell types. This subtask focuses
 on the prediction of interactions from steady-state, or single-context,
 single-cell data.**
-
-## The metrics
-
-Metrics for cell-cell communication aim to characterize how good are
-the different scoring methods at prioritizing assumed truth predictions.
-
-* **Odds ratio**: The odds ratio represents the ratio of true and false
-positives within a set of prioritized interactions (top ranked hits) versus
-the same ratio for the remainder of the interactions. Thus, in this
-scenario odds ratios quantify the strength of association between the
-ability of methods to prioritize interactions and those interactions
-assigned to the positive class.
 
 ## API
 
@@ -54,8 +40,8 @@ al](https://doi.org/10.1038/s41467-022-30755-0) for more details.
 `adata.uns["ccc_target"]` should be a Pandas DataFrame containing all of the
 following columns:
 
-* `response`: `int`, binary response variable indicating whether an interaction is
-  assumed to have occurred
+* `response`: `int`, binary response variable _[0; 1]_ indicating whether an interaction
+  is assumed to have occurred
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
 
@@ -75,6 +61,15 @@ Methods should predict interactions between cell types without using
   inferred interaction
 * `source`: `str`, name of source cell type in interaction
 * `target`: `str`, name of target cell type in interaction
+
+Methods should infer a `score` for each _intersecting interaction_
+between a `source` and a `target`, which correspond to all possible combinations
+of the cell identity labels in the dataset.
+
+The predictions of any method which do not uniquely map
+to the columns in `adata.uns["merge_keys"]` are to be **aggregated**.
+By default, aggregation is carried as the `max` and `sum`
+according to columns in the `merge_keys`.
 
 ### Prior-knowledge Resource
 
