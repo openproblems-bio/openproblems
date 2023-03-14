@@ -1,15 +1,10 @@
 functionality:
-  name: process_openproblems_v1
-  namespace: datasets/workflows
-  description: |
-    Fetch and process legacy OpenProblems v1 datasets
+  name: "openproblems_v1_multimodal"
+  namespace: "datasets/loaders"
+  description: "Fetch a dataset from OpenProblems v1"
   argument_groups:
     - name: Inputs
       arguments:
-        - name: "--id"
-          type: "string"
-          description: "The ID of the dataset"
-          required: true
         - name: "--dataset_id"
           type: "string"
           description: "The ID of the dataset"
@@ -59,45 +54,27 @@ functionality:
           required: false
     - name: Outputs
       arguments:
-        - name: "--output"
+        - name: "--output_mod1"
+          __merge__: ../../api/anndata_raw.yaml
           direction: "output"
-          # todo: fix inherits in nxf
-          # __merge__: ../../api/anndata_raw.yaml
-          type: file
-          description: "A raw dataset"
-          example: "raw_dataset.h5ad"
-          info:
-            short_description: "Raw dataset"
-            slots:
-              layers: 
-                - type: integer
-                  name: counts
-                  description: Raw counts
-                  required: true
-              obs:
-                - type: string
-                  name: celltype
-                  description: Cell type information
-                  required: false
-                - type: string
-                  name: batch
-                  description: Batch information
-                  required: false
-                - type: string
-                  name: tissue
-                  description: Tissue information
-                  required: false
-              uns:
-                - type: string
-                  name: dataset_id
-                  description: "A unique identifier for the dataset"
-                  required: true
+        - name: "--output_mod2"
+          __merge__: ../../api/anndata_raw.yaml
+          direction: "output"
   resources:
-    - type: nextflow_script
-      path: main.nf
-  # test_resources:
-  #   - type: nextflow_script
-  #     path: main.nf
-  #     entrypoint: test_wf
+    - type: python_script
+      path: script.py
+  test_resources:
+    - type: python_script
+      path: test.py
 platforms:
+  - type: docker
+    image: python:3.8
+    setup:
+      - type: apt
+        packages: git
+      - type: docker
+        run: |
+          git clone https://github.com/openproblems-bio/openproblems.git /opt/openproblems && \
+            pip install --no-cache-dir -r /opt/openproblems/docker/openproblems/requirements.txt && \
+            pip install --no-cache-dir --editable /opt/openproblems
   - type: nextflow

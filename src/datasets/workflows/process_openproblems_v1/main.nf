@@ -32,7 +32,10 @@ workflow run_wf {
 
     // split params for downstream components
     | setWorkflowArguments(
-      loader: ["id", "obs_celltype", "obs_batch", "obs_tissue", "layer_counts", "sparse"],
+      loader: [
+        "dataset_id", "obs_celltype", "obs_batch", "obs_tissue", "layer_counts", "sparse",
+        "dataset_name", "data_url", "data_reference", "dataset_summary", "dataset_description", "dataset_organism"
+      ],
       output: [ "output" ]
     )
 
