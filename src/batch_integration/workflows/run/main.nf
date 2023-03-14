@@ -30,6 +30,13 @@ include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } f
 
 config = readConfig("$projectDir/config.vsh.yaml")
 
+
+// construct a map of methods (id -> method_module)
+methods = [ bbknn, combat, scanorama_embed, scanorama_feature, scvi]
+  .collectEntries{method ->
+    [method.config.functionality.name, method]
+  }
+
 workflow {
   helpMessage(config)
 
@@ -46,6 +53,26 @@ workflow run_wf {
   input_ch
 
   main:
+
+  output_ch = input_ch
+
+    // split params for downstream components
+    | setWorkflowArguments(
+      preprocess: ["normalization_id", "dataset_id"],
+      method: ["input"],
+      output: ["output"]
+    )
+
+    // multiply events by the number of method
+    | getWorkflowArguments(key: "preprocess")
+    | add_methods
+
+    // filter the normalization methods that a method actually prefers
+    | check_filtered_normalization_id
+
+    // run methods
+    | getWorkflowArguments(key: "method")
+    | run_methods
 
   // run feature methods
   meth_feature = input_ch
@@ -109,11 +136,7 @@ workflow run_wf {
 *                    Sub workflows                     *
 *******************************************************/
 
-// construct a map of methods (id -> method_module)
-methods = [ bbknn, combat, scanorama_embed, scanorama_feature, scvi]
-  .collectEntries{method ->
-    [method.config.functionality.name, method]
-  }
+
 
 workflow add_methods {
   take: input_ch
@@ -127,6 +150,23 @@ workflow add_methods {
       def new_data = data.clone() + [method_id: method_id]
       new_data.remove("id")
       [new_id, new_data]
+    }
+  emit: output_ch
+}
+
+workflow check_filtered_normalization_id {
+  take: input_ch
+  main:
+  output_ch = input_ch
+    | pfilter{id, data ->
+      data = data.clone()
+      def method = methods[data.method_id]
+      def preferred = method.config.functionality.info.preferred_normalization
+      // if a method is just using the counts, we can use any normalization method
+      if (preferred == "counts") {
+        preferred = "log_cpm"
+      }
+      data.normalization_id == preferred
     }
   emit: output_ch
 }
