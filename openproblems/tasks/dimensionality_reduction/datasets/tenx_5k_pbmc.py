@@ -1,7 +1,6 @@
 from ....data.tenx import load_tenx_5k_pbmc
 from ....tools.decorators import dataset
 from ....tools.normalize import log_cp10k
-from .._utils import ranking_matrix
 
 
 @dataset(
@@ -18,5 +17,4 @@ def tenx_5k_pbmc(test=False):
     adata = load_tenx_5k_pbmc(test=test)
     adata.uns["n_genes"] = adata.shape[1]
     adata = log_cp10k(adata)
-    adata.obsm["X_ranking"] = ranking_matrix(adata.X)
     return adata
