@@ -22,7 +22,13 @@ _xgboost_method = functools.partial(
 )
 
 
-def _xgboost(adata, test: bool = False, num_round: Optional[int] = None):
+def _xgboost(
+    adata,
+    test: bool = False,
+    obsm: Optional[str] = None,
+    num_round: Optional[int] = None,
+    **kwargs,
+):
     import xgboost as xgb
 
     if test:
@@ -36,12 +42,19 @@ def _xgboost(adata, test: bool = False, num_round: Optional[int] = None):
     adata_train = adata[adata.obs["is_train"]]
     adata_test = adata[~adata.obs["is_train"]].copy()
 
-    xg_train = xgb.DMatrix(adata_train.X, label=adata_train.obs["labels_int"])
-    xg_test = xgb.DMatrix(adata_test.X, label=adata_test.obs["labels_int"])
+    xg_train = xgb.DMatrix(
+        adata_train.obsm[obsm] if obsm else adata_train.X,
+        label=adata_train.obs["labels_int"],
+    )
+    xg_test = xgb.DMatrix(
+        adata_test.obsm[obsm] if obsm else adata_test.X,
+        label=adata_test.obs["labels_int"],
+    )
 
     param = dict(
         objective="multi:softmax",
         num_class=len(categories),
+        **kwargs,
     )
 
     watchlist = [(xg_train, "train")]
