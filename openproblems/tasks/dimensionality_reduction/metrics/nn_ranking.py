@@ -126,11 +126,13 @@ def _qnn_auc(QNN: np.ndarray) -> float:
     return AUC  # type: ignore
 
 
-def _fit(adata: AnnData) -> Tuple[float, float, float, float, float, float, float]:
-    if adata.shape[0] > _MAX_SAMPLES:
+def _fit(
+    adata: AnnData, max_samples: int = _MAX_SAMPLES
+) -> Tuple[float, float, float, float, float, float, float]:
+    if adata.shape[0] > max_samples:
         import scanpy as sc
 
-        sc.pp.subsample(adata, n_obs=_MAX_SAMPLES)
+        sc.pp.subsample(adata, n_obs=max_samples)
 
     E = adata.obsm["X_emb"]
     Re = ranking_matrix(E)
@@ -154,8 +156,8 @@ def _fit(adata: AnnData) -> Tuple[float, float, float, float, float, float, floa
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
-def continuity(adata: AnnData) -> float:
-    Q, m = _fit(adata)
+def continuity(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
+    Q, m = _fit(adata, max_samples=max_samples)
     C = _continuity(Q, m)[_K]
     return float(np.clip(C, 0.0, 1.0))  # in [0, 1]
 
@@ -169,8 +171,8 @@ def continuity(adata: AnnData) -> float:
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
-def qnn(adata: AnnData) -> float:
-    Q, m = _fit(adata)
+def qnn(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
+    Q, m = _fit(adata, max_samples=max_samples)
     QNN = _qnn(Q, m)[_K]
     # normalized in the code to [0, 1]
     return float(np.clip(QNN, 0.0, 1.0))
@@ -182,8 +184,8 @@ def qnn(adata: AnnData) -> float:
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
-def qnn_auc(adata: AnnData) -> float:
-    Q, m = _fit(adata)
+def qnn_auc(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
+    Q, m = _fit(adata, max_samples=max_samples)
     QNN = _qnn(Q, m)
     AUC = _qnn_auc(QNN)
     return float(np.clip(AUC, 0.5, 1.0))  # in [0.5, 1]
@@ -198,8 +200,8 @@ def qnn_auc(adata: AnnData) -> float:
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
-def lcmc(adata: AnnData) -> float:
-    Q, m = _fit(adata)
+def lcmc(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
+    Q, m = _fit(adata, max_samples=max_samples)
     QNN = _qnn(Q, m)
     LCMC = _lcmc(QNN, m)[_K]
     return LCMC
@@ -211,10 +213,10 @@ def lcmc(adata: AnnData) -> float:
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
-def qlocal(adata: AnnData) -> float:
+def qlocal(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
     # according to authors, this is usually preferred to
     # qglobal, because human are more sensitive to nearer neighbors
-    Q, m = _fit(adata)
+    Q, m = _fit(adata, max_samples=max_samples)
     QNN = _qnn(Q, m)
     LCMC = _lcmc(QNN, m)
     kmax = _kmax(LCMC)
@@ -228,8 +230,8 @@ def qlocal(adata: AnnData) -> float:
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
-def qglobal(adata: AnnData) -> float:
-    Q, m = _fit(adata)
+def qglobal(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
+    Q, m = _fit(adata, max_samples=max_samples)
     QNN = _qnn(Q, m)
     LCMC = _lcmc(QNN, m)
     kmax = _kmax(LCMC)
