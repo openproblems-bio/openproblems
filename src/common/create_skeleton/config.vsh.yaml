@@ -1,34 +1,41 @@
 functionality:
   name: create_skeleton
   namespace: common
-  description: Create a skeleton directory containing a viash config file and python or r script file based on the task api.
+  description: |
+    Create a skeleton Viash component.
+    
+    Usage:
+    ```
+    bin/create_skeleton --task denoising --comp_type method --language r --name foo --output src/denoising/method/foo
+    ```
   arguments:
     - name: "--src"
       type: "file"
       default: "./src"
-      description: "The src directory of the openproblems-v2 repository."
+      description: "The source directory of the openproblems-v2 repository."
     - type: string
       name: --task
-      description: Which task the component will be added
+      description: Which task the component will be added to.
       example: denoising
     - type: string
       name: --comp_type
       example: metric
-      description: type of component to create
+      description: The type of component to create.
       choices: ['metric', 'method', 'negative_control', 'positive_control']
     - type: string
       name: --language
-      example: python
-      description: script language
+      description: Which scripting language to use. Options are 'python', 'r'.
       default: python
+      choices: [python, r]
     - type: string
       name: --name
       example: new_comp
-      description: name of the new method in snake case
+      description: Name of the new method, formatted in snake case.
     - type: file
       name: --output
       direction: output
       required: true
+      description: Path to the component directory. 
   resources:
     - type: python_script
       path: script.py
@@ -39,11 +46,10 @@ functionality:
       dest: openproblems-v2/src
 platforms:
   - type: docker
-    image: python:3.10
+    image: python:3.10-slim
     setup:
       - type: python
-        pip: 
-          - ruamel.yaml
+        pip: ruamel.yaml
   - type: nextflow
 
 
