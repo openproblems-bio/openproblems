@@ -4,7 +4,6 @@ functionality:
   namespace: "label_projection/methods"
   description: "Multilayer perceptron"
   info:
-    type: method
     label: Multilayer perceptron
     # paper_name: "Connectionist learning procedures"
     # paper_url: "https://doi.org/10.1016/0004-3702(89)90049-0"

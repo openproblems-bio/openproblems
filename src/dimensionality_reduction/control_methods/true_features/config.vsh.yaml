@@ -4,7 +4,7 @@ functionality:
   namespace: "dimensionality_reduction/control_methods"
   description: "Positive control method which generates high-dimensional (full data) embedding"
   info:
-    type: positive_control
+    subtype: positive_control
     label: True Features
     v1_url: openproblems/tasks/dimensionality_reduction/methods/baseline.py
     v1_comp_id: "True Features"

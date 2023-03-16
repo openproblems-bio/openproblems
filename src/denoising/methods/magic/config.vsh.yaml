@@ -4,7 +4,6 @@ functionality:
   namespace: "denoising/methods"
   description: "MAGIC: Markov affinity-based graph imputation of cells"
   info:
-    type: method
     method_name: MAGIC
     paper_reference: "https://doi.org/10.1016/j.cell.2018.05.061"
     code_url: "https://github.com/KrishnaswamyLab/MAGIC"

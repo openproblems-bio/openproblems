@@ -1,4 +1,6 @@
 functionality:
+  info:
+    type: control_method
   arguments:
     - name: "--input"
       __merge__: anndata_dataset.yaml

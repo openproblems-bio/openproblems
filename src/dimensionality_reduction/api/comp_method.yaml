@@ -1,4 +1,6 @@
 functionality:
+  info:
+    type: method
   arguments:
     - name: "--input"
       __merge__: anndata_train.yaml

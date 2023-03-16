@@ -6,7 +6,6 @@ functionality:
     Probabilistic harmonization and annotation of single-cell 
     transcriptomics data with deep generative models.
   info:
-    type: method
     label: SCANVI
     paper_doi: "10.1101/2020.07.16.205997"
     code_url: "https://github.com/YosefLab/scvi-tools"
