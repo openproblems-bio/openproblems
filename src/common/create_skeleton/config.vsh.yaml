@@ -51,6 +51,7 @@ functionality:
     - path: ../../../src
       dest: openproblems-v2/src
 platforms:
+  - type: native
   - type: docker
     image: python:3.10-slim
     setup:

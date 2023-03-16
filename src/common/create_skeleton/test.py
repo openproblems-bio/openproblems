@@ -2,31 +2,27 @@ import subprocess
 from os import path
 from ruamel.yaml import YAML
 
-
 ## VIASH START
-
 meta = {
     'executable': 'foo'
 }
-
 ## VIASH END
 
-src_path = meta["resources_dir"] + "/openproblems-v2/src"
-output_path= 'test_method'
-
+api_file = meta["resources_dir"] + "/openproblems-v2/src/label_projection/api/comp_method.yaml"
+output_path = 'method_py'
 
 cmd = [
     meta['executable'],
-    '--src', src_path,
     '--task', 'label_projection',
-    '--comp_type', 'method',
+    '--type', 'method',
     '--name', 'test_method',
     '--language', 'python',
     '--output', output_path,
+    '--api_file', api_file
 ]
 
 print('>> Running the script as test', flush=True)
-out= subprocess.run(cmd, check=True)
+out = subprocess.run(cmd, check=True)
 
 print('>> Checking whether output files exist', flush=True)
 assert path.exists(output_path)
@@ -42,11 +38,9 @@ with open(conf_f) as f:
 
 assert conf_data['functionality']['name'] == 'test_method'
 assert conf_data['functionality']['namespace'] == 'label_projection/methods'
-assert conf_data['functionality']['info']['type'] == 'method'
-
 assert conf_data['platforms'][0]['image'] == 'python:3.10'
 
 
 
-print('all checks succeeded!', flush=True)
+print('All checks succeeded!', flush=True)
 

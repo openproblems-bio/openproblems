@@ -3,11 +3,15 @@ from ruamel.yaml import YAML
 from pathlib import Path
 import os
 import re
+import subprocess
+
+yaml = YAML()
+yaml.indent(mapping=2, sequence=4, offset=2)
 
 ## VIASH START
 par = {
   'task': 'denoising',
-  'type': 'metric',
+  'type': 'method',
   'language': 'python',
   'name': 'new_comp',
   'output': 'src/denoising/methods/new_comp',
@@ -15,13 +19,10 @@ par = {
 }
 ## VIASH END
 
-# TODO: fix adata -> detect input file
-
 def strip_margin(text: str) -> str:
   return re.sub('(\n?)[ \t]*\|', '\\1', text)
 
 def create_config_template(par):
-  yaml = YAML()
   config_template = yaml.load(strip_margin(f'''\
     |# The API specifies which type of component this is.
     |# It contains specifications for:
@@ -35,8 +36,7 @@ def create_config_template(par):
     |  namespace: {par["task"]}/{par['type']}s
     |
     |  # Metadata for your component (required)
-    |  info: 
-    |    xx: xx
+    |  info:
     |
     |  # Component-specific parameters (optional)
     |  # arguments:
@@ -119,7 +119,7 @@ def add_python_setup(conf) -> None:
   conf['platforms'][0]["setup"] = [
     {
       "type": "python",
-      "pypi": "anndata>=0.8"
+      "pypi": "anndata~=0.8"
     }
   ]
 
@@ -132,29 +132,25 @@ def add_r_setup(conf) -> None:
       "packages": ['libhdf5-dev', 'libgeos-dev', 'python3', 'python3-pip', 'python3-dev', 'python-is-python3']
     },
     {
+      "type": "python",
+      "pypi": "anndata~=0.8"
+    },
+    {
       "type": "r",
-      "cran": "anndata",
-      "script": "anndata::install_anndata()" # TODO: does this work?
+      "cran": "anndata"
     }
   ]
 
-def read_api_spec(par):
-  with open(par['api_file'], 'r') as f:
-    api_spec = YAML().load(f)
-  return api_spec
-
-def set_par_values(api_spec) -> dict[str, Any]:
-  """Reads in the API file and returns default values for the par object."""
-  args = api_spec['functionality']['arguments']
+def set_par_values(config) -> dict[str, Any]:
+  """Adds values to each of the arguments in a config file."""
+  args = config['functionality']['arguments']
   for argi, arg in enumerate(args):
-    arg_type = arg.get("type", "file")
-    direction = arg.get("direction", "input")
     key = re.sub("^-*", "", arg['name'])
 
     # find value
-    if arg_type != "file":
+    if arg["type"] != "file":
       value = arg.get("default", arg.get("example", "..."))
-    elif direction == "input":
+    elif arg["direction"] == "input":
       key_strip = key.replace("input_", "")
       value = f'resources_test/{par["task"]}/pancreas/{key_strip}.h5ad'
     else:
@@ -162,14 +158,83 @@ def set_par_values(api_spec) -> dict[str, Any]:
       value = f'{key_strip}.h5ad'
 
     # store key and value
-    api_spec['functionality']['arguments'][argi]["type"] = arg_type
-    api_spec['functionality']['arguments'][argi]["direction"] = direction
-    api_spec['functionality']['arguments'][argi]["key"] = key
-    api_spec['functionality']['arguments'][argi]["value"] = value
+    config['functionality']['arguments'][argi]["key"] = key
+    config['functionality']['arguments'][argi]["value"] = value
+  
+def look_for_adata_arg(args, uns_field):
+  """Look for an argument that has a .uns[uns_field] in its info.slots."""
+  for arg in args:
+    uns = arg.get("info", {}).get("slots", {}).get("uns", [])
+    for unval in uns:
+      if unval.get("name") == uns_field:
+        return arg["key"]
+  return "adata"
 
-def create_python_script(par, api_spec, type):
-  args = api_spec['functionality']['arguments']
+def write_output_python(arg, copy_from_adata, is_metric):
+  """Create code for writing the output h5ad files."""
+  slots = arg.get("info", {}).get("slots", {})
+  outer = []
+  for group_name, slots in slots.items():
+    inner = []
+    for slot in slots:
+      if group_name == "uns" and slot["name"] == "dataset_id":
+        value = f"{copy_from_adata}.uns['{slot['name']}']"
+      elif group_name == "uns" and slot["name"] == "method_id":
+        if is_metric:
+          value = f"{copy_from_adata}.uns['{slot['name']}']"
+        else:
+          value = "meta['functionality_name']"
+      else:
+        value = group_name + "_" + slot["name"]
+      inner.append(f"'{slot['name']}': {value}")
+    inner_values = ',\n    '.join(inner)
+    outer.append(f"{group_name}={{\n    {inner_values}\n  }}")
+  outer_values = ',\n  '.join(outer)
+  return strip_margin(
+    f'''\
+      |print("Write {arg["key"]} AnnData to file", flush=True)
+      |{arg["key"]} = ad.AnnData(
+      |  {outer_values}
+      |)
+      |{arg["key"]}.write_h5ad(par['{arg["key"]}'], compression='gzip')'''
+  )
+
+def write_output_r(arg, copy_from_adata, is_metric):
+  """Create code for writing the output h5ad files."""
+  slots = arg.get("info", {}).get("slots", {})
+  outer = []
+  for group_name, slots in slots.items():
+    inner = []
+    for slot in slots:
+      if group_name == "uns" and slot["name"] == "dataset_id":
+        value = f"{copy_from_adata}$uns[[\"{slot['name']}\"]]"
+      elif group_name == "uns" and slot["name"] == "method_id":
+        if is_metric:
+          value = f"{copy_from_adata}$uns[[\"{slot['name']}\"]]"
+        else:
+          value = "meta[[\"functionality_name\"]]"
+      else:
+        value = group_name + "_" + slot["name"]
+      inner.append(f"{slot['name']} = {value}")
+    inner_values = ',\n    '.join(inner)
+    outer.append(f"{group_name} = list(\n    {inner_values}\n  )")
+  outer_values = ',\n  '.join(outer)
+  return strip_margin(
+    f'''\
+      |cat("Write {arg["key"]} AnnData to file\\n")
+      |{arg["key"]} <- anndata::AnnData(
+      |  {outer_values}
+      |)
+      |{arg["key"]}$write_h5ad(par[["{arg["key"]}"]], compression = "gzip")'''
+  )
+
+def create_python_script(par, config, type):
+  args = config['functionality']['arguments']
+
+  # create the arguments of the par string
   par_string = ",\n  ".join(f"'{arg['key']}': '{arg['value']}'" for arg in args)
+
+  # create code for reading the input h5ad file
   read_h5ad_string = "\n".join(
     f"{arg['key']} = ad.read_h5ad(par['{arg['key']}'])"
     for arg in args
@@ -177,26 +242,26 @@ def create_python_script(par, api_spec, type):
     and arg['direction'] == "input"
   )
 
+  # determine which adata to copy from
+  copy_from_adata = look_for_adata_arg(args, "method_id" if type == "metric" else "dataset_id")
+
+  # create code for writing the output h5ad files
+  write_h5ad_string = "\n".join(
+    write_output_python(arg, copy_from_adata, type == "metric")
+    for arg in args
+    if arg["type"] == "file"
+    and arg["direction"] == "output"
+  )
+
   if type == 'metric':
-    output_string = strip_margin(f'''\
+    processing_string = strip_margin(f'''\
       |print('Compute metrics', flush=True)
       |# metric_ids and metric_values can have length > 1
       |# but should be of equal length
-      |metric_ids = [ '{par['name']}' ]
-      |metric_values = [ 0.5 ]
-      |
-      |print('Create output anndata', flush=True)
-      |out = ad.AnnData(
-      |    uns={{
-      |        'dataset_id': adata.uns['dataset_id'],
-      |        'method_id': adata.uns['method_id'],
-      |        'metric_ids': metric_ids,
-      |        'metric_values': metric_values,
-      |    }},
-      |)''')
+      |uns_metric_ids = [ '{par['name']}' ]
+      |uns_metric_values = [ 0.5 ]''')
   else:
-    # TODO: fix output slots
-    output_string = strip_margin('''\
+    processing_string = strip_margin(f'''\
       |print('Preprocess data', flush=True)
       |# ... preprocessing ...
       |
@@ -204,16 +269,7 @@ def create_python_script(par, api_spec, type):
       |# ... train model ...
       |
       |print('Generate predictions', flush=True)
-      |# ... generate predictions ...
-      |
-      |print('Create output anndata', flush=True)
-      |out = ad.AnnData(
-      |    X=y_pred,
-      |    uns={
-      |        'dataset_id': adata.uns['dataset_id'],
-      |        'method_id': meta['functionality_name'],
-      |    },
-      |)''')
+      |# ... generate predictions ...''')
 
   script = strip_margin(f'''\
     |import anndata as ad
@@ -230,18 +286,20 @@ def create_python_script(par, api_spec, type):
     |print('Reading input files', flush=True)
     |{read_h5ad_string}
     |
-    |{output_string}
+    |{processing_string}
     |
-    |print('Write output to file', flush=True)
-    |out.write_h5ad(par['output'], compress='gzip')
+    |{write_h5ad_string}
     |''')
 
   return script
 
-
 def create_r_script(par, api_spec, type):
   args = api_spec['functionality']['arguments']
+
+  # create the arguments of the par string
   par_string = ",\n  ".join(f'{arg["key"]} = "{arg["value"]}"' for arg in args)
+
+  # create helpers for reading the h5ad file
   read_h5ad_string = "\n".join(
     f'{arg["key"]} <- anndata::read_h5ad(par[["{arg["key"]}"]])'
     for arg in args
@@ -249,26 +307,26 @@ def create_r_script(par, api_spec, type):
     and arg['direction'] == "input"
   )
 
+  # determine which adata to copy from
+  copy_from_adata = look_for_adata_arg(args, "method_id" if type == "metric" else "dataset_id")
+
+  # create code for writing the output h5ad files
+  write_h5ad_string = "\n".join(
+    write_output_r(arg, copy_from_adata, type == "metric")
+    for arg in args
+    if arg["type"] == "file"
+    and arg["direction"] == "output"
+  )
+
   if type == 'metric':
-    output_string = strip_margin(f'''\
+    processing_string = strip_margin(f'''\
       |cat("Compute metrics\\n")
       |# metric_ids and metric_values can have length > 1
       |# but should be of equal length
-      |metric_ids <- c( "{par['name']}" )
-      |metric_values <- c( 0.5 )
-      |
-      |cat("Create output anndata\\n")
-      |out <- anndata::AnnData(
-      |  uns = list(
-      |    dataset_id = adata$uns[["dataset_id"]],
-      |    method_id = adata$uns[["method_id"]],
-      |    metric_ids = metric_ids,
-      |    metric_values = metric_values,
-      |  )
-      |)''')
+      |uns_metric_ids <- c("{par['name']}")
+      |uns_metric_values <- c(0.5)''')
   else:
-    # TODO: fix output slots
-    output_string = strip_margin('''\
+    processing_string = strip_margin(f'''\
       |cat("Preprocess data\\n")
       |# ... preprocessing ...
       |
@@ -276,16 +334,7 @@ def create_r_script(par, api_spec, type):
       |# ... train model ...
       |
       |cat("Generate predictions\\n")
-      |# ... generate predictions ...
-      |
-      |cat("Create output anndata\\n")
-      |out <- anndata::AnnData(
-      |  X = y_pred,
-      |  uns = list(
-      |    dataset_id = adata$uns[["dataset_id"]],
-      |    method_id = meta[["functionality_name"]],
-      |  )
-      |)''')
+      |# ... generate predictions ...''')
 
   script = strip_margin(f'''\
     |library(anndata)
@@ -302,13 +351,24 @@ def create_r_script(par, api_spec, type):
     |cat("Reading input files\\n")
     |{read_h5ad_string}
     |
-    |{output_string}
+    |{processing_string}
     |
-    |cat("Write output to file\\n")
-    |out$write_h5ad(par[["output"]], compress = "gzip")
+    |{write_h5ad_string}
     |''')
 
   return script
+
+def read_viash_config(file):
+  # read in config
+  command = ["viash", "config", "view", str(file)]
+
+  # Execute the command and capture the output
+  output = subprocess.check_output(command, universal_newlines=True)
+
+  # Parse the output as YAML
+  config = yaml.load(output)
+
+  return config
 
 
 def main(par):
@@ -318,11 +378,16 @@ def main(par):
 
   pretty_name = re.sub("_", " ", par['name']).title()
 
-  api_spec = read_api_spec(par)
+  ####### CREATE OUTPUT DIR #######
+  out_dir = Path(par["output"])
+  out_dir.mkdir(exist_ok=True)
 
   ####### CREATE CONFIG #######
-  config_template = create_config_template(par)
+  config_file = out_dir / 'config.vsh.yaml'
 
+  # get config template
+  config_template = create_config_template(par)
+  
   # Add component specific info
   if par['type'] == 'metric':
     add_metric_info(config_template, par, pretty_name)
@@ -339,26 +404,31 @@ def main(par):
   if par['language'] == 'r':
     add_r_setup(config_template)
 
+  with open(config_file, 'w') as f:
+    yaml.dump(config_template, f)
+
   ####### CREATE SCRIPT #######
-  set_par_values(api_spec)
+  script_file = out_dir / config_template['functionality']['resources'][0]['path']
+
+  # touch file
+  script_file.touch()
+
+  # read config with viash
+  final_config = read_viash_config(config_file)
+
+  # set reasonable values
+  set_par_values(final_config)
 
   if par['language'] == 'python':
-    script_out = create_python_script(par, api_spec, par['type'])
+    script_out = create_python_script(par, final_config, par['type'])
 
   if par['language'] == 'r':
-    script_out = create_r_script(par, api_spec, par['type'])
-
-  ####### WRITE OUTPUTS #######
-  out_dir = Path(par["output"])
-  out_dir.mkdir(exist_ok=True)
-
-  with open(f'{out_dir}/config.vsh.yaml', 'w') as f:
-    YAML().dump(config_template, f)
-
-  script_name = config_template['functionality']['resources'][0]['path']
-
-  with open(f'{out_dir}/{script_name}', 'w') as f:
+    script_out = create_r_script(par, final_config, par['type'])
+  
+  # write script
+  with open(script_file, 'w') as f:
     f.write(script_out)
+
 
 if __name__ == "__main__":
   main(par)
