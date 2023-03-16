@@ -1,3 +1,4 @@
+# TODO: project config is no longer mounted
 functionality:
   name: create_skeleton
   namespace: common
@@ -51,10 +52,13 @@ functionality:
     - path: ../../../src
       dest: openproblems-v2/src
 platforms:
-  - type: native
   - type: docker
     image: python:3.10-slim
     setup:
+      - type: apt
+        packages: [ curl, default-jre, unzip ]
+      - type: docker
+        run: [ cd /usr/bin && curl -fsSL dl.viash.io | bash ]
       - type: python
         pip: ruamel.yaml
   - type: nextflow
