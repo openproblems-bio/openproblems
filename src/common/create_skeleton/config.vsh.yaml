@@ -6,22 +6,19 @@ functionality:
     
     Usage:
     ```
-    bin/create_skeleton --task denoising --comp_type method --language r --name foo --output src/denoising/method/foo
+    bin/create_skeleton --task denoising --type method --language r --name foo
+    bin/create_skeleton --task denoising --type metric --language python --name bar
     ```
   arguments:
-    - name: "--src"
-      type: "file"
-      default: "./src"
-      description: "The source directory of the openproblems-v2 repository."
     - type: string
       name: --task
       description: Which task the component will be added to.
       example: denoising
     - type: string
-      name: --comp_type
+      name: --type
       example: metric
       description: The type of component to create.
-      choices: ['metric', 'method', 'negative_control', 'positive_control']
+      choices: ['metric', 'method', 'control_method']
     - type: string
       name: --language
       description: Which scripting language to use. Options are 'python', 'r'.
@@ -34,8 +31,17 @@ functionality:
     - type: file
       name: --output
       direction: output
-      required: true
-      description: Path to the component directory. 
+      # required: true
+      description: Path to the component directory. Suggested location is `src/<TASK>/<TYPE>s/<NAME>`.
+      default: src/${VIASH_PAR_TASK}/${VIASH_PAR_TYPE}s/${VIASH_PAR_NAME}
+    - type: file
+      name: --api_file
+      description: |
+        Which API file to use. Defaults to `src/<TASK>/api/comp_<TYPE>.yaml`.
+        In tasks with different subtypes of method, this location might not exist and you might need
+        to manually specify a different API file to inherit from.
+      # required: true
+      default: src/${VIASH_PAR_TASK}/api/comp_${VIASH_PAR_TYPE}.yaml
   resources:
     - type: python_script
       path: script.py
