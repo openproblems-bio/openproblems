@@ -5,7 +5,6 @@ functionality:
   namespace: batch_integration/methods_graph
   description: Run scVI on adata object, use feature output
   info:
-    type: method
     method_name: scVI
     paper_reference: "lopez2018deep"
     code_url: https://github.com/YosefLab/scvi-tools"

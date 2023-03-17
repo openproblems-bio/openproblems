@@ -5,7 +5,6 @@ functionality:
   namespace: batch_integration/metrics_graph
   description: Metrics that are based on computing the clustering overlap.
   info:
-    type: metric
     metrics:
       - metric_id: ari
         metric_name: ARI

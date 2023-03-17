@@ -6,7 +6,6 @@ functionality:
   description: "Adjusting batch effects in microarray expression data using
     empirical Bayes methods"
   info:
-    type: method
     method_name: Combat
     paper_reference: "hansen2012removing"
     code_url: https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html

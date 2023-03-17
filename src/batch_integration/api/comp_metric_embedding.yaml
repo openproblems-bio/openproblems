@@ -1,4 +1,6 @@
 functionality:
+  info:
+    type: metric
   arguments:
     - name: --input_integrated
       __merge__: anndata_integrated_embedding.yaml

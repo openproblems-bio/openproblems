@@ -1,6 +1,7 @@
 functionality:
   namespace: batch_integration/methods_feature
   info:
+    type: method
     output_type: feature
   arguments:
     - __merge__: anndata_unintegrated.yaml

@@ -5,7 +5,6 @@ functionality:
   namespace: batch_integration/methods_graph
   description: "BBKNN: fast batch alignment of single cell transcriptomes"
   info:
-    type: method
     method_name: BBKNN
     paper_reference: "polanski2020bbknn"
     code_url: https://github.com/Teichlab/bbknn

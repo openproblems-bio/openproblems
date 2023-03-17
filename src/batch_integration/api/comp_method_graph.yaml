@@ -1,6 +1,7 @@
 functionality:
   namespace: batch_integration/graph/methods
   info:
+    type: method
     output_type: graph
   arguments:
     - __merge__: anndata_unintegrated.yaml

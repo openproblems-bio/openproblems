@@ -6,7 +6,6 @@ functionality:
   description: "Efficient integration of heterogeneous single-cell
     transcriptomes using Scanorama"
   info:
-    type: method
     method_name: Scanorama
     paper_reference: "hie2019efficient"
     code_url: https://github.com/brianhie/scanorama
