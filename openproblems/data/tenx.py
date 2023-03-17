@@ -3,6 +3,7 @@ from . import utils
 import os
 import scprep
 import tempfile
+import warnings
 
 # sparsified from https://ndownloader.figshare.com/files/24974582
 # TODO(@LuckyMD): change link to figshare.com/articles/*
@@ -56,7 +57,16 @@ def load_tenx_5k_pbmc(test=False):
         with tempfile.TemporaryDirectory() as tempdir:
             filepath = os.path.join(tempdir, "10x_5k_pbmc.h5ad")
             scprep.io.download.download_url(PBMC_5K_URL, filepath)
-            adata = sc.read(filepath)
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    "ignore",
+                    message=(
+                        "Variable names are not unique. To make them unique, call"
+                        " `.var_names_make_unique`"
+                    ),
+                    category=UserWarning,
+                )
+                adata = sc.read(filepath)
 
             adata.var_names_make_unique()
 
