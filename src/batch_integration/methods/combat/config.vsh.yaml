@@ -2,7 +2,6 @@
 __merge__: ../../api/comp_method_feature.yaml
 functionality:
   name: combat
-  namespace: batch_integration/methods_feature
   description: "Adjusting batch effects in microarray expression data using
     empirical Bayes methods"
   info:

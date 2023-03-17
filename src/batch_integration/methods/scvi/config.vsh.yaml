@@ -2,8 +2,7 @@
 __merge__: ../../api/comp_method_embedding.yaml
 functionality:
   name: scvi
-  namespace: batch_integration/methods_graph
-  description: Run scVI on adata object, use feature output
+  description: Run scVI on adata object
   info:
     method_name: scVI
     paper_reference: "lopez2018deep"
@@ -22,8 +21,10 @@ platforms:
   - type: docker
     image: mumichae/scib-base:1.0.2
     setup:
-      - type: python
-        pypi:
-          - scvi-tools
-          - pyyaml
+      # - type: python
+      #   pypi:
+      #     - scvi-tools<0.20
+      #     - pyyaml
+      - type: docker
+        run: micromamba install -c conda-forge "scvi-tools<0.20" "pyyaml"
   - type: nextflow

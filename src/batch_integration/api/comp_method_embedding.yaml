@@ -1,4 +1,5 @@
 functionality:
+  namespace: batch_integration/methods
   info:
     type: method
     output_type: embedding

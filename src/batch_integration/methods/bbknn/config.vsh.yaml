@@ -2,7 +2,6 @@
 __merge__: ../../api/comp_method_graph.yaml
 functionality:
   name: bbknn
-  namespace: batch_integration/methods_graph
   description: "BBKNN: fast batch alignment of single cell transcriptomes"
   info:
     method_name: BBKNN

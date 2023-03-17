@@ -1,5 +1,5 @@
 functionality:
-  namespace: batch_integration/methods_feature
+  namespace: batch_integration/methods
   info:
     type: method
     output_type: feature
