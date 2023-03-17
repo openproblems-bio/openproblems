@@ -21,10 +21,9 @@ platforms:
   - type: docker
     image: mumichae/scib-base:1.0.2
     setup:
-      # - type: python
-      #   pypi:
-      #     - scvi-tools<0.20
-      #     - pyyaml
-      - type: docker
-        run: micromamba install -c conda-forge "scvi-tools<0.20" "pyyaml"
+      - type: python
+        pypi:
+          - scvi-tools
+          - pyyaml
+          - scib
   - type: nextflow

@@ -7,7 +7,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "$REPO_ROOT"
 
 RAW_DATA=resources_test/common/pancreas/dataset.h5ad
-DATASET_DIR=resources_test/batch_integration
+DATASET_DIR=resources_test/batch_integration/pancreas
 
 if [ ! -f $RAW_DATA ]; then
   echo "Error! Could not find raw data"

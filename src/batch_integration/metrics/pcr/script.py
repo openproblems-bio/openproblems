@@ -3,7 +3,7 @@ from scib.metrics import pcr_comparison
 
 ## VIASH START
 par = {
-    'input_integrated': 'resources_test/batch_integration/scvi.h5ad',
+    'input_integrated': 'resources_test/batch_integration/pancreas/scvi.h5ad',
     'output': 'output.h5ad',
 }
 

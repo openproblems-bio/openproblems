@@ -9,7 +9,7 @@ functionality:
       direction: output
       __merge__: anndata_score.yaml
   test_resources:
-    - path: ../../../../resources_test/batch_integration
+    - path: ../../../../resources_test/batch_integration/pancreas
     - type: python_script
       dest: test.py
       text: |
@@ -22,7 +22,7 @@ functionality:
 
         ## VIASH START
         meta = {
-            "resources_dir": "resources_test/batch_integration",
+            "resources_dir": "resources_test/batch_integration/pancreas",
             "config": "src/batch_integration/metric_graph/ari/config.vsh.yaml"
         }
         ## VIASH END

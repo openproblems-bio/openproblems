@@ -4,7 +4,7 @@ import scanpy as sc
 ## VIASH START
 
 par = {
-    'input': 'resources_test/batch_integration/scvi.h5ad',
+    'input': 'resources_test/batch_integration/pancreas/scvi.h5ad',
     'ouput': 'output.h5ad'
 }
 
