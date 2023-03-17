@@ -12,7 +12,6 @@ functionality:
     Next, each row (gene) is thresholded by the magnitude of the most negative value of that gene. 
     Finally, the matrix is rescaled.
   info:
-    type: method
     method_name: ALRA
     paper_reference: "linderman2018zero"
     code_url: "https://github.com/KlugerLab/ALRA"

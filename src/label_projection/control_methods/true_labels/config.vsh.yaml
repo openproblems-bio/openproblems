@@ -4,7 +4,7 @@ functionality:
   namespace: "label_projection/control_methods"
   description: "Positive control method by returning the true labels"
   info:
-    type: positive_control
+    subtype: positive_control
     label: True labels
     v1_url: openproblems/tasks/label_projection/methods/baseline.py
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c

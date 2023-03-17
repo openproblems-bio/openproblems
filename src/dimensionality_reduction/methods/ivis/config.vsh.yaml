@@ -9,7 +9,6 @@ functionality:
     ivis preserves global data structures in a low-dimensional space, adds new data points to existing embeddings using
     a parametric mapping function, and scales linearly to millions of observations.
   info:
-    type: method
     method_name: "ivis"
     paper_reference: szubert2019structurepreserving
     code_url: https://github.com/beringresearch/ivis
