@@ -23,7 +23,7 @@ functionality:
         import subprocess
         import anndata as ad
 
-        input_path = meta["resources_dir"] + "/batch_integration/unintegrated.h5ad"
+        input_path = meta["resources_dir"] + "/pancreas/unintegrated.h5ad"
         output_path = "integrated.h5ad"
         cmd = [
             meta['executable'],
