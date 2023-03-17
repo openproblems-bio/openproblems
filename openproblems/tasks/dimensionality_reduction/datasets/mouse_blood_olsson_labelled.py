@@ -1,7 +1,6 @@
 from ....data.mouse_blood_olsson_labelled import load_olsson_2016_mouse_blood
 from ....tools.decorators import dataset
 from ....tools.normalize import log_cp10k
-from .._utils import ranking_matrix
 
 
 @dataset(
@@ -17,5 +16,4 @@ def olsson_2016_mouse_blood(test=False):
     adata = load_olsson_2016_mouse_blood(test=test)
     adata.uns["n_genes"] = adata.shape[1]
     adata = log_cp10k(adata)
-    adata.obsm["X_ranking"] = ranking_matrix(adata.X)
     return adata
