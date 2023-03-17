@@ -20,27 +20,23 @@ mkdir -p $DATASET_DIR
 echo process data...
 viash run src/batch_integration/split_dataset/config.vsh.yaml -- \
   --input $RAW_DATA \
-  --output_unintegrated $DATASET_DIR/pancreas/unintegrated.h5ad \
-  --output_solution $DATASET_DIR/pancreas/solution.h5ad \
+  --output $DATASET_DIR/unintegrated.h5ad \
   --hvgs 100
 
-# run methods
-echo run methods...
+echo Running BBKNN
+viash run src/batch_integration/methods/bbknn/config.vsh.yaml -- \
+  --input $DATASET_DIR/unintegrated.h5ad \
+  --output $DATASET_DIR/bbknn.h5ad
 
-# Graph methods
-viash run src/batch_integration/methods_graph/bbknn/config.vsh.yaml -- \
-  --input $DATASET_DIR/pancreas/unintegrated.h5ad \
-  --output $DATASET_DIR/graph/bbknn.h5ad
+echo Running SCVI
+viash run src/batch_integration/methods/scvi/config.vsh.yaml -- \
+  --input $DATASET_DIR/unintegrated.h5ad \
+  --output $DATASET_DIR/scvi.h5ad
 
-# Embedding method
-viash run src/batch_integration/methods_embedding/scvi/config.vsh.yaml -- \
-  --input $DATASET_DIR/pancreas/unintegrated.h5ad \
-  --output $DATASET_DIR/embedding/scvi.h5ad
-
-# feature method
-viash run src/batch_integration/methods_feature/combat/config.vsh.yaml -- \
-  --input $DATASET_DIR/pancreas/unintegrated.h5ad \
-  --output $DATASET_DIR/feature/combat.h5ad
+echo Running combat
+viash run src/batch_integration/methods/combat/config.vsh.yaml -- \
+  --input $DATASET_DIR/unintegrated.h5ad \
+  --output $DATASET_DIR/combat.h5ad
 
 # run one metric
 echo run metrics...
