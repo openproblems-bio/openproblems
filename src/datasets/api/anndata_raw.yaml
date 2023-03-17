@@ -49,5 +49,5 @@ info:
         required: true
       - name: dataset_organism
         type: string
-        description: The organism of the dataset.
+        description: The organism of the sample in the dataset.
         required: false
