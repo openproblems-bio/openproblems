@@ -292,6 +292,8 @@ def dataset_results_to_json(task_name, dataset_name, dataset_results):
 def results_to_json(results, outdir: pathlib.Path):
     """Convert the full results to pretty JSON for web."""
     for task_name, task_results in results.items():
+        if workflow_utils.task_is_incomplete(getattr(openproblems.tasks, task_name)):
+            continue
         task_results_out = []
         task_dir = outdir.joinpath(task_name, "data")
         task_dir.mkdir(parents=True, exist_ok=True)
