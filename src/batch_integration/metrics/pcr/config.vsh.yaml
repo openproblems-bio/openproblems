@@ -2,7 +2,6 @@
 __merge__: ../../api/comp_metric_embedding.yaml
 functionality:
   name: pcr
-  namespace: batch_integration/metrics_embedding
   description: PCA regression
   info:
     v1_url: openproblems/tasks/_batch_integration/batch_integration_embed/metrics/pcr.py

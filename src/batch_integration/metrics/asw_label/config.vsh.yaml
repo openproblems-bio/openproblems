@@ -2,7 +2,6 @@
 __merge__: ../../api/comp_metric_embedding.yaml
 functionality:
   name: asw_label
-  namespace: batch_integration/metrics_embedding
   description: Average silhouette of labels
   info:
     v1_url: openproblems/tasks/_batch_integration/batch_integration_embed/metrics/silhouette.py

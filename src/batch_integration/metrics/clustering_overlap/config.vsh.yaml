@@ -2,7 +2,6 @@
 __merge__: ../../api/comp_metric_graph.yaml
 functionality:
   name: clustering_overlap
-  namespace: batch_integration/metrics_graph
   description: Metrics that are based on computing the clustering overlap.
   info:
     metrics:

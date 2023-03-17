@@ -1,4 +1,5 @@
 functionality:
+  namespace: batch_integration/metrics
   info:
     type: metric
   arguments:

@@ -2,7 +2,6 @@
 __merge__: ../../api/comp_metric_embedding.yaml
 functionality:
   name: cell_cycle_conservation
-  namespace: batch_integration/metrics_embedding
   description: Cell cycle conservation score based on cell cycle gene scoring
   info:
     v1_url: openproblems/tasks/_batch_integration/batch_integration_embed/metrics/cc_score.py
