@@ -14,11 +14,11 @@ functionality:
         min: 0
         max: 1
         maximize: true
-  arguments:
-    - name: --organism
-      type: string
-      description: Name of organism to compute cell cycle scores on
-      required: true
+  # arguments:
+  #   - name: --organism
+  #     type: string
+  #     description: Name of organism to compute cell cycle scores on
+  #     required: true
   resources:
     - type: python_script
       path: script.py
