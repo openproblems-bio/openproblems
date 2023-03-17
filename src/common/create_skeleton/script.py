@@ -177,7 +177,7 @@ def write_output_python(arg, copy_from_adata, is_metric):
   for group_name, slots in slots.items():
     inner = []
     for slot in slots:
-      if group_name == "uns" and slot["name"] == "dataset_id":
+      if group_name == "uns" and slot["name"] in ["dataset_id", "normalization_id"]:
         value = f"{copy_from_adata}.uns['{slot['name']}']"
       elif group_name == "uns" and slot["name"] == "method_id":
         if is_metric:
@@ -206,7 +206,7 @@ def write_output_r(arg, copy_from_adata, is_metric):
   for group_name, slots in slots.items():
     inner = []
     for slot in slots:
-      if group_name == "uns" and slot["name"] == "dataset_id":
+      if group_name == "uns" and slot["name"] in ["dataset_id", "normalization_id"]:
         value = f"{copy_from_adata}$uns[[\"{slot['name']}\"]]"
       elif group_name == "uns" and slot["name"] == "method_id":
         if is_metric:
