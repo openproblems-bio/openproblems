@@ -4,7 +4,7 @@ import yaml
 
 ## VIASH START
 par = {
-    'input_integrated': 'resources_test/batch_integration/embedding/scvi.h5ad',
+    'input_integrated': 'resources_test/batch_integration/scvi.h5ad',
     'output': 'output.h5ad',
 }
 meta = {

@@ -32,7 +32,7 @@ functionality:
         with open(meta['config'], 'r', encoding="utf8") as file:
             config = yaml.safe_load(file)
 
-        input_file = f"{meta['resources_dir']}/batch_integration/embedding/scvi.h5ad"
+        input_file = f"{meta['resources_dir']}/batch_integration/scvi.h5ad"
         output_file = "output.h5ad"
 
         cmd_args = [

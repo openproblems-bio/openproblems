@@ -34,7 +34,7 @@ functionality:
 
         output_type = config["functionality"].get("info", {}).get("output_type")
 
-        input_file = f"{meta['resources_dir']}/batch_integration/graph/bbknn.h5ad"
+        input_file = f"{meta['resources_dir']}/batch_integration/bbknn.h5ad"
         output_file = "output.h5ad"
 
         cmd_args = [

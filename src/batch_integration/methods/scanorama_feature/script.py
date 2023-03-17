@@ -4,7 +4,7 @@ from scib.integration import scanorama
 
 ## VIASH START
 par = {
-    'input': 'resources_test/batch_integration/pancreas/unintegrated.h5ad',
+    'input': 'resources_test/batch_integration/unintegrated.h5ad',
     'output': 'output.h5ad',
     'hvg': True,
 }
