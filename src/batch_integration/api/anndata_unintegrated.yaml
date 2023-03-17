@@ -47,6 +47,6 @@ info:
         description: "Which normalization was used"
         required: true
       - type: string
-        name: organism
+        name: dataset_organism
         description: "Which normalization was used"
         required: true

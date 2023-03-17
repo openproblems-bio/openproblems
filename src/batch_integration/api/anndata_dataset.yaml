@@ -74,6 +74,6 @@ info:
         name: knn
         description: Neighbors data.
       - type: string
-        name: organism
-        description: "Which normalization was used"
+        name: dataset_organism
+        description: The organism of the sample in the dataset.
         required: true
