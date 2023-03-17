@@ -19,13 +19,18 @@ adata.X = adata.layers['normalized']
 
 adata_int = adata.copy()
 
+translator = {
+    "homo_sapiens": "human",
+    "mus_musculus": "mouse"
+}
+
 print('compute score', flush=True)
 score = cell_cycle(
     adata,
     adata_int,
     batch_key='batch',
     embed='X_emb',
-    organism=adata.uns['dataset_organism']
+    organism=translator[adata.uns['dataset_organism']]
 )
 
 print('Create output AnnData object', flush=True)
