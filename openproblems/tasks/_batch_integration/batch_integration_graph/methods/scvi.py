@@ -6,6 +6,9 @@ import functools
 
 _scvi_method = functools.partial(
     method,
+    method_summary=(
+        "scVI combines a variational autoencoder with a hierarchical Bayesian model."
+    ),
     paper_name="Deep generative modeling for single-cell transcriptomics",
     paper_reference="lopez2018deep",
     paper_year=2018,

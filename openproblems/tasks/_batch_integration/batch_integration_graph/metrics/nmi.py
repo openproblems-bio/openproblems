@@ -14,6 +14,10 @@ the scikit-learn27 (v.0.22.1) implementation of NMI.
 
 @metric(
     metric_name="NMI",
+    metric_summary=(
+        "NMI compares the overlap of two clusterings. We used NMI to compare the"
+        " cell-type labels with Louvain clusters computed on the integrated dataset."
+    ),
     paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-r-pytorch",

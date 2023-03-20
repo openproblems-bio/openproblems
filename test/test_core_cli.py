@@ -1,7 +1,9 @@
 from openproblems.api.hash import docker_labels_from_api
+from openproblems.api.hash import git_hash
 from openproblems.api.main import main
 from openproblems.api.utils import print_output
 
+import importlib
 import numpy as np
 import openproblems
 import os
@@ -24,11 +26,13 @@ def test_print(capsys):
 def test_tasks(capsys):
     """Test task listing."""
     result = np.array(main(["tasks"], do_print=False))
-    expected = np.array([task.__name__.split(".")[-1] for task in openproblems.TASKS])
+    expected = np.array(
+        [openproblems.utils.get_member_id(task) for task in openproblems.TASKS]
+    )
     assert np.all(result == expected)
     result = np.array(main(["tasks"], do_print=True))
-    expected = (
-        "\n".join([task.__name__.split(".")[-1] for task in openproblems.TASKS]) + "\n"
+    expected = "\n".join(
+        [openproblems.utils.get_member_id(task) for task in openproblems.TASKS] + [""]
     )
     captured = capsys.readouterr()
     assert captured.out == expected
@@ -42,7 +46,7 @@ def test_list(task):
     """Test function listing."""
     result = np.array(
         main(
-            ["list", "--task", task.__name__.split(".")[-1], "--datasets"],
+            ["list", "--task", openproblems.utils.get_member_id(task), "--datasets"],
             do_print=False,
         )
     )
@@ -51,7 +55,7 @@ def test_list(task):
 
     result = np.array(
         main(
-            ["list", "--task", task.__name__.split(".")[-1], "--methods"],
+            ["list", "--task", openproblems.utils.get_member_id(task), "--methods"],
             do_print=False,
         )
     )
@@ -60,7 +64,7 @@ def test_list(task):
 
     result = np.array(
         main(
-            ["list", "--task", task.__name__.split(".")[-1], "--metrics"],
+            ["list", "--task", openproblems.utils.get_member_id(task), "--metrics"],
             do_print=False,
         )
     )
@@ -73,7 +77,7 @@ def _test_image(task, function_type, function):
         [
             "image",
             "--task",
-            task.__name__.split(".")[-1],
+            openproblems.utils.get_member_id(task),
             function_type,
             function.__name__,
         ],
@@ -159,6 +163,20 @@ def test_hash_docker_api():
 
 @parameterized.parameterized.expand(
     [
+        (openproblems.tasks.label_projection.datasets.zebrafish_labs,),
+        (openproblems.tasks.label_projection.methods.knn_classifier_log_cp10k,),
+    ],
+    name_func=utils.name.name_test,
+)
+def test_git_hash(func):
+    h1 = git_hash(func)
+    module = importlib.import_module(func.__wrapped__.__module__)
+    assert git_hash(module) == h1
+    assert git_hash(module.__file__) == h1
+
+
+@parameterized.parameterized.expand(
+    [
         (dataset, method, metric)
         for dataset in ["zebrafish_labs", None]
         for method in ["logistic_regression_log_cp10k", None]
@@ -204,7 +222,7 @@ def test_zero_metric():
             [
                 "evaluate",
                 "--task",
-                task.__name__.split(".")[-1],
+                openproblems.utils.get_member_id(task),
                 "--input",
                 dataset_file,
                 metric_name,

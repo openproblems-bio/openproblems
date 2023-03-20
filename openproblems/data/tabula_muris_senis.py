@@ -29,8 +29,8 @@ def check_unknown_organs(datasets, organ_list):
     unknown_organs = set(organ_list) - known_organs
     if unknown_organs:
         raise ValueError(
-            f"Unknown organs provided in `organ_list': {', '.join(unknown_organs)}. "
-            f"Known organs are {', '.join(known_organs)}"
+            f"Unknown organs provided in `organ_list': {', '.join(unknown_organs)}."
+            f" Known organs are {', '.join(known_organs)}"
         )
 
 
@@ -107,8 +107,8 @@ def load_tabula_muris_senis(test=False, method_list=None, organ_list=None):
     unknown_methods = set(method_list) - set(["facs", "droplet"])
     if unknown_methods:
         raise ValueError(
-            f"Unknown methods provided in `method_list': {','.join(unknown_methods)}. "
-            "Known methods are `facs' and `droplet'"
+            f"Unknown methods provided in `method_list': {','.join(unknown_methods)}."
+            " Known methods are `facs' and `droplet'"
         )
 
     datasets_path = f"/curation/v1/collections/{COLLECTION_ID}"

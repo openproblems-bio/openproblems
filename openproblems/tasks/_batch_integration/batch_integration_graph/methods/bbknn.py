@@ -6,6 +6,12 @@ import functools
 
 _bbknn_method = functools.partial(
     method,
+    method_summary=(
+        "BBKNN or batch balanced k nearest neighbours graph is built for each cell by"
+        " identifying its k nearest neighbours within each defined batch separately,"
+        " creating independent neighbour sets for each cell in each batch. These sets"
+        " are then combined and processed with the UMAP algorithm for visualisation."
+    ),
     paper_name="BBKNN: fast batch alignment of single cell transcriptomes",
     paper_reference="polanski2020bbknn",
     paper_year=2020,

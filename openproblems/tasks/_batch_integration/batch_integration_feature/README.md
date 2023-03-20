@@ -1,8 +1,4 @@
-<!--- TODO: add links --->
-
 # Batch integration feature
-
-## The task
 
 This is a sub-task of the overall batch integration task. Batch (or data) integration
 integrates datasets across batches that arise from various biological and technical
@@ -18,17 +14,6 @@ for:
 This sub-task was taken from a [benchmarking study of data integration
 methods](https://openproblems.bio/bibliography#luecken2022benchmarking).
 
-## The metrics
-
-Metrics for batch integration (feature) measure how well feature-level information is
-batch corrected. This is only done on by capturing biological variance conservation.
-Further metrics for batch correction and biological variance conservation that are
-calculated on lower dimensional feature spaces extrapolated from corrected feature
-outputs can be found in the batch integration embed and graph tasks.
-
-* **HVG conservation**: This metric computes the average percentage of overlapping
-highly variable genes per batch before and after integration.
-
 ## API
 
 WARNING: other than most tasks, `adata.X` should contain log-normalized data.
@@ -42,7 +27,9 @@ Datasets should contain the following attributes:
 
 * `adata.obs["batch"]` with the batch covariate, and
 * `adata.obs["label"]` with the cell identity label
-* `adata.obs["X_uni_pca"]` with a PCA embedding of the uncorrected data
+* `adata.obsm['X_uni_pca']` with the PCA embedding of the unintegrated representation
+* `adata.obsp['uni_connectivities']` with an unintegrated connectivity matrix generated
+  by  `scanpy.pp.neighbors()`
 * `adata.layers['counts']` with raw, integer UMI count data,
 * `adata.layers['log_normalized']` with log-normalized data and
 * `adata.X` with log-normalized data

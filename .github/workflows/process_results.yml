@@ -32,24 +32,12 @@ jobs:
       with:
         fetch-depth: 1
         repository: openproblems-bio/website
+        ref: main
         path: website
         token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
 
-    - name: Checkout NBT reproduciblity repo
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 1
-        repository: openproblems-bio/website-experimental
-        path: nbt2022-reproducibility
-        token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
-
     - name: Set up website Git branch
       working-directory: website
-      run: |
-        git checkout -b $UPDATE_BRANCH_NAME
-
-    - name: Set up nbt2022-reproducibility Git branch
-      working-directory: nbt2022-reproducibility
       run: |
         git checkout -b $UPDATE_BRANCH_NAME
 
@@ -86,19 +74,13 @@ jobs:
           S3_URI="s3://openproblems-nextflow/cwd_example"
         fi
         aws s3 cp --quiet --recursive "${S3_URI}" /tmp/results/
-        rm -r website/data/results/*/
-        python openproblems/workflow/parse_nextflow.py /tmp website/data/results
+        python openproblems/workflow/parse_nextflow.py /tmp website/results
 
     - name: Upload results
       uses: actions/upload-artifact@main
       with:
         name: results
-        path: website/data/results
-
-    - name: Move raw output
-      run: |
-        rsync -v -r --include "*.raw.json" --include "*/" --exclude "*" website/data/results/ nbt2022-reproducibility/results
-        rm website/data/results/*/*.raw.json
+        path: website/results
 
     - name: Push to openproblems-bio/website
       if: |
@@ -119,38 +101,10 @@ jobs:
       with:
         branch: ${{ env.UPDATE_BRANCH_NAME }}
         delete-branch: true
-        base: main
-        title: '[auto] Update benchmark results'
-        reviewers: scottgigante-immunai,rcannood,dburkhardt
-        path: './website'
-        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
-        author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
-        commit-message: "Update benchmark results"
-
-    - name: Push to openproblems-bio/nbt2022-reproducibility
-      if: |
-        github.event_name == 'repository_dispatch' ||
-        endsWith(github.event.head_commit.message, '# publish')
-      shell: bash
-      working-directory: './nbt2022-reproducibility'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
-      run: |
-        git push origin "${UPDATE_BRANCH_NAME}"
-
-    - name: Create nbt2022-reproducibility Pull Request
-      if: |
-        github.event_name == 'repository_dispatch' ||
-        endsWith(github.event.head_commit.message, '# publish')
-      uses: peter-evans/create-pull-request@v4
-      with:
-        branch: ${{ env.UPDATE_BRANCH_NAME }}
-        delete-branch: true
-        base: main
         title: '[auto] Update benchmark results'
         reviewers: scottgigante-immunai,rcannood
-        path: './nbt2022-reproducibility'
-        token: ${{ secrets.GH_ACTIONS_NBT_REPRODUCIBILITY_PAT }}
+        path: './website'
+        token: ${{ secrets.GH_ACTIONS_WEBSITE_PAT }}
         author: "openproblems-bio <singlecellopenproblems@protonmail.com>"
         commit-message: "Update benchmark results"
 

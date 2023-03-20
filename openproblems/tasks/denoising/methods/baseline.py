@@ -1,14 +1,10 @@
-from ....tools.decorators import method
+from ....tools.decorators import baseline_method
 from ....tools.utils import check_version
 
 
-@method(
+@baseline_method(
     method_name="No denoising",
-    paper_name="Molecular Cross-Validation for Single-Cell RNA-seq",
-    paper_reference="batson2019molecular",
-    paper_year=2019,
-    code_url="https://github.com/czbiohub/molecular-cross-validation",
-    is_baseline=True,
+    method_summary="Denoised outputs are defined from the unmodified input data.",
 )
 def no_denoising(adata, test=False):
     """Do nothing."""
@@ -17,13 +13,9 @@ def no_denoising(adata, test=False):
     return adata
 
 
-@method(
+@baseline_method(
     method_name="Perfect denoising",
-    paper_name="Molecular Cross-Validation for Single-Cell RNA-seq",
-    paper_reference="batson2019molecular",
-    paper_year=2019,
-    code_url="https://github.com/czbiohub/molecular-cross-validation",
-    is_baseline=True,
+    method_summary="Denoised outputs are defined from the target data.",
 )
 def perfect_denoising(adata, test=False):
     """Cheat."""

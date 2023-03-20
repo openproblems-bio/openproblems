@@ -14,6 +14,10 @@ _seuratv3 = r_function(
 
 @method(
     method_name="SeuratV3",
+    method_summary=(
+        "SeuratV3 is a decomposition method that is based on Canonical Correlation"
+        " Analysis (CCA)."
+    ),
     paper_name="Comprehensive Integration of Single-Cell Data",
     paper_reference="stuart2019comprehensive",
     paper_year=2019,

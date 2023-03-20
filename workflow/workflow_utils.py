@@ -1,6 +1,18 @@
+import functools
+import git
+import openproblems
+import pathlib
+
 TASK_MIN_DATASETS = 1
 TASK_MIN_METHODS = 3
 TASK_MIN_METRICS = 1
+
+
+@functools.lru_cache()
+def get_sha():
+    repo = git.Repo(pathlib.Path(openproblems.__path__[0]).parent)
+    assert not repo.bare
+    return repo.head.commit.hexsha
 
 
 def task_is_incomplete(task):

@@ -7,16 +7,31 @@ import functools
 
 _umap_method = functools.partial(
     method,
-    paper_name="UMAP: Uniform Manifold Approximation and Projection for "
-    "Dimension Reduction",
+    method_summary=(
+        "UMAP or Uniform Manifold Approximation and Projection is an algorithm for"
+        " dimension reduction based on manifold learning techniques and ideas from"
+        " topological data analysis. We perform UMAP on the logCPM expression matrix"
+        " before and after HVG selection and with and without PCA as a pre-processing"
+        " step."
+    ),
+    paper_name=(
+        "UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction"
+    ),
     paper_reference="mcinnes2018umap",
     paper_year=2018,
     code_url="https://github.com/lmcinnes/umap",
 )
 _densmap_method = functools.partial(
     method,
-    paper_name="Assessing single-cell transcriptomic variability through"
-    " density-preserving data visualization",
+    method_summary=(
+        "densMAP is a modification of UMAP that adds an extra cost term in order to"
+        " preserve information about the relative local density of the data. It is"
+        " performed on the same inputs as UMAP."
+    ),
+    paper_name=(
+        "Assessing single-cell transcriptomic variability through density-preserving"
+        " data visualization"
+    ),
     paper_reference="narayan2021assessing",
     paper_year=2021,
     code_url="https://github.com/lmcinnes/umap",

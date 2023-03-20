@@ -5,6 +5,12 @@ import numpy as np
 
 @metric(
     metric_name="kNN Area Under the Curve",
+    metric_summary=(
+        "Let $f(i) ∈ F$ be the scRNA-seq measurement of cell $i$, and $g(i) ∈ G$ be the"
+        " scATAC- seq measurement of cell $i$. kNN-AUC calculates the average"
+        " percentage overlap of neighborhoods of $f(i)$ in $F$ with neighborhoods of"
+        " $g(i)$ in $G$. Higher is better."
+    ),
     paper_reference="stanley2020harmonic",
     maximize=True,
 )

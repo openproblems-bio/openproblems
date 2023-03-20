@@ -173,9 +173,9 @@ def docker_image_age(image, pull_on_error=True):
             return docker_image_age(image, pull_on_error=False)
         elif date_string == "":
             warnings.warn(
-                "Docker image singlecellopenproblems/{} not found; "
-                "assuming needs rebuild. If you think this message is in error, "
-                "you can fix this by running `snakemake -j 1 docker_pull`".format(image)
+                "Docker image singlecellopenproblems/{} not found; assuming needs"
+                " rebuild. If you think this message is in error, you can fix this by"
+                " running `snakemake -j 1 docker_pull`".format(image)
             )
             return -1
         else:

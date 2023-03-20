@@ -7,7 +7,7 @@ import utils.name
 @parameterized.parameterized.expand(
     [
         (
-            task.__name__.split(".")[-1],
+            openproblems.utils.get_member_id(task),
             dataset.__name__,
             test,
             utils.TEMPDIR.name,

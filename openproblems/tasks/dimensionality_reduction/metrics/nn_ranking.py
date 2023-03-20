@@ -30,6 +30,7 @@ __license_link__ = (
 )
 
 
+_MAX_SAMPLES = 10000
 _K = 30
 
 
@@ -49,6 +50,14 @@ def _ranking_matrix(D: np.ndarray) -> np.ndarray:  # pragma: no cover
     return R
 
 
+def ranking_matrix(X):
+    from sklearn.metrics import pairwise_distances
+
+    D = pairwise_distances(X)
+    R = _ranking_matrix(D)
+    return R
+
+
 @njit(cache=True, fastmath=True)
 def _coranking_matrix(R1: np.ndarray, R2: np.ndarray) -> np.ndarray:  # pragma: no cover
     assert R1.shape == R2.shape
@@ -61,22 +70,6 @@ def _coranking_matrix(R1: np.ndarray, R2: np.ndarray) -> np.ndarray:  # pragma: 
             Q[k, l] += 1
 
     return Q
-
-
-@njit(cache=True, fastmath=True)
-def _trustworthiness(Q: np.ndarray, m: int) -> np.ndarray:  # pragma: no cover
-
-    T = np.zeros(m - 1)  # trustworthiness
-
-    for k in range(m - 1):
-        Qs = Q[k:, :k]
-        # a column vector of weights. weight = rank error = actual_rank - k
-        W = np.arange(Qs.shape[0]).reshape(-1, 1)
-        # 1 - normalized hard-k-intrusions. lower-left region.
-        # weighted by rank error (rank - k)
-        T[k] = 1 - np.sum(Qs * W) / ((k + 1) * m * (m - 1 - k))
-
-    return T
 
 
 @njit(cache=True, fastmath=True)
@@ -133,87 +126,114 @@ def _qnn_auc(QNN: np.ndarray) -> float:
     return AUC  # type: ignore
 
 
-def _metrics(
-    Q: np.ndarray,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, float, np.ndarray, int, float, float]:
+def _fit(
+    adata: AnnData, max_samples: int = _MAX_SAMPLES
+) -> Tuple[float, float, float, float, float, float, float]:
+    if adata.shape[0] > max_samples:
+        import scanpy as sc
+
+        sc.pp.subsample(adata, n_obs=max_samples)
+
+    E = adata.obsm["X_emb"]
+    Re = ranking_matrix(E)
+
+    X = adata.X
+    Rx = ranking_matrix(X)
+
+    Q = _coranking_matrix(Rx, Re)
     Q = Q[1:, 1:]
     m = len(Q)
 
-    T = _trustworthiness(Q, m)
-    C = _continuity(Q, m)
-    QNN = _qnn(Q, m)
-    LCMC = _lcmc(QNN, m)
-    kmax = _kmax(LCMC)
-    Qlocal = _q_local(QNN, kmax)
-    Qglobal = _q_global(QNN, kmax, m)
-    AUC = _qnn_auc(QNN)
-
-    return T, C, QNN, AUC, LCMC, kmax, Qlocal, Qglobal
+    return Q, m
 
 
-def _high_dim(adata: AnnData) -> np.ndarray:
-    from scipy.sparse import issparse
-
-    high_dim = adata.X
-    return high_dim.A if issparse(high_dim) else high_dim
-
-
-def _fit(
-    X: np.ndarray, E: np.ndarray
-) -> Tuple[float, float, float, float, float, float, float]:
-    from sklearn.metrics import pairwise_distances
-
-    if np.any(np.isnan(E)):
-        return 0.0, 0.0, 0.0, 0.5, -np.inf, -np.inf, -np.inf
-
-    Dx = pairwise_distances(X)
-    De = pairwise_distances(E)
-    Rx, Re = _ranking_matrix(Dx), _ranking_matrix(De)
-    Q = _coranking_matrix(Rx, Re)
-
-    T, C, QNN, AUC, LCMC, _kmax, Qlocal, Qglobal = _metrics(Q)
-
-    return T[_K], C[_K], QNN[_K], AUC, LCMC[_K], Qlocal, Qglobal
-
-
-@metric("continuity", paper_reference="zhang2021pydrmetrics", maximize=True)
-def continuity(adata: AnnData) -> float:
-    _, C, _, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+@metric(
+    "continuity",
+    metric_summary=(
+        "Continuity measures error of hard extrusions based on nearest neighbor"
+        " coranking"
+    ),
+    paper_reference="zhang2021pydrmetrics",
+    maximize=True,
+)
+def continuity(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
+    Q, m = _fit(adata, max_samples=max_samples)
+    C = _continuity(Q, m)[_K]
     return float(np.clip(C, 0.0, 1.0))  # in [0, 1]
 
 
-@metric("co-KNN size", paper_reference="zhang2021pydrmetrics", maximize=True)
-def qnn(adata: AnnData) -> float:
-    _, _, QNN, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+@metric(
+    "co-KNN size",
+    metric_summary=(
+        "co-KNN size counts how many points are in both k-nearest neighbors before and"
+        " after the dimensionality reduction"
+    ),
+    paper_reference="zhang2021pydrmetrics",
+    maximize=True,
+)
+def qnn(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
+    Q, m = _fit(adata, max_samples=max_samples)
+    QNN = _qnn(Q, m)[_K]
     # normalized in the code to [0, 1]
     return float(np.clip(QNN, 0.0, 1.0))
 
 
-@metric("co-KNN AUC", paper_reference="zhang2021pydrmetrics", maximize=True)
-def qnn_auc(adata: AnnData) -> float:
-    _, _, _, AUC, *_ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+@metric(
+    "co-KNN AUC",
+    metric_summary="co-KNN AUC is area under the co-KNN curve",
+    paper_reference="zhang2021pydrmetrics",
+    maximize=True,
+)
+def qnn_auc(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
+    Q, m = _fit(adata, max_samples=max_samples)
+    QNN = _qnn(Q, m)
+    AUC = _qnn_auc(QNN)
     return float(np.clip(AUC, 0.5, 1.0))  # in [0.5, 1]
 
 
 @metric(
     "local continuity meta criterion",
+    metric_summary=(
+        "The local continuity meta criterion is the co-KNN size with baseline removal"
+        " which favors locality"
+    ),
     paper_reference="zhang2021pydrmetrics",
     maximize=True,
 )
-def lcmc(adata: AnnData) -> float:
-    *_, LCMC, _, _ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+def lcmc(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
+    Q, m = _fit(adata, max_samples=max_samples)
+    QNN = _qnn(Q, m)
+    LCMC = _lcmc(QNN, m)[_K]
     return LCMC
 
 
-@metric("local property", paper_reference="zhang2021pydrmetrics", maximize=True)
-def qlocal(adata: AnnData) -> float:
+@metric(
+    "local property",
+    metric_summary="The local property metric is a summary of the local co-KNN",
+    paper_reference="zhang2021pydrmetrics",
+    maximize=True,
+)
+def qlocal(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
     # according to authors, this is usually preferred to
     # qglobal, because human are more sensitive to nearer neighbors
-    *_, Qlocal, _ = _fit(_high_dim(adata), adata.obsm["X_emb"])
+    Q, m = _fit(adata, max_samples=max_samples)
+    QNN = _qnn(Q, m)
+    LCMC = _lcmc(QNN, m)
+    kmax = _kmax(LCMC)
+    Qlocal = _q_local(QNN, kmax)
     return Qlocal
 
 
-@metric("global property", paper_reference="zhang2021pydrmetrics", maximize=True)
-def qglobal(adata: AnnData) -> float:
-    *_, Qglobal = _fit(_high_dim(adata), adata.obsm["X_emb"])
+@metric(
+    "global property",
+    metric_summary="The global property metric is a summary of the global co-KNN",
+    paper_reference="zhang2021pydrmetrics",
+    maximize=True,
+)
+def qglobal(adata: AnnData, max_samples: int = _MAX_SAMPLES) -> float:
+    Q, m = _fit(adata, max_samples=max_samples)
+    QNN = _qnn(Q, m)
+    LCMC = _lcmc(QNN, m)
+    kmax = _kmax(LCMC)
+    Qglobal = _q_global(QNN, kmax, m)
     return Qglobal

@@ -1,17 +1,17 @@
-from ....tools.decorators import method
+from ....tools.decorators import baseline_method
 from ....tools.normalize import log_cp10k
 from ....tools.utils import check_version
 
 import numpy as np
 
 
-@method(
+@baseline_method(
     method_name="Random Features",
-    paper_name="Random Features (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary=(
+        "20-dimensional SVD is computed on the first modality, and is then randomly"
+        " permuted twice, once for use as the output for each modality, producing"
+        " random features with no correlation between modalities."
+    ),
 )
 def random_features(adata, test=False, n_svd=20):
     import sklearn.decomposition
@@ -27,13 +27,13 @@ def random_features(adata, test=False, n_svd=20):
     return adata
 
 
-@method(
+@baseline_method(
     method_name="True Features",
-    paper_name="True Features (baseline)",
-    paper_reference="openproblems",
-    paper_year=2022,
-    code_url="https://github.com/openproblems-bio/openproblems",
-    is_baseline=True,
+    method_summary=(
+        "20-dimensional SVD is computed on the first modality, and this same embedding"
+        " is used as output for both modalities, producing perfectly aligned features"
+        " from each modality."
+    ),
 )
 def true_features(adata, test=False, n_svd=20):
     import sklearn.decomposition

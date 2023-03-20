@@ -12,6 +12,13 @@ _rctd = r_function("rctd.R", args="sce_sc, sce_sp, fc_cutoff, fc_cutoff_reg, max
 
 @method(
     method_name="RCTD",
+    method_summary=(
+        "RCTD (Robust Cell Type Decomposition) is a decomposition method that uses"
+        " signatures learnt from single-cell data to decompose spatial expression of"
+        " tissues.  It is able to platform effect normalization step, which normalizes"
+        " the scRNA-seq cell type profiles to match the platform effects of the spatial"
+        " transcriptomics dataset."
+    ),
     paper_name="Robust decomposition of cell type mixtures in spatial transcriptomics",
     paper_reference="cable2021robust",
     paper_year=2020,

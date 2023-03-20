@@ -14,6 +14,11 @@ consists of the mean isolated score of all isolated labels.
 
 @metric(
     metric_name="Isolated label Silhouette",
+    metric_summary=(
+        "This score evaluates the compactness for the label(s) that is(are) shared by"
+        " fewest batches. It indicates how well rare cell types can be preserved after"
+        " integration."
+    ),
     paper_reference="luecken2022benchmarking",
     maximize=True,
     image="openproblems-r-pytorch",

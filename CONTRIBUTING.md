@@ -358,6 +358,10 @@ Notes:
 
 ### Adding a new task
 
+To add a new task, you must provide a task description, dataset and method API, and at
+least one dataset, one method, and one metric. In order to appear on the website, a task
+must have at least three methods.
+
 The task directory structure is as follows
 
 ```text

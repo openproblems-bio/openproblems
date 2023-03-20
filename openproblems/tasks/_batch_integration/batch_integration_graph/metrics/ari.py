@@ -15,6 +15,11 @@ We also used the scikit-learn (v.0.22.1) implementation of the ARI.
 
 @metric(
     metric_name="ARI",
+    metric_summary=(
+        "ARI (Adjusted Rand Index) compares the overlap of two clusterings. It"
+        " considers both correct clustering overlaps while also counting correct"
+        " disagreements between two clustering."
+    ),
     maximize=True,
     paper_reference="luecken2022benchmarking",
     image="openproblems-r-pytorch",

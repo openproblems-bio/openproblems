@@ -5,8 +5,18 @@ import functools
 
 _combat_method = functools.partial(
     method,
-    paper_name="Adjusting batch effects in microarray expression data using "
-    "empirical Bayes methods",
+    method_summary=(
+        "ComBat uses an Empirical Bayes (EB) approach to correct for batch effects. It"
+        " estimates batch-specific parameters by pooling information across genes in"
+        " each batch and shrinks the estimates towards the overall mean of the batch"
+        " effect estimates across all genes. These parameters are then used to adjust"
+        " the data for batch effects, leading to more accurate and reproducible"
+        " results."
+    ),
+    paper_name=(
+        "Adjusting batch effects in microarray expression data using empirical Bayes"
+        " methods"
+    ),
     paper_reference="hansen2012removing",
     paper_year=2007,
     code_url="https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html",

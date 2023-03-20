@@ -6,8 +6,16 @@ import functools
 
 _harmony_method = functools.partial(
     method,
-    paper_name="Fast, sensitive and accurate integration "
-    "of single-cell data with Harmony",
+    method_summary=(
+        "Harmony is a method that uses PCA to group the cells into multi-dataset"
+        " clusters, and then computes cluster-specific linear correction factors. Each"
+        " cell is then corrected by its cell-specific linear factor using the"
+        " cluster-weighted average. The method keeps iterating these four steps until"
+        " cell clusters are stable."
+    ),
+    paper_name=(
+        "Fast, sensitive and accurate integration of single-cell data with Harmony"
+    ),
     paper_reference="korsunsky2019fast",
     paper_year=2019,
     code_url="https://github.com/lilab-bcb/harmony-pytorch",

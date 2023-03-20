@@ -1,4 +1,5 @@
 """Specific tests for the dimensionality_reduction task"""
+import numpy as np
 import openproblems
 import parameterized
 import utils.docker
@@ -12,13 +13,12 @@ TASK = openproblems.tasks.dimensionality_reduction
 def test_trustworthiness_sparse():  # pragma: nocover
     from scipy.sparse import csr_matrix
 
-    task = openproblems.tasks.dimensionality_reduction
-    metric = task.metrics.trustworthiness
+    metric = TASK.metrics.trustworthiness
 
-    adata = task.api.sample_dataset()
-    adata = task.api.sample_method(adata)
+    adata = TASK.api.sample_dataset()
+    adata = TASK.api.sample_method(adata)
     openproblems.log.debug(
-        "Testing {} metric from {} task".format(metric.__name__, task.__name__)
+        "Testing {} metric from {} task".format(metric.__name__, TASK.__name__)
     )
     adata.X = csr_matrix(adata.X)
     m = metric(adata)
@@ -35,13 +35,12 @@ def test_density_preservation_matches_densmap():
 
     import numpy as np
 
-    task = openproblems.tasks.dimensionality_reduction
-    metric = openproblems.tasks.dimensionality_reduction.metrics.density_preservation
+    metric = TASK.metrics.density_preservation
 
-    adata = task.api.sample_dataset()
-    adata = task.api.sample_method(adata)
+    adata = TASK.api.sample_dataset()
+    adata = TASK.api.sample_method(adata)
     openproblems.log.debug(
-        "Testing {} metric from {} task".format(metric.__name__, task.__name__)
+        "Testing {} metric from {} task".format(metric.__name__, TASK.__name__)
     )
 
     (emb, ro, re) = UMAP(
@@ -62,11 +61,10 @@ def test_density_preservation_matches_densmap():
 def test_distance_correlation_with_svd(n_svd):
     import numpy as np
 
-    task = openproblems.tasks.dimensionality_reduction
-    metric = openproblems.tasks.dimensionality_reduction.metrics.distance_correlation
+    metric = TASK.metrics.distance_correlation
 
-    adata = task.api.sample_dataset()
-    adata = task.api.sample_method(adata)
+    adata = TASK.api.sample_dataset()
+    adata = TASK.api.sample_method(adata)
     adata.obsm["X_emb"] = adata.X.toarray()
 
     expected = 1
@@ -78,11 +76,10 @@ def test_distance_correlation_with_svd(n_svd):
 def test_density_preservation_perfect():
     import numpy as np
 
-    task = openproblems.tasks.dimensionality_reduction
-    metric = openproblems.tasks.dimensionality_reduction.metrics.density_preservation
+    metric = TASK.metrics.density_preservation
 
-    adata = task.api.sample_dataset()
-    adata = task.api.sample_method(adata)
+    adata = TASK.api.sample_dataset()
+    adata = TASK.api.sample_method(adata)
 
     adata.obsm["X_emb"] = adata.X.toarray()
     actual = metric(adata)
@@ -94,11 +91,9 @@ def test_diffusion_map_no_convergence():
     import numpy as np
     import scipy.sparse.linalg
 
-    adata = (
-        openproblems.tasks.dimensionality_reduction.datasets.olsson_2016_mouse_blood()
-    )
+    adata = TASK.datasets.olsson_2016_mouse_blood()
     # no exception with retries
-    adata = openproblems.tasks.dimensionality_reduction.methods.diffusion_map(adata)
+    adata = TASK.methods.diffusion_map(adata)
     # exception with no retries
     np.testing.assert_raises(
         scipy.sparse.linalg.ArpackNoConvergence,
@@ -106,3 +101,18 @@ def test_diffusion_map_no_convergence():
         adata,
         n_retries=0,
     )
+
+
+@parameterized.parameterized.expand(
+    [("qlocal",), ("qglobal",)],
+    name_func=utils.name.name_test,
+)
+def test_pydrmetrics_subsample(metric_name):
+    np.random.seed(0)
+    metric = getattr(openproblems.tasks.dimensionality_reduction.metrics, metric_name)
+
+    adata = TASK.api.sample_dataset()
+    adata = TASK.api.sample_method(adata)
+    metric_full = metric(adata)
+    metric_sub = metric(adata, max_samples=int(adata.shape[0] * 0.9))
+    np.testing.assert_allclose(metric_full, metric_sub, atol=0.05)

@@ -1,6 +1,4 @@
-# Cell-cell Communication
-
-## The task
+# Cell-cell Communication (ligand-target)
 
 The growing availability of single-cell data has sparked an increased
 interest in the inference of cell-cell communication (CCC),
@@ -30,21 +28,6 @@ the corresponding of cytokines of which, are inferred to be active in
 the target cell types. This subtask focuses
 on the prediction of interactions from steady-state, or single-context,
 single-cell data.**
-
-## The metrics
-
-Metrics for cell-cell communication aim to characterize how good are
-the different scoring methods at prioritizing assumed truth predictions.
-
-* **Odds ratio**: The odds ratio represents the ratio of true and false
-positives within a set of prioritized interactions (top ranked hits) versus
-the same ratio for the remainder of the interactions. Thus, in this
-scenario odds ratios quantify the strength of association between the
-ability of methods to prioritize interactions and those interactions
-assigned to the positive class.
-
-* **AUPRC**: a single number _[0-1]_ that summarizes the area under the curve where
-x is the recall and y is the precision.
 
 ## API
 

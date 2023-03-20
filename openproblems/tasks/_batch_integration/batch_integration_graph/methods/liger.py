@@ -7,8 +7,16 @@ import functools
 
 _liger_method = functools.partial(
     method,
-    paper_name="Single-Cell Multi-omic Integration Compares and "
-    "Contrasts Features of Brain Cell Identity",
+    method_summary=(
+        "LIGER or linked inference of genomic experimental relationships uses iNMF"
+        " deriving and implementing a novel coordinate descent algorithm to efficiently"
+        " do the factorization. Joint clustering is performed and factor loadings are"
+        " normalised."
+    ),
+    paper_name=(
+        "Single-Cell Multi-omic Integration Compares and Contrasts Features of Brain"
+        " Cell Identity"
+    ),
     paper_reference="welch2019single",
     paper_year=2019,
     code_url="https://github.com/welch-lab/liger",

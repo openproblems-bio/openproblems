@@ -5,8 +5,15 @@ import functools
 
 _mnn_method = functools.partial(
     method,
-    paper_name="Batch effects in single-cell RNA-sequencing "
-    "data are corrected by matching mutual nearest neighbors",
+    method_summary=(
+        "MNN first detects mutual nearest neighbours in two of the batches and infers a"
+        " projection of the second onto the first batch. After that, additional batches"
+        " are added iteratively."
+    ),
+    paper_name=(
+        "Batch effects in single-cell RNA-sequencing data are corrected by matching"
+        " mutual nearest neighbors"
+    ),
     paper_reference="haghverdi2018batch",
     paper_year=2018,
     code_url="https://github.com/chriscainx/mnnpy",

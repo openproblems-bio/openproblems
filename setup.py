@@ -29,7 +29,7 @@ r_requires = [
 
 evaluate_requires = ["snakemake>=7.8,<7.17", "tabulate<0.9"]
 
-process_requires = ["numpyencoder==0.3.*"]
+process_requires = ["numpyencoder==0.3.*", "gitpython==3.1.*"]
 
 test_requires = [
     "pytest==7.1.*",

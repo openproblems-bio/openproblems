@@ -42,6 +42,13 @@ def _diffusion_map(graph, n_comps, t, n_retries=1):
 
 @method(
     method_name="Diffusion maps",
+    method_summary=(
+        "Diffusion maps uses an affinity matrix to describe the similarity between data"
+        " points, which is then transformed into a graph Laplacian. The"
+        " eigenvalue-weighted eigenvectors of the graph Laplacian are then used to"
+        " create the embedding. Diffusion maps is calculated on the logCPM expression"
+        " matrix."
+    ),
     paper_reference="coifman2006diffusion",
     paper_name="Diffusion maps",
     paper_year=2006,

@@ -1,5 +1,7 @@
 from .alra import alra_log
+from .alra import alra_log_reversenorm
 from .alra import alra_sqrt
+from .alra import alra_sqrt_reversenorm
 from .baseline import no_denoising
 from .baseline import perfect_denoising
 from .dca import dca

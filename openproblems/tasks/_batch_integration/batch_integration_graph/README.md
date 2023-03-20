@@ -1,8 +1,4 @@
-<!--- TODO: add links --->
-
 # Batch integration (graph)
-
-## The task
 
 This is a sub-task of the overall batch integration task. Batch (or data) integration
 methods integrate datasets across batches that arise from various biological and
@@ -19,30 +15,6 @@ sub-tasks for batch integration can be found for:
 This sub-task was taken from a [benchmarking study of data integration
 methods](https://openproblems.bio/bibliography#luecken2022benchmarking).
 
-## The metrics
-
-Metrics for batch integration (graph) measure how well batches are mixed while
-biological signals are preserved. They are divided into batch correction and biological
-variance conservation metrics.
-
-### Batch correction
-
-* **Graph connectivity**: The graph connectivity metric assesses whether the kNN graph
-representation, G, of the integrated data connects all cells with the same cell identity
-label.
-
-### Biological variance removal
-
-* **Adjusted rand index (ARI)**: The Rand index compares the overlap of two clusterings;
-it considers both correct clustering overlaps while also counting correct disagreements
-between two clusterings.
-* **Iso label F1 score**: Isolated cell labels are identified as the labels present in
-the least number of batches in the integration task. The score evaluates how well these
-isolated labels separate from other cell identities based on clustering.
-* **Normalized mutual information (NMI)**: NMI compares the overlap of two clusterings.
-We used NMI to compare the cell-type labels with Louvain clusters computed on the
-integrated dataset.
-
 ## API
 
 WARNING: other than most tasks, `adata.X` should contain log-normalized data.
@@ -57,7 +29,7 @@ Datasets should contain the following attributes:
 * `adata.obs["batch"]` with the batch covariate,
 * `adata.obs["label"]` with the cell identity label,
 * `adata.layers['counts']` with raw, integer UMI count data, and
-* `adata.obsm['X_uni']` with the PCA embedding of the unintegrated representation
+* `adata.obsm['X_uni_pca']` with the PCA embedding of the unintegrated representation
 * `adata.obsp['uni_connectivities']` with an unintegrated connectivity matrix generated
   by  `scanpy.pp.neighbors()`
 * `adata.X` with log-normalized data

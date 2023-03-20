@@ -7,11 +7,22 @@ import functools
 
 _mlp_method = functools.partial(
     method,
+    method_summary=(
+        'MLP or "Multi-Layer Perceptron" is a type of artificial neural network that'
+        " consists of multiple layers of interconnected neurons. Each neuron computes a"
+        " weighted sum of all neurons in the previous layer and transforms it with"
+        " nonlinear activation function. The output layer provides the final"
+        " prediction, and network weights are updated by gradient descent to minimize"
+        " the cross entropy loss. Here, the input data is 100-dimensional whitened PCA"
+        " coordinates for each cell, and we use two hidden layers of 100 neurons each."
+    ),
     paper_name="Connectionist learning procedures",
     paper_reference="hinton1989connectionist",
     paper_year=1990,
-    code_url="https://scikit-learn.org/stable/modules/generated/"
-    "sklearn.neural_network.MLPClassifier.html",
+    code_url=(
+        "https://scikit-learn.org/stable/modules/generated/"
+        "sklearn.neural_network.MLPClassifier.html"
+    ),
 )
 
 

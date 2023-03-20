@@ -15,6 +15,10 @@ def _square(X):
 
 @metric(
     metric_name="Mean squared error",
+    metric_summary=(
+        "Mean squared error (MSE) is the average distance between each pair of matched"
+        " observations of the same cell in the learned latent space. Lower is better."
+    ),
     paper_reference="lance2022multimodal",
     maximize=False,
 )
