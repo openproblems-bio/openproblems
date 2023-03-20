@@ -5,12 +5,10 @@ import parameterized
 import utils.docker
 import utils.git
 
-# global skip
 TASK = openproblems.tasks.dimensionality_reduction
 
 
-@utils.docker.docker_test(image=TASK.metrics.trustworthiness.metadata["image"])
-def test_trustworthiness_sparse():  # pragma: nocover
+def test_trustworthiness_sparse():
     from scipy.sparse import csr_matrix
 
     metric = TASK.metrics.trustworthiness
@@ -109,7 +107,7 @@ def test_diffusion_map_no_convergence():
 )
 def test_pydrmetrics_subsample(metric_name):
     np.random.seed(0)
-    metric = getattr(openproblems.tasks.dimensionality_reduction.metrics, metric_name)
+    metric = getattr(TASK.metrics, metric_name)
 
     adata = TASK.api.sample_dataset()
     adata = TASK.api.sample_method(adata)
