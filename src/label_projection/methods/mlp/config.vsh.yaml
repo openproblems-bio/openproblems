@@ -4,11 +4,11 @@ functionality:
   namespace: "label_projection/methods"
   description: "Multilayer perceptron"
   info:
-    label: Multilayer perceptron
+    method_name: Multilayer perceptron
     # paper_name: "Connectionist learning procedures"
     # paper_url: "https://doi.org/10.1016/0004-3702(89)90049-0"
     # paper_year: 1990
-    paper_doi: "10.1016/0004-3702(89)90049-0"
+    paper_reference: "hinton1989connectionist"
     code_url: https://github.com/scikit-learn/scikit-learn
     doc_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html"
     v1_url: openproblems/tasks/label_projection/methods/mlp.py

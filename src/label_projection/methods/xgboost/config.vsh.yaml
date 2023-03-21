@@ -4,8 +4,8 @@ functionality:
   namespace: "label_projection/methods"
   description: "XGBoost: A Scalable Tree Boosting System"
   info:
-    label: XGBoost
-    paper_doi: 10.1145/2939672.2939785
+    method_name: XGBoost
+    paper_reference: "chen2016xgboost"
     code_url: "https://github.com/dmlc/xgboost"
     doc_url: "https://xgboost.readthedocs.io/en/stable/index.html"
     v1_url: openproblems/tasks/label_projection/methods/xgboost.py

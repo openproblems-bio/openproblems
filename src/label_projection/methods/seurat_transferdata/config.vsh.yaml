@@ -6,8 +6,8 @@ functionality:
     The Seurat v3 anchoring procedure is designed to integrate
     diverse single-cell datasets across technologies and modalities. 
   info:
-    label: Seurat TransferData
-    paper_doi: "10.1101/460147"
+    method_name: Seurat TransferData
+    paper_reference: "hao2021integrated"
     code_url: "https://github.com/satijalab/seurat"
     doc_url: "https://satijalab.org/seurat/articles/integration_mapping.html"
     v1_url: openproblems/tasks/label_projection/methods/seurat.py
