@@ -26,14 +26,22 @@ functionality:
           required: false
           description: If specified, this file will contain a structured log of which checks succeeded (or not).
           example: checks.json
+          direction: output
         - name: --output
           type: file
           required: false
           description: If specified, the output file will be a copy of the input file.
-          example: output.h5ad 
+          example: output.h5ad
+          direction: output
   resources:
     - type: python_script
       path: script.py
+  test_resources:
+    - path: ../../../resources_test
+    - path: ../../../src
+      dest: src 
+    - type: python_script
+      path: test.py
 platforms:
   - type: docker
     image: python:3.10

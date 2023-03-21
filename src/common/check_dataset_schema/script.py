@@ -53,7 +53,7 @@ for slot in def_slots:
     out['data_schema'] = 'not ok'
     out['error'][slot] = check
 
-if par['json'] is not None:
+if par['checks'] is not None:
   with open(par["checks"], "w") as f:
     json.dump(out, f, indent=2)
 
