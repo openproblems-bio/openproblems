@@ -4,7 +4,6 @@ functionality:
   namespace: "label_projection/methods"
   description: "Logistic regression method"
   info:
-    type: method
     label: Logistic Regression
     paper_name: "Applied Logistic Regression"
     paper_url: "https://books.google.com/books?id=64JYAwAAQBAJ"

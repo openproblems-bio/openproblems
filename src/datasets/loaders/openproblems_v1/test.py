@@ -11,11 +11,17 @@ print(">> Running script", flush=True)
 out = subprocess.run(
     [
         meta["executable"],
-        "--id", name,
+        "--dataset_id", name,
         "--obs_celltype", obs_celltype,
         "--obs_batch", obs_batch,
         "--layer_counts", "counts",
-        "--output", output
+        "--output", output,
+        "--dataset_name", "Pancreas",
+        "--data_url", "http://foo.org",
+        "--data_reference", "foo2000bar",
+        "--dataset_summary", "A short summary.",
+        "--dataset_description", "A couple of paragraphs worth of text.",
+        "--dataset_organism", "homo_sapiens",
     ],
     check=True
 )

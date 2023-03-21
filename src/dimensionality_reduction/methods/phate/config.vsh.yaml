@@ -4,7 +4,6 @@ functionality:
   namespace: "dimensionality_reduction/methods"
   description: "Potential of heat-diffusion for affinity-based transition embedding"
   info:
-    type: method
     method_name: PHATE
     paper_reference: "moon2019visualizing"
     code_url: https://github.com/KrishnaswamyLab/PHATE/

@@ -4,7 +4,6 @@ functionality:
   namespace: "dimensionality_reduction/methods"
   description: "Principal component analysis (PCA)"
   info:
-    type: method
     method_name: "PCA"
     paper_reference: pearson1901pca
     code_url: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
