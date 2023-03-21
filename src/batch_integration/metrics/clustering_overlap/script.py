@@ -45,8 +45,5 @@ output = ad.AnnData(
     }
 )
 
-if 'parent_method_id' in input.uns:
-    output.uns['parent_method_id'] = input.uns['parent_method_id']
-
 print("Write data to file", flush=True)
 output.write_h5ad(par["output"], compression="gzip")
