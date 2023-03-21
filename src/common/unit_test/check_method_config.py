@@ -20,7 +20,7 @@ assert "namespace" in config["functionality"] is not None, "namespace not a fiel
 print("Check info fields", flush=True)
 info = config['functionality']['info']
 assert "type" in info, "type not an info field"
-info_types = ["method", "negative_control", "positive_control"]
+info_types = ["method", "control_method"]
 assert info["type"] in info_types , f"got {info['type']} expected one of {info_types}"
 assert "method_name" in info, "method_name not an info field"
 assert "variants" in info,  "variants not an info field"
