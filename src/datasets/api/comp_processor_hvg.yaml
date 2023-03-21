@@ -5,10 +5,10 @@ functionality:
     - name: "--layer_input"
       type: string
       default: "normalized"
-      description: Which layer to use as input for the PCA.
+      description: Which layer to use as input.
     - name: "--output"
       direction: output
-      __merge__: anndata_dataset.yaml
+      __merge__: anndata_hvg.yaml
     - name: "--var_hvg"
       type: string
       default: "hvg"

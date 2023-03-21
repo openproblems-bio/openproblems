@@ -8,10 +8,12 @@ functionality:
       path: script.R
 platforms:
   - type: docker
-    image: eddelbuettel/r2u:22.04
+    # image: eddelbuettel/r2u:22.04
+    # switched to specific tag, see https://github.com/eddelbuettel/r2u/issues/29
+    image: eddelbuettel/r2u@sha256:1d3a92aab5abad11787cd6b6c9479960db9f4e56dcc7f837768da2e3f3c4dfe2
     setup:
       - type: r
-        cran: [ Matrix, scran, BiocParallel, rlang, anndata, bit64 ]
+        cran: [ Matrix, rlang, anndata, bit64, scran, BiocParallel ]
       - type: apt
         packages: [ libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3 ]
       - type: python

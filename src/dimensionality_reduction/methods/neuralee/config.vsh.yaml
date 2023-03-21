@@ -4,7 +4,6 @@ functionality:
   namespace: "dimensionality_reduction/methods"
   description: "A neural network implementation of elastic embedding implemented in the [NeuralEE package](https://neuralee.readthedocs.io/en/latest/)."
   info:
-    type: method
     method_name: NeuralEE
     paper_reference: "xiong2020neuralee"
     code_url: https://github.com/HiBearME/NeuralEE

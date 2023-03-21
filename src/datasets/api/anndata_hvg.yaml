@@ -1,0 +1,16 @@
+__merge__: anndata_pca.yaml
+type: file
+description: "A normalised dataset with a PCA embedding and HVG selection"
+example: "dataset.h5ad"
+info:
+  label: "Dataset+PCA+HVG"
+  slots:
+    var:
+      - type: boolean
+        name: hvg
+        description: Whether or not the feature is considered to be a 'highly variable gene'
+        required: true
+      - type: integer
+        name: hvg_score
+        description: A ranking of the features by hvg.
+        required: true

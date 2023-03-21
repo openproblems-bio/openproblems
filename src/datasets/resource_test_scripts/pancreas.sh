@@ -17,10 +17,16 @@ mkdir -p $DATASET_DIR
 
 # download dataset
 viash run src/datasets/loaders/openproblems_v1/config.vsh.yaml -- \
-    --id "pancreas" \
     --obs_celltype "celltype" \
     --obs_batch "tech" \
     --layer_counts "counts" \
+    --dataset_id pancreas \
+    --dataset_name "Human pancreas" \
+    --data_url "https://theislab.github.io/scib-reproducibility/dataset_pancreas.html" \
+    --data_reference "luecken2022benchmarking" \
+    --dataset_summary "Human pancreas cells dataset from the scIB benchmarks" \
+    --dataset_description "Human pancreatic islet scRNA-seq data from 6 datasets across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, and SMARTER-seq)." \
+    --dataset_organism "homo_sapiens" \
     --output $DATASET_DIR/temp_dataset_full.h5ad
 
 wget https://raw.githubusercontent.com/theislab/scib/c993ffd9ccc84ae0b1681928722ed21985fb91d1/scib/resources/g2m_genes_tirosh_hm.txt -O $DATASET_DIR/temp_g2m_genes_tirosh_hm.txt
@@ -46,9 +52,14 @@ viash run src/datasets/processors/pca/config.vsh.yaml -- \
     --input $DATASET_DIR/temp_dataset1.h5ad \
     --output $DATASET_DIR/temp_dataset2.h5ad
 
-# run log cpm normalisation
+# run hvg
 viash run src/datasets/processors/hvg/config.vsh.yaml -- \
     --input $DATASET_DIR/temp_dataset2.h5ad \
+    --output $DATASET_DIR/temp_dataset3.h5ad
+
+# run knn
+viash run src/datasets/processors/knn/config.vsh.yaml -- \
+    --input $DATASET_DIR/temp_dataset3.h5ad \
     --output $DATASET_DIR/dataset.h5ad
 
 rm -r $DATASET_DIR/temp_*

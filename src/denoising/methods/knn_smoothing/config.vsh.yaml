@@ -4,7 +4,6 @@ functionality:
   namespace: "denoising/methods"
   description: "iterative K-nearest neighbor smoothing"
   info:
-    type: method
     method_name: KNN Smoothing
     paper_reference: "wagner2018knearest"
     code_url: "https://github.com/yanailab/knn-smoothing"

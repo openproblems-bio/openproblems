@@ -4,7 +4,6 @@ functionality:
   namespace: "dimensionality_reduction/methods"
   description: "t-Distributed Stochastic Neighbor Embedding (t-SNE)"
   info:
-    type: method
     method_name: t-SNE
     paper_reference: vandermaaten2008visualizing
     code_url: https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html#sklearn.manifold.TSNE

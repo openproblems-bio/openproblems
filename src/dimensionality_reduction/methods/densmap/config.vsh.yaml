@@ -4,7 +4,6 @@ functionality:
   namespace: "dimensionality_reduction/methods"
   description: "Density-preserving UMAP"
   info:
-    type: method
     method_name: densMAP
     paper_reference: "narayan2021assessing"
     code_url: https://github.com/lmcinnes/umap

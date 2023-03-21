@@ -4,7 +4,6 @@ functionality:
   namespace: "label_projection/methods"
   description: "K-Nearest Neighbors classifier"
   info:
-    type: method
     label: KNN
     # paper_name: "Nearest neighbor pattern classification"
     # paper_url: "https://doi.org/10.1109/TIT.1967.1053964"

@@ -4,7 +4,7 @@ functionality:
   namespace: "dimensionality_reduction/control_methods"
   description: "Uses a normal distribution to generate random embeddings."
   info:
-    type: negative_control
+    subtype: negative_control
     method_name: Random Features
     v1_url: openproblems/tasks/dimensionality_reduction/methods/baseline.py
     v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf

@@ -1,0 +1,22 @@
+functionality:
+  arguments:
+    - name: "--input"
+      __merge__: anndata_hvg.yaml
+    - name: "--layer_input"
+      type: string
+      default: "normalized"
+      description: Which layer to use as input.
+    - name: "--output"
+      direction: output
+      __merge__: anndata_dataset.yaml
+    - name: "--key_added"
+      type: string
+      default: "knn"
+      description: |
+        the neighbors data is added to `.uns[key_added]`, 
+        distances are stored in `.obsp[key_added+'_distances'] and 
+        connectivities in `.obsp[key_added+'_connectivities']`.
+    - name: "--num_neighbors"
+      type: integer
+      default: 15
+      description: "The size of local neighborhood (in terms of number of neighboring data points) used for manifold approximation."

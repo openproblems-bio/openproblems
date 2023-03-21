@@ -8,7 +8,6 @@ functionality:
     Removes the dropout effect by taking the count structure, overdispersed nature and sparsity of the data into account 
     using a deep autoencoder with zero-inflated negative binomial (ZINB) loss function.
   info:
-    type: method
     method_name: DCA
     paper_reference: "https://www.nature.com/articles/s41467-018-07931-2"
     code_url: "https://github.com/theislab/dca"
