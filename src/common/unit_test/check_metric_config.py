@@ -12,10 +12,10 @@ meta = {
 
 def check_metric(metric: Dict[str, str])  -> str:
     assert "metric_id" in metric, "metric_id not a field"
-    assert "metric_name" in metric, f"metric_name not a field in metric['metric_id']"
-    assert "min" in metric, f"min not a field in metric['metric_id']"
-    assert "max" in metric, f"max not a field in metric['metric_id']"
-    assert "maximize" in metric, f"maximize not a field in metric['metric_id']"
+    assert "metric_name" in metric, f"metric_name not a field in metric"
+    assert "min" in metric, f"min not a field in metric"
+    assert "max" in metric, f"max not a field in metric"
+    assert "maximize" in metric, f"maximize not a field in metric"
     assert isinstance(metric['metric_id'], str), "not a string"
     assert isinstance(metric['metric_name'], str), "not a string"
     assert isinstance(metric['min'], int), "not an int"
