@@ -6,7 +6,7 @@ jaxlib==0.4.6
 pymde==0.1.18
 scalex==1.0.2
 scikit-misc==0.1.*
-scvi-tools~=0.19
+scvi-tools~=0.20
 tangram-sc==1.0.*
 torch==1.12.*
 xgboost==1.6.*
