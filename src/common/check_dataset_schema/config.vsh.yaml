@@ -19,23 +19,22 @@ functionality:
           type: boolean
           default: false
           description: Whether or not to stop with exit code 1 if the input file does not adhere to the schema.
-        - name: --copy_output
-          type: boolean_true
-          description: Wether a output needs to be created for further analysis.
     - name: Output
       arguments:
-        - name: --json
+        - name: --checks
           type: file
           required: false
           description: If specified, this file will contain a structured log of which checks succeeded (or not).
+          example: checks.json
         - name: --output
           type: file
           required: false
           description: If specified, the output file will be a copy of the input file.
+          example: output.h5ad 
   resources:
     - type: python_script
       path: script.py
-platform:
+platforms:
   - type: docker
     image: python:3.10
     setup:

@@ -9,9 +9,8 @@ import json
 par = {
   'input': 'resources_test/common/pancreas/dataset.h5ad',
   'schema': 'src/denoising/api/anndata_dataset.yaml',
-  'stop_on_error': 'false',
-  'copy_output': 'false',
-  'json': 'output/error.json',
+  'stop_on_error': False,
+  'checks': 'output/error.json',
   'output': 'output/output.h5ad'
 }
 meta = {
@@ -28,11 +27,6 @@ def check_structure (slot_info, adata_slot):
          missing.append(obj['name'])
 
   return missing
-
-def write_json(output):
-  if par['json'] is not None:
-    with open(par["json"], "w") as outf:
-      json.dump(output, outf, indent=2)
 
 
 print('Load data', flush=True)
@@ -59,12 +53,12 @@ for slot in def_slots:
     out['data_schema'] = 'not ok'
     out['error'][slot] = check
 
-if par['stop_on_error'] == 'true':
-  write_json(out)
-  exit(out['exit_code'])
+if par['json'] is not None:
+  with open(par["checks"], "w") as f:
+    json.dump(out, f, indent=2)
 
-if par['copy_output'] == 'true':
-  assert par['output'] is not None, 'No output defined'
-  write_json(out)
+if par['output'] is not None:
   shutil.copyfile(par["input"], par["output"])
-  
+    
+if par['stop_on_error']:
+  exit(out['exit_code'])  
