@@ -3,10 +3,52 @@ from os import path
 import json
 
 input_path = meta["resources_dir"] + "resources_test/common/pancreas/dataset.h5ad"
-input_correct_schema = meta["resources_dir"] +  "resources_test/common/check_schema/anndata_correct.yaml"
-input_error_schema = meta["resources_dir"] + "resources_test/common/check_schema/anndata_error.yaml"
+input_correct_schema = meta["resources_dir"] +  "resources_test/common/anndata_correct.yaml"
+input_error_schema = meta["resources_dir"] + "resources_test/common/anndata_error.yaml"
 output_checks = "checks.json"
 output_path = "output.h5ad"
+
+
+
+with open(input_correct_schema, "w") as f:
+    f.write('''
+type: file
+description: "A preprocessed dataset"
+example: "preprocessed.h5ad"
+info:
+  short_description: "Preprocessed dataset"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+    ''')
+
+
+with open(input_error_schema, "w") as f:
+    f.write('''
+type: file
+description: "A preprocessed dataset"
+example: "preprocessed.h5ad"
+info:
+  short_description: "Preprocessed dataset"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+      - type: string
+        name: error_test
+        description: "A made up uns variable to test if error is picked up"
+    ''')
 
 
 cmd = [
