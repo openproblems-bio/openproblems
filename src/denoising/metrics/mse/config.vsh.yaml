@@ -27,6 +27,7 @@ platforms:
           - "anndata>=0.8"
           - scanpy
           - scprep
+          - pyyaml
   - type: nextflow
     directives: 
       label: [ midmem, midcpu ]
