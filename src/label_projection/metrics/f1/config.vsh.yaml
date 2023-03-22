@@ -7,20 +7,20 @@ functionality:
     v1_url: openproblems/tasks/label_projection/metrics/f1.py
     v1_commit: bb16ca05ae1ce20ce59bfa7a879641b9300df6b0
     metrics:
-      - id: f1_weighted
-        label: F1 weighted
+      - metric_id: f1_weighted
+        metric_name: F1 weighted
         description: Calculates the F1 score for each label, and find their average weighted by support (the number of true instances for each label). This alters 'macro' to account for label imbalance; it can result in an F-score that is not between precision and recall.
         min: 0
         max: 1
         maximize: true
-      - id: f1_macro
-        label: F1 macro
+      - metric_id: f1_macro
+        metric_name: F1 macro
         description: Calculates the F1 score for each label, and find their unweighted mean. This does not take label imbalance into account.
         min: 0
         max: 1
         maximize: true
-      - id: f1_micro
-        label: F1 micro
+      - metric_id: f1_micro
+        metric_name: F1 micro
         description: Calculates the F1 score globally by counting the total true positives, false negatives and false positives.
         min: 0
         max: 1
@@ -35,5 +35,6 @@ platforms:
       - type: python
         packages:
           - scikit-learn
+          - pyyaml
           - "anndata>=0.8"
   - type: nextflow

@@ -5,7 +5,7 @@ functionality:
   description: "Baseline method using majority voting"
   info:
     subtype: negative_control
-    label: Majority Vote
+    method_name: Majority Vote
     v1_url: openproblems/tasks/label_projection/methods/baseline.py
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
     variants:
@@ -21,6 +21,7 @@ platforms:
       - type: python
         packages:
           - "anndata>=0.8"
+          - pyyaml
   - type: nextflow
     directives: 
       label: [ lowmem, lowcpu ]

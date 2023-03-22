@@ -4,8 +4,8 @@ functionality:
   namespace: "dimensionality_reduction/methods"
   description: "Uniform Manifold Approximation and Projection for Dimension Reduction"
   info:
-    label: UMAP
-    paper_doi: "10.1038/s41587-020-00801-7"
+    method_name: UMAP
+    paper_reference : "mcinnes2018umap"
     code_url: https://github.com/lmcinnes/umap
     v1_url: openproblems/tasks/dimensionality_reduction/methods/umap.py
     v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
@@ -38,6 +38,7 @@ platforms:
         packages:
           - scanpy
           - "anndata>=0.8"
+          - pyyaml
           - umap-learn
   - type: nextflow
     directives: 

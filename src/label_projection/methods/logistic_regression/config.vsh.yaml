@@ -4,10 +4,11 @@ functionality:
   namespace: "label_projection/methods"
   description: "Logistic regression method"
   info:
-    label: Logistic Regression
-    paper_name: "Applied Logistic Regression"
-    paper_url: "https://books.google.com/books?id=64JYAwAAQBAJ"
-    paper_year: 2013
+    method_name: Logistic Regression
+    # paper_name: "Applied Logistic Regression"
+    # paper_url: "https://books.google.com/books?id=64JYAwAAQBAJ"
+    # paper_year: 2013
+    paper_reference: "hosmer2013applied"
     code_url: https://github.com/scikit-learn/scikit-learn
     doc_url: "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html"
     v1_url: openproblems/tasks/label_projection/methods/logistic_regression.py
@@ -27,6 +28,7 @@ platforms:
       - type: python
         packages:
           - scikit-learn
+          - pyyaml
           - "anndata>=0.8"
   - type: nextflow
     directives: 

@@ -25,6 +25,8 @@
 
 * `get_task_info`: extract task info
 
+* `unit_test`: Common unit test that can be used by all tasks
+
 * `check_dataset_schema`: check if the dataset used has the required fields defined in the api `anndata_*.yaml` files
 
 ## datasets
