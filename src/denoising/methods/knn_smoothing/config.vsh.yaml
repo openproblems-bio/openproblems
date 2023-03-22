@@ -22,6 +22,7 @@ platforms:
       - type: python
         packages:
           - "anndata>=0.8"
+          - pyyaml
           - scipy
         github:
           - scottgigante-immunai/knn-smoothing@python_package

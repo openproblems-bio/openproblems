@@ -20,6 +20,7 @@ platforms:
     setup:
       - type: python
         packages:
+          - pyyaml
           - "anndata>=0.8"
   - type: nextflow
     directives: 

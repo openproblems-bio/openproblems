@@ -5,7 +5,7 @@ functionality:
   description: "Negative control method which generates random labels"
   info:
     subtype: negative_control
-    label: Random Labels
+    method_name: Random Labels
     v1_url: openproblems/tasks/label_projection/methods/baseline.py
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
     preferred_normalization: counts
@@ -21,6 +21,7 @@ platforms:
       - type: python
         packages:
           - scanpy
+          - pyyaml
           - "anndata>=0.8"
   - type: nextflow
     directives: 
