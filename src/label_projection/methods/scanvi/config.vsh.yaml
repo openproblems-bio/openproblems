@@ -27,7 +27,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: nvcr.io/nvidia/pytorch:22.09-py3
+    image: nvcr.io/nvidia/pytorch:22.12-py3
     setup:
       - type: python
         packages: 
