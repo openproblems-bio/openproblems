@@ -37,9 +37,7 @@ functionality:
     - type: python_script
       path: script.py
   test_resources:
-    - path: ../../../resources_test
-    - path: ../../../src
-      dest: src 
+    - path: ../../../resources_test/common/pancreas
     - type: python_script
       path: test.py
 platforms:
