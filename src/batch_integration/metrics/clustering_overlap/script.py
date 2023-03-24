@@ -1,5 +1,6 @@
 import anndata as ad
-from scib.metrics.clustering import opt_louvain
+import scanpy as sc
+from scib.metrics.clustering import cluster_optimal_resolution
 from scib.metrics import ari, nmi
 
 ## VIASH START
@@ -16,14 +17,12 @@ meta = {
 print('Read input', flush=True)
 input = ad.read_h5ad(par['input_integrated'])
 
-print('Run Louvain clustering', flush=True)
-opt_louvain(
-    input,
+print('Run optimal Leiden clustering', flush=True)
+cluster_optimal_resolution(
+    adata=input,
     label_key='label',
     cluster_key='cluster',
-    plot=False,
-    inplace=True,
-    force=True
+    cluster_function=sc.tl.leiden,
 )
 
 print('Compute ARI score', flush=True)
