@@ -19,7 +19,7 @@ print('compute score', flush=True)
 score = silhouette_batch(
     adata,
     batch_key='batch',
-    group_key='label',
+    lable_key='label',
     embed='X_emb',
 )
 

@@ -18,7 +18,7 @@ adata = ad.read_h5ad(par['input_integrated'])
 print('compute score')
 score = silhouette(
     adata,
-    group_key='label',
+    label_key='label',
     embed='X_emb'
 )
 
