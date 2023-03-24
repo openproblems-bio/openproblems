@@ -1,0 +1,26 @@
+__merge__: "anndata_unintegrated.yaml"
+type: file
+description: Integrated AnnData HDF5 file.
+example: input.h5ad
+info:
+  prediction_type: feature
+  short_description: "Integrated Feature"
+  slots:
+    layers:
+      - type: double
+        name: corrected_counts
+        description: Corrected counts after integration
+        required: true
+    uns:
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"
+        required: true
+      - type: boolean
+        name: hvg
+        description: If the method was done on hvg or full
+        required: true
+      - type: string
+        name: output_type
+        description: what kind of output has been generated
+        required: true

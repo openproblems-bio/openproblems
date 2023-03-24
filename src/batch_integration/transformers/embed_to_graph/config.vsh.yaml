@@ -1,0 +1,25 @@
+functionality:
+  name: embed_to_graph
+  namespace: batch_integration/transformers
+  description: "Transform an embedded integration to a graph integration"
+  info:
+    type: method
+    method_name: Embedding to Graph
+  arguments:
+    - __merge__: ../../api/anndata_integrated_embedding.yaml
+      name: --input
+    - __merge__: ../../api/anndata_integrated_graph.yaml
+      name: --output
+      direction: output
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: python:3.10
+    setup:
+      - type: python
+        pypi:
+          - scanpy
+          - pyyaml
+  - type: nextflow

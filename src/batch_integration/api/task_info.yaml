@@ -1,0 +1,24 @@
+task_id: batch_integration
+task_name: Batch Integration
+v1_url: openproblems/tasks/batch_integration/README.md
+v1_commit: 637163fba7d74ab5393c2adbee5354dcf4d46f85
+summary: Remove unwanted batch effects from scRNA data while retaining biologically meaningful variation.
+description: |
+  ## Motivation
+  
+  As single-cell technologies advance, single-cell datasets are growing both in size and complexity.
+  Especially in consortia such as the Human Cell Atlas, individual studies combine data from multiple labs, each sequencing multiple individuals possibly with different technologies.
+  This gives rise to complex batch effects in the data that must be computationally removed to perform a joint analysis.
+  These batch integration methods must remove the batch effect while not removing relevant biological information.
+  Currently, over 200 tools exist that aim to remove batch effects scRNA-seq datasets [@zappia2018exploring].
+  These methods balance the removal of batch effects with the conservation of nuanced biological information in different ways.
+  This abundance of tools has complicated batch integration method choice, leading to several benchmarks on this topic [@luecken2020benchmarking; @tran2020benchmark; @chazarragil2021flexible; @mereu2020benchmarking].
+  Yet, benchmarks use different metrics, method implementations and datasets. Here we build a living benchmarking task for batch integration methods with the vision of improving the consistency of method evaluation.
+
+  ## Task Description
+  
+  In this task we evaluate batch integration methods on their ability to remove batch effects in the data while conserving variation attributed to biological effects.
+  As input, methods require either normalised or unnormalised data with multiple batches and consistent cell type labels.
+  The batch integrated output can be a feature matrix, a low dimensional embedding and/or a neighbourhood graph.
+  The respective batch-integrated representation is then evaluated using sets of metrics that capture how well batch effects are removed and whether biological variance is conserved.
+  We have based this particular task on the latest, and most extensive benchmark of single-cell data integration methods [@luecken2022benchmarking].

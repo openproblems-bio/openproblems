@@ -1,0 +1,34 @@
+# use method api spec
+__merge__: ../../api/comp_method_feature.yaml
+functionality:
+  name: scanorama_feature
+  description: "Efficient integration of heterogeneous single-cell
+    transcriptomes using Scanorama"
+  info:
+    method_name: Scanorama
+    paper_reference: "hie2019efficient"
+    code_url: https://github.com/brianhie/scanorama
+    v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/methods/scanorama.py
+    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+    preferred_normalization: log_cpm
+    variants:
+      scanorama_feature_full_unscaled:
+      scanorama_feature_hvg_unscaled:
+        hvg: true
+      scanorama_feature_hvg_scaled:
+        hvg: true
+        preferred_normalization: log_cpm_scaled
+      scanorama_feature_full_scaled:
+        preferred_normalization: log_cpm_scaled
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: mumichae/scib-base:1.1.3
+    setup:
+      - type: python
+        pypi:
+          - scanorama
+          - pyyaml
+  - type: nextflow

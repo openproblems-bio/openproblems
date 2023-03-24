@@ -1,0 +1,25 @@
+functionality:
+  name: feature_to_embed
+  namespace: batch_integration/transformers
+  description: "Transform a feature integration to an embedded integration"
+  info:
+    type: method
+    method_name: Feature to Embed
+  arguments:
+    - __merge__: ../../api/anndata_integrated_feature.yaml
+      name: --input
+    - __merge__: ../../api/anndata_integrated_embedding.yaml
+      name: --output
+      direction: output
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: python:3.10
+    setup:
+      - type: python
+        pypi: 
+          - pyyaml
+          - scanpy
+  - type: nextflow
