@@ -10,7 +10,7 @@ feature matrices with subsequent postprocessing to generate a joint embedding. O
 sub-tasks for batch integration can be found for:
 
 * [graphs](../batch_integration_graph/), and
-* [corrected features](../batch_integration_features)
+* [corrected features](../batch_integration_feature/)
 
 This sub-task was taken from a
 [benchmarking study of data integration
