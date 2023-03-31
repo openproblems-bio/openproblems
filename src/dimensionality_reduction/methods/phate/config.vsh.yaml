@@ -2,11 +2,21 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "phate"
   namespace: "dimensionality_reduction/methods"
-  description: "Potential of heat-diffusion for affinity-based transition embedding"
   info:
-    method_name: PHATE
-    paper_reference: "moon2019visualizing"
-    code_url: https://github.com/KrishnaswamyLab/PHATE/
+    pretty_name: PHATE
+    summary: "Preservating trajectories in a dataset by using heat diffusion potential via an affinity-based method that creates an embedding from dominant eigenvalues of a Markov transition matrix."
+    description: |
+      "PHATE or “Potential of Heat - diffusion for Affinity - based Transition
+      Embedding” uses the potential of heat diffusion to preserve trajectories in a
+      dataset via a diffusion process. It is an affinity - based method that
+      creates an embedding by finding the dominant eigenvalues of a Markov
+      transition matrix. We evaluate several variants including using the
+      recommended square - root transformed CPM matrix as input, this input with
+      the gamma parameter set to zero and the normal logCPM transformed matrix with
+      and without HVG selection."
+    reference: "moon2019visualizing"
+    repository_url: "https://github.com/KrishnaswamyLab/PHATE"
+    documentation_url: "https://github.com/KrishnaswamyLab/PHATE#readme"
     v1_url: openproblems/tasks/dimensionality_reduction/methods/phate.py
     v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
     preferred_normalization: sqrt_cpm

@@ -1,6 +1,7 @@
 # see https://github.com/openproblems-bio/openproblems/blob/9ebb777b3b76337e731a3b99f4bf39462a15c4cc/openproblems/tasks/dimensionality_reduction/methods/ivis.py
 
 __merge__: ../../api/comp_method.yaml
+status: disabled #Temporarily removed from OPv1 see commit 93d2161a08da3edf249abedff5111fb5ce527552
 functionality:
   name: "ivis"
   namespace: "dimensionality_reduction/methods"
@@ -9,9 +10,14 @@ functionality:
     ivis preserves global data structures in a low-dimensional space, adds new data points to existing embeddings using
     a parametric mapping function, and scales linearly to millions of observations.
   info:
-    method_name: "ivis"
-    paper_reference: szubert2019structurepreserving
-    code_url: https://github.com/beringresearch/ivis
+    pretty_name: "ivis"
+    summary:
+    description: |
+      "ivis is a machine learning library for reducing dimensionality of very large datasets using Siamese Neural Networks.
+      ivis preserves global data structures in a low-dimensional space, adds new data points to existing embeddings using
+      a parametric mapping function, and scales linearly to millions of observations."
+      reference: szubert2019structurepreserving
+    repository_url: https://github.com/beringresearch/ivis
     v1_url: openproblems/tasks/dimensionality_reduction/methods/ivis.py
     v1_commit: 9ebb777b3b76337e731a3b99f4bf39462a15c4cc
     preferred_normalization: log_cpm

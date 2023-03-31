@@ -8,17 +8,23 @@ functionality:
     v1_commit: b353a462f6ea353e0fc43d0f9fcbbe621edc3a0b
     v1_note: This metric was ported but will probably be removed soon.
     metrics:
-      - metric_id: rmse
-        metric_name: RMSE
-        metric_description: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of an SVD."
-        paper_reference: kruskal1964mds
+      - name: rmse
+        pretty_name: RMSE
+        summary: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of an SVD."
+        description: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of an SVD."
+        reference: kruskal1964mds
+        repository_url: ""
+        documentation_url: ""
         min: 0
         max: +inf
         maximize: false
-      - metric_id: rmse_spectral
-        metric_name: RMSE Spectral
-        metric_description: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of a spectral embedding."
-        paper_reference: coifman2006diffusion
+      - name: rmse_spectral
+        pretty_name: RMSE Spectral
+        summary: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of a spectral embedding."
+        description: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of a spectral embedding."
+        reference: coifman2006diffusion
+        repository_url: ""
+        documentation_url: ""
         min: 0
         max: +inf
         maximize: false
