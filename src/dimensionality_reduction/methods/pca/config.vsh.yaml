@@ -14,7 +14,7 @@ functionality:
       HVGs.' 
     reference: pearson1901pca
     repository_url: "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html"
-    documentatoin_url: "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html"
+    documentation_url: "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html"
     v1_url: openproblems/tasks/dimensionality_reduction/methods/pca.py
     v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
     preferred_normalization: log_cpm
