@@ -4,10 +4,16 @@ functionality:
   namespace: "label_projection/methods"
   description: "XGBoost: A Scalable Tree Boosting System"
   info:
-    method_name: XGBoost
-    paper_reference: "chen2016xgboost"
-    code_url: "https://github.com/dmlc/xgboost"
-    doc_url: "https://xgboost.readthedocs.io/en/stable/index.html"
+    pretty_name: XGBoost
+    summary: "XGBoost is a decision tree model that averages multiple trees with gradient boosting."
+    description: |
+      "XGBoost is a gradient boosting decision tree model that learns multiple tree
+      structures in the form of a series of input features and their values,
+      leading to a prediction decision, and averages predictions from all its
+      trees. Here, input features are normalised gene expression values."
+    reference: "chen2016xgboost"
+    repository_url: "https://github.com/dmlc/xgboost"
+    documentation_url: "https://xgboost.readthedocs.io/en/stable/index.html"
     v1_url: openproblems/tasks/label_projection/methods/xgboost.py
     v1_commit: 123bb7b39c51c58e19ddf0fbbc1963c3dffde14c
     preferred_normalization: log_cpm
