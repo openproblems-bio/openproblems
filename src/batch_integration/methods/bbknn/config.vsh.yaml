@@ -2,11 +2,17 @@
 __merge__: ../../api/comp_method_graph.yaml
 functionality:
   name: bbknn
-  description: "BBKNN: fast batch alignment of single cell transcriptomes"
   info:
-    method_name: BBKNN
-    paper_reference: "polanski2020bbknn"
-    code_url: https://github.com/Teichlab/bbknn
+    pretty_name: BBKNN
+    summary: "BBKNN creates k nearest neighbours graph by identifying neighbours within batches, then combining and processing them with UMAP for visualization."
+    description: |
+      "BBKNN or batch balanced k nearest neighbours graph is built for each cell by
+      identifying its k nearest neighbours within each defined batch separately,
+      creating independent neighbour sets for each cell in each batch. These sets
+      are then combined and processed with the UMAP algorithm for visualisation."
+    reference: "polanski2020bbknn"
+    repository_url: "https://github.com/Teichlab/bbknn"
+    documentation_url: "https://github.com/Teichlab/bbknn#readme"
     v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/methods/bbknn.py
     v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     preferred_normalization: log_cpm

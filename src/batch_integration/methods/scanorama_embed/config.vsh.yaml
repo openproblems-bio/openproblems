@@ -2,12 +2,14 @@
 __merge__: ../../api/comp_method_embedding.yaml
 functionality:
   name: scanorama_embed
-  description: "Efficient integration of heterogeneous single-cell 
-    transcriptomes using Scanorama"
   info:
-    method_name: Scanorama
-    paper_reference: "hie2019efficient"
-    code_url: https://github.com/brianhie/scanorama
+    pretty_name: Scanorama
+    summary: "Efficient integration of heterogeneous single-cell 
+      transcriptomes using Scanorama"
+    description: 
+    reference: "hie2019efficient"
+    repository_url: "https://github.com/brianhie/scanorama"
+    documentation_url: "https://github.com/brianhie/scanorama#readme"
     v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/methods/scanorama.py
     v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     preferred_normalization: log_cpm

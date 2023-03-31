@@ -4,9 +4,9 @@ functionality:
   name: scvi
   description: Run scVI on adata object
   info:
-    method_name: scVI
-    paper_reference: "lopez2018deep"
-    code_url: https://github.com/YosefLab/scvi-tools"
+    pretty_name: scVI
+    reference: "lopez2018deep"
+    repository_url: https://github.com/YosefLab/scvi-tools"
     v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/methods/scvi.py
     v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     preferred_normalization: log_cpm

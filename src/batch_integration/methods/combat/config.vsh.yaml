@@ -2,12 +2,20 @@
 __merge__: ../../api/comp_method_feature.yaml
 functionality:
   name: combat
-  description: "Adjusting batch effects in microarray expression data using
-    empirical Bayes methods"
   info:
-    method_name: Combat
-    paper_reference: "hansen2012removing"
-    code_url: https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html
+    pretty_name: Combat
+    summary: "Adjusting batch effects in microarray expression data using
+      empirical Bayes methods"
+    description: |
+      "An Empirical Bayes (EB) approach to correct for batch effects. It
+      estimates batch-specific parameters by pooling information across genes in
+      each batch and shrinks the estimates towards the overall mean of the batch
+      effect estimates across all genes. These parameters are then used to adjust
+      the data for batch effects, leading to more accurate and reproducible
+      results."
+    reference: "hansen2012removing"
+    repository_url: "https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html"
+    documentation_url: "https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.combat.html"
     v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/methods/combat.py
     v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     preferred_normalization: log_cpm
