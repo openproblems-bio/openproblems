@@ -30,11 +30,15 @@ df <- map_df(configs, function(config) {
   info$task_id <- par$task_id
   info$method_id <- config$functionality$name
   info$namespace <- config$functionality$namespace
-  info$description <- config$functionality$description
   info$is_baseline <- grepl("control", info$type)
   info
 }) %>%
-  select(method_id, type, one_of("method_name"), everything())
+  rename(
+    method_name = pretty_name,
+    method_summary = description,
+    paper_reference = reference,
+    code_url = repository_url,
+  )
 
 jsonlite::write_json(
   purrr::transpose(df),
