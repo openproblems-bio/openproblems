@@ -5,9 +5,10 @@ functionality:
   description: Metrics that are based on computing the clustering overlap.
   info:
     metrics:
-      - metric_id: ari
-        metric_name: ARI
-        metric_description: |
+      - name: ari
+        pretty_name: ARI
+        summary: "Adjusted Rand Index compares clustering overlap, correcting for random labels and considering correct overlaps and disagreements."
+        description: |
           The Adjusted Rand Index (ARI) compares the overlap of two clusterings;
           it considers both correct clustering overlaps while also counting correct
           disagreements between two clusterings.
@@ -17,15 +18,18 @@ functionality:
           An ARI of 0 or 1 corresponds to random labeling or a perfect match,
           respectively.
           We used the scikit-learn implementation of the ARI.
-        paper_reference: hubert1985comparing
+        reference: hubert1985comparing
+        repostiory_url: ""
+        documentation_url: ""
         min: 0
         max: 1
         maximize: true
         v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/metrics/ari.py
         v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
-      - metric_id: nmi
-        metric_name: NMI
-        metric_description: |
+      - name: nmi
+        pretty_name: NMI
+        summary: "NMI compares overlap by scaling using mean entropy terms and optimizing Louvain clustering to obtain the best match between clusters and labels."
+        description: |
           Normalized Mutual Information (NMI) compares the overlap of two clusterings.
           We used NMI to compare the cell-type labels with Louvain clusters computed on
           the integrated dataset. The overlap was scaled using the mean of the entropy terms
@@ -35,7 +39,9 @@ functionality:
           Louvain clustering was performed at a resolution range of 0.1 to 2 in steps of 0.1,
           and the clustering output with the highest NMI with the label set was used. We
           the scikit-learn implementation of NMI.
-        paper_reference: amelio2015normalized
+        reference: amelio2015normalized
+        documentation_url: ""
+        repository_url: ""
         min: 0
         max: 1
         maximize: true
