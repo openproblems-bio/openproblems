@@ -18,7 +18,14 @@ configs <- yaml::yaml.load(ns_list$stdout)
 
 df <- map_df(configs, function(config) {
   if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") return(NULL)
-  info <- as_tibble(config$functionality$info)
+  info <- config$functionality$info
+  # remove empty fields
+  for (n in names(info)) {
+    if (length(info[[n]]) == 0) {
+      info[[n]] <- NA
+    }
+  }
+  info <- as_tibble(info)
   info$config_path <- gsub(".*\\./", "", config$info$config)
   info$task_id <- par$task_id
   info$method_id <- config$functionality$name
