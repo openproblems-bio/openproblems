@@ -1,14 +1,14 @@
 # TODO: project config is no longer mounted
 functionality:
-  name: create_skeleton
+  name: create_component
   namespace: common
   description: |
-    Create a skeleton Viash component.
+    Create a component Viash component.
     
     Usage:
     ```
-    bin/create_skeleton --task denoising --type method --language r --name foo
-    bin/create_skeleton --task denoising --type metric --language python --name bar
+    bin/create_component --task denoising --type method --language r --name foo
+    bin/create_component --task denoising --type metric --language python --name bar
     ```
   arguments:
     - type: string
