@@ -18,7 +18,7 @@ mkdir -p $DATASET_DIR
 
 # process dataset
 echo process data...
-viash run src/batch_integration/split_dataset/config.vsh.yaml -- \
+viash run src/batch_integration/process_dataset/config.vsh.yaml -- \
   --input $RAW_DATA \
   --output $DATASET_DIR/unintegrated.h5ad \
   --hvgs 100

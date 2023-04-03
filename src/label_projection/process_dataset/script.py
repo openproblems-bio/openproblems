@@ -18,8 +18,8 @@ par = {
     'output_solution': 'solution.h5ad'
 }
 meta = {
-    'resources_dir': 'src/label_projection/split_dataset',
-    'config': 'src/label_projection/split_dataset/.config.vsh.yaml'
+    'resources_dir': 'src/label_projection/process_dataset',
+    'config': 'src/label_projection/process_dataset/.config.vsh.yaml'
 }
 ## VIASH END
 

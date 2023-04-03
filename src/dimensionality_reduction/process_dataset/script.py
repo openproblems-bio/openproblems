@@ -13,7 +13,7 @@ par = {
 }
 meta = {
     "functionality_name": "split_data",
-    "config": "src/dimensionality_reduction/split_dataset/.config.vsh.yaml"
+    "config": "src/dimensionality_reduction/process_dataset/.config.vsh.yaml"
 }
 ## VIASH END
 

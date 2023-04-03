@@ -54,7 +54,7 @@ fi
 export NXF_VER=22.04.5
 nextflow \
   run . \
-  -main-script target/nextflow/denoising/split_dataset/main.nf \
+  -main-script target/nextflow/denoising/process_dataset/main.nf \
   -profile docker \
   -resume \
   -params-file $params_file \

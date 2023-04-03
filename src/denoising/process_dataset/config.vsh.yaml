@@ -1,6 +1,6 @@
-__merge__: ../api/comp_split_dataset.yaml
+__merge__: ../api/comp_process_dataset.yaml
 functionality:
-  name: "split_dataset"
+  name: "process_dataset"
   namespace: "denoising"
   description: |
     Split data using molecular cross-validation.
