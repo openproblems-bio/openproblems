@@ -19,7 +19,7 @@ functionality:
           respectively.
           We used the scikit-learn implementation of the ARI.
         reference: hubert1985comparing
-        repostiory_url: ""
+        repository_url: ""
         documentation_url: ""
         min: 0
         max: 1

@@ -13,8 +13,8 @@ functionality:
         summary: "Average silhouette of labels"
         description: "The absolute silhouette width is computed on cell identity labels, measuring their compactness."
         reference: luecken2022benchmarking
-        repository_url:
-        description_url:
+        repository_url: ""
+        documentation_url: ""
         min: 0
         max: 1
         maximize: true
