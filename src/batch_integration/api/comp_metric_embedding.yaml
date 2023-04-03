@@ -11,6 +11,8 @@ functionality:
   test_resources:
     - path: ../../../../resources_test/batch_integration/pancreas
     - type: python_script
+      path: ../../../common/unit_test/check_metric_config.py
+    - type: python_script
       dest: test.py
       text: |
         import sys
@@ -65,7 +67,7 @@ functionality:
 
         print(">> Check that score makes sense", flush=True)
         metrics_info = {
-            metric["metric_id"]: metric
+            metric["name"]: metric
             for metric in config["functionality"]["info"]["metrics"]
         }
 

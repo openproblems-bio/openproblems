@@ -15,7 +15,9 @@ functionality:
       default: false
       required: false
   test_resources:
-    - path: ../../../../resources_test/batch_integration/pancreas/
+    - path: ../../../../resources_test/batch_integration/pancreas
+    - type: python_script
+      path: ../../../common/unit_test/check_method_config.py
     - type: python_script
       path: generic_test.py
       text: |
