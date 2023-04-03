@@ -11,7 +11,7 @@ meta = {
 ## VIASH END
 
 def check_metric(metric: Dict[str, str])  -> str:
-    assert "name" in metric is not None, "metric_id not a field or is empty"
+    assert "name" in metric is not None, "name not a field or is empty"
     assert "pretty_name" in metric is not None, "pretty_name not a field in metric or is empty"
     assert "summary" in metric is not None, "summary not a field in metric or is empty"
     assert "description" in metric is not None, "description not a field in metric or is empty"
