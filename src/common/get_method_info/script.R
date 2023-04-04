@@ -16,32 +16,35 @@ ns_list <- processx::run(
 )
 configs <- yaml::yaml.load(ns_list$stdout)
 
-df <- map_df(configs, function(config) {
+out <- map(configs, function(config) {
   if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") return(NULL)
   info <- config$functionality$info
-  # remove empty fields
-  for (n in names(info)) {
-    if (length(info[[n]]) == 0) {
-      info[[n]] <- NA
-    }
-  }
-  info <- as_tibble(info)
+
+  # add extra info
   info$config_path <- gsub(".*\\./", "", config$info$config)
   info$task_id <- par$task_id
   info$method_id <- config$functionality$name
   info$namespace <- config$functionality$namespace
   info$is_baseline <- grepl("control", info$type)
+
+  # rename fields to v1 format
+  info$method_name <- info$pretty_name
+  info$pretty_name <- NULL
+  info$method_summary <- info$description
+  info$description <- NULL
+  info$paper_reference <- info$reference
+  info$reference <- NULL
+  info$code_url <- info$repository_url
+  info$repository_url <- NULL
+
+  # todo: show warning when certain data is missing and return null?
+
+  # return output
   info
-}) %>%
-  rename(
-    method_name = pretty_name,
-    method_summary = description,
-    paper_reference = reference,
-    code_url = repository_url,
-  )
+})
 
 jsonlite::write_json(
-  purrr::transpose(df),
+  out,
   par$output,
   auto_unbox = TRUE,
   pretty = TRUE
