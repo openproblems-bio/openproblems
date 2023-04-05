@@ -87,7 +87,7 @@ jobs:
           startsWith(github.ref, 'refs/heads/main') ||
           endsWith(github.event.head_commit.message, '# publish')
         )
-      uses: peter-evans/create-pull-request@v4
+      uses: peter-evans/create-pull-request@v5
       with:
         base: main
         branch: ${{ env.UPDATE_BRANCH_NAME }}
