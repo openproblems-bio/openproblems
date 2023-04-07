@@ -126,7 +126,7 @@ Detailed overview of a task folder (e.g. `src/label_projection`):
     ├── metrics                Label projection metric components.
     ├── resources_scripts      The scripts needed to run the benchmark.
     ├── resources_test_scripts The scripts needed to generate the test resources (which are needed for unit testing).
-    ├── process_dataset          A component that masks a common dataset for use in the benchmark
+    ├── process_dataset        A component that masks a common dataset for use in the benchmark
     └── workflows              The benchmarking workflow.
 
 
