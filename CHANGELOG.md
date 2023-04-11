@@ -1,7 +1,7 @@
 
 # openproblems-v2 0.1.0
 
-* updated method and metric info fields according to [#93](https://github.com/openproblems-bio/openproblems-v2/issues/93)
+
 
 ## common
 
@@ -26,6 +26,10 @@
 * `check_dataset_schema`: check if the dataset used has the required fields defined in the api `anndata_*.yaml` files
   
 * `Create_component`: creates a template folder with a viash config and script file depending on the task api.
+
+### MINOR CHANGES
+
+* Refactor and standardize metric and method info fields (#99).
 
 ## migration
 
