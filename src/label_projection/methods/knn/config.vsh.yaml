@@ -2,15 +2,20 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "knn"
   namespace: "label_projection/methods"
-  description: "K-Nearest Neighbors classifier"
   info:
-    method_name: KNN
-    # paper_name: "Nearest neighbor pattern classification"
-    # paper_url: "https://doi.org/10.1109/TIT.1967.1053964"
-    # paper_year: 1967
-    paper_reference : "cover1967nearest"
-    code_url: https://github.com/scikit-learn/scikit-learn
-    doc_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html"
+    pretty_name: KNN
+    summary: "Assumes cells with similar gene expression belong to the same cell type, and assigns an unlabelled cell the most common cell type among its k nearest neighbors in PCA space."
+    description: |
+      'Using the "k-nearest neighbours" approach, which is a
+      popular machine learning algorithm for classification and regression tasks.
+      The assumption underlying KNN in this context is that cells with similar gene
+      expression profiles tend to belong to the same cell type. For each unlabelled
+      cell, this method computes the $k$ labelled cells (in this case, 5) with the
+      smallest distance in PCA space, and assigns that cell the most common cell
+      type among its $k$ nearest neighbors.'
+    reference : "cover1967nearest"
+    repository_url: https://github.com/scikit-learn/scikit-learn
+    documentation_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html"
     v1_url: openproblems/tasks/label_projection/methods/knn_classifier.py
     v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
     preferred_normalization: log_cpm

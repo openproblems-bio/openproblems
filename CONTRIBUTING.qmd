@@ -64,7 +64,7 @@ viash ns build --query 'label_projection|common' --parallel --setup cachedbuild
 ```
 
     In development mode with 'dev'.
-    Exporting split_dataset (label_projection) =docker=> target/docker/label_projection/split_dataset
+    Exporting process_dataset (label_projection) =docker=> target/docker/label_projection/process_dataset
     Exporting accuracy (label_projection/metrics) =docker=> target/docker/label_projection/metrics/accuracy
     Exporting random_labels (label_projection/control_methods) =docker=> target/docker/label_projection/control_methods/random_labels
     [notice] Building container 'label_projection/control_methods_random_labels:dev' with Dockerfile
@@ -126,7 +126,7 @@ Detailed overview of a task folder (e.g. `src/label_projection`):
     ├── metrics                Label projection metric components.
     ├── resources_scripts      The scripts needed to run the benchmark.
     ├── resources_test_scripts The scripts needed to generate the test resources (which are needed for unit testing).
-    ├── split_dataset          A component that masks a common dataset for use in the benchmark
+    ├── process_dataset        A component that masks a common dataset for use in the benchmark
     └── workflows              The benchmarking workflow.
 
 
@@ -174,7 +174,7 @@ functionality:
     # paper_url: "https://doi.org/10.1109/TIT.1967.1053964"
     # paper_year: 1967
     
-    code_url: "https://github.com/my_organisation/foo"
+    repository_url: "https://github.com/my_organisation/foo"
   resources:
     - type: python_script
       path: script.py

@@ -4,8 +4,8 @@ library(rlang)
 ## VIASH START
 par <- list(
   input = ".",
-  task_id = "label_projection",
-  output = "output/metrics.json"
+  task_id = "batch_integration",
+  output = "output/metric_info.json"
 )
 ## VIASH END
 
@@ -27,8 +27,14 @@ df <- map_df(configs, function(config) {
   info$v1_url <- config$functionality$info$v1_url
   info$v1_commit <- config$functionality$info$v1_commit
   info
+  info
 }) %>%
-  select(metric_id, everything())
+rename(
+  metric_id = name,
+  metric_name = pretty_name,
+  metric_summary = description,
+  paper_reference = reference,
+)
 
 jsonlite::write_json(
   purrr::transpose(df),

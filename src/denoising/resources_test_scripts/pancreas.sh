@@ -20,7 +20,7 @@ fi
 mkdir -p $DATASET_DIR
 
 # split dataset
-viash run src/denoising/split_dataset/config.vsh.yaml -- \
+viash run src/denoising/process_dataset/config.vsh.yaml -- \
     --input $RAW_DATA \
     --output_train $DATASET_DIR/train.h5ad \
     --output_test $DATASET_DIR/test.h5ad \

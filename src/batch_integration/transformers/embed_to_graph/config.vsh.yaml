@@ -4,7 +4,7 @@ functionality:
   description: "Transform an embedded integration to a graph integration"
   info:
     type: method
-    method_name: Embedding to Graph
+    pretty_name: Embedding to Graph
   arguments:
     - __merge__: ../../api/anndata_integrated_embedding.yaml
       name: --input

@@ -2,30 +2,27 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "alra"
   namespace: "denoising/methods"
-  description: |
-    Adaptively-thresholded Low Rank Approximation (ALRA). 
-    
-    ALRA is a method for imputation of missing values in single cell RNA-sequencing data, 
-    described in the preprint, "Zero-preserving imputation of scRNA-seq data using low-rank approximation" 
-    available [here](https://www.biorxiv.org/content/early/2018/08/22/397588). Given a 
-    scRNA-seq expression matrix, ALRA first computes its rank-k approximation using randomized SVD. 
-    Next, each row (gene) is thresholded by the magnitude of the most negative value of that gene. 
-    Finally, the matrix is rescaled.
   info:
-    method_name: ALRA
-    paper_reference: "linderman2018zero"
-    code_url: "https://github.com/KlugerLab/ALRA"
-    doc_url: https://github.com/KlugerLab/ALRA/blob/master/README.md
+    pretty_name: ALRA
+    summary: "ALRA imputes missing values in scRNA-seq data by computing rank-k approximation, thresholding by gene, and rescaling the matrix."
+    description: |
+      "Adaptively-thresholded Low Rank Approximation (ALRA). 
+      
+      ALRA is a method for imputation of missing values in single cell RNA-sequencing data, 
+      described in the preprint, "Zero-preserving imputation of scRNA-seq data using low-rank approximation" 
+      available [here](https://www.biorxiv.org/content/early/2018/08/22/397588). Given a 
+      scRNA-seq expression matrix, ALRA first computes its rank-k approximation using randomized SVD. 
+      Next, each row (gene) is thresholded by the magnitude of the most negative value of that gene. 
+      Finally, the matrix is rescaled."
+    reference: "linderman2018zero"
+    repository_url: "https://github.com/KlugerLab/ALRA"
+    documentation_url: https://github.com/KlugerLab/ALRA/blob/master/README.md
     v1_url: openproblems/tasks/denoising/methods/alra.py
     v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     variants: 
       alra:
     preferred_normalization: counts
   arguments:
-    - name: "--layer_input"
-      type: string
-      default: "counts"
-      description: Which layer to use as input.
     - name: "--epochs"
       type: "integer"
       default: 300

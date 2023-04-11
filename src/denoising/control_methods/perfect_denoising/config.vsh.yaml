@@ -1,11 +1,12 @@
 __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "perfect_denoising"
-  namespace: "denoising/control_methods"
-  description: "Negative control by copying the train counts"
+  namespace: "denoising/control_methods" 
   info:
     subtype: positive_control
-    method_name: Perfect Denoising
+    pretty_name: Perfect Denoising
+    summary: "Positive control by copying the test counts"
+    description: "This baseline serves as a positive control, where the test data is copied 1-to-1 to the denoised data. This makes it seem as if the data is perfectly denoised as it will be compared to the test data in the metrics."
     v1_url: openproblems/tasks/denoising/methods/baseline.py
     v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     variants: 

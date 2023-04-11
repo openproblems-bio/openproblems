@@ -2,15 +2,20 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "mlp"
   namespace: "label_projection/methods"
-  description: "Multilayer perceptron"
   info:
-    method_name: Multilayer perceptron
-    # paper_name: "Connectionist learning procedures"
-    # paper_url: "https://doi.org/10.1016/0004-3702(89)90049-0"
-    # paper_year: 1990
-    paper_reference: "hinton1989connectionist"
-    code_url: https://github.com/scikit-learn/scikit-learn
-    doc_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html"
+    pretty_name: Multilayer perceptron
+    summary: "A neural network with 100-dimensional PCA input, two hidden layers, and gradient descent weight updates to minimize cross entropy loss."
+    description: |
+      "Multi-Layer Perceptron is a type of artificial neural network that
+      consists of multiple layers of interconnected neurons. Each neuron computes a
+      weighted sum of all neurons in the previous layer and transforms it with
+      nonlinear activation function. The output layer provides the final
+      prediction, and network weights are updated by gradient descent to minimize
+      the cross entropy loss. Here, the input data is 100-dimensional whitened PCA
+      coordinates for each cell, and we use two hidden layers of 100 neurons each."
+    reference: "hinton1989connectionist"
+    repository_url: https://github.com/scikit-learn/scikit-learn
+    documentation_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html"
     v1_url: openproblems/tasks/label_projection/methods/mlp.py
     v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
     preferred_normalization: log_cpm

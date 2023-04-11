@@ -2,10 +2,11 @@ __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "majority_vote"
   namespace: "label_projection/control_methods"
-  description: "Baseline method using majority voting"
   info:
     subtype: negative_control
-    method_name: Majority Vote
+    pretty_name: Majority Vote
+    summary: "A baseline-type method that predicts all cells to belong to the most abundant cell type in the dataset"
+    description: "A baseline-type method that predicts all cells to belong to the most abundant cell type in the dataset"
     v1_url: openproblems/tasks/label_projection/methods/baseline.py
     v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
     variants:

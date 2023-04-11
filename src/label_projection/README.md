@@ -10,7 +10,7 @@ Structure of this task:
     ├── README.md                    This file
     ├── resources_scripts            Scripts to process the datasets
     ├── resources_test_scripts       Scripts to process the test resources
-    ├── split_dataset                Component to prepare common datasets
+    ├── process_dataset                Component to prepare common datasets
     └── workflows                    Pipelines to run the full benchmark
 
 Relevant links:

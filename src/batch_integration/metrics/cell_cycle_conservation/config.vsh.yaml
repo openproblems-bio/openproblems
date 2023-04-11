@@ -2,14 +2,17 @@
 __merge__: ../../api/comp_metric_embedding.yaml
 functionality:
   name: cell_cycle_conservation
-  description: Cell cycle conservation score based on cell cycle gene scoring
   info:
-    v1_url: openproblems/tasks/_batch_integration/batch_integration_embed/metrics/cc_score.py
-    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
-    paper_reference: luecken2022benchmarking
     metrics:
-      - metric_id: cell_cycle_conservation
-        metric_name: Cell Cycle Conservation
+      - name: cell_cycle_conservation
+        pretty_name: Cell Cycle Conservation
+        summary: "Cell cycle conservation score based on cell cycle gene scoring"
+        description: "The cell-cycle conservation score evaluates how well the cell-cycle effect can be captured before and after integration."
+        reference: luecken2022benchmarking
+        repository_url: ""
+        documentation_url: ""
+        v1_url: openproblems/tasks/_batch_integration/batch_integration_embed/metrics/cc_score.py
+        v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
         min: 0
         max: 1
         maximize: true

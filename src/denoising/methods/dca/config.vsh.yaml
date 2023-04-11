@@ -2,15 +2,17 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "dca"
   namespace: "denoising/methods"
-  description: |
-    Deep Count Autoencoder
-
-    Removes the dropout effect by taking the count structure, overdispersed nature and sparsity of the data into account 
-    using a deep autoencoder with zero-inflated negative binomial (ZINB) loss function.
   info:
-    method_name: DCA
-    paper_reference: "https://www.nature.com/articles/s41467-018-07931-2"
-    code_url: "https://github.com/theislab/dca"
+    pretty_name: DCA
+    summary: "A deep autoencoder with ZINB loss function to address the dropout effect in count data"
+    description: |
+      "Deep Count Autoencoder
+
+      Removes the dropout effect by taking the count structure, overdispersed nature and sparsity of the data into account 
+      using a deep autoencoder with zero-inflated negative binomial (ZINB) loss function."
+    reference: "eraslan2019single"
+    documentation_url: "https://github.com/theislab/dca#readme"
+    repository_url: "https://github.com/theislab/dca"
     v1_url: openproblems/tasks/denoising/methods/dca.py
     v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     variants: 

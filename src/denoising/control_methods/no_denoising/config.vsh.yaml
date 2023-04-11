@@ -2,10 +2,12 @@ __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "no_denoising"
   namespace: "denoising/control_methods"
-  description: "negative control by copying train counts"
+  
   info:
     subtype: negative_control
-    method_name: No Denoising
+    pretty_name: No Denoising
+    summary: "negative control by copying train counts"
+    description: "This baseline method serves as a negative control, where the denoised data is a copy of the unaltered training data. This represents the scoring threshold if denoising was not performed on the data."
     v1_url: openproblems/tasks/denoising/methods/baseline.py
     v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     variants:

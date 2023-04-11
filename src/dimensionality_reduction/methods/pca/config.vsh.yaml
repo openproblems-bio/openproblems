@@ -2,11 +2,19 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "pca"
   namespace: "dimensionality_reduction/methods"
-  description: "Principal component analysis (PCA)"
   info:
-    method_name: "PCA"
-    paper_reference: pearson1901pca
-    code_url: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+    pretty_name: "PCA"
+    summary: "A linear method that finds orthogonal directions to compute the two-dimensional embedding, capturing maximum variance from logCPM expression matrix with/without selecting 1000 HVGs."
+    description: |
+      'Principal Component Analysis is a linear method that finds orthogonal
+      directions in the data that capture the most variance. The first two
+      principal components are chosen as the two-dimensional embedding. We select
+      only the first two principal components as the two-dimensional embedding. PCA
+      is calculated on the logCPM expression matrix with and without selecting 1000
+      HVGs.' 
+    reference: pearson1901pca
+    repository_url: "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html"
+    documentation_url: "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html"
     v1_url: openproblems/tasks/dimensionality_reduction/methods/pca.py
     v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
     preferred_normalization: log_cpm

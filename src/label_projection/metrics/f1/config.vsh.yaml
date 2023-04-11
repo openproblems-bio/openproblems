@@ -2,26 +2,37 @@ __merge__: ../../api/comp_metric.yaml
 functionality:
   name: "f1"
   namespace: "label_projection/metrics"
-  description: "balanced F-score or F-measure"
   info:
     v1_url: openproblems/tasks/label_projection/metrics/f1.py
     v1_commit: bb16ca05ae1ce20ce59bfa7a879641b9300df6b0
     metrics:
-      - metric_id: f1_weighted
-        metric_name: F1 weighted
-        description: Calculates the F1 score for each label, and find their average weighted by support (the number of true instances for each label). This alters 'macro' to account for label imbalance; it can result in an F-score that is not between precision and recall.
+      - name: f1_weighted
+        pretty_name: F1 weighted
+        summary: "Average weigthed support between each labels F1 score"
+        description: "Calculates the F1 score for each label, and find their average weighted by support (the number of true instances for each label). This alters 'macro' to account for label imbalance; it can result in an F-score that is not between precision and recall."
+        reference: ""
+        repository_url: ""
+        documentation_url: ""
         min: 0
         max: 1
         maximize: true
-      - metric_id: f1_macro
-        metric_name: F1 macro
-        description: Calculates the F1 score for each label, and find their unweighted mean. This does not take label imbalance into account.
+      - name: f1_macro
+        pretty_name: F1 macro
+        summary: "Unweighted mean of each label F1-score"
+        description: "Calculates the F1 score for each label, and find their unweighted mean. This does not take label imbalance into account."
+        reference: ""
+        repository_url: ""
+        documentation_url: ""
         min: 0
         max: 1
         maximize: true
-      - metric_id: f1_micro
-        metric_name: F1 micro
-        description: Calculates the F1 score globally by counting the total true positives, false negatives and false positives.
+      - name: f1_micro
+        pretty_name: F1 micro
+        summary: "Calculation of TP, FN and FP."
+        description: "Calculates the F1 score globally by counting the total true positives, false negatives and false positives."
+        reference: ""
+        repository_url: ""
+        documentation_url: ""
         min: 0
         max: 1
         maximize: true

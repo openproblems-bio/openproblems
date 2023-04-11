@@ -1,6 +1,6 @@
 functionality:
   name: list_git_shas
-  namespace: common
+  namespace: migration
   description: "Extract git file info from a git repo"
   arguments:
     - name: --input

@@ -8,9 +8,13 @@ functionality:
     v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
     v1_note: This metric is already included in the 'coranking' component and can be removed.
     metrics:
-      - metric_id: trustworthiness
-        metric_name: Trustworthiness at k=15
-        paper_reference: venna2006local
+      - name: trustworthiness
+        pretty_name: Trustworthiness at k=15
+        summary: "A measurement of similarity between the rank of each point's nearest neighbors in the high-dimensional data and the reduced data."
+        description: "A measurement of similarity between the rank of each point's nearest neighbors in the high-dimensional data and the reduced data."
+        reference: venna2006local
+        repository_url: ""
+        documentation_url: ""
         min: 0
         max: 1
         maximize: true
