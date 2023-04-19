@@ -59,4 +59,8 @@ platforms:
         packages:
           - scanpy
           -  "anndata>=0.8"
+    test_setup:
+      - type: python
+        packages:
+          - viashpy
   - type: nextflow
