@@ -49,7 +49,7 @@ functionality:
   test_resources:
     - type: python_script
       path: test.py
-    - path: ../../../src
+    - path: /src
       dest: openproblems-v2/src
 platforms:
   - type: docker
