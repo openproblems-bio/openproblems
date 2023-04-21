@@ -23,7 +23,7 @@ output_file = "output.h5ad"
 
 cmd_args = [
     meta["executable"],
-    "--input_integrated", input_file,
+    "--input", input_file,
     "--output", output_file
 ]
 
