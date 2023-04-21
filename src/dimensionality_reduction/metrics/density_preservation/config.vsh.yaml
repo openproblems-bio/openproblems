@@ -29,7 +29,7 @@ platforms:
         packages:
           - scipy
           - numpy
-          - "anndata>=0.8"
+          - "anndata~=0.8.0"
           - pyyaml
           - umap-learn
   - type: nextflow

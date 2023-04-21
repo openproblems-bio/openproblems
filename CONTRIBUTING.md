@@ -215,7 +215,7 @@ platforms:
     setup:
       - type: python
         packages:
-          - anndata>=0.8
+          - anndata~=0.8.0
           - scikit-learn
   - type: nextflow
 ```
@@ -383,7 +383,7 @@ viash test src/label_projection/methods/foo/config.vsh.yaml
 
     Step 1/7 : FROM python:3.10
      ---> 465483cdaa4e
-    Step 2/7 : RUN pip install --upgrade pip &&   pip install --upgrade --no-cache-dir "anndata>=0.8" "scikit-learn"
+    Step 2/7 : RUN pip install --upgrade pip &&   pip install --upgrade --no-cache-dir "anndata~=0.8.0" "scikit-learn"
      ---> Using cache
      ---> 91f658ec0590
     Step 3/7 : LABEL org.opencontainers.image.description="Companion container for running component label_projection/methods foo"
@@ -480,7 +480,7 @@ viash test src/label_projection/methods/foo/config.vsh.yaml
 
     Step 1/7 : FROM python:3.10
      ---> 465483cdaa4e
-    Step 2/7 : RUN pip install --upgrade pip &&   pip install --upgrade --no-cache-dir "anndata>=0.8" "scikit-learn"
+    Step 2/7 : RUN pip install --upgrade pip &&   pip install --upgrade --no-cache-dir "anndata~=0.8.0" "scikit-learn"
      ---> Using cache
      ---> 91f658ec0590
     Step 3/7 : LABEL org.opencontainers.image.description="Companion container for running component label_projection/methods foo"

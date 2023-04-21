@@ -13,7 +13,7 @@ platforms:
       - type: python
         packages:
           - scanpy
-          - "anndata>=0.8"
+          - "anndata~=0.8.0"
   - type: nextflow
     directives: 
       label: [ lowmem, lowcpu ]

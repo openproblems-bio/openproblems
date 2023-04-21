@@ -46,7 +46,7 @@ platforms:
           - numpy
           - scipy
           - pyyaml
-          - "anndata>=0.8"
+          - "anndata~=0.8.0"
   - type: nextflow
     directives: 
       label: [ midmem, midcpu ]

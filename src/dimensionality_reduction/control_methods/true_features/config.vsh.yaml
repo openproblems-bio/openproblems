@@ -41,7 +41,7 @@ platforms:
         packages:
           - scanpy
           - pyyaml
-          - "anndata>=0.8"
+          - "anndata~=0.8.0"
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]
