@@ -11,6 +11,6 @@ functionality:
   test_resources:
     - path: /resources_test/batch_integration/pancreas
     - type: python_script
-      path: /common/comp_tests/check_metric_config.py
+      path: /src/common/comp_tests/check_metric_config.py
     - type: python_script
       path: /src/batch_integration/comp_tests/test_metric_feature.py
