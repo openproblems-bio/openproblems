@@ -10,7 +10,7 @@ functionality:
   test_resources:
     - path: ../../../../resources_test/dimensionality_reduction/pancreas/
     - type: python_script
-      path: ../../../common/comp_test/check_method_config.py
+      path: ../../../common/comp_tests/check_method_config.py
     - type: python_script
       path: generic_test.py
       text: |
