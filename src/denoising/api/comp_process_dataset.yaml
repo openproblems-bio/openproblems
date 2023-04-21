@@ -12,5 +12,5 @@ functionality:
       direction: output
   test_resources:
     - type: python_script
-      path: /src/label_projection/comp_tests/test_process_dataset.py
+      path: /src/denoising/comp_tests/test_process_dataset.py
     - path: /resources_test/common/pancreas
