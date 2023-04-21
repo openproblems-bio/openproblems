@@ -14,4 +14,4 @@ functionality:
     - type: python_script
       path: /src/common/unit_test/check_metric_config.py
     - type: python_script
-      path: /src/label_projection/unit_tests/test_metric.py
+      path: /src/label_projection/comp_test/test_metric.py
