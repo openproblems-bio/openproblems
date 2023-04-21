@@ -14,6 +14,6 @@ functionality:
   test_resources:
     - path: /resources_test/label_projection/pancreas
     - type: python_script
-      path: /src/common/unit_test/check_method_config.py
+      path: /src/common/comp_test/check_method_config.py
     - type: python_script
       path: /src/label_projection/comp_test/test_method.py
