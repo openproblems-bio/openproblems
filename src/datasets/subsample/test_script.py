@@ -57,13 +57,3 @@ def test_keep_functionality(run_component):
 
 if __name__ == '__main__':
     sys.exit(pytest.main([__file__, "--capture=no"], plugins=["viashpy"]))
-
-
-
-
-
-
-
-
-
-
