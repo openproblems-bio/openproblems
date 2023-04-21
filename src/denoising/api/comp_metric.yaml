@@ -13,6 +13,6 @@ functionality:
     - type: python_script
       path: /src/common/comp_tests/check_metric_config.py
     - type: python_script
-      path: /src/label_projection/comp_tests/test_metric.py
+      path: /src/denoising/comp_tests/test_metric.py
     - path: /resources_test/denoising/pancreas
         
