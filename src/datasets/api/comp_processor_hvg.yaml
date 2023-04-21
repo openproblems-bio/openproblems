@@ -22,7 +22,7 @@ functionality:
       default: 1000
       description: "The number of HVG to select"
   test_resources:
-    - path: ../../../../resources_test/common/pancreas
+    - path: /resources_test/common/pancreas
     - type: python_script
       path: generic_test.py
       text: |

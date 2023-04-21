@@ -8,9 +8,9 @@ functionality:
       __merge__: anndata_reduced.yaml
       direction: output
   test_resources:
-    - path: ../../../../resources_test/dimensionality_reduction/pancreas/
+    - path: /resources_test/dimensionality_reduction/pancreas/
     - type: python_script
-      path: ../../../common/comp_tests/check_method_config.py
+      path: /common/comp_tests/check_method_config.py
     - type: python_script
       path: generic_test.py
       text: |

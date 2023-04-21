@@ -11,7 +11,7 @@ functionality:
       __merge__: anndata_test.yaml
       direction: output
   test_resources:
-    - path: ../../../resources_test/common/pancreas/
+    - path: /resources_test/common/pancreas/
     - type: python_script
       path: generic_test.py
       text: |

@@ -23,7 +23,6 @@ functionality:
   test_resources:
     - type: python_script
       path: test.py
-    - path: ../../../resources_test/common/pancreas/
 platforms:
   - type: docker
     image: mumichae/scib-base:1.1.3

@@ -52,4 +52,4 @@ functionality:
         assert input.uns["dataset_id"] == output.uns["dataset_id"]
 
         print("All checks succeeded!")
-    - path: ../../../../resources_test/common/pancreas
+    - path: /resources_test/common/pancreas
