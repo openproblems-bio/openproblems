@@ -5,7 +5,7 @@ import numpy as np
 
 ### VIASH START
 par = {
-    "input": "resources_test/common/pancreas/temp_dataset_full.h5ad",
+    "input": "resources_test/common/pancreas/dataset.h5ad",
     "keep_celltype_categories": None,
     "keep_batch_categories": None,
     "keep_features": ["HMGB2", "CDK1", "NUSAP1", "UBE2C"],

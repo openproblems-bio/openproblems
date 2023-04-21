@@ -2,7 +2,7 @@ import sys
 import os
 import pytest
 import anndata as ad
-
+import numpy as np
 
 input_path = f"{meta['resources_dir']}/pancreas/dataset.h5ad"
 input = ad.read_h5ad(input_path)
@@ -51,7 +51,7 @@ def test_keep_functionality(run_component):
 
     assert output.n_obs <= 500
     assert output.n_vars <= 500
-    assert set(keep_features).issubset(output.var_names)
+    assert np.all([ f in output.var_names for f in keep_features])
 
     print(f"output: {output}", flush=True)
 
