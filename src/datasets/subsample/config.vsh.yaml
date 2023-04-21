@@ -53,10 +53,14 @@ functionality:
     - path: "../../../resources_test/common/pancreas"
 platforms:
   - type: docker
-    image: "python:3.8"
+    image: "python:3.10"
     setup:
       - type: python
         packages:
           - scanpy
           -  "anndata>=0.8"
+    test_setup:
+      - type: python
+        packages:
+          - viashpy
   - type: nextflow
