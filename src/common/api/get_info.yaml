@@ -15,9 +15,9 @@ functionality:
       default: "output.json"
       description: "Output json"
   test_resources: 
-    - path: ../../../src
+    - path: /src
       dest: openproblems-v2/src
-    - path: ../../../_viash.yaml
+    - path: /_viash.yaml
       dest: openproblems-v2/_viash.yaml
     - type: python_script
       path: generic_test.py
