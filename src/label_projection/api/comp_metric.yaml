@@ -1,4 +1,5 @@
 functionality:
+  namespace: "label_projection/metrics"
   info:
     type: metric
   arguments:
@@ -11,7 +12,8 @@ functionality:
       direction: output
   test_resources:
     - path: /resources_test/label_projection/pancreas
+      dest: resources_test/label_projection/pancreas
     - type: python_script
       path: /src/common/comp_tests/check_metric_config.py
     - type: python_script
-      path: /src/label_projection/comp_tests/test_metric.py
+      path: /src/common/comp_tests/run_and_check_adata.py

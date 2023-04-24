@@ -1,6 +1,6 @@
 type: file
 description: "The test data (without labels)"
-example: "test.h5ad"
+example: "resources_test/label_projection/pancreas/test.h5ad"
 info:
   short_description: "Test data"
   slots:

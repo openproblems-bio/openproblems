@@ -1,4 +1,5 @@
 functionality:
+  namespace: "denoising/control_methods"
   info:
     type: control_method
   arguments:
@@ -13,5 +14,6 @@ functionality:
     - type: python_script
       path: /src/common/comp_tests/check_method_config.py
     - type: python_script
-      path: /src/denoising/comp_tests/test_method.py
+      path: /src/common/comp_tests/run_and_check_adata.py
     - path: /resources_test/denoising/pancreas
+      dest: resources_test/denoising/pancreas

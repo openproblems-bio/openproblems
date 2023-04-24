@@ -14,7 +14,7 @@ with open(meta["config"], "r") as file:
                 config = yaml.safe_load(file)
 
 
-print("check general fields", flush=True)
+print("Check general fields", flush=True)
 assert "name" in config["functionality"] is not None, "Name not a field or is empty"
 assert "namespace" in config["functionality"] is not None, "namespace not a field or is empty"
 

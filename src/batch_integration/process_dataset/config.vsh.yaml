@@ -1,7 +1,6 @@
 __merge__: ../api/comp_process_dataset.yaml
 functionality:
   name: process_dataset
-  namespace: batch_integration
   description: Preprocess adata object for data integration
   arguments:
     - name: "--obs_label"
@@ -20,9 +19,6 @@ functionality:
   resources:
     - type: python_script
       path: script.py
-  test_resources:
-    - type: python_script
-      path: test.py
 platforms:
   - type: docker
     image: mumichae/scib-base:1.1.3

@@ -50,7 +50,7 @@ functionality:
   test_resources:
     - type: python_script
       path: test_script.py
-    - path: "../../../resources_test/common/pancreas"
+    - path: /resources_test/common/pancreas
 platforms:
   - type: docker
     image: "python:3.10"

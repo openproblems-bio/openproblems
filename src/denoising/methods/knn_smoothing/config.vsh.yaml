@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "knn_smoothing"
-  namespace: "denoising/methods"
   info:
     pretty_name: KNN Smoothing
     summary: "Iterative kNN-smoothing denoises scRNA-seq data by iteratively increasing the size of neighbourhoods for smoothing until a maximum k value is reached."

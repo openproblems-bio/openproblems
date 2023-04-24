@@ -16,7 +16,8 @@ functionality:
       required: false
   test_resources:
     - path: /resources_test/batch_integration/pancreas
+      dest: resources_test/batch_integration/pancreas
     - type: python_script
       path: /src/common/comp_tests/check_method_config.py
     - type: python_script
-      path: /src/batch_integration/comp_tests/test_method_graph.py
+      path: /src/common/comp_tests/run_and_check_adata.py

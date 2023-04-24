@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "xgboost"
-  namespace: "label_projection/methods"
   description: "XGBoost: A Scalable Tree Boosting System"
   info:
     pretty_name: XGBoost

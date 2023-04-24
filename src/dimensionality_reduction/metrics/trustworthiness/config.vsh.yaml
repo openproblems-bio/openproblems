@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_metric.yaml
 functionality:
   name: "trustworthiness"
-  namespace: "dimensionality_reduction/metrics"
   description: "To what extent the local structure is retained in a low-dimensional embedding in a value between 0 and 1."
   info:
     v1_url: openproblems/tasks/dimensionality_reduction/metrics/trustworthiness.py 

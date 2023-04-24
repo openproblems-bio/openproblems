@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_metric.yaml
 functionality:
   name: "poisson"
-  namespace: "denoising/metrics"
   info:
     reference: "batson2019molecular"
     metrics:

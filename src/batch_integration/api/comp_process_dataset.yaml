@@ -1,13 +1,15 @@
 functionality:
+  namespace: batch_integration
   info:
     type: process_dataset
   arguments:
     - name: "--input"
-      __merge__: anndata_dataset.yaml
+      __merge__: /src/datasets/api/anndata_dataset.yaml
     - name: "--output"
       __merge__: anndata_unintegrated.yaml
       direction: output
   test_resources:
     - path: /resources_test/common/pancreas/
+      dest: resources_test/common/pancreas/
     - type: python_script
-      path: /src/batch_integration/comp_tests/test_process_dataset.py
+      path: /src/common/comp_tests/run_and_check_adata.py

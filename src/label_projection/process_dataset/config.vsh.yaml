@@ -1,7 +1,6 @@
 __merge__: ../api/comp_process_dataset.yaml
 functionality:
   name: "process_dataset"
-  namespace: "label_projection"
   arguments:
     - name: "--method"
       type: "string"

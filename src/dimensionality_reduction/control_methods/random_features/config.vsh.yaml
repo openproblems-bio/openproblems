@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "random_features"
-  namespace: "dimensionality_reduction/control_methods"
   info:
     subtype: negative_control
     pretty_name: Random Features

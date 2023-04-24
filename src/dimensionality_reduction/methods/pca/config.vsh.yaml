@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "pca"
-  namespace: "dimensionality_reduction/methods"
   info:
     pretty_name: "PCA"
     summary: "A linear method that finds orthogonal directions to compute the two-dimensional embedding, capturing maximum variance from logCPM expression matrix with/without selecting 1000 HVGs."

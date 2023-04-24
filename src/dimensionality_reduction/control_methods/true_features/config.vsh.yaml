@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "true_features"
-  namespace: "dimensionality_reduction/control_methods"
   description: "Positive control method which generates high-dimensional (full data) embedding"
   info:
     subtype: positive_control

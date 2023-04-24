@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "alra"
-  namespace: "denoising/methods"
   info:
     pretty_name: ALRA
     summary: "ALRA imputes missing values in scRNA-seq data by computing rank-k approximation, thresholding by gene, and rescaling the matrix."

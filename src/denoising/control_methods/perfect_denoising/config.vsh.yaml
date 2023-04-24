@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "perfect_denoising"
-  namespace: "denoising/control_methods" 
   info:
     subtype: positive_control
     pretty_name: Perfect Denoising

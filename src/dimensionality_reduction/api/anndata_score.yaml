@@ -1,6 +1,6 @@
 type: file
 description: "Metric score file"
-example: "score.h5ad"
+example: "resources_test/dimensionality_reduction/pancreas/score.h5ad"
 info:
   short_description: "Score"
   slots:

@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "magic"
-  namespace: "denoising/methods"
   info:
     pretty_name: MAGIC
     summary: "MAGIC imputes and denoises scRNA-seq data using Euclidean distances and a Gaussian kernel to calculate the affinity matrix, followed by a Markov process and multiplication with the normalised data to obtain imputed values."

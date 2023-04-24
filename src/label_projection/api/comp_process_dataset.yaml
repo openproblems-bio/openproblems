@@ -1,4 +1,5 @@
 functionality:
+  namespace: "label_projection"
   info:
     type: process_dataset
   arguments:
@@ -15,6 +16,7 @@ functionality:
       direction: output
   test_resources:
     - path: /resources_test/common/pancreas
+      dest: resources_test/common/pancreas
     - type: python_script
-      path: /src/label_projection/comp_tests/test_process_dataset.py
+      path: /src/common/comp_tests/run_and_check_adata.py
         

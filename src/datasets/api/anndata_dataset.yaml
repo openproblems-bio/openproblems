@@ -1,7 +1,7 @@
 __merge__: anndata_hvg.yaml
 type: file
 description: "A normalised data with a PCA embedding, HVG selection and a kNN graph"
-example: "dataset.h5ad"
+example: "/resources_test/common/pancreas/dataset.h5ad"
 info:
   label: "Dataset+PCA+HVG+kNN"
   slots:

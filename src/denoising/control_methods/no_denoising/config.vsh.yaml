@@ -1,8 +1,6 @@
 __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "no_denoising"
-  namespace: "denoising/control_methods"
-  
   info:
     subtype: negative_control
     pretty_name: No Denoising

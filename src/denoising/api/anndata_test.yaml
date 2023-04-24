@@ -1,6 +1,6 @@
 type: file
 description: "The test data"
-example: "test.h5ad"
+example: "resources_test/denoising/pancreas/test.h5ad"
 info:
   short_description: "Test data"
   slots:

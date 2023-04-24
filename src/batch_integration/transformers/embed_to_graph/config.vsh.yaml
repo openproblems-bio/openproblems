@@ -3,8 +3,9 @@ functionality:
   namespace: batch_integration/transformers
   description: "Transform an embedded integration to a graph integration"
   info:
-    type: method
+    type: transformer
     pretty_name: Embedding to Graph
+    output_type: graph
   arguments:
     - __merge__: ../../api/anndata_integrated_embedding.yaml
       name: --input
@@ -14,6 +15,11 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+  test_resources:
+    - path: /resources_test/batch_integration/pancreas/
+      dest: resources_test/batch_integration/pancreas/
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
 platforms:
   - type: docker
     image: python:3.10

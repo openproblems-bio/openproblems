@@ -2,17 +2,10 @@ import scanpy as sc
 import yaml
 
 ## VIASH START
-
 par = {
     'input': 'resources_test/batch_integration/pancreas/combat.h5ad',
     'ouput': 'output.h5ad'
 }
-
-meta = {
-    'functionality_name': 'foo',
-    'config': 'bar'
-}
-
 ## VIASH END
 
 with open(meta['config'], 'r', encoding="utf8") as file:

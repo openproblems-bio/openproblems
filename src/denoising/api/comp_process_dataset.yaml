@@ -1,9 +1,10 @@
 functionality:
+  namespace: "denoising"
   info:
     type: process_dataset
   arguments:
     - name: "--input"
-      __merge__: anndata_dataset.yaml
+      __merge__: /src/datasets/api/anndata_dataset.yaml
     - name: "--output_train"
       __merge__: anndata_train.yaml
       direction: output
@@ -12,5 +13,6 @@ functionality:
       direction: output
   test_resources:
     - type: python_script
-      path: /src/denoising/comp_tests/test_process_dataset.py
+      path: /src/common/comp_tests/run_and_check_adata.py
     - path: /resources_test/common/pancreas
+      dest: resources_test/common/pancreas

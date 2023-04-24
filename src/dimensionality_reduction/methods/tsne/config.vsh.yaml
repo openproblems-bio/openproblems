@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "tsne"
-  namespace: "dimensionality_reduction/methods"
   info:
     pretty_name: t-SNE
     summary: "Minimizing Kullback-Leibler divergence by converting similarities into joint probabilities between data points and the low/high dimensional embedding."

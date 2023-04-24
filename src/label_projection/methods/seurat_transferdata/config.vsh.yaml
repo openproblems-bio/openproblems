@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "seurat_transferdata"
-  namespace: "label_projection/methods"
   description: |
     The Seurat v3 anchoring procedure is designed to integrate
     diverse single-cell datasets across technologies and modalities. 

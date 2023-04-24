@@ -1,6 +1,6 @@
 type: file
 description: "The training data"
-example: "train.h5ad"
+example: "resources_test/dimensionality_reduction/pancreas/train.h5ad"
 info:
   short_description: "Training data"
   slots:
