@@ -2,7 +2,6 @@ import sys
 import os
 import pytest
 import anndata as ad
-import numpy as np
 
 ## VIASH START
 meta = {
