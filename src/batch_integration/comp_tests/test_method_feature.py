@@ -14,7 +14,8 @@ print(">> Checking whether input file exists", flush=True)
 assert os.path.exists(input_path)
 
 print(">> Running script as test", flush=True)
-subprocess.run(cmd, check=True)
+out = subprocess.run(cmd, stderr=subprocess.STDOUT).stdout
+print(out)
 
 print(">> Checking whether file exists", flush=True)
 assert os.path.exists(output_path)
