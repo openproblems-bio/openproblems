@@ -50,7 +50,7 @@ platforms:
     setup:
       - type: python
         packages:
-          - "anndata>=0.8"
+          - "anndata~=0.8.0"
           - phate==1.0.*
           - scprep
           - pyyaml

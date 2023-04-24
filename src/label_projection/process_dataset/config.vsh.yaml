@@ -30,5 +30,5 @@ platforms:
       - type: python
         packages:
           - pyyaml
-          - "anndata>=0.8"
+          - "anndata~=0.8.0"
   - type: nextflow

@@ -32,7 +32,7 @@ platforms:
     setup:
       - type: python
         packages:
-          - anndata>=0.8
+          - anndata~=0.8.0
           - pyyaml
           - "git+https://github.com/scottgigante-immunai/dca.git@patch-1"
   - type: nextflow

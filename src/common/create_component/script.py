@@ -119,7 +119,7 @@ def add_python_setup(conf) -> None:
   conf['platforms'][0]["setup"] = [
     {
       "type": "python",
-      "pypi": "anndata~=0.8"
+      "pypi": "anndata~=0.8.0"
     }
   ]
 
@@ -133,7 +133,7 @@ def add_r_setup(conf) -> None:
     },
     {
       "type": "python",
-      "pypi": "anndata~=0.8"
+      "pypi": "anndata~=0.8.0"
     },
     {
       "type": "r",

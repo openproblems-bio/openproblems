@@ -45,6 +45,6 @@ platforms:
     image: python:3.10
     setup:
       - type: python
-        pip: [anndata>=0.8, pyyaml]
+        pip: [anndata~=0.8.0, pyyaml]
   - type: nextflow
 
