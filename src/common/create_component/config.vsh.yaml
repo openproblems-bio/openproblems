@@ -51,6 +51,8 @@ functionality:
       path: test.py
     - path: /src
       dest: openproblems-v2/src
+    - path: /_viash.yaml
+      dest: openproblems-v2/_viash.yaml
 platforms:
   - type: docker
     image: python:3.10-slim
