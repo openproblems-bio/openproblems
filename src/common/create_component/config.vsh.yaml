@@ -43,6 +43,12 @@ functionality:
         to manually specify a different API file to inherit from.
       # required: true
       default: src/${VIASH_PAR_TASK}/api/comp_${VIASH_PAR_TYPE}.yaml
+    - type: file
+      name: --viash_yaml
+      description: |
+        Path to the project config file. Needed for knowing the relative location of a file to the project root.
+      # required: true
+      default: "_viash.yaml"
   resources:
     - type: python_script
       path: script.py

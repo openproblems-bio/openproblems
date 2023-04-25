@@ -9,6 +9,7 @@ meta = {
 ## VIASH END
 
 api_file = meta["resources_dir"] + "/openproblems-v2/src/label_projection/api/comp_method.yaml"
+viash_yaml = meta["resources_dir"] + "/openproblems-v2/_viash.yaml"
 output_path = 'method_py'
 
 cmd = [
@@ -18,7 +19,8 @@ cmd = [
     '--name', 'test_method',
     '--language', 'python',
     '--output', output_path,
-    '--api_file', api_file
+    '--api_file', api_file,
+    '--viash_yaml', viash_yaml
 ]
 
 print('>> Running the script as test', flush=True)
