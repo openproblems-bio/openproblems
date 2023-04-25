@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_metric.yaml
 functionality:
   name: "mse"
-  namespace: "denoising/metrics"
   info:
     metrics:
       - name: mse

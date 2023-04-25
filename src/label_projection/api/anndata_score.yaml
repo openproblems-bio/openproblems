@@ -1,6 +1,6 @@
 type: file
 description: "Metric score file"
-example: "output.h5ad"
+example: "resources_test/label_projection/pancreas/knn_accuracy.h5ad"
 info:
   short_description: "Score"
   slots:

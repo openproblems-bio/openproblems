@@ -1,6 +1,6 @@
 type: file
 description: "The prediction file"
-example: "prediction.h5ad"
+example: "resources_test/label_projection/pancreas/knn.h5ad"
 info:
   short_description: "Prediction"
   slots:

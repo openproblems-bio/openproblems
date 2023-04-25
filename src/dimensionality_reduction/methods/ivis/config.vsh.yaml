@@ -5,7 +5,6 @@ functionality:
   #Temporarily removed from OPv1 see commit 93d2161a08da3edf249abedff5111fb5ce527552
   status: disabled
   name: "ivis"
-  namespace: "dimensionality_reduction/methods"
   info:
     pretty_name: "ivis"
     summary: ""

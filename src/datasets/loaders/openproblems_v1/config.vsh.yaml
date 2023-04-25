@@ -65,7 +65,7 @@ functionality:
       path: test.py
 platforms:
   - type: docker
-    image: python:3.8
+    image: python:3.10
     setup:
       - type: apt
         packages: git

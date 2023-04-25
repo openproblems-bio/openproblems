@@ -43,14 +43,22 @@ functionality:
         to manually specify a different API file to inherit from.
       # required: true
       default: src/${VIASH_PAR_TASK}/api/comp_${VIASH_PAR_TYPE}.yaml
+    - type: file
+      name: --viash_yaml
+      description: |
+        Path to the project config file. Needed for knowing the relative location of a file to the project root.
+      # required: true
+      default: "_viash.yaml"
   resources:
     - type: python_script
       path: script.py
   test_resources:
     - type: python_script
       path: test.py
-    - path: ../../../src
+    - path: /src
       dest: openproblems-v2/src
+    - path: /_viash.yaml
+      dest: openproblems-v2/_viash.yaml
 platforms:
   - type: docker
     image: python:3.10-slim

@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "densmap"
-  namespace: "dimensionality_reduction/methods"
   info:
     pretty_name: densMAP
     summary: "Modified UMAP with preservation of local density information"

@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "random_labels"
-  namespace: "label_projection/control_methods"
   info:
     subtype: negative_control
     pretty_name: Random Labels
@@ -17,7 +16,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: "python:3.8"
+    image: "python:3.10"
     setup:
       - type: python
         packages:

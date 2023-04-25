@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_metric.yaml
 functionality:
   name: "coranking"
-  namespace: "dimensionality_reduction/metrics"
   description: |
     This is a set of metrics which all use a co-ranking matrix as the basis of the metric.
   info:

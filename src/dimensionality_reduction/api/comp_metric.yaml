@@ -1,4 +1,5 @@
 functionality:
+  namespace: dimensionality_reduction/metrics
   info:
     type: metric
   arguments:
@@ -10,54 +11,9 @@ functionality:
       __merge__: anndata_score.yaml
       direction: output
   test_resources:
-    - path: ../../../../resources_test/dimensionality_reduction/pancreas/
+    - path: /resources_test/dimensionality_reduction/pancreas/
+      dest: resources_test/dimensionality_reduction/pancreas/
     - type: python_script
-      path: ../../../common/unit_test/check_metric_config.py
+      path: /src/common/comp_tests/check_metric_config.py
     - type: python_script
-      path: generic_test.py
-      text: |
-        import anndata as ad
-        import subprocess
-        from os import path
-
-        input_reduced_path = meta["resources_dir"] + "/pancreas/reduced.h5ad"
-        input_test_path = meta["resources_dir"] + "/pancreas/test.h5ad"
-        output_path = "score.h5ad"
-        cmd = [
-            meta['executable'],
-            "--input_reduced", input_reduced_path,
-            "--input_test", input_test_path,
-            "--output", output_path,
-        ]
-
-        print(">> Checking whether input files exist", flush=True)
-        assert path.exists(input_reduced_path)
-        assert path.exists(input_test_path)
-
-        print(">> Running script as test", flush=True)
-        subprocess.run(cmd, check=True)
-
-        print(">> Checking whether output file exists", flush=True)
-        assert path.exists(output_path)
-
-        print(">> Reading h5ad files", flush=True)
-        input_reduced = ad.read_h5ad(input_reduced_path)
-        input_test = ad.read_h5ad(input_test_path)
-        output = ad.read_h5ad(output_path)
-
-        print("input reduced:", input_reduced, flush=True)
-        print("input test:", input_test, flush=True)
-        print("output:", output, flush=True)
-
-        print(">> Checking whether metrics were added", flush=True)
-        assert "metric_ids" in output.uns
-        assert "metric_values" in output.uns
-        # assert meta['functionality_name'] in output.uns["metric_ids"]
-        # todo: look at config to check whether all metric ids are available
-
-        print(">> Checking whether data from input was copied properly to output", flush=True)
-        assert input_reduced.uns["dataset_id"] == output.uns["dataset_id"]
-        assert input_reduced.uns["normalization_id"] == output.uns["normalization_id"]
-        assert input_reduced.uns["method_id"] == output.uns["method_id"]
-
-        print("All checks succeeded!", flush=True)
+      path: /src/common/comp_tests/run_and_check_adata.py

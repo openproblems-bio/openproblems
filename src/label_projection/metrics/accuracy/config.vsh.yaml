@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_metric.yaml
 functionality:
   name: "accuracy"
-  namespace: "label_projection/metrics"
   info:
     v1_url: openproblems/tasks/label_projection/metrics/accuracy.py
     v1_commit: fcd5b876e7d0667da73a2858bc27c40224e19f65

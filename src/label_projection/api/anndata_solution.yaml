@@ -1,6 +1,6 @@
 type: file
 description: "The solution for the test data"
-example: "solution.h5ad"
+example: "resources_test/label_projection/pancreas/solution.h5ad"
 info:
   short_description: "Solution"
   slots:

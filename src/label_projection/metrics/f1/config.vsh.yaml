@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_metric.yaml
 functionality:
   name: "f1"
-  namespace: "label_projection/metrics"
   info:
     v1_url: openproblems/tasks/label_projection/metrics/f1.py
     v1_commit: bb16ca05ae1ce20ce59bfa7a879641b9300df6b0

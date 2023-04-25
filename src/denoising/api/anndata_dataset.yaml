@@ -1,6 +1,6 @@
 type: file
 description: "A preprocessed dataset"
-example: "preprocessed.h5ad"
+example: "resources_test/common/pancreas/dataset.h5ad"
 info:
   short_description: "Preprocessed dataset"
   slots:

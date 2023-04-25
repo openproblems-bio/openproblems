@@ -1,6 +1,6 @@
 type: file
 description: "The denoised data"
-example: "denoised.h5ad"
+example: "resources_test/denoising/pancreas/magic.h5ad"
 info:
   short_description: "Denoised data"
   slots:

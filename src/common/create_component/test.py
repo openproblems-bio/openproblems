@@ -1,3 +1,4 @@
+import os
 import subprocess
 from os import path
 from ruamel.yaml import YAML
@@ -8,38 +9,36 @@ meta = {
 }
 ## VIASH END
 
-api_file = meta["resources_dir"] + "/openproblems-v2/src/label_projection/api/comp_method.yaml"
-output_path = 'method_py'
+opv2 = f"{meta['resources_dir']}/openproblems-v2"
+output_path = f"{opv2}/src/label_projection/methods/test_method"
 
 cmd = [
     meta['executable'],
     '--task', 'label_projection',
     '--type', 'method',
     '--name', 'test_method',
-    '--language', 'python',
-    '--output', output_path,
-    '--api_file', api_file
+    '--language', 'python'
 ]
 
 print('>> Running the script as test', flush=True)
-out = subprocess.run(cmd, check=True)
+out = subprocess.run(cmd, check=True, cwd=opv2)
 
 print('>> Checking whether output files exist', flush=True)
-assert path.exists(output_path)
+assert os.path.exists(output_path), "Output dir does not exist"
+
 conf_f = path.join(output_path, 'config.vsh.yaml')
-assert path.exists(conf_f)
+assert os.path.exists(conf_f), "Config file does not exist"
+
 script_f = path.join(output_path, "script.py")
-assert path.exists(script_f)
+assert os.path.exists(script_f), "Script file does not exist"
 
 print('>> Checking file contents', flush=True)
 yaml = YAML()
 with open(conf_f) as f:
     conf_data = yaml.load(f)
 
-assert conf_data['functionality']['name'] == 'test_method'
-assert conf_data['functionality']['namespace'] == 'label_projection/methods'
-assert conf_data['platforms'][0]['image'] == 'python:3.10'
-
+assert conf_data['functionality']['name'] == 'test_method', "Name should be equal to 'test_method'"
+assert conf_data['platforms'][0]['image'] == 'python:3.10', "Python image should be equal to python:3.10"
 
 
 print('All checks succeeded!', flush=True)

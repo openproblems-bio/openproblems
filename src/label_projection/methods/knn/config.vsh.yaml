@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "knn"
-  namespace: "label_projection/methods"
   info:
     pretty_name: KNN
     summary: "Assumes cells with similar gene expression belong to the same cell type, and assigns an unlabelled cell the most common cell type among its k nearest neighbors in PCA space."

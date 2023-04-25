@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "dca"
-  namespace: "denoising/methods"
   info:
     pretty_name: DCA
     summary: "A deep autoencoder with ZINB loss function to address the dropout effect in count data"

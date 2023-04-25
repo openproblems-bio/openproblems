@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_metric.yaml
 functionality:
   name: "rmse"
-  namespace: "dimensionality_reduction/metrics"
   description: The root mean squared error between the full (or processed) data matrix and a list of dimensionally-reduced matrices
   info:
     v1_url: openproblems/tasks/dimensionality_reduction/metrics/root_mean_square_error.py 

@@ -1,6 +1,6 @@
 type: file
 description: Unintegrated AnnData HDF5 file.
-example: input.h5ad
+example: "resources_test/batch_integration/pancreas/unintegrated.h5ad"
 info:
   short_description: "Unintegrated"
   slots:
