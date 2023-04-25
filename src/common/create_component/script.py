@@ -33,7 +33,6 @@ def create_config_template(par):
     |
     |functionality:
     |  name: {par["name"]}
-    |  namespace: {par["task"]}/{par['type']}s
     |
     |  # Metadata for your component (required)
     |  info:
