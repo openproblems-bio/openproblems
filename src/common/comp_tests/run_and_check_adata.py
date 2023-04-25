@@ -21,7 +21,7 @@ def check_slots(adata, slot_metadata):
         struc_dict = getattr(adata, struc_name)
         
         for slot_item in slot_items:
-            if slot_item.get("required", False):
+            if slot_item.get("required", True):
                 assert slot_item["name"] in struc_dict,\
                     f"File '{arg['value']}' is missing slot .{struc_name}['{slot_item['name']}']"
 
