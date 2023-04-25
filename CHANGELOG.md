@@ -84,6 +84,8 @@
 
 * `methods/scanvi`: Migrated and adapted from v1.
 
+* `methods/scanvi_scarches`: Migrated and adapted from v1.
+
 * `methods/seurat_transferdata`: Migrated and adapted from v1.
 
 * `methods/xgboost`: Migrated from v1.

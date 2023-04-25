@@ -1,0 +1,63 @@
+# The API specifies which type of component this is.
+# It contains specifications for:
+#   - The input/output files
+#   - Common parameters
+#   - A unit test
+__merge__: ../../api/comp_method.yaml
+
+functionality:
+  name: scanvi_scarches
+
+  # Metadata for your component (required)
+  info:
+    pretty_name: scANVI+scArches
+    summary: 'Query to reference single-cell integration with transfer learning with scANVI and scArches'
+    description: 'scArches+scANVI or "Single-cell architecture surgery" is a deep learning method for mapping new datasets onto a pre-existing reference model, using transfer learning and parameter optimization. It first uses scANVI to build a reference model from the training data, and then apply scArches to map the test data onto the reference model and make predictions.'
+    reference: lotfollahi2020query
+    documentation_url: https://docs.scvi-tools.org
+    repository_url: https://github.com/scverse/scvi-tools
+    preferred_normalization: none
+    variants:
+      scanvi_scarches:
+
+  # Component-specific parameters (optional)
+  arguments:
+    - name: "--n_latent"
+      type: "integer"
+      default: 30
+      description: "Number of units in the latent layer"
+    - name: "--n_layers"
+      type: "integer"
+      default: 2
+      description: "Number of hidden layers"
+    - name: "--n_hidden"
+      type: "integer"
+      default: 128
+      description: "Number of units in the hidden layers"
+    - name: "--dropout_rate"
+      type: "double"
+      default: 0.2
+      description: "Rate of dropout applied in training"
+    - name: "--max_epochs"
+      type: "integer"
+      default: 2
+      description: "Maximum number of training epochs"
+
+  # Resources required to run the component
+  resources:
+    # The script of your component
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: python:3.10
+    # Add custom dependencies here
+    setup:
+      - type: python
+        pypi: 
+        - anndata~=0.8
+        - pyyaml
+        - scvi-tools
+  - type: nextflow
+    directives:
+      label: [midmem, midcpu]
