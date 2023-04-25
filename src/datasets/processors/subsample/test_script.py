@@ -36,7 +36,10 @@ def test_even_sampling(run_component):
 def test_keep_functionality(run_component):
     output_path = "output.h5ad"
 
-    keep_features = list(input.var_names[:10])
+    # keep_features = list(input.var_names[:10])
+    # use genes with high enough expression
+    keep_features = ["ARHGEF12", "PPM1L", "HMGB2", "NEURL4"]
+
     run_component([
         "--input", input_path,
         "--keep_celltype_categories", "acinar:beta",

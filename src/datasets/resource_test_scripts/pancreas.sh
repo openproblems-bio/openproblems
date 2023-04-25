@@ -34,7 +34,7 @@ wget https://raw.githubusercontent.com/theislab/scib/c993ffd9ccc84ae0b1681928722
 KEEP_FEATURES=`cat $DATASET_DIR/temp_g2m_genes_tirosh_hm.txt $DATASET_DIR/temp_s_genes_tirosh_hm.txt | paste -sd ":" -`
 
 # subsample
-viash run src/datasets/subsample/config.vsh.yaml -- \
+viash run src/datasets/processors/subsample/config.vsh.yaml -- \
     --input $DATASET_DIR/temp_dataset_full.h5ad \
     --keep_celltype_categories "acinar:beta" \
     --keep_batch_categories "celseq:inDrop4:smarter" \
