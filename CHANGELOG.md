@@ -11,21 +11,21 @@
 
 * Created test data `resources_test/pancreas` with `src/common/resources_test_scripts/pancreas.sh`.
 
-* `get_api_info`: extract api info from tasks
+* `get_api_info`: Extract api info from tasks.
 
-* `get_method_info`: extract method info from config yaml
+* `get_method_info`: Extract method info from config yaml.
 
-* `get_metric_info`: extract metric info from config yaml
+* `get_metric_info`: Extract metric info from config yaml.
 
-* `get_results`: extract benchmark scores 
+* `get_results`: Extract benchmark scores.
 
-* `get_task_info`: extract task info
+* `get_task_info`: Extract task info.
 
-* `comp_tests`: Common unit test that can be used by all tasks
+* `comp_tests`: Common unit tests that can be used by all tasks.
 
-* `check_dataset_schema`: check if the dataset used has the required fields defined in the api `anndata_*.yaml` files
+* `check_dataset_schema`: Check if the dataset used has the required fields defined in the api `anndata_*.yaml` files.
   
-* `Create_component`: creates a template folder with a viash config and script file depending on the task api.
+* `Create_component`: Creates a template folder with a viash config and script file depending on the task api.
 
 ### MINOR CHANGES
 
