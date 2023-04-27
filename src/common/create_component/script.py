@@ -358,6 +358,8 @@ def create_r_script(par, api_spec, type):
   return script
 
 def read_viash_config(file):
+  file = file.absolute()
+
   # read in config
   command = ["viash", "config", "view", str(file)]
 
