@@ -358,11 +358,17 @@ def create_r_script(par, api_spec, type):
   return script
 
 def read_viash_config(file):
+  file = file.absolute()
+
   # read in config
   command = ["viash", "config", "view", str(file)]
 
   # Execute the command and capture the output
-  output = subprocess.check_output(command, universal_newlines=True)
+  output = subprocess.check_output(
+    command,
+    universal_newlines=True,
+    cwd=str(file.parent)
+  )
 
   # Parse the output as YAML
   config = yaml.load(output)
