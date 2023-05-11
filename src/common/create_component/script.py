@@ -14,8 +14,8 @@ par = {
   'type': 'method',
   'language': 'python',
   'name': 'new_comp',
-  'output': 'src/denoising/methods/new_comp',
-  'api_file': 'src/denoising/api/comp_method.yaml'
+  'output': 'src/tasks/denoising/methods/new_comp',
+  'api_file': 'src/tasks/denoising/api/comp_method.yaml'
 }
 ## VIASH END
 

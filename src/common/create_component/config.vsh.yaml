@@ -1,4 +1,3 @@
-# TODO: project config is no longer mounted
 functionality:
   name: create_component
   namespace: common
@@ -34,7 +33,7 @@ functionality:
       direction: output
       # required: true
       description: Path to the component directory. Suggested location is `src/<TASK>/<TYPE>s/<NAME>`.
-      default: src/${VIASH_PAR_TASK}/${VIASH_PAR_TYPE}s/${VIASH_PAR_NAME}
+      default: src/tasks/${VIASH_PAR_TASK}/${VIASH_PAR_TYPE}s/${VIASH_PAR_NAME}
     - type: file
       name: --api_file
       description: |
@@ -42,7 +41,7 @@ functionality:
         In tasks with different subtypes of method, this location might not exist and you might need
         to manually specify a different API file to inherit from.
       # required: true
-      default: src/${VIASH_PAR_TASK}/api/comp_${VIASH_PAR_TYPE}.yaml
+      default: src/tasks/${VIASH_PAR_TASK}/api/comp_${VIASH_PAR_TYPE}.yaml
     - type: file
       name: --viash_yaml
       description: |
