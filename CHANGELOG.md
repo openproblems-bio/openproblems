@@ -5,7 +5,7 @@
 
 ### MAJOR CHANGES
 
-* Relocate task directories to new `src/tasks/` location. (PR #142)
+* Relocate task directories to new `src/tasks/` location (PR #142).
 
 ## common
 
