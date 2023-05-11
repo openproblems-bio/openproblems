@@ -13,7 +13,7 @@ meta = { "functionality" : "foo" }
 
 ## VIASH END
 
-task_info_path = path.join(par["input"], "src", par["task_id"], "api", "task_info.yaml")
+task_info_path = path.join(par["input"], "src/tasks", par["task_id"], "api", "task_info.yaml")
 
 with open(task_info_path, "r") as f:
     task_info = load(f, Loader=CSafeLoader )

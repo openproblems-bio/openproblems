@@ -1,7 +1,11 @@
 
 # openproblems-v2 0.1.0
 
+## general
 
+### MAJOR CHANGES
+
+* Relocate task directories to new `src/tasks/` location (PR #142).
 
 ## common
 

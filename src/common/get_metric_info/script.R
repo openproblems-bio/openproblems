@@ -11,7 +11,7 @@ par <- list(
 
 ns_list <- processx::run(
   "viash",
-  c("ns", "list", "-q", "metrics", "--src", paste("src", par$task_id, sep = "/")),
+  c("ns", "list", "-q", "metrics", "--src", paste("src/tasks", par$task_id, sep = "/")),
   wd = par$input
 )
 configs <- yaml::yaml.load(ns_list$stdout)
