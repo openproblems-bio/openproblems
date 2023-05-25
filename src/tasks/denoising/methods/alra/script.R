@@ -2,14 +2,9 @@
 cat(">> Loading dependencies\n")
 library(anndata, warn.conflicts = FALSE)
 library(Matrix, warn.conflicts = FALSE)
-
-# load alra script from within the Docker container
-source("/ALRA/alra.R")
+library(ALRA, warn.conflicts = FALSE)
 
 ## VIASH START
-# load directly from github when testing locally
-source("https://raw.githubusercontent.com/KlugerLab/ALRA/master/alra.R")
-
 par <- list(
   input_train = "resources_test/denoising/pancreas/train.h5ad",
   # input_train = "resources_test/common/pancreas/dataset.h5ad",

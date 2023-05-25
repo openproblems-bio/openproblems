@@ -39,8 +39,7 @@ platforms:
         pip: [ anndata~=0.8.0, pyyaml ]
       - type: r
         cran: [ Matrix, anndata, bit64, rsvd ]
-      - type: docker
-        run: git clone https://github.com/KlugerLab/ALRA.git /ALRA
+        github: KlugerLab/ALRA
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]
