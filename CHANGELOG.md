@@ -7,6 +7,10 @@
 
 * Relocate task directories to new `src/tasks/` location (PR #142).
 
+### MINOR CHANGES
+
+* Update "baseline" to "control" (PR #146)
+
 ## common
 
 ### NEW FUNCTIONALITY

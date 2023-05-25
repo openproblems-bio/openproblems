@@ -4,7 +4,7 @@ import anndata as ad
 par = {
     'input_train': 'resources_test/denoising/pancreas/train.h5ad',
     'input_test': 'resources_test/denoising/pancreas/test.h5ad',
-    'output': 'output_baseline_PD.h5ad',
+    'output': 'output_PD.h5ad',
 }
 meta = {
     'functionality_name': 'foo',

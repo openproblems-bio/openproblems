@@ -4,7 +4,7 @@ Structure of this task:
 
     src/dimensionality_reduction
     ├── api                          Interface specifications for components and datasets in this task
-    ├── control_methods              Baseline (random/ground truth) methods to compare methods against
+    ├── control_methods              Control methods to compare methods against
     ├── methods                      Methods to be benchmarked
     ├── metrics                      Metrics used to quantify performance of methods
     ├── README.md                    This file
