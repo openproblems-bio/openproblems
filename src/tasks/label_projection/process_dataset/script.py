@@ -1,10 +1,7 @@
-import re
-import yaml
+import sys
 import random
-import pandas as pd
 import numpy as np
 import anndata as ad
-# Todo: throw error when not all slots are available?
 
 ## VIASH START
 par = {
@@ -18,58 +15,14 @@ par = {
     'output_solution': 'solution.h5ad'
 }
 meta = {
-    'resources_dir': 'src/label_projection/process_dataset',
-    'config': 'src/label_projection/process_dataset/.config.vsh.yaml'
+    'resources_dir': 'src/tasks/label_projection/process_dataset',
+    'config': 'src/tasks/label_projection/process_dataset/.config.vsh.yaml'
 }
 ## VIASH END
 
-# read the .config.vsh.yaml to find out which output slots need to be copied to which output file
-def read_slots(par, meta):
-    # read output spec from yaml
-    with open(meta["config"], "r") as file:
-        config = yaml.safe_load(file)
-
-    output_struct_slots = {}
-
-    # fetch info on which slots should be copied to which file
-    for arg in config["functionality"]["arguments"]:
-        if re.match("--output_", arg["name"]):
-            file = re.sub("--output_", "", arg["name"])
-            
-            struct_slots = arg['info']['slots']
-            out = {}
-            for (struct, slots) in struct_slots.items():
-                out[struct] = { slot['name'] : slot['name'] for slot in slots }
-            
-            # rename source keys
-            if 'obs' in out:
-                if 'label' in out['obs']:
-                    out['obs']['label'] = par['obs_label']
-                if 'batch' in out['obs']:
-                    out['obs']['batch'] = par['obs_batch']
-
-            output_struct_slots[file] = out
-
-    return output_struct_slots
-
-# create new anndata objects according to api spec
-def subset_anndata(adata_sub, slot_info):
-    structs = ["layers", "obs", "var", "uns", "obsp", "obsm", "varp", "varm"]
-    kwargs = {}
-
-    for struct in structs:
-        slot_mapping = slot_info.get(struct, {})
-        data = {dest : getattr(adata_sub, struct)[src] for (dest, src) in slot_mapping.items()}
-        if len(data) > 0:
-            if struct in ['obs', 'var']:
-                data = pd.concat(data, axis=1)
-            kwargs[struct] = data
-        elif struct in ['obs', 'var']:
-            # if no columns need to be copied, we still need an 'obs' and a 'var' 
-            # to help determine the shape of the adata
-            kwargs[struct] = getattr(adata_sub, struct).iloc[:,[]]
-
-    return ad.AnnData(**kwargs)
+# import helper functions
+sys.path.append(meta['resources_dir'])
+from subset_anndata import read_config_slots_info, subset_anndata
 
 # set seed if need be
 if par["seed"]:
@@ -78,7 +31,7 @@ if par["seed"]:
 
 print(">> Load data")
 adata = ad.read_h5ad(par["input"])
-print("adata:", adata)
+print("input:", adata)
 
 print(f">> Process data using {par['method']} method")
 if par["method"] == "batch":
@@ -92,24 +45,31 @@ elif par["method"] == "random":
 
 # subset the different adatas
 print(">> Figuring which data needs to be copied to which output file")
-slot_info_per_output = read_slots(par, meta)
+# use par arguments to look for label and batch value in different slots
+slot_mapping = {
+    "obs": {
+        "label": par["obs_label"],
+        "batch": par["obs_batch"],
+    }
+}
+slot_info = read_config_slots_info(meta["config"], slot_mapping)
 
 print(">> Creating train data")
 output_train = subset_anndata(
-    adata_sub=adata[[not x for x in is_test]], 
-    slot_info=slot_info_per_output['train']
+    adata[[not x for x in is_test]], 
+    slot_info["output_train"]
 )
 
 print(">> Creating test data")
 output_test = subset_anndata(
-    adata_sub=adata[is_test],
-    slot_info=slot_info_per_output['test']
+    adata[is_test],
+    slot_info["output_test"]
 )
 
 print(">> Creating solution data")
 output_solution = subset_anndata(
-    adata_sub=adata[is_test],
-    slot_info=slot_info_per_output['solution']
+    adata[is_test],
+    slot_info['output_solution']
 )
 
 print(">> Writing data")

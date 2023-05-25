@@ -1,7 +1,6 @@
+import sys
 import anndata as ad
 import numpy as np
-import sys
-import scipy.sparse
 
 ## VIASH START
 par = {

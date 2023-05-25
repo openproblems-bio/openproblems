@@ -1,8 +1,6 @@
-import anndata as ad
+import sys
 import scib
-import yaml
-import re
-import pandas as pd
+import anndata as ad
 
 ## VIASH START
 par = {
@@ -12,6 +10,10 @@ par = {
 }
 meta = {}
 ## VIASH END
+
+# import helper functions
+sys.path.append(meta['resources_dir'])
+from subset_anndata import read_config_slots_info, subset_anndata
 
 print('Read input', flush=True)
 input = ad.read_h5ad(par['input'])
@@ -32,66 +34,21 @@ def compute_batched_hvg(adata, n_hvgs):
     del adata.X
     return adata
 
-
-# read the .config.vsh.yaml to find out which output slots need to be copied to which output file
-def read_slots(par, meta):
-    # read output spec from yaml
-    with open(meta["config"], "r") as file:
-        config = yaml.safe_load(file)
-
-    output_struct_slots = {}
-
-    # fetch info on which slots should be copied to which file
-    for arg in config["functionality"]["arguments"]:
-        if re.match("--output", arg["name"]):
-            file = "output"
-            
-            struct_slots = arg['info']['slots']
-            out = {}
-            for (struct, slots) in struct_slots.items():
-                out[struct] = { slot['name'] : slot['name'] for slot in slots }
-            
-            # rename source keys
-            if 'obs' in out:
-                if 'label' in out['obs']:
-                    out['obs']['label'] = par['obs_label']
-                if 'batch' in out['obs']:
-                    out['obs']['batch'] = par['obs_batch']
-
-            output_struct_slots[file] = out
-
-    return output_struct_slots
-
-# create new anndata objects according to api spec
-def subset_anndata(adata_sub, slot_info):
-    structs = ["layers", "obs", "var", "uns", "obsp", "obsm", "varp", "varm"]
-    kwargs = {}
-
-    for struct in structs:
-        slot_mapping = slot_info.get(struct, {})
-        data = {dest : getattr(adata_sub, struct)[src] for (dest, src) in slot_mapping.items()}
-        if len(data) > 0:
-            if struct in ["obs", "var"]:
-                data = pd.concat(data, axis=1)
-            kwargs[struct] = data
-        elif struct in ["obs", "var"]:
-            # if no columns need to be copied, we still need an "obs" and a "var" 
-            # to help determine the shape of the adata
-            kwargs[struct] = getattr(adata_sub, struct).iloc[:,[]]
-
-    return ad.AnnData(**kwargs)
-
 print(f'Select {par["hvgs"]} highly variable genes', flush=True)
 adata_with_hvg = compute_batched_hvg(input, n_hvgs=par['hvgs'])
 
 print(">> Figuring out which data needs to be copied to which output file", flush=True)
-slot_info_per_output = read_slots(par, meta)
+# use par arguments to look for label and batch value in different slots
+slot_mapping = {
+    "obs": {
+        "label": par["obs_label"],
+        "batch": par["obs_batch"],
+    }
+}
+slot_info = read_config_slots_info(meta["config"], slot_mapping)
 
 print(">> Create output object", flush=True)
-output = subset_anndata(
-    adata_sub=adata_with_hvg, 
-    slot_info=slot_info_per_output["output"]
-)
+output = subset_anndata(adata_with_hvg, slot_info["output"])
 
 print('Writing adatas to file', flush=True)
 output.write(par['output'], compression='gzip')

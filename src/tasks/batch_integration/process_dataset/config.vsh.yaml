@@ -19,6 +19,7 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+    - path: /src/common/helper_functions/subset_anndata.py
 platforms:
   - type: docker
     image: mumichae/scib-base:1.1.3
