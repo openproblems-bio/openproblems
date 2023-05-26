@@ -14,13 +14,20 @@ urllib.request.urlretrieve("ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE100nnn/GSE1
 
 print(">> Running scprep_csv")
 
-out = subprocess.check_output([
+out = subprocess.run([
     "./scprep_csv",
     "--id", "footest",
     "--input1", "adt_umi.csv.gz",
     "--input2", "adt_umi.csv.gz",
     "--output", "output.h5ad"
-]).decode("utf-8")
+], stderr=subprocess.STDOUT)
+
+if out.stdout:
+    print(out.stdout)
+
+if out.returncode:
+    print(f"script: '{out.args}' exited with an error.")
+    exit(out.returncode)
 
 print(">> Checking whether file exists")
 assert path.exists("output.h5ad")

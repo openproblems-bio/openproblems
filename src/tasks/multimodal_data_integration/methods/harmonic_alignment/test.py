@@ -5,11 +5,18 @@ import subprocess
 import scanpy as sc
 
 print(">> Running harmonic_alignment")
-out = subprocess.check_output([
+out = subprocess.run([
     "./harmonic_alignment",
     "--input", "sample_dataset.h5ad",
     "--output", "output.h5ad"
-]).decode("utf-8")
+], stderr=subprocess.STDOUT)
+
+if out.stdout:
+    print(out.stdout)
+
+if out.returncode:
+    print(f"script: '{out.args}' exited with an error.")
+    exit(out.returncode)
 
 print(">> Checking whether file exists")
 assert path.exists("output.h5ad")

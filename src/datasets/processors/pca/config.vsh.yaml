@@ -17,4 +17,5 @@ platforms:
         packages:
           - scanpy
           - "anndata~=0.8.0"
+          - pyyaml
   - type: nextflow

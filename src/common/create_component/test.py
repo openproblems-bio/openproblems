@@ -21,7 +21,14 @@ cmd = [
 ]
 
 print('>> Running the script as test', flush=True)
-out = subprocess.run(cmd, check=True, cwd=opv2)
+out = subprocess.run(cmd, stderr=subprocess.STDOUT, cwd=opv2)
+
+if out.stdout:
+    print(out.stdout)
+
+if out.returncode:
+    print(f"script: '{cmd}' exited with an error.")
+    exit(out.returncode)
 
 print('>> Checking whether output files exist', flush=True)
 assert os.path.exists(output_path), "Output dir does not exist"

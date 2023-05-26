@@ -16,7 +16,7 @@ functionality:
     reference: lotfollahi2020query
     documentation_url: https://docs.scvi-tools.org
     repository_url: https://github.com/scverse/scvi-tools
-    preferred_normalization: none
+    preferred_normalization: counts
     variants:
       scanvi_scarches:
 

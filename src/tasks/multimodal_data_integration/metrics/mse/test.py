@@ -6,11 +6,18 @@ import scanpy as sc
 import numpy as np
 
 print(">> Running mse")
-out = subprocess.check_output([
+out = subprocess.run([
     "./mse",
     "--input", "sample_output.h5ad",
     "--output", "output.h5ad"
-]).decode("utf-8")
+], stderr=subprocess.STDOUT)
+
+if out.stdout:
+    print(out.stdout)
+
+if out.returncode:
+    print(f"script: '{out.args}' exited with an error.")
+    exit(out.returncode)
 
 print(">> Checking whether file exists")
 assert path.exists("output.h5ad")

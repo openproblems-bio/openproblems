@@ -18,7 +18,7 @@ print("Load data")
 input_prediction = ad.read_h5ad(par['input_prediction'])
 input_solution = ad.read_h5ad(par['input_solution'])
 
-assert (input_prediction.obs_names == input_solution.obs_names).all()
+assert (input_prediction.obs_names == input_solution.obs_names).all(), "obs_names not the same in prediction and solution inputs"
 
 print("Encode labels")
 cats = list(input_solution.obs["label"].dtype.categories) + list(input_prediction.obs["label_pred"].dtype.categories)

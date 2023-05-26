@@ -21,3 +21,8 @@ functionality:
       type: integer
       default: 15
       description: "The size of local neighborhood (in terms of number of neighboring data points) used for manifold approximation."
+  test_resources:
+    - path: /resources_test/common/pancreas
+      dest: resources_test/common/pancreas
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py

@@ -23,6 +23,7 @@ platforms:
           - scprep
           - "anndata~=0.8.0"
           - numpy
+          - pyyaml
   - type: nextflow
     directives: 
       label: [ lowmem, lowcpu ]

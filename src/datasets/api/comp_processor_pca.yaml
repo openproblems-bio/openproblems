@@ -26,3 +26,9 @@ functionality:
       type: integer
       example: 25
       description: Number of principal components to compute. Defaults to 50, or 1 - minimum dimension size of selected representation.
+  test_resources:
+    - path: /resources_test/common/pancreas
+      dest: resources_test/common/pancreas
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+

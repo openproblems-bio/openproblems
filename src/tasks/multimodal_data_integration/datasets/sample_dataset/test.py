@@ -26,16 +26,20 @@ assert len(adata.uns["mode2_var"]) == adata.obsm["mode2"].shape[1]
 # check dataset id
 assert "dataset_id" in adata.uns
 
-
-
-
 print(">> Running sample_dataset with different args")
-out = subprocess.check_output([
+out = subprocess.run([
     "./sample_dataset",
     "--output", "output.h5ad",
     "--n_cells", "100",
     "--n_genes", "200"
-]).decode("utf-8")
+], stderr=subprocess.STDOUT)
+
+if out.stdout:
+    print(out.stdout)
+
+if out.returncode:
+    print(f"script: '{out.args}' exited with an error.")
+    exit(out.returncode)
 
 print(">> Checking whether file exists")
 assert path.exists("output.h5ad")

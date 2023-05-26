@@ -5,11 +5,18 @@ import subprocess
 import scanpy as sc
 
 print(">> Running mnn")
-out = subprocess.check_output([
+out = subprocess.run([
     "./mnn",
     "--input", "sample_dataset.h5ad",
     "--output", "output.h5ad"
-]).decode("utf-8")
+], stderr=subprocess.STDOUT)
+
+if out.stdout:
+    print(out.stdout)
+
+if out.returncode:
+    print(f"script: '{out.args}' exited with an error.")
+    exit(out.returncode)
 
 print(">> Checking whether file exists")
 assert path.exists("output.h5ad")

@@ -63,8 +63,14 @@ for arg in arguments:
         assert path.exists(arg["value"]), f"Input file '{arg['value']}' does not exist"
 
 print(">> Running script as test", flush=True)
-# out = subprocess.run(cmd, check=True, capture_output=True, text=True)
-subprocess.run(cmd, check=True)
+out = subprocess.run(cmd, stderr=subprocess.STDOUT)
+
+if out.stdout:
+    print(out.stdout)
+
+if out.returncode:
+    print(f"script: '{cmd}' exited with an error.")
+    exit(out.returncode)
 
 print(">> Checking whether output file exists", flush=True)
 for arg in arguments:

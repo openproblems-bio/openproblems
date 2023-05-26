@@ -10,11 +10,22 @@ meta = {
 
 ## VIASH END
 
+NAME_MAXLEN = 50
+
+SUMMARY_MAXLEN = 400
+
+DESCRIPTION_MAXLEN = 1000
+
 def check_metric(metric: Dict[str, str])  -> str:
     assert "name" in metric is not None, "name not a field or is empty"
+    assert len(metric["name"]) <= NAME_MAXLEN, f"Component id (.functionality.info.metrics.metric.name) should not exceed {NAME_MAXLEN} characters."
     assert "pretty_name" in metric is not None, "pretty_name not a field in metric or is empty"
     assert "summary" in metric is not None, "summary not a field in metric or is empty"
+    assert "FILL IN:" not in metric["summary"], "Summary not filled in"
+    assert len(metric["summary"]) <= SUMMARY_MAXLEN, f"Component id (.functionality.info.metrics.metric.summary) should not exceed {SUMMARY_MAXLEN} characters."
     assert "description" in metric is not None, "description not a field in metric or is empty"
+    assert len(metric["description"]) <= DESCRIPTION_MAXLEN, f"Component id (.functionality.info.metrics.metric.description) should not exceed {DESCRIPTION_MAXLEN} characters."
+    assert "FILL IN:" not in metric["description"], "description not filled in"
     assert "reference" in metric, "reference not a field in metric"
     assert "documentation_url" in metric , "documentation_url not a field in metric"
     assert "repository_url" in metric , "repository_url not an info field"
@@ -32,6 +43,7 @@ with open(meta["config"], "r") as file:
 
 print("check general fields", flush=True)
 assert "name" in config["functionality"] is not None, "Name not a field or is empty"
+assert len(config["functionality"]["name"]) <= NAME_MAXLEN, f"Component id (.functionality.name) should not exceed {NAME_MAXLEN} characters."
 assert "namespace" in config["functionality"] is not None, "namespace not a field or is empty"
 
 

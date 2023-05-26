@@ -73,4 +73,7 @@ platforms:
           git clone https://github.com/openproblems-bio/openproblems.git /opt/openproblems && \
             pip install --no-cache-dir -r /opt/openproblems/docker/openproblems/requirements.txt && \
             pip install --no-cache-dir --editable /opt/openproblems
+      - type: python
+        pypi:
+          - pyyaml
   - type: nextflow
