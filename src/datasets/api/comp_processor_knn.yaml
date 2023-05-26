@@ -8,7 +8,7 @@ functionality:
       description: Which layer to use as input.
     - name: "--output"
       direction: output
-      __merge__: anndata_dataset.yaml
+      __merge__: anndata_knn.yaml
     - name: "--key_added"
       type: string
       default: "knn"
