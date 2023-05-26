@@ -1,6 +1,6 @@
 type: file
 description: "An unprocessed dataset as output by a dataset loader."
-example: "raw_dataset.h5ad"
+example: "resources_test/common/pancreas/raw.h5ad"
 info:
   label: "Raw dataset"
   slots:

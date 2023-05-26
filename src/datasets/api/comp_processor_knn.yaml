@@ -1,4 +1,5 @@
 functionality:
+  namespace: "datasets/processors"
   arguments:
     - name: "--input"
       __merge__: anndata_hvg.yaml

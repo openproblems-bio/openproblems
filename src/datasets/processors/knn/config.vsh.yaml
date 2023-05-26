@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_processor_knn.yaml
 functionality:
   name: "knn"
-  namespace: "datasets/processors"
   description: "Compute KNN"
   resources:
     - type: python_script

@@ -1,6 +1,5 @@
 functionality:
   name: "subsample"
-  namespace: "datasets/processors"
   description: "Subsample an h5ad file"
   arguments:
     - name: "--input"

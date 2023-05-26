@@ -4,6 +4,6 @@ description: |
   A dataset processed by the common dataset processing pipeline. 
   This dataset contains both raw counts and normalized data matrices,
   as well as a PCA embedding, HVG selection and a kNN graph.
-example: "/resources_test/common/pancreas/dataset.h5ad"
+example: "resources_test/common/pancreas/dataset.h5ad"
 info:
   label: "Common dataset"

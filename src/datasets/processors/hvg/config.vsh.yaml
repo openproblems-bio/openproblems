@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_processor_hvg.yaml
 functionality:
   name: "hvg"
-  namespace: "datasets/processors"
   description: "Compute HVG"
   resources:
     - type: python_script

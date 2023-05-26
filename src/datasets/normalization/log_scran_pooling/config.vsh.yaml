@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_normalization.yaml
 functionality:
   name: "log_scran_pooling"
-  namespace: "datasets/normalization"
   description: "Normalize data using scran pooling"
   resources:
     - type: r_script

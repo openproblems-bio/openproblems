@@ -1,7 +1,7 @@
 __merge__: anndata_raw.yaml
 type: file
 description: "A normalized dataset"
-example: "dataset.h5ad"
+example: "resources_test/common/pancreas/normalized.h5ad"
 info:
   label: "Normalized dataset"
   slots:

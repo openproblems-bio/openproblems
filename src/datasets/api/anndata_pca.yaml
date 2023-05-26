@@ -1,7 +1,7 @@
 __merge__: anndata_normalized.yaml
 type: file
 description: "A normalised dataset with a PCA embedding"
-example: "dataset.h5ad"
+example: "resources_test/common/pancreas/pca.h5ad"
 info:
   label: "Dataset+PCA"
   slots:

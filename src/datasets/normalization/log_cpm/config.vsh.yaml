@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_normalization.yaml
 functionality:
   name: "log_cpm"
-  namespace: "datasets/normalization"
   description: "Normalize data using Log CPM"
   resources:
     - type: python_script

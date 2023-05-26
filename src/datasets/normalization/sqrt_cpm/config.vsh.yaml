@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_normalization.yaml
 functionality:
   name: "sqrt_cpm"
-  namespace: "datasets/normalization"
   description: "Normalize data using Log Sqrt"
   resources:
     - type: python_script

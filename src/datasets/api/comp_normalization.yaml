@@ -1,4 +1,5 @@
 functionality:
+  namespace: "common/normalization"
   arguments:
     - name: "--input"
       __merge__: anndata_raw.yaml

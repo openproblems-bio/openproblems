@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_processor_pca.yaml
 functionality:
   name: "pca"
-  namespace: "datasets/processors"
   description: "Compute PCA"
   resources:
     - type: python_script
