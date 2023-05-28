@@ -1,5 +1,11 @@
 functionality:
   namespace: "datasets/loaders"
+  info:
+    type_info:
+      label: Dataset loader
+      description: |
+        A component which generates a "Common dataset". A dataset loader will typically have an identifier (e.g. a GEO identifier)
+        or URL as input argument and additional arguments to define where the script needs to download a dataset from and how to process it.
   argument_groups:
     - name: Outputs
       arguments:

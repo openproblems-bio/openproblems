@@ -1,5 +1,10 @@
 functionality:
   namespace: "datasets/processors"
+  info:
+    type_info:
+      label: HVG
+      description: |
+        Computes the highly variable genes scores.
   arguments:
     - name: "--input"
       __merge__: anndata_pca.yaml

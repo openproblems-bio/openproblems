@@ -2,6 +2,10 @@ functionality:
   namespace: "denoising/methods"
   info:
     type: method
+    type_info:
+      label: Method
+      description: |
+        A denoising method to remove noise (i.e. technical artifacts) from a dataset.
   arguments:
     - name: "--input_train"
       __merge__: anndata_train.yaml

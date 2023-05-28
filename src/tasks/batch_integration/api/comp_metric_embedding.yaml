@@ -2,6 +2,10 @@ functionality:
   namespace: batch_integration/metrics
   info:
     type: metric
+    type_info:
+      label: Metric (embedding)
+      description: |
+        A metric for evaluating batch corrected embeddings.
   arguments:
     - name: --input_integrated
       __merge__: anndata_integrated_embedding.yaml

@@ -2,6 +2,15 @@ functionality:
   namespace: "denoising/control_methods"
   info:
     type: control_method
+    type_info:
+      label: Control method
+      description: |
+        This folder contains control components for the task. 
+        These components have the same interface as the regular methods
+        but also receive the solution object as input. It serves as a
+        starting point to test the relative accuracy of new methods in
+        the task, and also as a quality control for the metrics defined
+        in the task. 
   arguments:
     - name: "--input_train"
       __merge__: anndata_train.yaml

@@ -1,12 +1,8 @@
+__merge__: ../../api/comp_processor_subset.yaml
 functionality:
   name: "subsample"
   description: "Subsample an h5ad file"
   arguments:
-    - name: "--input"
-      type: "file"
-      description: "Input data to be resized"
-      required: true
-      example: input.h5ad
     - name: "--n_obs"
       type: integer
       description: Maximum number of observations to be kept. It might end up being less because empty cells / genes are removed.
@@ -32,13 +28,6 @@ functionality:
     - name: "--even"
       type: "boolean_true"
       description: Subsample evenly from different batches
-    - name: "--output"
-      alternatives: ["-o"]
-      type: "file"
-      direction: "output"
-      example: "output.h5ad"
-      description: "Output h5ad file"
-      required: true
     - name: "--seed"
       type: "integer"
       description: "A seed for the subsampling."

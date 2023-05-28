@@ -3,6 +3,10 @@ functionality:
   info:
     type: method
     output_type: graph
+    type_info:
+      label: Method (graph)
+      description: |
+        A batch integration method which outputs a batch-corrected cell graphs.
   arguments:
     - __merge__: anndata_unintegrated.yaml
       name: --input

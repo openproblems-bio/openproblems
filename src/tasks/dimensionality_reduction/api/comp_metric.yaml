@@ -2,6 +2,10 @@ functionality:
   namespace: dimensionality_reduction/metrics
   info:
     type: metric
+    type_info:
+      label: Metric
+      description: |
+        A metric for evaluating dimensionality reductions.
   arguments:
     - name: "--input_reduced"
       __merge__: anndata_reduced.yaml

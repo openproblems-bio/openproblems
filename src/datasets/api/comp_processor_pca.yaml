@@ -1,5 +1,10 @@
 functionality:
   namespace: "datasets/processors"
+  info:
+    type_info:
+      label: PCA
+      description: |
+        Computes a PCA embedding of the normalized data.
   arguments:
     - name: "--input"
       __merge__: anndata_normalized.yaml

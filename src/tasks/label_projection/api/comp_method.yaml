@@ -2,6 +2,11 @@ functionality:
   namespace: "label_projection/methods"
   info:
     type: method
+    type_info:
+      label: Method
+      description: |
+        A label projection method to predict the labels of a new "test"
+        dataset based on an annotated "training" dataset.
   arguments:
     - name: "--input_train"
       __merge__: anndata_train.yaml

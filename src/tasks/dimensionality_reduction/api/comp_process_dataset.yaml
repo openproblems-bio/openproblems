@@ -2,6 +2,10 @@ functionality:
   namespace: dimensionality_reduction
   info:
     type: process_dataset
+    type_info:
+      label: Data processor
+      description: |
+        Prepare a common dataset for the denoising task.
   arguments:
     - name: "--input"
       __merge__: /src/datasets/api/anndata_common_dataset.yaml

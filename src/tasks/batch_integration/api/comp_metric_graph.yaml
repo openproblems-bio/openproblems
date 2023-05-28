@@ -2,6 +2,10 @@ functionality:
   namespace: batch_integration/metrics
   info:
     type: metric
+    type_info:
+      label: Metric (graph)
+      description: |
+        A metric for evaluating batch corrected cell graphs.
   arguments:
     - name: --input_integrated
       __merge__: anndata_integrated_graph.yaml

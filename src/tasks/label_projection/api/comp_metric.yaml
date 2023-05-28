@@ -2,6 +2,10 @@ functionality:
   namespace: "label_projection/metrics"
   info:
     type: metric
+    type_info:
+      label: Metric
+      description: |
+        A metric for evaluating predicted labels.
   arguments:
     - name: "--input_solution"
       __merge__: anndata_solution.yaml

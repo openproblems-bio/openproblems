@@ -1,0 +1,19 @@
+functionality:
+  namespace: "datasets/processors"
+  info:
+    type_info:
+      label: Subset
+      description: |
+        Subset a common dataset
+  arguments:
+    - name: "--input"
+      __merge__: anndata_common_dataset.yaml
+    - name: "--output"
+      __merge__: anndata_common_dataset.yaml
+      direction: output
+  test_resources:
+    - path: /resources_test/common/pancreas
+      dest: resources_test/common/pancreas
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+

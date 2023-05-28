@@ -1,5 +1,10 @@
 functionality:
   namespace: "datasets/processors"
+  info:
+    type_info:
+      label: KNN
+      description: |
+        Computes the k-nearest-neighbours for each cell.
   arguments:
     - name: "--input"
       __merge__: anndata_hvg.yaml

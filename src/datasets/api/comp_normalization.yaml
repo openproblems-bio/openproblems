@@ -1,5 +1,10 @@
 functionality:
   namespace: "datasets/normalization"
+  info:
+    type_info:
+      label: Dataset normalization
+      description: |
+        A normalization method which processes the raw counts output by a dataset loader.
   arguments:
     - name: "--input"
       __merge__: anndata_raw.yaml

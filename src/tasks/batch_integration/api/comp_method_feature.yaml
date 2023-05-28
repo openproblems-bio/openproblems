@@ -3,6 +3,10 @@ functionality:
   info:
     type: method
     output_type: feature
+    type_info:
+      label: Method (feature)
+      description: |
+        A batch integration method which outputs a batch-corrected feature-space.
   arguments:
     - __merge__: anndata_unintegrated.yaml
       name: --input

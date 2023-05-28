@@ -3,6 +3,10 @@ functionality:
   info:
     type: method
     output_type: embedding
+    type_info:
+      label: Method (embedding)
+      description: |
+        A batch integration method which outputs a batch-corrected embedding.
   arguments:
     - name: --input
       __merge__: anndata_unintegrated.yaml

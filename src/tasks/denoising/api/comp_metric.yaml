@@ -2,6 +2,10 @@ functionality:
   namespace: "denoising/metrics"
   info:
     type: metric
+    type_info:
+      label: Metric
+      description: |
+        A metric for evaluating denoised datasets.
   arguments:
     - name: "--input_test"
       __merge__: anndata_test.yaml

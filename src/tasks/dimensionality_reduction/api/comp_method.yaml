@@ -2,6 +2,11 @@ functionality:
   namespace: dimensionality_reduction/methods
   info:
     type: method
+    type_info:
+      label: Method
+      description: |
+        A dimensionality reduction method to summarise the biological information in
+        a dataset in as few dimensions as possible.
   arguments:
     - name: "--input"
       __merge__: anndata_train.yaml
