@@ -1,6 +1,6 @@
 type: file
 description: "A dataset with dimensionality reduction embedding."
-example: "resources_test/dimensionality_reduction/pancreas/output.h5ad"
+example: "resources_test/dimensionality_reduction/pancreas/embedding.h5ad"
 info:
   short_description: "Embedding"
   slots:
