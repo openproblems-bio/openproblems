@@ -8,6 +8,7 @@ functionality:
   arguments:
     - name: "--input"
       __merge__: anndata_normalized.yaml
+      required: true
     - name: "--layer_input"
       type: string
       default: "normalized"
@@ -15,6 +16,7 @@ functionality:
     - name: "--output"
       direction: output
       __merge__: anndata_pca.yaml
+      required: true
     - name: "--obsm_embedding"
       type: string
       default: "X_pca"

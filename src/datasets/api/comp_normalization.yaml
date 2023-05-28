@@ -8,9 +8,11 @@ functionality:
   arguments:
     - name: "--input"
       __merge__: anndata_raw.yaml
+      required: true
     - name: "--output"
       direction: output
       __merge__: anndata_normalized.yaml
+      required: true
     - name: "--layer_output"
       type: string
       default: "normalized"

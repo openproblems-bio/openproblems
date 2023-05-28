@@ -8,9 +8,11 @@ functionality:
   arguments:
     - name: "--input"
       __merge__: anndata_common_dataset.yaml
+      required: true
     - name: "--output"
       __merge__: anndata_common_dataset.yaml
       direction: output
+      required: true
   test_resources:
     - path: /resources_test/common/pancreas
       dest: resources_test/common/pancreas
