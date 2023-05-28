@@ -20,7 +20,7 @@ functionality:
       default: "knn"
       description: |
         the neighbors data is added to `.uns[key_added]`, 
-        distances are stored in `.obsp[key_added+'_distances'] and 
+        distances are stored in `.obsp[key_added+'_distances']` and 
         connectivities in `.obsp[key_added+'_connectivities']`.
     - name: "--num_neighbors"
       type: integer
