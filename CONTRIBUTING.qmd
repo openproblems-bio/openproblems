@@ -79,14 +79,14 @@ The flag `--setup cachedbuild` will automatically start building Docker containe
 
 The command might take a while to run, since it is building a docker container for each of the components. 
 
-**Step 3, run the pipeline with nextflow.** To do so, run the bash script located at `src/label_projection/workflows/run_nextflow.sh`:
+**Step 3, run the pipeline with nextflow.** To do so, run the bash script located at `src/tasks/label_projection/workflows/run_nextflow.sh`:
 
 ```bash
-src/label_projection/workflows/run/run_test.sh
+src/tasks/label_projection/workflows/run/run_test.sh
 ```
 
     N E X T F L O W  ~  version 22.04.5
-    Launching `src/label_projection/workflows/run/main.nf` [pensive_turing] DSL2 - revision: 16b7b0c332
+    Launching `src/tasks/label_projection/workflows/run/main.nf` [pensive_turing] DSL2 - revision: 16b7b0c332
     executor >  local (28)
     [f6/f89435] process > run_wf:run_methods:true_labels:true_labels_process (pancreas.true_labels)                         [100%] 1 of 1 ✔
     [ed/d674a2] process > run_wf:run_methods:majority_vote:majority_vote_process (pancreas.majority_vote)                   [100%] 1 of 1 ✔
@@ -116,9 +116,9 @@ High level overview:
         ├── docker             Bash executables which can be used from a terminal.
         └── nextflow           Nextflow modules which can be used as a standalone pipeline or as part of a bigger pipeline.
 
-Detailed overview of a task folder (e.g. `src/label_projection`):
+Detailed overview of a task folder (e.g. `src/tasks/label_projection`):
 
-    src/label_projection/
+    src/tasks/label_projection/
     ├── api                    Specs for the components in this task.
     ├── control_methods        Control methods which serve as quality control checks for the benchmark.
     ├── docs                   Task documentation
@@ -152,9 +152,9 @@ You can start creating a new component by [creating a Viash component](https://v
 
 ```{bash, include=FALSE}
 
-mkdir -p src/label_projection/methods/foo
+mkdir -p src/tasks/label_projection/methods/foo
 
-cat > src/label_projection/methods/foo/config.vsh.yaml << HERE
+cat > src/tasks/label_projection/methods/foo/config.vsh.yaml << HERE
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "foo"
@@ -189,7 +189,7 @@ platforms:
   - type: nextflow
 HERE
 
-cat > src/label_projection/methods/foo/script.py << HERE
+cat > src/tasks/label_projection/methods/foo/script.py << HERE
 import anndata as ad
 import numpy as np
 
@@ -220,16 +220,16 @@ input_test.write_h5ad(par["output"], compression="gzip")
 HERE
 ```
 
-For example, to create a new Python-based method named `foo`, create a Viash config at `src/label_projection/methods/foo/config.vsh.yaml`:
+For example, to create a new Python-based method named `foo`, create a Viash config at `src/tasks/label_projection/methods/foo/config.vsh.yaml`:
 
 ```{embed lang="yaml"}
-src/label_projection/methods/foo/config.vsh.yaml
+src/tasks/label_projection/methods/foo/config.vsh.yaml
 ```
 
-And create a script at `src/label_projection/methods/foo/script.py`:
+And create a script at `src/tasks/label_projection/methods/foo/script.py`:
 
 ```{embed lang="python"}
-src/label_projection/methods/foo/script.py
+src/tasks/label_projection/methods/foo/script.py
 ```
 
 
@@ -238,13 +238,13 @@ src/label_projection/methods/foo/script.py
 You can view the interface of the executable by running the executable with the `-h` or `--help` parameter.
 
 ```{bash}
-viash run src/label_projection/methods/foo/config.vsh.yaml -- --help
+viash run src/tasks/label_projection/methods/foo/config.vsh.yaml -- --help
 ```
 
 You can **run the component** as follows:
 
 ```{bash}
-viash run src/label_projection/methods/foo/config.vsh.yaml -- \
+viash run src/tasks/label_projection/methods/foo/config.vsh.yaml -- \
   --input_train resources_test/label_projection/pancreas/train.h5ad \
   --input_test resources_test/label_projection/pancreas/test.h5ad \
   --output resources_test/label_projection/pancreas/prediction.h5ad
@@ -259,7 +259,7 @@ This standalone executable you can give to somebody else, and they will be able 
 run it, provided that they have Bash and Docker installed.
 
 ```{bash}
-viash build src/label_projection/methods/foo/config.vsh.yaml \
+viash build src/tasks/label_projection/methods/foo/config.vsh.yaml \
   -o target/docker/label_projection/methods/foo
 ```
 
@@ -286,15 +286,15 @@ target/docker/label_projection/methods/foo/foo \
 
 ## Unit testing a component
 
-The [method API specifications](src/label_projection/api/comp_method.yaml) comes with a generic unit test for free. 
+The [method API specifications](src/tasks/label_projection/api/comp_method.yaml) comes with a generic unit test for free. 
 This means you can unit test your component using the **`viash test`** command.
 
 ```{bash}
-viash test src/label_projection/methods/foo/config.vsh.yaml
+viash test src/tasks/label_projection/methods/foo/config.vsh.yaml
 ```
 
 ```{bash include=FALSE}
-cat > src/label_projection/methods/foo/script.py << HERE
+cat > src/tasks/label_projection/methods/foo/script.py << HERE
 import anndata as ad
 import numpy as np
 
@@ -328,13 +328,13 @@ HERE
 Let's introduce a bug in the script and try running the test again. For instance:
 
 ```{embed lang="python"}
-src/label_projection/methods/foo/script.py
+src/tasks/label_projection/methods/foo/script.py
 ```
 
 If we now run the test, we should get an error since we didn't create all of the required output slots.
 
 ```{bash error=TRUE}
-viash test src/label_projection/methods/foo/config.vsh.yaml
+viash test src/tasks/label_projection/methods/foo/config.vsh.yaml
 ```
 
 
@@ -346,5 +346,5 @@ The [Viash reference docs](https://viash.io/reference/config/) page provides inf
 <!-- cleaning up temporary files -->
 
 ```{bash, echo=FALSE}
-rm -r src/label_projection/methods/foo target/docker/label_projection/methods/foo
+rm -r src/tasks/label_projection/methods/foo target/docker/label_projection/methods/foo
 ```

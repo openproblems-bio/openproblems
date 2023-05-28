@@ -18,7 +18,7 @@ export NXF_VER=22.04.5
 
   # -profile docker \
 nextflow run . \
-  -main-script src/batch_integration/workflows/run/main.nf \
+  -main-script src/tasks/batch_integration/workflows/run/main.nf \
   -profile docker \
   -c src/wf_utils/labels_ci.config \
   -resume \

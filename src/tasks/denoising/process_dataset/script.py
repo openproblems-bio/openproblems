@@ -12,7 +12,7 @@ par = {
 }
 meta = {
     "functionality_name": "split_data",
-    "resources_dir": "src/denoising/process_dataset"
+    "resources_dir": "src/tasks/denoising/process_dataset"
 }
 ## VIASH END
 

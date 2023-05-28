@@ -15,7 +15,7 @@ functionality:
         - name: "--input"
           type: "file"
           required: true
-        - name: "--input_test"
+        - name: "--input_solution"
           type: "file"
           required: true
         - name: "--normalization_id"

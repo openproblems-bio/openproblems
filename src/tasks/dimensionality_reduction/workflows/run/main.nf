@@ -56,7 +56,7 @@ workflow run_wf {
     | setWorkflowArguments(
       preprocess: ["dataset_id", "normalization_id"],
       method: ["input"],
-      metric: ["input_test"],
+      metric: ["input_solution"],
       output: ["output"]
     )
     // multiply events by the number of method
@@ -73,7 +73,7 @@ workflow run_wf {
     | run_methods
 
     // run metrics
-    | getWorkflowArguments(key: "metric", inputKey: "input_reduced")
+    | getWorkflowArguments(key: "metric", inputKey: "input_embedding")
     | run_metrics
 
     // convert to tsv  

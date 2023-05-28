@@ -63,7 +63,7 @@ fi
 export NXF_VER=22.04.5
 nextflow \
   run . \
-  -main-script src/label_projection/workflows/run/main.nf \
+  -main-script src/tasks/label_projection/workflows/run/main.nf \
   -profile docker \
   -params-file "$params_file" \
   --publish_dir "$OUTPUT_DIR" \

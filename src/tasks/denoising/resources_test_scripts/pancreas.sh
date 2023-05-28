@@ -20,19 +20,19 @@ fi
 mkdir -p $DATASET_DIR
 
 # split dataset
-viash run src/denoising/process_dataset/config.vsh.yaml -- \
+viash run src/tasks/denoising/process_dataset/config.vsh.yaml -- \
     --input $RAW_DATA \
     --output_train $DATASET_DIR/train.h5ad \
     --output_test $DATASET_DIR/test.h5ad \
     --seed 123
 
 # run one method
-viash run src/denoising/methods/magic/config.vsh.yaml -- \
+viash run src/tasks/denoising/methods/magic/config.vsh.yaml -- \
     --input_train $DATASET_DIR/train.h5ad \
     --output $DATASET_DIR/magic.h5ad
 
 # run one metric
-viash run src/denoising/metrics/poisson/config.vsh.yaml -- \
+viash run src/tasks/denoising/metrics/poisson/config.vsh.yaml -- \
     --input_denoised $DATASET_DIR/magic.h5ad \
     --input_test $DATASET_DIR/test.h5ad \
     --output $DATASET_DIR/magic_poisson.h5ad
@@ -42,7 +42,7 @@ export NXF_VER=22.04.5
 
 nextflow \
   run . \
-  -main-script src/denoising/workflows/run/main.nf \
+  -main-script src/tasks/denoising/workflows/run/main.nf \
   -profile docker \
   -resume \
   --id pancreas \

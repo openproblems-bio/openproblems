@@ -82,7 +82,7 @@
 
 * `process_dataset`: Added a component for processing common datasets into task-ready dataset objects.
 
-* `resources_test/label_projection/pancreas` with `src/label_projection/resources_test_scripts/pancreas.sh`.
+* `resources_test/label_projection/pancreas` with `src/tasks/label_projection/resources_test_scripts/pancreas.sh`.
 
 ### V1 MIGRATION
 
@@ -120,7 +120,7 @@
 
 * `process_dataset`: Added a component for processing common datasets into task-ready dataset objects.
 
-* `resources_test/denoising/pancreas` with `src/denoising/resources_test_scripts/pancreas.sh`.
+* `resources_test/denoising/pancreas` with `src/tasks/denoising/resources_test_scripts/pancreas.sh`.
 
 ### V1 MIGRATION
 
@@ -159,7 +159,7 @@
 
 * `control_methods`: Added a component for baseline methods specifically.
 
-* `resources_test/dimensionality_reduction/pancreas` with `src/dimensionality_reduction/resources_test_scripts/pancreas.sh`.
+* `resources_test/dimensionality_reduction/pancreas` with `src/tasks/dimensionality_reduction/resources_test_scripts/pancreas.sh`.
 
 * Added `variant` key to config files to store variants (different input parameters) of every component.
 

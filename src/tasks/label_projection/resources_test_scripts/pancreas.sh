@@ -20,7 +20,7 @@ fi
 mkdir -p $DATASET_DIR
 
 # split dataset
-viash run src/label_projection/process_dataset/config.vsh.yaml -- \
+viash run src/tasks/label_projection/process_dataset/config.vsh.yaml -- \
     --input $RAW_DATA \
     --output_train $DATASET_DIR/train.h5ad \
     --output_test $DATASET_DIR/test.h5ad \
@@ -28,13 +28,13 @@ viash run src/label_projection/process_dataset/config.vsh.yaml -- \
     --seed 123
 
 # run one method
-viash run src/label_projection/methods/knn/config.vsh.yaml -- \
+viash run src/tasks/label_projection/methods/knn/config.vsh.yaml -- \
     --input_train $DATASET_DIR/train.h5ad \
     --input_test $DATASET_DIR/test.h5ad \
     --output $DATASET_DIR/knn.h5ad
 
 # run one metric
-viash run src/label_projection/metrics/accuracy/config.vsh.yaml -- \
+viash run src/tasks/label_projection/metrics/accuracy/config.vsh.yaml -- \
     --input_prediction $DATASET_DIR/knn.h5ad \
     --input_solution $DATASET_DIR/solution.h5ad \
     --output $DATASET_DIR/knn_accuracy.h5ad
@@ -44,7 +44,7 @@ export NXF_VER=22.04.5
 
 nextflow \
   run . \
-  -main-script src/label_projection/workflows/run/main.nf \
+  -main-script src/tasks/label_projection/workflows/run/main.nf \
   -profile docker \
   -resume \
   --id pancreas \

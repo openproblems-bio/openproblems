@@ -2,7 +2,7 @@
 
 Structure of this task:
 
-    src/denoising
+    src/tasks/denoising
     ├── api                          Interface specifications for components and datasets in this task
     ├── control_methods              Control methods to compare methods against
     ├── methods                      Methods to be benchmarked
