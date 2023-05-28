@@ -4,10 +4,6 @@ functionality:
   namespace: "multimodal_data_integration/datasets"
   version: "dev"
   description: "Create a modality alignment dataset from CSV using scprep."
-  authors:
-    - name: "Scott Gigante"
-      roles: [ maintainer, author ]
-      props: { github: scottgigante }
   arguments:
     - name: "--id"
       type: "string"

@@ -4,10 +4,6 @@ functionality:
   namespace: "multimodal_data_integration/datasets"
   version: "dev"
   description: "Sample dataset for testing purposes"
-  authors:
-    - name: "Scott Gigante"
-      roles: [ maintainer, author ]
-      props: { github: scottgigante }
   arguments:
     - name: "--output"
       alternatives: ["-o"]

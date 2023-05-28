@@ -4,10 +4,6 @@ functionality:
   namespace: "multimodal_data_integration/metrics"
   version: "dev"
   description: "Compute the kNN Area Under the Curve"
-  authors:
-    - name: "Scott Gigante"
-      roles: [ maintainer, author ]
-      props: { github: scottgigante }
   info:
     method_label: "KNN-AUC"
     metric_name: "kNN Area Under the Curve"

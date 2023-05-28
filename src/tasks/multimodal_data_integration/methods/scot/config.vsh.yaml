@@ -4,10 +4,6 @@ functionality:
   namespace: "multimodal_data_integration/methods"
   version: "dev"
   description: "Run Single Cell Optimal Transport"
-  authors:
-    - name: "Alex Tong"
-      roles: [ maintainer, author ]
-      props: { github: atong01 }
   info:
     method_label: "SCOT"
     method_name: "Single Cell Optimal Transport"

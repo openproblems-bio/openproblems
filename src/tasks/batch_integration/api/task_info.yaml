@@ -22,3 +22,16 @@ description: |
   The batch integrated output can be a feature matrix, a low dimensional embedding and/or a neighbourhood graph.
   The respective batch-integrated representation is then evaluated using sets of metrics that capture how well batch effects are removed and whether biological variance is conserved.
   We have based this particular task on the latest, and most extensive benchmark of single-cell data integration methods [@luecken2022benchmarking].
+authors:
+  - name: Michaela Mueller
+    roles: [ maintainer, author ]
+    props: { github: mumichae }
+  - name: Kai Waldrant
+    roles: [ contributor ]
+    props: { github: KaiWaldrant }
+  - name: Robrecht Cannoodt
+    roles: [ contributor ]
+    props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  - name: Daniel Strobl
+    roles: [ author ]
+    props: { github: danielStrobl }

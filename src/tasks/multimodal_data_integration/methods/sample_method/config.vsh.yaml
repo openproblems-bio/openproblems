@@ -4,10 +4,6 @@ functionality:
   namespace: "multimodal_data_integration/methods"
   version: "dev"
   description: "Sample method"
-  authors:
-    - name: "Scott Gigante"
-      roles: [ maintainer, author ]
-      props: { github: scottgigante }
   info:
     method_name: "Sample method"
   arguments:

@@ -4,10 +4,6 @@ functionality:
   namespace: "multimodal_data_integration/metrics"
   version: "dev"
   description: "Compute the mean squared error"
-  authors:
-    - name: "Scott Gigante"
-      roles: [ maintainer, author ]
-      props: { github: scottgigante }
   info:
     method_label: "MSE"
     metric_name: "Mean Squared Error"

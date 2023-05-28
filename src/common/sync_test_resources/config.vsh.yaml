@@ -6,11 +6,6 @@ functionality:
   usage: |
     sync_test_resources
     sync_test_resources --input s3://openproblems-data/resources_test --output resources_test
-  authors:
-    - name: Robrecht Cannoodt
-      email: rcannood@gmail.com
-      roles: [ maintainer ]
-      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
   arguments:
     - name: "--input"
       alternatives: ["-i"]
