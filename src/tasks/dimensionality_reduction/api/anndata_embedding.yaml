@@ -1,8 +1,8 @@
 type: file
-description: "A dimensionally reduced dataset"
-example: "resources_test/dimensionality_reduction/pancreas/reduced.h5ad"
+description: "A dataset with dimensionality reduction embedding."
+example: "resources_test/dimensionality_reduction/pancreas/output.h5ad"
 info:
-  short_description: "Training data"
+  short_description: "Embedding"
   slots:
     obsm:
       - type: double

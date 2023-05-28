@@ -1,8 +1,8 @@
 type: file
-description: "The test data"
-example: "resources_test/dimensionality_reduction/pancreas/test.h5ad"
+description: "The dataset to pass to a method."
+example: "resources_test/dimensionality_reduction/pancreas/dataset.h5ad"
 info:
-  short_description: "Test data"
+  short_description: "Dataset"
   slots:
     layers: 
       - type: integer

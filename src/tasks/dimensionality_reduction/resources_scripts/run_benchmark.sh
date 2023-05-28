@@ -37,14 +37,14 @@ param_list = []
 for dataset in datasets:
   id = dataset["id"]
   input_train = dataset_dir + "/" + id + ".train.h5ad"
-  input_test = dataset_dir + "/" + id + ".test.h5ad"
+  input_solution = dataset_dir + "/" + id + ".test.h5ad"
 
   obj = {
     'id': id, 
     'dataset_id': dataset["dataset_id"],
     'normalization_id': dataset["normalization_id"],
     'input': input_train,
-    'input_test': input_test
+    'input_solution': input_solution
   }
   param_list.append(obj)
 
@@ -61,7 +61,7 @@ fi
 export NXF_VER=22.04.5
 nextflow \
   run . \
-  -main-script src/dimensionality_reduction/workflows/run/main.nf \
+  -main-script src/tasks/dimensionality_reduction/workflows/run/main.nf \
   -profile docker \
   -resume \
   -params-file "$params_file" \

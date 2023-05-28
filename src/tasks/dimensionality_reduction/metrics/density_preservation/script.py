@@ -8,8 +8,8 @@ from scipy.stats import pearsonr
 
 ## VIASH START
 par = {
-    "input_reduced": "resources_test/dimensionality_reduction/pancreas/reduced.h5ad",
-    "input_test": "resources_test/dimensionality_reduction/pancreas/test.h5ad",
+    "input_embedding": "resources_test/dimensionality_reduction/pancreas/reduced.h5ad",
+    "input_solution": "resources_test/dimensionality_reduction/pancreas/test.h5ad",
     "output": "score.h5ad",
 }
 ## VIASH END
@@ -107,11 +107,11 @@ _K = 30
 _SEED = 42
 
 print("Load data", flush=True)
-input_test = ad.read_h5ad(par["input_test"])
-input_reduced = ad.read_h5ad(par["input_reduced"])
+input_solution = ad.read_h5ad(par["input_solution"])
+input_embedding = ad.read_h5ad(par["input_embedding"])
 
-high_dim = input_test.layers["normalized"]
-X_emb = input_reduced.obsm["X_emb"]
+high_dim = input_solution.layers["normalized"]
+X_emb = input_embedding.obsm["X_emb"]
 
 density_preservation = compute_density_preservation(
     X_emb=X_emb,
@@ -123,9 +123,9 @@ density_preservation = compute_density_preservation(
 print("Create output AnnData object", flush=True)
 output = ad.AnnData(
     uns={
-        "dataset_id": input_test.uns["dataset_id"],
-        "normalization_id": input_test.uns["normalization_id"],
-        "method_id": input_reduced.uns["method_id"],
+        "dataset_id": input_solution.uns["dataset_id"],
+        "normalization_id": input_solution.uns["normalization_id"],
+        "method_id": input_embedding.uns["method_id"],
         "metric_ids": [ "density_preservation" ],
         "metric_values": [ density_preservation ]
     }

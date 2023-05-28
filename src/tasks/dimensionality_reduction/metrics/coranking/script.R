@@ -3,19 +3,19 @@ library(coRanking)
 
 ## VIASH START
 par <- list(
-  "input_reduced" = "resources_test/dimensionality_reduction/pancreas/reduced.h5ad",
-  "input_test" = "resources_test/dimensionality_reduction/pancreas/test.h5ad",
+  "input_embedding" = "resources_test/dimensionality_reduction/pancreas/reduced.h5ad",
+  "input_solution" = "resources_test/dimensionality_reduction/pancreas/test.h5ad",
   "output" = "score.h5ad"
 )
 ## VIASH END
 
 cat("Read anndata objects")
-input_test <- anndata::read_h5ad(par[["input_test"]])
-input_reduced <- anndata::read_h5ad(par[["input_reduced"]])
+input_solution <- anndata::read_h5ad(par[["input_solution"]])
+input_embedding <- anndata::read_h5ad(par[["input_embedding"]])
 
 # get datasets
-high_dim <- input_test$layers[["normalized"]]
-X_emb <- input_reduced$obsm[["X_emb"]]
+high_dim <- input_solution$layers[["normalized"]]
+X_emb <- input_embedding$obsm[["X_emb"]]
 
 if (any(is.na(X_emb))) {
   continuity_at_k30 <-
@@ -73,9 +73,9 @@ cat("construct output AnnData\n")
 output <- AnnData(
   shape = c(0L, 0L),
   uns = list(
-    dataset_id = input_test$uns[["dataset_id"]],
-    normalization_id = input_test$uns[["normalization_id"]],
-    method_id = input_reduced$uns[["method_id"]],
+    dataset_id = input_solution$uns[["dataset_id"]],
+    normalization_id = input_solution$uns[["normalization_id"]],
+    method_id = input_embedding$uns[["method_id"]],
     metric_ids = c(
       "continuity_at_k30",
       "trustworthiness_at_k30",

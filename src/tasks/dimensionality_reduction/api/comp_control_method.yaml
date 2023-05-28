@@ -13,10 +13,15 @@ functionality:
         in the task. 
   arguments:
     - name: "--input"
-      __merge__: anndata_train.yaml
+      __merge__: anndata_dataset.yaml
+      required: true
+    - name: "--input_solution"
+      __merge__: anndata_solution.yaml
+      required: true
     - name: "--output"
-      __merge__: anndata_reduced.yaml
+      __merge__: anndata_embedding.yaml
       direction: output
+      required: true
   test_resources:
     - path: /resources_test/dimensionality_reduction/pancreas/
       dest: resources_test/dimensionality_reduction/pancreas/

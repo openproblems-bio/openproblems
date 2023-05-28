@@ -7,13 +7,16 @@ functionality:
       description: |
         A metric for evaluating dimensionality reductions.
   arguments:
-    - name: "--input_reduced"
-      __merge__: anndata_reduced.yaml
-    - name: "--input_test"
-      __merge__: anndata_test.yaml
+    - name: "--input_embedding"
+      __merge__: anndata_embedding.yaml
+      required: true
+    - name: "--input_solution"
+      __merge__: anndata_solution.yaml
+      required: true
     - name: "--output"
       __merge__: anndata_score.yaml
       direction: output
+      required: true
   test_resources:
     - path: /resources_test/dimensionality_reduction/pancreas/
       dest: resources_test/dimensionality_reduction/pancreas/
