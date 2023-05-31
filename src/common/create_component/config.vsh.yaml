@@ -40,6 +40,7 @@ functionality:
         Which API file to use. Defaults to `src/<TASK>/api/comp_<TYPE>.yaml`.
         In tasks with different subtypes of method, this location might not exist and you might need
         to manually specify a different API file to inherit from.
+      must_exist: false
       # required: true
       default: src/tasks/${VIASH_PAR_TASK}/api/comp_${VIASH_PAR_TYPE}.yaml
     - type: file

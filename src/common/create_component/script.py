@@ -1,6 +1,7 @@
 from typing import Any
 from ruamel.yaml import YAML
 from pathlib import Path
+import sys
 import os
 import re
 import subprocess
@@ -15,7 +16,8 @@ par = {
   'language': 'python',
   'name': 'new_comp',
   'output': 'src/tasks/denoising/methods/new_comp',
-  'api_file': 'src/tasks/denoising/api/comp_method.yaml'
+  'api_file': 'src/tasks/denoising/api/comp_method.yaml',
+  'viash_yaml': '_viash.yaml'
 }
 ## VIASH END
 
@@ -384,6 +386,20 @@ def main(par):
   assert len(par['name']) <= 50, "Method name should be at most 50 characters."
 
   pretty_name = re.sub("_", " ", par['name']).title()
+
+  ## CHECK API FILE
+  newline = "\n"
+  api_file = Path(par["api_file"])
+  viash_yaml = Path(par["viash_yaml"])
+  if not api_file.exists():
+    api_files = [str(x.relative_to(viash_yaml.parent)) for x in api_file.parent.glob("**/comp_*.y*ml")]
+    list.sort(api_files)
+    sys.exit(strip_margin(f"""\
+      |Could not find component API file at location '{par['api_file']}'.
+      |You might need to manually specify a value for the '--api_file' parameter.
+      |
+      |Detected component API files:
+      |- {(newline + "- ").join(api_files)}"""))
 
   ####### CREATE OUTPUT DIR #######
   out_dir = Path(par["output"])
