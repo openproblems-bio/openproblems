@@ -1,6 +1,7 @@
 import bibtexparser
 from tempfile import NamedTemporaryFile
 import urllib.request
+import collections
 
 ## VIASH START
 par = {
@@ -30,7 +31,8 @@ else:
 # Remove duplicates
 print(">> Remove duplicates", flush=True)
 unique_blocks = {block.key : block for block in blocks if not hasattr(block, "error")}
-bib_new = bibtexparser.Library(unique_blocks.values())
+unique_blocks_sorted = collections.OrderedDict(sorted(unique_blocks.items()))
+bib_new = bibtexparser.Library(unique_blocks_sorted.values())
 
 print("  New keys: " + ', '.join(bib_new.entries_dict.keys()), flush=True)
 
