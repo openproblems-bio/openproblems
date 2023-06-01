@@ -11,18 +11,22 @@ yaml.indent(mapping=2, sequence=4, offset=2)
 
 ## VIASH START
 par = {
-  'task': 'denoising',
-  'type': 'method',
-  'language': 'python',
-  'name': 'new_comp',
-  'output': 'src/tasks/denoising/methods/new_comp',
-  'api_file': 'src/tasks/denoising/api/comp_method.yaml',
-  'viash_yaml': '_viash.yaml'
+  "task": "denoising",
+  "type": "method",
+  "language": "python",
+  "name": "new_comp",
+  "output": "src/tasks/denoising/methods/new_comp",
+  "api_file": "src/tasks/denoising/api/comp_method.yaml",
+  "viash_yaml": "_viash.yaml"
 }
 ## VIASH END
 
+# import helper function
+sys.path.append(meta["resources_dir"])
+from read_and_merge_yaml import read_and_merge_yaml
+
 def strip_margin(text: str) -> str:
-  return re.sub('(\n?)[ \t]*\|', '\\1', text)
+  return re.sub("(\n?)[ \t]*\|", "\\1", text)
 
 def create_config_template(par):
   config_template = yaml.load(strip_margin(f'''\
@@ -388,50 +392,58 @@ def main(par):
   pretty_name = re.sub("_", " ", par['name']).title()
 
   ## CHECK API FILE
-  newline = "\n"
   api_file = Path(par["api_file"])
   viash_yaml = Path(par["viash_yaml"])
+  project_dir = viash_yaml.parent
   if not api_file.exists():
-    api_files = [str(x.relative_to(viash_yaml.parent)) for x in api_file.parent.glob("**/comp_*.y*ml")]
-    list.sort(api_files)
+    comp_types = [x.with_suffix("").name.removeprefix("comp_") for x in api_file.parent.glob("**/comp_*.y*ml")]
+    list.sort(comp_types)
     sys.exit(strip_margin(f"""\
-      |Could not find component API file at location '{par['api_file']}'.
-      |You might need to manually specify a value for the '--api_file' parameter.
-      |
-      |Detected component API files:
-      |- {(newline + "- ").join(api_files)}"""))
+      |Error: Invalid --type argument.
+      |  Reason: Could not find API file at '{api_file.relative_to(project_dir)}'.
+      |  Possible values for --type: {', '.join(comp_types)}."""))
+  
+  ## READ API FILE
+  api = read_and_merge_yaml(api_file)
+  comp_type = api.get("functionality", {}).get("info", {}).get("type", {})
+  if not comp_type:
+    sys.exit(strip_margin(f"""\
+      |Error: API file is incorrectly formatted.
+      |  Reason: Could not find component type at `.functionality.info.type`.'
+      |  Please fix the formatting of the API file."""))
 
   ####### CREATE OUTPUT DIR #######
   out_dir = Path(par["output"])
   out_dir.mkdir(exist_ok=True)
 
   ####### CREATE CONFIG #######
-  config_file = out_dir / 'config.vsh.yaml'
+  config_file = out_dir / "config.vsh.yaml"
 
   # get config template
   config_template = create_config_template(par)
   
   # Add component specific info
-  if par['type'] == 'metric':
+  # TODO: this should be based on a component type spec
+  if comp_type == "metric":
     add_metric_info(config_template, par, pretty_name)
-  else:
+  elif comp_type == "method":
     add_method_info(config_template, par, pretty_name)
 
   # add script to resources
   add_script_resource(config_template, par)
 
   # add elements depending on language
-  if par['language'] == 'python':
+  if par["language"] == "python":
     add_python_setup(config_template)
 
-  if par['language'] == 'r':
+  if par["language"] == "r":
     add_r_setup(config_template)
 
-  with open(config_file, 'w') as f:
+  with open(config_file, "w") as f:
     yaml.dump(config_template, f)
 
   ####### CREATE SCRIPT #######
-  script_file = out_dir / config_template['functionality']['resources'][0]['path']
+  script_file = out_dir / config_template["functionality"]["resources"][0]["path"]
 
   # touch file
   script_file.touch()
@@ -442,14 +454,14 @@ def main(par):
   # set reasonable values
   set_par_values(final_config)
 
-  if par['language'] == 'python':
-    script_out = create_python_script(par, final_config, par['type'])
+  if par["language"] == "python":
+    script_out = create_python_script(par, final_config, comp_type)
 
-  if par['language'] == 'r':
-    script_out = create_r_script(par, final_config, par['type'])
+  if par["language"] == "r":
+    script_out = create_r_script(par, final_config, comp_type)
   
   # write script
-  with open(script_file, 'w') as f:
+  with open(script_file, "w") as f:
     f.write(script_out)
 
 

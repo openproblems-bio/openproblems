@@ -52,6 +52,7 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+    - path: /src/common/helper_functions/read_and_merge_yaml.py
   test_resources:
     - type: python_script
       path: test.py
