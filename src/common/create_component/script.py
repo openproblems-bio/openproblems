@@ -21,6 +21,9 @@ par = {
 }
 ## VIASH END
 
+# Remove this after upgrading to Viash 0.7.5
+sys.dont_write_bytecode = True
+
 # import helper function
 sys.path.append(meta["resources_dir"])
 from read_and_merge_yaml import read_and_merge_yaml
@@ -426,7 +429,7 @@ def main(par):
   # TODO: this should be based on a component type spec
   if comp_type == "metric":
     add_metric_info(config_template, par, pretty_name)
-  elif comp_type == "method":
+  elif comp_type in ["method", "control_method"]:
     add_method_info(config_template, par, pretty_name)
 
   # add script to resources
