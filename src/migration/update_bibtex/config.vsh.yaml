@@ -1,0 +1,25 @@
+functionality:
+  name: update_bibtex
+  namespace: migration
+  arguments:
+    - name: --library
+      description: Path to bibtex file
+      type: file
+      default: src/common/library.bib
+      direction: output
+    - name: --library_v1
+      description: Url of the v1 bibtex file
+      type: string
+      default: https://raw.githubusercontent.com/openproblems-bio/openproblems/main/main.bib
+  resources:
+    - type: python_script
+      path: script.py
+  test_resources:
+    - type: python_script
+      path: test.py
+platforms:
+  - type: docker
+    image: python:3.10
+    setup:
+      - type: python
+        pypi: git+https://github.com/sciunto-org/python-bibtexparser@main
