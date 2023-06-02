@@ -28,14 +28,10 @@ functionality:
       path: script.R
 platforms:
   - type: docker
-    image: eddelbuettel/r2u:22.04
+    image: ghcr.io/openproblems-bio/base-r:latest
     setup:
       - type: r
-        cran: [ Matrix, Seurat, rlang, anndata, bit64 ]
-      - type: apt
-        packages: [ libhdf5-dev, libgeos-dev, python3, python3-pip, python3-dev, python-is-python3 ]
-      - type: python
-        pip: [ anndata~=0.8.0, pyyaml ]
+        cran: [ Matrix, Seurat, rlang, bit64 ]
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]

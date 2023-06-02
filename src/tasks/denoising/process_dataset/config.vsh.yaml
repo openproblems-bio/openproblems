@@ -26,12 +26,10 @@ functionality:
     - path: helper.py
 platforms:
   - type: docker
-    image: "python:3.10"
+    image: ghcr.io/openproblems-bio/base-python:latest
     setup:
       - type: python
         packages:
-          - "anndata~=0.8.0"
           - numpy
           - scipy
-          - pyyaml
   - type: nextflow

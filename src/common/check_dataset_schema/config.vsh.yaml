@@ -42,9 +42,6 @@ functionality:
       path: test.py
 platforms:
   - type: docker
-    image: python:3.10
-    setup:
-      - type: python
-        pip: [anndata~=0.8.0, pyyaml]
+    image: ghcr.io/openproblems-bio/base-python:latest
   - type: nextflow
 

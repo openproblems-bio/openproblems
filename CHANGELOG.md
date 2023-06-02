@@ -13,6 +13,8 @@
 
 * Update "baseline" to "control" (PR #146)
 
+* Update docker images to OP pyhton/R base images (#168)
+
 ## common
 
 ### NEW FUNCTIONALITY

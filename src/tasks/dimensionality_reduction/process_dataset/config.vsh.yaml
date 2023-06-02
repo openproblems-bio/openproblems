@@ -7,12 +7,7 @@ functionality:
     - path: /src/common/helper_functions/subset_anndata.py
 platforms:
   - type: docker
-    image: "python:3.10"
-    setup:
-      - type: python
-        packages:
-          - pyyaml
-          - "anndata~=0.8.0"
+    image: ghcr.io/openproblems-bio/base-python:latest
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]

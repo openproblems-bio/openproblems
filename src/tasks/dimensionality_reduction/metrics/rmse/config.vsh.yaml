@@ -36,7 +36,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: "python:3.10"
+    image: ghcr.io/openproblems-bio/base-python:latest
     setup:
       - type: python
         packages:
@@ -44,8 +44,6 @@ platforms:
           - scikit-learn
           - numpy
           - scipy
-          - pyyaml
-          - "anndata~=0.8.0"
   - type: nextflow
     directives: 
       label: [ midmem, midcpu ]

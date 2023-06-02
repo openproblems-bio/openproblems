@@ -53,10 +53,10 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: "python:3.10"
+    image: ghcr.io/openproblems-bio/base-python:latest
     setup:
       - type: python
-        pip: [ "anndata~=0.8.0", pyyaml, scprep, magic-impute, scipy, scikit-learn<1.2]
+        pip: [scprep, magic-impute, scipy, scikit-learn<1.2]
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]

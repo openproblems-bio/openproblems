@@ -41,13 +41,11 @@ functionality:
     - path: /resources_test/common/pancreas
 platforms:
   - type: docker
-    image: "python:3.10"
+    image: ghcr.io/openproblems-bio/base-python:latest
     setup:
       - type: python
         packages:
           - scanpy
-          - "anndata~=0.8.0"
-          - pyyaml
     test_setup:
       - type: python
         packages:

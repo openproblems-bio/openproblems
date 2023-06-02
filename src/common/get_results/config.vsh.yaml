@@ -23,7 +23,7 @@ functionality:
       path: script.R
 platforms:
   - type: docker
-    image: eddelbuettel/r2u:22.04
+    image: ghcr.io/openproblems-bio/base-r:latest
     setup:
       - type: r
         cran: [ tidyverse ]

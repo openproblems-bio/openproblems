@@ -45,14 +45,12 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: "python:3.10"
+    image: ghcr.io/openproblems-bio/base-python:latest
     setup:
       - type: python
         packages:
-          - "anndata~=0.8.0"
           - phate==1.0.*
           - scprep
-          - pyyaml
           - "scikit-learn<1.2"
   - type: nextflow
     directives: 
