@@ -43,6 +43,8 @@
 
 * Refactor and standardize metric and method info fields (#99).
 
+* Add url check to method and metric unit test (#160).
+
 ## migration
 
 ### NEW FUNCTIONALITY
