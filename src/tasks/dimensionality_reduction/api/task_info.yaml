@@ -29,7 +29,7 @@ authors:
     props: { github: michalk8 }
   - name: "Scott Gigante"
     roles: [ author ]
-    props: { github: scottgigante }
+    props: { github: scottgigante, orcid: "0000-0002-4544-2764" }
   - name: Ben DeMeo
     roles: [ author ]
     props: { github: bendemeo }

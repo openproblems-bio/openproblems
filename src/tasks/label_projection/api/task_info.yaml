@@ -33,7 +33,7 @@ authors:
     props: { github: mxposed }
   - name: "Scott Gigante"
     roles: [ author ]
-    props: { github: scottgigante }
+    props: { github: scottgigante, orcid: "0000-0002-4544-2764" }
   - name: Robrecht Cannoodt
     roles: [ author ]
     props: { github: rcannood, orcid: "0000-0003-3641-729X" }
