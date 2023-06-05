@@ -14,6 +14,8 @@ SUMMARY_MAXLEN = 400
 
 DESCRIPTION_MAXLEN = 1000
 
+_MISSING_DOIS = ["vandermaaten2008visualizing", "hosmer2013applied"]
+
 
 def assert_dict(dict, functionality):
 
@@ -28,13 +30,46 @@ def assert_dict(dict, functionality):
         for key in dict:
             assert key in arg_names or info, f"{key} is not a defined argument or .functionality.info field"
 
+def _load_bib():
+    bib_path = meta["resources_dir"]+"/library.bib"
+    with open(bib_path, "r") as file:
+        return file.read()
+
 def check_url(url):
     import requests
 
-    get = requests.get(url)
+    get = requests.head(url)
 
-    assert get.status_code is (200 or 429), f"{url} is not reachable, {get.status_code}." # 429 rejected, too many requests
-        
+    if get.ok or get.status_code == 429: # 429 rejected, too many requests
+        return True
+    else:
+        return False
+
+def search_ref_bib(reference):
+    import re
+    bib = _load_bib()
+    
+    entry_pattern =  r"(@\w+{[^}]*" + reference + r"[^}]*}(.|\n)*?)(?=@)"
+
+    bib_entry = re.search(entry_pattern, bib)
+
+    if bib_entry:
+
+        type_pattern = r"@(.*){" + reference
+        doi_pattern = r"(?=doi\s*=\s*{([^,}]+)})"
+
+        entry_type = re.search(type_pattern, bib_entry.group(1))
+
+        if not (entry_type.group(1) == "misc" or reference in _MISSING_DOIS):
+            entry_doi = re.search(doi_pattern, bib_entry.group(1))
+            assert entry_doi.group(1), "doi not found in bibtex reference"
+            url = f"https://doi.org/{entry_doi.group(1)}"
+            assert check_url(url), f"{url} is not reachable, ref= {reference}."
+
+        return True
+
+    else:
+        return False
 
 print("Load config data", flush=True)
 with open(meta["config"], "r") as file:
@@ -59,10 +94,13 @@ assert "FILL IN:" not in info["description"], "description not filled in"
 assert len(info["description"]) <= DESCRIPTION_MAXLEN, f"Component id (.functionality.info.description) should not exceed {DESCRIPTION_MAXLEN} characters."
 if ("control" not in info["type"]):
     assert "reference" in info, "reference not an info field"
+    bib = _load_bib()
+    if info["reference"]:
+        assert search_ref_bib(info["reference"]), f"reference {info['reference']} not added to library.bib"
     assert "documentation_url" in info is not None, "documentation_url not an info field or is empty"
     assert "repository_url" in info is not None, "repository_url not an info field or is empty"
-    check_url(info["documentation_url"])
-    check_url(info["repository_url"])
+    assert check_url(info["documentation_url"]), f"{info['documentation_url']} is not reachable"
+    assert check_url(info["repository_url"]), f"{info['repository_url']} is not reachable"
 
 
 if "variants" in info:

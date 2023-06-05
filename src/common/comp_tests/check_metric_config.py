@@ -15,12 +15,49 @@ SUMMARY_MAXLEN = 400
 
 DESCRIPTION_MAXLEN = 1000
 
+_MISSING_DOIS = ["vandermaaten2008visualizing", "hosmer2013applied"]
+
+
+def _load_bib():
+    bib_path = meta["resources_dir"]+"/library.bib"
+    with open(bib_path, "r") as file:
+        return file.read()
+    
 def check_url(url):
     import requests
 
-    get = requests.get(url)
+    get = requests.head(url)
 
-    assert get.status_code is (200 or 429), f"{url} is not reachable, {get.status_code}." # 429 rejected, too many requests
+    if get.ok or get.status_code == 429: # 429 rejected, too many requests
+        return True
+    else:
+        return False
+
+def search_ref_bib(reference):
+    import re
+    bib = _load_bib()
+    
+    entry_pattern =  r"(@\w+{[^}]*" + reference + r"[^}]*}(.|\n)*?)(?=@)"
+
+    bib_entry = re.search(entry_pattern, bib)
+
+    if bib_entry:
+
+        type_pattern = r"@(.*){" + reference
+        doi_pattern = r"(?=doi\s*=\s*{([^,}]+)})"
+
+        entry_type = re.search(type_pattern, bib_entry.group(1))
+
+        if not (entry_type.group(1) == "misc" or reference in _MISSING_DOIS):
+            entry_doi = re.search(doi_pattern, bib_entry.group(1))
+            assert entry_doi.group(1), "doi not found in bibtex reference"
+            url = f"https://doi.org/{entry_doi.group(1)}"
+            assert check_url(url), f"{url} is not reachable, ref= {reference}."
+
+        return True
+
+    else:
+        return False
 
 def check_metric(metric: Dict[str, str])  -> str:
     assert "name" in metric is not None, "name not a field or is empty"
@@ -33,12 +70,14 @@ def check_metric(metric: Dict[str, str])  -> str:
     assert len(metric["description"]) <= DESCRIPTION_MAXLEN, f"Component id (.functionality.info.metrics.metric.description) should not exceed {DESCRIPTION_MAXLEN} characters."
     assert "FILL IN:" not in metric["description"], "description not filled in"
     assert "reference" in metric, "reference not a field in metric"
+    if metric["reference"]:
+        assert search_ref_bib(metric["reference"]), f"reference {metric['reference']} not added to library.bib"
     assert "documentation_url" in metric , "documentation_url not a field in metric"
     assert "repository_url" in metric , "repository_url not a metric field"
     if metric["documentation_url"]:
-        check_url(metric["documentation_url"])
+        assert check_url(metric["documentation_url"]), f"{metric['documentation_url']} is not reachable"
     if metric["repository_url"]:
-        check_url(metric["repository_url"])
+        assert check_url(metric["repository_url"]), f"{metric['repository_url']} is not reachable"
     assert "min" in metric is not None, f"min not a field in metric or is emtpy"
     assert "max" in metric is not None, f"max not a field in metric or is empty"
     assert "maximize" in metric is not None, f"maximize not a field in metric or is emtpy"

@@ -13,7 +13,7 @@
 
 * Update "baseline" to "control" (PR #146)
 
-* Update docker images to OP pyhton/R base images (#168)
+* Update docker images to OP pyhton/R base images (PR #168)
 
 ## common
 
@@ -41,9 +41,11 @@
 
 ### MINOR CHANGES
 
-* Refactor and standardize metric and method info fields (#99).
+* Refactor and standardize metric and method info fields (PR #99).
 
-* Add url check to method and metric unit test (#160).
+* Add url check to method and metric unit test (PR #160).
+
+* Add library.bib file check to component unit test (PR #167)
 
 ## migration
 
