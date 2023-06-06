@@ -23,10 +23,11 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: mumichae/scib-base:1.1.3
+    image: ghcr.io/openproblems-bio/base-r:latest
     setup:
       - type: python
         pypi:
           - scvi-tools
-          - pyyaml
+          - scanpy
+          - scib==1.1.3
   - type: nextflow

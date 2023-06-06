@@ -22,10 +22,8 @@ functionality:
       path: /src/common/comp_tests/run_and_check_adata.py
 platforms:
   - type: docker
-    image: python:3.10
+    image: ghcr.io/openproblems-bio/base-python:latest
     setup:
       - type: python
-        pypi: 
-          - pyyaml
-          - scanpy
+        pypi: scanpy
   - type: nextflow

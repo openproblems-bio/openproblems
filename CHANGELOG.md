@@ -7,13 +7,16 @@
 
 * Relocate task directories to new `src/tasks/` location (PR #142).
 
+* Update Docker images to our base images; `ghcr.io/openproblems-bio/base-python`
+  and `ghcr.io/openproblems-bio/base-r` (PR #168).
+
+* Update batch integration docker images to OpenProblems base images (PR #171).
+
 ### MINOR CHANGES
 
-* Update test scripts (PR #143)
+* Update test scripts (PR #143).
 
-* Update "baseline" to "control" (PR #146)
-
-* Update docker images to OP pyhton/R base images (PR #168)
+* Update "baseline" to "control" (PR #146).
 
 ## common
 
