@@ -17,8 +17,7 @@ functionality:
     - type: string
       name: --type
       example: metric
-      description: The type of component to create.
-      choices: ['metric', 'method', 'control_method']
+      description: The type of component to create. Typically must be one of 'method', 'control_method' or 'metric'.
     - type: string
       name: --language
       description: Which scripting language to use. Options are 'python', 'r'.
@@ -64,12 +63,9 @@ platforms:
   - type: docker
     image: python:3.10-slim
     setup:
-      - type: apt
-        packages: [ curl, default-jre, unzip ]
-      - type: docker
-        run: [ cd /usr/bin && curl -fsSL dl.viash.io | bash ]
       - type: python
-        pip: ruamel.yaml
+        pypi: ruamel.yaml
+  - type: native
   - type: nextflow
 
 

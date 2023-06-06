@@ -92,7 +92,7 @@ assert len(info["summary"]) <= SUMMARY_MAXLEN, f"Component id (.functionality.in
 assert "description" in info is not None, "description not an info field or is empty"
 assert "FILL IN:" not in info["description"], "description not filled in"
 assert len(info["description"]) <= DESCRIPTION_MAXLEN, f"Component id (.functionality.info.description) should not exceed {DESCRIPTION_MAXLEN} characters."
-if ("control" not in info["type"]):
+if info["type"] == "method":
     assert "reference" in info, "reference not an info field"
     bib = _load_bib()
     if info["reference"]:

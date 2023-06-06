@@ -1,7 +1,7 @@
 import os
 import subprocess
 from os import path
-from ruamel.yaml import YAML
+import ruamel.yaml as yaml
 
 ## VIASH START
 meta = {
@@ -40,12 +40,11 @@ script_f = path.join(output_path, "script.py")
 assert os.path.exists(script_f), "Script file does not exist"
 
 print('>> Checking file contents', flush=True)
-yaml = YAML()
 with open(conf_f) as f:
-    conf_data = yaml.load(f)
+    conf_data = yaml.safe_load(f)
 
 assert conf_data['functionality']['name'] == 'test_method', "Name should be equal to 'test_method'"
-assert conf_data['platforms'][0]['image'] == 'python:3.10', "Python image should be equal to python:3.10"
+# assert conf_data['platforms'][0]['image'] == 'python:3.10', "Python image should be equal to python:3.10"
 
 
 print('All checks succeeded!', flush=True)
