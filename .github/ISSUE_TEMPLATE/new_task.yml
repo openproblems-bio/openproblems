@@ -1,5 +1,5 @@
 name: New task
-about: Start creating a new benchmarking task in OpenProblems
+description: Start creating a new benchmarking task in OpenProblems
 labels: [task]
 body:
   - type: markdown
