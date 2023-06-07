@@ -4,7 +4,7 @@ labels: [task]
 body:
   - type: markdown
     attributes:
-      value: Thanks for choosing OpenProblems for hosting your benchmark. Please check the [OpenProblems tasks](https://github.com/openproblems-bio/openproblems-v2/labels/task) to see whether a similar task has already been created.
+      value: Thanks for choosing OpenProblems. Please check the [OpenProblems tasks](https://github.com/openproblems-bio/openproblems-v2/labels/task) to see whether a similar task has already been created. If you haven't already, please review the documentation on [how to create a new task](https://openproblems.bio/documentation/create_task/).
   - type: textarea
     attributes:
       label: Task motivation
