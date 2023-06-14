@@ -3,8 +3,8 @@ from os import path
 import json
 
 input_path = meta["resources_dir"] + "/pancreas/dataset.h5ad"
-input_correct_schema = "anndata_correct.yaml"
-input_error_schema = "anndata_error.yaml"
+input_correct_schema = "file_correct.yaml"
+input_error_schema = "file_error.yaml"
 output_checks = "checks.json"
 output_path = "output.h5ad"
 output_error_checks = "error_checks.json"
@@ -18,7 +18,7 @@ type: file
 description: "A preprocessed dataset"
 example: "preprocessed.h5ad"
 info:
-  short_description: "Preprocessed dataset"
+  label: "Preprocessed dataset"
   slots:
     layers: 
       - type: integer
@@ -37,7 +37,7 @@ type: file
 description: "A preprocessed dataset"
 example: "preprocessed.h5ad"
 info:
-  short_description: "Preprocessed dataset"
+  label: "Preprocessed dataset"
   slots:
     layers: 
       - type: integer

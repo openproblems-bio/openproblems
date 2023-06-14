@@ -1,9 +1,9 @@
-__merge__: anndata_hvg.yaml
+__merge__: file_hvg.yaml
 type: file
-description: "A normalised data with a PCA embedding, HVG selection and a kNN graph"
 example: "resources_test/common/pancreas/dataset.h5ad"
 info:
   label: "Dataset+PCA+HVG+kNN"
+  summary: "A normalised data with a PCA embedding, HVG selection and a kNN graph"
   slots:
     obsp:
       - type: double
@@ -17,4 +17,5 @@ info:
     uns:
       - type: object
         name: knn
-        description: Neighbors data.
+        description: Supplementary K nearest neighbors data.
+        required: true

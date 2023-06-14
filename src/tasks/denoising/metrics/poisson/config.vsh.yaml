@@ -5,15 +5,14 @@ functionality:
     reference: "batson2019molecular"
     metrics:
       - name: poisson
-        pretty_name: Poisson Loss
+        label: Poisson Loss
         summary: "The Poisson log lieklihood of the true counts observed in the distribution of denoised counts"
         description: "The Poisson log likelihood of observing the true counts of the test dataset
           given the distribution given in the denoised dataset."
         reference: batson2019molecular
-        documentation_url: ""
-        repository_url: ""
-        v1_url: openproblems/tasks/denoising/metrics/poisson.py
-        v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+        v1:
+          path: openproblems/tasks/denoising/metrics/poisson.py
+          commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
         maximize: false
         min: 0
         max: +inf
@@ -22,7 +21,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         pip: scprep

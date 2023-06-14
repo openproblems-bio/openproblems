@@ -2,11 +2,10 @@
 __merge__: ../../api/comp_metric_graph.yaml
 functionality:
   name: clustering_overlap
-  description: Metrics that are based on computing the clustering overlap.
   info:
     metrics:
       - name: ari
-        pretty_name: ARI
+        label: ARI
         summary: "Adjusted Rand Index compares clustering overlap, correcting for random labels and considering correct overlaps and disagreements."
         description: |
           The Adjusted Rand Index (ARI) compares the overlap of two clusterings;
@@ -19,15 +18,14 @@ functionality:
           respectively.
           We used the scikit-learn implementation of the ARI.
         reference: hubert1985comparing
-        repository_url: ""
-        documentation_url: ""
         min: 0
         max: 1
         maximize: true
-        v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/metrics/ari.py
-        v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+        v1:
+          path: openproblems/tasks/_batch_integration/batch_integration_graph/metrics/ari.py
+          commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
       - name: nmi
-        pretty_name: NMI
+        label: NMI
         summary: "NMI compares overlap by scaling using mean entropy terms and optimizing Louvain clustering to obtain the best match between clusters and labels."
         description: |
           Normalized Mutual Information (NMI) compares the overlap of two clusterings.
@@ -40,19 +38,18 @@ functionality:
           and the clustering output with the highest NMI with the label set was used. We
           the scikit-learn implementation of NMI.
         reference: amelio2015normalized
-        documentation_url: ""
-        repository_url: ""
         min: 0
         max: 1
         maximize: true
-        v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/metrics/nmi.py
-        v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+        v1:
+          path: openproblems/tasks/_batch_integration/batch_integration_graph/metrics/nmi.py
+          commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
   resources:
     - type: python_script
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-r:latest
+    image: ghcr.io/openproblems-bio/base_r:1.0.0
     setup:
       - type: python
         pypi: 

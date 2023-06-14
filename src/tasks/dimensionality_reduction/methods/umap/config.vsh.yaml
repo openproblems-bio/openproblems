@@ -2,19 +2,20 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "umap"
   info:
-    pretty_name: UMAP
+    label: UMAP
     summary: "A manifold learning algorithm that utilizes topological data analysis for dimension reduction."
     description: |
-      "Uniform Manifold Approximation and Projection is an algorithm for
+      Uniform Manifold Approximation and Projection is an algorithm for
       dimension reduction based on manifold learning techniques and ideas from
       topological data analysis. We perform UMAP on the logCPM expression matrix
       before and after HVG selection and with and without PCA as a pre-processing
-      step."
+      step.
     reference : "mcinnes2018umap"
     repository_url: "https://github.com/lmcinnes/umap"
     documentation_url: "https://github.com/lmcinnes/umap#readme"
-    v1_url: openproblems/tasks/dimensionality_reduction/methods/umap.py
-    v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+    v1:
+      path: openproblems/tasks/dimensionality_reduction/methods/umap.py
+      commit: 14d70b330cae09527a6d4c4e552db240601e31cf
     preferred_normalization: log_cpm
     variants:
       umap_logCPM:
@@ -38,7 +39,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         packages:

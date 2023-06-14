@@ -26,21 +26,21 @@
 ``` mermaid
 %%| column: screen-inset-shaded
 flowchart LR
-  anndata_dataset(Dataset+Pca+Hvg)
-  anndata_normalized(Normalized Dataset)
-  anndata_pca(Dataset+Pca)
-  anndata_raw(Raw Dataset)
+  file_dataset(Dataset+Pca+Hvg)
+  file_normalized(Normalized Dataset)
+  file_pca(Dataset+Pca)
+  file_raw(Raw Dataset)
   comp_dataset_loader[/Dataset Loader/]
   comp_normalization[/Normalization/]
   comp_processor_hvg[/Processor Hvg/]
   comp_processor_pca[/Processor Pca/]
-  anndata_raw---comp_normalization
-  anndata_pca---comp_processor_hvg
-  anndata_normalized---comp_processor_pca
-  comp_dataset_loader-->anndata_raw
-  comp_normalization-->anndata_normalized
-  comp_processor_hvg-->anndata_dataset
-  comp_processor_pca-->anndata_pca
+  file_raw---comp_normalization
+  file_pca---comp_processor_hvg
+  file_normalized---comp_processor_pca
+  comp_dataset_loader-->file_raw
+  comp_normalization-->file_normalized
+  comp_processor_hvg-->file_dataset
+  comp_processor_pca-->file_pca
 ```
 
 ## File format API

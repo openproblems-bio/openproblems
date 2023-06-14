@@ -2,21 +2,22 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "mlp"
   info:
-    pretty_name: Multilayer perceptron
+    label: Multilayer perceptron
     summary: "A neural network with 100-dimensional PCA input, two hidden layers, and gradient descent weight updates to minimize cross entropy loss."
     description: |
-      "Multi-Layer Perceptron is a type of artificial neural network that
+      Multi-Layer Perceptron is a type of artificial neural network that
       consists of multiple layers of interconnected neurons. Each neuron computes a
       weighted sum of all neurons in the previous layer and transforms it with
       nonlinear activation function. The output layer provides the final
       prediction, and network weights are updated by gradient descent to minimize
       the cross entropy loss. Here, the input data is 100-dimensional whitened PCA
-      coordinates for each cell, and we use two hidden layers of 100 neurons each."
+      coordinates for each cell, and we use two hidden layers of 100 neurons each.
     reference: "hinton1989connectionist"
     repository_url: https://github.com/scikit-learn/scikit-learn
     documentation_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html"
-    v1_url: openproblems/tasks/label_projection/methods/mlp.py
-    v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    v1:
+      path: openproblems/tasks/label_projection/methods/mlp.py
+      commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
     preferred_normalization: log_cpm
     variants:
       mlp_log_cpm:
@@ -37,7 +38,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         packages: scikit-learn

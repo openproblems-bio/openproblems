@@ -1,5 +1,6 @@
 functionality:
   name: "openproblems_v1_multimodal"
+  namespace: "datasets/loaders"
   description: "Fetch a dataset from OpenProblems v1"
   argument_groups:
     - name: Inputs
@@ -54,10 +55,10 @@ functionality:
     - name: Outputs
       arguments:
         - name: "--output_mod1"
-          __merge__: ../../api/anndata_raw.yaml
+          __merge__: ../../api/file_raw.yaml
           direction: "output"
         - name: "--output_mod2"
-          __merge__: ../../api/anndata_raw.yaml
+          __merge__: ../../api/file_raw.yaml
           direction: "output"
   resources:
     - type: python_script
@@ -67,7 +68,7 @@ functionality:
       path: test.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: apt
         packages: git

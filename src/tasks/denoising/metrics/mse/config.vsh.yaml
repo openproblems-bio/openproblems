@@ -4,14 +4,13 @@ functionality:
   info:
     metrics:
       - name: mse
-        pretty_name: Mean-squared error
+        label: Mean-squared error
         summary: "The mean squared error between the denoised counts and the true counts."
         description: "The mean squared error between the denoised counts of the training dataset and the true counts of the test dataset after reweighing by the train/test ratio"
         reference: batson2019molecular
-        documentation_url: ""
-        repository_url: ""
-        v1_url: openproblems/tasks/denoising/metrics/mse.py
-        v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+        v1:
+          path: openproblems/tasks/denoising/metrics/mse.py
+          commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
         maximize: false
         min: 0
         max: +inf
@@ -20,7 +19,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         packages:

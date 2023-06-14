@@ -1,14 +1,15 @@
-__merge__: anndata_raw.yaml
+__merge__: file_raw.yaml
 type: file
-description: "A normalized dataset"
 example: "resources_test/common/pancreas/normalized.h5ad"
 info:
   label: "Normalized dataset"
+  summary: "A normalized dataset"
   slots:
     layers:
       - type: double
         name: normalized
         description: Normalised expression values
+        required: true
     obs:
       - type: double
         name: size_factors

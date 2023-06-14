@@ -1,17 +1,21 @@
 functionality:
   namespace: "datasets/normalization"
   info:
+    type: dataset_normalization
     type_info:
       label: Dataset normalization
-      description: |
-        A normalization method which processes the raw counts output by a dataset loader.
+      summary: |
+        A normalization method which processes the raw counts into a normalized dataset.
+      description:
+        A component for normalizing the raw counts as output by dataset loaders into a normalized dataset.
   arguments:
     - name: "--input"
-      __merge__: anndata_raw.yaml
+      __merge__: file_raw.yaml
+      direction: input
       required: true
     - name: "--output"
+      __merge__: file_normalized.yaml
       direction: output
-      __merge__: anndata_normalized.yaml
       required: true
     - name: "--layer_output"
       type: string

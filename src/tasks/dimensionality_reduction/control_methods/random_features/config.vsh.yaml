@@ -2,12 +2,12 @@ __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "random_features"
   info:
-    subtype: negative_control
-    pretty_name: Random Features
+    label: Random Features
     summary: "Negative control by randomly embedding into a 2D space."
     description: "This method serves as a negative control, where the data is randomly embedded into a two-dimensional space, with no attempt to preserve the original structure."
-    v1_url: openproblems/tasks/dimensionality_reduction/methods/baseline.py
-    v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+    v1:
+      path: openproblems/tasks/dimensionality_reduction/methods/baseline.py
+      commit: 14d70b330cae09527a6d4c4e552db240601e31cf
     preferred_normalization: counts
     variants:
       random_features:
@@ -16,7 +16,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]

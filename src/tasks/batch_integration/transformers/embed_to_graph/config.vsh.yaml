@@ -4,12 +4,12 @@ functionality:
   description: "Transform an embedded integration to a graph integration"
   info:
     type: transformer
-    pretty_name: Embedding to Graph
+    label: Embedding to Graph
     output_type: graph
   arguments:
-    - __merge__: ../../api/anndata_integrated_embedding.yaml
+    - __merge__: ../../api/file_integrated_embedding.yaml
       name: --input
-    - __merge__: ../../api/anndata_integrated_graph.yaml
+    - __merge__: ../../api/file_integrated_graph.yaml
       name: --output
       direction: output
   resources:
@@ -22,7 +22,7 @@ functionality:
       path: /src/common/comp_tests/run_and_check_adata.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         pypi: scanpy

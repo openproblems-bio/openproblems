@@ -1,0 +1,10 @@
+{
+  "yaml.schemas": {
+    "src/common/api/schema_component_api.yaml": "src/**/api/comp_*.yaml",
+    "src/common/api/schema_file_api.yaml": "src/**/api/file_*.yaml",
+    "src/common/api/schema_task_info.yaml": "src/**/api/task_info.yaml",
+    "src/common/api/schema_task_method.yaml": "src/tasks/**/methods/**/config.vsh.yaml",
+    "src/common/api/schema_task_control_method.yaml": "src/tasks/**/control_methods/**/config.vsh.yaml",
+    "src/common/api/schema_task_metric.yaml": "src/tasks/**/metrics/**/config.vsh.yaml"
+  }
+}

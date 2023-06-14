@@ -62,27 +62,27 @@ def search_ref_bib(reference):
 def check_metric(metric: Dict[str, str])  -> str:
     assert "name" in metric is not None, "name not a field or is empty"
     assert len(metric["name"]) <= NAME_MAXLEN, f"Component id (.functionality.info.metrics.metric.name) should not exceed {NAME_MAXLEN} characters."
-    assert "pretty_name" in metric is not None, "pretty_name not a field in metric or is empty"
+    assert "label" in metric is not None, "pretty_name not a field in metric or is empty"
     assert "summary" in metric is not None, "summary not a field in metric or is empty"
     assert "FILL IN:" not in metric["summary"], "Summary not filled in"
     assert len(metric["summary"]) <= SUMMARY_MAXLEN, f"Component id (.functionality.info.metrics.metric.summary) should not exceed {SUMMARY_MAXLEN} characters."
     assert "description" in metric is not None, "description not a field in metric or is empty"
     assert len(metric["description"]) <= DESCRIPTION_MAXLEN, f"Component id (.functionality.info.metrics.metric.description) should not exceed {DESCRIPTION_MAXLEN} characters."
     assert "FILL IN:" not in metric["description"], "description not filled in"
-    assert "reference" in metric, "reference not a field in metric"
-    if metric["reference"]:
+    # assert "reference" in metric, "reference not a field in metric"
+    if "reference" in metric:
         assert search_ref_bib(metric["reference"]), f"reference {metric['reference']} not added to library.bib"
-    assert "documentation_url" in metric , "documentation_url not a field in metric"
-    assert "repository_url" in metric , "repository_url not a metric field"
-    if metric["documentation_url"]:
+    # assert "documentation_url" in metric , "documentation_url not a field in metric"
+    # assert "repository_url" in metric , "repository_url not a metric field"
+    if "documentation_url" in metric:
         assert check_url(metric["documentation_url"]), f"{metric['documentation_url']} is not reachable"
-    if metric["repository_url"]:
+    if "repository_url" in metric:
         assert check_url(metric["repository_url"]), f"{metric['repository_url']} is not reachable"
     assert "min" in metric is not None, f"min not a field in metric or is emtpy"
     assert "max" in metric is not None, f"max not a field in metric or is empty"
     assert "maximize" in metric is not None, f"maximize not a field in metric or is emtpy"
-    assert isinstance(metric['min'], int), "not an int"
-    assert isinstance(metric['max'], (int, str)), "not an int or string (+inf)"
+    assert isinstance(metric['min'], (int, str)), "not an int or string (-.inf)"
+    assert isinstance(metric['max'], (int, str)), "not an int or string (+.inf)"
     assert isinstance(metric['maximize'], bool) or metric["maximize"] not in ["-inf", "+inf"], "not a bool"
 
 

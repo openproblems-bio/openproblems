@@ -2,21 +2,22 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "knn"
   info:
-    pretty_name: KNN
+    label: KNN
     summary: "Assumes cells with similar gene expression belong to the same cell type, and assigns an unlabelled cell the most common cell type among its k nearest neighbors in PCA space."
     description: |
-      'Using the "k-nearest neighbours" approach, which is a
+      Using the "k-nearest neighbours" approach, which is a
       popular machine learning algorithm for classification and regression tasks.
       The assumption underlying KNN in this context is that cells with similar gene
       expression profiles tend to belong to the same cell type. For each unlabelled
       cell, this method computes the $k$ labelled cells (in this case, 5) with the
       smallest distance in PCA space, and assigns that cell the most common cell
-      type among its $k$ nearest neighbors.'
+      type among its $k$ nearest neighbors.
     reference : "cover1967nearest"
     repository_url: https://github.com/scikit-learn/scikit-learn
     documentation_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html"
-    v1_url: openproblems/tasks/label_projection/methods/knn_classifier.py
-    v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    v1:
+      path: openproblems/tasks/label_projection/methods/knn_classifier.py
+      commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
     preferred_normalization: log_cpm
     variants:
       knn_classifier_log_cpm:
@@ -27,10 +28,10 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
-        packages: scikit-learn
+        packages: [scikit-learn, jsonschema]
   - type: nextflow
     directives: 
       label: [ midmem, lowcpu ]

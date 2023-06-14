@@ -1,8 +1,8 @@
 type: file
-description: "An unprocessed dataset as output by a dataset loader."
 example: "resources_test/common/pancreas/raw.h5ad"
 info:
   label: "Raw dataset"
+  summary: "An unprocessed dataset as output by a dataset loader."
   slots:
     layers: 
       - type: integer

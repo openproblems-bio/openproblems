@@ -2,7 +2,7 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "alra"
   info:
-    pretty_name: ALRA
+    label: ALRA
     summary: "ALRA imputes missing values in scRNA-seq data by computing rank-k approximation, thresholding by gene, and rescaling the matrix."
     description: |
       "Adaptively-thresholded Low Rank Approximation (ALRA). 
@@ -16,8 +16,9 @@ functionality:
     reference: "linderman2018zero"
     repository_url: "https://github.com/KlugerLab/ALRA"
     documentation_url: https://github.com/KlugerLab/ALRA/blob/master/README.md
-    v1_url: openproblems/tasks/denoising/methods/alra.py
-    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+    v1:
+      path: openproblems/tasks/denoising/methods/alra.py
+      commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     variants: 
       alra:
     preferred_normalization: counts
@@ -31,7 +32,7 @@ functionality:
       path: script.R
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-r:latest
+    image: ghcr.io/openproblems-bio/base_r:1.0.0
     setup:
       - type: r
         cran: [ Matrix, bit64, rsvd ]

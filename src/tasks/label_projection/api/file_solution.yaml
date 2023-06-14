@@ -1,20 +1,27 @@
 type: file
-description: "The test data (without labels)"
-example: "resources_test/label_projection/pancreas/test.h5ad"
+example: "resources_test/label_projection/pancreas/solution.h5ad"
 info:
-  short_description: "Test data"
+  label: "Solution"
+  summary: "The solution for the test data"
   slots:
     layers: 
       - type: integer
         name: counts
         description: Raw counts
+        required: true
       - type: double
         name: normalized
         description: Normalized counts
+        required: true
     obs:
+      - type: string
+        name: label
+        description: Ground truth cell type labels
+        required: true
       - type: string
         name: batch
         description: Batch information
+        required: true
     var:
       - type: boolean
         name: hvg

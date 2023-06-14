@@ -1,21 +1,25 @@
 functionality:
   namespace: "datasets/processors"
   info:
+    type: dataset_processor
     type_info:
       label: HVG
-      description: |
+      summary: |
         Computes the highly variable genes scores.
+      description: |
+        The resulting AnnData will contain both a boolean 'hvg' column in 'var', as well as a numerical 'hvg_score' in 'var'.
   arguments:
     - name: "--input"
-      __merge__: anndata_pca.yaml
+      __merge__: file_pca.yaml
       required: true
+      direction: input
     - name: "--layer_input"
       type: string
       default: "normalized"
       description: Which layer to use as input.
     - name: "--output"
       direction: output
-      __merge__: anndata_hvg.yaml
+      __merge__: file_hvg.yaml
       required: true
     - name: "--var_hvg"
       type: string

@@ -4,17 +4,23 @@ functionality:
     type: method
     type_info:
       label: Method
+      summary: A label projection method.
       description: |
         A label projection method to predict the labels of a new "test"
         dataset based on an annotated "training" dataset.
   arguments:
     - name: "--input_train"
-      __merge__: anndata_train.yaml
+      __merge__: file_train.yaml
+      direction: input
+      required: true
     - name: "--input_test"
-      __merge__: anndata_test.yaml
+      __merge__: file_test.yaml
+      direction: input
+      required: true
     - name: "--output"
-      __merge__: anndata_prediction.yaml
+      __merge__: file_prediction.yaml
       direction: output
+      required: true
   test_resources:
     - path: /resources_test/label_projection/pancreas
       dest: resources_test/label_projection/pancreas
@@ -23,3 +29,4 @@ functionality:
     - type: python_script
       path: /src/common/comp_tests/run_and_check_adata.py
     - path: /src/common/library.bib
+    - path: /src/common/api

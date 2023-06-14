@@ -2,12 +2,12 @@ __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "random_labels"
   info:
-    subtype: negative_control
-    pretty_name: Random Labels
+    label: Random Labels
     summary: "a negative control, where the labels are randomly predicted."
     description: "A negative control, where the labels are randomly predicted without training the data."
-    v1_url: openproblems/tasks/label_projection/methods/baseline.py
-    v1_commit: b460ecb183328c857cbbf653488f522a4034a61c
+    v1:
+      path: openproblems/tasks/label_projection/methods/baseline.py
+      commit: b460ecb183328c857cbbf653488f522a4034a61c
     preferred_normalization: counts
     variants:
       random_labels:
@@ -16,7 +16,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         packages: scanpy

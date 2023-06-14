@@ -1,8 +1,8 @@
 type: file
-description: "The training data"
-example: "resources_test/denoising/pancreas/train.h5ad"
+description: "The test data"
+example: "resources_test/denoising/pancreas/test.h5ad"
 info:
-  short_description: "Training data"
+  label: "Test data"
   slots:
     layers: 
       - type: integer

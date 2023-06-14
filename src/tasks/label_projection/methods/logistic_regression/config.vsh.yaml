@@ -2,18 +2,19 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "logistic_regression"
   info:
-    pretty_name: Logistic Regression
+    label: Logistic Regression
     summary: "Logistic Regression with 100-dimensional PCA coordinates estimates parameters for multivariate classification by minimizing cross entropy loss over cell type classes."
     description: |
-      "Logistic Regression estimates parameters of a logistic function for
+      Logistic Regression estimates parameters of a logistic function for
       multivariate classification tasks. Here, we use 100-dimensional whitened PCA
       coordinates as independent variables, and the model minimises the cross
-      entropy loss over all cell type classes."
+      entropy loss over all cell type classes.
     reference: "hosmer2013applied"
     repository_url: https://github.com/scikit-learn/scikit-learn
     documentation_url: "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html"
-    v1_url: openproblems/tasks/label_projection/methods/logistic_regression.py
-    v1_commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
+    v1:
+      path: openproblems/tasks/label_projection/methods/logistic_regression.py
+      commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
     preferred_normalization: log_cpm
     variants:
       logistic_regression_log_cpm:
@@ -24,7 +25,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         packages: scikit-learn

@@ -1,4 +1,6 @@
-library(tidyverse)
+library(purrr)
+library(dplyr)
+library(yaml)
 library(rlang)
 
 ## VIASH START
@@ -10,7 +12,7 @@ par <- list(
 ## VIASH END
 
 comp_yamls <- list.files(paste(par$input, "src/tasks", par$task_id, "api", sep = "/"), pattern = "comp_", full.names = TRUE)
-file_yamls <- list.files(paste(par$input, "src/tasks", par$task_id, "api", sep = "/"), pattern = "anndata_", full.names = TRUE)
+file_yamls <- list.files(paste(par$input, "src/tasks", par$task_id, "api", sep = "/"), pattern = "file_", full.names = TRUE)
 
 # list component - file args links
 comp_file <- map_df(comp_yamls, function(yaml_file) {
@@ -19,7 +21,7 @@ comp_file <- map_df(comp_yamls, function(yaml_file) {
   map_df(conf$functionality$arguments, function(arg) {
     tibble(
       comp_name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
-      arg_name = str_replace_all(arg$name, "^-*", ""),
+      arg_name = gsub("^-*", "", arg$name),
       direction = arg$direction %||% "input",
       file_name = basename(arg$`__merge__`) %>% gsub("\\.yaml", "", .)
     )
@@ -43,9 +45,9 @@ file_info <- map_df(file_yamls, function(yaml_file) {
   tibble(
     name = basename(yaml_file) %>% gsub("\\.yaml", "", .),
     description = arg$description,
-    short_description = arg$info$short_description,
+    label = arg$info$label,
     example = arg$example,
-    label = name %>% gsub("anndata_", "", .) %>% gsub("_", " ", .)
+    clean_label = name %>% gsub("file_", "", .) %>% gsub("_", " ", .)
   )
 })
 
@@ -59,7 +61,7 @@ file_slot <- map_df(file_yamls, function(yaml_file) {
     df$file_name <- basename(yaml_file) %>% gsub("\\.yaml", "", .)
     as_tibble(df)
   })
-}) %>% 
+}) %>%
   mutate(multiple = multiple %|% FALSE)
 
 out <- list(

@@ -1,0 +1,70 @@
+title: Control Method
+description: |
+  A control method is used to test the relative performance of all other methods,
+  and also as a quality control for the pipeline as a whole. A control method can
+  either be a positive control or a negative control. The positive control and
+  negative control methods set a maximum and minimum threshold for performance,
+  so any new method should perform better than the negative control methods and
+  worse than the positive control method.
+type: object
+required: [__merge__, functionality, platforms]
+properties:
+  __merge__:
+    "$ref": "schema_definitions.yaml#/definitions/CompAPIMerge"
+  functionality:
+    type: object
+    description: Information regarding the functionality of the component.
+    required: [name, info, resources]
+    additionalProperties: false
+    properties:
+      name:
+        "$ref": "schema_definitions.yaml#/definitions/Name"
+      status:
+        "$ref": "schema_viash_config.yaml#/definitions/Status"
+      info:
+        type: object
+        description: Metadata of the component.
+        additionalProperties: false
+        required: [label, summary, description, preferred_normalization]
+        properties:
+          label:
+            "$ref": "schema_definitions.yaml#/definitions/Label"
+          summary:
+            "$ref": "schema_definitions.yaml#/definitions/Summary"
+          description:
+            "$ref": "schema_definitions.yaml#/definitions/Description"
+          preferred_normalization: 
+            "$ref": "schema_definitions.yaml#/definitions/PreferredNormalization"
+          reference:
+            "$ref": "schema_definitions.yaml#/definitions/BibtexReference"
+          documentation_url:
+            "$ref": "schema_definitions.yaml#/definitions/DocumentationURL"
+          repository_url:
+            "$ref": "schema_definitions.yaml#/definitions/RepositoryURL"
+          v1:
+            "$ref": "schema_definitions.yaml#/definitions/MigrationV1"
+          variants:
+            "$ref": "schema_definitions.yaml#/definitions/MethodVariants"
+      arguments:
+        type: array
+        description: Component-specific parameters.
+        items:
+          "$ref": "schema_viash_config.yaml#/definitions/Argument"
+      resources:
+        type: array
+        description: Resources required to run the component.
+        items:
+          "$ref": "schema_viash_config.yaml#/definitions/Resource"
+      test_resources:
+        type: array
+        description: One or more scripts and resources used to test the component.
+        items:
+          "$ref": "schema_viash_config.yaml#/definitions/Resource"
+  platforms:
+    type: array
+    description: A list of platforms which Viash generates target artifacts for.
+    items:
+      anyOf:
+        - "$ref": "schema_definitions.yaml#/definitions/PlatformDocker"
+        - "$ref": "schema_definitions.yaml#/definitions/PlatformNative"
+        - "$ref": "schema_definitions.yaml#/definitions/PlatformVdsl3"

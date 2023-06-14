@@ -32,7 +32,7 @@ functionality:
       path: test.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     test_setup:
       - type: docker
         run: "git clone https://github.com/openproblems-bio/openproblems-v2.git"

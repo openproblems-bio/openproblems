@@ -2,12 +2,12 @@ __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "perfect_denoising"
   info:
-    subtype: positive_control
-    pretty_name: Perfect Denoising
+    label: Perfect Denoising
     summary: "Positive control by copying the test counts"
     description: "This method serves as a positive control, where the test data is copied 1-to-1 to the denoised data. This makes it seem as if the data is perfectly denoised as it will be compared to the test data in the metrics."
-    v1_url: openproblems/tasks/denoising/methods/baseline.py
-    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+    v1:
+      path: openproblems/tasks/denoising/methods/baseline.py
+      commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     variants: 
       perfect_denoising:
     preferred_normalization: counts
@@ -16,7 +16,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
   - type: nextflow
     directives: 
       label: [ midmem, midcpu ]

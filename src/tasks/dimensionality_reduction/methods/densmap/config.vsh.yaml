@@ -2,14 +2,15 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "densmap"
   info:
-    pretty_name: densMAP
+    label: densMAP
     summary: "Modified UMAP with preservation of local density information"
     description: "A modification of UMAP that adds an extra cost term in order to preserve information about the relative local density of the data. It is performed on the same inputs as UMAP."
     reference: "narayan2021assessing"
     repository_url: https://github.com/lmcinnes/umap
     documentation_url: https://github.com/lmcinnes/umap#readme
-    v1_url: openproblems/tasks/dimensionality_reduction/methods/umap.py
-    v1_commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+    v1:
+      path: openproblems/tasks/dimensionality_reduction/methods/umap.py
+      commit: 14d70b330cae09527a6d4c4e552db240601e31cf
     preferred_normalization: log_cpm
     variants:
       densmap_logCPM:
@@ -32,12 +33,13 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         packages:
           - scanpy
           - umap-learn
+  - type: native
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]

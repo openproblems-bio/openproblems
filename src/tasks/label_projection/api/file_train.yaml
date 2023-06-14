@@ -1,8 +1,8 @@
 type: file
-description: Unintegrated AnnData HDF5 file.
-example: "resources_test/batch_integration/pancreas/unintegrated.h5ad"
+example: "resources_test/label_projection/pancreas/train.h5ad"
 info:
-  short_description: "Unintegrated"
+  label: "Training data"
+  summary: "The training data"
   slots:
     layers: 
       - type: integer
@@ -11,31 +11,30 @@ info:
         required: true
       - type: double
         name: normalized
-        description: Normalized expression values
+        description: Normalized counts
         required: true
     obs:
       - type: string
-        name: batch
-        description: Batch information
+        name: label
+        description: Ground truth cell type labels
         required: true
       - type: string
-        name: label
-        description: label information
+        name: batch
+        description: Batch information
         required: true
     var:
       - type: boolean
         name: hvg
         description: Whether or not the feature is considered to be a 'highly variable gene'
         required: true
+      - type: integer
+        name: hvg_score
+        description: A ranking of the features by hvg.
+        required: true
     obsm:
       - type: double
         name: X_pca
         description: The resulting PCA embedding.
-        required: true
-    obsp:
-      - type: double
-        name: knn_connectivities
-        description: K nearest neighbors connectivities matrix.
         required: true
     uns:
       - type: string
@@ -44,9 +43,5 @@ info:
         required: true
       - type: string
         name: normalization_id
-        description: "Which normalization was used"
-        required: true
-      - type: string
-        name: dataset_organism
         description: "Which normalization was used"
         required: true

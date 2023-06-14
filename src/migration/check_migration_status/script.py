@@ -11,21 +11,21 @@ par = {
 
 def check_status(comp_item: List[Dict[str, str]], git_objects: List[Dict[str, str]]) -> str:
     """Looks for the comp_item's matching git_object 
-    based on the comp_item["v1_url"] and git_object["path"].
+    based on the comp_item["v1"]["path"] and git_object["path"].
     If found, checks whether the comp_item["v1_commit"] equals
     git_object["sha"]."""
 
-    v1_url = comp_item.get("v1_url")
-    if not v1_url:
-        return "v1_url missing"
+    v1_path = comp_item.get("v1", {}).get("path")
+    if not v1_path:
+        return "v1.path missing"
     
-    v1_commit = comp_item.get("v1_commit")
+    v1_commit = comp_item.get("v1", {}).get("commit")
     if not v1_commit:
-        return "v1_commit missing"
+        return "v1.commit missing"
     
-    git_object = [ obj for obj in git_objects if obj["path"] == v1_url ]
+    git_object = [ obj for obj in git_objects if obj["path"] == v1_path ]
     if not git_object:
-        return "v1_url does not exist in git repo"
+        return "v1.path does not exist in git repo"
 
     git_sha = git_object[0]["sha"]
     if git_sha == comp_item["v1_commit"]:

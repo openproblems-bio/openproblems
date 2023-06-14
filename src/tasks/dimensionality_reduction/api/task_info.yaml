@@ -1,9 +1,10 @@
-task_id: dimensionality_reduction
-task_name: "Dimensionality reduction for visualization"
-v1_url: openproblems/tasks/dimensionality_reduction/README.md
-v1_commit: b353a462f6ea353e0fc43d0f9fcbbe621edc3a0b
+name: dimensionality_reduction
+label: "Dimensionality reduction for visualization"
+v1:
+  path: openproblems/tasks/dimensionality_reduction/README.md
+  commit: b353a462f6ea353e0fc43d0f9fcbbe621edc3a0b
 summary: Reduction of high-dimensional datasets to 2D for visualization & interpretation
-description: |
+motivation: |
   Dimensionality reduction is one of the key challenges in single-cell data representation.
   Routine single-cell RNA sequencing (scRNA-seq) experiments measure cells in roughly
   20,000-30,000 dimensions (i.e., features - mostly gene transcripts but also other functional
@@ -12,7 +13,7 @@ description: |
   experiments would yield a few hundred cells, at best. Now, it is not uncommon to see
   experiments that yield over [100,000 cells](<https://www.nature.com/articles/s41586-018-0590-4>)
   or even [> 1 million cells](https://doi.org/10.1126/science.aba7721).
-
+description: |
   Each *feature* in a dataset functions as a single dimension. While each of the ~30,000
   dimensions measured in each cell contribute to an underlying data structure, the overall
   structure of the data is challenging to display in few dimensions due to data sparsity
@@ -23,19 +24,28 @@ description: |
 authors:
   - name: Luke Zappia
     roles: [ maintainer, author ]
-    props: { github: lazappi }
+    info:
+      github: lazappi
   - name: Michal Klein
     roles: [ author ]
-    props: { github: michalk8 }
+    info:
+      github: michalk8
   - name: "Scott Gigante"
     roles: [ author ]
-    props: { github: scottgigante, orcid: "0000-0002-4544-2764" }
+    info:
+      github: scottgigante
+      orcid: "0000-0002-4544-2764"
   - name: Ben DeMeo
     roles: [ author ]
-    props: { github: bendemeo }
+    info:
+      github: bendemeo
   - name: "Juan A. Cordero Varela"
     roles: [ contributor ]
-    props: { github: jacorvar, orcid: 0000-0002-7373-5433}
+    info:
+      github: jacorvar
+      orcid: 0000-0002-7373-5433
   - name: Robrecht Cannoodt
     roles: [ contributor ]
-    props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+    info:
+      github: rcannood
+      orcid: "0000-0003-3641-729X"

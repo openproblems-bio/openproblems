@@ -4,15 +4,17 @@ functionality:
     type: method
     type_info:
       label: Method
+      summary: A dimensionality reduction method.
       description: |
-        A dimensionality reduction method to summarise the biological information in
-        a dataset in as few dimensions as possible.
+        A dimensionality reduction method to summarise the biological
+        information in a dataset in as few dimensions as possible.
   arguments:
     - name: "--input"
-      __merge__: anndata_dataset.yaml
+      __merge__: file_dataset.yaml
+      direction: input
       required: true
     - name: "--output"
-      __merge__: anndata_embedding.yaml
+      __merge__: file_embedding.yaml
       direction: output
       required: true
   test_resources:

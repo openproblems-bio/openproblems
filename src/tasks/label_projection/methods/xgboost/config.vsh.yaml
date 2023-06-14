@@ -1,20 +1,20 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "xgboost"
-  description: "XGBoost: A Scalable Tree Boosting System"
   info:
-    pretty_name: XGBoost
+    label: XGBoost
     summary: "XGBoost is a decision tree model that averages multiple trees with gradient boosting."
     description: |
-      "XGBoost is a gradient boosting decision tree model that learns multiple tree
+      XGBoost is a gradient boosting decision tree model that learns multiple tree
       structures in the form of a series of input features and their values,
       leading to a prediction decision, and averages predictions from all its
-      trees. Here, input features are normalised gene expression values."
+      trees. Here, input features are normalised gene expression values.
     reference: "chen2016xgboost"
     repository_url: "https://github.com/dmlc/xgboost"
     documentation_url: "https://xgboost.readthedocs.io/en/stable/index.html"
-    v1_url: openproblems/tasks/label_projection/methods/xgboost.py
-    v1_commit: 123bb7b39c51c58e19ddf0fbbc1963c3dffde14c
+    v1:
+      path: openproblems/tasks/label_projection/methods/xgboost.py
+      commit: 123bb7b39c51c58e19ddf0fbbc1963c3dffde14c
     preferred_normalization: log_cpm
     variants:
       xgboost_log_cpm:
@@ -25,7 +25,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         packages: xgboost

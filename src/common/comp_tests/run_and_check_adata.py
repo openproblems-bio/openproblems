@@ -27,8 +27,8 @@ def check_slots(adata, slot_metadata):
 
 
 # read viash config
-with open(meta["config"], "r") as stream:
-    config = yaml.safe_load(stream)
+with open(meta["config"], "r") as file:
+    config = yaml.safe_load(file)
 
 # get resources
 arguments = []

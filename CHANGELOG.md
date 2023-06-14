@@ -38,7 +38,7 @@
 
 * `comp_tests`: Common unit tests that can be used by all tasks.
 
-* `check_dataset_schema`: Check if the dataset used has the required fields defined in the api `anndata_*.yaml` files.
+* `check_dataset_schema`: Check if the dataset used has the required fields defined in the api `file_*.yaml` files.
   
 * `Create_component`: Creates a template folder with a viash config and script file depending on the task api.
 
@@ -85,7 +85,7 @@
 
 ### NEW FUNCTIONALITY
 
-* `api/anndata_*`: Created a file format specifications for the h5ad files throughout the pipeline.
+* `api/file_*`: Created a file format specifications for the h5ad files throughout the pipeline.
 
 * `api/comp_*`: Created an api definition for the process, method and metric components.
 
@@ -123,7 +123,7 @@
 
 ### NEW FUNCTIONALITY
 
-* `api/anndata_*`: Created a file format specifications for the h5ad files throughout the pipeline.
+* `api/file_*`: Created a file format specifications for the h5ad files throughout the pipeline.
 
 * `api/comp_*`: Created an api definition for the split, method and metric components.
 
@@ -160,7 +160,7 @@
 ## Dimensionality reduction
 
 ### New functionality
-* `api/anndata_*`: Created a file format specifications for the h5ad files throughout the pipeline.
+* `api/file_*`: Created a file format specifications for the h5ad files throughout the pipeline.
 
 * `api/comp_*`: Created an api definition for the split, control method, method and metric components.
 

@@ -1,13 +1,14 @@
 type: file
-description: "The prediction file"
 example: "resources_test/label_projection/pancreas/knn.h5ad"
 info:
-  short_description: "Prediction"
+  label: "Prediction"
+  summary: "The prediction file"
   slots:
     obs:
       - type: string
         name: label_pred
         description: Predicted labels for the test cells.
+        required: true
     uns:
       - type: string
         name: dataset_id
@@ -20,3 +21,4 @@ info:
       - type: string
         name: method_id
         description: "A unique identifier for the method"
+        required: true

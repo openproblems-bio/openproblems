@@ -4,12 +4,12 @@ functionality:
   description: "Transform a feature integration to an embedded integration"
   info:
     type: transformer
-    pretty_name: Feature to Embed
+    label: Feature to Embed
     output_type: embedding
   arguments:
-    - __merge__: ../../api/anndata_integrated_feature.yaml
+    - __merge__: ../../api/file_integrated_feature.yaml
       name: --input
-    - __merge__: ../../api/anndata_integrated_embedding.yaml
+    - __merge__: ../../api/file_integrated_embedding.yaml
       name: --output
       direction: output
   resources:
@@ -22,7 +22,7 @@ functionality:
       path: /src/common/comp_tests/run_and_check_adata.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         pypi: scanpy

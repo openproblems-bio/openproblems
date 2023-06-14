@@ -4,22 +4,24 @@ functionality:
     type: control_method
     type_info:
       label: Control method
+      summary: Quality control methods for verifying the pipeline.
       description: |
-        This folder contains control components for the task. 
-        These components have the same interface as the regular methods
+        Control methods have the same interface as the regular methods
         but also receive the solution object as input. It serves as a
         starting point to test the relative accuracy of new methods in
         the task, and also as a quality control for the metrics defined
-        in the task. 
+        in the task.
   arguments:
     - name: "--input"
-      __merge__: anndata_dataset.yaml
+      __merge__: file_dataset.yaml
+      direction: input
       required: true
     - name: "--input_solution"
-      __merge__: anndata_solution.yaml
+      __merge__: file_solution.yaml
+      direction: input
       required: true
     - name: "--output"
-      __merge__: anndata_embedding.yaml
+      __merge__: file_embedding.yaml
       direction: output
       required: true
   test_resources:

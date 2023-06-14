@@ -22,7 +22,7 @@ functionality:
     - path: /src/common/helper_functions/subset_anndata.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-r:latest
+    image: ghcr.io/openproblems-bio/base_r:1.0.0
     setup:
       - type: python
         pypi: 

@@ -6,18 +6,18 @@ functionality:
   status: disabled
   name: "ivis"
   info:
-    pretty_name: "ivis"
-    summary: ""
+    label: "ivis"
+    summary: "Structure-preserving dimensionality reduction using a siamese neural network trained on triplets."
     description: |
-      "ivis is a machine learning library for reducing dimensionality of very large datasets using Siamese Neural Networks.
+      ivis is a machine learning library for reducing dimensionality of very large datasets using Siamese Neural Networks.
       ivis preserves global data structures in a low-dimensional space, adds new data points to existing embeddings using
-      a parametric mapping function, and scales linearly to millions of observations."
-      reference: szubert2019structurepreserving
+      a parametric mapping function, and scales linearly to millions of observations.
+    reference: szubert2019structurepreserving
     repository_url: "https://github.com/beringresearch/ivis"
     documentation_url: "https://github.com/beringresearch/ivis#readme"
-    reference: ""
-    v1_url: openproblems/tasks/dimensionality_reduction/methods/ivis.py
-    v1_commit: 9ebb777b3b76337e731a3b99f4bf39462a15c4cc
+    v1:
+      path: openproblems/tasks/dimensionality_reduction/methods/ivis.py
+      commit: 9ebb777b3b76337e731a3b99f4bf39462a15c4cc
     preferred_normalization: log_cpm
     variants:
       ivis_logCPM_1kHVG:
@@ -35,12 +35,12 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         packages:
           - scanpy
           - ivis[cpu]
   - type: nextflow
-    directives: 
+    directives:
       label: [ highmem, highcpu ]

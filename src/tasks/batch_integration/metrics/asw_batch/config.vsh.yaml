@@ -3,26 +3,25 @@ __merge__: ../../api/comp_metric_embedding.yaml
 functionality:
   name: asw_batch
   info:
-    v1_url: openproblems/tasks/_batch_integration/batch_integration_embed/metrics/sil_batch.py
-    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     metrics:
       - name: asw_batch
-        pretty_name: ASW batch
+        label: ASW batch
         summary: Average silhouette of batches per label
         description: |
           "A batch correction metric that computes the silhouette score over all batch labels per cell type. Here, 0 indicates that batches are well mixed and any deviation from 0 indicates there remains a separation between batch labels. This is rescaled to a score between 0 and 1 by taking."
         reference: luecken2022benchmarking
-        repository_url: ""
-        documentation_url: ""
         min: 0
         max: 1
         maximize: true
+        v1:
+          path: openproblems/tasks/_batch_integration/batch_integration_embed/metrics/sil_batch.py
+          commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
   resources:
     - type: python_script
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-r:latest
+    image: ghcr.io/openproblems-bio/base_r:1.0.0
     setup:
       - type: python
         pypi: 

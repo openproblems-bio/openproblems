@@ -1,9 +1,9 @@
-__merge__: anndata_pca.yaml
-type: file
-description: "A normalised dataset with a PCA embedding and HVG selection."
+__merge__: file_pca.yaml
+type: file 
 example: "resources_test/common/pancreas/hvg.h5ad"
 info:
   label: "Dataset+PCA+HVG"
+  summary: "A normalised dataset with a PCA embedding and HVG selection."
   slots:
     var:
       - type: boolean

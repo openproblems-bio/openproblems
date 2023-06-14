@@ -1,12 +1,11 @@
 import yaml
 
 ## VIASH START
-
 meta = {
     "config" : "foo"
 }
-
 ## VIASH END
+
 
 NAME_MAXLEN = 50
 
@@ -16,23 +15,8 @@ DESCRIPTION_MAXLEN = 1000
 
 _MISSING_DOIS = ["vandermaaten2008visualizing", "hosmer2013applied"]
 
-
-def assert_dict(dict, functionality):
-
-    arg_names = []
-    args = functionality["arguments"]
-
-    for i in args:
-        arg_names.append(i["name"].replace("--",""))
-    
-    info = functionality["info"]
-    if dict:
-        for key in dict:
-            assert key in arg_names or info, f"{key} is not a defined argument or .functionality.info field"
-
 def _load_bib():
-    bib_path = meta["resources_dir"]+"/library.bib"
-    with open(bib_path, "r") as file:
+    with open(f"{meta['resources_dir']}/library.bib", "r") as file:
         return file.read()
 
 def check_url(url):
@@ -75,7 +59,6 @@ print("Load config data", flush=True)
 with open(meta["config"], "r") as file:
     config = yaml.safe_load(file)
 
-
 print("Check general fields", flush=True)
 assert len(config["functionality"]["name"]) <= NAME_MAXLEN, f"Component id (.functionality.name) should not exceed {NAME_MAXLEN} characters."
 assert "namespace" in config["functionality"] is not None, "namespace not a field or is empty"
@@ -85,7 +68,7 @@ info = config['functionality']['info']
 assert "type" in info, "type not an info field"
 info_types = ["method", "control_method"]
 assert info["type"] in info_types , f"got {info['type']} expected one of {info_types}"
-assert "pretty_name" in info is not None, "pretty_name not an info field or is empty"
+assert "label" in info is not None, "pretty_name not an info field or is empty"
 assert "summary" in info is not None, "summary not an info field or is empty"
 assert "FILL IN:" not in info["summary"], "Summary not filled in"
 assert len(info["summary"]) <= SUMMARY_MAXLEN, f"Component id (.functionality.info.summary) should not exceed {SUMMARY_MAXLEN} characters."
@@ -102,10 +85,13 @@ if info["type"] == "method":
     assert check_url(info["documentation_url"]), f"{info['documentation_url']} is not reachable"
     assert check_url(info["repository_url"]), f"{info['repository_url']} is not reachable"
 
-
 if "variants" in info:
-    for key in info["variants"]:
-        assert_dict(info["variants"][key], config['functionality'])
+    arg_names = [arg["name"].replace("--", "") for arg in config["functionality"]["arguments"]] + ["preferred_normalization"]
+
+    for paramset_id, paramset in info["variants"].items():
+        if paramset:
+            for arg_id in paramset:
+                assert arg_id in arg_names, f"Argument '{arg_id}' in `.functionality.info.variants['{paramset_id}']` is not an argument in `.functionality.arguments`."
 
 assert "preferred_normalization" in info, "preferred_normalization not an info field"
 norm_methods = ["log_cpm", "counts", "log_scran_pooling", "sqrt_cpm", "l1_sqrt"]

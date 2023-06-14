@@ -2,7 +2,7 @@ type: file
 description: "The denoised data"
 example: "resources_test/denoising/pancreas/magic.h5ad"
 info:
-  short_description: "Denoised data"
+  label: "Denoised data"
   slots:
     layers: 
       - type: integer

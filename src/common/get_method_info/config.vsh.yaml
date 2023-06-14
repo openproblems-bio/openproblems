@@ -8,10 +8,10 @@ functionality:
       path: script.R
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-r:latest
+    image: ghcr.io/openproblems-bio/base_r:1.0.0
     setup:
       - type: r
-        cran: [ tidyverse ]
+        cran: [ purrr, dplyr, yaml, rlang, processx ]
       - type: apt
         packages: [ curl, default-jdk ]
       - type: docker

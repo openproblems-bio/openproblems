@@ -1,15 +1,13 @@
 __merge__: ../../api/comp_control_method.yaml
 functionality:
   name: "true_features"
-  description: "Positive control method which generates high-dimensional (full data) embedding"
   info:
-    subtype: positive_control
-    pretty_name: True Features
+    label: True Features
     summary: "Positive control by retaining the dimensionality without loss of information."
     description: "This serves as a positive control since the original high-dimensional data is retained as is, without any loss of information"
-    v1_url: openproblems/tasks/dimensionality_reduction/methods/baseline.py
-    v1_comp_id: "True Features"
-    v1_commit: 4a0ee9b3731ff10d8cd2e584726a61b502aef613
+    v1:
+      path: openproblems/tasks/dimensionality_reduction/methods/baseline.py
+      commit: 4a0ee9b3731ff10d8cd2e584726a61b502aef613
     preferred_normalization: counts
     variants:
       true_features:
@@ -34,7 +32,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         packages: scanpy

@@ -19,7 +19,7 @@ meta = {
 with open(meta['config'], 'r', encoding="utf8") as file:
     config = yaml.safe_load(file)
 
-output_type = config["functionality"]["info"]["output_type"]
+output_type = config["functionality"]["info"]["subtype"]
 
 print('Read input', flush=True)
 adata = sc.read_h5ad(par['input'])

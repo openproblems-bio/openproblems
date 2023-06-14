@@ -4,15 +4,21 @@ functionality:
     type: metric
     type_info:
       label: Metric
+      summary: A label projection metric.
       description: |
         A metric for evaluating predicted labels.
   arguments:
     - name: "--input_solution"
-      __merge__: anndata_solution.yaml
+      __merge__: file_solution.yaml
+      direction: input
+      required: true
     - name: "--input_prediction"
-      __merge__: anndata_prediction.yaml
+      __merge__: file_prediction.yaml
+      direction: input
+      required: true
     - name: "--output"
-      __merge__: anndata_score.yaml
+      __merge__: file_score.yaml
+      required: true
       direction: output
   test_resources:
     - path: /resources_test/label_projection/pancreas

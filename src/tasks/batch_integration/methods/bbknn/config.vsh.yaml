@@ -3,7 +3,7 @@ __merge__: ../../api/comp_method_graph.yaml
 functionality:
   name: bbknn
   info:
-    pretty_name: BBKNN
+    label: BBKNN
     summary: "BBKNN creates k nearest neighbours graph by identifying neighbours within batches, then combining and processing them with UMAP for visualization."
     description: |
       "BBKNN or batch balanced k nearest neighbours graph is built for each cell by
@@ -13,8 +13,9 @@ functionality:
     reference: "polanski2020bbknn"
     repository_url: "https://github.com/Teichlab/bbknn"
     documentation_url: "https://github.com/Teichlab/bbknn#readme"
-    v1_url: openproblems/tasks/_batch_integration/batch_integration_graph/methods/bbknn.py
-    v1_commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+    v1:
+      path: openproblems/tasks/_batch_integration/batch_integration_graph/methods/bbknn.py
+      commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
     preferred_normalization: log_cpm
     variants:
       bbknn_full_unscaled:
@@ -30,7 +31,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-r:latest
+    image: ghcr.io/openproblems-bio/base_r:1.0.0
     setup:
       - type: python
         pypi:

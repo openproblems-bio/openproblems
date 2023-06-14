@@ -4,6 +4,7 @@ functionality:
     type: control_method
     type_info:
       label: Control method
+      summary: Quality control methods for verifying the pipeline.
       description: |
         This folder contains control components for the task. 
         These components have the same interface as the regular methods
@@ -13,14 +14,21 @@ functionality:
         in the task. 
   arguments:
     - name: "--input_train"
-      __merge__: anndata_train.yaml
+      __merge__: file_train.yaml
+      direction: input
+      required: true
     - name: "--input_test"
-      __merge__: anndata_test.yaml
+      __merge__: file_test.yaml
+      direction: input
+      required: true
     - name: "--input_solution"
-      __merge__: anndata_solution.yaml
+      __merge__: file_solution.yaml
+      direction: input
+      required: true
     - name: "--output"
-      __merge__: anndata_prediction.yaml
+      __merge__: file_prediction.yaml
       direction: output
+      required: true
   test_resources:
     - path: /resources_test/label_projection/pancreas
       dest: resources_test/label_projection/pancreas

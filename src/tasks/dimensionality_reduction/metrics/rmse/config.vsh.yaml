@@ -1,32 +1,28 @@
 __merge__: ../../api/comp_metric.yaml
 functionality:
   name: "rmse"
-  description: The root mean squared error between the full (or processed) data matrix and a list of dimensionally-reduced matrices
   info:
-    v1_url: openproblems/tasks/dimensionality_reduction/metrics/root_mean_square_error.py 
-    v1_commit: b353a462f6ea353e0fc43d0f9fcbbe621edc3a0b
-    v1_note: This metric was ported but will probably be removed soon.
     metrics:
       - name: rmse
-        pretty_name: RMSE
+        label: RMSE
         summary: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of an SVD."
         description: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of an SVD."
         reference: kruskal1964mds
-        repository_url: ""
-        documentation_url: ""
         min: 0
-        max: +inf
+        max: "+.inf"
         maximize: false
       - name: rmse_spectral
-        pretty_name: RMSE Spectral
+        label: RMSE Spectral
         summary: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of a spectral embedding."
         description: "The residual after applying the Non-Negative Least Squares solver on the pairwise distances of a spectral embedding."
         reference: coifman2006diffusion
-        repository_url: ""
-        documentation_url: ""
         min: 0
-        max: +inf
+        max: "+.inf"
         maximize: false
+        v1:
+          path: openproblems/tasks/dimensionality_reduction/metrics/root_mean_square_error.py 
+          commit: b353a462f6ea353e0fc43d0f9fcbbe621edc3a0b
+          note: This metric was ported but will probably be removed soon.
   arguments:
     - name: "--spectral"
       type: boolean_true
@@ -36,7 +32,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base-python:latest
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
     setup:
       - type: python
         packages:
