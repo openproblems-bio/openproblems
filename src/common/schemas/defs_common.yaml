@@ -7,11 +7,7 @@ definitions:
         const: nextflow
         description: Next-gen platform for generating NextFlow VDSL3 modules.
       directives:
-        $ref: 'schema_viash_config.yaml#/definitions/NextflowDirectives'
-      # auto:
-      #   $ref: 'schema_viash_config.yaml#/definitions/NextflowAuto'
-      # config:
-      #   $ref: 'schema_viash_config.yaml#/definitions/NextflowConfig'
+        $ref: 'defs_viash.yaml#/definitions/NextflowDirectives'
     required: [ type ]
     additionalProperties: false
   PlatformDocker:
@@ -44,11 +40,11 @@ definitions:
       setup:
         type: array
         items:
-          "$ref": "schema_viash_config.yaml#/definitions/Requirements"
+          "$ref": "defs_viash.yaml#/definitions/Requirements"
       test_setup:
         type: array
         items:
-          "$ref": "schema_viash_config.yaml#/definitions/Requirements"
+          "$ref": "defs_viash.yaml#/definitions/Requirements"
     required: [type, image]
     additionalProperties: false
   PlatformNative:
@@ -169,7 +165,7 @@ definitions:
         description: The file format specification file.
       direction:
         description: Makes this argument an `input` or an `output`, as in does the file/folder needs to be read or written. `input` by default.
-        $ref: 'schema_viash_config.yaml#/definitions/Direction'
+        $ref: 'defs_viash.yaml#/definitions/Direction'
       info:
         description: 'Structured information. Can be any shape: a string, vector, map or even nested map.'
         type: object

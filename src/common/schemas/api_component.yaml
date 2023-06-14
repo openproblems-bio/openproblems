@@ -1,0 +1,67 @@
+title: Component API
+description: |
+  A component type specification file.
+type: object
+required: [functionality]
+properties:
+  functionality:
+    type: object
+    description: Information regarding the functionality of the component.
+    required: [namespace, info, arguments, test_resources]
+    additionalProperties: false
+    properties:
+      namespace:
+        "$ref": "defs_common.yaml#/definitions/Namespace"
+      info:
+        type: object
+        description: Metadata of the component.
+        additionalProperties: false
+        required: [type, type_info]
+        properties:
+          type:
+            "$ref": "defs_common.yaml#/definitions/ComponentType"
+          subtype:
+            "$ref": "defs_common.yaml#/definitions/ComponentSubtype"
+          type_info:
+            type: object
+            description: Metadata related to the component type.
+            required: [label, summary, description]
+            properties:
+              label:
+                $ref: "defs_common.yaml#/definitions/Label"
+              summary: 
+                $ref: "defs_common.yaml#/definitions/Summary"
+              description: 
+                $ref: "defs_common.yaml#/definitions/Description"
+      arguments:
+        type: array
+        description: Component-specific parameters.
+        items:
+          anyOf:
+            - $ref: 'defs_common.yaml#/definitions/ComponentAPIFile'
+            - $ref: 'defs_viash.yaml#/definitions/BooleanArgument'
+            - $ref: 'defs_viash.yaml#/definitions/BooleanArgument'
+            - $ref: 'defs_viash.yaml#/definitions/BooleanTrueArgument'
+            - $ref: 'defs_viash.yaml#/definitions/BooleanFalseArgument'
+            - $ref: 'defs_viash.yaml#/definitions/DoubleArgument'
+            - $ref: 'defs_viash.yaml#/definitions/IntegerArgument'
+            - $ref: 'defs_viash.yaml#/definitions/LongArgument'
+            - $ref: 'defs_viash.yaml#/definitions/StringArgument'
+      resources:
+        type: array
+        description: Resources required to run the component.
+        items:
+          "$ref": "defs_viash.yaml#/definitions/Resource"
+      test_resources:
+        type: array
+        description: One or more scripts and resources used to test the component.
+        items:
+          "$ref": "defs_viash.yaml#/definitions/Resource"
+  platforms:
+    type: array
+    description: A list of platforms which Viash generates target artifacts for.
+    items:
+      anyOf:
+        - "$ref": "defs_common.yaml#/definitions/PlatformDocker"
+        - "$ref": "defs_common.yaml#/definitions/PlatformNative"
+        - "$ref": "defs_common.yaml#/definitions/PlatformVdsl3"

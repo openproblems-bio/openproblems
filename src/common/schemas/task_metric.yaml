@@ -6,7 +6,7 @@ type: object
 required: [__merge__, functionality, platforms]
 properties:
   __merge__:
-    "$ref": "schema_definitions.yaml#/definitions/CompAPIMerge"
+    "$ref": "defs_common.yaml#/definitions/CompAPIMerge"
   functionality:
     type: object
     description: Information regarding the functionality of the component.
@@ -14,9 +14,9 @@ properties:
     additionalProperties: false
     properties:
       name:
-        "$ref": "schema_definitions.yaml#/definitions/Name"
+        "$ref": "defs_common.yaml#/definitions/Name"
       status:
-        "$ref": "schema_viash_config.yaml#/definitions/Status"
+        "$ref": "defs_viash.yaml#/definitions/Status"
       info:
         type: object
         description: Metadata of the component.
@@ -33,21 +33,21 @@ properties:
               required: [label, summary, description, reference, min, max, maximize]
               properties:
                 name:
-                  "$ref": "schema_definitions.yaml#/definitions/Name"
+                  "$ref": "defs_common.yaml#/definitions/Name"
                 label:
-                  "$ref": "schema_definitions.yaml#/definitions/Label"
+                  "$ref": "defs_common.yaml#/definitions/Label"
                 summary:
-                  "$ref": "schema_definitions.yaml#/definitions/Summary"
+                  "$ref": "defs_common.yaml#/definitions/Summary"
                 description:
-                  "$ref": "schema_definitions.yaml#/definitions/Description"
+                  "$ref": "defs_common.yaml#/definitions/Description"
                 reference:
-                  "$ref": "schema_definitions.yaml#/definitions/BibtexReference"
+                  "$ref": "defs_common.yaml#/definitions/BibtexReference"
                 documentation_url:
-                  "$ref": "schema_definitions.yaml#/definitions/DocumentationURL"
+                  "$ref": "defs_common.yaml#/definitions/DocumentationURL"
                 repository_url:
-                  "$ref": "schema_definitions.yaml#/definitions/RepositoryURL"
+                  "$ref": "defs_common.yaml#/definitions/RepositoryURL"
                 variants:
-                  "$ref": "schema_definitions.yaml#/definitions/MethodVariants"
+                  "$ref": "defs_common.yaml#/definitions/MethodVariants"
                 min:
                   oneOf:
                     - type: number
@@ -62,27 +62,27 @@ properties:
                   type: boolean
                   description: Whether a higher metric value is better.
                 v1:
-                  "$ref": "schema_definitions.yaml#/definitions/MigrationV1"
+                  "$ref": "defs_common.yaml#/definitions/MigrationV1"
       arguments:
         type: array
         description: Component-specific parameters.
         items:
-          "$ref": "schema_viash_config.yaml#/definitions/Argument"
+          "$ref": "defs_viash.yaml#/definitions/Argument"
       resources:
         type: array
         description: Resources required to run the component.
         items:
-          "$ref": "schema_viash_config.yaml#/definitions/Resource"
+          "$ref": "defs_viash.yaml#/definitions/Resource"
       test_resources:
         type: array
         description: One or more scripts and resources used to test the component.
         items:
-          "$ref": "schema_viash_config.yaml#/definitions/Resource"
+          "$ref": "defs_viash.yaml#/definitions/Resource"
   platforms:
     type: array
     description: A list of platforms which Viash generates target artifacts for.
     items:
       anyOf:
-        - "$ref": "schema_definitions.yaml#/definitions/PlatformDocker"
-        - "$ref": "schema_definitions.yaml#/definitions/PlatformNative"
-        - "$ref": "schema_definitions.yaml#/definitions/PlatformVdsl3"
+        - "$ref": "defs_common.yaml#/definitions/PlatformDocker"
+        - "$ref": "defs_common.yaml#/definitions/PlatformNative"
+        - "$ref": "defs_common.yaml#/definitions/PlatformVdsl3"
