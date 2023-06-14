@@ -5,28 +5,49 @@
 #' lists will be merged. This is a recursive procedure.
 #'
 #' @param path Path to Viash YAML
-read_and_merge_yaml <- function(path) {
-  data <- suppressWarnings(yaml::read_yaml(path))
-  .ram_process_merge(data, path)
+read_and_merge_yaml <- function(path, project_path = .ram_find_project(path)) {
+  path <- normalizePath(path, mustWork = FALSE)
+  data <- tryCatch({
+    suppressWarnings(yaml::read_yaml(path))
+  }, error = function(e) {
+    stop("Could not read ", path, ". Error: ", e)
+  })
+  .ram_process_merge(data, path, project_path)
+}
+
+.ram_find_project <- function(path) {
+  path <- normalizePath(path, mustWork = FALSE)
+  check <- paste0(dirname(path), "/_viash.yaml")
+  if (file.exists(check)) {
+    dirname(check)
+  } else if (check == "//_viash.yaml") {
+    NULL
+  } else {
+    .ram_find_project(dirname(check))
+  }
 }
 
 .ram_is_named_list <- function(obj) {
   is.null(obj) || (is.list(obj) && (length(obj) == 0 || !is.null(names(obj))))
 }
 
-.ram_process_merge <- function(data, path) {
+.ram_process_merge <- function(data, path, project_path) {
   if (.ram_is_named_list(data)) {
     # check whether children have `__merge__` entries
     processed_data <- lapply(data, function(dat) {
-      .ram_process_merge(dat, path)
+      .ram_process_merge(dat, path, project_path)
     })
     names(processed_data) <- names(data)
 
     # if current element has __merge__, read list2 yaml and combine with data
-    new_data <- 
+    new_data <-
       if ("__merge__" %in% names(processed_data)) {
-        new_data_path <- paste0(dirname(path), "/", processed_data$`__merge__`)
-        read_and_merge_yaml(new_data_path)
+        new_data_path <- .ram_resolve_path(
+          path = processed_data$`__merge__`,
+          project_path = project_path,
+          parent_path = dirname(path)
+        )
+        read_and_merge_yaml(new_data_path, project_path)
       } else {
         list()
       }
@@ -34,11 +55,19 @@ read_and_merge_yaml <- function(path) {
     .ram_deep_merge(new_data, processed_data)
   } else if (is.list(data)) {
     lapply(data, function(dat) {
-      .ram_process_merge(dat, path)
+      .ram_process_merge(dat, path, project_path)
     })
   } else {
     data
   }
+}
+
+.ram_resolve_path <- function(path, project_path, parent_path) {
+  ifelse(
+    grepl("^/", path),
+    paste0(project_path, "/", path),
+    fs::path_abs(path, parent_path)
+  )
 }
 
 .ram_deep_merge <- function(list1, list2) {

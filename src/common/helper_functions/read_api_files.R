@@ -16,6 +16,8 @@ read_anndata_info <- function(spec, path) {
     df <- dplyr::bind_cols(df, list_as_tibble(spec$info))
   }
   df$file_name <- basename(path) %>% gsub("\\.yaml", "", .)
+  df$description <- df$description %||% NA_character_ %>% as.character
+  df$summary <- df$summary %||% NA_character_ %>% as.character
   as_tibble(df)
 }
 read_anndata_slots <- function(spec, path) {
@@ -104,6 +106,7 @@ read_comp_info <- function(spec_yaml, path) {
   df$file_name <- basename(path) %>% gsub("\\.yaml", "", .)
   as_tibble(df)
 }
+
 read_comp_args <- function(spec_yaml, path) {
   arguments <- spec_yaml$functionality$arguments
   for (arg_group in spec_yaml$functionality$argument_groups) {
@@ -115,7 +118,7 @@ read_comp_args <- function(spec_yaml, path) {
       df <- dplyr::bind_cols(df, list_as_tibble(arg$info))
     }
     df$file_name <- basename(path) %>% gsub("\\.yaml", "", .)
-    df$arg_name <- stringr::str_replace_all(arg$name, "^-*", "")
+    df$arg_name <- gsub("^-*", "", arg$name)
     df$direction <- df$direction %||% "input" %|% "input"
     df$parent <- df$`__merge__` %||% NA_character_ %>% basename() %>% gsub("\\.yaml", "", .)
     df$required <- df$required %||% FALSE %|% FALSE
@@ -160,11 +163,13 @@ format_comp_args_as_tibble <- function(spec) {
 }
 
 # path <- "src/datasets/api/comp_processor_knn.yaml"
-render_component <- function(path) {
-  spec <- read_comp_spec(path)
+render_component <- function(spec) {
+  if (is.character(spec)) {
+    spec <- read_comp_spec(spec)
+  }
 
-  cat(strip_margin(glue::glue("
-    §# Component type: {spec$info$label}
+  strip_margin(glue::glue("
+    §## Component type: {spec$info$label}
     §
     §Path: [`src/{spec$info$namespace}`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/{spec$info$namespace})
     §
@@ -176,19 +181,29 @@ render_component <- function(path) {
     §{paste(format_comp_args_as_tibble(spec), collapse = '\n')}
     §:::
     §
-    §"), symbol = "§"))
+    §"), symbol = "§")
 }
 
 # path <- "src/datasets/api/file_pca.yaml"
-render_file <- function(path) {
-  spec <- read_anndata_spec(path)
+render_file <- function(spec) {
+  if (is.character(spec)) {
+    spec <- read_anndata_spec(spec)
+  }
 
-  cat(strip_margin(glue::glue("
-    §# File format: {spec$info$label}
+  if (!"label" %in% names(spec$info)) {
+    spec$info$label <- basename(spec$info$example)
+  }
+
+  strip_margin(glue::glue("
+    §## File format: {spec$info$label}
+    §
+    §{spec$info$summary %||% ''}
     §
     §Example file: `{spec$info$example %|% '<Missing>'}`
     §
-    §{spec$info$summary}
+    §Description:
+    §
+    §{spec$info$description %||% ''}
     §
     §Format:
     §
@@ -202,5 +217,113 @@ render_file <- function(path) {
     §{paste(format_slots_as_kable(spec), collapse = '\n')}
     §:::
     §
-    §"), symbol = "§"))
+    §"), symbol = "§")
+}
+
+# path <- "src/tasks/denoising"
+read_task_api <- function(path) {
+  cli::cli_inform("Looking for project root")
+  project_path <- .ram_find_project(path)
+  api_dir <- paste0(path, "/api")
+
+  cli::cli_inform("Reading task info")
+  task_info_yaml <- list.files(api_dir, pattern = "task_info.ya?ml", full.names = TRUE)
+  assertthat::assert_that(length(task_info_yaml) == 1)
+  task_info <- read_and_merge_yaml(task_info_yaml, project_path)
+
+  cli::cli_inform("Reading task authors")
+  authors <- map_df(task_info$authors, function(aut) {
+    aut$roles <- paste(aut$roles, collapse = ", ")
+    list_as_tibble(aut)
+  })
+
+  cli::cli_inform("Reading component yamls")
+  comp_yamls <- list.files(api_dir, pattern = "comp_.*\\.ya?ml", full.names = TRUE)
+  comps <- map(comp_yamls, read_comp_spec)
+  comp_info <- map_df(comps, "info")
+  comp_args <- map_df(comps, "args")
+  names(comps) <- basename(comp_yamls) %>% gsub("\\..*$", "", .)
+
+  cli::cli_inform("Reading file yamls")
+  file_yamls <- .ram_resolve_path(
+    path = na.omit(unique(comp_args$`__merge__`)),
+    project_path = project_path,
+    parent_path = api_dir
+  )
+  files <- map(file_yamls, read_anndata_spec)
+  names(files) <- basename(file_yamls) %>% gsub("\\..*$", "", .)
+  file_info <- map_df(files, "info")
+  file_slots <- map_df(files, "slots")
+
+  cli::cli_inform("Generating task graph")
+  task_graph <- create_task_graph(file_info, comp_info, comp_args)
+
+  list(
+    task_info = task_info,
+    file_specs = files,
+    file_info = file_info,
+    file_slots = file_slots,
+    comp_specs = comps,
+    comp_info = comp_info,
+    comp_args = comp_args,
+    task_graph = task_graph,
+    authors = authors
+  )
+}
+
+
+create_task_graph <- function(file_info, comp_info, comp_args) {
+  clean_id <- function(id) {
+    gsub("graph", "graaf", id)
+  }
+  nodes <-
+    bind_rows(
+      file_info %>%
+        mutate(id = file_name, label = label, is_comp = FALSE),
+      comp_info %>%
+        mutate(id = file_name, label = label, is_comp = TRUE)
+    ) %>%
+      select(id, label, everything()) %>%
+      mutate(str = paste0(
+        "  ",
+        clean_id(id),
+        ifelse(is_comp, "[/\"", "(\""),
+        label,
+        ifelse(is_comp, "\"/]", "\")")
+      ))
+  edges <- bind_rows(
+    comp_args %>%
+      filter(type == "file", direction == "input") %>%
+      mutate(
+        from = parent,
+        to = file_name,
+        arrow = "---"
+      ),
+    comp_args %>%
+      filter(type == "file", direction == "output") %>%
+      mutate(
+        from = file_name,
+        to = parent,
+        arrow = "-->"
+      )
+  ) %>%
+    select(from, to, everything()) %>%
+    mutate(str = paste0("  ", clean_id(from), arrow, clean_id(to)))
+
+  igraph::graph_from_data_frame(
+    edges,
+    vertices = nodes,
+    directed = TRUE
+  )
+}
+
+render_task_graph <- function(task_api) {
+  strip_margin(glue::glue("
+    §```{{mermaid}}
+    §%%| column: screen-inset-shaded
+    §flowchart LR
+    §{paste(igraph::V(task_api$task_graph)$str, collapse = '\n')}
+    §{paste(igraph::E(task_api$task_graph)$str, collapse = '\n')}
+    §```
+    §"), symbol = "§")
 }
