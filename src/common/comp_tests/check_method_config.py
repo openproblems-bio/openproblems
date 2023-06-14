@@ -68,7 +68,7 @@ info = config['functionality']['info']
 assert "type" in info, "type not an info field"
 info_types = ["method", "control_method"]
 assert info["type"] in info_types , f"got {info['type']} expected one of {info_types}"
-assert "label" in info is not None, "pretty_name not an info field or is empty"
+assert "label" in info is not None, "label not an info field or is empty"
 assert "summary" in info is not None, "summary not an info field or is empty"
 assert "FILL IN:" not in info["summary"], "Summary not filled in"
 assert len(info["summary"]) <= SUMMARY_MAXLEN, f"Component id (.functionality.info.summary) should not exceed {SUMMARY_MAXLEN} characters."

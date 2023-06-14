@@ -62,7 +62,7 @@ def search_ref_bib(reference):
 def check_metric(metric: Dict[str, str])  -> str:
     assert "name" in metric is not None, "name not a field or is empty"
     assert len(metric["name"]) <= NAME_MAXLEN, f"Component id (.functionality.info.metrics.metric.name) should not exceed {NAME_MAXLEN} characters."
-    assert "label" in metric is not None, "pretty_name not a field in metric or is empty"
+    assert "label" in metric is not None, "label not a field in metric or is empty"
     assert "summary" in metric is not None, "summary not a field in metric or is empty"
     assert "FILL IN:" not in metric["summary"], "Summary not filled in"
     assert len(metric["summary"]) <= SUMMARY_MAXLEN, f"Component id (.functionality.info.metrics.metric.summary) should not exceed {SUMMARY_MAXLEN} characters."
