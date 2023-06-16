@@ -55,15 +55,15 @@ dataset.
 
 ``` mermaid
 flowchart LR
-  file_train(Training data)
-  file_test(Test data)
-  file_denoised(Denoised data)
-  file_score(Score)
-  file_common_dataset(Common dataset)
-  comp_control_method[/Control method/]
-  comp_method[/Method/]
-  comp_metric[/Metric/]
-  comp_process_dataset[/Data processor/]
+  file_train("Training data")
+  file_test("Test data")
+  file_denoised("Denoised data")
+  file_score("Score")
+  file_common_dataset("Common dataset")
+  comp_control_method[/"Control method"/]
+  comp_method[/"Method"/]
+  comp_metric[/"Metric"/]
+  comp_process_dataset[/"Data processor"/]
   file_train---comp_control_method
   file_test---comp_control_method
   file_train---comp_method

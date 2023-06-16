@@ -47,15 +47,15 @@ for visualization and interpretation.
 
 ``` mermaid
 flowchart LR
-  file_dataset(Dataset)
-  file_solution(Test data)
-  file_embedding(Embedding)
-  file_score(Score)
-  file_common_dataset(Common dataset)
-  comp_control_method[/Control method/]
-  comp_method[/Method/]
-  comp_metric[/Metric/]
-  comp_process_dataset[/Data processor/]
+  file_dataset("Dataset")
+  file_solution("Test data")
+  file_embedding("Embedding")
+  file_score("Score")
+  file_common_dataset("Common dataset")
+  comp_control_method[/"Control method"/]
+  comp_method[/"Method"/]
+  comp_metric[/"Metric"/]
+  comp_process_dataset[/"Data processor"/]
   file_dataset---comp_control_method
   file_solution---comp_control_method
   file_dataset---comp_method

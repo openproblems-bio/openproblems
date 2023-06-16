@@ -54,19 +54,19 @@ extensive benchmark of single-cell data integration methods
 
 ``` mermaid
 flowchart LR
-  file_unintegrated(Unintegrated)
-  file_integrated_embedding(Integrated embedding)
-  file_integrated_feature(Integrated Feature)
-  file_integrated_graaf(Integrated Graph)
-  file_score(Score)
-  file_common_dataset(Common dataset)
-  comp_method_embedding[/Method (embedding)/]
-  comp_method_feature[/Method (feature)/]
-  comp_method_graaf[/Method (graph)/]
-  comp_metric_embedding[/Metric (embedding)/]
-  comp_metric_feature[/Metric (feature)/]
-  comp_metric_graaf[/Metric (graph)/]
-  comp_process_dataset[/Data processor/]
+  file_unintegrated("Unintegrated")
+  file_integrated_embedding("Integrated embedding")
+  file_integrated_feature("Integrated Feature")
+  file_integrated_graaf("Integrated Graph")
+  file_score("Score")
+  file_common_dataset("Common dataset")
+  comp_method_embedding[/"Method (embedding)"/]
+  comp_method_feature[/"Method (feature)"/]
+  comp_method_graaf[/"Method (graph)"/]
+  comp_metric_embedding[/"Metric (embedding)"/]
+  comp_metric_feature[/"Metric (feature)"/]
+  comp_metric_graaf[/"Metric (graph)"/]
+  comp_process_dataset[/"Data processor"/]
   file_unintegrated---comp_method_embedding
   file_unintegrated---comp_method_feature
   file_unintegrated---comp_method_graaf
