@@ -74,13 +74,13 @@ flowchart LR
   file_integrated_feature---comp_metric_feature
   file_integrated_graaf---comp_metric_graaf
   file_common_dataset---comp_process_dataset
-  comp_method_embedding--&gt;file_integrated_embedding
-  comp_method_feature--&gt;file_integrated_feature
-  comp_method_graaf--&gt;file_integrated_graaf
-  comp_metric_embedding--&gt;file_score
-  comp_metric_feature--&gt;file_score
-  comp_metric_graaf--&gt;file_score
-  comp_process_dataset--&gt;file_unintegrated
+  comp_method_embedding-->file_integrated_embedding
+  comp_method_feature-->file_integrated_feature
+  comp_method_graaf-->file_integrated_graaf
+  comp_metric_embedding-->file_score
+  comp_metric_feature-->file_score
+  comp_metric_graaf-->file_score
+  comp_process_dataset-->file_unintegrated
 ```
 
 ## File format: Common dataset

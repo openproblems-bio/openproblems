@@ -62,11 +62,11 @@ flowchart LR
   file_embedding---comp_metric
   file_solution---comp_metric
   file_common_dataset---comp_process_dataset
-  comp_control_method--&gt;file_embedding
-  comp_method--&gt;file_embedding
-  comp_metric--&gt;file_score
-  comp_process_dataset--&gt;file_dataset
-  comp_process_dataset--&gt;file_solution
+  comp_control_method-->file_embedding
+  comp_method-->file_embedding
+  comp_metric-->file_score
+  comp_process_dataset-->file_dataset
+  comp_process_dataset-->file_solution
 ```
 
 ## File format: Common dataset

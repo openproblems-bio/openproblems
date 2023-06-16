@@ -70,11 +70,11 @@ flowchart LR
   file_test---comp_metric
   file_denoised---comp_metric
   file_common_dataset---comp_process_dataset
-  comp_control_method--&gt;file_denoised
-  comp_method--&gt;file_denoised
-  comp_metric--&gt;file_score
-  comp_process_dataset--&gt;file_train
-  comp_process_dataset--&gt;file_test
+  comp_control_method-->file_denoised
+  comp_method-->file_denoised
+  comp_metric-->file_score
+  comp_process_dataset-->file_train
+  comp_process_dataset-->file_test
 ```
 
 ## File format: Common dataset

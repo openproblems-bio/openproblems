@@ -319,8 +319,7 @@ create_task_graph <- function(file_info, comp_info, comp_args) {
 
 render_task_graph <- function(task_api) {
   strip_margin(glue::glue("
-    §```{{mermaid}}
-    §%%| column: screen-inset-shaded
+    §```mermaid
     §flowchart LR
     §{paste(igraph::V(task_api$task_graph)$str, collapse = '\n')}
     §{paste(igraph::E(task_api$task_graph)$str, collapse = '\n')}
