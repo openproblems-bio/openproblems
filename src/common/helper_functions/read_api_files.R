@@ -287,9 +287,9 @@ create_task_graph <- function(file_info, comp_info, comp_args) {
       mutate(str = paste0(
         "  ",
         clean_id(id),
-        ifelse(is_comp, "[/\"", "(\""),
+        ifelse(is_comp, "[/", "("),
         label,
-        ifelse(is_comp, "\"/]", "\")")
+        ifelse(is_comp, "/]", ")")
       ))
   edges <- bind_rows(
     comp_args %>%

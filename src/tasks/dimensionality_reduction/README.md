@@ -4,7 +4,7 @@ Reduction of high-dimensional datasets to 2D for visualization &
 interpretation
 
 Path:
-[`/viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/src/tasks/dimensionality_reduction`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src//viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/src/tasks/dimensionality_reduction)
+[`src/tasks/dimensionality_reduction`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/dimensionality_reduction)
 
 ## Motivation
 
@@ -47,15 +47,15 @@ for visualization and interpretation.
 
 ``` mermaid
 flowchart LR
-  file_dataset(&quot;Dataset&quot;)
-  file_solution(&quot;Test data&quot;)
-  file_embedding(&quot;Embedding&quot;)
-  file_score(&quot;Score&quot;)
-  file_common_dataset(&quot;Common dataset&quot;)
-  comp_control_method[/&quot;Control method&quot;/]
-  comp_method[/&quot;Method&quot;/]
-  comp_metric[/&quot;Metric&quot;/]
-  comp_process_dataset[/&quot;Data processor&quot;/]
+  file_dataset(Dataset)
+  file_solution(Test data)
+  file_embedding(Embedding)
+  file_score(Score)
+  file_common_dataset(Common dataset)
+  comp_control_method[/Control method/]
+  comp_method[/Method/]
+  comp_metric[/Metric/]
+  comp_process_dataset[/Data processor/]
   file_dataset---comp_control_method
   file_solution---comp_control_method
   file_dataset---comp_method

@@ -3,7 +3,7 @@
 Automated cell type annotation from rich, labeled reference data
 
 Path:
-[`/viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/src/tasks/label_projection`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src//viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/src/tasks/label_projection)
+[`src/tasks/label_projection`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/label_projection)
 
 ## Motivation
 
@@ -46,16 +46,16 @@ labels onto the test set.
 
 ``` mermaid
 flowchart LR
-  file_train(&quot;Training data&quot;)
-  file_test(&quot;Test data&quot;)
-  file_solution(&quot;Solution&quot;)
-  file_prediction(&quot;Prediction&quot;)
-  file_score(&quot;Score&quot;)
-  file_common_dataset(&quot;Common dataset&quot;)
-  comp_control_method[/&quot;Control method&quot;/]
-  comp_method[/&quot;Method&quot;/]
-  comp_metric[/&quot;Metric&quot;/]
-  comp_process_dataset[/&quot;Data processor&quot;/]
+  file_train(Training data)
+  file_test(Test data)
+  file_solution(Solution)
+  file_prediction(Prediction)
+  file_score(Score)
+  file_common_dataset(Common dataset)
+  comp_control_method[/Control method/]
+  comp_method[/Method/]
+  comp_metric[/Metric/]
+  comp_process_dataset[/Data processor/]
   file_train---comp_control_method
   file_test---comp_control_method
   file_solution---comp_control_method

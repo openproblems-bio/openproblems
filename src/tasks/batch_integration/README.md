@@ -4,7 +4,7 @@ Remove unwanted batch effects from scRNA data while retaining
 biologically meaningful variation.
 
 Path:
-[`/viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/src/tasks/batch_integration`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src//viash_automount/home/rcannood/workspace/openproblems/openproblems-v2/src/tasks/batch_integration)
+[`src/tasks/batch_integration`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/batch_integration)
 
 ## Motivation
 
@@ -54,19 +54,19 @@ extensive benchmark of single-cell data integration methods
 
 ``` mermaid
 flowchart LR
-  file_unintegrated(&quot;Unintegrated&quot;)
-  file_integrated_embedding(&quot;Integrated embedding&quot;)
-  file_integrated_feature(&quot;Integrated Feature&quot;)
-  file_integrated_graaf(&quot;Integrated Graph&quot;)
-  file_score(&quot;Score&quot;)
-  file_common_dataset(&quot;Common dataset&quot;)
-  comp_method_embedding[/&quot;Method (embedding)&quot;/]
-  comp_method_feature[/&quot;Method (feature)&quot;/]
-  comp_method_graaf[/&quot;Method (graph)&quot;/]
-  comp_metric_embedding[/&quot;Metric (embedding)&quot;/]
-  comp_metric_feature[/&quot;Metric (feature)&quot;/]
-  comp_metric_graaf[/&quot;Metric (graph)&quot;/]
-  comp_process_dataset[/&quot;Data processor&quot;/]
+  file_unintegrated(Unintegrated)
+  file_integrated_embedding(Integrated embedding)
+  file_integrated_feature(Integrated Feature)
+  file_integrated_graaf(Integrated Graph)
+  file_score(Score)
+  file_common_dataset(Common dataset)
+  comp_method_embedding[/Method (embedding)/]
+  comp_method_feature[/Method (feature)/]
+  comp_method_graaf[/Method (graph)/]
+  comp_metric_embedding[/Metric (embedding)/]
+  comp_metric_feature[/Metric (feature)/]
+  comp_metric_graaf[/Metric (graph)/]
+  comp_process_dataset[/Data processor/]
   file_unintegrated---comp_method_embedding
   file_unintegrated---comp_method_feature
   file_unintegrated---comp_method_graaf

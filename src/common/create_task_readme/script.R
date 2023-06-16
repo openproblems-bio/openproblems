@@ -54,6 +54,7 @@ authors_str <-
   }
 
 cat("Generate qmd content\n")
+task_dir_short <- gsub(".*openproblems-v2/", "", task_dir)
 qmd_content <- strip_margin(glue::glue("
   §---
   §title: \"{task_api$task_info$label}\"
@@ -62,7 +63,7 @@ qmd_content <- strip_margin(glue::glue("
   §
   §{task_api$task_info$summary}
   §
-  §Path: [`{task_dir}`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/{task_dir})
+  §Path: [`{task_dir_short}`](https://github.com/openproblems-bio/openproblems-v2/tree/main/{task_dir_short})
   §
   §## Motivation
   §
