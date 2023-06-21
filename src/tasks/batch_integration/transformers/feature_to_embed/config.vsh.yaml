@@ -1,25 +1,15 @@
+__merge__: ../../api/comp_transformer_feature_to_embedding.yaml
 functionality:
   name: feature_to_embed
-  namespace: batch_integration/transformers
-  description: "Transform a feature integration to an embedded integration"
   info:
     type: transformer
-    label: Feature to Embed
-    output_type: embedding
-  arguments:
-    - __merge__: ../../api/file_integrated_feature.yaml
-      name: --input
-    - __merge__: ../../api/file_integrated_embedding.yaml
-      name: --output
-      direction: output
+    label: Feature to Embedding
+    summary: Transform a feature output to an embedding.
+    description: |
+      Transform a feature output to an embedding by computing a PCA on the corrected counts.
   resources:
     - type: python_script
       path: script.py
-  test_resources:
-    - path: /resources_test/batch_integration/pancreas/
-      dest: resources_test/batch_integration/pancreas/
-    - type: python_script
-      path: /src/common/comp_tests/run_and_check_adata.py
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_python:1.0.1

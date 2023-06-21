@@ -1,25 +1,14 @@
+__merge__: ../../api/comp_transformer_embedding_to_graph.yaml
 functionality:
   name: embed_to_graph
-  namespace: batch_integration/transformers
-  description: "Transform an embedded integration to a graph integration"
   info:
-    type: transformer
     label: Embedding to Graph
-    output_type: graph
-  arguments:
-    - __merge__: ../../api/file_integrated_embedding.yaml
-      name: --input
-    - __merge__: ../../api/file_integrated_graph.yaml
-      name: --output
-      direction: output
+    summary: Transform an embedding to a graph output.
+    description: |
+      Transform an embedding to a graph output by applying the k nearest neighbors algorithm.
   resources:
     - type: python_script
       path: script.py
-  test_resources:
-    - path: /resources_test/batch_integration/pancreas/
-      dest: resources_test/batch_integration/pancreas/
-    - type: python_script
-      path: /src/common/comp_tests/run_and_check_adata.py
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_python:1.0.1

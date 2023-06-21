@@ -67,6 +67,8 @@ flowchart LR
   comp_metric_feature[/"Metric (feature)"/]
   comp_metric_graaf[/"Metric (graph)"/]
   comp_process_dataset[/"Data processor"/]
+  comp_transformer_embedding_to_graaf[/"Embedding to Graph"/]
+  comp_transformer_feature_to_embedding[/"Feature to Embedding"/]
   file_unintegrated---comp_method_embedding
   file_unintegrated---comp_method_feature
   file_unintegrated---comp_method_graaf
@@ -74,6 +76,8 @@ flowchart LR
   file_integrated_feature---comp_metric_feature
   file_integrated_graaf---comp_metric_graaf
   file_common_dataset---comp_process_dataset
+  file_integrated_embedding---comp_transformer_embedding_to_graaf
+  file_integrated_feature---comp_transformer_feature_to_embedding
   comp_method_embedding-->file_integrated_embedding
   comp_method_feature-->file_integrated_feature
   comp_method_graaf-->file_integrated_graaf
@@ -81,6 +85,8 @@ flowchart LR
   comp_metric_feature-->file_score
   comp_metric_graaf-->file_score
   comp_process_dataset-->file_unintegrated
+  comp_transformer_embedding_to_graaf-->file_integrated_graaf
+  comp_transformer_feature_to_embedding-->file_integrated_embedding
 ```
 
 ## File format: Common dataset
@@ -417,6 +423,24 @@ Arguments:
 
 </div>
 
+## Component type: Embedding to Graph
+
+Path:
+[`src/batch_integration/transformers`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/transformers)
+
+Transform an embedding to a graph output.
+
+Arguments:
+
+<div class="small">
+
+| Name       | Type   | Description                              |
+|:-----------|:-------|:-----------------------------------------|
+| `--input`  | `file` | An integrated AnnData HDF5 file.         |
+| `--output` | `file` | (*Output*) Integrated AnnData HDF5 file. |
+
+</div>
+
 ## Component type: Metric (feature)
 
 Path:
@@ -432,6 +456,24 @@ Arguments:
 |:---------------------|:-------|:------------------------------|
 | `--input_integrated` | `file` | Integrated AnnData HDF5 file. |
 | `--output`           | `file` | (*Output*) Metric score file. |
+
+</div>
+
+## Component type: Feature to Embedding
+
+Path:
+[`src/batch_integration/transformers`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/transformers)
+
+Transform a feature output to an embedding.
+
+Arguments:
+
+<div class="small">
+
+| Name       | Type   | Description                                 |
+|:-----------|:-------|:--------------------------------------------|
+| `--input`  | `file` | Integrated AnnData HDF5 file.               |
+| `--output` | `file` | (*Output*) An integrated AnnData HDF5 file. |
 
 </div>
 
