@@ -54,39 +54,39 @@ extensive benchmark of single-cell data integration methods
 
 ``` mermaid
 flowchart LR
-  file_unintegrated("Unintegrated")
-  file_integrated_embedding("Integrated embedding")
-  file_integrated_feature("Integrated Feature")
-  file_integrated_graaf("Integrated Graph")
-  file_score("Score")
   file_common_dataset("Common dataset")
+  comp_process_dataset[/"Data processor"/]
+  file_unintegrated("Unintegrated")
   comp_method_embedding[/"Method (embedding)"/]
   comp_method_feature[/"Method (feature)"/]
   comp_method_graaf[/"Method (graph)"/]
+  file_integrated_embedding("Integrated embedding")
+  file_integrated_feature("Integrated Feature")
+  file_integrated_graaf("Integrated Graph")
   comp_metric_embedding[/"Metric (embedding)"/]
-  comp_metric_feature[/"Metric (feature)"/]
-  comp_metric_graaf[/"Metric (graph)"/]
-  comp_process_dataset[/"Data processor"/]
   comp_transformer_embedding_to_graaf[/"Embedding to Graph"/]
+  comp_metric_feature[/"Metric (feature)"/]
   comp_transformer_feature_to_embedding[/"Feature to Embedding"/]
+  comp_metric_graaf[/"Metric (graph)"/]
+  file_score("Score")
+  file_common_dataset---comp_process_dataset
+  comp_process_dataset-->file_unintegrated
   file_unintegrated---comp_method_embedding
   file_unintegrated---comp_method_feature
   file_unintegrated---comp_method_graaf
-  file_integrated_embedding---comp_metric_embedding
-  file_integrated_feature---comp_metric_feature
-  file_integrated_graaf---comp_metric_graaf
-  file_common_dataset---comp_process_dataset
-  file_integrated_embedding---comp_transformer_embedding_to_graaf
-  file_integrated_feature---comp_transformer_feature_to_embedding
   comp_method_embedding-->file_integrated_embedding
   comp_method_feature-->file_integrated_feature
   comp_method_graaf-->file_integrated_graaf
+  file_integrated_embedding---comp_metric_embedding
+  file_integrated_embedding---comp_transformer_embedding_to_graaf
+  file_integrated_feature---comp_metric_feature
+  file_integrated_feature---comp_transformer_feature_to_embedding
+  file_integrated_graaf---comp_metric_graaf
   comp_metric_embedding-->file_score
-  comp_metric_feature-->file_score
-  comp_metric_graaf-->file_score
-  comp_process_dataset-->file_unintegrated
   comp_transformer_embedding_to_graaf-->file_integrated_graaf
+  comp_metric_feature-->file_score
   comp_transformer_feature_to_embedding-->file_integrated_embedding
+  comp_metric_graaf-->file_score
 ```
 
 ## File format: Common dataset

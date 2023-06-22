@@ -55,26 +55,26 @@ dataset.
 
 ``` mermaid
 flowchart LR
+  file_common_dataset("Common dataset")
+  comp_process_dataset[/"Data processor"/]
   file_train("Training data")
   file_test("Test data")
-  file_denoised("Denoised data")
-  file_score("Score")
-  file_common_dataset("Common dataset")
   comp_control_method[/"Control method"/]
   comp_method[/"Method"/]
   comp_metric[/"Metric"/]
-  comp_process_dataset[/"Data processor"/]
-  file_train---comp_control_method
-  file_test---comp_control_method
-  file_train---comp_method
-  file_test---comp_metric
-  file_denoised---comp_metric
+  file_denoised("Denoised data")
+  file_score("Score")
   file_common_dataset---comp_process_dataset
+  comp_process_dataset-->file_train
+  comp_process_dataset-->file_test
+  file_train---comp_control_method
+  file_train---comp_method
+  file_test---comp_control_method
+  file_test---comp_metric
   comp_control_method-->file_denoised
   comp_method-->file_denoised
   comp_metric-->file_score
-  comp_process_dataset-->file_train
-  comp_process_dataset-->file_test
+  file_denoised---comp_metric
 ```
 
 ## File format: Common dataset

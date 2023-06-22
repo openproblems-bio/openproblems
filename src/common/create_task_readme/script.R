@@ -24,12 +24,13 @@ task_dir <- paste0(dirname(par[["viash_yaml"]]), "/src/tasks/", par[["task"]]) %
   gsub("^\\./", "", .)
 task_api <- read_task_api(task_dir)
 
-r_graph <- render_task_graph(task_api)
+# determine ordering
+root <- .task_graph_get_root(task_api)
 
-# todo: fix hard coded node
-order <- names(igraph::bfs(task_api$task_graph, "file_common_dataset")$order)
+r_graph <- render_task_graph(task_api, root)
 
 cat("Render API details\n")
+order <- names(igraph::bfs(task_api$task_graph, root)$order)
 r_details <- map_chr(
   order,
   function(file_name) {

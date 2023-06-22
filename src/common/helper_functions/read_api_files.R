@@ -317,12 +317,30 @@ create_task_graph <- function(file_info, comp_info, comp_args) {
   )
 }
 
-render_task_graph <- function(task_api) {
+.task_graph_get_root <- function(task_api) {
+  root <- names(which(igraph::degree(task_api$task_graph, mode = "in") == 0))
+  if (length(root) > 1) {
+    stop(
+      "There should only be one node with in-degree equal to 0.\n",
+      "  Nodes with in-degree == 0: ", paste(root, collapse = ", ")
+    )
+  }
+  root
+}
+
+render_task_graph <- function(task_api, root = .task_graph_get_root(task_api)) {
+  order <- names(igraph::bfs(task_api$task_graph, root)$order)
+
+  vdf <- igraph::as_data_frame(task_api$task_graph, "vertices") %>%
+    arrange(match(name, order))
+  edf <- igraph::as_data_frame(task_api$task_graph, "edges") %>%
+    arrange(match(from, order), match(to, order))
+
   strip_margin(glue::glue("
     §```mermaid
     §flowchart LR
-    §{paste(igraph::V(task_api$task_graph)$str, collapse = '\n')}
-    §{paste(igraph::E(task_api$task_graph)$str, collapse = '\n')}
+    §{paste(vdf$str, collapse = '\n')}
+    §{paste(edf$str, collapse = '\n')}
     §```
     §"), symbol = "§")
 }
