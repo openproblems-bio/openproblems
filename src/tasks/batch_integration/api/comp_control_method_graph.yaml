@@ -1,0 +1,31 @@
+functionality:
+  namespace: batch_integration/control_methods
+  info:
+    type: control_method
+    subtype: graph
+    type_info:
+      label: control method (graph)
+      summary: A batch integration graph control method.
+      description: |
+        A batch integration control method which outputs a batch-corrected cell graphs.
+  arguments:
+    - __merge__: file_unintegrated.yaml
+      name: --input
+      direction: input
+      required: true
+    - __merge__: file_integrated_graph.yaml
+      name: --output
+      direction: output
+      required: true
+    - name: --hvg
+      type: boolean
+      description: Whether to subset to highly variable genes
+      default: false
+      required: false
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/check_method_config.py
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/batch_integration/pancreas
+      dest: resources_test/batch_integration/pancreas

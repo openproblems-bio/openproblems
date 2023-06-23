@@ -268,7 +268,7 @@ Arguments:
 
 An integrated AnnData HDF5 file.
 
-Example file: `resources_test/batch_integration/pancreas/scvi.h5ad`
+Example file: `resources_test/batch_integration/pancreas/integrated_embedding.h5ad`
 
 Description:
 
@@ -315,7 +315,7 @@ Slot description:
 
 Integrated AnnData HDF5 file.
 
-Example file: `resources_test/batch_integration/pancreas/combat.h5ad`
+Example file: `resources_test/batch_integration/pancreas/integrated_feature.h5ad`
 
 Description:
 
@@ -362,7 +362,7 @@ Slot description:
 
 Integrated AnnData HDF5 file.
 
-Example file: `resources_test/batch_integration/pancreas/bbknn.h5ad`
+Example file: `resources_test/batch_integration/pancreas/integrated_graph.h5ad`
 
 Description:
 

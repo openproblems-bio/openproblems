@@ -81,6 +81,50 @@
 
 * `loaders/openproblems_v1_multimodal`: Fetch a multimodal dataset from OpenProblems v1, whilst adding extra information to the `.uns`.
 
+## batch_integration
+
+### NEW FUNCTIONALITY
+
+* `api/file_*`: Created a file format specifications for the h5ad files throughout the pipeline.
+
+* `api/comp_*`: Created an api definition for the process, method and metric components.
+
+* `process_dataset`: Added a component for processing common datasets into task-ready dataset objects.
+
+* `resources_test/label_projection/pancreas` with `src/tasks/label_projection/resources_test_scripts/pancreas.sh`.
+
+### V1 MIGRATION
+
+* Removed the separate subtask specific subfolders. The "subtask" is added to the config.
+
+* `control_methods/no_integration_batch`: Migrated from v1 embedding.
+
+* `control_methods/random_embed_cell`: Migrated from v1 embedding.
+
+* `control_methods/random_embed_cel_jitter`: Migrated from v1 embedding.
+
+* `control_methods/random_integration`: Migrated from v1 graph.
+
+* `methods/bbknn`: Migrated from v1 graph.
+
+* `methods/combat`: Migrated from v1 feature.
+
+* `methods/scanorama_embed`: Migrated from v1 embedding.
+
+* `methods/scanorama_feature`: Migrated from v1 feature.
+
+* `methods/scvi`: Migrated from v1 embedding.
+
+* `metrics/asw_batch`: Migrated from v1 embedding.
+
+* `metrics/asw_label`: Migrated from v1 embedding.
+
+* `metrics/cell_cycle_conservation`: Migrated from v1 embedding.
+
+* `metrics/clustering_overlap`: Migrated from v1 graph NMI & ARI.
+
+* `metrics/pcr`: Migrated from v1 embedding.
+
 ## label_projection
 
 ### NEW FUNCTIONALITY

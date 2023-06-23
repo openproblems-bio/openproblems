@@ -1,17 +1,20 @@
-import yaml
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 import anndata as ad
-from scib.integration import bbknn
+import yaml
 
 ## VIASH START
+
 par = {
     'input': 'resources_test/batch_integration/pancreas/unintegrated.h5ad',
     'output': 'output.h5ad',
-    'hvg': True,
 }
-meta = {
-    'functionality_name': 'foo',
+
+meta = { 
+    'functionality': 'foo',
     'config': 'bar'
 }
+
 ## VIASH END
 
 with open(meta['config'], 'r', encoding="utf8") as file:
@@ -22,16 +25,14 @@ output_type = config["functionality"]["info"]["subtype"]
 print('Read input', flush=True)
 input = ad.read_h5ad(par['input'])
 
-if par['hvg']:
-    print('Select HVGs', flush=True)
-    input = input[:, input.var['hvg']].copy()
 
-print('Run BBKNN', flush=True)
-input.X = input.layers['normalized']
-input = bbknn(input, batch='batch')
-del input.X
+print('processing data', flush=True)
+input.obsm['X_emb'] = OneHotEncoder().fit_transform(
+    LabelEncoder().fit_transform(input.obs["label"])[:, None]
+)
 
 print("Store outputs", flush=True)
 input.uns['output_type'] = output_type
+input.uns['hvg'] = par['hvg']
 input.uns['method_id'] = meta['functionality_name']
 input.write_h5ad(par['output'], compression='gzip')

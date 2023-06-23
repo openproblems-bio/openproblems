@@ -1,6 +1,6 @@
 __merge__: "file_unintegrated.yaml"
 type: file
-example: "resources_test/batch_integration/pancreas/combat.h5ad"
+example: "resources_test/batch_integration/pancreas/integrated_feature.h5ad"
 info:
   prediction_type: feature
   label: "Integrated Feature"
@@ -16,10 +16,8 @@ info:
         name: method_id
         description: "A unique identifier for the method"
         required: true
-      - type: boolean
-        name: hvg
-        description: If the method was done on hvg or full
-        required: true
+
+      #? Still required ? info can be extracted from config (initialy added to check which metric should be run on the h5ad)
       - type: string
         name: output_type
         description: what kind of output has been generated

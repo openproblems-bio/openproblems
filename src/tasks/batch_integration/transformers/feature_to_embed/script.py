@@ -3,7 +3,7 @@ import yaml
 
 ## VIASH START
 par = {
-    'input': 'resources_test/batch_integration/pancreas/combat.h5ad',
+    'input': 'resources_test/batch_integration/pancreas/integrated_feature.h5ad',
     'ouput': 'output.h5ad'
 }
 ## VIASH END

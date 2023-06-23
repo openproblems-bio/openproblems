@@ -34,6 +34,10 @@ info:
         required: true
     obsp:
       - type: double
+        name: knn_distances
+        description: K nearest neighbors distance matrix.
+        required: true
+      - type: double
         name: knn_connectivities
         description: K nearest neighbors connectivities matrix.
         required: true
@@ -50,3 +54,8 @@ info:
         name: dataset_organism
         description: "Which normalization was used"
         required: true
+      - type: object
+        name: knn
+        description: Supplementary K nearest neighbors data.
+        required: true
+

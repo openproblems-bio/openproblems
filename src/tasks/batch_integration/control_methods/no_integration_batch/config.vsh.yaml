@@ -1,0 +1,24 @@
+# use method api spec
+__merge__: ../../api/comp_control_method_embedding.yaml
+functionality:
+  name: no_integration_batch
+  info:
+    label: No integration by Batch
+    summary: "Cells are embedded by computing PCA independently on each batch"
+    description: "Cells are embedded by computing PCA independently on each batch"
+    v1:
+      path: openproblems/tasks/_batch_integration/batch_integration_embed/methods/baseline.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: log_cpm
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
+    setup:
+      - type: python
+        pypi:
+          - scanpy
+          - numpy
+  - type: nextflow

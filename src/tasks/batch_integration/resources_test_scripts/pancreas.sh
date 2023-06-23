@@ -26,17 +26,17 @@ viash run src/tasks/batch_integration/process_dataset/config.vsh.yaml -- \
 echo Running BBKNN
 viash run src/tasks/batch_integration/methods/bbknn/config.vsh.yaml -- \
   --input $DATASET_DIR/unintegrated.h5ad \
-  --output $DATASET_DIR/bbknn.h5ad
+  --output $DATASET_DIR/integrated_graph.h5ad
 
 echo Running SCVI
 viash run src/tasks/batch_integration/methods/scvi/config.vsh.yaml -- \
   --input $DATASET_DIR/unintegrated.h5ad \
-  --output $DATASET_DIR/scvi.h5ad
+  --output $DATASET_DIR/integrated_embedding.h5ad
 
 echo Running combat
 viash run src/tasks/batch_integration/methods/combat/config.vsh.yaml -- \
   --input $DATASET_DIR/unintegrated.h5ad \
-  --output $DATASET_DIR/combat.h5ad
+  --output $DATASET_DIR/integrated_feature.h5ad
 
 # run one metric
 echo run metrics...

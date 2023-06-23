@@ -1,0 +1,23 @@
+# use method api spec
+__merge__: ../../api/comp_control_method_graph.yaml
+functionality:
+  name: random_integration
+  info:
+    label: Random integration
+    summary: "Feature values, embedding coordinates, and graph connectivity are all randomly permuted."
+    description: "Feature values, embedding coordinates, and graph connectivity are all randomly permuted."
+    v1:
+      path: openproblems/tasks/_batch_integration/batch_integration_embed/methods/baseline.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: log_cpm
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.0
+    setup:
+      - type: python
+        pypi:
+          - numpy
+  - type: nextflow

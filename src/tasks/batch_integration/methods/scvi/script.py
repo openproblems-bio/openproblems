@@ -33,6 +33,5 @@ del adata.X
 
 print("Store outputs", flush=True)
 adata.uns['output_type'] = output_type
-adata.uns['hvg'] = par['hvg']
 adata.uns['method_id'] = meta['functionality_name']
 adata.write_h5ad(par['output'], compression='gzip')

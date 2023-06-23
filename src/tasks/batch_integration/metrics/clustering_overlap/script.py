@@ -5,7 +5,7 @@ from scib.metrics import ari, nmi
 
 ## VIASH START
 par = {
-    'input_integrated': 'resources_test/batch_integration/pancreas/bbknn.h5ad',
+    'input_integrated': 'resources_test/batch_integration/pancreas/integrated_graph.h5ad',
     'output': 'output.h5ad',
 }
 
