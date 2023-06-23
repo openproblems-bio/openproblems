@@ -22,9 +22,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: viash-io/viash-actions/setup@v3
+    - uses: viash-io/viash-actions/setup@v4
 
-    - uses: viash-io/viash-actions/project/sync-and-cache-s3@v3
+    - uses: viash-io/viash-actions/project/sync-and-cache-s3@v4
       id: cache
       with:
         s3_bucket: $s3_bucket
@@ -36,13 +36,13 @@ jobs:
         # allow publishing the target folder
         sed -i '/^target.*/d' .gitignore
 
-    - uses: viash-io/viash-actions/ns-build@v3
+    - uses: viash-io/viash-actions/ns-build@v4
       with:
         config_mod: ".functionality.version := '${{ github.event.inputs.version_tag }}'"
         parallel: true
 
     - name: Build nextflow schemas
-      uses: viash-io/viash-actions/pro/build-nextflow-schemas@v3
+      uses: viash-io/viash-actions/pro/build-nextflow-schemas@v4
       with:
         workflows: src
         components: src
@@ -50,7 +50,7 @@ jobs:
         tools_version: 'main_build'
    
     - name: Build parameter files
-      uses: viash-io/viash-actions/pro/build-nextflow-params@v3
+      uses: viash-io/viash-actions/pro/build-nextflow-params@v4
       with:
         workflows: src
         components: src
@@ -66,14 +66,14 @@ jobs:
         full_commit_message: "Deploy for release ${{ github.event.inputs.version_tag }} from ${{ github.sha }}"
 
     - id: ns_list_components
-      uses: viash-io/viash-actions/ns-list@v3
+      uses: viash-io/viash-actions/ns-list@v4
       with:
         platform: docker
         src: src
         format: json
 
     - id: ns_list_workflows
-      uses: viash-io/viash-actions/ns-list@v3
+      uses: viash-io/viash-actions/ns-list@v4
       with:
         src: workflows
         format: json
@@ -110,10 +110,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: viash-io/viash-actions/setup@v3
+    - uses: viash-io/viash-actions/setup@v4
 
     - name: Build container
-      uses: viash-io/viash-actions/ns-build@v3
+      uses: viash-io/viash-actions/ns-build@v4
       with:
         config_mod: .functionality.version := 'main_build'
         platform: docker
@@ -128,7 +128,7 @@ jobs:
         password: ${{ secrets.GTHB_PAT }}
 
     - name: Push container
-      uses: viash-io/viash-actions/ns-build@v3
+      uses: viash-io/viash-actions/ns-build@v4
       with:
         config_mod: .functionality.version := '${{ github.event.inputs.version_tag }}'
         platform: docker
@@ -151,14 +151,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: viash-io/viash-actions/setup@v3
+    - uses: viash-io/viash-actions/setup@v4
 
     - uses: nf-core/setup-nextflow@v1.3.0
 
     # build target dir
     # use containers from release branch, hopefully these are available
     - name: Build target dir
-      uses: viash-io/viash-actions/ns-build@v3
+      uses: viash-io/viash-actions/ns-build@v4
       with:
         config_mod: ".functionality.version := '${{ github.event.inputs.version_tag }}'"
         parallel: true
@@ -197,7 +197,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: viash-io/viash-actions/setup@v3
+    - uses: viash-io/viash-actions/setup@v4
 
     # use cache
     - name: Cache resources data
