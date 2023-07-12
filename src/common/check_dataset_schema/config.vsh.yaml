@@ -11,7 +11,7 @@ functionality:
           description: A h5ad file.
         - name: --schema
           type: file
-          required: true
+          required: false
           description: A schema file for the h5ad object.
     - name: Arguments
       arguments:
@@ -32,6 +32,12 @@ functionality:
           required: false
           description: If specified, the output file will be a copy of the input file.
           example: output.h5ad
+          direction: output
+        - name: --meta
+          type: file
+          required: false
+          description: If specified, the output file will contain metadata of the dataset.
+          example: output_meta.yaml
           direction: output
   resources:
     - type: python_script

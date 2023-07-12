@@ -55,3 +55,5 @@ platforms:
         pypi:
           - scib==1.1.3
   - type: nextflow
+    directives: 
+      label: [ midmem, lowcpu ]

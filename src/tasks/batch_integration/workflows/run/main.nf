@@ -3,50 +3,76 @@ nextflow.enable.dsl=2
 sourceDir = params.rootDir + "/src"
 targetDir = params.rootDir + "/target/nextflow"
 
+include { check_dataset_schema } from "$targetDir/common/check_dataset_schema/main.nf"
+
+// import preprocessing
+include { process_dataset } from "$targetDir/batch_integration/process_dataset/main.nf"
+
 // import methods
-include { bbknn } from "$targetDir/batch_integration/methods_graph/bbknn/main.nf"
-include { combat } from "$targetDir/batch_integration/methods_feature/combat/main.nf"
-include { scanorama_embed } from "$targetDir/batch_integration/methods_embedding/scanorama_embed/main.nf"
-include { scanorama_feature } from "$targetDir/batch_integration/methods_feature/scanorama_feature/main.nf"
-include { scvi } from "$targetDir/batch_integration/methods_graph/scvi/main.nf"
+include { bbknn } from "$targetDir/batch_integration/methods/bbknn/main.nf"
+include { combat } from "$targetDir/batch_integration/methods/combat/main.nf"
+include { scanorama_embed } from "$targetDir/batch_integration/methods/scanorama_embed/main.nf"
+include { scanorama_feature } from "$targetDir/batch_integration/methods/scanorama_feature/main.nf"
+include { scvi } from "$targetDir/batch_integration/methods/scvi/main.nf"
+
+// import control methods
+include { no_integration_batch } from "$targetDir/batch_integration/control_methods/no_integration_batch/main.nf"
+include { random_embed_cell } from "$targetDir/batch_integration/control_methods/random_embed_cell/main.nf"
+include { random_embed_cell_jitter } from "$targetDir/batch_integration/control_methods/random_embed_cell_jitter/main.nf"
+include { random_integration } from "$targetDir/batch_integration/control_methods/random_integration/main.nf"
 
 // import transformers
-include ( feature_to_embed ) from "$targetDir/batch_integration/methods_feature/feature_to_embed/main.nf"
-include ( embed_to_graph ) from "$targetDir/batch_integration/methods_graph/embed_to_graph/main.nf"
+include { feature_to_embed } from "$targetDir/batch_integration/transformers/feature_to_embed/main.nf"
+include { embed_to_graph } from "$targetDir/batch_integration/transformers/embed_to_graph/main.nf"
 
 // import metrics
-include { clustering_overlap } from "$targetDir/batch_integration/metrics_graph/clustering_overlap/main.nf"
-include { asw_batch } from "$targetDir/batch_integration/metrics_embedding/asw_batch/main.nf"
-include { asw_label } from "$targetDir/batch_integration/metrics_embedding/asw_label/main.nf"
-include { ccc } from "$targetDir/batch_integration/metrics_embedding/cel_cycle_conservation/main.nf"
-include { pcr } from "$targetDir/batch_integration/metrics_embedding/pcr/main.nf"
+include { clustering_overlap } from "$targetDir/batch_integration/metrics/clustering_overlap/main.nf"
+include { asw_batch } from "$targetDir/batch_integration/metrics/asw_batch/main.nf"
+include { asw_label } from "$targetDir/batch_integration/metrics/asw_label/main.nf"
+include { cell_cycle_conservation } from "$targetDir/batch_integration/metrics/cell_cycle_conservation/main.nf"
+include { pcr } from "$targetDir/batch_integration/metrics/pcr/main.nf"
 
 // tsv generation component
 include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
 
 // import helper functions
-include { readConfig; viashChannel; helpMessage } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap } from sourceDir + "/wf_utils/DataflowHelper.nf"
+include { readConfig; helpMessage; channelFromParams; preprocessInputs; readYaml } from sourceDir + "/wf_utils/WorkflowHelper.nf"
+include { run_components; join_states; initialize_tracer; write_json; get_publish_dir } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
 
 config = readConfig("$projectDir/config.vsh.yaml")
 
+// add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
+traces = initialize_tracer()
 
-// construct a map of methods (id -> method_module)
-methods = [ bbknn, combat, scanorama_embed, scanorama_feature, scvi]
-  .collectEntries{method ->
-    [method.config.functionality.name, method]
-  }
+// collect method list
+methods = [
+  bbknn,
+  combat,
+  scanorama_embed,
+  scanorama_feature,
+  scvi,
+  no_integration_batch,
+  random_embed_cell,
+  random_embed_cell_jitter,
+  random_integration
+]
+
+// collect metric list
+metrics = [
+  asw_batch,
+  asw_label,
+  cell_cycle_conservation,
+  clustering_overlap,
+  pcr
+]
+
 
 workflow {
   helpMessage(config)
 
-  viashChannel(params, config)
+  channelFromParams(params, config)
     | run_wf
 }
-
-/*******************************************************
-*                    Main workflow                     *
-*******************************************************/
 
 workflow run_wf {
   take:
@@ -54,163 +80,124 @@ workflow run_wf {
 
   main:
 
-  output_ch = input_ch
+  // process input parameter channel
+  dataset_ch = input_ch
+    | preprocessInputs(config: config)
 
-    // split params for downstream components
-    | setWorkflowArguments(
-      preprocess: ["normalization_id", "dataset_id"],
-      method: ["input"],
-      output: ["output"]
+    // extract the dataset metadata
+    | run_components(
+      components: check_dataset_schema,
+      from_state: ["input"],
+      to_state: { id, output, config ->
+        new org.yaml.snakeyaml.Yaml().load(output.meta)
+      }
     )
 
-    // multiply events by the number of method
-    | getWorkflowArguments(key: "preprocess")
-    | add_methods
-
-    // filter the normalization methods that a method actually prefers
-    | check_filtered_normalization_id
-
-    // run methods
-    | getWorkflowArguments(key: "method")
-    | run_methods
-
   // run feature methods
-  meth_feature = input_ch
-    | (combat & scanorama_feature)
-    | mix
-  // run embed methods
-  meth_embed = input_ch
-    | (scanorama_embed & scvi)
-    | mix
-  // run graph methods
-  meth_graph = input_ch
-    | (bbknn)
+  method_out_ch1 = dataset_ch
+    | run_components(
+      components: methods,
 
-  // apply feature metrics on feature outputs
-  // metr_feat = meth_feature
-  //   | (asw_batch & asw_label & cell_cycle_conservation & pcr)
+      // use the 'filter' argument to only run a method on the normalisation the component is asking for
+      filter: { id, state, config ->
+        def norm = state.normalization_id
+        def pref = config.functionality.info.preferred_normalization
+        // if the preferred normalisation is none at all,
+        // we can pass whichever dataset we want
+        (norm == "log_cpm" && pref == "counts") || norm == pref
+      },
 
-  // convert feature outputs to embedding outputs
-  meth_feat_to_embed = meth_feature
-    | feature_to_embed
+      // define a new 'id' by appending the method name to the dataset id
+      id: { id, state, config ->
+        id + "." + config.functionality.name
+      },
 
-  // apply embedding metrics to embedding outputs
-  metr_embed = meth_embed
-    | mix(meth_feat_to_embed)
-    | (asw_batch & asw_label & cell_cycle_conservation & pcr)
-    | mix
+      // use 'from_state' to fetch the arguments the component requires from the overall state
+      from_state: ["input"],
+
+      // use 'to_state' to publish that component's outputs to the overall state
+      to_state: { id, output, config ->
+        [
+          method_id: config.functionality.name,
+          method_output: output.output,
+          method_subtype: config.functionality.info.subtype
+        ]
+      }
+    )
   
-  // convert embedding outputs to graph outputs
-  meth_embed_to_graph = meth_embed
-    | mix(meth_feat_to_embed)
-    | embed_to_graph
-  
-  // apply graph metrics to graph outputs
-  metr_graph = meth_graph
-    | mix(meth_embed_to_graph)
-    | (clustering_overlap)
+  // append feature->embed transformations
+  method_out_ch2 = method_out_ch1
+    | run_components(
+      components: feature_to_embed,
+      filter: { id, state, config -> state.method_subtype == "feature"},
+      from_state: [ input: "method_output" ],
+      to_state: { id, output, config ->
+        [
+          method_output: output.output,
+          method_subtype: config.functionality.info.subtype
+        ]
+      }
+    )
+    | mix(method_out_ch1)
 
-  
-  output_ch = metr_embed.mix(metr_graph)
-    
-    // convert to tsv  
-    | aggregate_results
+  // append embed->graph transformations
+  method_out_ch3 = method_out_ch2
+    | run_components(
+      components: embed_to_graph,
+      filter: { id, state, config -> state.method_subtype == "embedding"},
+      from_state: [ input: "method_output" ],
+      to_state: { id, output, config ->
+        [
+          method_output: output.output,
+          method_subtype: config.functionality.info.subtype
+        ]
+      }
+    )
+    | mix(method_out_ch2)
+
+  // run metrics
+  output_ch = method_out_ch3
+    | run_components(
+      components: metrics,
+      filter: { id, state, config ->
+        state.method_subtype == config.functionality.info.subtype
+      },
+      from_state: [input_integrated: "method_output"],
+      to_state: { id, output, config ->
+        [
+          metric_id: config.functionality.name,
+          metric_output: output.output
+        ]
+      }
+    )
+
+  // join all events into a new event where the new id is simply "output" and the new state consists of:
+  //   - "input": a list of score h5ads
+  //   - "output": the output argument of this workflow
+  | join_states{ ids, states ->
+    def new_id = "output"
+    def new_state = [
+      input: states.collect{it.metric_output},
+      output: states[0].output
+    ]
+    [new_id, new_state]
+  }
+
+  // convert to tsv and publish
+  | extract_scores.run(
+    auto: [publish: true]
+  )
 
   emit:
   output_ch
-/*
-        | (bbknn & combat & scvi & scanorama_embed & scanorama_feature)
-        | mix
-        | toSortedList
-        | view { "toSortedList $it" }
-/*
-        | map{ it -> [ "combined", [ input: it.collect{ it[1] } ] ] }
-        | (ari & nmi)
-        | extract_scores.run(
-            auto: [ publish: true ]
-        )
-*/
 }
 
-/*******************************************************
-*                    Sub workflows                     *
-*******************************************************/
+// store the trace log in the publish dir
+workflow.onComplete {
+  def publish_dir = get_publish_dir()
 
-
-
-workflow add_methods {
-  take: input_ch
-  main:
-  output_ch = Channel.fromList(methods.keySet())
-    | combine(input_ch)
-
-    // generate combined id for method_id and dataset_id
-    | pmap{method_id, dataset_id, data ->
-      def new_id = dataset_id + "." + method_id
-      def new_data = data.clone() + [method_id: method_id]
-      new_data.remove("id")
-      [new_id, new_data]
-    }
-  emit: output_ch
-}
-
-workflow check_filtered_normalization_id {
-  take: input_ch
-  main:
-  output_ch = input_ch
-    | pfilter{id, data ->
-      data = data.clone()
-      def method = methods[data.method_id]
-      def preferred = method.config.functionality.info.preferred_normalization
-      // if a method is just using the counts, we can use any normalization method
-      if (preferred == "counts") {
-        preferred = "log_cpm"
-      }
-      data.normalization_id == preferred
-    }
-  emit: output_ch
-}
-
-workflow run_methods {
-  take: input_ch
-  main:
-    // generate one channel per method
-    method_chs = methods.collect { method_id, method_module ->
-        input_ch
-          | filter{it[1].method_id == method_id}
-          | method_module
-      }
-    // mix all results
-    output_ch = method_chs[0].mix(*method_chs.drop(1))
-
-  emit: output_ch
-}
-
-workflow run_metrics {
-  take: input_ch
-  main:
-
-  output_ch = input_ch
-    | (ari & nmi)
-    | mix
-
-  emit: output_ch
-}
-
-workflow aggregate_results {
-  take: input_ch
-  main:
-
-  output_ch = input_ch
-    | toSortedList
-    | filter{ it.size() > 0 }
-    | map{ it -> 
-      [ "combined", it.collect{ it[1] } ] + it[0].drop(2) 
-    }
-    | getWorkflowArguments(key: "output")
-    | extract_scores.run(
-        auto: [ publish: true ]
-    )
-
-  emit: output_ch
+  write_json(traces, file("$publish_dir/traces.json"))
+  // todo: add datasets logging
+  write_json(methods.collect{it.config}, file("$publish_dir/methods.json"))
+  write_json(metrics.collect{it.config}, file("$publish_dir/metrics.json"))
 }

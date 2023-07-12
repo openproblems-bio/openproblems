@@ -4,7 +4,7 @@ functionality:
     type: control_method
     subtype: embedding
     type_info:
-      label: control method (embedding)
+      label: Control method (embedding)
       summary: A batch integration embedding control method.
       description: |
         A batch integration control method which outputs a batch-corrected embedding.

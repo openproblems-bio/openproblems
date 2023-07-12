@@ -38,3 +38,5 @@ platforms:
           - scib==1.1.3
           - bbknn
   - type: nextflow
+    directives: 
+      label: [ midmem, lowcpu ]

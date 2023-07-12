@@ -38,9 +38,7 @@ output = ad.AnnData(
         'normalization_id': input.uns['normalization_id'],
         "method_id": input.uns['method_id'],
         "metric_ids": [ "ari", "nmi" ],
-        "metric_values": [ ari_score, nmi_score ],
-        "hvg": input.uns['hvg'],
-        'output_type': input.uns['output_type'],
+        "metric_values": [ ari_score, nmi_score ]
     }
 )
 

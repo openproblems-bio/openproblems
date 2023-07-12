@@ -17,7 +17,6 @@ info:
         description: "A unique identifier for the method"
         required: true
 
-      #? Still required ? info can be extracted from config (initialy added to check which metric should be run on the h5ad)
       - type: string
         name: output_type
         description: what kind of output has been generated

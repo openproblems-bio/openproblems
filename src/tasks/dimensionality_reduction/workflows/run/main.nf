@@ -1,46 +1,61 @@
-nextflow.enable.dsl=2
-
 sourceDir = params.rootDir + "/src"
 targetDir = params.rootDir + "/target/nextflow"
 
 // import control methods
-include { true_features } from "$targetDir/dimensionality_reduction/control_methods/true_features/main.nf"
 include { random_features } from "$targetDir/dimensionality_reduction/control_methods/random_features/main.nf"
+include { true_features } from "$targetDir/dimensionality_reduction/control_methods/true_features/main.nf"
 
 // import methods
-include { umap } from "$targetDir/dimensionality_reduction/methods/umap/main.nf"
 include { densmap } from "$targetDir/dimensionality_reduction/methods/densmap/main.nf"
+// include { ivis } from "$targetDir/dimensionality_reduction/methods/ivis/main.nf"
+include { neuralee } from "$targetDir/dimensionality_reduction/methods/neuralee/main.nf"
+include { pca } from "$targetDir/dimensionality_reduction/methods/pca/main.nf"
 include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
 include { tsne } from "$targetDir/dimensionality_reduction/methods/tsne/main.nf"
-include { pca } from "$targetDir/dimensionality_reduction/methods/pca/main.nf"
-include { neuralee } from "$targetDir/dimensionality_reduction/methods/neuralee/main.nf"
-// include { ivis } from "$targetDir/dimensionality_reduction/methods/ivis/main.nf"
+include { umap } from "$targetDir/dimensionality_reduction/methods/umap/main.nf"
 
 // import metrics
-include { density_preservation } from "$targetDir/dimensionality_reduction/metrics/density_preservation/main.nf"
 include { coranking } from "$targetDir/dimensionality_reduction/metrics/coranking/main.nf"
+include { density_preservation } from "$targetDir/dimensionality_reduction/metrics/density_preservation/main.nf"
 include { rmse } from "$targetDir/dimensionality_reduction/metrics/rmse/main.nf"
 include { trustworthiness } from "$targetDir/dimensionality_reduction/metrics/trustworthiness/main.nf"
 
-// tsv generation component
-include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
-
 // import helper functions
-include { readConfig; viashChannel; helpMessage } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { setWorkflowArguments; getWorkflowArguments; passthroughMap as pmap; passthroughFilter as pfilter } from sourceDir + "/wf_utils/DataflowHelper.nf"
+include { readConfig; helpMessage; channelFromParams; preprocessInputs } from sourceDir + "/wf_utils/WorkflowHelper.nf"
+include { run_components; join_states; initialize_tracer; write_json; get_publish_dir } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
 
+// read in pipeline config
 config = readConfig("$projectDir/config.vsh.yaml")
 
-// construct a map of methods (id -> method_module)
-methods = [ random_features, true_features, umap, densmap, phate, tsne, pca, neuralee ]
-  .collectEntries{method ->
-    [method.config.functionality.name, method]
-  }
+// add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
+traces = initialize_tracer()
+
+// collect method list
+methods = [
+  random_features,
+  true_features,
+  densmap,
+  neuralee,
+  pca,
+  phate,
+  tsne,
+  umap
+]
+
+// collect metric list
+metrics = [
+  coranking,
+  density_preservation,
+  rmse,
+  trustworthiness
+]
 
 workflow {
   helpMessage(config)
 
-  viashChannel(params, config)
+  // create channel from input parameters with
+  // arguments as defined in the config
+  channelFromParams(params, config)
     | run_wf
 }
 
@@ -50,128 +65,92 @@ workflow run_wf {
 
   main:
   output_ch = input_ch
-    
-    // split params for downstream components
-    | view{"step 0: $it"}
-    | setWorkflowArguments(
-      preprocess: ["dataset_id", "normalization_id"],
-      method: ["input"],
-      metric: ["input_solution"],
-      output: ["output"]
+    | preprocessInputs(config: config)
+
+    // run all methods
+    | run_components(
+      components: methods,
+
+      // use the 'filter' argument to only run a method on the normalisation the component is asking for
+      filter: { id, state, config ->
+        def norm = state.normalization_id
+        def pref = config.functionality.info.preferred_normalization
+        // if the preferred normalisation is none at all,
+        // we can pass whichever dataset we want
+        (norm == "log_cpm" && pref == "counts") || norm == pref
+      },
+
+      // define a new 'id' by appending the method name to the dataset id
+      id: { id, state, config ->
+        id + "." + config.functionality.name
+      },
+
+      // use 'from_state' to fetch the arguments the component requires from the overall state
+      from_state: { id, state, config ->
+        def new_args = [
+          input: state.input
+        ]
+        if (config.functionality.info.type == "control_method") {
+          new_args.input_solution = state.input_solution
+        }
+        new_args
+      },
+
+      // use 'to_state' to publish that component's outputs to the overall state
+      to_state: { id, output, config ->
+        [
+          method_id: config.functionality.name,
+          method_output: output.output
+        ]
+      }
     )
-    // multiply events by the number of method
-    | getWorkflowArguments(key: "preprocess")
-    | add_methods
 
-    // filter the normalization methods that a method actually prefers
-    | check_filtered_normalization_id
-    // add input_solution to data for the positive controls
-    | controls_can_cheat
+    // run all metrics
+    | run_components(
+      components: metrics,
+      // use 'from_state' to fetch the arguments the component requires from the overall state
+      from_state: { id, state, config ->
+        [
+          input_solution: state.input_solution,
+          input_embedding: state.method_output
+        ]
+      },
+      // use 'to_state' to publish that component's outputs to the overall state
+      to_state: { id, output, config ->
+        [
+          metric_id: config.functionality.name,
+          metric_output: output.output
+        ]
+      }
+    )
 
-    // run methods
-    | getWorkflowArguments(key: "method")
-    | run_methods
+    // join all events into a new event where the new id is simply "output" and the new state consists of:
+    //   - "input": a list of score h5ads
+    //   - "output": the output argument of this workflow
+    | join_states(
+      apply: { ids, states ->
+        ["output", [
+          input: states.collect{it.metric_output},
+          output: states[0].output
+        ]]
+      }
+    )
 
-    // run metrics
-    | getWorkflowArguments(key: "metric", inputKey: "input_embedding")
-    | run_metrics
-
-    // convert to tsv  
-    | aggregate_results
+    // convert to tsv and publish
+    | extract_scores.run(
+      auto: [publish: true]
+    )
 
   emit:
   output_ch
 }
 
-workflow add_methods {
-  take: input_ch
-  main:
-  output_ch = Channel.fromList(methods.keySet())
-    | combine(input_ch)
+// store the trace log in the publish dir
+workflow.onComplete {
+  def publish_dir = get_publish_dir()
 
-    // generate combined id for method_id and dataset_id
-    | pmap{method_id, dataset_id, data ->
-      def new_id = dataset_id + "." + method_id
-      def new_data = data.clone() + [method_id: method_id]
-      new_data.remove("id")
-      [new_id, new_data]
-    }
-  emit: output_ch
-}
-
-workflow check_filtered_normalization_id {
-  take: input_ch
-  main:
-  output_ch = input_ch
-    | pfilter{id, data ->
-      data = data.clone()
-      def method = methods[data.method_id]
-      def preferred = method.config.functionality.info.preferred_normalization
-      // if a method is just using the counts, we can use any normalization method
-      if (preferred == "counts") {
-        preferred = "log_cpm"
-      }
-      data.normalization_id == preferred
-    }
-  emit: output_ch
-}
-
-workflow controls_can_cheat {
-  take: input_ch
-  main:
-  output_ch = input_ch
-    | pmap{id, data, passthrough ->
-      def method = methods[data.method_id]
-      def method_type = method.config.functionality.info.method_type
-      def new_data = data.clone()
-      // if (method_type != "method") {
-      //   new_data = new_data + [input_solution: passthrough.metric.input_solution]
-      // }
-      [id, new_data, passthrough]
-    }
-  emit: output_ch
-}
-
-workflow run_methods {
-  take: input_ch
-  main:
-    // generate one channel per method
-    method_chs = methods.collect { method_id, method_module ->
-        input_ch
-          | filter{it[1].method_id == method_id}
-          | method_module
-      }
-    // mix all results
-    output_ch = method_chs[0].mix(*method_chs.drop(1))
-
-  emit: output_ch
-}
-
-workflow run_metrics {
-  take: input_ch
-  main:
-
-  output_ch = input_ch
-    | (density_preservation & coranking & rmse & trustworthiness)
-    | mix
-
-  emit: output_ch
-}
-
-workflow aggregate_results {
-  take: input_ch
-  main:
-
-  output_ch = input_ch
-    | toSortedList
-    | filter{ it.size() > 0 }
-    | map{ it -> 
-      [ "combined", it.collect{ it[1] } ] + it[0].drop(2) 
-    }
-    | getWorkflowArguments(key: "output")
-    | extract_scores.run(
-        auto: [ publish: true ]
-    )
-
-  emit: output_ch
+  write_json(traces, file("$publish_dir/traces.json"))
+  // todo: add datasets logging
+  write_json(methods.collect{it.config}, file("$publish_dir/methods.json"))
+  write_json(metrics.collect{it.config}, file("$publish_dir/metrics.json"))
 }

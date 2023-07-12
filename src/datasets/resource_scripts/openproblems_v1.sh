@@ -145,11 +145,12 @@ param_list:
     dataset_description: 90k cells from zebrafish embryos throughout the first day of development, with and without a knockout of chordin, an important developmental gene. 
     dataset_organism: danio_rerio
 
-output: '$id.h5ad'
+output_dataset: '$id/dataset.h5ad'
+output_meta: '$id/dataset_meta.yaml'
 HERE
 fi
 
-export NXF_VER=22.04.5
+export NXF_VER=23.04.2
 nextflow \
   run . \
   -main-script src/datasets/workflows/process_openproblems_v1/main.nf \

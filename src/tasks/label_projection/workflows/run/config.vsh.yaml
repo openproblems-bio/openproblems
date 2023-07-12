@@ -17,11 +17,20 @@ functionality:
           description: "The ID of the normalization used"
           required: true
         - name: "--input_train"
-          type: "file" # todo: replace with includes
+          # __merge__: ../../api/file_train.yaml
+          type: file
+          direction: input
+          required: true
         - name: "--input_test"
-          type: "file" # todo: replace with includes
+          # __merge__: ../../api/file_test.yaml
+          type: file
+          direction: input
+          required: true
         - name: "--input_solution"
-          type: "file" # todo: replace with includes
+          # __merge__: ../../api/file_solution.yaml
+          type: file
+          direction: input
+          required: true
     - name: Outputs
       arguments:
         - name: "--output"

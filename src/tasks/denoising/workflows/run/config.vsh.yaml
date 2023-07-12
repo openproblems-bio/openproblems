@@ -8,6 +8,14 @@ functionality:
           type: "string"
           description: "The ID of the dataset"
           required: true
+        - name: "--dataset_id"
+          type: "string"
+          description: "The ID of the dataset"
+          required: true
+        - name: "--normalization_id"
+          type: "string"
+          description: "The ID of the normalization used"
+          required: true
         - name: "--input_train"
           type: "file" # todo: replace with includes
         - name: "--input_test"

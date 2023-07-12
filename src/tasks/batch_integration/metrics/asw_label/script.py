@@ -28,8 +28,6 @@ output = ad.AnnData(
         "dataset_id": adata.uns['dataset_id'],
         'normalization_id': adata.uns['normalization_id'],
         "method_id": adata.uns['method_id'],
-        "hvg": adata.uns['hvg'],
-        "output_type": adata.uns['output_type'],
         "metric_ids": [meta['functionality_name']],
         "metric_values": [score]
     }

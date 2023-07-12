@@ -4,7 +4,7 @@ functionality:
     type: control_method
     subtype: graph
     type_info:
-      label: control method (graph)
+      label: Control method (graph)
       summary: A batch integration graph control method.
       description: |
         A batch integration control method which outputs a batch-corrected cell graphs.

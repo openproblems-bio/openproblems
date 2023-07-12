@@ -38,6 +38,5 @@ input.obsm['X_emb'] = csr_matrix(embedding + np.random.uniform(-1 * par['jitter'
 
 print("Store outputs", flush=True)
 input.uns['output_type'] = output_type
-input.uns['hvg'] = par['hvg']
 input.uns['method_id'] = meta['functionality_name']
 input.write_h5ad(par['output'], compression='gzip')
