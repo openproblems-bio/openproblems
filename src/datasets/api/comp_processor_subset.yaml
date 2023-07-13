@@ -11,10 +11,18 @@ functionality:
       __merge__: file_common_dataset.yaml
       required: true
       direction: input
+    - name: "--input_mod2"
+      __merge__: file_common_dataset.yaml
+      direction: input
+      required: false
     - name: "--output"
       __merge__: file_common_dataset.yaml
       direction: output
       required: true
+    - name: "--output_mod2"
+      __merge__: file_common_dataset.yaml
+      direction: output
+      required: false
   test_resources:
     - path: /resources_test/common/pancreas
       dest: resources_test/common/pancreas

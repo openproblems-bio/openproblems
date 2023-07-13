@@ -18,7 +18,7 @@ adata = sc.read_h5ad(par['input'])
 print(">> Look for layer")
 layer = adata.X if not par['layer_input'] else adata.layers[par['layer_input']]
 
-print(">> Run PCA")
+print(">> Run HVG")
 out = sc.pp.highly_variable_genes(
   adata,
   layer=par["layer_input"],

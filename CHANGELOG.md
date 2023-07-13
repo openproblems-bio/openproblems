@@ -75,6 +75,8 @@
 * `subsample`: Subsample an h5ad file. Allows keeping observations from specific batches and celltypes, 
   also allows keeping certain features.
 
+* `resources_test_scripts`: Scripts to create test_resources for local development with "pancreas", "pancreas_tasks" and "multimodal".
+
 ### V1 MIGRATION
 
 * `loaders/openproblems_v1`: Fetch a dataset from OpenProblems v1, whilst adding extra information to the `.uns`.
