@@ -23,8 +23,6 @@ nextflow run . \
   -c src/wf_utils/labels_ci.config \
   -resume \
   --id pancreas \
-  --dataset_id pancreas \
-  --normalization_id log_cpm \
   --input $DATASET_DIR/unintegrated.h5ad \
   --output scores.tsv \
   --publish_dir $DATASET_DIR/
