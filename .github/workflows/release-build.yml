@@ -108,6 +108,9 @@ jobs:
         component: ${{ fromJson(needs.list.outputs.component_matrix) }}
 
     steps:
+    # Remove unnecessary files to free up space. Otherwise, we get 'no space left on device.'
+    - uses: data-intuitive/reclaim-the-bytes@v2
+
     - uses: actions/checkout@v3
 
     - uses: viash-io/viash-actions/setup@v4
@@ -149,6 +152,9 @@ jobs:
         component: ${{ fromJson(needs.list.outputs.workflow_matrix) }}
 
     steps:
+    # Remove unnecessary files to free up space. Otherwise, we get 'no space left on device.'
+    - uses: data-intuitive/reclaim-the-bytes@v2
+    
     - uses: actions/checkout@v3
 
     - uses: viash-io/viash-actions/setup@v4
