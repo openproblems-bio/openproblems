@@ -18,12 +18,18 @@ def check_slots(adata, slot_metadata):
     slots in the corresponding .info.slots field.
     """
     for struc_name, slot_items in slot_metadata.items():
-        struc_dict = getattr(adata, struc_name)
+        struc_x = getattr(adata, struc_name)
         
-        for slot_item in slot_items:
-            if slot_item.get("required", True):
-                assert slot_item["name"] in struc_dict,\
-                    f"File '{arg['value']}' is missing slot .{struc_name}['{slot_item['name']}']"
+        if struc_name == "X":
+            if slot_items.get("required", True):
+                assert struc_x is not None,\
+                    f"File '{arg['value']}' is missing slot .{struc_name}"
+        
+        else:
+            for slot_item in slot_items:
+                if slot_item.get("required", True):
+                    assert slot_item["name"] in struc_x,\
+                        f"File '{arg['value']}' is missing slot .{struc_name}['{slot_item['name']}']"
 
 
 # read viash config
@@ -83,7 +89,7 @@ for arg in arguments:
     if arg["type"] == "file":
         print(f"Reading and checking {arg['clean_name']}", flush=True)
         adata = ad.read_h5ad(arg["value"])
-        slots = arg["info"]["slots"]
+        slots = arg["info"].get("slots") or {}
 
         print(f"  {adata}")
 

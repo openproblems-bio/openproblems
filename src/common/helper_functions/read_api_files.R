@@ -320,12 +320,12 @@ create_task_graph <- function(file_info, comp_info, comp_args) {
 .task_graph_get_root <- function(task_api) {
   root <- names(which(igraph::degree(task_api$task_graph, mode = "in") == 0))
   if (length(root) > 1) {
-    stop(
-      "There should only be one node with in-degree equal to 0.\n",
+    warning(
+      "There should probably only be one node with in-degree equal to 0.\n",
       "  Nodes with in-degree == 0: ", paste(root, collapse = ", ")
     )
   }
-  root
+  root[[1]]
 }
 
 render_task_graph <- function(task_api, root = .task_graph_get_root(task_api)) {

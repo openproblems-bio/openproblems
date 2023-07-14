@@ -1,0 +1,19 @@
+__merge__: ../../api/comp_control_method.yaml
+functionality:
+  name: random_predict
+  info:
+    label: Random predictions
+    summary: Returns random training profiles.
+    description: Returns random training profiles.
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_r:1.0.1
+    setup:
+      - type: r
+        cran: [ bit64]
+  - type: nextflow
+    directives:
+      label: [ lowmem, lowcpu ]

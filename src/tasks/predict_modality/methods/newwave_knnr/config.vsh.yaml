@@ -1,0 +1,42 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: newwave_knnr
+  info:
+    label: NewWave+KNNR
+    summary: Perform DR with NewWave, predict modality with KNN regression.
+    description: Perform DR with NewWave, predict modality with KNN regression.
+    reference: agostinis2022newwave
+    repository_url: https://github.com/fedeago/NewWave
+    documentation_url: https://bioconductor.org/packages/release/bioc/html/NewWave.html
+  arguments:
+    - name: "--newwave_maxiter"
+      type: "integer"
+      default: 40
+      description: Maximum number of NewWave iterations.
+    - name: "--newwave_ngene"
+      type: "integer"
+      default: 200
+      description: Setting of the n_gene_par NewWave parameter.
+    - name: "--newwave_ncell"
+      type: "integer"
+      default: 200
+      description: Setting of the n_cell_par NewWave parameter.
+    - name: "--n_neighbors"
+      type: "integer"
+      default: 20
+      description: Number of neighbors to use in the knn regression.
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_r:1.0.1
+    setup:
+      - type: r
+        cran: [ lmds, FNN, proxy, proxyC, bit64 ]
+        bioc: [ SingleCellExperiment, NewWave ]
+      - type: r
+        github: [Jiefei-Wang/SharedObject, fedeago/NewWave]
+  - type: nextflow
+    directives:
+      label: [ highmem, highcpu ]

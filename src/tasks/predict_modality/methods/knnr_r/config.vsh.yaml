@@ -1,0 +1,35 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: knnr_r
+  info:
+    label: KNNR (R)
+    summary: K-nearest neighbor regression in R.
+    description: K-nearest neighbor regression in R.
+    reference: fix1989discriminatory
+    documentation_url: https://cran.r-project.org/package=FNN
+    repository_url: https://github.com/cran/FNN
+  arguments:
+    - name: "--distance_method"
+      type: "string"
+      default: "spearman"
+      description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
+    - name: "--n_pcs"
+      type: "integer"
+      default: 50
+      description: Number of principal components to use.
+    - name: "--n_neighbors"
+      type: "integer"
+      default: 20
+      description: Number of neighbors to use in the knn regression.
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_r:1.0.1
+    setup:
+      - type: r
+        cran: [ lmds, FNN, proxyC, bit64 ]
+  - type: nextflow
+    directives:
+      label: [ lowmem, lowcpu ]

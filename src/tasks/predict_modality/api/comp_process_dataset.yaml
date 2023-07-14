@@ -1,0 +1,43 @@
+functionality:
+  namespace: "predict_modality"
+  info:
+    type: process_dataset
+    type_info:
+      label: Data processor
+      summary: A predict modality dataset processor.
+      description: |
+        A component for processing a Common Dataset into a task-specific dataset.
+  arguments:
+    - name: "--input_rna"
+      __merge__: file_dataset_rna.yaml
+      direction: input
+      required: true
+    - name: "--input_other_mod"
+      __merge__: file_dataset_other_mod.yaml
+      direction: input
+      required: true
+    - name: "--output_train_mod1"
+      __merge__: file_train_mod1.yaml
+      direction: output
+      required: true
+    - name: "--output_train_mod2"
+      __merge__: file_train_mod2.yaml
+      direction: output
+      required: true
+    - name: "--output_test_mod1"
+      __merge__: file_test_mod1.yaml
+      direction: "output"
+      required: true
+    - name: "--output_test_mod2"
+      __merge__: file_test_mod2.yaml
+      direction: output
+      required: true
+    - name: "--seed"
+      type: integer
+      default: 1
+      description: "The seed for determining the train/test split."
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/common/bmmc_cite_starter
+      dest: resources_test/common/bmmc_cite_starter

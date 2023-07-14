@@ -1,0 +1,20 @@
+__merge__: ../api/comp_process_dataset.yaml
+functionality:
+  name: "process_dataset"
+  arguments:
+    - name: "--swap"
+      type: "boolean"
+      description: "Swap mod1 and mod2"
+      default: true
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_r:1.0.1
+    setup:
+      - type: r
+        cran: [ bit64 ]
+  - type: nextflow
+    directives:
+      label: [ midmem, lowcpu ]
