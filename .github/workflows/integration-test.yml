@@ -42,6 +42,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: .
         publish_branch: integration_build
+        exclude_assets: ''
 
     - id: ns_list_components
       uses: viash-io/viash-actions/ns-list@v4
@@ -60,18 +61,20 @@ jobs:
       run: |
         echo "components=$(jq -c '[ .[] | 
           { 
-            "name": (.functionality.namespace + "/" + .functionality.name),
+            "name": (.functionality.namespace + (.platforms | map(select(.type == "docker"))[0].namespace_separator) + .functionality.name),
+            "config": .info.config,
             "dir": .info.config | capture("^(?<dir>.*\/)").dir
           }
         ]' ${{ steps.ns_list_components.outputs.output_file }} )" >> $GITHUB_OUTPUT
 
-        echo "workflows=$(jq -c '[ .[] | 
+        echo "workflows=$(jq -c '[ .[] | . as $config | (.functionality.test_resources // [])[] | select(.type == "nextflow_script", .entrypoint) |
           { 
-            "name": (.functionality.namespace + "/" + .functionality.name),
-            "main_script": (.info.config | capture("^(?<dir>.*\/)").dir + "/" + .functionality.test_resources[].path),
-            "entry": .functionality.test_resources[].entrypoint
+            "name": ($config.functionality.namespace + "/" + $config.functionality.name),
+            "main_script": (($config.info.config | capture("^(?<dir>.*\/)").dir) + "/" + .path),
+            "entry": .entrypoint,
+            "config": $config.info.config
           }
-        ]' ${{ steps.ns_list_workflows.outputs.output_file }} )" >> $GITHUB_OUTPUT
+        ] | unique' ${{ steps.ns_list_workflows.outputs.output_file }} )" >> $GITHUB_OUTPUT
 
   # phase 2
   build:
@@ -87,7 +90,7 @@ jobs:
     steps:
     # Remove unnecessary files to free up space. Otherwise, we get 'no space left on device.'
     - uses: data-intuitive/reclaim-the-bytes@v2
-
+    
     - uses: actions/checkout@v3
 
     - uses: viash-io/viash-actions/setup@v4
@@ -130,7 +133,7 @@ jobs:
     steps:
     # Remove unnecessary files to free up space. Otherwise, we get 'no space left on device.'
     - uses: data-intuitive/reclaim-the-bytes@v2
-    
+        
     - uses: actions/checkout@v3
 
     - uses: viash-io/viash-actions/setup@v4
@@ -152,6 +155,7 @@ jobs:
       with:
         path: resources_test
         key: ${{ needs.list.outputs.cache_key }}
+        fail-on-cache-miss: true
 
     - name: Run integration test
       timeout-minutes: 45
