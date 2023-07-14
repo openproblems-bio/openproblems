@@ -8,11 +8,6 @@ par = {
 }
 ## VIASH END
 
-with open(meta['config'], 'r', encoding="utf8") as file:
-    config = yaml.safe_load(file)
-
-output_type = config["functionality"]["info"]["subtype"]
-
 print('Read input', flush=True)
 adata= sc.read_h5ad(par['input'])
 
@@ -27,5 +22,4 @@ adata.obsm['X_emb'] = sc.pp.pca(
 )
 
 print('Store outputs', flush=True)
-adata.uns['output_type'] = output_type
 adata.write_h5ad(par['output'], compression='gzip')
