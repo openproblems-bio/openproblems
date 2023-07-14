@@ -210,7 +210,7 @@ Slot description:
 | `layers["normalized"]`       | `double`  | Normalized expression values.                                            |
 | `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                     |
 | `uns["normalization_id"]`    | `string`  | Which normalization was used.                                            |
-| `uns["dataset_organism"]`    | `string`  | Which normalization was used.                                            |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                  |
 | `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                  |
 
 </div>
@@ -352,7 +352,7 @@ Slot description:
 | `layers["normalized"]`       | `double`  | Normalized expression values.                                            |
 | `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                     |
 | `uns["normalization_id"]`    | `string`  | Which normalization was used.                                            |
-| `uns["dataset_organism"]`    | `string`  | Which normalization was used.                                            |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                  |
 | `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                  |
 | `uns["method_id"]`           | `string`  | A unique identifier for the method.                                      |
 | `uns["output_type"]`         | `string`  | what kind of output has been generated.                                  |
@@ -401,7 +401,7 @@ Slot description:
 | `layers["normalized"]`       | `double`  | Normalized expression values.                                            |
 | `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                     |
 | `uns["normalization_id"]`    | `string`  | Which normalization was used.                                            |
-| `uns["dataset_organism"]`    | `string`  | Which normalization was used.                                            |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                  |
 | `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                  |
 | `uns["method_id"]`           | `string`  | A unique identifier for the method.                                      |
 | `uns["output_type"]`         | `string`  | what kind of output has been generated.                                  |
@@ -450,7 +450,7 @@ Slot description:
 | `layers["corrected_counts"]` | `double`  | Corrected counts after integration.                                      |
 | `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                     |
 | `uns["normalization_id"]`    | `string`  | Which normalization was used.                                            |
-| `uns["dataset_organism"]`    | `string`  | Which normalization was used.                                            |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                  |
 | `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                  |
 | `uns["method_id"]`           | `string`  | A unique identifier for the method.                                      |
 | `uns["output_type"]`         | `string`  | what kind of output has been generated.                                  |
