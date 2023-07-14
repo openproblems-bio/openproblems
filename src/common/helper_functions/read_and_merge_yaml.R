@@ -48,6 +48,39 @@ read_and_merge_yaml <- function(path, project_path = .ram_find_project(path)) {
           parent_path = dirname(path)
         )
         read_and_merge_yaml(new_data_path, project_path)
+      } else if ("$ref" %in% names(processed_data)) {
+        ref_parts <- strsplit(processed_data$`$ref`, "#")[[1]]
+
+        # resolve the path in $ref
+        new_data_path <- .ram_resolve_path(
+          path = ref_parts[[1]],
+          project_path = project_path,
+          parent_path = dirname(path)
+        )
+        new_data_path <- normalizePath(new_data_path, mustWork = FALSE)
+
+        # read in the new data
+        x <-
+          tryCatch({
+            suppressWarnings(yaml::read_yaml(new_data_path))
+          }, error = function(e) {
+            stop("Could not read ", new_data_path, ". Error: ", e)
+          })
+
+        # Navigate the path and retrieve the referenced data
+        ref_path_parts <- unlist(strsplit(ref_parts[[2]], "/"))
+        for (part in ref_path_parts) {
+          if (part == "") {
+            next
+          } else if (part %in% names(x)) {
+            x <- x[[part]]
+          } else {
+            stop("Could not find ", part, " in ", new_data_path, "#", ref_parts[[2]])
+          }
+        }
+
+        # postprocess the new data
+        .ram_process_merge(x, new_data_path, project_path)
       } else {
         list()
       }
