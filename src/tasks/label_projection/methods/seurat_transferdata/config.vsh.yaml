@@ -29,7 +29,7 @@ platforms:
     image: ghcr.io/openproblems-bio/base_r:1.0.1
     setup:
       - type: r
-        cran: [ Matrix, Seurat, rlang, bit64 ]
+        cran: [ Matrix>=1.5.3, Seurat, rlang, bit64 ]
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]
