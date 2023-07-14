@@ -9,7 +9,7 @@ par <- list(
   input_prediction = "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad",
   output = "openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad"
 )
-#/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/work/29/320fe1e10fcd323020345bcc8969c2/openproblems_bmmc_cite_mod2_dummy_meanpergene.correlation.output.h5ad
+#/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/work/29/320fe1e10fcd323020345bcc8969c2/openproblems_bmmc_cite_mod2_dummy_mean_per_gene.correlation.output.h5ad
 ## VIASH END
 
 cat("Reading solution file\n")

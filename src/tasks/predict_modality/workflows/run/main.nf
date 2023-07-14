@@ -2,7 +2,7 @@ sourceDir = params.rootDir + "/src"
 targetDir = params.rootDir + "/target/nextflow"
 
 // import control methods
-include { meanpergene } from "$targetDir/predict_modality/control_methods/meanpergene/main.nf"
+include { mean_per_gene } from "$targetDir/predict_modality/control_methods/mean_per_gene/main.nf"
 include { random_predict } from "$targetDir/predict_modality/control_methods/random_predict/main.nf"
 include { zeros } from "$targetDir/predict_modality/control_methods/zeros/main.nf"
 include { solution } from "$targetDir/predict_modality/control_methods/solution/main.nf"
@@ -34,7 +34,7 @@ traces = initialize_tracer()
 
 // collect method list
 methods = [
-  meanpergene,
+  mean_per_gene,
   random_predict,
   zeros,
   solution,

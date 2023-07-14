@@ -1,6 +1,6 @@
 __merge__: ../../api/comp_control_method.yaml
 functionality:
-  name: meanpergene
+  name: mean_per_gene
   info:
     label: Mean per gene
     summary: Returns the mean expression value per gene.
