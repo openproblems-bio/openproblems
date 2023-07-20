@@ -1,5 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
+  status: disabled
   name: "seurat_transferdata"
   info:
     label: Seurat TransferData
