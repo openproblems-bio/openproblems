@@ -18,6 +18,10 @@
 
 * Update "baseline" to "control" (PR #146).
 
+### BUG FIXES
+
+* fix dim_red and temp disbale label_projection test scripts (PR #206).
+
 ## common
 
 ### NEW FUNCTIONALITY
