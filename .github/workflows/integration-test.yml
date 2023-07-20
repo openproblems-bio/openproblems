@@ -51,11 +51,11 @@ jobs:
         src: src
         format: json
 
-    - id: ns_list_workflows
-      uses: viash-io/viash-actions/ns-list@v4
-      with:
-        src: workflows
-        format: json
+    # - id: ns_list_workflows
+    #   uses: viash-io/viash-actions/ns-list@v4
+    #   with:
+    #     src: workflows
+    #     format: json
 
     - id: set_matrix
       run: |
