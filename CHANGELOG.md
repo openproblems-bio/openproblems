@@ -20,7 +20,7 @@
 
 ### BUG FIXES
 
-* Remove the ns-list action for worklfows in integration test (PR #208)
+* Remove the ns-list action for workflows in integration test (PR #208)
 
 ## common
 

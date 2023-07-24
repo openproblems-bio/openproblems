@@ -44,18 +44,12 @@ jobs:
         publish_branch: integration_build
         exclude_assets: ''
 
-    - id: ns_list_components
+    - id: ns_list
       uses: viash-io/viash-actions/ns-list@v4
       with:
         platform: docker
         src: src
         format: json
-
-    # - id: ns_list_workflows
-    #   uses: viash-io/viash-actions/ns-list@v4
-    #   with:
-    #     src: workflows
-    #     format: json
 
     - id: set_matrix
       run: |
@@ -65,7 +59,7 @@ jobs:
             "config": .info.config,
             "dir": .info.config | capture("^(?<dir>.*\/)").dir
           }
-        ]' ${{ steps.ns_list_components.outputs.output_file }} )" >> $GITHUB_OUTPUT
+        ]' ${{ steps.ns_list.outputs.output_file }} )" >> $GITHUB_OUTPUT
 
         echo "workflows=$(jq -c '[ .[] | . as $config | (.functionality.test_resources // [])[] | select(.type == "nextflow_script", .entrypoint) |
           { 
@@ -74,7 +68,7 @@ jobs:
             "entry": .entrypoint,
             "config": $config.info.config
           }
-        ] | unique' ${{ steps.ns_list_workflows.outputs.output_file }} )" >> $GITHUB_OUTPUT
+        ] | unique' ${{ steps.ns_list.outputs.output_file }} )" >> $GITHUB_OUTPUT
 
   # phase 2
   build:
