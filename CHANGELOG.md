@@ -18,6 +18,15 @@
 
 * Update "baseline" to "control" (PR #146).
 
+### BUG FIXES
+
+* `dimensionality_reduction/methods/tsne`: Use GitHub version of MulticoreTSNE.
+
+* `label_projection/methods/seurat_transferdata`: Temporarily disable component as it appears to not be working (PR #206).
+
+* Remove the ns-list action for workflows in integration test (PR #208)
+
+
 ## common
 
 ### NEW FUNCTIONALITY
