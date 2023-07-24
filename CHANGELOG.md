@@ -20,7 +20,8 @@
 
 ### BUG FIXES
 
-* fix dim_red and temp disbale label_projection test scripts (PR #206).
+* `dimensionality_reduction/methods/tsne`: Use GitHub version of MulticoreTSNE.
+* `label_projection/methods/seurat_transferdata`: Temporarily disable component as it appears to not be working (PR #206).
 
 ## common
 
