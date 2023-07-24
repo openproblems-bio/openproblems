@@ -18,6 +18,10 @@
 
 * Update "baseline" to "control" (PR #146).
 
+### BUG FIXES
+
+* Remove the ns-list action for workflows in integration test (PR #208)
+
 ## common
 
 ### NEW FUNCTIONALITY
