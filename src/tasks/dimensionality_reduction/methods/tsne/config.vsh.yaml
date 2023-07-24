@@ -42,8 +42,8 @@ platforms:
           - cmake
           - gcc
       - type: python
-        packages:
-          - MulticoreTSNE
+        github:
+          - DmitryUlyanov/Multicore-TSNE
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]
