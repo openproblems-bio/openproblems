@@ -12,7 +12,7 @@ include { logistic_regression } from "$targetDir/label_projection/methods/logist
 include { mlp } from "$targetDir/label_projection/methods/mlp/main.nf"
 include { scanvi } from "$targetDir/label_projection/methods/scanvi/main.nf"
 include { scanvi_scarches } from "$targetDir/label_projection/methods/scanvi_scarches/main.nf"
-include { seurat_transferdata } from "$targetDir/label_projection/methods/seurat_transferdata/main.nf"
+// include { seurat_transferdata } from "$targetDir/label_projection/methods/seurat_transferdata/main.nf"
 include { xgboost } from "$targetDir/label_projection/methods/xgboost/main.nf"
 
 // import metrics
@@ -42,7 +42,7 @@ methods = [
   mlp,
   scanvi,
   scanvi_scarches,
-  seurat_transferdata,
+  // seurat_transferdata,
   xgboost
 ]
 
