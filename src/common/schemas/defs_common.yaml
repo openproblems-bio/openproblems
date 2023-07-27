@@ -102,8 +102,7 @@ definitions:
   BibtexReference:
     type: string
     description: |
-      type: string
-      description: A bibtex reference key to the paper where the component is described.
+      A bibtex reference key to the paper where the component is described.
   DocumentationURL:
     type: string
     format: uri

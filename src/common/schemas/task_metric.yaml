@@ -49,14 +49,14 @@ properties:
                 variants:
                   "$ref": "defs_common.yaml#/definitions/MethodVariants"
                 min:
+                  description: The lowest possible value of the metric.
                   oneOf:
                     - type: number
-                      description: The lowest possible value of the metric.
                     - const: "-.inf"
                 max:
+                  description: The highest possible value of the metric.
                   oneOf:
                     - type: number
-                      description: The highest possible value of the metric.
                     - const: "+.inf"
                 maximize:
                   type: boolean
