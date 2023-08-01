@@ -59,6 +59,10 @@
 
 * Add library.bib file check to component unit test (PR #167)
 
+### BUG FIXES
+
+* fix typos in metric and common defenition schemas (PR #212)
+
 ## migration
 
 ### NEW FUNCTIONALITY
