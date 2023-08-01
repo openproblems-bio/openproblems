@@ -16,8 +16,3 @@ info:
         name: method_id
         description: "A unique identifier for the method"
         required: true
-
-      - type: string
-        name: output_type
-        description: what kind of output has been generated
-        required: true

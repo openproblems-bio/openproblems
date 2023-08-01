@@ -20,6 +20,9 @@ include { density_preservation } from "$targetDir/dimensionality_reduction/metri
 include { rmse } from "$targetDir/dimensionality_reduction/metrics/rmse/main.nf"
 include { trustworthiness } from "$targetDir/dimensionality_reduction/metrics/trustworthiness/main.nf"
 
+// convert scores to tsv
+include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
+
 // import helper functions
 include { readConfig; helpMessage; channelFromParams; preprocessInputs } from sourceDir + "/wf_utils/WorkflowHelper.nf"
 include { run_components; join_states; initialize_tracer; write_json; get_publish_dir } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
@@ -127,14 +130,14 @@ workflow run_wf {
     // join all events into a new event where the new id is simply "output" and the new state consists of:
     //   - "input": a list of score h5ads
     //   - "output": the output argument of this workflow
-    | join_states(
-      apply: { ids, states ->
-        ["output", [
-          input: states.collect{it.metric_output},
-          output: states[0].output
-        ]]
-      }
-    )
+    | join_states{ ids, states ->
+      def new_id = "output"
+      def new_state = [
+        input: states.collect{it.metric_output},
+        output: states[0].output
+      ]
+      [new_id, new_state]
+    }
 
     // convert to tsv and publish
     | extract_scores.run(

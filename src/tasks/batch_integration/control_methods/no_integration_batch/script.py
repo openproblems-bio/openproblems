@@ -16,11 +16,6 @@ meta = {
 
 ## VIASH END
 
-with open(meta['config'], 'r', encoding="utf8") as file:
-    config = yaml.safe_load(file)
-
-output_type = config["functionality"]["info"]["subtype"]
-
 print('Read input', flush=True)
 input = sc.read_h5ad(par['input'])
 
@@ -39,7 +34,5 @@ for batch in input.obs["batch"].unique():
     # ).obsm["X_pca"]
 
 print("Store outputs", flush=True)
-input.uns['output_type'] = output_type
 input.uns['method_id'] = meta['functionality_name']
-
 input.write_h5ad(par['output'], compression='gzip')

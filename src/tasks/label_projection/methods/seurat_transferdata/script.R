@@ -1,7 +1,7 @@
 cat(">> Loading dependencies\n")
+library(Matrix, warn.conflicts = FALSE)
 library(anndata, warn.conflicts = FALSE)
 requireNamespace("Seurat", quietly = TRUE)
-library(Matrix, warn.conflicts = FALSE)
 library(magrittr, warn.conflicts = FALSE)
 
 ## VIASH START
@@ -11,6 +11,8 @@ par <- list(
   output = "output.h5ad"
 )
 ## VIASH END
+
+packageVersion("Matrix")
 
 cat(">> Load input data\n")
 input_train <- read_h5ad(par$input_train)

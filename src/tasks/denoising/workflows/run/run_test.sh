@@ -19,6 +19,7 @@ nextflow \
   -main-script src/tasks/denoising/workflows/run/main.nf \
   -profile docker \
   -resume \
+  -c src/wf_utils/labels_ci.config \
   --id pancreas \
   --dataset_id pancreas \
   --normalization_id log_cpm \
