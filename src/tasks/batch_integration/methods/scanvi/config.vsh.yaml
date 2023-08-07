@@ -1,0 +1,46 @@
+# The API specifies which type of component this is.
+# It contains specifications for:
+#   - The input/output files
+#   - Common parameters
+#   - A unit test
+__merge__: ../../api/comp_method_embedding.yaml
+
+functionality:
+  # A unique identifier for your component (required).
+  # Can contain only lowercase letters or underscores.
+  name: scanvi
+
+  # Metadata for your component
+  info:
+    # A relatively short label, used when rendering visualisarions (required)
+    label: ScanVI
+    # A one sentence summary of how this method works (required). Used when 
+    # rendering summary tables.
+    summary: "ScanVI is a deep learning method that considers cell type labels."
+    description : |
+      scANVI (single-cell ANnotation using Variational Inference; Python class SCANVI) is a semi-supervised model for single-cell transcriptomics data. In a sense, it can be seen as a scVI extension that can leverage the cell type knowledge for a subset of the cells present in the data sets to infer the states of the rest of the cells.
+    reference: "lopez2018deep"
+    repository_url: "https://github.com/YosefLab/scvi-tools"
+    documentation_url: "https://github.com/YosefLab/scvi-tools#readme"
+    v1:
+      path: openproblems/tasks/_batch_integration/batch_integration_graph/methods/scanvi.py
+      commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+    preferred_normalization: log_cpm
+    variants:
+      scanvi_full_unscaled:
+      scanvi_hvg_unscaled:
+        hvg: true
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_r:1.0.1
+    setup:
+      - type: python
+        pypi:
+          - scvi-tools
+          - scib==1.1.3
+  - type: nextflow
+    directives:
+      label: [ lowmem, lowcpu ]
