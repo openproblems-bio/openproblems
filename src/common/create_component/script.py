@@ -16,9 +16,6 @@ par = {
 }
 ## VIASH END
 
-# Remove this after upgrading to Viash 0.7.5
-sys.dont_write_bytecode = True
-
 # import helper function
 sys.path.append(meta["resources_dir"])
 from read_and_merge_yaml import read_and_merge_yaml

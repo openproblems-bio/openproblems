@@ -42,4 +42,3 @@ platforms:
     image: "amazon/aws-cli:2.7.12"
   - type: native
   - type: nextflow
-    variant: vdsl3
