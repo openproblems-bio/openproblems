@@ -13,6 +13,9 @@ meta = {
 }
 ## VIASH END
 
+# Remove this after upgrading to Viash 0.7.5
+sys.dont_write_bytecode = True
+
 # import helper functions
 sys.path.append(meta['resources_dir'])
 from subset_anndata import read_config_slots_info, subset_anndata
