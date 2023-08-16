@@ -16,9 +16,6 @@ meta = {
 }
 ## VIASH END
 
-# Remove this after upgrading to Viash 0.7.5
-sys.dont_write_bytecode = True
-
 # add helper scripts to path
 sys.path.append(meta["resources_dir"])
 from helper import split_molecules
