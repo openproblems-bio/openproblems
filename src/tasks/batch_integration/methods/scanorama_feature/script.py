@@ -27,16 +27,6 @@ adata.layers['corrected_counts'] = scanorama(adata, batch='batch').X
 
 del adata.X
 
-# ? Create new comp feature_to_graph?
-# print("Run PCA", flush=True)
-# sc.pp.pca(
-#     adata,
-#     n_comps=50,
-#     use_highly_variable=False,
-#     svd_solver='arpack',
-#     return_info=True
-# )
-
 print("Store outputs", flush=True)
 adata.uns['method_id'] = meta['functionality_name']
 adata.write_h5ad(par['output'], compression='gzip')

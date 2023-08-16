@@ -1,0 +1,37 @@
+# use method api spec
+__merge__: ../../api/comp_method_embedding.yaml
+functionality:
+  name: fastmnn
+  info:
+    label: fastMnn
+    summary: "A simpler version of the original mnnCorrect algorithm."
+    description: |
+      The fastMNN() approach is much simpler than the original mnnCorrect() algorithm, and proceeds in several steps.
+
+      1. Perform a multi-sample PCA on the (cosine-)normalized expression values to reduce dimensionality.
+      2. Identify MNN pairs in the low-dimensional space between a reference batch and a target batch.
+      3. Remove variation along the average batch vector in both reference and target batches.
+      4. Correct the cells in the target batch towards the reference, using locally weighted correction vectors.
+      5. Merge the corrected target batch with the reference, and repeat with the next target batch.
+
+    reference: "haghverdi2018batch"
+    repository_url: "https://code.bioconductor.org/browse/batchelor/"
+    documentation_url: "https://bioconductor.org/packages/batchelor/"
+    preferred_normalization: log_cpm
+    variants:
+      mnn_full_unscaled:
+      mnn_hvg_unscaled:
+        hvg: true
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_r:1.0.1
+    setup:
+      - type: r
+        bioc:
+          - batchelor
+  - type: nextflow
+    directives:
+      label: [ lowcpu, highmem ]
