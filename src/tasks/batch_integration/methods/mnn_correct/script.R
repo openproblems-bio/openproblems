@@ -8,8 +8,7 @@ suppressPackageStartupMessages({
 ## VIASH START
 par <- list(
   input = 'resources_test/batch_integration/pancreas/unintegrated.h5ad',
-  output = 'output.h5ad',
-  hvg = FALSE
+  output = 'output.h5ad'
 )
 meta <- list(
   functionality_name = "mnn_correct_feature"
@@ -18,12 +17,6 @@ meta <- list(
 
 cat("Read input\n")
 adata <- anndata::read_h5ad(par$input)
-
-# don't subset when return_type is not "feature"
-if ("hvg" %in% names(par) && par$hvg) {
-  cat("Select HVGs\n")
-  adata <- adata[, adata$var[["hvg"]]]
-}
 
 cat("Run mnn\n")
 out <- suppressWarnings(batchelor::mnnCorrect(

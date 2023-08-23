@@ -12,10 +12,6 @@ functionality:
     repository_url: "https://code.bioconductor.org/browse/batchelor/"
     documentation_url: "https://bioconductor.org/packages/batchelor/"
     preferred_normalization: log_cpm
-    variants:
-      mnn_full_unscaled:
-      mnn_hvg_unscaled:
-        hvg: true
   resources:
     - type: r_script
       path: script.R
