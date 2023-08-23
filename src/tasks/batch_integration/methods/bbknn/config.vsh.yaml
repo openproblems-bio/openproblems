@@ -19,12 +19,7 @@ functionality:
     preferred_normalization: log_cpm
     variants:
       bbknn_full_unscaled:
-      bbknn_hvg_unscaled:
-        hvg: true
-      bbknn_hvg_scaled:
-        preferred_normalization: log_cpm_scaled
       bbknn_full_scaled:
-        hvg: true
         preferred_normalization: log_cpm_scaled
   resources:
     - type: python_script

@@ -17,10 +17,6 @@ meta = {
 print('Read input', flush=True)
 adata = ad.read_h5ad(par['input'])
 
-if par['hvg']:
-    print('Select HVGs', flush=True)
-    adata = adata[:, adata.var['hvg']].copy()
-
 print('Run scanorama', flush=True)
 adata.X = adata.layers['normalized']
 adata.obsm['X_emb'] = scanorama(adata, batch='batch').obsm['X_emb']

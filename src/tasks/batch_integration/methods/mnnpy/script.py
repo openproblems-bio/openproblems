@@ -16,10 +16,6 @@ meta = {
 print('Read input', flush=True)
 adata = ad.read_h5ad(par['input'])
 
-if par['hvg']:
-    print('Select HVGs', flush=True)
-    adata = adata[:, adata.var['hvg']]
-
 print('Run mnn', flush=True)
 adata.X = adata.layers['normalized']
 adata.layers['corrected_counts'] = mnn(adata, batch='batch').X

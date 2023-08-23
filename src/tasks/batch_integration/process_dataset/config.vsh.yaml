@@ -2,20 +2,6 @@ __merge__: ../api/comp_process_dataset.yaml
 functionality:
   name: process_dataset
   description: Preprocess adata object for data integration
-  arguments:
-    - name: "--obs_label"
-      type: "string"
-      description: "Which .obs slot to use as label."
-      default: "celltype"
-    - name: "--obs_batch"
-      type: "string"
-      description: "Which .obs slot to use as batch covariate."
-      default: "batch"
-    - name: --hvgs
-      type: integer
-      description: Number of highly variable genes
-      default: 2000
-      required: false
   resources:
     - type: python_script
       path: script.py

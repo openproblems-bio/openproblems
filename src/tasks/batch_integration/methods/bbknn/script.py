@@ -17,10 +17,6 @@ meta = {
 print('Read input', flush=True)
 input = ad.read_h5ad(par['input'])
 
-if par['hvg']:
-    print('Select HVGs', flush=True)
-    input = input[:, input.var['hvg']].copy()
-
 print('Run BBKNN', flush=True)
 input.X = input.layers['normalized']
 input = bbknn(input, batch='batch')

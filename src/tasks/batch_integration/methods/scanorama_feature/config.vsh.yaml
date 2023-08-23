@@ -17,11 +17,6 @@ functionality:
     preferred_normalization: log_cpm
     variants:
       scanorama_feature_full_unscaled:
-      scanorama_feature_hvg_unscaled:
-        hvg: true
-      scanorama_feature_hvg_scaled:
-        hvg: true
-        preferred_normalization: log_cpm_scaled
       scanorama_feature_full_scaled:
         preferred_normalization: log_cpm_scaled
   resources:

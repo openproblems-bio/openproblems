@@ -28,8 +28,6 @@ functionality:
     preferred_normalization: log_cpm
     variants:
       scanvi_full_unscaled:
-      scanvi_hvg_unscaled:
-        hvg: true
   resources:
     - type: python_script
       path: script.py

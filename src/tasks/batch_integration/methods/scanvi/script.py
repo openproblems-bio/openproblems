@@ -19,9 +19,6 @@ meta = {
 print('Read input', flush=True)
 adata = ad.read_h5ad(par['input'])
 
-if par['hvg']:
-    print('Select HVGs', flush=True)
-    adata = adata[:, adata.var['hvg']].copy()
 
 print('Run scanvi', flush=True)
 adata.X = adata.layers['normalized']

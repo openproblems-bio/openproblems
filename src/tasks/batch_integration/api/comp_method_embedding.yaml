@@ -17,11 +17,6 @@ functionality:
       __merge__: file_integrated_embedding.yaml
       direction: output
       required: true
-    - name: --hvg
-      type: boolean
-      description: Whether to subset to highly variable genes
-      default: false
-      required: false
   test_resources:
     # check method component
     - type: python_script
@@ -32,8 +27,3 @@ functionality:
       path: /src/common/comp_tests/run_and_check_adata.py
     - path: /resources_test/batch_integration/pancreas
       dest: resources_test/batch_integration/pancreas
-    # # test config against schema
-    # - type: python_script
-    #   path: /src/common/check_yaml_schema/script.py
-    # - path: /src/common/api/schema_method.yaml
-    #   dest: schema.yaml

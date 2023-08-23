@@ -16,8 +16,6 @@ functionality:
     preferred_normalization: log_cpm
     variants:
       scvi_full_unscaled:
-      scvi_hvg_unscaled:
-        hvg: true
   resources:
     - type: python_script
       path: script.py

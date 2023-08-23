@@ -20,11 +20,6 @@ functionality:
     preferred_normalization: log_cpm
     variants:
       mnn_full_unscaled:
-      mnn_hvg_unscaled:
-        hvg: true
-      mnn_hvg_scaled:
-        hvg: true
-        preferred_normalization: log_cpm_scaled
       mnn_full_scaled:
         preferred_normalization: log_cpm_scaled
   resources:

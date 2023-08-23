@@ -22,12 +22,7 @@ functionality:
     preferred_normalization: log_cpm
     variants:
       combat_full_unscaled:
-      combat_hvg_unscaled:
-        hvg: true
       combat_full_scaled:
-        preferred_normalization: log_cpm_scaled
-      combat_hvg_scaled:
-        hvg: true
         preferred_normalization: log_cpm_scaled
   resources:
     - type: python_script

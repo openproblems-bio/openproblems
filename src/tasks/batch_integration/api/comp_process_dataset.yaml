@@ -16,6 +16,24 @@ functionality:
       __merge__: file_unintegrated.yaml
       direction: output
       required: true
+    - name: "--obs_label"
+      type: "string"
+      description: "Which .obs slot to use as label."
+      default: "celltype"
+    - name: "--obs_batch"
+      type: "string"
+      description: "Which .obs slot to use as batch covariate."
+      default: "batch"
+    - name: --hvgs
+      type: integer
+      description: Number of highly variable genes
+      default: 2000
+      required: false
+    - name: --subset_hvg
+      type: boolean
+      description: Whether to subset to highly variable genes
+      default: false
+      required: false
   test_resources:
     - path: /resources_test/common/pancreas/
       dest: resources_test/common/pancreas/

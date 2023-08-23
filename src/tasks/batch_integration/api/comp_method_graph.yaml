@@ -17,11 +17,6 @@ functionality:
       __merge__: file_integrated_graph.yaml
       direction: output
       required: true
-    - name: --hvg
-      type: boolean
-      description: Whether to subset to highly variable genes
-      default: false
-      required: false
   test_resources:
     # check method component
     - type: python_script
