@@ -1,0 +1,45 @@
+# use metric api spec
+__merge__: ../../api/comp_metric_graph.yaml
+functionality:
+  name: graph_connectivity
+  info:
+    metrics:
+      - name: graph_connectivity
+        label: Graph Connectivity
+        summary: Connectivity of the subgraph per cell type label
+        description: |
+          The graph connectivity metric assesses whether the kNN graph representation,
+          G, of the integrated data directly connects all cells with the same cell
+          identity label. For each cell identity label c, we created the subset kNN
+          graph G(Nc;Ec) to contain only cells from a given label. Using these subset
+          kNN graphs, we computed the graph connectivity score using the equation:
+
+          gc =1/|C| Σc∈C |LCC(G(Nc;Ec))|/|Nc|.
+
+          Here, C represents the set of cell identity labels, |LCC()| is the number
+          of nodes in the largest connected component of the graph, and |Nc| is the
+          number of nodes with cell identity c. The resultant score has a range
+          of (0;1], where 1 indicates that all cells with the same cell identity
+          are connected in the integrated kNN graph, and the lowest possible score
+          indicates a graph where no cell is connected. As this score is computed
+          on the kNN graph, it can be used to evaluate all integration outputs.
+        reference: luecken2022benchmarking
+        min: 0
+        max: 1
+        maximize: true
+        v1:
+          path: https://github.com/openproblems-bio/openproblems/blob/main/openproblems/tasks/_batch_integration/batch_integration_graph/metrics/graph_connectivity.py
+          commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    setup:
+      - type: python
+        pypi:
+          - scib==1.1.4
+  - type: nextflow
+    directives: 
+      label: [ midmem, lowcpu ]

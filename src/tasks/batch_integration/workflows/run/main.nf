@@ -26,10 +26,17 @@ include { feature_to_embed } from "$targetDir/batch_integration/transformers/fea
 include { embed_to_graph } from "$targetDir/batch_integration/transformers/embed_to_graph/main.nf"
 
 // import metrics
-include { clustering_overlap } from "$targetDir/batch_integration/metrics/clustering_overlap/main.nf"
 include { asw_batch } from "$targetDir/batch_integration/metrics/asw_batch/main.nf"
 include { asw_label } from "$targetDir/batch_integration/metrics/asw_label/main.nf"
 include { cell_cycle_conservation } from "$targetDir/batch_integration/metrics/cell_cycle_conservation/main.nf"
+include { clustering_overlap } from "$targetDir/batch_integration/metrics/clustering_overlap/main.nf"
+include { graph_connectivity } from "$targetDir/batch_integration/metrics/graph_connectivity/main.nf"
+include { lisi } from "$targetDir/batch_integration/metrics/lisi/main.nf"
+include { hvg_overlap } from "$targetDir/batch_integration/metrics/hvg_overlap/main.nf"
+include { isolated_label_asw } from "$targetDir/batch_integration/metrics/isolated_label_asw/main.nf"
+include { isolated_label_f1 } from "$targetDir/batch_integration/metrics/isolated_label_f1/main.nf"
+include { kbet } from "$targetDir/batch_integration/metrics/kbet/main.nf"
+include { lisi } from "$targetDir/batch_integration/metrics/lisi/main.nf"
 include { pcr } from "$targetDir/batch_integration/metrics/pcr/main.nf"
 
 // tsv generation component
@@ -63,7 +70,13 @@ metrics = [
   asw_label,
   cell_cycle_conservation,
   clustering_overlap,
-  pcr
+  graph_connectivity,
+  hvg_overlap,
+  isolated_label_asw,
+  isolated_label_f1,
+  kbet,
+  lisi,
+  pcr,
 ]
 
 
@@ -93,7 +106,7 @@ workflow run_wf {
       }
     )
 
-  // run feature methods
+  // run all methods
   method_out_ch1 = dataset_ch
     | run_components(
       components: methods,

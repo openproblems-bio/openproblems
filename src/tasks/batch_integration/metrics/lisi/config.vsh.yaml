@@ -1,0 +1,53 @@
+# use metric api spec
+__merge__: ../../api/comp_metric_graph.yaml
+functionality:
+  name: lisi
+  info:
+    metrics:
+      - name: ilisi
+        label: iLISI
+        summary: Local inverse Simpson's Index
+        description: |
+          Local Inverse Simpson's Index metrics adapted from Korsunsky et al. 2019 to run on
+          all full feature, embedding and kNN integration outputs via shortest path-based
+          distance computation on single-cell kNN graphs. The metric assesses whether clusters
+          of cells in a single-cell RNA-seq dataset are well-mixed across a categorical batch
+          variable.
+          
+          The original LISI score ranges from 0 to the number of categories, with the latter
+          indicating good cell mixing. This is rescaled to a score between 0 and 1.
+        reference: luecken2022benchmarking
+        min: 0
+        max: 1
+        maximize: true
+        repository_url: https://github.com/theislab/scib/blob/ed3e2846414ca1e3dc07552c0eef1e68d82230d4/scib/metrics/lisi.py
+        documentation_url: https://scib.readthedocs.io/en/latest/api/scib.metrics.ilisi_graph.html
+      - name: clisi
+        label: cLISI
+        summary: Local inverse Simpson's Index
+        description: |
+          Local Inverse Simpson's Index metrics adapted from Korsunsky et al. 2019 to run on
+          all full feature, embedding and kNN integration outputs via shortest path-based
+          distance computation on single-cell kNN graphs. The metric assesses whether clusters
+          of cells in a single-cell RNA-seq dataset are well-mixed across a categorical cell type variable.
+          
+          The original LISI score ranges from 0 to the number of categories, with the latter indicating good cell mixing. This is rescaled to a score between 0 and 1.
+        reference: luecken2022benchmarking
+        min: 0
+        max: 1
+        maximize: true
+        repository_url: https://github.com/theislab/scib/blob/ed3e2846414ca1e3dc07552c0eef1e68d82230d4/scib/metrics/lisi.py
+        documentation_url: https://scib.readthedocs.io/en/latest/api/scib.metrics.clisi_graph.html
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    setup:
+      - type: python
+        pypi:
+          - git+https://github.com/theislab/scib.git@v1.1.4
+  - type: nextflow
+    directives: 
+      label: [ midmem, lowcpu ]

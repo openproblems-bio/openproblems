@@ -25,4 +25,5 @@ nextflow run . \
   --id pancreas \
   --input $DATASET_DIR/unintegrated.h5ad \
   --output scores.tsv \
-  --publish_dir $DATASET_DIR/
+  --publish_dir $DATASET_DIR/ \
+  $@

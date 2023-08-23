@@ -13,7 +13,7 @@ NAME_MAXLEN = 50
 
 SUMMARY_MAXLEN = 400
 
-DESCRIPTION_MAXLEN = 1000
+DESCRIPTION_MAXLEN = 5000
 
 _MISSING_DOIS = ["vandermaaten2008visualizing", "hosmer2013applied"]
 
@@ -71,7 +71,11 @@ def check_metric(metric: Dict[str, str])  -> str:
     assert "FILL IN:" not in metric["description"], "description not filled in"
     # assert "reference" in metric, "reference not a field in metric"
     if "reference" in metric:
-        assert search_ref_bib(metric["reference"]), f"reference {metric['reference']} not added to library.bib"
+        reference = metric["reference"]
+        if not isinstance(reference, list):
+            reference = [reference]
+        for ref in reference:
+            assert search_ref_bib(ref), f"reference {ref} not added to library.bib"
     # assert "documentation_url" in metric , "documentation_url not a field in metric"
     # assert "repository_url" in metric , "repository_url not a metric field"
     if "documentation_url" in metric:

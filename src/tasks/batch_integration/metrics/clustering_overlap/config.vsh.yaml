@@ -6,7 +6,7 @@ functionality:
     metrics:
       - name: ari
         label: ARI
-        summary: "Adjusted Rand Index compares clustering overlap, correcting for random labels and considering correct overlaps and disagreements."
+        summary: Adjusted Rand Index compares clustering overlap, correcting for random labels and considering correct overlaps and disagreements.
         description: |
           The Adjusted Rand Index (ARI) compares the overlap of two clusterings;
           it considers both correct clustering overlaps while also counting correct
@@ -16,8 +16,9 @@ functionality:
           The adjustment of the Rand index corrects for randomly correct labels.
           An ARI of 0 or 1 corresponds to random labeling or a perfect match,
           respectively.
-          We used the scikit-learn implementation of the ARI.
-        reference: hubert1985comparing
+        reference:
+          - hubert1985comparing
+          - luecken2022benchmarking
         min: 0
         max: 1
         maximize: true
@@ -34,10 +35,9 @@ functionality:
           for cell-type and cluster labels. Thus, NMI scores of 0 or 1 correspond to uncorrelated
           clustering or a perfect match, respectively. We performed optimized Louvain clustering
           for this metric to obtain the best match between clusters and labels.
-          Louvain clustering was performed at a resolution range of 0.1 to 2 in steps of 0.1,
-          and the clustering output with the highest NMI with the label set was used. We
-          the scikit-learn implementation of NMI.
-        reference: amelio2015normalized
+        reference:
+          - amelio2015normalized
+          - luecken2022benchmarking
         min: 0
         max: 1
         maximize: true

@@ -1,0 +1,38 @@
+# use metric api spec
+__merge__: ../../api/comp_metric_embedding.yaml
+functionality:
+  name: isolated_label_asw
+  info:
+    metrics:
+      - name: isolated_label_asw
+        label: Isolated label ASW
+        summary: Evaluate how well isolated labels separate by average silhouette width
+        description: |
+          Isolated cell labels are defined as the labels present in the least number
+          of batches in the integration task. The score evaluates how well these isolated labels
+          separate from other cell identities.
+
+          The isolated label ASW score is obtained by computing the
+          ASW of isolated versus non-isolated labels on the PCA embedding (ASW metric above) and
+          scaling this score to be between 0 and 1. The final score for each metric version
+          consists of the mean isolated score of all isolated labels.
+        reference: luecken2022benchmarking
+        v1:
+          path: openproblems/tasks/_batch_integration/batch_integration_graph/metrics/iso_label_sil.py
+          commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+        min: 0
+        max: 1
+        maximize: true
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    setup:
+      - type: python
+        pypi:
+          - scib==1.1.4
+  - type: nextflow
+    directives: 
+      label: [ midmem, lowcpu ]

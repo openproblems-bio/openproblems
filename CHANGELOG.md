@@ -108,7 +108,9 @@
 
 * `resources_test/label_projection/pancreas` with `src/tasks/label_projection/resources_test_scripts/pancreas.sh`.
 
-* `workflows/run`: Added nf-tower test script. (PR #205)
+* `workflows/run`: Added nf-tower test script (PR #205).
+
+* `metrics/lisi`: Added a component for cLISI and iLISI graph metrics from scib (PR #213).
 
 ### V1 MIGRATION
 
@@ -139,6 +141,16 @@
 * `metrics/cell_cycle_conservation`: Migrated from v1 embedding.
 
 * `metrics/clustering_overlap`: Migrated from v1 graph NMI & ARI.
+
+* `metrics/graph_connectivity`: Migrated from v1 graph.
+
+* `metrics/hvg_overlap`: Migrated from v1 feature.
+
+* `metrics/isolated_label_asw`: Migrated from v1 embedding.
+
+* `metrics/isolated_label_f1`: Migrated from v1 graph.
+
+* `metrics/kbet`: Migrated from v1 embedding.
 
 * `metrics/pcr`: Migrated from v1 embedding.
 
