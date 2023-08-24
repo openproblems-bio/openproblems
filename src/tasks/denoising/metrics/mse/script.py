@@ -15,7 +15,7 @@ meta = {
 }
 ## VIASH END
 
-print("Load data")
+print("Load data", flush=True)
 input_denoised = ad.read_h5ad(par['input_denoised'])
 input_test = ad.read_h5ad(par['input_test'])
 
@@ -23,7 +23,7 @@ input_test = ad.read_h5ad(par['input_test'])
 test_data = ad.AnnData(X=input_test.layers["counts"].toarray(), dtype="float")
 denoised_data = ad.AnnData( X=input_denoised.layers["denoised"].toarray(), dtype="float")
 
-print("Normalize data")
+print("Normalize data", flush=True)
 
 # scaling and transformation
 target_sum = 10000
@@ -34,12 +34,12 @@ sc.pp.log1p(test_data)
 sc.pp.normalize_total(denoised_data, target_sum)
 sc.pp.log1p(denoised_data)
 
-print("Compute mse value")
+print("Compute mse value", flush=True)
 error = sklearn.metrics.mean_squared_error(
     scprep.utils.toarray(test_data.X), denoised_data.X
 )
 
-print("Store mse value")
+print("Store mse value", flush=True)
 output_metric = ad.AnnData(
     layers={},
     obs=input_denoised.obs[[]],
@@ -53,6 +53,6 @@ for key in input_denoised.uns_keys():
 output_metric.uns["metric_ids"] = meta['functionality_name']
 output_metric.uns["metric_values"] = error
 
-print("Write adata to file")
+print("Write adata to file", flush=True)
 output_metric.write_h5ad(par['output'], compression="gzip")
 

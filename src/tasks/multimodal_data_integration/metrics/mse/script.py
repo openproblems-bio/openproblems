@@ -7,16 +7,16 @@ par = {
 }
 ## VIASH END
 
-print("Importing libraries")
+print("Importing libraries", flush=True)
 import anndata
 import scprep
 import numpy as np
 from scipy import sparse
 
-print("Reading adata file")
+print("Reading adata file", flush=True)
 adata = anndata.read_h5ad(par["input"])
 
-print("Computing MSE")
+print("Computing MSE", flush=True)
 def _square(X):
 	if sparse.issparse(X):
 		X.data = X.data ** 2
@@ -32,9 +32,9 @@ error_random = np.mean(np.sum(_square(X_shuffled - Y)))
 error_abs = np.mean(np.sum(_square(X - Y)))
 metric_value = error_abs / error_random
 
-print("Store metic value")
+print("Store metic value", flush=True)
 adata.uns["metric_id"] = "mse"
 adata.uns["metric_value"] = metric_value
 
-print("Writing adata to file")
+print("Writing adata to file", flush=True)
 adata.write_h5ad(par["output"], compression = "gzip")

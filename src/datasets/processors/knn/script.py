@@ -11,13 +11,13 @@ par = {
 }
 ### VIASH END
 
-print(">> Load data")
+print(">> Load data", flush=True)
 adata = sc.read(par['input'])
 
-print(">> Look for layer")
+print(">> Look for layer", flush=True)
 adata.X = adata.layers[par['layer_input']]
 
-print(">> Run kNN")
+print(">> Run kNN", flush=True)
 sc.pp.neighbors(
     adata,
     use_rep='X_pca',
@@ -27,6 +27,6 @@ sc.pp.neighbors(
 
 del adata.X
 
-print(">> Writing data")
+print(">> Writing data", flush=True)
 adata.write_h5ad(par['output'])
 

@@ -5,7 +5,7 @@ import subprocess
 import scanpy as sc
 import numpy as np
 
-print(">> Running mse")
+print(">> Running mse", flush=True)
 out = subprocess.run([
     "./mse",
     "--input", "sample_output.h5ad",
@@ -19,10 +19,10 @@ if out.returncode:
     print(f"script: '{out.args}' exited with an error.")
     exit(out.returncode)
 
-print(">> Checking whether file exists")
+print(">> Checking whether file exists", flush=True)
 assert path.exists("output.h5ad")
 
-print(">> Check that output fits expected API")
+print(">> Check that output fits expected API", flush=True)
 adata = sc.read_h5ad("output.h5ad")
 
 # check id
@@ -31,4 +31,4 @@ assert adata.uns["metric_id"] == "mse"
 assert "metric_value" in adata.uns
 assert type(adata.uns["metric_value"]) is np.float64
 
-print(">> All tests passed successfully")
+print(">> All tests passed successfully", flush=True)

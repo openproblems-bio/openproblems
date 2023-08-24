@@ -12,18 +12,18 @@ meta = {
 }
 ## VIASH END
 
-print("Load data")
+print("Load data", flush=True)
 adata = ad.read_h5ad(par['input'])
 
-print("Normalize data")
+print("Normalize data", flush=True)
 # libsize and sqrt L1 norm
 sqrt_data = scprep.utils.matrix_transform(adata.layers['counts'], np.sqrt)
 l1_sqrt, libsize = scprep.normalize.library_size_normalize(sqrt_data, rescale=1, return_library_size=True)
 l1_sqrt = l1_sqrt.tocsr()
 
-print("Store output in adata")
+print("Store output in adata", flush=True)
 adata.layers[par["layer_output"]] = l1_sqrt
 adata.uns["normalization_id"] = meta['functionality_name']
 
-print("Write data")
+print("Write data", flush=True)
 adata.write_h5ad(par['output'], compression="gzip")

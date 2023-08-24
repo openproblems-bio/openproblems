@@ -205,17 +205,17 @@ meta = {
 }
 ## VIASH END
 
-print("Load data")
+print("Load data", flush=True)
 input_train = ad.read_h5ad(par['input_train'])
 input_test = ad.read_h5ad(par['input_test'])
 
-print("Create predictions")
+print("Create predictions", flush=True)
 input_test.obs["label_pred"] = "foo"
 
-print("Add method name to uns")
+print("Add method name to uns", flush=True)
 input_test.uns["method_id"] = meta["functionality_name"]
 
-print("Write output to file")
+print("Write output to file", flush=True)
 input_test.write_h5ad(par["output"], compression="gzip")
 HERE
 ```
@@ -310,17 +310,17 @@ meta = {
 }
 ## VIASH END
 
-print("Load data")
+print("Load data", flush=True)
 input_train = ad.read_h5ad(par['input_train'])
 input_test = ad.read_h5ad(par['input_test'])
 
-print("Not creating any predictions!!!")
+print("Not creating any predictions!!!", flush=True)
 # input_test.obs["label_pred"] = "foo"
 
-print("Not adding method name to uns!!!")
+print("Not adding method name to uns!!!", flush=True)
 # input_test.uns["method_id"] = meta["functionality_name"]
 
-print("Write output to file")
+print("Write output to file", flush=True)
 input_test.write_h5ad(par["output"], compression="gzip")
 HERE
 ```

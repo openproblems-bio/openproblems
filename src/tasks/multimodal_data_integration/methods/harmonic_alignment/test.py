@@ -4,7 +4,7 @@ import subprocess
 
 import scanpy as sc
 
-print(">> Running harmonic_alignment")
+print(">> Running harmonic_alignment", flush=True)
 out = subprocess.run([
     "./harmonic_alignment",
     "--input", "sample_dataset.h5ad",
@@ -18,10 +18,10 @@ if out.returncode:
     print(f"script: '{out.args}' exited with an error.")
     exit(out.returncode)
 
-print(">> Checking whether file exists")
+print(">> Checking whether file exists", flush=True)
 assert path.exists("output.h5ad")
 
-print(">> Check that output fits expected API")
+print(">> Check that output fits expected API", flush=True)
 adata = sc.read_h5ad("output.h5ad")
 
 assert "aligned" in adata.obsm
@@ -34,4 +34,4 @@ assert adata.obsm["aligned"].shape[1] == adata.obsm["mode2_aligned"].shape[1]
 assert "method_id" in adata.uns
 assert adata.uns["method_id"] == "harmonic_alignment"
 
-print(">> All tests passed successfully")
+print(">> All tests passed successfully", flush=True)

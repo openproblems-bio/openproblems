@@ -10,13 +10,13 @@ meta = {
 }
 ## VIASH END
 
-print("Load input data")
+print("Load input data", flush=True)
 input_train = ad.read_h5ad(par['input_train'])
 
-print("Process data")
+print("Process data", flush=True)
 input_train.layers["denoised"] = input_train.layers['counts']
 
 input_train.uns["method_id"] = meta['functionality_name']
 
-print("Write Data")
+print("Write Data", flush=True)
 input_train.write_h5ad(par['output'],compression="gzip")

@@ -28,7 +28,7 @@ if par["n_hvg"]:
 print(f"Running PCA with {par['n_pca_dims']} dimensions", flush=True)
 X_pca = sc.tl.pca(X_mat, n_comps=par["n_pca_dims"], svd_solver="arpack")[:, :2]
 
-print("Run ivis")
+print("Run ivis", flush=True)
 # parameters taken from:
 # https://bering-ivis.readthedocs.io/en/latest/scanpy_singlecell.html#reducing-dimensionality-using-ivis
 ivis = Ivis(

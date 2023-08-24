@@ -139,7 +139,7 @@ del adata_output.X
 if par["input_mod2"] is not None:
     del adata_output_mod2.X
 
-print(">> Writing data")
+print(">> Writing data", flush=True)
 adata_output.write_h5ad(par["output"])
 if par["output_mod2"] is not None:
     adata_output_mod2.write_h5ad(par["output_mod2"])

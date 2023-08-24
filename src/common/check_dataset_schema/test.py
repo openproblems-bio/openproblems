@@ -106,4 +106,4 @@ with open(output_error_checks, 'r') as f:
     print(out)
 
 
-print("All checks succeeded!")
+print("All checks succeeded!", flush=True)

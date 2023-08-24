@@ -13,13 +13,13 @@ meta = {
 }
 ## VIASH END
 
-print("Load input data")
+print("Load input data", flush=True)
 input_train = ad.read_h5ad(par["input_train"])
 
-print("process data")
+print("process data", flush=True)
 X = input_train.layers["counts"].transpose().toarray()
 input_train.layers["denoised"] = scipy.sparse.csr_matrix((knn_smooth.knn_smoothing(X, k=10)).transpose())
 
-print("Writing data")
+print("Writing data", flush=True)
 input_train.uns["method_id"] = meta["functionality_name"]
 input_train.write_h5ad(par["output"], compression="gzip")

@@ -13,19 +13,19 @@ meta = {
 }
 ## VIASH END
 
-print("load input data")
+print("load input data", flush=True)
 input_train = ad.read_h5ad(par['input_train'])
 
-print("move layer to X")
+print("move layer to X", flush=True)
 input_train.X = input_train.layers["counts"]
 
-print("running dca")
+print("running dca", flush=True)
 dca(input_train, epochs=par["epochs"])
 
-print("moving X back to layer")
+print("moving X back to layer", flush=True)
 input_train.layers["denoised"] = scipy.sparse.csr_matrix(input_train.X)
 del input_train.X
 
-print("Writing data")
+print("Writing data", flush=True)
 input_train.uns["method_id"] = meta["functionality_name"]
 input_train.write_h5ad(par["output"], compression="gzip")

@@ -1,4 +1,4 @@
-print("Loading dependencies")
+print("Loading dependencies", flush=True)
 import scanpy as sc
 import harmonicalignment
 import sklearn.decomposition
@@ -20,10 +20,10 @@ sys.path.append(resources_dir)
 from preprocessing import log_cpm
 from preprocessing import sqrt_cpm
 
-print("Reading input h5ad file")
+print("Reading input h5ad file", flush=True)
 adata = sc.read_h5ad(par["input"])
 
-print("Check parameters")
+print("Check parameters", flush=True)
 n_svd = min([par["n_svd"], min(adata.X.shape) - 1, min(adata.obsm["mode2"].shape) - 1])
 n_eigenvectors = par["n_eigenvectors"]
 n_pca_XY = par["n_pca_XY"]
@@ -33,27 +33,27 @@ if adata.X.shape[0] <= n_eigenvectors:
 if adata.X.shape[0] <= n_pca_XY:
     n_pca_XY = None
 
-print("Normalising mode 1")
+print("Normalising mode 1", flush=True)
 sqrt_cpm(adata)
 
-print("Normalising mode 2")
+print("Normalising mode 2", flush=True)
 log_cpm(adata, obsm="mode2", obs="mode2_obs", var="mode2_var")
 
-print("Performing PCA reduction")
+print("Performing PCA reduction", flush=True)
 X_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
 Y_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.obsm["mode2"])
 
-print("Running Harmonic Alignment")
+print("Running Harmonic Alignment", flush=True)
 ha_op = harmonicalignment.HarmonicAlignment(
     n_filters=8, n_pca_XY=n_pca_XY, n_eigenvectors=n_eigenvectors
 )
 ha_op.align(X_pca, Y_pca)
 XY_aligned = ha_op.diffusion_map(n_eigenvectors=n_eigenvectors)
 
-print("Storing output data structures")
+print("Storing output data structures", flush=True)
 adata.obsm["aligned"] = XY_aligned[: X_pca.shape[0]]
 adata.obsm["mode2_aligned"] = XY_aligned[X_pca.shape[0] :]
 
-print("Write output to file")
+print("Write output to file", flush=True)
 adata.uns["method_id"] = "harmonic_alignment"
 adata.write_h5ad(par["output"], compression = "gzip")

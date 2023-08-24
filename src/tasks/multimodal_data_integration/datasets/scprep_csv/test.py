@@ -8,11 +8,11 @@ import numpy as np
 
 import urllib.request
 
-print(">> Downloading input file")
+print(">> Downloading input file", flush=True)
 # need to download file manually for now; viash docker platform tries to auto-mount them
 urllib.request.urlretrieve("ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE100nnn/GSE100866/suppl/GSE100866%5FCD8%5Fmerged%2DADT%5Fumi%2Ecsv%2Egz", "adt_umi.csv.gz")
 
-print(">> Running scprep_csv")
+print(">> Running scprep_csv", flush=True)
 
 out = subprocess.run([
     "./scprep_csv",
@@ -29,10 +29,10 @@ if out.returncode:
     print(f"script: '{out.args}' exited with an error.")
     exit(out.returncode)
 
-print(">> Checking whether file exists")
+print(">> Checking whether file exists", flush=True)
 assert path.exists("output.h5ad")
 
-print(">> Check that output fits expected API")
+print(">> Check that output fits expected API", flush=True)
 adata = sc.read_h5ad("output.h5ad")
 assert "mode2" in adata.obsm
 assert "mode2_obs" in adata.uns
@@ -47,4 +47,4 @@ assert adata.shape == adata.obsm["mode2"].shape
 assert "dataset_id" in adata.uns
 assert adata.uns["dataset_id"] == "footest"
 
-print(">> All tests passed successfully")
+print(">> All tests passed successfully", flush=True)

@@ -9,37 +9,37 @@ par = {
 }
 ## VIASH END
 
-print("Importing libraries")
+print("Importing libraries", flush=True)
 import anndata
 import numpy as np
 import sklearn.decomposition
 import sklearn.neighbors
 
-print("Reading adata file")
+print("Reading adata file", flush=True)
 adata = anndata.read_h5ad(par["input"])
 
-print("Checking parameters")
+print("Checking parameters", flush=True)
 n_svd = min([par["n_svd"], min(adata.X.shape) - 1])
 n_neighbors = int(np.ceil(par["proportion_neighbors"] * adata.X.shape[0]))
 
-print("Performing PCA")
+print("Performing PCA", flush=True)
 X_pca = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.X)
 
-print("Compute KNN on PCA")
+print("Compute KNN on PCA", flush=True)
 _, indices_true = (
     sklearn.neighbors.NearestNeighbors(n_neighbors=n_neighbors)
     .fit(X_pca)
     .kneighbors(X_pca)
 )
 
-print("Compute KNN on aligned matrix")
+print("Compute KNN on aligned matrix", flush=True)
 _, indices_pred = (
     sklearn.neighbors.NearestNeighbors(n_neighbors=n_neighbors)
     .fit(adata.obsm["aligned"])
     .kneighbors(adata.obsm["mode2_aligned"])
 )
 
-print("Check which neighbours match")
+print("Check which neighbours match", flush=True)
 neighbors_match = np.zeros(n_neighbors, dtype=int)
 for i in range(adata.shape[0]):
     _, pred_matches, true_matches = np.intersect1d(
@@ -51,15 +51,15 @@ for i in range(adata.shape[0]):
         axis=0,
     )
 
-print("Compute area under neighbours match curve")
+print("Compute area under neighbours match curve", flush=True)
 neighbors_match_curve = neighbors_match / (
     np.arange(1, n_neighbors + 1) * adata.shape[0]
 )
 area_under_curve = np.mean(neighbors_match_curve)
 
-print("Store metic value")
+print("Store metic value", flush=True)
 adata.uns["metric_id"] = "knn_auc"
 adata.uns["metric_value"] = area_under_curve
 
-print("Writing adata to file")
+print("Writing adata to file", flush=True)
 adata.write_h5ad(par["output"], compression = "gzip")
