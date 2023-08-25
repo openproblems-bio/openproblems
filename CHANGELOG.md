@@ -3,6 +3,10 @@
 
 ## general
 
+### NEW FUNCTIONALITY
+
+* Updated all current tasks in v2 to latest changes in OP v1 (PR #214)
+
 ### MAJOR CHANGES
 
 * Relocate task directories to new `src/tasks/` location (PR #142).
@@ -11,6 +15,8 @@
   and `ghcr.io/openproblems-bio/base-r` (PR #168).
 
 * Update batch integration docker images to OpenProblems base images (PR #171).
+  
+* Changed default normalization CPM to CP10k (PR #214)
 
 ### MINOR CHANGES
 
@@ -274,7 +280,7 @@
 
 * `methods/neuralee`: Migrated from v1.
 
-* `metrics/rmse`: Migrated from v1, but will likely be removed.
+* `metrics/distance_correlation`: Migrated from v1, but will likely be removed.
 
 * `metrics/trustworthiness`: Migrated from v1, but will likely be removed.
 

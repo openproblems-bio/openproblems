@@ -17,8 +17,12 @@ functionality:
     documentation_url: https://docs.scvi-tools.org
     repository_url: https://github.com/scverse/scvi-tools
     preferred_normalization: counts
+    v1:
+      path: openproblems/tasks/label_projection/methods/scvi_tools.py
+      commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
     variants:
       scanvi_scarches:
+      #! TODO: add other scanvi_scarches variants
 
   # Component-specific parameters (optional)
   arguments:

@@ -23,7 +23,7 @@ functionality:
         reference: luecken2022benchmarking
         v1:
           path: openproblems/tasks/_batch_integration/batch_integration_embed/metrics/pcr.py
-          commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+          commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
         min: 0
         max: 1
         maximize: true

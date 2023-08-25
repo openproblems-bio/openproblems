@@ -9,7 +9,7 @@ functionality:
     v1:
       path: openproblems/tasks/_batch_integration/batch_integration_embed/methods/baseline.py
       commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
-    preferred_normalization: log_cpm
+    preferred_normalization: log_cp10k
   arguments:
     - name: "--jitter"
       type: double

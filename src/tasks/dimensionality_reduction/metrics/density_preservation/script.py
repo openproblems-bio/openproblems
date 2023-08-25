@@ -11,6 +11,8 @@ par = {
     "input_embedding": "resources_test/dimensionality_reduction/pancreas/reduced.h5ad",
     "input_solution": "resources_test/dimensionality_reduction/pancreas/test.h5ad",
     "output": "score.h5ad",
+    "n_neighbors": 30,
+    "seed": 42,
 }
 ## VIASH END
 
@@ -84,27 +86,22 @@ def compute_density_preservation(
         return 0.0
     
     print("Compute local radii in original data", flush=True)
-    _, ro, _ = UMAP(
-        n_neighbors=_K,
-        random_state=_SEED,
-        densmap=True,
-        output_dens=True
-    ).fit_transform(high_dim)
+    ro = _calculate_radii(
+        high_dim,
+        n_neighbors=n_neighbors,
+        random_state=random_state
+    )
 
     print("Compute local radii of embedding", flush=True)
     re = _calculate_radii(
         X_emb,
-        n_neighbors=_K,
-        random_state=_SEED
+        n_neighbors=n_neighbors,
+        random_state=random_state
     )
     
     print("Compute pearson correlation", flush=True)
     return pearsonr(ro, re)[0]
 
-# number of neighbors
-_K = 30
-# Fix seed
-_SEED = 42
 
 print("Load data", flush=True)
 input_solution = ad.read_h5ad(par["input_solution"])
@@ -116,8 +113,8 @@ X_emb = input_embedding.obsm["X_emb"]
 density_preservation = compute_density_preservation(
     X_emb=X_emb,
     high_dim=high_dim,
-    n_neighbors=_K,
-    random_state=_SEED
+    n_neighbors=par["n_neighbors"],
+    random_state=par["seed"]
 )
 
 print("Create output AnnData object", flush=True)

@@ -7,35 +7,16 @@ functionality:
     description: "This serves as a positive control since the original high-dimensional data is retained as is, without any loss of information"
     v1:
       path: openproblems/tasks/dimensionality_reduction/methods/baseline.py
-      commit: 4a0ee9b3731ff10d8cd2e584726a61b502aef613
-    preferred_normalization: counts
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: log_cp10k
     variants:
       true_features:
-      true_features_log_cpm:
-        preferred_normalization: log_cpm
-        use_normalized_layer: true
-      true_features_log_cpm_hvg:
-        preferred_normalization: log_cpm
-        use_normalized_layer: true
-        n_hvg: 1000
-  arguments:
-    - name: "--use_normalized_layer"
-      type: boolean
-      default: false
-      description: Whether to work with the raw counts or the normalized counts.
-    - name: "--n_hvg"
-      type: integer
-      description: Number of highly variable genes to subset to. If not specified, the input matrix will not be subset.
-      default: 1000
   resources:
     - type: python_script
       path: script.py
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_python:1.0.1
-    setup:
-      - type: python
-        packages: scanpy
   - type: nextflow
     directives: 
       label: [ highmem, highcpu ]

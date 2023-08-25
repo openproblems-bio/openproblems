@@ -13,7 +13,7 @@ functionality:
         reference: grandini2020metrics
         v1:
           path: openproblems/tasks/label_projection/metrics/accuracy.py
-          commit: fcd5b876e7d0667da73a2858bc27c40224e19f65
+          commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
   resources:
     - type: python_script
       path: script.py

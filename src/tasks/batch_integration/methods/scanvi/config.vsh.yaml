@@ -25,7 +25,7 @@ functionality:
     v1:
       path: openproblems/tasks/_batch_integration/batch_integration_graph/methods/scanvi.py
       commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
-    preferred_normalization: log_cpm
+    preferred_normalization: log_cp10k
     variants:
       scanvi_full_unscaled:
   resources:

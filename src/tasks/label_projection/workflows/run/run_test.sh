@@ -21,7 +21,7 @@ nextflow \
   -resume \
   --id pancreas \
   --dataset_id pancreas \
-  --normalization_id log_cpm \
+  --normalization_id log_cp10k \
   --input_train $DATASET_DIR/train.h5ad \
   --input_test $DATASET_DIR/test.h5ad \
   --input_solution $DATASET_DIR/solution.h5ad \

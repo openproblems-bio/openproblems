@@ -59,7 +59,7 @@ definitions:
     required: [ type ]
     additionalProperties: false
   PreferredNormalization:
-    enum: [l1_sqrt, log_cpm, log_scran_pooling, sqrt_cpm, counts]
+    enum: [l1_sqrt, log_cpm, log_cp10k, log_scran_pooling, sqrt_cpm, sqrt_cp10k, counts]
     description: |
       Which normalization method a component prefers. 
       

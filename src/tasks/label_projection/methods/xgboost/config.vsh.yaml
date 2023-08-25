@@ -14,10 +14,10 @@ functionality:
     documentation_url: "https://xgboost.readthedocs.io/en/stable/index.html"
     v1:
       path: openproblems/tasks/label_projection/methods/xgboost.py
-      commit: 123bb7b39c51c58e19ddf0fbbc1963c3dffde14c
-    preferred_normalization: log_cpm
+      commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
+    preferred_normalization: log_cp10k
     variants:
-      xgboost_log_cpm:
+      xgboost_log_cp10k:
       xgboost_scran:
         preferred_normalization: log_scran_pooling
   resources:

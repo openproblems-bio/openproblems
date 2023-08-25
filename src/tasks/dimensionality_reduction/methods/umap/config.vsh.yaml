@@ -16,14 +16,14 @@ functionality:
     v1:
       path: openproblems/tasks/dimensionality_reduction/methods/umap.py
       commit: 14d70b330cae09527a6d4c4e552db240601e31cf
-    preferred_normalization: log_cpm
+    preferred_normalization: log_cp10k
     variants:
-      umap_logCPM:
-      umap_pca_logCPM:
+      umap_logCP10k:
+      umap_pca_logCP10k:
         n_pca_dims: 50
-      umap_logCPM_1kHVG:
+      umap_logCP10k_1kHVG:
         n_hvg: 1000
-      umap_pca_logCPM_1kHVG:
+      umap_pca_logCP10k_1kHVG:
         n_pca_dims: 50
         n_hvg: 1000
   arguments:

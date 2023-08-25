@@ -7,9 +7,9 @@ targetDir = params.rootDir + "/target/nextflow"
 include { openproblems_v1 } from "$targetDir/datasets/loaders/openproblems_v1/main.nf"
 
 // normalization methods
-include { log_cpm } from "$targetDir/datasets/normalization/log_cpm/main.nf"
+include { log_cpm } from "$targetDir/datasets/normalization/log_cp/main.nf"
 include { log_scran_pooling } from "$targetDir/datasets/normalization/log_scran_pooling/main.nf"
-include { sqrt_cpm } from "$targetDir/datasets/normalization/sqrt_cpm/main.nf"
+include { sqrt_cpm } from "$targetDir/datasets/normalization/sqrt_cp/main.nf"
 include { l1_sqrt } from "$targetDir/datasets/normalization/l1_sqrt/main.nf"
 
 // dataset processors
@@ -27,8 +27,8 @@ config = readConfig("$projectDir/config.vsh.yaml")
 // add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
 traces = initialize_tracer()
 
-// normalization_methods = [log_cpm, log_scran_pooling, sqrt_cpm, l1_sqrt
-normalization_methods = [log_cpm, sqrt_cpm, l1_sqrt]
+// normalization_methods = [log_cp, log_scran_pooling, sqrt_cp, l1_sqrt
+normalization_methods = [log_cp, sqrt_cp, l1_sqrt]
 
 workflow {
   helpMessage(config)

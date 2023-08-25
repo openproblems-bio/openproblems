@@ -117,7 +117,7 @@ workflow run_wf {
         def pref = config.functionality.info.preferred_normalization
         // if the preferred normalisation is none at all,
         // we can pass whichever dataset we want
-        (norm == "log_cpm" && pref == "counts") || norm == pref
+        (norm == "log_cp10k" && pref == "counts") || norm == pref
       },
 
       // define a new 'id' by appending the method name to the dataset id

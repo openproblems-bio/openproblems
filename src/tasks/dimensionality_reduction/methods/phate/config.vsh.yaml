@@ -18,17 +18,17 @@ functionality:
     documentation_url: "https://github.com/KrishnaswamyLab/PHATE#readme"
     v1:
       path: openproblems/tasks/dimensionality_reduction/methods/phate.py
-      commit: 14d70b330cae09527a6d4c4e552db240601e31cf
-    preferred_normalization: sqrt_cpm
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: sqrt_cp10k
     variants:
       phate_default:
       phate_sqrt:
         gamma: 0
-      phate_logCPM:
-        preferred_normalization: log_cpm
-      phate_logCPM_1kHVG:
+      phate_logCP10k:
+        preferred_normalization: log_cp10k
+      phate_logCP10k_1kHVG:
         n_hvg: 1000
-        preferred_normalization: log_cpm
+        preferred_normalization: log_cp10k
   arguments:
     - name: '--n_pca_dims'
       type: integer

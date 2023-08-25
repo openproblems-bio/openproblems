@@ -2,7 +2,6 @@ __merge__: ../../api/comp_metric.yaml
 functionality:
   name: "poisson"
   info:
-    reference: "batson2019molecular"
     metrics:
       - name: poisson
         label: Poisson Loss
@@ -12,10 +11,10 @@ functionality:
         reference: batson2019molecular
         v1:
           path: openproblems/tasks/denoising/metrics/poisson.py
-          commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+          commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
         maximize: false
         min: 0
-        max: +inf
+        max: "+.inf"
   resources:
     - type: python_script
       path: script.py

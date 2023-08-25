@@ -98,7 +98,7 @@ if "variants" in info:
                 assert arg_id in arg_names, f"Argument '{arg_id}' in `.functionality.info.variants['{paramset_id}']` is not an argument in `.functionality.arguments`."
 
 assert "preferred_normalization" in info, "preferred_normalization not an info field"
-norm_methods = ["log_cpm", "counts", "log_scran_pooling", "sqrt_cpm", "l1_sqrt"]
+norm_methods = ["log_cpm", "log_cp10k", "counts", "log_scran_pooling", "sqrt_cpm", "sqrt_cp10k", "l1_sqrt"]
 assert info["preferred_normalization"] in norm_methods, "info['preferred_normalization'] not one of '" + "', '".join(norm_methods) + "'."
 
 

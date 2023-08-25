@@ -7,7 +7,7 @@ functionality:
     description: "A control-type method that predicts all cells to belong to the most abundant cell type in the dataset"
     v1:
       path: openproblems/tasks/label_projection/methods/baseline.py
-      commit: b460ecb183328c857cbbf653488f522a4034a61c
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
     variants:
       majority_vote:
     preferred_normalization: counts

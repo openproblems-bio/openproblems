@@ -17,10 +17,10 @@ functionality:
     documentation_url: "https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html"
     v1:
       path: openproblems/tasks/label_projection/methods/mlp.py
-      commit: c2470ce02e6f196267cec1c554ba7ae389c0956a
-    preferred_normalization: log_cpm
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: log_cp10k
     variants:
-      mlp_log_cpm:
+      mlp_log_cp10k:
       mlp_scran:
         preferred_normalization: log_scran_pooling
   arguments:

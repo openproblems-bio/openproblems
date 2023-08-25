@@ -16,11 +16,11 @@ functionality:
     documentation_url: "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html"
     v1:
       path: openproblems/tasks/dimensionality_reduction/methods/pca.py
-      commit: 14d70b330cae09527a6d4c4e552db240601e31cf
-    preferred_normalization: log_cpm
+      commit: 154ccb9fd99113f3d28d9c3f139194539a0290f9
+    preferred_normalization: log_cp10k
     variants:
-      pca_logCPM:
-      pca_logCPM_1kHVG:
+      pca_logCP10k:
+      pca_logCP10k_1kHVG:
         n_hvg: 1000
   arguments:
     - name: "--n_hvg"

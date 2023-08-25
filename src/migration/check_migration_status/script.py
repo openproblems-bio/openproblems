@@ -3,9 +3,9 @@ from typing import Dict, List
 
 ## VIASH START
 par = {
-    'git_sha': 'temp/openproblems-v1.json',
-    'comp_info': 'temp/denoising_metrics.json',
-    'output': 'temp/migration_status.json'
+    'git_sha': 'resources_test/input_git_sha.json',
+    'comp_info': 'output/denoising_metric.json',
+    'output': 'output/denoising_metric_status.json'
 }
 ## VIASH END
 
@@ -16,10 +16,18 @@ def check_status(comp_item: List[Dict[str, str]], git_objects: List[Dict[str, st
     git_object["sha"]."""
 
     v1_path = comp_item.get("v1", {}).get("path")
+
+    if "metric_id" in comp_item:
+        v1_path = comp_item.get("v1.path")
+    
     if not v1_path:
         return "v1.path missing"
     
     v1_commit = comp_item.get("v1", {}).get("commit")
+
+    if "metric_id" in comp_item:
+        v1_commit = comp_item.get("v1.commit")
+
     if not v1_commit:
         return "v1.commit missing"
     
@@ -28,7 +36,7 @@ def check_status(comp_item: List[Dict[str, str]], git_objects: List[Dict[str, st
         return "v1.path does not exist in git repo"
 
     git_sha = git_object[0]["sha"]
-    if git_sha == comp_item["v1_commit"]:
+    if git_sha == v1_commit:
         return "up to date"
     else:
         return f"out of date (sha: {git_sha})"

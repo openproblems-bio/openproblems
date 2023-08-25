@@ -9,7 +9,7 @@ input_train: s3://openproblems-data/$DATASET_DIR/train.h5ad
 input_test: s3://openproblems-data/$DATASET_DIR/test.h5ad
 input_solution: s3://openproblems-data/$DATASET_DIR/solution.h5ad
 dataset_id: pancreas
-normalization_id: log_cpm
+normalization_id: log_cp10k
 output: scores.tsv
 publish_dir: s3://openproblems-nextflow/output_test/v2/label_projection
 HERE

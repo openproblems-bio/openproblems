@@ -17,7 +17,7 @@ functionality:
         maximize: true
         v1:
           path: openproblems/tasks/dimensionality_reduction/metrics/nn_ranking.py 
-          commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+          commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
           note: |
             The original v1 implementations consisted of a lot of helper functions which were 
             derived from the pyDRMetrics package. This version uses the coRanking package
@@ -38,7 +38,7 @@ functionality:
         maximize: true
         v1:
           path: openproblems/tasks/dimensionality_reduction/metrics/nn_ranking.py 
-          commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+          commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
           note: |
             The original v1 implementations consisted of a lot of helper functions which were 
             derived from the pyDRMetrics package. This version uses the coRanking package
@@ -59,7 +59,7 @@ functionality:
         maximize: true
         v1:
           path: openproblems/tasks/dimensionality_reduction/metrics/nn_ranking.py 
-          commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+          commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
           note: |
             The original v1 implementations consisted of a lot of helper functions which were 
             derived from the pyDRMetrics package. This version uses the coRanking package
@@ -80,7 +80,7 @@ functionality:
         maximize: true
         v1:
           path: openproblems/tasks/dimensionality_reduction/metrics/nn_ranking.py 
-          commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+          commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
           note: |
             The original v1 implementations consisted of a lot of helper functions which were 
             derived from the pyDRMetrics package. This version uses the coRanking package
@@ -101,7 +101,7 @@ functionality:
         maximize: true
         v1:
           path: openproblems/tasks/dimensionality_reduction/metrics/nn_ranking.py 
-          commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+          commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
           note: |
             The original v1 implementations consisted of a lot of helper functions which were 
             derived from the pyDRMetrics package. This version uses the coRanking package
@@ -122,7 +122,7 @@ functionality:
         maximize: true
         v1:
           path: openproblems/tasks/dimensionality_reduction/metrics/nn_ranking.py 
-          commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+          commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
           note: |
             The original v1 implementations consisted of a lot of helper functions which were 
             derived from the pyDRMetrics package. This version uses the coRanking package
@@ -143,7 +143,7 @@ functionality:
         maximize: true
         v1:
           path: openproblems/tasks/dimensionality_reduction/metrics/nn_ranking.py 
-          commit: 14d70b330cae09527a6d4c4e552db240601e31cf
+          commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
           note: |
             The original v1 implementations consisted of a lot of helper functions which were 
             derived from the pyDRMetrics package. This version uses the coRanking package

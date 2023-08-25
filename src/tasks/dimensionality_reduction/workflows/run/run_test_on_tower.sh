@@ -8,7 +8,7 @@ id: pancreas_subsample
 input: s3://openproblems-data/$DATASET_DIR/dataset.h5ad
 input_solution: s3://openproblems-data/$DATASET_DIR/solution.h5ad
 dataset_id: pancreas
-normalization_id: log_cpm
+normalization_id: log_cp10k
 output: scores.tsv
 publish_dir: s3://openproblems-nextflow/output_test/v2/dimensionality_reduction
 HERE

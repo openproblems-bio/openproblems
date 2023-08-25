@@ -4,7 +4,7 @@ import scanpy as sc
 ### VIASH START
 par = {
   'input': 'resources_test/common/pancreas/dataset.h5ad',
-  'layer_input': 'log_cpm',
+  'layer_input': 'log_cp10k',
   'output': 'dataset.h5ad',
   'obsm_embedding': 'X_pca',
   'varm_loadings': 'pca_loadings',

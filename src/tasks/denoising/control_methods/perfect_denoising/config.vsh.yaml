@@ -7,7 +7,7 @@ functionality:
     description: "This method serves as a positive control, where the test data is copied 1-to-1 to the denoised data. This makes it seem as if the data is perfectly denoised as it will be compared to the test data in the metrics."
     v1:
       path: openproblems/tasks/denoising/methods/baseline.py
-      commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
     variants: 
       perfect_denoising:
     preferred_normalization: counts

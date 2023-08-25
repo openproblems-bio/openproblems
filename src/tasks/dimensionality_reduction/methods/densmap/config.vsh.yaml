@@ -10,15 +10,15 @@ functionality:
     documentation_url: https://github.com/lmcinnes/umap#readme
     v1:
       path: openproblems/tasks/dimensionality_reduction/methods/umap.py
-      commit: 14d70b330cae09527a6d4c4e552db240601e31cf
-    preferred_normalization: log_cpm
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: log_cp10k
     variants:
-      densmap_logCPM:
-      densmap_pca_logCPM:
+      densmap_logCP10k:
+      densmap_pca_logCP10k:
         n_pca_dims: 50
-      densmap_logCPM_1kHVG:
+      densmap_logCP10k_1kHVG:
         n_hvg: 1000
-      densmap_pca_logCPM_1kHVG:
+      densmap_pca_logCP10k_1kHVG:
         n_pca_dims: 50
         n_hvg: 1000
   arguments:

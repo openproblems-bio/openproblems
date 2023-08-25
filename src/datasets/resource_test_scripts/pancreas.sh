@@ -42,8 +42,8 @@ viash run src/datasets/processors/subsample/config.vsh.yaml -- \
     --output $DATASET_DIR/raw.h5ad \
     --seed 123
 
-# run log cpm normalisation
-viash run src/datasets/normalization/log_cpm/config.vsh.yaml -- \
+# run log cp10k normalisation
+viash run src/datasets/normalization/log_cp/config.vsh.yaml -- \
     --input $DATASET_DIR/raw.h5ad \
     --output $DATASET_DIR/normalized.h5ad
 

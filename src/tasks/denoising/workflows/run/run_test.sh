@@ -22,7 +22,7 @@ nextflow \
   -c src/wf_utils/labels_ci.config \
   --id pancreas \
   --dataset_id pancreas \
-  --normalization_id log_cpm \
+  --normalization_id log_cp10k \
   --input_train $DATASET_DIR/train.h5ad \
   --input_test $DATASET_DIR/test.h5ad \
   --output scores.tsv \

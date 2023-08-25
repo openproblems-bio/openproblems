@@ -1,0 +1,44 @@
+__merge__: ../../api/comp_control_method.yaml
+functionality:
+  name: "diffusion_maps"
+  info:
+    label: Diffusion maps
+    summary: "Positive control by Use 1000-dimensional diffusions maps as an embedding."
+    description: "This serves as a positive control since it uses 1000-dimensional diffusions maps as an embedding"
+    reference: coifman2006diffusion
+    documentation_url: https://github.com/openproblems-bio/openproblems
+    repository_url: https://github.com/openproblems-bio/openproblems
+    v1:
+      path: openproblems/tasks/dimensionality_reduction/methods/diffusion_map.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: log_cp10k
+    variants:
+      diffusion_map:
+  arguments:
+    - name: "--n_comps"
+      type: integer
+      default: 2
+      description: "Number of components to use for the embedding."
+    - name: t
+      type: integer
+      default: 1
+      description: "Number to power the eigenvalues by."
+    - name: n_retries
+      type: integer
+      default: 1
+      description: "Number of times to retry if the embedding fails, each time adding noise."
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    setup:
+      - type: python
+        pypi: 
+          - umap-learn
+          - scipy
+          - numpy
+  - type: nextflow
+    directives: 
+      label: [ highmem, highcpu ]

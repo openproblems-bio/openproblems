@@ -15,12 +15,12 @@ functionality:
     documentation_url: "https://github.com/Teichlab/bbknn#readme"
     v1:
       path: openproblems/tasks/_batch_integration/batch_integration_graph/methods/bbknn.py
-      commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
-    preferred_normalization: log_cpm
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: log_cp10k
     variants:
       bbknn_full_unscaled:
       bbknn_full_scaled:
-        preferred_normalization: log_cpm_scaled
+        preferred_normalization: log_cp10k_scaled
   resources:
     - type: python_script
       path: script.py
