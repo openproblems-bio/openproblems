@@ -1,4 +1,4 @@
-__merge__: "file_unintegrated.yaml"
+__merge__: "file_dataset.yaml"
 type: file
 example: "resources_test/batch_integration/pancreas/integrated_graph.h5ad"
 info:
@@ -11,8 +11,16 @@ info:
         name: connectivities
         description: Neighbors connectivities matrix.
         required: true
+      - type: double
+        name: distances
+        description: Neighbors connectivities matrix.
+        required: true
     uns:
       - type: string
         name: method_id
         description: "A unique identifier for the method"
+        required: true
+      - type: object
+        name: neighbors
+        description: Supplementary K nearest neighbors data.
         required: true

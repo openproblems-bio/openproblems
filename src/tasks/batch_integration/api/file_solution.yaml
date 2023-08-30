@@ -1,8 +1,8 @@
 type: file
 example: "resources_test/batch_integration/pancreas/unintegrated.h5ad"
 info:
-  label: "Unintegrated"
-  summary: Unintegrated AnnData HDF5 file.
+  label: "Solution"
+  summary: Solution dataset
   slots:
     layers:
       - type: integer

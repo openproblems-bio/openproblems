@@ -13,6 +13,10 @@ functionality:
       __merge__: file_integrated_embedding.yaml
       direction: input
       required: true
+    - name: --input_solution
+      __merge__: file_solution.yaml
+      direction: input
+      required: true
     - name: --output
       __merge__: file_score.yaml
       direction: output

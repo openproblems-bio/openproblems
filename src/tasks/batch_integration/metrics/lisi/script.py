@@ -13,19 +13,18 @@ meta = {
 ## VIASH END
 
 print('Read input', flush=True)
-adata = ad.read_h5ad(par['input_integrated'])
+input_solution = ad.read_h5ad(par['input_solution'])
+input_integrated = ad.read_h5ad(par['input_integrated'])
 
-print('recompute kNN graph..', flush=True)
-output_type = adata.uns['output_type']
-adata_tmp = recompute_knn(
-    adata,
-    type_=output_type,
-    use_rep= "X_emb" if output_type == 'embed' else "X_pca",
-)
+input_solution.obsp["connectivities"] = input_integrated.obsp["connectivities"]
+input_solution.obsp["distances"] = input_integrated.obsp["distances"]
+
+# TODO: if we don't copy neighbors over, the metric doesn't work
+input_solution.uns["neighbors"] = input_integrated.uns["neighbors"]
 
 print('compute iLISI score...', flush=True)
 ilisi_scores = lisi_graph_py(
-    adata=adata_tmp,
+    adata=input_solution,
     obs_key='batch',
     n_neighbors=90,
     perplexity=None,
@@ -34,11 +33,11 @@ ilisi_scores = lisi_graph_py(
     verbose=False,
 )
 ilisi = np.nanmedian(ilisi_scores)
-ilisi = (ilisi - 1) / (adata.obs['batch'].nunique() - 1)
+ilisi = (ilisi - 1) / (input_solution.obs['batch'].nunique() - 1)
 
 print('compute cLISI scores...', flush=True)
 clisi_scores = lisi_graph_py(
-    adata=adata_tmp,
+    adata=input_solution,
     obs_key='label',
     n_neighbors=90,
     perplexity=None,
@@ -47,15 +46,15 @@ clisi_scores = lisi_graph_py(
     verbose=False,
 )
 clisi = np.nanmedian(clisi_scores)
-nlabs = adata.obs['label'].nunique()
+nlabs = input_solution.obs['label'].nunique()
 clisi = (nlabs - clisi) / (nlabs - 1)
 
 print('Create output AnnData object', flush=True)
 output = ad.AnnData(
     uns={
-        'dataset_id': adata.uns['dataset_id'],
-        'normalization_id': adata.uns['normalization_id'],
-        'method_id': adata.uns['method_id'],
+        'dataset_id': input_solution.uns['dataset_id'],
+        'normalization_id': input_solution.uns['normalization_id'],
+        'method_id': input_integrated.uns['method_id'],
         'metric_ids': [ 'ilisi_graph', 'clisi_graph' ],
         'metric_values': [ ilisi, clisi ]
     }

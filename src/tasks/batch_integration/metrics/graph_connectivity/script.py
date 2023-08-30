@@ -12,20 +12,27 @@ meta = {
 ## VIASH END
 
 print('Read input', flush=True)
-adata = ad.read_h5ad(par['input_integrated'])
+input_solution = ad.read_h5ad(par['input_solution'])
+input_integrated = ad.read_h5ad(par['input_integrated'])
+
+input_solution.obsp["connectivities"] = input_integrated.obsp["connectivities"]
+input_solution.obsp["distances"] = input_integrated.obsp["distances"]
+
+# TODO: if we don't copy neighbors over, the metric doesn't work
+input_solution.uns["neighbors"] = input_integrated.uns["neighbors"]
 
 print('compute score', flush=True)
 score = scib.metrics.graph_connectivity(
-    adata,
-    label_key='label',
+    input_solution,
+    label_key='label'
 )
 
 print('Create output AnnData object', flush=True)
 output = ad.AnnData(
     uns={
-        'dataset_id': adata.uns['dataset_id'],
-        'normalization_id': adata.uns['normalization_id'],
-        'method_id': adata.uns['method_id'],
+        'dataset_id': input_solution.uns['dataset_id'],
+        'normalization_id': input_solution.uns['normalization_id'],
+        'method_id': input_integrated.uns['method_id'],
         'metric_ids': [ meta['functionality_name'] ],
         'metric_values': [ score ]
     }

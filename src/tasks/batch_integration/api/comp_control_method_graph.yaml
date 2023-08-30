@@ -9,7 +9,7 @@ functionality:
       description: |
         A batch integration control method which outputs a batch-corrected cell graphs.
   arguments:
-    - __merge__: file_unintegrated.yaml
+    - __merge__: file_dataset.yaml
       name: --input
       direction: input
       required: true

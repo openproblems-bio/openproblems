@@ -12,8 +12,12 @@ functionality:
       __merge__: /src/datasets/api/file_common_dataset.yaml
       direction: input
       required: true
-    - name: "--output"
-      __merge__: file_unintegrated.yaml
+    - name: "--output_dataset"
+      __merge__: file_dataset.yaml
+      direction: output
+      required: true
+    - name: "--output_solution"
+      __merge__: file_solution.yaml
       direction: output
       required: true
     - name: "--obs_label"

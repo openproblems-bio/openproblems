@@ -10,7 +10,7 @@ functionality:
         A batch integration method which outputs a batch-corrected feature-space.
   arguments:
     - name: --input
-      __merge__: file_unintegrated.yaml
+      __merge__: file_dataset.yaml
       direction: input
       required: true
     - name: --output

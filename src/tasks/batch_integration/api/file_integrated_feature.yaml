@@ -1,4 +1,4 @@
-__merge__: "file_unintegrated.yaml"
+__merge__: "file_dataset.yaml"
 type: file
 example: "resources_test/batch_integration/pancreas/integrated_feature.h5ad"
 info:
