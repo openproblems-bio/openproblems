@@ -1,0 +1,41 @@
+# use method api spec
+__merge__: ../../api/comp_method_feature.yaml
+functionality:
+  name: fastmnn_feature
+  info:
+    label: fastMnn (feature)
+    summary: "A simpler version of the original mnnCorrect algorithm."
+    description: |
+      The fastMNN() approach is much simpler than the original mnnCorrect() algorithm, and proceeds in several steps.
+
+      1. Perform a multi-sample PCA on the (cosine-)normalized expression values to reduce dimensionality.
+      2. Identify MNN pairs in the low-dimensional space between a reference batch and a target batch.
+      3. Remove variation along the average batch vector in both reference and target batches.
+      4. Correct the cells in the target batch towards the reference, using locally weighted correction vectors.
+      5. Merge the corrected target batch with the reference, and repeat with the next target batch.
+
+    reference: "haghverdi2018batch"
+    repository_url: "https://code.bioconductor.org/browse/batchelor/"
+    documentation_url: "https://bioconductor.org/packages/batchelor/"
+    preferred_normalization: log_cpm
+    v1:
+      path: openproblems/tasks/_batch_integration/batch_integration_graph/methods/fastmnn.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_r:1.0.1
+    setup:
+      # - type: r
+      #   bioc: batchelor
+      # workaround for DelayedArray issue
+      - type: apt
+        packages: git
+      - type: r
+        script:
+          - remotes::install_bioc("3.18/batchelor", upgrade = "always", type = "source")
+  - type: nextflow
+    directives:
+      label: [ lowcpu, highmem ]
