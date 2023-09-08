@@ -15,7 +15,7 @@ jobs:
       cache_key: ${{ steps.cache.outputs.cache_key }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - uses: viash-io/viash-actions/setup@v4
 
@@ -85,7 +85,7 @@ jobs:
     # Remove unnecessary files to free up space. Otherwise, we get 'no space left on device.'
     - uses: data-intuitive/reclaim-the-bytes@v2
     
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - uses: viash-io/viash-actions/setup@v4
 
@@ -128,7 +128,7 @@ jobs:
     # Remove unnecessary files to free up space. Otherwise, we get 'no space left on device.'
     - uses: data-intuitive/reclaim-the-bytes@v2
         
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - uses: viash-io/viash-actions/setup@v4
 
