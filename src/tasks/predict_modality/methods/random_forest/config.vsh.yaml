@@ -8,6 +8,7 @@ functionality:
     reference: breiman2001random
     documentation_url: https://www.stat.berkeley.edu/~breiman/RandomForests/reg_home.htm
     repository_url: https://github.com/cran/randomForest
+    preferred_normalization: counts
   arguments:
     - name: "--distance_method"
       type: "string"

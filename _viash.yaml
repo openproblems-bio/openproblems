@@ -9,3 +9,4 @@ config_mods: |
   .platforms[.type == 'docker'].target_organization := 'openproblems-bio'
   .platforms[.type == 'docker'].target_image_source := 'https://github.com/openproblems-bio/openproblems-v2'
   .platforms[.type == "nextflow"].directives.tag := "$id"
+  .platforms[.type == "nextflow"].auto.simplifyOutput := false

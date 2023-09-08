@@ -8,18 +8,12 @@ functionality:
           type: "string"
           description: "The ID of the normalized dataset"
           required: true
-        - name: "--dataset_id"
-          type: "string"
-          description: "The ID of the dataset"
-          required: true
-        - name: "--input"
+        - name: "--input_dataset"
           type: "file"
           required: true
         - name: "--input_solution"
           type: "file"
           required: true
-        - name: "--normalization_id"
-          type: "string" 
     - name: Outputs
       arguments:
         - name: "--output"

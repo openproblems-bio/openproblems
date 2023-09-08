@@ -100,8 +100,8 @@ workflow run_wf {
     // extract the dataset metadata
     | run_components(
       components: check_dataset_schema,
-      from_state: ["input"],
-      to_state: { id, output, config ->
+      fromState: ["input"],
+      toState: { id, output, config ->
         new org.yaml.snakeyaml.Yaml().load(output.meta)
       }
     )
@@ -125,11 +125,11 @@ workflow run_wf {
         id + "." + config.functionality.name
       },
 
-      // use 'from_state' to fetch the arguments the component requires from the overall state
-      from_state: ["input"],
+      // use 'fromState' to fetch the arguments the component requires from the overall state
+      fromState: ["input"],
 
-      // use 'to_state' to publish that component's outputs to the overall state
-      to_state: { id, output, config ->
+      // use 'toState' to publish that component's outputs to the overall state
+      toState: { id, output, config ->
         [
           method_id: config.functionality.name,
           method_output: output.output,
@@ -143,8 +143,8 @@ workflow run_wf {
     | run_components(
       components: feature_to_embed,
       filter: { id, state, config -> state.method_subtype == "feature"},
-      from_state: [ input: "method_output" ],
-      to_state: { id, output, config ->
+      fromState: [ input: "method_output" ],
+      toState: { id, output, config ->
         [
           method_output: output.output,
           method_subtype: config.functionality.info.subtype
@@ -158,8 +158,8 @@ workflow run_wf {
     | run_components(
       components: embed_to_graph,
       filter: { id, state, config -> state.method_subtype == "embedding"},
-      from_state: [ input: "method_output" ],
-      to_state: { id, output, config ->
+      fromState: [ input: "method_output" ],
+      toState: { id, output, config ->
         [
           method_output: output.output,
           method_subtype: config.functionality.info.subtype
@@ -175,8 +175,8 @@ workflow run_wf {
       filter: { id, state, config ->
         state.method_subtype == config.functionality.info.subtype
       },
-      from_state: [input_integrated: "method_output"],
-      to_state: { id, output, config ->
+      fromState: [input_integrated: "method_output"],
+      toState: { id, output, config ->
         [
           metric_id: config.functionality.name,
           metric_output: output.output

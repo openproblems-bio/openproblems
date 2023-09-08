@@ -1,6 +1,8 @@
 sourceDir = params.rootDir + "/src"
 targetDir = params.rootDir + "/target/nextflow"
 
+include { check_dataset_schema } from "$targetDir/common/check_dataset_schema/main.nf"
+
 // import control methods
 include { mean_per_gene } from "$targetDir/predict_modality/control_methods/mean_per_gene/main.nf"
 include { random_predict } from "$targetDir/predict_modality/control_methods/random_predict/main.nf"
@@ -70,26 +72,28 @@ workflow run_wf {
     // and fill in default values
     | preprocessInputs(config: config)
 
+    // extract the dataset metadata
+    | check_dataset_schema.run(
+      fromState: [ "input": "input_train_mod1" ],
+      toState: { id, output, state ->
+        // load output yaml file
+        def metadata = new org.yaml.snakeyaml.Yaml().load(output.meta)
+        // add metadata from file to state
+        state + metadata
+      }
+    )
+
     // run all methods
     | run_components(
       components: methods,
-
-      // // use the 'filter' argument to only run a method on the normalisation the component is asking for
-      // filter: { id, state, config ->
-      //   def norm = state.normalization_id
-      //   def pref = config.functionality.info.preferred_normalization
-      //   // if the preferred normalisation is none at all,
-      //   // we can pass whichever dataset we want
-      //   (norm == "log_cpm" && pref == "counts") || norm == pref
-      // },
 
       // define a new 'id' by appending the method name to the dataset id
       id: { id, state, config ->
         id + "." + config.functionality.name
       },
 
-      // use 'from_state' to fetch the arguments the component requires from the overall state
-      from_state: { id, state, config ->
+      // use 'fromState' to fetch the arguments the component requires from the overall state
+      fromState: { id, state, config ->
         def new_args = [
           input_train_mod1: state.input_train_mod1,
           input_train_mod2: state.input_train_mod2,
@@ -101,8 +105,8 @@ workflow run_wf {
         new_args
       },
 
-      // use 'to_state' to publish that component's outputs to the overall state
-      to_state: { id, output, config ->
+      // use 'toState' to publish that component's outputs to the overall state
+      toState: { id, output, config ->
         [
           method_id: config.functionality.name,
           method_output: output.output
@@ -113,13 +117,13 @@ workflow run_wf {
     // run all metrics
     | run_components(
       components: metrics,
-      // use 'from_state' to fetch the arguments the component requires from the overall state
-      from_state: [
+      // use 'fromState' to fetch the arguments the component requires from the overall state
+      fromState: [
         input_test_mod2: "input_test_mod2", 
         input_prediction: "method_output"
       ],
-      // use 'to_state' to publish that component's outputs to the overall state
-      to_state: { id, output, config ->
+      // use 'toState' to publish that component's outputs to the overall state
+      toState: { id, output, config ->
         [
           metric_id: config.functionality.name,
           metric_output: output.output

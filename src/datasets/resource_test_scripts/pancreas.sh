@@ -63,3 +63,9 @@ viash run src/datasets/processors/knn/config.vsh.yaml -- \
     --output $DATASET_DIR/dataset.h5ad
 
 rm -r $DATASET_DIR/temp_*
+
+# rerun task process dataset components
+src/tasks/batch_integration/resources_test_scripts/pancreas.sh
+src/tasks/denoising/resources_test_scripts/pancreas.sh
+src/tasks/dimensionality_reduction/resources_test_scripts/pancreas.sh
+src/tasks/label_projection/resources_test_scripts/pancreas.sh

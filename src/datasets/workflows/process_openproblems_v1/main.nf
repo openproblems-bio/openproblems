@@ -48,19 +48,19 @@ workflow run_wf {
     // fetch data from legacy openproblems
     | run_components(
       components: openproblems_v1,
-      from_state: [
+      fromState: [
         "dataset_id", "obs_celltype", "obs_batch", "obs_tissue", "layer_counts", "sparse",
         "dataset_name", "data_url", "data_reference", "dataset_summary", "dataset_description", "dataset_organism"
       ],
-      to_state: [ dataset: "output" ]
+      toState: [ dataset: "output" ]
     )
 
     // run normalization methods
     | run_components(
       components: normalization_methods,
       id: { id, state, config -> id + "/" + config.functionality.name },
-      from_state: [ input: "dataset" ],
-      to_state: [
+      fromState: [ input: "dataset" ],
+      toState: [
         normalization_id: config.functionality.name,
         output_normalization: "output"
       ]
@@ -68,25 +68,25 @@ workflow run_wf {
 
     | run_components(
       components: pca,
-      from_state: [ input: "output_normalization" ],
-      to_state: [ pca: "output" ]
+      fromState: [ input: "output_normalization" ],
+      toState: [ pca: "output" ]
     )
 
     | run_components(
       components: hvg,
-      from_state: [ input: "pca" ],
-      to_state: [ hvg: "output" ]
+      fromState: [ input: "pca" ],
+      toState: [ hvg: "output" ]
     )
 
     | run_components(
       components: knn,
-      from_state: [ input: "hvg" ],
-      to_state: [ knn: "output" ]
+      fromState: [ input: "hvg" ],
+      toState: [ knn: "output" ]
     )
 
     | run_components(
       components: check_dataset_schema,
-      from_state: {id, state, config ->
+      fromState: {id, state, config ->
         [
           input: state.knn,
           meta: state.output_meta,
@@ -94,7 +94,7 @@ workflow run_wf {
           checks: null
         ]
       },
-      to_state: [],
+      toState: [],
       auto: [publish: true]
     )
 

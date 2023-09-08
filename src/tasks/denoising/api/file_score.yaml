@@ -1,6 +1,6 @@
 type: file
 description: "Metric score file"
-example: "resources_test/denoising/pancreas/magic_poisson.h5ad"
+example: "resources_test/denoising/pancreas/score.h5ad"
 info:
   label: "Score"
   slots:

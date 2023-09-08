@@ -274,7 +274,7 @@ Arguments:
 
 NA
 
-Example file: `resources_test/denoising/pancreas/magic.h5ad`
+Example file: `resources_test/denoising/pancreas/denoised.h5ad`
 
 Description:
 
@@ -307,7 +307,7 @@ Slot description:
 
 NA
 
-Example file: `resources_test/denoising/pancreas/magic_poisson.h5ad`
+Example file: `resources_test/denoising/pancreas/score.h5ad`
 
 Description:
 

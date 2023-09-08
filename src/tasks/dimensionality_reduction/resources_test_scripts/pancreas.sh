@@ -8,7 +8,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
-RAW_DATA=resources_test/common/pancreas/cp10k_dataset.h5ad
+RAW_DATA=resources_test/common/pancreas/dataset.h5ad
 DATASET_DIR=resources_test/dimensionality_reduction/pancreas
 
 if [ ! -f $RAW_DATA ]; then
@@ -45,8 +45,6 @@ nextflow \
   -main-script src/tasks/dimensionality_reduction/workflows/run/main.nf \
   -profile docker \
   --id pancreas \
-  --dataset_id pancreas \
-  --normalization_id log_cp10k \
   --input $DATASET_DIR/dataset.h5ad \
   --input_solution $DATASET_DIR/solution.h5ad \
   --output scores.tsv \

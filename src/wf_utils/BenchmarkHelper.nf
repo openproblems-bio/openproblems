@@ -7,8 +7,8 @@ def run_components(Map args) {
   }
   assert components_.size() > 0: "pass at least one component to run_components"
 
-  def from_state_ = args.from_state
-  def to_state_ = args.to_state
+  def fromState_ = args.fromState
+  def toState_ = args.toState
   def filter_ = args.filter
   def id_ = args.id
 
@@ -39,16 +39,16 @@ def run_components(Map args) {
         : filter_ch
       data_ch = id_ch | map{tup ->
           def new_data = tup[1]
-          if (from_state_ instanceof Map) {
-            new_data = from_state_.collectEntries{ key0, key1 ->
+          if (fromState_ instanceof Map) {
+            new_data = fromState_.collectEntries{ key0, key1 ->
               [key0, new_data[key1]]
             }
-          } else if (from_state_ instanceof List) {
-            new_data = from_state_.collectEntries{ key ->
+          } else if (fromState_ instanceof List) {
+            new_data = fromState_.collectEntries{ key ->
               [key, new_data[key]]
             }
-          } else if (from_state_ instanceof Closure) {
-            new_data = from_state_(tup[0], new_data, comp_config)
+          } else if (fromState_ instanceof Closure) {
+            new_data = fromState_(tup[0], new_data, comp_config)
           }
           tup.take(1) + [new_data] + tup.drop(1)
         }
@@ -56,19 +56,19 @@ def run_components(Map args) {
         | comp_.run(
           auto: (args.auto ?: [:]) + [simplifyInput: false, simplifyOutput: false]
         )
-      post_ch = to_state_
+      post_ch = toState_
         ? out_ch | map{tup ->
           def new_outputs = tup[1]
-          if (to_state_ instanceof Map) {
-            new_outputs = to_state_.collectEntries{ key0, key1 ->
+          if (toState_ instanceof Map) {
+            new_outputs = toState_.collectEntries{ key0, key1 ->
               [key0, new_outputs[key1]]
             }
-          } else if (to_state_ instanceof List) {
-            new_outputs = to_state_.collectEntries{ key ->
+          } else if (toState_ instanceof List) {
+            new_outputs = toState_.collectEntries{ key ->
               [key, new_outputs[key]]
             }
-          } else if (to_state_ instanceof Closure) {
-            new_outputs = to_state_(tup[0], new_outputs, comp_config)
+          } else if (toState_ instanceof Closure) {
+            new_outputs = toState_(tup[0], new_outputs, comp_config)
           }
           [tup[0], tup[2] + new_outputs] + tup.drop(3)
         }

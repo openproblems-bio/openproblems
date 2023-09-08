@@ -1,6 +1,8 @@
 sourceDir = params.rootDir + "/src"
 targetDir = params.rootDir + "/target/nextflow"
 
+include { check_dataset_schema } from "$targetDir/common/check_dataset_schema/main.nf"
+
 // import control methods
 include { random_features } from "$targetDir/dimensionality_reduction/control_methods/random_features/main.nf"
 include { true_features } from "$targetDir/dimensionality_reduction/control_methods/true_features/main.nf"
@@ -70,6 +72,15 @@ workflow run_wf {
   output_ch = input_ch
     | preprocessInputs(config: config)
 
+    // extract the dataset metadata
+    | run_components(
+      components: check_dataset_schema,
+      fromState: [input: "input_dataset"],
+      toState: { id, output, config ->
+        new org.yaml.snakeyaml.Yaml().load(output.meta)
+      }
+    )
+
     // run all methods
     | run_components(
       components: methods,
@@ -88,10 +99,10 @@ workflow run_wf {
         id + "." + config.functionality.name
       },
 
-      // use 'from_state' to fetch the arguments the component requires from the overall state
-      from_state: { id, state, config ->
+      // use 'fromState' to fetch the arguments the component requires from the overall state
+      fromState: { id, state, config ->
         def new_args = [
-          input: state.input
+          input: state.input_dataset
         ]
         if (config.functionality.info.type == "control_method") {
           new_args.input_solution = state.input_solution
@@ -99,8 +110,8 @@ workflow run_wf {
         new_args
       },
 
-      // use 'to_state' to publish that component's outputs to the overall state
-      to_state: { id, output, config ->
+      // use 'toState' to publish that component's outputs to the overall state
+      toState: { id, output, config ->
         [
           method_id: config.functionality.name,
           method_output: output.output
@@ -111,15 +122,15 @@ workflow run_wf {
     // run all metrics
     | run_components(
       components: metrics,
-      // use 'from_state' to fetch the arguments the component requires from the overall state
-      from_state: { id, state, config ->
+      // use 'fromState' to fetch the arguments the component requires from the overall state
+      fromState: { id, state, config ->
         [
           input_solution: state.input_solution,
           input_embedding: state.method_output
         ]
       },
-      // use 'to_state' to publish that component's outputs to the overall state
-      to_state: { id, output, config ->
+      // use 'toState' to publish that component's outputs to the overall state
+      toState: { id, output, config ->
         [
           metric_id: config.functionality.name,
           metric_output: output.output

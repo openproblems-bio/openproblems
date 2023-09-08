@@ -1,6 +1,8 @@
 sourceDir = params.rootDir + "/src"
 targetDir = params.rootDir + "/target/nextflow"
 
+include { check_dataset_schema } from "$targetDir/common/check_dataset_schema/main.nf"
+
 // import control methods
 include { true_labels } from "$targetDir/label_projection/control_methods/true_labels/main.nf"
 include { majority_vote } from "$targetDir/label_projection/control_methods/majority_vote/main.nf"
@@ -71,9 +73,16 @@ workflow run_wf {
     // and fill in default values
     | preprocessInputs(config: config)
 
-    | view{ id, state ->
-      "input event: [id: $id, dataset_id: $state.dataset_id, normalization_id: $state.normalization_id, ...]"
-    }
+    // extract the dataset metadata
+    | check_dataset_schema.run(
+      fromState: [ "input": "input_train" ],
+      toState: { id, output, state ->
+        // load output yaml file
+        def metadata = new org.yaml.snakeyaml.Yaml().load(output.meta)
+        // add metadata from file to state
+        state + metadata
+      }
+    )
 
     // run all methods
     | run_components(
@@ -93,8 +102,8 @@ workflow run_wf {
         id + "." + config.functionality.name
       },
 
-      // use 'from_state' to fetch the arguments the component requires from the overall state
-      from_state: { id, state, config ->
+      // use 'fromState' to fetch the arguments the component requires from the overall state
+      fromState: { id, state, config ->
         def new_args = [
           input_train: state.input_train,
           input_test: state.input_test
@@ -105,8 +114,8 @@ workflow run_wf {
         new_args
       },
 
-      // use 'to_state' to publish that component's outputs to the overall state
-      to_state: { id, output, config ->
+      // use 'toState' to publish that component's outputs to the overall state
+      toState: { id, output, config ->
         [
           method_id: config.functionality.name,
           method_output: output.output
@@ -114,30 +123,22 @@ workflow run_wf {
       }
     )
 
-    | view{ id, state ->
-      "after method: [id: $id, dataset_id: $state.dataset_id, normalization_id: $state.normalization_id, method_id: $state.method_id, ...]"
-    }
-
     // run all metrics
     | run_components(
       components: metrics,
-      // use 'from_state' to fetch the arguments the component requires from the overall state
-      from_state: [
+      // use 'fromState' to fetch the arguments the component requires from the overall state
+      fromState: [
         input_solution: "input_solution", 
         input_prediction: "method_output"
       ],
-      // use 'to_state' to publish that component's outputs to the overall state
-      to_state: { id, output, config ->
+      // use 'toState' to publish that component's outputs to the overall state
+      toState: { id, output, config ->
         [
           metric_id: config.functionality.name,
           metric_output: output.output
         ]
       }
     )
-
-    | view{ id, state ->
-      "after metric: [id: $id, dataset_id: $state.dataset_id, normalization_id: $state.normalization_id, method_id: $state.method_id, metric_id: $state.metric_id, ...]"
-    }
 
     // join all events into a new event where the new id is simply "output" and the new state consists of:
     //   - "input": a list of score h5ads
