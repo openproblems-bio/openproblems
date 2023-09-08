@@ -1,0 +1,38 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "harmonic_alignment"
+  info:
+    label: "Harmonic Alignment"
+    summary: "Harmonic Alignment"
+    description: |
+      Harmonic Alignment is a method for integrating multimodal single-cell data. It is based on the idea of aligning the eigenvectors of the Laplacian matrices of the two modalities. The alignment is achieved by solving a generalized eigenvalue problem. The method is described in the following paper: https://doi.org/10.1137/1.9781611976236.36
+    preferred_normalization: "log_cp10k"
+    v1:
+      path: openproblems/tasks/matching_modalities/methods/harmonic_alignment.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    reference: "stanley2020harmonic"
+    documentation_url: "https://github.com/KrishnaswamyLab/harmonic-alignment#readme"
+    repository_url: "https://github.com/KrishnaswamyLab/harmonic-alignment"
+  arguments:
+    - name: "--n_pca_XY"
+      type: "integer"
+      default: 100
+      description: "Default number of principal components on which to build graph."
+    - name: "--n_eigenvectors"
+      type: "integer"
+      default: 100
+      description: "Number of eigenvectors of the normalized Laplacian on which to perform alignment."
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    setup:
+      - type: python
+        github: 
+          - KrishnaswamyLab/harmonic-alignment#subdirectory=python
+  - type: nextflow
+    directives:
+      label: [ lowmem, lowcpu ]
+

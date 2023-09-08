@@ -1,0 +1,30 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "scot"
+  info:
+    label: "Single Cell Optimal Transport"
+    description: |
+      Single Cell Optimal Transport (SCOT) is a method for integrating multimodal single-cell data. It is based on the idea of aligning the distributions of the two modalities using optimal transport.
+    summary: "Run Single Cell Optimal Transport"
+    preferred_normalization: "log_cpm"
+    reference: Demetci2020scot
+    documentation_url: "https://github.com/rsinghlab/SCOT#readme"
+    repository_url: "https://github.com/rsinghlab/SCOT"
+  arguments:
+    - name: "--balanced"
+      type: "boolean_true"
+      description: "Determines whether balanced or unbalanced optimal transport. In the balanced case, the target and source distributions are assumed to have equal mass."
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    setup:
+      - type: apt
+        packages: git
+      - type: docker
+        run: "cd /opt && git clone --depth 1 https://github.com/rsinghlab/SCOT.git && cd SCOT && pip install -r requirements.txt"
+  - type: nextflow
+    directives:
+      label: [ lowmem, lowcpu ]

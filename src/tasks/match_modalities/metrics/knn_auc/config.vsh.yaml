@@ -1,0 +1,36 @@
+__merge__: ../../api/comp_metric.yaml
+functionality:
+  name: "knn_auc"
+  info:
+    metrics:
+      - label: KNN AUC
+        name: knn_auc
+        summary: "Compute the kNN Area Under the Curve"
+        description: |
+          "Compute the kNN Area Under the Curve"
+        reference: ""
+        min: 0
+        max: 1
+        maximize: true
+        v1:
+          path: openproblems/tasks/matching_modalities/metrics/knn_auc.py
+          commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+  arguments:
+    - name: "--proportion_neighbors"
+      type: "double"
+      default: 0.1
+      description: The proportion of neighbours to use in computing the KNN.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    setup:
+      - type: python
+        packages:
+          - numpy
+          - scikit-learn
+  - type: nextflow
+    directives:
+      label: [ lowmem, lowcpu ]

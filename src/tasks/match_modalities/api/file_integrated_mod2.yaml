@@ -1,0 +1,46 @@
+type: file
+example: "resources_test/multimodal/integrated_mod2.h5ad"
+info:
+  label: "Integrated"
+  summary: "The integrated data"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+      - type: double
+        name: normalized
+        description: Normalized counts
+        required: true
+    var:
+      - type: boolean
+        name: hvg
+        description: Whether or not the feature is considered to be a 'highly variable gene'
+        required: true
+      - type: integer
+        name: hvg_score
+        description: A ranking of the features by hvg.
+        required: true
+    obsm:
+      - type: double
+        name: X_svd
+        description: The resulting SVD PCA embedding.
+        required: true
+      - type: double
+        name: integrated
+        description: The resulting integrated embedding.
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: normalization_id
+        description: "Which normalization was used"
+        required: true
+      - type: string
+        name: method_id
+        description: "Which method was used"
+        required: true

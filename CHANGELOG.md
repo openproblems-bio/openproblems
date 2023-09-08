@@ -304,3 +304,50 @@
 * `metrics/rmse` should be removed because RMSE metrics don't really make sense here.
 
 * `metrics/trustworthiness` should be removed because it is already included in `metrics/coranking`.
+
+
+## match_modalities (PR #201)
+
+### New functionality
+
+* `api/file_*`: Created a file format specifications for the h5ad files throughout the pipeline.
+
+* `api/comp_*`: Created an api definition for the split, control method, method and metric components.
+
+* `process_dataset`: Added a component for processing common datasets into task-ready dataset objects.
+
+* `control_methods`: Added a component for baseline methods specifically.
+
+* `resources_test/dimensionality_reduction/pancreas` with `src/tasks/dimensionality_reduction/resources_test_scripts/pancreas.sh`.
+
+* Added `variant` key to config files to store variants (different input parameters) of every component.
+  
+* `workflows/run`: Added nf-tower test script.
+
+### V1 migration
+
+* `control_methods/true_features`: Migrated from v1. Extracted from baseline method `True Features`.
+
+* `control_methods/random_features`: Migrated from v1. Extracted from baseline method `Random Features`.
+
+* `methods/harmonic_alignment`: Migrated from v1.
+
+* `methods/mnn`: Migrated from v1.
+
+* `methods/procrustes`: Migrated from v1.
+
+* `metrics/knn_auc`: Migrated from v1.
+
+* `metrics/mse`: Migrated from v1.
+
+
+### Changes from V1
+
+* `methods/scot`: Add new scot method.
+
+* Raw counts and normalized expression data is stored in `.layers["counts"]` and `.layers["normalized"]`, respectively,
+  instead of in `.X`.
+
+* The methods and metrics now take 2 modal datasets as input instead of 1.
+
+

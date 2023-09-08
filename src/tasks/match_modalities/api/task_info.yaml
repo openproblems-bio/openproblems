@@ -1,0 +1,23 @@
+name: match_modalities
+label: Match Modalities
+summary: |
+  Match modalities is the task of combining multiple datasets
+  that have been generated from the same set of samples.
+motivation: "No motivation has been provided for this task."
+description: |
+  Match modalities is the task of combining multiple datasets
+  that have been generated from the same set of samples. This task is
+  important for integrating datasets generated from different modalities
+  (e.g. RNA and ATAC) or from different technologies (e.g. 10x and
+  SmartSeq). The goal of this task is to evaluate methods for integrating
+  multimodal datasets.
+authors:
+  - name: Robrecht Cannoodt
+    roles: [ author ]
+    info:
+      github: rcannood
+      orcid: "0000-0003-3641-729X"
+  - name: Kai Waldrant
+    roles: [ contributor ]
+    info:
+      github: KaiWaldrant

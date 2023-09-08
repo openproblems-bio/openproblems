@@ -42,12 +42,12 @@ viash run src/datasets/processors/subsample/config.vsh.yaml -- \
     --seed 123
 
 
-# run sqrt cpm normalisation on mod 1 file
-viash run src/datasets/normalization/sqrt_cp/config.vsh.yaml -- \
+# run log cp10k normalisation on mod 1 file
+viash run src/datasets/normalization/log_cp/config.vsh.yaml -- \
     --input $DATASET_DIR/raw_mod1.h5ad \
     --output $DATASET_DIR/normalized_mod1.h5ad
 
-# run log cpm normalisation on mod 2 file
+# run log cp10k normalisation on mod 2 file
 viash run src/datasets/normalization/log_cp/config.vsh.yaml -- \
     --input $DATASET_DIR/raw_mod2.h5ad \
     --output $DATASET_DIR/normalized_mod2.h5ad
