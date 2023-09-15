@@ -10,6 +10,8 @@ properties:
     $ref: "defs_common.yaml#/definitions/Label"
   summary: 
     $ref: "defs_common.yaml#/definitions/Summary"
+  image:
+    $ref: "defs_common.yaml#/definitions/Image"
   motivation: 
     $ref: "defs_common.yaml#/definitions/Description"
   description: 

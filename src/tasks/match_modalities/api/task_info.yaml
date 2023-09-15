@@ -3,6 +3,7 @@ label: Match Modalities
 summary: |
   Match modalities is the task of combining multiple datasets
   that have been generated from the same set of samples.
+image: "thumbnail.svg"
 motivation: "No motivation has been provided for this task."
 description: |
   Match modalities is the task of combining multiple datasets

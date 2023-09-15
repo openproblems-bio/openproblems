@@ -4,6 +4,7 @@ v1:
   path: openproblems/tasks/batch_integration/README.md
   commit: 637163fba7d74ab5393c2adbee5354dcf4d46f85
 summary: Remove unwanted batch effects from scRNA data while retaining biologically meaningful variation.
+image: thumbnail.svg
 motivation: |
   As single-cell technologies advance, single-cell datasets are growing both in size and complexity.
   Especially in consortia such as the Human Cell Atlas, individual studies combine data from multiple labs, each sequencing multiple individuals possibly with different technologies.

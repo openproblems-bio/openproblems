@@ -24,6 +24,8 @@
 
 * Update "baseline" to "control" (PR #146).
 
+* Add task image thumbnails to api (PR #231).
+
 ### BUG FIXES
 
 * `dimensionality_reduction/methods/tsne`: Use GitHub version of MulticoreTSNE.
