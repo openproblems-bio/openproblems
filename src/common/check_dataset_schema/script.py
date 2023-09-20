@@ -22,12 +22,13 @@ def check_structure(slot_info, adata_slot):
   return missing
 
 print('Load data', flush=True)
-adata = ad.read_h5ad(par['input'])
+adata = ad.read_h5ad(par['input']).copy()
 
 # create data structure
 out = {
   "exit_code": 0,
-  "error": {}
+  "error": {},
+  "data_schema": "ok"
 }
 
 def is_atomic(obj):
@@ -46,11 +47,17 @@ def is_dict_of_atomics(obj):
 
 if par['meta'] is not None:
   print("Extract metadata from object", flush=True)
-  meta = {
+  uns = {
     key: val
     for key, val in adata.uns.items()
     if is_atomic(val) or is_list_of_atomics(val) or is_dict_of_atomics(val)
   }
+  structure = {
+    struct: list(getattr(adata, struct).keys())
+    for struct
+    in ["obs", "var", "obsp", "varp", "obsm", "varm", "layers", "uns"]
+  }
+  meta = {"uns": uns, "structure": structure}
   with open(par["meta"], "w") as f:
     yaml.dump(meta, f, indent=2)
 
@@ -61,20 +68,18 @@ if par['schema'] is not None:
 
   def_slots = data_struct['info']['slots']
 
-  out["data_schema"] = "ok"
-
   for slot in def_slots:
-    check = check_structure(def_slots[slot], getattr(adata, slot))
-    if bool(check):
+    missing = check_structure(def_slots[slot], getattr(adata, slot))
+    if missing:
       out['exit_code'] = 1
       out['data_schema'] = 'not ok'
-      out['error'][slot] = check
+      out['error'][slot] = missing
 
   if par['checks'] is not None:
     with open(par["checks"], "w") as f:
       json.dump(out, f, indent=2)
 
-if par['output'] is not None:
+if par['output'] is not None and out["data_schema"] == "ok":
   shutil.copyfile(par["input"], par["output"])
 
 if par['stop_on_error']:

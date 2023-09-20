@@ -9,7 +9,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
-DATASET_DIR=resources_test/common/multimodal
+DATASET_DIR=resources_test/common/scicar_cell_lines
 
 # choose a particular version of nextflow
 export NXF_VER=23.04.2

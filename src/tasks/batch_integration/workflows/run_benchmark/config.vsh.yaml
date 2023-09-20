@@ -8,11 +8,16 @@ functionality:
           type: "string"
           description: "The ID of the dataset"
           required: true
-        - name: "--input"
+        - name: "--input_dataset"
           type: "file"
           description: "A dataset"
           required: true
           example: dataset.h5ad
+        - name: "--input_solution"
+          type: "file"
+          description: "A solution"
+          required: true
+          example: solution.h5ad
     - name: Outputs
       arguments:
         - name: "--output"

@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/common/multimodal/dataset_mod2.h5ad"
+example: "resources_test/common/scicar_cell_lines/dataset_mod2.h5ad"
 info:
   label: "multimodal mod 2 data"
   summary: "the second modal data"

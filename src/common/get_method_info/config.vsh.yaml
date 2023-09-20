@@ -15,6 +15,5 @@ platforms:
       - type: apt
         packages: [ curl, default-jdk ]
       - type: docker
-        run: "curl -fsSL get.viash.io | bash -s -- --bin /usr/local/bin/"
+        run: "curl -fsSL dl.viash.io | bash && mv viash /usr/bin/viash"
   - type: nextflow
-  - type: native

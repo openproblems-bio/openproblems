@@ -4,8 +4,8 @@ requireNamespace("batchelor", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_mod1 = "resources_test/common/multimodal/dataset_mod1.h5ad",
-  input_mod2 = "resources_test/common/multimodal/dataset_mod2.h5ad",
+  input_mod1 = "resources_test/common/scicar_cell_lines/dataset_mod1.h5ad",
+  input_mod2 = "resources_test/common/scicar_cell_lines/dataset_mod2.h5ad",
   output_mod1 = "output_mod1.h5ad",
   output_mod2 = "output_mod2.h5ad"
 )

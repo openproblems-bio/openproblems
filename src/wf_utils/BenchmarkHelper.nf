@@ -1,18 +1,18 @@
-def run_components(Map args) {
-  assert args.components: "run_components should be passed a list of components to run"
+def runComponents(Map args) {
+  assert args.components: "runComponents should be passed a list of components to run"
 
   def components_ = args.components
   if (components_ !instanceof List) {
     components_ = [ components_ ]
   }
-  assert components_.size() > 0: "pass at least one component to run_components"
+  assert components_.size() > 0: "pass at least one component to runComponents"
 
   def fromState_ = args.fromState
   def toState_ = args.toState
   def filter_ = args.filter
   def id_ = args.id
 
-  workflow run_components_wf {
+  workflow runComponentsWf {
     take: input_ch
     main:
 
@@ -58,19 +58,20 @@ def run_components(Map args) {
         )
       post_ch = toState_
         ? out_ch | map{tup ->
-          def new_outputs = tup[1]
+          def output = tup[1]
+          def old_state = tup[2]
           if (toState_ instanceof Map) {
-            new_outputs = toState_.collectEntries{ key0, key1 ->
-              [key0, new_outputs[key1]]
+            new_state = old_state + toState_.collectEntries{ key0, key1 ->
+              [key0, output[key1]]
             }
           } else if (toState_ instanceof List) {
-            new_outputs = toState_.collectEntries{ key ->
-              [key, new_outputs[key]]
+            new_state = old_state + toState_.collectEntries{ key ->
+              [key, output[key]]
             }
           } else if (toState_ instanceof Closure) {
-            new_outputs = toState_(tup[0], new_outputs, comp_config)
+            new_state = toState_(tup[0], output, old_state, comp_config)
           }
-          [tup[0], tup[2] + new_outputs] + tup.drop(3)
+          [tup[0], new_state] + tup.drop(3)
         }
         : out_ch
       
@@ -86,11 +87,11 @@ def run_components(Map args) {
     emit: output_ch
   }
 
-  return run_components_wf
+  return runComponentsWf
 }
 
-def join_states(Closure apply_) {
-  workflow join_states_wf {
+def joinStates(Closure apply_) {
+  workflow joinStatesWf {
     take: input_ch
     main:
     output_ch = input_ch
@@ -104,7 +105,7 @@ def join_states(Closure apply_) {
 
     emit: output_ch
   }
-  return join_states_wf
+  return joinStatesWf
 }
 
 
@@ -130,7 +131,7 @@ class CustomTraceObserver implements nextflow.trace.TraceObserver {
   }
 }
 
-def initialize_tracer() {
+def initializeTracer() {
   def traces = Collections.synchronizedList([])
 
   // add custom trace observer which stores traces in the traces object
@@ -139,14 +140,328 @@ def initialize_tracer() {
   traces
 }
 
-def write_json(data, file) {
-  assert data: "write_json: data should not be null"
-  assert file: "write_json: file should not be null"
+def writeJson(data, file) {
+  assert data: "writeJson: data should not be null"
+  assert file: "writeJson: file should not be null"
   file.write(groovy.json.JsonOutput.toJson(data))
 }
 
-def get_publish_dir() {
+import org.yaml.snakeyaml.DumperOptions
+import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.nodes.Node
+import org.yaml.snakeyaml.nodes.Tag
+import org.yaml.snakeyaml.representer.Representer
+import org.yaml.snakeyaml.representer.Represent
+
+
+
+// Custom representer to modify how certain objects are represented in YAML
+class CustomRepresenter extends Representer {
+  class RepresentFile implements Represent {
+    public Node representData(Object data) {
+      File file = (File) data;
+      String value = file.name;
+      Tag tag = new Tag("!file");
+      return representScalar(tag, value);
+    }
+  }
+  CustomRepresenter(DumperOptions options) {
+    super(options)
+    this.representers.put(File, new RepresentFile())
+  }
+}
+
+String toTaggedYamlBlob(Map data) {
+  def options = new DumperOptions()
+  options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
+  def representer = new CustomRepresenter(options)
+  def yaml = new Yaml(representer, options)
+  return yaml.dump(data)
+}
+
+
+import org.yaml.snakeyaml.TypeDescription
+import org.yaml.snakeyaml.constructor.AbstractConstruct
+import org.yaml.snakeyaml.constructor.Constructor
+
+// Custom constructor to modify how certain objects are parsed from YAML
+class CustomConstructor extends Constructor {
+  File root
+
+  class ConstructFile extends AbstractConstruct {
+    public Object construct(Node node) {
+      String filename = (String) constructScalar(node);
+      if (root != null) {
+        return new File(root, filename);
+      }
+      return new File(filename);
+    }
+  }
+
+  CustomConstructor(File root = null) {
+    super()
+    this.root = root
+    // Handling !file tag and parse it back to a File type
+    this.yamlConstructors.put(new Tag("!file"), new ConstructFile())
+  }
+}
+
+def readTaggedYaml(File file) {
+  Constructor constructor = new CustomConstructor(file.absoluteFile.parentFile)
+  Yaml yaml = new Yaml(constructor)
+  return yaml.load(file.text)
+}
+
+def getPublishDir() {
   return params.containsKey("publish_dir") ? params.publish_dir : 
     params.containsKey("publishDir") ? params.publishDir : 
     null
+}
+
+process publishStateProc {
+  // todo: check publishpath?
+  publishDir path: "${getPublishDir()}/${id}/", mode: "copy"
+  tag "$id"
+  input:
+    tuple val(id), val(yamlBlob), path(inputFiles)
+  output:
+    tuple val(id), path{["state.yaml"] + inputFiles}
+  script:
+  """
+  echo '${yamlBlob}' > state.yaml
+  """
+}
+
+def collectFiles(obj) {
+  if (obj instanceof java.io.File || obj instanceof Path)  {
+    return [obj]
+  } else if (obj instanceof List && obj !instanceof String) {
+    return obj.collectMany{item ->
+      collectFiles(item)
+    }
+  } else if (obj instanceof Map) {
+    return obj.collectMany{key, item ->
+      collectFiles(item)
+    }
+  } else {
+    return []
+  }
+}
+
+
+def iterateMap(obj, fun) {
+  if (obj instanceof List && obj !instanceof String) {
+    return obj.collect{item ->
+      iterateMap(item, fun)
+    }
+  } else if (obj instanceof Map) {
+    return obj.collectEntries{key, item ->
+      [key.toString(), iterateMap(item, fun)]
+    }
+  } else {
+    return fun(obj)
+  }
+}
+
+
+// def convertPathsToFile(obj) {
+//   if (obj instanceof File) {
+//     return obj
+//   } else if (obj instanceof Path)  {
+//     return obj.toFile()
+//   } else if (obj instanceof List && obj !instanceof String) {
+//     return obj.collect{item ->
+//       convertPathsToFile(item)
+//     }
+//   } else if (obj instanceof Map) {
+//     return obj.collectEntries{key, item ->
+//       [key, convertPathsToFile(item)]
+//     }
+//   } else {
+//     return obj
+//   }
+// }
+
+// def convertFilesToPath(obj) {
+//   if (obj instanceof File) {
+//     return obj.toPath()
+//   } else if (obj instanceof Path)  {
+//     return obj
+//   } else if (obj instanceof List && obj !instanceof String) {
+//     return obj.collect{item ->
+//       convertFilesToPath(item)
+//     }
+//   } else if (obj instanceof Map) {
+//     return obj.collectEntries{key, item ->
+//       [key, convertFilesToPath(item)]
+//     }
+//   } else {
+//     return obj
+//   }
+// }
+
+def convertPathsToFile(obj) {
+  iterateMap(obj, {x ->
+    if (x instanceof File) {
+      return x
+    } else if (x instanceof Path)  {
+      return x.toFile()
+    } else {
+      return x
+    }
+  })
+}
+def convertFilesToPath(obj) {
+  iterateMap(obj, {x ->
+    if (x instanceof Path) {
+      return x
+    } else if (x instanceof File)  {
+      return x.toPath()
+    } else {
+      return x
+    }
+  })
+}
+
+def publishState(Map args) {
+  workflow publishStateWf {
+    take: input_ch
+    main:
+      input_ch
+        | map { tup ->
+          def id = tup[0]
+          def state = tup[1]
+          def files = collectFiles(state)
+          def convertedState = [id: id] + convertPathsToFile(state)
+          def yamlBlob = toTaggedYamlBlob(convertedState)
+          [id, yamlBlob, files]
+        }
+        | publishStateProc
+    emit: input_ch
+  }
+  return publishStateWf
+}
+
+
+include { processConfig; helpMessage; channelFromParams; readYamlBlob } from "./WorkflowHelper.nf"
+
+
+def autoDetectStates(Map params, Map config) {
+  // TODO: do a deep clone of config
+  def auto_config = config.clone()
+  auto_config.functionality = auto_config.functionality.clone()
+  // override arguments
+  auto_config.functionality.argument_groups = []
+  auto_config.functionality.arguments = [
+    [
+      type: "file",
+      name: "--input_dir",
+      example: "/path/to/input/directory",
+      description: "Path to input directory containing the datasets to be integrated.",
+      required: true
+    ],
+    [
+      type: "string",
+      name: "--filter",
+      example: "foo/.*/state.yaml",
+      description: "Regex to filter state files by path.",
+      required: false
+    ],
+    // to do: make this a yaml blob?
+    [
+      type: "string",
+      name: "--rename_keys",
+      example: ["newKey1:oldKey1", "newKey2:oldKey2"],
+      description: "Rename keys in the detected input files. This is useful if the input files do not match the set of input arguments of the workflow.",
+      required: false,
+      multiple: true,
+      multiple_sep: ","
+    ],
+    [
+      type: "string",
+      name: "--settings",
+      example: '{"output_dataset": "dataset.h5ad", "k": 10}',
+      description: "Global arguments as a JSON glob to be passed to all components.",
+      required: false
+    ]
+  ]
+
+  // run auto config through processConfig once more
+  auto_config = processConfig(auto_config)
+
+  workflow autoDetectStatesWf {
+    helpMessage(auto_config)
+
+    output_ch = 
+      channelFromParams(params, auto_config)
+        | flatMap { autoId, args ->
+
+          def globalSettings = args.settings ? readYamlBlob(args.settings) : [:]
+
+          // look for state files in input dir
+          def stateFiles = file("${args.input_dir}/**/state.yaml")
+
+          // filter state files by regex
+          if (args.filter) {
+            stateFiles = stateFiles.findAll{ stateFile ->
+              def stateFileStr = stateFile.toString()
+              def matcher = stateFileStr =~ args.filter
+              matcher.matches()}
+          }
+
+          // read in states
+          def states = stateFiles.collect { stateFile ->
+            def state_ = convertFilesToPath(readTaggedYaml(stateFile.toFile()))
+            [state_.id, state_]
+          }
+
+          // construct renameMap
+          if (args.rename_keys) {
+            def renameMap = args.rename_keys.collectEntries{renameString ->
+              def split = renameString.split(":")
+              assert split.size() == 2: "Argument 'rename' should be of the form 'newKey:oldKey,newKey:oldKey'"
+              split
+            }
+
+            // rename keys in state, only let states through which have all keys
+            // also add global settings
+            states = states.collectMany{id, state ->
+              def newState = [:]
+
+              for (key in renameMap.keySet()) {
+                def origKey = renameMap[key]
+                if (!(state.containsKey(origKey))) {
+                  return []
+                }
+                newState[key] = state[origKey]
+              }
+
+              [[id, globalSettings + newState]]
+            }
+          }
+
+          states
+        }
+    emit:
+    output_ch
+  }
+
+  return autoDetectStatesWf
+}
+
+def setState(fun) {
+  workflow setStateWf {
+    take: input_ch
+    main:
+      output_ch = input_ch
+        | map { tup ->
+          def id = tup[0]
+          def state = tup[1]
+          def unfilteredState = fun(id, state)
+          def newState = unfilteredState.findAll{key, val -> val != null}
+          [id, newState] + tup.drop(2)
+        }
+    emit: output_ch
+  }
+  return setStateWf
 }

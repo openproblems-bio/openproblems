@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATASET_DIR=resources_test/common/multimodal
+DATASET_DIR=resources_test/common/scicar_cell_lines
 
 # try running on nf tower
 cat > /tmp/params.yaml << HERE

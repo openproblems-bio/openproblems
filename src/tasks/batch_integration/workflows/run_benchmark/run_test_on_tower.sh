@@ -5,7 +5,7 @@ DATASET_DIR=resources_test/batch_integration/pancreas
 # try running on nf tower
 cat > /tmp/params.yaml << HERE
 id: pancreas_subsample
-input: s3://openproblems-data/$DATASET_DIR/unintegrated.h5ad
+input: s3://openproblems-data/$DATASET_DIR/dataset.h5ad
 output: scores.tsv
 publish_dir: s3://openproblems-nextflow/output_test/v2/batch_integration
 HERE

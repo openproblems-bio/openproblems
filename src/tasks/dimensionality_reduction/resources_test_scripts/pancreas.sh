@@ -31,7 +31,7 @@ viash run src/tasks/dimensionality_reduction/methods/densmap/config.vsh.yaml -- 
     --output $DATASET_DIR/embedding.h5ad
 
 # run one metric
-viash run src/tasks/dimensionality_reduction/metrics/rmse/config.vsh.yaml -- \
+viash run src/tasks/dimensionality_reduction/metrics/distance_correlation/config.vsh.yaml -- \
     --input_embedding $DATASET_DIR/embedding.h5ad \
     --input_solution $DATASET_DIR/solution.h5ad \
     --output $DATASET_DIR/score.h5ad
@@ -45,7 +45,7 @@ nextflow \
   -main-script src/tasks/dimensionality_reduction/workflows/run/main.nf \
   -profile docker \
   --id pancreas \
-  --input $DATASET_DIR/dataset.h5ad \
+  --input_dataset $DATASET_DIR/dataset.h5ad \
   --input_solution $DATASET_DIR/solution.h5ad \
   --output scores.tsv \
   --publish_dir $DATASET_DIR/

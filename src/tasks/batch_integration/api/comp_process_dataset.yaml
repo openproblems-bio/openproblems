@@ -9,7 +9,7 @@ functionality:
         A component for processing a Common Dataset into a task-specific dataset.
   arguments:
     - name: "--input"
-      __merge__: /src/datasets/api/file_common_dataset.yaml
+      __merge__: file_common_dataset.yaml
       direction: input
       required: true
     - name: "--output_dataset"

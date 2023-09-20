@@ -4,8 +4,8 @@ import numpy as np
 
 ### VIASH START
 par = {
-    "input": "resources_test/common/multimodal/temp_mod1_full.h5ad",
-    "input_mod2": "resources_test/common/multimodal/temp_mod2_full.h5ad",
+    "input": "resources_test/common/scicar_cell_lines/temp_mod1_full.h5ad",
+    "input_mod2": "resources_test/common/scicar_cell_lines/temp_mod2_full.h5ad",
     "n_obs": 600,
     "n_vars": 1500,
     "keep_celltype_categories": None,

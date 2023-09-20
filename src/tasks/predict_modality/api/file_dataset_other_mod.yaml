@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/common/bmmc_cite_starter/openproblems_bmmc_cite_starter.output_adt.h5ad"
+example: "resources_test/common/bmmc_cite_starter/dataset_adt.h5ad"
 info:
   label: "Raw dataset mod2"
   summary: "The second modality of the raw dataset. Must be an ADT or an ATAC dataset"

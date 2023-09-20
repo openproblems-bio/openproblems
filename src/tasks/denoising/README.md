@@ -144,23 +144,23 @@ Arguments:
 
 <div class="small">
 
-| Name             | Type   | Description                                                    |
-|:-----------------|:-------|:---------------------------------------------------------------|
-| `--input`        | `file` | A dataset processed by the common dataset processing pipeline. |
-| `--output_train` | `file` | (*Output*) The training data.                                  |
-| `--output_test`  | `file` | (*Output*) The test data.                                      |
+| Name             | Type   | Description                                                       |
+|:-----------------|:-------|:------------------------------------------------------------------|
+| `--input`        | `file` | A dataset processed by the common dataset processing pipeline.    |
+| `--output_train` | `file` | (*Output*) The subset of molecules used for the training dataset. |
+| `--output_test`  | `file` | (*Output*) The subset of molecules used for the test dataset.     |
 
 </div>
 
 ## File format: Training data
 
-NA
+The subset of molecules used for the training dataset
 
 Example file: `resources_test/denoising/pancreas/train.h5ad`
 
 Description:
 
-The training data
+NA
 
 Format:
 
@@ -185,13 +185,13 @@ Slot description:
 
 ## File format: Test data
 
-NA
+The subset of molecules used for the test dataset
 
 Example file: `resources_test/denoising/pancreas/test.h5ad`
 
 Description:
 
-The test data
+NA
 
 Format:
 
@@ -225,11 +225,11 @@ Arguments:
 
 <div class="small">
 
-| Name            | Type   | Description                   |
-|:----------------|:-------|:------------------------------|
-| `--input_train` | `file` | The training data.            |
-| `--input_test`  | `file` | The test data.                |
-| `--output`      | `file` | (*Output*) The denoised data. |
+| Name            | Type   | Description                                                    |
+|:----------------|:-------|:---------------------------------------------------------------|
+| `--input_train` | `file` | The subset of molecules used for the training dataset.         |
+| `--input_test`  | `file` | The subset of molecules used for the test dataset.             |
+| `--output`      | `file` | (*Output*) A denoised dataset as output by a denoising method. |
 
 </div>
 
@@ -244,10 +244,10 @@ Arguments:
 
 <div class="small">
 
-| Name            | Type   | Description                   |
-|:----------------|:-------|:------------------------------|
-| `--input_train` | `file` | The training data.            |
-| `--output`      | `file` | (*Output*) The denoised data. |
+| Name            | Type   | Description                                                    |
+|:----------------|:-------|:---------------------------------------------------------------|
+| `--input_train` | `file` | The subset of molecules used for the training dataset.         |
+| `--output`      | `file` | (*Output*) A denoised dataset as output by a denoising method. |
 
 </div>
 
@@ -262,23 +262,23 @@ Arguments:
 
 <div class="small">
 
-| Name               | Type   | Description                   |
-|:-------------------|:-------|:------------------------------|
-| `--input_test`     | `file` | The test data.                |
-| `--input_denoised` | `file` | The denoised data.            |
-| `--output`         | `file` | (*Output*) Metric score file. |
+| Name               | Type   | Description                                         |
+|:-------------------|:-------|:----------------------------------------------------|
+| `--input_test`     | `file` | The subset of molecules used for the test dataset.  |
+| `--input_denoised` | `file` | A denoised dataset as output by a denoising method. |
+| `--output`         | `file` | (*Output*) Metric score file.                       |
 
 </div>
 
 ## File format: Denoised data
 
-NA
+A denoised dataset as output by a denoising method.
 
 Example file: `resources_test/denoising/pancreas/denoised.h5ad`
 
 Description:
 
-The denoised data
+NA
 
 Format:
 

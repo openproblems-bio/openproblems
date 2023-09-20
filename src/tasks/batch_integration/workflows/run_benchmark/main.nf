@@ -5,9 +5,6 @@ targetDir = params.rootDir + "/target/nextflow"
 
 include { check_dataset_schema } from "$targetDir/common/check_dataset_schema/main.nf"
 
-// import preprocessing
-include { process_dataset } from "$targetDir/batch_integration/process_dataset/main.nf"
-
 // import methods
 include { bbknn } from "$targetDir/batch_integration/methods/bbknn/main.nf"
 include { combat } from "$targetDir/batch_integration/methods/combat/main.nf"
@@ -31,7 +28,6 @@ include { asw_label } from "$targetDir/batch_integration/metrics/asw_label/main.
 include { cell_cycle_conservation } from "$targetDir/batch_integration/metrics/cell_cycle_conservation/main.nf"
 include { clustering_overlap } from "$targetDir/batch_integration/metrics/clustering_overlap/main.nf"
 include { graph_connectivity } from "$targetDir/batch_integration/metrics/graph_connectivity/main.nf"
-include { lisi } from "$targetDir/batch_integration/metrics/lisi/main.nf"
 include { hvg_overlap } from "$targetDir/batch_integration/metrics/hvg_overlap/main.nf"
 include { isolated_label_asw } from "$targetDir/batch_integration/metrics/isolated_label_asw/main.nf"
 include { isolated_label_f1 } from "$targetDir/batch_integration/metrics/isolated_label_f1/main.nf"
@@ -44,12 +40,12 @@ include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
 
 // import helper functions
 include { readConfig; helpMessage; channelFromParams; preprocessInputs; readYaml } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { run_components; join_states; initialize_tracer; write_json; get_publish_dir } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
+include { publishState; runComponents; joinStates; initializeTracer; writeJson; getPublishDir; autoDetectStates } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
 
 config = readConfig("$projectDir/config.vsh.yaml")
 
 // add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
-traces = initialize_tracer()
+traces = initializeTracer()
 
 // collect method list
 methods = [
@@ -76,7 +72,7 @@ metrics = [
   isolated_label_f1,
   kbet,
   lisi,
-  pcr,
+  pcr
 ]
 
 
@@ -85,6 +81,13 @@ workflow {
 
   channelFromParams(params, config)
     | run_wf
+    | publishState([:])
+}
+
+workflow auto {
+  autoDetectStates(params, config)
+    | run_wf
+    | publishState([:])
 }
 
 workflow run_wf {
@@ -98,17 +101,16 @@ workflow run_wf {
     | preprocessInputs(config: config)
 
     // extract the dataset metadata
-    | run_components(
-      components: check_dataset_schema,
-      fromState: ["input"],
-      toState: { id, output, config ->
-        new org.yaml.snakeyaml.Yaml().load(output.meta)
+    | check_dataset_schema.run(
+      fromState: [input: "input_dataset"],
+      toState: { id, output, state ->
+        state + (new org.yaml.snakeyaml.Yaml().load(output.meta)).uns
       }
     )
 
   // run all methods
   method_out_ch1 = dataset_ch
-    | run_components(
+    | runComponents(
       components: methods,
 
       // use the 'filter' argument to only run a method on the normalisation the component is asking for
@@ -126,11 +128,11 @@ workflow run_wf {
       },
 
       // use 'fromState' to fetch the arguments the component requires from the overall state
-      fromState: ["input"],
+      fromState: [input: "input_dataset"],
 
       // use 'toState' to publish that component's outputs to the overall state
-      toState: { id, output, config ->
-        [
+      toState: { id, output, state, config ->
+        state + [
           method_id: config.functionality.name,
           method_output: output.output,
           method_subtype: config.functionality.info.subtype
@@ -140,12 +142,12 @@ workflow run_wf {
   
   // append feature->embed transformations
   method_out_ch2 = method_out_ch1
-    | run_components(
+    | runComponents(
       components: feature_to_embed,
       filter: { id, state, config -> state.method_subtype == "feature"},
       fromState: [ input: "method_output" ],
-      toState: { id, output, config ->
-        [
+      toState: { id, output, state, config ->
+        state + [
           method_output: output.output,
           method_subtype: config.functionality.info.subtype
         ]
@@ -155,12 +157,12 @@ workflow run_wf {
 
   // append embed->graph transformations
   method_out_ch3 = method_out_ch2
-    | run_components(
+    | runComponents(
       components: embed_to_graph,
       filter: { id, state, config -> state.method_subtype == "embedding"},
       fromState: [ input: "method_output" ],
-      toState: { id, output, config ->
-        [
+      toState: { id, output, state, config ->
+        state + [
           method_output: output.output,
           method_subtype: config.functionality.info.subtype
         ]
@@ -170,14 +172,17 @@ workflow run_wf {
 
   // run metrics
   output_ch = method_out_ch3
-    | run_components(
+    | runComponents(
       components: metrics,
       filter: { id, state, config ->
         state.method_subtype == config.functionality.info.subtype
       },
-      fromState: [input_integrated: "method_output"],
-      toState: { id, output, config ->
-        [
+      fromState: [
+        input_integrated: "method_output",
+        input_solution: "input_solution"
+      ],
+      toState: { id, output, state, config ->
+        state + [
           metric_id: config.functionality.name,
           metric_output: output.output
         ]
@@ -187,7 +192,7 @@ workflow run_wf {
   // join all events into a new event where the new id is simply "output" and the new state consists of:
   //   - "input": a list of score h5ads
   //   - "output": the output argument of this workflow
-  | join_states{ ids, states ->
+  | joinStates{ ids, states ->
     def new_id = "output"
     def new_state = [
       input: states.collect{it.metric_output},
@@ -197,9 +202,7 @@ workflow run_wf {
   }
 
   // convert to tsv and publish
-  | extract_scores.run(
-    auto: [publish: true]
-  )
+  | extract_scores
 
   emit:
   output_ch
@@ -207,10 +210,10 @@ workflow run_wf {
 
 // store the trace log in the publish dir
 workflow.onComplete {
-  def publish_dir = get_publish_dir()
+  def publish_dir = getPublishDir()
 
-  write_json(traces, file("$publish_dir/traces.json"))
+  writeJson(traces, file("$publish_dir/traces.json"))
   // todo: add datasets logging
-  write_json(methods.collect{it.config}, file("$publish_dir/methods.json"))
-  write_json(metrics.collect{it.config}, file("$publish_dir/metrics.json"))
+  // writeJson(methods.collect{it.config}, file("$publish_dir/methods.json"))
+  // writeJson(metrics.collect{it.config}, file("$publish_dir/metrics.json"))
 }

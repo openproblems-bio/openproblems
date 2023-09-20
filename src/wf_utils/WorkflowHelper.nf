@@ -6,9 +6,32 @@ import java.util.regex.Pattern
 import java.io.BufferedReader
 import java.io.FileReader
 import java.nio.file.Paths
+import java.nio.file.Files
 import groovy.json.JsonSlurper
 import groovy.text.SimpleTemplateEngine
 import org.yaml.snakeyaml.Yaml
+
+// Recurse upwards until we find a '.build.yaml' file
+def findBuildYamlFile(path) {
+  def child = path.resolve(".build.yaml")
+  if (Files.isDirectory(path) && Files.exists(child)) {
+    return child
+  } else {
+    def parent = path.getParent()
+    if (parent == null) {
+      return null
+    } else {
+      return findBuildYamlFile(parent)
+    }
+  }
+}
+
+// get the root of the target folder
+def getRootDir() {
+  def dir = findBuildYamlFile(projectDir.toAbsolutePath())
+  assert dir != null: "Could not find .build.yaml in the folder structure"
+  dir.getParent()
+}
 
 // param helpers //
 def paramExists(name) {
@@ -31,16 +54,16 @@ def getChild(parent, child) {
   }
 }
 
-def readCsv(file) {
+def readCsv(file_path) {
   def output = []
-  def inputFile = file !instanceof File ? new File(file) : file
+  def inputFile = file_path !instanceof Path ? file(file_path) : file_path
 
   // todo: allow escaped quotes in string
   // todo: allow single quotes?
   def splitRegex = Pattern.compile(''',(?=(?:[^"]*"[^"]*")*[^"]*$)''')
   def removeQuote = Pattern.compile('''"(.*)"''')
 
-  def br = new BufferedReader(new FileReader(inputFile))
+  def br = Files.newBufferedReader(inputFile)
 
   def row = -1
   def header = null
@@ -59,6 +82,11 @@ def readCsv(file) {
   while (br.ready()) {
     def line = br.readLine()
     row++
+    if (line == null) {
+      br.close()
+      break
+    }
+
     if (!line.startsWith("#")) {
       def predata = splitRegex.split(line, -1)
       def data = predata.collect{field ->
@@ -87,8 +115,8 @@ def readJsonBlob(str) {
   jsonSlurper.parseText(str)
 }
 
-def readJson(file) {
-  def inputFile = file !instanceof File ? new File(file) : file
+def readJson(file_path) {
+  def inputFile = file_path !instanceof Path ? file(file_path) : file_path
   def jsonSlurper = new JsonSlurper()
   jsonSlurper.parse(inputFile)
 }
@@ -98,8 +126,8 @@ def readYamlBlob(str) {
   yamlSlurper.load(str)
 }
 
-def readYaml(file) {
-  def inputFile = file !instanceof File ? new File(file) : file
+def readYaml(file_path) {
+  def inputFile = file_path !instanceof Path ? file(file_path) : file_path
   def yamlSlurper = new Yaml()
   yamlSlurper.load(inputFile)
 }
@@ -119,7 +147,8 @@ def processArgument(arg) {
     arg.create_parent = arg.create_parent != null ? arg.create_parent : true
   }
 
-  if (arg.type == "file" && arg.direction == "output") {
+  // add default values to required output files which haven't already got a default
+  if (arg.type == "file" && arg.direction == "output" && arg.default == null && arg.required) {
     def mult = arg.multiple ? "_*" : ""
     def extSearch = ""
     if (arg.default != null) {
@@ -748,7 +777,10 @@ private List<Tuple2<String, Map>> _parseParamListArguments(Map params, Map confi
   def paramListFile = paramListOut[0]
   def paramSets = paramListOut[1] // these are the actual parameters from reading the blob/file
 
-  // data checks
+  return checkParamListArguments(paramListFile, paramSets, config)
+}
+
+def checkParamListArguments(paramListFile, paramSets, config) {
   assert paramSets instanceof List: "--param_list should contain a list of maps"
   for (value in paramSets) {
     assert value instanceof Map: "--param_list should contain a list of maps"

@@ -86,8 +86,7 @@ flowchart LR
 
 The RNA modality of the raw dataset.
 
-Example file:
-`resources_test/common/bmmc_cite_starter/openproblems_bmmc_cite_starter.output_rna.h5ad`
+Example file: `resources_test/common/bmmc_cite_starter/dataset_rna.h5ad`
 
 Description:
 
@@ -444,8 +443,7 @@ Slot description:
 The second modality of the raw dataset. Must be an ADT or an ATAC
 dataset
 
-Example file:
-`resources_test/common/bmmc_cite_starter/openproblems_bmmc_cite_starter.output_adt.h5ad`
+Example file: `resources_test/common/bmmc_cite_starter/dataset_adt.h5ad`
 
 Description:
 

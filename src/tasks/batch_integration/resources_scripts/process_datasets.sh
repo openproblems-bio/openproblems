@@ -6,6 +6,8 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
+set -e
+
 COMMON_DATASETS="resources/datasets/openproblems_v1"
 OUTPUT_DIR="resources/batch_integration/datasets/openproblems_v1"
 
@@ -13,49 +15,14 @@ if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"
 fi
 
-params_file="$OUTPUT_DIR/params.yaml"
-
-if [ ! -f $params_file ]; then
-  python << HERE
-import anndata as ad
-import glob
-import yaml
-
-h5ad_files = glob.glob("$COMMON_DATASETS/**/*.h5ad", recursive=True)
-
-param_list = []
-
-for h5ad_file in h5ad_files:
-  print(f"Checking {h5ad_file}")
-  adata = ad.read_h5ad(h5ad_file, backed=True)
-
-  if "batch" in adata.obs and "celltype" in adata.obs:
-    dataset_id = adata.uns["dataset_id"].replace("/", ".")
-    normalization_id = adata.uns["normalization_id"]
-    id = dataset_id + "." + normalization_id
-    obj = {
-      'id': id, 
-      'input': h5ad_file
-    }
-    param_list.append(obj)
-
-output = {
-  "param_list": param_list,
-  "obs_label": "celltype",
-  "obs_batch": "batch",
-  "output": "\$id.h5ad"
-}
-
-with open("$params_file", "w") as file:
-  yaml.dump(output, file)
-HERE
-fi
-
 export NXF_VER=22.04.5
-nextflow \
-  run . \
-  -main-script target/nextflow/batch_integration/process_dataset/main.nf \
+nextflow run . \
+  -main-script src/tasks/batch_integration/workflows/process_datasets/main.nf \
   -profile docker \
+  -entry auto \
   -resume \
-  -params-file $params_file \
+  --id resources \
+  --input_dir resources/datasets/openproblems_v1 \
+  --rename_keys 'input:output_dataset' \
+  --settings '{"output_dataset": "dataset.h5ad", "output_solution": "solution.h5ad"}' \
   --publish_dir "$OUTPUT_DIR"

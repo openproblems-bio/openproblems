@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/common/bmmc_cite_starter/openproblems_bmmc_cite_starter.output_rna.h5ad"
+example: "resources_test/common/bmmc_cite_starter/dataset_rna.h5ad"
 info:
   label: "Raw dataset RNA"
   summary: "The RNA modality of the raw dataset."

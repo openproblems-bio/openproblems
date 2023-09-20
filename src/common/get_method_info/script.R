@@ -1,6 +1,6 @@
-library(purrr)
-library(dplyr)
-library(rlang)
+library(purrr, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(

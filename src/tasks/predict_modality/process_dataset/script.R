@@ -4,8 +4,8 @@ library(Matrix, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input_rna = "resources_test/common/bmmc_cite_starter/openproblems_bmmc_cite_starter.output_rna.h5ad",
-  input_other_mod = "resources_test/common/bmmc_cite_starter/openproblems_bmmc_cite_starter.output_adt.h5ad",
+  input_rna = "resources_test/common/bmmc_cite_starter/dataset_rna.h5ad",
+  input_other_mod = "resources_test/common/bmmc_cite_starter/dataset_adt.h5ad.h5ad",
   output_train_mod1 = "resources_test/predict_modality/bmmc_cite_starter/train_mod1.h5ad",
   output_train_mod2 = "resources_test/predict_modality/bmmc_cite_starter/train_mod2.h5ad",
   output_test_mod1 = "resources_test/predict_modality/bmmc_cite_starter/test_mod1.h5ad",

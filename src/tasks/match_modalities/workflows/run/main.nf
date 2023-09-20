@@ -22,13 +22,13 @@ include { extract_scores } from "$targetDir/common/extract_scores/main.nf"      
 
 // import helper functions
 include { readConfig; helpMessage; channelFromParams; preprocessInputs } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { run_components; join_states; initialize_tracer; write_json; get_publish_dir } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
+include { runComponents; joinStates; initializeTracer; writeJon; getPublishDir } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
 
 // read in pipeline config
 config = readConfig("$projectDir/config.vsh.yaml")
 
 // add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
-traces = initialize_tracer()
+traces = initializeTracer()
 
 // collect method list
 methods = [
@@ -72,14 +72,14 @@ workflow run_wf {
         fromState: [ "input": "input_mod1" ],
         toState: { id, output, state ->
             // load output yaml file
-            def metadata = new org.yaml.snakeyaml.Yaml().load(output.meta)
+            def metadata = (new org.yaml.snakeyaml.Yaml().load(output.meta)).uns
             // add metadata from file to state
             state + metadata
         }
     )
 
     // run all methods
-    | run_components(
+    | runComponents(
         components: methods,
 
         // // use the 'filter' argument to only run a method on the normalisation the component is asking for
@@ -106,8 +106,8 @@ workflow run_wf {
         },
 
         // use 'toState' to publish that component's outputs to the overall state
-        toState: { id, output, config ->
-            [
+        toState: { id, output, state, config ->
+            state + [
             method_id: config.functionality.name,
             method_output_mod1: output.output_mod1,
             method_output_mod2: output.output_mod2
@@ -116,7 +116,7 @@ workflow run_wf {
     )
 
         // run all metrics
-    | run_components(
+    | runComponents(
         components: metrics,
         // use 'fromState' to fetch the arguments the component requires from the overall state
         fromState: [
@@ -124,8 +124,8 @@ workflow run_wf {
             input_mod2: "method_output_mod2"
         ],
         // use 'toState' to publish that component's outputs to the overall state
-        toState: { id, output, config ->
-            [
+        toState: { id, output, state, config ->
+            state + [
             metric_id: config.functionality.name,
             metric_output: output.output
             ]
@@ -135,7 +135,7 @@ workflow run_wf {
     // join all events into a new event where the new id is simply "output" and the new state consists of:
     //   - "input": a list of score h5ads
     //   - "output": the output argument of this workflow
-    | join_states{ ids, states ->
+    | joinStates{ ids, states ->
         def new_id = "output"
         def new_state = [
             input: states.collect{it.metric_output},
@@ -156,10 +156,10 @@ workflow run_wf {
 
 // store the trace log in the publish dir
 workflow.onComplete {
-    def publish_dir = get_publish_dir()
+    def publish_dir = getPublishDir()
 
-    write_json(traces, file("$publish_dir/traces.json"))
+    writeJsontraces, file("$publish_dir/traces.json"))
     // todo: add datasets logging
-    write_json(methods.collect{it.config}, file("$publish_dir/methods.json"))
-    write_json(metrics.collect{it.config}, file("$publish_dir/metrics.json"))
+    writeJsonmethods.collect{it.config}, file("$publish_dir/methods.json"))
+    writeJsonmetrics.collect{it.config}, file("$publish_dir/metrics.json"))
 }

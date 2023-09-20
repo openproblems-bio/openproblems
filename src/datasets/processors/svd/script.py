@@ -4,8 +4,8 @@ import sklearn.decomposition
 
 ## VIASH START
 par = {
-    "input": "resources_test/common/multimodal/normalized_mod1.h5ad",
-    "input_mod2": "resources_test/common/multimodal/normalized_mod2.h5ad",
+    "input": "resources_test/common/scicar_cell_lines/normalized_mod1.h5ad",
+    "input_mod2": "resources_test/common/scicar_cell_lines/normalized_mod2.h5ad",
     "output": "output.h5ad",
     "layer_input": "normalized",
     "obsm_embedding": "X_svd",

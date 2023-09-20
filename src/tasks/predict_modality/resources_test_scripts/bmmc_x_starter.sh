@@ -10,8 +10,6 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "$REPO_ROOT"
 
 set -e
-# TODO: Download the starter datasets from the source repository
-# TODO TODO: Generate the datasets from the source GEO dataset
 
 generate_pm_test_resources () {
   DATASET_ID="$1"
@@ -68,28 +66,28 @@ generate_pm_test_resources () {
 
 generate_pm_test_resources \
   bmmc_cite_starter \
-  resources_test/common/bmmc_cite_starter/openproblems_bmmc_cite_starter.output_rna.h5ad \
-  resources_test/common/bmmc_cite_starter/openproblems_bmmc_cite_starter.output_adt.h5ad \
+  resources_test/common/bmmc_cite_starter/dataset_rna.h5ad \
+  resources_test/common/bmmc_cite_starter/dataset_adt.h5ad \
   resources_test/predict_modality/bmmc_cite_starter \
   ""
 
 generate_pm_test_resources \
   bmmc_cite_starter_swapped \
-  resources_test/common/bmmc_cite_starter/openproblems_bmmc_cite_starter.output_adt.h5ad \
-  resources_test/common/bmmc_cite_starter/openproblems_bmmc_cite_starter.output_rna.h5ad \
+  resources_test/common/bmmc_cite_starter/dataset_adt.h5ad \
+  resources_test/common/bmmc_cite_starter/dataset_rna.h5ad \
   resources_test/predict_modality/bmmc_cite_starter_swapped \
   "--swap true"
 
 generate_pm_test_resources \
   bmmc_multiome_starter \
-  resources_test/common/bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_rna.h5ad \
-  resources_test/common/bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_atac.h5ad \
+  resources_test/common/bmmc_multiome_starter/dataset_rna.h5ad \
+  resources_test/common/bmmc_multiome_starter/dataset_atac.h5ad \
   resources_test/predict_modality/bmmc_multiome_starter \
   ""
 
 generate_pm_test_resources \
   bmmc_multiome_starter_swapped \
-  resources_test/common/bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_atac.h5ad \
-  resources_test/common/bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_rna.h5ad \
+  resources_test/common/bmmc_multiome_starter/dataset_atac.h5ad \
+  resources_test/common/bmmc_multiome_starter/dataset_rna.h5ad \
   resources_test/predict_modality/bmmc_multiome_starter_swapped \
   "--swap true"
