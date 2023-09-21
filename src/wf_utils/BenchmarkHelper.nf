@@ -218,7 +218,7 @@ def getPublishDir() {
     null
 }
 
-process publishStateProc {
+process publishStatesProc {
   // todo: check publishpath?
   publishDir path: "${getPublishDir()}/${id}/", mode: "copy"
   tag "$id"
@@ -286,8 +286,8 @@ def convertFilesToPath(obj) {
   })
 }
 
-def publishState(Map args) {
-  workflow publishStateWf {
+def publishStates(Map args) {
+  workflow publishStatesWf {
     take: input_ch
     main:
       input_ch
@@ -299,10 +299,10 @@ def publishState(Map args) {
           def yamlBlob = toTaggedYamlBlob(convertedState)
           [id, yamlBlob, files]
         }
-        | publishStateProc
+        | publishStatesProc
     emit: input_ch
   }
-  return publishStateWf
+  return publishStatesWf
 }
 
 

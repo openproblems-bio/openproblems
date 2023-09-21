@@ -20,7 +20,7 @@ include { check_dataset_schema } from "$targetDir/common/check_dataset_schema/ma
 
 // helper functions
 include { readConfig; helpMessage; channelFromParams; preprocessInputs } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { publishState; runComponents; joinStates; initializeTracer; writeJson; getPublishDir; setState } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
+include { publishStates; runComponents; joinStates; initializeTracer; writeJson; getPublishDir; setState } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
 
 config = readConfig("$projectDir/config.vsh.yaml")
 
@@ -34,7 +34,7 @@ workflow {
 
   channelFromParams(params, config)
     | run_wf
-    | publishState([:])
+    | publishStates([:])
 }
 
 workflow run_wf {
