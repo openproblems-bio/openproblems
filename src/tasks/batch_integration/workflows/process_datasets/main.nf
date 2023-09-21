@@ -8,7 +8,7 @@ include { process_dataset } from "$targetDir/batch_integration/process_dataset/m
 
 // import helper functions
 include { readConfig; processConfig; helpMessage; channelFromParams; preprocessInputs; readYaml; readJson } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { publishState; runComponents; joinStates; initializeTracer; writeJson; getPublishDir; autoDetectStates; setState } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
+include { publishState; runComponents; joinStates; initializeTracer; writeJson; getPublishDir; findStates; setState } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
 
 config = readConfig("$projectDir/config.vsh.yaml")
 
@@ -21,7 +21,7 @@ workflow {
 }
 
 workflow auto {
-  autoDetectStates(params, config)
+  findStates(params, config)
     | run_wf
     | publishState([:])
 }

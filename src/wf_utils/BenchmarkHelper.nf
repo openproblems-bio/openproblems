@@ -263,43 +263,6 @@ def iterateMap(obj, fun) {
   }
 }
 
-
-// def convertPathsToFile(obj) {
-//   if (obj instanceof File) {
-//     return obj
-//   } else if (obj instanceof Path)  {
-//     return obj.toFile()
-//   } else if (obj instanceof List && obj !instanceof String) {
-//     return obj.collect{item ->
-//       convertPathsToFile(item)
-//     }
-//   } else if (obj instanceof Map) {
-//     return obj.collectEntries{key, item ->
-//       [key, convertPathsToFile(item)]
-//     }
-//   } else {
-//     return obj
-//   }
-// }
-
-// def convertFilesToPath(obj) {
-//   if (obj instanceof File) {
-//     return obj.toPath()
-//   } else if (obj instanceof Path)  {
-//     return obj
-//   } else if (obj instanceof List && obj !instanceof String) {
-//     return obj.collect{item ->
-//       convertFilesToPath(item)
-//     }
-//   } else if (obj instanceof Map) {
-//     return obj.collectEntries{key, item ->
-//       [key, convertFilesToPath(item)]
-//     }
-//   } else {
-//     return obj
-//   }
-// }
-
 def convertPathsToFile(obj) {
   iterateMap(obj, {x ->
     if (x instanceof File) {
@@ -346,7 +309,7 @@ def publishState(Map args) {
 include { processConfig; helpMessage; channelFromParams; readYamlBlob } from "./WorkflowHelper.nf"
 
 
-def autoDetectStates(Map params, Map config) {
+def findStates(Map params, Map config) {
   // TODO: do a deep clone of config
   def auto_config = config.clone()
   auto_config.functionality = auto_config.functionality.clone()
@@ -389,7 +352,7 @@ def autoDetectStates(Map params, Map config) {
   // run auto config through processConfig once more
   auto_config = processConfig(auto_config)
 
-  workflow autoDetectStatesWf {
+  workflow findStatesWf {
     helpMessage(auto_config)
 
     output_ch = 
@@ -446,7 +409,7 @@ def autoDetectStates(Map params, Map config) {
     output_ch
   }
 
-  return autoDetectStatesWf
+  return findStatesWf
 }
 
 def setState(fun) {
