@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/batch_integration/pancreas/unintegrated.h5ad"
+example: "resources_test/batch_integration/pancreas/dataset.h5ad"
 info:
   label: "Dataset"
   summary: Unintegrated AnnData HDF5 file.

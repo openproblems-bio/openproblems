@@ -21,8 +21,8 @@ functionality:
       required: true
       direction: output
   test_resources:
-    - path: /resources_test/multimodal
-      dest: resources_test/multimodal
+    - path: /resources_test/common/scicar_cell_lines
+      dest: resources_test/common/scicar_cell_lines
     - type: python_script
       path: /src/common/comp_tests/check_metric_config.py
     - type: python_script
