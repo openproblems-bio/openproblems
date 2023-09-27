@@ -22,3 +22,5 @@ platforms:
           - scanpy
           - numpy
   - type: nextflow
+    directives:
+      label: [ "lowmem", "lowcpu"]

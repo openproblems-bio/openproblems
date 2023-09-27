@@ -53,4 +53,5 @@ platforms:
       - type: python
         packages: viashpy
   - type: nextflow
-
+    directives:
+      label: [ "highmem", "highcpu"]

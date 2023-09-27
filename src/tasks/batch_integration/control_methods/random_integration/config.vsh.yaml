@@ -21,3 +21,5 @@ platforms:
         pypi:
           - numpy
   - type: nextflow
+    directives:
+      label: [ "lowmem", "lowcpu"]

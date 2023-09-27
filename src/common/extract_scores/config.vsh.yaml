@@ -31,3 +31,5 @@ platforms:
       - type: r
         cran: [ tidyverse ]
   - type: nextflow
+    directives:
+      label: [ "lowmem", "lowcpu"]
