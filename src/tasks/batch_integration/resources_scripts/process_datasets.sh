@@ -22,7 +22,7 @@ nextflow run . \
   -entry auto \
   -resume \
   --id resources \
-  --input_dir resources/datasets/openproblems_v1 \
+  --input_states "resources/datasets/openproblems_v1/**/state.yaml" \
   --rename_keys 'input:output_dataset' \
   --settings '{"output_dataset": "dataset.h5ad", "output_solution": "solution.h5ad"}' \
   --publish_dir "$OUTPUT_DIR"

@@ -40,12 +40,13 @@ include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
 
 // import helper functions
 include { readConfig; helpMessage; channelFromParams; preprocessInputs; readYaml } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { publishStates; runComponents; joinStates; initializeTracer; writeJson; getPublishDir; findStates } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
+include { publishStates; runComponents; collectTraces; writeJson; getPublishDir; findStates; setState } from sourceDir + "/wf_utils/WorkflowHelper.nf"
+include { joinStates } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
 
 config = readConfig("$projectDir/config.vsh.yaml")
 
 // add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
-traces = initializeTracer()
+traces = collectTraces()
 
 // collect method list
 methods = [

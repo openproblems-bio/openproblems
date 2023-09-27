@@ -18,7 +18,7 @@ nextflow run . \
   -profile docker \
   -entry auto \
   --id resources_test \
-  --input_dir "$RAW_DATA" \
+  --input_states "$RAW_DATA/**/state.yaml" \
   --rename_keys 'input:output_dataset' \
   --settings '{"output_dataset": "dataset.h5ad", "output_solution": "solution.h5ad"}' \
   --publish_dir "$DATASET_DIR"

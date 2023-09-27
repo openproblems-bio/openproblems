@@ -23,5 +23,5 @@ nextflow run . \
   -c src/wf_utils/labels_ci.config \
   -resume \
   --id foo \
-  --input_dir $DATASET_DIR \
+  --input_states "$DATASET_DIR/**/state.yaml" \
   --publish_dir "output"
