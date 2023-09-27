@@ -1456,7 +1456,7 @@ def readJson(file_path) {
 class CustomConstructor extends org.yaml.snakeyaml.constructor.Constructor {
   Path root
 
-  class ConstructFile extends org.yaml.snakeyaml.constructor.AbstractConstruct {
+  class ConstructPath extends org.yaml.snakeyaml.constructor.AbstractConstruct {
     public Object construct(org.yaml.snakeyaml.nodes.Node node) {
       String filename = (String) constructScalar(node);
       if (root != null) {
@@ -1470,7 +1470,7 @@ class CustomConstructor extends org.yaml.snakeyaml.constructor.Constructor {
     super(options)
     this.root = root
     // Handling !file tag and parse it back to a File type
-    this.yamlConstructors.put(new org.yaml.snakeyaml.nodes.Tag("!file"), new ConstructFile())
+    this.yamlConstructors.put(new org.yaml.snakeyaml.nodes.Tag("!file"), new ConstructPath())
   }
 }
 
@@ -1502,7 +1502,7 @@ String toJsonBlob(Map data) {
 // helper file: 'src/main/resources/io/viash/platforms/nextflow/readwrite/toTaggedYamlBlob.nf'
 // Custom representer to modify how certain objects are represented in YAML
 class CustomRepresenter extends org.yaml.snakeyaml.representer.Representer {
-  class RepresentFile implements org.yaml.snakeyaml.representer.Represent {
+  class RepresentPath implements org.yaml.snakeyaml.representer.Represent {
     public org.yaml.snakeyaml.nodes.Node representData(Object data) {
       Path file = (Path) data;
       String value = file.getFileName();
@@ -1512,7 +1512,7 @@ class CustomRepresenter extends org.yaml.snakeyaml.representer.Representer {
   }
   CustomRepresenter(org.yaml.snakeyaml.DumperOptions options) {
     super(options)
-    this.representers.put(File, new RepresentFile())
+    this.representers.put(Path, new RepresentPath())
   }
 }
 
