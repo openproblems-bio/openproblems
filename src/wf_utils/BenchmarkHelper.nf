@@ -159,8 +159,8 @@ import org.yaml.snakeyaml.representer.Represent
 class CustomRepresenter extends Representer {
   class RepresentFile implements Represent {
     public Node representData(Object data) {
-      File file = (File) data;
-      String value = file.name;
+      Path file = (Path) data;
+      String value = file.getFileName();
       Tag tag = new Tag("!file");
       return representScalar(tag, value);
     }
@@ -186,19 +186,19 @@ import org.yaml.snakeyaml.constructor.Constructor
 
 // Custom constructor to modify how certain objects are parsed from YAML
 class CustomConstructor extends Constructor {
-  File root
+  Path root
 
   class ConstructFile extends AbstractConstruct {
     public Object construct(Node node) {
       String filename = (String) constructScalar(node);
       if (root != null) {
-        return new File(root, filename);
+        return root.resolve(filename);
       }
-      return new File(filename);
+      return java.nio.file.Paths.get(filename);
     }
   }
 
-  CustomConstructor(File root = null) {
+  CustomConstructor(Path root = null) {
     super()
     this.root = root
     // Handling !file tag and parse it back to a File type
@@ -206,10 +206,10 @@ class CustomConstructor extends Constructor {
   }
 }
 
-def readTaggedYaml(File file) {
-  Constructor constructor = new CustomConstructor(file.absoluteFile.parentFile)
+def readTaggedYaml(Path path) {
+  Constructor constructor = new CustomConstructor(path.getParent())
   Yaml yaml = new Yaml(constructor)
-  return yaml.load(file.text)
+  return yaml.load(path.text)
 }
 
 def getPublishDir() {
@@ -295,14 +295,13 @@ def publishStates(Map args) {
           def id = tup[0]
           def state = tup[1]
           def files = collectFiles(state)
-          def convertedState = [id: id] + convertPathsToFile(state)
-          def yamlBlob = toTaggedYamlBlob(convertedState)
+          def yamlBlob = toTaggedYamlBlob([id: id] + state)
           [id, yamlBlob, files]
         }
         | publishStatesProc
     emit: input_ch
   }
-  return publishStatesWf
+  return publishStateWf
 }
 
 
@@ -317,7 +316,7 @@ def findStates(Map params, Map config) {
   auto_config.functionality.argument_groups = []
   auto_config.functionality.arguments = [
     [
-      type: "file",
+      type: "string",
       name: "--input_dir",
       example: "/path/to/input/directory",
       description: "Path to input directory containing the datasets to be integrated.",
@@ -374,7 +373,7 @@ def findStates(Map params, Map config) {
 
           // read in states
           def states = stateFiles.collect { stateFile ->
-            def state_ = convertFilesToPath(readTaggedYaml(stateFile.toFile()))
+            def state_ = readTaggedYaml(stateFile)
             [state_.id, state_]
           }
 
