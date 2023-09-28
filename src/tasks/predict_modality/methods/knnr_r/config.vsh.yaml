@@ -33,4 +33,4 @@ platforms:
         cran: [ lmds, FNN, proxyC, bit64 ]
   - type: nextflow
     directives:
-      label: [ lowmem, lowcpu ]
+      label: [ "midtime", lowmem, lowcpu ]

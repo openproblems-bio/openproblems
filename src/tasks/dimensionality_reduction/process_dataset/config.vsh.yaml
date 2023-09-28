@@ -10,4 +10,4 @@ platforms:
     image: ghcr.io/openproblems-bio/base_python:1.0.1
   - type: nextflow
     directives: 
-      label: [ highmem, highcpu ]
+      label: [ "midtime", highmem, highcpu ]

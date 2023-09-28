@@ -41,4 +41,4 @@ platforms:
           - scib==1.1.4
   - type: nextflow
     directives: 
-      label: [ midmem, lowcpu ]
+      label: [ "midtime", midmem, lowcpu ]

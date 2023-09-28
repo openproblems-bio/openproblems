@@ -44,4 +44,4 @@ platforms:
           - chriscainx/mnnpy
   - type: nextflow
     directives:
-      label: [ lowcpu, lowmem ]
+      label: [ "midtime", lowcpu, lowmem ]

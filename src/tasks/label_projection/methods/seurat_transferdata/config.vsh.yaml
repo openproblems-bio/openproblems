@@ -33,4 +33,4 @@ platforms:
         cran: [ Matrix>=1.5.3, Seurat, rlang, bit64 ]
   - type: nextflow
     directives: 
-      label: [ highmem, highcpu ]
+      label: [ "midtime", highmem, highcpu ]

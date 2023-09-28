@@ -41,4 +41,4 @@ platforms:
           - scarches
   - type: nextflow
     directives: 
-      label: [ midmem, highcpu, gpu ]
+      label: [ "midtime", midmem, highcpu, gpu ]

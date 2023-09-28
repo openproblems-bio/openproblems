@@ -62,7 +62,7 @@ def create_config(par, component_type, pretty_name, script_path) -> str:
     |  # Allows turning the component into a Nextflow module / pipeline.
     |  - type: nextflow
     |    directives:
-    |      label: [midmem, midcpu]
+    |      label: [ "midtime",midmem, midcpu]
     |'''
   )
 
