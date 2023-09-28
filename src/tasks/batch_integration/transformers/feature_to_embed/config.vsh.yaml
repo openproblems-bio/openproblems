@@ -17,3 +17,5 @@ platforms:
       - type: python
         pypi: scanpy
   - type: nextflow
+    directives: 
+      label: [ "midtime", midmem, lowcpu ]

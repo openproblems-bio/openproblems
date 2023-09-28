@@ -19,7 +19,9 @@ input_solution.X = input_solution.layers['normalized']
 
 translator = {
     "homo_sapiens": "human",
-    "mus_musculus": "mouse"
+    "mus_musculus": "mouse",
+    "danio_rerio": "zebrafish",
+    "caenorhabditis_elegans": "C. elegans"
 }
 
 print('compute score', flush=True)
