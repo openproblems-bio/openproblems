@@ -1,12 +1,6 @@
-# Open Problems in Single-Cell Analysis
+# This repository has been superseded by [openproblems-v2](https://github.com/openproblems-bio/openproblems-v2).
 
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/openproblems-bio/openproblems/run_tests.yml?branch=main)](https://github.com/openproblems-bio/openproblems/actions)
-[![Coverage Status](https://codecov.io/gh/openproblems-bio/openproblems/branch/main/graph/badge.svg?token=S1ZIME1ZZR)](https://codecov.io/gh/openproblems-bio/openproblems)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/83b92388-53c7-4fef-9003-e14d94c6ac6f/deploy-status)](https://app.netlify.com/sites/openproblems/deploys)
-[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Style Guide: OpenStack](https://img.shields.io/badge/style%20guide-openstack-eb1a32.svg)](https://docs.openstack.org/hacking/latest/user/hacking.html#styleguide)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-[![Video](https://img.shields.io/static/v1?label=YouTube&message=Visit%20channel&color=red&logo=youtube)](https://www.youtube.com/channel/UCJpqxlzxRamcA3Pv3KlYZHg)
+# Open Problems in Single-Cell Analysis
 
 Formalizing and benchmarking open problems in single-cell genomics.
 
