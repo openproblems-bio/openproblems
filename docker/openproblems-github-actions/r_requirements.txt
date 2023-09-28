@@ -1,6 +1,6 @@
 backports@1.4.1
 docopt@0.7.1
-git2r@0.30.1
+git2r@0.32.0
 lintr@3.0.2
 styler@1.9.0
 tibble@3.1.8
