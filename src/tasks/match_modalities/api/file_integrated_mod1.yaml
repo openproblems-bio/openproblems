@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/match_modalities/integrated_mod1.h5ad"
+example: "resources_test/match_modalities/scicar_cell_lines/integrated_mod1.h5ad"
 info:
   label: "Integrated"
   summary: "The integrated data"

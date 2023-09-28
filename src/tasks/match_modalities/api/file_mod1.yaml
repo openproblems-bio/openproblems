@@ -1,8 +1,8 @@
 type: file
 example: "resources_test/common/scicar_cell_lines/dataset_mod1.h5ad"
 info:
-  label: "multimodal mod 1 data"
-  summary: "the first modal data"
+  label: "Modality 1"
+  summary: "The first modality of a multimodal dataset."
   slots:
     layers: 
       - type: integer
