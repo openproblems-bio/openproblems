@@ -28,4 +28,4 @@ platforms:
           - scipy
   - type: nextflow
     directives:
-      label: [ "lowmem", "lowcpu"]
+      label: [ "midtime", "lowmem", "lowcpu"]

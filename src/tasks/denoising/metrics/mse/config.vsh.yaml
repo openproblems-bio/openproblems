@@ -27,4 +27,4 @@ platforms:
           - scprep
   - type: nextflow
     directives: 
-      label: [ midmem, midcpu ]
+      label: [ "midtime", midmem, midcpu ]

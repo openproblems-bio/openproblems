@@ -24,4 +24,4 @@ platforms:
           - batchelor
   - type: nextflow
     directives:
-      label: [ lowcpu, highmem ]
+      label: [ "midtime", lowcpu, highmem ]

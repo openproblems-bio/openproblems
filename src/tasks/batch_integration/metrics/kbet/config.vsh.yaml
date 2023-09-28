@@ -51,4 +51,4 @@ platforms:
           - anndata2ri
   - type: nextflow
     directives: 
-      label: [ midmem, lowcpu ]
+      label: [ "midtime", midmem, lowcpu ]

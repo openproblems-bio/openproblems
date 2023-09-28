@@ -31,4 +31,4 @@ platforms:
         packages: xgboost
   - type: nextflow
     directives: 
-      label: [ midmem, midcpu ]
+      label: [ "midtime", midmem, midcpu ]

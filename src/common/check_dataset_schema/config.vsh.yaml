@@ -54,4 +54,4 @@ platforms:
         packages: viashpy
   - type: nextflow
     directives:
-      label: [ "highmem", "highcpu"]
+      label: [ "midtime", "highmem", "highcpu"]

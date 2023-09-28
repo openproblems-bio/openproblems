@@ -31,4 +31,4 @@ platforms:
           - remotes::install_bioc("3.18/batchelor", upgrade = "always", type = "source")
   - type: nextflow
     directives:
-      label: [ lowmem, lowcpu ]
+      label: [ "midtime", lowmem, lowcpu ]

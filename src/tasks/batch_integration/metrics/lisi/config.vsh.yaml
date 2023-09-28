@@ -50,4 +50,4 @@ platforms:
           - git+https://github.com/theislab/scib.git@v1.1.4
   - type: nextflow
     directives: 
-      label: [ midmem, lowcpu ]
+      label: [ "midtime", midmem, lowcpu ]

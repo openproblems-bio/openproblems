@@ -35,4 +35,4 @@ platforms:
           - "git+https://github.com/scottgigante-immunai/dca.git@patch-1"
   - type: nextflow
     directives: 
-      label: [ highmem, highcpu ]
+      label: [ "midtime", highmem, highcpu ]

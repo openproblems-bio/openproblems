@@ -39,4 +39,4 @@ platforms:
           - umap-learn
   - type: nextflow
     directives: 
-      label: [ lowmem, midcpu ]
+      label: [ "midtime", lowmem, midcpu ]
