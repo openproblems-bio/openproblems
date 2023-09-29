@@ -101,6 +101,12 @@ workflow run_wf {
   dataset_ch = input_ch
     | preprocessInputs(config: config)
 
+    | map { id, state -> 
+      def newId = id.replaceAll(/\//, "_")
+
+      [newId, state]
+    }
+
     // extract the dataset metadata
     | check_dataset_schema.run(
       fromState: [input: "input_dataset"],
