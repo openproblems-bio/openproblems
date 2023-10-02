@@ -1679,7 +1679,7 @@ def collectFiles(obj) {
 def collectInputOutputPaths(obj, prefix) {
   if (obj instanceof File || obj instanceof Path)  {
     def path = obj instanceof Path ? obj : obj.toPath()
-    def ext = path.getFileName().find("\\.[^\\.]+\$") ?: ""
+    def ext = path.getFileName().toString().find("\\.[^\\.]+\$") ?: ""
     def newFilename = prefix + ext
     return [[obj, newFilename]]
   } else if (obj instanceof List && obj !instanceof String) {
