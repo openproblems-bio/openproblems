@@ -13,7 +13,7 @@ install_requires = [
     "numpy>=1.21,<1.24",
     "packaging==21.3",
     "pandas==1.3.5",
-    "python-igraph==0.10.*",
+    "igraph==0.10.*",
     "scanpy>=1.6",
     "scipy>=1.7,<1.10",
     "scikit-learn>=1.0,<1.2",
