@@ -24,11 +24,11 @@ functionality:
     v1:
       path: openproblems/tasks/_batch_integration/batch_integration_graph/methods/scalex.py
       commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
-    preferred_normalization: log_cpm
+    preferred_normalization: log_cp10k
     variants:
       scalex_feature_unscaled:
       scanorama_feature_scaled:
-        preferred_normalization: log_cpm_scaled
+        preferred_normalization: log_cp10k_scaled
   resources:
     - type: python_script
       path: script.py

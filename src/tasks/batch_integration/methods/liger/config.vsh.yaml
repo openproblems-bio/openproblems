@@ -13,7 +13,7 @@ functionality:
     reference: welch2019
     repository_url: https://github.com/welch-lab/liger
     documentation_url: https://github.com/welch-lab/liger
-    preferred_normalization: log_cpm
+    preferred_normalization: log_cp10k
   resources:
     - type: r_script
       path: script.R

@@ -13,11 +13,11 @@ functionality:
     reference: welch2019
     repository_url: https://github.com/welch-lab/pyliger
     documentation_url: https://github.com/welch-lab/pyliger
-    preferred_normalization: log_cpm
+    preferred_normalization: log_cp10k
     variants:
       liger_unscaled:
       liger_scaled:
-        preferred_normalization: log_cpm_scaled
+        preferred_normalization: log_cp10k_scaled
   resources:
     - type: python_script
       path: script.py

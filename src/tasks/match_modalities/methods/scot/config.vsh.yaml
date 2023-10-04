@@ -6,7 +6,7 @@ functionality:
     description: |
       Single Cell Optimal Transport (SCOT) is a method for integrating multimodal single-cell data. It is based on the idea of aligning the distributions of the two modalities using optimal transport.
     summary: "Run Single Cell Optimal Transport"
-    preferred_normalization: "log_cpm"
+    preferred_normalization: "log_cp10k"
     reference: Demetci2020scot
     documentation_url: "https://github.com/rsinghlab/SCOT#readme"
     repository_url: "https://github.com/rsinghlab/SCOT"
