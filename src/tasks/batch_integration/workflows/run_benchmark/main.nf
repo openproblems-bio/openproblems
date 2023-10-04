@@ -82,13 +82,13 @@ workflow {
 
   channelFromParams(params, config)
     | run_wf
-    | publishStates([:])
+    | publishStates(key: config.functionality.name)
 }
 
 workflow auto {
   findStates(params, config)
     | run_wf
-    | publishStates([:])
+    | publishStates(key: config.functionality.name)
 }
 
 workflow run_wf {
