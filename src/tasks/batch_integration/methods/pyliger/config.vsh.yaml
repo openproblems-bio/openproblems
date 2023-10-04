@@ -1,0 +1,34 @@
+# use method api spec
+__merge__: ../../api/comp_method_embedding.yaml
+functionality:
+  name: pyliger
+  info:
+    label: pyliger
+    summary: Python implementation of LIGER (Linked Inference of Genomic Experimental Relationships
+    description: |
+      LIGER (installed as rliger) is a package for integrating and analyzing multiple 
+      single-cell datasets, developed by the Macosko lab and maintained/extended by the 
+      Welch lab. It relies on integrative non-negative matrix factorization to identify 
+      shared and dataset-specific factors.
+    reference: welch2019
+    repository_url: https://github.com/welch-lab/pyliger
+    documentation_url: https://github.com/welch-lab/pyliger
+    preferred_normalization: log_cpm
+    variants:
+      liger_unscaled:
+      liger_scaled:
+        preferred_normalization: log_cpm_scaled
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    setup:
+      - type: python
+        pypi:
+          - umap-learn[plot]
+          - pyliger
+  - type: nextflow
+    directives:
+      label: [ lowcpu, highmem ]

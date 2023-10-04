@@ -1,0 +1,28 @@
+# use method api spec
+__merge__: ../../api/comp_method_embedding.yaml
+functionality:
+  name: liger
+  info:
+    label: LIGER
+    summary: Linked Inference of Genomic Experimental Relationships
+    description: |
+      LIGER or linked inference of genomic experimental relationships uses iNMF 
+      deriving and implementing a novel coordinate descent algorithm to efficiently 
+      do the factorization. Joint clustering is performed and factor loadings are 
+      normalised.
+    reference: welch2019
+    repository_url: https://github.com/welch-lab/liger
+    documentation_url: https://github.com/welch-lab/liger
+    preferred_normalization: log_cpm
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_r:1.0.1
+    setup:
+      - type: r
+        cran: rliger
+  - type: nextflow
+    directives:
+      label: [ lowcpu, highmem ]
