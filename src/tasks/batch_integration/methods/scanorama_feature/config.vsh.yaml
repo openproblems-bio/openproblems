@@ -3,7 +3,7 @@ __merge__: ../../api/comp_method_feature.yaml
 functionality:
   name: scanorama_feature
   info:
-    label: Scanorama
+    label: Scanorama (feature)
     summary: "Efficient integration of heterogeneous single-cell
       transcriptomes using Scanorama"
     description: |

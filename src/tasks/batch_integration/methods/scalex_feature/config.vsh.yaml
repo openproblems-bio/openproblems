@@ -13,7 +13,7 @@ functionality:
   # Metadata for your component
   info:
     # A relatively short label, used when rendering visualisarions (required)
-    label: SCALEX
+    label: SCALEX (feature)
     # A one sentence summary of how this method works (required). Used when 
     # rendering summary tables.
     summary: Online single-cell data integration through projecting heterogeneous datasets into a common cell-embedding space

@@ -3,7 +3,7 @@ __merge__: ../../api/comp_method_embedding.yaml
 functionality:
   name: scanorama_embed
   info:
-    label: Scanorama
+    label: Scanorama (embedding)
     summary: "Efficient integration of heterogeneous single-cell 
       transcriptomes using Scanorama"
     description: |
