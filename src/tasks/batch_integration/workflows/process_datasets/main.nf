@@ -1,25 +1,3 @@
-nextflow.enable.dsl=2
-
-sourceDir = params.rootDir + "/src"
-targetDir = params.rootDir + "/target/nextflow"
-
-include { check_dataset_schema } from "$targetDir/common/check_dataset_schema/main.nf"
-include { process_dataset } from "$targetDir/batch_integration/process_dataset/main.nf"
-
-// import helper functions
-include { readConfig; processConfig; helpMessage; channelFromParams; preprocessInputs; readYaml; readJson } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { publishStates; runComponents; collectTraces; writeJson; getPublishDir; setState; findStates } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-
-config = readConfig("$projectDir/config.vsh.yaml")
-
-workflow {
-  helpMessage(config)
-
-  channelFromParams(params, config)
-    | run_wf
-    | publishStates([:])
-}
-
 workflow auto {
   findStates(params, config)
     | run_wf
@@ -32,7 +10,6 @@ workflow run_wf {
 
   main:
   output_ch = input_ch
-    | preprocessInputs(config: config)
 
     // TODO: check schema based on the values in `config`
     // instead of having to provide a separate schema file

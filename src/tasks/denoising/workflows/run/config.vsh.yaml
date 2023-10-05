@@ -20,5 +20,17 @@ functionality:
   resources:
     - type: nextflow_script
       path: main.nf
+      entrypoint: run_wf
+  dependencies:
+    - name: common/check_dataset_schema
+    - name: common/extract_scores
+    - name: denoising/control_methods/no_denoising
+    - name: denoising/control_methods/perfect_denoising
+    - name: denoising/methods/alra
+    - name: denoising/methods/dca
+    - name: denoising/methods/knn_smoothing
+    - name: denoising/methods/magic
+    - name: denoising/metrics/mse
+    - name: denoising/metrics/poisson
 platforms:
   - type: nextflow

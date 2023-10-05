@@ -168,6 +168,18 @@ functionality:
   resources:
     - type: nextflow_script
       path: main.nf
+      entrypoint: run_wf
+  dependencies: 
+    - name: datasets/loaders/openproblems_v1
+    - name: datasets/normalization/log_cp
+    - name: datasets/normalization/log_scran_pooling
+    - name: datasets/normalization/sqrt_cp
+    - name: datasets/normalization/l1_sqrt
+    - name: datasets/processors/subsample
+    - name: datasets/processors/pca
+    - name: datasets/processors/hvg
+    - name: datasets/processors/knn
+    - name: common/check_dataset_schema
   # test_resources:
   #   - type: nextflow_script
   #     path: main.nf

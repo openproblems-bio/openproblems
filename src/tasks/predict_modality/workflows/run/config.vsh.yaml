@@ -24,5 +24,20 @@ functionality:
   resources:
     - type: nextflow_script
       path: main.nf
+      entrypoint: run_wf
+  dependencies:
+    - name: common/check_dataset_schema
+    - name: common/extract_scores
+    - name: predict_modality/control_methods/mean_per_gene
+    - name: predict_modality/control_methods/random_predict
+    - name: predict_modality/control_methods/zeros
+    - name: predict_modality/control_methods/solution
+    - name: predict_modality/methods/knnr_py
+    - name: predict_modality/methods/knnr_r
+    - name: predict_modality/methods/lm
+    - name: predict_modality/methods/newwave_knnr
+    - name: predict_modality/methods/random_forest
+    - name: predict_modality/metrics/correlation
+    - name: predict_modality/metrics/mse
 platforms:
   - type: nextflow

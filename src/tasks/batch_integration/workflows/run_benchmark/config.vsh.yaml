@@ -28,5 +28,40 @@ functionality:
   resources:
     - type: nextflow_script
       path: main.nf
+      entrypoint: run_wf
+  dependencies: 
+    - name: common/check_dataset_schema
+    - name: common/extract_scores
+    - name: batch_integration/methods/bbknn
+    - name: batch_integration/methods/combat
+    - name: batch_integration/methods/fastmnn_embedding
+    - name: batch_integration/methods/fastmnn_feature
+    - name: batch_integration/methods/liger
+    - name: batch_integration/methods/mnn_correct
+    - name: batch_integration/methods/mnnpy
+    - name: batch_integration/methods/pyliger
+    - name: batch_integration/methods/scalex_embed
+    - name: batch_integration/methods/scalex_feature
+    - name: batch_integration/methods/scanorama_embed
+    - name: batch_integration/methods/scanorama_feature
+    - name: batch_integration/methods/scanvi
+    - name: batch_integration/methods/scvi
+    - name: batch_integration/control_methods/no_integration_batch
+    - name: batch_integration/control_methods/random_embed_cell
+    - name: batch_integration/control_methods/random_embed_cell_jitter
+    - name: batch_integration/control_methods/random_integration
+    - name: batch_integration/transformers/feature_to_embed
+    - name: batch_integration/transformers/embed_to_graph
+    - name: batch_integration/metrics/asw_batch
+    - name: batch_integration/metrics/asw_label
+    - name: batch_integration/metrics/cell_cycle_conservation
+    - name: batch_integration/metrics/clustering_overlap
+    - name: batch_integration/metrics/graph_connectivity
+    - name: batch_integration/metrics/hvg_overlap
+    - name: batch_integration/metrics/isolated_label_asw
+    - name: batch_integration/metrics/isolated_label_f1
+    - name: batch_integration/metrics/kbet
+    - name: batch_integration/metrics/lisi
+    - name: batch_integration/metrics/pcr
 platforms:
   - type: nextflow

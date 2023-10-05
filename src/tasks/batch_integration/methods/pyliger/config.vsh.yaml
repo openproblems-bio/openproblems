@@ -31,4 +31,4 @@ platforms:
           - pyliger
   - type: nextflow
     directives:
-      label: [ lowcpu, highmem ]
+      label: [ lowcpu, highmem, midtime ]

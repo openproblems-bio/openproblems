@@ -1,76 +1,32 @@
-sourceDir = params.rootDir + "/src"
-targetDir = params.rootDir + "/target/nextflow"
-
-include { check_dataset_schema } from "$targetDir/common/check_dataset_schema/main.nf"
-
-// import control methods
-include { mean_per_gene } from "$targetDir/predict_modality/control_methods/mean_per_gene/main.nf"
-include { random_predict } from "$targetDir/predict_modality/control_methods/random_predict/main.nf"
-include { zeros } from "$targetDir/predict_modality/control_methods/zeros/main.nf"
-include { solution } from "$targetDir/predict_modality/control_methods/solution/main.nf"
-
-// import methods
-include { knnr_py } from "$targetDir/predict_modality/methods/knnr_py/main.nf"
-include { knnr_r } from "$targetDir/predict_modality/methods/knnr_r/main.nf"
-include { lm } from "$targetDir/predict_modality/methods/lm/main.nf"
-include { newwave_knnr } from "$targetDir/predict_modality/methods/newwave_knnr/main.nf"
-include { random_forest } from "$targetDir/predict_modality/methods/random_forest/main.nf"
-
-
-// import metrics
-include { correlation } from "$targetDir/predict_modality/metrics/correlation/main.nf"
-include { mse } from "$targetDir/predict_modality/metrics/mse/main.nf"
-
-// tsv generation component
-include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
-
-// import helper functions
-include { readConfig; helpMessage; channelFromParams; preprocessInputs } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { runComponents; joinStates; initializeTracer; writeJson; getPublishDir } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
-
-// read in pipeline config
-config = readConfig("$projectDir/config.vsh.yaml")
-
 // add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
 traces = initializeTracer()
-
-// collect method list
-methods = [
-  mean_per_gene,
-  random_predict,
-  zeros,
-  solution,
-  knnr_py,
-  knnr_r,
-  lm,
-  newwave_knnr,
-  random_forest
-]
-
-// collect metric list
-metrics = [
-  correlation,
-  mse
-]
-
-workflow {
-  helpMessage(config)
-
-  // create channel from input parameters with
-  // arguments as defined in the config
-  channelFromParams(params, config)
-    | run_wf
-}
 
 workflow run_wf {
   take:
   input_ch
 
   main:
+
+  // collect method list
+  methods = [
+    mean_per_gene,
+    random_predict,
+    zeros,
+    solution,
+    knnr_py,
+    knnr_r,
+    lm,
+    newwave_knnr,
+    random_forest
+  ]
+
+  // collect metric list
+  metrics = [
+    correlation,
+    mse
+  ]
+
   output_ch = input_ch
-    // based on the config file (config.vsh.yaml), run assertions on parameter sets
-    // and fill in default values
-    | preprocessInputs(config: config)
 
     // extract the dataset metadata
     | check_dataset_schema.run(

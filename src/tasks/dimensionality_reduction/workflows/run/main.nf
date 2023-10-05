@@ -1,59 +1,5 @@
-sourceDir = params.rootDir + "/src"
-targetDir = params.rootDir + "/target/nextflow"
-
-include { check_dataset_schema } from "$targetDir/common/check_dataset_schema/main.nf"
-
-// import control methods
-include { random_features } from "$targetDir/dimensionality_reduction/control_methods/random_features/main.nf"
-include { true_features } from "$targetDir/dimensionality_reduction/control_methods/true_features/main.nf"
-
-// import methods
-include { densmap } from "$targetDir/dimensionality_reduction/methods/densmap/main.nf"
-// include { ivis } from "$targetDir/dimensionality_reduction/methods/ivis/main.nf"
-include { neuralee } from "$targetDir/dimensionality_reduction/methods/neuralee/main.nf"
-include { pca } from "$targetDir/dimensionality_reduction/methods/pca/main.nf"
-include { phate } from "$targetDir/dimensionality_reduction/methods/phate/main.nf"
-include { tsne } from "$targetDir/dimensionality_reduction/methods/tsne/main.nf"
-include { umap } from "$targetDir/dimensionality_reduction/methods/umap/main.nf"
-
-// import metrics
-include { coranking } from "$targetDir/dimensionality_reduction/metrics/coranking/main.nf"
-include { density_preservation } from "$targetDir/dimensionality_reduction/metrics/density_preservation/main.nf"
-include { distance_correlation } from "$targetDir/dimensionality_reduction/metrics/distance_correlation/main.nf"
-include { trustworthiness } from "$targetDir/dimensionality_reduction/metrics/trustworthiness/main.nf"
-
-// convert scores to tsv
-include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
-
-// import helper functions
-include { readConfig; helpMessage; channelFromParams; preprocessInputs } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { runComponents; joinStates; initializeTracer; writeJson; getPublishDir } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
-
-// read in pipeline config
-config = readConfig("$projectDir/config.vsh.yaml")
-
 // add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
 traces = initializeTracer()
-
-// collect method list
-methods = [
-  random_features,
-  true_features,
-  densmap,
-  neuralee,
-  pca,
-  phate,
-  tsne,
-  umap
-]
-
-// collect metric list
-metrics = [
-  coranking,
-  density_preservation,
-  distance_correlation,
-  trustworthiness
-]
 
 workflow {
   helpMessage(config)
@@ -69,8 +15,28 @@ workflow run_wf {
   input_ch
 
   main:
+
+  // collect method list
+  methods = [
+    random_features,
+    true_features,
+    densmap,
+    neuralee,
+    pca,
+    phate,
+    tsne,
+    umap
+  ]
+
+  // collect metric list
+  metrics = [
+    coranking,
+    density_preservation,
+    distance_correlation,
+    trustworthiness
+  ]
+
   output_ch = input_ch
-    | preprocessInputs(config: config)
 
     // extract the dataset metadata
     | check_dataset_schema.run(

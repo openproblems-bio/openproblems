@@ -1,49 +1,16 @@
-nextflow.enable.dsl=2
-
-sourceDir = params.rootDir + "/src"
-targetDir = params.rootDir + "/target/nextflow"
-
-// dataset loaders
-include { openproblems_v1_multimodal } from "$targetDir/datasets/loaders/openproblems_v1_multimodal/main.nf"
-
-// normalization methods
-include { log_cp } from "$targetDir/datasets/normalization/log_cp/main.nf"
-include { log_scran_pooling } from "$targetDir/datasets/normalization/log_scran_pooling/main.nf"
-include { sqrt_cp } from "$targetDir/datasets/normalization/sqrt_cp/main.nf"
-include { l1_sqrt } from "$targetDir/datasets/normalization/l1_sqrt/main.nf"
-
-// dataset processors
-include { subsample } from "$targetDir/datasets/processors/subsample/main.nf"
-include { svd } from "$targetDir/datasets/processors/svd/main.nf"
-include { hvg } from "$targetDir/datasets/processors/hvg/main.nf"
-include { check_dataset_schema } from "$targetDir/common/check_dataset_schema/main.nf"
-
-// helper functions
-include { readConfig; helpMessage; channelFromParams; preprocessInputs } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { publishStates; runComponents; collectTraces; writeJson; getPublishDir; setState } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-
-config = readConfig("$projectDir/config.vsh.yaml")
-
 // add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
 traces = initializeTracer()
-
-normalization_methods = [log_cp, sqrt_cp, l1_sqrt, log_scran_pooling]
-
-workflow {
-  helpMessage(config)
-
-  channelFromParams(params, config)
-    | run_wf
-    | publishStates([:])
-}
 
 workflow run_wf {
   take:
   input_ch
 
   main:
+
+  normalization_methods = [log_cp, sqrt_cp, l1_sqrt, log_scran_pooling]
+
+
   dataset_ch = input_ch
-    | preprocessInputs(config: config)
 
     // fetch data from legacy openproblems
     | openproblems_v1_multimodal.run(

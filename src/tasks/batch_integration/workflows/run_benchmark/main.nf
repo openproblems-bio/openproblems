@@ -1,113 +1,5 @@
-nextflow.enable.dsl=2
-
-sourceDir = params.rootDir + "/src"
-targetDir = params.rootDir + "/target/nextflow"
-
-include { check_dataset_schema } from "$targetDir/common/check_dataset_schema/main.nf"
-
-// import methods
-include { bbknn } from "$targetDir/batch_integration/methods/bbknn/main.nf"
-include { combat } from "$targetDir/batch_integration/methods/combat/main.nf"
-include { fastmnn_embedding } from "$targetDir/batch_integration/methods/fastmnn_embedding/main.nf"
-include { fastmnn_feature } from "$targetDir/batch_integration/methods/fastmnn_feature/main.nf"
-include { liger } from "$targetDir/batch_integration/methods/liger/main.nf"
-include { mnn_correct } from "$targetDir/batch_integration/methods/mnn_correct/main.nf"
-include { mnnpy } from "$targetDir/batch_integration/methods/mnnpy/main.nf"
-include { pyliger } from "$targetDir/batch_integration/methods/pyliger/main.nf"
-include { scalex_embed } from "$targetDir/batch_integration/methods/scalex_embed/main.nf"
-include { scalex_feature } from "$targetDir/batch_integration/methods/scalex_feature/main.nf"
-include { scanorama_embed } from "$targetDir/batch_integration/methods/scanorama_embed/main.nf"
-include { scanorama_feature } from "$targetDir/batch_integration/methods/scanorama_feature/main.nf"
-include { scanvi } from "$targetDir/batch_integration/methods/scanvi/main.nf"
-include { scvi } from "$targetDir/batch_integration/methods/scvi/main.nf"
-
-// import control methods
-include { no_integration_batch } from "$targetDir/batch_integration/control_methods/no_integration_batch/main.nf"
-include { random_embed_cell } from "$targetDir/batch_integration/control_methods/random_embed_cell/main.nf"
-include { random_embed_cell_jitter } from "$targetDir/batch_integration/control_methods/random_embed_cell_jitter/main.nf"
-include { random_integration } from "$targetDir/batch_integration/control_methods/random_integration/main.nf"
-
-// import transformers
-include { feature_to_embed } from "$targetDir/batch_integration/transformers/feature_to_embed/main.nf"
-include { embed_to_graph } from "$targetDir/batch_integration/transformers/embed_to_graph/main.nf"
-
-// import metrics
-include { asw_batch } from "$targetDir/batch_integration/metrics/asw_batch/main.nf"
-include { asw_label } from "$targetDir/batch_integration/metrics/asw_label/main.nf"
-include { cell_cycle_conservation } from "$targetDir/batch_integration/metrics/cell_cycle_conservation/main.nf"
-include { clustering_overlap } from "$targetDir/batch_integration/metrics/clustering_overlap/main.nf"
-include { graph_connectivity } from "$targetDir/batch_integration/metrics/graph_connectivity/main.nf"
-include { hvg_overlap } from "$targetDir/batch_integration/metrics/hvg_overlap/main.nf"
-include { isolated_label_asw } from "$targetDir/batch_integration/metrics/isolated_label_asw/main.nf"
-include { isolated_label_f1 } from "$targetDir/batch_integration/metrics/isolated_label_f1/main.nf"
-include { kbet } from "$targetDir/batch_integration/metrics/kbet/main.nf"
-include { lisi } from "$targetDir/batch_integration/metrics/lisi/main.nf"
-include { pcr } from "$targetDir/batch_integration/metrics/pcr/main.nf"
-
-// tsv generation component
-include { extract_scores } from "$targetDir/common/extract_scores/main.nf"
-
-// import helper functions
-include { readConfig; helpMessage; channelFromParams; preprocessInputs; readYaml } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { publishStates; runComponents; collectTraces; writeJson; getPublishDir; findStates; setState } from sourceDir + "/wf_utils/WorkflowHelper.nf"
-include { joinStates } from sourceDir + "/wf_utils/BenchmarkHelper.nf"
-
-config = readConfig("$projectDir/config.vsh.yaml")
-
 // add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
 traces = collectTraces()
-
-// collect method list
-methods = [
-  bbknn,
-  combat,
-  fastmnn_embedding,
-  fastmnn_feature,
-  liger,
-  mnn_correct,
-  mnnpy,
-  pyliger,
-  scalex_embed,
-  scalex_feature,
-  scanorama_embed,
-  scanorama_feature,
-  scanvi,
-  scvi,
-  no_integration_batch,
-  random_embed_cell,
-  random_embed_cell_jitter,
-  random_integration
-]
-
-// collect metric list
-metrics = [
-  asw_batch,
-  asw_label,
-  cell_cycle_conservation,
-  clustering_overlap,
-  graph_connectivity,
-  hvg_overlap,
-  isolated_label_asw,
-  isolated_label_f1,
-  kbet,
-  lisi,
-  pcr
-]
-
-
-workflow {
-  helpMessage(config)
-
-  channelFromParams(params, config)
-    | run_wf
-    | publishStates(key: config.functionality.name)
-}
-
-workflow auto {
-  findStates(params, config)
-    | run_wf
-    | publishStates(key: config.functionality.name)
-}
 
 workflow run_wf {
   take:
@@ -115,9 +7,45 @@ workflow run_wf {
 
   main:
 
+  // collect method list
+  methods = [
+    bbknn,
+    combat,
+    fastmnn_embedding,
+    fastmnn_feature,
+    liger,
+    mnn_correct,
+    mnnpy,
+    pyliger,
+    scalex_embed,
+    scalex_feature,
+    scanorama_embed,
+    scanorama_feature,
+    scanvi,
+    scvi,
+    no_integration_batch,
+    random_embed_cell,
+    random_embed_cell_jitter,
+    random_integration
+  ]
+
+  // collect metric list
+  metrics = [
+    asw_batch,
+    asw_label,
+    cell_cycle_conservation,
+    clustering_overlap,
+    graph_connectivity,
+    hvg_overlap,
+    isolated_label_asw,
+    isolated_label_f1,
+    kbet,
+    lisi,
+    pcr
+  ]
+
   // process input parameter channel
   dataset_ch = input_ch
-    | preprocessInputs(config: config)
 
     | map { id, state -> 
       def newId = id.replaceAll(/\//, "_")
@@ -233,6 +161,12 @@ workflow run_wf {
   output_ch
 }
 
+workflow auto {
+  findStates(params, thisConfig)
+    | run_wf
+    | publishStates([key: thisConfig.functionality.name])
+}
+
 // store the trace log in the publish dir
 workflow.onComplete {
   def publish_dir = getPublishDir()
@@ -241,4 +175,22 @@ workflow.onComplete {
   // todo: add datasets logging
   // writeJson(methods.collect{it.config}, file("$publish_dir/methods.json"))
   // writeJson(metrics.collect{it.config}, file("$publish_dir/metrics.json"))
+}
+
+def joinStates(Closure apply_) {
+  workflow joinStatesWf {
+    take: input_ch
+    main:
+    output_ch = input_ch
+      | toSortedList
+      | filter{ it.size() > 0 }
+      | map{ tups ->
+        def ids = tups.collect{it[0]}
+        def states = tups.collect{it[1]}
+        apply_(ids, states)
+      }
+
+    emit: output_ch
+  }
+  return joinStatesWf
 }

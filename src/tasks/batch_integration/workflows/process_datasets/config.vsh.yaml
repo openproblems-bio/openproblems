@@ -36,5 +36,9 @@ functionality:
   resources:
     - type: nextflow_script
       path: main.nf
+      entrypoint: run_wf
+  dependencies:
+    - name: common/check_dataset_schema
+    - name: batch_integration/process_dataset
 platforms:
   - type: nextflow

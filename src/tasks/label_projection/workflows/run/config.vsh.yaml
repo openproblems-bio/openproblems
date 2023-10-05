@@ -32,6 +32,21 @@ functionality:
   resources:
     - type: nextflow_script
       path: main.nf
+      entrypoint: run_wf
+  dependencies:
+    - name: common/check_dataset_schema
+    - name: common/extract_scores
+    - name: label_projection/control_methods/true_labels
+    - name: label_projection/control_methods/majority_vote
+    - name: label_projection/control_methods/random_labels
+    - name: label_projection/methods/knn
+    - name: label_projection/methods/logistic_regression
+    - name: label_projection/methods/mlp
+    - name: label_projection/methods/scanvi
+    - name: label_projection/methods/scanvi_scarches
+    - name: label_projection/methods/xgboost
+    - name: label_projection/metrics/accuracy
+    - name: label_projection/metrics/f1
   # test_resources:
   #   - type: nextflow_script
   #     path: main.nf

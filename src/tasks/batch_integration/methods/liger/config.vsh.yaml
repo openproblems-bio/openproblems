@@ -25,4 +25,4 @@ platforms:
         cran: rliger
   - type: nextflow
     directives:
-      label: [ lowcpu, highmem ]
+      label: [ lowcpu, highmem, midtime ]

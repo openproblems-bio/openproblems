@@ -24,6 +24,22 @@ functionality:
   resources:
     - type: nextflow_script
       path: main.nf
+      entrypoint: run_wf
+  dependencies:
+    - name: common/check_dataset_schema
+    - name: common/extract_scores
+    - name: dimensionality_reduction/control_methods/random_features
+    - name: dimensionality_reduction/control_methods/true_features
+    - name: dimensionality_reduction/methods/densmap
+    - name: dimensionality_reduction/methods/neuralee
+    - name: dimensionality_reduction/methods/pca
+    - name: dimensionality_reduction/methods/phate
+    - name: dimensionality_reduction/methods/tsne
+    - name: dimensionality_reduction/methods/umap
+    - name: dimensionality_reduction/metrics/coranking
+    - name: dimensionality_reduction/metrics/density_preservation
+    - name: dimensionality_reduction/metrics/distance_correlation
+    - name: dimensionality_reduction/metrics/trustworthiness
   # test_resources:
   #   - type: nextflow_script
   #     path: main.nf
