@@ -9,11 +9,13 @@ functionality:
           description: "The ID of the dataset"
           required: true
         - name: "--input_dataset"
-          __merge__: ../../api/file_dataset.yaml
+          __merge__: /src/tasks/batch_integration/api/file_dataset.yaml
           required: true
+          direction: input
         - name: "--input_solution"
-          __merge__: ../../api/file_dataset.yaml
+          __merge__: /src/tasks/batch_integration/api/file_solution.yaml
           required: true
+          direction: input
     - name: Outputs
       arguments:
         - name: "--output"
