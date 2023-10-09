@@ -17,7 +17,7 @@ mkdir -p $DATASET_DIR
 
 # download dataset
 nextflow run . \
-  -main-script src/datasets/workflows/process_openproblems_v1_multimodal/main.nf \
+  -main-script target/nextflow/datasets/workflows/process_openproblems_v1_multimodal/main.nf \
   -profile docker \
   -resume \
   --id scicar_cell_lines \
@@ -35,10 +35,12 @@ nextflow run . \
   --n_obs 600 \
   --n_vars 1500 \
   --seed 123 \
-  --output_dataset_mod1 dataset_mod1.h5ad \
-  --output_dataset_mod2 dataset_mod2.h5ad \
-  --output_meta_mod1 dataset_metadata_mod1.yaml \
-  --output_meta_mod2 dataset_metadata_mod2.yaml \
+  --normalization_methods log_cp10k \
+  --output_dataset_mod1 '$id/dataset_mod1.h5ad' \
+  --output_dataset_mod2 '$id/dataset_mod2.h5ad' \
+  --output_meta_mod1 '$id/dataset_metadata_mod1.yaml' \
+  --output_meta_mod2 '$id/dataset_metadata_mod2.yaml' \
+  --output_state '$id/state.yaml' \
   --publish_dir "$DATASET_DIR"
 
-src/tasks/match_modalities/resources_test_scripts/scicar_cell_lines.sh
+# src/tasks/match_modalities/resources_test_scripts/scicar_cell_lines.sh

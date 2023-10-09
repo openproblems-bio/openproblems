@@ -10,10 +10,6 @@ functionality:
       type: integer
       default: 1e4
       description: "Number of counts per cell"
-    - name: "--norm_id"
-      type: string
-      default: sqrt_cp10k
-      description: "normalization id to use e.g. 1e4 -> sqrt_cp10k, 1e6 -> sqrt_cpm"
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_python:1.0.1

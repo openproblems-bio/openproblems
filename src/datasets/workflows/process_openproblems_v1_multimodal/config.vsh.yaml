@@ -97,8 +97,8 @@ functionality:
         - name: "--normalization_methods"
           type: string
           multiple: true
-          choices: ["log_cp", "sqrt_cp", "l1_sqrt"]
-          default: ["log_cp"]
+          choices: ["log_cp10k", "log_cpm", "sqrt_cp10k", "sqrt_cpm", "l1_sqrt", "log_scran_pooling"]
+          default: ["log_cp10k", "log_cpm", "sqrt_cp10k", "sqrt_cpm", "l1_sqrt"]
           description: "Which normalization methods to run."
     - name: Outputs
       arguments:

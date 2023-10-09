@@ -17,6 +17,10 @@ functionality:
       __merge__: file_normalized.yaml
       direction: output
       required: true
+    - name: "--normalization_id"
+      type: string
+      description: "The normalization id to store in the dataset metadata. If not specified, the functionality name will be used."
+      required: false
     - name: "--layer_output"
       type: string
       default: "normalized"

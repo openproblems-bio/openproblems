@@ -145,8 +145,15 @@ param_list:
     dataset_description: 90k cells from zebrafish embryos throughout the first day of development, with and without a knockout of chordin, an important developmental gene. 
     dataset_organism: danio_rerio
 
-output_dataset: dataset.h5ad
-output_meta: dataset_metadata.yaml
+normalization_id: [log_cp10k, sqrt_cp10k, l1_sqrt]
+output_dataset: '$id/dataset.h5ad'
+output_meta: '$id/dataset_metadata.yaml'
+output_state: '$id/state.yaml'
+output_raw: force_null
+output_normalized: force_null
+output_pca: force_null
+output_hvg: force_null
+output_knn: force_null
 HERE
 fi
 

@@ -23,7 +23,7 @@ l1_sqrt = l1_sqrt.tocsr()
 
 print("Store output in adata", flush=True)
 adata.layers[par["layer_output"]] = l1_sqrt
-adata.uns["normalization_id"] = meta['functionality_name']
+adata.uns["normalization_id"] = par.get("normalization_id", meta['functionality_name'])
 
 print("Write data", flush=True)
 adata.write_h5ad(par['output'], compression="gzip")
