@@ -36,7 +36,7 @@ workflow run_wf {
     // fetch data from legacy openproblems
     | openproblems_v1_multimodal.run(
       fromState: [
-        "dataset_id": "dataset_id",
+        "dataset_id": "id",
         "obs_celltype": "obs_celltype",
         "obs_batch": "obs_batch",
         "obs_tissue": "obs_tissue",

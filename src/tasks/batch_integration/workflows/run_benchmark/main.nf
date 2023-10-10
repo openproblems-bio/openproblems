@@ -1,5 +1,9 @@
-// add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
-traces = collectTraces()
+workflow auto {
+  findStates(params, meta.config)
+    | meta.workflow.run(
+      auto: [publish: "state"]
+    )
+}
 
 workflow run_wf {
   take:
@@ -47,10 +51,9 @@ workflow run_wf {
   // process input parameter channel
   dataset_ch = input_ch
 
-    | map { id, state -> 
-      def newId = id.replaceAll(/\//, "_")
-
-      [newId, state]
+    // store original id for later use
+    | map{ id, state ->
+      [id, state + [_meta: [join_id: id]]]
     }
 
     // extract the dataset metadata
@@ -61,48 +64,49 @@ workflow run_wf {
       }
     )
 
-  // run all methods
+    // run all methods
   method_out_ch1 = dataset_ch
-    | runComponents(
+    | runEach(
       components: methods,
 
       // use the 'filter' argument to only run a method on the normalisation the component is asking for
-      filter: { id, state, config ->
+      filter: { id, state, comp ->
         def norm = state.normalization_id
-        def pref = config.functionality.info.preferred_normalization
+        def pref = comp.config.functionality.info.preferred_normalization
         // if the preferred normalisation is none at all,
         // we can pass whichever dataset we want
         (norm == "log_cp10k" && pref == "counts") || norm == pref
       },
 
       // define a new 'id' by appending the method name to the dataset id
-      id: { id, state, config ->
-        id + "." + config.functionality.name
+      id: { id, state, comp ->
+        id + "." + comp.config.functionality.name
       },
 
       // use 'fromState' to fetch the arguments the component requires from the overall state
       fromState: [input: "input_dataset"],
 
       // use 'toState' to publish that component's outputs to the overall state
-      toState: { id, output, state, config ->
+      toState: { id, output, state, comp ->
         state + [
-          method_id: config.functionality.name,
+          method_id: comp.config.functionality.name,
           method_output: output.output,
-          method_subtype: config.functionality.info.subtype
+          method_subtype: comp.config.functionality.info.subtype
         ]
       }
     )
   
+
   // append feature->embed transformations
   method_out_ch2 = method_out_ch1
-    | runComponents(
+    | runEach(
       components: feature_to_embed,
-      filter: { id, state, config -> state.method_subtype == "feature"},
+      filter: { id, state, comp -> state.method_subtype == "feature"},
       fromState: [ input: "method_output" ],
-      toState: { id, output, state, config ->
+      toState: { id, output, state, comp ->
         state + [
           method_output: output.output,
-          method_subtype: config.functionality.info.subtype
+          method_subtype: comp.config.functionality.info.subtype
         ]
       }
     )
@@ -110,14 +114,14 @@ workflow run_wf {
 
   // append embed->graph transformations
   method_out_ch3 = method_out_ch2
-    | runComponents(
+    | runEach(
       components: embed_to_graph,
-      filter: { id, state, config -> state.method_subtype == "embedding"},
+      filter: { id, state, comp -> state.method_subtype == "embedding"},
       fromState: [ input: "method_output" ],
-      toState: { id, output, state, config ->
+      toState: { id, output, state, comp ->
         state + [
           method_output: output.output,
-          method_subtype: config.functionality.info.subtype
+          method_subtype: comp.config.functionality.info.subtype
         ]
       }
     )
@@ -125,18 +129,18 @@ workflow run_wf {
 
   // run metrics
   output_ch = method_out_ch3
-    | runComponents(
+    | runEach(
       components: metrics,
-      filter: { id, state, config ->
-        state.method_subtype == config.functionality.info.subtype
+      filter: { id, state, comp ->
+        state.method_subtype == comp.config.functionality.info.subtype
       },
       fromState: [
         input_integrated: "method_output",
         input_solution: "input_solution"
       ],
-      toState: { id, output, state, config ->
+      toState: { id, output, state, comp ->
         state + [
-          metric_id: config.functionality.name,
+          metric_id: comp.config.functionality.name,
           metric_output: output.output
         ]
       }
@@ -149,48 +153,19 @@ workflow run_wf {
     def new_id = "output"
     def new_state = [
       input: states.collect{it.metric_output},
-      output: states[0].output
+      _meta: states[0]._meta
     ]
     [new_id, new_state]
   }
 
   // convert to tsv and publish
-  | extract_scores
+  | extract_scores.run(
+    fromState: ["input"],
+    toState: ["output"]
+  )
+
+  | setState(["output", "_meta"])
 
   emit:
   output_ch
-}
-
-workflow auto {
-  findStates(params, thisConfig)
-    | run_wf
-    | publishStates([key: thisConfig.functionality.name])
-}
-
-// store the trace log in the publish dir
-workflow.onComplete {
-  def publish_dir = getPublishDir()
-
-  writeJson(traces, file("$publish_dir/traces.json"))
-  // todo: add datasets logging
-  // writeJson(methods.collect{it.config}, file("$publish_dir/methods.json"))
-  // writeJson(metrics.collect{it.config}, file("$publish_dir/metrics.json"))
-}
-
-def joinStates(Closure apply_) {
-  workflow joinStatesWf {
-    take: input_ch
-    main:
-    output_ch = input_ch
-      | toSortedList
-      | filter{ it.size() > 0 }
-      | map{ tups ->
-        def ids = tups.collect{it[0]}
-        def states = tups.collect{it[1]}
-        apply_(ids, states)
-      }
-
-    emit: output_ch
-  }
-  return joinStatesWf
 }

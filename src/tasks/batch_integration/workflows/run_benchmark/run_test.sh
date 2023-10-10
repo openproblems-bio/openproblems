@@ -11,7 +11,7 @@ set -e
 # export TOWER_WORKSPACE_ID=53907369739130
 
 DATASETS_DIR="resources_test/batch_integration"
-OUTPUT_DIR="resources_test/batch_integration/benchmarks/openproblems_v1"
+OUTPUT_DIR="output/temp"
 
 if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"
@@ -23,7 +23,6 @@ nextflow run . \
   -profile docker \
   -resume \
   -entry auto \
-  --id resources \
   --input_states "$DATASETS_DIR/**/state.yaml" \
   --rename_keys 'input_dataset:output_dataset,input_solution:output_solution' \
   --settings '{"output": "scores.tsv"}' \

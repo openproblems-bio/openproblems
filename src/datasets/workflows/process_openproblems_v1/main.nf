@@ -36,9 +36,18 @@ workflow run_wf {
     // fetch data from legacy openproblems
     | openproblems_v1.run(
       fromState: [
-        "dataset_id", "obs_celltype", "obs_batch", "obs_tissue", "layer_counts",
-        "sparse", "dataset_name", "data_url", "data_reference", "dataset_summary",
-        "dataset_description", "dataset_organism"
+        "dataset_id": "id",
+        "obs_celltype": "obs_celltype",
+        "obs_batch": "obs_batch",
+        "obs_tissue": "obs_tissue",
+        "layer_counts": "layer_counts",
+        "sparse": "sparse",
+        "dataset_name": "dataset_name",
+        "data_url": "data_url",
+        "data_reference": "data_reference",
+        "dataset_summary": "dataset_summary",
+        "dataset_description": "dataset_description",
+        "dataset_organism": "dataset_organism",
       ],
       toState: ["raw": "output"]
     )

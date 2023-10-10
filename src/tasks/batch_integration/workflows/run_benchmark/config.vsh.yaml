@@ -4,10 +4,6 @@ functionality:
   argument_groups:
     - name: Inputs
       arguments:
-        - name: "--id"
-          type: "string"
-          description: "The ID of the dataset"
-          required: true
         - name: "--input_dataset"
           __merge__: /src/tasks/batch_integration/api/file_dataset.yaml
           required: true

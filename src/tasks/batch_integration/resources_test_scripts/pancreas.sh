@@ -6,6 +6,8 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
+set -e
+
 RAW_DATA=resources_test/common
 DATASET_DIR=resources_test/batch_integration
 
@@ -14,14 +16,15 @@ mkdir -p $DATASET_DIR
 # process dataset
 echo Running process_dataset
 nextflow run . \
-  -main-script src/tasks/batch_integration/workflows/process_datasets/main.nf \
+  -main-script target/nextflow/batch_integration/workflows/process_datasets/main.nf \
   -profile docker \
   -entry auto \
-  --id resources_test \
   --input_states "$RAW_DATA/**/state.yaml" \
   --rename_keys 'input:output_dataset' \
-  --settings '{"output_dataset": "dataset.h5ad", "output_solution": "solution.h5ad"}' \
-  --publish_dir "$DATASET_DIR"
+  --settings '{"output_dataset": "$id/dataset.h5ad", "output_solution": "$id/solution.h5ad"}' \
+  --publish_dir "$DATASET_DIR" \
+  --output_state '$id/state.yaml'
+# output_state should be moved to settings once workaround is solved
 
 echo Running BBKNN
 viash run src/tasks/batch_integration/methods/bbknn/config.vsh.yaml -- \
