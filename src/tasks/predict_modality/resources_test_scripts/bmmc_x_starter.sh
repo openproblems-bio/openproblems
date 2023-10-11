@@ -48,20 +48,20 @@ generate_pm_test_resources () {
     --input_test_mod2 $DATASET_DIR/test_mod2.h5ad \
     --output $DATASET_DIR/score.h5ad
 
-  # run benchmark on test data
-  export NXF_VER=22.04.5
+  # # run benchmark on test data
+  # export NXF_VER=22.04.5
 
-  nextflow run . \
-    -main-script src/tasks/predict_modality/workflows/run/main.nf \
-    -profile docker \
-    -c src/wf_utils/labels_ci.config \
-    --id "$DATASET_ID" \
-    --input_train_mod1 $DATASET_DIR/train_mod1.h5ad \
-    --input_train_mod2 $DATASET_DIR/train_mod2.h5ad \
-    --input_test_mod1 $DATASET_DIR/test_mod1.h5ad \
-    --input_test_mod2 $DATASET_DIR/test_mod2.h5ad \
-    --output scores.tsv \
-    --publish_dir $DATASET_DIR/
+  # nextflow run . \
+  #   -main-script src/tasks/predict_modality/workflows/run/main.nf \
+  #   -profile docker \
+  #   -c src/wf_utils/labels_ci.config \
+  #   --id "$DATASET_ID" \
+  #   --input_train_mod1 $DATASET_DIR/train_mod1.h5ad \
+  #   --input_train_mod2 $DATASET_DIR/train_mod2.h5ad \
+  #   --input_test_mod1 $DATASET_DIR/test_mod1.h5ad \
+  #   --input_test_mod2 $DATASET_DIR/test_mod2.h5ad \
+  #   --output scores.tsv \
+  #   --publish_dir $DATASET_DIR/
 }
 
 generate_pm_test_resources \
