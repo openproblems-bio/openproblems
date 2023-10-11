@@ -32,25 +32,25 @@ viash run src/tasks/label_projection/process_dataset/config.vsh.yaml -- \
 viash run src/tasks/label_projection/methods/knn/config.vsh.yaml -- \
     --input_train $DATASET_DIR/train.h5ad \
     --input_test $DATASET_DIR/test.h5ad \
-    --output $DATASET_DIR/knn.h5ad
+    --output $DATASET_DIR/prediction.h5ad
 
 # run one metric
 viash run src/tasks/label_projection/metrics/accuracy/config.vsh.yaml -- \
-    --input_prediction $DATASET_DIR/knn.h5ad \
+    --input_prediction $DATASET_DIR/prediction.h5ad \
     --input_solution $DATASET_DIR/solution.h5ad \
-    --output $DATASET_DIR/knn_accuracy.h5ad
+    --output $DATASET_DIR/score.h5ad
 
-# run benchmark
-export NXF_VER=22.04.5
+# # run benchmark
+# export NXF_VER=22.04.5
 
-nextflow \
-  run . \
-  -main-script src/tasks/label_projection/workflows/run/main.nf \
-  -profile docker \
-  -resume \
-  --id pancreas \
-  --input_train $DATASET_DIR/train.h5ad \
-  --input_test $DATASET_DIR/test.h5ad \
-  --input_solution $DATASET_DIR/solution.h5ad \
-  --output scores.tsv \
-  --publish_dir $DATASET_DIR/
+# nextflow \
+#   run . \
+#   -main-script src/tasks/label_projection/workflows/run/main.nf \
+#   -profile docker \
+#   -resume \
+#   --id pancreas \
+#   --input_train $DATASET_DIR/train.h5ad \
+#   --input_test $DATASET_DIR/test.h5ad \
+#   --input_solution $DATASET_DIR/solution.h5ad \
+#   --output scores.tsv \
+#   --publish_dir $DATASET_DIR/

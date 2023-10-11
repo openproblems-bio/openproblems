@@ -17,4 +17,5 @@ wget "$NEURIPS2021_URL/openproblems_bmmc_multiome_starter/openproblems_bmmc_mult
 wget "$NEURIPS2021_URL/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_mod2.h5ad" \
   -O "$SUBDIR/dataset_atac.h5ad"
 
-# src/tasks/predict_modality/resources_test_scripts/bmmc_x_starter.sh
+# run task process dataset components
+src/tasks/predict_modality/resources_test_scripts/bmmc_x_starter.sh
