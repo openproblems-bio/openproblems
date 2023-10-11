@@ -5,11 +5,11 @@ functionality:
     - name: Inputs
       arguments:
         - name: "--input_rna"
-          __merge__: "/src/tasks/predict_modality/api/file_dataset_rna.yaml"
+          __merge__: "/src/tasks/predict_modality/api/file_common_dataset_rna.yaml"
           required: true
           direction: input
         - name: "--input_other_mod"
-          __merge__: "/src/tasks/predict_modality/api/file_dataset_other_mod.yaml"
+          __merge__: "/src/tasks/predict_modality/api/file_common_dataset_other_mod.yaml"
           direction: input
           required: true
         - name: "--dataset_schema"
@@ -21,21 +21,21 @@ functionality:
     - name: Outputs
       arguments:
         - name: "--output_train_mod1"
-      __merge__: /src/tasks/predict_modality/api/file_train_mod1.yaml
-      direction: output
-      required: true
-    - name: "--output_train_mod2"
-      __merge__: /src/tasks/predict_modality/api/file_train_mod2.yaml
-      direction: output
-      required: true
-    - name: "--output_test_mod1"
-      __merge__: /src/tasks/predict_modality/api/file_test_mod1.yaml
-      direction: "output"
-      required: true
-    - name: "--output_test_mod2"
-      __merge__: /src/tasks/predict_modality/api/file_test_mod2.yaml
-      direction: output
-      required: true
+          __merge__: /src/tasks/predict_modality/api/file_train_mod1.yaml
+          direction: output
+          required: true
+        - name: "--output_train_mod2"
+          __merge__: /src/tasks/predict_modality/api/file_train_mod2.yaml
+          direction: output
+          required: true
+        - name: "--output_test_mod1"
+          __merge__: /src/tasks/predict_modality/api/file_test_mod1.yaml
+          direction: "output"
+          required: true
+        - name: "--output_test_mod2"
+          __merge__: /src/tasks/predict_modality/api/file_test_mod2.yaml
+          direction: output
+          required: true
   resources:
     - type: nextflow_script
       path: main.nf

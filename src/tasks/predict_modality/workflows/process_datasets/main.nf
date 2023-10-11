@@ -80,7 +80,7 @@ workflow run_wf {
         "output_train_mod1": state.output_train_mod1 ? state.train_mod1 : null,
         "output_train_mod2": state.output_train_mod2 ? state.train_mod2 : null,
         "output_test_mod1": state.output_test_mod1 ? state.test_mod1 : null,
-        "output_test_mod2": state.output_test_mod2 ? state.test_mod2 : null,
+        "output_test_mod2": state.output_test_mod2 ? state.test_mod2 : null
       ]
     }
 
