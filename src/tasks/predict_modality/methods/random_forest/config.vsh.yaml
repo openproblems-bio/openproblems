@@ -27,10 +27,10 @@ functionality:
       path: script.R
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_r:1.0.1
+    image: ghcr.io/openproblems-bio/base_r:1.0.2
     setup:
       - type: r
-        cran: [ lmds, ranger, pbapply, bit64 ]
+        cran: [ lmds, ranger, pbapply]
   - type: nextflow
     directives:
       label: [ "midtime", highmem, highcpu ]
