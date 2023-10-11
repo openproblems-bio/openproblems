@@ -3,6 +3,7 @@ from . import tasks
 from . import tools
 from . import utils
 from .version import __version__
+from . import datasets
 
 import logging as _logging
 
