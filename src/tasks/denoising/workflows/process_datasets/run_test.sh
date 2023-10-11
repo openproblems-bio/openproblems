@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Run this prior to executing this script:
+# bin/viash_build -q 'batch_integration'
+
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
@@ -15,7 +18,8 @@ nextflow run . \
   -profile docker \
   -entry auto \
   -c src/wf_utils/labels_ci.config \
-  --input_states "resources/batch_integration/datasets/**/state.yaml" \
+  --id run_test \
+  --input_states "resources_test/common/**/state.yaml" \
   --rename_keys 'input:output_dataset' \
-  --settings '{"output_train": "$id/train.h5ad", "output_test": "$id/test.h5ad"}' \
-  --publish_dir "resources/batch_integration/benchmarks/openproblems_v1"
+  --settings '{"output_train": "train.h5ad", "output_test": "test.h5ad"}' \
+  --publish_dir "resources_test/denoising"
