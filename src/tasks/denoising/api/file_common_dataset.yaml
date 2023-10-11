@@ -1,0 +1,16 @@
+type: file
+example: "resources_test/common/pancreas/dataset.h5ad"
+info:
+  label: "Common Dataset"
+  summary: A subset of the common dataset.
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
