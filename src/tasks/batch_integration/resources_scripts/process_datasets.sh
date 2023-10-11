@@ -11,18 +11,16 @@ set -e
 COMMON_DATASETS="resources/datasets/openproblems_v1"
 OUTPUT_DIR="resources/batch_integration/datasets/openproblems_v1"
 
-if [ ! -d "$OUTPUT_DIR" ]; then
-  mkdir -p "$OUTPUT_DIR"
-fi
-
 export NXF_VER=22.04.5
+
 nextflow run . \
-  -main-script src/tasks/batch_integration/workflows/process_datasets/main.nf \
+  -main-script target/nextflow/batch_integration/workflows/process_datasets/main.nf \
   -profile docker \
   -entry auto \
   -resume \
-  --id resources \
-  --input_states "resources/datasets/openproblems_v1/**/state.yaml" \
+  --input_states "$COMMON_DATASETS/**/state.yaml" \
   --rename_keys 'input:output_dataset' \
-  --settings '{"output_dataset": "dataset.h5ad", "output_solution": "solution.h5ad"}' \
-  --publish_dir "$OUTPUT_DIR"
+  --settings '{"output_dataset": "$id/dataset.h5ad", "output_solution": "$id/solution.h5ad"}' \
+  --publish_dir "$OUTPUT_DIR" \
+  --output_state '$id/state.yaml'
+# output_state should be moved to settings once workaround is solved

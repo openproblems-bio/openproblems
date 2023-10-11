@@ -22,8 +22,14 @@ workflow run_wf {
       key: "sqrt_cpm",
       args: [normalization_id: "sqrt_cpm", n_cp: 1000000]
     ),
-    l1_sqrt,
-    log_scran_pooling
+    l1_sqrt.run(
+      key: "l1_sqrt",
+      args: [normalization_id: "l1_sqrt"]
+    ),
+    log_scran_pooling.run(
+      key: "log_scran_pooling",
+      args: [normalization_id: "log_scran_pooling"]
+    )
   ]
 
   output_ch = input_ch

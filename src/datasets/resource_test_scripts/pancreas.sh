@@ -28,7 +28,6 @@ nextflow run . \
   --obs_celltype "celltype" \
   --obs_batch "tech" \
   --layer_counts "counts" \
-  --dataset_id pancreas \
   --dataset_name "Human pancreas" \
   --data_url "https://theislab.github.io/scib-reproducibility/dataset_pancreas.html" \
   --data_reference "luecken2022benchmarking" \

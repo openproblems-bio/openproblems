@@ -172,8 +172,7 @@ Arguments:
 
 Unintegrated AnnData HDF5 file.
 
-Example file:
-`resources_test/batch_integration/pancreas/unintegrated.h5ad`
+Example file: `resources_test/batch_integration/pancreas/dataset.h5ad`
 
 Description:
 

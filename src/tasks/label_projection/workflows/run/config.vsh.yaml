@@ -4,10 +4,6 @@ functionality:
   argument_groups:
     - name: Inputs
       arguments:
-        - name: "--id"
-          type: "string"
-          description: "The ID of the normalized dataset"
-          required: true
         - name: "--input_train"
           # __merge__: ../../api/file_train.yaml
           type: file

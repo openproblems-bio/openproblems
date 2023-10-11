@@ -22,8 +22,14 @@ workflow run_wf {
       key: "sqrt_cpm",
       args: [normalization_id: "sqrt_cpm", n_cp: 1000000],
     ),
-    l1_sqrt,
-    log_scran_pooling
+    l1_sqrt.run(
+      key: "l1_sqrt",
+      args: [normalization_id: "l1_sqrt"],
+    ),
+    log_scran_pooling.run(
+      key: "log_scran_pooling",
+      args: [normalization_id: "log_scran_pooling"],
+    )
   ]
 
   output_ch = input_ch
@@ -49,14 +55,14 @@ workflow run_wf {
         "dataset_description": "dataset_description",
         "dataset_organism": "dataset_organism",
       ],
-      toState: ["raw": "output"]
+      toState: ["output_raw": "output"]
     )
     
     // subsample if so desired
     | subsample.run(
       runIf: { id, state -> state.do_subsample },
       fromState: [
-        "input": "raw",
+        "input": "output_raw",
         "n_obs": "n_obs",
         "n_vars": "n_vars",
         "keep_features": "keep_features",
@@ -66,7 +72,7 @@ workflow run_wf {
         "seed": "seed"
       ],
       args: [output_mod2: null],
-      toState: [raw: "output"]
+      toState: ["output_raw": "output"]
     )
 
     | runEach(
@@ -81,48 +87,52 @@ workflow run_wf {
       filter: { id, state, comp ->
         comp.name in state.normalization_methods
       },
-      fromState: ["input": "raw"],
-      toState: ["normalized": "output"]
+      fromState: ["input": "output_raw"],
+      toState: ["output_normalized": "output"]
     )
 
     | pca.run(
-      fromState: ["input": "normalized"],
-      toState: ["pca": "output" ]
+      fromState: ["input": "output_normalized"],
+      toState: ["output_pca": "output" ]
     )
 
     | hvg.run(
-      fromState: ["input": "pca"],
-      toState: ["hvg": "output"]
+      fromState: ["input": "output_pca"],
+      toState: ["output_hvg": "output"]
     )
 
     | knn.run(
-      fromState: ["input": "hvg"],
-      toState: ["knn": "output"]
+      fromState: ["input": "output_hvg"],
+      toState: ["output_knn": "output"]
     )
 
     | check_dataset_schema.run(
-      fromState: { id, state ->
-        [
-          input: state.knn,
-          checks: null
-        ]
-      },
-      toState: ["dataset": "output", "meta": "meta"]
+      fromState: ["input": "output_knn"],
+      toState: ["output_dataset": "output", "output_meta": "meta"]
     )
 
-    // only output the files for which an output file was specified
-    | setState{ id, state ->
-      [
-        "output_dataset": state.output_dataset ? state.dataset : null,
-        "output_meta": state.output_meta ? state.meta : null,
-        "output_raw": state.output_raw ? state.raw : null,
-        "output_normalized": state.output_normalized ? state.normalized : null,
-        "output_pca": state.output_pca ? state.pca : null,
-        "output_hvg": state.output_hvg ? state.hvg : null,
-        "output_knn": state.output_knn ? state.knn : null,
-        "_meta": state._meta
-      ]
+    | filter{ id, state ->
+      def uns = (new org.yaml.snakeyaml.Yaml().load(state.output_meta)).uns
+      def expected_id = "${uns.dataset_id}/${uns.normalization_id}"
+      
+      def is_ok = id == expected_id
+      
+      if (!is_ok) {
+        println("DETECTED ID MISMATCH: $id != $expected_id.\nState: $state\n")
+      }
     }
+
+    // only output the files for which an output file was specified
+    | setState([
+      "output_dataset",
+      "output_meta",
+      "output_raw",
+      "output_normalized",
+      "output_pca",
+      "output_hvg",
+      "output_knn",
+      "_meta"
+    ])
 
   emit:
   output_ch

@@ -22,7 +22,6 @@ param_list:
   - id: allen_brain_atlas
     obs_celltype: label
     layer_counts: counts
-    dataset_id: allen_brain_atlas
     dataset_name: Mouse Brain Atlas
     data_url: http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71585
     data_reference: tasic2016adult
@@ -35,7 +34,6 @@ param_list:
     obs_batch: experiment_code
     obs_tissue: tissue
     layer_counts: counts
-    dataset_id: cengen
     dataset_name: CeNGEN
     data_url: https://www.cengen.org
     data_reference: hammarlund2018cengen
@@ -48,7 +46,6 @@ param_list:
     obs_batch: batch
     obs_tissue: tissue
     layer_counts: counts
-    dataset_id: immune_cells
     dataset_name: Human immune
     data_url: https://theislab.github.io/scib-reproducibility/dataset_immune_cell_hum.html
     data_reference: luecken2022benchmarking
@@ -59,7 +56,6 @@ param_list:
   - id: mouse_blood_olsson_labelled
     obs_celltype: celltype
     layer_counts: counts
-    dataset_id: mouse_blood_olsson_labelled
     dataset_name: Mouse myeloid
     data_url: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70245
     data_reference: olsson2016single
@@ -70,7 +66,6 @@ param_list:
   - id: mouse_hspc_nestorowa2016
     obs_celltype: cell_type_label
     layer_counts: counts
-    dataset_id: mouse_hspc_nestorowa2016
     dataset_name: Mouse HSPC
     data_url: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE81682
     data_reference: nestorowa2016single
@@ -82,7 +77,6 @@ param_list:
     obs_celltype: celltype
     obs_batch: tech
     layer_counts: counts
-    dataset_id: pancreas
     dataset_name: Human pancreas
     data_url: https://theislab.github.io/scib-reproducibility/dataset_pancreas.html
     data_reference: luecken2022benchmarking
@@ -90,21 +84,20 @@ param_list:
     dataset_description: Human pancreatic islet scRNA-seq data from 6 datasets across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, and SMARTER-seq). 
     dataset_organism: homo_sapiens
 
-  - id: tabula_muris_senis_droplet_lung
-    obs_celltype: cell_type
-    obs_batch: donor_id
-    layer_counts: counts
-    dataset_id: tabula_muris_senis_droplet_lung
-    dataset_name: Tabula Muris Senis Lung
-    data_url: https://tabula-muris-senis.ds.czbiohub.org
-    data_reference: tabula2020single
-    dataset_summary: Aging mouse lung cells from Tabula Muris Senis
-    dataset_description: All lung cells from 10x profiles in Tabula Muris Senis, a 500k cell-atlas from 18 organs and tissues across the mouse lifespan.
-    dataset_organism: mus_musculus
+  # disabled as this is not working in openproblemsv1
+  # - id: tabula_muris_senis_droplet_lung
+  #   obs_celltype: cell_type
+  #   obs_batch: donor_id
+  #   layer_counts: counts
+  #   dataset_name: Tabula Muris Senis Lung
+  #   data_url: https://tabula-muris-senis.ds.czbiohub.org
+  #   data_reference: tabula2020single
+  #   dataset_summary: Aging mouse lung cells from Tabula Muris Senis
+  #   dataset_description: All lung cells from 10x profiles in Tabula Muris Senis, a 500k cell-atlas from 18 organs and tissues across the mouse lifespan.
+  #   dataset_organism: mus_musculus
 
   - id: tenx_1k_pbmc
     layer_counts: counts
-    dataset_id: tenx_1k_pbmc
     dataset_name: 1k PBMCs
     data_url: https://www.10xgenomics.com/resources/datasets/1-k-pbm-cs-from-a-healthy-donor-v-3-chemistry-3-standard-3-0-0
     data_reference: 10x2018pbmc
@@ -114,7 +107,6 @@ param_list:
 
   - id: tenx_5k_pbmc
     layer_counts: counts
-    dataset_id: tenx_5k_pbmc
     dataset_name: 5k PBMCs
     data_url: https://www.10xgenomics.com/resources/datasets/5-k-peripheral-blood-mononuclear-cells-pbm-cs-from-a-healthy-donor-with-cell-surface-proteins-v-3-chemistry-3-1-standard-3-1-0
     data_reference: 10x2019pbmc
@@ -125,7 +117,6 @@ param_list:
   - id: tnbc_wu2021
     obs_celltype: celltype_minor
     layer_counts: counts
-    dataset_id: tnbc_wu2021
     dataset_name: Triple-Negative Breast Cancer
     data_url: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE118389
     data_reference: wu2021single
@@ -137,7 +128,6 @@ param_list:
     obs_celltype: cell_type
     obs_batch: lab
     layer_counts: counts
-    dataset_id: zebrafish
     dataset_name: Zebrafish embryonic cells
     data_url: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE112294
     data_reference: wagner2018single
@@ -145,7 +135,7 @@ param_list:
     dataset_description: 90k cells from zebrafish embryos throughout the first day of development, with and without a knockout of chordin, an important developmental gene. 
     dataset_organism: danio_rerio
 
-normalization_id: [log_cp10k, sqrt_cp10k, l1_sqrt]
+normalization_methods: [log_cp10k, sqrt_cp10k, l1_sqrt]
 output_dataset: '$id/dataset.h5ad'
 output_meta: '$id/dataset_metadata.yaml'
 output_state: '$id/state.yaml'

@@ -4,10 +4,6 @@ functionality:
   argument_groups:
     - name: Inputs
       arguments:
-        - name: "--id"
-          type: "string"
-          description: "The ID of the dataset"
-          required: true
         - name: "--input_train"
           type: "file"
         - name: "--input_test"
