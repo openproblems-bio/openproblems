@@ -12,11 +12,17 @@ functionality:
           __merge__: "/src/tasks/predict_modality/api/file_common_dataset_other_mod.yaml"
           direction: input
           required: true
-        - name: "--dataset_schema"
+        - name: "--dataset_schema_rna"
           type: "file"
           description: "The schema of the dataset to validate against"
           required: true
-          default: "src/tasks/predict_modality/api/file_common_dataset.yaml"
+          default: "src/tasks/predict_modality/api/file_common_dataset_rna.yaml"
+          direction: input
+        - name: "--dataset_schema_other_mod"
+          type: "file"
+          description: "The schema of the dataset to validate against"
+          required: true
+          default: "src/tasks/predict_modality/api/file_common_dataset_other_mod.yaml"
           direction: input
     - name: Outputs
       arguments:

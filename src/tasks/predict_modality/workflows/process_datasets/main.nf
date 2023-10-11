@@ -15,9 +15,10 @@ workflow run_wf {
     // TODO: check schema based on the values in `config`
     // instead of having to provide a separate schema file
     | check_dataset_schema.run(
+      key: "check_dataset_schema_rna",
       fromState: [
         "input": "input_rna",
-        "schema": "dataset_schema"
+        "schema": "dataset_schema_rna"
       ],
       args: [
         "stop_on_error": false
@@ -29,9 +30,10 @@ workflow run_wf {
     )
 
     | check_dataset_schema.run(
+      key: "check_dataset_schema_other_mod",
       fromState: [
         "input": "input_other_mod",
-        "schema": "dataset_schema"
+        "schema": "dataset_schema_other_mod"
       ],
       args: [
         "stop_on_error": false
@@ -53,7 +55,7 @@ workflow run_wf {
       }
     }
     | filter { id, state ->
-      state.dataset_rna != null,
+      state.dataset_rna != null &&
       state.dataset_other_mod != null
     }
 
