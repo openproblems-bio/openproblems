@@ -25,13 +25,17 @@ translator = {
 }
 
 print('compute score', flush=True)
-score = cell_cycle(
-    input_solution,
-    input_integrated,
-    batch_key='batch',
-    embed='X_emb',
-    organism=translator[input_solution.uns['dataset_organism']]
-)
+organism = translator[input_solution.uns['dataset_organism']]
+if organism not in ["human", "mouse"]:
+    score = np.nan
+else:
+    score = cell_cycle(
+        input_solution,
+        input_integrated,
+        batch_key='batch',
+        embed='X_emb',
+        organism=organism,
+    )
 
 print('Create output AnnData object', flush=True)
 output = ad.AnnData(
