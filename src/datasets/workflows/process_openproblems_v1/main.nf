@@ -88,7 +88,12 @@ workflow run_wf {
         comp.name in state.normalization_methods
       },
       fromState: ["input": "output_raw"],
-      toState: ["output_normalized": "output"]
+      toState: { id, state, output, comp ->
+        state + [
+          output_normalization: output.output,
+          normalization_id: comp.name
+        ]
+      }
     )
 
     | pca.run(
@@ -118,8 +123,10 @@ workflow run_wf {
       def is_ok = id == expected_id
       
       if (!is_ok) {
-        println("DETECTED ID MISMATCH: $id != $expected_id.\nState: $state\n")
+        println("DETECTED ID MISMATCH: $id != $expected_id.\nTuple:\n${toYamlBlob([id, state])}\n")
       }
+
+      is_ok
     }
 
     // only output the files for which an output file was specified
