@@ -14,10 +14,9 @@ if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"
 fi
 
-params_file="$OUTPUT_DIR/params.yaml"
+params_file="/tmp/datasets_openproblems_v1_multimodal_params.yaml"
 
-if [ ! -f $params_file ]; then
-  cat > "$params_file" << 'HERE'
+cat > "$params_file" << 'HERE'
 param_list:
   - id: citeseq_cbmc
     dataset_name: "CITE-Seq CBMC"
@@ -56,7 +55,6 @@ output_meta_mod1: '$id/dataset_metadata_mod1.yaml'
 output_meta_mod2: '$id/dataset_metadata_mod2.yaml'
 output_state: '$id/state.yaml'
 HERE
-fi
 
 export NXF_VER=22.04.5
 nextflow \

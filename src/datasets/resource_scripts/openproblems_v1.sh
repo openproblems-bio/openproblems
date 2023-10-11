@@ -14,10 +14,9 @@ if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"
 fi
 
-params_file="$OUTPUT_DIR/params.yaml"
+params_file="/tmp/datasets_openproblems_v1_params.yaml"
 
-if [ ! -f $params_file ]; then
-  cat > "$params_file" << 'HERE'
+cat > "$params_file" << 'HERE'
 param_list:
   - id: allen_brain_atlas
     obs_celltype: label
@@ -145,7 +144,6 @@ output_pca: force_null
 output_hvg: force_null
 output_knn: force_null
 HERE
-fi
 
 export NXF_VER=23.04.2
 nextflow run . \

@@ -88,9 +88,9 @@ workflow run_wf {
         comp.name in state.normalization_methods
       },
       fromState: ["input": "output_raw"],
-      toState: { id, state, output, comp ->
+      toState: { id, output, state, comp ->
         state + [
-          output_normalization: output.output,
+          output_normalized: output.output,
           normalization_id: comp.name
         ]
       }
@@ -116,9 +116,13 @@ workflow run_wf {
       toState: ["output_dataset": "output", "output_meta": "meta"]
     )
 
+    // TODO: remove this filter if we're sure the mismatch issue no longer occurs
     | filter{ id, state ->
       def uns = (new org.yaml.snakeyaml.Yaml().load(state.output_meta)).uns
-      def expected_id = "${uns.dataset_id}/${uns.normalization_id}"
+      def expected_id = state.normalization_methods.size() > 1 ?
+        "${uns.dataset_id}/${uns.normalization_id}" :
+        uns.dataset_id
+      expected_id = expected_id.replaceAll("_subsample", "")
       
       def is_ok = id == expected_id
       

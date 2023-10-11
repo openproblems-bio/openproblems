@@ -142,8 +142,8 @@ workflow run_wf {
         ]
       },
       toState: [
-        "dataset_mod1": "output",
-        "meta_mod1": "meta"
+        "output_dataset_mod1": "output",
+        "output_meta_mod1": "meta"
       ]
     )
 
@@ -155,21 +155,19 @@ workflow run_wf {
         ]
       },
       toState: [
-        "dataset_mod2": "output",
-        "meta_mod2": "meta"
+        "output_dataset_mod2": "output",
+        "output_meta_mod2": "meta"
       ]
     )
 
     // only output the files for which an output file was specified
-    | setState{ id, state ->
-      [
-        "output_dataset_mod1" : state.output_dataset_mod1 ? state.dataset_mod1: null,
-        "output_dataset_mod2" : state.output_dataset_mod2 ? state.dataset_mod2: null,
-        "output_meta_mod1" : state.output_meta_mod1 ? state.meta_mod1: null,
-        "output_meta_mod2" : state.output_meta_mod2 ? state.meta_mod2: null,
-        "_meta": state._meta
-      ]
-    }
+    | setState([
+      "output_dataset_mod1",
+      "output_dataset_mod2",
+      "output_meta_mod1",
+      "output_meta_mod2",
+      "_meta"
+    ])
 
   emit:
   output_ch

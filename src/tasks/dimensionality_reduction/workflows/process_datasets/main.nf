@@ -32,24 +32,15 @@ workflow run_wf {
     }
 
     | process_dataset.run(
-      fromState: [
-        input: "dataset",
+      fromState: [input: "dataset"],
+      toState: [
         output_dataset: "output_dataset",
         output_solution: "output_solution"
-      ],
-      toState: [
-        dataset: "output_dataset",
-        solution: "output_solution"
       ]
     )
 
     // only output the files for which an output file was specified
-    | setState { id, state ->
-      [
-        "output_dataset": state.output_dataset ? state.dataset : null,
-        "output_solution": state.output_solution ? state.solution : null
-      ]
-    }
+    | setState(["output_dataset", "output_solution"])
 
   emit:
   output_ch
