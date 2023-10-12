@@ -22,6 +22,7 @@ nextflow run . \
   -profile docker \
   -resume \
   -entry auto \
+  -c src/wf_utils/labels_ci.config \
   --input_states "$DATASETS_DIR/**/state.yaml" \
   --rename_keys 'input_train_mod1:output_train_mod1,input_train_mod2:output_train_mod2,input_test_mod1:output_test_mod1,input_test_mod2:output_test_mod2' \
   --settings '{"output": "scores.tsv"}' \
