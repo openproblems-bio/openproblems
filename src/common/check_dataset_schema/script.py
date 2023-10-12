@@ -17,7 +17,7 @@ par = {
 def check_structure(slot_info, adata_slot):
   missing = []
   for obj in slot_info:
-    if obj['name'] not in adata_slot:
+    if 'required' in obj and obj['required'] and obj['name'] not in adata_slot:
       missing.append(obj['name'])
   return missing
 
@@ -75,8 +75,7 @@ if par['schema'] is not None:
       if adata.X is None:
         missing_x = True
       continue
-    if "required" in def_slots[slot] and def_slots[slot]["required"]:
-      missing = check_structure(def_slots[slot], getattr(adata, slot))
+    missing = check_structure(def_slots[slot], getattr(adata, slot))
     if missing_x:
       missing.append("X")
     if missing:
