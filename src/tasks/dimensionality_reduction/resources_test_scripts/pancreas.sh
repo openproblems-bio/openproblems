@@ -31,14 +31,14 @@ nextflow run . \
 
 # run one method
 viash run src/tasks/dimensionality_reduction/methods/densmap/config.vsh.yaml -- \
-    --input $DATASET_DIR/dataset.h5ad \
-    --output $DATASET_DIR/embedding.h5ad
+    --input $DATASET_DIR/pancreas/dataset.h5ad \
+    --output $DATASET_DIR/pancreas/embedding.h5ad
 
 # run one metric
 viash run src/tasks/dimensionality_reduction/metrics/distance_correlation/config.vsh.yaml -- \
-    --input_embedding $DATASET_DIR/embedding.h5ad \
-    --input_solution $DATASET_DIR/solution.h5ad \
-    --output $DATASET_DIR/score.h5ad
+    --input_embedding $DATASET_DIR/pancreas/embedding.h5ad \
+    --input_solution $DATASET_DIR/pancreas/solution.h5ad \
+    --output $DATASET_DIR/pancreas/score.h5ad
 
 # # run benchmark
 # export NXF_VER=22.04.5
