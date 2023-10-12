@@ -23,10 +23,12 @@ info:
       - type: integer
         name: counts
         description: Raw counts
+        required: true
     uns:
       - type: string
         name: dataset_id
         description: "A unique identifier for the dataset"
+        required: true
 """)
   return schema
 
@@ -48,13 +50,16 @@ info:
       - type: integer
         name: counts
         description: Raw counts
+        required: true
     uns:
       - type: string
         name: dataset_id
         description: "A unique identifier for the dataset"
+        required: true
       - type: string
         name: error_test
         description: "A made up uns variable to test if error is picked up"
+        required: true
   """)
   return schema
 
