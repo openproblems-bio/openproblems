@@ -69,7 +69,14 @@ if par['schema'] is not None:
   def_slots = data_struct['info']['slots']
 
   for slot in def_slots:
+    missing_x = False
+    if slot == "X":
+      if adata.X is None:
+        missing_x = True
+      continue
     missing = check_structure(def_slots[slot], getattr(adata, slot))
+    if missing_x:
+      missing.append("X")
     if missing:
       out['exit_code'] = 1
       out['data_schema'] = 'not ok'

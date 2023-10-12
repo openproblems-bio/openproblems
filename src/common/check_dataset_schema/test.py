@@ -40,6 +40,10 @@ example: "preprocessed.h5ad"
 info:
   label: "Preprocessed dataset"
   slots:
+    X:
+      type: double
+      description: Normalized expression values
+      required: true
     layers: 
       - type: integer
         name: counts
