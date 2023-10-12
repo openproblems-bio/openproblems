@@ -25,5 +25,5 @@ functionality:
     - path: /src/common/helper_functions/subset_anndata.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    image: ghcr.io/openproblems-bio/base_python:1.0.2
   - type: nextflow

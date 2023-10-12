@@ -41,7 +41,7 @@ functionality:
     - path: /resources_test/common/pancreas
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    image: ghcr.io/openproblems-bio/base_python:1.0.2
     test_setup:
       - type: python
         packages:

@@ -29,7 +29,7 @@ functionality:
       path: /src/tasks/dimensionality_reduction/methods/diffusion_map/script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    image: ghcr.io/openproblems-bio/base_python:1.0.2
     setup:
       - type: python
         pypi: 

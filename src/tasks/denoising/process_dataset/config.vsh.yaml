@@ -26,7 +26,7 @@ functionality:
     - path: helper.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.1
+    image: ghcr.io/openproblems-bio/base_python:1.0.2
     setup:
       - type: python
         packages:
