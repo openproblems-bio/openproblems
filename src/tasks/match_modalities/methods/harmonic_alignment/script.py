@@ -9,10 +9,9 @@ par = {
   "n_pca_XY" : 100,
   "eigenvectors" : 100
 }
-
 meta = {
-    "functionality_name" : "harmonic_alignment"
-    }
+  "functionality_name" : "harmonic_alignment"
+}
 ## VIASH END
 
 

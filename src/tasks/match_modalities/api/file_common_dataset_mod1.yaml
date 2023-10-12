@@ -1,0 +1,32 @@
+type: file
+example: "resources_test/common/scicar_cell_lines/dataset_mod1.h5ad"
+info:
+  label: "Common dataset mod1"
+  summary: The first modality (RNA) of a dataset processed by the common multimodal dataset processing pipeline. 
+  description: |
+    This dataset contains both raw counts and normalized data matrices,
+    as well as a PCA embedding, HVG selection and a kNN graph.
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+      - type: double
+        name: normalized
+        description: Normalized counts
+        required: true
+    obsm:
+      - type: double
+        name: X_svd
+        description: The resulting SVD PCA embedding.
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: normalization_id
+        description: "Which normalization was used"
+        required: true

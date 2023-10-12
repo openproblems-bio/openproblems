@@ -26,4 +26,4 @@ platforms:
           - scipy
   - type: nextflow
     directives:
-      label: [ "midtime", medcpu, medmem ]
+      label: [ "midtime", midmem, midcpu ]

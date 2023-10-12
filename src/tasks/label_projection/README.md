@@ -46,7 +46,7 @@ labels onto the test set.
 
 ``` mermaid
 flowchart LR
-  file_common_dataset("Common dataset")
+  file_common_dataset("Common Dataset")
   comp_process_dataset[/"Data processor"/]
   file_train("Training data")
   file_test("Test data")
@@ -72,29 +72,26 @@ flowchart LR
   file_prediction---comp_metric
 ```
 
-## File format: Common dataset
+## File format: Common Dataset
 
-A dataset processed by the common dataset processing pipeline.
+A subset of the common dataset.
 
 Example file: `resources_test/common/pancreas/dataset.h5ad`
 
 Description:
 
-This dataset contains both raw counts and normalized data matrices, as
-well as a PCA embedding, HVG selection and a kNN graph.
+NA
 
 Format:
 
 <div class="small">
 
     AnnData object
-     obs: 'celltype', 'batch', 'tissue', 'size_factors'
+     obs: 'celltype', 'batch'
      var: 'hvg', 'hvg_score'
      obsm: 'X_pca'
-     obsp: 'knn_distances', 'knn_connectivities'
-     varm: 'pca_loadings'
      layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'dataset_name', 'data_url', 'data_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'pca_variance', 'knn'
+     uns: 'dataset_id', 'normalization_id'
 
 </div>
 
@@ -102,29 +99,17 @@ Slot description:
 
 <div class="small">
 
-| Slot                         | Type      | Description                                                                    |
-|:-----------------------------|:----------|:-------------------------------------------------------------------------------|
-| `obs["celltype"]`            | `string`  | (*Optional*) Cell type information.                                            |
-| `obs["batch"]`               | `string`  | (*Optional*) Batch information.                                                |
-| `obs["tissue"]`              | `string`  | (*Optional*) Tissue information.                                               |
-| `obs["size_factors"]`        | `double`  | (*Optional*) The size factors created by the normalisation method, if any.     |
-| `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.       |
-| `var["hvg_score"]`           | `integer` | A ranking of the features by hvg.                                              |
-| `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                                   |
-| `obsp["knn_distances"]`      | `double`  | K nearest neighbors distance matrix.                                           |
-| `obsp["knn_connectivities"]` | `double`  | K nearest neighbors connectivities matrix.                                     |
-| `varm["pca_loadings"]`       | `double`  | The PCA loadings matrix.                                                       |
-| `layers["counts"]`           | `integer` | Raw counts.                                                                    |
-| `layers["normalized"]`       | `double`  | Normalised expression values.                                                  |
-| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                           |
-| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                         |
-| `uns["data_url"]`            | `string`  | (*Optional*) Link to the original source of the dataset.                       |
-| `uns["data_reference"]`      | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
-| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
-| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
-| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
-| `uns["pca_variance"]`        | `double`  | The PCA variance objects.                                                      |
-| `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                        |
+| Slot                      | Type      | Description                                                              |
+|:--------------------------|:----------|:-------------------------------------------------------------------------|
+| `obs["celltype"]`         | `string`  | Cell type information.                                                   |
+| `obs["batch"]`            | `string`  | Batch information.                                                       |
+| `var["hvg"]`              | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’. |
+| `var["hvg_score"]`        | `integer` | A ranking of the features by hvg.                                        |
+| `obsm["X_pca"]`           | `double`  | The resulting PCA embedding.                                             |
+| `layers["counts"]`        | `integer` | Raw counts.                                                              |
+| `layers["normalized"]`    | `double`  | Normalized expression values.                                            |
+| `uns["dataset_id"]`       | `string`  | A unique identifier for the dataset.                                     |
+| `uns["normalization_id"]` | `string`  | Which normalization was used.                                            |
 
 </div>
 
@@ -139,12 +124,12 @@ Arguments:
 
 <div class="small">
 
-| Name                | Type   | Description                                                    |
-|:--------------------|:-------|:---------------------------------------------------------------|
-| `--input`           | `file` | A dataset processed by the common dataset processing pipeline. |
-| `--output_train`    | `file` | (*Output*) The training data.                                  |
-| `--output_test`     | `file` | (*Output*) The test data (without labels).                     |
-| `--output_solution` | `file` | (*Output*) The solution for the test data.                     |
+| Name                | Type   | Description                                |
+|:--------------------|:-------|:-------------------------------------------|
+| `--input`           | `file` | A subset of the common dataset.            |
+| `--output_train`    | `file` | (*Output*) The training data.              |
+| `--output_test`     | `file` | (*Output*) The test data (without labels). |
+| `--output_solution` | `file` | (*Output*) The solution for the test data. |
 
 </div>
 

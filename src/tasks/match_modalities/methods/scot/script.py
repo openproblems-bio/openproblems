@@ -16,7 +16,6 @@ par = {
   "output_mod2" : "integrated_mod2.h5ad",
   "balanced":False,
 }
-
 ## VIASH END
 
 

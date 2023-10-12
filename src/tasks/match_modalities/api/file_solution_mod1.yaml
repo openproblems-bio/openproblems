@@ -1,8 +1,8 @@
 type: file
-example: "resources_test/common/scicar_cell_lines/dataset_mod1.h5ad"
+example: "resources_test/match_modalities/scicar_cell_lines/solution_mod1.h5ad"
 info:
-  label: "Modality 1"
-  summary: "The first modality of a multimodal dataset."
+  label: "Solution mod1"
+  summary: "The ground truth information for the first modality"
   slots:
     layers: 
       - type: integer
@@ -13,14 +13,10 @@ info:
         name: normalized
         description: Normalized counts
         required: true
-    var:
-      - type: boolean
-        name: hvg
-        description: Whether or not the feature is considered to be a 'highly variable gene'
-        required: true
+    obs:
       - type: integer
-        name: hvg_score
-        description: A ranking of the features by hvg.
+        name: permutation_indices
+        description: "Indices with which to revert the permutation of the cells"
         required: true
     obsm:
       - type: double

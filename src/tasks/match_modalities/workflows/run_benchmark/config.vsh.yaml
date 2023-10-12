@@ -5,14 +5,29 @@ functionality:
     - name: Inputs
       arguments:
         - name: "--input_mod1"
-          type: "file" # todo: replace with includes
+          __merge__: /src/tasks/match_modalities/api/file_dataset_mod1.yaml
+          direction: input
+          required: true
         - name: "--input_mod2"
-          type: "file" 
+          __merge__: /src/tasks/match_modalities/api/file_dataset_mod2.yaml
+          direction: input
+          required: true
+        - name: "--input_solution_mod1"
+          __merge__: /src/tasks/match_modalities/api/file_solution_mod1.yaml
+          direction: input
+          required: true
+        - name: "--input_solution_mod2"
+          __merge__: /src/tasks/match_modalities/api/file_solution_mod2.yaml
+          direction: input
+          required: true
     - name: Outputs
       arguments:
         - name: "--output"
-          direction: "output"
+          direction: output
           type: file
+          example: output.tsv
+          description: A TSV file containing the scores of each of the methods
+          required: true
   resources:
     - type: nextflow_script
       path: main.nf
