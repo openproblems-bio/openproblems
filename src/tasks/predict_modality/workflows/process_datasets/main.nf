@@ -45,15 +45,6 @@ workflow run_wf {
     )
 
     // remove datasets which didn't pass the schema check
-    | view { id, state ->
-      if (state.dataset_rna == null) {
-        "Dataset ${state.input} did not pass the schema check. Checks: ${state.dataset_checks}"
-      } else if (state.dataset_other_mod == null) {
-        "Dataset ${state.input} did not pass the schema check. Checks: ${state.dataset_checks}"
-      } else {
-        null
-      }
-    }
     | filter { id, state ->
       state.dataset_rna != null &&
       state.dataset_other_mod != null
@@ -69,22 +60,20 @@ workflow run_wf {
         output_test_mod2: "output_test_mod2"
       ],
       toState: [
-        train_mod1: "output_train_mod1",
-        train_mod2: "output_train_mod2",
-        test_mod1: "output_test_mod1",
-        test_mod2: "output_test_mod2"
+        "output_train_mod1",
+        "output_train_mod2",
+        "output_test_mod1",
+        "output_test_mod2"
       ]
     )
 
     // only output the files for which an output file was specified
-    | setState { id, state ->
-      [
-        "output_train_mod1": state.output_train_mod1 ? state.train_mod1 : null,
-        "output_train_mod2": state.output_train_mod2 ? state.train_mod2 : null,
-        "output_test_mod1": state.output_test_mod1 ? state.test_mod1 : null,
-        "output_test_mod2": state.output_test_mod2 ? state.test_mod2 : null
-      ]
-    }
+    | setState ([
+        "output_train_mod1",
+        "output_train_mod2",
+        "output_test_mod1",
+        "output_test_mod2"
+      ])
 
   emit:
   output_ch
