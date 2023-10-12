@@ -17,7 +17,7 @@ par = {
 def check_structure(slot_info, adata_slot):
   missing = []
   for obj in slot_info:
-    if 'required' in obj and obj['required'] and obj['name'] not in adata_slot:
+    if obj.get('required') and obj['name'] not in adata_slot:
       missing.append(obj['name'])
   return missing
 

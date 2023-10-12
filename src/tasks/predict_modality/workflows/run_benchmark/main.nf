@@ -45,25 +45,18 @@ workflow run_wf {
       }
     )
 
-    | check_dataset_schema.run(
-      fromState: [ "input": "input_train_mod2" ],
-      toState: { id, output, state ->
-        state + (new org.yaml.snakeyaml.Yaml().load(output.meta)).uns
-      }
-    )
-
     // run all methods
     | runEach(
       components: methods,
 
-      // use the 'filter' argument to only run a method on the normalisation the component is asking for
-      filter: { id, state, comp ->
-        def norm = state.normalization_id
-        def pref = comp.config.functionality.info.preferred_normalization
-        // if the preferred normalisation is none at all,
-        // we can pass whichever dataset we want
-        (norm == "log_cp10k" && pref == "counts") || norm == pref
-      },
+      // // use the 'filter' argument to only run a method on the normalisation the component is asking for
+      // filter: { id, state, comp ->
+      //   def norm = state.normalization_id
+      //   def pref = comp.config.functionality.info.preferred_normalization
+      //   // if the preferred normalisation is none at all,
+      //   // we can pass whichever dataset we want
+      //   (norm == "log_cp10k" && pref == "counts") || norm == pref
+      // },
 
       // define a new 'id' by appending the method name to the dataset id
       id: { id, state, comp ->
@@ -71,7 +64,7 @@ workflow run_wf {
       },
 
       // use 'fromState' to fetch the arguments the component requires from the overall state
-      fromState:fromState: { id, state, comp ->
+      fromState: { id, state, comp ->
         def new_args = [
           input_train_mod1: state.input_train_mod1,
           input_train_mod2: state.input_train_mod2,
