@@ -91,8 +91,8 @@ workflow run_wf {
       components: metrics,
       // use 'fromState' to fetch the arguments the component requires from the overall state
       fromState: [
-        input_mod1: "method_output_mod1",
-        input_mod2: "method_output_mod2",
+        input_integrated_mod1: "method_output_mod1",
+        input_integrated_mod2: "method_output_mod2",
         input_solution_mod1: "input_solution_mod1",
         input_solution_mod2: "input_solution_mod2"
       ],
