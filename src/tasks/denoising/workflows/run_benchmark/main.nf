@@ -93,7 +93,7 @@ workflow run_wf {
       def new_id = "output"
       def new_state = [
         input: states.collect{it.metric_output},
-        output: states[0]._meta
+        _meta: states[0]._meta
       ]
       [new_id, new_state]
     }
