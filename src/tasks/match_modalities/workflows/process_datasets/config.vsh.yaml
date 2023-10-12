@@ -1,0 +1,53 @@
+functionality:
+  name: "process_datasets"
+  namespace: "match_modalities/workflows"
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - name: "--input_mod1"
+          __merge__: "/src/tasks/match_modalities/api/file_common_dataset_mod1.yaml"
+          required: true
+          direction: input
+        - name: "--input_mod2"
+          __merge__: "/src/tasks/match_modalities/api/file_common_dataset_mod2.yaml"
+          required: true
+          direction: input
+        - name: "--dataset_schema_mod1"
+          type: "file"
+          description: "The schema of the dataset mod1 to validate against"
+          required: true
+          default: "src/tasks/match_modalities/api/file_common_dataset_mod1.yaml"
+          direction: input
+        - name: "--dataset_schema_mod2"
+          type: "file"
+          description: "The schema of the dataset mod2 to validate against"
+          required: true
+          default: "src/tasks/match_modalities/api/file_common_dataset_mod2.yaml"
+          direction: input
+    - name: Outputs
+      arguments:
+        - name: "--output_mod1"
+          __merge__: /src/tasks/match_modalities/api/file_dataset_mod1.yaml
+          required: true
+          direction: output
+        - name: "--output_mod2"
+          __merge__: /src/tasks/match_modalities/api/file_dataset_mod2.yaml
+          required: true
+          direction: output
+        - name: "--output_solution_mod1"
+          __merge__: /src/tasks/match_modalities/api/file_solution_mod1.yaml
+          required: true
+          direction: output
+        - name: "--output_solution_mod2"
+          __merge__: /src/tasks/match_modalities/api/file_solution_mod2.yaml
+          required: true
+          direction: output
+  resources:
+    - type: nextflow_script
+      path: main.nf
+      entrypoint: run_wf
+  dependencies:
+    - name: common/check_dataset_schema
+    - name: match_modalities/process_dataset
+platforms:
+  - type: nextflow

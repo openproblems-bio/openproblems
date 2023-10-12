@@ -1,35 +1,13 @@
 type: file
 example: "resources_test/match_modalities/scicar_cell_lines/integrated_mod1.h5ad"
 info:
-  label: "Integrated"
-  summary: "The integrated data"
+  label: "Integrated mod1"
+  summary: "The integrated embedding for the first modality"
   slots:
-    layers: 
-      - type: integer
-        name: counts
-        description: Raw counts
-        required: true
-      - type: double
-        name: normalized
-        description: Normalized counts
-        required: true
-    var:
-      - type: boolean
-        name: hvg
-        description: Whether or not the feature is considered to be a 'highly variable gene'
-        required: true
-      - type: integer
-        name: hvg_score
-        description: A ranking of the features by hvg.
-        required: true
     obsm:
       - type: double
-        name: X_svd
-        description: The resulting SVD PCA embedding.
-        required: true
-      - type: double
         name: integrated
-        description: The resulting integrated embedding.
+        description: An integrated embedding.
         required: true
     uns:
       - type: string

@@ -17,7 +17,7 @@ functionality:
           commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
   resources:
     - type: python_script
-      path: ./script.py
+      path: script.py
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_python:1.0.1
@@ -26,7 +26,6 @@ platforms:
         packages:
           - numpy
           - scipy
-          - scprep
   - type: nextflow
     directives:
       label: [ "midtime", lowmem, lowcpu ]

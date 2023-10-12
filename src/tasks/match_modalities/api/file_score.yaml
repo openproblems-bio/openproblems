@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/match_modalities/score.h5ad"
+example: "resources_test/match_modalities/scicar_cell_lines/score.h5ad"
 info:
   label: "Score"
   summary: "Metric score file"
