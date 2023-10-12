@@ -1,5 +1,9 @@
-// add custom tracer to nextflow to capture exit codes, memory usage, cpu usage, etc.
-traces = initializeTracer()
+workflow auto {
+  findStates(params, meta.config)
+    | meta.workflow.run(
+      auto: [publish: "state"]
+    )
+}
 
 workflow run_wf {
   take:
@@ -29,6 +33,11 @@ workflow run_wf {
 
   output_ch = input_ch
 
+    // store original id for later use
+    | map{ id, state ->
+      [id, state + [_meta: [join_id: id]]]
+    }
+
     // extract the dataset metadata
     | check_dataset_schema.run(
       fromState: [ "input": "input_train" ],
@@ -41,46 +50,46 @@ workflow run_wf {
     )
 
     // run all methods
-    | runComponents(
+    | runEach(
       components: methods,
 
       // use the 'filter' argument to only run a method on the normalisation the component is asking for
-      filter: { id, state, config ->
+      filter: { id, state, comp ->
         def norm = state.normalization_id
-        def pref = config.functionality.info.preferred_normalization
+        def pref = comp.config.functionality.info.preferred_normalization
         // if the preferred normalisation is none at all,
         // we can pass whichever dataset we want
         (norm == "log_cp10k" && pref == "counts") || norm == pref
       },
 
       // define a new 'id' by appending the method name to the dataset id
-      id: { id, state, config ->
-        id + "." + config.functionality.name
+      id: { id, state, comp ->
+        id + "." + comp.config.functionality.name
       },
 
       // use 'fromState' to fetch the arguments the component requires from the overall state
-      fromState: { id, state, config ->
+      fromState: { id, state, comp ->
         def new_args = [
           input_train: state.input_train,
           input_test: state.input_test
         ]
-        if (config.functionality.info.type == "control_method") {
+        if (comp.config.functionality.info.type == "control_method") {
           new_args.input_solution = state.input_solution
         }
         new_args
       },
 
       // use 'toState' to publish that component's outputs to the overall state
-      toState: { id, output, state, config ->
+      toState: { id, output, state, comp ->
         state + [
-          method_id: config.functionality.name,
+          method_id: comp.config.functionality.name,
           method_output: output.output
         ]
       }
     )
 
     // run all metrics
-    | runComponents(
+    | runEach(
       components: metrics,
       // use 'fromState' to fetch the arguments the component requires from the overall state
       fromState: [
@@ -88,41 +97,33 @@ workflow run_wf {
         input_prediction: "method_output"
       ],
       // use 'toState' to publish that component's outputs to the overall state
-      toState: { id, output, state, config ->
+      toState: { id, output, state, comp ->
         state + [
-          metric_id: config.functionality.name,
+          metric_id: comp.config.functionality.name,
           metric_output: output.output
         ]
       }
     )
 
-    // join all events into a new event where the new id is simply "output" and the new state consists of:
-    //   - "input": a list of score h5ads
-    //   - "output": the output argument of this workflow
+    // join all events into a new event
     | joinStates{ ids, states ->
       def new_id = "output"
       def new_state = [
         input: states.collect{it.metric_output},
-        output: states[0].output
+        _meta: states[0]._meta
       ]
       [new_id, new_state]
     }
 
     // convert to tsv and publish
     | extract_scores.run(
-      auto: [publish: true]
+      fromState: ["input"],
+      toState: ["output"]
     )
+
+    | setState(["output", "_meta"])
+
 
   emit:
   output_ch
-}
-
-// store the trace log in the publish dir
-workflow.onComplete {
-  def publish_dir = getPublishDir()
-
-  writeJson(traces, file("$publish_dir/traces.json"))
-  // todo: add datasets logging
-  writeJson(methods.collect{it.config}, file("$publish_dir/methods.json"))
-  writeJson(metrics.collect{it.config}, file("$publish_dir/metrics.json"))
 }
