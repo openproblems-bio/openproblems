@@ -71,7 +71,7 @@ workflow run_wf {
       },
 
       // use 'fromState' to fetch the arguments the component requires from the overall state
-      fromState:fromState: { id, state, comp ->
+      fromState: { id, state, comp ->
         def new_args = [
           input_train_mod1: state.input_train_mod1,
           input_train_mod2: state.input_train_mod2,
