@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Run this prior to executing this script:
-# bin/viash_build -q 'batch_integration'
-
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
