@@ -67,21 +67,26 @@ workflow run_wf {
 
       // define a new 'id' by appending the method name to the dataset id
       id: { id, state, comp ->
-        id + "." + comp.functionality.name
+        id + "." + comp.config.functionality.name
       },
 
       // use 'fromState' to fetch the arguments the component requires from the overall state
-      fromState: [
-          input_train_mod1: "input_train_mod1",
-          input_train_mod2: "input_train_mod2",
-          input_test_mod1: "input_test_mod1",
-          input_test_mod2: "input_test_mod2"
-        ],
+      fromState:fromState: { id, state, comp ->
+        def new_args = [
+          input_train_mod1: state.input_train_mod1,
+          input_train_mod2: state.input_train_mod2,
+          input_test_mod1: state.input_test_mod1
+        ]
+        if (comp.config.functionality.info.type == "control_method") {
+          new_args.input_test_mod2 = state.input_test_mod2
+        }
+        new_args
+      },
 
       // use 'toState' to publish that component's outputs to the overall state
       toState: { id, output, state, comp ->
         state + [
-          method_id: comp.functionality.name,
+          method_id: comp.config.functionality.name,
           method_output: output.output
         ]
       }
@@ -98,7 +103,7 @@ workflow run_wf {
       // use 'toState' to publish that component's outputs to the overall state
       toState: { id, output, state, comp ->
         state + [
-          metric_id: comp.functionality.name,
+          metric_id: comp.config.functionality.name,
           metric_output: output.output
         ]
       }
