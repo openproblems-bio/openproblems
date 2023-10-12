@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/label_projection/pancreas/knn_accuracy.h5ad"
+example: "resources_test/label_projection/pancreas/score.h5ad"
 info:
   label: "Score"
   summary: "Metric score file"

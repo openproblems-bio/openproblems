@@ -1,0 +1,53 @@
+functionality:
+  name: "process_datasets"
+  namespace: "predict_modality/workflows"
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - name: "--input_rna"
+          __merge__: "/src/tasks/predict_modality/api/file_common_dataset_rna.yaml"
+          required: true
+          direction: input
+        - name: "--input_other_mod"
+          __merge__: "/src/tasks/predict_modality/api/file_common_dataset_other_mod.yaml"
+          direction: input
+          required: true
+        - name: "--dataset_schema_rna"
+          type: "file"
+          description: "The schema of the dataset to validate against"
+          required: true
+          default: "src/tasks/predict_modality/api/file_common_dataset_rna.yaml"
+          direction: input
+        - name: "--dataset_schema_other_mod"
+          type: "file"
+          description: "The schema of the dataset to validate against"
+          required: true
+          default: "src/tasks/predict_modality/api/file_common_dataset_other_mod.yaml"
+          direction: input
+    - name: Outputs
+      arguments:
+        - name: "--output_train_mod1"
+          __merge__: /src/tasks/predict_modality/api/file_train_mod1.yaml
+          direction: output
+          required: true
+        - name: "--output_train_mod2"
+          __merge__: /src/tasks/predict_modality/api/file_train_mod2.yaml
+          direction: output
+          required: true
+        - name: "--output_test_mod1"
+          __merge__: /src/tasks/predict_modality/api/file_test_mod1.yaml
+          direction: "output"
+          required: true
+        - name: "--output_test_mod2"
+          __merge__: /src/tasks/predict_modality/api/file_test_mod2.yaml
+          direction: output
+          required: true
+  resources:
+    - type: nextflow_script
+      path: main.nf
+      entrypoint: run_wf
+  dependencies:
+    - name: common/check_dataset_schema
+    - name: predict_modality/process_dataset
+platforms:
+  - type: nextflow

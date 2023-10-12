@@ -43,4 +43,5 @@ nextflow run . \
   --output_state '$id/state.yaml' \
   --publish_dir "$DATASET_DIR"
 
-# src/tasks/match_modalities/resources_test_scripts/scicar_cell_lines.sh
+# run task process dataset components
+src/tasks/match_modalities/resources_test_scripts/scicar_cell_lines.sh

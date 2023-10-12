@@ -317,7 +317,7 @@ Arguments:
 
 The prediction file
 
-Example file: `resources_test/label_projection/pancreas/knn.h5ad`
+Example file: `resources_test/label_projection/pancreas/prediction.h5ad`
 
 Description:
 
@@ -351,7 +351,7 @@ Slot description:
 Metric score file
 
 Example file:
-`resources_test/label_projection/pancreas/knn_accuracy.h5ad`
+`resources_test/label_projection/pancreas/score.h5ad`
 
 Description:
 

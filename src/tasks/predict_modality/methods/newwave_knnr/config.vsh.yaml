@@ -31,10 +31,10 @@ functionality:
       path: script.R
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_r:1.0.1
+    image: ghcr.io/openproblems-bio/base_r:1.0.2
     setup:
       - type: r
-        cran: [ lmds, FNN, proxy, proxyC, bit64 ]
+        cran: [ lmds, FNN, proxy, proxyC]
         bioc: [ SingleCellExperiment, NewWave ]
       - type: r
         github: [Jiefei-Wang/SharedObject, fedeago/NewWave]

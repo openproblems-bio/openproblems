@@ -23,10 +23,12 @@ info:
       - type: integer
         name: counts
         description: Raw counts
+        required: true
     uns:
       - type: string
         name: dataset_id
         description: "A unique identifier for the dataset"
+        required: true
 """)
   return schema
 
@@ -40,17 +42,24 @@ example: "preprocessed.h5ad"
 info:
   label: "Preprocessed dataset"
   slots:
+    X:
+      type: double
+      description: Normalized expression values
+      required: true
     layers: 
       - type: integer
         name: counts
         description: Raw counts
+        required: true
     uns:
       - type: string
         name: dataset_id
         description: "A unique identifier for the dataset"
+        required: true
       - type: string
         name: error_test
         description: "A made up uns variable to test if error is picked up"
+        required: true
   """)
   return schema
 

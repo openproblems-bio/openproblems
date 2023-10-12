@@ -10,6 +10,12 @@ wget "$NEURIPS2021_URL/openproblems_bmmc_cite_starter/openproblems_bmmc_cite_sta
 wget "$NEURIPS2021_URL/openproblems_bmmc_cite_starter/openproblems_bmmc_cite_starter.output_mod2.h5ad" \
   -O "$SUBDIR/dataset_adt.h5ad"
 
+cat > "$SUBDIR/state.yaml" << HERE
+id: bmmc_cite_starter
+output_dataset_rna: !file dataset_rna.h5ad
+output_dataset_other_mod: !file dataset_adt.h5ad
+HERE
+
 SUBDIR="$DATASET_DIR/bmmc_multiome_starter"
 mkdir -p "$SUBDIR"
 wget "$NEURIPS2021_URL/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_rna.h5ad" \
@@ -17,4 +23,11 @@ wget "$NEURIPS2021_URL/openproblems_bmmc_multiome_starter/openproblems_bmmc_mult
 wget "$NEURIPS2021_URL/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_mod2.h5ad" \
   -O "$SUBDIR/dataset_atac.h5ad"
 
-# src/tasks/predict_modality/resources_test_scripts/bmmc_x_starter.sh
+cat > "$SUBDIR/state.yaml" << HERE
+id: bmmc_multiome_starter
+output_dataset_rna: !file dataset_rna.h5ad
+output_dataset_other_mod: !file dataset_atac.h5ad
+HERE
+
+# run task process dataset components
+src/tasks/predict_modality/resources_test_scripts/bmmc_x_starter.sh

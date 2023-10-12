@@ -52,8 +52,8 @@ nextflow run . \
 
 rm -r $DATASET_DIR/temp_*
 
-# # run task process dataset components
-# src/tasks/batch_integration/resources_test_scripts/pancreas.sh
-# src/tasks/denoising/resources_test_scripts/pancreas.sh
-# src/tasks/dimensionality_reduction/resources_test_scripts/pancreas.sh
-# src/tasks/label_projection/resources_test_scripts/pancreas.sh
+# run task process dataset components
+src/tasks/batch_integration/resources_test_scripts/pancreas.sh
+src/tasks/denoising/resources_test_scripts/pancreas.sh
+src/tasks/dimensionality_reduction/resources_test_scripts/pancreas.sh
+src/tasks/label_projection/resources_test_scripts/pancreas.sh

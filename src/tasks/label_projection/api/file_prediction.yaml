@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/label_projection/pancreas/knn.h5ad"
+example: "resources_test/label_projection/pancreas/prediction.h5ad"
 info:
   label: "Prediction"
   summary: "The prediction file"
