@@ -46,3 +46,5 @@ platforms:
       - type: python
         packages: scikit-learn
   - type: nextflow
+    directives:
+      label: [midtime, midmem, midcpu]

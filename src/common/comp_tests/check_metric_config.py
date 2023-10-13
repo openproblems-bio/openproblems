@@ -17,6 +17,10 @@ DESCRIPTION_MAXLEN = 5000
 
 _MISSING_DOIS = ["vandermaaten2008visualizing", "hosmer2013applied"]
 
+TIME_LABELS = ["lowtime", "midtime", "longtime"]
+MEM_LABELS = ["lowmem", "midmem", "highmem"]
+CPU_LABELS = ["lowcpu", "midcpu", "highcpu"]
+
 
 def _load_bib():
     bib_path = meta["resources_dir"]+"/library.bib"
@@ -102,11 +106,25 @@ assert "namespace" in config["functionality"] is not None, "namespace not a fiel
 
 print("Check info fields", flush=True)
 info = config['functionality']['info']
-print(info)
 assert "type" in info, "type not an info field"
 assert info["type"] == "metric" , f"got {info['type']} expected 'metric'"
 assert "metrics" in info, "metrics not an info field"
 for metric in info["metrics"]:
     check_metric(metric)
+
+print("Check platform fields", flush=True)
+platforms = config['platforms']
+for platform in platforms:
+    if not platform["type"] == "nextflow":
+        continue
+    nextflow= platform
+
+assert nextflow, "nextflow not a platform"
+assert nextflow["directives"], "directives not a field in nextflow platform"
+assert nextflow["directives"]["label"], "label not a field in nextflow platform directives"
+
+assert [i for i in nextflow["directives"]["label"] if i in TIME_LABELS], "time label not filled in"
+assert [i for i in nextflow["directives"]["label"] if i in MEM_LABELS], "mem label not filled in"
+assert [i for i in nextflow["directives"]["label"] if i in CPU_LABELS], "cpu label not filled in"
 
 print("All checks succeeded!", flush=True)

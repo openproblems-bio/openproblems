@@ -15,6 +15,10 @@ DESCRIPTION_MAXLEN = 5000
 
 _MISSING_DOIS = ["vandermaaten2008visualizing", "hosmer2013applied"]
 
+TIME_LABELS = ["lowtime", "midtime", "longtime"]
+MEM_LABELS = ["lowmem", "midmem", "highmem"]
+CPU_LABELS = ["lowcpu", "midcpu", "highcpu"]
+
 def _load_bib():
     with open(f"{meta['resources_dir']}/library.bib", "r") as file:
         return file.read()
@@ -101,6 +105,19 @@ assert "preferred_normalization" in info, "preferred_normalization not an info f
 norm_methods = ["log_cpm", "log_cp10k", "counts", "log_scran_pooling", "sqrt_cpm", "sqrt_cp10k", "l1_sqrt"]
 assert info["preferred_normalization"] in norm_methods, "info['preferred_normalization'] not one of '" + "', '".join(norm_methods) + "'."
 
+print("Check platform fields", flush=True)
+platforms = config['platforms']
+for platform in platforms:
+    if not platform["type"] == "nextflow":
+        continue
+    nextflow= platform
 
+assert nextflow, "nextflow not a platform"
+assert nextflow["directives"], "directives not a field in nextflow platform"
+assert nextflow["directives"]["label"], "label not a field in nextflow platform directives"
+
+assert [i for i in nextflow["directives"]["label"] if i in TIME_LABELS], "time label not filled in"
+assert [i for i in nextflow["directives"]["label"] if i in MEM_LABELS], "mem label not filled in"
+assert [i for i in nextflow["directives"]["label"] if i in CPU_LABELS], "cpu label not filled in"
 
 print("All checks succeeded!", flush=True)
