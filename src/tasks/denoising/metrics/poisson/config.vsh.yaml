@@ -26,4 +26,4 @@ platforms:
         pip: scprep
   - type: nextflow
     directives: 
-      label: [ "midtime", midmem, midcpu ]
+      label: [ midtime, highmem, midcpu ]
