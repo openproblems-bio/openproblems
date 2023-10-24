@@ -398,11 +398,14 @@ def create_r_script(par, api_spec, type):
 
 def main(par):
   ####### CHECK INPUTS #######
+  print("Check inputs", flush=True)
   assert re.match("[a-z][a-z0-9_]*", par["name"]), "Name should match the regular expression '[a-z][a-z0-9_]*'. Example: 'my_component'."
   assert len(par['name']) <= 50, "Method name should be at most 50 characters."
 
   pretty_name = re.sub("_", " ", par['name']).title()
 
+  ####### CHECK LANGUAGE #######
+  print("Check language", flush=True)
   # check language and determine script path
   if par["language"] == "python":
     script_path = "script.py"
@@ -412,6 +415,7 @@ def main(par):
     sys.exit(f"Unrecognized language parameter '{par['language']}'.")
 
   ## CHECK API FILE
+  print("Check API file", flush=True)
   api_file = Path(par["api_file"])
   viash_yaml = Path(par["viash_yaml"])
   project_dir = viash_yaml.parent
@@ -424,6 +428,7 @@ def main(par):
       |  Possible values for --type: {', '.join(comp_types)}."""))
   
   ## READ API FILE
+  print("Read API file", flush=True)
   api = read_and_merge_yaml(api_file)
   comp_type = api.get("functionality", {}).get("info", {}).get("type", {})
   if not comp_type:
@@ -433,10 +438,12 @@ def main(par):
       |  Please fix the formatting of the API file."""))
 
   ####### CREATE OUTPUT DIR #######
+  print("Create output dir", flush=True)
   out_dir = Path(par["output"])
   out_dir.mkdir(exist_ok=True)
 
   ####### CREATE CONFIG #######
+  print("Create config", flush=True)
   config_file = out_dir / "config.vsh.yaml"
 
   # get config template
@@ -446,6 +453,7 @@ def main(par):
     f.write(config_str)
 
   ####### CREATE SCRIPT #######
+  print("Create script", flush=True)
   script_file = out_dir / script_path
 
   # set reasonable values
@@ -460,6 +468,8 @@ def main(par):
   # write script
   with open(script_file, "w") as f:
     f.write(script_out)
+
+  print("Done!", flush=True)
 
 
 if __name__ == "__main__":
