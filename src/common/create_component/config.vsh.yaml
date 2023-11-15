@@ -64,7 +64,7 @@ platforms:
     image: python:3.10-slim
     setup:
       - type: python
-        pypi: ruamel.yaml<0.18
+        pypi: ruamel.yaml
   - type: native
   - type: nextflow
 

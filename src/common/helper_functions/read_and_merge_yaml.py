@@ -7,9 +7,12 @@ def read_and_merge_yaml(path):
     
     Arguments:
     path -- Path to the Viash YAML"""
-    import ruamel.yaml as yaml
+    from ruamel.yaml import YAML
+
+    yaml = YAML(typ='safe', pure=True)
+
     with open(path, 'r') as stream:
-        data = yaml.safe_load(stream)
+        data = yaml.load(stream)
     return _ram_process_merge(data, path)
 
 def _ram_deep_merge(dict1, dict2):
