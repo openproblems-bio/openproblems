@@ -2,9 +2,8 @@ functionality:
   arguments:
     - name: "--input"
       type: "file"
-      multiple: false
-      example: ../openproblems-v2
-      description: "the root repo"
+      example: 
+      description: "A yaml file"
     - name: "--task_id"
       type: "string"
       description: "A task dir"
@@ -15,9 +14,9 @@ functionality:
       default: "output.json"
       description: "Output json"
   test_resources: 
+    - type: python_script
+      path: /src/common/comp_tests/check_get_info.py
     - path: /src
       dest: openproblems-v2/src
     - path: /_viash.yaml
       dest: openproblems-v2/_viash.yaml
-    - type: python_script
-      path: /src/common/comp_tests/check_get_info.py

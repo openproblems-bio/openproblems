@@ -1,11 +1,15 @@
 __merge__: ../api/get_info.yaml
 functionality:
-  name: "get_task_info"
+  name: "yaml_to_json"
   namespace: "common"
-  description: "Extract task info"
+  description: "convert yaml file to json file"
   resources:
     - type: python_script
       path: script.py
+  test_resources:
+    - type: file
+      path: /resources_test/common/task_metadata/dataset_info.yaml
+      dest: test_file.yaml
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_python:1.0.2

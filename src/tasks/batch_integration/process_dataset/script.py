@@ -1,18 +1,20 @@
 import sys
-import scib
 import anndata as ad
 
 ## VIASH START
 par = {
     'input': 'resources_test/common/pancreas/dataset.h5ad',
     'hvgs': 2000,
+    'obs_label': 'celltype',
+    'obs_batch': 'batch',
+    'subset_hvg': False,
     'output': 'output.h5ad'
 }
-meta = {}
+meta = {
+    "config": "target/nextflow/batch_integration/process_dataset/.config.vsh.yaml",
+    "resources_dir": "src/common/helper_functions"
+}
 ## VIASH END
-
-# Remove this after upgrading to Viash 0.7.5
-sys.dont_write_bytecode = True
 
 # import helper functions
 sys.path.append(meta['resources_dir'])
@@ -27,6 +29,7 @@ def compute_batched_hvg(adata, n_hvgs):
     if n_hvgs > adata.n_vars or n_hvgs <= 0:
         hvg_list = adata.var_names.tolist()
     else:
+        import scib
         hvg_list = scib.pp.hvg_batch(
             adata,
             batch_key='batch',

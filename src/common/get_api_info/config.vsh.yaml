@@ -1,5 +1,6 @@
 __merge__: ../api/get_info.yaml
 functionality:
+  status: disabled
   name: "get_api_info"
   namespace: "common"
   description: "Extract api info"
@@ -13,4 +14,6 @@ platforms:
       - type: r
         cran: [ purrr, dplyr, yaml, rlang, processx ]
   - type: nextflow
+    directives:
+      label: [lowmem, lowtime, lowcpu]
   - type: native

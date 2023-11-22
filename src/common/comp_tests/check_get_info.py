@@ -5,7 +5,7 @@ import json
 ## VIASH START
 ## VIASH END
 
-input_path = meta["resources_dir"] + "/openproblems-v2"
+input_path = meta["resources_dir"] + "/test_file.yaml"
 task_id = "denoising"
 output_path = "output.json"
 

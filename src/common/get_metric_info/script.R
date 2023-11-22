@@ -4,18 +4,13 @@ library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input = ".",
+  input = "output/temp/metric_configs.yaml",
   task_id = "batch_integration",
   output = "output/metric_info.json"
 )
 ## VIASH END
 
-ns_list <- processx::run(
-  "viash",
-  c("ns", "list", "-q", "metrics", "--src", paste("src/tasks", par$task_id, sep = "/")),
-  wd = par$input
-)
-configs <- yaml::yaml.load(ns_list$stdout)
+configs <- yaml::yaml.load_file(par$input)
 
 df <- map_df(configs, function(config) {
   if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") return(NULL)

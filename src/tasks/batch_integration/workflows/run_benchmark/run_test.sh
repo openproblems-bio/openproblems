@@ -22,8 +22,10 @@ nextflow run . \
   -main-script target/nextflow/batch_integration/workflows/run_benchmark/main.nf \
   -profile docker \
   -resume \
+  -c src/wf_utils/labels_ci.config \
   -entry auto \
   --input_states "$DATASETS_DIR/**/state.yaml" \
   --rename_keys 'input_dataset:output_dataset,input_solution:output_solution' \
-  --settings '{"output": "scores.tsv"}' \
-  --publish_dir "$OUTPUT_DIR"
+  --settings '{"output_scores": "scores.yaml", "output_dataset_info": "dataset_info.yaml", "output_method_configs": "method_configs.yaml", "output_metric_configs": "metric_configs.yaml"}' \
+  --publish_dir "$OUTPUT_DIR" \
+  --output_state "state.yaml"

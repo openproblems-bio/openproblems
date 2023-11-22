@@ -9,7 +9,11 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
+set -e
+
+DATASETS_DIR="resources_test/batch_integration"
 OUTPUT_DIR="resources_test/common/task_metadata"
+
 
 if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"
@@ -113,8 +117,20 @@ cat <<EOT > $sha_file
 ]
 EOT
     
-# Create a method info json
-viash run src/common/get_method_info/config.vsh.yaml -- \
-  --input . \
-  --task_id "denoising" \
-  --output "$OUTPUT_DIR/method_info.json"
+# Create all metadata
+export NXF_VER=22.04.5
+
+nextflow run . \
+  -main-script target/nextflow/batch_integration/workflows/run_benchmark/main.nf \
+  -profile docker \
+  -resume \
+  -c src/wf_utils/labels_ci.config \
+  -entry auto \
+  --input_states "$DATASETS_DIR/**/state.yaml" \
+  --rename_keys 'input_dataset:output_dataset,input_solution:output_solution' \
+  --settings '{"output_scores": "scores.yaml", "output_dataset_info": "dataset_info.yaml", "output_method_configs": "method_configs.yaml", "output_metric_configs": "metric_configs.yaml"}' \
+  --publish_dir "$OUTPUT_DIR" \
+  --output_state "state.yaml"
+
+# Copy task info
+cp src/tasks/batch_integration/api/task_info.yaml "$OUTPUT_DIR/task_info.yaml"

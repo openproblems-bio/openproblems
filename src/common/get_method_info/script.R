@@ -4,18 +4,13 @@ library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input = ".",
+  input = "output/temp/method_configs.yaml",
   task_id = "label_projection",
-  output = "output/method_info.json"
+  output = "output/test/method_info.json"
 )
 ## VIASH END
 
-ns_list <- processx::run(
-  "viash",
-  c("ns", "list", "-q", "methods", "--src", paste("src/tasks", par$task_id, sep = "/")),
-  wd = par$input
-)
-configs <- yaml::yaml.load(ns_list$stdout)
+configs <- yaml::yaml.load_file(par$input)
 
 out <- map(configs, function(config) {
   if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") return(NULL)
@@ -27,6 +22,8 @@ out <- map(configs, function(config) {
   info$method_id <- config$functionality$name
   info$namespace <- config$functionality$namespace
   info$is_baseline <- grepl("control", info$type)
+  info$commit_sha <- config$info$git_commit %||% "missing-sha"
+  info$code_version <- "missing-version"
 
   # rename fields to v1 format
   info$method_name <- info$label
@@ -39,6 +36,23 @@ out <- map(configs, function(config) {
   info$reference <- NULL
   info$code_url <- info$repository_url
   info$repository_url <- NULL
+  info$v1.path <- info$v1$path
+  info$v1$path <- NULL
+  info$v1.commit <- info$v1$commit
+  info$v1$commit <- NULL
+  info$v1 <- NULL
+  info$type_info.label <- info$type_info$label
+  info$type_info$label <- NULL
+  info$type_info.summary <- info$type_info$summary
+  info$type_info$summary <- NULL
+  info$type_info.description <- info$type_info$description
+  info$type_info$description <- NULL
+  info$type_info <- NULL
+  if (length(info$variants) > 0) {
+    info$variants <- NULL
+  }
+
+
 
   # todo: show warning when certain data is missing and return null?
 
