@@ -25,8 +25,17 @@ def _load_bib():
 
 def check_url(url):
     import requests
+    from urllib3.util.retry import Retry
+    from requests.adapters import HTTPAdapter
 
-    get = requests.head(url)
+    # configure retry strategy
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+
+    get = session.head(url)
 
     if get.ok or get.status_code == 429: # 429 rejected, too many requests
         return True
