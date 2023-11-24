@@ -17,18 +17,13 @@ functionality:
     documentation_url: "https://github.com/LTLA/batchelor#readme"
   resources:
     - type: r_script
-      path: ./script.R
+      path: script.R
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_r:1.0.2
     setup:
-      - type: apt
-        packages: git
       - type: r
-        cran: [Matrix, SingleCellExperiment]
-        script:
-          # Install batchelor from Bioconductor devel because the version on r2u is behind
-          - remotes::install_bioc("3.18/batchelor", upgrade = "always", type = "source")
+        bioc: batchelor
   - type: nextflow
     directives:
       label: [ "midtime", lowmem, lowcpu ]
