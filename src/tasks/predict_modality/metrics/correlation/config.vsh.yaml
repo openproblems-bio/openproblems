@@ -59,8 +59,7 @@ platforms:
     image: ghcr.io/openproblems-bio/base_r:1.0.2
     setup:
       - type: r
-        cran: [ proxyC, testthat]
-        github: dynverse/dynutils
+        cran: [ proxyC, testthat, dynutils ]
   - type: nextflow
     directives:
       label: [ "midtime", lowmem, lowcpu ]
