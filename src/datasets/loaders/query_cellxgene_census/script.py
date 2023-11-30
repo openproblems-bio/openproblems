@@ -82,6 +82,27 @@ def write_anndata(query_data, path, compression):
 
     query_data.write_h5ad(path, compression=compression)
 
+def print_unique(adata, column):
+    formatted = "', '".join(adata.obs[column].unique())
+    logger.info(f"Unique {column}: ['{formatted}']")
+
+def print_summary(query_data):
+    logger.info(f"Resulting dataset: {query_data}")
+
+    logger.info("Summary of dataset:")
+    print_unique(query_data, "assay")
+    print_unique(query_data, "assay_ontology_term_id")
+    print_unique(query_data, "cell_type")
+    print_unique(query_data, "cell_type_ontology_term_id")
+    print_unique(query_data, "dataset_id")
+    print_unique(query_data, "development_stage")
+    print_unique(query_data, "development_stage_ontology_term_id")
+    print_unique(query_data, "disease")
+    print_unique(query_data, "disease_ontology_term_id")
+    print_unique(query_data, "tissue")
+    print_unique(query_data, "tissue_ontology_term_id")
+    print_unique(query_data, "tissue_general")
+    print_unique(query_data, "tissue_general_ontology_term_id")
 
 def main():
     # check arguments
@@ -93,7 +114,8 @@ def main():
     with connect_census(uri=par["input_uri"], census_version=par["census_version"]) as conn:
         query_data = get_anndata(conn, par["obs_value_filter"], par["species"])
 
-        query_data.obs = add_cellcensus_metadata_obs(conn, query_data)
+        if par["add_collection_metadata"]:
+            query_data.obs = add_cellcensus_metadata_obs(conn, query_data)
 
     if par["cell_filter_grouping"] is not None:
         query_data = cellcensus_cell_filter(
@@ -104,6 +126,9 @@ def main():
 
     # use feature_id as var_names
     query_data.var_names = query_data.var["feature_id"]
+
+    # print summary
+    print_summary(query_data)
 
     # write output to file
     write_anndata(query_data, par["output"], par["output_compression"])

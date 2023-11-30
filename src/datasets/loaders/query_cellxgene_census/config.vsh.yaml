@@ -34,6 +34,12 @@ functionality:
           description: "Filter for selecting the `obs` metadata (i.e. cells). Value is a filter query written in the SOMA `value_filter` syntax."
           required: false
           example: "is_primary_data == True and cell_type_ontology_term_id in ['CL:0000136', 'CL:1000311', 'CL:0002616'] and suspension_type == 'cell'"
+    - name: Arguments
+      description: Other arguments
+      arguments:
+        - name: "--add_collection_metadata"
+          type: boolean_true
+          description: Whether to add metadata to the obs related to the collection.
         - name: "--cell_filter_grouping"
           type: string
           description: |
