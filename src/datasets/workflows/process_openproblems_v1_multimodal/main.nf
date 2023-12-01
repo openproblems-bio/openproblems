@@ -43,14 +43,14 @@ workflow run_wf {
     | openproblems_v1_multimodal.run(
       fromState: [
         "dataset_id": "id",
-        "obs_celltype": "obs_celltype",
+        "obs_cell_type": "obs_cell_type",
         "obs_batch": "obs_batch",
         "obs_tissue": "obs_tissue",
         "layer_counts": "layer_counts",
         "sparse": "sparse",
         "dataset_name": "dataset_name",
-        "data_url": "data_url",
-        "data_reference": "data_reference",
+        "dataset_url": "dataset_url",
+        "dataset_reference": "dataset_reference",
         "dataset_summary": "dataset_summary",
         "dataset_description": "dataset_description",
         "dataset_organism": "dataset_organism"
@@ -70,7 +70,7 @@ workflow run_wf {
         "n_obs": "n_obs",
         "n_vars": "n_vars",
         "keep_features": "keep_features",
-        "keep_celltype_categories": "keep_celltype_categories",
+        "keep_cell_type_categories": "keep_cell_type_categories",
         "keep_batch_categories": "keep_batch_categories",
         "even": "even",
         "seed": "seed"

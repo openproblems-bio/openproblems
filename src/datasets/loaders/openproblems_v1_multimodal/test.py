@@ -3,7 +3,7 @@ import subprocess
 import anndata as ad
 
 name = "scicar_mouse_kidney"
-obs_celltype = "cell_name"
+obs_cell_type = "cell_name"
 obs_batch = "replicate"
 obs_tissue = None
 
@@ -15,14 +15,14 @@ out = subprocess.run(
     [
         meta["executable"],
         "--dataset_id", name,
-        "--obs_celltype", obs_celltype,
+        "--obs_cell_type", obs_cell_type,
         "--obs_batch", obs_batch,
         "--layer_counts", "counts",
         "--output_mod1", output_mod1_file,
         "--output_mod2", output_mod2_file,
         "--dataset_name", "Pancreas",
-        "--data_url", "http://foo.org",
-        "--data_reference", "foo2000bar",
+        "--dataset_url", "http://foo.org",
+        "--dataset_reference", "foo2000bar",
         "--dataset_summary", "A short summary.",
         "--dataset_description", "A couple of paragraphs worth of text.",
         "--dataset_organism", "homo_sapiens",
@@ -52,8 +52,8 @@ print(">> Check that output mod1 fits expected API", flush=True)
 assert output_mod1.X is None, ".X is not None/empty in mod 1 output"
 assert "counts" in output_mod1.layers, "'counts' not found in mod 1 output layers" 
 assert output_mod1.uns["dataset_id"] == name, f"Expected: {name} as value for dataset_id in mod 1 output uns"
-if obs_celltype:
-    assert "celltype" in output_mod1.obs.columns, "celltype column not found in mod 1 output obs"
+if obs_cell_type:
+    assert "cell_type" in output_mod1.obs.columns, "cell_type column not found in mod 1 output obs"
 if obs_batch:
     assert "batch" in output_mod1.obs.columns, "batch column not found in mod 1 output obs"
 if obs_tissue:
@@ -63,8 +63,8 @@ print(">> Check that output mod2 fits expected API", flush=True)
 assert output_mod2.X is None, ".X is not None/empty in mod 2 output"
 assert "counts" in output_mod2.layers, "'counts' not found in mod 2 output layers"
 assert output_mod2.uns["dataset_id"] == name, f"Expected: {name} as value for dataset_id in mod 2 output uns"
-if obs_celltype:
-    assert "celltype" in output_mod2.obs.columns, "celltype column not found in mod 2 output obs"
+if obs_cell_type:
+    assert "cell_type" in output_mod2.obs.columns, "cell_type column not found in mod 2 output obs"
 if obs_batch:
     assert "batch" in output_mod2.obs.columns, "batch column not found in mod 2 output obs"
 if obs_tissue:

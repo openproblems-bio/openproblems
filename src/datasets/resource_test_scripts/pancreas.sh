@@ -25,16 +25,16 @@ nextflow run . \
   -profile docker \
   -resume \
   --id pancreas \
-  --obs_celltype "celltype" \
+  --obs_cell_type "celltype" \
   --obs_batch "tech" \
   --layer_counts "counts" \
   --dataset_name "Human pancreas" \
-  --data_url "https://theislab.github.io/scib-reproducibility/dataset_pancreas.html" \
-  --data_reference "luecken2022benchmarking" \
+  --dataset_url "https://theislab.github.io/scib-reproducibility/dataset_pancreas.html" \
+  --dataset_reference "luecken2022benchmarking" \
   --dataset_summary "Human pancreas cells dataset from the scIB benchmarks" \
   --dataset_description "Human pancreatic islet scRNA-seq data from 6 datasets across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, and SMARTER-seq)." \
   --dataset_organism "homo_sapiens" \
-  --keep_celltype_categories "acinar:beta" \
+  --keep_cell_type_categories "acinar:beta" \
   --keep_batch_categories "celseq:inDrop4:smarter" \
   --keep_features "$KEEP_FEATURES" \
   --seed 123 \

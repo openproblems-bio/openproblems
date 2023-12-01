@@ -9,7 +9,7 @@ par = {
     'method': 'batch',
     'seed': None,
     'obs_batch': 'batch',
-    'obs_label': 'celltype',
+    'obs_label': 'cell_type',
     'output_train': 'train.h5ad',
     'output_test': 'test.h5ad',
     'output_solution': 'solution.h5ad'

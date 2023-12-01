@@ -16,7 +16,7 @@ def read_config_slots_info(config_file, slot_mapping = {}):
             "counts": par["layer_counts"],
           },
           "obs": {
-            "celltype": par["obs_celltype"],
+            "cell_type": par["obs_cell_type"],
             "batch": par["obs_batch"],
           }
         }

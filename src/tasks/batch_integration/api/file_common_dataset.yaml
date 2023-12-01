@@ -1,6 +1,6 @@
 # This file is based on the spec of the common dataset located at
 # `src/datasets/api/file_common_dataset.yaml`. However, some fields
-# such as obs.celltype and obs.batch are now required
+# such as obs.cell_type and obs.batch are now required
 type: file
 example: "resources_test/common/pancreas/dataset.h5ad"
 info:
@@ -18,7 +18,7 @@ info:
         required: true
     obs:
       - type: string
-        name: celltype
+        name: cell_type
         description: Cell type information
         required: true
       - type: string
@@ -54,10 +54,10 @@ info:
         description: Nicely formatted name.
         required: true
       - type: string
-        name: data_url
+        name: dataset_url
         description: Link to the original source of the dataset.
         required: false
-      - name: data_reference
+      - name: dataset_reference
         type: string
         description: Bibtex reference of the paper in which the dataset was published.
         required: false

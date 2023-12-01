@@ -15,7 +15,7 @@ functionality:
       type: string
       multiple: true
       description: A list of genes to keep.
-    - name: "--keep_celltype_categories"
+    - name: "--keep_cell_type_categories"
       type: "string"
       multiple: true
       description: "Categories indexes to be selected"

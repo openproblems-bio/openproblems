@@ -15,7 +15,7 @@ info:
         required: true
     obs:
       - type: string
-        name: celltype
+        name: cell_type
         description: Cell type information
         required: true
       - type: string

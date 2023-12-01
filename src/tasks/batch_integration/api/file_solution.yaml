@@ -51,10 +51,10 @@ info:
         description: Nicely formatted name.
         required: true
       - type: string
-        name: data_url
+        name: dataset_url
         description: Link to the original source of the dataset.
         required: false
-      - name: data_reference
+      - name: dataset_reference
         type: string
         description: Bibtex reference of the paper in which the dataset was published.
         required: false

@@ -8,10 +8,10 @@ par = {
     "input_mod2": "resources_test/common/scicar_cell_lines/temp_mod2_full.h5ad",
     "n_obs": 600,
     "n_vars": 1500,
-    "keep_celltype_categories": None,
+    "keep_cell_type_categories": None,
     "keep_batch_categories": None,
     "keep_features": None,
-    "keep_celltype_categories": None,
+    "keep_cell_type_categories": None,
     "keep_batch_categories": None,
     "even": False,
     "output": "subsample_mod1.h5ad",
@@ -49,14 +49,14 @@ n_vars = min(min_vars_list)
 print(">> Subsampling the observations", flush=True)
 obs_filt = np.ones(dtype=np.bool_, shape=adata_input.n_obs)
 
-# subset by celltype
-if par.get("keep_celltype_categories"):
-    print(f">> Selecting celltype_categories {par['keep_celltype_categories']}")
-    obs_filt = obs_filt & adata_input.obs["celltype"].isin(par["keep_celltype_categories"])
+# subset by cell_type
+if par.get("keep_cell_type_categories"):
+    print(f">> Selecting cell_type_categories {par['keep_cell_type_categories']}")
+    obs_filt = obs_filt & adata_input.obs["cell_type"].isin(par["keep_cell_type_categories"])
 
 # subset by batch
 if par.get("keep_batch_categories"):
-    print(f">> Selecting celltype_categories {par['keep_batch_categories']}")
+    print(f">> Selecting cell_type_categories {par['keep_batch_categories']}")
     obs_filt = obs_filt & adata_input.obs["batch"].isin(par["keep_batch_categories"])
 
 # subsample evenly across batches or not

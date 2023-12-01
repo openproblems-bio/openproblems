@@ -6,7 +6,7 @@ import scipy
 ## VIASH START
 par = {
     "dataset_id": "pancreas",
-    "obs_celltype": "celltype",
+    "obs_cell_type": "cell_type",
     "obs_batch": "tech",
     "obs_tissue": "tissue",
     "layer_counts": "counts",
@@ -49,12 +49,12 @@ for key, value in dataset_fun.metadata.items():
     print(f"Setting .uns['{key}']", flush=True)
     adata.uns[key] = value
 
-print("Setting .obs['celltype']", flush=True)
-if par["obs_celltype"]:
-    if par["obs_celltype"] in adata.obs:
-        adata.obs["celltype"] = adata.obs[par["obs_celltype"]]
+print("Setting .obs['cell_type']", flush=True)
+if par["obs_cell_type"]:
+    if par["obs_cell_type"] in adata.obs:
+        adata.obs["cell_type"] = adata.obs[par["obs_cell_type"]]
     else:
-        print(f"Warning: key '{par['obs_celltype']}' could not be found in adata.obs.", flush=True)
+        print(f"Warning: key '{par['obs_cell_type']}' could not be found in adata.obs.", flush=True)
 
 print("Setting .obs['batch']", flush=True)
 if par["obs_batch"]:
@@ -91,7 +91,7 @@ del adata.X
 
 print("Add metadata to uns", flush=True)
 metadata_fields = [
-    "dataset_id", "dataset_name", "data_url", "data_reference",
+    "dataset_id", "dataset_name", "dataset_url", "dataset_reference",
     "dataset_summary", "dataset_description", "dataset_organism"
 ]
 uns_metadata = {

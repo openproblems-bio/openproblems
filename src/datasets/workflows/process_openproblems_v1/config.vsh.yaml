@@ -10,7 +10,7 @@ functionality:
           type: "string"
           description: "The ID of the dataset"
           required: true
-        - name: "--obs_celltype"
+        - name: "--obs_cell_type"
           type: "string"
           description: "Location of where to find the observation cell types."
         - name: "--obs_batch"
@@ -33,11 +33,11 @@ functionality:
           type: string
           description: Nicely formatted name.
           required: true
-        - name: "--data_url"
+        - name: "--dataset_url"
           type: string
           description: Link to the original source of the dataset.
           required: false
-        - name: "--data_reference"
+        - name: "--dataset_reference"
           type: string
           description: Bibtex reference of the paper in which the dataset was published.
           required: false
@@ -71,7 +71,7 @@ functionality:
           type: string
           multiple: true
           description: A list of genes to keep.
-        - name: "--keep_celltype_categories"
+        - name: "--keep_cell_type_categories"
           type: "string"
           multiple: true
           description: "Categories indexes to be selected"

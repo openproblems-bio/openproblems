@@ -23,11 +23,11 @@ nextflow run . \
   --id scicar_cell_lines \
   --obs_tissue "source" \
   --layer_counts "counts" \
-  --obs_celltype "cell_name" \
+  --obs_cell_type "cell_name" \
   --dataset_id scicar_cell_lines \
   --dataset_name "sci-CAR cell lines" \
-  --data_url "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117089" \
-  --data_reference "cao2018joint" \
+  --dataset_url "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117089" \
+  --dataset_reference "cao2018joint" \
   --dataset_summary "sciCAR is a combinatorial indexing-based assay that jointly measures cellular transcriptomes and the accessibility of cellular chromatin in the same cells" \
   --dataset_description "sciCAR is a combinatorial indexing-based assay that jointly measures cellular transcriptomes and the accessibility of cellular chromatin in the same cells. Here, we use two sciCAR datasets that were obtained from the same study. The first dataset contains 4,825 cells from three cell lines (HEK293T cells, NIH/3T3 cells, and A549 cells) at multiple timepoints (0, 1 hour, 3 hours) after dexamethasone treatment. The second dataset contains 11,233 cells from wild-type adult mouse kidney." \
   --dataset_organism "[homo_sapiens, mus_musculus]" \

@@ -5,7 +5,7 @@ import anndata as ad
 par = {
     'input': 'resources_test/common/pancreas/dataset.h5ad',
     'hvgs': 2000,
-    'obs_label': 'celltype',
+    'obs_label': 'cell_type',
     'obs_batch': 'batch',
     'subset_hvg': False,
     'output': 'output.h5ad'

@@ -13,6 +13,7 @@ OUTPUT_DIR="resources_test/predict_modality"
 
 export NXF_VER=22.04.5
 
+echo "Preprocess datasets"
 nextflow run . \
   -main-script target/nextflow/predict_modality/workflows/process_datasets/main.nf \
   -profile docker \
@@ -24,9 +25,9 @@ nextflow run . \
   --publish_dir "$OUTPUT_DIR" \
   --output_state '$id/state.yaml'
 
-  # run one method
+  echo "Run one method"
   viash run src/tasks/predict_modality/methods/knnr_py/config.vsh.yaml -- \
-    --input_train_mod1 $DATASET_DIR/train_mod1.h5ad \
-    --input_train_mod2 $DATASET_DIR/train_mod2.h5ad \
-    --input_test_mod1 $DATASET_DIR/test_mod1.h5ad \
-    --output $DATASET_DIR/prediction.h5ad
+    --input_train_mod1 $OUTPUT_DIR/bmmc_cite_starter/train_mod1.h5ad \
+    --input_train_mod2 $OUTPUT_DIR/bmmc_cite_starter/train_mod2.h5ad \
+    --input_test_mod1 $OUTPUT_DIR/bmmc_cite_starter/test_mod1.h5ad \
+    --output $OUTPUT_DIR/bmmc_cite_starter/prediction.h5ad

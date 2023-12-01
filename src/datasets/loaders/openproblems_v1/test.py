@@ -4,7 +4,7 @@ import anndata as ad
 
 name = "pancreas"
 output = "dataset.h5ad"
-obs_celltype = "celltype"
+obs_cell_type = "celltype"
 obs_batch = "tech"
 
 print(">> Running script", flush=True)
@@ -12,13 +12,13 @@ out = subprocess.run(
     [
         meta["executable"],
         "--dataset_id", name,
-        "--obs_celltype", obs_celltype,
+        "--obs_cell_type", obs_cell_type,
         "--obs_batch", obs_batch,
         "--layer_counts", "counts",
         "--output", output,
         "--dataset_name", "Pancreas",
-        "--data_url", "http://foo.org",
-        "--data_reference", "foo2000bar",
+        "--dataset_url", "http://foo.org",
+        "--dataset_reference", "foo2000bar",
         "--dataset_summary", "A short summary.",
         "--dataset_description", "A couple of paragraphs worth of text.",
         "--dataset_organism", "homo_sapiens",
@@ -45,8 +45,8 @@ print(">> Check that output fits expected API", flush=True)
 assert adata.X is None, "adata.X should be None/empty"
 assert "counts" in adata.layers, "Counts layer not found in output layers"
 assert adata.uns["dataset_id"] == name, f"Expected {name} as value"
-if obs_celltype:
-    assert "celltype" in adata.obs.columns, "'celltype' column not found in obs of anndata output"
+if obs_cell_type:
+    assert "cell_type" in adata.obs.columns, "'cell_type' column not found in obs of anndata output"
 if obs_batch:
     assert "batch" in adata.obs.columns, "'batch' column not found in obs of anndata output"
 

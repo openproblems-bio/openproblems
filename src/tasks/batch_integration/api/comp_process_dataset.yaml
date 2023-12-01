@@ -23,7 +23,7 @@ functionality:
     - name: "--obs_label"
       type: "string"
       description: "Which .obs slot to use as label."
-      default: "celltype"
+      default: "cell_type"
     - name: "--obs_batch"
       type: "string"
       description: "Which .obs slot to use as batch covariate."
