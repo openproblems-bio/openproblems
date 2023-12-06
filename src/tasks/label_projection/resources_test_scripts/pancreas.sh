@@ -21,7 +21,7 @@ nextflow run . \
   -entry auto \
   --input_states "$RAW_DATA/**/state.yaml" \
   --rename_keys 'input:output_dataset' \
-  --settings '{"output_train": "$id/train.h5ad", "output_test": "$id/test.h5ad", "output_solution": "$id/solution.h5ad"}' \
+  --settings '{"output_train": "$id/train.h5ad", "output_test": "$id/test.h5ad", "output_solution": "$id/solution.h5ad", "method": "random"}' \
   --publish_dir "$DATASET_DIR" \
   --output_state '$id/state.yaml'
 # output_state should be moved to settings once workaround is solved
