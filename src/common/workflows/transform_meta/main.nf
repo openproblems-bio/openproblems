@@ -60,9 +60,6 @@ workflow run_wf {
       fromState: [ 
         "input_scores": "input_scores",
         "input_execution" : "input_execution",
-        "methods_meta": "output_method",
-        "metrics_meta": "output_metric",
-        "task_id" : "task_id",
         "output": "output_scores"
       ],
       toState: { id, output, state ->

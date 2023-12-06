@@ -19,7 +19,7 @@ description: |
   As input, methods require either normalised or unnormalised data with multiple batches and consistent cell type labels.
   The batch integrated output can be a feature matrix, a low dimensional embedding and/or a neighbourhood graph.
   The respective batch-integrated representation is then evaluated using sets of metrics that capture how well batch effects are removed and whether biological variance is conserved.
-  We have based this particular task on the latest, and most extensive benchmark of single-cell data integration methods [@luecken2022benchmarking].
+  We have based this particular task on the latest, and most extensive benchmark of single-cell data integration methods.
 authors:
   - name: Michaela Mueller
     roles: [ maintainer, author ]
@@ -29,6 +29,7 @@ authors:
     roles: [ contributor ]
     info:
       github: KaiWaldrant
+      orcid: "0009-0003-8555-1361"
   - name: Robrecht Cannoodt
     roles: [ contributor ]
     info:

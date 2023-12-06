@@ -26,6 +26,12 @@ df <- map_df(configs, function(config) {
     metric_name = label,
     metric_summary = description,
     paper_reference = reference,
+  ) %>%
+  group_by(across(-paper_reference)
+  ) %>%
+  summarise(
+    paper_reference = paste(paper_reference, collapse = ", "),
+    .groups = "drop"
   )
 
 jsonlite::write_json(

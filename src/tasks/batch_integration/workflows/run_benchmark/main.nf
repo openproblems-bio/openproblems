@@ -44,7 +44,6 @@ workflow run_wf {
     isolated_label_asw,
     isolated_label_f1,
     kbet,
-    lisi,
     pcr
   ]
 

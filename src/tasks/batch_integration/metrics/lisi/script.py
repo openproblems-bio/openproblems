@@ -55,7 +55,7 @@ output = ad.AnnData(
         'dataset_id': input_solution.uns['dataset_id'],
         'normalization_id': input_solution.uns['normalization_id'],
         'method_id': input_integrated.uns['method_id'],
-        'metric_ids': [ 'ilisi_graph', 'clisi_graph' ],
+        'metric_ids': [ 'ilisi', 'clisi' ],
         'metric_values': [ ilisi, clisi ]
     }
 )

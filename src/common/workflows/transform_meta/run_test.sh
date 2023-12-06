@@ -10,8 +10,8 @@ set -e
 
 # export TOWER_WORKSPACE_ID=53907369739130
 
-DATASETS_DIR="output/temp"
-OUTPUT_DIR="output/get_info"
+DATASETS_DIR="output/v2/batch_integration"
+OUTPUT_DIR="/home/kai/Documents/openroblems/website/results/batch_integration_feature/data"
 
 if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"
@@ -23,6 +23,7 @@ nextflow run . \
   -main-script target/nextflow/common/workflows/transform_meta/main.nf \
   -profile docker \
   -resume \
+  -c src/wf_utils/labels_ci.config \
   --id "get_results_test" \
   --input_scores "$DATASETS_DIR/scores.yaml" \
   --input_dataset_info "$DATASETS_DIR/dataset_info.yaml" \
