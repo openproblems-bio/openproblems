@@ -47,3 +47,5 @@ platforms:
         packages:
           - viashpy
   - type: nextflow
+    directives:
+      label: [ highmem, midcpu , midtime]

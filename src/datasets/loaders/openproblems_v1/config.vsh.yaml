@@ -70,3 +70,5 @@ platforms:
             pip install --no-cache-dir -r /opt/openproblems/docker/openproblems/requirements.txt && \
             pip install --no-cache-dir --editable /opt/openproblems
   - type: nextflow
+    directives:
+      label: [ highmem, midcpu , midtime]
