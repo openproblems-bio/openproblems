@@ -5,7 +5,7 @@ DATASET_DIR=resources_test/denoising/pancreas
 # try running on nf tower
 cat > /tmp/params.yaml << HERE
 id: denoising
-input_states: s3://openproblems-data/resources/denoising/datasets/**/*state.yaml
+input_states: s3://openproblems-nextflow/resources/denoising/datasets/**/*state.yaml
 rename_keys: 'input_train:output_train,input_test:output_test'
 settings: '{"output": "scores.tsv"}'
 publish_dir: s3://openproblems-nextflow/output/v2/denoising

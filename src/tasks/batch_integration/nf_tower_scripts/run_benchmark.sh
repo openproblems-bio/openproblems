@@ -4,7 +4,7 @@
 # try running on nf tower
 cat > /tmp/params.yaml << HERE
 id: batch_integration
-input_states: s3://openproblems-data/resources/batch_integration/datasets/**/state.yaml
+input_states: s3://openproblems-nextflow/resources/batch_integration/datasets/**/state.yaml
 rename_keys: 'input_dataset:output_dataset,input_solution:output_solution'
 settings: '{"output": "scores.tsv"}'
 publish_dir: s3://openproblems-nextflow/output/v2/batch_integration

@@ -8,12 +8,6 @@ functionality:
           __merge__: "/src/tasks/batch_integration/api/file_common_dataset.yaml"
           required: true
           direction: input
-        - name: "--dataset_schema"
-          type: "file"
-          description: "The schema of the dataset to validate against"
-          required: true
-          default: "src/tasks/batch_integration/api/file_common_dataset.yaml"
-          direction: input
     - name: Outputs
       arguments:
         - name: "--output_dataset"
@@ -28,6 +22,8 @@ functionality:
     - type: nextflow_script
       path: main.nf
       entrypoint: run_wf
+    - type: file
+      path: "/src/tasks/batch_integration/api/file_common_dataset.yaml"
   dependencies:
     - name: common/check_dataset_schema
     - name: batch_integration/process_dataset

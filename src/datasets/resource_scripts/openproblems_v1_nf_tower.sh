@@ -135,7 +135,7 @@ output_normalized: force_null
 output_pca: force_null
 output_hvg: force_null
 output_knn: force_null
-publish_dir: s3://openproblems-data/resources/datasets/openproblems_v1
+publish_dir: s3://openproblems-nextflow/resources/datasets/openproblems_v1
 HERE
 
 cat > /tmp/nextflow.config << HERE

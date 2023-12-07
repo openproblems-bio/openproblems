@@ -35,10 +35,17 @@ functionality:
           required: true
           direction: output
           example: dataset_uns.yaml
+        - name: "--output_task_info"
+          type: file
+          required: true
+          direction: output
+          example: task_info.yaml
   resources:
     - type: nextflow_script
       path: main.nf
       entrypoint: run_wf
+    - type: file
+      path: /src/tasks/batch_integration/api/task_info.yaml
   dependencies: 
     - name: common/check_dataset_schema
     - name: common/extract_scores

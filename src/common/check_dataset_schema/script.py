@@ -73,9 +73,9 @@ if par['meta'] is not None:
   for key, val in adata.uns.items():
     if is_atomic(val):
       uns[key] = to_atomic(val)
-    elif is_list_of_atomics(val):
+    elif is_list_of_atomics(val) and len(val) <= 10:
       uns[key] = to_list_of_atomics(val)
-    elif is_dict_of_atomics(val):
+    elif is_dict_of_atomics(val) and len(val) <= 10:
       uns[key] = to_dict_of_atomics(val)
   structure = {
     struct: list(getattr(adata, struct).keys())

@@ -212,9 +212,12 @@ workflow run_wf {
       def metric_configs_file = tempFile("metric_configs.yaml")
       metric_configs_file.write(metric_configs_yaml_blob)
 
+      def task_info_file = meta.resources_dir.resolve("task_info.yaml")
+
       def new_state = [
         output_method_configs: method_configs_file,
         output_metric_configs: metric_configs_file,
+        output_task_info: task_info_file,
         _meta: _meta
       ]
       ["output", new_state]
@@ -222,6 +225,7 @@ workflow run_wf {
 
   // merge all of the output data 
   // todo: add task info?
+
   // todo: add trace log?
   output_ch = comp_config_ch
     | mix(metric_uns_ch, dataset_meta_ch)

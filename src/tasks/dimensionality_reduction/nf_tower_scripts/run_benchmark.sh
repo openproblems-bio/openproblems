@@ -4,7 +4,7 @@
 # try running on nf tower
 cat > /tmp/params.yaml << HERE
 id: dimensionality_reduction
-input_states: s3://openproblems-data/resources/dimensionality_reduction/datasets
+input_states: s3://openproblems-nextflow/resources/dimensionality_reduction/datasets
 rename_keys: 'input_dataset:output_dataset,input_solution:output_solution'
 settings: '{"output": "scores.tsv"}'
 publish_dir: s3://openproblems-nextflow/output/v2/dimensionality_reduction
