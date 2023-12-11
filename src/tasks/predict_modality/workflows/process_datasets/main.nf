@@ -16,10 +16,13 @@ workflow run_wf {
     // instead of having to provide a separate schema file
     | check_dataset_schema.run(
       key: "check_dataset_schema_rna",
-      fromState: [
-        "input": "input_rna",
-        "schema": "dataset_schema_rna"
-      ],
+            fromState: { id, state ->
+        // as a resource
+        [
+          "input": state.input,
+          "schema": meta.resources_dir.resolve("file_common_dataset_rna.yaml")
+        ]
+      },
       args: [
         "stop_on_error": false
       ],
@@ -31,10 +34,13 @@ workflow run_wf {
 
     | check_dataset_schema.run(
       key: "check_dataset_schema_other_mod",
-      fromState: [
-        "input": "input_other_mod",
-        "schema": "dataset_schema_other_mod"
-      ],
+            fromState: { id, state ->
+        // as a resource
+        [
+          "input": state.input,
+          "schema": meta.resources_dir.resolve("file_common_dataset_other_mod.yaml")
+        ]
+      },
       args: [
         "stop_on_error": false
       ],

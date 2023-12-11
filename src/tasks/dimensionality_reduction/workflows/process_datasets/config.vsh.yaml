@@ -8,12 +8,6 @@ functionality:
           __merge__: "/src/tasks/dimensionality_reduction/api/file_common_dataset.yaml"
           required: true
           direction: input
-        - name: "--dataset_schema"
-          type: "file"
-          required: true
-          direction: input
-          description: "The schema of the dataset to validate against"
-          default: "src/tasks/dimensionality_reduction/api/file_common_dataset.yaml"
     - name: Outputs
       arguments:
         - name: "--output_dataset"
@@ -28,6 +22,8 @@ functionality:
     - type: nextflow_script
       path: main.nf
       entrypoint: run_wf
+    - type: file
+      path: "/src/tasks/dimensionality_reduction/api/file_common_dataset.yaml"
   dependencies:
     - name: common/check_dataset_schema
     - name: dimensionality_reduction/process_dataset

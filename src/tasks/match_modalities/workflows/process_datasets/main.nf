@@ -16,10 +16,13 @@ workflow run_wf {
     // instead of having to provide a separate schema file
     | check_dataset_schema.run(
       key: "check_dataset_schema_mod1",
-      fromState: [
-        "input": "input_mod1",
-        "schema": "dataset_schema_mod1"
-      ],
+      fromState: { id, state ->
+        // as a resource
+        [
+          "input": state.input,
+          "schema": meta.resources_dir.resolve("file_common_dataset_mod1.yaml")
+        ]
+      },
       args: [
         "stop_on_error": false
       ],
@@ -29,10 +32,13 @@ workflow run_wf {
     )
     | check_dataset_schema.run(
       key: "check_dataset_schema_mod2",
-      fromState: [
-        "input": "input_mod2",
-        "schema": "dataset_schema_mod2"
-      ],
+      fromState: { id, state ->
+        // as a resource
+        [
+          "input": state.input,
+          "schema": meta.resources_dir.resolve("file_common_dataset_mod2.yaml")
+        ]
+      },
       args: [
         "stop_on_error": false
       ],

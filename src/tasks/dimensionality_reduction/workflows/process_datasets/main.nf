@@ -15,10 +15,13 @@ workflow run_wf {
     // TODO: check schema based on the values in `config`
     // instead of having to provide a separate schema file
     | check_dataset_schema.run(
-      fromState: [
-        "input": "input",
-        "schema": "dataset_schema"
-      ],
+      fromState: { id, state ->
+        // as a resource
+        [
+          "input": state.input,
+          "schema": meta.resources_dir.resolve("file_common_dataset.yaml")
+        ]
+      },
       args: [
         "stop_on_error": false,
         "checks": null
