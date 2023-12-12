@@ -7,11 +7,16 @@ import pandas as pd
 ## VIASH START
 par = {
     "dataset_id": "scicar_mouse_kidney",
+    "obs_tissue": "source",
     "obs_cell_type": "cell_type",
-    "obs_batch": "replicate",
-    "obs_tissue": None,
     "layer_counts": "counts",
     "output": "test_data.h5ad",
+    "dataset_name": "name",
+    "dataset_url": "https://some.url",
+    "dataset_reference": "reference",
+    "dataset_summary": "summary",
+    "dataset_description": "description",
+    "dataset_organism": "[homo_sapiens, mus_musculus]",
 }
 meta = {
     "resources_dir": "src/datasets/loaders/openproblems_v1/"
@@ -118,15 +123,13 @@ del mod2.X
 print("Add metadata to uns", flush=True)
 metadata_fields = [
     "dataset_id", "dataset_name", "dataset_url", "dataset_reference",
-    "dataset_summary", "dataset_description" "dataset_organism"
+    "dataset_summary", "dataset_description", "dataset_organism"
 ]
-uns_metadata = {
-    id: par[id]
-    for id in metadata_fields
-    if id in par
-}
-mod1.uns.update(uns_metadata)
-mod2.uns.update(uns_metadata)
+for key in metadata_fields:
+    if key in par:
+        print(f"  Setting .uns['{key}']", flush=True)
+        mod1.uns[key] = par[key]
+        mod2.uns[key] = par[key]
 
 print("Writing adata to file", flush=True)
 mod1.write_h5ad(par["output_mod1"], compression="gzip")

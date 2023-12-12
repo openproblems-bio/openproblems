@@ -31,10 +31,10 @@ out = subprocess.run(
 )
 
 if out.stdout:
-    print(out.stdout)
+    print(out.stdout, flush=True)
 
 if out.returncode:
-    print(f"script: '{out.args}' exited with an error.")
+    print(f"script: '{out.args}' exited with an error.", flush=True)
     exit(out.returncode)
 
 print(">> Checking whether files exist", flush=True)
@@ -51,23 +51,33 @@ print(f"output_mod2: {output_mod2}", flush=True)
 print(">> Check that output mod1 fits expected API", flush=True)
 assert output_mod1.X is None, ".X is not None/empty in mod 1 output"
 assert "counts" in output_mod1.layers, "'counts' not found in mod 1 output layers" 
-assert output_mod1.uns["dataset_id"] == name, f"Expected: {name} as value for dataset_id in mod 1 output uns"
 if obs_cell_type:
     assert "cell_type" in output_mod1.obs.columns, "cell_type column not found in mod 1 output obs"
 if obs_batch:
     assert "batch" in output_mod1.obs.columns, "batch column not found in mod 1 output obs"
 if obs_tissue:
     assert "tissue" in output_mod1.obs.columns, "tissue column not found in mod 1 output obs"
+assert output_mod1.uns["dataset_id"] == name, f"Expected: {name} as value for dataset_id in mod 1 output uns"
+assert output_mod1.uns["dataset_name"] == "Pancreas", "Expected: Pancreas as value for dataset_name in mod 1 output uns"
+assert output_mod1.uns["dataset_url"] == "http://foo.org", "Expected: http://foo.org as value for dataset_url in mod 1 output uns"
+assert output_mod1.uns["dataset_reference"] == "foo2000bar", "Expected: foo2000bar as value for dataset_reference in mod 1 output uns"
+assert output_mod1.uns["dataset_summary"] == "A short summary.", "Expected: A short summary. as value for dataset_summary in mod 1 output uns"
+assert output_mod1.uns["dataset_description"] == "A couple of paragraphs worth of text.", "Expected: A couple of paragraphs worth of text. as value for dataset_description in mod 1 output uns"
 
 print(">> Check that output mod2 fits expected API", flush=True)
 assert output_mod2.X is None, ".X is not None/empty in mod 2 output"
 assert "counts" in output_mod2.layers, "'counts' not found in mod 2 output layers"
-assert output_mod2.uns["dataset_id"] == name, f"Expected: {name} as value for dataset_id in mod 2 output uns"
 if obs_cell_type:
     assert "cell_type" in output_mod2.obs.columns, "cell_type column not found in mod 2 output obs"
 if obs_batch:
     assert "batch" in output_mod2.obs.columns, "batch column not found in mod 2 output obs"
 if obs_tissue:
     assert "tissue" in output_mod2.obs.columns, "tissue column not found in mod 2 output obs"
+assert output_mod2.uns["dataset_id"] == name, f"Expected: {name} as value for dataset_id in mod 2 output uns"
+assert output_mod2.uns["dataset_name"] == "Pancreas", "Expected: Pancreas as value for dataset_name in mod 2 output uns"
+assert output_mod2.uns["dataset_url"] == "http://foo.org", "Expected: http://foo.org as value for dataset_url in mod 2 output uns"
+assert output_mod2.uns["dataset_reference"] == "foo2000bar", "Expected: foo2000bar as value for dataset_reference in mod 2 output uns"
+assert output_mod2.uns["dataset_summary"] == "A short summary.", "Expected: A short summary. as value for dataset_summary in mod 2 output uns"
+assert output_mod2.uns["dataset_description"] == "A couple of paragraphs worth of text.", "Expected: A couple of paragraphs worth of text. as value for dataset_description in mod 2 output uns"
 
 print(">> All tests passed successfully", flush=True)
