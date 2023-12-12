@@ -53,11 +53,12 @@ output_train = ad.AnnData(
     var=adata.var[[]],
     uns={"dataset_id": adata.uns["dataset_id"]}
 )
+test_uns_keys = ["dataset_id", "dataset_name", "dataset_url", "dataset_reference", "dataset_summary", "dataset_description", "dataset_organism"]
 output_test = ad.AnnData(
     layers={"counts": X_test.astype(float)},
     obs=adata.obs[[]],
     var=adata.var[[]],
-    uns={"dataset_id": adata.uns["dataset_id"]}
+    uns={key: adata.uns[key] for key in test_uns_keys}
 )
 
 # Remove no cells that do not have enough reads
