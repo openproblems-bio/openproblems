@@ -24,4 +24,3 @@ functionality:
     - path: /resources_test/denoising/pancreas
       dest: resources_test/denoising/pancreas
     - path: /src/common/library.bib
-    - path: /src/common/api

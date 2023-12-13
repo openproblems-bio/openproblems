@@ -29,4 +29,3 @@ functionality:
     - type: python_script
       path: /src/common/comp_tests/run_and_check_adata.py
     - path: /src/common/library.bib
-    - path: /src/common/api

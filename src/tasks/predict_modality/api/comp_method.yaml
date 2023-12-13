@@ -33,4 +33,3 @@ functionality:
     - path: /resources_test/predict_modality/bmmc_cite_starter
       dest: resources_test/predict_modality/bmmc_cite_starter
     - path: /src/common/library.bib
-    - path: /src/common/api
