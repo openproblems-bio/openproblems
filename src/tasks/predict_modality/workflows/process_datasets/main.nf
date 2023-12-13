@@ -19,7 +19,7 @@ workflow run_wf {
             fromState: { id, state ->
         // as a resource
         [
-          "input": state.input,
+          "input": state.input_rna,
           "schema": meta.resources_dir.resolve("file_common_dataset_rna.yaml")
         ]
       },
@@ -37,7 +37,7 @@ workflow run_wf {
             fromState: { id, state ->
         // as a resource
         [
-          "input": state.input,
+          "input": state.input_other_mod,
           "schema": meta.resources_dir.resolve("file_common_dataset_other_mod.yaml")
         ]
       },

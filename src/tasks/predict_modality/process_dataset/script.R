@@ -40,11 +40,8 @@ ad2_mod <- unique(ad2$var[["feature_types"]])
 new_dataset_id <- paste0(ad1$uns[["dataset_id"]], "_", tolower(ad1_mod), "2", tolower(ad2_mod))
 
 # determine new uns
-ad1_uns <- ad2_uns <- list(
-  dataset_id = new_dataset_id,
-  # TODO: this should already be part of the source dataset
-  dataset_organism = "homo_sapiens"
-)
+uns_vars <- c("dataset_id", "dataset_name", "dataset_url", "dataset_reference", "dataset_summary", "dataset_description", "dataset_organism")
+ad1_uns <- ad2_uns <- ad1$uns[uns_vars]
 ad1_uns$modality <- ad1_mod
 ad2_uns$modality <- ad2_mod
 
