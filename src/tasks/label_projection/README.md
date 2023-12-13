@@ -87,11 +87,11 @@ Format:
 <div class="small">
 
     AnnData object
-     obs: 'celltype', 'batch'
+     obs: 'cell_type', 'batch'
      var: 'hvg', 'hvg_score'
      obsm: 'X_pca'
      layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'normalization_id'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'normalization_id'
 
 </div>
 
@@ -99,17 +99,23 @@ Slot description:
 
 <div class="small">
 
-| Slot                      | Type      | Description                                                              |
-|:--------------------------|:----------|:-------------------------------------------------------------------------|
-| `obs["celltype"]`         | `string`  | Cell type information.                                                   |
-| `obs["batch"]`            | `string`  | Batch information.                                                       |
-| `var["hvg"]`              | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’. |
-| `var["hvg_score"]`        | `integer` | A ranking of the features by hvg.                                        |
-| `obsm["X_pca"]`           | `double`  | The resulting PCA embedding.                                             |
-| `layers["counts"]`        | `integer` | Raw counts.                                                              |
-| `layers["normalized"]`    | `double`  | Normalized expression values.                                            |
-| `uns["dataset_id"]`       | `string`  | A unique identifier for the dataset.                                     |
-| `uns["normalization_id"]` | `string`  | Which normalization was used.                                            |
+| Slot                         | Type      | Description                                                                    |
+|:-----------------------------|:----------|:-------------------------------------------------------------------------------|
+| `obs["cell_type"]`           | `string`  | Cell type information.                                                         |
+| `obs["batch"]`               | `string`  | Batch information.                                                             |
+| `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.       |
+| `var["hvg_score"]`           | `integer` | A ranking of the features by hvg.                                              |
+| `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                                   |
+| `layers["counts"]`           | `integer` | Raw counts.                                                                    |
+| `layers["normalized"]`       | `double`  | Normalized expression values.                                                  |
+| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                           |
+| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                         |
+| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                       |
+| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
+| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                                  |
 
 </div>
 
@@ -233,7 +239,7 @@ Format:
      var: 'hvg', 'hvg_score'
      obsm: 'X_pca'
      layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'normalization_id'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'normalization_id'
 
 </div>
 
@@ -241,17 +247,23 @@ Slot description:
 
 <div class="small">
 
-| Slot                      | Type      | Description                                                              |
-|:--------------------------|:----------|:-------------------------------------------------------------------------|
-| `obs["label"]`            | `string`  | Ground truth cell type labels.                                           |
-| `obs["batch"]`            | `string`  | Batch information.                                                       |
-| `var["hvg"]`              | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’. |
-| `var["hvg_score"]`        | `integer` | A ranking of the features by hvg.                                        |
-| `obsm["X_pca"]`           | `double`  | The resulting PCA embedding.                                             |
-| `layers["counts"]`        | `integer` | Raw counts.                                                              |
-| `layers["normalized"]`    | `double`  | Normalized counts.                                                       |
-| `uns["dataset_id"]`       | `string`  | A unique identifier for the dataset.                                     |
-| `uns["normalization_id"]` | `string`  | Which normalization was used.                                            |
+| Slot                         | Type      | Description                                                                    |
+|:-----------------------------|:----------|:-------------------------------------------------------------------------------|
+| `obs["label"]`               | `string`  | Ground truth cell type labels.                                                 |
+| `obs["batch"]`               | `string`  | Batch information.                                                             |
+| `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.       |
+| `var["hvg_score"]`           | `integer` | A ranking of the features by hvg.                                              |
+| `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                                   |
+| `layers["counts"]`           | `integer` | Raw counts.                                                                    |
+| `layers["normalized"]`       | `double`  | Normalized counts.                                                             |
+| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                           |
+| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                         |
+| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                       |
+| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
+| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                                  |
 
 </div>
 
@@ -350,8 +362,7 @@ Slot description:
 
 Metric score file
 
-Example file:
-`resources_test/label_projection/pancreas/score.h5ad`
+Example file: `resources_test/label_projection/pancreas/score.h5ad`
 
 Description:
 

@@ -248,7 +248,7 @@ Format:
      var: 'gene_ids'
      obsm: 'gene_activity'
      layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'dataset_organism', 'gene_activity_var_names'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'gene_activity_var_names'
 
 </div>
 
@@ -256,17 +256,22 @@ Slot description:
 
 <div class="small">
 
-| Slot                             | Type      | Description                                                        |
-|:---------------------------------|:----------|:-------------------------------------------------------------------|
-| `obs["batch"]`                   | `string`  | Batch information.                                                 |
-| `obs["size_factors"]`            | `double`  | (*Optional*) The size factors of the cells prior to normalization. |
-| `var["gene_ids"]`                | `string`  | (*Optional*) The gene identifiers (if available).                  |
-| `obsm["gene_activity"]`          | `double`  | (*Optional*) ATAC gene activity.                                   |
-| `layers["counts"]`               | `integer` | Raw counts.                                                        |
-| `layers["normalized"]`           | `double`  | Normalized expression values.                                      |
-| `uns["dataset_id"]`              | `string`  | A unique identifier for the dataset.                               |
-| `uns["dataset_organism"]`        | `string`  | (*Optional*) The organism of the sample in the dataset.            |
-| `uns["gene_activity_var_names"]` | `string`  | (*Optional*) Names of the gene activity matrix.                    |
+| Slot                             | Type      | Description                                                                    |
+|:---------------------------------|:----------|:-------------------------------------------------------------------------------|
+| `obs["batch"]`                   | `string`  | Batch information.                                                             |
+| `obs["size_factors"]`            | `double`  | (*Optional*) The size factors of the cells prior to normalization.             |
+| `var["gene_ids"]`                | `string`  | (*Optional*) The gene identifiers (if available).                              |
+| `obsm["gene_activity"]`          | `double`  | (*Optional*) ATAC gene activity.                                               |
+| `layers["counts"]`               | `integer` | Raw counts.                                                                    |
+| `layers["normalized"]`           | `double`  | Normalized expression values.                                                  |
+| `uns["dataset_id"]`              | `string`  | A unique identifier for the dataset.                                           |
+| `uns["dataset_name"]`            | `string`  | Nicely formatted name.                                                         |
+| `uns["dataset_url"]`             | `string`  | (*Optional*) Link to the original source of the dataset.                       |
+| `uns["dataset_reference"]`       | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]`         | `string`  | Short description of the dataset.                                              |
+| `uns["dataset_description"]`     | `string`  | Long description of the dataset.                                               |
+| `uns["dataset_organism"]`        | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["gene_activity_var_names"]` | `string`  | (*Optional*) Names of the gene activity matrix.                                |
 
 </div>
 
@@ -290,7 +295,7 @@ Format:
      var: 'gene_ids'
      obsm: 'gene_activity'
      layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'dataset_organism', 'gene_activity_var_names'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'gene_activity_var_names'
 
 </div>
 
@@ -298,17 +303,22 @@ Slot description:
 
 <div class="small">
 
-| Slot                             | Type      | Description                                                        |
-|:---------------------------------|:----------|:-------------------------------------------------------------------|
-| `obs["batch"]`                   | `string`  | Batch information.                                                 |
-| `obs["size_factors"]`            | `double`  | (*Optional*) The size factors of the cells prior to normalization. |
-| `var["gene_ids"]`                | `string`  | (*Optional*) The gene identifiers (if available).                  |
-| `obsm["gene_activity"]`          | `double`  | (*Optional*) ATAC gene activity.                                   |
-| `layers["counts"]`               | `integer` | Raw counts.                                                        |
-| `layers["normalized"]`           | `double`  | Normalized expression values.                                      |
-| `uns["dataset_id"]`              | `string`  | A unique identifier for the dataset.                               |
-| `uns["dataset_organism"]`        | `string`  | (*Optional*) The organism of the sample in the dataset.            |
-| `uns["gene_activity_var_names"]` | `string`  | (*Optional*) Names of the gene activity matrix.                    |
+| Slot                             | Type      | Description                                                                    |
+|:---------------------------------|:----------|:-------------------------------------------------------------------------------|
+| `obs["batch"]`                   | `string`  | Batch information.                                                             |
+| `obs["size_factors"]`            | `double`  | (*Optional*) The size factors of the cells prior to normalization.             |
+| `var["gene_ids"]`                | `string`  | (*Optional*) The gene identifiers (if available).                              |
+| `obsm["gene_activity"]`          | `double`  | (*Optional*) ATAC gene activity.                                               |
+| `layers["counts"]`               | `integer` | Raw counts.                                                                    |
+| `layers["normalized"]`           | `double`  | Normalized expression values.                                                  |
+| `uns["dataset_id"]`              | `string`  | A unique identifier for the dataset.                                           |
+| `uns["dataset_name"]`            | `string`  | Nicely formatted name.                                                         |
+| `uns["dataset_url"]`             | `string`  | (*Optional*) Link to the original source of the dataset.                       |
+| `uns["dataset_reference"]`       | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]`         | `string`  | Short description of the dataset.                                              |
+| `uns["dataset_description"]`     | `string`  | Long description of the dataset.                                               |
+| `uns["dataset_organism"]`        | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["gene_activity_var_names"]` | `string`  | (*Optional*) Names of the gene activity matrix.                                |
 
 </div>
 
@@ -458,7 +468,7 @@ Format:
      var: 'gene_ids'
      obsm: 'gene_activity'
      layers: 'counts'
-     uns: 'dataset_id', 'gene_activity_var_names'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'gene_activity_var_names'
 
 </div>
 
@@ -466,14 +476,20 @@ Slot description:
 
 <div class="small">
 
-| Slot                             | Type      | Description                                                        |
-|:---------------------------------|:----------|:-------------------------------------------------------------------|
-| `obs["batch"]`                   | `string`  | Batch information.                                                 |
-| `obs["size_factors"]`            | `double`  | (*Optional*) The size factors of the cells prior to normalization. |
-| `var["gene_ids"]`                | `string`  | (*Optional*) The gene identifiers (if available).                  |
-| `obsm["gene_activity"]`          | `double`  | (*Optional*) ATAC gene activity.                                   |
-| `layers["counts"]`               | `integer` | Raw counts.                                                        |
-| `uns["dataset_id"]`              | `string`  | A unique identifier for the dataset.                               |
-| `uns["gene_activity_var_names"]` | `string`  | (*Optional*) Names of the gene activity matrix.                    |
+| Slot                             | Type      | Description                                                                    |
+|:---------------------------------|:----------|:-------------------------------------------------------------------------------|
+| `obs["batch"]`                   | `string`  | Batch information.                                                             |
+| `obs["size_factors"]`            | `double`  | (*Optional*) The size factors of the cells prior to normalization.             |
+| `var["gene_ids"]`                | `string`  | (*Optional*) The gene identifiers (if available).                              |
+| `obsm["gene_activity"]`          | `double`  | (*Optional*) ATAC gene activity.                                               |
+| `layers["counts"]`               | `integer` | Raw counts.                                                                    |
+| `uns["dataset_id"]`              | `string`  | A unique identifier for the dataset.                                           |
+| `uns["dataset_name"]`            | `string`  | Nicely formatted name.                                                         |
+| `uns["dataset_url"]`             | `string`  | (*Optional*) Link to the original source of the dataset.                       |
+| `uns["dataset_reference"]`       | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]`         | `string`  | Short description of the dataset.                                              |
+| `uns["dataset_description"]`     | `string`  | Long description of the dataset.                                               |
+| `uns["dataset_organism"]`        | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["gene_activity_var_names"]` | `string`  | (*Optional*) Names of the gene activity matrix.                                |
 
 </div>

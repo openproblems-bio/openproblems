@@ -38,8 +38,7 @@ embedding and/or a neighbourhood graph. The respective batch-integrated
 representation is then evaluated using sets of metrics that capture how
 well batch effects are removed and whether biological variance is
 conserved. We have based this particular task on the latest, and most
-extensive benchmark of single-cell data integration methods
-\[@luecken2022benchmarking\].
+extensive benchmark of single-cell data integration methods.
 
 ## Authors & contributors
 
@@ -115,12 +114,12 @@ Format:
 <div class="small">
 
     AnnData object
-     obs: 'celltype', 'batch'
+     obs: 'cell_type', 'batch'
      var: 'hvg'
      obsm: 'X_pca'
      obsp: 'knn_distances', 'knn_connectivities'
      layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'normalization_id', 'dataset_organism', 'knn'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'normalization_id', 'knn'
 
 </div>
 
@@ -128,20 +127,25 @@ Slot description:
 
 <div class="small">
 
-| Slot                         | Type      | Description                                                              |
-|:-----------------------------|:----------|:-------------------------------------------------------------------------|
-| `obs["celltype"]`            | `string`  | Cell type information.                                                   |
-| `obs["batch"]`               | `string`  | Batch information.                                                       |
-| `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’. |
-| `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                             |
-| `obsp["knn_distances"]`      | `double`  | K nearest neighbors distance matrix.                                     |
-| `obsp["knn_connectivities"]` | `double`  | K nearest neighbors connectivities matrix.                               |
-| `layers["counts"]`           | `integer` | Raw counts.                                                              |
-| `layers["normalized"]`       | `double`  | Normalized expression values.                                            |
-| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                     |
-| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                            |
-| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                  |
-| `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                  |
+| Slot                         | Type      | Description                                                                    |
+|:-----------------------------|:----------|:-------------------------------------------------------------------------------|
+| `obs["cell_type"]`           | `string`  | Cell type information.                                                         |
+| `obs["batch"]`               | `string`  | Batch information.                                                             |
+| `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.       |
+| `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                                   |
+| `obsp["knn_distances"]`      | `double`  | K nearest neighbors distance matrix.                                           |
+| `obsp["knn_connectivities"]` | `double`  | K nearest neighbors connectivities matrix.                                     |
+| `layers["counts"]`           | `integer` | Raw counts.                                                                    |
+| `layers["normalized"]`       | `double`  | Normalized expression values.                                                  |
+| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                           |
+| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                         |
+| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                       |
+| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
+| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                                  |
+| `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                        |
 
 </div>
 
@@ -161,7 +165,7 @@ Arguments:
 | `--input`           | `file`    | A subset of the common dataset.                                            |
 | `--output_dataset`  | `file`    | (*Output*) Unintegrated AnnData HDF5 file.                                 |
 | `--output_solution` | `file`    | (*Output*) Solution dataset.                                               |
-| `--obs_label`       | `string`  | (*Optional*) Which .obs slot to use as label. Default: `celltype`.         |
+| `--obs_label`       | `string`  | (*Optional*) Which .obs slot to use as label. Default: `cell_type`.        |
 | `--obs_batch`       | `string`  | (*Optional*) Which .obs slot to use as batch covariate. Default: `batch`.  |
 | `--hvgs`            | `integer` | (*Optional*) Number of highly variable genes. Default: `2000`.             |
 | `--subset_hvg`      | `boolean` | (*Optional*) Whether to subset to highly variable genes. Default: `FALSE`. |
@@ -233,7 +237,7 @@ Format:
      obsm: 'X_pca'
      obsp: 'knn_distances', 'knn_connectivities'
      layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'normalization_id', 'dataset_organism', 'knn'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'normalization_id', 'knn'
 
 </div>
 
@@ -241,20 +245,25 @@ Slot description:
 
 <div class="small">
 
-| Slot                         | Type      | Description                                                              |
-|:-----------------------------|:----------|:-------------------------------------------------------------------------|
-| `obs["batch"]`               | `string`  | Batch information.                                                       |
-| `obs["label"]`               | `string`  | label information.                                                       |
-| `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’. |
-| `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                             |
-| `obsp["knn_distances"]`      | `double`  | K nearest neighbors distance matrix.                                     |
-| `obsp["knn_connectivities"]` | `double`  | K nearest neighbors connectivities matrix.                               |
-| `layers["counts"]`           | `integer` | Raw counts.                                                              |
-| `layers["normalized"]`       | `double`  | Normalized expression values.                                            |
-| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                     |
-| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                            |
-| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                  |
-| `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                  |
+| Slot                         | Type      | Description                                                                    |
+|:-----------------------------|:----------|:-------------------------------------------------------------------------------|
+| `obs["batch"]`               | `string`  | Batch information.                                                             |
+| `obs["label"]`               | `string`  | label information.                                                             |
+| `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.       |
+| `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                                   |
+| `obsp["knn_distances"]`      | `double`  | K nearest neighbors distance matrix.                                           |
+| `obsp["knn_connectivities"]` | `double`  | K nearest neighbors connectivities matrix.                                     |
+| `layers["counts"]`           | `integer` | Raw counts.                                                                    |
+| `layers["normalized"]`       | `double`  | Normalized expression values.                                                  |
+| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                           |
+| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                         |
+| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                       |
+| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
+| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                                  |
+| `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                        |
 
 </div>
 

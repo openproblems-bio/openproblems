@@ -107,7 +107,7 @@ Format:
     AnnData object
      obsm: 'X_svd'
      layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'normalization_id'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'normalization_id'
 
 </div>
 
@@ -115,13 +115,19 @@ Slot description:
 
 <div class="small">
 
-| Slot                      | Type      | Description                          |
-|:--------------------------|:----------|:-------------------------------------|
-| `obsm["X_svd"]`           | `double`  | The resulting SVD PCA embedding.     |
-| `layers["counts"]`        | `integer` | Raw counts.                          |
-| `layers["normalized"]`    | `double`  | Normalized counts.                   |
-| `uns["dataset_id"]`       | `string`  | A unique identifier for the dataset. |
-| `uns["normalization_id"]` | `string`  | Which normalization was used.        |
+| Slot                         | Type      | Description                                                                    |
+|:-----------------------------|:----------|:-------------------------------------------------------------------------------|
+| `obsm["X_svd"]`              | `double`  | The resulting SVD PCA embedding.                                               |
+| `layers["counts"]`           | `integer` | Raw counts.                                                                    |
+| `layers["normalized"]`       | `double`  | Normalized counts.                                                             |
+| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                           |
+| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                         |
+| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                       |
+| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
+| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                                  |
 
 </div>
 
@@ -153,7 +159,7 @@ The first modality of a multimodal dataset. The cells of this dataset
 are randomly permuted.
 
 Example file:
-`resources_test/common/scicar_cell_lines/dataset_mod1.h5ad`
+`resources_test/match_modalities/scicar_cell_lines/dataset_mod1.h5ad`
 
 Description:
 
@@ -190,7 +196,7 @@ The second modality of a multimodal dataset. The cells of this dataset
 are randomly permuted.
 
 Example file:
-`resources_test/common/scicar_cell_lines/dataset_mod2.h5ad`
+`resources_test/match_modalities/scicar_cell_lines/dataset_mod2.h5ad`
 
 Description:
 
@@ -226,7 +232,7 @@ Slot description:
 The ground truth information for the first modality
 
 Example file:
-`resources_test/common/scicar_cell_lines/solution_mod1.h5ad`
+`resources_test/match_modalities/scicar_cell_lines/solution_mod1.h5ad`
 
 Description:
 
@@ -240,7 +246,7 @@ Format:
      obs: 'permutation_indices'
      obsm: 'X_svd'
      layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'normalization_id'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'normalization_id'
 
 </div>
 
@@ -248,14 +254,20 @@ Slot description:
 
 <div class="small">
 
-| Slot                         | Type      | Description                                                |
-|:-----------------------------|:----------|:-----------------------------------------------------------|
-| `obs["permutation_indices"]` | `integer` | Indices with which to revert the permutation of the cells. |
-| `obsm["X_svd"]`              | `double`  | The resulting SVD PCA embedding.                           |
-| `layers["counts"]`           | `integer` | Raw counts.                                                |
-| `layers["normalized"]`       | `double`  | Normalized counts.                                         |
-| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                       |
-| `uns["normalization_id"]`    | `string`  | Which normalization was used.                              |
+| Slot                         | Type      | Description                                                                    |
+|:-----------------------------|:----------|:-------------------------------------------------------------------------------|
+| `obs["permutation_indices"]` | `integer` | Indices with which to revert the permutation of the cells.                     |
+| `obsm["X_svd"]`              | `double`  | The resulting SVD PCA embedding.                                               |
+| `layers["counts"]`           | `integer` | Raw counts.                                                                    |
+| `layers["normalized"]`       | `double`  | Normalized counts.                                                             |
+| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                           |
+| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                         |
+| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                       |
+| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
+| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                                  |
 
 </div>
 
@@ -264,7 +276,7 @@ Slot description:
 The ground truth information for the second modality
 
 Example file:
-`resources_test/common/scicar_cell_lines/solution_mod2.h5ad`
+`resources_test/match_modalities/scicar_cell_lines/solution_mod2.h5ad`
 
 Description:
 
@@ -278,7 +290,7 @@ Format:
      obs: 'permutation_indices'
      obsm: 'X_svd'
      layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'normalization_id'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'normalization_id'
 
 </div>
 
@@ -286,14 +298,20 @@ Slot description:
 
 <div class="small">
 
-| Slot                         | Type      | Description                                                |
-|:-----------------------------|:----------|:-----------------------------------------------------------|
-| `obs["permutation_indices"]` | `integer` | Indices with which to revert the permutation of the cells. |
-| `obsm["X_svd"]`              | `double`  | The resulting SVD PCA embedding.                           |
-| `layers["counts"]`           | `integer` | Raw counts.                                                |
-| `layers["normalized"]`       | `double`  | Normalized counts.                                         |
-| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                       |
-| `uns["normalization_id"]`    | `string`  | Which normalization was used.                              |
+| Slot                         | Type      | Description                                                                    |
+|:-----------------------------|:----------|:-------------------------------------------------------------------------------|
+| `obs["permutation_indices"]` | `integer` | Indices with which to revert the permutation of the cells.                     |
+| `obsm["X_svd"]`              | `double`  | The resulting SVD PCA embedding.                                               |
+| `layers["counts"]`           | `integer` | Raw counts.                                                                    |
+| `layers["normalized"]`       | `double`  | Normalized counts.                                                             |
+| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                           |
+| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                         |
+| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                       |
+| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
+| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                                  |
 
 </div>
 
@@ -432,7 +450,8 @@ Slot description:
 
 Metric score file
 
-Example file: `resources_test/match_modalities/score.h5ad`
+Example file:
+`resources_test/match_modalities/scicar_cell_lines/score.h5ad`
 
 Description:
 
@@ -481,7 +500,7 @@ Format:
     AnnData object
      obsm: 'X_svd'
      layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'normalization_id'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'normalization_id'
 
 </div>
 
@@ -489,12 +508,18 @@ Slot description:
 
 <div class="small">
 
-| Slot                      | Type      | Description                          |
-|:--------------------------|:----------|:-------------------------------------|
-| `obsm["X_svd"]`           | `double`  | The resulting SVD PCA embedding.     |
-| `layers["counts"]`        | `integer` | Raw counts.                          |
-| `layers["normalized"]`    | `double`  | Normalized counts.                   |
-| `uns["dataset_id"]`       | `string`  | A unique identifier for the dataset. |
-| `uns["normalization_id"]` | `string`  | Which normalization was used.        |
+| Slot                         | Type      | Description                                                                    |
+|:-----------------------------|:----------|:-------------------------------------------------------------------------------|
+| `obsm["X_svd"]`              | `double`  | The resulting SVD PCA embedding.                                               |
+| `layers["counts"]`           | `integer` | Raw counts.                                                                    |
+| `layers["normalized"]`       | `double`  | Normalized counts.                                                             |
+| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                           |
+| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                         |
+| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                       |
+| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
+| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                                  |
 
 </div>
