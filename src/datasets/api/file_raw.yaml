@@ -78,6 +78,19 @@ info:
         required: false
 
       - type: string
+        name: organism
+        description: Organism from which the cell sample is obtained.
+        required: false
+      
+      - type: string
+        name: organism_ontology_term_id
+        description: |
+          Ontology term identifier for the organism, providing a standardized reference for the organism.
+
+          Must be a term from the NCBI Taxonomy Ontology (`NCBITaxon:`) which is a child of `NCBITaxon:33208`.
+        required: false
+
+      - type: string
         name: self_reported_ethnicity
         description: Ethnicity of the donor as self-reported, relevant for studies considering genetic diversity and population-specific traits.
         required: false

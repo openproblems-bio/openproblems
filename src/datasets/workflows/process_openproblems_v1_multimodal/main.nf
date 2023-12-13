@@ -1,3 +1,10 @@
+workflow auto {
+  findStates(params, meta.config)
+    | meta.workflow.run(
+      auto: [publish: "state"]
+    )
+}
+
 workflow run_wf {
   take:
   input_ch

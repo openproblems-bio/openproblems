@@ -13,4 +13,4 @@ platforms:
         pypi: [scikit-learn]
   - type: nextflow
     directives:
-      label: [ highmem, midcpu , midtime]
+      label: [ midtime, highmem, midcpu ]

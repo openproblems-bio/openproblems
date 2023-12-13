@@ -47,14 +47,17 @@ workflow run_wf {
     }
 
     // fetch data from legacy openproblems
-    | openproblems_v1.run(
+    | cellxgene_census.run(
       fromState: [
-        "dataset_id": "id",
-        "obs_cell_type": "obs_cell_type",
+        "input_uri": "input_uri",
+        "census_version": "census_version",
+        "species": "species",
+        "obs_value_filter": "obs_value_filter",
+        "cell_filter_grouping": "cell_filter_grouping",
+        "cell_filter_minimum_count": "cell_filter_minimum_count",
         "obs_batch": "obs_batch",
-        "obs_tissue": "obs_tissue",
-        "layer_counts": "layer_counts",
-        "sparse": "sparse",
+        "obs_batch_separator": "obs_batch_separator",
+        "dataset_id": "id",
         "dataset_name": "dataset_name",
         "dataset_url": "dataset_url",
         "dataset_reference": "dataset_reference",

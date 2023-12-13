@@ -15,4 +15,4 @@ platforms:
         pip: scanpy
   - type: nextflow
     directives: 
-      label: [ "midtime", highmem, highcpu ]
+      label: [ midtime, midmem, midcpu ]

@@ -1,5 +1,5 @@
 functionality:
-  name: query_cellxgene_census
+  name: cellxgene_census
   namespace: datasets/loaders
   description: |
     Query cells from a CellxGene Census or custom TileDBSoma object.
@@ -20,26 +20,22 @@ functionality:
           type: string
           example: "stable"
           required: false
-    - name: Query
+    - name: Cell query
       description: Arguments related to the query.
       arguments:
         - name: "--species"
           type: string
           description: The organism to query, usually one of `Homo sapiens` or `Mus musculus`.
-          required: false
-          default: "homo_sapiens"
-          multiple: false
+          required: true
+          example: "homo_sapiens"
         - name: "--obs_value_filter"
           type: string
           description: "Filter for selecting the `obs` metadata (i.e. cells). Value is a filter query written in the SOMA `value_filter` syntax."
-          required: false
+          required: true
           example: "is_primary_data == True and cell_type_ontology_term_id in ['CL:0000136', 'CL:1000311', 'CL:0002616'] and suspension_type == 'cell'"
-    - name: Arguments
-      description: Other arguments
+    - name: Filter cells by grouping
+      description: 
       arguments:
-        - name: "--add_collection_metadata"
-          type: boolean_true
-          description: Whether to add metadata to the obs related to the collection.
         - name: "--cell_filter_grouping"
           type: string
           description: |
@@ -51,12 +47,87 @@ functionality:
           example: ["dataset_id", "tissue", "assay", "disease", "cell_type"]
           multiple: true
         - name: "--cell_filter_minimum_count"
-          type: double
+          type: integer
           description: |
             A minimum number of cells per group to retain. If `--cell_filter_grouping`
             is defined, this parameter should also be provided and vice versa.
           required: false
           example: 100
+    - name: Count filtering
+      description: Arguments related to filtering cells and genes by counts.
+      arguments:
+        - name: "--cell_filter_min_genes"
+          type: integer
+          description: Remove cells with less than this number of genes.
+          required: false
+          default: 50
+        - name: "--cell_filter_min_counts"
+          type: integer
+          description: Remove cells with less than this number of counts.
+          required: false
+          default: 0
+        - name: "--gene_filter_min_cells"
+          type: integer
+          description: Remove genes expressed in less than this number of cells.
+          required: false
+          default: 5
+        - name: "--gene_filter_min_counts"
+          type: integer
+          description: Remove genes with less than this number of counts.
+          required: false
+          default: 0
+    - name: Cell metadata
+      description: Cell metadata arguments
+      arguments:
+        - name: "--obs_batch"
+          type: string
+          description: |
+            Location of where to find the observation batch IDs.  
+            
+            * If not specified, the `.obs["batch"]` field will not be included.
+            * If one or more values are specified, the `.obs["batch"]` field will be 
+              set to the concatenated values of the specified fields, separated by
+              the `obs_batch_separator`.
+          required: false
+          multiple: true
+          multiple_sep: ","
+          example: ["batch"]
+        - name: "--obs_batch_separator"
+          type: string
+          description: Separator to use when concatenating the values of the `--obs_batch` fields.
+          required: false
+          default: "+"
+    - name: Dataset metadata
+      description: Information about the dataset that will be stored in the `.uns` slot.
+      arguments:
+        - name: "--dataset_id"
+          type: string
+          description: Unique identifier of the dataset.
+          required: true
+        - name: "--dataset_name"
+          type: string
+          description: Nicely formatted name.
+          required: true
+        - name: "--dataset_url"
+          type: string
+          description: Link to the original source of the dataset.
+          required: false
+        - name: "--dataset_reference"
+          type: string
+          description: Bibtex reference of the paper in which the dataset was published.
+          required: false
+        - name: "--dataset_summary"
+          type: string
+          description: Short description of the dataset.
+          required: true
+        - name: "--dataset_description"
+          type: string
+          description: Long description of the dataset.
+          required: true
+        - name: "--dataset_organism"
+          type: string
+          description: The organism of the dataset.
+          required: true
     - name: Outputs
       description: Output arguments.
       arguments:
@@ -80,11 +151,13 @@ functionality:
       path: test.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    #image: ghcr.io/openproblems-bio/base_python:1.0.2
+    image: python:3.11
     setup:
       - type: python
         packages:
-          - cellxgene-census~=1.2.0
+          - cellxgene-census
+          - scanpy
     test_setup:
       - type: python
         packages:
