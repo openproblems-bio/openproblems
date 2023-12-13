@@ -1,6 +1,7 @@
 functionality:
   name: "get_results"
   description: "Extract execution info"
+  namespace: common/process_task_results
   arguments:
     - name: "--input_scores"
       type: "file"
