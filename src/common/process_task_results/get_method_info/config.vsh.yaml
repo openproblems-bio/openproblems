@@ -1,7 +1,6 @@
 __merge__: ../api/get_info.yaml
 functionality:
   name: "get_method_info"
-  namespace: "common"
   description: "Extract method info"
   resources:
     - type: r_script

@@ -1,8 +1,7 @@
 __merge__: ../api/get_info.yaml
 functionality:
   status: disabled
-  name: "get_api_info"
-  namespace: "common"
+  name: get_api_info
   description: "Extract api info"
   resources:
     - type: r_script

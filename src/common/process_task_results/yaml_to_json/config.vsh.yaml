@@ -1,7 +1,6 @@
 __merge__: ../api/get_info.yaml
 functionality:
   name: "yaml_to_json"
-  namespace: "common"
   description: "convert yaml file to json file"
   resources:
     - type: python_script

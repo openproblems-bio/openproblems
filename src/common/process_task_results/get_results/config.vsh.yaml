@@ -1,6 +1,5 @@
 functionality:
   name: "get_results"
-  namespace: "common"
   description: "Extract execution info"
   arguments:
     - name: "--input_scores"

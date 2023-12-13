@@ -1,7 +1,6 @@
 __merge__: ../api/get_info.yaml
 functionality:
   name: "get_metric_info"
-  namespace: "common"
   description: "Extract metric info"
   resources:
     - type: r_script

@@ -1,6 +1,6 @@
 functionality:
-  name: transform_meta
-  namespace: common/workflows
+  name: run
+  namespace: common/process_task_results
   description: >-
     This workflow transforms the meta information of the results into a format
     that can be used by the website.
@@ -76,9 +76,9 @@ functionality:
       path: main.nf
       entrypoint: run_wf
   dependencies:
-    - name: common/get_results
-    - name: common/get_method_info
-    - name: common/get_metric_info
-    - name: common/yaml_to_json
+    - name: common/process_task_results/get_results
+    - name: common/process_task_results/get_method_info
+    - name: common/process_task_results/get_metric_info
+    - name: common/process_task_results/yaml_to_json
 platforms:
   - type: nextflow
