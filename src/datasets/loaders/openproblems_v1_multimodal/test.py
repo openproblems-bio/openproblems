@@ -2,7 +2,8 @@ from os import path
 import subprocess
 import anndata as ad
 
-name = "scicar_mouse_kidney"
+input_id = "scicar_mouse_kidney"
+dataset_id = "openproblems_v1_multimodal/" + input_id
 obs_cell_type = "cell_name"
 obs_batch = "replicate"
 obs_tissue = None
@@ -14,7 +15,8 @@ print(">> Running script", flush=True)
 out = subprocess.run(
     [
         meta["executable"],
-        "--dataset_id", name,
+        "--input_id", input_id,
+        "--dataset_id", dataset_id,
         "--obs_cell_type", obs_cell_type,
         "--obs_batch", obs_batch,
         "--layer_counts", "counts",
@@ -57,7 +59,7 @@ if obs_batch:
     assert "batch" in output_mod1.obs.columns, "batch column not found in mod 1 output obs"
 if obs_tissue:
     assert "tissue" in output_mod1.obs.columns, "tissue column not found in mod 1 output obs"
-assert output_mod1.uns["dataset_id"] == name, f"Expected: {name} as value for dataset_id in mod 1 output uns"
+assert output_mod1.uns["dataset_id"] == dataset_id, f"Expected: {dataset_id} as value for dataset_id in mod 1 output uns"
 assert output_mod1.uns["dataset_name"] == "Pancreas", "Expected: Pancreas as value for dataset_name in mod 1 output uns"
 assert output_mod1.uns["dataset_url"] == "http://foo.org", "Expected: http://foo.org as value for dataset_url in mod 1 output uns"
 assert output_mod1.uns["dataset_reference"] == "foo2000bar", "Expected: foo2000bar as value for dataset_reference in mod 1 output uns"
@@ -73,7 +75,7 @@ if obs_batch:
     assert "batch" in output_mod2.obs.columns, "batch column not found in mod 2 output obs"
 if obs_tissue:
     assert "tissue" in output_mod2.obs.columns, "tissue column not found in mod 2 output obs"
-assert output_mod2.uns["dataset_id"] == name, f"Expected: {name} as value for dataset_id in mod 2 output uns"
+assert output_mod2.uns["dataset_id"] == dataset_id, f"Expected: {dataset_id} as value for dataset_id in mod 2 output uns"
 assert output_mod2.uns["dataset_name"] == "Pancreas", "Expected: Pancreas as value for dataset_name in mod 2 output uns"
 assert output_mod2.uns["dataset_url"] == "http://foo.org", "Expected: http://foo.org as value for dataset_url in mod 2 output uns"
 assert output_mod2.uns["dataset_reference"] == "foo2000bar", "Expected: foo2000bar as value for dataset_reference in mod 2 output uns"

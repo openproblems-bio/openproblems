@@ -5,9 +5,9 @@ functionality:
   argument_groups:
     - name: Inputs
       arguments:
-        - name: "--dataset_id"
+        - name: "--input_id"
           type: "string"
-          description: "The ID of the dataset"
+          description: "The ID of the dataset in OpenProblems v1"
           required: true
         - name: "--obs_cell_type"
           type: "string"
@@ -28,6 +28,10 @@ functionality:
           description: Convert layers to a sparse CSR format.
     - name: Metadata
       arguments:
+        - name: "--dataset_id"
+          type: string
+          description: Unique identifier of the dataset.
+          required: true
         - name: "--dataset_name"
           type: string
           description: Nicely formatted name.

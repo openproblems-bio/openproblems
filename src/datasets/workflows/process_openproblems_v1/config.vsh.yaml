@@ -7,8 +7,12 @@ functionality:
     - name: Inputs
       arguments:
         - name: "--id"
+          type: string
+          description: Unique identifier of the dataset.
+          required: true
+        - name: "--input_id"
           type: "string"
-          description: "The ID of the dataset"
+          description: "The ID of the dataset in OpenProblems v1"
           required: true
         - name: "--obs_cell_type"
           type: "string"

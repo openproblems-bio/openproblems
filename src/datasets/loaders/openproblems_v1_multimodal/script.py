@@ -33,7 +33,7 @@ dataset_funs: Dict[str, Tuple[Callable, Dict[str, Any]]] = {
 }
 
 # fetch dataset
-dataset_fun, kwargs = dataset_funs[par["dataset_id"]]
+dataset_fun, kwargs = dataset_funs[par["input_id"]]
 
 print("Fetch dataset", flush=True)
 adata = dataset_fun(**kwargs)

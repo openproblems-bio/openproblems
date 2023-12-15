@@ -2,7 +2,8 @@ from os import path
 import subprocess
 import anndata as ad
 
-name = "pancreas"
+input_id = "pancreas"
+dataset_id = "openproblems_v1/" + input_id
 output = "dataset.h5ad"
 obs_cell_type = "celltype"
 obs_batch = "tech"
@@ -11,7 +12,8 @@ print(">> Running script", flush=True)
 out = subprocess.run(
     [
         meta["executable"],
-        "--dataset_id", name,
+        "--input_id", input_id,
+        "--dataset_id", dataset_id,
         "--obs_cell_type", obs_cell_type,
         "--obs_batch", obs_batch,
         "--layer_counts", "counts",
@@ -44,7 +46,7 @@ print(adata)
 print(">> Check that output fits expected API", flush=True)
 assert adata.X is None, "adata.X should be None/empty"
 assert "counts" in adata.layers, "Counts layer not found in output layers"
-assert adata.uns["dataset_id"] == name, f"Expected {name} as value"
+assert adata.uns["dataset_id"] == dataset_id, f"Expected {dataset_id} as value"
 if obs_cell_type:
     assert "cell_type" in adata.obs.columns, "'cell_type' column not found in obs of anndata output"
 if obs_batch:
