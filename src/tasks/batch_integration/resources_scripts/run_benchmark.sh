@@ -1,31 +1,27 @@
 #!/bin/bash
 
-# get the root of the directory
-REPO_ROOT=$(git rev-parse --show-toplevel)
 
-# ensure that the command below is run from the root of the repository
-cd "$REPO_ROOT"
+# try running on nf tower
+cat > /tmp/params.yaml << 'HERE'
+input_states: s3://openproblems-data/resources/batch_integration/datasets/**/state.yaml
+rename_keys: 'input_dataset:output_dataset,input_solution:output_solution'
+settings: '{"output": "scores.tsv"}'
+output_state: "state.yaml"
+publish_dir: s3://openproblems-data/resources/batch_integration/results
+HERE
 
-set -e
+cat > /tmp/nextflow.config << HERE
+process {
+  executor = 'awsbatch'
+}
+HERE
 
-export TOWER_WORKSPACE_ID=53907369739130
-
-DATASETS_DIR="resources/batch_integration/datasets/openproblems_v1"
-OUTPUT_DIR="resources/batch_integration/benchmarks/openproblems_v1"
-
-if [ ! -d "$OUTPUT_DIR" ]; then
-  mkdir -p "$OUTPUT_DIR"
-fi
-
-export NXF_VER=22.04.5
-nextflow run . \
-  -main-script target/nextflow/batch_integration/workflows/run_benchmark/main.nf \
-  -profile docker \
-  -resume \
-  -entry auto \
-  --input_states "$DATASETS_DIR/**/state.yaml" \
-  --rename_keys 'input_dataset:output_dataset,input_solution:output_solution' \
-  --settings '{"output": "scores.tsv"}' \
-  --publish_dir "$OUTPUT_DIR" \
-  --output_state '$id/state.yaml'
-# output_state should be moved to settings once workaround is solved
+tw launch https://github.com/openproblems-bio/openproblems-v2.git \
+  --revision main_build \
+  --pull-latest \
+  --main-script target/nextflow/batch_integration/workflows/run_benchmark/main.nf \
+  --workspace 53907369739130 \
+  --compute-env 1pK56PjjzeraOOC2LDZvN2 \
+  --params-file /tmp/params.yaml \
+  --entry-name auto \
+  --config /tmp/nextflow.config

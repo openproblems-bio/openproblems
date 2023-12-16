@@ -1,31 +1,28 @@
 #!/bin/bash
 
-# get the root of the directory
-REPO_ROOT=$(git rev-parse --show-toplevel)
 
-# ensure that the command below is run from the root of the repository
-cd "$REPO_ROOT"
+# try running on nf tower
+cat > /tmp/params.yaml << 'HERE'
+id: dimensionality_reduction
+input_states: s3://openproblems-data/resources/dimensionality_reduction/datasets/**/state.yaml
+rename_keys: 'input_dataset:output_dataset,input_solution:output_solution'
+settings: '{"output": "scores.tsv"}'
+output_state: "state.yaml"
+publish_dir: s3://openproblems-data/resources/dimensionality_reduction/results
+HERE
 
-set -e
+cat > /tmp/nextflow.config << HERE
+process {
+  executor = 'awsbatch'
+}
+HERE
 
-# export TOWER_WORKSPACE_ID=53907369739130
-
-DATASETS_DIR="resources/dimensionality_reduction"
-OUTPUT_DIR="output/test"
-
-if [ ! -d "$OUTPUT_DIR" ]; then
-  mkdir -p "$OUTPUT_DIR"
-fi
-
-export NXF_VER=22.04.5
-nextflow run . \
-  -main-script target/nextflow/dimensionality_reduction/workflows/run_benchmark/main.nf \
-  -profile docker \
-  -resume \
-  -entry auto \
-  -c src/wf_utils/labels_ci.config \
-  --input_states "$DATASETS_DIR/**/state.yaml" \
-  --rename_keys 'input_dataset:output_dataset,input_solution:output_solution' \
-  --settings '{"output": "scores.tsv"}' \
-  --publish_dir "$OUTPUT_DIR"\
-  --output_state '$id/state.yaml'
+tw launch https://github.com/openproblems-bio/openproblems-v2.git \
+  --revision main_build \
+  --pull-latest \
+  --main-script target/nextflow/dimensionality_reduction/workflows/run_benchmark/main.nf \
+  --workspace 53907369739130 \
+  --compute-env 1pK56PjjzeraOOC2LDZvN2 \
+  --params-file /tmp/params.yaml \
+  --entry-name auto \
+  --config /tmp/nextflow.config

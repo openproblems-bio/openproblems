@@ -1,9 +1,9 @@
 #!/bin/bash
 
-DATASETS_DIR="s3://openproblems-nextflow/output/v2/batch_integration"
+DATASETS_DIR="s3://openproblems-data/resources/batch_integration/results/"
 
 # try running on nf tower
-cat > /tmp/params.yaml << HERE
+cat > /tmp/params.yaml << 'HERE'
 id: batch_integration_transform
 input_scores: "$DATASETS_DIR/scores.yaml"
 input_dataset_info: "$DATASETS_DIR/dataset_info.yaml"
@@ -33,6 +33,6 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --pull-latest \
   --main-script target/nextflow/common/workflows/transform_meta/main.nf \
   --workspace 53907369739130 \
-  --compute-env 7IkB9ckC81O0dgNemcPJTD \
+  --compute-env 1pK56PjjzeraOOC2LDZvN2 \
   --params-file /tmp/params.yaml \
   --config /tmp/nextflow.config

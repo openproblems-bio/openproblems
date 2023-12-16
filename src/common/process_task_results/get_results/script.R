@@ -3,8 +3,8 @@ library(rlang)
 
 ## VIASH START
 par <- list(
-  input_scores = "output/v2/batch_integration/scores.yaml",
-  input_execution = "output/v2/batch_integration/trace.txt",
+  input_scores = "resources/batch_integration/results/scores.yaml",
+  input_execution = "resources/batch_integration/results/trace.txt",
   output = "test.json"
 )
 ## VIASH END

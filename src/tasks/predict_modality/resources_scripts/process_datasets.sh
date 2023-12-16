@@ -1,26 +1,26 @@
 #!/bin/bash
 
-# get the root of the directory
-REPO_ROOT=$(git rev-parse --show-toplevel)
+cat > /tmp/params.yaml << 'HERE'
+id: predict_modality_process_datasets
+input_states: s3://openproblems-data/resources/datasets/openproblems_v1_multimodal/**/state.yaml
+rename_keys: 'input_rna:output_dataset_rna,input_other_mod:output_dataset_other_mod'
+settings: '{"output_train_mod1": "$id/train_mod1.h5ad", "output_train_mod2": "$id/train_mod2.h5ad", "output_test_mod1": "$id/test_mod1.h5ad", "output_test_mod2": "$id/test_mod2.h5ad"}'
+output_state: "$id/state.yaml"
+publish_dir: s3://openproblems-data/resources/predict_modality/datasets/openproblems_v1
+HERE
 
-# ensure that the command below is run from the root of the repository
-cd "$REPO_ROOT"
+cat > /tmp/nextflow.config << HERE
+process {
+  executor = 'awsbatch'
+}
+HERE
 
-set -e
-
-COMMON_DATASETS="resources/datasets/openproblems_v1_multimodal"
-OUTPUT_DIR="resources/predict_modality/datasets/openproblems_v1_multimodal"
-
-export NXF_VER=22.04.5
-
-nextflow run . \
-  -main-script target/nextflow/predict_modality/workflows/process_datasets/main.nf \
-  -profile docker \
-  -entry auto \
-  -resume \
-  --input_states "$COMMON_DATASETS/**/state.yaml" \
-  --rename_keys 'input_rna:output_dataset_rna,input_other_mod:output_dataset_other_mod' \
-  --settings '{"output_train_mod1": "$id/train_mod1.h5ad", "output_train_mod2": "$id/train_mod2.h5ad", "output_test_mod1": "$id/test_mod1.h5ad", "output_test_mod2": "$id/test_mod2.h5ad"}' \
-  --publish_dir "$OUTPUT_DIR" \
-  --output_state '$id/state.yaml'
-# output_state should be moved to settings once workaround is solved
+tw launch https://github.com/openproblems-bio/openproblems-v2.git \
+  --revision main_build \
+  --pull-latest \
+  --main-script target/nextflow/predict_modality/workflows/process_datasets/main.nf \
+  --workspace 53907369739130 \
+  --compute-env 1pK56PjjzeraOOC2LDZvN2 \
+  --params-file /tmp/params.yaml \
+  --entry-name auto \
+  --config /tmp/nextflow.config

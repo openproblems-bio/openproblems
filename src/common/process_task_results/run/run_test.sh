@@ -10,8 +10,8 @@ set -e
 
 # export TOWER_WORKSPACE_ID=53907369739130
 
-DATASETS_DIR="output/v2/batch_integration"
-OUTPUT_DIR="/home/kai/Documents/openroblems/website/results/batch_integration_feature/data"
+DATASETS_DIR="resources/batch_integration/results"
+OUTPUT_DIR="../website/results/batch_integration_feature/data"
 
 if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"

@@ -1,31 +1,28 @@
 #!/bin/bash
 
-# get the root of the directory
-REPO_ROOT=$(git rev-parse --show-toplevel)
+#!/bin/bash
 
-# ensure that the command below is run from the root of the repository
-cd "$REPO_ROOT"
+cat > /tmp/params.yaml << 'HERE'
+id: predict_modality
+input_states: s3://openproblems-data/resources/predict_modality/datasets/**/state.yaml
+rename_keys: 'input_train_mod1:output_train_mod1,input_train_mod2:output_train_mod2,input_test_mod1:output_test_mod1,input_test_mod2:output_test_mod2'
+settings: '{"output": "scores.tsv"}'
+output_state: "state.yaml"
+publish_dir: s3://openproblems-data/resources/predict_modality/results
+HERE
 
-set -e
+cat > /tmp/nextflow.config << HERE
+process {
+  executor = 'awsbatch'
+}
+HERE
 
-# export TOWER_WORKSPACE_ID=53907369739130
-
-DATASETS_DIR="resources_test/predict_modality"
-OUTPUT_DIR="output/predict_modality"
-
-if [ ! -d "$OUTPUT_DIR" ]; then
-  mkdir -p "$OUTPUT_DIR"
-fi
-
-export NXF_VER=22.04.5
-nextflow run . \
-  -main-script target/nextflow/predict_modality/workflows/run_benchmark/main.nf \
-  -profile docker \
-  -resume \
-  -entry auto \
-  -c src/wf_utils/labels_ci.config \
-  --input_states "$DATASETS_DIR/**/state.yaml" \
-  --rename_keys 'input_train_mod1:output_train_mod1,input_train_mod2:output_train_mod2,input_test_mod1:output_test_mod1,input_test_mod2:output_test_mod2' \
-  --settings '{"output": "scores.tsv"}' \
-  --publish_dir "$OUTPUT_DIR"\
-  --output_state '$id/state.yaml'
+tw launch https://github.com/openproblems-bio/openproblems-v2.git \
+  --revision main_build \
+  --pull-latest \
+  --main-script target/nextflow/predict_modality/workflows/run_benchmark/main.nf \
+  --workspace 53907369739130 \
+  --compute-env 1pK56PjjzeraOOC2LDZvN2 \
+  --params-file /tmp/params.yaml \
+  --entry-name auto \
+  --config /tmp/nextflow.config
