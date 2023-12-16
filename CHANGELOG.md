@@ -307,6 +307,8 @@
 
 * `metrics/trustworthiness` should be removed because it is already included in `metrics/coranking`.
 
+* `methods/simlr`: Added new SIMLR method.
+
 
 ## match_modalities (PR #201)
 
