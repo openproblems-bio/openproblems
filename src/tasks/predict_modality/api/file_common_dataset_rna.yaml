@@ -1,17 +1,17 @@
 type: file
-example: "resources_test/common/bmmc_cite_starter/dataset_rna.h5ad"
+example: "resources_test/common/neurips2021_bmmc_cite/dataset_rna.h5ad"
 info:
   label: "Raw dataset RNA"
   summary: "The RNA modality of the raw dataset."
   slots:
-    X:
-      type: double
-      description: Normalized expression values
-      required: true
     layers:
       - type: integer
         name: counts
         description: Raw counts
+        required: true
+      - type: double
+        name: normalized
+        description: Normalized expression values
         required: true
     obs:
       - type: string
