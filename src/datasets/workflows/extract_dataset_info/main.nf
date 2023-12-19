@@ -32,6 +32,7 @@ workflow run_wf {
 
     | joinStates { ids, states ->
       // remove normalization id
+      // TODO: make this optional through a parameter?
       def dataset_uns = states.collect{state ->
         def uns = state.dataset_uns.clone()
         uns.remove("normalization_id")

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DATASETS_DIR="s3://openproblems-data/resources/datasets"
+
 cat > "/tmp/params.yaml" << HERE
 param_list:
   - id: openproblems_v1
@@ -38,3 +40,15 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --compute-env 1pK56PjjzeraOOC2LDZvN2 \
   --params-file "/tmp/params.yaml" \
   --config /tmp/nextflow.config
+
+
+# # run locally after the above has finished
+# nextflow run . \
+#   -main-script target/nextflow/common/process_task_results/get_dataset_info/main.nf \
+#   -profile docker \
+#   -resume \
+#   --input "$DATASETS_DIR/dataset_info.yaml" \
+#   --task_id "common" \
+#   --output "dataset_info.json" \
+#   --output_state state.yaml \
+#   --publish_dir "../website/documentation/reference/datasets/data/"

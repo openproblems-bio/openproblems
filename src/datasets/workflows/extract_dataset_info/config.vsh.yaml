@@ -16,7 +16,7 @@ functionality:
           direction: input
           description: If defined, only the normalization with this ID will be included in the output.
           multiple: true
-          default: [ log_cp10k ]
+          example: [ log_cp10k ]
     - name: Outputs
       arguments:
         - name: "--output"
