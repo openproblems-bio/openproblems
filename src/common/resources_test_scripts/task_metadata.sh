@@ -128,9 +128,6 @@ nextflow run . \
   -entry auto \
   --input_states "$DATASETS_DIR/**/state.yaml" \
   --rename_keys 'input_dataset:output_dataset,input_solution:output_solution' \
-  --settings '{"output_scores": "scores.yaml", "output_dataset_info": "dataset_info.yaml", "output_method_configs": "method_configs.yaml", "output_metric_configs": "metric_configs.yaml"}' \
+  --settings '{"output_scores": "scores.yaml", "output_dataset_info": "dataset_info.yaml", "output_method_configs": "method_configs.yaml", "output_metric_configs": "metric_configs.yaml", "output_task_info": "task_info.yaml"}' \
   --publish_dir "$OUTPUT_DIR" \
   --output_state "state.yaml"
-
-# Copy task info
-cp src/tasks/batch_integration/api/task_info.yaml "$OUTPUT_DIR/task_info.yaml"

@@ -1,13 +1,13 @@
 __merge__: ../api/get_info.yaml
 functionality:
-  name: "get_metric_info"
-  description: "Extract metric info"
+  name: "get_dataset_info"
+  description: "Extract dataset info and convert to expected format for website results"
   resources:
     - type: r_script
       path: script.R
   test_resources:
     - type: file
-      path: /resources_test/common/task_metadata/metric_configs.yaml
+      path: /resources_test/common/task_metadata/dataset_info.yaml
       dest: test_file.yaml
 platforms:
   - type: docker

@@ -15,10 +15,6 @@ platforms:
     setup:
       - type: r
         cran: [ purrr, dplyr, yaml, rlang, processx ]
-      - type: apt
-        packages: [ curl, default-jdk ]
-      - type: docker
-        run: "curl -fsSL dl.viash.io | bash && mv viash /usr/bin/viash"
   - type: nextflow
     directives:
       label: [lowmem, lowtime, lowcpu]

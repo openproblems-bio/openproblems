@@ -79,6 +79,7 @@ functionality:
     - name: common/process_task_results/get_results
     - name: common/process_task_results/get_method_info
     - name: common/process_task_results/get_metric_info
+    - name: common/process_task_results/get_dataset_info
     - name: common/process_task_results/yaml_to_json
 platforms:
   - type: nextflow

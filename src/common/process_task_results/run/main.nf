@@ -34,8 +34,7 @@ workflow run_wf {
       }
     )
 
-    | yaml_to_json.run(
-      key: "dataset_info",
+    | get_dataset_info.run(
       fromState: [ 
         "input": "input_dataset_info",
         "output": "output_dataset_info"
