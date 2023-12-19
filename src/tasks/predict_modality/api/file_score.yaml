@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/predict_modality/bmmc_cite_starter/score.h5ad"
+example: "resources_test/predict_modality/neurips2021_bmmc_cite/score.h5ad"
 info:
   label: "Score"
   summary: "Metric score file"

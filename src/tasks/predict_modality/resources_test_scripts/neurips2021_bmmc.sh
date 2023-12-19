@@ -25,9 +25,9 @@ nextflow run . \
   --publish_dir "$OUTPUT_DIR" \
   --output_state '$id/state.yaml'
 
-  echo "Run one method"
-  viash run src/tasks/predict_modality/methods/knnr_py/config.vsh.yaml -- \
-    --input_train_mod1 $OUTPUT_DIR/bmmc_cite_starter/train_mod1.h5ad \
-    --input_train_mod2 $OUTPUT_DIR/bmmc_cite_starter/train_mod2.h5ad \
-    --input_test_mod1 $OUTPUT_DIR/bmmc_cite_starter/test_mod1.h5ad \
-    --output $OUTPUT_DIR/bmmc_cite_starter/prediction.h5ad
+echo "Run one method"
+viash run src/tasks/predict_modality/methods/knnr_py/config.vsh.yaml -- \
+  --input_train_mod1 $OUTPUT_DIR/neurips2021_bmmc_cite/train_mod1.h5ad \
+  --input_train_mod2 $OUTPUT_DIR/neurips2021_bmmc_cite/train_mod2.h5ad \
+  --input_test_mod1 $OUTPUT_DIR/neurips2021_bmmc_cite/test_mod1.h5ad \
+  --output $OUTPUT_DIR/neurips2021_bmmc_cite/prediction.h5ad

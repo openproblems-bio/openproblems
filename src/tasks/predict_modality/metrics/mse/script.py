@@ -4,9 +4,9 @@ import numpy as np
 
 ## VIASH START
 par = {
-  "input_test_mod2" : "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod2.h5ad",
-  "input_prediction" : "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad",
-  "output" : "openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad"
+  "input_test_mod2" : "resources_test/predict_modality/neurips2021_bmmc_cite/test_mod2.h5ad",
+  "input_prediction" : "resources_test/predict_modality/neurips2021_bmmc_cite/prediction.h5ad",
+  "output" : "output/scores.h5ad"
 }
 ## VIASH END
 

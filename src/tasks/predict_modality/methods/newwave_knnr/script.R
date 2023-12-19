@@ -6,9 +6,7 @@ requireNamespace("FNN", quietly = TRUE)
 requireNamespace("SingleCellExperiment", quietly = TRUE)
 
 ## VIASH START
-path <- "output/datasets/predict_modality/openproblems_bmmc_multiome_phase1_rna/openproblems_bmmc_multiome_phase1_rna.censor_dataset.output_"
-path <- "resources_test/predict_modality/openproblems_bmmc_cite_starter/openproblems_bmmc_cite_starter."
-path <- "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
+path <- "resources_test/predict_modality/neurips2021_bmmc_cite/"
 par <- list(
   input_train_mod1 = paste0(path, "train_mod1.h5ad"),
   input_test_mod1 = paste0(path, "test_mod1.h5ad"),

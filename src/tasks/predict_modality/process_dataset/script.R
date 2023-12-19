@@ -14,12 +14,12 @@ par <- list(
   seed = 1L
 )
 # par <- list(
-#   input_rna = "resources_test/common/bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_rna.h5ad",
-#   input_other_mod = "resources_test/common/bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_atac.h5ad",
-#   output_train_mod1 = "resources_test/predict_modality/bmmc_multiome_starter/train_mod1.h5ad",
-#   output_train_mod2 = "resources_test/predict_modality/bmmc_multiome_starter/train_mod2.h5ad",
-#   output_test_mod1 = "resources_test/predict_modality/bmmc_multiome_starter/test_mod1.h5ad",
-#   output_test_mod2 = "resources_test/predict_modality/bmmc_multiome_starter/test_mod2.h5ad",
+#   input_rna = "resources_test/predict_modality/neurips2021_bmmc_mutliome/output_rna.h5ad",
+#   input_other_mod = "resources_test/predict_modality/neurips2021_bmmc_mutliome/output_atac.h5ad",
+#   output_train_mod1 = "resources_test/predict_modality/neurips2021_bmmc_mutliome/train_mod1.h5ad",
+#   output_train_mod2 = "resources_test/predict_modality/neurips2021_bmmc_mutliome/train_mod2.h5ad",
+#   output_test_mod1 = "resources_test/predict_modality/neurips2021_bmmc_mutliome/test_mod1.h5ad",
+#   output_test_mod2 = "resources_test/predict_modality/neurips2021_bmmc_mutliome/test_mod2.h5ad",
 #   swap = TRUE,
 #   seed = 1L
 # )

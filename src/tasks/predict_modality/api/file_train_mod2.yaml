@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/predict_modality/bmmc_cite_starter/train_mod2.h5ad"
+example: "resources_test/predict_modality/neurips2021_bmmc_cite/train_mod2.h5ad"
 info:
   label: "Train mod2"
   summary: "The mod2 expression values of the train cells."

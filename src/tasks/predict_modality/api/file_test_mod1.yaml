@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/predict_modality/bmmc_cite_starter/test_mod1.h5ad"
+example: "resources_test/predict_modality/neurips2021_bmmc_cite/test_mod1.h5ad"
 info:
   label: "Test mod1"
   summary: "The mod1 expression values of the test cells."
