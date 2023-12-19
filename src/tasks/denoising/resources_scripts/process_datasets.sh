@@ -2,7 +2,7 @@
 
 cat > /tmp/params.yaml << 'HERE'
 id: denoising_process_datasets
-input_states: s3://openproblems-data/resources/datasets/**/state.yaml
+input_states: s3://openproblems-data/resources/datasets/**/log_cp10k/state.yaml
 rename_keys: 'input:output_dataset'
 settings: '{"output_train": "$id/train.h5ad", "output_test": "$id/test.h5ad"}'
 output_state: "$id/state.yaml"

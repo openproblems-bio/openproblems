@@ -38,7 +38,3 @@ info:
         type: string
         description: The organism of the sample in the dataset.
         required: false
-      - type: string
-        name: normalization_id
-        description: "Which normalization was used"
-        required: true

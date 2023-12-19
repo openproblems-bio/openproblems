@@ -53,7 +53,7 @@ output_train = ad.AnnData(
     var=adata.var[[]],
     uns={"dataset_id": adata.uns["dataset_id"]}
 )
-test_uns_keys = ["dataset_id", "dataset_name", "dataset_url", "dataset_reference", "dataset_summary", "dataset_description", "dataset_organism", "normalization_id"]
+test_uns_keys = ["dataset_id", "dataset_name", "dataset_url", "dataset_reference", "dataset_summary", "dataset_description", "dataset_organism"]
 output_test = ad.AnnData(
     layers={"counts": X_test.astype(float)},
     obs=adata.obs[[]],

@@ -45,15 +45,6 @@ workflow run_wf {
     | runEach(
       components: methods,
 
-      // use the 'filter' argument to only run a method on the normalisation the component is asking for
-      filter: { id, state, comp ->
-        def norm = state.dataset_uns.normalization_id
-        def pref = comp.config.functionality.info.preferred_normalization
-        // if the preferred normalisation is none at all,
-        // we can pass whichever dataset we want
-        (norm == "log_cp10k" && pref == "counts") || norm == pref
-      },
-
       // define a new 'id' by appending the method name to the dataset id
       id: { id, state, comp ->
         id + "." + comp.config.functionality.name
@@ -92,12 +83,6 @@ workflow run_wf {
       }
     )
 
-    // extract the dataset metadata
-    // only keep one of the normalization methods
-    | filter{ id, state ->
-      state.dataset_uns.normalization_id == "log_cp10k"
-    }
-
     // extract the scores
     | check_dataset_schema.run(
       key: "extract_scores",
@@ -112,9 +97,7 @@ workflow run_wf {
 
       // store the dataset metadata in a file
       def dataset_uns = states.collect{state ->
-        def uns = state.dataset_uns.clone()
-        uns.remove("normalization_id")
-        uns
+        state.dataset_uns.clone()
       }
       def dataset_uns_yaml_blob = toYamlBlob(dataset_uns)
       def dataset_uns_file = tempFile("dataset_uns.yaml")
