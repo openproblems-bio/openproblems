@@ -2,16 +2,23 @@
 
 cat > /tmp/params.yaml << 'HERE'
 id: denoising_process_datasets
-input_states: s3://openproblems-data/resources/datasets/openproblems_v1/**/state.yaml
+input_states: s3://openproblems-data/resources/datasets/**/state.yaml
 rename_keys: 'input:output_dataset'
 settings: '{"output_train": "$id/train.h5ad", "output_test": "$id/test.h5ad"}'
 output_state: "$id/state.yaml"
-publish_dir: s3://openproblems-data/resources/denoising/datasets/openproblems_v1
+publish_dir: s3://openproblems-data/resources/denoising/datasets
 HERE
 
 cat > /tmp/nextflow.config << HERE
 process {
   executor = 'awsbatch'
+  withName:'.*publishStatesProc' {
+      memory = '16GB'
+      disk = '100GB'
+   }
+  withLabel:highmem {
+      memory = '350GB'
+   }
 }
 HERE
 

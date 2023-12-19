@@ -12,6 +12,13 @@ HERE
 cat > /tmp/nextflow.config << HERE
 process {
   executor = 'awsbatch'
+  withName:'.*publishStatesProc' {
+      memory = '16GB'
+      disk = '100GB'
+   }
+  withLabel:highmem {
+      memory = '350GB'
+   }
 }
 HERE
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cat > /tmp/params.yaml << 'HERE'
-input_states: s3://openproblems-data/resources/datasets/openproblems_v1/**/state.yaml
+input_states: s3://openproblems-data/resources/datasets/**/state.yaml
 rename_keys: 'input:output_dataset'
 settings: '{"output_dataset": "$id/dataset.h5ad", "output_solution": "$id/solution.h5ad"}'
 output_state: "$id/state.yaml"
@@ -11,6 +11,13 @@ HERE
 cat > /tmp/nextflow.config << HERE
 process {
   executor = 'awsbatch'
+  withName:'.*publishStatesProc' {
+      memory = '16GB'
+      disk = '100GB'
+   }
+  withLabel:highmem {
+      memory = '350GB'
+   }
 }
 HERE
 
