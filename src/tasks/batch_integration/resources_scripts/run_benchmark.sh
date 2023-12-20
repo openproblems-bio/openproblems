@@ -1,7 +1,7 @@
 #!/bin/bash
 
 run_date=$(date +%Y%m%d)
-publish_dir="s3://openproblems-data/resources/dimensionality_reduction/results/${run_date}"
+publish_dir="s3://openproblems-data/resources/batch_integration/results/${run_date}"
 
 cat > /tmp/params.yaml << HERE
 input_states: s3://openproblems-data/resources/batch_integration/datasets/**/state.yaml
