@@ -1,9 +1,6 @@
 #!/bin/bash
 
-
-# try running on nf tower
 cat > /tmp/params.yaml << 'HERE'
-id: dimensionality_reduction
 input_states: s3://openproblems-data/resources/dimensionality_reduction/datasets/**/state.yaml
 rename_keys: 'input_dataset:output_dataset,input_solution:output_solution'
 settings: '{"output": "scores.tsv"}'
@@ -25,4 +22,5 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --compute-env 1pK56PjjzeraOOC2LDZvN2 \
   --params-file /tmp/params.yaml \
   --entry-name auto \
-  --config /tmp/nextflow.config
+  --config /tmp/nextflow.config \
+  --labels dimensionality_reduction,full

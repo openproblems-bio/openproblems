@@ -1,11 +1,11 @@
 #!/bin/bash
 
 cat > /tmp/params.yaml << 'HERE'
-input_states: s3://openproblems-data/resources/batch_integration/datasets/**/state.yaml
+input_states: s3://openproblems-data/resources_test/batch_integration/**/state.yaml
 rename_keys: 'input_dataset:output_dataset,input_solution:output_solution'
 settings: '{"output": "scores.tsv"}'
 output_state: "state.yaml"
-publish_dir: s3://openproblems-data/resources/batch_integration/results
+publish_dir: s3://openproblems-nextflow/temp/batch_integration/
 HERE
 
 cat > /tmp/nextflow.config << HERE
@@ -23,4 +23,4 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --params-file /tmp/params.yaml \
   --entry-name auto \
   --config /tmp/nextflow.config \
-  --labels batch_integration,full
+  --labels batch_integration,test
