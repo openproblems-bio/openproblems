@@ -1,19 +1,25 @@
 #!/bin/bash
 
-#!/bin/bash
+run_date=$(date +%Y%m%d)
+publish_dir="s3://openproblems-data/resources/predict_modality/results/${run_date}"
 
-cat > /tmp/params.yaml << 'HERE'
+cat > /tmp/params.yaml << HERE
 id: predict_modality
 input_states: s3://openproblems-data/resources/predict_modality/datasets/**/state.yaml
 rename_keys: 'input_train_mod1:output_train_mod1,input_train_mod2:output_train_mod2,input_test_mod1:output_test_mod1,input_test_mod2:output_test_mod2'
-settings: '{"output": "scores.tsv"}'
 output_state: "state.yaml"
-publish_dir: s3://openproblems-data/resources/predict_modality/results
+publish_dir: "$publish_dir"
 HERE
 
 cat > /tmp/nextflow.config << HERE
 process {
   executor = 'awsbatch'
+}
+
+trace {
+    enabled = true
+    overwrite = true
+    file    = "$publish_dir/trace.txt"
 }
 HERE
 
