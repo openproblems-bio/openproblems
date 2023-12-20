@@ -22,8 +22,6 @@ trace {
 }
 HERE
 
-cat /tmp/nextflow.config
-
 tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --revision main_build \
   --pull-latest \
