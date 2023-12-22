@@ -1,67 +1,66 @@
+requireNamespace("jsonlite", quietly = TRUE)
+requireNamespace("yaml", quietly = TRUE)
 library(purrr, warn.conflicts = FALSE)
-library(dplyr, warn.conflicts = FALSE)
 library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
   input = "output/temp/method_configs.yaml",
-  task_id = "label_projection",
   output = "output/test/method_info.json"
 )
 ## VIASH END
 
 configs <- yaml::yaml.load_file(par$input)
 
-out <- map(configs, function(config) {
-  if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") return(NULL)
+outputs <- map(configs, function(config) {
+  if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") {
+    return(NULL)
+  }
   info <- config$functionality$info
 
   # add extra info
-  info$config_path <- gsub(".*\\./", "", config$info$config)
-  info$task_id <- par$task_id
-  info$method_id <- config$functionality$name
+  info$config_path <- gsub(".*openproblems-v2/src/", "src/", config$info$config)
+  info$task_id <- gsub("/.*", "", config$functionality$namespace)
+  info$id <- config$functionality$name
   info$namespace <- config$functionality$namespace
-  info$is_baseline <- grepl("control", info$type)
   info$commit_sha <- config$info$git_commit %||% "missing-sha"
   info$code_version <- "missing-version"
+  info$implementation_url <- paste0(
+    "https://github.com/openproblems-bio/openproblems-v2/tree/",
+    info$commit_sha, "/",
+    info$config_path
+  )
 
-  # rename fields to v1 format
-  info$method_name <- info$label
-  info$label <- NULL
-  info$method_summary <- info$summary
-  info$summary <- NULL
-  info$method_description <- info$description
-  info$description <- NULL
-  info$paper_reference <- info$reference
-  info$reference <- NULL
-  info$code_url <- info$repository_url
-  info$repository_url <- NULL
-  info$v1.path <- info$v1$path
-  info$v1$path <- NULL
-  info$v1.commit <- info$v1$commit
-  info$v1$commit <- NULL
-  info$v1 <- NULL
-  info$type_info.label <- info$type_info$label
-  info$type_info$label <- NULL
-  info$type_info.summary <- info$type_info$summary
-  info$type_info$summary <- NULL
-  info$type_info.description <- info$type_info$description
-  info$type_info$description <- NULL
-  info$type_info <- NULL
-  if (length(info$variants) > 0) {
-    info$variants <- NULL
+  # ↑ this could be used as the new format
+
+  # construct v1 format
+  out <- list(
+    task_id = info$task_id,
+    method_id = info$id,
+    method_name = info$label,
+    method_summary = info$summary,
+    is_baseline = grepl("control", info$type),
+    paper_reference = info$reference %||% NA_character_,
+    code_url = info$repository_url %||% NA_character_,
+    implementation_url = info$implementation_url %||% NA_character_,
+    code_version = NA_character_,
+    commit_sha = info$commit_sha
+  )
+
+  # show warning when certain data is missing and return null?
+  for (n in names(out)) {
+    if (is.null(out[[n]])) {
+      out_as_str <- jsonlite::toJSON(out, auto_unbox = TRUE, pretty = TRUE)
+      stop("missing value for value '", n, "' in ", out_as_str)
+    }
   }
 
-
-
-  # todo: show warning when certain data is missing and return null?
-
   # return output
-  info
+  out
 })
 
 jsonlite::write_json(
-  out,
+  outputs,
   par$output,
   auto_unbox = TRUE,
   pretty = TRUE

@@ -10,7 +10,7 @@ functionality:
       deriving and implementing a novel coordinate descent algorithm to efficiently 
       do the factorization. Joint clustering is performed and factor loadings are 
       normalised.
-    reference: welch2019
+    reference: welch2019single
     repository_url: https://github.com/welch-lab/liger
     documentation_url: https://github.com/welch-lab/liger
     preferred_normalization: log_cp10k

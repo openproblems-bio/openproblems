@@ -11,7 +11,7 @@ set -e
 # export TOWER_WORKSPACE_ID=53907369739130
 
 DATASETS_DIR="resources_test/label_projection"
-OUTPUT_DIR="resources_test/label_projection/benchmarks/openproblems_v1"
+OUTPUT_DIR="output/temp"
 
 if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"

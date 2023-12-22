@@ -1,51 +1,44 @@
 #!/bin/bash
 
-# get the root of the directory
-REPO_ROOT=$(git rev-parse --show-toplevel)
-
-# ensure that the command below is run from the root of the repository
-cd "$REPO_ROOT"
-
+# fail on error
 set -e
 
-# export TOWER_WORKSPACE_ID=53907369739130
+# ensure we're in the root of the repo
+REPO_ROOT=$(git rev-parse --show-toplevel)
+cd "$REPO_ROOT"
 
-DATASETS_DIR="resources/batch_integration/results"
-OUTPUT_DIR="../website/results/batch_integration_feature/data"
+# settings
+TASK="denoising"
+TASK="dimensionality_reduction"
+TASK="batch_integration"
+TASK="label_projection"
+DATE="20231220"
 
-if [ ! -d "$OUTPUT_DIR" ]; then
-  mkdir -p "$OUTPUT_DIR"
-fi
+for TASK in "denoising" "dimensionality_reduction" "batch_integration" "label_projection"; do
+  INPUT_DIR="s3://openproblems-data/resources/$TASK/results/$DATE"
+  OUTPUT_DIR="../website/results/$TASK/data"
 
-export NXF_VER=22.04.5
+  # # temp sync
+  # aws s3 sync $INPUT_DIR output/temp
 
-nextflow run . \
-  -main-script target/nextflow/common/workflows/transform_meta/main.nf \
-  -profile docker \
-  -resume \
-  -c src/wf_utils/labels_ci.config \
-  --id "get_results_test" \
-  --input_scores "$DATASETS_DIR/scores.yaml" \
-  --input_dataset_info "$DATASETS_DIR/dataset_info.yaml" \
-  --input_method_configs "$DATASETS_DIR/method_configs.yaml" \
-  --input_metric_configs "$DATASETS_DIR/metric_configs.yaml" \
-  --input_execution "$DATASETS_DIR/trace.txt" \
-  --input_task_info "$DATASETS_DIR/task_info.yaml" \
-  --task_id "batch_integration" \
-  --output_scores "results.json"\
-  --output_method_info "method_info.json"\
-  --output_metric_info "metric_info.json"\
-  --output_dataset_info "dataset_info.json"\
-  --output_task_info "task_info.json" \
-  --publish_dir "$OUTPUT_DIR"
+  echo "Processing $TASK - $DATE"
 
+  # start the run
+  NXF_VER=23.10.0 nextflow run . \
+    -main-script target/nextflow/common/process_task_results/run/main.nf \
+    -profile docker \
+    -resume \
+    -c src/wf_utils/labels_ci.config \
+    --id "process" \
+    --input_scores "$INPUT_DIR/score_uns.yaml" \
+    --input_dataset_info "$INPUT_DIR/dataset_uns.yaml" \
+    --input_method_configs "$INPUT_DIR/method_configs.yaml" \
+    --input_metric_configs "$INPUT_DIR/metric_configs.yaml" \
+    --input_execution "$INPUT_DIR/trace.txt" \
+    --input_task_info "$INPUT_DIR/task_info.yaml" \
+    --output_state "state.yaml" \
+    --publish_dir "$OUTPUT_DIR"
 
-# nextflow run . \
-#   -main-script target/nextflow/common/workflows/transform_meta/main.nf \
-#   -profile docker \
-#   -resume \
-#   -entry auto \
-#   --input_states "$DATASETS_DIR/state.yaml" \
-#   --rename_keys 'input_scores:output_scores,input_dataset_info:output_dataset_info, input_method_configs:output_method_configs, input_metric_configs:output_metric_configs, ' \
-#   --settings '{"task_id": "batch_integration", "output_scores": "results.json", "output_method_info": "method_info.json", "output_metric_info": "metric_info.json", "output_dataset_info": "dataset_info.json", "output_task_info":"task_info.json"}' \
-#   --publish_dir "$OUTPUT_DIR"
+  # cause quarto rerender to index page when in preview mode
+  touch ../website/results/$TASK/index.qmd
+done

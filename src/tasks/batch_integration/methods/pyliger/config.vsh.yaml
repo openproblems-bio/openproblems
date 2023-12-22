@@ -10,7 +10,7 @@ functionality:
       single-cell datasets, developed by the Macosko lab and maintained/extended by the 
       Welch lab. It relies on integrative non-negative matrix factorization to identify 
       shared and dataset-specific factors.
-    reference: welch2019
+    reference: welch2019single
     repository_url: https://github.com/welch-lab/pyliger
     documentation_url: https://github.com/welch-lab/pyliger
     preferred_normalization: log_cp10k

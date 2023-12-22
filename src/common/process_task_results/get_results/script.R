@@ -1,20 +1,37 @@
-library(tidyverse)
-library(rlang)
+requireNamespace("jsonlite", quietly = TRUE)
+requireNamespace("yaml", quietly = TRUE)
+requireNamespace("dynutils", quietly = TRUE)
+requireNamespace("readr", quietly = TRUE)
+requireNamespace("lubridate", quietly = TRUE)
+library(dplyr, warn.conflicts = FALSE)
+library(tidyr, warn.conflicts = FALSE)
+library(purrr, warn.conflicts = FALSE)
+library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input_scores = "resources/batch_integration/results/scores.yaml",
-  input_execution = "resources/batch_integration/results/trace.txt",
-  output = "test.json"
+  input_scores = "output/temp/score_uns.yaml",
+  input_execution = "output/temp/trace.txt",
+  output = "output/results.json"
 )
 ## VIASH END
 
 # read scores
-raw_scores <- yaml::yaml.load_file(par$input_scores)
-score_df <- as_tibble(map_df(raw_scores, as.data.frame))
+raw_scores <- yaml::yaml.load_file(par$input_scores) %>%
+  map_df(function(x) {
+    as_tibble(as.data.frame(
+      x[c("dataset_id", "method_id", "metric_ids", "metric_values")]
+    ))
+  })
 
-scores <- score_df %>%
-  complete(dataset_id, method_id, metric_ids, fill = list(metric_values = NA_real_), normalization_id) %>%
+# scale scores
+scores <- raw_scores %>%
+  complete(
+    dataset_id,
+    method_id,
+    metric_ids,
+    fill = list(metric_values = NA_real_)
+  ) %>%
   group_by(metric_ids, dataset_id) %>%
   mutate(
     scaled_score = dynutils::scale_minmax(metric_values) %|% 0
@@ -27,39 +44,102 @@ scores <- score_df %>%
     .groups = "drop"
   )
 
-# read nxf log
-nxf_log <- read_tsv(par$input_execution) %>%
-    mutate(
+# read nxf log and process the task id
+id_regex <- "^.*:(.*)_process \\((.*)/([^\\.]*)\\.(.*)\\)$"
+
+trace <- readr::read_tsv(par$input_execution) %>%
+  mutate(
     id = name,
-    process_id = gsub(".*:(.*)_process.*", "\\1", id),
-    method_id = gsub(".*\\.([^)]*)\\)", "\\1", id)
+    process_id = stringr::str_extract(id, id_regex, 1L),
+    dataset_id = stringr::str_extract(id, id_regex, 2L),
+    normalization_id = stringr::str_extract(id, id_regex, 3L),
+    method_id = stringr::str_extract(id, id_regex, 4L),
   ) %>%
   filter(process_id == method_id)
 
+# parse strings into numbers
+parse_exit <- function(x) {
+  if (is.na(x) || x == "-") {
+    NA_integer_
+  } else {
+    as.integer(x)
+  }
+}
+parse_duration <- function(x) {
+  if (is.na(x) || x == "-") {
+    NA_real_
+  } else {
+    as.numeric(lubridate::duration(toupper(x)))
+  }
+}
+parse_cpu <- function(x) {
+  if (is.na(x) || x == "-") {
+    NA_real_
+  } else {
+    as.numeric(gsub(" *%", "", x))
+  }
+}
+parse_size <- function(x) {
+  out <-
+    if (is.na(x) || x == "-") {
+      NA_integer_
+    } else if (grepl("GB", x)) {
+      as.numeric(gsub(" *GB", "", x)) * 1024
+    } else if (grepl("MB", x)) {
+      as.numeric(gsub(" *MB", "", x))
+    } else if (grepl("KB", x)) {
+      as.numeric(gsub(" *KB", "", x)) / 1024
+    } else if (grepl("B", x)) {
+      as.numeric(gsub(" *B", "", x)) / 1024 / 1024
+    } else {
+      NA_integer_
+    }
+  as.integer(ceiling(out))
+}
 
-# process execution info
-execution_info <- nxf_log %>%
+execution_info <- trace %>%
   rowwise() %>%
   transmute(
-    dataset_id = gsub(".*\\(([^/]*)\\/.*", "\\1", id),
-    normalization_id = gsub(".*\\/([^.]*)\\..*", "\\1", id),
+    dataset_id,
+    normalization_id,
     method_id,
     resources = list(list(
-      exit_code = exit,
-      duration_sec = as.numeric(lubridate::duration(toupper(realtime))),
-      cpu_pct = as.numeric(gsub("%", "", `%cpu`)),
-      peak_memory_mb = as.numeric(gsub(" *GB", "", peak_vmem)) * 1024,
-      disk_read_mb = as.numeric(gsub(" *MB", "", rchar)),
-      disk_write_mb = as.numeric(gsub(" *MB", "", wchar))
+      exit_code = parse_exit(exit),
+      duration_sec = parse_duration(realtime),
+      cpu_pct = parse_cpu(`%cpu`),
+      peak_memory_mb = parse_size(peak_vmem),
+      disk_read_mb = parse_size(rchar),
+      disk_write_mb = parse_size(wchar)
     ))
   ) %>%
   ungroup()
 
-df <- full_join(scores, execution_info, by = c("method_id", "dataset_id")) %>% 
-  filter(!is.na(mean_score))
+# combine scores with execution info
+# fill up missing entries with NAs and 0s
+metric_ids <- unique(raw_scores$metric_ids)
+rep_names <- function(val) {
+  setNames(
+    as.list(rep(val, length(metric_ids))),
+    metric_ids
+  )
+}
+out <- full_join(
+  scores,
+  execution_info,
+  by = c("method_id", "dataset_id")
+) %>%
+  rowwise() %>%
+  mutate(
+    task_id = par$task_id,
+    metric_values = list(metric_values %||% rep_names(NA_real_)),
+    scaled_scores = list(scaled_scores %||% rep_names(0)),
+    mean_score = mean_score %|% 0,
+  ) %>%
+  ungroup()
+
 
 jsonlite::write_json(
-  purrr::transpose(df),
+  purrr::transpose(out),
   par$output,
   auto_unbox = TRUE,
   pretty = TRUE

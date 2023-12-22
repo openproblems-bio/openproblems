@@ -1,7 +1,7 @@
 #!/bin/bash
 
-run_date=$(date +%Y%m%d)
-publish_dir="s3://openproblems-data/resources/label_projection/results/${run_date}"
+RUN_ID="run_$(date +%Y-%m-%d_%H-%M-%S)"
+publish_dir="s3://openproblems-data/resources/label_projection/results/${RUN_ID}"
 
 cat > /tmp/params.yaml << HERE
 input_states: s3://openproblems-data/resources/label_projection/datasets/**/state.yaml

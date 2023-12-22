@@ -11,7 +11,7 @@ workflow run_wf {
 
   main:
 
-  // collect method list
+  // construct list of methods
   methods = [
     bbknn,
     combat,
@@ -33,7 +33,7 @@ workflow run_wf {
     random_integration
   ]
 
-  // collect metric list
+  // construct list of metrics
   metrics = [
     asw_batch,
     asw_label,
@@ -47,10 +47,15 @@ workflow run_wf {
     pcr
   ]
 
-  // process input parameter channel
+  /****************************
+   * EXTRACT DATASET METADATA *
+   ****************************/
   dataset_ch = input_ch
-
-    // extract the dataset metadata
+    // store join id
+    | map{ id, state -> 
+      [id, state + ["_meta": [join_id: id]]]
+    }
+    // extract dataset metadata
     | check_dataset_schema.run(
       fromState: [input: "input_solution"],
       toState: { id, output, state ->
@@ -59,6 +64,9 @@ workflow run_wf {
       }
     )
 
+  /***************************
+   * RUN METHODS AND METRICS *
+   ***************************/
   // run all methods
   method_out_ch1 = dataset_ch
     | runEach(
@@ -150,16 +158,18 @@ workflow run_wf {
       }
     )
 
+
+  /******************************
+   * GENERATE OUTPUT YAML FILES *
+   ******************************/
   // TODO: can we store everything below in a separate helper function?
 
   // extract the dataset metadata
   dataset_meta_ch = dataset_ch
-
     // only keep one of the normalization methods
     | filter{ id, state ->
       state.dataset_uns.normalization_id == "log_cp10k"
     }
-
     | joinStates { ids, states ->
       // store the dataset metadata in a file
       def dataset_uns = states.collect{state ->
@@ -174,8 +184,8 @@ workflow run_wf {
       ["output", [output_dataset_info: dataset_uns_file]]
     }
 
-  // extract the scores
-  metric_uns_ch = score_ch
+  output_ch = score_ch
+    // extract scores
     | check_dataset_schema.run(
       key: "extract_scores",
       fromState: [input: "metric_output"],
@@ -184,22 +194,8 @@ workflow run_wf {
         state + [score_uns: score_uns]
       }
     )
+
     | joinStates { ids, states ->
-      // store the scores in a file
-      def score_uns = states.collect{it.score_uns}
-      def score_uns_yaml_blob = toYamlBlob(score_uns)
-      def score_uns_file = tempFile("score_uns.yaml")
-      score_uns_file.write(score_uns_yaml_blob)
-
-      ["output", [output_scores: score_uns_file]]
-    }
-
-  // store the method and metric configs
-  comp_config_ch = input_ch
-    | map{ id, state ->
-      // store original id for later use
-      def _meta = [join_id: id]
-
       // store the method configs in a file
       def method_configs = methods.collect{it.config}
       def method_configs_yaml_blob = toYamlBlob(method_configs)
@@ -212,23 +208,29 @@ workflow run_wf {
       def metric_configs_file = tempFile("metric_configs.yaml")
       metric_configs_file.write(metric_configs_yaml_blob)
 
+      // store the task info in a file
       def task_info_file = meta.resources_dir.resolve("task_info.yaml")
 
+      // store the scores in a file
+      def score_uns = states.collect{it.score_uns}
+      def score_uns_yaml_blob = toYamlBlob(score_uns)
+      def score_uns_file = tempFile("score_uns.yaml")
+      score_uns_file.write(score_uns_yaml_blob)
+
+      // create state
       def new_state = [
         output_method_configs: method_configs_file,
         output_metric_configs: metric_configs_file,
         output_task_info: task_info_file,
-        _meta: _meta
+        output_scores: score_uns_file,
+        _meta: states[0]._meta
       ]
+
       ["output", new_state]
     }
 
-  // merge all of the output data 
-  // todo: add task info?
-
-  // todo: add trace log?
-  output_ch = comp_config_ch
-    | mix(metric_uns_ch, dataset_meta_ch)
+    // merge all of the output data 
+    | mix(dataset_meta_ch)
     | joinStates{ ids, states ->
       def mergedStates = states.inject([:]) { acc, m -> acc + m }
       [ids[0], mergedStates]

@@ -11,7 +11,7 @@ workflow run_wf {
 
   main:
 
-  // collect method list
+  // construct list of methods
   methods = [
     true_labels,
     majority_vote,
@@ -25,28 +25,34 @@ workflow run_wf {
     xgboost
   ]
 
-  // collect metric list
+  // construct list of metrics
   metrics = [
     accuracy,
     f1
   ]
 
-  output_ch = input_ch
-
-    | map{ id, state ->
-      [id, state + [_meta: [join_id: id]]]
+  /****************************
+   * EXTRACT DATASET METADATA *
+   ****************************/
+  dataset_ch = input_ch
+    // store join id
+    | map{ id, state -> 
+      [id, state + ["_meta": [join_id: id]]]
     }
-
-    // extract the dataset metadata
+    // extract dataset metadata
     | check_dataset_schema.run(
       fromState: [ "input": "input_solution" ],
       toState: { id, output, state ->
         // load output yaml file
         def dataset_uns = (new org.yaml.snakeyaml.Yaml().load(output.meta)).uns
-        // add metadata from file to state
         state + [dataset_uns: dataset_uns]
       }
     )
+
+  /***************************
+   * RUN METHODS AND METRICS *
+   ***************************/
+  score_ch = dataset_ch
 
     // run all methods
     | runEach(
@@ -90,6 +96,9 @@ workflow run_wf {
     // run all metrics
     | runEach(
       components: metrics,
+      id: { id, state, comp ->
+        id + "." + comp.config.functionality.name
+      },
       // use 'fromState' to fetch the arguments the component requires from the overall state
       fromState: [
         input_solution: "input_solution", 
@@ -104,10 +113,33 @@ workflow run_wf {
       }
     )
 
+
+  /******************************
+   * GENERATE OUTPUT YAML FILES *
+   ******************************/
+  // TODO: can we store everything below in a separate helper function?
+
+  // extract the dataset metadata
+  dataset_meta_ch = dataset_ch
     // only keep one of the normalization methods
     | filter{ id, state ->
       state.dataset_uns.normalization_id == "log_cp10k"
     }
+    | joinStates { ids, states ->
+      // store the dataset metadata in a file
+      def dataset_uns = states.collect{state ->
+        def uns = state.dataset_uns.clone()
+        uns.remove("normalization_id")
+        uns
+      }
+      def dataset_uns_yaml_blob = toYamlBlob(dataset_uns)
+      def dataset_uns_file = tempFile("dataset_uns.yaml")
+      dataset_uns_file.write(dataset_uns_yaml_blob)
+
+      ["output", [output_dataset_info: dataset_uns_file]]
+    }
+
+  output_ch = score_ch
 
     // extract the scores
     | check_dataset_schema.run(
@@ -120,27 +152,6 @@ workflow run_wf {
     )
 
     | joinStates { ids, states ->
-      // store the dataset metadata in a file
-      def dataset_uns = states.collect{state ->
-        def uns = state.dataset_uns.clone()
-        uns.remove("normalization_id")
-        uns
-      }
-      def dataset_uns_yaml_blob = toYamlBlob(dataset_uns)
-      def dataset_uns_file = tempFile("dataset_uns.yaml")
-      dataset_uns_file.write(dataset_uns_yaml_blob)
-
-      // store the scores in a file
-      def score_uns = states.collect{it.score_uns}
-      def score_uns_yaml_blob = toYamlBlob(score_uns)
-      def score_uns_file = tempFile("score_uns.yaml")
-      score_uns_file.write(score_uns_yaml_blob)
-
-      ["output", [output_dataset_info: dataset_uns_file, output_scores: score_uns_file, _meta: states[0]._meta]]
-    }
-
-    | map{ id, state ->
-
       // store the method configs in a file
       def method_configs = methods.collect{it.config}
       def method_configs_yaml_blob = toYamlBlob(method_configs)
@@ -155,14 +166,29 @@ workflow run_wf {
 
       def task_info_file = meta.resources_dir.resolve("task_info.yaml")
 
+      // store the scores in a file
+      def score_uns = states.collect{it.score_uns}
+      def score_uns_yaml_blob = toYamlBlob(score_uns)
+      def score_uns_file = tempFile("score_uns.yaml")
+      score_uns_file.write(score_uns_yaml_blob)
+
       def new_state = [
         output_method_configs: method_configs_file,
         output_metric_configs: metric_configs_file,
-        output_task_info: task_info_file
+        output_task_info: task_info_file,
+        output_scores: score_uns_file,
+        _meta: states[0]._meta
       ]
-      ["output", state + new_state]
+
+      ["output", new_state]
     }
 
+    // merge all of the output data 
+    | mix(dataset_meta_ch)
+    | joinStates{ ids, states ->
+      def mergedStates = states.inject([:]) { acc, m -> acc + m }
+      [ids[0], mergedStates]
+    }
 
   emit:
   output_ch

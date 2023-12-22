@@ -38,11 +38,6 @@ functionality:
           required: true
           direction: input
           example: task_info.yaml
-        - name: "--task_id"
-          type: string
-          required: true
-          direction: input
-          example: "batch_integration"
     - name: Outputs
       arguments:
         - name: "--output_scores"
@@ -50,27 +45,32 @@ functionality:
           required: true
           direction: output
           description: A yaml file containing the scores of each of the methods
-          example: results.json
+          default: results.json
         - name: "--output_method_info"
           type: file
           required: true
           direction: output
-          example: method_info.json
+          default: method_info.json
         - name: "--output_metric_info"
           type: file
           required: true
           direction: output
-          example: metric_info.json
+          default: metric_info.json
         - name: "--output_dataset_info"
           type: file
           required: true
           direction: output
-          example: dataset_info.json
+          default: dataset_info.json
         - name: "--output_task_info"
           type: file
           required: true
           direction: output
-          example: task_info.json
+          default: task_info.json
+        - name: "--output_qc"
+          type: file
+          required: true
+          direction: output
+          default: quality_control.json
   resources:
     - type: nextflow_script
       path: main.nf
@@ -80,6 +80,7 @@ functionality:
     - name: common/process_task_results/get_method_info
     - name: common/process_task_results/get_metric_info
     - name: common/process_task_results/get_dataset_info
-    - name: common/process_task_results/yaml_to_json
+    - name: common/process_task_results/get_task_info
+    - name: common/process_task_results/generate_qc
 platforms:
   - type: nextflow

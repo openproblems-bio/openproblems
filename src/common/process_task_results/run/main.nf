@@ -12,73 +12,75 @@ workflow run_wf {
   main:
   output_ch = input_ch
 
+    | get_task_info.run(
+      key: "task_info",
+      fromState: [ 
+        "input": "input_task_info"
+      ],
+      toState: ["output_task": "output"]
+    )
+
+    // extract task id from task info
+    | map { id, state ->
+      def task_id = readJson(state.output_task).task_id
+      [id, state + ["task_id": task_id]]
+    }
+
     | get_method_info.run(
       fromState: [ 
         "input": "input_method_configs",
-        "task_id" : "task_id",
-        "output": "output_method_info"
+        "task_id" : "task_id"
       ],
-      toState: { id, output, state ->
-        state + [output_method: output.output]
-      }
+      toState: ["output_method": "output"]
     )
 
     | get_metric_info.run(
       fromState: [ 
         "input": "input_metric_configs",
-        "task_id" : "task_id",
-        "output": "output_metric_info"
+        "task_id" : "task_id"
       ],
-      toState: { id, output, state ->
-        state + [output_metric: output.output]
-      }
+      toState: ["output_metric": "output"]
     )
 
     | get_dataset_info.run(
-      fromState: [ 
+      fromState: [
+        "task_id" : "task_id",
         "input": "input_dataset_info",
-        "output": "output_dataset_info"
       ],
-      toState: { id, output, state ->
-        state + [output_dataset: output.output]
-      }
-    )
-
-    | yaml_to_json.run(
-      key: "task_info",
-      fromState: [ 
-        "input": "input_task_info",
-        "output": "output_task_info"
-      ],
-      toState: { id, output, state ->
-        state + [output_task: output.output]
-      }
+      toState: ["output_dataset": "output"]
     )
 
     | get_results.run(
       fromState: [ 
+        "task_id": "task_id",
         "input_scores": "input_scores",
-        "input_execution" : "input_execution",
-        "output": "output_scores"
+        "input_execution" : "input_execution"
       ],
-      toState: { id, output, state ->
-        state + [output_results: output.output]
-      }
+      toState: ["output_results": "output"]
+    )
+
+    | generate_qc.run(
+      fromState: [
+        "task_info": "output_task",
+        "method_info": "output_method",
+        "metric_info": "output_metric",
+        "dataset_info": "output_dataset",
+        "results": "output_results"
+      ],
+      toState: ["output_qc": "output"]
     )
 
     | map{ id, state ->
-      def _meta = [join_id: id]
-
       def new_state = [
         output_scores: state.output_results,
         output_method_info: state.output_method,
         output_metric_info: state.output_metric,
         output_dataset_info: state.output_dataset,
         output_task_info: state.output_task,
-        _meta: _meta
+        output_qc: state.output_qc
       ]
 
-      ["output", new_state]
+      [id, new_state]
     }
 
   emit:

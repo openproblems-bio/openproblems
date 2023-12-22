@@ -3,6 +3,10 @@ functionality:
   description: "Extract execution info"
   namespace: common/process_task_results
   arguments:
+    - name: "--task_id"
+      type: "string"
+      example: "batch_integration"
+      description: "Task id"
     - name: "--input_scores"
       type: "file"
       example: resources/label_projection/benchmarks/openproblems_v1/combined.extract_scores.output.yaml
@@ -24,8 +28,7 @@ platforms:
     image: ghcr.io/openproblems-bio/base_r:1.0.2
     setup:
       - type: r
-        cran: [tidyverse, dynutils]
+        cran: [ purrr, yaml, rlang, dplyr, tidyr, readr, lubridate, dynutils, processx ]
   - type: nextflow
     directives:
       label: [lowmem, lowtime, lowcpu]
-  - type: native

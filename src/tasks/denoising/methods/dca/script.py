@@ -17,14 +17,14 @@ print("load input data", flush=True)
 input_train = ad.read_h5ad(par['input_train'])
 
 print("move layer to X", flush=True)
-input_train.X = input_train.layers["counts"]
+input_dca = ad.AnnData(X=input_train.layers["counts"])
+del input_train.X
 
 print("running dca", flush=True)
-dca(input_train, epochs=par["epochs"])
+dca(input_dca, epochs=par["epochs"])
 
 print("moving X back to layer", flush=True)
-input_train.layers["denoised"] = scipy.sparse.csr_matrix(input_train.X)
-del input_train.X
+input_train.layers["denoised"] = scipy.sparse.csr_matrix(input_dca.X)
 
 print("Writing data", flush=True)
 input_train.uns["method_id"] = meta["functionality_name"]

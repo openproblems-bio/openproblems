@@ -45,7 +45,7 @@ functionality:
       path: main.nf
       entrypoint: run_wf
     - type: file
-      path: "/src/tasks/label_projection/api/task_info.yaml"
+      path: "../../api/task_info.yaml"
   dependencies:
     - name: common/check_dataset_schema
     - name: common/extract_scores
@@ -55,6 +55,7 @@ functionality:
     - name: dimensionality_reduction/methods/neuralee
     - name: dimensionality_reduction/methods/pca
     - name: dimensionality_reduction/methods/phate
+    - name: dimensionality_reduction/methods/simlr
     - name: dimensionality_reduction/methods/tsne
     - name: dimensionality_reduction/methods/umap
     - name: dimensionality_reduction/metrics/coranking

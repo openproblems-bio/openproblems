@@ -8,10 +8,8 @@ cd "$REPO_ROOT"
 
 set -e
 
-# export TOWER_WORKSPACE_ID=53907369739130
-
 DATASETS_DIR="resources_test/denoising"
-OUTPUT_DIR="resources_test/denoising/benchmarks/openproblems_v1"
+OUTPUT_DIR="output/temp"
 
 if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"

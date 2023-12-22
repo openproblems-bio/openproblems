@@ -1,7 +1,7 @@
 #!/bin/bash
 
-run_date=$(date +%Y%m%d)
-publish_dir="s3://openproblems-data/resources/match_modalities/results/${run_date}"
+RUN_ID="run_$(date +%Y-%m-%d_%H-%M-%S)"
+publish_dir="s3://openproblems-data/resources/match_modalities/results/${RUN_ID}"
 
 cat > /tmp/params.yaml << HERE
 id: match_modalities
