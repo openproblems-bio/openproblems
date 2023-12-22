@@ -7,15 +7,14 @@ set -e
 REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "$REPO_ROOT"
 
-# settings
-TASK="denoising"
-TASK="dimensionality_reduction"
-TASK="batch_integration"
-TASK="label_projection"
-DATE="20231220"
-
 for TASK in "denoising" "dimensionality_reduction" "batch_integration" "label_projection"; do
-  INPUT_DIR="s3://openproblems-data/resources/$TASK/results/$DATE"
+# for TASK in "label_projection"; do
+  BASE_DIR="s3://openproblems-data/resources/$TASK/results/"
+  
+  # find subdir in bucket with latest date
+  DATE=$(aws s3 ls $BASE_DIR | awk '{print $2}' | grep 'run_' | sort -r | head -n 1 | sed 's/\///')
+  
+  INPUT_DIR="$BASE_DIR/$DATE"
   OUTPUT_DIR="../website/results/$TASK/data"
 
   # # temp sync
