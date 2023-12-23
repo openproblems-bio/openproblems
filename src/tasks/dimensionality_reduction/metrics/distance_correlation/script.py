@@ -9,8 +9,8 @@ import umap.spectral
 
 ## VIASH START
 par = {
-    "input_embedding": "resources_test/dimensionality_reduction/pancreas/reduced.h5ad",
-    "input_solution": "resources_test/dimensionality_reduction/pancreas/test.h5ad",
+    "input_embedding": "resources_test/dimensionality_reduction/pancreas/embedding.h5ad",
+    "input_solution": "resources_test/dimensionality_reduction/pancreas/solution.h5ad",
     "output": "score.h5ad",
 }
 ## VIASH END
@@ -33,7 +33,7 @@ X_emb = input_embedding.obsm["X_emb"]
 print("Compute NNLS residual after SVD", flush=True)
 n_svd = 500
 svd_emb = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(high_dim)
-dist_corr = _distance_correlation(svd_emb, X_emb)
+dist_corr = _distance_correlation(svd_emb, X_emb).correlation
 
 #! Explicitly not changing it to use diffusion map method as this will have a positive effect on the diffusion map method for this specific metric.
 print("Compute NLSS residual after spectral embedding", flush=True)
@@ -42,7 +42,7 @@ umap_graph = umap.UMAP(transform_mode="graph").fit_transform(high_dim)
 spectral_emb = umap.spectral.spectral_layout(
     high_dim, umap_graph, n_comps, random_state=np.random.default_rng()
 )
-dist_corr_spectral = _distance_correlation(spectral_emb, X_emb)
+dist_corr_spectral = _distance_correlation(spectral_emb, X_emb).correlation
 
 print("Create output AnnData object", flush=True)
 output = ad.AnnData(
@@ -50,7 +50,7 @@ output = ad.AnnData(
         "dataset_id": input_solution.uns["dataset_id"],
         "normalization_id": input_solution.uns["normalization_id"],
         "method_id": input_embedding.uns["method_id"],
-        "metric_ids": [ "distance correlation", "distance_correlation_spectral" ],
+        "metric_ids": [ "distance_correlation", "distance_correlation_spectral" ],
         "metric_values": [ dist_corr, dist_corr_spectral ]
     }
 )

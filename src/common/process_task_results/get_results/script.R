@@ -9,19 +9,26 @@ library(purrr, warn.conflicts = FALSE)
 library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
+dir <- "resources/dimensionality_reduction/results/run_2023-12-22_13-08-31"
 par <- list(
-  input_scores = "output/temp/score_uns.yaml",
-  input_execution = "output/temp/trace.txt",
+  input_scores = paste0(dir, "/score_uns.yaml"),
+  input_execution = paste0(dir, "/trace.txt"),
   output = "output/results.json"
 )
 ## VIASH END
 
 # read scores
-raw_scores <- yaml::yaml.load_file(par$input_scores) %>%
+raw_scores <-
+  yaml::yaml.load_file(par$input_scores) %>%
   map_df(function(x) {
-    as_tibble(as.data.frame(
-      x[c("dataset_id", "method_id", "metric_ids", "metric_values")]
-    ))
+    tryCatch({
+      as_tibble(as.data.frame(
+        x[c("dataset_id", "method_id", "metric_ids", "metric_values")]
+      ))
+    }, error = function(e) {
+      message("Encountered error while reading scores: ", e$message)
+      NULL
+    })
   })
 
 # scale scores
