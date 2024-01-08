@@ -19,7 +19,7 @@ out <- list(
   commit_sha = NA_character_,
   task_name = info$label,
   task_summary = info$summary,
-  task_description = info$description,
+  task_description = paste0(info$motivation, "\n\n", info$description),
   repo = "openproblems-bio/openproblems-v2"
 )
 
