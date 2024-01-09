@@ -43,6 +43,7 @@ platforms:
           - umap-learn
           - scikit-learn
           - numpy
+          - pynndescent~=0.5.11
           - scipy
   - type: nextflow
     directives: 

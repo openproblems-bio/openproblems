@@ -37,6 +37,7 @@ platforms:
           - scipy
           - numpy
           - umap-learn
+          - pynndescent~=0.5.11
   - type: nextflow
     directives: 
       label: [ "midtime", lowmem, midcpu ]

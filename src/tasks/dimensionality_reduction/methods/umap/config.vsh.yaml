@@ -44,7 +44,7 @@ platforms:
       - type: python
         packages:
           - umap-learn
-          - pynndescent==0.5.8
+          - pynndescent==0.5.11
   - type: nextflow
     directives: 
       label: [ "midtime", highmem, highcpu ]

@@ -55,7 +55,14 @@ def create_quality_control(task_info, dataset_info, method_info, metric_info, re
         })
     
     def percent_missing(list_of_dicts, field):
-        are_missing = [0.0 if field in item and item[field] is not None else 1.0 for item in list_of_dicts]
+        are_missing = []
+        for item in list_of_dicts:
+            if field == 'paper_reference' and item.get('is_baseline', False):
+                are_missing.append(0.0)
+            elif field in item and item[field] is not None:
+                are_missing.append(0.0)
+            else:
+                are_missing.append(1.0)
         return np.mean(are_missing)
     
     # check task_info
