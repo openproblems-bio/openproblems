@@ -144,7 +144,7 @@ jobs:
 
     # use cache
     - name: Cache resources data
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       timeout-minutes: 5
       with:
         path: resources_test
