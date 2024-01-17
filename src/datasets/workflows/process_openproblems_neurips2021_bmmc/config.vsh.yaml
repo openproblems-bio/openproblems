@@ -127,6 +127,7 @@ functionality:
     - name: datasets/processors/svd
     - name: datasets/processors/hvg
     - name: common/check_dataset_schema
+    - name: common/decompress_gzip
   # test_resources:
   #   - type: nextflow_script
   #     path: main.nf

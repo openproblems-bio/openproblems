@@ -39,10 +39,15 @@ workflow run_wf {
       [id, state + [_meta: [join_id: id]]]
     }
 
+    | decompress_gzip.run(
+      fromState: ["input": "input"],
+      toState: ["input_decompressed": "output"]
+    )
+
     // process neurips downloaded dataset
     | openproblems_neurips2021_bmmc.run(
       fromState: [
-        "input": "input",
+        "input": "input_decompressed",
         "mod1": "mod1",
         "mod2": "mod2",
         "dataset_name": "dataset_name",
@@ -101,11 +106,17 @@ workflow run_wf {
     )
 
     // run normalization methods on second modality
-    | runEach(
-      components: normalization_methods,
-      filter: { id, state, comp ->
-        comp.name == state.normalization_id
-      },
+    | log_cp.run(
+      key: "log_cp10k_adt",
+      runIf: { id, state -> state.mod2 == "ADT" },
+      args: [normalization_id: "log_cp10k", n_cp: 10000]
+      fromState: ["input": "raw_other_mod"],
+      toState: ["normalized_other_mod": "output"]
+    )
+    | normalization_methods[0].run( // TODO: change this normalization method
+      key: "log_cp10k_atac",
+      runIf: { id, state -> state.mod2 == "ATAC" },
+      args: [normalization_id: "log_cp10k", n_cp: 10000]
       fromState: ["input": "raw_other_mod"],
       toState: ["normalized_other_mod": "output"]
     )
@@ -126,7 +137,9 @@ workflow run_wf {
       toState: [ "hvg_rna": "output" ]
     )
 
+    // TODO: should this only run on ATAC? or even not at all?s
     | hvg.run(
+      key: "hvg_other_mod",
       fromState: [ "input": "svd_other_mod" ],
       toState: [ "hvg_other_mod": "output" ]
     )
@@ -145,6 +158,7 @@ workflow run_wf {
     )
 
     | check_dataset_schema.run(
+      key: "check_dataset_schema_other_mod",
       fromState: { id, state ->
         [
           "input": state.hvg_other_mod,
