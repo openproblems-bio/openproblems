@@ -1,7 +1,6 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
   name: "scanvi"
-  status: disabled
   info:
     label: SCANVI
     summary: "ScANVI predicts cell type labels for unlabelled test data by leveraging cell type labels, modelling uncertainty and using deep neural networks with stochastic optimization."
@@ -33,7 +32,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: nvcr.io/nvidia/pytorch:22.12-py3
+    image: nvcr.io/nvidia/pytorch:23.12-py3
     setup:
       - type: python
         packages: 
