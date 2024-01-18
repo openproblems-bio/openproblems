@@ -106,17 +106,18 @@ workflow run_wf {
     )
 
     // run normalization methods on second modality
+    // TODO: change this normalization method
     | log_cp.run(
       key: "log_cp10k_adt",
       runIf: { id, state -> state.mod2 == "ADT" },
-      args: [normalization_id: "log_cp10k", n_cp: 10000]
+      args: [normalization_id: "log_cp10k", n_cp: 10000],
       fromState: ["input": "raw_other_mod"],
       toState: ["normalized_other_mod": "output"]
     )
-    | normalization_methods[0].run( // TODO: change this normalization method
+    | log_cp.run(
       key: "log_cp10k_atac",
       runIf: { id, state -> state.mod2 == "ATAC" },
-      args: [normalization_id: "log_cp10k", n_cp: 10000]
+      args: [normalization_id: "log_cp10k", n_cp: 10000],
       fromState: ["input": "raw_other_mod"],
       toState: ["normalized_other_mod": "output"]
     )
