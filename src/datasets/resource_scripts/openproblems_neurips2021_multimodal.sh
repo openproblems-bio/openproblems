@@ -35,6 +35,15 @@ output_state: '$id/state.yaml'
 publish_dir: s3://openproblems-data/resources/datasets
 HERE
 
+cat > /tmp/nextflow.config << HERE
+process {
+  withName:'.*publishStatesProc' {
+    memory = '16GB'
+    disk = '100GB'
+  }
+}
+HERE
+
 tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --revision main_build \
   --pull-latest \
@@ -42,3 +51,4 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --workspace 53907369739130 \
   --compute-env 1pK56PjjzeraOOC2LDZvN2 \
   --params-file "$params_file" \
+  --config /tmp/nextflow.config
