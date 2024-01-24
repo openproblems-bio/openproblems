@@ -38,10 +38,10 @@ Full tasks (>1 datasets, >5 methods):
 * Dimensionality reduction - Michael Vinyard (@mvinyard) and Luke Zappia (@lazappi)
 * Label projection - Nick Markov (@mxposed)
 * Spatial deconvolution - Alma Anderson (@almaan) and Giovanni Palla (@giovp)
+* Data denoising - Wes Lewis (@weslewis)
 
 Task stubs:
 
-* Data denoising - Wes Lewis (@weslewis)
 * Multimodal data integration - The Open Problems core team
 
 Tasks in discussion:
