@@ -1,4 +1,4 @@
-# This repository has been superseded by [openproblems-v2](https://github.com/openproblems-bio/openproblems-v2).
+# This repository has been superseded by [openproblems-v2](https://github.com/openproblems-bio/openproblems-v2)
 
 # Open Problems in Single-Cell Analysis
 
