@@ -4,7 +4,7 @@ import scanpy as sc
 ### VIASH START
 par = {
   'input': 'work/ca/0751ff85df6f9478cb7bda5a705cad/zebrafish.sqrt_cpm.pca.output.h5ad',
-  'layer_input': 'normalized',
+  'input_layer': 'normalized',
   'output': 'dataset.h5ad',
   'var_hvg': 'hvg',
   'var_hvg_score': 'hvg_score',
@@ -16,12 +16,12 @@ print(">> Load data", flush=True)
 adata = sc.read_h5ad(par['input'])
 
 print(">> Look for layer", flush=True)
-layer = adata.X if not par['layer_input'] else adata.layers[par['layer_input']]
+layer = adata.X if not par['input_layer'] else adata.layers[par['input_layer']]
 
 print(">> Run HVG", flush=True)
 out = sc.pp.highly_variable_genes(
   adata,
-  layer=par["layer_input"],
+  layer=par["input_layer"],
   n_top_genes=par["num_features"],
   flavor='cell_ranger',
   inplace=False

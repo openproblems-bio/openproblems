@@ -4,7 +4,7 @@ import scanpy as sc
 ### VIASH START
 par = {
   'input': 'resources_test/common/pancreas/dataset.h5ad',
-  'layer_input': 'log_cp10k',
+  'input_layer': 'log_cp10k',
   'output': 'dataset.h5ad',
   'obsm_embedding': 'X_pca',
   'varm_loadings': 'pca_loadings',
@@ -17,7 +17,7 @@ print(">> Load data", flush=True)
 adata = sc.read(par['input'])
 
 print(">> Look for layer", flush=True)
-layer = adata.X if not par['layer_input'] else adata.layers[par['layer_input']]
+layer = adata.X if not par['input_layer'] else adata.layers[par['input_layer']]
 
 print(">> Run PCA", flush=True)
 X_pca, loadings, variance, variance_ratio = sc.tl.pca(

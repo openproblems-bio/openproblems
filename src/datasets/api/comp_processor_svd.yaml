@@ -17,7 +17,7 @@ functionality:
       __merge__: file_normalized.yaml
       required: false
       direction: input
-    - name: "--layer_input"
+    - name: "--input_layer"
       type: string
       default: "normalized"
       description: Which layer to use as input.

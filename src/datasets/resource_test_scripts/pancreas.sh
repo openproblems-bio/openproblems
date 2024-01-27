@@ -42,8 +42,8 @@ nextflow run . \
   --do_subsample true \
   --output_raw '$id/raw.h5ad' \
   --output_normalized '$id/normalized.h5ad' \
-  --output_pca '$id/pca.h5ad' \
   --output_hvg '$id/hvg.h5ad' \
+  --output_pca '$id/pca.h5ad' \
   --output_knn '$id/knn.h5ad' \
   --output_dataset '$id/dataset.h5ad' \
   --output_meta '$id/dataset_meta.yaml' \

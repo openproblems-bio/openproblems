@@ -104,14 +104,14 @@ workflow run_wf {
       }
     )
 
-    | pca.run(
-      fromState: ["input": "output_normalized"],
-      toState: ["output_pca": "output" ]
-    )
-
     | hvg.run(
       fromState: ["input": "output_pca"],
       toState: ["output_hvg": "output"]
+    )
+
+    | pca.run(
+      fromState: ["input": "output_normalized"],
+      toState: ["output_pca": "output" ]
     )
 
     | knn.run(

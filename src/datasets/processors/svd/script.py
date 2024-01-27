@@ -7,7 +7,7 @@ par = {
     "input": "resources_test/common/scicar_cell_lines/normalized_mod1.h5ad",
     "input_mod2": "resources_test/common/scicar_cell_lines/normalized_mod2.h5ad",
     "output": "output.h5ad",
-    "layer_input": "normalized",
+    "input_layer": "normalized",
     "obsm_embedding": "X_svd",
     "num_components": 100,
 }
@@ -19,18 +19,18 @@ if par["input_mod2"] is not None:
     adata2 = ad.read(par["input_mod2"])
 
 print(">> check parameters", flush=True)
-min_list = [par["num_components"], min(adata.layers[par["layer_input"]].shape) - 1]
+min_list = [par["num_components"], min(adata.layers[par["input_layer"]].shape) - 1]
 
 if par["input_mod2"] is not None:
-    min_list.append(min(adata2.layers[par["layer_input"]].shape) - 1)
+    min_list.append(min(adata2.layers[par["input_layer"]].shape) - 1)
 
 n_svd = min(min_list)
 
 
 print(">> Run SVD", flush=True)
-svd1 = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.layers[par["layer_input"]])
+svd1 = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata.layers[par["input_layer"]])
 if par["input_mod2"] is not None:
-    svd2 = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata2.layers[par["layer_input"]])
+    svd2 = sklearn.decomposition.TruncatedSVD(n_svd).fit_transform(adata2.layers[par["input_layer"]])
 
 print(">> Storing output", flush=True)
 adata.obsm[par["obsm_embedding"]] = svd1
