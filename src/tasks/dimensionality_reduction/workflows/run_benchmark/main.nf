@@ -41,12 +41,14 @@ workflow run_wf {
     | map{ id, state -> 
       [id, state + ["_meta": [join_id: id]]]
     }
+
     // extract the dataset metadata
-    | check_dataset_schema.run(
+    | extract_metadata.run(
       fromState: [input: "input_solution"],
       toState: { id, output, state ->
-        def dataset_uns = (new org.yaml.snakeyaml.Yaml().load(output.meta)).uns
-        state + [dataset_uns: dataset_uns]
+        state + [
+          dataset_uns: readYaml(output.output).uns
+        ]
       }
     )
 
@@ -143,12 +145,13 @@ workflow run_wf {
   output_ch = score_ch
 
     // extract the scores
-    | check_dataset_schema.run(
+    | extract_metadata.run(
       key: "extract_scores",
       fromState: [input: "metric_output"],
       toState: { id, output, state ->
-        def score_uns = (new org.yaml.snakeyaml.Yaml().load(output.meta)).uns
-        state + [score_uns: score_uns]
+        state + [
+          score_uns: readYaml(output.output).uns
+        ]
       }
     )
 

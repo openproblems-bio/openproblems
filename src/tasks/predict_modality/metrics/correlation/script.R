@@ -5,11 +5,10 @@ requireNamespace("anndata", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_test_mod2 = "resources_test/predict_modality/neurips2021_bmmc_cite/test_mod2.h5ad",
-  input_prediction = "resources_test/predict_modality/neurips2021_bmmc_cite/prediction.h5ad",
+  input_test_mod2 = "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/test_mod2.h5ad",
+  input_prediction = "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/prediction.h5ad",
   output = "output/scores.h5ad"
 )
-#/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/work/29/320fe1e10fcd323020345bcc8969c2/openproblems_bmmc_cite_mod2_dummy_mean_per_gene.correlation.output.h5ad
 ## VIASH END
 
 cat("Reading solution file\n")

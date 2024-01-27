@@ -40,6 +40,12 @@ functionality:
           required: true
           direction: output
           default: task_info.yaml
+    - name: Methods
+      arguments:
+        - name: "--method_ids"
+          type: string
+          multiple: true
+          description: A list of method ids to run. If not specified, all methods will be run.
   resources:
     - type: nextflow_script
       path: main.nf
@@ -48,7 +54,7 @@ functionality:
       path: ../../api/task_info.yaml
   dependencies: 
     - name: common/check_dataset_schema
-    - name: common/extract_scores
+    - name: common/extract_metadata
     - name: batch_integration/methods/bbknn
     - name: batch_integration/methods/combat
     - name: batch_integration/methods/fastmnn_embedding

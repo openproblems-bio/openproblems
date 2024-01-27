@@ -55,7 +55,7 @@ functionality:
       path: "../../api/task_info.yaml"
   dependencies:
     - name: common/check_dataset_schema
-    - name: common/extract_scores
+    - name: common/extract_metadata
     - name: label_projection/control_methods/true_labels
     - name: label_projection/control_methods/majority_vote
     - name: label_projection/control_methods/random_labels

@@ -1,3 +1,5 @@
+include { findArgumentSchema } from "${meta.resources_dir}/helper.nf"
+
 workflow auto {
   findStates(params, meta.config)
     | meta.workflow.run(
@@ -12,43 +14,46 @@ workflow run_wf {
   main:
   output_ch = input_ch
 
-    // TODO: check schema based on the values in `config`
-    // instead of having to provide a separate schema file
     | check_dataset_schema.run(
       key: "check_dataset_schema_rna",
-            fromState: { id, state ->
-        // as a resource
+      fromState: { id, state ->
+        def schema = findArgumentSchema(meta.config, "input_rna")
+        def schemaYaml = tempFile("schema.yaml")
+        writeYaml(schema, schemaYaml)
         [
           "input": state.input_rna,
-          "schema": meta.resources_dir.resolve("file_common_dataset_rna.yaml")
+          "schema": schemaYaml
         ]
       },
-      args: [
-        "stop_on_error": false
-      ],
-      toState: [
-        "dataset_rna": "output",
-        "dataset_checks": "checks"
-      ]
+      toState: { id, output, state ->
+        // read the output to see if dataset passed the qc
+        def checks = readYaml(output.output)
+        state + [
+          "dataset_rna": checks["exit_code"] == 0 ? state.input_rna : null,
+        ]
+      }
     )
 
     | check_dataset_schema.run(
       key: "check_dataset_schema_other_mod",
-            fromState: { id, state ->
-        // as a resource
+      fromState: { id, state ->
+        def schema = findArgumentSchema(meta.config, "input_other_mod")
+        def schemaYaml = tempFile("schema.yaml")
+        writeYaml(schema, schemaYaml)
         [
           "input": state.input_other_mod,
-          "schema": meta.resources_dir.resolve("file_common_dataset_other_mod.yaml")
+          "schema": schemaYaml
         ]
       },
-      args: [
-        "stop_on_error": false
-      ],
-      toState: [
-        "dataset_other_mod": "output",
-        "dataset_checks": "checks"
-      ]
+      toState: { id, output, state ->
+        // read the output to see if dataset passed the qc
+        def checks = readYaml(output.output)
+        state + [
+          "dataset_other_mod": checks["exit_code"] == 0 ? state.input_other_mod : null,
+        ]
+      }
     )
+    | view{"test: ${it}"}
 
     // remove datasets which didn't pass the schema check
     | filter { id, state ->

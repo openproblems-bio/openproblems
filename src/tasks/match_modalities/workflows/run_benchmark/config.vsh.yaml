@@ -56,7 +56,7 @@ functionality:
       path: "/src/tasks/match_modalities/api/task_info.yaml"
   dependencies:
     - name: common/check_dataset_schema
-    - name: common/extract_scores
+    - name: common/extract_metadata
     - name: match_modalities/control_methods/random_features
     - name: match_modalities/control_methods/true_features
     - name: match_modalities/methods/fastmnn

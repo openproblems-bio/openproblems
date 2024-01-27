@@ -4,22 +4,22 @@ library(Matrix, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input_rna = "resources_test/common/neurips2021_bmmc_cite/dataset_rna.h5ad",
-  input_other_mod = "resources_test/common/neurips2021_bmmc_cite/dataset_other_mod.h5ad",
-  output_train_mod1 = "resources_test/predict_modality/neurips2021_bmmc_cite/train_mod1.h5ad",
-  output_train_mod2 = "resources_test/predict_modality/neurips2021_bmmc_cite/train_mod2.h5ad",
-  output_test_mod1 = "resources_test/predict_modality/neurips2021_bmmc_cite/test_mod1.h5ad",
-  output_test_mod2 = "resources_test/predict_modality/neurips2021_bmmc_cite/test_mod2.h5ad",
+  input_rna = "resources_test/common/openproblems_neurips2021/bmmc_cite/dataset_rna.h5ad",
+  input_other_mod = "resources_test/common/openproblems_neurips2021/bmmc_cite/dataset_other_mod.h5ad",
+  output_train_mod1 = "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/train_mod1.h5ad",
+  output_train_mod2 = "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/train_mod2.h5ad",
+  output_test_mod1 = "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/test_mod1.h5ad",
+  output_test_mod2 = "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/test_mod2.h5ad",
   swap = TRUE,
   seed = 1L
 )
 # par <- list(
-#   input_rna = "resources_test/predict_modality/neurips2021_bmmc_mutliome/output_rna.h5ad",
-#   input_other_mod = "resources_test/predict_modality/neurips2021_bmmc_mutliome/output_atac.h5ad",
-#   output_train_mod1 = "resources_test/predict_modality/neurips2021_bmmc_mutliome/train_mod1.h5ad",
-#   output_train_mod2 = "resources_test/predict_modality/neurips2021_bmmc_mutliome/train_mod2.h5ad",
-#   output_test_mod1 = "resources_test/predict_modality/neurips2021_bmmc_mutliome/test_mod1.h5ad",
-#   output_test_mod2 = "resources_test/predict_modality/neurips2021_bmmc_mutliome/test_mod2.h5ad",
+#   input_rna = "resources_test/predict_modality/openproblems_neurips2021/bmmc_multiome/output_rna.h5ad",
+#   input_other_mod = "resources_test/predict_modality/openproblems_neurips2021/bmmc_multiome/output_atac.h5ad",
+#   output_train_mod1 = "resources_test/predict_modality/openproblems_neurips2021/bmmc_multiome/train_mod1.h5ad",
+#   output_train_mod2 = "resources_test/predict_modality/openproblems_neurips2021/bmmc_multiome/train_mod2.h5ad",
+#   output_test_mod1 = "resources_test/predict_modality/openproblems_neurips2021/bmmc_multiome/test_mod1.h5ad",
+#   output_test_mod2 = "resources_test/predict_modality/openproblems_neurips2021/bmmc_multiome/test_mod2.h5ad",
 #   swap = TRUE,
 #   seed = 1L
 # )

@@ -48,7 +48,7 @@ functionality:
       path: "../../api/task_info.yaml"
   dependencies:
     - name: common/check_dataset_schema
-    - name: common/extract_scores
+    - name: common/extract_metadata
     - name: denoising/control_methods/no_denoising
     - name: denoising/control_methods/perfect_denoising
     - name: denoising/methods/alra

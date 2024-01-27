@@ -1,7 +1,4 @@
 #!/bin/bash
-#
-#make sure the following command has been executed
-#viash ns build -q 'datasets|common' --parallel --setup cb
 
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -21,10 +18,10 @@ nextflow run . \
   -profile docker \
   -resume \
   --id scicar_cell_lines \
+  --input_id scicar_cell_lines \
   --obs_tissue "source" \
   --layer_counts "counts" \
   --obs_cell_type "cell_name" \
-  --dataset_id scicar_cell_lines \
   --dataset_name "sci-CAR cell lines" \
   --dataset_url "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117089" \
   --dataset_reference "cao2018joint" \

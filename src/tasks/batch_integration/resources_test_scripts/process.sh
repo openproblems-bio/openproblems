@@ -26,17 +26,24 @@ nextflow run . \
   --output_state '$id/state.yaml'
 # output_state should be moved to settings once workaround is solved
 
-echo Running BBKNN
-viash run src/tasks/batch_integration/methods/bbknn/config.vsh.yaml -- \
-  --input $DATASET_DIR/pancreas/dataset.h5ad \
-  --output $DATASET_DIR/pancreas/integrated_graph.h5ad
+for id in pancreas cxg_mouse_pancreas_atlas; do
+  if [ ! -f $DATASET_DIR/$id/dataset.h5ad ]; then
+    echo "Dataset $id not found"
+    exit 1
+  fi
 
-echo Running SCVI
-viash run src/tasks/batch_integration/methods/scvi/config.vsh.yaml -- \
-  --input $DATASET_DIR/pancreas/dataset.h5ad \
-  --output $DATASET_DIR/pancreas/integrated_embedding.h5ad
+  echo Running BBKNN on $id
+  viash run src/tasks/batch_integration/methods/bbknn/config.vsh.yaml -- \
+    --input $DATASET_DIR/$id/dataset.h5ad \
+    --output $DATASET_DIR/$id/integrated_graph.h5ad
 
-echo Running combat
-viash run src/tasks/batch_integration/methods/combat/config.vsh.yaml -- \
-  --input $DATASET_DIR/pancreas/dataset.h5ad \
-  --output $DATASET_DIR/pancreas/integrated_feature.h5ad
+  echo Running SCVI on $id
+  viash run src/tasks/batch_integration/methods/scvi/config.vsh.yaml -- \
+    --input $DATASET_DIR/$id/dataset.h5ad \
+    --output $DATASET_DIR/$id/integrated_embedding.h5ad
+
+  echo Running combat on $id
+  viash run src/tasks/batch_integration/methods/combat/config.vsh.yaml -- \
+    --input $DATASET_DIR/$id/dataset.h5ad \
+    --output $DATASET_DIR/$id/integrated_feature.h5ad
+done

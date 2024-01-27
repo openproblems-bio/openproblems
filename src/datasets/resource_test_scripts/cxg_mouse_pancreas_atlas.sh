@@ -1,11 +1,13 @@
 #!/bin/bash
 
+set -e
+
 cat > "/tmp/params.yaml" << 'HERE'
 param_list:
-  - id: cellxgene_census/mouse_pancreas_atlas
+  - id: cxg_mouse_pancreas_atlas
     species: mus_musculus
     census_version: "2023-07-25"
-    obs_value_filter: "dataset_id == '49e4ffcc-5444-406d-bdee-577127404ba8'"
+    obs_value_filter: "dataset_id == '49e4ffcc-5444-406d-bdee-577127404ba8' and donor_id in ['mouse_pancreatic_islet_atlas_Hrovatin__Fltp_2y__MUC13974', 'mouse_pancreatic_islet_atlas_Hrovatin__Fltp_2y__MUC13975', 'mouse_pancreatic_islet_atlas_Hrovatin__Fltp_2y__MUC13976']"
     obs_batch: donor_id
     dataset_name: Mouse Pancreatic Islet Atlas
     dataset_summary: Mouse pancreatic islet scRNA-seq atlas across sexes, ages, and stress conditions including diabetes
@@ -14,7 +16,7 @@ param_list:
     dataset_reference: hrovatin2023delineating
     dataset_organism: mus_musculus
 
-normalization_methods: [log_cp10k, sqrt_cp10k, l1_sqrt]
+normalization_methods: [log_cp10k]
 output_dataset: '$id/dataset.h5ad'
 output_meta: '$id/dataset_metadata.yaml'
 output_state: '$id/state.yaml'
@@ -23,10 +25,13 @@ output_normalized: force_null
 output_pca: force_null
 output_hvg: force_null
 output_knn: force_null
-publish_dir: resources/datasets
+publish_dir: resources_test/common
+do_subsample: true
 HERE
 
 nextflow run . \
   -main-script target/nextflow/datasets/workflows/process_cellxgene_census/main.nf \
   -profile docker \
   -params-file "/tmp/params.yaml"
+
+# src/tasks/batch_integration/resources_test_scripts/process.sh

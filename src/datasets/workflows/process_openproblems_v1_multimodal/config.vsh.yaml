@@ -104,12 +104,10 @@ functionality:
       arguments:
         - name: "--output_dataset_mod1"
           direction: "output"
-          type: file
-          example: "dataset_mod1.h5ad"
+          __merge__: /src/datasets/api/file_multimodal_dataset.yaml
         - name: "--output_dataset_mod2"
           direction: "output"
-          type: file
-          example: "dataset_mod2.h5ad"
+          __merge__: /src/datasets/api/file_multimodal_dataset.yaml
         - name: "--output_meta_mod1"
           direction: "output"
           type: file
@@ -124,6 +122,7 @@ functionality:
     - type: nextflow_script
       path: main.nf
       entrypoint: run_wf
+    - path: /src/wf_utils/helper.nf
   dependencies:
     - name: datasets/loaders/openproblems_v1_multimodal
     - name: datasets/normalization/log_cp
@@ -133,7 +132,7 @@ functionality:
     - name: datasets/processors/subsample
     - name: datasets/processors/svd
     - name: datasets/processors/hvg
-    - name: common/check_dataset_schema
+    - name: common/extract_metadata
   # test_resources:
   #   - type: nextflow_script
   #     path: main.nf

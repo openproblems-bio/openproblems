@@ -34,10 +34,7 @@ functionality:
     - type: nextflow_script
       path: main.nf
       entrypoint: run_wf
-    - type: file
-      path: "/src/tasks/predict_modality/api/file_common_dataset_rna.yaml"
-    - type: file
-      path: "/src/tasks/predict_modality/api/file_common_dataset_other_mod.yaml"
+    - path: /src/wf_utils/helper.nf
   dependencies:
     - name: common/check_dataset_schema
     - name: predict_modality/process_dataset

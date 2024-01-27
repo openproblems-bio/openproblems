@@ -2,12 +2,34 @@ from os import path
 import subprocess
 import anndata as ad
 
-input = meta["resources_dir"] + "neurips2021_bmmc_cite.h5ad"
+input = "neurips2021_bmmc_cite.h5ad"
 mod1 = "GEX"
 mod2 = "ADT"
 
 output_mod1_file = "output_mod1.h5ad"
 output_mod2_file = "output_mod2.h5ad"
+
+input_url = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE194nnn/GSE194122/suppl/GSE194122%5Fopenproblems%5Fneurips2021%5Fcite%5FBMMC%5Fprocessed%2Eh5ad%2Egz"
+
+# download input
+print(">> Downloading input", flush=True)
+out = subprocess.run(
+  [
+    "wget",
+    "-O", input + ".gz",
+    input_url,
+  ],
+  stderr=subprocess.STDOUT
+)
+# unzip input
+print(">> Unzipping input", flush=True)
+out = subprocess.run(
+  [
+    "gunzip",
+    input + ".gz",
+  ],
+  stderr=subprocess.STDOUT
+)
 
 print(">> Running script", flush=True)
 out = subprocess.run(

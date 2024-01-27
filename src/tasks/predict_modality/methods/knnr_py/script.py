@@ -5,9 +5,9 @@ from sklearn.neighbors import KNeighborsRegressor
 
 ## VIASH START
 par = {
-    'input_train_mod1': 'resources_test/predict_modality/neurips2021_bmmc_cite/train_mod1.h5ad',
-    'input_train_mod2': 'resources_test/predict_modality/neurips2021_bmmc_cite/train_mod2.h5ad',
-    'input_test_mod1': 'resources_test/predict_modality/neurips2021_bmmc_cite/test_mod1.h5ad',
+    'input_train_mod1': 'resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/train_mod1.h5ad',
+    'input_train_mod2': 'resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/train_mod2.h5ad',
+    'input_test_mod1': 'resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/test_mod1.h5ad',
     'distance_method': 'minkowski',
     'output': 'output.h5ad',
     'n_pcs': 4,

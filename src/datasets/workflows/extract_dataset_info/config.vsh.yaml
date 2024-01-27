@@ -29,6 +29,6 @@ functionality:
       path: main.nf
       entrypoint: run_wf
   dependencies: 
-    - name: common/check_dataset_schema
+    - name: common/extract_metadata
 platforms:
   - type: nextflow

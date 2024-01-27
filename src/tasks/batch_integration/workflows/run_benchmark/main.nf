@@ -55,12 +55,14 @@ workflow run_wf {
     | map{ id, state -> 
       [id, state + ["_meta": [join_id: id]]]
     }
-    // extract dataset metadata
-    | check_dataset_schema.run(
+    
+    // extract the dataset metadata
+    | extract_metadata.run(
       fromState: [input: "input_solution"],
       toState: { id, output, state ->
-        def dataset_uns = (new org.yaml.snakeyaml.Yaml().load(output.meta)).uns
-        state + [dataset_uns: dataset_uns]
+        state + [
+          dataset_uns: readYaml(output.output).uns
+        ]
       }
     )
 
@@ -78,7 +80,10 @@ workflow run_wf {
         def pref = comp.config.functionality.info.preferred_normalization
         // if the preferred normalisation is none at all,
         // we can pass whichever dataset we want
-        (norm == "log_cp10k" && pref == "counts") || norm == pref
+        def norm_check = (norm == "log_cp10k" && pref == "counts") || norm == pref
+        def method_check = state.method_ids.isEmpty() || state.method_ids.contains(comp.config.functionality.name)
+
+        method_check && norm_check
       },
 
       // define a new 'id' by appending the method name to the dataset id
@@ -186,12 +191,13 @@ workflow run_wf {
 
   output_ch = score_ch
     // extract scores
-    | check_dataset_schema.run(
+    | extract_metadata.run(
       key: "extract_scores",
       fromState: [input: "metric_output"],
       toState: { id, output, state ->
-        def score_uns = (new org.yaml.snakeyaml.Yaml().load(output.meta)).uns
-        state + [score_uns: score_uns]
+        state + [
+          score_uns: readYaml(output.output).uns
+        ]
       }
     )
 

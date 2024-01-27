@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/common/neurips2021_bmmc_cite/dataset_other_mod.h5ad"
+example: "resources_test/common/openproblems_neurips2021/bmmc_cite/dataset_other_mod.h5ad"
 info:
   label: "Raw dataset mod2"
   summary: "The second modality of the raw dataset. Must be an ADT or an ATAC dataset"
@@ -24,8 +24,15 @@ info:
         required: false
     var:
       - type: string
-        name: gene_ids
-        description: The gene identifiers (if available)
+        name: feature_id
+        description: Unique identifier for the feature, usually a ENSEMBL gene id.
+        # TODO: make this required once openproblems_v1 dataloader supports it
+        required: true
+      
+      - type: string
+        name: feature_name
+        description: A human-readable name for the feature, usually a gene symbol.
+        # TODO: make this required once the dataloader supports it
         required: false
     uns:
       - type: string

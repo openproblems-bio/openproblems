@@ -56,7 +56,7 @@ functionality:
       path: "/src/tasks/predict_modality/api/task_info.yaml"
   dependencies:
     - name: common/check_dataset_schema
-    - name: common/extract_scores
+    - name: common/extract_metadata
     - name: predict_modality/control_methods/mean_per_gene
     - name: predict_modality/control_methods/random_predict
     - name: predict_modality/control_methods/zeros

@@ -1,7 +1,7 @@
 functionality:
   name: "extract_scores"
+  status: disabled
   namespace: "common"
-  version: "dev"
   description: "Extract evaluation data frame on output"
   arguments:
     - name: "--input"

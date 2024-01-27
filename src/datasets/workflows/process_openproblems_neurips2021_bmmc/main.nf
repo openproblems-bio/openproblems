@@ -1,3 +1,5 @@
+include { findArgumentSchema } from "${meta.resources_dir}/helper.nf"
+
 workflow run_wf {
   take:
   input_ch
@@ -145,31 +147,41 @@ workflow run_wf {
       toState: [ "hvg_other_mod": "output" ]
     )
 
-    | check_dataset_schema.run(
+    // add synonyms
+    | map{ id, state ->
+      [id, state + ["output_rna": state.hvg_rna, "output_other_mod": state.hvg_other_mod]]
+    }
+
+    | extract_metadata.run(
+      key: "extract_metadata_rna",
       fromState: { id, state ->
+        def schema = findArgumentSchema(meta.config, "output_rna")
+        // workaround: convert GString to String
+        schema = iterateMap(schema, { it instanceof GString ? it.toString() : it })
+        def schemaYaml = tempFile("schema.yaml")
+        writeYaml(schema, schemaYaml)
         [
-          "input": state.hvg_rna,
-          "checks": null
+          "input": state.output_rna,
+          "schema": schemaYaml
         ]
       },
-      toState: [
-        "output_rna": "output",
-        "output_meta_rna": "meta"
-      ]
+      toState: ["output_meta_rna": "output"]
     )
 
-    | check_dataset_schema.run(
-      key: "check_dataset_schema_other_mod",
+    | extract_metadata.run(
+      key: "extract_metadata_other_mod",
       fromState: { id, state ->
+        def schema = findArgumentSchema(meta.config, "output_other_mod")
+        // workaround: convert GString to String
+        schema = iterateMap(schema, { it instanceof GString ? it.toString() : it })
+        def schemaYaml = tempFile("schema.yaml")
+        writeYaml(schema, schemaYaml)
         [
-          "input": state.hvg_other_mod,
-          "checks": null
+          "input": state.output_other_mod,
+          "schema": schemaYaml
         ]
       },
-      toState: [
-        "output_other_mod": "output",
-        "output_meta_other_mod": "meta"
-      ]
+      toState: ["output_meta_other_mod": "output"]
     )
 
     // only output the files for which an output file was specified

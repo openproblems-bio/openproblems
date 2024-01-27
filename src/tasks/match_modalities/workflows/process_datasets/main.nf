@@ -1,3 +1,5 @@
+include { findArgumentSchema } from "${meta.resources_dir}/helper.nf"
+
 workflow auto {
   findStates(params, meta.config)
     | meta.workflow.run(
@@ -11,42 +13,47 @@ workflow run_wf {
 
   main:
   output_ch = input_ch
-    
-    // TODO: check schema based on the values in `config`
-    // instead of having to provide a separate schema file
+
     | check_dataset_schema.run(
       key: "check_dataset_schema_mod1",
       fromState: { id, state ->
-        // as a resource
+        def schema = findArgumentSchema(meta.config, "input_mod1")
+        def schemaYaml = tempFile("schema.yaml")
+        writeYaml(schema, schemaYaml)
         [
           "input": state.input_mod1,
-          "schema": meta.resources_dir.resolve("file_common_dataset_mod1.yaml")
+          "schema": schemaYaml
         ]
       },
-      args: [
-        "stop_on_error": false
-      ],
-      toState: [
-        "dataset_mod1": "output"
-      ]
+      toState: { id, output, state ->
+        // read the output to see if dataset passed the qc
+        def checks = readYaml(output.output)
+        state + [
+          "dataset_mod1": checks["exit_code"] == 0 ? state.input_mod1 : null,
+        ]
+      }
     )
+
     | check_dataset_schema.run(
       key: "check_dataset_schema_mod2",
       fromState: { id, state ->
-        // as a resource
+        def schema = findArgumentSchema(meta.config, "input_mod2")
+        def schemaYaml = tempFile("schema.yaml")
+        writeYaml(schema, schemaYaml)
         [
           "input": state.input_mod2,
-          "schema": meta.resources_dir.resolve("file_common_dataset_mod2.yaml")
+          "schema": schemaYaml
         ]
       },
-      args: [
-        "stop_on_error": false
-      ],
-      toState: [
-        "dataset_mod2": "output"
-      ]
+      toState: { id, output, state ->
+        // read the output to see if dataset passed the qc
+        def checks = readYaml(output.output)
+        state + [
+          "dataset_mod2": checks["exit_code"] == 0 ? state.input_mod2 : null,
+        ]
+      }
     )
-
+    
     // remove datasets which didn't pass the schema check
     | filter { id, state ->
       state.dataset_mod1 != null && state.dataset_mod2 != null

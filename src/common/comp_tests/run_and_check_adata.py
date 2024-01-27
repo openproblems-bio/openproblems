@@ -13,11 +13,11 @@ meta = {
 ## VIASH END
 
 # helper functions
-def check_slots(adata, slot_metadata):
+def check_slots(adata, arg):
     """Check whether an AnnData file contains all for the required
     slots in the corresponding .info.slots field.
     """
-    for struc_name, slot_items in slot_metadata.items():
+    for struc_name, slot_items in arg["info"].get("slots", {}).items():
         struc_x = getattr(adata, struc_name)
         
         if struc_name == "X":
@@ -30,6 +30,42 @@ def check_slots(adata, slot_metadata):
                 if slot_item.get("required", True):
                     assert slot_item["name"] in struc_x,\
                         f"File '{arg['value']}' is missing slot .{struc_name}['{slot_item['name']}']"
+
+def run_and_check(arguments, cmd):
+    print(">> Checking whether input files exist", flush=True)
+    for arg in arguments:
+        if arg["type"] == "file" and arg["direction"] == "input":
+            assert path.exists(arg["value"]), f"Input file '{arg['value']}' does not exist"
+
+    print(f">> Running script as test", flush=True)
+    out = subprocess.run(cmd, stderr=subprocess.STDOUT)
+
+    if out.stdout:
+        print(out.stdout)
+
+    if out.returncode:
+        print(f"script: \'{' '.join(cmd)}\' exited with an error.")
+        exit(out.returncode)
+
+    print(">> Checking whether output file exists", flush=True)
+    for arg in arguments:
+        if arg["type"] == "file" and arg["direction"] == "output":
+            assert path.exists(arg["value"]), f"Output file '{arg['value']}' does not exist"
+
+    print(">> Reading h5ad files and checking formats", flush=True)
+    adatas = {}
+    for arg in arguments:
+        if arg["type"] == "file" and "slots" in arg["info"]:
+            print(f"Reading and checking {arg['clean_name']}", flush=True)
+            adata = ad.read_h5ad(arg["value"])
+
+            print(f"  {adata}")
+
+            check_slots(adata, arg)
+
+            adatas[arg["clean_name"]] = adata
+
+    print("All checks succeeded!", flush=True)
 
 
 # read viash config
@@ -56,45 +92,30 @@ for arg in config["functionality"]["arguments"]:
     
     arguments.append(new_arg)
 
-# construct command
-cmd = [ meta["executable"] ]
-for arg in arguments:
-    if arg["type"] == "file":
-        cmd.extend([arg["name"], arg["value"]])
 
+if "test_setup" not in config["functionality"]["info"]:
+    argument_sets = {"run": arguments}
+else:
+    test_setup = config["functionality"]["info"]["test_setup"]
+    argument_sets = {}
+    for name, test_instance in test_setup.items():
+        new_arguments = []
+        for arg in arguments:
+            new_arg = arg.copy()
+            if arg["clean_name"] in test_instance:
+                val = test_instance[arg["clean_name"]]
+                if new_arg["type"] == "file" and new_arg["direction"] == "input":
+                    val = f"{meta['resources_dir']}/{val}"
+                new_arg["value"] = val
+            new_arguments.append(new_arg)
+        argument_sets[name] = new_arguments
 
-print(">> Checking whether input files exist", flush=True)
-for arg in arguments:
-    if arg["type"] == "file" and arg["direction"] == "input":
-        assert path.exists(arg["value"]), f"Input file '{arg['value']}' does not exist"
+for argset_name, argset_args in argument_sets.items():
+    print(f">> Running test '{argset_name}'", flush=True)
+    # construct command
+    cmd = [ meta["executable"] ]
+    for arg in argset_args:
+        if arg["type"] == "file":
+            cmd.extend([arg["name"], arg["value"]])
 
-print(">> Running script as test", flush=True)
-out = subprocess.run(cmd, stderr=subprocess.STDOUT)
-
-if out.stdout:
-    print(out.stdout)
-
-if out.returncode:
-    print(f"script: '{cmd}' exited with an error.")
-    exit(out.returncode)
-
-print(">> Checking whether output file exists", flush=True)
-for arg in arguments:
-    if arg["type"] == "file" and arg["direction"] == "output":
-        assert path.exists(arg["value"]), f"Output file '{arg['value']}' does not exist"
-
-print(">> Reading h5ad files and checking formats", flush=True)
-adatas = {}
-for arg in arguments:
-    if arg["type"] == "file":
-        print(f"Reading and checking {arg['clean_name']}", flush=True)
-        adata = ad.read_h5ad(arg["value"])
-        slots = arg["info"].get("slots") or {}
-
-        print(f"  {adata}")
-
-        check_slots(adata, slots)
-
-        adatas[arg["clean_name"]] = adata
-
-print("All checks succeeded!", flush=True)
+    run_and_check(argset_args, cmd)

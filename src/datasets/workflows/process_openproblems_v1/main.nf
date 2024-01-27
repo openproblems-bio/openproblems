@@ -1,3 +1,5 @@
+include { findArgumentSchema } from "${meta.resources_dir}/helper.nf"
+
 workflow auto {
   findStates(params, meta.config)
     | meta.workflow.run(
@@ -119,9 +121,24 @@ workflow run_wf {
       toState: ["output_knn": "output"]
     )
 
-    | check_dataset_schema.run(
-      fromState: ["input": "output_knn"],
-      toState: ["output_dataset": "output", "output_meta": "meta"]
+    // add synonym
+    | map{ id, state ->
+      [id, state + [output_dataset: state.output_knn]]
+    }
+
+    | extract_metadata.run(
+      fromState: { id, state ->
+        def schema = findArgumentSchema(meta.config, "output_dataset")
+        // workaround: convert GString to String
+        schema = iterateMap(schema, { it instanceof GString ? it.toString() : it })
+        def schemaYaml = tempFile("schema.yaml")
+        writeYaml(schema, schemaYaml)
+        [
+          "input": state.output_dataset,
+          "schema": schemaYaml
+        ]
+      },
+      toState: ["output_meta": "output"]
     )
 
     // only output the files for which an output file was specified

@@ -15,6 +15,8 @@ platforms:
     setup:
       - type: r
         cran: [ bit64 ]
+        # TODO: remove this when reticulate >= 1.35 is released
+        github: rstudio/reticulate
   - type: nextflow
     directives:
       label: [ "midtime", midmem, lowcpu ]

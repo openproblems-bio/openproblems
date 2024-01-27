@@ -1,3 +1,5 @@
+include { findArgumentSchema } from "${meta.resources_dir}/helper.nf"
+
 workflow auto {
   findStates(params, meta.config)
     | meta.workflow.run(
@@ -142,32 +144,46 @@ workflow run_wf {
       toState: [ "hvg_mod2": "output" ]
     )
 
-    | check_dataset_schema.run(
+    // add synonyms
+    | map{ id, state ->
+      [id, state + [
+        "output_dataset_mod1": state.hvg_mod1,
+        "output_dataset_mod2": state.hvg_mod2
+      ]]
+    }
+
+    | extract_metadata.run(
+      key: "extract_metadata_mod1",
       fromState: { id, state ->
+        def schema = findArgumentSchema(meta.config, "output_dataset_mod1")
+        // workaround: convert GString to String
+        schema = iterateMap(schema, { it instanceof GString ? it.toString() : it })
+        def schemaYaml = tempFile("schema.yaml")
+        writeYaml(schema, schemaYaml)
         [
-          "input": state.hvg_mod1,
-          "checks": null
+          "input": state.output_dataset_mod1,
+          "schema": schemaYaml
         ]
       },
-      toState: [
-        "output_dataset_mod1": "output",
-        "output_meta_mod1": "meta"
-      ]
+      toState: ["output_meta_mod1": "output"]
     )
 
-    | check_dataset_schema.run(
+    | extract_metadata.run(
+      key: "extract_metadata_mod2",
       fromState: { id, state ->
+        def schema = findArgumentSchema(meta.config, "output_dataset_mod2")
+        // workaround: convert GString to String
+        schema = iterateMap(schema, { it instanceof GString ? it.toString() : it })
+        def schemaYaml = tempFile("schema.yaml")
+        writeYaml(schema, schemaYaml)
         [
-          "input": state.hvg_mod2,
-          "checks": null
+          "input": state.output_dataset_mod2,
+          "schema": schemaYaml
         ]
       },
-      toState: [
-        "output_dataset_mod2": "output",
-        "output_meta_mod2": "meta"
-      ]
+      toState: ["output_meta_mod2": "output"]
     )
-
+    
     // only output the files for which an output file was specified
     | setState([
       "output_dataset_mod1",

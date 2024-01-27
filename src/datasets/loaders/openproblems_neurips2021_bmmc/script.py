@@ -1,5 +1,6 @@
 import anndata as ad
 import pandas as pd
+import numpy as np
 
 ## VIASH START
 par = {
@@ -32,13 +33,12 @@ def remove_mod_prefix(df, mod):
 print("load dataset file", flush=True)
 adata = ad.read_h5ad(par["input"])
 
-# Add is_train to obs
+# Add is_train to obs if it is missing
 if "is_train" not in adata.obs.columns:
   batch_info = adata.obs["batch"]
   batch_categories = batch_info.dtype.categories
   train = ["s1d1", "s2d1", "s2d4", "s3d6", "s3d1"]
-  adata.obs["is_train"] = [ x in train for x in batch_info ]
-  adata.obs["is_train"].replace([True, False], ["train", "test"])
+  adata.obs["is_train"] = [ "train" if x in train else "test" for x in batch_info ]
 
 # Construct Modality datasets
 print("Construct Mod datasets", flush=True)
@@ -53,11 +53,10 @@ mod1_var = pd.DataFrame(adata_mod1.var)
 remove_other_mod_col(mod1_var, par["mod2"])
 remove_mod_prefix(mod1_var, par["mod1"])
 mod1_var.index.name = "feature_name"
-mod1_var["feature_id"] = mod1_var.gene_id
+mod1_var.reset_index("feature_name", inplace=True)
+mod1_var["feature_id"] = np.where(mod1_var.gene_id.isna(), mod1_var.feature_name, mod1_var.gene_id.astype(str))
 mod1_var.drop("gene_id", axis=1, inplace=True)
-if not mod1_var.feature_id.hasnans:
-  mod1_var.reset_index("feature_name", inplace=True)
-  mod1_var.set_index("feature_id", drop=False, inplace=True)
+mod1_var.set_index("feature_id", drop=False, inplace=True)
 
 mod1_obs = pd.DataFrame(adata_mod1.obs)
 remove_other_mod_col(mod1_obs, par["mod2"])
@@ -74,11 +73,10 @@ mod2_var = pd.DataFrame(adata_mod2.var)
 remove_other_mod_col(mod2_var, par["mod1"])
 remove_mod_prefix(mod2_var, par["mod2"])
 mod2_var.index.name = "feature_name"
-mod2_var["feature_id"] = mod2_var.gene_id
+mod2_var.reset_index("feature_name", inplace=True)
+mod2_var["feature_id"] = np.where(mod2_var.gene_id.isna(), mod2_var.feature_name, mod2_var.gene_id.astype(str))
 mod2_var.drop("gene_id", axis=1, inplace=True)
-if not mod2_var.feature_id.hasnans:
-  mod2_var.reset_index("feature_name", inplace=True)
-  mod2_var.set_index("feature_id", drop=False, inplace=True)
+mod2_var.set_index("feature_id", drop=False, inplace=True)
 
 mod2_obs = pd.DataFrame(adata_mod2.obs)
 remove_other_mod_col(mod2_obs, par["mod1"])

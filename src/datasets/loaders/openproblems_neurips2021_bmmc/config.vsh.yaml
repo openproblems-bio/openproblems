@@ -60,8 +60,8 @@ functionality:
   test_resources:
     - type: python_script
       path: test.py
-    - type: file
-      path: /resources_test/common/openproblems_neurips2021/neurips2021_bmmc_cite.h5ad
+    # - type: file
+    #   path: /resources_test/common/openproblems_neurips2021/neurips2021_bmmc_cite.h5ad
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_python:1.0.2

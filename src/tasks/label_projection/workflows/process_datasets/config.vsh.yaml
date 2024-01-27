@@ -26,8 +26,7 @@ functionality:
     - type: nextflow_script
       path: main.nf
       entrypoint: run_wf
-    - type: file
-      path: "/src/tasks/label_projection/api/file_common_dataset.yaml"
+    - path: /src/wf_utils/helper.nf
   dependencies:
     - name: common/check_dataset_schema
     - name: label_projection/process_dataset

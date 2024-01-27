@@ -1,3 +1,5 @@
+include { findArgumentSchema } from "${meta.resources_dir}/helper.nf"
+
 workflow auto {
   findStates(params, meta.config)
     | meta.workflow.run(
@@ -12,21 +14,23 @@ workflow run_wf {
   main:
   output_ch = input_ch
 
-    // TODO: check schema based on the values in `config`
-    // instead of having to provide a separate schema file
     | check_dataset_schema.run(
       fromState: { id, state ->
-        // as a resource
+        def schema = findArgumentSchema(meta.config, "input")
+        def schemaYaml = tempFile("schema.yaml")
+        writeYaml(schema, schemaYaml)
         [
           "input": state.input,
-          "schema": meta.resources_dir.resolve("file_common_dataset.yaml")
+          "schema": schemaYaml
         ]
       },
-      args: [
-        "stop_on_error": false,
-        "checks": null
-      ],
-      toState: ["dataset": "output"]
+      toState: { id, output, state ->
+        // read the output to see if dataset passed the qc
+        def checks = readYaml(output.output)
+        state + [
+          "dataset": checks["exit_code"] == 0 ? state.input : null,
+        ]
+      }
     )
 
     // remove datasets which didn't pass the schema check

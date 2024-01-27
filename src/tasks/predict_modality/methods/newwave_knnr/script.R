@@ -6,7 +6,7 @@ requireNamespace("FNN", quietly = TRUE)
 requireNamespace("SingleCellExperiment", quietly = TRUE)
 
 ## VIASH START
-path <- "resources_test/predict_modality/neurips2021_bmmc_cite/"
+path <- "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/"
 par <- list(
   input_train_mod1 = paste0(path, "train_mod1.h5ad"),
   input_test_mod1 = paste0(path, "test_mod1.h5ad"),

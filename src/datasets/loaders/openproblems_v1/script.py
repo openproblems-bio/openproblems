@@ -5,6 +5,7 @@ import scipy
 
 ## VIASH START
 par = {
+    "input_id": "pancreas",
     "dataset_id": "pancreas",
     "obs_cell_type": "cell_type",
     "obs_batch": "tech",
@@ -100,6 +101,9 @@ uns_metadata = {
     if id in par
 }
 adata.uns.update(uns_metadata)
+
+# TODO: fix var annotation
+# - add feature_id and feature_name
 
 print("Writing adata to file", flush=True)
 adata.write_h5ad(par["output"], compression="gzip")

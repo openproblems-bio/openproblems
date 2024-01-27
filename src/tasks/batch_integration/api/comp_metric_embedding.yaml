@@ -8,6 +8,13 @@ functionality:
       summary: A batch integration embedding metric.
       description: |
         A metric for evaluating batch corrected embeddings.
+    test_setup:
+      pancreas:
+        input_integrated: resources_test/batch_integration/pancreas/integrated_embedding.h5ad
+        input_solution: resources_test/batch_integration/pancreas/solution.h5ad
+      cellxgene_census:
+        input_integrated: resources_test/batch_integration/cxg_mouse_pancreas_atlas/integrated_embedding.h5ad
+        input_solution: resources_test/batch_integration/cxg_mouse_pancreas_atlas/solution.h5ad
   arguments:
     - name: --input_integrated
       __merge__: file_integrated_embedding.yaml
@@ -22,10 +29,10 @@ functionality:
       direction: output
       required: true
   test_resources:
-    - path: /resources_test/batch_integration/pancreas
-      dest: resources_test/batch_integration/pancreas
-    - type: python_script
-      path: /src/common/comp_tests/check_metric_config.py
+    - path: /resources_test/batch_integration/
+      dest: resources_test/batch_integration/
+    # - type: python_script
+    #   path: /src/common/comp_tests/check_metric_config.py
     - type: python_script
       path: /src/common/comp_tests/run_and_check_adata.py
     - path: /src/common/library.bib

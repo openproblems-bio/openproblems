@@ -48,7 +48,7 @@ functionality:
       path: "../../api/task_info.yaml"
   dependencies:
     - name: common/check_dataset_schema
-    - name: common/extract_scores
+    - name: common/extract_metadata
     - name: dimensionality_reduction/control_methods/random_features
     - name: dimensionality_reduction/control_methods/true_features
     - name: dimensionality_reduction/methods/densmap

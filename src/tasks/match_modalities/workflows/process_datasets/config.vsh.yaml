@@ -34,10 +34,7 @@ functionality:
     - type: nextflow_script
       path: main.nf
       entrypoint: run_wf
-    - type: file
-      path: "/src/tasks/match_modalities/api/file_common_dataset_mod1.yaml"
-    - type: file
-      path: "/src/tasks/match_modalities/api/file_common_dataset_mod2.yaml"
+    - path: /src/wf_utils/helper.nf
   dependencies:
     - name: common/check_dataset_schema
     - name: match_modalities/process_dataset

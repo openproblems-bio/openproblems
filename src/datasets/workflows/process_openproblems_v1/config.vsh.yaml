@@ -135,6 +135,7 @@ functionality:
     - type: nextflow_script
       path: main.nf
       entrypoint: run_wf
+    - path: /src/wf_utils/helper.nf
   dependencies: 
     - name: datasets/loaders/openproblems_v1
     - name: datasets/normalization/log_cp
@@ -145,7 +146,7 @@ functionality:
     - name: datasets/processors/pca
     - name: datasets/processors/hvg
     - name: datasets/processors/knn
-    - name: common/check_dataset_schema
+    - name: common/extract_metadata
   # test_resources:
   #   - type: nextflow_script
   #     path: main.nf

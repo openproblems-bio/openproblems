@@ -11,7 +11,7 @@ functionality:
           description: A h5ad file.
         - name: --schema
           type: file
-          required: false
+          required: true
           description: A schema file for the h5ad object.
     - name: Arguments
       arguments:
@@ -21,23 +21,11 @@ functionality:
           description: Whether or not to stop with exit code 1 if the input file does not adhere to the schema.
     - name: Output
       arguments:
-        - name: --checks
-          type: file
-          required: false
-          description: If specified, this file will contain a structured log of which checks succeeded (or not).
-          example: checks.json
-          direction: output
         - name: --output
           type: file
-          required: false
-          description: If specified, the output file will be a copy of the input file.
-          example: output.h5ad
-          direction: output
-        - name: --meta
-          type: file
-          required: false
-          description: If specified, the output file will contain metadata of the dataset.
-          example: output_meta.yaml
+          required: true
+          description: If specified, this file will contain a structured log of which checks succeeded (or not).
+          example: checks.json
           direction: output
   resources:
     - type: python_script

@@ -64,7 +64,7 @@ info:
   return schema
 
 def test_run(run_component, tmp_path, schema):
-  output_path = tmp_path / "output.h5ad"
+  output_path = tmp_path / "checks.json"
 
   run_component([
     "--input", input_path,
@@ -76,20 +76,17 @@ def test_run(run_component, tmp_path, schema):
 
 def test_error(run_component, tmp_path, error_schema):
   output_checks = tmp_path / "checks.json"
-  output_path = tmp_path / "output.h5ad"
 
   with pytest.raises(subprocess.CalledProcessError) as err:
     run_component([
       "--input", input_path,
       "--schema", str(error_schema),
       "--stop_on_error", "true",
-      "--checks", str(output_checks),
-      "--output", str(output_path)
+      "--output", str(output_checks)
     ])
     assert err.value.exitcode > 0
 
   assert output_checks.exists(), "Output checks file does not exist"
-  assert not output_path.exists(), "Output path does not exist"
 
   with open(output_checks, "r") as f:
       out = json.load(f)
