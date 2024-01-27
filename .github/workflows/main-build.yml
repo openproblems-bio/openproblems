@@ -16,14 +16,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - uses: viash-io/viash-actions/setup@v4
+    - uses: viash-io/viash-actions/setup@v5
 
     - name: Remove target folder from .gitignore
       run: |
         # allow publishing the target folder
         sed -i '/^target.*/d' .gitignore
 
-    - uses: viash-io/viash-actions/ns-build@v4
+    - uses: viash-io/viash-actions/ns-build@v5
       with:
         config_mod: .functionality.version := 'main_build'
         parallel: true
@@ -52,7 +52,7 @@ jobs:
         publish_branch: main_build
 
     - id: ns_list
-      uses: viash-io/viash-actions/ns-list@v4
+      uses: viash-io/viash-actions/ns-list@v5
       with:
         platform: docker
         src: src
@@ -84,10 +84,10 @@ jobs:
     
     - uses: actions/checkout@v4
 
-    - uses: viash-io/viash-actions/setup@v4
+    - uses: viash-io/viash-actions/setup@v5
 
     - name: Build container
-      uses: viash-io/viash-actions/ns-build@v4
+      uses: viash-io/viash-actions/ns-build@v5
       with:
         config_mod: .functionality.version := 'main_build'
         platform: docker
@@ -102,7 +102,7 @@ jobs:
         password: ${{ secrets.GTHB_PAT }}
 
     - name: Push container
-      uses: viash-io/viash-actions/ns-build@v4
+      uses: viash-io/viash-actions/ns-build@v5
       with:
         config_mod: .functionality.version := 'main_build'
         platform: docker
