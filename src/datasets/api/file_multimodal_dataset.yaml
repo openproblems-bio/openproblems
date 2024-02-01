@@ -177,7 +177,7 @@ info:
         name: feature_name
         description: A human-readable name for the feature, usually a gene symbol.
         # TODO: make this required once the dataloader supports it
-        required: false
+        required: true
 
       - type: integer
         name: soma_joinid

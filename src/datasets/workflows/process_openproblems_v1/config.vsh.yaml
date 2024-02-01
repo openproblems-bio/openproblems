@@ -31,6 +31,14 @@ functionality:
           type: boolean
           default: true
           description: Convert layers to a sparse CSR format.
+        - name: "--var_feature_id"
+          type: "string"
+          description: "Location of where to find the feature IDs. Can be set to index if the feature IDs are the index."
+          example: gene_ids
+        - name: "--var_feature_name"
+          type: "string"
+          description: "Location of where to find the feature names. Can be set to index if the feature names are the index."
+          default: index
     - name: Metadata
       arguments:
         - name: "--dataset_name"

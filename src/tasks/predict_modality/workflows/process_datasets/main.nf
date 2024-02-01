@@ -15,13 +15,13 @@ workflow run_wf {
   output_ch = input_ch
 
     | check_dataset_schema.run(
-      key: "check_dataset_schema_rna",
+      key: "check_dataset_schema_mod1",
       fromState: { id, state ->
-        def schema = findArgumentSchema(meta.config, "input_rna")
+        def schema = findArgumentSchema(meta.config, "input_mod1")
         def schemaYaml = tempFile("schema.yaml")
         writeYaml(schema, schemaYaml)
         [
-          "input": state.input_rna,
+          "input": state.input_mod1,
           "schema": schemaYaml
         ]
       },
@@ -29,19 +29,19 @@ workflow run_wf {
         // read the output to see if dataset passed the qc
         def checks = readYaml(output.output)
         state + [
-          "dataset_rna": checks["exit_code"] == 0 ? state.input_rna : null,
+          "dataset_mod1": checks["exit_code"] == 0 ? state.input_mod1 : null,
         ]
       }
     )
 
     | check_dataset_schema.run(
-      key: "check_dataset_schema_other_mod",
+      key: "check_dataset_schema_mod2",
       fromState: { id, state ->
-        def schema = findArgumentSchema(meta.config, "input_other_mod")
+        def schema = findArgumentSchema(meta.config, "input_mod2")
         def schemaYaml = tempFile("schema.yaml")
         writeYaml(schema, schemaYaml)
         [
-          "input": state.input_other_mod,
+          "input": state.input_mod2,
           "schema": schemaYaml
         ]
       },
@@ -49,7 +49,7 @@ workflow run_wf {
         // read the output to see if dataset passed the qc
         def checks = readYaml(output.output)
         state + [
-          "dataset_other_mod": checks["exit_code"] == 0 ? state.input_other_mod : null,
+          "dataset_mod2": checks["exit_code"] == 0 ? state.input_mod2 : null,
         ]
       }
     )
@@ -57,14 +57,14 @@ workflow run_wf {
 
     // remove datasets which didn't pass the schema check
     | filter { id, state ->
-      state.dataset_rna != null &&
-      state.dataset_other_mod != null
+      state.dataset_mod1 != null &&
+      state.dataset_mod2 != null
     }
 
     | process_dataset.run(
       fromState: [
-        input_rna: "dataset_rna",
-        input_other_mod: "dataset_other_mod",
+        input_mod1: "dataset_mod1",
+        input_mod2: "dataset_mod2",
         output_train_mod1: "output_train_mod1",
         output_train_mod2: "output_train_mod2",
         output_test_mod1: "output_test_mod1",

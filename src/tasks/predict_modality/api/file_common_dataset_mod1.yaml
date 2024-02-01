@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/common/openproblems_neurips2021/bmmc_cite/dataset_rna.h5ad"
+example: "resources_test/common/openproblems_neurips2021/bmmc_cite/dataset_mod1.h5ad"
 info:
   label: "Raw dataset RNA"
   summary: "The RNA modality of the raw dataset."
@@ -33,7 +33,7 @@ info:
         name: feature_name
         description: A human-readable name for the feature, usually a gene symbol.
         # TODO: make this required once the dataloader supports it
-        required: false
+        required: true
     uns:
       - type: string
         name: dataset_id

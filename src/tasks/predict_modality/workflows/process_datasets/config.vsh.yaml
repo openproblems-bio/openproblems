@@ -4,12 +4,12 @@ functionality:
   argument_groups:
     - name: Inputs
       arguments:
-        - name: "--input_rna"
-          __merge__: "/src/tasks/predict_modality/api/file_common_dataset_rna.yaml"
+        - name: "--input_mod1"
+          __merge__: "/src/tasks/predict_modality/api/file_common_dataset_mod1.yaml"
           required: true
           direction: input
-        - name: "--input_other_mod"
-          __merge__: "/src/tasks/predict_modality/api/file_common_dataset_other_mod.yaml"
+        - name: "--input_mod2"
+          __merge__: "/src/tasks/predict_modality/api/file_common_dataset_mod2.yaml"
           direction: input
           required: true
     - name: Outputs

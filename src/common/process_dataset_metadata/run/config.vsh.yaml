@@ -18,7 +18,7 @@ functionality:
           type: file
           required: true
           direction: output
-          default: $id.json
+          default: meta.json
   resources:
     - type: nextflow_script
       path: main.nf

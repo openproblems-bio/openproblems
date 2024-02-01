@@ -19,6 +19,7 @@ param_list:
     dataset_url: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100866
     dataset_organism: homo_sapiens
     layer_counts: counts
+    var_feature_name: index
 
   - id: openproblems_v1_multimodal/scicar_cell_lines
     input_id: scicar_cell_lines
@@ -30,6 +31,8 @@ param_list:
     dataset_organism: "[homo_sapiens, mus_musculus]"
     obs_cell_type: cell_name
     layer_counts: counts
+    var_feature_id: index
+    var_feature_name: gene_short_name
 
   - id: openproblems_v1_multimodal/scicar_mouse_kidney
     input_id: scicar_mouse_kidney
@@ -42,6 +45,8 @@ param_list:
     obs_cell_type: cell_name
     obs_batch: replicate
     layer_counts: counts
+    var_feature_id: index
+    var_feature_name: gene_short_name
 
 normalization_methods: [log_cp10k, sqrt_cp10k, l1_sqrt]
 output_dataset_mod1: '$id/dataset_mod1.h5ad'
@@ -59,3 +64,4 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --workspace 53907369739130 \
   --compute-env 1pK56PjjzeraOOC2LDZvN2 \
   --params-file "$params_file" \
+  --labels openproblems_v1_multimodal,dataset_loader

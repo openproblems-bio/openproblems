@@ -29,8 +29,9 @@ for LOADER in "cellxgene_census" "openproblems_v1"; do
       -main-script target/nextflow/common/process_dataset_metadata/run/main.nf \
       -profile docker \
       -c src/wf_utils/labels_ci.config \
-      --id "process" \
+      --id "extract_metadata" \
       --input "$INPUT" \
+      --output meta.json \
       --output_state "state.yaml" \
       --publish_dir "$OUTPUT_DIR"
 

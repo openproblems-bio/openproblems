@@ -10,7 +10,7 @@ functionality:
         The resulting AnnData will contain both the knn distances and the knn connectivities in 'obsp'.
   arguments:
     - name: "--input"
-      __merge__: file_hvg.yaml
+      __merge__: file_pca.yaml
       required: true
       direction: input
     - name: "--input_layer"

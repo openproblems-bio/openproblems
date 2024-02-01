@@ -10,7 +10,7 @@ functionality:
         The resulting AnnData will contain an embedding in obsm, as well as optional loadings in 'varm'.
   arguments:
     - name: "--input"
-      __merge__: file_normalized.yaml
+      __merge__: file_hvg.yaml
       required: true
       direction: input
     - name: "--input_layer"

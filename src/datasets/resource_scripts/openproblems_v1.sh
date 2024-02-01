@@ -20,6 +20,7 @@ param_list:
     dataset_summary: Adult mouse primary visual cortex
     dataset_description: A murine brain atlas with adjacent cell types as assumed benchmark truth, inferred from deconvolution proportion correlations using matching 10x Visium slides (see Dimitrov et al., 2022).
     dataset_organism: mus_musculus
+    var_feature_name: index
 
   - id: openproblems_v1/cengen
     obs_cell_type: cell_type
@@ -33,6 +34,7 @@ param_list:
     dataset_summary: Complete Gene Expression Map of an Entire Nervous System
     dataset_description: 100k FACS-isolated C. elegans neurons from 17 experiments sequenced on 10x Genomics.
     dataset_organism: caenorhabditis_elegans
+    var_feature_name: index
 
   - id: openproblems_v1/immune_cells
     obs_cell_type: final_annotation
@@ -46,6 +48,7 @@ param_list:
     dataset_summary: Human immune cells dataset from the scIB benchmarks
     dataset_description: Human immune cells from peripheral blood and bone marrow taken from 5 datasets comprising 10 batches across technologies (10X, Smart-seq2).
     dataset_organism: homo_sapiens
+    var_feature_name: index
 
   - id: openproblems_v1/mouse_blood_olsson_labelled
     obs_cell_type: celltype
@@ -57,6 +60,7 @@ param_list:
     dataset_summary: Myeloid lineage differentiation from mouse blood
     dataset_description: 660 FACS-isolated myeloid cells from 9 experiments sequenced using C1 Fluidigm and SMARTseq in 2016 by Olsson et al.
     dataset_organism: mus_musculus
+    var_feature_name: index
 
   - id: openproblems_v1/mouse_hspc_nestorowa2016
     obs_cell_type: cell_type_label
@@ -68,6 +72,9 @@ param_list:
     dataset_summary: Haematopoeitic stem and progenitor cells from mouse bone marrow
     dataset_description: 1656 hematopoietic stem and progenitor cells from mouse bone marrow. Sequenced by Smart-seq2. 
     dataset_organism: mus_musculus
+    var_feature_name: name
+    var_feature_id: converted_alias
+    
 
   - id: openproblems_v1/pancreas
     obs_cell_type: celltype
@@ -80,6 +87,7 @@ param_list:
     dataset_summary: Human pancreas cells dataset from the scIB benchmarks
     dataset_description: Human pancreatic islet scRNA-seq data from 6 datasets across technologies (CEL-seq, CEL-seq2, Smart-seq2, inDrop, Fluidigm C1, and SMARTER-seq). 
     dataset_organism: homo_sapiens
+    var_feature_name: index
 
   # disabled as this is not working in openproblemsv1
   # - id: openproblems_v1/tabula_muris_senis_droplet_lung
@@ -103,6 +111,7 @@ param_list:
     dataset_summary: 1k peripheral blood mononuclear cells from a healthy donor
     dataset_description: 1k Peripheral Blood Mononuclear Cells (PBMCs) from a healthy donor. Sequenced on 10X v3 chemistry in November 2018 by 10X Genomics.
     dataset_organism: homo_sapiens
+    var_feature_name: index
 
   - id: openproblems_v1/tenx_5k_pbmc
     layer_counts: counts
@@ -113,6 +122,9 @@ param_list:
     dataset_summary: 5k peripheral blood mononuclear cells from a healthy donor
     dataset_description: 5k Peripheral Blood Mononuclear Cells (PBMCs) from a healthy donor. Sequenced on 10X v3 chemistry in July 2019 by 10X Genomics.
     dataset_organism: homo_sapiens
+    var_feature_name: index
+    var_feature_id: gene_ids
+
 
   - id: openproblems_v1/tnbc_wu2021
     obs_cell_type: celltype_minor
@@ -124,6 +136,7 @@ param_list:
     dataset_summary: 1535 cells from six fresh triple-negative breast cancer tumors.
     dataset_description: 1535 cells from six TNBC donors by (Wu et al., 2021). This dataset includes cytokine activities, inferred using a multivariate linear model with cytokine-focused signatures, as assumed true cell-cell communication (Dimitrov et al., 2022).
     dataset_organism: homo_sapiens
+    var_feature_name: index
     
   - id: openproblems_v1/zebrafish
     obs_cell_type: cell_type
@@ -136,6 +149,9 @@ param_list:
     dataset_summary: Single-cell mRNA sequencing of zebrafish embryonic cells.
     dataset_description: 90k cells from zebrafish embryos throughout the first day of development, with and without a knockout of chordin, an important developmental gene. 
     dataset_organism: danio_rerio
+    var_feature_name: index
+    var_feature_id: index
+
 
 normalization_methods: [log_cp10k, sqrt_cp10k, l1_sqrt]
 output_dataset: '$id/dataset.h5ad'
@@ -156,10 +172,11 @@ process {
 HERE
 
 tw launch https://github.com/openproblems-bio/openproblems-v2.git \
-  --revision integration_build \
+  --revision main_build \
   --pull-latest \
   --main-script target/nextflow/datasets/workflows/process_openproblems_v1/main.nf \
   --workspace 53907369739130 \
   --compute-env 1pK56PjjzeraOOC2LDZvN2 \
   --params-file "$params_file" \
-  --config /tmp/nextflow.config
+  --config /tmp/nextflow.config \
+  --labels openproblems_v1,dataset_loader

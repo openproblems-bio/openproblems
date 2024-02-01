@@ -10,7 +10,7 @@ functionality:
         The resulting AnnData will contain both a boolean 'hvg' column in 'var', as well as a numerical 'hvg_score' in 'var'.
   arguments:
     - name: "--input"
-      __merge__: file_pca.yaml
+      __merge__: file_normalized.yaml
       required: true
       direction: input
     - name: "--input_layer"

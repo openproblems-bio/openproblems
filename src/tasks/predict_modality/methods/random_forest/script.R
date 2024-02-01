@@ -4,7 +4,7 @@ requireNamespace("pbapply", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
-path <- "output/datasets/predict_modality/openproblems_bmmc_multiome_phase1_rna/openproblems_bmmc_multiome_phase1_rna.censor_dataset.output_"
+path <- "output/datasets/predict_modality/openproblems_bmmc_multiome_phase1_mod1/openproblems_bmmc_multiome_phase1_mod1.censor_dataset.output_"
 par <- list(
   input_train_mod1 = paste0(path, "train_mod1.h5ad"),
   input_test_mod1 = paste0(path, "test_mod1.h5ad"),

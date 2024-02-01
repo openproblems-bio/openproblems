@@ -60,8 +60,8 @@ workflow run_wf {
         "dataset_organism": "dataset_organism"
       ],
       toState: [
-        "raw_rna": "output_mod1",
-        "raw_other_mod": "output_mod2"
+        "raw_mod1": "output_mod1",
+        "raw_mod2": "output_mod2"
       ]
     )
 
@@ -69,8 +69,8 @@ workflow run_wf {
     | subsample.run(
       runIf: { id, state -> state.do_subsample },
       fromState: [
-        "input": "raw_rna",
-        "input_mod2": "raw_other_mod",
+        "input": "raw_mod1",
+        "input_mod2": "raw_mod2",
         "n_obs": "n_obs",
         "n_vars": "n_vars",
         "keep_features": "keep_features",
@@ -80,8 +80,8 @@ workflow run_wf {
         "seed": "seed"
       ],
       toState: [
-        "raw_rna": "output",
-        "raw_other_mod": "output_mod2"
+        "raw_mod1": "output",
+        "raw_mod2": "output_mod2"
       ]
     )
 
@@ -98,11 +98,11 @@ workflow run_wf {
       filter: { id, state, comp ->
         comp.name in state.normalization_methods
       },
-      fromState: ["input": "raw_rna"],
+      fromState: ["input": "raw_mod1"],
       toState: { id, output, state, comp -> 
         state + [
           "normalization_id": comp.name,
-          "normalized_rna": output.output
+          "normalized_mod1": output.output
         ]
       }
     )
@@ -113,83 +113,83 @@ workflow run_wf {
       key: "log_cp10k_adt",
       runIf: { id, state -> state.mod2 == "ADT" },
       args: [normalization_id: "log_cp10k", n_cp: 10000],
-      fromState: ["input": "raw_other_mod"],
-      toState: ["normalized_other_mod": "output"]
+      fromState: ["input": "raw_mod2"],
+      toState: ["normalized_mod2": "output"]
     )
     | log_cp.run(
       key: "log_cp10k_atac",
       runIf: { id, state -> state.mod2 == "ATAC" },
       args: [normalization_id: "log_cp10k", n_cp: 10000],
-      fromState: ["input": "raw_other_mod"],
-      toState: ["normalized_other_mod": "output"]
+      fromState: ["input": "raw_mod2"],
+      toState: ["normalized_mod2": "output"]
     )
 
     | svd.run(
       fromState: [
-        "input": "normalized_rna",
-        "input_mod2": "normalized_other_mod"
+        "input": "normalized_mod1",
+        "input_mod2": "normalized_mod2"
       ],
       toState: [
-        "svd_rna": "output",
-        "svd_other_mod": "output_mod2"
+        "svd_mod1": "output",
+        "svd_mod2": "output_mod2"
       ]
     )
 
     | hvg.run(
-      fromState: [ "input": "svd_rna" ],
-      toState: [ "hvg_rna": "output" ]
+      fromState: [ "input": "svd_mod1" ],
+      toState: [ "hvg_mod1": "output" ]
     )
 
     // TODO: should this only run on ATAC? or even not at all?s
     | hvg.run(
-      key: "hvg_other_mod",
-      fromState: [ "input": "svd_other_mod" ],
-      toState: [ "hvg_other_mod": "output" ]
+      key: "hvg_mod2",
+      fromState: [ "input": "svd_mod2" ],
+      toState: [ "hvg_mod2": "output" ]
     )
 
     // add synonyms
     | map{ id, state ->
-      [id, state + ["output_rna": state.hvg_rna, "output_other_mod": state.hvg_other_mod]]
+      [id, state + ["output_mod1": state.hvg_mod1, "output_mod2": state.hvg_mod2]]
     }
 
     | extract_metadata.run(
-      key: "extract_metadata_rna",
+      key: "extract_metadata_mod1",
       fromState: { id, state ->
-        def schema = findArgumentSchema(meta.config, "output_rna")
+        def schema = findArgumentSchema(meta.config, "output_mod1")
         // workaround: convert GString to String
         schema = iterateMap(schema, { it instanceof GString ? it.toString() : it })
         def schemaYaml = tempFile("schema.yaml")
         writeYaml(schema, schemaYaml)
         [
-          "input": state.output_rna,
+          "input": state.output_mod1,
           "schema": schemaYaml
         ]
       },
-      toState: ["output_meta_rna": "output"]
+      toState: ["output_meta_mod1": "output"]
     )
 
     | extract_metadata.run(
-      key: "extract_metadata_other_mod",
+      key: "extract_metadata_mod2",
       fromState: { id, state ->
-        def schema = findArgumentSchema(meta.config, "output_other_mod")
+        def schema = findArgumentSchema(meta.config, "output_mod2")
         // workaround: convert GString to String
         schema = iterateMap(schema, { it instanceof GString ? it.toString() : it })
         def schemaYaml = tempFile("schema.yaml")
         writeYaml(schema, schemaYaml)
         [
-          "input": state.output_other_mod,
+          "input": state.output_mod2,
           "schema": schemaYaml
         ]
       },
-      toState: ["output_meta_other_mod": "output"]
+      toState: ["output_meta_mod2": "output"]
     )
 
     // only output the files for which an output file was specified
     | setState([
-      "output_rna",
-      "output_other_mod",
-      "output_meta_rna",
-      "output_meta_other_mod",
+      "output_mod1",
+      "output_mod2",
+      "output_meta_mod1",
+      "output_meta_mod2",
       "_meta"
     ])
 

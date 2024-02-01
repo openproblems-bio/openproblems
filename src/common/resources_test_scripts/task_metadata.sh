@@ -125,9 +125,15 @@ nextflow run . \
   -profile docker \
   -resume \
   -c src/wf_utils/labels_ci.config \
+  -with-trace \
   -entry auto \
   --input_states "$DATASETS_DIR/pancreas/state.yaml" \
   --rename_keys 'input_dataset:output_dataset,input_solution:output_solution' \
   --settings '{"output_scores": "scores.yaml", "output_dataset_info": "dataset_info.yaml", "output_method_configs": "method_configs.yaml", "output_metric_configs": "metric_configs.yaml", "output_task_info": "task_info.yaml", "method_ids": ["bbknn", "mnnpy", "mnnr"]}' \
   --publish_dir "$OUTPUT_DIR" \
   --output_state "state.yaml"
+
+cp trace.txt "$OUTPUT_DIR/trace.txt"
+
+
+viash run src/common/process_task_results/get_method_info/config.vsh.yaml -- --input "$OUTPUT_DIR/method_configs.yaml" --output "$OUTPUT_DIR/method_info.json"

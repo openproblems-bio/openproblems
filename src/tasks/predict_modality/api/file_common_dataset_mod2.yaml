@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/common/openproblems_neurips2021/bmmc_cite/dataset_other_mod.h5ad"
+example: "resources_test/common/openproblems_neurips2021/bmmc_cite/dataset_mod2.h5ad"
 info:
   label: "Raw dataset mod2"
   summary: "The second modality of the raw dataset. Must be an ADT or an ATAC dataset"
@@ -33,7 +33,7 @@ info:
         name: feature_name
         description: A human-readable name for the feature, usually a gene symbol.
         # TODO: make this required once the dataloader supports it
-        required: false
+        required: true
     uns:
       - type: string
         name: dataset_id

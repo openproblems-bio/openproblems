@@ -43,7 +43,7 @@ platforms:
         # download and install quarto-*-linux-amd64.deb from latest release
         run: |
           release_info=$(curl -s https://api.github.com/repos/quarto-dev/quarto-cli/releases/latest) && \
-            download_url=$(echo "$release_info" | jq -r '.assets[] | select(.name | test("quarto-.*-linux-amd64.deb")) | .browser_download_url') && \
+            download_url=$(printf "%s" "$release_info" | jq -r '.assets[] | select(.name | test("quarto-.*-linux-amd64.deb")) | .browser_download_url') && \
             curl -sL "$download_url" -o /opt/quarto.deb && \
             dpkg -i /opt/quarto.deb && \
             rm /opt/quarto.deb

@@ -20,11 +20,13 @@ KEEP_FEATURES=`cat $DATASET_DIR/temp_g2m_genes_tirosh_hm.txt $DATASET_DIR/temp_s
 nextflow run . \
   -main-script target/nextflow/datasets/workflows/process_openproblems_v1/main.nf \
   -profile docker \
+  -c src/wf_utils/labels_ci.config \
   -resume \
   --id pancreas \
   --input_id pancreas \
   --obs_cell_type "celltype" \
   --obs_batch "tech" \
+  --var_feature_name "index" \
   --layer_counts "counts" \
   --dataset_name "Human pancreas" \
   --dataset_url "https://theislab.github.io/scib-reproducibility/dataset_pancreas.html" \

@@ -22,6 +22,8 @@ nextflow run . \
   --obs_tissue "source" \
   --layer_counts "counts" \
   --obs_cell_type "cell_name" \
+  --var_feature_id "index" \
+  --var_feature_name "gene_short_name" \
   --dataset_name "sci-CAR cell lines" \
   --dataset_url "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117089" \
   --dataset_reference "cao2018joint" \

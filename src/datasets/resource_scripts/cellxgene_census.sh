@@ -149,4 +149,5 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --workspace 53907369739130 \
   --compute-env 1pK56PjjzeraOOC2LDZvN2 \
   --params-file "/tmp/params.yaml" \
-  --config /tmp/nextflow.config
+  --config /tmp/nextflow.config \
+  --labels cellxgene_census,dataset_loader

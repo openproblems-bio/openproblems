@@ -102,8 +102,23 @@ uns_metadata = {
 }
 adata.uns.update(uns_metadata)
 
-# TODO: fix var annotation
-# - add feature_id and feature_name
+print("Setting .var['feature_name']", flush=True)
+if par["var_feature_name"]:
+    if par["var_feature_name"] == "index":
+        adata.var["feature_name"] = adata.var.index
+    elif par["var_feature_name"] in adata.var:
+        adata.var["feature_name"] = adata.var[par["feature_name"]]
+    else:
+        print(f"Warning: key '{par['var_feature_name']}' could not be found in adata.var.", flush=True)
+
+print("Setting .var['feature_id']", flush=True)
+if par["var_feature_id"]:
+    if par["var_feature_id"] == "index":
+        adata.var["feature_id"] = adata.var.index
+    elif par["var_feature_id"] in adata.var:
+        adata.var["feature_id"] = adata.var[par["feature_id"]]
+    else:
+        print(f"Warning: key '{par['var_feature_id']}' could not be found in adata.var.", flush=True)
 
 print("Writing adata to file", flush=True)
 adata.write_h5ad(par["output"], compression="gzip")

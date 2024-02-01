@@ -8,12 +8,12 @@ functionality:
       description: |
         A component for processing a Common Dataset into a task-specific dataset.
   arguments:
-    - name: "--input_rna"
-      __merge__: file_common_dataset_rna.yaml
+    - name: "--input_mod1"
+      __merge__: file_common_dataset_mod1.yaml
       direction: input
       required: true
-    - name: "--input_other_mod"
-      __merge__: file_common_dataset_other_mod.yaml
+    - name: "--input_mod2"
+      __merge__: file_common_dataset_mod2.yaml
       direction: input
       required: true
     - name: "--output_train_mod1"

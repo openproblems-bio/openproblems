@@ -27,10 +27,10 @@ param_list:
 dataset_url: "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE194122"
 dataset_reference: luecken2021neurips
 normalization_methods: [log_cp10k, sqrt_cp10k, l1_sqrt]
-output_rna: '$id/dataset_rna.h5ad'
-output_other_mod: '$id/dataset_other_mod.h5ad'
-output_meta_rna: '$id/dataset_metadata_rna.yaml'
-output_meta_other_mod: '$id/dataset_metadata_other_mod.yaml'
+output_mod1: '$id/dataset_mod1.h5ad'
+output_mod2: '$id/dataset_mod2.h5ad'
+output_meta_mod1: '$id/dataset_metadata_mod1.yaml'
+output_meta_mod2: '$id/dataset_metadata_mod2.yaml'
 output_state: '$id/state.yaml'
 publish_dir: resources/datasets/openproblems_neurips2021
 HERE
