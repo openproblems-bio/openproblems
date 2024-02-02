@@ -1,4 +1,4 @@
-__merge__: ../../api/comp_control_method.yaml
+__merge__: ../../api/comp_method.yaml
 functionality:
   name: "diffusion_maps"
   info:
