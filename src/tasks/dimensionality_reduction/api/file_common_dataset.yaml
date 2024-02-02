@@ -13,6 +13,11 @@ info:
         name: normalized
         description: Normalized expression values
         required: true
+    obs: 
+      - type: string
+        name: cell_type
+        description: Classification of the cell type based on its characteristics and function within the tissue or organism.
+        required: true
     var:
       - type: double
         name: hvg_score

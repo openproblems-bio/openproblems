@@ -309,6 +309,8 @@
 
 * `methods/simlr`: Added new SIMLR method.
 
+* `metrics/clustering_performance`: Added new metric to assess clustering on the reduced dimensional embeddings using NMI and ARI.
+
 
 ## match_modalities (PR #201)
 
