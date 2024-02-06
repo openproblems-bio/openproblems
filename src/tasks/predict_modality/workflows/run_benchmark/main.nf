@@ -60,13 +60,13 @@ workflow run_wf {
       components: methods,
 
       // // use the 'filter' argument to only run a method on the normalisation the component is asking for
-      // filter: { id, state, comp ->
-      //   def norm = state.normalization_id
-      //   def pref = comp.config.functionality.info.preferred_normalization
-      //   // if the preferred normalisation is none at all,
-      //   // we can pass whichever dataset we want
-      //   (norm == "log_cp10k" && pref == "counts") || norm == pref
-      // },
+      filter: { id, state, comp ->
+        def norm = state.dataset_uns.normalization_id
+        def pref = comp.config.functionality.info.preferred_normalization
+        // if the preferred normalisation is none at all,
+        // we can pass whichever dataset we want
+        (norm == "log_cp10k" && pref == "counts") || norm == pref
+      },
 
       // define a new 'id' by appending the method name to the dataset id
       id: { id, state, comp ->
@@ -191,7 +191,7 @@ workflow run_wf {
       def mergedStates = states.inject([:]) { acc, m -> acc + m }
       [ids[0], mergedStates]
     }
-    
+
   emit:
   output_ch
 }
