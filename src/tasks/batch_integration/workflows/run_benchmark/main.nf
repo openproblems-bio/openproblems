@@ -81,7 +81,7 @@ workflow run_wf {
         // if the preferred normalisation is none at all,
         // we can pass whichever dataset we want
         def norm_check = (norm == "log_cp10k" && pref == "counts") || norm == pref
-        def method_check = state.method_ids.isEmpty() || state.method_ids.contains(comp.config.functionality.name)
+        def method_check = !state.method_ids || state.method_ids.contains(comp.config.functionality.name)
 
         method_check && norm_check
       },
