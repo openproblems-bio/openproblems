@@ -1,6 +1,5 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
-  status: disabled
   name: "scot"
   info:
     label: "Single Cell Optimal Transport"

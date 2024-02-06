@@ -60,7 +60,7 @@ functionality:
     - name: match_modalities/control_methods/random_features
     - name: match_modalities/control_methods/true_features
     - name: match_modalities/methods/fastmnn
-    # - name: match_modalities/methods/scot
+    - name: match_modalities/methods/scot
     - name: match_modalities/methods/harmonic_alignment
     - name: match_modalities/methods/procrustes
     - name: match_modalities/metrics/knn_auc
