@@ -15,7 +15,7 @@ workflow run_wf {
   methods = [
     random_features,
     true_features,
-    scot,
+    // scot,
     harmonic_alignment,
     fastmnn,
     procrustes
