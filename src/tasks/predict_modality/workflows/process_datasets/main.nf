@@ -53,7 +53,6 @@ workflow run_wf {
         ]
       }
     )
-    | view{"test: ${it}"}
 
     // remove datasets which didn't pass the schema check
     | filter { id, state ->
