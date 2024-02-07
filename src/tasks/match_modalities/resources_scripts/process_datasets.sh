@@ -30,4 +30,5 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --compute-env 1pK56PjjzeraOOC2LDZvN2 \
   --params-file /tmp/params.yaml \
   --entry-name auto \
-  --config /tmp/nextflow.config
+  --config /tmp/nextflow.config \
+  --labels match_modalities,process_datasets
