@@ -14,7 +14,7 @@ param_list:
     input_id: citeseq_cbmc
     dataset_name: "CITE-Seq CBMC"
     dataset_summary: "CITE-seq profiles of 8k Cord Blood Mononuclear Cells"
-    dataset_description: "8k cord blood mononuclear cells profiled by CITEsequsing a panel of 13 antibodies."
+    dataset_description: "8k cord blood mononuclear cells profiled by CITEseq using a panel of 13 antibodies."
     dataset_reference: stoeckius2017simultaneous
     dataset_url: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100866
     dataset_organism: homo_sapiens
