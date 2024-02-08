@@ -52,6 +52,7 @@ workflow run_wf {
         "input": "input_decompressed",
         "mod1": "mod1",
         "mod2": "mod2",
+        "dataset_id": "id",
         "dataset_name": "dataset_name",
         "dataset_url": "dataset_url",
         "dataset_reference": "dataset_reference",

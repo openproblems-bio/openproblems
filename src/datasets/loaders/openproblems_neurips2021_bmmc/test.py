@@ -40,6 +40,7 @@ out = subprocess.run(
     "--mod2", mod2,
     "--output_mod1", output_mod1_file,
     "--output_mod2", output_mod2_file,
+    "--dataset_id", "openproblems/neurips2021_bmmc",
     "--dataset_name", "BMMC (Multiome)",
     "--dataset_url", "http://foo.org",
     "--dataset_reference", "foo2000bar",

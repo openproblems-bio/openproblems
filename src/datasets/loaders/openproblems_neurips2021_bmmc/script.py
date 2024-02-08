@@ -7,6 +7,7 @@ par = {
   "input": "GSE194122_openproblems_neurips2021_cite_BMMC_processed.h5ad",
   "mod1": "GEX",
   "mod2": "ATAC",
+  "dataset_id": "openproblems/neurips2021_bmmc",
   "dataset_name": "BMMC (CITE-seq)",
   "dataset_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE194122",
   "dataset_reference": "Neurips",
