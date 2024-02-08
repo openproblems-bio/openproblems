@@ -132,7 +132,7 @@ jobs:
 
     - uses: viash-io/viash-actions/setup@v5
 
-    - uses: nf-core/setup-nextflow@v1.5.1
+    - uses: nf-core/setup-nextflow@v1.5.2
 
     # build target dir
     # use containers from integration_build branch, hopefully these are available
