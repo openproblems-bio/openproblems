@@ -36,14 +36,19 @@ ad2 <- anndata::read_h5ad(if (!par$swap) par$input_mod2 else par$input_mod1)
 ad1_mod <- unique(ad1$var[["feature_types"]])
 ad2_mod <- unique(ad2$var[["feature_types"]])
 
-# determine new dataset id
-new_dataset_id <- paste0(ad1$uns[["dataset_id"]], "_", tolower(ad1_mod), "2", tolower(ad2_mod))
-
 # determine new uns
 uns_vars <- c("dataset_id", "dataset_name", "dataset_url", "dataset_reference", "dataset_summary", "dataset_description", "dataset_organism", "normalization_id")
 ad1_uns <- ad2_uns <- ad1$uns[uns_vars]
 ad1_uns$modality <- ad1_mod
 ad2_uns$modality <- ad2_mod
+
+# Create new dataset id and name depending on the modality
+ad1_uns[["common_dataset_id"]] <- ad2_uns[["common_dataset_id"]] <- ad1_uns$dataset_id
+new_dataset_id <- paste0(ad1_uns$dataset_id, "_", ad1_mod, "2", ad2_mod)
+ad1_uns$dataset_id <- ad2_uns$dataset_id <- new_dataset_id
+
+new_dataset_name <- paste0(ad1_uns$dataset_name, " (", ad1_mod, "2", ad2_mod, ")")
+ad1_uns$dataset_name <- ad2_uns$dataset_name <- new_dataset_name
 
 # determine new obsm
 ad1_obsm <- ad2_obsm <- list()

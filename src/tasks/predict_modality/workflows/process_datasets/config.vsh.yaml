@@ -12,6 +12,10 @@ functionality:
           __merge__: "/src/tasks/predict_modality/api/file_common_dataset_mod2.yaml"
           direction: input
           required: true
+        - name: "--swap"
+          type: "boolean"
+          description: "Swap mod1 and mod2"
+          default: false
     - name: Outputs
       arguments:
         - name: "--output_train_mod1"
@@ -37,6 +41,7 @@ functionality:
     - path: /src/wf_utils/helper.nf
   dependencies:
     - name: common/check_dataset_schema
+    - name: common/extract_metadata
     - name: predict_modality/process_dataset
 platforms:
   - type: nextflow

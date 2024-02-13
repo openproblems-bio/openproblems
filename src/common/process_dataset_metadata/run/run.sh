@@ -31,7 +31,7 @@ for LOADER in $(aws s3 ls $DATASET_DIR); do
 
     for metafile in $metafiles; do
       INPUT="${FILE_DIR%/}/$metafile"
-      OUTPUT_DIR="../website/datasets/$LOADER/$DATASET"
+      OUTPUT_DIR="../website/datasets/$LOADER/${DATASET%/}/data/"
       OUTPUT_FILE="${metafile%.*}.json"
       echo "Processing $LOADER - $DATASET : $INPUT"
 

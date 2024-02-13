@@ -63,6 +63,10 @@ info:
         type: string
         description: The organism of the sample in the dataset.
         required: false
+      - name: normalization_id
+        type: string
+        description: The unique identifier of the normalization method used.
+        required: true
       - type: string
         name: gene_activity_var_names
         description: "Names of the gene activity matrix"

@@ -7,7 +7,7 @@ set -e
 REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "$REPO_ROOT"
 
-for TASK in "denoising" "dimensionality_reduction" "batch_integration" "label_projection"; do
+for TASK in "denoising" "dimensionality_reduction" "batch_integration" "label_projection" "match_modalities" "predict_modality"; do
 # for TASK in "label_projection"; do
   BASE_DIR="s3://openproblems-data/resources/$TASK/results/"
   

@@ -32,10 +32,18 @@ info:
         name: dataset_id
         description: "A unique identifier for the dataset"
         required: true
+      - type: string
+        name: common_dataset_id
+        description: "A common identifier for the dataset"
+        required: true
       - name: dataset_organism
         type: string
         description: The organism of the sample in the dataset.
         required: false
+      - name: normalization_id
+        type: string
+        description: The unique identifier of the normalization method used.
+        required: true
       - type: string
         name: gene_activity_var_names
         description: "Names of the gene activity matrix"

@@ -1,10 +1,14 @@
 #!/bin/bash
 
 cat > /tmp/params.yaml << 'HERE'
-id: predict_modality_process_datasets
+param_list:
+  - id: predict_modality_process_datasets
+    settings: '{"output_train_mod1": "$id/train_mod1.h5ad", "output_train_mod2": "$id/train_mod2.h5ad", "output_test_mod1": "$id/test_mod1.h5ad", "output_test_mod2": "$id/test_mod2.h5ad"}'
+  - id: predict_modality_process_datasets_swap
+    settings: '{"output_train_mod1": "$id/train_mod1.h5ad", "output_train_mod2": "$id/train_mod2.h5ad", "output_test_mod1": "$id/test_mod1.h5ad", "output_test_mod2": "$id/test_mod2.h5ad", "swap": true}'
+
 input_states: s3://openproblems-data/resources/datasets/**/state.yaml
 rename_keys: 'input_mod1:output_mod1,input_mod2:output_mod2'
-settings: '{"output_train_mod1": "$id/train_mod1.h5ad", "output_train_mod2": "$id/train_mod2.h5ad", "output_test_mod1": "$id/test_mod1.h5ad", "output_test_mod2": "$id/test_mod2.h5ad"}'
 output_state: "$id/state.yaml"
 publish_dir: s3://openproblems-data/resources/predict_modality/datasets
 HERE
