@@ -38,6 +38,7 @@ nextflow run . \
   --output_state '$id/state.yaml'
 
 echo "Run one method"
+
 viash run src/tasks/predict_modality/methods/knnr_py/config.vsh.yaml -- \
   --input_train_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite_GEX2ADT/train_mod1.h5ad \
   --input_train_mod2 $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite_GEX2ADT/train_mod2.h5ad \

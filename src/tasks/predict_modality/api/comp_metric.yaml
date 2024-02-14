@@ -25,6 +25,6 @@ functionality:
       path: /src/common/comp_tests/check_metric_config.py
     - type: python_script
       path: /src/common/comp_tests/run_and_check_adata.py
-    - path: /resources_test/predict_modality/openproblems_neurips2021/bmmc_cite
-      dest: resources_test/predict_modality/openproblems_neurips2021/bmmc_cite
+    - path: /resources_test/predict_modality/openproblems_neurips2021/bmmc_cite_GEX2ADT
+      dest: resources_test/predict_modality/openproblems_neurips2021/bmmc_cite_GEX2ADT
     - path: /src/common/library.bib
