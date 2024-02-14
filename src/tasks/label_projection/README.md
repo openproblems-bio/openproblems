@@ -78,10 +78,6 @@ A subset of the common dataset.
 
 Example file: `resources_test/common/pancreas/dataset.h5ad`
 
-Description:
-
-NA
-
 Format:
 
 <div class="small">
@@ -145,10 +141,6 @@ The training data
 
 Example file: `resources_test/label_projection/pancreas/train.h5ad`
 
-Description:
-
-NA
-
 Format:
 
 <div class="small">
@@ -186,10 +178,6 @@ The test data (without labels)
 
 Example file: `resources_test/label_projection/pancreas/test.h5ad`
 
-Description:
-
-NA
-
 Format:
 
 <div class="small">
@@ -225,10 +213,6 @@ Slot description:
 The solution for the test data
 
 Example file: `resources_test/label_projection/pancreas/solution.h5ad`
-
-Description:
-
-NA
 
 Format:
 
@@ -331,10 +315,6 @@ The prediction file
 
 Example file: `resources_test/label_projection/pancreas/prediction.h5ad`
 
-Description:
-
-NA
-
 Format:
 
 <div class="small">
@@ -363,10 +343,6 @@ Slot description:
 Metric score file
 
 Example file: `resources_test/label_projection/pancreas/score.h5ad`
-
-Description:
-
-NA
 
 Format:
 

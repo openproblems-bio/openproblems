@@ -194,16 +194,28 @@ render_file <- function(spec) {
     spec$info$label <- basename(spec$info$example)
   }
 
+  example <-
+    if (is.null(spec$info$example) || is.na(spec$info$example)) {
+      ""
+    } else {
+      paste0("Example file: `", spec$info$example, "`")
+    }
+
+  description <-
+    if (is.null(spec$info$description) || is.na(spec$info$description)) {
+      ""
+    } else {
+      paste0("Description:\n\n", spec$info$description)
+    }
+
   strip_margin(glue::glue("
     §## File format: {spec$info$label}
     §
     §{spec$info$summary %||% ''}
     §
-    §Example file: `{spec$info$example %|% '<Missing>'}`
+    §{example}
     §
-    §Description:
-    §
-    §{spec$info$description %||% ''}
+    §{description}
     §
     §Format:
     §

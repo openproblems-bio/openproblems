@@ -127,7 +127,7 @@ Slot description:
 | `obs["soma_joinid"]`                              | `integer` | (*Optional*) If the dataset was retrieved from CELLxGENE census, this is a unique identifier for the cell.                                                                                                                                                                                                                                                                                                                                                                                    |
 | `obs["size_factors"]`                             | `double`  | (*Optional*) The size factors created by the normalisation method, if any.                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `var["feature_id"]`                               | `string`  | (*Optional*) Unique identifier for the feature, usually a ENSEMBL gene id.                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `var["feature_name"]`                             | `string`  | (*Optional*) A human-readable name for the feature, usually a gene symbol.                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `var["feature_name"]`                             | `string`  | A human-readable name for the feature, usually a gene symbol.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `var["soma_joinid"]`                              | `integer` | (*Optional*) If the dataset was retrieved from CELLxGENE census, this is a unique identifier for the feature.                                                                                                                                                                                                                                                                                                                                                                                 |
 | `var["hvg"]`                                      | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `var["hvg_score"]`                                | `integer` | A ranking of the features by hvg.                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -176,10 +176,6 @@ The dataset to pass to a method.
 Example file:
 `resources_test/dimensionality_reduction/pancreas/dataset.h5ad`
 
-Description:
-
-NA
-
 Format:
 
 <div class="small">
@@ -212,15 +208,12 @@ The data for evaluating a dimensionality reduction.
 Example file:
 `resources_test/dimensionality_reduction/pancreas/solution.h5ad`
 
-Description:
-
-NA
-
 Format:
 
 <div class="small">
 
     AnnData object
+     obs: 'cell_type'
      var: 'hvg_score'
      layers: 'counts', 'normalized'
      uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'normalization_id'
@@ -231,19 +224,20 @@ Slot description:
 
 <div class="small">
 
-| Slot                         | Type      | Description                                                                          |
-|:-----------------------------|:----------|:-------------------------------------------------------------------------------------|
-| `var["hvg_score"]`           | `double`  | High variability gene score (normalized dispersion). The greater, the more variable. |
-| `layers["counts"]`           | `integer` | Raw counts.                                                                          |
-| `layers["normalized"]`       | `double`  | Normalized expression values.                                                        |
-| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                                 |
-| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                               |
-| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                             |
-| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published.       |
-| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                                    |
-| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                                     |
-| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                              |
-| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                                        |
+| Slot                         | Type      | Description                                                                                              |
+|:-----------------------------|:----------|:---------------------------------------------------------------------------------------------------------|
+| `obs["cell_type"]`           | `string`  | Classification of the cell type based on its characteristics and function within the tissue or organism. |
+| `var["hvg_score"]`           | `double`  | High variability gene score (normalized dispersion). The greater, the more variable.                     |
+| `layers["counts"]`           | `integer` | Raw counts.                                                                                              |
+| `layers["normalized"]`       | `double`  | Normalized expression values.                                                                            |
+| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                                                     |
+| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                                                   |
+| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                                                 |
+| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published.                           |
+| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                                                        |
+| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                                                         |
+| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                                                  |
+| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                                                            |
 
 </div>
 
@@ -310,10 +304,6 @@ A dataset with dimensionality reduction embedding.
 Example file:
 `resources_test/dimensionality_reduction/pancreas/embedding.h5ad`
 
-Description:
-
-NA
-
 Format:
 
 <div class="small">
@@ -343,10 +333,6 @@ Metric score file
 
 Example file:
 `resources_test/dimensionality_reduction/pancreas/score.h5ad`
-
-Description:
-
-NA
 
 Format:
 

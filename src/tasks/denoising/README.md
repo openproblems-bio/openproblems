@@ -135,7 +135,7 @@ Slot description:
 | `obs["soma_joinid"]`                              | `integer` | (*Optional*) If the dataset was retrieved from CELLxGENE census, this is a unique identifier for the cell.                                                                                                                                                                                                                                                                                                                                                                                    |
 | `obs["size_factors"]`                             | `double`  | (*Optional*) The size factors created by the normalisation method, if any.                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `var["feature_id"]`                               | `string`  | (*Optional*) Unique identifier for the feature, usually a ENSEMBL gene id.                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `var["feature_name"]`                             | `string`  | (*Optional*) A human-readable name for the feature, usually a gene symbol.                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `var["feature_name"]`                             | `string`  | A human-readable name for the feature, usually a gene symbol.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `var["soma_joinid"]`                              | `integer` | (*Optional*) If the dataset was retrieved from CELLxGENE census, this is a unique identifier for the feature.                                                                                                                                                                                                                                                                                                                                                                                 |
 | `var["hvg"]`                                      | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `var["hvg_score"]`                                | `integer` | A ranking of the features by hvg.                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -183,10 +183,6 @@ The subset of molecules used for the training dataset
 
 Example file: `resources_test/denoising/pancreas/train.h5ad`
 
-Description:
-
-NA
-
 Format:
 
 <div class="small">
@@ -213,10 +209,6 @@ Slot description:
 The subset of molecules used for the test dataset
 
 Example file: `resources_test/denoising/pancreas/test.h5ad`
-
-Description:
-
-NA
 
 Format:
 
@@ -306,10 +298,6 @@ Arguments:
 A denoised dataset as output by a denoising method.
 
 Example file: `resources_test/denoising/pancreas/denoised.h5ad`
-
-Description:
-
-NA
 
 Format:
 
