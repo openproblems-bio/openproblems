@@ -1,6 +1,7 @@
 name: predict_modality
 label: Predict Modality
 summary: "Predicting the profiles of one modality (e.g. protein abundance) from another (e.g. mRNA expression)."
+image: "thumbnail.svg"
 motivation: |
   Experimental techniques to measure multiple modalities within the same single cell are increasingly becoming available. 
   The demand for these measurements is driven by the promise to provide a deeper insight into the state of a cell. 
