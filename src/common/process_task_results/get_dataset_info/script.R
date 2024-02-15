@@ -28,6 +28,10 @@ outputs <- map(datasets, function(dataset) {
     "data_url" = dataset$dataset_url %||% NA_character_
   )
 
+  if (!is.null(dataset[["common_dataset_id"]])) {
+    out[["common_dataset_id"]] <- dataset[["common_dataset_id"]]
+  }
+
   # show warning when certain data is missing and return null?
   for (n in names(out)) {
     if (is.null(out[[n]])) {
