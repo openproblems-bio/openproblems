@@ -1,12 +1,12 @@
-OpenProblems v2
-================
+# OpenProblems v2
+
 
 Formalizing and benchmarking open problems in single-cell genomics.
 
 [**Visit the Open Problems Website.**](https://openproblems.bio/)
 
 To get started with developing a new method or metric, please see the
-[Contribution guidelines](CONTRIBUTING.md).
+[OpenProblems documentation](https://openproblems.bio/documentation/).
 
 ## Benefits of using Viash
 

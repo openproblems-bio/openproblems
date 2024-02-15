@@ -2,10 +2,11 @@
 title: Contributing to OpenProblems
 format: gfm
 toc: true
+toc-depth: 2
 engine: knitr
 ---
 
-[OpenProblems](https://openproblems.bio) is a community effort, and everyone is welcome to contribute. This project is hosted on [github.com/openproblems-bio/openproblems-v2](https://github.com/openproblems-bio/openproblems-v2).
+[OpenProblems](https://openproblems.bio) is a community effort, and everyone is welcome to contribute. This project is hosted on [github.com/openproblems-bio/openproblems-v2](https://github.com/openproblems-bio/openproblems-v2).  You can find a full in depth guide on how to contribute to this project on the [OpenProblems website](https://openproblems.bio/documentation/).
 
 ## Code of conduct {#code-of-conduct}
 
@@ -167,26 +168,30 @@ functionality:
     # a short label of your method
     label: Foo
 
-    paper_doi: "10.1234/1234.5678.1234567890"
+    # A multiline description of your method.
+    description: "Todo: fill in"
 
-    # if you don't have a Doi, you can specify a name, url and year manually:
-    # paper_name: "Nearest neighbor pattern classification"
-    # paper_url: "https://doi.org/10.1109/TIT.1967.1053964"
-    # paper_year: 1967
-    
-    repository_url: "https://github.com/my_organisation/foo"
+    # A short summary of the method description.
+    summary: "Todo: fill in"
+
+    # Add the bibtex reference to the "src/common/library.bib" if it is not already there.
+    reference: "cover1967nearest"
+
+    repository_url: "https://github.com/openproblems-bio/openproblems-v2"
+    documentation_url: "https://openproblems.bio/documentation/"
+    preferred_normalization: log_cp10k
   resources:
     - type: python_script
       path: script.py
 platforms:
   - type: docker
-    image: "python:3.10"
+    image: ghcr.io/openproblems-bio/base_python:1.0.2
     setup:
       - type: python
-        packages:
-          - anndata~=0.8.0
-          - scikit-learn
+        packages: [scikit-learn]
   - type: nextflow
+    directives:
+      label: [midtime, midmem, lowcpu]
 HERE
 
 cat > src/tasks/label_projection/methods/foo/script.py << HERE
@@ -239,6 +244,13 @@ You can view the interface of the executable by running the executable with the 
 
 ```{bash}
 viash run src/tasks/label_projection/methods/foo/config.vsh.yaml -- --help
+```
+
+Before running a new component, youy will need to create the docker container:
+
+```{bash}
+viash run src/tasks/label_projection/methods/foo/config.vsh.yaml -- ---setup cachedbuild
+
 ```
 
 You can **run the component** as follows:

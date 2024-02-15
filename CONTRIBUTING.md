@@ -1,25 +1,22 @@
-Contributing to OpenProblems
-================
+# Contributing to OpenProblems
 
-- <a href="#code-of-conduct" id="toc-code-of-conduct">Code of conduct</a>
-- <a href="#requirements" id="toc-requirements">Requirements</a>
-- <a href="#quick-start" id="toc-quick-start">Quick start</a>
-- <a href="#project-structure" id="toc-project-structure">Project
-  structure</a>
-- <a href="#adding-a-viash-component"
-  id="toc-adding-a-viash-component">Adding a Viash component</a>
-- <a href="#running-a-component-from-cli"
-  id="toc-running-a-component-from-cli">Running a component from CLI</a>
-- <a href="#building-a-component" id="toc-building-a-component">Building a
-  component</a>
-- <a href="#unit-testing-a-component"
-  id="toc-unit-testing-a-component">Unit testing a component</a>
-- <a href="#more-information" id="toc-more-information">More
-  information</a>
+
+- [Code of conduct](#code-of-conduct)
+- [Requirements](#requirements)
+- [Quick start](#quick-start)
+- [Project structure](#project-structure)
+- [Adding a Viash component](#adding-a-viash-component)
+- [Running a component from CLI](#running-a-component-from-cli)
+- [Building a component](#building-a-component)
+- [Unit testing a component](#unit-testing-a-component)
+- [More information](#more-information)
+- [Branch Naming Conventions](#branch-naming-conventions)
 
 [OpenProblems](https://openproblems.bio) is a community effort, and
 everyone is welcome to contribute. This project is hosted on
 [github.com/openproblems-bio/openproblems-v2](https://github.com/openproblems-bio/openproblems-v2).
+You can find a full in depth guide on how to contribute to this project
+on the [OpenProblems website](https://openproblems.bio/documentation/).
 
 ## Code of conduct
 
@@ -55,7 +52,7 @@ modality alignment benchmark. Running the full pipeline is quite easy.
 **Step 0, fetch Viash and Nextflow**
 
 ``` bash
-mkdir -p $HOME/bin
+mkdir $HOME/bin
 curl -fsSL get.viash.io | bash -s -- --bin $HOME/bin --tools false
 curl -s https://get.nextflow.io | bash; mv nextflow $HOME/bin
 ```
@@ -68,8 +65,8 @@ viash -v
 nextflow -v
 ```
 
-    viash 0.6.6 (c) 2020 Data Intuitive
-    nextflow version 22.10.4.5836
+    viash 0.8.0 (c) 2020 Data Intuitive
+    nextflow version 23.04.1.5866
 
 **Step 1, download test resources:** by running the following command.
 
@@ -93,7 +90,7 @@ viash ns build --query 'label_projection|common' --parallel --setup cachedbuild
 ```
 
     In development mode with 'dev'.
-    Exporting split_dataset (label_projection) =docker=> target/docker/label_projection/split_dataset
+    Exporting process_dataset (label_projection) =docker=> target/docker/label_projection/process_dataset
     Exporting accuracy (label_projection/metrics) =docker=> target/docker/label_projection/metrics/accuracy
     Exporting random_labels (label_projection/control_methods) =docker=> target/docker/label_projection/control_methods/random_labels
     [notice] Building container 'label_projection/control_methods_random_labels:dev' with Dockerfile
@@ -113,7 +110,8 @@ The command might take a while to run, since it is building a docker
 container for each of the components.
 
 **Step 3, run the pipeline with nextflow.** To do so, run the bash
-script located at `src/tasks/label_projection/workflows/run_nextflow.sh`:
+script located at
+`src/tasks/label_projection/workflows/run_nextflow.sh`:
 
 ``` bash
 src/tasks/label_projection/workflows/run/run_test.sh
@@ -159,7 +157,7 @@ Detailed overview of a task folder (e.g. `src/tasks/label_projection`):
     ├── metrics                Label projection metric components.
     ├── resources_scripts      The scripts needed to run the benchmark.
     ├── resources_test_scripts The scripts needed to generate the test resources (which are needed for unit testing).
-    ├── split_dataset          A component that masks a common dataset for use in the benchmark
+    ├── process_dataset        A component that masks a common dataset for use in the benchmark
     └── workflows              The benchmarking workflow.
 
 Detailed overview of the `src/datasets` folder:
@@ -183,7 +181,8 @@ You can start creating a new component by [creating a Viash
 component](https://viash.io/guide/component/creation/docker.html).
 
 For example, to create a new Python-based method named `foo`, create a
-Viash config at `src/tasks/label_projection/methods/foo/config.vsh.yaml`:
+Viash config at
+`src/tasks/label_projection/methods/foo/config.vsh.yaml`:
 
 ``` yaml
 __merge__: ../../api/comp_method.yaml
@@ -198,29 +197,34 @@ functionality:
     # a short label of your method
     label: Foo
 
-    paper_doi: "10.1234/1234.5678.1234567890"
+    # A multiline description of your method.
+    description: "Todo: fill in"
 
-    # if you don't have a Doi, you can specify a name, url and year manually:
-    # paper_name: "Nearest neighbor pattern classification"
-    # paper_url: "https://doi.org/10.1109/TIT.1967.1053964"
-    # paper_year: 1967
-    
-    code_url: "https://github.com/my_organisation/foo"
+    # A short summary of the method description.
+    summary: "Todo: fill in"
+
+    # Add the bibtex reference to the "src/common/library.bib" if it is not already there.
+    reference: "cover1967nearest"
+
+    repository_url: "https://github.com/openproblems-bio/openproblems-v2"
+    documentation_url: "https://openproblems.bio/documentation/"
+    preferred_normalization: log_cp10k
   resources:
     - type: python_script
       path: script.py
 platforms:
   - type: docker
-    image: "python:3.10"
+    image: ghcr.io/openproblems-bio/base_python:1.0.2
     setup:
       - type: python
-        packages:
-          - anndata~=0.8.0
-          - scikit-learn
+        packages: [scikit-learn]
   - type: nextflow
+    directives:
+      label: [midtime, midmem, lowcpu]
 ```
 
-And create a script at `src/tasks/label_projection/methods/foo/script.py`:
+And create a script at
+`src/tasks/label_projection/methods/foo/script.py`:
 
 ``` python
 import anndata as ad
@@ -267,19 +271,25 @@ viash run src/tasks/label_projection/methods/foo/config.vsh.yaml -- --help
 
     Arguments:
         --input_train
-            type: file, file must exist
-            example: training.h5ad
-            The training data
+            type: file, required parameter, file must exist
+            example: resources_test/label_projection/pancreas/train.h5ad
 
         --input_test
-            type: file, file must exist
-            example: test.h5ad
-            The test data (without labels)
+            type: file, required parameter, file must exist
+            example: resources_test/label_projection/pancreas/test.h5ad
 
         --output
-            type: file, output, file must exist
-            example: prediction.h5ad
-            The prediction file
+            type: file, required parameter, output, file must exist
+            example: resources_test/label_projection/pancreas/prediction.h5ad
+
+Before running a new component, youy will need to create the docker
+container:
+
+``` bash
+viash run src/tasks/label_projection/methods/foo/config.vsh.yaml -- ---setup cachedbuild
+```
+
+    [notice] Building container 'ghcr.io/openproblems-bio/label_projection/methods/foo:dev' with Dockerfile
 
 You can **run the component** as follows:
 
@@ -290,9 +300,6 @@ viash run src/tasks/label_projection/methods/foo/config.vsh.yaml -- \
   --output resources_test/label_projection/pancreas/prediction.h5ad
 ```
 
-    [notice] Checking if Docker image is available at 'ghcr.io/openproblems-bio/label_projection/methods_foo:dev'
-    [warning] Could not pull from 'ghcr.io/openproblems-bio/label_projection/methods_foo:dev'. Docker image doesn't exist or is not accessible.
-    [notice] Building container 'ghcr.io/openproblems-bio/label_projection/methods_foo:dev' with Dockerfile
     Load data
     Create predictions
     Add method name to uns
@@ -313,14 +320,10 @@ viash build src/tasks/label_projection/methods/foo/config.vsh.yaml \
   -o target/docker/label_projection/methods/foo
 ```
 
-<div>
-
-> **Note**
+> [!NOTE]
 >
-> The `viash_build` component does a much better job of setting up a
+> The `viash ns build` component does a much better job of setting up a
 > collection of components.
-
-</div>
 
 You can now view the same interface of the executable by running the
 executable with the `-h` parameter.
@@ -335,19 +338,16 @@ target/docker/label_projection/methods/foo/foo -h
 
     Arguments:
         --input_train
-            type: file, file must exist
-            example: training.h5ad
-            The training data
+            type: file, required parameter, file must exist
+            example: resources_test/label_projection/pancreas/train.h5ad
 
         --input_test
-            type: file, file must exist
-            example: test.h5ad
-            The test data (without labels)
+            type: file, required parameter, file must exist
+            example: resources_test/label_projection/pancreas/test.h5ad
 
         --output
-            type: file, output, file must exist
-            example: prediction.h5ad
-            The prediction file
+            type: file, required parameter, output, file must exist
+            example: resources_test/label_projection/pancreas/prediction.h5ad
 
 Or **run the component** as follows:
 
@@ -366,69 +366,85 @@ target/docker/label_projection/methods/foo/foo \
 ## Unit testing a component
 
 The [method API
-specifications](src/tasks/label_projection/api/comp_method.yaml) comes with a
-generic unit test for free. This means you can unit test your component
-using the **`viash test`** command.
+specifications](src/tasks/label_projection/api/comp_method.yaml) comes
+with a generic unit test for free. This means you can unit test your
+component using the **`viash test`** command.
 
 ``` bash
 viash test src/tasks/label_projection/methods/foo/config.vsh.yaml
 ```
 
-    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo17760509097337858011'
+    Running tests in temporary directory: '/tmp/viash_test_foo11070556749764805852'
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo17760509097337858011/build_executable/foo ---verbosity 6 ---setup cachedbuild
-    [notice] Building container 'ghcr.io/openproblems-bio/label_projection/methods_foo:test_nGvjdE' with Dockerfile
-    [info] Running 'docker build -t ghcr.io/openproblems-bio/label_projection/methods_foo:test_nGvjdE /home/rcannood/workspace/viash_temp/viash_test_foo17760509097337858011/build_executable -f /home/rcannood/workspace/viash_temp/viash_test_foo17760509097337858011/build_executable/tmp/dockerbuild-foo-C7VuUU/Dockerfile'
-    Sending build context to Docker daemon  39.94kB
+    +/tmp/viash_test_foo11070556749764805852/build_executable/foo ---verbosity 6 ---setup cachedbuild
+    [notice] Building container 'ghcr.io/openproblems-bio/label_projection/methods/foo:test' with Dockerfile
+    [info] Running 'docker build -t ghcr.io/openproblems-bio/label_projection/methods/foo:test /tmp/viash_test_foo11070556749764805852/build_executable -f /tmp/viash_test_foo11070556749764805852/build_executable/tmp/dockerbuild-foo-VMKj2u/Dockerfile'
+    #0 building with "default" instance using docker driver
 
-    Step 1/7 : FROM python:3.10
-     ---> 465483cdaa4e
-    Step 2/7 : RUN pip install --upgrade pip &&   pip install --upgrade --no-cache-dir "anndata~=0.8.0" "scikit-learn"
-     ---> Using cache
-     ---> 91f658ec0590
-    Step 3/7 : LABEL org.opencontainers.image.description="Companion container for running component label_projection/methods foo"
-     ---> Using cache
-     ---> f1ace85a71b0
-    Step 4/7 : LABEL org.opencontainers.image.created="2022-12-17T08:47:34+01:00"
-     ---> Running in 299ea3924905
-    Removing intermediate container 299ea3924905
-     ---> 6fc97da56de8
-    Step 5/7 : LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems-v2"
-     ---> Running in bf60068c5fe8
-    Removing intermediate container bf60068c5fe8
-     ---> 20ff545ec27a
-    Step 6/7 : LABEL org.opencontainers.image.revision="8a4877920fc79009dcb1e4bb16674b3b441c75ab"
-     ---> Running in c4410d3a7c78
-    Removing intermediate container c4410d3a7c78
-     ---> 1a57a0d9a7e5
-    Step 7/7 : LABEL org.opencontainers.image.version="test_nGvjdE"
-     ---> Running in 81d7a66aa40a
-    Removing intermediate container 81d7a66aa40a
-     ---> 9d84592b1c1e
-    Successfully built 9d84592b1c1e
-    Successfully tagged ghcr.io/openproblems-bio/label_projection/methods_foo:test_nGvjdE
+    #1 [internal] load build definition from Dockerfile
+    #1 transferring dockerfile: 658B done
+    #1 DONE 0.1s
+
+    #2 [internal] load .dockerignore
+    #2 transferring context: 2B done
+    #2 DONE 0.1s
+
+    #3 [internal] load metadata for ghcr.io/openproblems-bio/base_python:1.0.2
+    #3 DONE 0.3s
+
+    #4 [1/2] FROM ghcr.io/openproblems-bio/base_python:1.0.2@sha256:65a577a3de37665b7a65548cb33c9153b6881742345593d33fe02919c8d66a20
+    #4 DONE 0.0s
+
+    #5 [2/2] RUN pip install --upgrade pip &&   pip install --upgrade --no-cache-dir "scikit-learn"
+    #5 CACHED
+
+    #6 exporting to image
+    #6 exporting layers done
+    #6 writing image sha256:b5c134ce2ab91a0e616d7362f6bd168e6494c4a1bd7c643d62d7ad65d8678c5b done
+    #6 naming to ghcr.io/openproblems-bio/label_projection/methods/foo:test 0.0s done
+    #6 DONE 0.0s
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo17760509097337858011/test_generic_test/test_executable
+    +/tmp/viash_test_foo11070556749764805852/test_check_method_config/test_executable
+    Load config data
+    Check general fields
+    Check info fields
+    Check platform fields
+    All checks succeeded!
+    ====================================================================
+    +/tmp/viash_test_foo11070556749764805852/test_run_and_check_adata/test_executable
+    >> Running test 'run'
+    >> Checking whether input files exist
     >> Running script as test
+    Load data
+    Create predictions
+    Add method name to uns
+    Write output to file
     >> Checking whether output file exists
-    >> Reading h5ad files
-    input_test: AnnData object with n_obs × n_vars = 130 × 443
+    >> Reading h5ad files and checking formats
+    Reading and checking input_train
+      AnnData object with n_obs × n_vars = 326 × 500
+        obs: 'label', 'batch'
+        var: 'hvg', 'hvg_score'
+        uns: 'dataset_id', 'normalization_id'
+        obsm: 'X_pca'
+        layers: 'counts', 'normalized'
+    Reading and checking input_test
+      AnnData object with n_obs × n_vars = 174 × 500
         obs: 'batch'
         var: 'hvg', 'hvg_score'
         uns: 'dataset_id', 'normalization_id'
         obsm: 'X_pca'
         layers: 'counts', 'normalized'
-    output: AnnData object with n_obs × n_vars = 130 × 443
+    Reading and checking output
+      AnnData object with n_obs × n_vars = 174 × 500
         obs: 'batch', 'label_pred'
         var: 'hvg', 'hvg_score'
         uns: 'dataset_id', 'method_id', 'normalization_id'
         obsm: 'X_pca'
         layers: 'counts', 'normalized'
-    >> Checking whether predictions were added
-    Checking whether data from input was copied properly to output
     All checks succeeded!
     ====================================================================
-    [32mSUCCESS! All 1 out of 1 test scripts succeeded![0m
+    SUCCESS! All 2 out of 2 test scripts succeeded!
     Cleaning up temporary directory
 
 Let’s introduce a bug in the script and try running the test again. For
@@ -471,73 +487,95 @@ all of the required output slots.
 viash test src/tasks/label_projection/methods/foo/config.vsh.yaml
 ```
 
-    Running tests in temporary directory: '/home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128'
+    Running tests in temporary directory: '/tmp/viash_test_foo11839237358029204600'
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128/build_executable/foo ---verbosity 6 ---setup cachedbuild
-    [notice] Building container 'ghcr.io/openproblems-bio/label_projection/methods_foo:test_lnevgh' with Dockerfile
-    [info] Running 'docker build -t ghcr.io/openproblems-bio/label_projection/methods_foo:test_lnevgh /home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128/build_executable -f /home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128/build_executable/tmp/dockerbuild-foo-VUcsWQ/Dockerfile'
-    Sending build context to Docker daemon  39.94kB
+    +/tmp/viash_test_foo11839237358029204600/build_executable/foo ---verbosity 6 ---setup cachedbuild
+    [notice] Building container 'ghcr.io/openproblems-bio/label_projection/methods/foo:test' with Dockerfile
+    [info] Running 'docker build -t ghcr.io/openproblems-bio/label_projection/methods/foo:test /tmp/viash_test_foo11839237358029204600/build_executable -f /tmp/viash_test_foo11839237358029204600/build_executable/tmp/dockerbuild-foo-gPvc8b/Dockerfile'
+    #0 building with "default" instance using docker driver
 
-    Step 1/7 : FROM python:3.10
-     ---> 465483cdaa4e
-    Step 2/7 : RUN pip install --upgrade pip &&   pip install --upgrade --no-cache-dir "anndata~=0.8.0" "scikit-learn"
-     ---> Using cache
-     ---> 91f658ec0590
-    Step 3/7 : LABEL org.opencontainers.image.description="Companion container for running component label_projection/methods foo"
-     ---> Using cache
-     ---> f1ace85a71b0
-    Step 4/7 : LABEL org.opencontainers.image.created="2022-12-17T08:47:52+01:00"
-     ---> Running in ae1e366b6410
-    Removing intermediate container ae1e366b6410
-     ---> 458c1b49e8b4
-    Step 5/7 : LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems-v2"
-     ---> Running in 06a244e7be1e
-    Removing intermediate container 06a244e7be1e
-     ---> cc48147df9e8
-    Step 6/7 : LABEL org.opencontainers.image.revision="8a4877920fc79009dcb1e4bb16674b3b441c75ab"
-     ---> Running in 2372d2bddd3d
-    Removing intermediate container 2372d2bddd3d
-     ---> 7bcad47b5d1b
-    Step 7/7 : LABEL org.opencontainers.image.version="test_lnevgh"
-     ---> Running in 6499fcfa63af
-    Removing intermediate container 6499fcfa63af
-     ---> 2213de86e5bc
-    Successfully built 2213de86e5bc
-    Successfully tagged ghcr.io/openproblems-bio/label_projection/methods_foo:test_lnevgh
+    #1 [internal] load build definition from Dockerfile
+    #1 transferring dockerfile: 658B done
+    #1 DONE 0.1s
+
+    #2 [internal] load .dockerignore
+    #2 transferring context: 2B done
+    #2 DONE 0.1s
+
+    #3 [internal] load metadata for ghcr.io/openproblems-bio/base_python:1.0.2
+    #3 DONE 0.3s
+
+    #4 [1/2] FROM ghcr.io/openproblems-bio/base_python:1.0.2@sha256:65a577a3de37665b7a65548cb33c9153b6881742345593d33fe02919c8d66a20
+    #4 DONE 0.0s
+
+    #5 [2/2] RUN pip install --upgrade pip &&   pip install --upgrade --no-cache-dir "scikit-learn"
+    #5 CACHED
+
+    #6 exporting to image
+    #6 exporting layers done
+    #6 writing image sha256:939f5846475192d821898f663f15872432e7a2c9033b38ac9b9522155270daf4 done
+    #6 naming to ghcr.io/openproblems-bio/label_projection/methods/foo:test 0.0s done
+    #6 DONE 0.0s
     ====================================================================
-    +/home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128/test_generic_test/test_executable
-    Traceback (most recent call last):
+    +/tmp/viash_test_foo11839237358029204600/test_check_method_config/test_executable
+    Load config data
+    Check general fields
+    Check info fields
+    Check platform fields
+    All checks succeeded!
+    ====================================================================
+    +/tmp/viash_test_foo11839237358029204600/test_run_and_check_adata/test_executable
+    >> Running test 'run'
+    >> Checking whether input files exist
     >> Running script as test
+    Load data
+    Not creating any predictions!!!
+    Not adding method name to uns!!!
+    Write output to file
     >> Checking whether output file exists
-      File "/viash_automount/home/rcannood/workspace/viash_temp/viash_test_foo4037451094287802128/test_generic_test/tmp//viash-run-foo-BVsf0m.py", line 57, in <module>
-    >> Reading h5ad files
-        assert "label_pred" in output.obs
-    input_test: AnnData object with n_obs × n_vars = 130 × 443
-    AssertionError
+    >> Reading h5ad files and checking formats
+    Reading and checking input_train
+      AnnData object with n_obs × n_vars = 326 × 500
+        obs: 'label', 'batch'
+        var: 'hvg', 'hvg_score'
+        uns: 'dataset_id', 'normalization_id'
+        obsm: 'X_pca'
+        layers: 'counts', 'normalized'
+    Reading and checking input_test
+      AnnData object with n_obs × n_vars = 174 × 500
         obs: 'batch'
         var: 'hvg', 'hvg_score'
         uns: 'dataset_id', 'normalization_id'
         obsm: 'X_pca'
         layers: 'counts', 'normalized'
-    output: AnnData object with n_obs × n_vars = 130 × 443
+    Reading and checking output
+      AnnData object with n_obs × n_vars = 174 × 500
+    Traceback (most recent call last):
         obs: 'batch'
         var: 'hvg', 'hvg_score'
+      File "/viash_automount/tmp/viash_test_foo11839237358029204600/test_run_and_check_adata/tmp//viash-run-foo-22aQh6.py", line 138, in <module>
         uns: 'dataset_id', 'normalization_id'
+        run_and_check(argset_args, cmd)
         obsm: 'X_pca'
+      File "/viash_automount/tmp/viash_test_foo11839237358029204600/test_run_and_check_adata/tmp//viash-run-foo-22aQh6.py", line 81, in run_and_check
         layers: 'counts', 'normalized'
-    >> Checking whether predictions were added
+        check_slots(adata, arg)
+      File "/viash_automount/tmp/viash_test_foo11839237358029204600/test_run_and_check_adata/tmp//viash-run-foo-22aQh6.py", line 48, in check_slots
+        assert slot_item["name"] in struc_x,\
+    AssertionError: File 'output.h5ad' is missing slot .obs['label_pred']
     ====================================================================
-    [31mERROR! Only 0 out of 1 test scripts succeeded![0m
+    ERROR! Only 1 out of 2 test scripts succeeded!
     Unexpected error occurred! If you think this is a bug, please post
     create an issue at https://github.com/viash-io/viash/issues containing
     a reproducible example and the stack trace below.
 
-    viash - 0.6.6
+    viash - 0.8.0
     Stacktrace:
-    java.lang.RuntimeException: Only 0 out of 1 test scripts succeeded!
-        at io.viash.ViashTest$.apply(ViashTest.scala:111)
-        at io.viash.Main$.internalMain(Main.scala:185)
-        at io.viash.Main$.main(Main.scala:77)
+    java.lang.RuntimeException: Only 1 out of 2 test scripts succeeded!
+        at io.viash.ViashTest$.apply(ViashTest.scala:134)
+        at io.viash.Main$.mainCLI(Main.scala:253)
+        at io.viash.Main$.mainCLIOrVersioned(Main.scala:123)
+        at io.viash.Main$.main(Main.scala:58)
         at io.viash.Main.main(Main.scala)
 
 ## More information
@@ -548,3 +586,54 @@ and the [Guide](https://viash.io/guide/) will help you get started with
 creating components from scratch.
 
 <!-- cleaning up temporary files -->
+
+## Branch Naming Conventions
+
+### Category
+
+A git branch should start with a category. Pick one of these: feature,
+bugfix, hotfix, or test.
+
+- `feature` is for adding, refactoring or removing a feature
+- `bugfix` is for fixing a bug
+- `hotfix` is for changing code with a temporary solution and/or without
+  following the usual process (usually because of an emergency)
+- `test` is for experimenting outside of an issue/ticket
+- `doc` is for adding, changing or removing documentation
+
+### Reference
+
+After the category, there should be a “`/`” followed by the reference of
+the issue/ticket/task you are working on. If there’s no reference, just
+add no-ref. With task it is meant as benchmarking task
+e.g. batch_integration
+
+### Description
+
+After the reference, there should be another “`/`” followed by a
+description which sums up the purpose of this specific branch. This
+description should be short and “kebab-cased”.
+
+By default, you can use the title of the issue/ticket you are working
+on. Just replace any special character by “`-`”.
+
+### To sum up, follow this pattern when branching:
+
+``` bash
+git branch <category/reference/description-in-kebab-case>
+```
+
+### Examples
+
+- You need to add, refactor or remove a feature:
+  `git branch feature/issue-42/create-new-button-component`
+- You need to fix a bug:
+  `git branch bugfix/issue-342/button-overlap-form-on-mobile`
+- You need to fix a bug really fast (possibly with a temporary
+  solution): `git branch hotfix/no-ref/registration-form-not-working`
+- You need to experiment outside of an issue/ticket:
+  `git branch test/no-ref/refactor-components-with-atomic-design`
+
+### References
+
+- [a-simplified-convention-for-naming-branches-and-commits-in-git](https://dev.to/varbsan/a-simplified-convention-for-naming-branches-and-commits-in-git-il4)
