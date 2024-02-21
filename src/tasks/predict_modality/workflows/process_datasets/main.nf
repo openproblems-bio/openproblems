@@ -13,25 +13,9 @@ workflow run_wf {
 
   main:
 
-  direction = Channel.of("normal", "swap")
-
   output_ch = input_ch
   
-    | combine(direction)
-
-    // Add swap direction to the state and set new id
-    | map{id, state, dir -> 
-      // Add direction (normal / swap) to id  
-      // Note: this id is added before the normalisation id  
-      // Example old id: dataset_loader/dataset_id/normalization_id  
-      // Example new id: dataset_loader/dataset_id_direction/normalization_id
-      def id_split = id.tokenize("/")
-      def norm = id_split.takeRight(1)[0]
-      def new_id = id_split.dropRight(1).join("/") + "_" + dir + "/" + norm
-      
-      [new_id, state + [direction: dir, "_meta": [join_id: id]]]
-    }
-
+    // Check if the input datasets match the desired format --------------------------------
     | check_dataset_schema.run(
       key: "check_dataset_schema_mod1",
       fromState: { id, state ->
@@ -78,6 +62,35 @@ workflow run_wf {
       state.dataset_mod2 != null
     }
 
+    // Use datasets in both directions (mod1 -> mod2 and mod2 -> mod1) ---------------------
+    // extract the dataset metadata
+    | extract_metadata.run(
+      key: "extract_metadata",
+      fromState: [input: "dataset_mod1"],
+      toState: { id, output, state ->
+        def uns = readYaml(output.output).uns
+        state + [
+          "dataset_id": uns.dataset_id,
+          "normalization_id": uns.normalization_id
+        ]
+      }
+    )
+
+    // Add swap direction to the state and set new id
+    | flatMap{id, state -> 
+      ["normal", "swap"].collect { dir ->
+        // Add direction (normal / swap) to id  
+        // Note: this id is added before the normalisation id  
+        // Example old id: dataset_loader/dataset_id/normalization_id  
+        // Example new id: dataset_loader/dataset_id/direction/normalization_id
+        def left = id.replaceAll("/${state.normalization_id}\$", "")
+        def right = id.replaceAll("^${left}", "")
+        def new_id = left + "/" + dir + right
+
+        [new_id, state + [direction: dir, "_meta": [join_id: id]]]
+      }
+    }
+
     | process_dataset.run(
       fromState: { id, state ->
         def swap_state = state.direction == "swap" ? true : false
@@ -99,36 +112,14 @@ workflow run_wf {
       ]
     )
 
-    // extract the dataset metadata
-    | extract_metadata.run(
-      key: "extract_metadata_mod1",
-      fromState: [input: "output_train_mod1"],
-      toState: { id, output, state ->
-        state + [
-          modality_mod1: readYaml(output.output).uns.modality
-        ]
-      }
-    )
-
-    // extract the dataset metadata
-    | extract_metadata.run(
-      key: "extract_metadata_mod2",
-      fromState: [input: "output_train_mod2"],
-      toState: { id, output, state ->
-        state + [
-          modality_mod2: readYaml(output.output).uns.modality
-        ]
-      }
-    )
-
     // only output the files for which an output file was specified
     | setState ([
-        "output_train_mod1",
-        "output_train_mod2",
-        "output_test_mod1",
-        "output_test_mod2",
-        "_meta"
-      ])
+      "output_train_mod1",
+      "output_train_mod2",
+      "output_test_mod1",
+      "output_test_mod2",
+      "_meta"
+    ])
 
   emit:
   output_ch

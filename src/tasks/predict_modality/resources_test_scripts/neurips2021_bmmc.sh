@@ -28,25 +28,25 @@ nextflow run . \
 echo "Run one method"
 
 viash run src/tasks/predict_modality/methods/knnr_py/config.vsh.yaml -- \
-  --input_train_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite_GEX2ADT/train_mod1.h5ad \
-  --input_train_mod2 $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite_GEX2ADT/train_mod2.h5ad \
-  --input_test_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite_GEX2ADT/test_mod1.h5ad \
-  --output $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite_GEX2ADT/prediction.h5ad
+  --input_train_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite/normal/train_mod1.h5ad \
+  --input_train_mod2 $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite/normal/train_mod2.h5ad \
+  --input_test_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite/normal/test_mod1.h5ad \
+  --output $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite/normal/prediction.h5ad
 
 viash run src/tasks/predict_modality/methods/knnr_py/config.vsh.yaml -- \
-  --input_train_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite_ADT2GEX/train_mod1.h5ad \
-  --input_train_mod2 $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite_ADT2GEX/train_mod2.h5ad \
-  --input_test_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite_ADT2GEX/test_mod1.h5ad \
-  --output $OUTPUT_DIR/openproblems_neurips2021/bmmc_cite_ADT2GEX/prediction.h5ad
+  --input_train_mod1 $OUTPUT_DIR//openproblems_neurips2021/bmmc_cite/swap/train_mod1.h5ad \
+  --input_train_mod2 $OUTPUT_DIR//openproblems_neurips2021/bmmc_cite/swap/train_mod2.h5ad \
+  --input_test_mod1 $OUTPUT_DIR//openproblems_neurips2021/bmmc_cite/swap/test_mod1.h5ad \
+  --output $OUTPUT_DIR//openproblems_neurips2021/bmmc_cite/swap/prediction.h5ad
 
 viash run src/tasks/predict_modality/methods/knnr_py/config.vsh.yaml -- \
-  --input_train_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome_GEX2ATAC/train_mod1.h5ad \
-  --input_train_mod2 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome_GEX2ATAC/train_mod2.h5ad \
-  --input_test_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome_GEX2ATAC/test_mod1.h5ad \
-  --output $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome_GEX2ATAC/prediction.h5ad
+  --input_train_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome/normal/train_mod1.h5ad \
+  --input_train_mod2 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome/normal/train_mod2.h5ad \
+  --input_test_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome/normal/test_mod1.h5ad \
+  --output $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome/normal/prediction.h5ad
 
 viash run src/tasks/predict_modality/methods/knnr_py/config.vsh.yaml -- \
-  --input_train_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome_ATAC2GEX/train_mod1.h5ad \
-  --input_train_mod2 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome_ATAC2GEX/train_mod2.h5ad \
-  --input_test_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome_ATAC2GEX/test_mod1.h5ad \
-  --output $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome_ATAC2GEX/prediction.h5ad
+  --input_train_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome/swap/train_mod1.h5ad \
+  --input_train_mod2 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome/swap/train_mod2.h5ad \
+  --input_test_mod1 $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome/swap/test_mod1.h5ad \
+  --output $OUTPUT_DIR/openproblems_neurips2021/bmmc_multiome/swap/prediction.h5ad
