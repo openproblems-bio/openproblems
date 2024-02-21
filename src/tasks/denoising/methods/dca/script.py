@@ -1,6 +1,5 @@
 import anndata as ad
 from dca.api import dca
-import scipy
 
 ## VIASH START
 par = {
@@ -14,18 +13,27 @@ meta = {
 ## VIASH END
 
 print("load input data", flush=True)
-input_train = ad.read_h5ad(par['input_train'])
+input_train = ad.read_h5ad(par['input_train'], backed="r")
 
-print("move layer to X", flush=True)
-input_dca = ad.AnnData(X=input_train.layers["counts"])
-del input_train.X
+print("Remove unneeded data", flush=True)
+output = ad.AnnData(
+    X=input_train.layers["counts"],
+    obs=input_train.obs[[]],
+    var=input_train.var[[]],
+    uns={
+        "dataset_id": input_train.uns["dataset_id"],
+        "method_id": meta["functionality_name"]
+    }
+)
 
-print("running dca", flush=True)
-dca(input_dca, epochs=par["epochs"])
+del input_train
 
-print("moving X back to layer", flush=True)
-input_train.layers["denoised"] = scipy.sparse.csr_matrix(input_dca.X)
+print("Run DCA", flush=True)
+dca(output, epochs=par["epochs"])
+
+print("Move output to correct location", flush=True)
+output.layers["denoised"] = output.X
+del output.X
 
 print("Writing data", flush=True)
-input_train.uns["method_id"] = meta["functionality_name"]
-input_train.write_h5ad(par["output"], compression="gzip")
+output.write_h5ad(par["output"], compression="gzip")

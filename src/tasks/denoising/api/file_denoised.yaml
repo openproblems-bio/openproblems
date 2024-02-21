@@ -4,11 +4,7 @@ info:
   label: "Denoised data"
   summary: A denoised dataset as output by a denoising method.
   slots:
-    layers: 
-      - type: integer
-        name: counts
-        description: Raw counts
-        required: true
+    layers:
       - type: integer
         name: denoised
         description: denoised data

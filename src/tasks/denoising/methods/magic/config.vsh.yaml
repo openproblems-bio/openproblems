@@ -25,7 +25,7 @@ functionality:
       magic:
       magic_approx:
         solver: approximate
-      knn_naive:
+      magic_knn_naive:
         norm: log
         decay: none
         t: 1
@@ -39,7 +39,7 @@ functionality:
     - name: "--norm"
       type: string
       choices: ["sqrt", "log"]
-      default: "sqrt"
+      default: "log"
       description: Normalization method
     - name: "--decay"
       type: integer
@@ -60,4 +60,4 @@ platforms:
         pip: [scprep, magic-impute, scipy, scikit-learn<1.2]
   - type: nextflow
     directives: 
-      label: [ "midtime", highmem, highcpu ]
+      label: [midtime, highmem, highcpu]

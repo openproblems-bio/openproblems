@@ -5,9 +5,8 @@ functionality:
     metrics:
       - name: poisson
         label: Poisson Loss
-        summary: "The Poisson log lieklihood of the true counts observed in the distribution of denoised counts"
-        description: "The Poisson log likelihood of observing the true counts of the test dataset
-          given the distribution given in the denoised dataset."
+        summary: "The Poisson log likelihood of the true counts observed in the distribution of denoised counts"
+        description: "The Poisson log likelihood of observing the true counts of the test dataset given the distribution given in the denoised dataset."
         reference: batson2019molecular
         v1:
           path: openproblems/tasks/denoising/metrics/poisson.py

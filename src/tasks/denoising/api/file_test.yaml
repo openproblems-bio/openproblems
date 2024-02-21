@@ -38,3 +38,7 @@ info:
         type: string
         description: The organism of the sample in the dataset.
         required: false
+      - name: train_sum
+        type: integer
+        description: The total number of counts in the training dataset.
+        required: true

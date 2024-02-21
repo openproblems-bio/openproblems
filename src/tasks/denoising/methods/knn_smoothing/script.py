@@ -1,7 +1,5 @@
 import knn_smooth
-import numpy as np
 import anndata as ad
-import scipy
 
 ## VIASH START
 par = {
@@ -14,12 +12,28 @@ meta = {
 ## VIASH END
 
 print("Load input data", flush=True)
-input_train = ad.read_h5ad(par["input_train"])
+input_train = ad.read_h5ad(par["input_train"], backed="r")
 
-print("process data", flush=True)
-X = input_train.layers["counts"].transpose().toarray()
-input_train.layers["denoised"] = scipy.sparse.csr_matrix((knn_smooth.knn_smoothing(X, k=10)).transpose())
+print("Remove unneeded data", flush=True)
+X = input_train.layers["counts"].astype(float).transpose().toarray()
+
+# Create output AnnData for later use
+output = ad.AnnData(
+    obs=input_train.obs[[]],
+    var=input_train.var[[]],
+    uns={
+        "dataset_id": input_train.uns["dataset_id"],
+        "method_id": meta["functionality_name"]
+    }
+)
+
+del input_train
+
+print("Run KNN smoothing", flush=True)
+X = knn_smooth.knn_smoothing(X, k=10).transpose()
+
+print("Process data", flush=True)
+output.layers["denoised"] = X
 
 print("Writing data", flush=True)
-input_train.uns["method_id"] = meta["functionality_name"]
-input_train.write_h5ad(par["output"], compression="gzip")
+output.write_h5ad(par["output"], compression="gzip")

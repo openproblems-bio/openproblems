@@ -14,15 +14,15 @@ meta = {
 ## VIASH END
 
 print("Load Data", flush=True)
-input_denoised = ad.read_h5ad(par['input_denoised'])
-input_test = ad.read_h5ad(par['input_test'])
+input_denoised = ad.read_h5ad(par['input_denoised'], backed="r")
+input_test = ad.read_h5ad(par['input_test'], backed="r")
 
-test_data = input_test.layers["counts"].toarray()
-denoised_data = input_denoised.layers["denoised"].toarray()
+test_data = scprep.utils.toarray(input_test.layers["counts"])
+denoised_data = scprep.utils.toarray(input_denoised.layers["denoised"])
 
 print("Compute metric value", flush=True)
 # scaling
-initial_sum = input_denoised.layers["counts"].sum()
+initial_sum = input_test.uns["train_sum"]
 target_sum = test_data.sum()
 denoised_data = denoised_data * target_sum / initial_sum
 
@@ -31,21 +31,16 @@ denoised_data = denoised_data * target_sum / initial_sum
 def poisson_nll_loss(y_pred: np.ndarray, y_true: np.ndarray) -> float:
     return (y_pred - y_true * np.log(y_pred + 1e-6)).mean()
 
-error = poisson_nll_loss(scprep.utils.toarray(test_data), denoised_data)
+error = poisson_nll_loss(test_data, denoised_data)
 
 print("Store poisson value", flush=True)
-output_metric = ad.AnnData(
-    layers={},
-    obs=input_denoised.obs[[]],
-    var=input_denoised.var[[]],
-    uns={}
+output = ad.AnnData(
+    uns={ key: val for key, val in input_test.uns.items() },
 )
 
-for key in input_denoised.uns_keys():
-    output_metric.uns[key] = input_denoised.uns[key]
-    
-output_metric.uns["metric_ids"] = meta['functionality_name']
-output_metric.uns["metric_values"] = error
+output.uns["method_id"] = input_denoised.uns["method_id"]
+output.uns["metric_ids"] = meta['functionality_name']
+output.uns["metric_values"] = error
 
 print("Write adata to file", flush=True)
-output_metric.write_h5ad(par['output'], compression="gzip")
+output.write_h5ad(par['output'], compression="gzip")

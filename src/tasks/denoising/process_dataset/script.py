@@ -11,7 +11,7 @@ par = {
     'seed': 0
 }
 meta = {
-    "functionality_name": "split_data",
+    "functionality_name": "process_dataset",
     "resources_dir": "src/tasks/denoising/process_dataset"
 }
 ## VIASH END
@@ -46,20 +46,23 @@ X_test.data = test_data
 X_train.eliminate_zeros()
 X_test.eliminate_zeros()
 
-#   copy adata to train_set, test_set
+# copy adata to train_set, test_set
 output_train = ad.AnnData(
-    layers={"counts": X_train.astype(float)},
+    layers={"counts": X_train},
     obs=adata.obs[[]],
     var=adata.var[[]],
     uns={"dataset_id": adata.uns["dataset_id"]}
 )
 test_uns_keys = ["dataset_id", "dataset_name", "dataset_url", "dataset_reference", "dataset_summary", "dataset_description", "dataset_organism"]
 output_test = ad.AnnData(
-    layers={"counts": X_test.astype(float)},
+    layers={"counts": X_test},
     obs=adata.obs[[]],
     var=adata.var[[]],
     uns={key: adata.uns[key] for key in test_uns_keys}
 )
+
+# add additional information for the train set
+output_test.uns["train_sum"] = X_train.sum()
 
 # Remove no cells that do not have enough reads
 is_missing = np.array(X_train.sum(axis=0) == 0)

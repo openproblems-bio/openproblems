@@ -5,14 +5,14 @@ functionality:
     label: ALRA
     summary: "ALRA imputes missing values in scRNA-seq data by computing rank-k approximation, thresholding by gene, and rescaling the matrix."
     description: |
-      "Adaptively-thresholded Low Rank Approximation (ALRA). 
+      Adaptively-thresholded Low Rank Approximation (ALRA). 
       
       ALRA is a method for imputation of missing values in single cell RNA-sequencing data, 
       described in the preprint, "Zero-preserving imputation of scRNA-seq data using low-rank approximation" 
       available [here](https://www.biorxiv.org/content/early/2018/08/22/397588). Given a 
       scRNA-seq expression matrix, ALRA first computes its rank-k approximation using randomized SVD. 
       Next, each row (gene) is thresholded by the magnitude of the most negative value of that gene. 
-      Finally, the matrix is rescaled."
+      Finally, the matrix is rescaled.
     reference: "linderman2018zero"
     repository_url: "https://github.com/KlugerLab/ALRA"
     documentation_url: https://github.com/KlugerLab/ALRA/blob/master/README.md
@@ -23,10 +23,11 @@ functionality:
       alra:
     preferred_normalization: counts
   arguments:
-    - name: "--epochs"
-      type: "integer"
-      default: 300
-      description: "Number of total epochs in training"
+    - name: "--norm"
+      type: string
+      choices: ["sqrt", "log"]
+      default: "log"
+      description: Normalization method
   resources:
     - type: r_script
       path: script.R
