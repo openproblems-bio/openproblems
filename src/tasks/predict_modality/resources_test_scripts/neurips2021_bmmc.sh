@@ -25,18 +25,6 @@ nextflow run . \
   --publish_dir "$OUTPUT_DIR" \
   --output_state '$id/state.yaml'
 
-# Swap the modalities
-nextflow run . \
-  -main-script target/nextflow/predict_modality/workflows/process_datasets/main.nf \
-  -profile docker \
-  -entry auto \
-  -c src/wf_utils/labels_ci.config \
-  --input_states "resources_test/common/openproblems_neurips2021/**/state.yaml" \
-  --rename_keys 'input_mod1:output_mod1,input_mod2:output_mod2' \
-  --settings '{"output_train_mod1": "$id/train_mod1.h5ad", "output_train_mod2": "$id/train_mod2.h5ad", "output_test_mod1": "$id/test_mod1.h5ad", "output_test_mod2": "$id/test_mod2.h5ad", "swap": true}' \
-  --publish_dir "$OUTPUT_DIR" \
-  --output_state '$id/state.yaml'
-
 echo "Run one method"
 
 viash run src/tasks/predict_modality/methods/knnr_py/config.vsh.yaml -- \
