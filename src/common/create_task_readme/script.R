@@ -95,10 +95,10 @@ if (!dir.exists(meta$temp_dir)) {
 writeLines(qmd_content, qmd_file)
 
 cat("Render README.qmd to README.md\n")
-md_content <- system(
-  paste0("quarto render ", qmd_file, " --output -"),
-  ignore.stderr = TRUE,
-  intern = TRUE
+out <- processx::run(
+  command = "quarto",
+  args = c("render", qmd_file, "--output", "-"),
+  echo = TRUE
 )
 
-writeLines(md_content, par$output)
+writeLines(out$stdout, par$output)
