@@ -12,7 +12,7 @@ library(rlang, warn.conflicts = FALSE)
 dir <- "resources/dimensionality_reduction/results/run_2023-12-22_13-08-31"
 par <- list(
   input_scores = paste0(dir, "/score_uns.yaml"),
-  input_execution = paste0(dir, "/trace.txt"),
+  input_execution ="resources_test/predict_modality/openproblems_neurips2021/results/trace.txt",
   output = "output/results.json"
 )
 ## VIASH END
@@ -61,9 +61,12 @@ trace <- readr::read_tsv(par$input_execution) %>%
     dataset_id = stringr::str_extract(id, id_regex, 2L),
     normalization_id = stringr::str_extract(id, id_regex, 3L),
     method_id = stringr::str_extract(id, id_regex, 4L),
+    submit = strptime(submit, "%Y-%m-%d %H:%M:%S"),
   ) %>%
-  filter(process_id == method_id)
-
+  filter(process_id == method_id) %>%
+  arrange(desc(submit)) %>%
+  group_by(name) %>%
+  slice(1)
 # parse strings into numbers
 parse_exit <- function(x) {
   if (is.na(x) || x == "-") {
