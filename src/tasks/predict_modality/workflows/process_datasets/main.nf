@@ -95,6 +95,7 @@ workflow run_wf {
       fromState: { id, state ->
         def swap_state = state.direction == "swap" ? true : false
         [
+          dataset_id: id,
           input_mod1: state.dataset_mod1,
           input_mod2: state.dataset_mod2,
           output_train_mod1: state.output_train_mod1,

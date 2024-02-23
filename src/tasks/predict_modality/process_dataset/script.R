@@ -44,9 +44,10 @@ ad1_uns$modality <- ad1_mod
 ad2_uns$modality <- ad2_mod
 
 # Create new dataset id and name depending on the modality
-ad1_uns[["common_dataset_id"]] <- ad2_uns[["common_dataset_id"]] <- ad1_uns$dataset_id
-new_dataset_id <- paste0(ad1_uns$dataset_id, "_", ad1_mod, "2", ad2_mod)
-ad1_uns$dataset_id <- ad2_uns$dataset_id <- new_dataset_id
+if (!is.null(par$dataset_id)) {
+  ad1_uns[["common_dataset_id"]] <- ad2_uns[["common_dataset_id"]] <- ad1_uns$dataset_id
+  ad1_uns$dataset_id <- ad2_uns$dataset_id <- par$dataset_id
+}
 
 new_dataset_name <- paste0(ad1_uns$dataset_name, " (", ad1_mod, "2", ad2_mod, ")")
 ad1_uns$dataset_name <- ad2_uns$dataset_name <- new_dataset_name

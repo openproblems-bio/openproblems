@@ -2,6 +2,10 @@ __merge__: ../api/comp_process_dataset.yaml
 functionality:
   name: "process_dataset"
   arguments:
+    - name: "--dataset_id"
+      type: "string"
+      description: "New dataset ID"
+      required: false
     - name: "--swap"
       type: "boolean"
       description: "Swap mod1 and mod2"

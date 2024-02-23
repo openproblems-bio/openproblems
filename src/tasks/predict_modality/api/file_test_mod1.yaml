@@ -35,7 +35,7 @@ info:
       - type: string
         name: common_dataset_id
         description: "A common identifier for the dataset"
-        required: true
+        required: false
       - name: dataset_name
         type: string
         description: Nicely formatted name.
