@@ -11,18 +11,6 @@ output_state: "state.yaml"
 publish_dir: "$publish_dir"
 HERE
 
-cat > /tmp/nextflow.config << HERE
-process {
-  executor = 'awsbatch'
-}
-
-trace {
-    enabled = true
-    overwrite = true
-    file    = "$publish_dir/trace.txt"
-}
-HERE
-
 tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --revision main_build \
   --pull-latest \
@@ -31,5 +19,5 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --compute-env 1pK56PjjzeraOOC2LDZvN2 \
   --params-file /tmp/params.yaml \
   --entry-name auto \
-  --config /tmp/nextflow.config \
+  --config src/wf_utils/labels_tw.config \
   --labels match_modalities,full
