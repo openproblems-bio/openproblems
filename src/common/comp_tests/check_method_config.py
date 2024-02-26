@@ -53,7 +53,7 @@ def search_ref_bib(reference):
     if bib_entry:
 
         type_pattern = r"@(.*){" + reference
-        doi_pattern = r"(?=doi\s*=\s*{([^,}]+)})"
+        doi_pattern = r"(?=[Dd][Oo][Ii]\s*=\s*{([^,}]+)})"
 
         entry_type = re.search(type_pattern, bib_entry.group(1))
 
