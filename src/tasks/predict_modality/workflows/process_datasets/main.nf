@@ -83,11 +83,12 @@ workflow run_wf {
         // Note: this id is added before the normalisation id  
         // Example old id: dataset_loader/dataset_id/normalization_id  
         // Example new id: dataset_loader/dataset_id/direction/normalization_id
-        def left = id.replaceAll("/${state.normalization_id}\$", "")
-        def right = id.replaceAll("^${left}", "")
-        def new_id = left + "/" + dir + right
+        def orig_dataset_id = id.replaceAll("/${state.normalization_id}$", "")
+        def normalization_id = id.replaceAll("^${orig_dataset_id}", "")
+        def new_dataset_id = orig_dataset_id + "/" + dir
+        def new_id = new_dataset_id + normalization_id
 
-        [new_id, state + [direction: dir, "_meta": [join_id: id]]]
+        [new_id, state + [dataset_id: new_dataset_id, direction: dir, "_meta": [join_id: id]]]
       }
     }
 
@@ -95,7 +96,7 @@ workflow run_wf {
       fromState: { id, state ->
         def swap_state = state.direction == "swap" ? true : false
         [
-          dataset_id: id,
+          dataset_id: state.dataset_id,
           input_mod1: state.dataset_mod1,
           input_mod2: state.dataset_mod2,
           output_train_mod1: state.output_train_mod1,
