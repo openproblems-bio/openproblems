@@ -1,7 +1,6 @@
 # use metric api spec
 __merge__: ../../api/comp_metric_embedding.yaml
 functionality:
-  status: disabled
   name: cell_cycle_conservation
   info:
     metrics:

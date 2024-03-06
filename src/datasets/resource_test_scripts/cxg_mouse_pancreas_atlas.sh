@@ -24,6 +24,8 @@ param_list:
     dataset_organism: mus_musculus
 
 normalization_methods: [log_cp10k]
+n_obs: 600
+n_vars: 1500
 output_dataset: '\$id/dataset.h5ad'
 output_meta: '\$id/dataset_metadata.yaml'
 output_state: '\$id/state.yaml'
@@ -39,6 +41,7 @@ HERE
 
 nextflow run . \
   -main-script target/nextflow/datasets/workflows/process_cellxgene_census/main.nf \
+  -c src/wf_utils/labels_ci.config \
   -profile docker \
   -params-file "/tmp/params.yaml"
 

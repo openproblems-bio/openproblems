@@ -37,7 +37,7 @@ workflow run_wf {
   metrics = [
     asw_batch,
     asw_label,
-    // cell_cycle_conservation,
+    cell_cycle_conservation,
     clustering_overlap,
     graph_connectivity,
     hvg_overlap,

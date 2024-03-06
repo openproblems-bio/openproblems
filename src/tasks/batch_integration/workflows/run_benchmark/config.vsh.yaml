@@ -77,7 +77,7 @@ functionality:
     - name: batch_integration/transformers/embed_to_graph
     - name: batch_integration/metrics/asw_batch
     - name: batch_integration/metrics/asw_label
-    # - name: batch_integration/metrics/cell_cycle_conservation
+    - name: batch_integration/metrics/cell_cycle_conservation
     - name: batch_integration/metrics/clustering_overlap
     - name: batch_integration/metrics/graph_connectivity
     - name: batch_integration/metrics/hvg_overlap
