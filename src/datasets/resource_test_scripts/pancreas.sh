@@ -41,7 +41,7 @@ nextflow run . \
   --normalization_methods log_cp10k \
   --do_subsample true \
   --n_obs 600 \
-  --n_var 1500 \
+  --n_vars 1500 \
   --output_raw '$id/raw.h5ad' \
   --output_normalized '$id/normalized.h5ad' \
   --output_hvg '$id/hvg.h5ad' \
