@@ -1,6 +1,7 @@
 import anndata as ad
 import pandas as pd
 import numpy as np
+from scipy import sparse
 
 ## VIASH START
 par = {
@@ -30,9 +31,18 @@ def remove_mod_prefix(df, mod):
   suffix = f"{mod}_"
   df.columns = df.columns.str.removeprefix(suffix)
 
+def convert_matrix(adata):
+  for key in adata:
+      if isinstance(adata[key], sparse.csr_matrix):
+        adata[key] = sparse.csc_matrix(adata[key])
+      
 
 print("load dataset file", flush=True)
 adata = ad.read_h5ad(par["input"])
+
+# Convert to sparse csc_matrix
+convert_matrix(adata.layers)
+convert_matrix(adata.obsm)
 
 # Add is_train to obs if it is missing
 if "is_train" not in adata.obs.columns:
@@ -109,3 +119,7 @@ for key in metadata_fields:
 print("Writing adata to file", flush=True)
 adata_mod1.write_h5ad(par["output_mod1"], compression="gzip")
 adata_mod2.write_h5ad(par["output_mod2"], compression="gzip")
+
+
+
+

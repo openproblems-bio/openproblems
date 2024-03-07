@@ -36,8 +36,6 @@ platforms:
       - type: r
         cran: [ lmds, FNN, proxy, proxyC]
         bioc: [ SingleCellExperiment, NewWave ]
-      - type: r
-        github: [Jiefei-Wang/SharedObject, fedeago/NewWave]
   - type: nextflow
     directives:
       label: [ "midtime", highmem, highcpu ]

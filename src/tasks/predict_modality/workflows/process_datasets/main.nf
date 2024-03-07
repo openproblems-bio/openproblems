@@ -83,7 +83,7 @@ workflow run_wf {
         // Note: this id is added before the normalisation id  
         // Example old id: dataset_loader/dataset_id/normalization_id  
         // Example new id: dataset_loader/dataset_id/direction/normalization_id
-        def orig_dataset_id = id.replaceAll("/${state.normalization_id}$", "")
+        def orig_dataset_id = id.replaceAll("/${state.normalization_id}", "")
         def normalization_id = id.replaceAll("^${orig_dataset_id}", "")
         def new_dataset_id = orig_dataset_id + "/" + dir
         def new_id = new_dataset_id + normalization_id

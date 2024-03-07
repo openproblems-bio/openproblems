@@ -34,8 +34,17 @@ input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
 batch1 <- c(as.character(input_train_mod1$obs$batch), as.character(input_test_mod1$obs$batch))
 batch2 <- as.character(input_train_mod1$obs$batch)
 
+# create SummarizedExperiment object
 data1 <- SummarizedExperiment::SummarizedExperiment(
-  assays = list(counts = cbind(t(input_train_mod1$layers[["counts"]]), t(input_test_mod1$layers[["counts"]]))),
+  assays = list(
+    counts = as(
+      cbind(
+        t(input_train_mod1$layers[["counts"]]),
+        t(input_test_mod1$layers[["counts"]])
+      ),
+      "CsparseMatrix"
+    )
+  ),
   colData = data.frame(batch = factor(batch1))
 )
 data1 <- data1[Matrix::rowSums(SummarizedExperiment::assay(data1)) > 0, ]
