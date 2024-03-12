@@ -54,6 +54,14 @@ workflow run_wf {
     // run all methods
     | runEach(
       components: methods,
+
+      // use the 'filter' argument to only run a defined method or all methods
+      filter: { id, state, comp ->
+        def method_check = !state.method_ids || state.method_ids.contains(comp.config.functionality.name)
+
+        method_check
+      },
+
       // define a new 'id' by appending the method name to the dataset id
       id: { id, state, comp ->
         id + "." + comp.config.functionality.name
