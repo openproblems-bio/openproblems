@@ -1,10 +1,6 @@
-# The API specifies which type of component this is.
 __merge__: ../../api/comp_method.yaml
-
 functionality:
-
   name: guanlab_dengkw_pm
-
   info:
     label: Guanlab-dengkw
     summary: A kernel ridge regression method with RBF kernel. 
@@ -14,8 +10,6 @@ functionality:
     reference: lance2022multimodal
     documentation_url: https://github.com/openproblems-bio/neurips2021_multimodal_topmethods/tree/main/src/predict_modality/methods/Guanlab-dengkw
     repository_url: https://github.com/openproblems-bio/neurips2021_multimodal_topmethods/tree/main/src/predict_modality/methods/Guanlab-dengkw
-
-  # Component-specific parameters (optional)
   arguments:
     - name: "--distance_method"
       type: "string"
@@ -26,11 +20,9 @@ functionality:
       type: "integer"
       default: 50
       description: Number of components to use for dimensionality reduction.
-
   resources:
     - type: python_script
       path: script.py
-
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_python:1.0.2
@@ -40,10 +32,6 @@ platforms:
           - scikit-learn
           - pandas
           - numpy
-          - scanpy
-
-  - type: native
-
   - type: nextflow
     directives:
       label: [ "hightime", highmem, highcpu]
