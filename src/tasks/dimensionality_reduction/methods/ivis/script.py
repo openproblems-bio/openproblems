@@ -6,7 +6,7 @@ from ivis import Ivis
 
 ## VIASH START
 par = {
-    "input": "resources_test/dimensionality_reduction/pancreas/train.h5ad",
+    "input": "resources_test/dimensionality_reduction/pancreas/dataset.h5ad",
     "output": "reduced.h5ad",
     "n_hvg": 1000,
     "n_pca_dims": 50
@@ -26,7 +26,7 @@ if par["n_hvg"]:
     X_mat = X_mat[:, idx]
 
 print(f"Running PCA with {par['n_pca_dims']} dimensions", flush=True)
-X_pca = sc.tl.pca(X_mat, n_comps=par["n_pca_dims"], svd_solver="arpack")[:, :2]
+X_pca = sc.tl.pca(X_mat, n_comps=par["n_pca_dims"], svd_solver="arpack")
 
 print("Run ivis", flush=True)
 # parameters taken from:

@@ -59,7 +59,7 @@ functionality:
     - name: dimensionality_reduction/control_methods/spectral_features
     - name: dimensionality_reduction/control_methods/true_features
     - name: dimensionality_reduction/methods/densmap
-    - name: dimensionality_reduction/methods/diffusionmap
+    - name: dimensionality_reduction/methods/diffusion_map
     - name: dimensionality_reduction/methods/ivis
     - name: dimensionality_reduction/methods/lmds
     - name: dimensionality_reduction/methods/neuralee

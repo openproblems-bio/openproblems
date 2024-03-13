@@ -2,8 +2,6 @@
 
 __merge__: ../../api/comp_method.yaml
 functionality:
-  #Temporarily removed from OPv1 see commit 93d2161a08da3edf249abedff5111fb5ce527552
-  status: disabled
   name: "ivis"
   info:
     label: "ivis"
@@ -40,6 +38,7 @@ platforms:
       - type: python
         packages:
           - ivis[cpu]
+          - tensorflow<2.16
   - type: nextflow
     directives:
       label: [ midtime, highmem, highcpu ]
