@@ -52,4 +52,4 @@ platforms:
           - "git+https://github.com/michalk8/neuralee@8946abf"
   - type: nextflow
     directives: 
-      label: [ "midtime", highmem, highcpu ]
+      label: [ midtime, highmem, highcpu ]

@@ -26,7 +26,7 @@ functionality:
       description: "Number of times to retry if the embedding fails, each time adding noise."
   resources:
     - type: python_script
-      path: /src/tasks/dimensionality_reduction/methods/diffusion_map/script.py
+      path: script.py
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_python:1.0.2
@@ -38,4 +38,4 @@ platforms:
           - numpy
   - type: nextflow
     directives: 
-      label: [ "midtime", highmem, highcpu ]
+      label: [ midtime, highmem, highcpu ]

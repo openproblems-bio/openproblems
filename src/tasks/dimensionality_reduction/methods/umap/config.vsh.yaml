@@ -47,4 +47,4 @@ platforms:
           - pynndescent==0.5.11
   - type: nextflow
     directives: 
-      label: [ "midtime", highmem, highcpu ]
+      label: [ midtime, highmem, highcpu ]

@@ -163,4 +163,4 @@ platforms:
         cran: [ coRanking, bit64 ]
   - type: nextflow
     directives: 
-      label: [ "midtime", highmem, midcpu ]
+      label: [ midtime, highmem, midcpu ]

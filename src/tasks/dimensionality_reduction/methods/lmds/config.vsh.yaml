@@ -18,7 +18,7 @@ functionality:
     - name: "--n_dim"
       type: integer
       description: Number of dimensions.
-      default: 3
+      default: 2
     - name: "--n_landmarks"
       type: integer
       description: Number of landmarks.

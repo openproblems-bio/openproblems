@@ -56,14 +56,19 @@ functionality:
     - name: common/check_dataset_schema
     - name: common/extract_metadata
     - name: dimensionality_reduction/control_methods/random_features
+    - name: dimensionality_reduction/control_methods/spectral_features
     - name: dimensionality_reduction/control_methods/true_features
     - name: dimensionality_reduction/methods/densmap
+    - name: dimensionality_reduction/methods/diffusionmap
+    - name: dimensionality_reduction/methods/ivis
+    - name: dimensionality_reduction/methods/lmds
     - name: dimensionality_reduction/methods/neuralee
     - name: dimensionality_reduction/methods/pca
     - name: dimensionality_reduction/methods/phate
     - name: dimensionality_reduction/methods/simlr
     - name: dimensionality_reduction/methods/tsne
     - name: dimensionality_reduction/methods/umap
+    - name: dimensionality_reduction/metrics/clustering_performance
     - name: dimensionality_reduction/metrics/coranking
     - name: dimensionality_reduction/metrics/density_preservation
     - name: dimensionality_reduction/metrics/distance_correlation

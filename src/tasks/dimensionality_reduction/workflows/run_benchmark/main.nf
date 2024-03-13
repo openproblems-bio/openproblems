@@ -13,12 +13,19 @@ workflow run_wf {
 
   // construct list of methods
   methods = [
+    // controls
     random_features,
+    spectral_features,
     true_features,
+    // methods
     densmap,
+    diffusionmap,
+    ivis,
+    lmds,
     neuralee,
     pca,
     phate,
+    pymde,
     simlr,
     tsne,
     umap
@@ -26,6 +33,7 @@ workflow run_wf {
 
   // construct list of metrics
   metrics = [
+    clustering_performance,
     coranking,
     density_preservation,
     distance_correlation,

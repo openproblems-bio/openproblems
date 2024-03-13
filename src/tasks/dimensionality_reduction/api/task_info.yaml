@@ -1,27 +1,38 @@
 name: dimensionality_reduction
-label: "Dimensionality reduction for visualization"
+label: "Dimensionality reduction for 2D visualization"
 v1:
   path: openproblems/tasks/dimensionality_reduction/README.md
   commit: b353a462f6ea353e0fc43d0f9fcbbe621edc3a0b
 summary: Reduction of high-dimensional datasets to 2D for visualization & interpretation
 image: "thumbnail.svg"
 motivation: |
-  Dimensionality reduction is one of the key challenges in single-cell data representation.
-  Routine single-cell RNA sequencing (scRNA-seq) experiments measure cells in roughly
-  20,000-30,000 dimensions (i.e., features - mostly gene transcripts but also other functional
-  elements encoded in mRNA such as lncRNAs). Since its inception,scRNA-seq experiments have
-  been growing in terms of the number of cells measured. Originally, cutting-edge SmartSeq
-  experiments would yield a few hundred cells, at best. Now, it is not uncommon to see
-  experiments that yield over [100,000 cells](<https://www.nature.com/articles/s41586-018-0590-4>)
-  or even [> 1 million cells](https://doi.org/10.1126/science.aba7721).
+  Data visualisation is an important part of all stages of single-cell analysis, from
+  initial quality control to interpretation and presentation of final results. For bulk RNA-seq
+  studies, linear dimensionality reduction techniques such as PCA and MDS are commonly used
+  to visualise the variation between samples. While these methods are highly effective they
+  can only be used to show the first few components of variation which cannot fully represent
+  the increased complexity and number of observations in single-cell datasets. For this reason
+  non-linear techniques (most notably t-SNE and UMAP) have become the standard for visualising
+  single-cell studies. These methods attempt to compress a dataset into a two-dimensional space
+  while attempting to capture as much of the variance between observations as possible. Many
+  methods for solving this problem now exist. In general these methods try to preserve distances,
+  while some additionally consider aspects such as density within the embedded space or conservation
+  of continuous trajectories. Despite almost every single-cell study using one of these visualisations
+  there has been debate as to whether they can effectively capture the variation in single-cell
+  datasets [@chari2023speciousart].
 description: |
-  Each *feature* in a dataset functions as a single dimension. While each of the ~30,000
-  dimensions measured in each cell contribute to an underlying data structure, the overall
-  structure of the data is challenging to display in few dimensions due to data sparsity
-  and the [*"curse of dimensionality"*](https://en.wikipedia.org/wiki/Curse_of_dimensionality)
-  (distances in high dimensional data don't distinguish data points well). Thus, we need to find
-  a way to [dimensionally reduce](https://en.wikipedia.org/wiki/Dimensionality_reduction)
-  the data for visualization and interpretation.
+  The dimensionality reduction task attempts to quantify the ability of methods to embed the
+  information present in complex single-cell studies into a two-dimensional space. Thus, this task
+  is specifically designed for dimensionality reduction for visualisation and does not consider other
+  uses of dimensionality reduction in standard single-cell workflows such as improving the
+  signal-to-noise ratio (and in fact several of the methods use PCA as a pre-processing step for this
+  reason). Unlike most tasks, methods for the dimensionality reduction task must accept a matrix
+  containing expression values normalised to 10,000 counts per cell and log transformed (log-10k) and
+  produce a two-dimensional coordinate for each cell. Pre-normalised matrices are required to
+  enforce consistency between the metric evaluation (which generally requires normalised data) and
+  the method runs. When these are not consistent, methods that use the same normalisation as used in
+  the metric tend to score more highly. For some methods we also evaluate the pre-processing
+  recommended by the method.
 authors:
   - name: Luke Zappia
     roles: [ maintainer, author ]
@@ -31,7 +42,7 @@ authors:
     roles: [ author ]
     info:
       github: michalk8
-  - name: "Scott Gigante"
+  - name: Scott Gigante
     roles: [ author ]
     info:
       github: scottgigante
@@ -40,13 +51,23 @@ authors:
     roles: [ author ]
     info:
       github: bendemeo
-  - name: "Juan A. Cordero Varela"
+  - name: Robrecht Cannoodt
+    roles: [ author ]
+    info:
+      github: rcannood
+      orcid: 0000-0003-3641-729X
+  - name: Kai Waldrant
+    roles: [ contributor ]
+    info:
+      github: KaiWaldrant
+      orcid: 0009-0003-8555-1361
+  - name: Sai Nirmayi Yasa
+    roles: [ contributor ]
+    info:
+      github: sainirmayi
+      orcid: 0009-0003-6319-9803
+  - name: Juan A. Cordero Varela
     roles: [ contributor ]
     info:
       github: jacorvar
       orcid: 0000-0002-7373-5433
-  - name: Robrecht Cannoodt
-    roles: [ contributor ]
-    info:
-      github: rcannood
-      orcid: "0000-0003-3641-729X"
