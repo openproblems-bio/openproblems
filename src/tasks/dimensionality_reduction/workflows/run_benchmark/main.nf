@@ -19,7 +19,7 @@ workflow run_wf {
     true_features,
     // methods
     densmap,
-    diffusionmap,
+    diffusion_map,
     ivis,
     lmds,
     neuralee,
