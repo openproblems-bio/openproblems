@@ -38,4 +38,4 @@ platforms:
         bioc: [ SingleCellExperiment, NewWave ]
   - type: nextflow
     directives:
-      label: [ "midtime", highmem, highcpu ]
+      label: [ midtime, highmem, highcpu ]
