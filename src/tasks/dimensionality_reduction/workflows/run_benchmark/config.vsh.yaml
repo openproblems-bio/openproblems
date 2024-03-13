@@ -65,6 +65,7 @@ functionality:
     - name: dimensionality_reduction/methods/neuralee
     - name: dimensionality_reduction/methods/pca
     - name: dimensionality_reduction/methods/phate
+    - name: dimensionality_reduction/methods/pymde
     - name: dimensionality_reduction/methods/simlr
     - name: dimensionality_reduction/methods/tsne
     - name: dimensionality_reduction/methods/umap
