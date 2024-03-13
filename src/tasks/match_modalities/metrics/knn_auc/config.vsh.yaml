@@ -7,7 +7,7 @@ functionality:
         name: knn_auc
         summary: "Compute the kNN Area Under the Curve"
         description: |
-          Let $f(i) \u2208 F$ be the scRNA-seq measurement of cell $i$, and $g(i) \u2208 G$ be the scATAC- seq measurement of cell $i$. kNN-AUC calculates the average percentage overlap of neighborhoods of $f(i)$ in $F$ with neighborhoods of $g(i)$ in $G$. Higher is better.
+          Let $f(i) \in F$ be the scRNA-seq measurement of cell $i$, and $g(i) \in G$ be the scATAC- seq measurement of cell $i$. kNN-AUC calculates the average percentage overlap of neighborhoods of $f(i)$ in $F$ with neighborhoods of $g(i)$ in $G$. Higher is better.
         reference: "lance2022multimodal"
         min: 0
         max: 1
