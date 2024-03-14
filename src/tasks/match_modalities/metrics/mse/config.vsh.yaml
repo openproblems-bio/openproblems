@@ -9,7 +9,7 @@ functionality:
         description: |
           Mean squared error (MSE) is the average distance between each pair of matched observations of the same cell in the learned latent space. Lower is better.
         reference: "lance2022multimodal"
-        maximize: true
+        maximize: false
         min: 0
         max: "+.inf"
         v1:
@@ -26,6 +26,7 @@ platforms:
         packages:
           - numpy
           - scipy
+          - scprep
   - type: nextflow
     directives:
       label: [ "midtime", lowmem, lowcpu ]

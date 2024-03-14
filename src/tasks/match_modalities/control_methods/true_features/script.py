@@ -1,4 +1,5 @@
 import anndata as ad
+import numpy as np
 
 ## VIASH START
 par = {
@@ -18,6 +19,9 @@ print("Reading input h5ad file", flush=True)
 adata_mod1 = ad.read_h5ad(par["input_mod1"])
 adata_mod2 = ad.read_h5ad(par["input_mod2"])
 
+solution_mod1 = ad.read_h5ad(par["input_solution_mod1"])
+solution_mod2 = ad.read_h5ad(par["input_solution_mod2"])
+
 print("Storing true features", flush=True)
 output_mod1 = ad.AnnData(
   obs=adata_mod1.obs[[]],
@@ -31,11 +35,17 @@ output_mod1 = ad.AnnData(
     "method_id": meta["functionality_name"]
   }
 )
+
+# Permutate mod1 according to mod2
+mod2_obsm = adata_mod1.obsm["X_svd"][solution_mod1.obs["permutation_indices"]]
+reverse_indices_mod2 = np.argsort(solution_mod2.obs["permutation_indices"])
+mod2_obsm = mod2_obsm[reverse_indices_mod2]
+
 output_mod2 = ad.AnnData(
   obs=adata_mod2.obs[[]],
   var=adata_mod2.var[[]],
   obsm={
-    "integrated": adata_mod2.obsm["X_svd"]
+    "integrated": mod2_obsm
   },
   uns={
     "dataset_id": adata_mod2.uns["dataset_id"],
