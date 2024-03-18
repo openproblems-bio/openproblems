@@ -54,9 +54,13 @@ workflow run_wf {
       fromState: [ 
         "task_id": "task_id",
         "input_scores": "input_scores",
-        "input_execution" : "input_execution"
+        "input_execution": "input_execution",
+        "input_metric_info": "output_metric"
       ],
-      toState: ["output_results": "output"]
+      toState: [
+        "output_results": "output_results",
+        "output_metric_execution_info": "output_metric_execution_info"
+      ]
     )
 
     | generate_qc.run(
@@ -70,18 +74,15 @@ workflow run_wf {
       toState: ["output_qc": "output"]
     )
 
-    | map{ id, state ->
-      def new_state = [
-        output_scores: state.output_results,
-        output_method_info: state.output_method,
-        output_metric_info: state.output_metric,
-        output_dataset_info: state.output_dataset,
-        output_task_info: state.output_task,
-        output_qc: state.output_qc
-      ]
-
-      [id, new_state]
-    }
+    | setState([
+      "output_scores": "output_results",
+      "output_method_info": "output_method",
+      "output_metric_info": "output_metric",
+      "output_dataset_info": "output_dataset",
+      "output_task_info": "output_task",
+      "output_qc": "output_qc",
+      "output_metric_execution_info": "output_metric_execution_info"
+    ])
 
   emit:
   output_ch

@@ -9,17 +9,26 @@ functionality:
       description: "Task id"
     - name: "--input_scores"
       type: "file"
-      example: resources/label_projection/benchmarks/openproblems_v1/combined.extract_scores.output.yaml
+      example: score_uns.yaml
       description: "Scores file"
     - name: "--input_execution"
       type: "file"
-      example: resources/label_projection/benchmarks/openproblems_v1/trace.txt
+      example: trace.txt
       description: "Nextflow log file"
-    - name: "--output"
+    - name: "--input_metric_info"
+      type: "file"
+      example: metric_info.json
+      description: "Metric info file"
+    - name: "--output_results"
       type: "file"
       direction: "output"
-      default: "output.json"
+      default: "results.json"
       description: "Output json"
+    - name: "--output_metric_execution_info"
+      type: "file"
+      direction: "output"
+      default: "metric_execution_info.json"
+      description: "Output metric execution info"
   resources:
     - type: r_script
       path: script.R

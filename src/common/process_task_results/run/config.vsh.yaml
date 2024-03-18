@@ -71,6 +71,11 @@ functionality:
           required: true
           direction: output
           default: quality_control.json
+        - name: "--output_metric_execution_info"
+          type: file
+          required: true
+          direction: output
+          default: metric_execution_info.json
   resources:
     - type: nextflow_script
       path: main.nf
