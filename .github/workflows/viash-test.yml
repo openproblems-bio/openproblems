@@ -50,13 +50,6 @@ jobs:
         dest_path: resources_test
         cache_key_prefix: resources_test__
 
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v42
-      with:
-        separator: ";"
-        diff_relative: true
-
     - id: ns_list
       uses: viash-io/viash-actions/ns-list@v5
       with:
