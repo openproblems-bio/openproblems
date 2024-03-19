@@ -15,6 +15,14 @@ functionality:
       type: "file"
       example: trace.txt
       description: "Nextflow log file"
+    - name: "--input_dataset_info"
+      type: "file"
+      example: dataset_info.json
+      description: "Method info file"
+    - name: "--input_method_info"
+      type: "file"
+      example: method_info.json
+      description: "Method info file"
     - name: "--input_metric_info"
       type: "file"
       example: metric_info.json

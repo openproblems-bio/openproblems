@@ -76,10 +76,36 @@ raw_scores <-
   })
 
 # read metric info
+dataset_info <- jsonlite::read_json(par$input_dataset_info, simplifyVector = TRUE)
+method_info <- jsonlite::read_json(par$input_method_info, simplifyVector = TRUE)
 metric_info <- jsonlite::read_json(par$input_metric_info, simplifyVector = TRUE)
 
 # --- process scores and execution info ----------------------------------------
 cat("Processing scores and execution info\n")
+scale_scores <- function(values, is_control, maximize) {
+  control_values <- values[is_control & !is.na(values)]
+  if (length(control_values) < 2) {
+    return(NA_real_)
+  }
+
+  min_control_value <- min(control_values)
+  max_control_value <- max(control_values)
+
+  if (min_control_value == max_control_value) {
+    return(NA_real_)
+  }
+
+  scaled <- (values - min_control_value) / (max_control_value - min_control_value)
+
+  if (maximize) {
+    scaled
+  } else {
+    1 - scaled
+  }
+}
+aggregate_scores <- function(scaled_score) {
+  mean(pmin(1, pmax(0, scaled_score)) %|% 0)
+}
 scores <- raw_scores %>%
   complete(
     dataset_id,
@@ -87,17 +113,15 @@ scores <- raw_scores %>%
     metric_ids,
     fill = list(metric_values = NA_real_)
   ) %>%
+  left_join(method_info %>% select(method_id, is_baseline), by = "method_id") %>%
   left_join(metric_info %>% select(metric_ids = metric_id, maximize), by = "metric_ids") %>%
   group_by(metric_ids, dataset_id) %>%
-  mutate(
-    scaled_score = dynutils::scale_minmax(metric_values) %|% 0,
-    scaled_score = ifelse(maximize, scaled_score, 1 - scaled_score)
-  ) %>%
+  mutate(scaled_score = scale_scores(metric_values, is_baseline, maximize[[1]]) %|% 0) %>%
   group_by(dataset_id, method_id) %>%
   summarise(
     metric_values = list(as.list(setNames(metric_values, metric_ids))),
     scaled_scores = list(as.list(setNames(scaled_score, metric_ids))),
-    mean_score = mean(scaled_score),
+    mean_score = aggregate_scores(scaled_score),
     .groups = "drop"
   )
 

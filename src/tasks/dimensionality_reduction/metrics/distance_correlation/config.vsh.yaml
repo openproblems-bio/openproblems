@@ -10,7 +10,7 @@ functionality:
         reference: kruskal1964mds
         min: 0
         max: "+.inf"
-        maximize: false
+        maximize: true
         v1:
           path: openproblems/tasks/dimensionality_reduction/metrics/distance_correlation.py 
           commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
@@ -22,7 +22,7 @@ functionality:
         reference: coifman2006diffusion
         min: 0
         max: "+.inf"
-        maximize: false
+        maximize: true
         v1:
           path: openproblems/tasks/dimensionality_reduction/metrics/root_mean_square_error.py 
           commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32

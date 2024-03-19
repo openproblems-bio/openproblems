@@ -55,6 +55,8 @@ workflow run_wf {
         "task_id": "task_id",
         "input_scores": "input_scores",
         "input_execution": "input_execution",
+        "input_dataset_info": "output_dataset",
+        "input_method_info": "output_method",
         "input_metric_info": "output_metric"
       ],
       toState: [
