@@ -1,0 +1,86 @@
+__merge__: ../../api/comp_method.yaml
+
+functionality:
+  name: cell2location
+
+  info:
+    label: Cell2Location
+    summary: "Cell2location uses a Bayesian model to resolve cell types in spatial transcriptomic data and create comprehensive cellular maps of diverse tissues."
+    description: |
+      Cell2location is a decomposition method based on Negative Binomial regression that is able to account for batch effects in estimating the single-cell gene expression signature used for the spatial decomposition step. 
+      Note that when batch information is unavailable for this task, we can use either a hard-coded reference, or a negative-binomial learned reference without batch labels. The parameter alpha refers to the detection efficiency prior.
+    preferred_normalization: counts
+    variants: 
+      cell2location_amortised_detection_alpha_20:
+        detection_alpha: 20
+        amortised: true
+      cell2location_detection_alpha_1:
+        detection_alpha: 1
+      cell2location_detection_alpha_20:
+        detection_alpha: 20
+      cell2location_detection_alpha_20_nb:
+        detection_alpha: 20
+        hard_coded_reference: false
+      cell2location_detection_alpha_200:
+        detection_alpha: 200
+    reference: "kleshchevnikov2022cell2location"
+    documentation_url: https://cell2location.readthedocs.io/en/latest/
+    repository_url: https://github.com/BayraktarLab/cell2location
+    
+  # Component-specific parameters (optional)
+  arguments:
+    - name: "--detection_alpha"
+      type: double
+      default: 20.0
+      description: Hyperparameter controlling normalisation of within-experiment variation in RNA detection.
+    - name: "--n_cells_per_location"
+      type: integer
+      default: 20
+      description: The expected average cell abundance. It is a tissue-dependent hyper-prior which can be estimated from  histology images
+    - name: "--hard_coded_reference"
+      type: boolean
+      default: true
+      description: Whether to use hard-coded reference or negative binomial regression model to account for batch effects. Hard-coded reference used by default.
+    - name: "--amortised"
+      type: boolean
+      default: false
+      description: Whether to use amortised inference.
+    - name: "--num_samples"
+      type: integer
+      default: 1000
+      description: Number of samples to use for summarising posterior distribution.
+    - name: "--sc_batch_size"
+      type: integer
+      default: 2500
+      description: Batch size used to train regression model for estimation of reference single-cell gene expression signature.
+    - name: "--st_batch_size"
+      type: integer
+      description: Batch size used to train cell2location model for spatial mapping.
+    - name: "--max_epochs_sc"
+      type: integer
+      default: 250
+      description: Maximum number of epochs to train regression model for estimation of reference single-cell gene expression signature.
+    - name: "--max_epochs_st"
+      type: integer
+      default: 30000
+      description: Maximum number of epochs to train cell2location model for spatial mapping.
+
+  resources:
+    - type: python_script
+      path: script.py
+
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    setup:
+      - type: python
+        packages: 
+          - scvi-tools==1.0.4
+          - cell2location
+          - jax==0.4.23
+          - jaxlib==0.4.23
+
+  - type: native
+  - type: nextflow
+    directives:
+      label: [ "midtime", midmem, midcpu]

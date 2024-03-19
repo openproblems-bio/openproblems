@@ -1,0 +1,42 @@
+__merge__: ../../api/comp_method.yaml
+
+functionality:
+  name: destvi
+
+  info:
+    label: DestVI
+    summary: "DestVI is a probabilistic method for multi-resolution analysis for spatial transcriptomics that explicitly models continuous variation within cell types"
+    description: |
+      Deconvolution of Spatial Transcriptomics profiles using Variational Inference (DestVI) is a spatial decomposition method that leverages a conditional generative model of spatial transcriptomics down to the sub-cell-type variation level, which is then used to decompose the cell-type proportions determining the spatial organization of a tissue.
+    preferred_normalization: counts
+    reference: "lopez2022destvi"
+    documentation_url: https://docs.scvi-tools.org/en/stable/user_guide/models/destvi.html
+    repository_url: https://github.com/scverse/scvi-tools
+
+  arguments:
+    - name: "--max_epochs_sc"
+      type: integer
+      default: 500
+      description: Number of epochs to train the Conditional version of single-cell Variational Inference (CondSCVI) model using MAP inference.
+    - name: "--max_epochs_sp"
+      type: integer
+      default: 10000
+      description: Number of epochs to train the DestVI model using MAP inference.
+
+  resources:
+    - type: python_script
+      path: script.py
+
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    setup:
+      - type: python
+        packages: 
+          - scvi-tools
+          - chex==0.1.85
+
+  - type: native
+  - type: nextflow
+    directives:
+      label: [ "midtime", midmem, midcpu]

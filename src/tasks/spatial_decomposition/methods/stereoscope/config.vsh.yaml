@@ -1,0 +1,40 @@
+__merge__: ../../api/comp_method.yaml
+
+functionality:
+  name: stereoscope
+
+  info:
+    label: Stereoscope
+    summary: "Stereoscope is a decomposition method based on Negative Binomial regression."
+    description: |
+      Stereoscope is a decomposition method based on Negative Binomial regression. It is similar in scope and implementation to cell2location but less flexible to incorporate additional covariates such as batch effects and other type of experimental design annotations.
+    preferred_normalization: counts
+    reference: andersson2020single
+    documentation_url: https://docs.scvi-tools.org/en/stable/user_guide/models/stereoscope.html
+    repository_url: https://github.com/scverse/scvi-tools
+
+  arguments: 
+    - name: "--max_epochs_sc"
+      type: integer
+      default: 100
+      description: Number of of epochs to train RNAStereoscope model.
+    - name: "--max_epochs_sp"
+      type: integer
+      default: 1000
+      description: Number of of epochs to train SpatialStereoscope model.
+
+  resources:
+    - type: python_script
+      path: script.py
+
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    setup:
+      - type: python
+        packages: 
+          - scvi-tools
+  - type: native
+  - type: nextflow
+    directives:
+      label: [ "midtime", midmem, midcpu]

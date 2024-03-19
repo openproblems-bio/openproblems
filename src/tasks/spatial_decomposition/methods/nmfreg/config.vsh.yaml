@@ -1,0 +1,37 @@
+__merge__: ../../api/comp_method.yaml
+
+functionality:
+  name: nmfreg
+  info:
+    label: NMFreg
+    summary: "NMFreg reconstructs gene expression as a weighted combination of cell type signatures defined by scRNA-seq."
+    description: |
+      Non-Negative Matrix Factorization regression (NMFreg) is a decomposition method that reconstructs expression of each spatial location as a weighted combination of cell-type signatures defined by scRNA-seq. It was originally developed for Slide-seq data. This is a re-implementation from https://github.com/tudaga/NMFreg_tutorial.
+    preferred_normalization: counts
+    reference: "rodriques2019slide"
+    documentation_url: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html
+    repository_url: https://github.com/tudaga/NMFreg_tutorial/tree/master?tab=readme-ov-file
+
+  arguments:
+    - name: "--n_components"
+      type: integer
+      default: 30
+      description: Number of components to use for non-negative matrix factorization.
+
+  resources:
+    - type: python_script
+      path: script.py
+
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    setup:
+      - type: python
+        packages: 
+          - numpy
+          - scipy
+          - scikit-learn
+  - type: native
+  - type: nextflow
+    directives:
+      label: [ "midtime", midmem, midcpu]

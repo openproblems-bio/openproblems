@@ -1,0 +1,29 @@
+type: file
+example: "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/solution.h5ad"
+info:
+  label: Solution
+  summary: "The spatial data file containing transcription profiles for each capture location, with true cell-type proportions for each spot / capture location."
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+    obsm:
+      - type: double
+        name: coordinates
+        description: XY coordinates for each spot
+        required: true
+      - type: double
+        name: proportions_true
+        description: True cell type proportions for each spot
+        required: true
+    uns:
+      - type: string
+        name: cell_type_names
+        description: Cell type names corresponding to columns of `proportions`
+        required: true
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true

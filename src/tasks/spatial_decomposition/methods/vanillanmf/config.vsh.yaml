@@ -1,0 +1,37 @@
+__merge__: ../../api/comp_method.yaml
+
+functionality:
+  name: vanillanmf
+  info:
+    label: NMF
+    summary: "NMF reconstructs gene expression as a weighted combination of cell type signatures defined by scRNA-seq."
+    description: |
+      NMF is a decomposition method based on Non-negative Matrix Factorization (NMF) that reconstructs expression of each spatial location as a weighted combination of cell-type signatures defined by scRNA-seq. It is a simpler baseline than NMFreg as it only performs the NMF step based on mean expression signatures of cell types, returning the weights loading of the NMF as (normalized) cell type proportions, without the regression step.
+    preferred_normalization: counts
+    reference: cichocki2009fast
+    documentation_url: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html
+    repository_url: https://github.com/scikit-learn/scikit-learn/blob/92c9b1866/sklearn/decomposition/
+
+  arguments:
+    - name: "--max_iter"
+      type: integer
+      default: 4000
+      description: Maximum number of iterations before timing out.
+
+  resources:
+    - type: python_script
+      path: script.py
+
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    setup:
+      - type: python
+        packages: 
+          - numpy
+          - scipy
+          - scikit-learn
+  - type: native
+  - type: nextflow
+    directives:
+      label: [ "midtime",midmem, midcpu]
