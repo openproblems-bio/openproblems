@@ -31,7 +31,7 @@ print("Compute KNN on PCA", flush=True)
 _, indices_true = (
     sklearn.neighbors.NearestNeighbors(n_neighbors=n_neighbors)
     .fit(input_solution_mod1.obsm["X_svd"])
-    .kneighbors(input_solution_mod2.obsm["X_svd"])
+    .kneighbors(input_solution_mod1.obsm["X_svd"])
 )
 
 _, indices_pred = (
