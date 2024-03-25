@@ -36,7 +36,7 @@ platforms:
     image: ghcr.io/openproblems-bio/base_r:1.0.2
     setup:
       - type: r
-        packages: [dplyr, purrr, rlang, glue, yaml, fs, cli, igraph, rmarkdown, bit64, processx]
+        packages: [dplyr, purrr, rlang, glue, yaml, fs, cli, igraph, rmarkdown, processx]
       - type: apt
         packages: [jq, curl]
       - type: docker
@@ -50,5 +50,5 @@ platforms:
   - type: native
   - type: nextflow
     directives: 
-      label: [ "midtime", lowmem, lowcpu ]
+      label: [ midtime, lowmem, lowcpu ]
 

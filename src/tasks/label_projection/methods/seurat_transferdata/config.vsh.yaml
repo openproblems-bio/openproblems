@@ -30,7 +30,7 @@ platforms:
     image: ghcr.io/openproblems-bio/base_r:1.0.2
     setup:
       - type: r
-        cran: [ Matrix>=1.5.3, Seurat, rlang, bit64 ]
+        cran: [ Matrix>=1.5.3, Seurat, rlang ]
   - type: nextflow
     directives: 
-      label: [ "midtime", highmem, highcpu ]
+      label: [ midtime, highmem, highcpu ]
