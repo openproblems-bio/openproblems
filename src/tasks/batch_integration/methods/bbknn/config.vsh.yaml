@@ -30,7 +30,7 @@ platforms:
     setup:
       - type: python
         pypi:
-          - scib==1.1.3
+          - scib==1.1.5
           - bbknn
   - type: nextflow
     directives: 

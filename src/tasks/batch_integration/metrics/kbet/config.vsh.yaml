@@ -46,7 +46,7 @@ platforms:
         github: theislab/kBET
       - type: python
         pypi:
-          - scib==1.1.4
+          - scib==1.1.5
           - rpy2>=3
           - anndata2ri
   - type: nextflow

@@ -39,7 +39,7 @@ platforms:
     setup:
       - type: python
         pypi:
-          - scib==1.1.4
+          - scib==1.1.5
   - type: nextflow
     directives: 
       label: [ "midtime", midmem, lowcpu ]
