@@ -1,5 +1,6 @@
 # Denoising
 
+
 Removing noise in sparse single-cell RNA-sequencing count data
 
 Path:
@@ -138,7 +139,7 @@ Slot description:
 | `var["feature_name"]`                             | `string`  | A human-readable name for the feature, usually a gene symbol.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `var["soma_joinid"]`                              | `integer` | (*Optional*) If the dataset was retrieved from CELLxGENE census, this is a unique identifier for the feature.                                                                                                                                                                                                                                                                                                                                                                                 |
 | `var["hvg"]`                                      | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| `var["hvg_score"]`                                | `integer` | A ranking of the features by hvg.                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `var["hvg_score"]`                                | `double`  | A score for the feature indicating how highly variable it is.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `obsm["X_pca"]`                                   | `double`  | The resulting PCA embedding.                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `obsp["knn_distances"]`                           | `double`  | K nearest neighbors distance matrix.                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `obsp["knn_connectivities"]`                      | `double`  | K nearest neighbors connectivities matrix.                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -216,7 +217,7 @@ Format:
 
     AnnData object
      layers: 'counts'
-     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism'
+     uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism', 'train_sum'
 
 </div>
 
@@ -234,6 +235,7 @@ Slot description:
 | `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
 | `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
 | `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| `uns["train_sum"]`           | `integer` | The total number of counts in the training dataset.                            |
 
 </div>
 
@@ -304,7 +306,7 @@ Format:
 <div class="small">
 
     AnnData object
-     layers: 'counts', 'denoised'
+     layers: 'denoised'
      uns: 'dataset_id', 'method_id'
 
 </div>
@@ -315,7 +317,6 @@ Slot description:
 
 | Slot                 | Type      | Description                          |
 |:---------------------|:----------|:-------------------------------------|
-| `layers["counts"]`   | `integer` | Raw counts.                          |
 | `layers["denoised"]` | `integer` | denoised data.                       |
 | `uns["dataset_id"]`  | `string`  | A unique identifier for the dataset. |
 | `uns["method_id"]`   | `string`  | A unique identifier for the method.  |
@@ -353,3 +354,4 @@ Slot description:
 | `uns["metric_values"]` | `double` | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
 
 </div>
+

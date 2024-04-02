@@ -1,4 +1,5 @@
-# Dimensionality reduction for visualization
+# Dimensionality reduction for 2D visualization
+
 
 Reduction of high-dimensional datasets to 2D for visualization &
 interpretation
@@ -8,29 +9,43 @@ Path:
 
 ## Motivation
 
-Dimensionality reduction is one of the key challenges in single-cell
-data representation. Routine single-cell RNA sequencing (scRNA-seq)
-experiments measure cells in roughly 20,000-30,000 dimensions (i.e.,
-features - mostly gene transcripts but also other functional elements
-encoded in mRNA such as lncRNAs). Since its inception,scRNA-seq
-experiments have been growing in terms of the number of cells measured.
-Originally, cutting-edge SmartSeq experiments would yield a few hundred
-cells, at best. Now, it is not uncommon to see experiments that yield
-over [100,000 cells](https://www.nature.com/articles/s41586-018-0590-4)
-or even [\> 1 million cells](https://doi.org/10.1126/science.aba7721).
+Data visualisation is an important part of all stages of single-cell
+analysis, from initial quality control to interpretation and
+presentation of final results. For bulk RNA-seq studies, linear
+dimensionality reduction techniques such as PCA and MDS are commonly
+used to visualise the variation between samples. While these methods are
+highly effective they can only be used to show the first few components
+of variation which cannot fully represent the increased complexity and
+number of observations in single-cell datasets. For this reason
+non-linear techniques (most notably t-SNE and UMAP) have become the
+standard for visualising single-cell studies. These methods attempt to
+compress a dataset into a two-dimensional space while attempting to
+capture as much of the variance between observations as possible. Many
+methods for solving this problem now exist. In general these methods try
+to preserve distances, while some additionally consider aspects such as
+density within the embedded space or conservation of continuous
+trajectories. Despite almost every single-cell study using one of these
+visualisations there has been debate as to whether they can effectively
+capture the variation in single-cell datasets \[@chari2023speciousart\].
 
 ## Description
 
-Each *feature* in a dataset functions as a single dimension. While each
-of the ~30,000 dimensions measured in each cell contribute to an
-underlying data structure, the overall structure of the data is
-challenging to display in few dimensions due to data sparsity and the
-[*“curse of
-dimensionality”*](https://en.wikipedia.org/wiki/Curse_of_dimensionality)
-(distances in high dimensional data don’t distinguish data points well).
-Thus, we need to find a way to [dimensionally
-reduce](https://en.wikipedia.org/wiki/Dimensionality_reduction) the data
-for visualization and interpretation.
+The dimensionality reduction task attempts to quantify the ability of
+methods to embed the information present in complex single-cell studies
+into a two-dimensional space. Thus, this task is specifically designed
+for dimensionality reduction for visualisation and does not consider
+other uses of dimensionality reduction in standard single-cell workflows
+such as improving the signal-to-noise ratio (and in fact several of the
+methods use PCA as a pre-processing step for this reason). Unlike most
+tasks, methods for the dimensionality reduction task must accept a
+matrix containing expression values normalised to 10,000 counts per cell
+and log transformed (log-10k) and produce a two-dimensional coordinate
+for each cell. Pre-normalised matrices are required to enforce
+consistency between the metric evaluation (which generally requires
+normalised data) and the method runs. When these are not consistent,
+methods that use the same normalisation as used in the metric tend to
+score more highly. For some methods we also evaluate the pre-processing
+recommended by the method.
 
 ## Authors & contributors
 
@@ -40,8 +55,10 @@ for visualization and interpretation.
 | Michal Klein           | author             |
 | Scott Gigante          | author             |
 | Ben DeMeo              | author             |
+| Robrecht Cannoodt      | author             |
+| Kai Waldrant           | contributor        |
+| Sai Nirmayi Yasa       | contributor        |
 | Juan A. Cordero Varela | contributor        |
-| Robrecht Cannoodt      | contributor        |
 
 ## API
 
@@ -130,7 +147,7 @@ Slot description:
 | `var["feature_name"]`                             | `string`  | A human-readable name for the feature, usually a gene symbol.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `var["soma_joinid"]`                              | `integer` | (*Optional*) If the dataset was retrieved from CELLxGENE census, this is a unique identifier for the feature.                                                                                                                                                                                                                                                                                                                                                                                 |
 | `var["hvg"]`                                      | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| `var["hvg_score"]`                                | `integer` | A ranking of the features by hvg.                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `var["hvg_score"]`                                | `double`  | A score for the feature indicating how highly variable it is.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `obsm["X_pca"]`                                   | `double`  | The resulting PCA embedding.                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `obsp["knn_distances"]`                           | `double`  | K nearest neighbors distance matrix.                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `obsp["knn_connectivities"]`                      | `double`  | K nearest neighbors connectivities matrix.                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -356,3 +373,4 @@ Slot description:
 | `uns["metric_values"]`    | `double` | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
 
 </div>
+

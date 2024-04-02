@@ -102,7 +102,7 @@ Slot description:
 | `obs["cell_type"]`           | `string`  | Cell type label IDs.                                                                                                |
 | `obs["batch"]`               | `string`  | A batch identifier. This label is very context-dependent and may be a combination of the tissue, assay, donor, etc. |
 | `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.                                            |
-| `var["hvg_score"]`           | `integer` | A ranking of the features by hvg.                                                                                   |
+| `var["hvg_score"]`           | `double`  | A ranking of the features by hvg.                                                                                   |
 | `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                                                                        |
 | `obsm["coordinates"]`        | `double`  | (*Optional*) XY coordinates for each spot.                                                                          |
 | `obsm["proportions_true"]`   | `double`  | (*Optional*) True cell type proportions for each spot.                                                              |

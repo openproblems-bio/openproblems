@@ -1,5 +1,6 @@
 # Predict Modality
 
+
 Predicting the profiles of one modality (e.g. protein abundance) from
 another (e.g. mRNA expression).
 
@@ -155,7 +156,7 @@ Arguments:
 The mod1 expression values of the train cells.
 
 Example file:
-`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/train_mod1.h5ad`
+`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap/train_mod1.h5ad`
 
 Format:
 
@@ -183,7 +184,7 @@ Slot description:
 | `layers["counts"]`               | `integer` | Raw counts.                                                        |
 | `layers["normalized"]`           | `double`  | Normalized expression values.                                      |
 | `uns["dataset_id"]`              | `string`  | A unique identifier for the dataset.                               |
-| `uns["common_dataset_id"]`       | `string`  | A common identifier for the dataset.                               |
+| `uns["common_dataset_id"]`       | `string`  | (*Optional*) A common identifier for the dataset.                  |
 | `uns["dataset_organism"]`        | `string`  | (*Optional*) The organism of the sample in the dataset.            |
 | `uns["normalization_id"]`        | `string`  | The unique identifier of the normalization method used.            |
 | `uns["gene_activity_var_names"]` | `string`  | (*Optional*) Names of the gene activity matrix.                    |
@@ -195,7 +196,7 @@ Slot description:
 The mod2 expression values of the train cells.
 
 Example file:
-`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/train_mod2.h5ad`
+`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap/train_mod2.h5ad`
 
 Format:
 
@@ -223,7 +224,7 @@ Slot description:
 | `layers["counts"]`               | `integer` | Raw counts.                                                        |
 | `layers["normalized"]`           | `double`  | Normalized expression values.                                      |
 | `uns["dataset_id"]`              | `string`  | A unique identifier for the dataset.                               |
-| `uns["common_dataset_id"]`       | `string`  | A common identifier for the dataset.                               |
+| `uns["common_dataset_id"]`       | `string`  | (*Optional*) A common identifier for the dataset.                  |
 | `uns["dataset_organism"]`        | `string`  | (*Optional*) The organism of the sample in the dataset.            |
 | `uns["normalization_id"]`        | `string`  | The unique identifier of the normalization method used.            |
 | `uns["gene_activity_var_names"]` | `string`  | (*Optional*) Names of the gene activity matrix.                    |
@@ -235,7 +236,7 @@ Slot description:
 The mod1 expression values of the test cells.
 
 Example file:
-`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/test_mod1.h5ad`
+`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap/test_mod1.h5ad`
 
 Format:
 
@@ -263,7 +264,7 @@ Slot description:
 | `layers["counts"]`               | `integer` | Raw counts.                                                                    |
 | `layers["normalized"]`           | `double`  | Normalized expression values.                                                  |
 | `uns["dataset_id"]`              | `string`  | A unique identifier for the dataset.                                           |
-| `uns["common_dataset_id"]`       | `string`  | A common identifier for the dataset.                                           |
+| `uns["common_dataset_id"]`       | `string`  | (*Optional*) A common identifier for the dataset.                              |
 | `uns["dataset_name"]`            | `string`  | Nicely formatted name.                                                         |
 | `uns["dataset_url"]`             | `string`  | (*Optional*) Link to the original source of the dataset.                       |
 | `uns["dataset_reference"]`       | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
@@ -280,7 +281,7 @@ Slot description:
 The mod2 expression values of the test cells.
 
 Example file:
-`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/test_mod2.h5ad`
+`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap/test_mod2.h5ad`
 
 Format:
 
@@ -308,7 +309,7 @@ Slot description:
 | `layers["counts"]`               | `integer` | Raw counts.                                                                    |
 | `layers["normalized"]`           | `double`  | Normalized expression values.                                                  |
 | `uns["dataset_id"]`              | `string`  | A unique identifier for the dataset.                                           |
-| `uns["common_dataset_id"]`       | `string`  | A common identifier for the dataset.                                           |
+| `uns["common_dataset_id"]`       | `string`  | (*Optional*) A common identifier for the dataset.                              |
 | `uns["dataset_name"]`            | `string`  | Nicely formatted name.                                                         |
 | `uns["dataset_url"]`             | `string`  | (*Optional*) Link to the original source of the dataset.                       |
 | `uns["dataset_reference"]`       | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
@@ -384,7 +385,7 @@ Arguments:
 A prediction of the mod2 expression values of the test cells
 
 Example file:
-`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/prediction.h5ad`
+`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap/prediction.h5ad`
 
 Format:
 
@@ -413,7 +414,7 @@ Slot description:
 Metric score file
 
 Example file:
-`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/score.h5ad`
+`resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap/score.h5ad`
 
 Format:
 
@@ -482,3 +483,4 @@ Slot description:
 | `uns["gene_activity_var_names"]` | `string`  | (*Optional*) Names of the gene activity matrix.                                |
 
 </div>
+

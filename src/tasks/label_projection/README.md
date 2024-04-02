@@ -1,5 +1,6 @@
 # Label projection
 
+
 Automated cell type annotation from rich, labeled reference data
 
 Path:
@@ -100,7 +101,7 @@ Slot description:
 | `obs["cell_type"]`           | `string`  | Cell type information.                                                         |
 | `obs["batch"]`               | `string`  | Batch information.                                                             |
 | `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.       |
-| `var["hvg_score"]`           | `integer` | A ranking of the features by hvg.                                              |
+| `var["hvg_score"]`           | `double`  | A ranking of the features by hvg.                                              |
 | `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                                   |
 | `layers["counts"]`           | `integer` | Raw counts.                                                                    |
 | `layers["normalized"]`       | `double`  | Normalized expression values.                                                  |
@@ -163,7 +164,7 @@ Slot description:
 | `obs["label"]`            | `string`  | Ground truth cell type labels.                                           |
 | `obs["batch"]`            | `string`  | Batch information.                                                       |
 | `var["hvg"]`              | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’. |
-| `var["hvg_score"]`        | `integer` | A ranking of the features by hvg.                                        |
+| `var["hvg_score"]`        | `double`  | A ranking of the features by hvg.                                        |
 | `obsm["X_pca"]`           | `double`  | The resulting PCA embedding.                                             |
 | `layers["counts"]`        | `integer` | Raw counts.                                                              |
 | `layers["normalized"]`    | `double`  | Normalized counts.                                                       |
@@ -199,7 +200,7 @@ Slot description:
 |:--------------------------|:----------|:-------------------------------------------------------------------------|
 | `obs["batch"]`            | `string`  | Batch information.                                                       |
 | `var["hvg"]`              | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’. |
-| `var["hvg_score"]`        | `integer` | A ranking of the features by hvg.                                        |
+| `var["hvg_score"]`        | `double`  | A ranking of the features by hvg.                                        |
 | `obsm["X_pca"]`           | `double`  | The resulting PCA embedding.                                             |
 | `layers["counts"]`        | `integer` | Raw counts.                                                              |
 | `layers["normalized"]`    | `double`  | Normalized counts.                                                       |
@@ -236,7 +237,7 @@ Slot description:
 | `obs["label"]`               | `string`  | Ground truth cell type labels.                                                 |
 | `obs["batch"]`               | `string`  | Batch information.                                                             |
 | `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.       |
-| `var["hvg_score"]`           | `integer` | A ranking of the features by hvg.                                              |
+| `var["hvg_score"]`           | `double`  | A ranking of the features by hvg.                                              |
 | `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                                   |
 | `layers["counts"]`           | `integer` | Raw counts.                                                                    |
 | `layers["normalized"]`       | `double`  | Normalized counts.                                                             |
@@ -366,3 +367,4 @@ Slot description:
 | `uns["metric_values"]`    | `double` | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
 
 </div>
+

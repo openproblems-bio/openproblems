@@ -1,5 +1,6 @@
 # Match Modalities
 
+
 Match cells across datasets of the same set of samples on different
 technologies / modalities.
 
@@ -495,3 +496,4 @@ Slot description:
 | `uns["normalization_id"]`    | `string`  | Which normalization was used.                                                  |
 
 </div>
+
