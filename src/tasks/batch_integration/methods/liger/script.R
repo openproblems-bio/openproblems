@@ -26,27 +26,39 @@ anndataToLiger <- function(adata) {
   })
   names(raw_data) <- batch_names
 
-  rliger::createLiger(raw.data = raw_data, remove.missing = FALSE)
+  rliger::createLiger(rawData = raw_data, removeMissing = FALSE)
 }
 
 addNormalizedDataToLiger <- function(adata, lobj) {
-  norm_data <- lapply(names(lobj@raw.data), function(name) {
+  norm_data <- lapply(names(rliger::rawData(lobj)), function(name) {
     norm <- adata$layers[["normalized"]]
+
     # subset
+    col_names <- colnames(rliger::rawData(lobj)[[name]])
+    row_names <- rownames(rliger::rawData(lobj)[[name]])
+    prefix <- paste0(name, "_")
+    col_names <- sub(prefix, "", col_names)
+
     norm <- norm[
-      colnames(lobj@raw.data[[name]]),
-      rownames(lobj@raw.data[[name]]),
+      col_names,
+      row_names,
       drop = FALSE
     ]
+
+    # add prefix
+    rownames(norm) <- paste0(prefix, rownames(norm))
+
     # transpose
     norm <- Matrix::t(norm)
 
     # turn into dgcMatrix
     as(as(norm, "denseMatrix"), "CsparseMatrix")
   })
-  names(norm_data) <- names(lobj@raw.data)
+  names(norm_data) <- names(rliger::rawData(lobj))
 
-  lobj@norm.data <- norm_data
+  for (name in names(rliger::rawData(lobj))) {
+    lobj@datasets[[name]]@normData <- norm_data[[name]]
+  }
 
   lobj
 }
@@ -63,18 +75,22 @@ lobj <- addNormalizedDataToLiger(adata, lobj)
 cat(">> Select genes\n")
 # lobj <- rliger::selectGenes(lobj)
 # overwrite gene selection to include all genes
-lobj@var.genes <- adata$var_names
+lobj@varFeatures <- adata$var_names
 
 cat(">> Perform scaling\n")
-lobj <- rliger::scaleNotCenter(lobj, remove.missing = FALSE)
+lobj <- rliger::scaleNotCenter(lobj, removeMissing = FALSE)
 
 cat(">> Joint Matrix Factorization\n")
-lobj <- rliger::optimizeALS(lobj, k = 20)
+lobj <- rliger::runIntegration(lobj, k = 20)
 
 cat(">> Quantile normalization\n")
-lobj <- rliger::quantile_norm(lobj)
+lobj <- rliger::quantileNorm(lobj)
 
 cat(">> Store dimred in adata\n")
+# remove dataset names from rownames
+for (name in names(rliger::rawData(lobj))) {
+  rownames(lobj@H.norm) <- sub(paste0(name, "_"), "", rownames(lobj@H.norm))
+}
 adata$obsm[["X_emb"]] <- lobj@H.norm[rownames(adata), , drop = FALSE]
 adata$uns[["method_id"]] <- meta$functionality_name
 
