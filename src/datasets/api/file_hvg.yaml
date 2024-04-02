@@ -10,7 +10,7 @@ info:
         name: hvg
         description: Whether or not the feature is considered to be a 'highly variable gene'
         required: true
-      - type: integer
+      - type: double
         name: hvg_score
-        description: A ranking of the features by hvg.
+        description: A score for the feature indicating how highly variable it is.
         required: true
