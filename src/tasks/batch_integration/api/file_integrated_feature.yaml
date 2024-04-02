@@ -1,4 +1,3 @@
-__merge__: "file_dataset.yaml"
 type: file
 example: "resources_test/batch_integration/pancreas/integrated_feature.h5ad"
 info:
@@ -12,6 +11,18 @@ info:
         description: Corrected counts after integration
         required: true
     uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: normalization_id
+        description: "Which normalization was used"
+        required: true
+      - name: dataset_organism
+        type: string
+        description: The organism of the sample in the dataset.
+        required: false
       - type: string
         name: method_id
         description: "A unique identifier for the method"

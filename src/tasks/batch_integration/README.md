@@ -1,5 +1,6 @@
 # Batch Integration
 
+
 Remove unwanted batch effects from scRNA data while retaining
 biologically meaningful variation.
 
@@ -111,7 +112,7 @@ Format:
 
     AnnData object
      obs: 'cell_type', 'batch'
-     var: 'hvg', 'feature_name'
+     var: 'hvg', 'hvg_score', 'feature_name'
      obsm: 'X_pca'
      obsp: 'knn_distances', 'knn_connectivities'
      layers: 'counts', 'normalized'
@@ -128,6 +129,7 @@ Slot description:
 | `obs["cell_type"]`           | `string`  | Cell type information.                                                         |
 | `obs["batch"]`               | `string`  | Batch information.                                                             |
 | `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.       |
+| `var["hvg_score"]`           | `double`  | A ranking of the features by hvg.                                              |
 | `var["feature_name"]`        | `string`  | A human-readable name for the feature, usually a gene symbol.                  |
 | `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                                   |
 | `obsp["knn_distances"]`      | `double`  | K nearest neighbors distance matrix.                                           |
@@ -181,7 +183,7 @@ Format:
 
     AnnData object
      obs: 'batch', 'label'
-     var: 'hvg', 'feature_name'
+     var: 'hvg', 'hvg_score', 'feature_name'
      obsm: 'X_pca'
      obsp: 'knn_distances', 'knn_connectivities'
      layers: 'counts', 'normalized'
@@ -198,6 +200,7 @@ Slot description:
 | `obs["batch"]`               | `string`  | Batch information.                                                       |
 | `obs["label"]`               | `string`  | label information.                                                       |
 | `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’. |
+| `var["hvg_score"]`           | `double`  | A ranking of the features by hvg.                                        |
 | `var["feature_name"]`        | `string`  | A human-readable name for the feature, usually a gene symbol.            |
 | `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                             |
 | `obsp["knn_distances"]`      | `double`  | K nearest neighbors distance matrix.                                     |
@@ -223,7 +226,7 @@ Format:
 
     AnnData object
      obs: 'batch', 'label'
-     var: 'hvg', 'feature_name'
+     var: 'hvg', 'hvg_score', 'feature_name'
      obsm: 'X_pca'
      obsp: 'knn_distances', 'knn_connectivities'
      layers: 'counts', 'normalized'
@@ -240,6 +243,7 @@ Slot description:
 | `obs["batch"]`               | `string`  | Batch information.                                                             |
 | `obs["label"]`               | `string`  | label information.                                                             |
 | `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’.       |
+| `var["hvg_score"]`           | `double`  | A ranking of the features by hvg.                                              |
 | `var["feature_name"]`        | `string`  | A human-readable name for the feature, usually a gene symbol.                  |
 | `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                                   |
 | `obsp["knn_distances"]`      | `double`  | K nearest neighbors distance matrix.                                           |
@@ -417,12 +421,8 @@ Format:
 <div class="small">
 
     AnnData object
-     obs: 'batch', 'label'
-     var: 'hvg', 'feature_name'
-     obsm: 'X_pca', 'X_emb'
-     obsp: 'knn_distances', 'knn_connectivities'
-     layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'normalization_id', 'dataset_organism', 'knn', 'method_id'
+     obsm: 'X_emb'
+     uns: 'dataset_id', 'normalization_id', 'dataset_organism', 'method_id'
 
 </div>
 
@@ -430,23 +430,13 @@ Slot description:
 
 <div class="small">
 
-| Slot                         | Type      | Description                                                              |
-|:-----------------------------|:----------|:-------------------------------------------------------------------------|
-| `obs["batch"]`               | `string`  | Batch information.                                                       |
-| `obs["label"]`               | `string`  | label information.                                                       |
-| `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’. |
-| `var["feature_name"]`        | `string`  | A human-readable name for the feature, usually a gene symbol.            |
-| `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                             |
-| `obsm["X_emb"]`              | `double`  | integration embedding prediction.                                        |
-| `obsp["knn_distances"]`      | `double`  | K nearest neighbors distance matrix.                                     |
-| `obsp["knn_connectivities"]` | `double`  | K nearest neighbors connectivities matrix.                               |
-| `layers["counts"]`           | `integer` | Raw counts.                                                              |
-| `layers["normalized"]`       | `double`  | Normalized expression values.                                            |
-| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                     |
-| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                            |
-| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                  |
-| `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                  |
-| `uns["method_id"]`           | `string`  | A unique identifier for the method.                                      |
+| Slot                      | Type     | Description                                             |
+|:--------------------------|:---------|:--------------------------------------------------------|
+| `obsm["X_emb"]`           | `double` | integration embedding prediction.                       |
+| `uns["dataset_id"]`       | `string` | A unique identifier for the dataset.                    |
+| `uns["normalization_id"]` | `string` | Which normalization was used.                           |
+| `uns["dataset_organism"]` | `string` | (*Optional*) The organism of the sample in the dataset. |
+| `uns["method_id"]`        | `string` | A unique identifier for the method.                     |
 
 </div>
 
@@ -462,12 +452,8 @@ Format:
 <div class="small">
 
     AnnData object
-     obs: 'batch', 'label'
-     var: 'hvg', 'feature_name'
-     obsm: 'X_pca'
-     obsp: 'knn_distances', 'knn_connectivities', 'connectivities', 'distances'
-     layers: 'counts', 'normalized'
-     uns: 'dataset_id', 'normalization_id', 'dataset_organism', 'knn', 'method_id', 'neighbors'
+     obsp: 'connectivities', 'distances'
+     uns: 'dataset_id', 'normalization_id', 'dataset_organism', 'method_id', 'neighbors'
 
 </div>
 
@@ -475,25 +461,15 @@ Slot description:
 
 <div class="small">
 
-| Slot                         | Type      | Description                                                              |
-|:-----------------------------|:----------|:-------------------------------------------------------------------------|
-| `obs["batch"]`               | `string`  | Batch information.                                                       |
-| `obs["label"]`               | `string`  | label information.                                                       |
-| `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’. |
-| `var["feature_name"]`        | `string`  | A human-readable name for the feature, usually a gene symbol.            |
-| `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                             |
-| `obsp["knn_distances"]`      | `double`  | K nearest neighbors distance matrix.                                     |
-| `obsp["knn_connectivities"]` | `double`  | K nearest neighbors connectivities matrix.                               |
-| `obsp["connectivities"]`     | `double`  | Neighbors connectivities matrix.                                         |
-| `obsp["distances"]`          | `double`  | Neighbors connectivities matrix.                                         |
-| `layers["counts"]`           | `integer` | Raw counts.                                                              |
-| `layers["normalized"]`       | `double`  | Normalized expression values.                                            |
-| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                     |
-| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                            |
-| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                  |
-| `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                  |
-| `uns["method_id"]`           | `string`  | A unique identifier for the method.                                      |
-| `uns["neighbors"]`           | `object`  | Supplementary K nearest neighbors data.                                  |
+| Slot                      | Type     | Description                                             |
+|:--------------------------|:---------|:--------------------------------------------------------|
+| `obsp["connectivities"]`  | `double` | Neighbors connectivities matrix.                        |
+| `obsp["distances"]`       | `double` | Neighbors connectivities matrix.                        |
+| `uns["dataset_id"]`       | `string` | A unique identifier for the dataset.                    |
+| `uns["normalization_id"]` | `string` | Which normalization was used.                           |
+| `uns["dataset_organism"]` | `string` | (*Optional*) The organism of the sample in the dataset. |
+| `uns["method_id"]`        | `string` | A unique identifier for the method.                     |
+| `uns["neighbors"]`        | `object` | Supplementary K nearest neighbors data.                 |
 
 </div>
 
@@ -509,12 +485,8 @@ Format:
 <div class="small">
 
     AnnData object
-     obs: 'batch', 'label'
-     var: 'hvg', 'feature_name'
-     obsm: 'X_pca'
-     obsp: 'knn_distances', 'knn_connectivities'
-     layers: 'counts', 'normalized', 'corrected_counts'
-     uns: 'dataset_id', 'normalization_id', 'dataset_organism', 'knn', 'method_id'
+     layers: 'corrected_counts'
+     uns: 'dataset_id', 'normalization_id', 'dataset_organism', 'method_id'
 
 </div>
 
@@ -522,23 +494,13 @@ Slot description:
 
 <div class="small">
 
-| Slot                         | Type      | Description                                                              |
-|:-----------------------------|:----------|:-------------------------------------------------------------------------|
-| `obs["batch"]`               | `string`  | Batch information.                                                       |
-| `obs["label"]`               | `string`  | label information.                                                       |
-| `var["hvg"]`                 | `boolean` | Whether or not the feature is considered to be a ‘highly variable gene’. |
-| `var["feature_name"]`        | `string`  | A human-readable name for the feature, usually a gene symbol.            |
-| `obsm["X_pca"]`              | `double`  | The resulting PCA embedding.                                             |
-| `obsp["knn_distances"]`      | `double`  | K nearest neighbors distance matrix.                                     |
-| `obsp["knn_connectivities"]` | `double`  | K nearest neighbors connectivities matrix.                               |
-| `layers["counts"]`           | `integer` | Raw counts.                                                              |
-| `layers["normalized"]`       | `double`  | Normalized expression values.                                            |
-| `layers["corrected_counts"]` | `double`  | Corrected counts after integration.                                      |
-| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                     |
-| `uns["normalization_id"]`    | `string`  | Which normalization was used.                                            |
-| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                  |
-| `uns["knn"]`                 | `object`  | Supplementary K nearest neighbors data.                                  |
-| `uns["method_id"]`           | `string`  | A unique identifier for the method.                                      |
+| Slot                         | Type     | Description                                             |
+|:-----------------------------|:---------|:--------------------------------------------------------|
+| `layers["corrected_counts"]` | `double` | Corrected counts after integration.                     |
+| `uns["dataset_id"]`          | `string` | A unique identifier for the dataset.                    |
+| `uns["normalization_id"]`    | `string` | Which normalization was used.                           |
+| `uns["dataset_organism"]`    | `string` | (*Optional*) The organism of the sample in the dataset. |
+| `uns["method_id"]`           | `string` | A unique identifier for the method.                     |
 
 </div>
 
@@ -606,3 +568,4 @@ Arguments:
 | `--output` | `file` | (*Output*) An integrated AnnData HDF5 file. |
 
 </div>
+
