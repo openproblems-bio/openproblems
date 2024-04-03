@@ -1,20 +1,8 @@
-# The API specifies which type of component this is.
-# It contains specifications for:
-#   - The input/output files
-#   - Common parameters
-#   - A unit test
 __merge__: ../../api/comp_method_embedding.yaml
-
 functionality:
-  # A unique identifier for your component (required).
-  # Can contain only lowercase letters or underscores.
   name: scalex_embed
-  # Metadata for your component
   info:
-    # A relatively short label, used when rendering visualisarions (required)
     label: SCALEX (embedding)
-    # A one sentence summary of how this method works (required). Used when 
-    # rendering summary tables.
     summary: Online single-cell data integration through projecting heterogeneous datasets into a common cell-embedding space
     description : |
       SCALEX is a method for integrating heterogeneous single-cell data online using a VAE framework. Its generalised encoder disentangles batch-related components from batch-invariant biological components, which are then projected into a common cell-embedding space.
@@ -29,12 +17,17 @@ functionality:
       scalex_feature_unscaled:
       scanorama_feature_scaled:
         preferred_normalization: log_cp10k_scaled
+  arguments:
+    - name: --n_hvg
+      type: integer
+      default: 2000
+      description: Number of highly variable genes to use.
   resources:
     - type: python_script
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    image: ghcr.io/openproblems-bio/base_python:1.0.3
     setup:
       - type: python
         pypi:

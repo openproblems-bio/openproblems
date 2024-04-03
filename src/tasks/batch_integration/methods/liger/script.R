@@ -86,13 +86,23 @@ lobj <- rliger::runIntegration(lobj, k = 20)
 cat(">> Quantile normalization\n")
 lobj <- rliger::quantileNorm(lobj)
 
-cat(">> Store dimred in adata\n")
+cat(">> Store output\n")
 # remove dataset names from rownames
 for (name in names(rliger::rawData(lobj))) {
   rownames(lobj@H.norm) <- sub(paste0(name, "_"), "", rownames(lobj@H.norm))
 }
-adata$obsm[["X_emb"]] <- lobj@H.norm[rownames(adata), , drop = FALSE]
-adata$uns[["method_id"]] <- meta$functionality_name
 
-cat(">> Write AnnData to disk\n")
-zzz <- adata$write_h5ad(par$output, compression = "gzip")
+output <- anndata::AnnData(
+  uns = list(
+    dataset_id = adata$uns[["dataset_id"]],
+    normalization_id = adata$uns[["normalization_id"]],
+    method_id = meta$functionality_name
+  ),
+  obsm = list(
+    X_emb = lobj@H.norm[rownames(adata), , drop = FALSE]
+  ),
+  shape = adata$shape
+)
+
+cat(">> Write AnnData to file\n")
+zzz <- output$write_h5ad(par$output, compression = "gzip")

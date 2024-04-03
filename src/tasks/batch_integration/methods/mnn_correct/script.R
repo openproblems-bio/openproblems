@@ -7,7 +7,7 @@ suppressPackageStartupMessages({
 })
 ## VIASH START
 par <- list(
-  input = 'resources_test/batch_integration/pancreas/unintegrated.h5ad',
+  input = 'resources_test/batch_integration/pancreas/dataset.h5ad',
   output = 'output.h5ad'
 )
 meta <- list(
@@ -26,8 +26,22 @@ out <- suppressWarnings(batchelor::mnnCorrect(
 
 cat("Reformat output\n")
 layer <- SummarizedExperiment::assay(out, "corrected")
-adata$layers[["corrected_counts"]] <- as(t(layer), "sparseMatrix")
+as(t(layer), "sparseMatrix")
+
+
 
 cat("Store outputs\n")
-adata$uns[["method_id"]] <- meta$functionality_name
-zzz <- adata$write_h5ad(par$output, compression = "gzip")
+output <- anndata::AnnData(
+  uns = list(
+    dataset_id = adata$uns[["dataset_id"]],
+    normalization_id = adata$uns[["normalization_id"]],
+    method_id = meta$functionality_name
+  ),
+  layers = list(
+    corrected_counts = as(t(layer), "sparseMatrix")
+  ),
+  shape = adata$shape
+)
+
+cat("Write output to file\n")
+zzz <- output$write_h5ad(par$output, compression = "gzip")

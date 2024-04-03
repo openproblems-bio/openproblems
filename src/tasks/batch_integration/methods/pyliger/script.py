@@ -64,9 +64,19 @@ pyliger.quantile_norm(lobj)
 print('>> Concatenate outputs', flush=True)
 ad_out = ad.concat(lobj.adata_list)
 
-print('>> Store output', flush=True)
-adata.obsm['X_emb'] = ad_out[adata.obs_names, :].obsm['H_norm']
-adata.uns['method_id'] = meta['functionality_name']
+print('Store output', flush=True)
+output = ad.AnnData(
+    obs=adata.obs[[]],
+    var=adata.var[[]],
+        obsm={
+        'X_emb': ad_out[adata.obs_names, :].obsm['H_norm']
+    },
+    uns={
+        'dataset_id': adata.uns['dataset_id'],
+        'normalization_id': adata.uns['normalization_id'],
+        'method_id': meta['functionality_name'],
+    }
+)
 
-print("Write output to disk", flush=True)
-adata.write_h5ad(par['output'], compression='gzip')
+print("Write output to file", flush=True)
+output.write_h5ad(par['output'], compression='gzip')

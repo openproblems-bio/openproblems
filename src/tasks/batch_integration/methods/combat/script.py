@@ -1,4 +1,3 @@
-import yaml
 import scanpy as sc
 from scipy.sparse import csr_matrix
 
@@ -6,7 +5,7 @@ from scipy.sparse import csr_matrix
 par = {
     'input': 'resources_test/batch_integration/pancreas/unintegrated.h5ad',
     'output': 'output.h5ad',
-    'hvg': True
+    'n_hvg': 2000,
 }
 
 meta = {
@@ -19,13 +18,30 @@ meta = {
 print('Read input', flush=True)
 adata = sc.read_h5ad(par['input'])
 
+if par['n_hvg']:
+    print(f"Select top {par['n_hvg']} high variable genes", flush=True)
+    idx = adata.var['hvg_score'].to_numpy().argsort()[::-1][:par['n_hvg']]
+    adata = adata[:, idx].copy()
+
+
 print('Run Combat', flush=True)
 adata.X = adata.layers['normalized']
 adata.X = sc.pp.combat(adata, key='batch', inplace=False)
-adata.layers['corrected_counts'] = csr_matrix(adata.X)
 
-del(adata.X)
+
+print("Store output", flush=True)
+output = sc.AnnData(
+    obs=adata.obs[[]],
+    var=adata.var[[]],
+    uns={
+        'dataset_id': adata.uns['dataset_id'],
+        'normalization_id': adata.uns['normalization_id'],
+        'method_id': meta['functionality_name'],
+    },
+    layers={
+        'corrected_counts': csr_matrix(adata.X),
+    }
+)
 
 print("Store outputs", flush=True)
-adata.uns['method_id'] = meta['functionality_name']
-adata.write_h5ad(par['output'], compression='gzip')
+output.write_h5ad(par['output'], compression='gzip')

@@ -1,5 +1,4 @@
 import anndata as ad
-import scanpy as sc
 import scalex
 
 ## VIASH START
@@ -14,10 +13,13 @@ meta = {
 }
 ## VIASH END
 
-
-
 print('Read input', flush=True)
 adata = ad.read_h5ad(par['input'])
+
+if par['n_hvg']:
+    print(f"Select top {par['n_hvg']} high variable genes", flush=True)
+    idx = adata.var['hvg_score'].to_numpy().argsort()[::-1][:par['n_hvg']]
+    adata = adata[:, idx].copy()
 
 print('Run SCALEX', flush=True)
 adata.X = adata.layers['normalized']
@@ -37,5 +39,18 @@ adata = scalex.SCALEX(
 adata.obsm["X_emb"] = adata.obsm["latent"]
 
 print("Store outputs", flush=True)
-adata.uns['method_id'] = meta['functionality_name']
-adata.write_h5ad(par['output'], compression='gzip')
+output = ad.AnnData(
+    obs=adata.obs[[]],
+    var=adata.var[[]],
+    obsm={
+        'X_emb': adata.obsm['latent'],
+    },
+    uns={
+        'dataset_id': adata.uns['dataset_id'],
+        'normalization_id': adata.uns['normalization_id'],
+        'method_id': meta['functionality_name'],
+    }
+)
+
+print("Write output to file", flush=True)
+output.write_h5ad(par['output'], compression='gzip')

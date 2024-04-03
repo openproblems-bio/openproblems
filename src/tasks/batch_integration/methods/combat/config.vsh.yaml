@@ -24,16 +24,17 @@ functionality:
       combat_full_unscaled:
       combat_full_scaled:
         preferred_normalization: log_cp10k_scaled
+  arguments:
+    - name: --n_hvg
+      type: integer
+      default: 2000
+      description: Number of highly variable genes to use.
   resources:
     - type: python_script
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.2
-    setup:
-      - type: python
-        pypi: 
-          - scib==1.1.5
+    image: ghcr.io/openproblems-bio/base_python:1.0.3
   - type: nextflow
     directives: 
-      label: [ "midtime", highmem, lowcpu ]
+      label: [ midtime, highmem, lowcpu ]

@@ -30,14 +30,22 @@ cat("Reformat output\n")
 # reusing the same script for fastmnn_embed and fastmnn_feature
 return_type <- gsub("fastmnn_", "", meta[["functionality_name"]])
 
+output <- anndata::AnnData(
+  shape = adata$shape,
+  uns = list(
+    dataset_id = adata$uns[["dataset_id"]],
+    normalization_id = adata$uns[["normalization_id"]],
+    method_id = meta$functionality_name
+  )
+)
+
 if (return_type == "feature") {
   layer <- as(SummarizedExperiment::assay(out, "reconstructed"), "sparseMatrix")
-  adata$layers[["corrected_counts"]] <- t(layer)
+  output$layers[["corrected_counts"]] <- t(layer)
 } else if (return_type == "embedding") {
   obsm <- SingleCellExperiment::reducedDim(out, "corrected")
-  adata$obsm[["X_emb"]] <- obsm
+  output$obsm[["X_emb"]] <- obsm
 }
 
-cat("Store outputs\n")
-adata$uns[["method_id"]] <- meta$functionality_name
-zzz <- adata$write_h5ad(par$output, compression = "gzip")
+cat("Write output to file\n")
+zzz <- output$write_h5ad(par$output, compression = "gzip")

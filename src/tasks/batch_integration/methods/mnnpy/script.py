@@ -1,11 +1,11 @@
 import anndata as ad
-from scib.integration import mnn
+import mnnpy
 
 ## VIASH START
 par = {
     'input': 'resources_test/batch_integration/pancreas/unintegrated.h5ad',
     'output': 'output.h5ad',
-    'hvg': True,
+    'n_hvg': 2000,
 }
 meta = {
     'functionality_name': 'foo',
@@ -16,12 +16,38 @@ meta = {
 print('Read input', flush=True)
 adata = ad.read_h5ad(par['input'])
 
+if par['n_hvg']:
+    print(f"Select top {par['n_hvg']} high variable genes", flush=True)
+    idx = adata.var['hvg_score'].to_numpy().argsort()[::-1][:par['n_hvg']]
+    adata = adata[:, idx].copy()
+
 print('Run mnn', flush=True)
 adata.X = adata.layers['normalized']
-adata.layers['corrected_counts'] = mnn(adata, batch='batch').X
-
-del adata.X
+split = []
+batch_categories = adata.obs['batch'].cat.categories
+for i in batch_categories:
+    split.append(adata[adata.obs['batch'] == i].copy())
+corrected, _, _ = mnnpy.mnn_correct(
+        *split,
+        batch_key='batch',
+        batch_categories=batch_categories,
+        index_unique=None
+    )
 
 print("Store outputs", flush=True)
-adata.uns['method_id'] = meta['functionality_name']
-adata.write_h5ad(par['output'], compression='gzip')
+output = ad.AnnData(
+    obs=adata.obs[[]],
+    var=adata.var[[]],
+    uns={
+        'dataset_id': adata.uns['dataset_id'],
+        'normalization_id': adata.uns['normalization_id'],
+        'method_id': meta['functionality_name'],
+    },
+    layers={
+        'corrected_counts': corrected.X,
+    }
+)
+
+
+print("Store outputs", flush=True)
+output.write_h5ad(par['output'], compression='gzip')
