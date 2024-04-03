@@ -2,8 +2,8 @@ __merge__: ../../api/comp_method.yaml
 functionality:
   name: "scanvi"
   info:
-    label: SCANVI
-    summary: "ScANVI predicts cell type labels for unlabelled test data by leveraging cell type labels, modelling uncertainty and using deep neural networks with stochastic optimization."
+    label: scANVI
+    summary: "scANVI predicts cell type labels for unlabelled test data by leveraging cell type labels, modelling uncertainty and using deep neural networks with stochastic optimization."
     description: |
       single-cell ANnotation using Variational Inference is a
       semi-supervised variant of the scVI(Lopez et al. 2018) algorithm. Like scVI,
@@ -13,12 +13,12 @@ functionality:
       in the generative modelling. In this approach, scANVI is used to predict the
       cell type labels of the unlabelled test data.
     reference: "lotfollahi2020query"
-    repository_url: "https://github.com/YosefLab/scvi-tools"
+    repository_url: "https://github.com/scverse/scvi-tools"
     documentation_url: https://scarches.readthedocs.io/en/latest/scanvi_surgery_pipeline.html
     v1:
       path: openproblems/tasks/label_projection/methods/scvi_tools.py
       commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
-    preferred_normalization: log_cp10k
+    preferred_normalization: counts
     variants:
       scanvi_all_genes:
       scanvi_hvg:
@@ -32,13 +32,12 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: nvcr.io/nvidia/pytorch:23.12-py3
+    image: ghcr.io/openproblems-bio/base_pytorch_nvidia:1.0.3
     setup:
       - type: python
         packages: 
-          - pyyaml
-          - "anndata~=0.8.0"
           - scarches
+          - scvi-tools>=1.1.0
   - type: nextflow
     directives: 
-      label: [ "midtime", midmem, highcpu, gpu ]
+      label: [ midtime, midmem, highcpu, gpu ]

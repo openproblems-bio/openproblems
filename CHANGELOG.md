@@ -67,6 +67,8 @@
 
 * Add library.bib file check to component unit test (PR #167)
 
+* Lower bound scvi-tools to 1.1.0 for all methods using the package (PR #416).
+
 ### BUG FIXES
 
 * fix typos in metric and common defenition schemas (PR #212)
@@ -105,6 +107,12 @@
 * `loaders/openproblems_v1_multimodal`: Fetch a multimodal dataset from OpenProblems v1, whilst adding extra information to the `.uns`.
 
 ## batch_integration
+
+### MINOR CHANGES
+
+* Updated `methods/scanvi` to use `counts` as  `preferred_normalization`
+
+* Updated `methods/scvi` to use `counts` as  `preferred_normalization`
 
 ### NEW FUNCTIONALITY
 
@@ -167,6 +175,10 @@
 * Removed the `.uns["output_type"]` field from output anndata in methods and control methods. (PR #205)
 
 ## label_projection
+
+### MINOR CHANGES
+
+* Updated `methods/scanvi` to use `counts` as  `preferred_normalization`
 
 ### NEW FUNCTIONALITY
 

@@ -1,5 +1,6 @@
 import anndata as ad
 import scarches as sca
+import pandas as pd
 
 # followed procedure from here:
 # https://scarches.readthedocs.io/en/latest/scanvi_surgery_pipeline.html
@@ -17,30 +18,28 @@ meta = {
 ## VIASH END
 
 print("Load input data", flush=True)
-input_train_orig = ad.read_h5ad(par['input_train'])
-input_test_orig = ad.read_h5ad(par['input_test'])
+input_train = ad.read_h5ad(par['input_train'])
+input_test = ad.read_h5ad(par['input_test'])
 
 if par["num_hvg"]:
     print("Subsetting to HVG", flush=True)
-    hvg_idx = input_train_orig.var['hvg_score'].to_numpy().argsort()[:par["num_hvg"]]
-    input_train = input_train_orig[:,hvg_idx]
-    input_test = input_test_orig[:,hvg_idx]
-else:
-    input_train = input_train_orig
-    input_test = input_test_orig
+    hvg_idx = input_train.var['hvg_score'].to_numpy().argsort()[:par["num_hvg"]]
+    input_train = input_train[:,hvg_idx]
+    input_test = input_test[:,hvg_idx]
 
 print("Concatenating train and test data", flush=True)
 input_train.obs['is_test'] = False
 input_test.obs['is_test'] = True
 input_test.obs['label'] = "Unknown"
 adata = ad.concat([input_train, input_test], merge = "same")
+del input_train
 
 print("Create SCANVI model and train it on fully labelled reference dataset", flush=True)
 sca.models.SCVI.setup_anndata(
     adata, 
     batch_key="batch", 
     labels_key="label",
-    layer="normalized"
+    layer="counts"
 )
 
 vae = sca.models.SCVI(
@@ -60,9 +59,20 @@ scanvae.train()
 
 print("Make predictions", flush=True)
 preds = scanvae.predict(adata)
-input_test_orig.obs["label_pred"] = preds[adata.obs['is_test'].values]
+
+print("Store outputs", flush=True)
+output = ad.AnnData(
+    obs=pd.DataFrame(
+        {"label_pred": preds[adata.obs['is_test'].values]},
+        index=input_test.obs.index,
+    ),
+    var=input_test.var[[]],
+    uns={
+        "dataset_id": input_test.uns["dataset_id"],
+        "normalization_id": input_test.uns["normalization_id"],
+        "method_id": meta["functionality_name"],
+    },
+)
 
 print("Write output to file", flush=True)
-input_test_orig.uns["method_id"] = meta["functionality_name"]
-input_test_orig.write_h5ad(par['output'], compression="gzip")
-
+output.write_h5ad(par["output"], compression="gzip")

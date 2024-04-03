@@ -29,12 +29,12 @@ functionality:
 
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    image: ghcr.io/openproblems-bio/base_pytorch_nvidia:1.0.3
     setup:
       - type: python
         packages: 
-          - scvi-tools
+          - scvi-tools>=1.1.0
   - type: native
   - type: nextflow
     directives:
-      label: [ "midtime", midmem, midcpu]
+      label: [ midtime, midmem, midcpu, gpu ]

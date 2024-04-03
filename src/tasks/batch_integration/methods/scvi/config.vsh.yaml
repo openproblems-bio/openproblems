@@ -8,25 +8,47 @@ functionality:
     description: |
       scVI combines a variational autoencoder with a hierarchical Bayesian model. It uses the negative binomial distribution to describe gene expression of each cell, conditioned on unobserved factors and the batch variable. ScVI is run as implemented in Luecken et al.
     reference: "lopez2018deep"
-    repository_url: "https://github.com/YosefLab/scvi-tools"
-    documentation_url: "https://github.com/YosefLab/scvi-tools#readme"
+    repository_url: "https://github.com/scverse/scvi-tools"
+    documentation_url: "https://docs.scvi-tools.org/en/stable/user_guide/models/scvi.html"
     v1:
       path: openproblems/tasks/_batch_integration/batch_integration_graph/methods/scvi.py
       commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
-    preferred_normalization: log_cp10k
+    preferred_normalization: counts
     variants:
       scvi_full_unscaled:
+  # defaults are derived from te scvi tutorial:
+  # https://docs.scvi-tools.org/en/stable/tutorials/notebooks/scrna/harmonization.html
+  arguments:
+    - name: --n_hvg
+      type: integer
+      default: 2000
+      description: Number of highly variable genes to use.
+    - name: --n_latent
+      type: integer
+      default: 30
+      description: Number of latent dimensions.
+    - name: --n_hidden
+      type: integer
+      default: 128
+      description: Number of hidden units.
+    - name: --n_layers
+      type: integer
+      default: 2
+      description: Number of layers.
+    - name: --max_epochs
+      type: integer
+      example: 400
+      description: Maximum number of epochs.
   resources:
     - type: python_script
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    image: ghcr.io/openproblems-bio/base_pytorch_nvidia:1.0.3
     setup:
       - type: python
         pypi:
-          - scvi-tools
-          - scib==1.1.5
+          - scvi-tools>=1.1.0
   - type: nextflow
     directives: 
-      label: [ "midtime", midmem, lowcpu ]
+      label: [ midtime, midmem, lowcpu, gpu ]

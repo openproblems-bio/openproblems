@@ -20,7 +20,7 @@ functionality:
       description: Number of epochs to train the Conditional version of single-cell Variational Inference (CondSCVI) model using MAP inference.
     - name: "--max_epochs_sp"
       type: integer
-      default: 10000
+      default: 2000
       description: Number of epochs to train the DestVI model using MAP inference.
 
   resources:
@@ -29,14 +29,13 @@ functionality:
 
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    image: ghcr.io/openproblems-bio/base_pytorch_nvidia:1.0.3
     setup:
       - type: python
         packages: 
-          - scvi-tools
-          - chex==0.1.85
+          - scvi-tools>=1.1.0
 
   - type: native
   - type: nextflow
     directives:
-      label: [ "midtime", midmem, midcpu]
+      label: [ midtime, midmem, midcpu, gpu ]

@@ -1,14 +1,7 @@
-# The API specifies which type of component this is.
-# It contains specifications for:
-#   - The input/output files
-#   - Common parameters
-#   - A unit test
 __merge__: ../../api/comp_method.yaml
 
 functionality:
   name: scanvi_scarches
-
-  # Metadata for your component (required)
   info:
     label: scANVI+scArches
     summary: 'Query to reference single-cell integration with transfer learning with scANVI and scArches'
@@ -22,9 +15,6 @@ functionality:
       commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
     variants:
       scanvi_scarches:
-      #! TODO: add other scanvi_scarches variants
-
-  # Component-specific parameters (optional)
   arguments:
     - name: "--n_latent"
       type: "integer"
@@ -46,19 +36,15 @@ functionality:
       type: "integer"
       default: 2
       description: "Maximum number of training epochs"
-
-  # Resources required to run the component
   resources:
-    # The script of your component
     - type: python_script
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.2
-    # Add custom dependencies here
+    image: ghcr.io/openproblems-bio/base_pytorch_nvidia:1.0.3
     setup:
       - type: python
-        pypi: scvi-tools
+        pypi: scvi-tools>=1.1.0
   - type: nextflow
     directives:
-      label: [ "midtime",midmem, midcpu]
+      label: [ midtime, midmem, midcpu, gpu ]
