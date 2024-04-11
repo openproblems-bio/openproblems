@@ -3,21 +3,36 @@ functionality:
   namespace: common
   description: |
     Create a README for the task.
-  arguments:
-    - type: string
-      name: --task
-      description: Which task the component will be added to.
-      example: denoising
-    - type: file
-      name: --output
-      direction: output
-      description: Path to the component directory. Suggested location is `src/<TASK>/README.md`.
-      default: src/tasks/${VIASH_PAR_TASK}/README.md
-    - type: file
-      name: --viash_yaml
-      description: |
-        Path to the project config file. Needed for knowing the relative location of a file to the project root.
-      default: "_viash.yaml"
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - type: string
+          name: --task
+          description: Which task the component will be added to.
+          example: denoising
+          required: false
+        - type: file
+          name: --task_dir
+          description: Path to the task directory.
+          default: src/tasks/${VIASH_PAR_TASK}
+          required: false
+        - type: file
+          name: --viash_yaml
+          description: |
+            Path to the project config file. Needed for knowing the relative location of a file to the project root.
+          default: "_viash.yaml"
+        - type: string
+          name: --github_url
+          description: |
+            URL to the GitHub repository. Needed for linking to the source code.
+          default: "https://github.com/openproblems-bio/openproblems-v2/tree/main/"
+    - name: Outputs
+      arguments:
+        - type: file
+          name: --output
+          direction: output
+          description: Path to the component directory. Suggested location is `src/tasks/<TASK>/README.md`.
+          default: src/tasks/${VIASH_PAR_TASK}/README.md
   resources:
     - type: r_script
       path: script.R

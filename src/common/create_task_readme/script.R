@@ -5,8 +5,10 @@ library(dplyr, quietly = TRUE, warn.conflicts = FALSE)
 ## VIASH START
 par <- list(
   "task" = "batch_integration",
+  "task_dir" = "src/tasks/batch_integration",
   "output" = "src/tasks/batch_integration/README.md",
-  "viash_yaml" = "_viash.yaml"
+  "viash_yaml" = "_viash.yaml",
+  "github_url" = "https://github.com/openproblems-bio/openproblems-v2/tree/main/"
 )
 meta <- list(
   "resources_dir" = "src/common/helper_functions",
@@ -14,15 +16,23 @@ meta <- list(
 )
 ## VIASH END
 
+if (is.null(par$task) && is.null(par$task_dir)) {
+  stop("Either 'task' or 'task_dir' must be provided")
+}
+if (is.null(par$viash_yaml)) {
+  stop("Argument 'viash_yaml' must be provided")
+}
+if (is.null(par$output)) {
+  stop("Argument 'output' must be provided")
+}
+
 # import helper function
 source(paste0(meta["resources_dir"], "/read_and_merge_yaml.R"))
 source(paste0(meta["resources_dir"], "/strip_margin.R"))
 source(paste0(meta["resources_dir"], "/read_api_files.R"))
 
 cat("Read task info\n")
-task_dir <- paste0(dirname(par[["viash_yaml"]]), "/src/tasks/", par[["task"]]) %>%
-  gsub("^\\./", "", .)
-task_api <- read_task_api(task_dir)
+task_api <- read_task_api(par[["task_dir"]])
 
 # determine ordering
 root <- .task_graph_get_root(task_api)
@@ -55,7 +65,10 @@ authors_str <-
   }
 
 cat("Generate qmd content\n")
-task_dir_short <- gsub(".*openproblems-v2/", "", task_dir)
+relative_path <- par[["task_dir"]] %>%
+  gsub(paste0(dirname(par[["viash_yaml"]]), "/*"), "", .) %>%
+  gsub("/*$", "", .)
+source_url <- paste0(par[["github_url"]], relative_path)
 qmd_content <- strip_margin(glue::glue("
   §---
   §title: \"{task_api$task_info$label}\"
@@ -64,7 +77,7 @@ qmd_content <- strip_margin(glue::glue("
   §
   §{task_api$task_info$summary}
   §
-  §Path: [`{task_dir_short}`](https://github.com/openproblems-bio/openproblems-v2/tree/main/{task_dir_short})
+  §Path: [`{relative_path}`]({source_url})
   §
   §## Motivation
   §

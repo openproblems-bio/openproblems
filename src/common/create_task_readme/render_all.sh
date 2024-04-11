@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 TASK_IDS=`ls src/tasks`
 
 for task_id in $TASK_IDS; do
