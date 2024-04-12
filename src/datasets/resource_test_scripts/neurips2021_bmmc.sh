@@ -54,7 +54,8 @@ nextflow run . \
   -profile docker \
   -resume \
   --publish_dir resources_test/common \
-  -params-file "$params_file"
+  -params-file "$params_file" \
+  -c src/wf_utils/labels.config
 
 # tw launch https://github.com/openproblems-bio/openproblems-v2.git \
 #   --revision main_build \
