@@ -86,7 +86,7 @@ workflow run_wf {
       ]
     )
 
-    // run normalization methods
+    // run mod1 normalization methods
     | runEach(
       components: normalization_methods,
       id: { id, state, comp ->
@@ -109,18 +109,16 @@ workflow run_wf {
     )
 
     // run normalization methods on second modality
-    // TODO: change this normalization method
-    | log_cp.run(
-      key: "log_cp10k_adt",
+    // TODO: can we change this to DSB?
+    | prot_clr.run(
       runIf: { id, state -> state.mod2 == "ADT" },
-      args: [normalization_id: "log_cp10k", n_cp: 10000],
+      args: [normalization_id: "prot_clr"],
       fromState: ["input": "raw_mod2"],
       toState: ["normalized_mod2": "output"]
     )
-    | log_cp.run(
-      key: "log_cp10k_atac",
+    | atac_tfidf.run(
       runIf: { id, state -> state.mod2 == "ATAC" },
-      args: [normalization_id: "log_cp10k", n_cp: 10000],
+      args: [normalization_id: "atac_tfidf"],
       fromState: ["input": "raw_mod2"],
       toState: ["normalized_mod2": "output"]
     )

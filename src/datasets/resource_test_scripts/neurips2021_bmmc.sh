@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 params_file="/tmp/datasets_openproblems_neurips2021_params.yaml"
 
 cat > "$params_file" << 'HERE'

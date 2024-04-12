@@ -122,6 +122,8 @@ functionality:
     - name: datasets/normalization/log_scran_pooling
     - name: datasets/normalization/sqrt_cp
     - name: datasets/normalization/l1_sqrt
+    - name: datasets/normalization/prot_clr
+    - name: datasets/normalization/atac_tfidf
     - name: datasets/processors/subsample
     - name: datasets/processors/svd
     - name: datasets/processors/hvg
