@@ -30,6 +30,8 @@ nextflow run . \
   --dataset_summary "sciCAR is a combinatorial indexing-based assay that jointly measures cellular transcriptomes and the accessibility of cellular chromatin in the same cells" \
   --dataset_description "sciCAR is a combinatorial indexing-based assay that jointly measures cellular transcriptomes and the accessibility of cellular chromatin in the same cells. Here, we use two sciCAR datasets that were obtained from the same study. The first dataset contains 4,825 cells from three cell lines (HEK293T cells, NIH/3T3 cells, and A549 cells) at multiple timepoints (0, 1 hour, 3 hours) after dexamethasone treatment. The second dataset contains 11,233 cells from wild-type adult mouse kidney." \
   --dataset_organism "[homo_sapiens, mus_musculus]" \
+  --mod1 GEX \
+  --mod2 ATAC \
   --do_subsample true \
   --n_obs 600 \
   --n_vars 1500 \

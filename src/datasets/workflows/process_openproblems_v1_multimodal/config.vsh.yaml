@@ -39,6 +39,16 @@ functionality:
           type: "string"
           description: "Location of where to find the feature names. Can be set to index if the feature names are the index."
           default: index
+        - name: "--mod1"
+          type: string
+          description: Name of the first modality.
+          required: true
+          example: GEX
+        - name: "--mod2"
+          type: string
+          description: Name of the second modality.
+          required: true
+          example: ADT
     - name: Metadata
       arguments:
         - name: "--dataset_name"

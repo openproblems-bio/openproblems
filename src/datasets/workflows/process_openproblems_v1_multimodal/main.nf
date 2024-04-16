@@ -145,6 +145,7 @@ workflow run_wf {
     )
 
     | hvg.run(
+      key: "hvg_mod2",
       fromState: [ "input": "svd_mod2" ],
       toState: [ "hvg_mod2": "output" ]
     )

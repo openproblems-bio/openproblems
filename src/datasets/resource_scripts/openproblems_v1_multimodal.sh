@@ -20,6 +20,8 @@ param_list:
     dataset_organism: homo_sapiens
     layer_counts: counts
     var_feature_name: index
+    mod1: GEX
+    mod2: ADT
 
   - id: openproblems_v1_multimodal/scicar_cell_lines
     input_id: scicar_cell_lines
@@ -33,6 +35,8 @@ param_list:
     layer_counts: counts
     var_feature_id: index
     var_feature_name: gene_short_name
+    mod1: GEX
+    mod2: ATAC
 
   - id: openproblems_v1_multimodal/scicar_mouse_kidney
     input_id: scicar_mouse_kidney
@@ -47,6 +51,8 @@ param_list:
     layer_counts: counts
     var_feature_id: index
     var_feature_name: gene_short_name
+    mod1: GEX
+    mod2: ATAC
 
 normalization_methods: [log_cp10k, sqrt_cp10k, l1_sqrt]
 output_dataset_mod1: '$id/dataset_mod1.h5ad'
