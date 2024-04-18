@@ -63,6 +63,16 @@ authors_str <-
   } else {
     ""
   }
+readme_str <-
+  if (is.null(task_api$task_info$readme) || is.na(task_api$task_info$readme)) {
+    ""
+  } else {
+    paste0(
+      "\n## README\n\n",
+      task_api$task_info$readme,
+      "\n"
+    )
+  }
 
 cat("Generate qmd content\n")
 relative_path <- par[["task_dir"]] %>%
@@ -84,7 +94,7 @@ qmd_content <- strip_margin(glue::glue("
   §
   §Path to source: [`{relative_path}`]({source_url})
   §
-  §{task_api$task_info$readme}
+  §{readme_str}
   §
   §## Motivation
   §
