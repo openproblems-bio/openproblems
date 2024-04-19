@@ -2,6 +2,7 @@ import anndata as ad
 import numpy as np
 import gc
 from scipy.sparse import csc_matrix
+from sklearn.decomposition import TruncatedSVD
 from sklearn.gaussian_process.kernels import RBF
 from sklearn.kernel_ridge import KernelRidge
 
@@ -51,21 +52,52 @@ input_train = ad.concat(
 )
 
 print('Determine parameters by the modalities', flush=True)
-mod1_type = input_train_mod1.uns["modality"].upper()
-mod2_type = input_train_mod2.uns["modality"].upper()
+mod1_type = input_train_mod1.uns["modality"]
+mod1_type = mod1_type.upper()
+mod2_type = input_train_mod2.uns["modality"]
+mod2_type = mod2_type.upper()
+n_comp_dict = {
+                ("GEX", "ADT"): (300, 70, 10, 0.2),
+                ("ADT", "GEX"): (None, 50, 10, 0.2),
+                ("GEX", "ATAC"): (1000, 50, 10, 0.1),
+                ("ATAC", "GEX"): (100, 70, 10, 0.1)
+              }
+print(f"{mod1_type}, {mod2_type}", flush=True)
+n_mod1, n_mod2, scale, alpha = n_comp_dict[(mod1_type, mod2_type)]
+print(f"{n_mod1}, {n_mod2}, {scale}, {alpha}", flush=True)
 
-scale = 10
-alpha = 0.1 if (mod1_type == "ATAC" or mod2_type == "ATAC") else 0.2
+# Perform PCA on the input data
+print('Models using the Truncated SVD to reduce the dimension', flush=True)
 
-train_norm = input_train_mod1.to_df(layer="normalized").values.astype(np.float32)
-test_norm = input_test_mod1.to_df(layer="normalized").values.astype(np.float32)
+if n_mod1 is not None and n_mod1 < input_train.shape[1]:
+    embedder_mod1 = TruncatedSVD(n_components=n_mod1)
+    mod1_pca = embedder_mod1.fit_transform(input_train.layers["counts"]).astype(np.float32)
+    train_matrix = mod1_pca[input_train.obs['group'] == 'train']
+    test_matrix = mod1_pca[input_train.obs['group'] == 'test']
+else:
+    train_matrix = input_train_mod1.to_df(layer="counts").values.astype(np.float32)
+    test_matrix = input_test_mod1.to_df(layer="counts").values.astype(np.float32)
+  
+if n_mod2 is not None and n_mod2 < input_train_mod2.shape[1]:
+    embedder_mod2 = TruncatedSVD(n_components=n_mod2)
+    train_gs = embedder_mod2.fit_transform(input_train_mod2.layers["counts"]).astype(np.float32)
+else:
+    train_gs = input_train_mod2.to_df(layer="counts").values.astype(np.float32)
 
-train_gs = input_train_mod2.to_df(layer="normalized").values.astype(np.float32)
+del input_train
 
-del input_train_mod1
-del input_test_mod1
-del input_train_mod2
-gc.collect()
+print('Running normalization ...', flush=True)
+train_sd = np.std(train_matrix, axis=1).reshape(-1, 1)
+train_sd[train_sd == 0] = 1
+train_norm = (train_matrix - np.mean(train_matrix, axis=1).reshape(-1, 1)) / train_sd
+train_norm = train_norm.astype(np.float32)
+del train_matrix
+
+test_sd = np.std(test_matrix, axis=1).reshape(-1, 1)
+test_sd[test_sd == 0] = 1
+test_norm = (test_matrix - np.mean(test_matrix, axis=1).reshape(-1, 1)) / test_sd
+test_norm = test_norm.astype(np.float32)
+del test_matrix
 
 print('Running KRR model ...', flush=True)
 y_pred = np.zeros((pred_dimx, pred_dimy), dtype=np.float32)
@@ -83,7 +115,7 @@ for _ in range(5):
     krr = KernelRidge(alpha=alpha, kernel=kernel)
     print('Fitting KRR ... ', flush=True)
     krr.fit(train_norm[feature_obs.batch.isin(batch)], train_gs[gs_obs.batch.isin(batch)])
-    y_pred += krr.predict(test_norm)
+    y_pred += (krr.predict(test_norm) @ embedder_mod2.components_)
 
 np.clip(y_pred, a_min=0, a_max=None, out=y_pred)
 if mod2_type == "ATAC":
