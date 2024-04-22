@@ -22,4 +22,4 @@ platforms:
     image: ubuntu:latest
   - type: nextflow
     directives:
-      label: [ "midtime", "lowmem", "lowcpu"]
+      label: [midtime, lowmem, lowcpu]

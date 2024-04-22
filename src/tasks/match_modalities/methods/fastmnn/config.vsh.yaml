@@ -20,10 +20,10 @@ functionality:
       path: script.R
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_r:1.0.2
+    image: ghcr.io/openproblems-bio/base_r:1.0.4
     setup:
       - type: r
         bioc: batchelor
   - type: nextflow
     directives:
-      label: [ "midtime", lowmem, lowcpu ]
+      label: [midtime, lowmem, lowcpu]

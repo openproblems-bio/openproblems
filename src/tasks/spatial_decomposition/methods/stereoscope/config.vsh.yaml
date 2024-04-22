@@ -29,7 +29,7 @@ functionality:
 
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_pytorch_nvidia:1.0.3
+    image: ghcr.io/openproblems-bio/base_pytorch_nvidia:1.0.4
     setup:
       - type: python
         packages: 
@@ -37,4 +37,4 @@ platforms:
   - type: native
   - type: nextflow
     directives:
-      label: [ midtime, midmem, midcpu, gpu ]
+      label: [midtime, midmem, midcpu, gpu]

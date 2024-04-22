@@ -11,6 +11,6 @@ functionality:
       dest: test_file.yaml
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    image: ghcr.io/openproblems-bio/base_python:1.0.4
   - type: nextflow
   - type: native

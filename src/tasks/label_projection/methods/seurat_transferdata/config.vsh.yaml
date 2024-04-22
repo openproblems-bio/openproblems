@@ -27,10 +27,10 @@ functionality:
       path: script.R
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_r:1.0.2
+    image: ghcr.io/openproblems-bio/base_r:1.0.4
     setup:
       - type: r
         cran: [ Matrix>=1.5.3, Seurat, rlang ]
   - type: nextflow
     directives: 
-      label: [ midtime, highmem, highcpu ]
+      label: [midtime, highmem, highcpu]

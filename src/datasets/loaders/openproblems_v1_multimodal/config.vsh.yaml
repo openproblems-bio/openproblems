@@ -80,7 +80,7 @@ functionality:
       path: test.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    image: ghcr.io/openproblems-bio/base_python:1.0.4
     setup:
       - type: apt
         packages: git
@@ -91,4 +91,4 @@ platforms:
             pip install --no-cache-dir --editable /opt/openproblems
   - type: nextflow
     directives:
-      label: [ highmem, midcpu , midtime]
+      label: [highmem, midcpu , midtime]

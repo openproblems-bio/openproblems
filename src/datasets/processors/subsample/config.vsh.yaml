@@ -41,11 +41,11 @@ functionality:
     - path: /resources_test/common/pancreas
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    image: ghcr.io/openproblems-bio/base_python:1.0.4
     test_setup:
       - type: python
         packages:
           - viashpy
   - type: nextflow
     directives:
-      label: [ midtime, highmem, midcpu ]
+      label: [midtime, highmem, midcpu]

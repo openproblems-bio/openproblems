@@ -32,7 +32,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_pytorch_nvidia:1.0.3
+    image: ghcr.io/openproblems-bio/base_pytorch_nvidia:1.0.4
     setup:
       - type: python
         packages: 
@@ -40,4 +40,4 @@ platforms:
           - scvi-tools>=1.1.0
   - type: nextflow
     directives: 
-      label: [ midtime, midmem, highcpu, gpu ]
+      label: [midtime, midmem, highcpu, gpu]

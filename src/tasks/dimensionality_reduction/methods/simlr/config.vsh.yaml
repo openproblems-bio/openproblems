@@ -45,7 +45,7 @@ functionality:
  
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_r:1.0.2
+    image: ghcr.io/openproblems-bio/base_r:1.0.4
     setup:
       - type: r
         packages: [ grDevices ]
@@ -54,4 +54,4 @@ platforms:
   - type: native
   - type: nextflow
     directives:
-      label: [ midtime, highmem, midcpu ]
+      label: [midtime, highmem, midcpu]

@@ -71,7 +71,7 @@ functionality:
 
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.2
+    image: ghcr.io/openproblems-bio/base_python:1.0.4
     setup:
       - type: python
         packages: 
@@ -79,8 +79,9 @@ platforms:
           - cell2location
           - jax==0.4.23
           - jaxlib==0.4.23
+          - scipy<1.13 # The scipy.linalg functions tri, triu & tril are deprecated and will be removed in SciPy 1.13.
 
   - type: native
   - type: nextflow
     directives:
-      label: [ "midtime", midmem, midcpu]
+      label: [midtime, midmem, midcpu]

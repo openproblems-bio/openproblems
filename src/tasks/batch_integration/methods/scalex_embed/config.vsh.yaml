@@ -27,7 +27,7 @@ functionality:
       path: script.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.3
+    image: ghcr.io/openproblems-bio/base_python:1.0.4
     setup:
       - type: python
         pypi:
@@ -36,4 +36,4 @@ platforms:
           - torch<2.1
   - type: nextflow
     directives:
-      label: [ lowmem, lowcpu, midtime ]
+      label: [lowmem, lowcpu, midtime]

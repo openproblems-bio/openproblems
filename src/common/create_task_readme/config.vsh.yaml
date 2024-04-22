@@ -48,7 +48,7 @@ functionality:
       dest: openproblems-v2/_viash.yaml
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_r:1.0.2
+    image: ghcr.io/openproblems-bio/base_r:1.0.4
     setup:
       - type: r
         packages: [dplyr, purrr, rlang, glue, yaml, fs, cli, igraph, rmarkdown, processx]
@@ -65,5 +65,5 @@ platforms:
   - type: native
   - type: nextflow
     directives: 
-      label: [ midtime, lowmem, lowcpu ]
+      label: [midtime, lowmem, lowcpu]
 
