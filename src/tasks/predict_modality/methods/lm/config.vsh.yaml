@@ -29,4 +29,4 @@ platforms:
         cran: [ lmds, RcppArmadillo, pbapply]
   - type: nextflow
     directives:
-      label: [midtime, highmem, highcpu]
+      label: [hightime, highmem, highcpu]

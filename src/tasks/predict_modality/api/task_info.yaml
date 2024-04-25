@@ -49,3 +49,8 @@ authors:
     roles: [ author ]
     info:
       github: agranado
+  - name: Kaiwen Deng
+    roles: [ contributor ]
+    info:
+      email: dengkw@umich.edu
+      github: nonztalk

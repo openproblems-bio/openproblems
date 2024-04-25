@@ -52,10 +52,8 @@ input_train = ad.concat(
 )
 
 print('Determine parameters by the modalities', flush=True)
-mod1_type = input_train_mod1.uns["modality"]
-mod1_type = mod1_type.upper()
-mod2_type = input_train_mod2.uns["modality"]
-mod2_type = mod2_type.upper()
+mod1_type = input_train_mod1.uns["modality"].upper()
+mod2_type = input_train_mod2.uns["modality"].upper()
 n_comp_dict = {
                 ("GEX", "ADT"): (300, 70, 10, 0.2),
                 ("ADT", "GEX"): (None, 50, 10, 0.2),
