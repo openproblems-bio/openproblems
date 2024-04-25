@@ -8,7 +8,7 @@ functionality:
     reference: fix1989discriminatory
     documentation_url: https://cran.r-project.org/package=FNN
     repository_url: https://github.com/cran/FNN
-    preferred_normalization: counts
+    preferred_normalization: log_cp10k
   arguments:
     - name: "--distance_method"
       type: "string"

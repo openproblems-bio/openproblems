@@ -2,7 +2,6 @@ functionality:
   namespace: "predict_modality/methods"
   info:
     type: method
-    preferred_normalization: counts # there is currently only one type of normalization
     type_info:
       label: Method
       summary: A regression method.

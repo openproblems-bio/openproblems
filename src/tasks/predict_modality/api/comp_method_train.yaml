@@ -2,7 +2,6 @@ functionality:
   namespace: "predict_modality/methods"
   info:
     type: method_train
-    preferred_normalization: counts
     type_info:
       label: Train
       summary: Train a model to predict the expression of one modality from another.

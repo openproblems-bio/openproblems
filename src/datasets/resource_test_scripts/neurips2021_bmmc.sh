@@ -30,6 +30,7 @@ dataset_url: "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE194122"
 dataset_reference: luecken2021neurips
 normalization_methods: [log_cp10k]
 do_subsample: true
+even: true
 n_obs: 600
 n_vars: 1500
 output_mod1: '$id/dataset_mod1.h5ad'

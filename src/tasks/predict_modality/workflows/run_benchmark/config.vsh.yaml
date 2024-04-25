@@ -70,8 +70,9 @@ functionality:
     - name: predict_modality/methods/knnr_py
     - name: predict_modality/methods/knnr_r
     - name: predict_modality/methods/lm
-    - name: predict_modality/methods/newwave_knnr
-    - name: predict_modality/methods/random_forest
+    - name: predict_modality/methods/lmds_irlba_rf
+    # - name: predict_modality/methods/newwave_knnr
+    # - name: predict_modality/methods/random_forest
     - name: predict_modality/methods/guanlab_dengkw_pm
     - name: predict_modality/metrics/correlation
     - name: predict_modality/metrics/mse

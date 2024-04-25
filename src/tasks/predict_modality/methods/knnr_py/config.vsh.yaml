@@ -8,7 +8,7 @@ functionality:
     reference: fix1989discriminatory
     documentation_url: https://scikit-learn.org/stable/modules/neighbors.html
     repository_url: https://github.com/scikit-learn/scikit-learn
-    preferred_normalization: counts
+    preferred_normalization: log_cp10k
   arguments:
     - name: "--distance_method"
       type: "string"

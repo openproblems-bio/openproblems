@@ -8,7 +8,7 @@ functionality:
     reference: wilkinson1973symbolic
     repository_url: https://github.com/RcppCore/RcppArmadillo
     documentation_url: https://cran.r-project.org/package=RcppArmadillo
-    preferred_normalization: counts
+    preferred_normalization: log_cp10k
   arguments:
     - name: "--distance_method"
       type: "string"

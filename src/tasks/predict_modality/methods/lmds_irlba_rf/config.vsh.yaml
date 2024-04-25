@@ -1,14 +1,14 @@
 __merge__: ../../api/comp_method.yaml
 functionality:
-  name: random_forest
-  status: disabled # disabled due to long execution times
+  name: lmds_irlba_rf
   info:
-    label: Random Forests
-    summary: Random forest regression.
-    description: A random forest regression method.
-    reference: breiman2001random
-    documentation_url: https://www.stat.berkeley.edu/~breiman/RandomForests/reg_home.htm
-    repository_url: https://github.com/cran/randomForest
+    label: LMDS + IRLBA + RF
+    summary: A random forest regression using LMDS of modality 1 to predict a PCA embedding of modality 2, which is then reversed to predict the original modality 2.
+    description: |
+      A random forest regression using LMDS of modality 1 to predict a PCA embedding of modality 2, which is then reversed to predict the original modality 2.
+    reference: lance2022multimodal
+    documentation_url: https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/predict_modality/methods #/lmds_irlba_rf
+    repository_url: https://github.com/openproblems-bio/openproblems-v2
     preferred_normalization: log_cp10k
   arguments:
     - name: "--distance_method"
@@ -21,7 +21,7 @@ functionality:
       description: Number of principal components to use.
     - name: "--n_trees"
       type: "integer"
-      default: 50
+      default: 500
       description: Number of trees to use.
   resources:
     - type: r_script
@@ -31,7 +31,7 @@ platforms:
     image: ghcr.io/openproblems-bio/base_r:1.0.4
     setup:
       - type: r
-        cran: [ lmds, ranger, pbapply]
+        cran: [lmds, ranger, pbapply, irlba]
   - type: nextflow
     directives:
       label: [hightime, highmem, highcpu]

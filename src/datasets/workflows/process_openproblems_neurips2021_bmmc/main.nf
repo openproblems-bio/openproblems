@@ -139,7 +139,6 @@ workflow run_wf {
       toState: [ "hvg_mod1": "output" ]
     )
 
-    // TODO: should this only run on ATAC? or even not at all?s
     | hvg.run(
       key: "hvg_mod2",
       fromState: [ "input": "svd_mod2" ],
