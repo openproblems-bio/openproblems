@@ -27,6 +27,16 @@ info:
         name: gene_ids
         description: The gene identifiers (if available)
         required: false
+
+      - type: boolean
+        name: hvg
+        description: Whether or not the feature is considered to be a 'highly variable gene'
+        required: true
+        
+      - type: double
+        name: hvg_score
+        description: A score for the feature indicating how highly variable it is.
+        required: true
     uns:
       - type: string
         name: dataset_id

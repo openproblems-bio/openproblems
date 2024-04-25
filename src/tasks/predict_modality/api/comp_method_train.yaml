@@ -1,0 +1,27 @@
+functionality:
+  namespace: "predict_modality/methods"
+  info:
+    type: method_train
+    preferred_normalization: counts
+    type_info:
+      label: Train
+      summary: Train a model to predict the expression of one modality from another.
+      description: |
+        This method trains a model to predict the expression of one modality from another.
+  arguments:
+    - name: "--input_train_mod1"
+      __merge__: file_train_mod1.yaml
+      direction: input
+      required: true
+    - name: "--input_train_mod2"
+      __merge__: file_train_mod2.yaml
+      direction: input
+      required: true
+    - name: "--input_test_mod1"
+      __merge__: file_test_mod1.yaml
+      direction: input
+      required: false
+    - name: "--output"
+      __merge__: file_pretrained_model.yaml
+      direction: output
+      required: true
