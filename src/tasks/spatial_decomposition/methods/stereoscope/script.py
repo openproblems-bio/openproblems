@@ -5,7 +5,7 @@ from scvi.external import SpatialStereoscope
 ## VIASH START
 par = {
   'input_single_cell': 'resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/single_cell_ref.h5ad',
-  'input_spatial': 'resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/spatial_masked.h5ad',
+  'input_spatial_masked': 'resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/spatial_masked.h5ad',
   'output': 'output.h5ad', 
   'max_epochs_sc': 100,
   'max_epochs_sp': 1000
@@ -29,7 +29,7 @@ sc_model = RNAStereoscope(input_single_cell)
 sc_model.train(
   max_epochs=par["max_epochs_sc"],
   # early_stopping=True,
-  # early_stopping_monitor="elbo_train"
+  # early_stopping_monitor="elbo_validation"
 )
 
 SpatialStereoscope.setup_anndata(input_spatial)
@@ -37,7 +37,7 @@ st_model = SpatialStereoscope.from_rna_model(input_spatial, sc_model)
 st_model.train(
   max_epochs=par["max_epochs_sp"],
   # early_stopping=True,
-  # early_stopping_monitor="elbo_train"
+  # early_stopping_monitor="elbo_validation"
 )
 input_spatial.obsm["proportions_pred"] = st_model.get_proportions().to_numpy()
 

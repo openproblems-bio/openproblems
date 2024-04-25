@@ -1,5 +1,6 @@
 import anndata as ad
 import sys 
+import numpy as np
 
 ## VIASH START
 par = {
@@ -20,6 +21,9 @@ from subset_anndata import read_config_slots_info, subset_anndata
 
 print(">> Load dataset", flush=True)
 adata = ad.read_h5ad(par["input"])
+
+# TO DO: Non-integer values in the counts layer are detected as un-normalized data by some methods, thereby causing them to fail.
+adata.layers['counts'] = adata.layers['counts'].floor()
 
 print(">> Figuring out which data needs to be copied to which output file", flush=True)
 slot_info = read_config_slots_info(meta["config"])

@@ -5,7 +5,7 @@ library(Matrix)
 ## VIASH START
 par <- list(
   input_single_cell = "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/single_cell_ref.h5ad",
-  input_spatial = "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/spatial_masked.h5ad",
+  input_spatial_masked = "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/spatial_masked.h5ad",
   output = "output.h5ad", 
   fc_cutoff = 0.5, 
   fc_cutoff_reg = 0.75
@@ -30,7 +30,7 @@ celltype_counts <- table(input_single_cell$obs$cell_type)
 input_single_cell <- input_single_cell[input_single_cell$obs$cell_type %in% names(as.table(celltype_counts[celltype_counts > 25]))]
 
 # get single cell reference counts
-sc_counts <- t(as.matrix(input_single_cell$layers['counts']))
+sc_counts <- t(input_single_cell$layers['counts'])
 # get single cell reference labels
 sc_cell_types <- factor(input_single_cell$obs$cell_type)
 names(sc_cell_types) <- rownames(input_single_cell)
@@ -38,7 +38,7 @@ names(sc_cell_types) <- rownames(input_single_cell)
 reference <- Reference(sc_counts, sc_cell_types)
 
 # get spatial data counts
-sp_counts <- t(as.matrix(input_spatial$layers['counts']))
+sp_counts <- t(input_spatial$layers['counts'])
 # get spatial data coordinates
 sp_coords <- as.data.frame(input_spatial$obsm['coordinates'])
 colnames(sp_coords) <- c("x", "y")
