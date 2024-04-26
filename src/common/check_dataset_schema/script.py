@@ -48,6 +48,7 @@ for slot in def_slots:
   print("Checking slot", slot, flush=True)
   missing = check_structure(slot, def_slots[slot], getattr(adata, slot))
   if missing:
+    print(f"Dataset is missing {slot} {missing}", flush=True)
     out['exit_code'] = 1
     out['data_schema'] = 'not ok'
     out['error'][slot] = missing

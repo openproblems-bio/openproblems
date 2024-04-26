@@ -86,25 +86,36 @@ test_norm = test_norm.astype(np.float32)
 del test_matrix
 
 print('Running KRR model ...', flush=True)
+if batch_len == 1:
+    # just in case there is only one batch
+    batch_subsets = [batches]
+elif mod1_type == "ADT" or mod2_type == "ADT":
+    # two fold consensus predictions
+    batch_subsets = [
+        batches[:batch_len//2],
+        batches[batch_len//2:]
+    ]
+else:
+    # leave-one-batch-out consensus predictions
+    batch_subsets = [
+        batches[:i] + batches[i+1:]
+        for i in range(batch_len)
+    ]
+
 y_pred = np.zeros((input_test_mod1.n_obs, input_train_mod2.n_vars), dtype=np.float32)
-
-for _ in range(5):
-    np.random.shuffle(batches)
-    for batch in [batches[:batch_len//2], batches[batch_len//2:]]:
-        # for passing the test
-        if not batch:
-            batch = [batches[0]]
-
+for batch in batch_subsets:
     print(batch, flush=True)
     kernel = RBF(length_scale = scale)
     krr = KernelRidge(alpha=alpha, kernel=kernel)
     print('Fitting KRR ... ', flush=True)
-    krr.fit(train_norm[input_train_mod1.obs.batch.isin(batch)], train_gs[input_train_mod2.obs.batch.isin(batch)])
+    krr.fit(
+        train_norm[input_train_mod1.obs.batch.isin(batch)], 
+        train_gs[input_train_mod2.obs.batch.isin(batch)]
+    )
     y_pred += (krr.predict(test_norm) @ embedder_mod2.components_)
 
 np.clip(y_pred, a_min=0, a_max=None, out=y_pred)
-
-y_pred /= 10
+y_pred /= len(batch_subsets)
 
 # Store as sparse matrix to be efficient. 
 # Note that this might require different classifiers/embedders before-hand. 

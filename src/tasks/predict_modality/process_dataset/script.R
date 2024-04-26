@@ -32,9 +32,25 @@ cat("Reading input data\n")
 ad1 <- anndata::read_h5ad(if (!par$swap) par$input_mod1 else par$input_mod2)
 ad2 <- anndata::read_h5ad(if (!par$swap) par$input_mod2 else par$input_mod1)
 
-# figure out modality types
-ad1_mod <- unique(ad1$var[["feature_types"]])
-ad2_mod <- unique(ad2$var[["feature_types"]])
+# use heuristic to determine modality
+# TODO: should be removed once modality is stored in the uns
+determine_modality <- function(ad, mod1 = TRUE) {
+  if ("modality" %in% names(ad$uns)) {
+    ad$uns[["modality"]]
+  } else if ("feature_types" %in% colnames(ad$var)) {
+    unique(ad$var[["feature_types"]])
+  } else if (mod1) {
+    "RNA"
+  } else if (grepl("cite", ad$uns[["dataset_id"]])) {
+    "ADT"
+  } else if (grepl("multiome", ad$uns[["dataset_id"]])) {
+    "ATAC"
+  } else {
+    stop("Could not determine modality")
+  }
+}
+ad1_mod <- determine_modality(ad1, !par$swap)
+ad2_mod <- determine_modality(ad2, par$swap)
 
 # determine new uns
 uns_vars <- c("dataset_id", "dataset_name", "dataset_url", "dataset_reference", "dataset_summary", "dataset_description", "dataset_organism", "normalization_id")

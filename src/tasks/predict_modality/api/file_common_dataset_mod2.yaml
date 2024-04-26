@@ -33,7 +33,7 @@ info:
         name: feature_name
         description: A human-readable name for the feature, usually a gene symbol.
         # TODO: make this required once the dataloader supports it
-        required: true
+        required: false
 
       - type: boolean
         name: hvg
