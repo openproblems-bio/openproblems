@@ -18,4 +18,4 @@ platforms:
     image: ghcr.io/openproblems-bio/base_r:1.0.4
   - type: nextflow
     directives:
-      label: [midtime, midmem, lowcpu]
+      label: [hightime, highmem, highcpu]

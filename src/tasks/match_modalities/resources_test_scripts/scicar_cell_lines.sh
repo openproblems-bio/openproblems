@@ -20,7 +20,7 @@ nextflow run . \
   -profile docker \
   -entry auto \
   --input_states "$RAW_DATA/**/state.yaml" \
-  --rename_keys 'input_mod1:output_dataset_mod1,input_mod2:output_dataset_mod2' \
+  --rename_keys 'input_mod1:output_mod1,input_mod2:output_mod2' \
   --settings '{"output_mod1": "$id/dataset_mod1.h5ad", "output_mod2": "$id/dataset_mod2.h5ad", "output_solution_mod1": "$id/solution_mod1.h5ad", "output_solution_mod2": "$id/solution_mod2.h5ad"}' \
   --publish_dir "$DATASET_DIR" \
   --output_state '$id/state.yaml'

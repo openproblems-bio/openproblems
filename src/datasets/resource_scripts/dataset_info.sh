@@ -9,7 +9,7 @@ param_list:
     rename_keys: 'input:output_dataset'
   - id: openproblems_v1_multimodal
     input_states: "$DATASETS_DIR/openproblems_v1_multimodal/**/log_cp10k/state.yaml"
-    rename_keys: 'input:output_dataset_mod1'
+    rename_keys: 'input:output_mod1'
   - id: cellxgene_census
     input_states: "$DATASETS_DIR/cellxgene_census/**/log_cp10k/state.yaml"
     rename_keys: 'input:output_dataset'
