@@ -40,7 +40,7 @@ determine_modality <- function(ad, mod1 = TRUE) {
   } else if ("feature_types" %in% colnames(ad$var)) {
     unique(ad$var[["feature_types"]])
   } else if (mod1) {
-    "RNA"
+    "GEX"
   } else if (grepl("cite", ad$uns[["dataset_id"]])) {
     "ADT"
   } else if (grepl("multiome", ad$uns[["dataset_id"]])) {
