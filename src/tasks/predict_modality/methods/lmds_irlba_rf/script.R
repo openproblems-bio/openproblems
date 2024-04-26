@@ -80,7 +80,7 @@ rownames(prediction) <- rownames(dr_test)
 colnames(prediction) <- colnames(X_mod2)
 
 out <- anndata::AnnData(
-  layers = list(normalized = as.matrix(prediction)),
+  layers = list(normalized = as(prediction, "CsparseMatrix")),
   shape = dim(prediction),
   uns = list(
     dataset_id = dataset_id,
