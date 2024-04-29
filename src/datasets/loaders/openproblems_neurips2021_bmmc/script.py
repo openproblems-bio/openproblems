@@ -48,7 +48,8 @@ convert_matrix(adata.obsm)
 if "is_train" not in adata.obs.columns:
   batch_info = adata.obs["batch"]
   batch_categories = batch_info.dtype.categories
-  train = ["s1d1", "s2d1", "s2d4", "s3d6", "s3d1"]
+  # From https://github.com/openproblems-bio/neurips2021_multimodal_viash/blob/75281c039ab98b459edbf52058a18597e710ed4d/src/common/datasets/process_inhouse_datasets/script.R#L14-L17
+  train = ["s1d1", "s1d2", "s2d1", "s2d4", "s3d1", "s3d6", "s3d7"]
   adata.obs["is_train"] = [ "train" if x in train else "test" for x in batch_info ]
 
 # Construct Modality datasets
