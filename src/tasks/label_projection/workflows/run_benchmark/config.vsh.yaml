@@ -68,7 +68,7 @@ functionality:
     - name: label_projection/methods/knn
     - name: label_projection/methods/logistic_regression
     - name: label_projection/methods/mlp
-    # - name: label_projection/methods/scanvi
+    - name: label_projection/methods/scanvi
     - name: label_projection/methods/scanvi_scarches
     - name: label_projection/methods/xgboost
     - name: label_projection/metrics/accuracy

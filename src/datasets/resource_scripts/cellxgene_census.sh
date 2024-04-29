@@ -147,7 +147,7 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --pull-latest \
   --main-script target/nextflow/datasets/workflows/process_cellxgene_census/main.nf \
   --workspace 53907369739130 \
-  --compute-env 1pK56PjjzeraOOC2LDZvN2 \
+  --compute-env 6TeIFgV5OY4pJCk8I0bfOh \
   --params-file "/tmp/params.yaml" \
   --config /tmp/nextflow.config \
   --labels cellxgene_census,dataset_loader

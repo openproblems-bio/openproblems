@@ -34,7 +34,9 @@ platforms:
       - type: python
         packages: 
           - scvi-tools>=1.1.0
-
+      - type: docker
+        run: |
+          pip install -U "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
   - type: native
   - type: nextflow
     directives:

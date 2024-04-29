@@ -176,7 +176,7 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --pull-latest \
   --main-script target/nextflow/datasets/workflows/process_openproblems_v1/main.nf \
   --workspace 53907369739130 \
-  --compute-env 1pK56PjjzeraOOC2LDZvN2 \
+  --compute-env 6TeIFgV5OY4pJCk8I0bfOh \
   --params-file "$params_file" \
   --config /tmp/nextflow.config \
   --labels openproblems_v1,dataset_loader

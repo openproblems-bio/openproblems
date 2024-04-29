@@ -19,7 +19,7 @@ workflow run_wf {
     knn,
     logistic_regression,
     mlp,
-    // scanvi,
+    scanvi,
     scanvi_scarches,
     // seurat_transferdata,
     xgboost
