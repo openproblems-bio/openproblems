@@ -58,6 +58,7 @@ functionality:
     - name: spatial_decomposition/methods/cell2location
     - name: spatial_decomposition/methods/destvi
     - name: spatial_decomposition/methods/nmfreg
+    - name: spatial_decomposition/methods/nnls
     - name: spatial_decomposition/methods/rctd
     - name: spatial_decomposition/methods/seurat
     - name: spatial_decomposition/methods/stereoscope
