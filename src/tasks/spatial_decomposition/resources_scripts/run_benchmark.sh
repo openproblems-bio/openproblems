@@ -19,4 +19,4 @@ tw launch https://github.com/openproblems-bio/openproblems-v2.git \
   --params-file /tmp/params.yaml \
   --entry-name auto \
   --config src/wf_utils/labels_tw.config \
-  --labels spatial_decomposition,full
+  # --labels spatial_decomposition,full

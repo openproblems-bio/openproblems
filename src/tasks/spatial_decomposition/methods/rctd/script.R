@@ -26,8 +26,8 @@ rownames(coordinates) <- rownames(input_single_cell)
 input_single_cell$obsm <- list(coordinates = coordinates)
 
 # remove rare cell types to prevent RCTD error
-celltype_counts <- table(input_single_cell$obs$cell_type)
-input_single_cell <- input_single_cell[input_single_cell$obs$cell_type %in% names(as.table(celltype_counts[celltype_counts > 25]))]
+# celltype_counts <- table(input_single_cell$obs$cell_type)
+# input_single_cell <- input_single_cell[input_single_cell$obs$cell_type %in% names(as.table(celltype_counts[celltype_counts > 25]))]
 
 # get single cell reference counts
 sc_counts <- t(input_single_cell$layers['counts'])

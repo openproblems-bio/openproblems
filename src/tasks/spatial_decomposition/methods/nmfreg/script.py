@@ -24,13 +24,9 @@ input_spatial = ad.read_h5ad(par['input_spatial_masked'])
 n_types = input_single_cell.obs["cell_type"].cat.categories.shape[0]
 
 # Learn from reference
-if issparse(input_single_cell.layers['counts']):
-  X = input_single_cell.layers['counts'].toarray()
-else:
-  X = input_single_cell.layers['counts']
-X_norm = X / X.sum(1)[:, np.newaxis]
+X = input_single_cell.layers['counts']
+X_norm = X / X.sum(1)
 X_scaled = StandardScaler(with_mean=False).fit_transform(X_norm)
-
 model = NMF(
   n_components=par['n_components'],
   init="random",
@@ -61,20 +57,14 @@ for i, j in enumerate(factor_to_best_celltype):
 
 Ha_norm = StandardScaler(with_mean=False).fit_transform(Ha)
 sc_deconv = np.dot(Ha_norm**2, factor_to_best_celltype_matrix)
-
 sc_deconv = sc_deconv / sc_deconv.sum(1)[:, np.newaxis]
 
 # Start run on actual spatial data
-if issparse(input_spatial.layers['counts']):
-    X_sp = input_spatial.layers['counts'].toarray()
-else:
-    X_sp = input_spatial.layers['counts']
-X_sp_norm = X_sp / X_sp.sum(1)[:, np.newaxis]
+X_sp = input_spatial.layers['counts']
+X_sp_norm = X_sp / X_sp.sum(1)
 X_sp_scaled = StandardScaler(with_mean=False).fit_transform(X_sp_norm)
 
-bead_prop_soln = np.array(
-  [nnls(Wa.T, X_sp_scaled[b, :])[0] for b in range(X_sp_scaled.shape[0])]
-)
+bead_prop_soln = np.array([nnls(Wa.T, X_sp_scaled[b, : ].toarray().reshape(-1))[0] for b in range(X_sp_scaled.shape[0])])
 bead_prop_soln = StandardScaler(with_mean=False).fit_transform(bead_prop_soln)
 bead_prop = np.dot(bead_prop_soln, factor_to_best_celltype_matrix)
 

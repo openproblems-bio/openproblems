@@ -18,6 +18,7 @@ workflow run_wf {
     cell2location,
     destvi,
     nmfreg,
+    nnls,
     rctd,
     seurat,
     stereoscope,

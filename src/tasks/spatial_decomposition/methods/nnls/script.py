@@ -32,11 +32,9 @@ adata_means.var_names = input_single_cell.var_names
 
 X = adata_means.X.T
 y = input_spatial.layers['counts'].T
-if issparse(y):
-  y = y.toarray()
 res = np.zeros((y.shape[1], X.shape[1]))  # (voxels, cells)
 for i in range(y.shape[1]):
-  x, _ = nnls(X, y[:, i])
+  x, _ = nnls(X, y[:, i].toarray().reshape(-1))
   res[i] = x
 
 # Normalize coefficients to sum to 1
