@@ -24,8 +24,11 @@ outputs <- map(datasets, function(dataset) {
     "dataset_id" = dataset$dataset_id,
     "dataset_name" = dataset$dataset_name,
     "dataset_summary" = dataset$dataset_summary,
+    "dataset_description" = dataset$dataset_description %||% NA_character_,
     "data_reference" = dataset$dataset_reference %||% NA_character_,
-    "data_url" = dataset$dataset_url %||% NA_character_
+    "data_url" = dataset$dataset_url %||% NA_character_,
+    "date_created" = dataset$date_created %||% NA_character_,
+    "file_size" = dataset$file_size %||% NA_character_
   )
 
   if (!is.null(dataset[["common_dataset_id"]])) {

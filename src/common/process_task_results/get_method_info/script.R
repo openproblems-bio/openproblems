@@ -39,6 +39,7 @@ outputs <- map(configs, function(config) {
     method_id = info$id,
     method_name = info$label,
     method_summary = info$summary,
+    method_description = info$description,
     is_baseline = grepl("control", info$type),
     paper_reference = info$reference %||% NA_character_,
     code_url = info$repository_url %||% NA_character_,
