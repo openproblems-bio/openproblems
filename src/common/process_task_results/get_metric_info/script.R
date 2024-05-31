@@ -17,20 +17,27 @@ outputs <- map(configs, function(config) {
     return(NULL)
   }
 
+  # prep for viash 0.9.0
+  build_info <- config$build_info %||% config$info
+  if ("functionality" %in% names(config)) {
+    config[names(config$functionality)] <- config$functionality
+    config[["functionality"]] <- NULL
+  }
+
   map(
-    config$functionality$info$metrics,
+    config$info$metrics,
     function(info) {
       # add extra info
-      info$config_path <- gsub(".*openproblems-v2/src/", "src/", config$info$config)
-      info$task_id <- gsub("/.*", "", config$functionality$namespace)
+      info$config_path <- gsub(".*/src/", "src/", build_info$config)
+      info$task_id <- gsub("/.*", "", config$namespace)
       info$id <- info$name
-      info$component_id <- config$functionality$name
-      info$namespace <- config$functionality$namespace
-      info$commit_sha <- config$info$git_commit %||% "missing-sha"
+      info$component_id <- config$name
+      info$namespace <- config$namespace
+      info$commit_sha <- build_info$git_commit %||% "missing-sha"
       info$code_version <- "missing-version"
       info$implementation_url <- paste0(
-        "https://github.com/openproblems-bio/openproblems-v2/tree/",
-        info$commit_sha, "/",
+        build_info$git_remote, "/blob/",
+        build_info$git_commit, "/",
         info$config_path
       )
 
