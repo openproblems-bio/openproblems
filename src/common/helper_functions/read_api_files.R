@@ -1,14 +1,21 @@
 
 anndata_struct_names <- c("obs", "var", "obsm", "obsp", "varm", "varp", "layers", "uns")
 
-read_anndata_spec <- function(path) {
+read_file_spec <- function(path) {
   spec <- read_and_merge_yaml(path)
-  list(
-    info = read_anndata_info(spec, path),
-    slots = read_anndata_slots(spec, path)
+  out <- list(
+    info = read_file_info(spec, path)
   )
+  if (out$info$file_type == "h5ad" || "slots" %in% names(spec$info)) {
+    out$info$file_type <- "h5ad"
+    out$slots <- read_anndata_slots(spec, path)
+  }
+  if (out$info$file_type == "csv" || out$info$file_type == "tsv" || out$info$file_type == "parquet") {
+    out$columns <- read_tabular_columns(spec, path)
+  }
+  out
 }
-read_anndata_info <- function(spec, path) {
+read_file_info <- function(spec, path) {
   # TEMP: make it readable
   spec$info$slots <- NULL
   df <- list_as_tibble(spec)
@@ -35,44 +42,95 @@ read_anndata_slots <- function(spec, path) {
     }
   )
 }
-
-format_slots <- function(spec) {
-  example <- spec$slots %>%
-    group_by(struct) %>%
-    summarise(
-      str = paste0(unique(struct), ": ", paste0("'", name, "'", collapse = ", "))
-    ) %>%
-    arrange(match(struct, anndata_struct_names))
-
-  c("    AnnData object", paste0("     ", example$str))
+read_tabular_columns <- function(spec, path) {
+  map_df(
+    spec$info$columns,
+    function(column) {
+      df <- list_as_tibble(column)
+      df$file_name <- basename(path) %>% gsub("\\.yaml", "", .)
+      df$required <- df$required %||% TRUE %|% TRUE
+      df$multiple <- df$multiple %||% FALSE %|% FALSE
+      as_tibble(df)
+    }
+  )
 }
 
-format_slots_as_kable <- function(spec) {
-  if (nrow(spec$slots) == 0) return("")
-  spec$slots %>%
-    mutate(
-      tag_str = pmap_chr(lst(required), function(required) {
-        out <- c()
-        if (!required) {
-          out <- c(out, "Optional")
-        }
-        if (length(out) == 0) {
-          ""
-        } else {
-          paste0("(_", paste(out, collapse = ", "), "_) ")
-        }
-      })
-    ) %>%
-    transmute(
-      Slot = paste0("`", struct, "[\"", name, "\"]`"),
-      Type = paste0("`", type, "`"),
-      Description = paste0(
-        tag_str,
-        description %>% gsub(" *\n *", " ", .) %>% gsub("\\. *$", "", .), 
-        "."
+format_file_format <- function(spec) {
+  if (spec$info$file_type == "h5ad") {
+    example <- spec$slots %>%
+      group_by(struct) %>%
+      summarise(
+        str = paste0(unique(struct), ": ", paste0("'", name, "'", collapse = ", "))
+      ) %>%
+      arrange(match(struct, anndata_struct_names))
+
+    c("    AnnData object", paste0("     ", example$str))
+  } else if (spec$info$file_type == "csv" || spec$info$file_type == "tsv" || spec$info$file_type == "parquet") {
+    example <- spec$columns %>%
+      summarise(
+        str = paste0("'", name, "'", collapse = ", ")
       )
-    ) %>%
-    knitr::kable()
+
+    c("    Tabular data", paste0("     ", example$str))
+  } else {
+    ""
+  }
+}
+
+format_file_format_as_kable <- function(spec) {
+  if (spec$info$file_type == "h5ad") {
+    spec$slots %>%
+      mutate(
+        tag_str = pmap_chr(lst(required), function(required) {
+          out <- c()
+          if (!required) {
+            out <- c(out, "Optional")
+          }
+          if (length(out) == 0) {
+            ""
+          } else {
+            paste0("(_", paste(out, collapse = ", "), "_) ")
+          }
+        })
+      ) %>%
+      transmute(
+        Slot = paste0("`", struct, "[\"", name, "\"]`"),
+        Type = paste0("`", type, "`"),
+        Description = paste0(
+          tag_str,
+          description %>% gsub(" *\n *", " ", .) %>% gsub("\\. *$", "", .), 
+          "."
+        )
+      ) %>%
+      knitr::kable()
+  } else if (spec$info$file_type == "csv" || spec$info$file_type == "tsv" || spec$info$file_type == "parquet") {
+    spec$columns %>%
+      mutate(
+        tag_str = pmap_chr(lst(required), function(required) {
+          out <- c()
+          if (!required) {
+            out <- c(out, "Optional")
+          }
+          if (length(out) == 0) {
+            ""
+          } else {
+            paste0("(_", paste(out, collapse = ", "), "_) ")
+          }
+        })
+      ) %>%
+      transmute(
+        Column = paste0("`", name, "`"),
+        Type = paste0("`", type, "`"),
+        Description = paste0(
+          tag_str,
+          description %>% gsub(" *\n *", " ", .) %>% gsub("\\. *$", "", .), 
+          "."
+        )
+      ) %>%
+      knitr::kable()
+  } else {
+    ""
+  }
 }
 
 list_contains_tibble <- function(li) {
@@ -97,6 +155,9 @@ read_comp_info <- function(spec_yaml, path) {
   spec_yaml$functionality$argument_groups <- NULL
   
   df <- list_as_tibble(spec_yaml$functionality)
+  if (nrow(df) == 0) {
+    df <- data.frame(a = 1)[, integer(0)]
+  }
   if (list_contains_tibble(spec_yaml$functionality$info)) {
     df <- dplyr::bind_cols(df, list_as_tibble(spec_yaml$functionality$info))
   }
@@ -187,7 +248,7 @@ render_component <- function(spec) {
 # path <- "src/datasets/api/file_pca.yaml"
 render_file <- function(spec) {
   if (is.character(spec)) {
-    spec <- read_anndata_spec(spec)
+    spec <- read_file_spec(spec)
   }
 
   if (!"label" %in% names(spec$info)) {
@@ -220,13 +281,13 @@ render_file <- function(spec) {
     §Format:
     §
     §:::{{.small}}
-    §{paste(format_slots(spec), collapse = '\n')}
+    §{paste(format_file_format(spec), collapse = '\n')}
     §:::
     §
     §Slot description:
     §
     §:::{{.small}}
-    §{paste(format_slots_as_kable(spec), collapse = '\n')}
+    §{paste(format_file_format_as_kable(spec), collapse = '\n')}
     §:::
     §
     §"), symbol = "§")
@@ -262,7 +323,7 @@ read_task_api <- function(path) {
     project_path = project_path,
     parent_path = api_dir
   )
-  files <- map(file_yamls, read_anndata_spec)
+  files <- map(file_yamls, read_file_spec)
   names(files) <- basename(file_yamls) %>% gsub("\\..*$", "", .)
   file_info <- map_df(files, "info")
   file_slots <- map_df(files, "slots")
