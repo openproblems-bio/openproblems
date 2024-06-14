@@ -69,10 +69,36 @@ functionality:
     - name: batch_integration/methods/scanorama_feature
     - name: batch_integration/methods/scanvi
     - name: batch_integration/methods/scvi
-    - name: batch_integration/control_methods/no_integration_batch
-    - name: batch_integration/control_methods/random_embed_cell
-    - name: batch_integration/control_methods/random_embed_cell_jitter
-    - name: batch_integration/control_methods/random_integration
+    - name: batch_integration/control_methods/no_integration/batch_embed
+      alias: no_integration_batch_embed
+    - name: batch_integration/control_methods/no_integration/global_embed
+      alias: no_integration_global_embed
+    - name: batch_integration/control_methods/no_integration/global_feature
+      alias: no_integration_global_feature
+    - name: batch_integration/control_methods/no_integration/global_graph
+      alias: no_integration_global_graph
+    - name: batch_integration/control_methods/perfect_integration/celltype_embed
+      alias: perfect_integration_celltype_embed
+    - name: batch_integration/control_methods/perfect_integration/celltype_jitter_embed
+      alias: perfect_integration_celltype_jitter_embed
+    - name: batch_integration/control_methods/random_integration/batch_embed
+      alias: random_integration_batch_embed
+    - name: batch_integration/control_methods/random_integration/batch_feature
+      alias: random_integration_batch_feature
+    - name: batch_integration/control_methods/random_integration/batch_graph
+      alias: random_integration_batch_graph
+    - name: batch_integration/control_methods/random_integration/celltype_embed
+      alias: random_integration_celltype_embed
+    - name: batch_integration/control_methods/random_integration/celltype_feature
+      alias: random_integration_celltype_feature
+    - name: batch_integration/control_methods/random_integration/celltype_graph
+      alias: random_integration_celltype_graph
+    - name: batch_integration/control_methods/random_integration/global_embed
+      alias: random_integration_global_embed
+    - name: batch_integration/control_methods/random_integration/global_feature
+      alias: random_integration_global_feature
+    - name: batch_integration/control_methods/random_integration/global_graph
+      alias: random_integration_global_graph
     - name: batch_integration/transformers/feature_to_embed
     - name: batch_integration/transformers/embed_to_graph
     - name: batch_integration/metrics/asw_batch

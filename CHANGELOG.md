@@ -132,13 +132,11 @@
 
 * Removed the separate subtask specific subfolders. The "subtask" is added to the config.
 
-* `control_methods/no_integration_batch`: Migrated from v1 embedding.
+* `control_methods/no_integration`: Migrated from v1.
 
-* `control_methods/random_embed_cell`: Migrated from v1 embedding.
+* `control_methods/perfect_integration`: Migrated from v1, renaming "random embedding" to "perfect integration".
 
-* `control_methods/random_embed_cel_jitter`: Migrated from v1 embedding.
-
-* `control_methods/random_integration`: Migrated from v1 graph.
+* `control_methods/random_integration`: Migrated from v1.
 
 * `methods/bbknn`: Migrated from v1 graph.
 

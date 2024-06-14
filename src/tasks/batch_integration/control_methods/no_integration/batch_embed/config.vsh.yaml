@@ -1,7 +1,8 @@
 # use method api spec
-__merge__: ../../api/comp_control_method_embedding.yaml
+__merge__: ../../../api/comp_control_method_embedding.yaml
 functionality:
-  name: no_integration_batch
+  name: batch_embed
+  namespace: batch_integration/control_methods/no_integration
   info:
     label: No integration by Batch
     summary: "Cells are embedded by computing PCA independently on each batch"
@@ -16,11 +17,6 @@ functionality:
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_python:1.0.4
-    setup:
-      - type: python
-        pypi:
-          - scanpy
-          - numpy
   - type: nextflow
     directives:
       label: [midtime, lowmem, lowcpu]

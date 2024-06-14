@@ -1,9 +1,10 @@
 # use method api spec
-__merge__: ../../api/comp_control_method_embedding.yaml
+__merge__: ../../../api/comp_control_method_embedding.yaml
 functionality:
-  name: random_embed_cell_jitter
+  name: celltype_jitter_embed
+  namespace: batch_integration/control_methods/perfect_integration
   info:
-    label: Random Embedding by Celltype with jitter
+    label: Perfect embedding by celltype with jitter
     summary: "Cells are embedded as a one-hot encoding of celltype labels, with a small amount of random noise added to the embedding"
     description: "Cells are embedded as a one-hot encoding of celltype labels, with a small amount of random noise added to the embedding"
     v1:
@@ -17,15 +18,10 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+    - path: ../../utils.py
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_python:1.0.4
-    setup:
-      - type: python
-        pypi:
-          - scikit-learn
-          - numpy
-          - scipy
   - type: nextflow
     directives:
       label: [midtime, lowmem, lowcpu]

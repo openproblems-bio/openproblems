@@ -27,10 +27,21 @@ workflow run_wf {
     scanorama_feature,
     scanvi,
     scvi,
-    no_integration_batch,
-    random_embed_cell,
-    random_embed_cell_jitter,
-    random_integration
+    no_integration_batch_embed,
+    no_integration_global_embed,
+    no_integration_global_feature,
+    no_integration_global_graph,
+    perfect_integration_celltype_embed,
+    perfect_integration_celltype_jitter_embed,
+    random_integration_batch_embed,
+    random_integration_batch_feature,
+    random_integration_batch_graph,
+    random_integration_celltype_embed,
+    random_integration_celltype_feature,
+    random_integration_celltype_graph,
+    random_integration_global_embed,
+    random_integration_global_feature,
+    random_integration_global_graph,
   ]
 
   // construct list of metrics

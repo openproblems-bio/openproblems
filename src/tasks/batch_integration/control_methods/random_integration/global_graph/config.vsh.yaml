@@ -1,0 +1,23 @@
+# use method api spec
+__merge__: ../../../api/comp_control_method_graph.yaml
+functionality:
+  name: global_graph
+  namespace: batch_integration/control_methods/random_integration
+  info:
+    label: Random integration
+    summary: "Graph connectivity values are randomly permuted"
+    description: "Graph connectivity values are randomly permuted"
+    v1:
+      path: openproblems/tasks/_batch_integration/_common/methods/baseline.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: log_cp10k
+  resources:
+    - type: python_script
+      path: script.py
+    - path: ../../utils.py
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.4
+  - type: nextflow
+    directives:
+      label: [ "midtime", "lowmem", "lowcpu"]
