@@ -54,3 +54,14 @@ authors:
     info:
       email: dengkw@umich.edu
       github: nonztalk
+  - name: Xueer Chen
+    roles: [ contributor ]
+    info:
+      github: xuerchen
+      email: xc2579@columbia.edu
+  - name: Jiwei Liu
+    roles: [ contributor ]
+    info:
+      github: daxiongshu
+      email: jiweil@nvidia.com
+      orcid: "0000-0002-8799-9763"

@@ -74,6 +74,7 @@ functionality:
     # - name: predict_modality/methods/newwave_knnr
     # - name: predict_modality/methods/random_forest
     - name: predict_modality/methods/guanlab_dengkw_pm
+    - name: predict_modality/methods/simplemlp
     - name: predict_modality/methods/novel
     - name: predict_modality/metrics/correlation
     - name: predict_modality/metrics/mse
