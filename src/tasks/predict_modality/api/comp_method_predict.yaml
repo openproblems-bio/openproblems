@@ -11,11 +11,11 @@ functionality:
     - name: "--input_train_mod1"
       __merge__: file_train_mod1.yaml
       direction: input
-      required: true
+      required: false
     - name: "--input_train_mod2"
       __merge__: file_train_mod2.yaml
       direction: input
-      required: true
+      required: false
     - name: "--input_test_mod1"
       __merge__: file_test_mod1.yaml
       direction: input

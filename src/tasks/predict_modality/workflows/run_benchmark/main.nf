@@ -23,7 +23,8 @@ workflow run_wf {
     lmds_irlba_rf,
     // newwave_knnr,
     // random_forest,
-    guanlab_dengkw_pm
+    guanlab_dengkw_pm,
+    novel
   ]
 
   // construct list of metrics
