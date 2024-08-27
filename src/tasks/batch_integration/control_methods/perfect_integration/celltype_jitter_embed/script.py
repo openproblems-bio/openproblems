@@ -17,10 +17,15 @@ meta = {
 ## VIASH END
 sys.path.append(meta["resources_dir"])
 from utils import _perfect_embedding
+from read_anndata_partial import read_anndata
 
 
 print('Read input', flush=True)
-adata = ad.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    obs='obs',
+    uns='uns'
+)
 
 print('Process data...', flush=True)
 adata.obsm["X_emb"] = _perfect_embedding(

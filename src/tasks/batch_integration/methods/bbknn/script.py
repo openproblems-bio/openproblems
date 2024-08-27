@@ -1,4 +1,6 @@
+import sys
 import anndata as ad
+import scanpy as sc
 import bbknn
 
 ## VIASH START
@@ -15,13 +17,24 @@ meta = {
 }
 ## VIASH END
 
+sys.path.append(meta["resources_dir"])
+from read_anndata_partial import read_anndata
+
+
 print('Read input', flush=True)
-adata = ad.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    X='layers/normalized',
+    obs='obs',
+    var='var',
+    uns='uns'
+)
 
 if par['n_hvg']:
     print(f"Select top {par['n_hvg']} high variable genes", flush=True)
     idx = adata.var['hvg_score'].to_numpy().argsort()[::-1][:par['n_hvg']]
     adata = adata[:, idx].copy()
+    sc.pp.pca(adata)
 
 print('Run BBKNN', flush=True)
 kwargs = dict(batch_key='batch', copy=True)

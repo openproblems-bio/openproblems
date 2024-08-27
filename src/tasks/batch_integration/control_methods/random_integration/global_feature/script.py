@@ -19,11 +19,18 @@ meta = {
 # add helper scripts to path
 sys.path.append(meta["resources_dir"])
 from utils import _randomize_features
+from read_anndata_partial import read_anndata
 
 print('Read input', flush=True)
-adata = ad.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    X='layers/normalized',
+    obs='obs',
+    var='var',
+    uns='uns'
+)
 
-adata.layers['corrected_counts'] = _randomize_features(adata.layers["normalized"])
+adata.layers['corrected_counts'] = _randomize_features(adata.X)
 
 print("Store outputs", flush=True)
 adata.uns['method_id'] = meta['functionality_name']

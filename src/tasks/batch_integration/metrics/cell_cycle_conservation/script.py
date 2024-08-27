@@ -1,3 +1,4 @@
+import sys
 import anndata as ad
 from scib.metrics import cell_cycle
 import numpy as np
@@ -12,15 +13,27 @@ meta = {
     'functionality_name': 'foo'
 }
 ## VIASH END
+sys.path.append(meta["resources_dir"])
+from read_anndata_partial import read_anndata
+
 
 print('Read input', flush=True)
-input_solution = ad.read_h5ad(par['input_solution'])
-input_integrated = ad.read_h5ad(par['input_integrated'])
-input_solution.X = input_solution.layers['normalized']
+adata_solution = read_anndata(
+    par['input_solution'],
+    X='layers/normalized',
+    obs='obs',
+    var='var',
+    uns='uns'
+)
+adata_integrated = read_anndata(
+    par['input_integrated'],
+    obs='obs',
+    obsm='obsm',
+    uns='uns'
+)
 
 print('Use gene symbols for features', flush=True)
-input_solution.var_names = input_solution.var['feature_name']
-input_integrated.var_names = input_integrated.var['feature_name']
+adata_solution.var_names = adata_solution.var['feature_name']
 
 translator = {
     "homo_sapiens": "human",
@@ -28,13 +41,13 @@ translator = {
 }
 
 print('Compute score', flush=True)
-if input_solution.uns['dataset_organism'] not in translator:
+if adata_solution.uns['dataset_organism'] not in translator:
     score = np.nan
 else:
-    organism = translator[input_solution.uns['dataset_organism']]
+    organism = translator[adata_solution.uns['dataset_organism']]
     score = cell_cycle(
-        input_solution,
-        input_integrated,
+        adata_solution,
+        adata_integrated,
         batch_key='batch',
         embed='X_emb',
         organism=organism,
@@ -43,9 +56,9 @@ else:
 print('Create output AnnData object', flush=True)
 output = ad.AnnData(
     uns={
-        'dataset_id': input_solution.uns['dataset_id'],
-        'normalization_id': input_solution.uns['normalization_id'],
-        'method_id': input_integrated.uns['method_id'],
+        'dataset_id': adata_solution.uns['dataset_id'],
+        'normalization_id': adata_solution.uns['normalization_id'],
+        'method_id': adata_integrated.uns['method_id'],
         'metric_ids': [ meta['functionality_name'] ],
         'metric_values': [ score ]
     }

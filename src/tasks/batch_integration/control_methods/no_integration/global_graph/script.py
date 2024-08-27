@@ -19,10 +19,16 @@ meta = {
 # add helper scripts to path
 sys.path.append(meta["resources_dir"])
 from utils import _set_uns
+from read_anndata_partial import read_anndata
 
 
 print('Read input', flush=True)
-adata = sc.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    obs='obs',
+    obsp='obsp',
+    uns='uns'
+)
 
 print("process dataset", flush=True)
 neighbors_map = adata.uns['knn']

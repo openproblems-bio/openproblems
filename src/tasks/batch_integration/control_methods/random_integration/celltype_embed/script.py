@@ -16,10 +16,16 @@ meta = {
 ## VIASH END
 sys.path.append(meta["resources_dir"])
 from utils import _randomize_features
+from read_anndata_partial import read_anndata
 
 
 print('Read input', flush=True)
-adata = ad.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    obs='obs',
+    obsm='obsm',
+    uns='uns'
+)
 
 print('Process data...', flush=True)
 adata.obsm["X_emb"] = _randomize_features(

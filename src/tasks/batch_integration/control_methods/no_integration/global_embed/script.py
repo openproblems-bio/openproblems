@@ -1,3 +1,4 @@
+import sys
 import scanpy as sc
 
 ## VIASH START
@@ -15,8 +16,17 @@ meta = {
 
 ## VIASH END
 
+sys.path.append(meta["resources_dir"])
+from read_anndata_partial import read_anndata
+
+
 print('Read input', flush=True)
-adata = sc.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    obs='obs',
+    obsm='obsm',
+    uns='uns'
+)
 
 print("process dataset", flush=True)
 adata.obsm["X_emb"] = adata.obsm["X_pca"]

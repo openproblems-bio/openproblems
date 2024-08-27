@@ -1,3 +1,4 @@
+import sys
 import scanpy as sc
 from scipy.sparse import csr_matrix
 
@@ -15,8 +16,18 @@ meta = {
 
 ## VIASH END
 
+sys.path.append(meta["resources_dir"])
+from read_anndata_partial import read_anndata
+
+
 print('Read input', flush=True)
-adata = sc.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    X='layers/normalized',
+    obs='obs',
+    var='var',
+    uns='uns'
+)
 
 if par['n_hvg']:
     print(f"Select top {par['n_hvg']} high variable genes", flush=True)
@@ -25,7 +36,6 @@ if par['n_hvg']:
 
 
 print('Run Combat', flush=True)
-adata.X = adata.layers['normalized']
 adata.X = sc.pp.combat(adata, key='batch', inplace=False)
 
 

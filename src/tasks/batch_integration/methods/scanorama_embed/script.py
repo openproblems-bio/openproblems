@@ -1,3 +1,4 @@
+import sys
 import anndata as ad
 import scanorama
 
@@ -12,6 +13,10 @@ meta = {
     'config': 'bar'
 }
 ## VIASH END
+
+sys.path.append(meta["resources_dir"])
+from read_anndata_partial import read_anndata
+
 
 # based on scib
 # -> https://github.com/theislab/scib/blob/59ae6eee5e611d9d3db067685ec96c28804e9127/scib/utils.py#L51C1-L72C62
@@ -40,7 +45,13 @@ def merge_adata(*adata_list, **kwargs):
 
 
 print('Read input', flush=True)
-adata = ad.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    X='layers/normalized',
+    obs='obs',
+    var='var',
+    uns='uns'
+)
 
 if par['n_hvg']:
     print(f"Select top {par['n_hvg']} high variable genes", flush=True)
@@ -48,7 +59,6 @@ if par['n_hvg']:
     adata = adata[:, idx].copy()
 
 print('Run scanorama', flush=True)
-adata.X = adata.layers['normalized']
 split = []
 batch_categories = adata.obs['batch'].cat.categories
 for i in batch_categories:
@@ -64,6 +74,9 @@ output = ad.AnnData(
         'dataset_id': adata.uns['dataset_id'],
         'normalization_id': adata.uns['normalization_id'],
         'method_id': meta['functionality_name'],
+    },
+    layers={
+        'corrected_counts': corrected.X,
     },
     obsm={
         'X_emb': corrected.obsm["X_scanorama"],

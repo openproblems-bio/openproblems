@@ -30,6 +30,8 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+    - type: python_script
+      path: /src/common/helper_functions/read_anndata_partial.py
 platforms:
   # Due to a [ gcc-8 ] dependency in the mnnpy package, we need to use a python:3.8 image
   - type: docker

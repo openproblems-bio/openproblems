@@ -24,10 +24,12 @@ functionality:
       description: Number of highly variable genes to use.
   resources:
     - type: python_script
-      path: script.py
+      path: ../scalex_embed/script.py
+    - type: python_script
+      path: /src/common/helper_functions/read_anndata_partial.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.4
+    image: ghcr.io/openproblems-bio/base_images/python:1.1.0
     setup:
       - type: python
         pypi:

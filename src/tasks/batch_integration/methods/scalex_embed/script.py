@@ -1,3 +1,4 @@
+import sys
 import anndata as ad
 import scalex
 
@@ -13,8 +14,19 @@ meta = {
 }
 ## VIASH END
 
+sys.path.append(meta["resources_dir"])
+from read_anndata_partial import read_anndata
+
+
 print('Read input', flush=True)
-adata = ad.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    X='layers/normalized',
+    obs='obs',
+    var='var',
+    uns='uns'
+)
+
 
 if par['n_hvg']:
     print(f"Select top {par['n_hvg']} high variable genes", flush=True)
@@ -22,7 +34,6 @@ if par['n_hvg']:
     adata = adata[:, idx].copy()
 
 print('Run SCALEX', flush=True)
-adata.X = adata.layers['normalized']
 adata = scalex.SCALEX(
     adata,
     batch_key="batch",
@@ -42,6 +53,9 @@ print("Store outputs", flush=True)
 output = ad.AnnData(
     obs=adata.obs[[]],
     var=adata.var[[]],
+    layers={
+        'corrected_counts': adata.layers["impute"],
+    },
     obsm={
         'X_emb': adata.obsm['latent'],
     },

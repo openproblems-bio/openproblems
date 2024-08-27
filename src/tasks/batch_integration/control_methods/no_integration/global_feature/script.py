@@ -1,3 +1,4 @@
+import sys
 import scanpy as sc
 
 ## VIASH START
@@ -15,12 +16,22 @@ meta = {
 
 ## VIASH END
 
+sys.path.append(meta["resources_dir"])
+from read_anndata_partial import read_anndata
+
+
 print('Read input', flush=True)
-adata = sc.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    X='layers/normalized',
+    obs='obs',
+    var='var',
+    uns='uns'
+)
 
 # no processing, subset matrix to highly variable genes
 adata_hvg = adata[:, adata.var["hvg"]].copy()
-adata.layers['corrected_counts'] = adata_hvg.layers["normalized"].copy()
+adata.layers['corrected_counts'] = adata_hvg.X.copy()
 
 print("Store outputs", flush=True)
 adata.uns['method_id'] = meta['functionality_name']

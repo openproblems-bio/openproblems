@@ -38,9 +38,11 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+    - type: python_script
+      path: /src/common/helper_functions/read_anndata_partial.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_r:1.0.4
+    image: ghcr.io/openproblems-bio/base_images/r:1.1.0
     setup:
       - type: r
         github: theislab/kBET

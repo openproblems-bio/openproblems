@@ -1,6 +1,7 @@
+import sys
 import numpy as np
 import anndata as ad
-from scib.metrics.lisi import recompute_knn, lisi_graph_py
+from scib.metrics.lisi import lisi_graph_py
 
 ## VIASH START
 par = {
@@ -12,19 +13,18 @@ meta = {
 }
 ## VIASH END
 
+sys.path.append(meta["resources_dir"])
+from read_anndata_partial import read_anndata
+
+
 print('Read input', flush=True)
-input_solution = ad.read_h5ad(par['input_solution'])
-input_integrated = ad.read_h5ad(par['input_integrated'])
-
-input_solution.obsp["connectivities"] = input_integrated.obsp["connectivities"]
-input_solution.obsp["distances"] = input_integrated.obsp["distances"]
-
-# TODO: if we don't copy neighbors over, the metric doesn't work
-input_solution.uns["neighbors"] = input_integrated.uns["neighbors"]
+adata = read_anndata(par['input_integrated'], obs='obs', obsp='obsp', uns='uns')
+adata.obs = read_anndata(par['input_solution'], obs='obs').obs
+adata.uns |= read_anndata(par['input_solution'], uns='uns').uns
 
 print('compute iLISI score...', flush=True)
 ilisi_scores = lisi_graph_py(
-    adata=input_solution,
+    adata=adata,
     obs_key='batch',
     n_neighbors=90,
     perplexity=None,
@@ -33,11 +33,11 @@ ilisi_scores = lisi_graph_py(
     verbose=False,
 )
 ilisi = np.nanmedian(ilisi_scores)
-ilisi = (ilisi - 1) / (input_solution.obs['batch'].nunique() - 1)
+ilisi = (ilisi - 1) / (adata.obs['batch'].nunique() - 1)
 
 print('compute cLISI scores...', flush=True)
 clisi_scores = lisi_graph_py(
-    adata=input_solution,
+    adata=adata,
     obs_key='label',
     n_neighbors=90,
     perplexity=None,
@@ -46,15 +46,15 @@ clisi_scores = lisi_graph_py(
     verbose=False,
 )
 clisi = np.nanmedian(clisi_scores)
-nlabs = input_solution.obs['label'].nunique()
+nlabs = adata.obs['label'].nunique()
 clisi = (nlabs - clisi) / (nlabs - 1)
 
 print('Create output AnnData object', flush=True)
 output = ad.AnnData(
     uns={
-        'dataset_id': input_solution.uns['dataset_id'],
-        'normalization_id': input_solution.uns['normalization_id'],
-        'method_id': input_integrated.uns['method_id'],
+        'dataset_id': adata.uns['dataset_id'],
+        'normalization_id': adata.uns['normalization_id'],
+        'method_id': adata.uns['method_id'],
         'metric_ids': [ 'ilisi', 'clisi' ],
         'metric_values': [ ilisi, clisi ]
     }

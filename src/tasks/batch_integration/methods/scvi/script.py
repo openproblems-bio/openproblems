@@ -1,3 +1,4 @@
+import sys
 import anndata as ad
 from scvi.model import SCVI
 
@@ -16,8 +17,17 @@ meta = {
 }
 ## VIASH END
 
+sys.path.append(meta["resources_dir"])
+from read_anndata_partial import read_anndata
+
 print('Read input', flush=True)
-adata = ad.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    X='layers/counts',
+    obs='obs',
+    var='var',
+    uns='uns'
+)
 
 if par["n_hvg"]:
     print(f"Select top {par['n_hvg']} high variable genes", flush=True)
@@ -25,7 +35,7 @@ if par["n_hvg"]:
     adata = adata[:, idx].copy()
 
 print("Processing data", flush=True)
-SCVI.setup_anndata(adata, layer="counts", batch_key="batch")
+SCVI.setup_anndata(adata, batch_key="batch")
 
 print("Run scVI", flush=True)
 model_kwargs = {

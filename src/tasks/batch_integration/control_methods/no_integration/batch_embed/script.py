@@ -1,3 +1,4 @@
+import sys
 import scanpy as sc
 import numpy as np
 
@@ -15,9 +16,18 @@ meta = {
 
 ## VIASH END
 
+sys.path.append(meta["resources_dir"])
+from read_anndata_partial import read_anndata
+
+
 print('Read input', flush=True)
-adata = sc.read_h5ad(par['input'])
-adata.X = adata.layers["normalized"]
+adata = read_anndata(
+    par['input'],
+    X='layers/normalized',
+    obs='obs',
+    var='var',
+    uns='uns'
+)
 adata.var["highly_variable"] = adata.var["hvg"]
 
 print("Process dataset", flush=True)
@@ -27,7 +37,7 @@ for batch in adata.obs["batch"].unique():
     n_comps = min(50, np.sum(batch_idx))
     solver = "full" if n_comps == np.sum(batch_idx) else "arpack"
     adata.obsm["X_emb"][batch_idx, :n_comps] = sc.tl.pca(
-        adata[batch_idx],
+        adata[batch_idx].copy(),
         n_comps=n_comps,
         use_highly_variable=True,
         svd_solver=solver,

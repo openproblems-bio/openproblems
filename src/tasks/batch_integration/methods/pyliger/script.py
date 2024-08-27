@@ -1,3 +1,4 @@
+import sys
 import anndata as ad
 import numpy as np
 import pyliger
@@ -12,21 +13,24 @@ meta = {
 }
 ## VIASH END
 
+sys.path.append(meta["resources_dir"])
+from read_anndata_partial import read_anndata
+
+
 print('>> Read input', flush=True)
-adata = ad.read_h5ad(par['input'])
+adata = read_anndata(
+    par['input'],
+    X='layers/counts',
+    obs='obs',
+    var='var',
+    uns='uns'
+)
+adata.layers['norm_data'] = read_anndata(par['input'], X='layers/normalized').X
 
 print('>> Prepare data', flush=True)
 adata_per_batch = []
 for batch in adata.obs['batch'].unique():
   adb = adata[adata.obs['batch'] == batch].copy()
-
-  # move counts
-  adb.X = adb.layers['counts']
-  del adb.layers['counts']
-
-  # move normalized data
-  adb.layers["norm_data"] = adb.layers["normalized"]
-  del adb.layers["normalized"]
   
   # save row sum and sum of squares for further use
   norm_sum = np.ravel(np.sum(adb.layers["norm_data"], axis=0))
