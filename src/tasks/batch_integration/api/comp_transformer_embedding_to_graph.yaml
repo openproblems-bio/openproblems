@@ -1,0 +1,25 @@
+functionality:
+  namespace: batch_integration/transformers
+  info:
+    type: transformer
+    subtype: graph
+    type_info:
+      label: Embedding to Graph
+      summary: Transform an embedding to a graph output.
+      description: |
+        Transform an embedding to a graph output by applying the k nearest neighbors algorithm.
+  arguments:
+    - name: --input
+      __merge__: file_integrated_embedding.yaml
+      direction: input
+      required: true
+    - name: --output
+      __merge__: file_integrated_graph.yaml
+      direction: output
+      required: true
+  test_resources:
+    # auto-run component
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/batch_integration/pancreas
+      dest: resources_test/batch_integration/pancreas

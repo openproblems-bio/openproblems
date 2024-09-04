@@ -1,0 +1,115 @@
+functionality:
+  name: "run_benchmark"
+  namespace: "batch_integration/workflows"
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - name: "--input_dataset"
+          __merge__: /src/tasks/batch_integration/api/file_dataset.yaml
+          required: true
+          direction: input
+        - name: "--input_solution"
+          __merge__: /src/tasks/batch_integration/api/file_solution.yaml
+          required: true
+          direction: input
+    - name: Outputs
+      arguments:
+        - name: "--output_scores"
+          type: file
+          required: true
+          direction: output
+          description: A yaml file containing the scores of each of the methods
+          default: score_uns.yaml
+        - name: "--output_method_configs"
+          type: file
+          required: true
+          direction: output
+          default: method_configs.yaml
+        - name: "--output_metric_configs"
+          type: file
+          required: true
+          direction: output
+          default: metric_configs.yaml
+        - name: "--output_dataset_info"
+          type: file
+          required: true
+          direction: output
+          default: dataset_uns.yaml
+        - name: "--output_task_info"
+          type: file
+          required: true
+          direction: output
+          default: task_info.yaml
+    - name: Methods
+      arguments:
+        - name: "--method_ids"
+          type: string
+          multiple: true
+          description: A list of method ids to run. If not specified, all methods will be run.
+  resources:
+    - type: nextflow_script
+      path: main.nf
+      entrypoint: run_wf
+    - type: file
+      path: ../../api/task_info.yaml
+  dependencies: 
+    - name: common/check_dataset_schema
+    - name: common/extract_metadata
+    - name: batch_integration/methods/bbknn
+    - name: batch_integration/methods/combat
+    - name: batch_integration/methods/fastmnn_embedding
+    - name: batch_integration/methods/fastmnn_feature
+    - name: batch_integration/methods/liger
+    - name: batch_integration/methods/mnn_correct
+    - name: batch_integration/methods/mnnpy
+    - name: batch_integration/methods/pyliger
+    - name: batch_integration/methods/scalex_embed
+    - name: batch_integration/methods/scalex_feature
+    - name: batch_integration/methods/scanorama_embed
+    - name: batch_integration/methods/scanorama_feature
+    - name: batch_integration/methods/scanvi
+    - name: batch_integration/methods/scvi
+    - name: batch_integration/control_methods/no_integration/batch_embed
+      alias: no_integration_batch_embed
+    - name: batch_integration/control_methods/no_integration/global_embed
+      alias: no_integration_global_embed
+    - name: batch_integration/control_methods/no_integration/global_feature
+      alias: no_integration_global_feature
+    - name: batch_integration/control_methods/no_integration/global_graph
+      alias: no_integration_global_graph
+    - name: batch_integration/control_methods/perfect_integration/celltype_embed
+      alias: perfect_integration_celltype_embed
+    - name: batch_integration/control_methods/perfect_integration/celltype_jitter_embed
+      alias: perfect_integration_celltype_jitter_embed
+    - name: batch_integration/control_methods/random_integration/batch_embed
+      alias: random_integration_batch_embed
+    - name: batch_integration/control_methods/random_integration/batch_feature
+      alias: random_integration_batch_feature
+    - name: batch_integration/control_methods/random_integration/batch_graph
+      alias: random_integration_batch_graph
+    - name: batch_integration/control_methods/random_integration/celltype_embed
+      alias: random_integration_celltype_embed
+    - name: batch_integration/control_methods/random_integration/celltype_feature
+      alias: random_integration_celltype_feature
+    - name: batch_integration/control_methods/random_integration/celltype_graph
+      alias: random_integration_celltype_graph
+    - name: batch_integration/control_methods/random_integration/global_embed
+      alias: random_integration_global_embed
+    - name: batch_integration/control_methods/random_integration/global_feature
+      alias: random_integration_global_feature
+    - name: batch_integration/control_methods/random_integration/global_graph
+      alias: random_integration_global_graph
+    - name: batch_integration/transformers/feature_to_embed
+    - name: batch_integration/transformers/embed_to_graph
+    - name: batch_integration/metrics/asw_batch
+    - name: batch_integration/metrics/asw_label
+    - name: batch_integration/metrics/cell_cycle_conservation
+    - name: batch_integration/metrics/clustering_overlap
+    - name: batch_integration/metrics/graph_connectivity
+    - name: batch_integration/metrics/hvg_overlap
+    - name: batch_integration/metrics/isolated_label_asw
+    - name: batch_integration/metrics/isolated_label_f1
+    - name: batch_integration/metrics/kbet
+    - name: batch_integration/metrics/pcr
+platforms:
+  - type: nextflow

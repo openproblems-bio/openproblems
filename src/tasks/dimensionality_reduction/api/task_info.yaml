@@ -1,0 +1,73 @@
+name: dimensionality_reduction
+label: "Dimensionality reduction for 2D visualization"
+v1:
+  path: openproblems/tasks/dimensionality_reduction/README.md
+  commit: b353a462f6ea353e0fc43d0f9fcbbe621edc3a0b
+summary: Reduction of high-dimensional datasets to 2D for visualization & interpretation
+image: "thumbnail.svg"
+motivation: |
+  Data visualisation is an important part of all stages of single-cell analysis, from
+  initial quality control to interpretation and presentation of final results. For bulk RNA-seq
+  studies, linear dimensionality reduction techniques such as PCA and MDS are commonly used
+  to visualise the variation between samples. While these methods are highly effective they
+  can only be used to show the first few components of variation which cannot fully represent
+  the increased complexity and number of observations in single-cell datasets. For this reason
+  non-linear techniques (most notably t-SNE and UMAP) have become the standard for visualising
+  single-cell studies. These methods attempt to compress a dataset into a two-dimensional space
+  while attempting to capture as much of the variance between observations as possible. Many
+  methods for solving this problem now exist. In general these methods try to preserve distances,
+  while some additionally consider aspects such as density within the embedded space or conservation
+  of continuous trajectories. Despite almost every single-cell study using one of these visualisations
+  there has been debate as to whether they can effectively capture the variation in single-cell
+  datasets [@chari2023speciousart].
+description: |
+  The dimensionality reduction task attempts to quantify the ability of methods to embed the
+  information present in complex single-cell studies into a two-dimensional space. Thus, this task
+  is specifically designed for dimensionality reduction for visualisation and does not consider other
+  uses of dimensionality reduction in standard single-cell workflows such as improving the
+  signal-to-noise ratio (and in fact several of the methods use PCA as a pre-processing step for this
+  reason). Unlike most tasks, methods for the dimensionality reduction task must accept a matrix
+  containing expression values normalised to 10,000 counts per cell and log transformed (log-10k) and
+  produce a two-dimensional coordinate for each cell. Pre-normalised matrices are required to
+  enforce consistency between the metric evaluation (which generally requires normalised data) and
+  the method runs. When these are not consistent, methods that use the same normalisation as used in
+  the metric tend to score more highly. For some methods we also evaluate the pre-processing
+  recommended by the method.
+authors:
+  - name: Luke Zappia
+    roles: [ maintainer, author ]
+    info:
+      github: lazappi
+  - name: Michal Klein
+    roles: [ author ]
+    info:
+      github: michalk8
+  - name: Scott Gigante
+    roles: [ author ]
+    info:
+      github: scottgigante
+      orcid: "0000-0002-4544-2764"
+  - name: Ben DeMeo
+    roles: [ author ]
+    info:
+      github: bendemeo
+  - name: Robrecht Cannoodt
+    roles: [ author ]
+    info:
+      github: rcannood
+      orcid: 0000-0003-3641-729X
+  - name: Kai Waldrant
+    roles: [ contributor ]
+    info:
+      github: KaiWaldrant
+      orcid: 0009-0003-8555-1361
+  - name: Sai Nirmayi Yasa
+    roles: [ contributor ]
+    info:
+      github: sainirmayi
+      orcid: 0009-0003-6319-9803
+  - name: Juan A. Cordero Varela
+    roles: [ contributor ]
+    info:
+      github: jacorvar
+      orcid: 0000-0002-7373-5433

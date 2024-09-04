@@ -1,0 +1,31 @@
+__merge__: ../../api/comp_method.yaml
+
+functionality:
+  name: nnsvg
+  info:
+    label: nnSVG
+    summary: "nnSVG is based on nearest-neighbor Gaussian process (NNGP) models to estimate parameters in GPs"
+    description: |
+      nnSVG identifies genes that vary in expression continuously across the entire tissue or within a priori defined 
+      spatial domains. It uses gene-specific estimates of length scale parameters within the Gaussian process models, 
+      and scales linearly with the number of spatial locations.
+    preferred_normalization: counts
+    reference: weber2023nnsvg
+    documentation_url: https://bioconductor.org/packages/release/bioc/vignettes/nnSVG/inst/doc/nnSVG.html
+    repository_url: https://github.com/lmweber/nnSVG
+
+  resources:
+    - type: r_script
+      path: script.R
+
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_r:1.0.4
+    setup:
+      - type: r
+        cran: [anndata, dplyr]
+        bioc: [SpatialExperiment, scran, nnSVG]
+  - type: native
+  - type: nextflow
+    directives:
+      label: [midtime, midmem, midcpu]

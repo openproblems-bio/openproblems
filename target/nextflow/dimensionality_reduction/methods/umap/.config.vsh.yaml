@@ -1,0 +1,204 @@
+functionality:
+  name: "umap"
+  namespace: "dimensionality_reduction/methods"
+  version: "main_build"
+  arguments:
+  - type: "file"
+    name: "--input"
+    info:
+      label: "Dataset"
+      summary: "The dataset to pass to a method."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalized expression values"
+          required: true
+        var:
+        - type: "double"
+          name: "hvg_score"
+          description: "High variability gene score (normalized dispersion). The greater,\
+            \ the more variable."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/dimensionality_reduction/pancreas/dataset.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Embedding"
+      summary: "A dataset with dimensionality reduction embedding."
+      slots:
+        obsm:
+        - type: "double"
+          name: "X_emb"
+          description: "The dimensionally reduced embedding."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/dimensionality_reduction/pancreas/embedding.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--n_hvg"
+    description: "Number of highly variable genes to subset to. If not specified,\
+      \ the input matrix will not be subset."
+    info: null
+    default:
+    - 1000
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--n_pca_dims"
+    description: "Number of PCA dimensions to use. If not specified, no PCA will be\
+      \ performed."
+    info: null
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  test_resources:
+  - type: "file"
+    path: "resources_test/dimensionality_reduction/pancreas/"
+    dest: "resources_test/dimensionality_reduction/pancreas/"
+  - type: "python_script"
+    path: "src/common/comp_tests/check_method_config.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "src/common/library.bib"
+  info:
+    label: "UMAP"
+    summary: "A manifold learning algorithm that utilizes topological data analysis\
+      \ for dimension reduction."
+    description: "Uniform Manifold Approximation and Projection is an algorithm for\n\
+      dimension reduction based on manifold learning techniques and ideas from\ntopological\
+      \ data analysis. We perform UMAP on the logCPM expression matrix\nbefore and\
+      \ after HVG selection and with and without PCA as a pre-processing\nstep.\n"
+    reference: "mcinnes2018umap"
+    repository_url: "https://github.com/lmcinnes/umap"
+    documentation_url: "https://github.com/lmcinnes/umap#readme"
+    v1:
+      path: "openproblems/tasks/dimensionality_reduction/methods/umap.py"
+      commit: "14d70b330cae09527a6d4c4e552db240601e31cf"
+    preferred_normalization: "log_cp10k"
+    variants:
+      umap_logCP10k: null
+      umap_pca_logCP10k:
+        n_pca_dims: 50
+      umap_logCP10k_1kHVG:
+        n_hvg: 1000
+      umap_pca_logCP10k_1kHVG:
+        n_pca_dims: 50
+        n_hvg: 1000
+    type: "method"
+    type_info:
+      label: "Method"
+      summary: "A dimensionality reduction method."
+      description: "A dimensionality reduction method to summarise the biological\n\
+        information in a dataset in as few dimensions as possible.\n"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1.0.0"
+  target_organization: "openproblems-bio"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  setup:
+  - type: "python"
+    user: false
+    packages:
+    - "umap-learn"
+    - "pynndescent==0.5.11"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "highmem"
+    - "highcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/umap/config.vsh.yaml"
+  platform: "nextflow"
+  output: "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/umap"
+  executable: "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/umap/umap"
+  viash_version: "0.8.0"
+  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  git_remote: "https://github.com/openproblems-bio/openproblems"

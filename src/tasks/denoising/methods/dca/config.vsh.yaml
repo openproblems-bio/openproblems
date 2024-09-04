@@ -1,0 +1,45 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "dca"
+  info:
+    label: DCA
+    summary: "A deep autoencoder with ZINB loss function to address the dropout effect in count data"
+    description: |
+      "Deep Count Autoencoder
+
+      Removes the dropout effect by taking the count structure, overdispersed nature and sparsity of the data into account 
+      using a deep autoencoder with zero-inflated negative binomial (ZINB) loss function."
+    reference: "eraslan2019single"
+    documentation_url: "https://github.com/theislab/dca#readme"
+    repository_url: "https://github.com/theislab/dca"
+    v1:
+      path: openproblems/tasks/denoising/methods/dca.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    variants: 
+      dca:
+    preferred_normalization: counts
+  arguments:
+    - name: "--epochs"
+      type: "integer"
+      default: 300
+      description: "Number of total epochs in training"
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: python:3.9
+    setup:
+      - type: apt
+        packages: procps
+      - type: python
+        packages:
+          - anndata~=0.8.0
+          - scanpy
+          - pyyaml
+          - requests
+          - jsonschema
+          - "git+https://github.com/scottgigante-immunai/dca.git@patch-1"
+  - type: nextflow
+    directives: 
+      label: [midtime, highmem, highcpu]

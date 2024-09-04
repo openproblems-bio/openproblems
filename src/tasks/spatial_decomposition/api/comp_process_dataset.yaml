@@ -1,0 +1,33 @@
+functionality:
+  namespace: "spatial_decomposition"
+  info:
+    type: process_dataset
+    type_info:
+      label: Data processor
+      summary: A spatial decomposition dataset processor.
+      description: |
+        Prepare a common dataset for the spatial_decomposition task.
+  arguments:
+    - name: "--input"
+      __merge__: file_common_dataset.yaml
+      direction: input
+      required: true
+    - name: "--output_single_cell"
+      __merge__: file_single_cell.yaml
+      direction: output
+      required: true
+    - name: "--output_spatial_masked"
+      __merge__: file_spatial_masked.yaml
+      direction: output
+      required: true
+    - name: "--output_solution"
+      __merge__: file_solution.yaml
+      direction: output
+      required: true
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/common/cxg_mouse_pancreas_atlas
+      dest: resources_test/common/cxg_mouse_pancreas_atlas
+    - path: /resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas
+      dest: resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas

@@ -1,0 +1,171 @@
+functionality:
+  name: "create_component"
+  namespace: "common"
+  version: "main_build"
+  arguments:
+  - type: "string"
+    name: "--task"
+    description: "Which task the component will be added to."
+    info: null
+    example:
+    - "denoising"
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "string"
+    name: "--type"
+    description: "The type of component to create. Typically must be one of 'method',\
+      \ 'control_method' or 'metric'."
+    info: null
+    example:
+    - "metric"
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "string"
+    name: "--language"
+    description: "Which scripting language to use. Options are 'python', 'r'."
+    info: null
+    default:
+    - "python"
+    required: false
+    choices:
+    - "python"
+    - "r"
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "string"
+    name: "--name"
+    description: "Name of the new method, formatted in snake case."
+    info: null
+    example:
+    - "new_comp"
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    description: "Path to the component directory. Suggested location is `src/<TASK>/<TYPE>s/<NAME>`."
+    info: null
+    default:
+    - "src/tasks/${VIASH_PAR_TASK}/${VIASH_PAR_TYPE}s/${VIASH_PAR_NAME}"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--api_file"
+    description: "Which API file to use. Defaults to `src/<TASK>/api/comp_<TYPE>.yaml`.\n\
+      In tasks with different subtypes of method, this location might not exist and\
+      \ you might need\nto manually specify a different API file to inherit from.\n"
+    info: null
+    default:
+    - "src/tasks/${VIASH_PAR_TASK}/api/comp_${VIASH_PAR_TYPE}.yaml"
+    must_exist: false
+    create_parent: true
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--viash_yaml"
+    description: "Path to the project config file. Needed for knowing the relative\
+      \ location of a file to the project root.\n"
+    info: null
+    default:
+    - "_viash.yaml"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  - type: "file"
+    path: "src/common/helper_functions/read_and_merge_yaml.py"
+  description: "Create a component Viash component.\n\nUsage:\n```\nbin/create_component\
+    \ --task denoising --type method --language r --name foo\nbin/create_component\
+    \ --task denoising --type metric --language python --name bar\n```\n"
+  test_resources:
+  - type: "python_script"
+    path: "test.py"
+    is_executable: true
+  - type: "file"
+    path: "src"
+    dest: "openproblems-v2/src"
+  - type: "file"
+    path: "_viash.yaml"
+    dest: "openproblems-v2/_viash.yaml"
+  info: null
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "python:3.10-slim"
+  target_organization: "openproblems-bio"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  setup:
+  - type: "python"
+    user: false
+    pypi:
+    - "ruamel.yaml"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+- type: "native"
+  id: "native"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/common/create_component/config.vsh.yaml"
+  platform: "nextflow"
+  output: "/home/runner/work/openproblems/openproblems/target/nextflow/common/create_component"
+  executable: "/home/runner/work/openproblems/openproblems/target/nextflow/common/create_component/create_component"
+  viash_version: "0.8.0"
+  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  git_remote: "https://github.com/openproblems-bio/openproblems"

@@ -1,0 +1,25 @@
+type: file
+example: "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/spatial_masked.h5ad"
+info:
+  label: "Spatial masked"
+  summary: "The spatial data file containing transcription profiles for each capture location, without cell-type proportions for each spot."
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+    obsm:
+      - type: double
+        name: coordinates
+        description: XY coordinates for each spot
+        required: true
+    uns:
+      - type: string
+        name: cell_type_names
+        description: Cell type names corresponding to columns of `proportions_pred` in output
+        required: true
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true

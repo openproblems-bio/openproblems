@@ -1,0 +1,232 @@
+functionality:
+  name: "random_features"
+  namespace: "dimensionality_reduction/control_methods"
+  version: "main_build"
+  arguments:
+  - type: "file"
+    name: "--input"
+    info:
+      label: "Dataset"
+      summary: "The dataset to pass to a method."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalized expression values"
+          required: true
+        var:
+        - type: "double"
+          name: "hvg_score"
+          description: "High variability gene score (normalized dispersion). The greater,\
+            \ the more variable."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/dimensionality_reduction/pancreas/dataset.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--input_solution"
+    info:
+      label: "Test data"
+      summary: "The data for evaluating a dimensionality reduction."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalized expression values"
+          required: true
+        obs:
+        - type: "string"
+          name: "cell_type"
+          description: "Classification of the cell type based on its characteristics\
+            \ and function within the tissue or organism."
+          required: true
+        var:
+        - type: "double"
+          name: "hvg_score"
+          description: "High variability gene score (normalized dispersion). The greater,\
+            \ the more variable."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - name: "dataset_name"
+          type: "string"
+          description: "Nicely formatted name."
+          required: true
+        - type: "string"
+          name: "dataset_url"
+          description: "Link to the original source of the dataset."
+          required: false
+        - name: "dataset_reference"
+          type: "string"
+          description: "Bibtex reference of the paper in which the dataset was published."
+          required: false
+        - name: "dataset_summary"
+          type: "string"
+          description: "Short description of the dataset."
+          required: true
+        - name: "dataset_description"
+          type: "string"
+          description: "Long description of the dataset."
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/dimensionality_reduction/pancreas/solution.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Embedding"
+      summary: "A dataset with dimensionality reduction embedding."
+      slots:
+        obsm:
+        - type: "double"
+          name: "X_emb"
+          description: "The dimensionally reduced embedding."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/dimensionality_reduction/pancreas/embedding.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  test_resources:
+  - type: "file"
+    path: "resources_test/dimensionality_reduction/pancreas/"
+    dest: "resources_test/dimensionality_reduction/pancreas/"
+  - type: "python_script"
+    path: "src/common/comp_tests/check_method_config.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  info:
+    label: "Random Features"
+    summary: "Negative control by randomly embedding into a 2D space."
+    description: "This method serves as a negative control, where the data is randomly\
+      \ embedded into a two-dimensional space, with no attempt to preserve the original\
+      \ structure."
+    v1:
+      path: "openproblems/tasks/dimensionality_reduction/methods/baseline.py"
+      commit: "80b37e7a6aa27df4436f400397564c01276817e0"
+    preferred_normalization: "counts"
+    variants:
+      random_features: null
+    type: "control_method"
+    type_info:
+      label: "Control method"
+      summary: "Quality control methods for verifying the pipeline."
+      description: "Control methods have the same interface as the regular methods\n\
+        but also receive the solution object as input. It serves as a\nstarting point\
+        \ to test the relative accuracy of new methods in\nthe task, and also as a\
+        \ quality control for the metrics defined\nin the task.\n"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1.0.0"
+  target_organization: "openproblems-bio"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  entrypoint: []
+  cmd: null
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "highmem"
+    - "highcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/control_methods/random_features/config.vsh.yaml"
+  platform: "docker"
+  output: "/home/runner/work/openproblems/openproblems/target/docker/dimensionality_reduction/control_methods/random_features"
+  executable: "/home/runner/work/openproblems/openproblems/target/docker/dimensionality_reduction/control_methods/random_features/random_features"
+  viash_version: "0.8.0"
+  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  git_remote: "https://github.com/openproblems-bio/openproblems"

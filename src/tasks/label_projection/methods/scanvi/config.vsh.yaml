@@ -1,0 +1,46 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "scanvi"
+  info:
+    label: scANVI
+    summary: "scANVI predicts cell type labels for unlabelled test data by leveraging cell type labels, modelling uncertainty and using deep neural networks with stochastic optimization."
+    description: |
+      single-cell ANnotation using Variational Inference is a
+      semi-supervised variant of the scVI(Lopez et al. 2018) algorithm. Like scVI,
+      scANVI uses deep neural networks and stochastic optimization to model
+      uncertainty caused by technical noise and bias in single - cell
+      transcriptomics measurements. However, scANVI also leverages cell type labels
+      in the generative modelling. In this approach, scANVI is used to predict the
+      cell type labels of the unlabelled test data.
+    reference: "lotfollahi2020query"
+    repository_url: "https://github.com/scverse/scvi-tools"
+    documentation_url: https://scarches.readthedocs.io/en/latest/scanvi_surgery_pipeline.html
+    v1:
+      path: openproblems/tasks/label_projection/methods/scvi_tools.py
+      commit: e3be930c6d4bbd656ab1e656badb52bb50e6cdd6
+    preferred_normalization: counts
+    variants:
+      scanvi_all_genes:
+      scanvi_hvg:
+        num_hvg: 2000
+  arguments:
+    - name: "--num_hvg"
+      type: integer
+      description: "The number of HVG genes to subset to."
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: openproblems/base_pytorch_nvidia:1.0.0
+    setup:
+      - type: python
+        packages: 
+          - scarches
+          - scvi-tools>=1.1.0
+      - type: docker
+        run: |
+          pip install -U "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+  - type: nextflow
+    directives: 
+      label: [midtime, midmem, highcpu, gpu]

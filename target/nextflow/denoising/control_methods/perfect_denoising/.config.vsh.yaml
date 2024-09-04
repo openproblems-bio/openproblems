@@ -1,0 +1,198 @@
+functionality:
+  name: "perfect_denoising"
+  namespace: "denoising/control_methods"
+  version: "main_build"
+  arguments:
+  - type: "file"
+    name: "--input_train"
+    info:
+      label: "Training data"
+      summary: "The subset of molecules used for the training dataset"
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+    example:
+    - "resources_test/denoising/pancreas/train.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--input_test"
+    info:
+      label: "Test data"
+      summary: "The subset of molecules used for the test dataset"
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - name: "dataset_name"
+          type: "string"
+          description: "Nicely formatted name."
+          required: true
+        - type: "string"
+          name: "dataset_url"
+          description: "Link to the original source of the dataset."
+          required: false
+        - name: "dataset_reference"
+          type: "string"
+          description: "Bibtex reference of the paper in which the dataset was published."
+          required: false
+        - name: "dataset_summary"
+          type: "string"
+          description: "Short description of the dataset."
+          required: true
+        - name: "dataset_description"
+          type: "string"
+          description: "Long description of the dataset."
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+        - name: "train_sum"
+          type: "integer"
+          description: "The total number of counts in the training dataset."
+          required: true
+    example:
+    - "resources_test/denoising/pancreas/test.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Denoised data"
+      summary: "A denoised dataset as output by a denoising method."
+      slots:
+        layers:
+        - type: "integer"
+          name: "denoised"
+          description: "denoised data"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/denoising/pancreas/denoised.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  test_resources:
+  - type: "python_script"
+    path: "src/common/comp_tests/check_method_config.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "resources_test/denoising/pancreas"
+    dest: "resources_test/denoising/pancreas"
+  info:
+    label: "Perfect Denoising"
+    summary: "Positive control by copying the test counts"
+    description: "This method serves as a positive control, where the test data is\
+      \ copied 1-to-1 to the denoised data. This makes it seem as if the data is perfectly\
+      \ denoised as it will be compared to the test data in the metrics."
+    v1:
+      path: "openproblems/tasks/denoising/methods/baseline.py"
+      commit: "b3456fd73c04c28516f6df34c57e6e3e8b0dab32"
+    variants:
+      perfect_denoising: null
+    preferred_normalization: "counts"
+    type: "control_method"
+    type_info:
+      label: "Control method"
+      summary: "Quality control methods for verifying the pipeline."
+      description: "These components have the same interface as the regular methods\n\
+        but also receive the solution object as input. It serves as a\nstarting point\
+        \ to test the relative accuracy of new methods in\nthe task, and also as a\
+        \ quality control for the metrics defined\nin the task. \n"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1.0.0"
+  target_organization: "openproblems-bio"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  entrypoint: []
+  cmd: null
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "midmem"
+    - "midcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/denoising/control_methods/perfect_denoising/config.vsh.yaml"
+  platform: "nextflow"
+  output: "/home/runner/work/openproblems/openproblems/target/nextflow/denoising/control_methods/perfect_denoising"
+  executable: "/home/runner/work/openproblems/openproblems/target/nextflow/denoising/control_methods/perfect_denoising/perfect_denoising"
+  viash_version: "0.8.0"
+  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  git_remote: "https://github.com/openproblems-bio/openproblems"

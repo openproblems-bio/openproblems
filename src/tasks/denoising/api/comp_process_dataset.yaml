@@ -1,0 +1,27 @@
+functionality:
+  namespace: "denoising"
+  info:
+    type: process_dataset
+    type_info:
+      label: Data processor
+      summary: A denoising dataset processor.
+      description: |
+        A component for processing a Common Dataset into a task-specific dataset.
+  arguments:
+    - name: "--input"
+      __merge__: /src/datasets/api/file_common_dataset.yaml
+      direction: input
+      required: true
+    - name: "--output_train"
+      __merge__: file_train.yaml
+      direction: output
+      required: true
+    - name: "--output_test"
+      __merge__: file_test.yaml
+      direction: output
+      required: true
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/common/pancreas
+      dest: resources_test/common/pancreas

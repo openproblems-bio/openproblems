@@ -1,0 +1,291 @@
+functionality:
+  name: "scanvi"
+  namespace: "batch_integration/methods"
+  version: "main_build"
+  arguments:
+  - type: "file"
+    name: "--input"
+    info:
+      label: "Dataset"
+      summary: "Unintegrated AnnData HDF5 file."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalized expression values"
+          required: true
+        obs:
+        - type: "string"
+          name: "batch"
+          description: "Batch information"
+          required: true
+        - type: "string"
+          name: "label"
+          description: "label information"
+          required: true
+        var:
+        - type: "boolean"
+          name: "hvg"
+          description: "Whether or not the feature is considered to be a 'highly variable\
+            \ gene'"
+          required: true
+        - type: "double"
+          name: "hvg_score"
+          description: "A ranking of the features by hvg."
+          required: true
+        - type: "string"
+          name: "feature_name"
+          description: "A human-readable name for the feature, usually a gene symbol."
+          required: true
+        obsm:
+        - type: "double"
+          name: "X_pca"
+          description: "The resulting PCA embedding."
+          required: true
+        obsp:
+        - type: "double"
+          name: "knn_distances"
+          description: "K nearest neighbors distance matrix."
+          required: true
+        - type: "double"
+          name: "knn_connectivities"
+          description: "K nearest neighbors connectivities matrix."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+        - type: "object"
+          name: "knn"
+          description: "Supplementary K nearest neighbors data."
+          required: true
+    example:
+    - "resources_test/batch_integration/pancreas/dataset.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      prediction_type: "embedding"
+      label: "Integrated embedding"
+      summary: "An integrated AnnData HDF5 file."
+      slots:
+        obsm:
+        - type: "double"
+          name: "X_emb"
+          description: "integration embedding prediction"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/batch_integration/pancreas/integrated_embedding.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--n_hvg"
+    description: "Number of highly variable genes to use."
+    info: null
+    default:
+    - 2000
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--n_latent"
+    description: "Number of latent dimensions."
+    info: null
+    default:
+    - 30
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--n_hidden"
+    description: "Number of hidden units."
+    info: null
+    default:
+    - 128
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--n_layers"
+    description: "Number of layers."
+    info: null
+    default:
+    - 2
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--max_epochs_scvi"
+    description: "Maximum number of training epochs for scVI."
+    info: null
+    example:
+    - 400
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--max_epochs_scanvi"
+    description: "Maximum number of training epochs for scANVI."
+    info: null
+    example:
+    - 10
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/helper_functions/read_anndata_partial.py"
+    is_executable: true
+  test_resources:
+  - type: "python_script"
+    path: "src/common/comp_tests/check_method_config.py"
+    is_executable: true
+  - type: "file"
+    path: "src/common/library.bib"
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "resources_test/batch_integration/pancreas"
+    dest: "resources_test/batch_integration/pancreas"
+  info:
+    label: "scANVI"
+    summary: "scANVI is a deep learning method that considers cell type labels."
+    description: "scANVI (single-cell ANnotation using Variational Inference; Python\
+      \ class SCANVI) is a semi-supervised model for single-cell transcriptomics data.\
+      \ In a sense, it can be seen as a scVI extension that can leverage the cell\
+      \ type knowledge for a subset of the cells present in the data sets to infer\
+      \ the states of the rest of the cells.\n"
+    reference: "lopez2018deep"
+    repository_url: "https://github.com/scverse/scvi-tools"
+    documentation_url: "https://docs.scvi-tools.org/en/stable/user_guide/models/scanvi.html"
+    v1:
+      path: "openproblems/tasks/_batch_integration/batch_integration_graph/methods/scanvi.py"
+      commit: "29803b95c88b4ec5921df2eec7111fd5d1a95daf"
+    preferred_normalization: "counts"
+    variants:
+      scanvi_full_unscaled: null
+    type: "method"
+    subtype: "embedding"
+    type_info:
+      label: "Method (embedding)"
+      summary: "A batch integration embedding method."
+      description: "A batch integration method which outputs a batch-corrected embedding.\n"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1.0.0"
+  target_organization: "openproblems-bio"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  setup:
+  - type: "python"
+    user: false
+    pypi:
+    - "scvi-tools>=1.1.0"
+    upgrade: true
+  - type: "docker"
+    run:
+    - "pip install -U \"jax[cuda12_pip]\" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html\n"
+  entrypoint: []
+  cmd: null
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "lowmem"
+    - "lowcpu"
+    - "gpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/batch_integration/methods/scanvi/config.vsh.yaml"
+  platform: "docker"
+  output: "/home/runner/work/openproblems/openproblems/target/docker/batch_integration/methods/scanvi"
+  executable: "/home/runner/work/openproblems/openproblems/target/docker/batch_integration/methods/scanvi/scanvi"
+  viash_version: "0.8.0"
+  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  git_remote: "https://github.com/openproblems-bio/openproblems"

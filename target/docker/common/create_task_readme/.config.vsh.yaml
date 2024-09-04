@@ -1,0 +1,174 @@
+functionality:
+  name: "create_task_readme"
+  namespace: "common"
+  version: "main_build"
+  argument_groups:
+  - name: "Inputs"
+    arguments:
+    - type: "string"
+      name: "--task"
+      description: "Which task the component will be added to."
+      info: null
+      example:
+      - "denoising"
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "file"
+      name: "--task_dir"
+      description: "Path to the task directory."
+      info: null
+      default:
+      - "src/tasks/${VIASH_PAR_TASK}"
+      must_exist: true
+      create_parent: true
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "file"
+      name: "--viash_yaml"
+      description: "Path to the project config file. Needed for knowing the relative\
+        \ location of a file to the project root.\n"
+      info: null
+      default:
+      - "_viash.yaml"
+      must_exist: true
+      create_parent: true
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--github_url"
+      description: "URL to the GitHub repository. Needed for linking to the source\
+        \ code.\n"
+      info: null
+      default:
+      - "https://github.com/openproblems-bio/openproblems-v2/tree/main/"
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Outputs"
+    arguments:
+    - type: "file"
+      name: "--output"
+      description: "Path to the component directory. Suggested location is `src/tasks/<TASK>/README.md`."
+      info: null
+      default:
+      - "src/tasks/${VIASH_PAR_TASK}/README.md"
+      must_exist: true
+      create_parent: true
+      required: false
+      direction: "output"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  resources:
+  - type: "r_script"
+    path: "script.R"
+    is_executable: true
+  - type: "file"
+    path: "src/common/helper_functions/read_and_merge_yaml.R"
+  - type: "file"
+    path: "src/common/helper_functions/read_api_files.R"
+  - type: "file"
+    path: "src/common/helper_functions/strip_margin.R"
+  description: "Create a README for the task.\n"
+  test_resources:
+  - type: "r_script"
+    path: "test.R"
+    is_executable: true
+  - type: "file"
+    path: "src"
+    dest: "openproblems-v2/src"
+  - type: "file"
+    path: "_viash.yaml"
+    dest: "openproblems-v2/_viash.yaml"
+  info: null
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_r:1.0.0"
+  target_organization: "openproblems-bio"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  setup:
+  - type: "r"
+    packages:
+    - "dplyr"
+    - "purrr"
+    - "rlang"
+    - "glue"
+    - "yaml"
+    - "fs"
+    - "cli"
+    - "igraph"
+    - "rmarkdown"
+    - "processx"
+    bioc_force_install: false
+  - type: "apt"
+    packages:
+    - "jq"
+    - "curl"
+    interactive: false
+  - type: "docker"
+    run:
+    - "release_info=$(curl -s https://api.github.com/repos/quarto-dev/quarto-cli/releases/latest)\
+      \ && \\\n  download_url=$(printf \"%s\" \"$release_info\" | jq -r '.assets[]\
+      \ | select(.name | test(\"quarto-.*-linux-amd64.deb\")) | .browser_download_url')\
+      \ && \\\n  curl -sL \"$download_url\" -o /opt/quarto.deb && \\\n  dpkg -i /opt/quarto.deb\
+      \ && \\\n  rm /opt/quarto.deb\n"
+  entrypoint: []
+  cmd: null
+- type: "native"
+  id: "native"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "lowmem"
+    - "lowcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/common/create_task_readme/config.vsh.yaml"
+  platform: "docker"
+  output: "/home/runner/work/openproblems/openproblems/target/docker/common/create_task_readme"
+  executable: "/home/runner/work/openproblems/openproblems/target/docker/common/create_task_readme/create_task_readme"
+  viash_version: "0.8.0"
+  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  git_remote: "https://github.com/openproblems-bio/openproblems"

@@ -1,0 +1,251 @@
+functionality:
+  name: "r2"
+  namespace: "spatial_decomposition/metrics"
+  version: "main_build"
+  arguments:
+  - type: "file"
+    name: "--input_method"
+    info:
+      label: "Output"
+      summary: "Spatial data with estimated proportions."
+      description: "Spatial data file with estimated cell type proportions."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        obsm:
+        - type: "double"
+          name: "coordinates"
+          description: "XY coordinates for each spot"
+          required: true
+        - type: "double"
+          name: "proportions_pred"
+          description: "Estimated cell type proportions for each spot"
+          required: true
+        uns:
+        - type: "string"
+          name: "cell_type_names"
+          description: "Cell type names corresponding to columns of `proportions`"
+          required: true
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/output.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--input_solution"
+    info:
+      label: "Solution"
+      summary: "The spatial data file containing transcription profiles for each capture\
+        \ location, with true cell-type proportions for each spot / capture location."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        obsm:
+        - type: "double"
+          name: "coordinates"
+          description: "XY coordinates for each spot"
+          required: true
+        - type: "double"
+          name: "proportions_true"
+          description: "True cell type proportions for each spot"
+          required: true
+        uns:
+        - name: "cell_type_names"
+          type: "string"
+          description: "Cell type names corresponding to columns of `proportions`"
+          required: true
+        - name: "dataset_id"
+          type: "string"
+          description: "A unique identifier for the dataset"
+          required: true
+        - name: "dataset_name"
+          type: "string"
+          description: "Nicely formatted name."
+          required: true
+        - type: "string"
+          name: "dataset_url"
+          description: "Link to the original source of the dataset."
+          required: false
+        - name: "dataset_reference"
+          type: "string"
+          description: "Bibtex reference of the paper in which the dataset was published."
+          required: false
+        - name: "dataset_summary"
+          type: "string"
+          description: "Short description of the dataset."
+          required: true
+        - name: "dataset_description"
+          type: "string"
+          description: "Long description of the dataset."
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/solution.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Score"
+      summary: "Metric score file."
+      slots:
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+        - type: "string"
+          name: "metric_ids"
+          description: "One or more unique metric identifiers"
+          multiple: true
+          required: true
+        - type: "double"
+          name: "metric_values"
+          description: "The metric values obtained for the given prediction. Must\
+            \ be of same length as 'metric_ids'."
+          multiple: true
+          required: true
+    example:
+    - "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/score.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  test_resources:
+  - type: "python_script"
+    path: "src/common/comp_tests/check_metric_config.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas"
+    dest: "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas"
+  - type: "file"
+    path: "src/common/library.bib"
+  info:
+    metrics:
+    - name: "r2"
+      label: "R2"
+      summary: "R2 represents the proportion of variance in the true proportions which\
+        \ is explained by the predicted proportions."
+      description: "R2, or the “coefficient of determination”, reports the fraction\
+        \ of the true proportion values' variance that can be explained by the predicted\
+        \ proportion values. The best score, and upper bound, is 1.0. There is no\
+        \ fixed lower bound for the metric. The uniform/non-weighted average across\
+        \ all cell types/states is used to summarise performance. By default, cases\
+        \ resulting in a score of NaN (perfect predictions) or -Inf (imperfect predictions)\
+        \ are replaced with 1.0 (perfect predictions) or 0.0 (imperfect predictions)\
+        \ respectively.\n"
+      reference: "miles2005rsquared"
+      documentation_url: "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html"
+      repository_url: "https://github.com/scikit-learn/scikit-learn/tree/5c4aa5d0d90ba66247d675d4c3fc2fdfba3c39ff"
+      min: "-inf"
+      max: 1
+      maximize: true
+    type: "metric"
+    type_info:
+      label: "Metric"
+      summary: "A spatial decomposition metric."
+      description: "A metric for evaluating accuracy of cell type proportion estimate\n"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1.0.0"
+  target_organization: "openproblems-bio"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  setup:
+  - type: "python"
+    user: false
+    packages:
+    - "scikit-learn"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+- type: "native"
+  id: "native"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "midmem"
+    - "midcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/metrics/r2/config.vsh.yaml"
+  platform: "native"
+  output: "/home/runner/work/openproblems/openproblems/target/native/spatial_decomposition/metrics/r2"
+  executable: "/home/runner/work/openproblems/openproblems/target/native/spatial_decomposition/metrics/r2/r2"
+  viash_version: "0.8.0"
+  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  git_remote: "https://github.com/openproblems-bio/openproblems"

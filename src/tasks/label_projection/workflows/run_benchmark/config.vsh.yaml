@@ -1,0 +1,77 @@
+functionality:
+  name: "run_benchmark"
+  namespace: "label_projection/workflows"
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - name: "--input_train"
+          __merge__: /src/tasks/label_projection/api/file_train.yaml
+          type: file
+          direction: input
+          required: true
+        - name: "--input_test"
+          __merge__: /src/tasks/label_projection/api/file_test.yaml
+          type: file
+          direction: input
+          required: true
+        - name: "--input_solution"
+          __merge__: /src/tasks/label_projection/api/file_solution.yaml
+          type: file
+          direction: input
+          required: true
+    - name: Outputs
+      arguments:
+        - name: "--output_scores"
+          type: file
+          required: true
+          direction: output
+          description: A yaml file containing the scores of each of the methods
+          default: score_uns.yaml
+        - name: "--output_method_configs"
+          type: file
+          required: true
+          direction: output
+          default: method_configs.yaml
+        - name: "--output_metric_configs"
+          type: file
+          required: true
+          direction: output
+          default: metric_configs.yaml
+        - name: "--output_dataset_info"
+          type: file
+          required: true
+          direction: output
+          default: dataset_uns.yaml
+        - name: "--output_task_info"
+          type: file
+          required: true
+          direction: output
+          default: task_info.yaml
+    - name: Methods
+      arguments:
+        - name: "--method_ids"
+          type: string
+          multiple: true
+          description: A list of method ids to run. If not specified, all methods will be run.
+  resources:
+    - type: nextflow_script
+      path: main.nf
+      entrypoint: run_wf
+    - type: file
+      path: "../../api/task_info.yaml"
+  dependencies:
+    - name: common/check_dataset_schema
+    - name: common/extract_metadata
+    - name: label_projection/control_methods/true_labels
+    - name: label_projection/control_methods/majority_vote
+    - name: label_projection/control_methods/random_labels
+    - name: label_projection/methods/knn
+    - name: label_projection/methods/logistic_regression
+    - name: label_projection/methods/mlp
+    - name: label_projection/methods/scanvi
+    - name: label_projection/methods/scanvi_scarches
+    - name: label_projection/methods/xgboost
+    - name: label_projection/metrics/accuracy
+    - name: label_projection/metrics/f1
+platforms:
+  - type: nextflow

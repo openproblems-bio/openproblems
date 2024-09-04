@@ -1,0 +1,69 @@
+functionality:
+  name: create_task_readme
+  namespace: common
+  description: |
+    Create a README for the task.
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - type: string
+          name: --task
+          description: Which task the component will be added to.
+          example: denoising
+          required: false
+        - type: file
+          name: --task_dir
+          description: Path to the task directory.
+          default: src/tasks/${VIASH_PAR_TASK}
+          required: false
+        - type: file
+          name: --viash_yaml
+          description: |
+            Path to the project config file. Needed for knowing the relative location of a file to the project root.
+          default: "_viash.yaml"
+        - type: string
+          name: --github_url
+          description: |
+            URL to the GitHub repository. Needed for linking to the source code.
+          default: "https://github.com/openproblems-bio/openproblems-v2/tree/main/"
+    - name: Outputs
+      arguments:
+        - type: file
+          name: --output
+          direction: output
+          description: Path to the component directory. Suggested location is `src/tasks/<TASK>/README.md`.
+          default: src/tasks/${VIASH_PAR_TASK}/README.md
+  resources:
+    - type: r_script
+      path: script.R
+    - path: /src/common/helper_functions/read_and_merge_yaml.R
+    - path: /src/common/helper_functions/read_api_files.R
+    - path: /src/common/helper_functions/strip_margin.R
+  test_resources:
+    - type: r_script
+      path: test.R
+    - path: /src
+      dest: openproblems-v2/src
+    - path: /_viash.yaml
+      dest: openproblems-v2/_viash.yaml
+platforms:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        packages: [dplyr, purrr, rlang, glue, yaml, fs, cli, igraph, rmarkdown, processx]
+      - type: apt
+        packages: [jq, curl]
+      - type: docker
+        # download and install quarto-*-linux-amd64.deb from latest release
+        run: |
+          release_info=$(curl -s https://api.github.com/repos/quarto-dev/quarto-cli/releases/latest) && \
+            download_url=$(printf "%s" "$release_info" | jq -r '.assets[] | select(.name | test("quarto-.*-linux-amd64.deb")) | .browser_download_url') && \
+            curl -sL "$download_url" -o /opt/quarto.deb && \
+            dpkg -i /opt/quarto.deb && \
+            rm /opt/quarto.deb
+  - type: native
+  - type: nextflow
+    directives: 
+      label: [midtime, lowmem, lowcpu]
+

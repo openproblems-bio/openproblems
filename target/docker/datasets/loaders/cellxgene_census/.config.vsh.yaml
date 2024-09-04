@@ -1,0 +1,344 @@
+functionality:
+  name: "cellxgene_census"
+  namespace: "datasets/loaders"
+  version: "main_build"
+  argument_groups:
+  - name: "Input database"
+    description: "Open CellxGene Census by version or URI."
+    arguments:
+    - type: "string"
+      name: "--input_uri"
+      description: "If specified, a URI containing the Census SOMA objects. If specified,\
+        \ will take precedence over the `--census_version` argument."
+      info: null
+      example:
+      - "s3://bucket/path"
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--census_version"
+      description: "Which release of CellxGene census to use. Possible values are\
+        \ \"latest\", \"stable\", or the date of one of the releases (e.g. \"2023-07-25\"\
+        ). For more information, check the documentation on [Census data releases](https://chanzuckerberg.github.io/cellxgene-census/cellxgene_census_docsite_data_release_info.html)."
+      info: null
+      example:
+      - "stable"
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Cell query"
+    description: "Arguments related to the query."
+    arguments:
+    - type: "string"
+      name: "--species"
+      description: "The organism to query, usually one of `Homo sapiens` or `Mus musculus`."
+      info: null
+      example:
+      - "homo_sapiens"
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--obs_value_filter"
+      description: "Filter for selecting the `obs` metadata (i.e. cells). Value is\
+        \ a filter query written in the SOMA `value_filter` syntax."
+      info: null
+      example:
+      - "is_primary_data == True and cell_type_ontology_term_id in ['CL:0000136',\
+        \ 'CL:1000311', 'CL:0002616'] and suspension_type == 'cell'"
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Filter cells by grouping"
+    arguments:
+    - type: "string"
+      name: "--cell_filter_grouping"
+      description: "A subset of 'obs' columns by which to group the cells for filtering.\n\
+        Only groups surpassing or equal to the `--cell_filter_minimum_count`\nthreshold\
+        \ will be retained. Take care not to introduce a selection\nbias against cells\
+        \ with more fine-grained ontology annotations.\n"
+      info: null
+      example:
+      - "dataset_id"
+      - "tissue"
+      - "assay"
+      - "disease"
+      - "cell_type"
+      required: false
+      direction: "input"
+      multiple: true
+      multiple_sep: ":"
+      dest: "par"
+    - type: "integer"
+      name: "--cell_filter_minimum_count"
+      description: "A minimum number of cells per group to retain. If `--cell_filter_grouping`\n\
+        is defined, this parameter should also be provided and vice versa.\n"
+      info: null
+      example:
+      - 100
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Count filtering"
+    description: "Arguments related to filtering cells and genes by counts."
+    arguments:
+    - type: "integer"
+      name: "--cell_filter_min_genes"
+      description: "Remove cells with less than this number of genes."
+      info: null
+      default:
+      - 50
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "integer"
+      name: "--cell_filter_min_counts"
+      description: "Remove cells with less than this number of counts."
+      info: null
+      default:
+      - 0
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "integer"
+      name: "--gene_filter_min_cells"
+      description: "Remove genes expressed in less than this number of cells."
+      info: null
+      default:
+      - 5
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "integer"
+      name: "--gene_filter_min_counts"
+      description: "Remove genes with less than this number of counts."
+      info: null
+      default:
+      - 0
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Cell metadata"
+    description: "Cell metadata arguments"
+    arguments:
+    - type: "string"
+      name: "--obs_batch"
+      description: "Location of where to find the observation batch IDs.  \n\n* If\
+        \ not specified, the `.obs[\"batch\"]` field will not be included.\n* If one\
+        \ or more values are specified, the `.obs[\"batch\"]` field will be \n  set\
+        \ to the concatenated values of the specified fields, separated by\n  the\
+        \ `obs_batch_separator`.\n"
+      info: null
+      example:
+      - "batch"
+      required: false
+      direction: "input"
+      multiple: true
+      multiple_sep: ","
+      dest: "par"
+    - type: "string"
+      name: "--obs_batch_separator"
+      description: "Separator to use when concatenating the values of the `--obs_batch`\
+        \ fields."
+      info: null
+      default:
+      - "+"
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Dataset metadata"
+    description: "Information about the dataset that will be stored in the `.uns`\
+      \ slot."
+    arguments:
+    - type: "string"
+      name: "--dataset_id"
+      description: "Unique identifier of the dataset."
+      info: null
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_name"
+      description: "Nicely formatted name."
+      info: null
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_url"
+      description: "Link to the original source of the dataset."
+      info: null
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_reference"
+      description: "Bibtex reference of the paper in which the dataset was published."
+      info: null
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_summary"
+      description: "Short description of the dataset."
+      info: null
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_description"
+      description: "Long description of the dataset."
+      info: null
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_organism"
+      description: "The organism of the dataset."
+      info: null
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Outputs"
+    description: "Output arguments."
+    arguments:
+    - type: "file"
+      name: "--output"
+      description: "Output h5ad file."
+      info: null
+      example:
+      - "output.h5ad"
+      must_exist: true
+      create_parent: true
+      required: true
+      direction: "output"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--output_compression"
+      info: null
+      example:
+      - "gzip"
+      required: false
+      choices:
+      - "gzip"
+      - "lzf"
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  - type: "file"
+    path: "src/common/helper_functions/setup_logger.py"
+  description: "Query cells from a CellxGene Census or custom TileDBSoma object.\n\
+    Aside from fetching the cells' RNA counts (`.X`), cell metadata\n(`.obs`) and\
+    \ gene metadata (`.var`), this component also fetches\nthe dataset metadata and\
+    \ joins it into the cell metadata.\n"
+  test_resources:
+  - type: "python_script"
+    path: "test.py"
+    is_executable: true
+  info: null
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "python:3.11"
+  target_organization: "openproblems-bio"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  setup:
+  - type: "python"
+    user: false
+    packages:
+    - "cellxgene-census"
+    - "scanpy"
+    upgrade: true
+  test_setup:
+  - type: "python"
+    user: false
+    packages:
+    - "viashpy"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "highmem"
+    - "midcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/datasets/loaders/cellxgene_census/config.vsh.yaml"
+  platform: "docker"
+  output: "/home/runner/work/openproblems/openproblems/target/docker/datasets/loaders/cellxgene_census"
+  executable: "/home/runner/work/openproblems/openproblems/target/docker/datasets/loaders/cellxgene_census/cellxgene_census"
+  viash_version: "0.8.0"
+  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  git_remote: "https://github.com/openproblems-bio/openproblems"

@@ -1,0 +1,18 @@
+__merge__: ../api/get_info.yaml
+functionality:
+  status: disabled
+  name: get_api_info
+  description: "Extract api info"
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        cran: [ purrr, dplyr, yaml, rlang, processx ]
+  - type: nextflow
+    directives:
+      label: [lowmem, lowtime, lowcpu]
+  - type: native

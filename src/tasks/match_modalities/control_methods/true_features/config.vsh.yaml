@@ -1,0 +1,21 @@
+__merge__: ../../api/comp_control_method.yaml
+functionality:
+  name: "true_features"
+  info:
+    label: True Features
+    summary: "A 1 to 1 mapping of features between modalities"
+    description: |
+      "use the same features for both modalities"
+    preferred_normalization: log_cp10k
+    v1:
+      path: openproblems/tasks/matching_modalities/methods/baseline.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+  - type: nextflow
+    directives:
+      label: [midtime, lowmem, lowcpu]

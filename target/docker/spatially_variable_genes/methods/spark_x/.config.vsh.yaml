@@ -1,0 +1,190 @@
+functionality:
+  name: "spark_x"
+  namespace: "spatially_variable_genes/methods"
+  version: "main_build"
+  arguments:
+  - type: "file"
+    name: "--input_data"
+    info:
+      label: "Dataset"
+      summary: "The dataset without spatially variable genes."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts."
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalised expression values"
+          required: true
+        var:
+        - type: "string"
+          name: "feature_id"
+          description: "Unique identifier for the feature, in this case a ENSEMBL\
+            \ gene id suffixed with alpha value."
+          required: false
+        - type: "string"
+          name: "feature_name"
+          description: "A human-readable name for the feature, in this case a gene\
+            \ symbol suffixed with alpha value."
+          required: false
+        obsm:
+        - type: "double"
+          name: "spatial"
+          description: "Spatial coordinates for each spot."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - name: "dataset_name"
+          type: "string"
+          description: "Nicely formatted name."
+          required: false
+    example:
+    - "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/dataset.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Output"
+      summary: "Anndata with estimate spatial variability."
+      description: "Anndata with estimated spatial variability score for each gene."
+      slots:
+        var:
+        - type: "string"
+          name: "feature_id"
+          description: "Feature ID"
+          required: true
+        - type: "string"
+          name: "feature_name"
+          description: "Feature name"
+          required: false
+        - type: "double"
+          name: "pred_spatial_var_score"
+          description: "Predicted spatial variability score"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/output.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "r_script"
+    path: "script.R"
+    is_executable: true
+  test_resources:
+  - type: "python_script"
+    path: "src/common/comp_tests/check_method_config.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "resources_test/spatially_variable_genes/mouse_brain_coronal_section1"
+    dest: "resources_test/spatially_variable_genes/mouse_brain_coronal_section1"
+  - type: "file"
+    path: "src/common/library.bib"
+  info:
+    label: "SPARK-X"
+    summary: "SPARK-X is a non-parametric method for rapid and effective detection\
+      \ of spatially expressed genes in large spatial transcriptomic studies."
+    description: "Spatial transcriptomic studies are becoming increasingly common\
+      \ and large, posing important \nstatistical and computational challenges for\
+      \ many analytic tasks. Here, we present SPARK-X, \na non-parametric method for\
+      \ rapid and effective detection of spatially expressed genes in large \nspatial\
+      \ transcriptomic studies. SPARK-X not only produces effective type I error control\
+      \ and \nhigh power but also brings orders of magnitude computational savings.\
+      \ We apply SPARK-X to \nanalyze three large datasets, one of which is only analyzable\
+      \ by SPARK-X. In these data, \nSPARK-X identifies many spatially expressed genes\
+      \ including those that are spatially \nexpressed within the same cell type,\
+      \ revealing new biological insights.\n"
+    preferred_normalization: "counts"
+    reference: "zhu2021spark"
+    documentation_url: "https://xzhoulab.github.io/SPARK/02_SPARK_Example/"
+    repository_url: "https://github.com/xzhoulab/SPARK"
+    type: "method"
+    type_info:
+      label: "Method"
+      summary: "A spatially variable gene identification method."
+      description: "Method to identify spatially variable genes"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "ghcr.io/openproblems-bio/base_r:1.0.4"
+  target_organization: "openproblems-bio"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  setup:
+  - type: "r"
+    github:
+    - "xzhoulab/SPARK"
+    bioc_force_install: false
+  entrypoint: []
+  cmd: null
+- type: "native"
+  id: "native"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "midmem"
+    - "midcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/spatially_variable_genes/methods/spark_x/config.vsh.yaml"
+  platform: "docker"
+  output: "/home/runner/work/openproblems/openproblems/target/docker/spatially_variable_genes/methods/spark_x"
+  executable: "/home/runner/work/openproblems/openproblems/target/docker/spatially_variable_genes/methods/spark_x/spark_x"
+  viash_version: "0.8.0"
+  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
