@@ -6,7 +6,7 @@ target: target
 config_mods: |
   .functionality.version := 'dev'
   .platforms[.type == 'docker'].target_registry := 'ghcr.io'
-  .platforms[.type == 'docker'].target_organization := 'openproblems-bio'
+  .platforms[.type == 'docker'].target_organization := 'openproblems-bio/openproblems'
   .platforms[.type == 'docker'].target_image_source := 'https://github.com/openproblems-bio/openproblems'
   .platforms[.type == "nextflow"].directives.tag := "$id"
   .platforms[.type == "nextflow"].auto.simplifyOutput := false
