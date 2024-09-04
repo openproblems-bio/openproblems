@@ -32,7 +32,7 @@ functionality:
       path: script.R
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_r:1.0.4
+    image: openproblems/base_r:1.0.0
     setup:
       - type: r
         cran: [ lmds, FNN, proxy, proxyC ]

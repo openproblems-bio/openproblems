@@ -3,34 +3,15 @@ name: viash test
 on:
   pull_request:
   push:
-    branches: [ '**' ]
+    branches: [ main ]
 
 jobs:
-  run_ci_check_job:
-    runs-on: ubuntu-latest
-    outputs:
-      run_ci: ${{ steps.github_cli.outputs.check }}
-    steps:
-      - name: 'Check if branch has an existing pull request and the trigger was a push'
-        id: github_cli
-        run: |
-          pull_request=$(gh pr list -R ${{ github.repository }} -H ${{ github.ref_name }} --json url --state open --limit 1 | jq '.[0].url')
-          # If the branch has a PR and this run was triggered by a push event, do not run
-          if [[ "$pull_request" != "null" && "$GITHUB_REF_NAME" != "main" && "${{ github.event_name == 'push' }}" == "true" && "${{ !contains(github.event.head_commit.message, 'ci force') }}" == "true" ]]; then
-            echo "check=false" >> $GITHUB_OUTPUT
-          else
-            echo "check=true" >> $GITHUB_OUTPUT
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GTHB_PAT }}
 
   # phase 1
   list:
-    needs: run_ci_check_job
     env:
       s3_bucket: s3://openproblems-data/resources_test/
     runs-on: ubuntu-latest
-    if: "needs.run_ci_check_job.outputs.run_ci == 'true'"
 
     outputs:
       matrix: ${{ steps.set_matrix.outputs.matrix }}

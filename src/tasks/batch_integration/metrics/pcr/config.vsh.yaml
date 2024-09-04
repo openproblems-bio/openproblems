@@ -34,7 +34,7 @@ functionality:
       path: /src/common/helper_functions/read_anndata_partial.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_images/python:1.1.0
+    image: openproblems/base_python:1.0.0
     setup:
       - type: python
         pypi:

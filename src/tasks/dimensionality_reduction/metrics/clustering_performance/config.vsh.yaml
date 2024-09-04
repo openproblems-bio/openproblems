@@ -51,7 +51,7 @@ functionality:
 
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.4
+    image: openproblems/base_python:1.0.0
     setup:
       - type: python
         packages: [ scikit-learn, scanpy, leidenalg ]

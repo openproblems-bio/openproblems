@@ -23,7 +23,7 @@ functionality:
     - path: ../../utils.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_images/python:1.1.0
+    image: openproblems/base_python:1.0.0
   - type: nextflow
     directives:
       label: [midtime, lowmem, lowcpu]

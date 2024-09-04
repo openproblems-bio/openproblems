@@ -42,7 +42,7 @@ functionality:
       path: /src/common/helper_functions/read_anndata_partial.py
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_images/r:1.1.0
+    image: openproblems/base_r:1.0.0
     setup:
       - type: r
         github: theislab/kBET
@@ -51,6 +51,7 @@ platforms:
           - scib==1.1.5
           - rpy2>=3
           - anndata2ri
+          - scipy<=1.13
   - type: nextflow
     directives: 
       label: [midtime, midmem, lowcpu]

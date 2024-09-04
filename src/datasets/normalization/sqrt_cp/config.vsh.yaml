@@ -12,7 +12,7 @@ functionality:
       description: "Number of counts per cell"
 platforms:
   - type: docker
-    image: ghcr.io/openproblems-bio/base_python:1.0.4
+    image: openproblems/base_python:1.0.0
   - type: nextflow
     directives: 
       label: [midtime, midmem, midcpu]
