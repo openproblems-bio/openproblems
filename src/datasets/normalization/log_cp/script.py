@@ -17,12 +17,20 @@ print(">> Load data", flush=True)
 adata = sc.read_h5ad(par['input'])
 
 print(">> Normalize data", flush=True)
-norm = sc.pp.normalize_total(
-    adata, 
-    target_sum=par["n_cp"], 
-    layer="counts", 
-    inplace=False
-)
+if par["n_cp"] == -1:
+    norm = sc.pp.normalize_total(
+        adata, 
+        target_sum=None, 
+        layer="counts", 
+        inplace=False
+    )
+else:
+    norm = sc.pp.normalize_total(
+        adata, 
+        target_sum=par["n_cp"], 
+        layer="counts", 
+        inplace=False
+    )
 lognorm = sc.pp.log1p(norm["X"])
 
 print(">> Store output in adata", flush=True)

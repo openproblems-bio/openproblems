@@ -15,7 +15,7 @@ DESCRIPTION_MAXLEN = 5000
 
 _MISSING_DOIS = ["vandermaaten2008visualizing", "hosmer2013applied"]
 
-TIME_LABELS = ["lowtime", "midtime", "hightime"]
+TIME_LABELS = ["lowtime", "midtime", "hightime", "veryhightime"]
 MEM_LABELS = ["lowmem", "midmem", "highmem"]
 CPU_LABELS = ["lowcpu", "midcpu", "highcpu"]
 

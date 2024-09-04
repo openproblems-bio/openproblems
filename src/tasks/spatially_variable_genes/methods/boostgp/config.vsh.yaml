@@ -1,0 +1,48 @@
+__merge__: ../../api/comp_method.yaml
+
+functionality:
+  name: boostgp
+  info:
+    label: BOOST-GP
+    summary: "Bayesian modeling of spatial molecular profiling data via Gaussian process"
+    description: |
+      BOOST-GP a novel Bayesian hierarchical model to analyze spatial transcriptomics data, 
+      with several unique characteristics. It models the zero-inflated and over-dispersed 
+      counts by deploying a zero-inflated negative binomial model that greatly increases 
+      model stability and robustness. Besides, the Bayesian inference framework allows us 
+      to borrow strength in parameter estimation in a de novo fashion. As a result, 
+      the proposed model shows competitive performances in accuracy and robustness 
+      over existing methods in both simulation studies and two real data applications.
+    preferred_normalization: counts
+    reference: li2021bayesian
+    documentation_url: https://github.com/Minzhe/BOOST-GP
+    repository_url: https://github.com/Minzhe/BOOST-GP
+
+  arguments:
+    - name: --n_iter
+      type: integer
+      description: Number of iterations.
+      default: 10
+      info:
+        test_default: 7
+
+  resources:
+    - type: r_script
+      path: script.R
+
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_r:1.0.4
+    setup:
+      - type: apt
+        packages: 
+          - git
+      - type: docker
+        run : |
+          git clone https://github.com/Minzhe/BOOST-GP.git /opt/BOOST-GP
+      - type: r
+        cran: [RcppDist, ggplot2, anndata]
+  - type: native
+  - type: nextflow
+    directives:
+      label: [veryhightime, midmem, midcpu]

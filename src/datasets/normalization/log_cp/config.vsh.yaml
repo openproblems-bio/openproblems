@@ -9,7 +9,7 @@ functionality:
     - name: "--n_cp"
       type: integer
       default: 1e4
-      description: "Number of counts per cell"
+      description: "Number of counts per cell. When set to -1, will use None."
 platforms:
   - type: docker
     image: openproblems/base_python:1.0.0

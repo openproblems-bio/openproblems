@@ -20,7 +20,8 @@ out <- list(
   task_name = info$label,
   task_summary = info$summary,
   task_description = paste0(info$motivation, "\n\n", info$description),
-  repo = "openproblems-bio/openproblems-v2"
+  repo = "openproblems-bio/openproblems-v2",
+  authors = info$authors
 )
 
 # show warning when certain data is missing and return null?

@@ -77,6 +77,7 @@ arguments = []
 
 for arg in config["functionality"]["arguments"]:
     new_arg = arg.copy()
+    arg_info = new_arg.get("info") or {}
 
     # set clean name
     clean_name = re.sub("^--", "", arg["name"])
@@ -89,7 +90,9 @@ for arg in config["functionality"]["arguments"]:
       else:
           value = f"{clean_name}.h5ad"
       new_arg["value"] = value
-    
+    elif "test_default" in arg_info:
+        new_arg["value"] = arg_info["test_default"]
+        
     arguments.append(new_arg)
 
 
@@ -115,7 +118,10 @@ for argset_name, argset_args in argument_sets.items():
     # construct command
     cmd = [ meta["executable"] ]
     for arg in argset_args:
-        if arg["type"] == "file":
-            cmd.extend([arg["name"], arg["value"]])
+        if "value" in arg:
+            value = arg["value"]
+            if arg["multiple"] and isinstance(value, list):
+                value = arg["multiple_sep"].join(value)
+            cmd.extend([arg["name"], str(value)])
 
     run_and_check(argset_args, cmd)

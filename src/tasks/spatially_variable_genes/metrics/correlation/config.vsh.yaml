@@ -1,0 +1,32 @@
+__merge__: ../../api/comp_metric.yaml
+
+functionality:
+  name: correlation
+  info:
+    metrics:
+      - name: correlation
+        label: correlation
+        summary: "Correlation represents the agreement of true and predicted spatial variability."
+        description: |
+          Kendall rank correlation coefficient measures the ordinal association between two measured quantities. The best score and upper bound is 1 (observations have an identical rank), while the lower bound is -1 (observations have a completely different rank).
+        reference: kendall1938new
+        documentation_url: https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient
+        repository_url: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.corr.html
+        min: -1
+        max: 1
+        maximize: true
+
+  resources:
+    - type: python_script
+      path: script.py
+
+platforms:
+  - type: docker
+    image: ghcr.io/openproblems-bio/base_python:1.0.4
+    setup:
+      - type: python
+        packages: pandas
+  - type: native
+  - type: nextflow
+    directives:
+      label: [midtime, midmem, midcpu]
