@@ -1,0 +1,67 @@
+name: predict_modality
+label: Predict Modality
+summary: "Predicting the profiles of one modality (e.g. protein abundance) from another (e.g. mRNA expression)."
+image: "thumbnail.svg"
+motivation: |
+  Experimental techniques to measure multiple modalities within the same single cell are increasingly becoming available. 
+  The demand for these measurements is driven by the promise to provide a deeper insight into the state of a cell. 
+  Yet, the modalities are also intrinsically linked. We know that DNA must be accessible (ATAC data) to produce mRNA 
+  (expression data), and mRNA in turn is used as a template to produce protein (protein abundance). These processes 
+  are regulated often by the same molecules that they produce: for example, a protein may bind DNA to prevent the production 
+  of more mRNA. Understanding these regulatory processes would be transformative for synthetic biology and drug target discovery. 
+  Any method that can predict a modality from another must have accounted for these regulatory processes, but the demand for 
+  multi-modal data shows that this is not trivial.
+description: |
+  In this task, the goal is to take one modality and predict the other modality for all
+  features in each cell. This task requires translating information between multiple layers of
+  gene regulation. In some ways, this is similar to the task of machine translation. In machine translation, the same
+  sentiment is expressed in multiple languages and the goal is to train a model to represent the same meaning in a different
+  language. In this context, the same cellular state is measured in two different feature sets and the goal of this task
+  is to translate the information about cellular state from one modality to the other.
+authors:
+  - name: Robrecht Cannoodt
+    roles: [ author, maintainer ]
+    info:
+      github: rcannood
+      orcid: "0000-0003-3641-729X"
+  - name: Kai Waldrant
+    roles: [ contributor ]
+    info: 
+      github: KaiWaldrant
+      orcid: "0009-0003-8555-1361"
+  - name: Louise Deconinck
+    roles: [ author ]
+    info:
+      github: LouiseDck
+  - name: Alex Tong
+    roles: [ author ]
+    info:
+      github: atong01
+  - name: Bastian Rieck
+    roles: [ author ]
+    info:
+      github: Pseudomanifold
+  - name: Daniel Burkhardt
+    roles: [ author ]
+    info:
+      github: dburkhardt
+  - name: Alejandro Granados
+    roles: [ author ]
+    info:
+      github: agranado
+  - name: Kaiwen Deng
+    roles: [ contributor ]
+    info:
+      email: dengkw@umich.edu
+      github: nonztalk
+  - name: Xueer Chen
+    roles: [ contributor ]
+    info:
+      github: xuerchen
+      email: xc2579@columbia.edu
+  - name: Jiwei Liu
+    roles: [ contributor ]
+    info:
+      github: daxiongshu
+      email: jiweil@nvidia.com
+      orcid: "0000-0002-8799-9763"

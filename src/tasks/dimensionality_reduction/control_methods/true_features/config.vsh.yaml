@@ -1,0 +1,22 @@
+__merge__: ../../api/comp_control_method.yaml
+functionality:
+  name: "true_features"
+  info:
+    label: True Features
+    summary: "Positive control by retaining the dimensionality without loss of information."
+    description: "This serves as a positive control since the original high-dimensional data is retained as is, without any loss of information"
+    v1:
+      path: openproblems/tasks/dimensionality_reduction/methods/baseline.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: log_cp10k
+    variants:
+      true_features:
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+  - type: nextflow
+    directives: 
+      label: [midtime, highmem, highcpu]

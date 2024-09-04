@@ -1,0 +1,29 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "fastmnn"
+  info:
+    label: "fastMNN"
+    summary: "A simpler version of the original mnnCorrect algorithm."
+    description: |
+      FastMNN is a simplified version of the mnnCorrect algorithm. Both use Mutual Nearest Neighbors to integrate multimodal single-cell data.
+    preferred_normalization: "log_cp10k"
+    variants:
+      mnn_log_cp10k:
+      mnn_log_scran_pooling:
+      # "The normalization only changes for the first modality dataset, the second still uses log_cp10k"
+        preferred_normalization: "log_scran_pooling"
+    reference: "haghverdi2018batch"
+    repository_url: "https://github.com/LTLA/batchelor"
+    documentation_url: "https://github.com/LTLA/batchelor#readme"
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        bioc: batchelor
+  - type: nextflow
+    directives:
+      label: [midtime, lowmem, lowcpu]

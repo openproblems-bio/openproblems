@@ -1,0 +1,24 @@
+title: Task info
+description: A file format specification file.
+type: object
+additionalProperties: false
+required: [name, label, summary, motivation, description]
+properties:
+  name:
+    $ref: "defs_common.yaml#/definitions/Name"
+  label:
+    $ref: "defs_common.yaml#/definitions/Label"
+  summary: 
+    $ref: "defs_common.yaml#/definitions/Summary"
+  image:
+    $ref: "defs_common.yaml#/definitions/Image"
+  motivation: 
+    $ref: "defs_common.yaml#/definitions/Description"
+  description: 
+    $ref: "defs_common.yaml#/definitions/Description"
+  v1:
+    $ref: "defs_common.yaml#/definitions/MigrationV1"
+  authors:
+    type: array
+    items:
+      $ref: "defs_common.yaml#/definitions/Author"

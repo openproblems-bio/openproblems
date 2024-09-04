@@ -1,0 +1,88 @@
+title: Metric
+description: |
+  A metric is a quantitative measure used to evaluate the performance of the
+  different methods in solving the specific task problem.
+type: object
+required: [__merge__, functionality, platforms]
+properties:
+  __merge__:
+    "$ref": "defs_common.yaml#/definitions/CompAPIMerge"
+  functionality:
+    type: object
+    description: Information regarding the functionality of the component.
+    required: [name, info, resources]
+    additionalProperties: false
+    properties:
+      name:
+        "$ref": "defs_common.yaml#/definitions/Name"
+      status:
+        "$ref": "defs_viash.yaml#/definitions/Status"
+      info:
+        type: object
+        description: Metadata of the component.
+        additionalProperties: false
+        required: [metrics]
+        properties:
+          metrics:
+            type: array
+            minItems: 1
+            items:
+              type: object
+              description: Metadata of each metric.
+              additionalProperties: false
+              required: [label, summary, description, reference, min, max, maximize]
+              properties:
+                name:
+                  "$ref": "defs_common.yaml#/definitions/Name"
+                label:
+                  "$ref": "defs_common.yaml#/definitions/Label"
+                summary:
+                  "$ref": "defs_common.yaml#/definitions/Summary"
+                description:
+                  "$ref": "defs_common.yaml#/definitions/Description"
+                reference:
+                  "$ref": "defs_common.yaml#/definitions/BibtexReference"
+                documentation_url:
+                  "$ref": "defs_common.yaml#/definitions/DocumentationURL"
+                repository_url:
+                  "$ref": "defs_common.yaml#/definitions/RepositoryURL"
+                variants:
+                  "$ref": "defs_common.yaml#/definitions/MethodVariants"
+                min:
+                  description: The lowest possible value of the metric.
+                  oneOf:
+                    - type: number
+                    - const: "-.inf"
+                max:
+                  description: The highest possible value of the metric.
+                  oneOf:
+                    - type: number
+                    - const: "+.inf"
+                maximize:
+                  type: boolean
+                  description: Whether a higher metric value is better.
+                v1:
+                  "$ref": "defs_common.yaml#/definitions/MigrationV1"
+      arguments:
+        type: array
+        description: Component-specific parameters.
+        items:
+          "$ref": "defs_viash.yaml#/definitions/Argument"
+      resources:
+        type: array
+        description: Resources required to run the component.
+        items:
+          "$ref": "defs_viash.yaml#/definitions/Resource"
+      test_resources:
+        type: array
+        description: One or more scripts and resources used to test the component.
+        items:
+          "$ref": "defs_viash.yaml#/definitions/Resource"
+  platforms:
+    type: array
+    description: A list of platforms which Viash generates target artifacts for.
+    items:
+      anyOf:
+        - "$ref": "defs_common.yaml#/definitions/PlatformDocker"
+        - "$ref": "defs_common.yaml#/definitions/PlatformNative"
+        - "$ref": "defs_common.yaml#/definitions/PlatformVdsl3"

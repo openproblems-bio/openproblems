@@ -1,0 +1,58 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "phate"
+  info:
+    label: PHATE
+    summary: Preservating trajectories in a dataset by using heat diffusion potential.
+    description: |
+      PHATE or "Potential of Heat - diffusion for Affinity - based Transition
+      Embedding" uses the potential of heat diffusion to preserve trajectories in a
+      dataset via a diffusion process. It is an affinity - based method that
+      creates an embedding by finding the dominant eigenvalues of a Markov
+      transition matrix. We evaluate several variants including using the
+      recommended square - root transformed CPM matrix as input, this input with
+      the gamma parameter set to zero and the normal logCPM transformed matrix with
+      and without HVG selection.
+    reference: "moon2019visualizing"
+    repository_url: "https://github.com/KrishnaswamyLab/PHATE"
+    documentation_url: "https://github.com/KrishnaswamyLab/PHATE#readme"
+    v1:
+      path: openproblems/tasks/dimensionality_reduction/methods/phate.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: sqrt_cp10k
+    variants:
+      phate_default:
+      phate_sqrt:
+        gamma: 0
+      phate_logCP10k:
+        preferred_normalization: log_cp10k
+      phate_logCP10k_1kHVG:
+        n_hvg: 1000
+        preferred_normalization: log_cp10k
+  arguments:
+    - name: '--n_pca_dims'
+      type: integer
+      default: 50
+      description: Number of principal components of PCA to use.
+    - name: "--n_hvg"
+      type: integer
+      description: Number of highly variable genes to subset to. If not specified, the input matrix will not be subset.
+    - name: '--gamma'
+      type: double
+      description: Gamma value
+      default: 1
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        packages:
+          - phate==1.0.*
+          - scprep
+          - "scikit-learn<1.2"
+  - type: nextflow
+    directives: 
+      label: [midtime, highmem, highcpu]

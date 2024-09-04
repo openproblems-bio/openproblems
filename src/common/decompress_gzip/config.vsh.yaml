@@ -1,0 +1,25 @@
+functionality:
+  name: decompress_gzip
+  namespace: common
+  arguments:
+    - name: --input
+      type: file
+      description: Input file
+      example: /path/to/file.gz
+    - name: --output
+      type: file
+      description: Output file
+      example: /path/to/file
+      direction: output
+  resources:
+    - type: bash_script
+      path: script.sh
+  test_resources:
+    - type: bash_script
+      path: test.sh
+platforms:
+  - type: docker
+    image: ubuntu:latest
+  - type: nextflow
+    directives:
+      label: [midtime, lowmem, lowcpu]

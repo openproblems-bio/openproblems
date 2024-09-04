@@ -1,0 +1,88 @@
+name: viash test
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  # phase 1
+  list:
+    env:
+      s3_bucket: s3://openproblems-data/resources_test/
+    runs-on: ubuntu-latest
+
+    outputs:
+      matrix: ${{ steps.set_matrix.outputs.matrix }}
+      cache_key: ${{ steps.cache.outputs.cache_key }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 
+
+    - uses: viash-io/viash-actions/setup@v5
+
+    - uses: viash-io/viash-actions/project/sync-and-cache-s3@v5
+      id: cache
+      with:
+        s3_bucket: $s3_bucket
+        dest_path: resources_test
+        cache_key_prefix: resources_test__
+
+    - id: ns_list
+      uses: viash-io/viash-actions/ns-list@v5
+      with:
+        platform: docker
+        format: json
+
+    - id: ns_list_filtered
+      uses: viash-io/viash-actions/project/detect-changed-components@v5
+      with:
+        input_file: "${{ steps.ns_list.outputs.output_file }}"
+
+    - id: set_matrix
+      run: |
+        echo "matrix=$(jq -c '[ .[] | 
+          { 
+            "name": (.functionality.namespace + "/" + .functionality.name),
+            "config": .info.config
+          }
+        ]' ${{ steps.ns_list_filtered.outputs.output_file }} )" >> $GITHUB_OUTPUT
+
+  # phase 2
+  viash_test:
+    needs: list
+    if: ${{ needs.list.outputs.matrix != '[]' && needs.list.outputs.matrix != '' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        component: ${{ fromJson(needs.list.outputs.matrix) }}
+
+    steps:
+    # Remove unnecessary files to free up space. Otherwise, we get 'no space left on device.'
+    - uses: data-intuitive/reclaim-the-bytes@v2
+    
+    - uses: actions/checkout@v4
+
+    - uses: viash-io/viash-actions/setup@v5
+
+    # use cache
+    - name: Cache resources data
+      uses: actions/cache@v4
+      timeout-minutes: 10
+      with:
+        path: resources_test
+        key: ${{ needs.list.outputs.cache_key }}
+
+    - name: Run test
+      timeout-minutes: 30
+      run: |
+        VIASH_TEMP=$RUNNER_TEMP/viash viash test \
+          "${{ matrix.component.config }}" \
+          --cpus 2 \
+          --memory "5gb"
+

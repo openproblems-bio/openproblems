@@ -1,0 +1,31 @@
+functionality:
+  namespace: "denoising/metrics"
+  info:
+    type: metric
+    type_info:
+      label: Metric
+      summary: A denoising metric.
+      description: |
+        A metric for evaluating denoised datasets.
+  arguments:
+    - name: "--input_test"
+      __merge__: file_test.yaml
+      direction: input
+      required: true
+    - name: "--input_denoised"
+      __merge__: file_denoised.yaml
+      direction: input
+      required: true
+    - name: "--output"
+      __merge__: file_score.yaml
+      direction: output
+      required: true
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/check_metric_config.py
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/denoising/pancreas
+      dest: resources_test/denoising/pancreas
+    - path: /src/common/library.bib
+        

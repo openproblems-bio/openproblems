@@ -1,0 +1,52 @@
+# use method api spec
+__merge__: ../../api/comp_method_feature.yaml
+functionality:
+  name: mnnpy
+  info:
+    label: mnnpy
+    summary: "Batch effect correction by matching mutual nearest neighbors, Python implementation."
+    description: |
+      An implementation of MNN correct in python featuring low memory usage, full multicore support and compatibility with the scanpy framework.
+
+      Batch effect correction by matching mutual nearest neighbors (Haghverdi et al, 2018) has been implemented as a function 'mnnCorrect' in the R package scran. Sadly it's extremely slow for big datasets and doesn't make full use of the parallel architecture of modern CPUs.
+
+      This project is a python implementation of the MNN correct algorithm which takes advantage of python's extendability and hackability. It seamlessly integrates with the scanpy framework and has multicore support in its bones.
+    reference: "hie2019efficient"
+    repository_url: "https://github.com/chriscainx/mnnpy"
+    documentation_url: "https://github.com/chriscainx/mnnpy#readme"
+    v1:
+      path: openproblems/tasks/_batch_integration/batch_integration_graph/methods/mnn.py
+      commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+    preferred_normalization: log_cp10k
+    variants:
+      mnn_full_unscaled:
+      mnn_full_scaled:
+        preferred_normalization: log_cp10k_scaled
+  arguments:
+    - name: --n_hvg
+      type: integer
+      default: 2000
+      description: Number of highly variable genes to use.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  # Due to a [ gcc-8 ] dependency in the mnnpy package, we need to use a python:3.8 image
+  - type: docker
+    image: python:3.8
+    setup:
+      - type: apt
+        packages:
+          - procps
+      - type: python
+        pypi:
+          - anndata~=0.8.0
+          - scanpy
+          - pyyaml
+          - requests
+          - jsonschema
+        github:
+          - chriscainx/mnnpy
+  - type: nextflow
+    directives:
+      label: [ midtime, lowcpu, lowmem ]

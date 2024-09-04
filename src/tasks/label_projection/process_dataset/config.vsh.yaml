@@ -1,0 +1,31 @@
+__merge__: ../api/comp_process_dataset.yaml
+functionality:
+  name: "process_dataset"
+  arguments:
+    - name: "--method"
+      type: "string"
+      description: "The process method to assign train/test."
+      choices: ["batch", "random"]
+      default: "batch"
+    - name: "--obs_label"
+      type: "string"
+      description: "Which .obs slot to use as label."
+      default: "cell_type"
+    - name: "--obs_batch"
+      type: "string"
+      description: "Which .obs slot to use as batch covariate."
+      default: "batch"
+    - name: "--seed"
+      type: "integer"
+      description: "A seed for the subsampling."
+      example: 123
+  resources:
+    - type: python_script
+      path: script.py
+    - path: /src/common/helper_functions/subset_anndata.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+  - type: nextflow
+    directives:
+      label: [highmem, midcpu , midtime]

@@ -1,0 +1,276 @@
+definitions:
+  PlatformVdsl3:
+    title: VDSL3
+    description: Next-gen platform for generating NextFlow VDSL3 modules.
+    properties:
+      type:
+        const: nextflow
+        description: Next-gen platform for generating NextFlow VDSL3 modules.
+      directives:
+        $ref: 'defs_viash.yaml#/definitions/NextflowDirectives'
+    required: [ type ]
+    additionalProperties: false
+  PlatformDocker:
+    title: Docker platform
+    description: |
+      Run a Viash component on a Docker backend platform.
+      By specifying which dependencies your component needs, users are be able to build
+      a docker container from scratch using the setup flag, or pull it from a docker repository.
+    type: object
+    properties:
+      type:
+        const: docker
+        description: Run a Viash component on a Docker backend platform.
+      image:
+        type: string
+        description: The base container to start from. You can also add the tag here
+          if you wish.
+      run_args:
+        anyOf:
+        - type: string
+          description: Add docker run arguments.
+        - type: array
+          items:
+            type: string
+          description: Add docker run arguments.
+      target_image_source:
+        type: string
+        description: The source of the target image. This is used for defining labels
+          in the dockerfile.
+      setup:
+        type: array
+        items:
+          "$ref": "defs_viash.yaml#/definitions/Requirements"
+      test_setup:
+        type: array
+        items:
+          "$ref": "defs_viash.yaml#/definitions/Requirements"
+    required: [type, image]
+    additionalProperties: false
+  PlatformNative:
+    title: Native platform
+    type: object
+    properties:
+      type:
+        const: native
+        description: Specifies the type of the platform. Running a Viash component
+          on a native platform means that the script will be executed in your current
+          environment.
+    required: [ type ]
+    additionalProperties: false
+  PreferredNormalization:
+    enum: [l1_sqrt, log_cpm, log_cp10k, log_scran_pooling, sqrt_cpm, sqrt_cp10k, counts]
+    description: |
+      Which normalization method a component prefers. 
+      
+      Each value corresponds to a normalization component in the directory `src/datasets/normalization`.
+  ComponentSubtype:
+    type: string
+    description: |
+      A component subtype, in case the task has multiple subtypes of methods and metrics.
+  ComponentType:
+    type: string
+    description: |
+      A component subtype, in case the task has multiple subtypes of methods and metrics.
+  Name:
+    type: string
+    description: |
+      A unique identifier. Can only contain lowercase letters, numbers or underscores.
+    pattern: "^[a-z_][a-z0-9_]*$"
+    maxLength: 50
+  Namespace:
+    type: string
+    description: |
+      The namespace a component is part of.
+    pattern: "^[a-z_][a-z0-9_/]*$"
+  Label:
+    type: string
+    description: |
+      A unique, human-readable, short label. Used for creating summary tables and visualisations.
+    maxLength: 50
+  Image:
+    type: string
+    description: |
+      The name of the image file to use for the component on the website.
+  Summary:
+    type: string
+    description: |
+      A one sentence summary of purpose and methodology. Used for creating an overview tables.
+    minLength: 15
+    maxLength: 180
+  Description:
+    type: string
+    description: |
+      A longer description (one or more paragraphs). Used for creating reference documentation and supplementary information.
+    minLength: 30
+  BibtexReference:
+    type: string
+    description: |
+      A bibtex reference key to the paper where the component is described.
+  DocumentationURL:
+    type: string
+    format: uri
+    pattern: "^https://"
+    description: The url to the documentation of the used software library.
+  RepositoryURL:
+    type: string
+    format: uri
+    pattern: "^https://"
+    description: The url to the repository of the used software library.
+  MigrationV1:
+    type: object
+    required: [path, commit]
+    properties:
+      additionalProperties: false
+      path:
+        type: string
+        description: |
+          If this component was migrated from the OpenProblems v1 repository, this value 
+          represents the location of the Python file relative to the root of the repository.
+      commit:
+        type: string
+        description: |
+          If this component was migrated from the OpenProblems v1 repository, this value
+          is the Git commit SHA of the v1 repository corresponding to when this component
+          was last updated.
+      note:
+        type: string
+        description: |
+          An optional note on any changes made during the migration.
+  MethodVariants:
+    type: object
+    description: Alternative parameter sets which should be evaluated in the benchmark.
+    properties:
+      preferred_normalization:
+        "$ref": "#/definitions/PreferredNormalization"
+  CompAPIMerge:
+    type: string
+    description: |
+      The API specifies which type of component this is.
+      It contains specifications for:
+
+        - The input/output files
+        - Common parameters
+        - A unit test
+  Merge:
+    type: string
+    description: |
+      Another YAML to inherit values from.
+  ComponentAPIFile:
+    description: A `file` type argument has a string value that points to a file or folder path.
+    type: object
+    properties:
+      name:
+        description: "The name of the argument. Can be in the formats `--foo`, `-f` or `foo`. The number of dashes determines how values can be passed:  \n\n  - `--foo` is a long option, which can be passed with `executable_name --foo=value` or `executable_name --foo value`\n  - `-f` is a short option, which can be passed with `executable_name -f value`\n  - `foo` is an argument, which can be passed with `executable_name value`  \n"
+        type: string
+      __merge__:
+        type: string
+        description: The file format specification file.
+      direction:
+        description: Makes this argument an `input` or an `output`, as in does the file/folder needs to be read or written. `input` by default.
+        $ref: 'defs_viash.yaml#/definitions/Direction'
+      info:
+        description: 'Structured information. Can be any shape: a string, vector, map or even nested map.'
+        type: object
+      required:
+        description: Make the value for this argument required. If set to `true`, an error will be produced if no value was provided. `false` by default.
+        type: boolean
+    required: [name, __merge__, direction, required]
+    additionalProperties: false
+  AnnDataSlots:
+    properties:
+      X:
+        $ref: "#/definitions/AnnDataSlot"
+      layers:
+        type: array
+        items:
+          $ref: "#/definitions/AnnDataSlot"
+      var:
+        type: array
+        items:
+          $ref: "#/definitions/AnnDataSlot"
+      varm:
+        type: array
+        items:
+          $ref: "#/definitions/AnnDataSlot"
+      varp:
+        type: array
+        items:
+          $ref: "#/definitions/AnnDataSlot"
+      obs:
+        type: array
+        items:
+          $ref: "#/definitions/AnnDataSlot"
+      obsm:
+        type: array
+        items:
+          $ref: "#/definitions/AnnDataSlot"
+      obsp:
+        type: array
+        items:
+          $ref: "#/definitions/AnnDataSlot"
+      uns:
+        type: array
+        items:
+          oneOf:
+            - $ref: "#/definitions/AnnDataSlot"
+            - $ref: "#/definitions/AnnDataSlotObject"
+  AnnDataSlot:
+    properties:
+      type:
+        enum: [integer, double, string, boolean]
+      name:
+        type: string
+        description: A unique identifier.
+        pattern: "^[a-zA-Z_][a-zA-Z0-9_]*$"
+      description:
+        type: string
+      required:
+        type: boolean
+    required: [type, name, description, required]
+  AnnDataSlotObject:
+    properties:
+      type:
+        enum: [object]
+      name:
+        type: string
+        description: A unique identifier.
+        pattern: "^[a-zA-Z_][a-zA-Z0-9_]*$"
+      description:
+        type: string
+      required:
+        type: boolean
+    required: [type, name, description, required]
+  Author:
+    description: Author metadata.
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        description: Full name of the author, usually in the name of FirstName MiddleName LastName.
+        type: string
+      info:
+        description: Additional information on the author
+        type: object
+        additionalProperties: false
+        properties:
+          github:
+            type: string
+          orcid:
+            type: string
+          email:
+            type: string
+          twitter:
+            type: string
+          linkedin:
+            type: string
+      roles:
+        description: |
+            Role of the author. Possible values:
+
+            * `"author"`: Authors who have made substantial contributions to the component.
+            * `"maintainer"`: The maintainer of the component.
+            * `"contributor"`: Authors who have made smaller contributions (such as code patches etc.).
+        type: array
+        items:
+          enum: [maintainer, author, contributor]

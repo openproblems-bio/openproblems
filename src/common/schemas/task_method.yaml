@@ -1,0 +1,67 @@
+title: Method
+description: |
+  A method is a specific technique used to solve the task problem and is
+  compared to the control methods and other methods to determine the best
+  approach for the task depending on the type of dataset.
+type: object
+required: [__merge__, functionality, platforms]
+properties:
+  __merge__:
+    "$ref": "defs_common.yaml#/definitions/CompAPIMerge"
+  functionality:
+    type: object
+    description: Information regarding the functionality of the component.
+    required: [name, info, resources]
+    additionalProperties: false
+    properties:
+      name:
+        "$ref": "defs_common.yaml#/definitions/Name"
+      status:
+        "$ref": "defs_viash.yaml#/definitions/Status"
+      info:
+        type: object
+        description: Metadata of the component.
+        additionalProperties: false
+        required: [label, summary, description, preferred_normalization, reference, documentation_url, repository_url]
+        properties:
+          label:
+            "$ref": "defs_common.yaml#/definitions/Label"
+          summary:
+            "$ref": "defs_common.yaml#/definitions/Summary"
+          description:
+            "$ref": "defs_common.yaml#/definitions/Description"
+          preferred_normalization: 
+            "$ref": "defs_common.yaml#/definitions/PreferredNormalization"
+          reference:
+            "$ref": "defs_common.yaml#/definitions/BibtexReference"
+          documentation_url:
+            "$ref": "defs_common.yaml#/definitions/DocumentationURL"
+          repository_url:
+            "$ref": "defs_common.yaml#/definitions/RepositoryURL"
+          v1:
+            "$ref": "defs_common.yaml#/definitions/MigrationV1"
+          variants:
+            "$ref": "defs_common.yaml#/definitions/MethodVariants"
+      arguments:
+        type: array
+        description: Component-specific parameters.
+        items:
+          "$ref": "defs_viash.yaml#/definitions/Argument"
+      resources:
+        type: array
+        description: Resources required to run the component.
+        items:
+          "$ref": "defs_viash.yaml#/definitions/Resource"
+      test_resources:
+        type: array
+        description: One or more scripts and resources used to test the component.
+        items:
+          "$ref": "defs_viash.yaml#/definitions/Resource"
+  platforms:
+    type: array
+    description: A list of platforms which Viash generates target artifacts for.
+    items:
+      anyOf:
+        - "$ref": "defs_common.yaml#/definitions/PlatformDocker"
+        - "$ref": "defs_common.yaml#/definitions/PlatformNative"
+        - "$ref": "defs_common.yaml#/definitions/PlatformVdsl3"

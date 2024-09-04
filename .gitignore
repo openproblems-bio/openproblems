@@ -1,0 +1,30 @@
+README.html
+README_files/
+*.DS_Store
+*__pycache__
+*.h5ad
+
+# IDE ignores
+/.idea/
+
+# repo specific ignores
+output_bash
+
+# R specific ignores
+.Rhistory
+.Rproj.user
+*.Rproj
+
+# viash specific ignores
+docker_output/
+/target/
+check_results/
+log.txt
+.viash*
+/resources/
+/resources_test/
+
+# nextflow specific ignores
+/.nextflow*
+/work
+output

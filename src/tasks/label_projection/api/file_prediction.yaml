@@ -1,0 +1,24 @@
+type: file
+example: "resources_test/label_projection/pancreas/prediction.h5ad"
+info:
+  label: "Prediction"
+  summary: "The prediction file"
+  slots:
+    obs:
+      - type: string
+        name: label_pred
+        description: Predicted labels for the test cells.
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: normalization_id
+        description: "Which normalization was used"
+        required: true
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"
+        required: true

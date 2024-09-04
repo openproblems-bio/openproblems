@@ -1,0 +1,34 @@
+functionality:
+  name: "process_datasets"
+  namespace: "label_projection/workflows"
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - name: "--input"
+          __merge__: "/src/tasks/label_projection/api/file_common_dataset.yaml"
+          required: true
+          direction: input
+    - name: Outputs
+      arguments:
+        - name: "--output_train"
+          __merge__: /src/tasks/label_projection/api/file_train.yaml
+          required: true
+          direction: output
+        - name: "--output_test"
+          __merge__: /src/tasks/label_projection/api/file_test.yaml
+          required: true
+          direction: output
+        - name: "--output_solution"
+          __merge__: /src/tasks/label_projection/api/file_solution.yaml
+          required: true
+          direction: output
+  resources:
+    - type: nextflow_script
+      path: main.nf
+      entrypoint: run_wf
+    - path: /src/wf_utils/helper.nf
+  dependencies:
+    - name: common/check_dataset_schema
+    - name: label_projection/process_dataset
+platforms:
+  - type: nextflow

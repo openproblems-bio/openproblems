@@ -1,0 +1,25 @@
+# use method api spec
+__merge__: ../../../api/comp_control_method_feature.yaml
+functionality:
+  name: global_feature
+  namespace: batch_integration/control_methods/random_integration
+  info:
+    label: Random integration
+    summary: "Feature values are randomly permuted"
+    description: "Feature values are randomly permuted"
+    v1:
+      path: openproblems/tasks/_batch_integration/_common/methods/baseline.py
+      commit: acf5c95a7306b819c4a13972783433d0a48f769b
+    preferred_normalization: log_cp10k
+  resources:
+    - type: python_script
+      path: script.py
+    - type: python_script
+      path: /src/common/helper_functions/read_anndata_partial.py
+    - path: ../../utils.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+  - type: nextflow
+    directives:
+      label: [ "midtime", "lowmem", "lowcpu"]

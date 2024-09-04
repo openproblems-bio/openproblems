@@ -1,0 +1,52 @@
+# use metric api spec
+__merge__: ../../api/comp_metric_graph.yaml
+functionality:
+  name: isolated_label_f1
+  info:
+    metrics:
+      - name: isolated_label_f1
+        label: Isolated label F1 score
+        summary: Evaluate how well isolated labels coincide with clusters 
+        description: |
+          We developed two isolated label scores to evaluate how well the data integration methods
+          dealt with cell identity labels shared by few batches. Specifically, we identified
+          isolated cell labels as the labels present in the least number of batches in the
+          integration task.
+          The score evaluates how well these isolated labels separate from other cell identities.
+          We implemented the isolated label metric in two versions:
+          (1) the best clustering of the isolated label (F1 score) and
+          (2) the global ASW of the isolated label. For the cluster-based score,
+          we first optimize the cluster assignment of the isolated label using the F1 score˚
+          across louvain clustering resolutions ranging from 0.1 to 2 in resolution steps of 0.1.
+          The optimal F1 score for the isolated label is then used as the metric score.
+          The F1 score is a weighted mean of precision and recall given by the equation:
+          𝐹1=2×(precision×recall)/(precision+recall).
+
+          It returns a value between 0 and 1,
+          where 1 shows that all of the isolated label cells and no others are captured in
+          the cluster. For the isolated label ASW score, we compute the ASW of isolated
+          versus nonisolated labels on the PCA embedding (ASW metric above) and scale this
+          score to be between 0 and 1. The final score for each metric version consists of
+          the mean isolated score of all isolated labels.
+        reference: luecken2022benchmarking
+        v1:
+          path: openproblems/tasks/_batch_integration/batch_integration_graph/metrics/iso_label_f1.py
+          commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+        min: 0
+        max: 1
+        maximize: true
+  resources:
+    - type: python_script
+      path: script.py
+    - type: python_script
+      path: /src/common/helper_functions/read_anndata_partial.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        pypi:
+          - scib==1.1.5
+  - type: nextflow
+    directives: 
+      label: [midtime, midmem, lowcpu]

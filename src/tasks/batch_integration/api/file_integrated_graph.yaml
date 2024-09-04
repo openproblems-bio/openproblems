@@ -1,0 +1,37 @@
+type: file
+example: "resources_test/batch_integration/pancreas/integrated_graph.h5ad"
+info:
+  prediction_type: graph
+  label: "Integrated Graph"
+  summary: Integrated AnnData HDF5 file.
+  slots:
+    obsp:
+      - type: double
+        name: connectivities
+        description: Neighbors connectivities matrix.
+        required: true
+      - type: double
+        name: distances
+        description: Neighbors connectivities matrix.
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: normalization_id
+        description: "Which normalization was used"
+        required: true
+      - name: dataset_organism
+        type: string
+        description: The organism of the sample in the dataset.
+        required: false
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"
+        required: true
+      - type: object
+        name: neighbors
+        description: Supplementary K nearest neighbors data.
+        required: true

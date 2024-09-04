@@ -1,0 +1,26 @@
+functionality:
+  namespace: "denoising/methods"
+  info:
+    type: method
+    type_info:
+      label: Method
+      summary: A denoising method.
+      description: |
+        A denoising method to remove noise (i.e. technical artifacts) from a dataset.
+  arguments:
+    - name: "--input_train"
+      __merge__: file_train.yaml
+      direction: input
+      required: true
+    - name: "--output"
+      __merge__: file_denoised.yaml
+      direction: output
+      required: true
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/check_method_config.py
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/denoising/pancreas
+      dest: resources_test/denoising/pancreas
+    - path: /src/common/library.bib

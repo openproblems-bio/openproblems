@@ -1,0 +1,22 @@
+__merge__: ../../api/comp_normalization.yaml
+functionality:
+  name: "atac_tfidf"
+  description: |
+    Transform peak counts with TF-IDF (Term Frequency - Inverse Document Frequency).
+
+    TF: peak counts are normalised by total number of counts per cell DF: total number of counts for each peak IDF: number of cells divided by DF
+
+    By default, log(TF) * log(IDF) is returned.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        packages:
+          - muon
+  - type: nextflow
+    directives: 
+      label: [midtime, midmem, midcpu]
