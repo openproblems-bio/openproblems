@@ -234,13 +234,13 @@ platforms:
 - type: "docker"
   id: "docker"
   image: "openproblems/base_r:1.0.0"
-  target_organization: "openproblems-bio"
+  target_organization: "openproblems-bio/openproblems"
   target_registry: "ghcr.io"
   namespace_separator: "/"
   resolve_volume: "Automatic"
   chown: true
   setup_strategy: "ifneedbepullelsecachedbuild"
-  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  target_image_source: "https://github.com/openproblems-bio/openproblems"
   setup:
   - type: "r"
     cran:
@@ -284,6 +284,6 @@ info:
   platform: "nextflow"
   output: "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/metrics/correlation"
   executable: "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/metrics/correlation/correlation"
-  viash_version: "0.8.0"
-  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  viash_version: "0.8.6"
+  git_commit: "e811057512655c3aa4d6f11a6867d0390f0689e5"
   git_remote: "https://github.com/openproblems-bio/openproblems"

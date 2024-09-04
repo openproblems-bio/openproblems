@@ -221,13 +221,13 @@ platforms:
 - type: "docker"
   id: "docker"
   image: "ghcr.io/openproblems-bio/base_python:1.0.4"
-  target_organization: "openproblems-bio"
+  target_organization: "openproblems-bio/openproblems"
   target_registry: "ghcr.io"
   namespace_separator: "/"
   resolve_volume: "Automatic"
   chown: true
   setup_strategy: "ifneedbepullelsecachedbuild"
-  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  target_image_source: "https://github.com/openproblems-bio/openproblems"
   entrypoint: []
   cmd: null
 - type: "nextflow"
@@ -264,6 +264,6 @@ info:
   platform: "docker"
   output: "/home/runner/work/openproblems/openproblems/target/docker/spatially_variable_genes/process_dataset/split_dataset"
   executable: "/home/runner/work/openproblems/openproblems/target/docker/spatially_variable_genes/process_dataset/split_dataset/split_dataset"
-  viash_version: "0.8.0"
-  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  viash_version: "0.8.6"
+  git_commit: "e811057512655c3aa4d6f11a6867d0390f0689e5"
   git_remote: "https://github.com/openproblems-bio/openproblems"

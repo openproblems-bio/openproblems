@@ -242,13 +242,13 @@ platforms:
 - type: "docker"
   id: "docker"
   image: "openproblems/base_python:1.0.0"
-  target_organization: "openproblems-bio"
+  target_organization: "openproblems-bio/openproblems"
   target_registry: "ghcr.io"
   namespace_separator: "/"
   resolve_volume: "Automatic"
   chown: true
   setup_strategy: "ifneedbepullelsecachedbuild"
-  target_image_source: "https://github.com/openproblems-bio/openproblems-v2"
+  target_image_source: "https://github.com/openproblems-bio/openproblems"
   setup:
   - type: "python"
     user: false
@@ -291,6 +291,6 @@ info:
   platform: "nextflow"
   output: "/home/runner/work/openproblems/openproblems/target/nextflow/batch_integration/metrics/graph_connectivity"
   executable: "/home/runner/work/openproblems/openproblems/target/nextflow/batch_integration/metrics/graph_connectivity/graph_connectivity"
-  viash_version: "0.8.0"
-  git_commit: "e0c7312ab637abf8a85b08ecf0e681278b196ae4"
+  viash_version: "0.8.6"
+  git_commit: "e811057512655c3aa4d6f11a6867d0390f0689e5"
   git_remote: "https://github.com/openproblems-bio/openproblems"
