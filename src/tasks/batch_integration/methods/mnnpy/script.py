@@ -1,4 +1,3 @@
-import sys
 import anndata as ad
 import mnnpy
 
@@ -14,18 +13,11 @@ meta = {
 }
 ## VIASH END
 
-sys.path.append(meta["resources_dir"])
-from read_anndata_partial import read_anndata
-
-
 print('Read input', flush=True)
-adata = read_anndata(
-    par['input'],
-    X='layers/normalized',
-    obs='obs',
-    var='var',
-    uns='uns'
-)
+adata = ad.read_h5ad(par['input'])
+adata.X = adata.layers['normalized']
+del adata.layers['normalized']
+del adata.layers['counts']
 
 if par['n_hvg']:
     print(f"Select top {par['n_hvg']} high variable genes", flush=True)
