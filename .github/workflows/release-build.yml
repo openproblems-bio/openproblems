@@ -102,6 +102,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     strategy:
       fail-fast: false
       matrix:
@@ -122,13 +126,13 @@ jobs:
         platform: docker
         src: ${{ matrix.component.dir }}
         setup: build
-        
+      
     - name: Login to container registry
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
-        username: ${{ secrets.GTHB_USER }}
-        password: ${{ secrets.GTHB_PAT }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Push container
       uses: viash-io/viash-actions/ns-build@v5
@@ -192,7 +196,7 @@ jobs:
   # phase 4
   component_test:
     needs: [ build, list ]
-    if: ${{ needs.list.outputs.matrix != '[]' && needs.list.outputs.matrix != '' }}
+    if: ${{ needs.list.outputs.component_matrix != '[]' && needs.list.outputs.component_matrix != '' }}
     runs-on: ubuntu-latest
 
     strategy:
