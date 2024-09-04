@@ -41,22 +41,6 @@ jobs:
         config_mod: ".functionality.version := '${{ github.event.inputs.version_tag }}'"
         parallel: true
 
-    - name: Build nextflow schemas
-      uses: viash-io/viash-actions/pro/build-nextflow-schemas@v6
-      with:
-        workflows: src
-        components: src
-        viash_pro_token: ${{ secrets.GTHB_PAT }}
-        tools_version: 'main_build'
-   
-    - name: Build parameter files
-      uses: viash-io/viash-actions/pro/build-nextflow-params@v6
-      with:
-        workflows: src
-        components: src
-        viash_pro_token: ${{ secrets.GTHB_PAT }}
-        tools_version: 'main_build'
-
     - name: Deploy to target branch
       uses: peaceiris/actions-gh-pages@v4
       with:
