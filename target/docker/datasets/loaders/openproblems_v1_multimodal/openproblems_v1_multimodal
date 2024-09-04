@@ -476,14 +476,14 @@ RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y git && \
   rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/openproblems-bio/openproblems.git /opt/openproblems && \
+RUN git clone -b 'v0.8.0' --depth 1 https://github.com/openproblems-bio/openproblems.git /opt/openproblems && \
   pip install --no-cache-dir -r /opt/openproblems/docker/openproblems/requirements.txt && \
   pip install --no-cache-dir --editable /opt/openproblems
 
 LABEL org.opencontainers.image.description="Companion container for running component datasets/loaders openproblems_v1_multimodal"
-LABEL org.opencontainers.image.created="2024-09-04T21:06:28Z"
+LABEL org.opencontainers.image.created="2024-09-04T21:27:37Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="e811057512655c3aa4d6f11a6867d0390f0689e5"
+LABEL org.opencontainers.image.revision="5e502a2eedba18edccdf6f92363e532bd50f40bc"
 LABEL org.opencontainers.image.version="main_build"
 
 VIASHDOCKER

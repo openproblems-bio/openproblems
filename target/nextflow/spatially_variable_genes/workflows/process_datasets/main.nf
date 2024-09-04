@@ -3288,7 +3288,7 @@ meta = [
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "e811057512655c3aa4d6f11a6867d0390f0689e5",
+          "git_commit" : "5e502a2eedba18edccdf6f92363e532bd50f40bc",
           "executable" : "/nextflow/common/check_dataset_schema/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/check_dataset_schema"
@@ -3309,7 +3309,7 @@ meta = [
           "functionalityNamespace" : "spatially_variable_genes/process_dataset",
           "output" : "",
           "platform" : "",
-          "git_commit" : "e811057512655c3aa4d6f11a6867d0390f0689e5",
+          "git_commit" : "5e502a2eedba18edccdf6f92363e532bd50f40bc",
           "executable" : "/nextflow/spatially_variable_genes/process_dataset/select_reference/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatially_variable_genes/process_dataset/select_reference"
@@ -3330,7 +3330,7 @@ meta = [
           "functionalityNamespace" : "spatially_variable_genes/process_dataset",
           "output" : "",
           "platform" : "",
-          "git_commit" : "e811057512655c3aa4d6f11a6867d0390f0689e5",
+          "git_commit" : "5e502a2eedba18edccdf6f92363e532bd50f40bc",
           "executable" : "/nextflow/spatially_variable_genes/process_dataset/simulate_svg/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatially_variable_genes/process_dataset/simulate_svg"
@@ -3351,7 +3351,7 @@ meta = [
           "functionalityNamespace" : "datasets/normalization",
           "output" : "",
           "platform" : "",
-          "git_commit" : "e811057512655c3aa4d6f11a6867d0390f0689e5",
+          "git_commit" : "5e502a2eedba18edccdf6f92363e532bd50f40bc",
           "executable" : "/nextflow/datasets/normalization/log_cp/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/normalization/log_cp"
@@ -3372,7 +3372,7 @@ meta = [
           "functionalityNamespace" : "spatially_variable_genes/process_dataset",
           "output" : "",
           "platform" : "",
-          "git_commit" : "e811057512655c3aa4d6f11a6867d0390f0689e5",
+          "git_commit" : "5e502a2eedba18edccdf6f92363e532bd50f40bc",
           "executable" : "/nextflow/spatially_variable_genes/process_dataset/split_dataset/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatially_variable_genes/process_dataset/split_dataset"
@@ -3419,7 +3419,7 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatially_variable_genes/workflows/process_datasets",
     "viash_version" : "0.8.6",
-    "git_commit" : "e811057512655c3aa4d6f11a6867d0390f0689e5",
+    "git_commit" : "5e502a2eedba18edccdf6f92363e532bd50f40bc",
     "git_remote" : "https://github.com/openproblems-bio/openproblems"
   }
 }'''))

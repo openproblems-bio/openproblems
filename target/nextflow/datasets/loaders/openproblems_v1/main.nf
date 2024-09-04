@@ -3251,7 +3251,7 @@ meta = [
         {
           "type" : "docker",
           "run" : [
-            "git clone https://github.com/openproblems-bio/openproblems.git /opt/openproblems && \\\\\n  pip install --no-cache-dir -r /opt/openproblems/docker/openproblems/requirements.txt && \\\\\n  pip install --no-cache-dir --editable /opt/openproblems\n"
+            "git clone -b 'v0.8.0' --depth 1 https://github.com/openproblems-bio/openproblems.git /opt/openproblems && \\\\\n  pip install --no-cache-dir -r /opt/openproblems/docker/openproblems/requirements.txt && \\\\\n  pip install --no-cache-dir --editable /opt/openproblems\n"
           ]
         }
       ]
@@ -3299,7 +3299,7 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/loaders/openproblems_v1",
     "viash_version" : "0.8.6",
-    "git_commit" : "e811057512655c3aa4d6f11a6867d0390f0689e5",
+    "git_commit" : "5e502a2eedba18edccdf6f92363e532bd50f40bc",
     "git_remote" : "https://github.com/openproblems-bio/openproblems"
   }
 }'''))
