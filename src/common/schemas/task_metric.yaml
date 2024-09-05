@@ -61,8 +61,6 @@ properties:
                 maximize:
                   type: boolean
                   description: Whether a higher metric value is better.
-                v1:
-                  "$ref": "defs_common.yaml#/definitions/MigrationV1"
       arguments:
         type: array
         description: Component-specific parameters.

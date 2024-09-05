@@ -16,8 +16,6 @@ properties:
     $ref: "defs_common.yaml#/definitions/Description"
   description: 
     $ref: "defs_common.yaml#/definitions/Description"
-  v1:
-    $ref: "defs_common.yaml#/definitions/MigrationV1"
   authors:
     type: array
     items:
