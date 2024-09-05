@@ -8,7 +8,6 @@ Structure:
 * src/common: Common components used by all tasks.
 * src/datasets: Components for fetching and processing datasets.
 * src/tasks/*: Benchmarking tasks
-* src/migration: Components for migrating from v1 to v2.
 * src/wf_utils: Workflow utilities.
 
 Migrates tasks:

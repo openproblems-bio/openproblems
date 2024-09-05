@@ -41,8 +41,6 @@ properties:
             "$ref": "defs_common.yaml#/definitions/DocumentationURL"
           repository_url:
             "$ref": "defs_common.yaml#/definitions/RepositoryURL"
-          v1:
-            "$ref": "defs_common.yaml#/definitions/MigrationV1"
           variants:
             "$ref": "defs_common.yaml#/definitions/MethodVariants"
       arguments:

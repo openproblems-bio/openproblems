@@ -117,26 +117,6 @@ definitions:
     format: uri
     pattern: "^https://"
     description: The url to the repository of the used software library.
-  MigrationV1:
-    type: object
-    required: [path, commit]
-    properties:
-      additionalProperties: false
-      path:
-        type: string
-        description: |
-          If this component was migrated from the OpenProblems v1 repository, this value 
-          represents the location of the Python file relative to the root of the repository.
-      commit:
-        type: string
-        description: |
-          If this component was migrated from the OpenProblems v1 repository, this value
-          is the Git commit SHA of the v1 repository corresponding to when this component
-          was last updated.
-      note:
-        type: string
-        description: |
-          An optional note on any changes made during the migration.
   MethodVariants:
     type: object
     description: Alternative parameter sets which should be evaluated in the benchmark.
