@@ -11,7 +11,7 @@ significantly across different spatial regions within a tissue or across
 cells in a spatially structured context.
 
 Path to source:
-[`src/tasks/spatially_variable_genes`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/spatially_variable_genes)
+[`src/tasks/spatially_variable_genes`](https://github.com/openproblems-bio/openproblems/tree/main/src/tasks/spatially_variable_genes)
 
 ## Motivation
 
@@ -121,7 +121,7 @@ Slot description:
 ## Component type: Data processor
 
 Path:
-[`src/spatially_variable_genes`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/spatially_variable_genes)
+[`src/spatially_variable_genes`](https://github.com/openproblems-bio/openproblems/tree/main/src/spatially_variable_genes)
 
 A spatially variable genes dataset processor.
 
@@ -216,7 +216,7 @@ Slot description:
 ## Component type: Control method
 
 Path:
-[`src/spatially_variable_genes/control_methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/spatially_variable_genes/control_methods)
+[`src/spatially_variable_genes/control_methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/spatially_variable_genes/control_methods)
 
 Quality control methods for verifying the pipeline.
 
@@ -235,7 +235,7 @@ Arguments:
 ## Component type: Method
 
 Path:
-[`src/spatially_variable_genes/methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/spatially_variable_genes/methods)
+[`src/spatially_variable_genes/methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/spatially_variable_genes/methods)
 
 A spatially variable gene identification method.
 
@@ -253,7 +253,7 @@ Arguments:
 ## Component type: Metric
 
 Path:
-[`src/spatially_variable_genes/metrics`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/spatially_variable_genes/metrics)
+[`src/spatially_variable_genes/metrics`](https://github.com/openproblems-bio/openproblems/tree/main/src/spatially_variable_genes/metrics)
 
 A spatially variable genes identification metric.
 

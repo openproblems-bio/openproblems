@@ -4,7 +4,7 @@ labels: [task]
 body:
   - type: markdown
     attributes:
-      value: Thanks for choosing OpenProblems. Please check the [OpenProblems tasks](https://github.com/openproblems-bio/openproblems-v2/issues?q=label%3Atask+) to see whether a similar task has already been created. If you haven't already, please review the documentation on [how to create a new task](https://openproblems.bio/documentation/create_task/).
+      value: Thanks for choosing OpenProblems. Please check the [OpenProblems tasks](https://github.com/openproblems-bio/openproblems/issues?q=label%3Atask+) to see whether a similar task has already been created. If you haven't already, please review the documentation on [how to create a new task](https://openproblems.bio/documentation/create_task/).
   - type: textarea
     attributes:
       label: Task motivation
@@ -16,7 +16,7 @@ body:
   - type: textarea
     attributes:
       label: Proposed ground-truth in datasets
-      description: Describe the datasets you plan to use for your task. OpenProblems offers a standard set of datasets (See [“Common datasets”](https://openproblems.bio/documentation/reference/openproblems-v2/src-datasets.html)) which you can peruse through. Explain how these datasets will provide the ground-truth for evaluating the methods implemented in your task. If possible, include references or links to the datasets to facilitate reproducibility.
+      description: Describe the datasets you plan to use for your task. OpenProblems offers a standard set of datasets (See [“Common datasets”](https://openproblems.bio/documentation/reference/openproblems/src-datasets.html)) which you can peruse through. Explain how these datasets will provide the ground-truth for evaluating the methods implemented in your task. If possible, include references or links to the datasets to facilitate reproducibility.
   - type: textarea
     attributes:
       label: Initial set of methods to implement

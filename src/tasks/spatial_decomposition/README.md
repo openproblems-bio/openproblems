@@ -5,7 +5,7 @@ Estimation of cell type proportions per spot in 2D space from spatial
 transcriptomic data coupled with corresponding single-cell data
 
 Path:
-[`src/tasks/spatial_decomposition`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/spatial_decomposition)
+[`src/tasks/spatial_decomposition`](https://github.com/openproblems-bio/openproblems/tree/main/src/tasks/spatial_decomposition)
 
 ## Motivation
 
@@ -121,7 +121,7 @@ Slot description:
 ## Component type: Data processor
 
 Path:
-[`src/spatial_decomposition`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/spatial_decomposition)
+[`src/spatial_decomposition`](https://github.com/openproblems-bio/openproblems/tree/main/src/spatial_decomposition)
 
 A spatial decomposition dataset processor.
 
@@ -239,7 +239,7 @@ Slot description:
 ## Component type: Control method
 
 Path:
-[`src/spatial_decomposition/control_methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/spatial_decomposition/control_methods)
+[`src/spatial_decomposition/control_methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/spatial_decomposition/control_methods)
 
 Quality control methods for verifying the pipeline.
 
@@ -259,7 +259,7 @@ Arguments:
 ## Component type: Method
 
 Path:
-[`src/spatial_decomposition/methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/spatial_decomposition/methods)
+[`src/spatial_decomposition/methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/spatial_decomposition/methods)
 
 A spatial composition method.
 
@@ -278,7 +278,7 @@ Arguments:
 ## Component type: Metric
 
 Path:
-[`src/spatial_decomposition/metrics`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/spatial_decomposition/metrics)
+[`src/spatial_decomposition/metrics`](https://github.com/openproblems-bio/openproblems/tree/main/src/spatial_decomposition/metrics)
 
 A spatial decomposition metric.
 

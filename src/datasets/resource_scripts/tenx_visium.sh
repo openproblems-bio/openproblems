@@ -306,7 +306,7 @@ process {
 }
 HERE
 
-tw launch https://github.com/openproblems-bio/openproblems-v2.git \
+tw launch https://github.com/openproblems-bio/openproblems.git \
   --revision integration_build \
   --pull-latest \
   --main-script target/nextflow/datasets/workflows/process_tenx_visium/main.nf \

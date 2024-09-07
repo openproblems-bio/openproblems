@@ -58,7 +58,7 @@ nextflow run . \
   -params-file "$params_file" \
   -c src/wf_utils/labels.config
 
-# tw launch https://github.com/openproblems-bio/openproblems-v2.git \
+# tw launch https://github.com/openproblems-bio/openproblems.git \
 #   --revision main_build \
 #   --main-script target/nextflow/datasets/workflows/process_openproblems_neurips2021_bmmc/main.nf \
 #   --workspace 53907369739130 \

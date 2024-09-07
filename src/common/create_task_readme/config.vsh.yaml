@@ -25,7 +25,7 @@ functionality:
           name: --github_url
           description: |
             URL to the GitHub repository. Needed for linking to the source code.
-          default: "https://github.com/openproblems-bio/openproblems-v2/tree/main/"
+          default: "https://github.com/openproblems-bio/openproblems/tree/main/"
     - name: Outputs
       arguments:
         - type: file
@@ -43,9 +43,9 @@ functionality:
     - type: r_script
       path: test.R
     - path: /src
-      dest: openproblems-v2/src
+      dest: openproblems/src
     - path: /_viash.yaml
-      dest: openproblems-v2/_viash.yaml
+      dest: openproblems/_viash.yaml
 platforms:
   - type: docker
     image: openproblems/base_r:1.0.0

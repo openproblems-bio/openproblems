@@ -9,7 +9,7 @@ meta = {
 }
 ## VIASH END
 
-opv2 = f"{meta['resources_dir']}/openproblems-v2"
+opv2 = f"{meta['resources_dir']}/openproblems"
 output_path = f"{opv2}/src/tasks/label_projection/methods/test_method"
 
 cmd = [
