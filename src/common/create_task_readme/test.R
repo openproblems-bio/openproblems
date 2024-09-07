@@ -3,7 +3,7 @@ requireNamespace("assertthat", quietly = TRUE)
 ## VIASH START
 ## VIASH END
 
-opv2 <- paste0(meta$resources_dir, "/openproblems-v2")
+opv2 <- paste0(meta$resources_dir, "/openproblems")
 output_path <- "output.md"
 
 cat(">> Running the script as test\n")

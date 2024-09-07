@@ -13,7 +13,7 @@ process {
 }
 HERE
 
-tw launch https://github.com/openproblems-bio/openproblems-v2.git \
+tw launch https://github.com/openproblems-bio/openproblems.git \
   --revision main_build \
   --pull-latest \
   --main-script target/nextflow/denoising/workflows/run_benchmark/main.nf \

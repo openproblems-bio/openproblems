@@ -8,7 +8,7 @@ par <- list(
   "task_dir" = "src/tasks/batch_integration",
   "output" = "src/tasks/batch_integration/README.md",
   "viash_yaml" = "_viash.yaml",
-  "github_url" = "https://github.com/openproblems-bio/openproblems-v2/tree/main/"
+  "github_url" = "https://github.com/openproblems-bio/openproblems/tree/main/"
 )
 meta <- list(
   "resources_dir" = "src/common/helper_functions",

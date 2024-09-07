@@ -5,12 +5,6 @@
     "src/common/schemas/task_info.yaml": "src/**/api/task_info.yaml",
     "src/common/schemas/task_method.yaml": "src/tasks/**/methods/**/config.vsh.yaml",
     "src/common/schemas/task_control_method.yaml": "src/tasks/**/control_methods/**/config.vsh.yaml",
-    "src/common/schemas/task_metric.yaml": "src/tasks/**/metrics/**/config.vsh.yaml",
-    "/home/rcannood/.viash/releases/0.8.0/schema.json": [
-      "*.vsh.yaml"
-    ],
-    "/home/rcannood/.viash/releases/0.8.6/schema.json": [
-      "*.vsh.yaml"
-    ]
+    "src/common/schemas/task_metric.yaml": "src/tasks/**/metrics/**/config.vsh.yaml"
   }
 }

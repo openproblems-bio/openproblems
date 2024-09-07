@@ -18,6 +18,6 @@ functionality:
     - type: python_script
       path: /src/common/comp_tests/check_get_info.py
     - path: /src
-      dest: openproblems-v2/src
+      dest: openproblems/src
     - path: /_viash.yaml
-      dest: openproblems-v2/_viash.yaml
+      dest: openproblems/_viash.yaml

@@ -5,7 +5,7 @@ Predicting the profiles of one modality (e.g. protein abundance) from
 another (e.g. mRNA expression).
 
 Path:
-[`src/tasks/predict_modality`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/predict_modality)
+[`src/tasks/predict_modality`](https://github.com/openproblems-bio/openproblems/tree/main/src/tasks/predict_modality)
 
 ## Motivation
 
@@ -131,7 +131,7 @@ Slot description:
 ## Component type: Data processor
 
 Path:
-[`src/predict_modality`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/predict_modality)
+[`src/predict_modality`](https://github.com/openproblems-bio/openproblems/tree/main/src/predict_modality)
 
 A predict modality dataset processor.
 
@@ -323,7 +323,7 @@ Slot description:
 ## Component type: Control method
 
 Path:
-[`src/predict_modality/control_methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/predict_modality/control_methods)
+[`src/predict_modality/control_methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/predict_modality/control_methods)
 
 Quality control methods for verifying the pipeline.
 
@@ -344,7 +344,7 @@ Arguments:
 ## Component type: Method
 
 Path:
-[`src/predict_modality/methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/predict_modality/methods)
+[`src/predict_modality/methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/predict_modality/methods)
 
 A regression method.
 
@@ -364,7 +364,7 @@ Arguments:
 ## Component type: Metric
 
 Path:
-[`src/predict_modality/metrics`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/predict_modality/metrics)
+[`src/predict_modality/metrics`](https://github.com/openproblems-bio/openproblems/tree/main/src/predict_modality/metrics)
 
 A predict modality metric.
 

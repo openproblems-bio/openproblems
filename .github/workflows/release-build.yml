@@ -16,7 +16,6 @@ jobs:
       
     outputs:
       component_matrix: ${{ steps.set_matrix.outputs.components }}
-      workflow_matrix: ${{ steps.set_matrix.outputs.workflows }}
       cache_key: ${{ steps.cache.outputs.cache_key }}
 
     steps:
@@ -56,12 +55,6 @@ jobs:
         src: src
         format: json
 
-    - id: ns_list_workflows
-      uses: viash-io/viash-actions/ns-list@v6
-      with:
-        src: workflows
-        format: json
-
     - id: set_matrix
       run: |
         echo "components=$(jq -c '[ .[] | 
@@ -71,14 +64,6 @@ jobs:
             "dir": .info.config | capture("^(?<dir>.*\/)").dir
           }
         ]' ${{ steps.ns_list_components.outputs.output_file }} )" >> $GITHUB_OUTPUT
-
-        echo "workflows=$(jq -c '[ .[] | 
-          { 
-            "name": (.functionality.namespace + "/" + .functionality.name),
-            "main_script": (.info.config | capture("^(?<dir>.*\/)").dir + "/" + .functionality.test_resources[].path),
-            "entry": .functionality.test_resources[].entrypoint
-          }
-        ]' ${{ steps.ns_list_workflows.outputs.output_file }} )" >> $GITHUB_OUTPUT
 
   # phase 2
   build:
@@ -128,56 +113,6 @@ jobs:
 
   ###################################3
   # phase 3
-  integration_test:
-    needs: [ build, list ]
-    if: "${{ needs.list.outputs.workflow_matrix != '[]' }}"
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        component: ${{ fromJson(needs.list.outputs.workflow_matrix) }}
-
-    steps:
-    # Remove unnecessary files to free up space. Otherwise, we get 'no space left on device.'
-    - uses: data-intuitive/reclaim-the-bytes@v2
-    
-    - uses: actions/checkout@v4
-
-    - uses: viash-io/viash-actions/setup@v6
-
-    - uses: nf-core/setup-nextflow@v2.0.0
-
-    # build target dir
-    # use containers from release branch, hopefully these are available
-    - name: Build target dir
-      uses: viash-io/viash-actions/ns-build@v6
-      with:
-        config_mod: ".functionality.version := '${{ github.event.inputs.version_tag }}'"
-        parallel: true
-
-    # use cache
-    - name: Cache resources data
-      uses: actions/cache@v4
-      timeout-minutes: 5
-      with:
-        path: resources_test
-        key: ${{ needs.list.outputs.cache_key }}
-
-    - name: Run integration test
-      timeout-minutes: 45
-      run: |
-        # todo: replace with viash test command
-        export NXF_VER=22.04.5
-        nextflow run . \
-          -main-script "${{ matrix.component.main_script }}" \
-          -entry ${{ matrix.component.entry }} \
-          -profile docker,mount_temp,no_publish \
-          -c workflows/utils/labels_ci.config
-
-  ###################################3
-  # phase 4
   component_test:
     needs: [ build, list ]
     if: ${{ needs.list.outputs.component_matrix != '[]' && needs.list.outputs.component_matrix != '' }}

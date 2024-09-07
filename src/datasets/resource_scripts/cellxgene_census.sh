@@ -142,7 +142,7 @@ process {
 }
 HERE
 
-tw launch https://github.com/openproblems-bio/openproblems-v2.git \
+tw launch https://github.com/openproblems-bio/openproblems.git \
   --revision main_build \
   --pull-latest \
   --main-script target/nextflow/datasets/workflows/process_cellxgene_census/main.nf \

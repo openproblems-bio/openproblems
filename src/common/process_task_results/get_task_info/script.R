@@ -20,7 +20,7 @@ out <- list(
   task_name = info$label,
   task_summary = info$summary,
   task_description = paste0(info$motivation, "\n\n", info$description),
-  repo = "openproblems-bio/openproblems-v2",
+  repo = "openproblems-bio/openproblems",
   authors = info$authors
 )
 
