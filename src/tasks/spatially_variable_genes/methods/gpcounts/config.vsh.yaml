@@ -31,7 +31,7 @@ functionality:
 platforms:
   - type: docker
     # image: python:3.9.16
-    image: ghcr.io/openproblems-bio/base_images/tensorflow_nvidia:1.1.0
+    image: openproblems/base_tensorflow_nvidia:1.0.0
     setup:
       - type: apt
         packages: 

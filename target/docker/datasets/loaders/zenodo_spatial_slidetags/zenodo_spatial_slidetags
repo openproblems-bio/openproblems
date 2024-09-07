@@ -456,16 +456,16 @@ function ViashDockerCheckCommands {
 #   ViashDockerFile
 function ViashDockerfile {
   cat << 'VIASHDOCKER'
-FROM ghcr.io/openproblems-bio/base_images/python:1.1.0
+FROM openproblems/base_bython:1.0.0
 
 ENTRYPOINT []
 
  
 RUN :
 LABEL org.opencontainers.image.description="Companion container for running component datasets/loaders zenodo_spatial_slidetags"
-LABEL org.opencontainers.image.created="2024-09-07T20:26:36Z"
+LABEL org.opencontainers.image.created="2024-09-07T21:05:06Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="8d7ac701c2d00df267386f4e94d884f71fa95101"
+LABEL org.opencontainers.image.revision="d2d538ab0f7757ccc0695f551bf4eaa0ec88a343"
 LABEL org.opencontainers.image.version="main_build"
 
 VIASHDOCKER

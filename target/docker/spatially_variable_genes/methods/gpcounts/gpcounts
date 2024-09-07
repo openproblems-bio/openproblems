@@ -403,7 +403,7 @@ function ViashDockerCheckCommands {
 #   ViashDockerFile
 function ViashDockerfile {
   cat << 'VIASHDOCKER'
-FROM ghcr.io/openproblems-bio/base_images/tensorflow_nvidia:1.1.0
+FROM openproblems/base_tensorflow_nvidia:1.0.0
 
 ENTRYPOINT []
 
@@ -422,9 +422,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "/opt/RobustGP" "/opt/GPcounts"
 
 LABEL org.opencontainers.image.description="Companion container for running component spatially_variable_genes/methods gpcounts"
-LABEL org.opencontainers.image.created="2024-09-07T20:26:35Z"
+LABEL org.opencontainers.image.created="2024-09-07T21:04:58Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="8d7ac701c2d00df267386f4e94d884f71fa95101"
+LABEL org.opencontainers.image.revision="d2d538ab0f7757ccc0695f551bf4eaa0ec88a343"
 LABEL org.opencontainers.image.version="main_build"
 
 VIASHDOCKER
