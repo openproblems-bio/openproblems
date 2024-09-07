@@ -7,6 +7,7 @@ changelogs
 
 # IDE ignores
 /.idea/
+/.vscode/
 
 # repo specific ignores
 output_bash
