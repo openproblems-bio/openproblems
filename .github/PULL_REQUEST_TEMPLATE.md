@@ -12,13 +12,8 @@ Closes #xxxx (Replace xxxx with the GitHub issue number)
   - [ ] Major changes
   - [ ] Minor changes
   - [ ] Bug fixes
+  - [ ] Documentation
 
 - [ ] Proposed changes are described in the CHANGELOG.md
 
 - [ ] CI Tests succeed and look good!
-
-## Requirements after merging
-
-- [ ] Need to regenerate `common/` resources
-
-- [ ] Need to regenerate task-specific resources. Specify: <all or ...>
