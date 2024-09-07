@@ -3197,7 +3197,7 @@ meta = [
           "functionalityNamespace" : "predict_modality/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "d2d538ab0f7757ccc0695f551bf4eaa0ec88a343",
+          "git_commit" : "37fde117354581948dc044dfd129755d1d1ab04b",
           "executable" : "/nextflow/predict_modality/methods/simplemlp_train/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/methods/simplemlp_train"
@@ -3218,7 +3218,7 @@ meta = [
           "functionalityNamespace" : "predict_modality/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "d2d538ab0f7757ccc0695f551bf4eaa0ec88a343",
+          "git_commit" : "37fde117354581948dc044dfd129755d1d1ab04b",
           "executable" : "/nextflow/predict_modality/methods/simplemlp_predict/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/methods/simplemlp_predict"
@@ -3265,7 +3265,7 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/methods/simplemlp",
     "viash_version" : "0.8.6",
-    "git_commit" : "d2d538ab0f7757ccc0695f551bf4eaa0ec88a343",
+    "git_commit" : "37fde117354581948dc044dfd129755d1d1ab04b",
     "git_remote" : "https://github.com/openproblems-bio/openproblems"
   }
 }'''))
