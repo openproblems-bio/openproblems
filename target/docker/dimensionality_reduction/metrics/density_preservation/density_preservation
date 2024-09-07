@@ -420,9 +420,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "scipy" "numpy" "umap-learn" "pynndescent~=0.5.11"
 
 LABEL org.opencontainers.image.description="Companion container for running component dimensionality_reduction/metrics density_preservation"
-LABEL org.opencontainers.image.created="2024-09-07T15:20:13Z"
+LABEL org.opencontainers.image.created="2024-09-07T16:01:35Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="86e2ff9e7e8ff23de2a294716b5bc812b8913ec2"
+LABEL org.opencontainers.image.revision="e354e53a769af0c4ae1ac947a5d240115af0b5bb"
 LABEL org.opencontainers.image.version="main_build"
 
 VIASHDOCKER

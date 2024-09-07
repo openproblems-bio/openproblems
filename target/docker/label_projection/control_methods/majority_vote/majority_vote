@@ -412,9 +412,9 @@ ENTRYPOINT []
  
 RUN :
 LABEL org.opencontainers.image.description="Companion container for running component label_projection/control_methods majority_vote"
-LABEL org.opencontainers.image.created="2024-09-07T15:20:14Z"
+LABEL org.opencontainers.image.created="2024-09-07T16:01:29Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="86e2ff9e7e8ff23de2a294716b5bc812b8913ec2"
+LABEL org.opencontainers.image.revision="e354e53a769af0c4ae1ac947a5d240115af0b5bb"
 LABEL org.opencontainers.image.version="main_build"
 
 VIASHDOCKER

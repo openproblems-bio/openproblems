@@ -5,7 +5,7 @@ Remove unwanted batch effects from scRNA data while retaining
 biologically meaningful variation.
 
 Path:
-[`src/tasks/batch_integration`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/batch_integration)
+[`src/tasks/batch_integration`](https://github.com/openproblems-bio/openproblems/tree/main/src/tasks/batch_integration)
 
 ## Motivation
 
@@ -151,7 +151,7 @@ Slot description:
 ## Component type: Data processor
 
 Path:
-[`src/batch_integration`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration)
+[`src/batch_integration`](https://github.com/openproblems-bio/openproblems/tree/main/src/batch_integration)
 
 A label projection dataset processor.
 
@@ -265,7 +265,7 @@ Slot description:
 ## Component type: Control method (embedding)
 
 Path:
-[`src/batch_integration/control_methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/control_methods)
+[`src/batch_integration/control_methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/batch_integration/control_methods)
 
 A batch integration embedding control method.
 
@@ -283,7 +283,7 @@ Arguments:
 ## Component type: Control method (graph)
 
 Path:
-[`src/batch_integration/control_methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/control_methods)
+[`src/batch_integration/control_methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/batch_integration/control_methods)
 
 A batch integration graph control method.
 
@@ -301,7 +301,7 @@ Arguments:
 ## Component type: Method (embedding)
 
 Path:
-[`src/batch_integration/methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/methods)
+[`src/batch_integration/methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/batch_integration/methods)
 
 A batch integration embedding method.
 
@@ -319,7 +319,7 @@ Arguments:
 ## Component type: Method (feature)
 
 Path:
-[`src/batch_integration/methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/methods)
+[`src/batch_integration/methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/batch_integration/methods)
 
 A batch integration feature method.
 
@@ -337,7 +337,7 @@ Arguments:
 ## Component type: Method (graph)
 
 Path:
-[`src/batch_integration/methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/methods)
+[`src/batch_integration/methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/batch_integration/methods)
 
 A batch integration graph method.
 
@@ -355,7 +355,7 @@ Arguments:
 ## Component type: Metric (embedding)
 
 Path:
-[`src/batch_integration/metrics`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/metrics)
+[`src/batch_integration/metrics`](https://github.com/openproblems-bio/openproblems/tree/main/src/batch_integration/metrics)
 
 A batch integration embedding metric.
 
@@ -374,7 +374,7 @@ Arguments:
 ## Component type: Metric (feature)
 
 Path:
-[`src/batch_integration/metrics`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/metrics)
+[`src/batch_integration/metrics`](https://github.com/openproblems-bio/openproblems/tree/main/src/batch_integration/metrics)
 
 A batch integration feature metric.
 
@@ -393,7 +393,7 @@ Arguments:
 ## Component type: Metric (graph)
 
 Path:
-[`src/batch_integration/metrics`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/metrics)
+[`src/batch_integration/metrics`](https://github.com/openproblems-bio/openproblems/tree/main/src/batch_integration/metrics)
 
 A batch integration graph metric.
 
@@ -536,7 +536,7 @@ Slot description:
 ## Component type: Embedding to Graph
 
 Path:
-[`src/batch_integration/transformers`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/transformers)
+[`src/batch_integration/transformers`](https://github.com/openproblems-bio/openproblems/tree/main/src/batch_integration/transformers)
 
 Transform an embedding to a graph output.
 
@@ -554,7 +554,7 @@ Arguments:
 ## Component type: Feature to Embedding
 
 Path:
-[`src/batch_integration/transformers`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/batch_integration/transformers)
+[`src/batch_integration/transformers`](https://github.com/openproblems-bio/openproblems/tree/main/src/batch_integration/transformers)
 
 Transform a feature output to an embedding.
 

@@ -193,7 +193,7 @@ function ViashHelp {
   echo ""
   echo "    --github_url"
   echo "        type: string"
-  echo "        default: https://github.com/openproblems-bio/openproblems-v2/tree/main/"
+  echo "        default: https://github.com/openproblems-bio/openproblems/tree/main/"
   echo "        URL to the GitHub repository. Needed for linking to the source code."
   echo ""
   echo "Outputs:"
@@ -392,7 +392,7 @@ if [ -z ${VIASH_PAR_VIASH_YAML+x} ]; then
   VIASH_PAR_VIASH_YAML="_viash.yaml"
 fi
 if [ -z ${VIASH_PAR_GITHUB_URL+x} ]; then
-  VIASH_PAR_GITHUB_URL="https://github.com/openproblems-bio/openproblems-v2/tree/main/"
+  VIASH_PAR_GITHUB_URL="https://github.com/openproblems-bio/openproblems/tree/main/"
 fi
 if [ -z ${VIASH_PAR_OUTPUT+x} ]; then
   VIASH_PAR_OUTPUT="src/tasks/${VIASH_PAR_TASK}/README.md"

@@ -232,7 +232,7 @@ render_component <- function(spec) {
   strip_margin(glue::glue("
     §## Component type: {spec$info$label}
     §
-    §Path: [`src/{spec$info$namespace}`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/{spec$info$namespace})
+    §Path: [`src/{spec$info$namespace}`](https://github.com/openproblems-bio/openproblems/tree/main/src/{spec$info$namespace})
     §
     §{spec$info$summary}
     §

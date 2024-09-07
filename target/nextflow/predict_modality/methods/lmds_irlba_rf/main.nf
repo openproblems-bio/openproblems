@@ -3258,8 +3258,8 @@ meta = [
       "summary" : "A random forest regression using LMDS of modality 1 to predict a PCA embedding of modality 2, which is then reversed to predict the original modality 2.",
       "description" : "A random forest regression using LMDS of modality 1 to predict a PCA embedding of modality 2, which is then reversed to predict the original modality 2.\n",
       "reference" : "lance2022multimodal",
-      "documentation_url" : "https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/predict_modality/methods",
-      "repository_url" : "https://github.com/openproblems-bio/openproblems-v2",
+      "documentation_url" : "https://github.com/openproblems-bio/openproblems/tree/main/src/tasks/predict_modality/methods",
+      "repository_url" : "https://github.com/openproblems-bio/openproblems",
       "preferred_normalization" : "log_cp10k",
       "type" : "method",
       "type_info" : {
@@ -3339,7 +3339,7 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/methods/lmds_irlba_rf",
     "viash_version" : "0.8.6",
-    "git_commit" : "86e2ff9e7e8ff23de2a294716b5bc812b8913ec2",
+    "git_commit" : "e354e53a769af0c4ae1ac947a5d240115af0b5bb",
     "git_remote" : "https://github.com/openproblems-bio/openproblems"
   }
 }'''))

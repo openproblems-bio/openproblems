@@ -5,7 +5,7 @@ Reduction of high-dimensional datasets to 2D for visualization &
 interpretation
 
 Path:
-[`src/tasks/dimensionality_reduction`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/dimensionality_reduction)
+[`src/tasks/dimensionality_reduction`](https://github.com/openproblems-bio/openproblems/tree/main/src/tasks/dimensionality_reduction)
 
 ## Motivation
 
@@ -170,7 +170,7 @@ Slot description:
 ## Component type: Data processor
 
 Path:
-[`src/dimensionality_reduction`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/dimensionality_reduction)
+[`src/dimensionality_reduction`](https://github.com/openproblems-bio/openproblems/tree/main/src/dimensionality_reduction)
 
 A dimensionality reduction dataset processor.
 
@@ -261,7 +261,7 @@ Slot description:
 ## Component type: Control method
 
 Path:
-[`src/dimensionality_reduction/control_methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/dimensionality_reduction/control_methods)
+[`src/dimensionality_reduction/control_methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/dimensionality_reduction/control_methods)
 
 Quality control methods for verifying the pipeline.
 
@@ -280,7 +280,7 @@ Arguments:
 ## Component type: Method
 
 Path:
-[`src/dimensionality_reduction/methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/dimensionality_reduction/methods)
+[`src/dimensionality_reduction/methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/dimensionality_reduction/methods)
 
 A dimensionality reduction method.
 
@@ -298,7 +298,7 @@ Arguments:
 ## Component type: Metric
 
 Path:
-[`src/dimensionality_reduction/metrics`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/dimensionality_reduction/metrics)
+[`src/dimensionality_reduction/metrics`](https://github.com/openproblems-bio/openproblems/tree/main/src/dimensionality_reduction/metrics)
 
 A dimensionality reduction metric.
 

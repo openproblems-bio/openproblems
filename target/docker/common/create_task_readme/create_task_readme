@@ -193,7 +193,7 @@ function ViashHelp {
   echo ""
   echo "    --github_url"
   echo "        type: string"
-  echo "        default: https://github.com/openproblems-bio/openproblems-v2/tree/main/"
+  echo "        default: https://github.com/openproblems-bio/openproblems/tree/main/"
   echo "        URL to the GitHub repository. Needed for linking to the source code."
   echo ""
   echo "Outputs:"
@@ -438,9 +438,9 @@ RUN release_info=$(curl -s https://api.github.com/repos/quarto-dev/quarto-cli/re
   rm /opt/quarto.deb
 
 LABEL org.opencontainers.image.description="Companion container for running component common create_task_readme"
-LABEL org.opencontainers.image.created="2024-09-07T15:20:20Z"
+LABEL org.opencontainers.image.created="2024-09-07T16:01:29Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="86e2ff9e7e8ff23de2a294716b5bc812b8913ec2"
+LABEL org.opencontainers.image.revision="e354e53a769af0c4ae1ac947a5d240115af0b5bb"
 LABEL org.opencontainers.image.version="main_build"
 
 VIASHDOCKER
@@ -801,7 +801,7 @@ if [ -z ${VIASH_PAR_VIASH_YAML+x} ]; then
   VIASH_PAR_VIASH_YAML="_viash.yaml"
 fi
 if [ -z ${VIASH_PAR_GITHUB_URL+x} ]; then
-  VIASH_PAR_GITHUB_URL="https://github.com/openproblems-bio/openproblems-v2/tree/main/"
+  VIASH_PAR_GITHUB_URL="https://github.com/openproblems-bio/openproblems/tree/main/"
 fi
 if [ -z ${VIASH_PAR_OUTPUT+x} ]; then
   VIASH_PAR_OUTPUT="src/tasks/${VIASH_PAR_TASK}/README.md"

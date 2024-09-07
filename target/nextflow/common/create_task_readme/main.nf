@@ -2835,7 +2835,7 @@ meta = [
             "name" : "--github_url",
             "description" : "URL to the GitHub repository. Needed for linking to the source code.\n",
             "default" : [
-              "https://github.com/openproblems-bio/openproblems-v2/tree/main/"
+              "https://github.com/openproblems-bio/openproblems/tree/main/"
             ],
             "required" : false,
             "direction" : "input",
@@ -2900,13 +2900,13 @@ meta = [
       {
         "type" : "file",
         "path" : "src",
-        "dest" : "openproblems-v2/src",
+        "dest" : "openproblems/src",
         "parent" : "file:///home/runner/work/openproblems/openproblems/"
       },
       {
         "type" : "file",
         "path" : "_viash.yaml",
-        "dest" : "openproblems-v2/_viash.yaml",
+        "dest" : "openproblems/_viash.yaml",
         "parent" : "file:///home/runner/work/openproblems/openproblems/"
       }
     ],
@@ -3005,7 +3005,7 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/create_task_readme",
     "viash_version" : "0.8.6",
-    "git_commit" : "86e2ff9e7e8ff23de2a294716b5bc812b8913ec2",
+    "git_commit" : "e354e53a769af0c4ae1ac947a5d240115af0b5bb",
     "git_remote" : "https://github.com/openproblems-bio/openproblems"
   }
 }'''))

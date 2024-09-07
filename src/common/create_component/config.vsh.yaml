@@ -56,9 +56,9 @@ functionality:
     - type: python_script
       path: test.py
     - path: /src
-      dest: openproblems-v2/src
+      dest: openproblems/src
     - path: /_viash.yaml
-      dest: openproblems-v2/_viash.yaml
+      dest: openproblems/_viash.yaml
 platforms:
   - type: docker
     image: python:3.10-slim

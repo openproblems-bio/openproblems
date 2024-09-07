@@ -416,9 +416,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "h5py==3.8.0" "pandas==1.5.3" "parmap==1.6.0" "scanpy==1.9.3" "tqdm==4.65.0" "anndata==0.8.0" "matplotlib==3.7.1" "scikit-learn==1.2.2" "hdbscan" "seaborn==0.12.2" "pysal==2.0.0" "pygco==0.0.16" "shapely==2.0.1" "networkx==2.5" "scikit-image" "pyyaml" "requests"
 
 LABEL org.opencontainers.image.description="Companion container for running component spatially_variable_genes/methods scgco"
-LABEL org.opencontainers.image.created="2024-09-07T15:20:17Z"
+LABEL org.opencontainers.image.created="2024-09-07T16:01:26Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="86e2ff9e7e8ff23de2a294716b5bc812b8913ec2"
+LABEL org.opencontainers.image.revision="e354e53a769af0c4ae1ac947a5d240115af0b5bb"
 LABEL org.opencontainers.image.version="main_build"
 
 VIASHDOCKER

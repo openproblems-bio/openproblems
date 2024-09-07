@@ -4,7 +4,7 @@
 Removing noise in sparse single-cell RNA-sequencing count data
 
 Path:
-[`src/tasks/denoising`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/denoising)
+[`src/tasks/denoising`](https://github.com/openproblems-bio/openproblems/tree/main/src/tasks/denoising)
 
 ## Motivation
 
@@ -162,7 +162,7 @@ Slot description:
 ## Component type: Data processor
 
 Path:
-[`src/denoising`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/denoising)
+[`src/denoising`](https://github.com/openproblems-bio/openproblems/tree/main/src/denoising)
 
 A denoising dataset processor.
 
@@ -242,7 +242,7 @@ Slot description:
 ## Component type: Control method
 
 Path:
-[`src/denoising/control_methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/denoising/control_methods)
+[`src/denoising/control_methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/denoising/control_methods)
 
 Quality control methods for verifying the pipeline.
 
@@ -261,7 +261,7 @@ Arguments:
 ## Component type: Method
 
 Path:
-[`src/denoising/methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/denoising/methods)
+[`src/denoising/methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/denoising/methods)
 
 A denoising method.
 
@@ -279,7 +279,7 @@ Arguments:
 ## Component type: Metric
 
 Path:
-[`src/denoising/metrics`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/denoising/metrics)
+[`src/denoising/metrics`](https://github.com/openproblems-bio/openproblems/tree/main/src/denoising/metrics)
 
 A denoising metric.
 

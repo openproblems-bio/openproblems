@@ -4,7 +4,7 @@
 Automated cell type annotation from rich, labeled reference data
 
 Path:
-[`src/tasks/label_projection`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/label_projection)
+[`src/tasks/label_projection`](https://github.com/openproblems-bio/openproblems/tree/main/src/tasks/label_projection)
 
 ## Motivation
 
@@ -119,7 +119,7 @@ Slot description:
 ## Component type: Data processor
 
 Path:
-[`src/label_projection`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/label_projection)
+[`src/label_projection`](https://github.com/openproblems-bio/openproblems/tree/main/src/label_projection)
 
 A label projection dataset processor.
 
@@ -255,7 +255,7 @@ Slot description:
 ## Component type: Control method
 
 Path:
-[`src/label_projection/control_methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/label_projection/control_methods)
+[`src/label_projection/control_methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/label_projection/control_methods)
 
 Quality control methods for verifying the pipeline.
 
@@ -275,7 +275,7 @@ Arguments:
 ## Component type: Method
 
 Path:
-[`src/label_projection/methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/label_projection/methods)
+[`src/label_projection/methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/label_projection/methods)
 
 A label projection method.
 
@@ -294,7 +294,7 @@ Arguments:
 ## Component type: Metric
 
 Path:
-[`src/label_projection/metrics`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/label_projection/metrics)
+[`src/label_projection/metrics`](https://github.com/openproblems-bio/openproblems/tree/main/src/label_projection/metrics)
 
 A label projection metric.
 

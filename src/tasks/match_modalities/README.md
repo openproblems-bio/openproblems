@@ -5,7 +5,7 @@ Match cells across datasets of the same set of samples on different
 technologies / modalities.
 
 Path:
-[`src/tasks/match_modalities`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/tasks/match_modalities)
+[`src/tasks/match_modalities`](https://github.com/openproblems-bio/openproblems/tree/main/src/tasks/match_modalities)
 
 ## Motivation
 
@@ -135,7 +135,7 @@ Slot description:
 ## Component type: Data processor
 
 Path:
-[`src/match_modalities`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/match_modalities)
+[`src/match_modalities`](https://github.com/openproblems-bio/openproblems/tree/main/src/match_modalities)
 
 A match modalities dataset processor.
 
@@ -303,7 +303,7 @@ Slot description:
 ## Component type: Control method
 
 Path:
-[`src/match_modalities/control_methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/match_modalities/control_methods)
+[`src/match_modalities/control_methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/match_modalities/control_methods)
 
 A multimodal data integration control method.
 
@@ -325,7 +325,7 @@ Arguments:
 ## Component type: Method
 
 Path:
-[`src/match_modalities/methods`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/match_modalities/methods)
+[`src/match_modalities/methods`](https://github.com/openproblems-bio/openproblems/tree/main/src/match_modalities/methods)
 
 A multimodal data integration method.
 
@@ -345,7 +345,7 @@ Arguments:
 ## Component type: Metric
 
 Path:
-[`src/match_modalities/metrics`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/match_modalities/metrics)
+[`src/match_modalities/metrics`](https://github.com/openproblems-bio/openproblems/tree/main/src/match_modalities/metrics)
 
 A multimodal data integration metric.
 
