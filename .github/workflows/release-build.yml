@@ -13,9 +13,9 @@ jobs:
     env:
       s3_bucket: s3://openproblems-data/resources_test/
     runs-on: ubuntu-latest
-      
+
     outputs:
-      component_matrix: ${{ steps.set_matrix.outputs.components }}
+      component_matrix: ${{ steps.set_matrix.outputs.matrix }}
       cache_key: ${{ steps.cache.outputs.cache_key }}
 
     steps:
@@ -48,7 +48,7 @@ jobs:
         publish_branch: release
         full_commit_message: "Deploy for release ${{ github.event.inputs.version_tag }} from ${{ github.sha }}"
 
-    - id: ns_list_components
+    - id: ns_list
       uses: viash-io/viash-actions/ns-list@v6
       with:
         platform: docker
@@ -57,13 +57,13 @@ jobs:
 
     - id: set_matrix
       run: |
-        echo "components=$(jq -c '[ .[] | 
+        echo "matrix=$(jq -c '[ .[] | 
           { 
             "name": (.functionality.namespace + "/" + .functionality.name),
             "config": .info.config,
             "dir": .info.config | capture("^(?<dir>.*\/)").dir
           }
-        ]' ${{ steps.ns_list_components.outputs.output_file }} )" >> $GITHUB_OUTPUT
+        ]' ${{ steps.ns_list.outputs.output_file }} )" >> $GITHUB_OUTPUT
 
   # phase 2
   build:
@@ -111,7 +111,7 @@ jobs:
         src: ${{ matrix.component.dir }}
         setup: push
 
-  ###################################3
+  ###################################
   # phase 3
   component_test:
     needs: [ build, list ]
