@@ -3066,7 +3066,7 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/batch_integration/control_methods/no_integration/global_feature",
     "viash_version" : "0.8.6",
-    "git_commit" : "166bc61fc5e9e5fbf9a4fee01ce02cff2bd5bd5f",
+    "git_commit" : "86e2ff9e7e8ff23de2a294716b5bc812b8913ec2",
     "git_remote" : "https://github.com/openproblems-bio/openproblems"
   }
 }'''))

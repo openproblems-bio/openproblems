@@ -3325,7 +3325,7 @@ meta = [
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "166bc61fc5e9e5fbf9a4fee01ce02cff2bd5bd5f",
+          "git_commit" : "86e2ff9e7e8ff23de2a294716b5bc812b8913ec2",
           "executable" : "/nextflow/common/check_dataset_schema/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/check_dataset_schema"
@@ -3346,7 +3346,7 @@ meta = [
           "functionalityNamespace" : "match_modalities",
           "output" : "",
           "platform" : "",
-          "git_commit" : "166bc61fc5e9e5fbf9a4fee01ce02cff2bd5bd5f",
+          "git_commit" : "86e2ff9e7e8ff23de2a294716b5bc812b8913ec2",
           "executable" : "/nextflow/match_modalities/process_dataset/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/match_modalities/process_dataset"
@@ -3393,7 +3393,7 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/match_modalities/workflows/process_datasets",
     "viash_version" : "0.8.6",
-    "git_commit" : "166bc61fc5e9e5fbf9a4fee01ce02cff2bd5bd5f",
+    "git_commit" : "86e2ff9e7e8ff23de2a294716b5bc812b8913ec2",
     "git_remote" : "https://github.com/openproblems-bio/openproblems"
   }
 }'''))

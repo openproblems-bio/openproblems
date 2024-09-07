@@ -414,9 +414,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "umap-learn" "scikit-learn" "numpy" "pynndescent~=0.5.11" "scipy"
 
 LABEL org.opencontainers.image.description="Companion container for running component dimensionality_reduction/metrics distance_correlation"
-LABEL org.opencontainers.image.created="2024-09-05T05:09:04Z"
+LABEL org.opencontainers.image.created="2024-09-07T15:20:13Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="166bc61fc5e9e5fbf9a4fee01ce02cff2bd5bd5f"
+LABEL org.opencontainers.image.revision="86e2ff9e7e8ff23de2a294716b5bc812b8913ec2"
 LABEL org.opencontainers.image.version="main_build"
 
 VIASHDOCKER
