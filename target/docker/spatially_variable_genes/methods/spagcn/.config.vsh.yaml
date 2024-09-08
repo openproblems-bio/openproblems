@@ -1,0 +1,206 @@
+functionality:
+  name: "spagcn"
+  namespace: "spatially_variable_genes/methods"
+  version: "2.0.0"
+  arguments:
+  - type: "file"
+    name: "--input_data"
+    info:
+      label: "Dataset"
+      summary: "The dataset without spatially variable genes."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts."
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalised expression values"
+          required: true
+        var:
+        - type: "string"
+          name: "feature_id"
+          description: "Unique identifier for the feature, in this case a ENSEMBL\
+            \ gene id suffixed with alpha value."
+          required: false
+        - type: "string"
+          name: "feature_name"
+          description: "A human-readable name for the feature, in this case a gene\
+            \ symbol suffixed with alpha value."
+          required: false
+        obsm:
+        - type: "double"
+          name: "spatial"
+          description: "Spatial coordinates for each spot."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - name: "dataset_name"
+          type: "string"
+          description: "Nicely formatted name."
+          required: false
+    example:
+    - "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/dataset.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Output"
+      summary: "Anndata with estimate spatial variability."
+      description: "Anndata with estimated spatial variability score for each gene."
+      slots:
+        var:
+        - type: "string"
+          name: "feature_id"
+          description: "Feature ID"
+          required: true
+        - type: "string"
+          name: "feature_name"
+          description: "Feature name"
+          required: false
+        - type: "double"
+          name: "pred_spatial_var_score"
+          description: "Predicted spatial variability score"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/output.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  test_resources:
+  - type: "python_script"
+    path: "src/common/comp_tests/check_method_config.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "resources_test/spatially_variable_genes/mouse_brain_coronal_section1"
+    dest: "resources_test/spatially_variable_genes/mouse_brain_coronal_section1"
+  - type: "file"
+    path: "src/common/library.bib"
+  info:
+    label: "SpaGCN"
+    summary: "Integrating gene expression, spatial location and histology to identify\
+      \ spatial domains and spatially variable genes by graph convolutional network."
+    description: "To elucidate spatial gene expression variation, we present SpaGCN,\
+      \ a graph convolutional \nnetwork approach that integrates gene expression,\
+      \ spatial location and histology in SRT data analysis. \nThrough graph convolution,\
+      \ SpaGCN aggregates gene expression of each spot from its neighboring spots,\
+      \ \nwhich enables the identification of spatial domains with coherent expression\
+      \ and histology. \nThe subsequent domain guided differential expression (DE)\
+      \ analysis then detects genes with \nenriched expression patterns in the identified\
+      \ domains. Analyzing seven SRT datasets using \nSpaGCN, we show it can detect\
+      \ genes with much more enriched spatial expression patterns than competing methods.\
+      \ Furthermore, genes detected by SpaGCN are transferrable and can be utilized\
+      \ to study spatial variation of gene expression in other datasets. SpaGCN is\
+      \ computationally \nfast, platform independent, making it a desirable tool for\
+      \ diverse SRT studies.\n"
+    preferred_normalization: "counts"
+    reference: "hu2021spagcn"
+    documentation_url: "https://github.com/jianhuupenn/SpaGCN/blob/master/tutorial/tutorial.ipynb"
+    repository_url: "https://github.com/jianhuupenn/SpaGCN"
+    type: "method"
+    type_info:
+      label: "Method"
+      summary: "A spatially variable gene identification method."
+      description: "Method to identify spatially variable genes"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "ghcr.io/openproblems-bio/base_python:1.0.4"
+  target_organization: "openproblems-bio/openproblems"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems"
+  setup:
+  - type: "apt"
+    packages:
+    - "git"
+    - "procps"
+    - "libhdf5-dev"
+    - "cmake"
+    interactive: false
+  - type: "docker"
+    run:
+    - "git clone https://github.com/jianhuupenn/SpaGCN.git /opt/SpaGCN\n"
+  - type: "python"
+    user: false
+    packages:
+    - "numpy<2.0"
+    - "/opt/SpaGCN/SpaGCN_package"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+- type: "native"
+  id: "native"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "midmem"
+    - "midcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/spatially_variable_genes/methods/spagcn/config.vsh.yaml"
+  platform: "docker"
+  output: "/home/runner/work/openproblems/openproblems/target/docker/spatially_variable_genes/methods/spagcn"
+  executable: "/home/runner/work/openproblems/openproblems/target/docker/spatially_variable_genes/methods/spagcn/spagcn"
+  viash_version: "0.8.6"
+  git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1413-gb782e93f"

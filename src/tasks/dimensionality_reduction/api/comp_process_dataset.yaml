@@ -1,0 +1,27 @@
+functionality:
+  namespace: dimensionality_reduction
+  info:
+    type: process_dataset
+    type_info:
+      label: Data processor
+      summary: A dimensionality reduction dataset processor.
+      description: |
+        A component for processing a Common Dataset into a task-specific dataset.
+  arguments:
+    - name: "--input"
+      __merge__: /src/datasets/api/file_common_dataset.yaml
+      direction: input
+      required: true
+    - name: "--output_dataset"
+      __merge__: file_dataset.yaml
+      direction: output
+      required: true
+    - name: "--output_solution"
+      __merge__: file_solution.yaml
+      direction: output
+      required: true
+  test_resources:
+    - path: /resources_test/common/pancreas/
+      dest: resources_test/common/pancreas/
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py

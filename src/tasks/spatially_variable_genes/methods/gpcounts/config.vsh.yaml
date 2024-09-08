@@ -1,0 +1,56 @@
+__merge__: ../../api/comp_method.yaml
+
+functionality:
+  name: gpcounts
+  info:
+    label: GPcounts
+    summary: "GPcounts is non-parametric modelling of temporal and spatial counts data from RNA-seq experiments."
+    description: |
+      The GPcounts package implements GP regression methods for modelling counts data using a 
+      negative binomial likelihood function. Computational efficiency is achieved through the use of 
+      variational Bayesian inference. The GP function models changes in the mean of the negative binomial 
+      likelihood through a logarithmic link function and the dispersion parameter is fitted by maximum 
+      likelihood. We validate the method on simulated time course data, showing better performance to identify 
+      changes in over-dispersed counts data than methods based on Gaussian or Poisson likelihoods. 
+    preferred_normalization: counts
+    reference: bintayyash2021non
+    documentation_url: https://github.com/ManchesterBioinference/GPcounts/blob/master/demo_notebooks/GPcounts_spatial.ipynb
+    repository_url: https://github.com/ManchesterBioinference/GPcounts
+
+  arguments:
+    - name: --n_features
+      type: integer
+      description: Number of features to include.
+      info: 
+        test_default: 120
+
+  resources:
+    - type: python_script
+      path: script.py
+
+platforms:
+  - type: docker
+    # image: python:3.9.16
+    image: openproblems/base_tensorflow_nvidia:1.0.0
+    setup:
+      - type: apt
+        packages: 
+          - git
+      - type: python
+        packages:
+          - tensorflow-probability
+          - tensorflow[and-cuda]
+          - gpflow
+          - scipy==1.9.1
+      - type: docker
+        run : |
+          git clone https://github.com/markvdw/RobustGP.git /opt/RobustGP && \
+          git clone https://github.com/lzj1769/GPcounts.git /opt/GPcounts
+      - type: python
+        packages: 
+          - /opt/RobustGP
+          - /opt/GPcounts
+  - type: native
+  - type: nextflow
+    directives:
+      label: [veryhightime, midmem, midcpu, gpu]

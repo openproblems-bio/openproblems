@@ -1,0 +1,74 @@
+functionality:
+  name: "openproblems_neurips2021_bmmc"
+  namespace: "datasets/loaders"
+  description: "Fetch a dataset from the OpenProblems NeurIPS2021 competition"
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - name: "--input"
+          type: file
+          description: Processed h5ad file published at https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE194122.
+          required: true
+          example: GSE194122_openproblems_neurips2021_cite_BMMC_processed.h5ad
+        - name: "--mod1"
+          type: string
+          description: Name of the first modality.
+          required: true
+          example: GEX
+        - name: "--mod2"
+          type: string
+          description: Name of the second modality.
+          required: true
+          example: ADT
+    - name: Metadata
+      arguments:
+        - name: "--dataset_id"
+          type: string
+          description: "A unique identifier for the dataset"
+          required: true
+        - name: "--dataset_name"
+          type: string
+          description: Nicely formatted name.
+          required: true
+        - name: "--dataset_url"
+          type: string
+          description: Link to the original source of the dataset.
+          required: false
+        - name: "--dataset_reference"
+          type: string
+          description: Bibtex reference of the paper in which the dataset was published.
+          required: false
+        - name: "--dataset_summary"
+          type: string
+          description: Short description of the dataset.
+          required: true
+        - name: "--dataset_description"
+          type: string
+          description: Long description of the dataset.
+          required: true
+        - name: "--dataset_organism"
+          type: string
+          description: The organism of the dataset.
+          required: false
+    - name: Outputs
+      arguments:
+        - name: "--output_mod1"
+          __merge__: ../../api/file_raw.yaml
+          direction: "output"
+        - name: "--output_mod2"
+          __merge__: ../../api/file_raw.yaml
+          direction: "output"
+  resources:
+    - type: python_script
+      path: script.py
+  test_resources:
+    - type: python_script
+      path: test.py
+    # - type: file
+    #   path: /resources_test/common/openproblems_neurips2021/neurips2021_bmmc_cite.h5ad
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+  - type: nextflow
+    directives:
+      label: [highmem, midcpu, midtime]

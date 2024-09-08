@@ -1,0 +1,29 @@
+functionality:
+  namespace: batch_integration/methods
+  info:
+    type: method
+    subtype: feature
+    type_info:
+      label: Method (feature)
+      summary: A batch integration feature method.
+      description: |
+        A batch integration method which outputs a batch-corrected feature-space.
+  arguments:
+    - name: --input
+      __merge__: file_dataset.yaml
+      direction: input
+      required: true
+    - name: --output
+      __merge__: file_integrated_feature.yaml
+      direction: output
+      required: true
+  test_resources:
+    # check method component
+    - type: python_script
+      path: /src/common/comp_tests/check_method_config.py
+    - path: /src/common/library.bib
+    # auto-run component
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/batch_integration/pancreas
+      dest: resources_test/batch_integration/pancreas

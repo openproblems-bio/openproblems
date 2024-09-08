@@ -1,0 +1,20 @@
+type: file
+example: "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap/prediction.h5ad"
+info:
+  label: "Prediction"
+  summary: "A prediction of the mod2 expression values of the test cells"
+  slots:
+    layers:
+      - type: double
+        name: normalized
+        description: Predicted normalized expression values
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"
+        required: true

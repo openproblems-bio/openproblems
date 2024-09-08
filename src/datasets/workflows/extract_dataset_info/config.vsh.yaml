@@ -1,0 +1,34 @@
+functionality:
+  name: "extract_dataset_info"
+  namespace: "datasets/workflows"
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - name: "--input"
+          __merge__: /src/datasets/api/file_raw.yaml
+          required: true
+          direction: input
+    - name: Filter arguments
+      arguments:
+        - name: "--filter_normalization_id"
+          type: string
+          required: false
+          direction: input
+          description: If defined, only the normalization with this ID will be included in the output.
+          multiple: true
+          example: [ log_cp10k ]
+    - name: Outputs
+      arguments:
+        - name: "--output"
+          type: file
+          required: true
+          direction: output
+          example: dataset_uns.yaml
+  resources:
+    - type: nextflow_script
+      path: main.nf
+      entrypoint: run_wf
+  dependencies: 
+    - name: common/extract_metadata
+platforms:
+  - type: nextflow

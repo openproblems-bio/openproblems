@@ -1,0 +1,384 @@
+functionality:
+  name: "novel"
+  namespace: "predict_modality/methods"
+  version: "2.0.0"
+  arguments:
+  - type: "file"
+    name: "--input_train_mod1"
+    info:
+      label: "Train mod1"
+      summary: "The mod1 expression values of the train cells."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalized expression values"
+          required: true
+        obs:
+        - type: "string"
+          name: "batch"
+          description: "Batch information"
+          required: true
+        - type: "double"
+          name: "size_factors"
+          description: "The size factors of the cells prior to normalization."
+          required: false
+        var:
+        - type: "string"
+          name: "gene_ids"
+          description: "The gene identifiers (if available)"
+          required: false
+        - type: "boolean"
+          name: "hvg"
+          description: "Whether or not the feature is considered to be a 'highly variable\
+            \ gene'"
+          required: true
+        - type: "double"
+          name: "hvg_score"
+          description: "A score for the feature indicating how highly variable it\
+            \ is."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "common_dataset_id"
+          description: "A common identifier for the dataset"
+          required: false
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+        - name: "normalization_id"
+          type: "string"
+          description: "The unique identifier of the normalization method used."
+          required: true
+        - type: "string"
+          name: "gene_activity_var_names"
+          description: "Names of the gene activity matrix"
+          required: false
+        obsm:
+        - type: "double"
+          name: "gene_activity"
+          description: "ATAC gene activity"
+          required: false
+    example:
+    - "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap/train_mod1.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--input_train_mod2"
+    info:
+      label: "Train mod2"
+      summary: "The mod2 expression values of the train cells."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalized expression values"
+          required: true
+        obs:
+        - type: "string"
+          name: "batch"
+          description: "Batch information"
+          required: true
+        - type: "double"
+          name: "size_factors"
+          description: "The size factors of the cells prior to normalization."
+          required: false
+        var:
+        - type: "string"
+          name: "gene_ids"
+          description: "The gene identifiers (if available)"
+          required: false
+        - type: "boolean"
+          name: "hvg"
+          description: "Whether or not the feature is considered to be a 'highly variable\
+            \ gene'"
+          required: true
+        - type: "double"
+          name: "hvg_score"
+          description: "A score for the feature indicating how highly variable it\
+            \ is."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "common_dataset_id"
+          description: "A common identifier for the dataset"
+          required: false
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+        - name: "normalization_id"
+          type: "string"
+          description: "The unique identifier of the normalization method used."
+          required: true
+        - type: "string"
+          name: "gene_activity_var_names"
+          description: "Names of the gene activity matrix"
+          required: false
+        obsm:
+        - type: "double"
+          name: "gene_activity"
+          description: "ATAC gene activity"
+          required: false
+    example:
+    - "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap/train_mod2.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--input_test_mod1"
+    info:
+      label: "Test mod1"
+      summary: "The mod1 expression values of the test cells."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalized expression values"
+          required: true
+        obs:
+        - type: "string"
+          name: "batch"
+          description: "Batch information"
+          required: true
+        - type: "double"
+          name: "size_factors"
+          description: "The size factors of the cells prior to normalization."
+          required: false
+        var:
+        - type: "string"
+          name: "gene_ids"
+          description: "The gene identifiers (if available)"
+          required: false
+        - type: "boolean"
+          name: "hvg"
+          description: "Whether or not the feature is considered to be a 'highly variable\
+            \ gene'"
+          required: true
+        - type: "double"
+          name: "hvg_score"
+          description: "A score for the feature indicating how highly variable it\
+            \ is."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "common_dataset_id"
+          description: "A common identifier for the dataset"
+          required: false
+        - name: "dataset_name"
+          type: "string"
+          description: "Nicely formatted name."
+          required: true
+        - type: "string"
+          name: "dataset_url"
+          description: "Link to the original source of the dataset."
+          required: false
+        - name: "dataset_reference"
+          type: "string"
+          description: "Bibtex reference of the paper in which the dataset was published."
+          required: false
+        - name: "dataset_summary"
+          type: "string"
+          description: "Short description of the dataset."
+          required: true
+        - name: "dataset_description"
+          type: "string"
+          description: "Long description of the dataset."
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+        - name: "normalization_id"
+          type: "string"
+          description: "The unique identifier of the normalization method used."
+          required: true
+        - type: "string"
+          name: "gene_activity_var_names"
+          description: "Names of the gene activity matrix"
+          required: false
+        obsm:
+        - type: "double"
+          name: "gene_activity"
+          description: "ATAC gene activity"
+          required: false
+    example:
+    - "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap/test_mod1.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Prediction"
+      summary: "A prediction of the mod2 expression values of the test cells"
+      slots:
+        layers:
+        - type: "double"
+          name: "normalized"
+          description: "Predicted normalized expression values"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap/prediction.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "nextflow_script"
+    path: "main.nf"
+    is_executable: true
+    entrypoint: "run_wf"
+  test_resources:
+  - type: "python_script"
+    path: "src/common/comp_tests/check_method_config.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap"
+    dest: "resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap"
+  - type: "file"
+    path: "src/common/library.bib"
+  info:
+    label: "Novel"
+    summary: "A method using encoder-decoder MLP model"
+    description: "This method trains an encoder-decoder MLP model with one output\
+      \ neuron per component in the target. As an input, the encoders use representations\
+      \ obtained from ATAC and GEX data via LSI transform and raw ADT data. The hyperparameters\
+      \ of the models were found via broad hyperparameter search using the Optuna\
+      \ framework."
+    documentation_url: "https://github.com/openproblems-bio/neurips2021_multimodal_topmethods/tree/main/src/predict_modality/methods/novel#readme"
+    repository_url: "https://github.com/openproblems-bio/neurips2021_multimodal_topmethods/tree/main/src/predict_modality/methods/novel"
+    reference: "pmlr-v176-lance2022multimodal"
+    submission_id: "169769"
+    preferred_normalization: "log_cp10k"
+    type: "method"
+    type_info:
+      label: "Method"
+      summary: "A regression method."
+      description: "A regression method to predict the expression of one modality\
+        \ from another.\n"
+  status: "enabled"
+  dependencies:
+  - name: "predict_modality/methods/novel_train"
+    repository:
+      type: "local"
+      localPath: ""
+    foundConfigPath: "/home/runner/work/openproblems/openproblems/src/tasks/predict_modality/methods/novel/train/config.vsh.yaml"
+    configInfo:
+      functionalityName: "novel_train"
+      git_tag: "v1.0.0-1413-gb782e93f"
+      git_remote: "https://github.com/openproblems-bio/openproblems"
+      viash_version: "0.8.6"
+      config: "/home/runner/work/openproblems/openproblems/src/tasks/predict_modality/methods/novel/train/config.vsh.yaml"
+      functionalityNamespace: "predict_modality/methods"
+      output: ""
+      platform: ""
+      git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+      executable: "/nextflow/predict_modality/methods/novel_train/main.nf"
+    writtenPath: "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/methods/novel_train"
+  - name: "predict_modality/methods/novel_predict"
+    repository:
+      type: "local"
+      localPath: ""
+    foundConfigPath: "/home/runner/work/openproblems/openproblems/src/tasks/predict_modality/methods/novel/predict/config.vsh.yaml"
+    configInfo:
+      functionalityName: "novel_predict"
+      git_tag: "v1.0.0-1413-gb782e93f"
+      git_remote: "https://github.com/openproblems-bio/openproblems"
+      viash_version: "0.8.6"
+      config: "/home/runner/work/openproblems/openproblems/src/tasks/predict_modality/methods/novel/predict/config.vsh.yaml"
+      functionalityNamespace: "predict_modality/methods"
+      output: ""
+      platform: ""
+      git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+      executable: "/nextflow/predict_modality/methods/novel_predict/main.nf"
+    writtenPath: "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/methods/novel_predict"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/predict_modality/methods/novel/run/config.vsh.yaml"
+  platform: "nextflow"
+  output: "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/methods/novel"
+  executable: "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/methods/novel/main.nf"
+  viash_version: "0.8.6"
+  git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1413-gb782e93f"

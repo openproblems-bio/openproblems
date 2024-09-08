@@ -1,0 +1,26 @@
+__merge__: ../../../api/comp_method_train.yaml
+functionality:
+  name: simplemlp
+  info:
+    label: Simple MLP
+    summary: Ensemble of MLPs trained on different sites (team AXX)
+    description: |
+      This folder contains the AXX solution to the OpenProblems-NeurIPS2021 Single-Cell Multimodal Data Integration.
+      Team took the 4th place of the modality prediction task in terms of overall ranking of 4 subtasks: namely GEX
+      to ADT, ADT to GEX, GEX to ATAC and ATAC to GEX. Specifically, our methods ranked 3rd in GEX to ATAC and 4th
+      in GEX to ADT. More details about the task can be found in the
+      [competition webpage](https://openproblems.bio/events/2021-09_neurips/documentation/about_tasks/task1_modality_prediction).
+    documentation_url: https://github.com/openproblems-bio/neurips2021_multimodal_topmethods/tree/main/src/predict_modality/methods/AXX
+    repository_url: https://github.com/openproblems-bio/neurips2021_multimodal_topmethods/tree/main/src/predict_modality/methods/AXX
+    reference: lance2022multimodal
+    preferred_normalization: log_cp10k
+    competition_submission_id: 170812
+  resources:
+    - path: main.nf
+      type: nextflow_script
+      entrypoint: run_wf
+  dependencies:
+    - name: predict_modality/methods/simplemlp_train
+    - name: predict_modality/methods/simplemlp_predict
+platforms:
+  - type: nextflow

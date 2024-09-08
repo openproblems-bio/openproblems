@@ -1,0 +1,47 @@
+functionality:
+  namespace: "match_modalities/control_methods"
+  info:
+    type: control_method
+    type_info:
+      label: Control method
+      summary: A multimodal data integration control method.
+      description: |
+        This folder contains control components for the task. 
+        These components have the same interface as the regular methods
+        but also receive the solution object as input. It serves as a
+        starting point to test the relative accuracy of new methods in
+        the task, and also as a quality control for the metrics defined
+        in the task. 
+  arguments:
+    - name: "--input_mod1"
+      __merge__: file_dataset_mod1.yaml
+      direction: input
+      required: true
+    - name: "--input_mod2"
+      __merge__: file_dataset_mod2.yaml
+      direction: input
+      required: true
+    - name: "--input_solution_mod1"
+      __merge__: file_solution_mod1.yaml
+      direction: input
+      required: true
+    - name: "--input_solution_mod2"
+      __merge__: file_solution_mod2.yaml
+      direction: input
+      required: true
+    - name: "--output_mod1"
+      __merge__: file_integrated_mod1.yaml
+      direction: output
+      required: true
+    - name: "--output_mod2"
+      __merge__: file_integrated_mod2.yaml
+      direction: output
+      required: true
+  test_resources:
+    - path: /resources_test/match_modalities/scicar_cell_lines
+      dest: resources_test/match_modalities/scicar_cell_lines
+    - type: python_script
+      path: /src/common/comp_tests/check_method_config.py
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /src/common/library.bib

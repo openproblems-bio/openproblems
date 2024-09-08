@@ -1,0 +1,143 @@
+functionality:
+  name: process_openproblems_neurips2022_pbmc
+  namespace: datasets/workflows
+  description: |
+    Fetch and process Neurips 2022 multimodal datasets
+  argument_groups:
+    - name: Inputs
+      arguments:
+        - name: "--id"
+          type: "string"
+          description: "The ID of the dataset"
+          required: true
+        - name: "--input_mod1"
+          type: file
+          description: "Processed RNA h5ad file"
+          required: true
+          example: cite_rna_merged.h5ad
+        - name: "--input_mod2"
+          type: file
+          description: "Processed ADT or ATAC h5ad file"
+          required: true
+          example: cite_prot_merged.h5ad
+        - name: "--mod1"
+          type: string
+          description: Name of the first modality.
+          required: true
+          example: GEX
+        - name: "--mod2"
+          type: string
+          description: Name of the second modality.
+          required: true
+          example: ADT
+    - name: Metadata
+      arguments:
+        - name: "--dataset_name"
+          type: string
+          description: Nicely formatted name.
+          required: true
+        - name: "--dataset_url"
+          type: string
+          description: Link to the original source of the dataset.
+          required: false
+        - name: "--dataset_reference"
+          type: string
+          description: Bibtex reference of the paper in which the dataset was published.
+          required: false
+        - name: "--dataset_summary"
+          type: string
+          description: Short description of the dataset.
+          required: true
+        - name: "--dataset_description"
+          type: string
+          description: Long description of the dataset.
+          required: true
+        - name: "--dataset_organism"
+          type: string
+          description: The organism of the dataset.
+          required: false
+    - name: Sampling options
+      arguments:
+        - name: "--do_subsample"
+          type: boolean
+          default: false
+          description: "Whether or not to subsample the dataset"
+        - name: "--n_obs"
+          type: integer
+          description: Maximum number of observations to be kept. It might end up being less because empty cells / genes are removed.
+          default: 500
+        - name: "--n_vars"
+          type: integer
+          description: Maximum number of variables to be kept. It might end up being less because empty cells / genes are removed.
+          default: 500
+        - name: "--keep_features"
+          type: string
+          multiple: true
+          description: A list of genes to keep.
+        - name: "--keep_cell_type_categories"
+          type: "string"
+          multiple: true
+          description: "Categories indexes to be selected"
+          required: false
+        - name: "--keep_batch_categories"
+          type: "string"
+          multiple: true
+          description: "Categories indexes to be selected"
+          required: false
+        - name: "--even"
+          type: "boolean_true"
+          description: Subsample evenly from different batches
+        - name: "--seed"
+          type: "integer"
+          description: "A seed for the subsampling."
+          example: 123
+    - name: Normalization
+      arguments:
+        - name: "--normalization_methods"
+          type: string
+          multiple: true
+          choices: ["log_cp10k", "log_cpm", "sqrt_cp10k", "sqrt_cpm", "l1_sqrt", "log_scran_pooling"]
+          default: ["log_cp10k", "log_cpm", "sqrt_cp10k", "sqrt_cpm", "l1_sqrt"]
+          description: "Which normalization methods to run."
+    - name: Outputs
+      arguments:
+        - name: "--output_mod1"
+          direction: "output"
+          __merge__: /src/datasets/api/file_multimodal_dataset.yaml
+        - name: "--output_mod2"
+          direction: "output"
+          __merge__: /src/datasets/api/file_multimodal_dataset.yaml
+        - name: "--output_meta_mod1"
+          direction: "output"
+          type: file
+          description: "Dataset metadata"
+          example: "dataset_metadata_mod1.yaml"
+        - name: "--output_meta_mod2"
+          direction: "output"
+          type: file
+          description: "Dataset metadata"
+          example: "dataset_metadata_mod2.yaml"
+  resources:
+    - type: nextflow_script
+      path: main.nf
+      entrypoint: run_wf
+    - path: /src/wf_utils/helper.nf
+  dependencies:
+    - name: datasets/loaders/openproblems_neurips2022_pbmc
+    - name: datasets/normalization/log_cp
+    - name: datasets/normalization/log_scran_pooling
+    - name: datasets/normalization/sqrt_cp
+    - name: datasets/normalization/l1_sqrt
+    - name: datasets/normalization/prot_clr
+    - name: datasets/normalization/atac_tfidf
+    - name: datasets/processors/subsample
+    - name: datasets/processors/svd
+    - name: datasets/processors/hvg
+    - name: common/extract_metadata
+    - name: common/decompress_gzip
+  # test_resources:
+  #   - type: nextflow_script
+  #     path: main.nf
+  #     entrypoint: test_wf
+platforms:
+  - type: nextflow

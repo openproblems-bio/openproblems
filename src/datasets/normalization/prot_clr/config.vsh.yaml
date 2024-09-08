@@ -1,0 +1,26 @@
+__merge__: ../../api/comp_normalization.yaml
+functionality:
+  name: "prot_clr"
+  description: |
+    Perform center log ratio (CLR) normalization on input CITE-seq data (Stoeckius et al. 2017).
+
+    The CLR transformation is defined as:
+
+    $$
+    x_{\text{clr}} = \log\left(\frac{x}{g(x)}\right)
+    $$
+
+    where $\(g(x)\)$ is the geometric mean of the row $\(x\)$.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        packages:
+          - muon
+  - type: nextflow
+    directives: 
+      label: [midtime, midmem, midcpu]

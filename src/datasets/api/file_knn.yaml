@@ -1,0 +1,21 @@
+__merge__: file_pca.yaml
+type: file
+example: "resources_test/common/pancreas/knn.h5ad"
+info:
+  label: "Dataset+HVG+PCA+kNN"
+  summary: "A normalised data with a PCA embedding, HVG selection and a kNN graph"
+  slots:
+    obsp:
+      - type: double
+        name: knn_distances
+        description: K nearest neighbors distance matrix.
+        required: true
+      - type: double
+        name: knn_connectivities
+        description: K nearest neighbors connectivities matrix.
+        required: true
+    uns:
+      - type: object
+        name: knn
+        description: Supplementary K nearest neighbors data.
+        required: true

@@ -1,0 +1,20 @@
+__merge__: ../api/get_info.yaml
+functionality:
+  name: "get_task_info"
+  description: "Extract task info"
+  resources:
+    - type: r_script
+      path: script.R
+  test_resources:
+    - type: file
+      path: /resources_test/common/task_metadata/task_info.yaml
+      dest: test_file.yaml
+platforms:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        cran: [ purrr, yaml, rlang, processx ]
+  - type: nextflow
+    directives:
+      label: [lowmem, lowtime, lowcpu]

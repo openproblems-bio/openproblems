@@ -1,0 +1,35 @@
+functionality:
+  name: "extract_scores"
+  status: disabled
+  namespace: "common"
+  description: "Extract evaluation data frame on output"
+  arguments:
+    - name: "--input"
+      alternatives: ["-i"]
+      type: "file"
+      multiple: true
+      default: "input.h5ad"
+      description: "Input h5ad files containing metadata and metrics in adata.uns"
+    - name: "--column_names"
+      type: "string"
+      multiple: true
+      default: [ "dataset_id", "method_id", "metric_ids", "metric_values" ]
+      description: "Which fields from adata.uns to extract and store as a data frame."
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "output.tsv"
+      description: "Output tsv"
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        cran: [ tidyverse ]
+  - type: nextflow
+    directives:
+      label: [midtime, lowmem, lowcpu]

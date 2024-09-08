@@ -1,0 +1,30 @@
+__merge__: ../../api/comp_metric.yaml
+functionality:
+  name: "mse"
+  info:
+    metrics:
+      - name: mse
+        label: Mean-squared error
+        summary: "The mean squared error between the denoised counts and the true counts."
+        description: "The mean squared error between the denoised counts of the training dataset and the true counts of the test dataset after reweighing by the train/test ratio"
+        reference: batson2019molecular
+        v1:
+          path: openproblems/tasks/denoising/metrics/mse.py
+          commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+        maximize: false
+        min: 0
+        max: "+.inf"
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        packages:
+          - scikit-learn
+          - scprep
+  - type: nextflow
+    directives: 
+      label: [midtime, highmem, midcpu]

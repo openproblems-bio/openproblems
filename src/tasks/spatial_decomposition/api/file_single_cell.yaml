@@ -1,0 +1,29 @@
+type: file
+example: "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/single_cell_ref.h5ad"
+info:
+  label: "Single cell data"
+  summary: "The single-cell data file used as reference for the spatial data"
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+    obs:
+      - type: string
+        name: cell_type
+        description: Cell type label IDs
+        required: true
+      - type: string
+        name: batch
+        description: A batch identifier. This label is very context-dependent and may be a combination of the tissue, assay, donor, etc.
+        required: false
+    uns:
+      - type: string
+        name: cell_type_names
+        description: Cell type names corresponding to values in `cell_type`
+        required: true
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true

@@ -1,0 +1,36 @@
+__merge__: ../../api/comp_metric.yaml
+functionality:
+  name: "knn_auc"
+  info:
+    metrics:
+      - label: kNN Area Under the Curve
+        name: knn_auc
+        summary: "Compute the kNN Area Under the Curve"
+        description: |
+          Let $f(i) \in F$ be the scRNA-seq measurement of cell $i$, and $g(i) \in G$ be the scATAC- seq measurement of cell $i$. kNN-AUC calculates the average percentage overlap of neighborhoods of $f(i)$ in $F$ with neighborhoods of $g(i)$ in $G$. Higher is better.
+        reference: "lance2022multimodal"
+        min: 0
+        max: 1
+        maximize: true
+        v1:
+          path: openproblems/tasks/matching_modalities/metrics/knn_auc.py
+          commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+  arguments:
+    - name: "--proportion_neighbors"
+      type: "double"
+      default: 0.1
+      description: The proportion of neighbours to use in computing the KNN.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        packages:
+          - numpy
+          - scikit-learn
+  - type: nextflow
+    directives:
+      label: [midtime, lowmem, lowcpu]

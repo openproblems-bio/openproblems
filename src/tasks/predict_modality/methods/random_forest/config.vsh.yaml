@@ -1,0 +1,37 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: random_forest
+  status: disabled # disabled due to long execution times
+  info:
+    label: Random Forests
+    summary: Random forest regression.
+    description: A random forest regression method.
+    reference: breiman2001random
+    documentation_url: https://www.stat.berkeley.edu/~breiman/RandomForests/reg_home.htm
+    repository_url: https://github.com/cran/randomForest
+    preferred_normalization: log_cp10k
+  arguments:
+    - name: "--distance_method"
+      type: "string"
+      default: "pearson"
+      description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
+    - name: "--n_pcs"
+      type: "integer"
+      default: 20
+      description: Number of principal components to use.
+    - name: "--n_trees"
+      type: "integer"
+      default: 50
+      description: Number of trees to use.
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        cran: [ lmds, ranger, pbapply]
+  - type: nextflow
+    directives:
+      label: [hightime, highmem, highcpu]

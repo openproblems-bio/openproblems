@@ -1,0 +1,28 @@
+__merge__: ../../api/comp_metric.yaml
+functionality:
+  name: "poisson"
+  info:
+    metrics:
+      - name: poisson
+        label: Poisson Loss
+        summary: "The Poisson log likelihood of the true counts observed in the distribution of denoised counts"
+        description: "The Poisson log likelihood of observing the true counts of the test dataset given the distribution given in the denoised dataset."
+        reference: batson2019molecular
+        v1:
+          path: openproblems/tasks/denoising/metrics/poisson.py
+          commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+        maximize: false
+        min: 0
+        max: "+.inf"
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        pip: scprep
+  - type: nextflow
+    directives: 
+      label: [midtime, highmem, midcpu]

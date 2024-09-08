@@ -1,0 +1,45 @@
+__merge__: ../../api/comp_method.yaml
+functionality:
+  name: "densmap"
+  info:
+    label: densMAP
+    summary: "Modified UMAP with preservation of local density information"
+    description: "A modification of UMAP that adds an extra cost term in order to preserve information about the relative local density of the data. It is performed on the same inputs as UMAP."
+    reference: "narayan2021assessing"
+    repository_url: https://github.com/lmcinnes/umap
+    documentation_url: https://github.com/lmcinnes/umap#readme
+    v1:
+      path: openproblems/tasks/dimensionality_reduction/methods/umap.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+    preferred_normalization: log_cp10k
+    variants:
+      densmap_logCP10k:
+      densmap_pca_logCP10k:
+        n_pca_dims: 50
+      densmap_logCP10k_1kHVG:
+        n_hvg: 1000
+      densmap_pca_logCP10k_1kHVG:
+        n_pca_dims: 50
+        n_hvg: 1000
+  arguments:
+    - name: "--n_hvg"
+      type: integer
+      description: Number of highly variable genes to subset to. If not specified, the input matrix will not be subset.
+    - name: "--n_pca_dims"
+      type: integer
+      description: Number of PCA dimensions to use. If not specified, no PCA will be performed.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        packages:
+          - umap-learn
+          - pynndescent==0.5.11
+  - type: native
+  - type: nextflow
+    directives: 
+      label: [midtime, highmem, highcpu]

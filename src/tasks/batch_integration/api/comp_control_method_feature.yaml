@@ -1,0 +1,26 @@
+functionality:
+  namespace: batch_integration/control_methods
+  info:
+    type: control_method
+    subtype: feature
+    type_info:
+      label: Control method (feature)
+      summary: A batch integration feature control method.
+      description: |
+        A batch integration control method which outputs a batch-corrected feature space.
+  arguments:
+    - name: --input
+      __merge__: file_dataset.yaml
+      direction: input
+      required: true
+    - name: --output
+      direction: output
+      __merge__: file_integrated_feature.yaml
+      required: true
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/check_method_config.py
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/batch_integration/pancreas
+      dest: resources_test/batch_integration/pancreas
