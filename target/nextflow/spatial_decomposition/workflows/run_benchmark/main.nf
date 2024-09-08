@@ -3095,14 +3095,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "check_dataset_schema",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/common/check_dataset_schema/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/check_dataset_schema"
@@ -3116,14 +3116,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "extract_metadata",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/common/extract_metadata/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/extract_metadata"
@@ -3137,14 +3137,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/control_methods/random_proportions/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "random_proportions",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/control_methods/random_proportions/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/control_methods/random_proportions/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/control_methods/random_proportions"
@@ -3158,14 +3158,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/control_methods/true_proportions/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "true_proportions",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/control_methods/true_proportions/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/control_methods/true_proportions/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/control_methods/true_proportions"
@@ -3179,14 +3179,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/cell2location/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "cell2location",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/cell2location/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/methods/cell2location/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/methods/cell2location"
@@ -3200,14 +3200,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/destvi/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "destvi",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/destvi/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/methods/destvi/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/methods/destvi"
@@ -3221,14 +3221,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/nmfreg/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "nmfreg",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/nmfreg/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/methods/nmfreg/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/methods/nmfreg"
@@ -3242,14 +3242,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/nnls/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "nnls",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/nnls/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/methods/nnls/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/methods/nnls"
@@ -3263,14 +3263,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/rctd/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "rctd",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/rctd/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/methods/rctd/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/methods/rctd"
@@ -3284,14 +3284,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/seurat/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "seurat",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/seurat/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/methods/seurat/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/methods/seurat"
@@ -3305,14 +3305,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/stereoscope/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "stereoscope",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/stereoscope/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/methods/stereoscope/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/methods/stereoscope"
@@ -3326,14 +3326,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/tangram/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "tangram",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/tangram/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/methods/tangram/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/methods/tangram"
@@ -3347,14 +3347,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/vanillanmf/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "vanillanmf",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/methods/vanillanmf/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/methods/vanillanmf/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/methods/vanillanmf"
@@ -3368,14 +3368,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/metrics/r2/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "r2",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/metrics/r2/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/spatial_decomposition/metrics/r2/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/metrics/r2"
@@ -3422,9 +3422,9 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/workflows/run_benchmark",
     "viash_version" : "0.8.6",
-    "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+    "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1413-gb782e93f"
+    "git_tag" : "v1.0.0-1414-gbf274d82"
   }
 }'''))
 ]

@@ -3218,14 +3218,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "check_dataset_schema",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/common/check_dataset_schema/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/check_dataset_schema"
@@ -3239,14 +3239,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "extract_metadata",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/common/extract_metadata/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/extract_metadata"
@@ -3260,14 +3260,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/control_methods/random_features/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "random_features",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/control_methods/random_features/config.vsh.yaml",
           "functionalityNamespace" : "match_modalities/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/match_modalities/control_methods/random_features/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/match_modalities/control_methods/random_features"
@@ -3281,14 +3281,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/control_methods/true_features/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "true_features",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/control_methods/true_features/config.vsh.yaml",
           "functionalityNamespace" : "match_modalities/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/match_modalities/control_methods/true_features/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/match_modalities/control_methods/true_features"
@@ -3302,14 +3302,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/methods/fastmnn/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "fastmnn",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/methods/fastmnn/config.vsh.yaml",
           "functionalityNamespace" : "match_modalities/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/match_modalities/methods/fastmnn/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/match_modalities/methods/fastmnn"
@@ -3323,14 +3323,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/methods/scot/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "scot",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/methods/scot/config.vsh.yaml",
           "functionalityNamespace" : "match_modalities/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/match_modalities/methods/scot/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/match_modalities/methods/scot"
@@ -3344,14 +3344,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/methods/harmonic_alignment/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "harmonic_alignment",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/methods/harmonic_alignment/config.vsh.yaml",
           "functionalityNamespace" : "match_modalities/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/match_modalities/methods/harmonic_alignment/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/match_modalities/methods/harmonic_alignment"
@@ -3365,14 +3365,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/methods/procrustes/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "procrustes",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/methods/procrustes/config.vsh.yaml",
           "functionalityNamespace" : "match_modalities/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/match_modalities/methods/procrustes/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/match_modalities/methods/procrustes"
@@ -3386,14 +3386,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/metrics/knn_auc/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "knn_auc",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/metrics/knn_auc/config.vsh.yaml",
           "functionalityNamespace" : "match_modalities/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/match_modalities/metrics/knn_auc/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/match_modalities/metrics/knn_auc"
@@ -3407,14 +3407,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/metrics/mse/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "mse",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/match_modalities/metrics/mse/config.vsh.yaml",
           "functionalityNamespace" : "match_modalities/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/match_modalities/metrics/mse/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/match_modalities/metrics/mse"
@@ -3461,9 +3461,9 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/match_modalities/workflows/run_benchmark",
     "viash_version" : "0.8.6",
-    "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+    "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1413-gb782e93f"
+    "git_tag" : "v1.0.0-1414-gbf274d82"
   }
 }'''))
 ]

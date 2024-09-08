@@ -3062,14 +3062,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "check_dataset_schema",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/common/check_dataset_schema/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/check_dataset_schema"
@@ -3083,14 +3083,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "extract_metadata",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/common/extract_metadata/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/extract_metadata"
@@ -3104,14 +3104,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/control_methods/random_features/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "random_features",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/control_methods/random_features/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/control_methods/random_features/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/control_methods/random_features"
@@ -3125,14 +3125,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/control_methods/spectral_features/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "spectral_features",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/control_methods/spectral_features/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/control_methods/spectral_features/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/control_methods/spectral_features"
@@ -3146,14 +3146,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/control_methods/true_features/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "true_features",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/control_methods/true_features/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/control_methods/true_features/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/control_methods/true_features"
@@ -3167,14 +3167,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/densmap/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "densmap",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/densmap/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/methods/densmap/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/densmap"
@@ -3188,14 +3188,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/diffusion_map/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "diffusion_map",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/diffusion_map/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/methods/diffusion_map/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/diffusion_map"
@@ -3209,14 +3209,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/ivis/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "ivis",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/ivis/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/methods/ivis/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/ivis"
@@ -3230,14 +3230,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/lmds/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "lmds",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/lmds/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/methods/lmds/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/lmds"
@@ -3251,14 +3251,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/neuralee/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "neuralee",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/neuralee/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/methods/neuralee/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/neuralee"
@@ -3272,14 +3272,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/pca/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "pca",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/pca/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/methods/pca/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/pca"
@@ -3293,14 +3293,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/phate/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "phate",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/phate/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/methods/phate/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/phate"
@@ -3314,14 +3314,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/pymde/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "pymde",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/pymde/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/methods/pymde/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/pymde"
@@ -3335,14 +3335,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/simlr/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "simlr",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/simlr/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/methods/simlr/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/simlr"
@@ -3356,14 +3356,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/tsne/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "tsne",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/tsne/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/methods/tsne/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/tsne"
@@ -3377,14 +3377,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/umap/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "umap",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/umap/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/methods/umap/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/umap"
@@ -3398,14 +3398,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/metrics/clustering_performance/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "clustering_performance",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/metrics/clustering_performance/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/metrics/clustering_performance/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/metrics/clustering_performance"
@@ -3419,14 +3419,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/metrics/coranking/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "coranking",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/metrics/coranking/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/metrics/coranking/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/metrics/coranking"
@@ -3440,14 +3440,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/metrics/density_preservation/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "density_preservation",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/metrics/density_preservation/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/metrics/density_preservation/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/metrics/density_preservation"
@@ -3461,14 +3461,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/metrics/distance_correlation/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "distance_correlation",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/metrics/distance_correlation/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/metrics/distance_correlation/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/metrics/distance_correlation"
@@ -3482,14 +3482,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/metrics/trustworthiness/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "trustworthiness",
-          "git_tag" : "v1.0.0-1413-gb782e93f",
+          "git_tag" : "v1.0.0-1414-gbf274d82",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/metrics/trustworthiness/config.vsh.yaml",
           "functionalityNamespace" : "dimensionality_reduction/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
           "executable" : "/nextflow/dimensionality_reduction/metrics/trustworthiness/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/metrics/trustworthiness"
@@ -3536,9 +3536,9 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/workflows/run_benchmark",
     "viash_version" : "0.8.6",
-    "git_commit" : "b782e93f596e0060953ca0260098b8ae2569194b",
+    "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1413-gb782e93f"
+    "git_tag" : "v1.0.0-1414-gbf274d82"
   }
 }'''))
 ]

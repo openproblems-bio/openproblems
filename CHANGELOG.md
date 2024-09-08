@@ -2,11 +2,9 @@
 
 A major update to the OpenProblems framework, switching from a Python-based framework to a Viash + Nextflow-based framework. This update features the same concepts as the previous version, but with a new implementation that is more flexible, scalable, and maintainable.
 
-Structure:
+Most relevant parts of the overall structure:
 
-* `src/common`: Common components used by all tasks.
-* `src/datasets`: Components for fetching and processing datasets.
-* `src/tasks`: Benchmarking tasks
+* `src/tasks`: Benchmarking tasks:
   - `batch_integration`: Batch integration
   - `denoising`: Denoising
   - `dimensionality_reduction`: Dimensionality reduction
@@ -14,7 +12,28 @@ Structure:
   - `predict_modality`: Predict modality
   - `spatial_decomposition`: Spatial decomposition
   - `spatially_variable_genes`: Spatially variable genes
-* `src/wf_utils`: Workflow utilities.
+
+* `src/datasets`: Components for creating common datasets. Loaders:
+  - `cellxgene_census`: Query cells from a CellxGene Census
+  - `openproblems_neurips2021_bmmc`: Fetch a dataset from the OpenProblems NeurIPS2021 competition
+  - `openproblems_neurips2022_pbmc`: Fetch a dataset from the OpenProblems NeurIPS2022 competition
+  - `openproblems_v1`: Fetch a legacy OpenProblems v1 dataset
+  - `openproblems_v1_multimodal`: Fetch a legacy OpenProblems v1 multimodal dataset
+  - `tenx_vision`: Fetch a and convert 10x Visium dataset
+  - `zenodo_spatial`: Fetch and process an Anndata file containing DBiT seq, MERFISH, seqFISH, Slide-seq v2, STARmap, and Stereo-seq data from Zenodo.
+  - `zenodo_spatial_slidetags`: Download a compressed file containing gene expression matrix and spatial locations from zenodo.
+
+* `src/common`: Common components used by all tasks.
+  - `check_dataset_schema`: Check whether an h5ad dataset adheres to a dataset schema
+  - `check_yaml_schema`: Check whether a YAML adheres to a JSON schema
+  - `comp_tests`: Reusable component unit tests
+  - `create_component`: Create a component Viash component.
+  - `create_task_readme`: Create a README for an OpenProblems task.
+  - `extract_metadata`: Extract the `.uns` metadata from an h5ad file.
+  - `helper_functions`: Commonly used helper functions in Python or in R,
+  - `process_task_results`: Process the raw tasks results (containing raw logs, unprocessed component configs, and various metrics) into nicely formatted task results.
+  - `schemas`: JSON schemas for YAML files in the repository
+  - `sync_test_resources`: Synchronise the test resources from s3 to resources_test
 
 For more information related to the structure of this repository, see the [documentation](https://openproblems.bio/documentation/reference/openproblems/).
 
