@@ -1,0 +1,27 @@
+# use method api spec
+__merge__: ../../api/comp_method_feature.yaml
+functionality:
+  name: mnn_correct
+  info:
+    label: mnnCorrect
+    summary: "Correct for batch effects in single-cell expression data using the mutual nearest neighbors method."
+    description: |
+      We present a strategy for batch correction based on the detection of mutual nearest neighbors (MNNs) in the high-dimensional expression space.
+      Our approach does not rely on predefined or equal population compositions across batches; instead, it requires only that a subset of the population be shared between batches.
+    reference: "haghverdi2018batch"
+    repository_url: "https://code.bioconductor.org/browse/batchelor/"
+    documentation_url: "https://bioconductor.org/packages/batchelor/"
+    preferred_normalization: log_cp10k
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        bioc:
+          - batchelor
+  - type: nextflow
+    directives:
+      label: [midtime, lowcpu, highmem]

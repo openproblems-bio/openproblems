@@ -1,0 +1,49 @@
+functionality:
+  namespace: "datasets/processors"
+  info:
+    type: dataset_processor
+    type_info:
+      label: PCA
+      summary: |
+        Computes a PCA embedding of the normalized data.
+      description:
+        The resulting AnnData will contain an embedding in obsm, as well as optional loadings in 'varm'.
+  arguments:
+    - name: "--input"
+      __merge__: file_hvg.yaml
+      required: true
+      direction: input
+    - name: "--input_layer"
+      type: string
+      default: "normalized"
+      description: Which layer to use as input.
+    - name: "--input_var_features"
+      type: string
+      description: Column name in .var matrix that will be used to select which genes to run the PCA on.
+      default: hvg
+    - name: "--output"
+      direction: output
+      __merge__: file_pca.yaml
+      required: true
+    - name: "--obsm_embedding"
+      type: string
+      default: "X_pca"
+      description: "In which .obsm slot to store the resulting embedding."
+    - name: "--varm_loadings"
+      type: string
+      default: "pca_loadings"
+      description: "In which .varm slot to store the resulting loadings matrix."
+    - name: "--uns_variance"
+      type: string
+      default: "pca_variance"
+      description: "In which .uns slot to store the resulting variance objects."
+    - name: "--num_components"
+      type: integer
+      example: 25
+      description: Number of principal components to compute. Defaults to 50, or 1 - minimum dimension size of selected representation.
+  test_resources:
+    - path: /resources_test/common/pancreas
+      dest: resources_test/common/pancreas
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+

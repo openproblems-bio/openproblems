@@ -1,0 +1,252 @@
+functionality:
+  name: "simlr"
+  namespace: "dimensionality_reduction/methods"
+  version: "build_main"
+  arguments:
+  - type: "file"
+    name: "--input"
+    info:
+      label: "Dataset"
+      summary: "The dataset to pass to a method."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalized expression values"
+          required: true
+        var:
+        - type: "double"
+          name: "hvg_score"
+          description: "High variability gene score (normalized dispersion). The greater,\
+            \ the more variable."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/dimensionality_reduction/pancreas/dataset.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Embedding"
+      summary: "A dataset with dimensionality reduction embedding."
+      slots:
+        obsm:
+        - type: "double"
+          name: "X_emb"
+          description: "The dimensionally reduced embedding."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/dimensionality_reduction/pancreas/embedding.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--n_dim"
+    description: "Number of dimensions."
+    info: null
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--n_clusters"
+    description: "Number of clusters to be estimated over the input dataset."
+    info: null
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--tuning_param"
+    description: "Number of dimensions."
+    info: null
+    default:
+    - 10
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "boolean"
+    name: "--impute"
+    description: "Should the input data be transposed?"
+    info: null
+    default:
+    - false
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "boolean"
+    name: "--normalize"
+    description: "Should the input data be normalized?"
+    info: null
+    default:
+    - false
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--cores_ratio"
+    description: "Ratio of the number of cores to be used when computing the multi-kernel."
+    info: null
+    default:
+    - 1
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "r_script"
+    path: "script.R"
+    is_executable: true
+  test_resources:
+  - type: "file"
+    path: "resources_test/dimensionality_reduction/pancreas/"
+    dest: "resources_test/dimensionality_reduction/pancreas/"
+  - type: "python_script"
+    path: "src/common/comp_tests/check_method_config.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "src/common/library.bib"
+  info:
+    label: "SIMLR"
+    summary: "Multikernel-based learning of distance metrics from gene expression\
+      \ data for dimension reduction, clustering and visulaization."
+    description: "Single-cell Interpretation via Multikernel LeaRning (SIMLR) learns\
+      \ cell-to-cell similarity measures from single-cell RNA-seq data in using Gaussian\
+      \ kernels with various hyperparameters in order to perform dimension reduction,\
+      \ clustering and visualization. \nSIMLR assumes that if C separable populations\
+      \ exist among the N cells, then the similarity matrix should have an approximate\
+      \ block-diagonal structure with C blocks whereby cells have larger similarities\
+      \ to other cells within the same subpopulations. Learned similarity between\
+      \ two cells should be small if the Euclidean distance between them is large.\
+      \ The cell-to-cell similarity is computed using an optimization framework over\
+      \ an N x N similarity matrix, a low-dimensional auxilary matrix enforcing low\
+      \ rank constraint on the similarity matrix, and the kernel weights. \nDimension\
+      \ reduction is achieved by the stochastic neighbor embedding methodology with\
+      \ the learned similarities as input. \n"
+    preferred_normalization: "log_cp10k"
+    reference: "wang2017visualization"
+    documentation_url: "https://github.com/BatzoglouLabSU/SIMLR/blob/SIMLR/README.md"
+    repository_url: "https://github.com/BatzoglouLabSU/SIMLR"
+    type: "method"
+    type_info:
+      label: "Method"
+      summary: "A dimensionality reduction method."
+      description: "A dimensionality reduction method to summarise the biological\n\
+        information in a dataset in as few dimensions as possible.\n"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_r:1.0.0"
+  target_organization: "openproblems-bio/openproblems"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems"
+  setup:
+  - type: "r"
+    packages:
+    - "grDevices"
+    cran:
+    - "Matrix"
+    - "parallel"
+    - "Rcpp"
+    - "pracma"
+    - "RcppAnnoy"
+    - "RSpectra"
+    - "igraph"
+    bioc:
+    - "SIMLR"
+    bioc_force_install: false
+  entrypoint: []
+  cmd: null
+- type: "native"
+  id: "native"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "highmem"
+    - "midcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/simlr/config.vsh.yaml"
+  platform: "native"
+  output: "/home/runner/work/openproblems/openproblems/target/native/dimensionality_reduction/methods/simlr"
+  executable: "/home/runner/work/openproblems/openproblems/target/native/dimensionality_reduction/methods/simlr/simlr"
+  viash_version: "0.8.6"
+  git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1413-gb782e93f"

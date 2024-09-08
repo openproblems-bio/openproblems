@@ -1,0 +1,31 @@
+functionality:
+  namespace: batch_integration/metrics
+  info:
+    type: metric
+    subtype: graph
+    type_info:
+      label: Metric (graph)
+      summary: A batch integration graph metric.
+      description: |
+        A metric for evaluating batch corrected cell graphs.
+  arguments:
+    - name: --input_integrated
+      __merge__: file_integrated_graph.yaml
+      direction: input
+      required: true
+    - name: --input_solution
+      __merge__: file_solution.yaml
+      direction: input
+      required: true
+    - name: --output
+      __merge__: file_score.yaml
+      direction: output
+      required: true
+  test_resources:
+    - path: /resources_test/batch_integration/pancreas
+      dest: resources_test/batch_integration/pancreas
+    - type: python_script
+      path: /src/common/comp_tests/check_metric_config.py
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /src/common/library.bib

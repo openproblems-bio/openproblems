@@ -1,0 +1,29 @@
+functionality:
+  namespace: "spatial_decomposition/methods"
+  info:
+    type: method
+    type_info:
+      label: Method
+      summary: A spatial composition method.
+      description: "Method to estimate cell type proportions from spatial and single cell data"
+  arguments:
+    - name: "--input_single_cell"
+      __merge__: file_single_cell.yaml
+      direction: input
+      required: true
+    - name: "--input_spatial_masked"
+      __merge__: file_spatial_masked.yaml
+      direction: input
+      required: true
+    - name: "--output"
+      __merge__: file_output.yaml
+      direction: output
+      required: true
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/check_method_config.py
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas
+      dest: resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas
+    - path: /src/common/library.bib

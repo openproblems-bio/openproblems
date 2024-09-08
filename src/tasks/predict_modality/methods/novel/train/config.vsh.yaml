@@ -1,0 +1,31 @@
+__merge__: ../../../api/comp_method_train.yaml
+functionality:
+  name: novel_train
+  arguments:
+    - name: --output_transform
+      type: file
+      description: "The output transform file"
+      required: false
+      default: "lsi_transformer.pickle"
+      direction: output
+    - name: --output_train_mod2
+      type: file
+      description: copy of the input with model dim in `.uns`
+      direction: output
+      default: "train_mod2.h5ad"
+      required: false
+  resources:
+    - path: script.py
+      type: python_script
+    - path: ../helper_functions.py
+platforms:
+  - type: docker
+    image: openproblems/base_pytorch_nvidia:1.0.0
+    setup:
+      - type: python
+        packages:
+          - scikit-learn
+          - networkx
+  - type: nextflow
+    directives:
+      label: [highmem, hightime, midcpu, highsharedmem, gpu]

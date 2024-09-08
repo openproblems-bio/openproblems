@@ -1,0 +1,201 @@
+functionality:
+  name: process_cellxgene_census
+  namespace: datasets/workflows
+  description: |
+    Fetch and process datasets originating from the CELLxGENE census.
+  argument_groups:
+    - name: Input database
+      description: "Open CellxGene Census by version or URI."
+      arguments:
+        - name: "--input_uri"
+          type: string
+          description: "If specified, a URI containing the Census SOMA objects. If specified, will take precedence over the `--census_version` argument."
+          required: false
+          example: "s3://bucket/path"
+        - name: "--census_version"
+          description: "Which release of CellxGene census to use. Possible values are \"latest\", \"stable\", or the date of one of the releases (e.g. \"2023-07-25\"). For more information, check the documentation on [Census data releases](https://chanzuckerberg.github.io/cellxgene-census/cellxgene_census_docsite_data_release_info.html)."
+          type: string
+          example: "stable"
+          required: false
+    - name: Cell query
+      description: Arguments related to the query.
+      arguments:
+        - name: "--species"
+          type: string
+          description: The organism to query, usually one of `Homo sapiens` or `Mus musculus`.
+          required: false
+          default: "homo_sapiens"
+          multiple: false
+        - name: "--obs_value_filter"
+          type: string
+          description: "Filter for selecting the `obs` metadata (i.e. cells). Value is a filter query written in the SOMA `value_filter` syntax."
+          required: false
+          example: "is_primary_data == True and cell_type_ontology_term_id in ['CL:0000136', 'CL:1000311', 'CL:0002616'] and suspension_type == 'cell'"
+    - name: Cell filter
+      description: Filter the cells based on a minimum cell count per specified group
+      arguments:
+        - name: "--cell_filter_grouping"
+          type: string
+          description: |
+            A subset of 'obs' columns by which to group the cells for filtering.
+            Only groups surpassing or equal to the `--cell_filter_minimum_count`
+            threshold will be retained. Take care not to introduce a selection
+            bias against cells with more fine-grained ontology annotations.
+          required: false
+          example: ["dataset_id", "tissue", "assay", "disease", "cell_type"]
+          multiple: true
+        - name: "--cell_filter_minimum_count"
+          type: double
+          description: |
+            A minimum number of cells per group to retain. If `--cell_filter_grouping`
+            is defined, this parameter should also be provided and vice versa.
+          required: false
+          example: 100
+    - name: Cell metadata
+      description: Cell metadata arguments
+      arguments:
+        - name: "--obs_batch"
+          type: string
+          description: |
+            Location of where to find the observation batch IDs.  
+            
+            * If not specified, the `.obs["batch"]` field will not be included.
+            * If one or more values are specified, the `.obs["batch"]` field will be 
+              set to the concatenated values of the specified fields, separated by
+              the `obs_batch_separator`.
+          required: false
+          multiple: true
+          multiple_sep: ","
+          example: ["batch"]
+        - name: "--obs_batch_separator"
+          type: string
+          description: Separator to use when concatenating the values of the `--obs_batch` fields.
+          required: false
+          default: "+"
+    - name: Dataset metadata
+      description: Information about the dataset that will be stored in the `.uns` slot.
+      arguments:
+        - name: "--id"
+          type: string
+          description: Nicely formatted name.
+          required: true
+        - name: "--dataset_name"
+          type: string
+          description: Nicely formatted name.
+          required: true
+        - name: "--dataset_url"
+          type: string
+          description: Link to the original source of the dataset.
+          required: false
+        - name: "--dataset_reference"
+          type: string
+          description: Bibtex reference of the paper in which the dataset was published.
+          required: false
+        - name: "--dataset_summary"
+          type: string
+          description: Short description of the dataset.
+          required: true
+        - name: "--dataset_description"
+          type: string
+          description: Long description of the dataset.
+          required: true
+        - name: "--dataset_organism"
+          type: string
+          description: The organism of the dataset.
+          required: true
+    - name: Sampling options
+      arguments:
+        - name: "--do_subsample"
+          type: boolean
+          default: false
+          description: "Whether or not to subsample the dataset"
+        - name: "--n_obs"
+          type: integer
+          description: Maximum number of observations to be kept. It might end up being less because empty cells / genes are removed.
+          default: 500
+        - name: "--n_vars"
+          type: integer
+          description: Maximum number of variables to be kept. It might end up being less because empty cells / genes are removed.
+          default: 500
+        - name: "--keep_features"
+          type: string
+          multiple: true
+          description: A list of genes to keep.
+        - name: "--keep_cell_type_categories"
+          type: "string"
+          multiple: true
+          description: "Categories indexes to be selected"
+          required: false
+        - name: "--keep_batch_categories"
+          type: "string"
+          multiple: true
+          description: "Categories indexes to be selected"
+          required: false
+        - name: "--even"
+          type: "boolean_true"
+          description: Subsample evenly from different batches
+        - name: "--seed"
+          type: "integer"
+          description: "A seed for the subsampling."
+          example: 123
+    - name: Normalization
+      arguments:
+        - name: "--normalization_methods"
+          type: string
+          multiple: true
+          choices: ["log_cp10k", "log_cpm", "sqrt_cp10k", "sqrt_cpm", "l1_sqrt", "log_scran_pooling"]
+          default: ["log_cp10k", "log_cpm", "sqrt_cp10k", "sqrt_cpm", "l1_sqrt"]
+          description: "Which normalization methods to run."
+    - name: Outputs
+      arguments:
+        - name: "--output_dataset"
+          __merge__: /src/datasets/api/file_common_dataset.yaml
+          direction: "output"
+          required: true
+        - name: "--output_meta"
+          direction: "output"
+          type: file
+          description: "Dataset metadata"
+          default: "dataset_metadata.yaml"
+        - name: "--output_raw"
+          __merge__: /src/datasets/api/file_raw.yaml
+          direction: "output"
+          required: false
+        - name: "--output_normalized"
+          __merge__: /src/datasets/api/file_normalized.yaml
+          direction: "output"
+          required: false
+        - name: "--output_pca"
+          __merge__: /src/datasets/api/file_pca.yaml
+          direction: "output"
+          required: false
+        - name: "--output_hvg"
+          __merge__: /src/datasets/api/file_hvg.yaml
+          direction: "output"
+          required: false
+        - name: "--output_knn"
+          __merge__: /src/datasets/api/file_knn.yaml
+          direction: "output"
+          required: false
+  resources:
+    - type: nextflow_script
+      path: main.nf
+      entrypoint: run_wf
+    - path: /src/wf_utils/helper.nf
+  dependencies: 
+    - name: datasets/loaders/cellxgene_census
+    - name: datasets/normalization/log_cp
+    - name: datasets/normalization/log_scran_pooling
+    - name: datasets/normalization/sqrt_cp
+    - name: datasets/normalization/l1_sqrt
+    - name: datasets/processors/subsample
+    - name: datasets/processors/pca
+    - name: datasets/processors/hvg
+    - name: datasets/processors/knn
+    - name: common/extract_metadata
+  # test_resources:
+  #   - type: nextflow_script
+  #     path: main.nf
+  #     entrypoint: test_wf
+platforms:
+  - type: nextflow

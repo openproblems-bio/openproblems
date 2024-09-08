@@ -1,0 +1,32 @@
+__merge__: ../../api/comp_metric.yaml
+
+functionality:
+  name: r2
+  info:
+    metrics:
+      - name: r2
+        label: R2
+        summary: "R2 represents the proportion of variance in the true proportions which is explained by the predicted proportions."
+        description: |
+          R2, or the “coefficient of determination”, reports the fraction of the true proportion values' variance that can be explained by the predicted proportion values. The best score, and upper bound, is 1.0. There is no fixed lower bound for the metric. The uniform/non-weighted average across all cell types/states is used to summarise performance. By default, cases resulting in a score of NaN (perfect predictions) or -Inf (imperfect predictions) are replaced with 1.0 (perfect predictions) or 0.0 (imperfect predictions) respectively.
+        reference: miles2005rsquared
+        documentation_url: https://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html
+        repository_url: https://github.com/scikit-learn/scikit-learn/tree/5c4aa5d0d90ba66247d675d4c3fc2fdfba3c39ff
+        min: -inf
+        max: 1
+        maximize: true
+
+  resources:
+    - type: python_script
+      path: script.py
+
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        packages: scikit-learn
+  - type: native
+  - type: nextflow
+    directives:
+      label: [midtime,midmem, midcpu]

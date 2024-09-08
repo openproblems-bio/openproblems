@@ -1,0 +1,35 @@
+type: file
+example: "resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas/output.h5ad"
+info:
+  label: Output
+  summary: "Spatial data with estimated proportions."
+  description: "Spatial data file with estimated cell type proportions."
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+    obsm:
+      - type: double
+        name: coordinates
+        description: XY coordinates for each spot
+        required: true
+      - type: double
+        name: proportions_pred
+        description: Estimated cell type proportions for each spot
+        required: true
+    uns:
+      - type: string
+        name: cell_type_names
+        description: Cell type names corresponding to columns of `proportions`
+        required: true
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"
+        required: true
+      

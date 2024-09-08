@@ -1,0 +1,248 @@
+functionality:
+  name: "xgboost"
+  namespace: "label_projection/methods"
+  version: "build_main"
+  arguments:
+  - type: "file"
+    name: "--input_train"
+    info:
+      label: "Training data"
+      summary: "The training data"
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalized counts"
+          required: true
+        obs:
+        - type: "string"
+          name: "label"
+          description: "Ground truth cell type labels"
+          required: true
+        - type: "string"
+          name: "batch"
+          description: "Batch information"
+          required: true
+        var:
+        - type: "boolean"
+          name: "hvg"
+          description: "Whether or not the feature is considered to be a 'highly variable\
+            \ gene'"
+          required: true
+        - type: "double"
+          name: "hvg_score"
+          description: "A ranking of the features by hvg."
+          required: true
+        obsm:
+        - type: "double"
+          name: "X_pca"
+          description: "The resulting PCA embedding."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/label_projection/pancreas/train.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--input_test"
+    info:
+      label: "Test data"
+      summary: "The test data (without labels)"
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalized counts"
+          required: true
+        obs:
+        - type: "string"
+          name: "batch"
+          description: "Batch information"
+          required: true
+        var:
+        - type: "boolean"
+          name: "hvg"
+          description: "Whether or not the feature is considered to be a 'highly variable\
+            \ gene'"
+          required: true
+        - type: "double"
+          name: "hvg_score"
+          description: "A ranking of the features by hvg."
+          required: true
+        obsm:
+        - type: "double"
+          name: "X_pca"
+          description: "The resulting PCA embedding."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/label_projection/pancreas/test.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Prediction"
+      summary: "The prediction file"
+      slots:
+        obs:
+        - type: "string"
+          name: "label_pred"
+          description: "Predicted labels for the test cells."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/label_projection/pancreas/prediction.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  test_resources:
+  - type: "file"
+    path: "resources_test/label_projection/pancreas"
+    dest: "resources_test/label_projection/pancreas"
+  - type: "python_script"
+    path: "src/common/comp_tests/check_method_config.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "src/common/library.bib"
+  info:
+    label: "XGBoost"
+    summary: "XGBoost is a decision tree model that averages multiple trees with gradient\
+      \ boosting."
+    description: "XGBoost is a gradient boosting decision tree model that learns multiple\
+      \ tree\nstructures in the form of a series of input features and their values,\n\
+      leading to a prediction decision, and averages predictions from all its\ntrees.\
+      \ Here, input features are normalised gene expression values.\n"
+    reference: "chen2016xgboost"
+    repository_url: "https://github.com/dmlc/xgboost"
+    documentation_url: "https://xgboost.readthedocs.io/en/stable/index.html"
+    v1:
+      path: "openproblems/tasks/label_projection/methods/xgboost.py"
+      commit: "e3be930c6d4bbd656ab1e656badb52bb50e6cdd6"
+    preferred_normalization: "log_cp10k"
+    variants:
+      xgboost_log_cp10k: null
+      xgboost_scran:
+        preferred_normalization: "log_scran_pooling"
+    type: "method"
+    type_info:
+      label: "Method"
+      summary: "A label projection method."
+      description: "A label projection method to predict the labels of a new \"test\"\
+        \ndataset based on an annotated \"training\" dataset.\n"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1.0.0"
+  target_organization: "openproblems-bio/openproblems"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems"
+  setup:
+  - type: "python"
+    user: false
+    packages:
+    - "xgboost"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "midmem"
+    - "midcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/xgboost/config.vsh.yaml"
+  platform: "nextflow"
+  output: "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/methods/xgboost"
+  executable: "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/methods/xgboost/xgboost"
+  viash_version: "0.8.6"
+  git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1413-gb782e93f"

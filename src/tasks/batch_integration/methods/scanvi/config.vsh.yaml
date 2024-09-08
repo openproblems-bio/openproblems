@@ -1,0 +1,61 @@
+__merge__: ../../api/comp_method_embedding.yaml
+
+functionality:
+  name: scanvi
+  info:
+    label: scANVI
+    summary: "scANVI is a deep learning method that considers cell type labels."
+    description : |
+      scANVI (single-cell ANnotation using Variational Inference; Python class SCANVI) is a semi-supervised model for single-cell transcriptomics data. In a sense, it can be seen as a scVI extension that can leverage the cell type knowledge for a subset of the cells present in the data sets to infer the states of the rest of the cells.
+    reference: "lopez2018deep"
+    repository_url: "https://github.com/scverse/scvi-tools"
+    documentation_url: "https://docs.scvi-tools.org/en/stable/user_guide/models/scanvi.html"
+    v1:
+      path: openproblems/tasks/_batch_integration/batch_integration_graph/methods/scanvi.py
+      commit: 29803b95c88b4ec5921df2eec7111fd5d1a95daf
+    preferred_normalization: counts
+    variants:
+      scanvi_full_unscaled:
+  arguments:
+    - name: --n_hvg
+      type: integer
+      default: 2000
+      description: Number of highly variable genes to use.
+    - name: --n_latent
+      type: integer
+      default: 30
+      description: Number of latent dimensions.
+    - name: --n_hidden
+      type: integer
+      default: 128
+      description: Number of hidden units.
+    - name: --n_layers
+      type: integer
+      default: 2
+      description: Number of layers.
+    - name: --max_epochs_scvi
+      type: integer
+      example: 400
+      description: Maximum number of training epochs for scVI.
+    - name: --max_epochs_scanvi
+      type: integer
+      example: 10
+      description: Maximum number of training epochs for scANVI.
+  resources:
+    - type: python_script
+      path: script.py
+    - type: python_script
+      path: /src/common/helper_functions/read_anndata_partial.py
+platforms:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        pypi:
+          - scvi-tools>=1.1.0
+      - type: docker
+        run: |
+          pip install -U "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+  - type: nextflow
+    directives:
+      label: [midtime, lowmem, lowcpu, gpu]

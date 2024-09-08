@@ -1,0 +1,96 @@
+functionality:
+  name: "run"
+  namespace: "common/process_dataset_metadata"
+  version: "build_main"
+  argument_groups:
+  - name: "Inputs"
+    arguments:
+    - type: "file"
+      name: "--input"
+      info: null
+      example:
+      - "meta.yaml"
+      must_exist: true
+      create_parent: true
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Outputs"
+    arguments:
+    - type: "file"
+      name: "--output"
+      info: null
+      default:
+      - "meta.json"
+      must_exist: true
+      create_parent: true
+      required: true
+      direction: "output"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  resources:
+  - type: "nextflow_script"
+    path: "main.nf"
+    is_executable: true
+    entrypoint: "run_wf"
+  description: "This workflow transforms the meta information of the datasets into\
+    \ a format that can be used by the website."
+  info: null
+  status: "enabled"
+  dependencies:
+  - name: "common/process_task_results/yaml_to_json"
+    repository:
+      type: "local"
+      localPath: ""
+    foundConfigPath: "/home/runner/work/openproblems/openproblems/src/common/process_task_results/yaml_to_json/config.vsh.yaml"
+    configInfo:
+      functionalityName: "yaml_to_json"
+      git_tag: "v1.0.0-1413-gb782e93f"
+      git_remote: "https://github.com/openproblems-bio/openproblems"
+      viash_version: "0.8.6"
+      config: "/home/runner/work/openproblems/openproblems/src/common/process_task_results/yaml_to_json/config.vsh.yaml"
+      functionalityNamespace: "common/process_task_results"
+      output: ""
+      platform: ""
+      git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+      executable: "/nextflow/common/process_task_results/yaml_to_json/main.nf"
+    writtenPath: "/home/runner/work/openproblems/openproblems/target/nextflow/common/process_task_results/yaml_to_json"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/common/process_dataset_metadata/run/config.vsh.yaml"
+  platform: "nextflow"
+  output: "/home/runner/work/openproblems/openproblems/target/nextflow/common/process_dataset_metadata/run"
+  executable: "/home/runner/work/openproblems/openproblems/target/nextflow/common/process_dataset_metadata/run/main.nf"
+  viash_version: "0.8.6"
+  git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1413-gb782e93f"

@@ -1,0 +1,24 @@
+type: file
+example: "resources_test/match_modalities/scicar_cell_lines/integrated_mod2.h5ad"
+info:
+  label: "Integrated mod2"
+  summary: "The integrated embedding for the second modality"
+  slots:
+    obsm:
+      - type: double
+        name: integrated
+        description: An integrated embedding.
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: normalization_id
+        description: "Which normalization was used"
+        required: true
+      - type: string
+        name: method_id
+        description: "Which method was used"
+        required: true

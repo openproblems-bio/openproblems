@@ -1,0 +1,214 @@
+functionality:
+  name: "lmds"
+  namespace: "dimensionality_reduction/methods"
+  version: "build_main"
+  arguments:
+  - type: "file"
+    name: "--input"
+    info:
+      label: "Dataset"
+      summary: "The dataset to pass to a method."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalized expression values"
+          required: true
+        var:
+        - type: "double"
+          name: "hvg_score"
+          description: "High variability gene score (normalized dispersion). The greater,\
+            \ the more variable."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/dimensionality_reduction/pancreas/dataset.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Embedding"
+      summary: "A dataset with dimensionality reduction embedding."
+      slots:
+        obsm:
+        - type: "double"
+          name: "X_emb"
+          description: "The dimensionally reduced embedding."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+    example:
+    - "resources_test/dimensionality_reduction/pancreas/embedding.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--n_dim"
+    description: "Number of dimensions."
+    info: null
+    default:
+    - 2
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "integer"
+    name: "--n_landmarks"
+    description: "Number of landmarks."
+    info: null
+    default:
+    - 1000
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "string"
+    name: "--distance_method"
+    description: "Number of clusters to be estimated over the input dataset."
+    info: null
+    default:
+    - "pearson"
+    required: false
+    choices:
+    - "euclidean"
+    - "pearson"
+    - "spearman"
+    - "cosine"
+    - "chisquared"
+    - "hamming"
+    - "kullback"
+    - "manhattan"
+    - "maximum"
+    - "canberra"
+    - "minkowski"
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "r_script"
+    path: "script.R"
+    is_executable: true
+  test_resources:
+  - type: "file"
+    path: "resources_test/dimensionality_reduction/pancreas/"
+    dest: "resources_test/dimensionality_reduction/pancreas/"
+  - type: "python_script"
+    path: "src/common/comp_tests/check_method_config.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "src/common/library.bib"
+  info:
+    label: "LMDS"
+    summary: "Landmark Multi-Dimensional Scaling"
+    description: "Landmark Multi-Dimensional Scaling (LMDS) is a method for dimensionality\
+      \ reduction that is based on the concept of multi-dimensional scaling.\nLMDS\
+      \ is a non-linear dimensionality reduction method that is based on the concept\
+      \ of multi-dimensional scaling.\n"
+    preferred_normalization: "log_cp10k"
+    reference: "saelens2019comparison"
+    documentation_url: "https://dynverse.org/lmds/"
+    repository_url: "https://github.com/dynverse/lmds"
+    type: "method"
+    type_info:
+      label: "Method"
+      summary: "A dimensionality reduction method."
+      description: "A dimensionality reduction method to summarise the biological\n\
+        information in a dataset in as few dimensions as possible.\n"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_r:1.0.0"
+  target_organization: "openproblems-bio/openproblems"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems"
+  setup:
+  - type: "r"
+    cran:
+    - "Matrix"
+    - "lmds"
+    bioc_force_install: false
+  entrypoint: []
+  cmd: null
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "highmem"
+    - "midcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/dimensionality_reduction/methods/lmds/config.vsh.yaml"
+  platform: "nextflow"
+  output: "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/lmds"
+  executable: "/home/runner/work/openproblems/openproblems/target/nextflow/dimensionality_reduction/methods/lmds/lmds"
+  viash_version: "0.8.6"
+  git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1413-gb782e93f"

@@ -1,0 +1,30 @@
+functionality:
+  namespace: "predict_modality/metrics"
+  info:
+    type: metric
+    type_info:
+      label: Metric
+      summary: A predict modality metric.
+      description: |
+        A metric for evaluating predicted expression.
+  arguments:
+    - name: --input_prediction
+      __merge__: file_prediction.yaml
+      direction: input
+      required: true
+    - name: --input_test_mod2
+      __merge__: file_test_mod2.yaml
+      direction: input
+      required: true
+    - name: --output
+      __merge__: file_score.yaml
+      direction: output
+      required: true
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/check_metric_config.py
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap
+      dest: resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap
+    - path: /src/common/library.bib

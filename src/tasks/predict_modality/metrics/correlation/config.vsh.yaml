@@ -1,0 +1,65 @@
+__merge__: ../../api/comp_metric.yaml
+functionality:
+  name: correlation
+  info:
+    metrics:
+      - name: mean_pearson_per_cell
+        label: Mean pearson per cell
+        summary: The mean of the pearson values of per-cell expression value vectors.
+        description: The mean of the pearson values of per-cell expression value vectors.
+        min: -1
+        max: 1
+        maximize: true
+        reference: pearson1895regression
+      - name: mean_spearman_per_cell
+        label: Mean spearman per cell
+        summary: The mean of the spearman values of per-cell expression value vectors.
+        description: The mean of the spearman values of per-cell expression value vectors.
+        min: -1
+        max: 1
+        maximize: true
+        reference: kendall1938new
+      - name: mean_pearson_per_gene
+        label: Mean pearson per gene
+        summary: The mean of the pearson values of per-gene expression value vectors.
+        description: The mean of the pearson values of per-gene expression value vectors.
+        min: -1
+        max: 1
+        maximize: true
+        reference: pearson1895regression
+      - name: mean_spearman_per_gene
+        label: Mean spearman per gene
+        summary: The mean of the spearman values of per-gene expression value vectors.
+        description: The mean of the spearman values of per-gene expression value vectors.
+        min: -1
+        max: 1
+        maximize: true
+        reference: kendall1938new
+      - name: overall_pearson
+        label: Overall pearson
+        summary: The mean of the pearson values of vectorized expression matrices.
+        description: The mean of the pearson values of vectorized expression matrices.
+        min: -1
+        max: 1
+        maximize: true
+        reference: pearson1895regression
+      - name: overall_spearman
+        label: Overall spearman
+        summary: The mean of the spearman values of vectorized expression matrices.
+        description: The mean of the spearman values of vectorized expression matrices.
+        min: -1
+        max: 1
+        maximize: true
+        reference: kendall1938new
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        cran: [ proxyC, testthat, dynutils ]
+  - type: nextflow
+    directives:
+      label: [midtime, lowmem, lowcpu]

@@ -1,0 +1,16 @@
+type: file
+example: "resources_test/denoising/pancreas/train.h5ad"
+info:
+  label: "Training data"
+  summary: The subset of molecules used for the training dataset
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true

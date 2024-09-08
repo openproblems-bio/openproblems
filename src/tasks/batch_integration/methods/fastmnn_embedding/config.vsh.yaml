@@ -1,0 +1,36 @@
+# use method api spec
+__merge__: ../../api/comp_method_embedding.yaml
+functionality:
+  name: fastmnn_embedding
+  info:
+    label: fastMnn (embedding)
+    summary: "A simpler version of the original mnnCorrect algorithm."
+    description: |
+      The fastMNN() approach is much simpler than the original mnnCorrect() algorithm, and proceeds in several steps.
+
+      1. Perform a multi-sample PCA on the (cosine-)normalized expression values to reduce dimensionality.
+      2. Identify MNN pairs in the low-dimensional space between a reference batch and a target batch.
+      3. Remove variation along the average batch vector in both reference and target batches.
+      4. Correct the cells in the target batch towards the reference, using locally weighted correction vectors.
+      5. Merge the corrected target batch with the reference, and repeat with the next target batch.
+
+    reference: "haghverdi2018batch"
+    repository_url: "https://code.bioconductor.org/browse/batchelor/"
+    documentation_url: "https://bioconductor.org/packages/batchelor/"
+    preferred_normalization: log_cp10k
+    v1:
+      path: openproblems/tasks/_batch_integration/batch_integration_graph/methods/fastmnn.py
+      commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
+  resources:
+    - type: r_script
+      path: ../fastmnn_feature/script.R
+platforms:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        bioc:
+          - batchelor
+  - type: nextflow
+    directives:
+      label: [midtime, lowcpu, highmem]

@@ -1,0 +1,179 @@
+functionality:
+  name: "get_results"
+  namespace: "common/process_task_results"
+  version: "build_main"
+  arguments:
+  - type: "string"
+    name: "--task_id"
+    description: "Task id"
+    info: null
+    example:
+    - "batch_integration"
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--input_scores"
+    description: "Scores file"
+    info: null
+    example:
+    - "score_uns.yaml"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--input_execution"
+    description: "Nextflow log file"
+    info: null
+    example:
+    - "trace.txt"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--input_dataset_info"
+    description: "Method info file"
+    info: null
+    example:
+    - "dataset_info.json"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--input_method_info"
+    description: "Method info file"
+    info: null
+    example:
+    - "method_info.json"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--input_metric_info"
+    description: "Metric info file"
+    info: null
+    example:
+    - "metric_info.json"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output_results"
+    description: "Output json"
+    info: null
+    default:
+    - "results.json"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output_metric_execution_info"
+    description: "Output metric execution info"
+    info: null
+    default:
+    - "metric_execution_info.json"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "r_script"
+    path: "script.R"
+    is_executable: true
+  description: "Extract execution info"
+  info: null
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_r:1.0.0"
+  target_organization: "openproblems-bio/openproblems"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems"
+  setup:
+  - type: "r"
+    cran:
+    - "purrr"
+    - "yaml"
+    - "rlang"
+    - "dplyr"
+    - "tidyr"
+    - "readr"
+    - "lubridate"
+    - "dynutils"
+    - "processx"
+    bioc_force_install: false
+  entrypoint: []
+  cmd: null
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "lowmem"
+    - "lowtime"
+    - "lowcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/common/process_task_results/get_results/config.vsh.yaml"
+  platform: "docker"
+  output: "/home/runner/work/openproblems/openproblems/target/docker/common/process_task_results/get_results"
+  executable: "/home/runner/work/openproblems/openproblems/target/docker/common/process_task_results/get_results/get_results"
+  viash_version: "0.8.6"
+  git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1413-gb782e93f"

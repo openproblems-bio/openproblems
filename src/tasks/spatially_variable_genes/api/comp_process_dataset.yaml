@@ -1,0 +1,27 @@
+functionality:
+  namespace: "spatially_variable_genes"
+  info:
+    type: process_dataset
+    type_info:
+      label: Data processor
+      summary: A spatially variable genes dataset processor.
+      description: |
+        Prepare a common dataset for the spatially_variable_genes task.
+  arguments:
+    - name: "--input"
+      __merge__: file_common_dataset.yaml
+      direction: input
+      required: true
+    - name: "--output_dataset"
+      __merge__: file_dataset.yaml
+      direction: output
+      required: true
+    - name: "--output_solution"
+      __merge__: file_solution.yaml
+      direction: output
+      required: true
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/common/mouse_brain_coronal_section1
+      dest: resources_test/common/mouse_brain_coronal_section1

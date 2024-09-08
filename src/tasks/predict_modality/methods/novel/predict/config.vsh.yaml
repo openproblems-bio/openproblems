@@ -1,0 +1,25 @@
+__merge__: ../../../api/comp_method_predict.yaml
+functionality:
+  name: novel_predict
+  arguments:
+    - name: "--input_transform"
+      type: file
+      direction: input
+      required: false
+      example: "lsi_transformer.pickle"
+  resources:
+    - type: python_script
+      path: script.py
+    - path: ../helper_functions.py
+platforms:
+  - type: docker
+    image: openproblems/base_pytorch_nvidia:1.0.0
+    setup:
+      - type: python
+        packages:
+          - scikit-learn
+          - networkx
+  - type: nextflow
+    directives:
+      label: [highmem, hightime, midcpu, highsharedmem, gpu]
+  

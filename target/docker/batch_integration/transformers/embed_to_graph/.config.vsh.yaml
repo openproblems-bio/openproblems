@@ -1,0 +1,168 @@
+functionality:
+  name: "embed_to_graph"
+  namespace: "batch_integration/transformers"
+  version: "build_main"
+  arguments:
+  - type: "file"
+    name: "--input"
+    info:
+      prediction_type: "embedding"
+      label: "Integrated embedding"
+      summary: "An integrated AnnData HDF5 file."
+      slots:
+        obsm:
+        - type: "double"
+          name: "X_emb"
+          description: "integration embedding prediction"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/batch_integration/pancreas/integrated_embedding.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      prediction_type: "graph"
+      label: "Integrated Graph"
+      summary: "Integrated AnnData HDF5 file."
+      slots:
+        obsp:
+        - type: "double"
+          name: "connectivities"
+          description: "Neighbors connectivities matrix."
+          required: true
+        - type: "double"
+          name: "distances"
+          description: "Neighbors connectivities matrix."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "normalization_id"
+          description: "Which normalization was used"
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+        - type: "object"
+          name: "neighbors"
+          description: "Supplementary K nearest neighbors data."
+          required: true
+    example:
+    - "resources_test/batch_integration/pancreas/integrated_graph.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/helper_functions/read_anndata_partial.py"
+    is_executable: true
+  test_resources:
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "resources_test/batch_integration/pancreas"
+    dest: "resources_test/batch_integration/pancreas"
+  info:
+    label: "Embedding to Graph"
+    summary: "Transform an embedding to a graph output."
+    description: "Transform an embedding to a graph output by applying the k nearest\
+      \ neighbors algorithm.\n"
+    type: "transformer"
+    subtype: "graph"
+    type_info:
+      label: "Embedding to Graph"
+      summary: "Transform an embedding to a graph output."
+      description: "Transform an embedding to a graph output by applying the k nearest\
+        \ neighbors algorithm.\n"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1.0.0"
+  target_organization: "openproblems-bio/openproblems"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems"
+  entrypoint: []
+  cmd: null
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "midmem"
+    - "lowcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/batch_integration/transformers/embed_to_graph/config.vsh.yaml"
+  platform: "docker"
+  output: "/home/runner/work/openproblems/openproblems/target/docker/batch_integration/transformers/embed_to_graph"
+  executable: "/home/runner/work/openproblems/openproblems/target/docker/batch_integration/transformers/embed_to_graph/embed_to_graph"
+  viash_version: "0.8.6"
+  git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1413-gb782e93f"

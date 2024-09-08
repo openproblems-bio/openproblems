@@ -1,0 +1,47 @@
+name: match_modalities
+label: Match Modalities
+summary: |
+  Match cells across datasets of the same set of samples on different technologies / modalities.
+image: "thumbnail.svg"
+motivation: |
+    Cellular function is regulated by the complex interplay of different types of biological
+    molecules (DNA, RNA, proteins, etc.), which determine the state of a cell. Several
+    recently described technologies allow for simultaneous measurement of different aspects
+    of cellular state. For example, sci-CAR [@cao2018joint]
+    jointly profiles RNA expression and chromatin accessibility on the same cell and
+    CITE-seq [@stoeckius2017simultaneous] measures
+    surface protein abundance and RNA expression from each cell. These technologies enable
+    us to better understand cellular function, however datasets are still rare and there are
+    tradeoffs that these measurements make for to profile multiple modalities.
+
+    Joint methods can be more expensive or lower throughput or more noisy than measuring a
+    single modality at a time. Therefore it is useful to develop methods that are capable
+    of integrating measurements of the same biological system but obtained using different
+    technologies on different cells.
+description: |
+  In this task, the goal is to learn a latent space where cells profiled by different
+  technologies in different modalities are matched if they have the same state. We use
+  jointly profiled data as ground truth so that we can evaluate when the observations
+  from the same cell acquired using different modalities are similar. A perfect result
+  has each of the paired observations sharing the same coordinates in the latent space.
+  A method that can achieve this would be able to match datasets across modalities to
+  enable multimodal cellular analysis from separately measured profiles.
+authors:
+  - name: "Scott Gigante"
+    roles: [ author, maintainer ]
+    info:
+      github: scottgigante
+      orcid: "0000-0002-4544-2764"
+  - name: Alex Tong
+    roles: [ author ]
+    info:
+      github: atong01
+  - name: Robrecht Cannoodt
+    roles: [ author ]
+    info:
+      github: rcannood
+      orcid: "0000-0003-3641-729X"
+  - name: Kai Waldrant
+    roles: [ contributor ]
+    info:
+      github: KaiWaldrant

@@ -1,0 +1,34 @@
+functionality:
+  namespace: "predict_modality/methods"
+  info:
+    type: method
+    type_info:
+      label: Method
+      summary: A regression method.
+      description: |
+        A regression method to predict the expression of one modality from another.
+  arguments:
+    - name: "--input_train_mod1"
+      __merge__: file_train_mod1.yaml
+      direction: input
+      required: true
+    - name: "--input_train_mod2"
+      __merge__: file_train_mod2.yaml
+      direction: input
+      required: true
+    - name: "--input_test_mod1"
+      __merge__: file_test_mod1.yaml
+      direction: input
+      required: true
+    - name: "--output"
+      __merge__: file_prediction.yaml
+      direction: output
+      required: true
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/check_method_config.py
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap
+      dest: resources_test/predict_modality/openproblems_neurips2021/bmmc_cite/swap
+    - path: /src/common/library.bib

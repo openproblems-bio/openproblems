@@ -1,0 +1,216 @@
+functionality:
+  name: "spagft"
+  namespace: "spatially_variable_genes/methods"
+  version: "build_main"
+  arguments:
+  - type: "file"
+    name: "--input_data"
+    info:
+      label: "Dataset"
+      summary: "The dataset without spatially variable genes."
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts."
+          required: true
+        - type: "double"
+          name: "normalized"
+          description: "Normalised expression values"
+          required: true
+        var:
+        - type: "string"
+          name: "feature_id"
+          description: "Unique identifier for the feature, in this case a ENSEMBL\
+            \ gene id suffixed with alpha value."
+          required: false
+        - type: "string"
+          name: "feature_name"
+          description: "A human-readable name for the feature, in this case a gene\
+            \ symbol suffixed with alpha value."
+          required: false
+        obsm:
+        - type: "double"
+          name: "spatial"
+          description: "Spatial coordinates for each spot."
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - name: "dataset_name"
+          type: "string"
+          description: "Nicely formatted name."
+          required: false
+    example:
+    - "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/dataset.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Output"
+      summary: "Anndata with estimate spatial variability."
+      description: "Anndata with estimated spatial variability score for each gene."
+      slots:
+        var:
+        - type: "string"
+          name: "feature_id"
+          description: "Feature ID"
+          required: true
+        - type: "string"
+          name: "feature_name"
+          description: "Feature name"
+          required: false
+        - type: "double"
+          name: "pred_spatial_var_score"
+          description: "Predicted spatial variability score"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/output.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  test_resources:
+  - type: "python_script"
+    path: "src/common/comp_tests/check_method_config.py"
+    is_executable: true
+  - type: "python_script"
+    path: "src/common/comp_tests/run_and_check_adata.py"
+    is_executable: true
+  - type: "file"
+    path: "resources_test/spatially_variable_genes/mouse_brain_coronal_section1"
+    dest: "resources_test/spatially_variable_genes/mouse_brain_coronal_section1"
+  - type: "file"
+    path: "src/common/library.bib"
+  info:
+    label: "SpaGFT"
+    summary: "SpaGFT is a graph Fourier transform for tissue module identification\
+      \ from spatially resolved transcriptomics"
+    description: "The tissue module (TM) was defined as an architectural area containing\
+      \ recurrent cellular \ncommunities executing specific biological functions at\
+      \ different tissue sites. \nHowever, the computational identification of TMs\
+      \ poses challenges owing to their various \nlength scales, convoluted biological\
+      \ processes, not well-defined molecular features, and \nirregular spatial patterns.\
+      \ Here, we present a hypothesis-free graph Fourier transform model, \nSpaGFT,\
+      \ to characterize TMs. For the first time, SpaGFT transforms complex gene expression\
+      \ \npatterns into simple, but informative signals, leading to the accurate identification\
+      \ of \nspatially variable genes (SVGs) at a fast computational speed. Based\
+      \ on clustering the \ntransformed signals of the SVGs, SpaGFT provides a novel\
+      \ computational framework for TM \ncharacterization. Three case studies were\
+      \ used to illustrate TM identities, the biological \nprocesses of convoluted\
+      \ TMs in the lymph node, and conserved TMs across multiple samples constituting\
+      \ \nthe complex organ. The superior accuracy, scalability, and interpretability\
+      \ of SpaGFT indicate \nthat it is a novel and powerful tool for the investigation\
+      \ of TMs to gain new insights into a variety \nof biological questions.\n"
+    preferred_normalization: "counts"
+    reference: "chang2022spatial"
+    documentation_url: "https://spagft.readthedocs.io/en/latest/"
+    repository_url: "https://github.com/jxLiu-bio/SpaGFT"
+    type: "method"
+    type_info:
+      label: "Method"
+      summary: "A spatially variable gene identification method."
+      description: "Method to identify spatially variable genes"
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "python:3.10"
+  target_organization: "openproblems-bio/openproblems"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems"
+  setup:
+  - type: "apt"
+    packages:
+    - "git"
+    - "procps"
+    - "libhdf5-dev"
+    - "cmake"
+    interactive: false
+  - type: "docker"
+    run:
+    - "git clone https://github.com/jxLiu-bio/SpaGFT.git /opt/SpaGFT\n"
+  - type: "python"
+    user: false
+    packages:
+    - "h5py"
+    - "numba==0.55.1"
+    - "louvain==0.7.1"
+    - "chardet==5.1.0"
+    - "charset-normalizer==3.1.0"
+    - "anndata"
+    - "/opt/SpaGFT"
+    - "mizani==0.9.3"
+    - "pyyaml"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+- type: "native"
+  id: "native"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "midmem"
+    - "midcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/tasks/spatially_variable_genes/methods/spagft/config.vsh.yaml"
+  platform: "native"
+  output: "/home/runner/work/openproblems/openproblems/target/native/spatially_variable_genes/methods/spagft"
+  executable: "/home/runner/work/openproblems/openproblems/target/native/spatially_variable_genes/methods/spagft/spagft"
+  viash_version: "0.8.6"
+  git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1413-gb782e93f"

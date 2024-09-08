@@ -1,0 +1,51 @@
+functionality:
+  name: "get_results"
+  description: "Extract execution info"
+  namespace: common/process_task_results
+  arguments:
+    - name: "--task_id"
+      type: "string"
+      example: "batch_integration"
+      description: "Task id"
+    - name: "--input_scores"
+      type: "file"
+      example: score_uns.yaml
+      description: "Scores file"
+    - name: "--input_execution"
+      type: "file"
+      example: trace.txt
+      description: "Nextflow log file"
+    - name: "--input_dataset_info"
+      type: "file"
+      example: dataset_info.json
+      description: "Method info file"
+    - name: "--input_method_info"
+      type: "file"
+      example: method_info.json
+      description: "Method info file"
+    - name: "--input_metric_info"
+      type: "file"
+      example: metric_info.json
+      description: "Metric info file"
+    - name: "--output_results"
+      type: "file"
+      direction: "output"
+      default: "results.json"
+      description: "Output json"
+    - name: "--output_metric_execution_info"
+      type: "file"
+      direction: "output"
+      default: "metric_execution_info.json"
+      description: "Output metric execution info"
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        cran: [ purrr, yaml, rlang, dplyr, tidyr, readr, lubridate, dynutils, processx ]
+  - type: nextflow
+    directives:
+      label: [lowmem, lowtime, lowcpu]

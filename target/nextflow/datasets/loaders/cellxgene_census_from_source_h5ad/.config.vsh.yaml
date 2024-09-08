@@ -1,0 +1,272 @@
+functionality:
+  name: "cellxgene_census_from_source_h5ad"
+  namespace: "datasets/loaders"
+  version: "build_main"
+  argument_groups:
+  - name: "Input"
+    description: "Input arguments"
+    arguments:
+    - type: "string"
+      name: "--input_id"
+      description: "The dataset ID of the CellxGene Census dataset to query.\n"
+      info: null
+      example:
+      - "a93eab58-3d82-4b61-8a2f-d7666dcdb7c4"
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Count filtering"
+    description: "Arguments related to filtering cells and genes by counts."
+    arguments:
+    - type: "integer"
+      name: "--cell_filter_min_genes"
+      description: "Remove cells with less than this number of genes."
+      info: null
+      default:
+      - 50
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "integer"
+      name: "--cell_filter_min_counts"
+      description: "Remove cells with less than this number of counts."
+      info: null
+      default:
+      - 0
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "integer"
+      name: "--gene_filter_min_cells"
+      description: "Remove genes expressed in less than this number of cells."
+      info: null
+      default:
+      - 5
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "integer"
+      name: "--gene_filter_min_counts"
+      description: "Remove genes with less than this number of counts."
+      info: null
+      default:
+      - 0
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Cell metadata"
+    description: "Cell metadata arguments"
+    arguments:
+    - type: "string"
+      name: "--obs_batch"
+      description: "Location of where to find the observation batch IDs.  \n\n* If\
+        \ not specified, the `.obs[\"batch\"]` field will not be included.\n* If one\
+        \ or more values are specified, the `.obs[\"batch\"]` field will be \n  set\
+        \ to the concatenated values of the specified fields, separated by\n  the\
+        \ `obs_batch_separator`.\n"
+      info: null
+      example:
+      - "batch"
+      required: false
+      direction: "input"
+      multiple: true
+      multiple_sep: ","
+      dest: "par"
+    - type: "string"
+      name: "--obs_batch_separator"
+      description: "Separator to use when concatenating the values of the `--obs_batch`\
+        \ fields."
+      info: null
+      default:
+      - "+"
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Dataset metadata"
+    description: "Information about the dataset that will be stored in the `.uns`\
+      \ slot."
+    arguments:
+    - type: "string"
+      name: "--dataset_id"
+      description: "Unique identifier of the dataset."
+      info: null
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_name"
+      description: "Nicely formatted name."
+      info: null
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_url"
+      description: "Link to the original source of the dataset."
+      info: null
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_reference"
+      description: "Bibtex reference of the paper in which the dataset was published."
+      info: null
+      required: false
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_summary"
+      description: "Short description of the dataset."
+      info: null
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_description"
+      description: "Long description of the dataset."
+      info: null
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--dataset_organism"
+      description: "The organism of the dataset."
+      info: null
+      required: true
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  - name: "Outputs"
+    description: "Output arguments."
+    arguments:
+    - type: "file"
+      name: "--output"
+      description: "Output h5ad file."
+      info: null
+      example:
+      - "output.h5ad"
+      must_exist: true
+      create_parent: true
+      required: true
+      direction: "output"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+    - type: "string"
+      name: "--output_compression"
+      info: null
+      example:
+      - "gzip"
+      required: false
+      choices:
+      - "gzip"
+      - "lzf"
+      direction: "input"
+      multiple: false
+      multiple_sep: ":"
+      dest: "par"
+  resources:
+  - type: "python_script"
+    path: "script.py"
+    is_executable: true
+  - type: "file"
+    path: "src/common/helper_functions/setup_logger.py"
+  description: "Query cells from a CellxGene Census or custom TileDBSoma object.\n\
+    Aside from fetching the cells' RNA counts (`.X`), cell metadata\n(`.obs`) and\
+    \ gene metadata (`.var`), this component also fetches\nthe dataset metadata and\
+    \ joins it into the cell metadata.\n"
+  test_resources:
+  - type: "python_script"
+    path: "test.py"
+    is_executable: true
+  info: null
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "python:3.11"
+  target_organization: "openproblems-bio/openproblems"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/openproblems-bio/openproblems"
+  setup:
+  - type: "python"
+    user: false
+    packages:
+    - "cellxgene-census"
+    - "scanpy"
+    upgrade: true
+  test_setup:
+  - type: "python"
+    user: false
+    packages:
+    - "viashpy"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "highmem"
+    - "midcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+info:
+  config: "/home/runner/work/openproblems/openproblems/src/datasets/loaders/cellxgene_census_from_source_h5ad/config.vsh.yaml"
+  platform: "nextflow"
+  output: "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/loaders/cellxgene_census_from_source_h5ad"
+  executable: "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/loaders/cellxgene_census_from_source_h5ad/cellxgene_census_from_source_h5ad"
+  viash_version: "0.8.6"
+  git_commit: "b782e93f596e0060953ca0260098b8ae2569194b"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1413-gb782e93f"

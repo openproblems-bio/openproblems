@@ -1,0 +1,31 @@
+functionality:
+  namespace: "spatial_decomposition/metrics"
+  info:
+    type: metric
+    type_info:
+      label: Metric
+      summary: A spatial decomposition metric.  
+      description: |
+        A metric for evaluating accuracy of cell type proportion estimate
+  arguments:
+    - name: "--input_method"
+      __merge__: file_output.yaml
+      direction: input
+      required: true
+    - name: "--input_solution"
+      __merge__: file_solution.yaml
+      direction: input
+      required: true
+    - name: "--output"
+      __merge__: file_score.yaml
+      direction: output
+      required: true
+  test_resources:
+    - type: python_script
+      path: /src/common/comp_tests/check_metric_config.py
+    - type: python_script
+      path: /src/common/comp_tests/run_and_check_adata.py
+    - path: /resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas
+      dest: resources_test/spatial_decomposition/cxg_mouse_pancreas_atlas
+    - path: /src/common/library.bib
+        

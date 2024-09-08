@@ -1,0 +1,29 @@
+type: file
+example: "resources_test/dimensionality_reduction/pancreas/dataset.h5ad"
+info:
+  label: "Dataset"
+  summary: "The dataset to pass to a method."
+  slots:
+    layers: 
+      - type: integer
+        name: counts
+        description: Raw counts
+        required: true
+      - type: double
+        name: normalized
+        description: Normalized expression values
+        required: true
+    var:
+      - type: double
+        name: hvg_score
+        description: High variability gene score (normalized dispersion). The greater, the more variable.
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: normalization_id
+        description: "Which normalization was used"
+        required: true
