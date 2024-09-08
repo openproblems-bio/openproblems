@@ -1,4 +1,4 @@
-name: viash test
+name: Test
 
 on:
   pull_request:
