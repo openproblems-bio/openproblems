@@ -2,7 +2,7 @@
 
 cat > "/tmp/params.yaml" << 'HERE'
 param_list:
-  - id: zenodo_spatial/human_heart_myocardial_infarction_1_visium
+  - id: zenodo_spatial/visium/human_heart_myocardial_infarction_1
     input_data: "https://zenodo.org/records/13328275/files/10X0018.h5ad?download=1"
     dataset_name: 10X Visium - Human Heart MI 1
     dataset_url: "https://www.nature.com/articles/s41586-022-05060-x"
@@ -14,7 +14,7 @@ param_list:
     gene_filter_min_spots: 50
     remove_mitochondrial: true
 
-  - id: zenodo_spatial/human_heart_myocardial_infarction_2_visium
+  - id: zenodo_spatial/visium/human_heart_myocardial_infarction_2
     input_data: "https://zenodo.org/records/13328275/files/10X009.h5ad?download=1"
     dataset_name: 10X Visium - Human Heart MI 2
     dataset_url: "https://www.nature.com/articles/s41586-022-05060-x"
@@ -38,7 +38,7 @@ HERE
 
 # catt > "/tmp/params.yaml" << 'HERE'
 # param_list:
-#   - id: zenodo_spatial/mouse_e10_brain_dbitseq
+#   - id: zenodo_spatial/dbitseq/mouse_e10_brain
 #     input_data: "https://zenodo.org/records/12785822/files/DBiT-seq_liu2020high_E10_brain_gene_25um_data.h5ad?download=1"
 #     dataset_name: DBiT-seq - Mouse Brain (E10)
 #     dataset_url: "https://www.cell.com/cell/fulltext/S0092-8674(20)31390-8"
@@ -50,7 +50,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/mouse_e10_eye_dbitseq
+#   - id: zenodo_spatial/dbitseq/mouse_e10_eye
 #     input_data: "https://zenodo.org/records/12785822/files/DBiT-seq_liu2020high_E10_eye_and_nearby_data.h5ad?download=1"
 #     dataset_name: DBiT-seq - Mouse Eye (E10)
 #     dataset_url: "https://www.cell.com/cell/fulltext/S0092-8674(20)31390-8"
@@ -62,7 +62,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/mouse_e10_whole_body_dbitseq
+#   - id: zenodo_spatial/dbitseq/mouse_e10_whole_body
 #     input_data: "https://zenodo.org/records/12785822/files/DBiT-seq_liu2020high_E10_whole_gene_best_data.h5ad?download=1"
 #     dataset_name: DBiT-seq - Mouse Whole Body (E10)
 #     dataset_url: "https://www.cell.com/cell/fulltext/S0092-8674(20)31390-8"
@@ -74,7 +74,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/mouse_e11_lower_body_dbitseq
+#   - id: zenodo_spatial/dbitseq/mouse_e11_lower_body
 #     input_data: "https://zenodo.org/records/12785822/files/DBiT-seq_liu2020high_E11_lower_body_data.h5ad?download=1"
 #     dataset_name: DBiT-seq - Mouse Lower Body (E11)
 #     dataset_url: "https://www.cell.com/cell/fulltext/S0092-8674(20)31390-8"
@@ -86,7 +86,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/mouse_e11_1_dbitseq
+#   - id: zenodo_spatial/dbitseq/mouse_e11_1
 #     input_data: "https://zenodo.org/records/12785822/files/DBiT-seq_liu2020high_GSM4364244_E11-FL-1L_gene_data.h5ad?download=1"
 #     dataset_name: DBiT-seq - Mouse Whole Body 1 (E11)
 #     dataset_url: "https://www.cell.com/cell/fulltext/S0092-8674(20)31390-8"
@@ -98,7 +98,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/mouse_e11_2_dbitseq
+#   - id: zenodo_spatial/dbitseq/mouse_e11_2
 #     input_data: "https://zenodo.org/records/12785822/files/DBiT-seq_liu2020high_GSM4364245_E11-FL-2L_gene_data.h5ad?download=1"
 #     dataset_name: DBiT-seq - Mouse Whole Body 2 (E11)
 #     dataset_url: "https://www.cell.com/cell/fulltext/S0092-8674(20)31390-8"
@@ -121,7 +121,7 @@ HERE
 
 # cat > "/tmp/params.yaml" << 'HERE'
 # param_list:
-#   - id: zenodo_spatial/human_cortex_1_merfish
+#   - id: zenodo_spatial/merfish/human_cortex_1
 #     input_data: "https://zenodo.org/records/12785822/files/MERFISH_Fang2022Conservation_H18.06.006.MTG.250.expand.rep1_data.h5ad?download=1"
 #     dataset_name: MERFISH - Human Cortex 1
 #     dataset_url: "https://www.science.org/doi/10.1126/science.abm1741"
@@ -133,7 +133,7 @@ HERE
 #     gene_filter_min_spots: 100
 #     remove_mitochondrial: false
 
-#   - id: zenodo_spatial/human_cortex_2_merfish
+#   - id: zenodo_spatial/merfish/human_cortex_2
 #     input_data: "https://zenodo.org/records/12785822/files/MERFISH_Fang2022Conservation_H18.06.006.MTG.4000.expand.rep1_data.h5ad?download=1"
 #     dataset_name: MERFISH - Human Cortex 2
 #     dataset_url: "https://www.science.org/doi/10.1126/science.abm1741"
@@ -145,7 +145,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: false
 
-#   - id: zenodo_spatial/human_cortex_3_merfish
+#   - id: zenodo_spatial/merfish/human_cortex_3
 #     input_data: "https://zenodo.org/records/12785822/files/MERFISH_Fang2022Conservation_H18.06.006.MTG.4000.expand.rep2_data.h5ad?download=1"
 #     dataset_name: MERFISH - Human Cortex 3
 #     dataset_url: "https://www.science.org/doi/10.1126/science.abm1741"
@@ -157,7 +157,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: false
 
-#   - id: zenodo_spatial/human_cortex_4_merfish
+#   - id: zenodo_spatial/merfish/human_cortex_4
 #     input_data: "https://zenodo.org/records/12785822/files/MERFISH_Fang2022Conservation_H18.06.006.MTG.4000.expand.rep3_data.h5ad?download=1"
 #     dataset_name: MERFISH - Human Cortex 4
 #     dataset_url: "https://www.science.org/doi/10.1126/science.abm1741"
@@ -169,7 +169,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: false
 
-#   - id: zenodo_spatial/mouse_cortex_merfish
+#   - id: zenodo_spatial/merfish/mouse_cortex
 #     input_data: "https://zenodo.org/records/12785822/files/MERFISH_Fang2022Conservation_mouse1.AUD_TEA_VIS.242.unexpand_data.h5ad?download=1"
 #     dataset_name: MERFISH - Mouse Cortex
 #     dataset_url: "https://www.science.org/doi/10.1126/science.abm1741"
@@ -192,7 +192,7 @@ HERE
 
 # cat > "/tmp/params.yaml" << 'HERE'
 # param_list:
-#   - id: zenodo_spatial/mouse_organogenesis_seqfish
+#   - id: zenodo_spatial/seqfish/mouse_organogenesis_seqfish
 #     input_data: "https://zenodo.org/records/12785822/files/seqfish.h5ad?download=1"
 #     dataset_name: Seqfish - Mouse Organogenesis
 #     dataset_url: "https://www.nature.com/articles/s41587-021-01006-2"
@@ -216,7 +216,7 @@ HERE
 
 # cat > "/tmp/params.yaml" << 'HERE'
 # param_list:
-#   - id: zenodo_spatial/mouse_olfactory_bulb_puck_slideseqv2
+#   - id: zenodo_spatial/slideseqv2/mouse_olfactory_bulb_puck
 #     input_data: "https://zenodo.org/records/12785822/files/Slide-seqV2_stickels2020highly_stickels2021highly_SlideSeqV2_Mouse_Olfactory_bulb_Puck_200127_15_data_whole.h5ad?download=1"
 #     dataset_name: Slide-seqV2 - Mouse Olfactory Bulb Puck
 #     dataset_url: "https://singlecell.broadinstitute.org/single_cell/study/SCP815/sensitive-spatial-genome-wide-expression-profiling-at-cellular-resolution#study-summary"
@@ -228,7 +228,7 @@ HERE
 #     gene_filter_min_spots: 500
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/mouse_cortex_slideseqv2
+#   - id: zenodo_spatial/slideseqv2/mouse_cortex
 #     input_data: "https://zenodo.org/records/12785822/files/Slide-seqV2_stickels2020highly_palla2021squidpy_Slide-seqV2_Mouse_Cortex_data_whole.h5ad?download=1"
 #     dataset_name: Slide-seqV2 - Mouse Cortex
 #     dataset_url: "https://singlecell.broadinstitute.org/single_cell/study/SCP815/sensitive-spatial-genome-wide-expression-profiling-at-cellular-resolution#study-summary"
@@ -240,7 +240,7 @@ HERE
 #     gene_filter_min_spots: 500
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/mouse_cerebellum_slideseqv2
+#   - id: zenodo_spatial/slideseqv2/mouse_cerebellum
 #     input_data: "https://zenodo.org/records/12785822/files/Slide-seqV2_stickels2020highly_stickels2021highly_Slide-seqV2_Mouse_Cerebellum_SCP948_data_whole.h5ad?download=1"
 #     dataset_name: Slide-seqV2 - Mouse Cerebellum
 #     dataset_url: "https://singlecell.broadinstitute.org/single_cell/study/SCP815/sensitive-spatial-genome-wide-expression-profiling-at-cellular-resolution#study-summary"
@@ -252,7 +252,7 @@ HERE
 #     gene_filter_min_spots: 500
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/mouse_hippocampus_puck_slideseqv2
+#   - id: zenodo_spatial/slideseqv2/mouse_hippocampus_puck
 #     input_data: "https://zenodo.org/records/12785822/files/Slide-seqV2_stickels2020highly_stickels2021highly_Slide-seqV2_Mouse_Hippocampus_Puck_200115_08_data_whole.h5ad?download=1"
 #     dataset_name: Slide-seqV2 - Mouse Hippocampus Puck
 #     dataset_url: "https://singlecell.broadinstitute.org/single_cell/study/SCP815/sensitive-spatial-genome-wide-expression-profiling-at-cellular-resolution#study-summary"
@@ -264,7 +264,7 @@ HERE
 #     gene_filter_min_spots: 500
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/mouse_somatosensory_cortex_puck_slideseqv2
+#   - id: zenodo_spatial/slideseqv2/mouse_somatosensory_cortex_puck
 #     input_data: "https://zenodo.org/records/12785822/files/Slide-seqV2_stickels2020highly_stickels2021highly_Slide-seqV2_Mouse_SomatosensoryCortex_Puck_200306_03_data_whole.h5ad?download=1"
 #     dataset_name: Slide-seqV2 - Mouse Somatosensory Cortex Puck
 #     dataset_url: "https://singlecell.broadinstitute.org/single_cell/study/SCP815/sensitive-spatial-genome-wide-expression-profiling-at-cellular-resolution#study-summary"
@@ -287,7 +287,7 @@ HERE
 
 # cat > "/tmp/params.yaml" << 'HERE'
 # param_list:
-#   - id: zenodo_spatial/mouse_brain_2d_zstep10_0_starmap
+#   - id: zenodo_spatial/starmap/mouse_brain_2d_zstep10_0
 #     input_data: "https://zenodo.org/records/12785822/files/STARmap_Wang2018three_data_2D_zstep10_0_data.h5ad?download=1"
 #     dataset_name: STARmap - Mouse Brain 1
 #     dataset_url: "https://www.science.org/doi/10.1126/science.aat5691"
@@ -299,7 +299,7 @@ HERE
 #     gene_filter_min_spots: 1
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/mouse_brain_2d_zstep15_0_starmap
+#   - id: zenodo_spatial/starmap/mouse_brain_2d_zstep15_0
 #     input_data: "https://zenodo.org/records/12785822/files/STARmap_Wang2018three_data_2D_zstep15_0_data.h5ad?download=1"
 #     dataset_name: STARmap - Mouse Brain 2
 #     dataset_url: "https://www.science.org/doi/10.1126/science.aat5691"
@@ -322,7 +322,7 @@ HERE
 
 # cat > "/tmp/params.yaml" << 'HERE'
 # param_list:
-#   - id: zenodo_spatial/drosophila_embryo_e5_6_stereoseq
+#   - id: zenodo_spatial/stereoseq/drosophila_embryo_e5_6
 #     input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_5.6.h5ad?download=1"
 #     dataset_name: Stereo-seq - Drosophila embryo E5_6
 #     dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
@@ -334,7 +334,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/drosophila_embryo_e6_3_stereoseq
+#   - id: zenodo_spatial/stereoseq/drosophila_embryo_e6_3
 #     input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_6.3.h5ad?download=1"
 #     dataset_name: Stereo-seq - Drosophila embryo E6_3
 #     dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
@@ -346,7 +346,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/drosophila_embryo_e7_stereoseq
+#   - id: zenodo_spatial/stereoseq/drosophila_embryo_e7
 #     input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_7.h5ad?download=1"
 #     dataset_name: Stereo-seq - Drosophila embryo E7
 #     dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
@@ -358,7 +358,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/drosophila_embryo_e9_1_stereoseq
+#   - id: zenodo_spatial/stereoseq/drosophila_embryo_e9_1
 #     input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_9.1.h5ad?download=1"
 #     dataset_name: Stereo-seq - Drosophila embryo E9_1
 #     dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
@@ -370,7 +370,7 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: zenodo_spatial/drosophila_embryo_e10_stereoseq
+#   - id: zenodo_spatial/stereoseq/drosophila_embryo_e10
 #     input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_10.5.h5ad?download=1"
 #     dataset_name: Stereo-seq - Drosophila embryo E10
 #     dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"

@@ -12,7 +12,7 @@ from scGCO_simple import *
 
 # VIASH START
 par = {
-    'input_data': 'resources_test/spatially_variable_genes/mouse_brain_coronal_section1/dataset.h5ad',
+    'input_data': 'resources_test/spatially_variable_genes/mouse_brain_coronal/dataset.h5ad',
     'output': 'output.h5ad'
 }
 meta = {

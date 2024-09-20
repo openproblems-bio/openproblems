@@ -6,7 +6,7 @@ suppressMessages(library(dplyr))
 
 # VIASH START
 par = list(
-    'input_data' = 'resources_test/spatially_variable_genes/mouse_brain_coronal_section1/dataset.h5ad',
+    'input_data' = 'resources_test/spatially_variable_genes/mouse_brain_coronal/dataset.h5ad',
     'output' = 'output.h5ad'
 )
 meta = list(

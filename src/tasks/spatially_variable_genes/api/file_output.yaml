@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/output.h5ad"
+example: "resources_test/spatially_variable_genes/mouse_brain_coronal/output.h5ad"
 info:
   label: Output
   summary: "Anndata with estimate spatial variability."

@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/score.h5ad"
+example: "resources_test/spatially_variable_genes/mouse_brain_coronal/score.h5ad"
 info:
   label: "Score"
   summary: Metric score file.

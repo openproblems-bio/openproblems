@@ -2,7 +2,7 @@
 
 # cat > "/tmp/params.yaml" << 'HERE'
 # param_list:
-#   - id: tenx_visium/mouse_brain_coronal_section1_visium
+#   - id: tenx_visium/visium/mouse_brain_coronal
 #     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.0/CytAssist_FFPE_Mouse_Brain_Rep1/CytAssist_FFPE_Mouse_Brain_Rep1_filtered_feature_bc_matrix.h5"
 #     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.0/CytAssist_FFPE_Mouse_Brain_Rep1/CytAssist_FFPE_Mouse_Brain_Rep1_spatial.tar.gz"
 #     dataset_name: 10X Visium - Mouse Brain Coronal
@@ -15,7 +15,7 @@
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: tenx_visium/human_colorectal_cancer_visium
+#   - id: tenx_visium/visium/human_colorectal_cancer
 #     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.1/CytAssist_11mm_FFPE_Human_Colorectal_Cancer/CytAssist_11mm_FFPE_Human_Colorectal_Cancer_filtered_feature_bc_matrix.h5"
 #     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.1/CytAssist_11mm_FFPE_Human_Colorectal_Cancer/CytAssist_11mm_FFPE_Human_Colorectal_Cancer_spatial.tar.gz"
 #     dataset_name: 10X Visium - Human Colorectal Cancer
@@ -28,7 +28,7 @@
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: tenx_visium/human_heart_visium
+#   - id: tenx_visium/visium/human_heart
 #     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Human_Heart/V1_Human_Heart_filtered_feature_bc_matrix.h5"
 #     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Human_Heart/V1_Human_Heart_spatial.tar.gz"
 #     dataset_name: 10X Visium - Human Heart
@@ -41,7 +41,7 @@
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: tenx_visium/mouse_embryo_visium
+#   - id: tenx_visium/visium/mouse_embryo
 #     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/2.1.0/CytAssist_11mm_FFPE_Mouse_Embryo/CytAssist_11mm_FFPE_Mouse_Embryo_filtered_feature_bc_matrix.h5"
 #     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/2.1.0/CytAssist_11mm_FFPE_Mouse_Embryo/CytAssist_11mm_FFPE_Mouse_Embryo_spatial.tar.gz"
 #     dataset_name: 10X Visium - Mouse Embryo
@@ -54,7 +54,7 @@
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: false
 
-#   - id: tenx_visium/mouse_olfactory_bulb_visium
+#   - id: tenx_visium/visium/mouse_olfactory_bulb
 #     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_Mouse_Olfactory_Bulb/Visium_Mouse_Olfactory_Bulb_filtered_feature_bc_matrix.h5"
 #     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_Mouse_Olfactory_Bulb/Visium_Mouse_Olfactory_Bulb_spatial.tar.gz"
 #     dataset_name: 10X Visium - Mouse Olfactory Bulb
@@ -67,7 +67,7 @@
 #     gene_filter_min_spots: 30
 #     remove_mitochondrial: false
 
-#   - id: tenx_visium/human_breast_cancer_1_visium
+#   - id: tenx_visium/visium/human_breast_cancer_1
 #     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/1.2.0/Parent_Visium_Human_BreastCancer/Parent_Visium_Human_BreastCancer_filtered_feature_bc_matrix.h5"
 #     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/1.2.0/Parent_Visium_Human_BreastCancer/Parent_Visium_Human_BreastCancer_spatial.tar.gz"
 #     dataset_name: 10X Visium - Human Breast Cancer 1
@@ -80,7 +80,7 @@
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: tenx_visium/human_lymph_node_visium
+#   - id: tenx_visium/visium/human_lymph_node
 #     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Human_Lymph_Node/V1_Human_Lymph_Node_filtered_feature_bc_matrix.h5"
 #     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Human_Lymph_Node/V1_Human_Lymph_Node_spatial.tar.gz"
 #     dataset_name: 10X Visium - Human Lymph Node
@@ -93,7 +93,7 @@
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: tenx_visium/human_normal_prostate_visium
+#   - id: tenx_visium/visium/human_normal_prostate
 #     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_FFPE_Human_Normal_Prostate/Visium_FFPE_Human_Normal_Prostate_filtered_feature_bc_matrix.h5"
 #     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_FFPE_Human_Normal_Prostate/Visium_FFPE_Human_Normal_Prostate_spatial.tar.gz"
 #     dataset_name: 10X Visium - Human Normal Prostate
@@ -106,7 +106,7 @@
 #     gene_filter_min_spots: 30
 #     remove_mitochondrial: true
 
-#   - id: tenx_visium/human_prostate_cancer_visium
+#   - id: tenx_visium/visium/human_prostate_cancer
 #     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_FFPE_Human_Prostate_IF/Visium_FFPE_Human_Prostate_IF_filtered_feature_bc_matrix.h5"
 #     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_FFPE_Human_Prostate_IF/Visium_FFPE_Human_Prostate_IF_spatial.tar.gz"
 #     dataset_name: 10X Visium - Human Prostate Cancer
@@ -130,7 +130,7 @@
 
 cat > "/tmp/params.yaml" << 'HERE'
 param_list:
-  - id: tenx_visium/human_cerebellum_visium
+  - id: tenx_visium/visium/human_cerebellum
     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/1.2.0/Parent_Visium_Human_Cerebellum/Parent_Visium_Human_Cerebellum_filtered_feature_bc_matrix.h5"
     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/1.2.0/Parent_Visium_Human_Cerebellum/Parent_Visium_Human_Cerebellum_spatial.tar.gz"
     dataset_name: 10X Visium - Adult Human Cerebellum
@@ -143,7 +143,7 @@ param_list:
     gene_filter_min_spots: 50
     remove_mitochondrial: true
 
-  - id: tenx_visium/mouse_kidney_v1_visium
+  - id: tenx_visium/visium/mouse_kidney_v1
     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/1.1.0/V1_Mouse_Kidney/V1_Mouse_Kidney_filtered_feature_bc_matrix.h5"
     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/1.1.0/V1_Mouse_Kidney/V1_Mouse_Kidney_spatial.tar.gz"
     dataset_name: 10X Visium - Mouse Kidney 1
@@ -156,7 +156,7 @@ param_list:
     gene_filter_min_spots: 30
     remove_mitochondrial: false
 
-  - id: tenx_visium/human_lung_cancer_visium
+  - id: tenx_visium/visium/human_lung_cancer
     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.1/CytAssist_11mm_FFPE_Human_Lung_Cancer/CytAssist_11mm_FFPE_Human_Lung_Cancer_filtered_feature_bc_matrix.h5"
     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.1/CytAssist_11mm_FFPE_Human_Lung_Cancer/CytAssist_11mm_FFPE_Human_Lung_Cancer_spatial.tar.gz"
     dataset_name: 10X Visium - Human Lung Cancer
@@ -169,7 +169,7 @@ param_list:
     gene_filter_min_spots: 50
     remove_mitochondrial: true
 
-  - id: tenx_visium/human_brain_cancer_visium
+  - id: tenx_visium/visium/human_brain_cancer
     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.1/CytAssist_11mm_FFPE_Human_Glioblastoma/CytAssist_11mm_FFPE_Human_Glioblastoma_filtered_feature_bc_matrix.h5"
     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.1/CytAssist_11mm_FFPE_Human_Glioblastoma/CytAssist_11mm_FFPE_Human_Glioblastoma_spatial.tar.gz"
     dataset_name: 10X Visium - Human Brain Cancer
@@ -182,7 +182,7 @@ param_list:
     gene_filter_min_spots: 100
     remove_mitochondrial: true
 
-  - id: tenx_visium/human_kidney_visium
+  - id: tenx_visium/visium/human_kidney
     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.1/CytAssist_11mm_FFPE_Human_Kidney/CytAssist_11mm_FFPE_Human_Kidney_filtered_feature_bc_matrix.h5"
     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.1/CytAssist_11mm_FFPE_Human_Kidney/CytAssist_11mm_FFPE_Human_Kidney_spatial.tar.gz"
     dataset_name: 10X Visium - Human Kidney
@@ -195,7 +195,7 @@ param_list:
     gene_filter_min_spots: 50
     remove_mitochondrial: true
 
-  - id: tenx_visium/human_intestinal_cancer_visium
+  - id: tenx_visium/visium/human_intestinal_cancer
     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_FFPE_Human_Intestinal_Cancer/Visium_FFPE_Human_Intestinal_Cancer_filtered_feature_bc_matrix.h5"
     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_FFPE_Human_Intestinal_Cancer/Visium_FFPE_Human_Intestinal_Cancer_spatial.tar.gz"
     dataset_name: 10X Visium - Human Intestine Cancer
@@ -208,7 +208,7 @@ param_list:
     gene_filter_min_spots: 30
     remove_mitochondrial: true
 
-  - id: tenx_visium/human_skin_melanoma_visium
+  - id: tenx_visium/visium/human_skin_melanoma
     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.0/CytAssist_FFPE_Human_Skin_Melanoma/CytAssist_FFPE_Human_Skin_Melanoma_filtered_feature_bc_matrix.h5"
     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/2.0.0/CytAssist_FFPE_Human_Skin_Melanoma/CytAssist_FFPE_Human_Skin_Melanoma_spatial.tar.gz"
     dataset_name: 10X Visium - Human Skin Melanoma
@@ -221,7 +221,7 @@ param_list:
     gene_filter_min_spots: 50
     remove_mitochondrial: true
 
-  - id: tenx_visium/human_cervical_cancer_visium
+  - id: tenx_visium/visium/human_cervical_cancer
     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_FFPE_Human_Cervical_Cancer/Visium_FFPE_Human_Cervical_Cancer_filtered_feature_bc_matrix.h5"
     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_FFPE_Human_Cervical_Cancer/Visium_FFPE_Human_Cervical_Cancer_spatial.tar.gz"
     dataset_name: 10X Visium - Human Cervical Cancer
@@ -234,13 +234,13 @@ param_list:
     gene_filter_min_spots: 50
     remove_mitochondrial: true
 
-  - id: tenx_visium/human_breast_cancer_2_visium
+  - id: tenx_visium/visium/human_breast_cancer_2
     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_FFPE_Human_Breast_Cancer/Visium_FFPE_Human_Breast_Cancer_filtered_feature_bc_matrix.h5"
     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/1.3.0/Visium_FFPE_Human_Breast_Cancer/Visium_FFPE_Human_Breast_Cancer_spatial.tar.gz"
     dataset_name: 10X Visium - Human Breast Cancer 2
     dataset_url: "https://www.10xgenomics.com/datasets/human-breast-cancer-ductal-carcinoma-in-situ-invasive-carcinoma-ffpe-1-standard-1-3-0"
     dataset_summary: Gene expression library of Human Breast Cancer (Visium FFPE) using the Human Whole Transcriptome Probe Set
-    dataset_description: "10x Genomics obtained FFPE human breast tissue from BioIVT Asterand Human Tissue Specimens. The tissue was annotated with Ductal Carcinoma In Situ, Invasive Carcinoma. The tissue was sectioned as described in Visium Spatial Gene Expression for FFPE – Tissue Preparation Guide Demonstrated Protocol (CG000408). Tissue sections of 5 µm were placed on Visium Gene Expression slides, then stained following Deparaffinization, H&E Staining, Imaging & Decrosslinking Demonstrated Protocol (CG000409)."
+    dataset_description: "10x Genomics obtained FFPE human breast tissue from BioIVT Asterand Human Tissue Specimens. The tissue was annotated with Ductal Carcinoma In Situ, Invasive Carcinoma. The tissue was sectioned as described in Visium Spatial Gene Expression for FFPE - Tissue Preparation Guide Demonstrated Protocol (CG000408). Tissue sections of 5 µm were placed on Visium Gene Expression slides, then stained following Deparaffinization, H&E Staining, Imaging & Decrosslinking Demonstrated Protocol (CG000409)."
     dataset_reference: 10x2021breast
     dataset_organism: Homo sapiens
     spot_filter_min_genes: 100
@@ -258,10 +258,10 @@ HERE
 
 # cat > "/tmp/params.yaml" << 'HERE'
 # param_list:
-#   - id: tenx_visium/human_colon_cancer_xenium
+#   - id: tenx_visium/post_xenium/human_colon_cancer
 #     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/2.1.0/CytAssist_FFPE_Human_Colon_Post_Xenium_Rep1/CytAssist_FFPE_Human_Colon_Post_Xenium_Rep1_filtered_feature_bc_matrix.h5"
 #     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/2.1.0/CytAssist_FFPE_Human_Colon_Post_Xenium_Rep1/CytAssist_FFPE_Human_Colon_Post_Xenium_Rep1_spatial.tar.gz"
-#     dataset_name: 10X Xenium - Human Colon
+#     dataset_name: 10X Post Xenium - Human Colon
 #     dataset_url: "https://www.10xgenomics.com/datasets/visium-cytassist-gene-expression-libraries-of-post-xenium-human-colon-cancer-ffpe-using-the-human-whole-transcriptome-probe-set-2-standard"
 #     dataset_summary: Gene expression library of Post Xenium Human Colon Cancer (CytAssist FFPE) using the Human Whole Transcriptome Probe Set - Replicate 1
 #     dataset_description: "This dataset is provided as part of the Technical Note: Post-Xenium In Situ Applications: Immunofluorescence, H&E, and Visium CytAssist Spatial Gene Expression (CG000709). Post-Xenium samples were compared to controls (samples not processed through the Xenium workflow) using 5 µm (FFPE) serial sections."
@@ -271,10 +271,10 @@ HERE
 #     gene_filter_min_spots: 50
 #     remove_mitochondrial: true
 
-#   - id: tenx_visium/mouse_brain_xenium
+#   - id: tenx_visium/post_xenium/mouse_brain
 #     input_expression: "https://cf.10xgenomics.com/samples/spatial-exp/2.1.0/CytAssist_FreshFrozen_Mouse_Brain_Post_Xenium_Rep1/CytAssist_FreshFrozen_Mouse_Brain_Post_Xenium_Rep1_filtered_feature_bc_matrix.h5"
 #     input_spatial: "https://cf.10xgenomics.com/samples/spatial-exp/2.1.0/CytAssist_FreshFrozen_Mouse_Brain_Post_Xenium_Rep1/CytAssist_FreshFrozen_Mouse_Brain_Post_Xenium_Rep1_spatial.tar.gz"
-#     dataset_name: 10X Xenium - Mouse Brain 
+#     dataset_name: 10X Post Xenium - Mouse Brain 
 #     dataset_url: "https://www.10xgenomics.com/datasets/visium-cytassist-gene-expression-libraries-of-post-xenium-mouse-brain-ff-using-the-mouse-whole-transcriptome-probe-set-2-standard"
 #     dataset_summary: Gene expression library of Post Xenium Mouse Brain (CytAssist Fresh Frozen) using the Mouse Whole Transcriptome Probe Set - Replicate 1
 #     dataset_description: "This dataset is provided as part of the Technical Note: Post-Xenium In Situ Applications: Immunofluorescence, H&E, and Visium CytAssist Spatial Gene Expression (CG000709). Post-Xenium samples were compared to controls (samples not processed through the Xenium workflow) using 10 µm fresh-frozen (FF) serial sections."

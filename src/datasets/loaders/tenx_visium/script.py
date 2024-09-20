@@ -7,7 +7,7 @@ import scanpy as sc
 par = {
   "input_expression": "https://cf.10xgenomics.com/samples/spatial-exp/2.0.0/CytAssist_FFPE_Mouse_Brain_Rep1/CytAssist_FFPE_Mouse_Brain_Rep1_filtered_feature_bc_matrix.h5",
   "input_spatial": "https://cf.10xgenomics.com/samples/spatial-exp/2.0.0/CytAssist_FFPE_Mouse_Brain_Rep1/CytAssist_FFPE_Mouse_Brain_Rep1_spatial.tar.gz",
-  "dataset_id": "tenx_visium/mouse_brain_coronal_section1_visium",
+  "dataset_id": "mouse_brain_coronal",
   "dataset_name": "Mouse Brain Coronal Section 1 (FFPE)",
   "dataset_url": "https://www.10xgenomics.com/datasets/mouse-brain-coronal-section-1-ffpe-2-standard",
   "dataset_summary": "Gene expression library of Mouse Brain (CytAssist FFPE) using the Mouse Whole Transcriptome Probe Set",
