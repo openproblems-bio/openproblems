@@ -13,7 +13,7 @@ par <- list(
 configs <- yaml::yaml.load_file(par$input)
 
 outputs <- map(configs, function(config) {
-  if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") {
+  if (length(config$status) > 0 && config$status == "disabled") {
     return(NULL)
   }
 
@@ -28,16 +28,25 @@ outputs <- map(configs, function(config) {
 
   # add extra info
   info$config_path <- gsub(".*/src/", "src/", build_info$config)
-  info$task_id <- gsub("/.*", "", config$namespace)
+  info$task_id <- config$package_config$name
   info$id <- config$name
+  info$label <- config$label
+  info$summary <- config$summary
+  info$description <- config$description
   info$namespace <- config$namespace
   info$commit_sha <- build_info$git_commit %||% "missing-sha"
+  info$reference <- if (!is.null(config$references$doi)) {
+    config$references$doi
+  } else {
+    config$references$bibtex
+  }
   info$code_version <- "missing-version"
-    info$implementation_url <- paste0(
-      build_info$git_remote, "/blob/",
-      build_info$git_commit, "/",
-      info$config_path
-    )
+  info$repository_url <- config$links$repository
+  info$implementation_url <- paste0(
+    build_info$git_remote, "/blob/",
+    build_info$git_commit, "/",
+    info$config_path
+  )
 
   # ↑ this could be used as the new format
 
