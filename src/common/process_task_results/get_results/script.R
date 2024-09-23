@@ -9,7 +9,7 @@ library(purrr, warn.conflicts = FALSE)
 library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
-dir <- "work/c1/6660ea0cc6155d7e13fa341d16057b/_viash_par"
+dir <- "work/37/6c432b7cde416490232b71ecf0896a/_viash_par"
 par <- list(
   task_id = "task_1",
   input_scores = paste0(dir, "/input_scores_1/score_uns.yaml"),
@@ -130,8 +130,8 @@ scores <- raw_scores %>%
   )
 
 # read nxf log and process the task id
-norm_methods <- "/log_cp10k|/log_cpm|/sqrt_cp10k|/sqrt_cpm|/l1_sqrt|/log_scran_pooling"
-id_regex <- paste0("^.*:(.*)_process \\(([^\\.]*)(", norm_methods, ")?(.[^\\.]*)?\\.(.*)\\)$")
+norm_methods <- "log_cp10k|log_cpm|sqrt_cp10k|sqrt_cpm|l1_sqrt|log_scran_pooling"
+id_regex <- paste0("^.*:(.*)_process \\(([^/]+/[^/]+)/(", norm_methods, ")?(.[^\\.]*)?\\.(.*)\\)$")
 
 trace <- readr::read_tsv(par$input_execution) %>%
   mutate(
