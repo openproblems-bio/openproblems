@@ -19,12 +19,12 @@ nextflow run . \
   -main-script target/nextflow/spatially_variable_genes/workflows/process_datasets/main.nf \
   -profile docker \
   -c src/wf_utils/labels_ci.config \
-  --id mouse_brain_coronal_section1 \
-  --input $RAW_DATA/mouse_brain_coronal_section1/dataset.h5ad \
+  --id mouse_brain_coronal \
+  --input $RAW_DATA/mouse_brain_coronal/dataset.h5ad \
   --output_dataset dataset.h5ad \
   --output_solution solution.h5ad \
   --dataset_simulated_normalized simulated_dataset.h5ad \
-  --publish_dir $DATASET_DIR/mouse_brain_coronal_section1 \
+  --publish_dir $DATASET_DIR/mouse_brain_coronal \
   --output_state "state.yaml" \
   --gp_k_sim 50 \
   --select_top_variable_genes 50 \
@@ -32,12 +32,12 @@ nextflow run . \
 
 echo "Running control method"
 viash run src/tasks/spatially_variable_genes/control_methods/true_ranking/config.vsh.yaml -- \
-  --input_data $DATASET_DIR/mouse_brain_coronal_section1/dataset.h5ad \
-  --input_solution $DATASET_DIR/mouse_brain_coronal_section1/solution.h5ad \
-  --output $DATASET_DIR/mouse_brain_coronal_section1/output.h5ad
+  --input_data $DATASET_DIR/mouse_brain_coronal/dataset.h5ad \
+  --input_solution $DATASET_DIR/mouse_brain_coronal/solution.h5ad \
+  --output $DATASET_DIR/mouse_brain_coronal/output.h5ad
 
 echo "Running metric"
 viash run src/tasks/spatially_variable_genes/metrics/correlation/config.vsh.yaml -- \
-    --input_method $DATASET_DIR/mouse_brain_coronal_section1/output.h5ad \
-    --input_solution $DATASET_DIR/mouse_brain_coronal_section1/solution.h5ad \
-    --output $DATASET_DIR/mouse_brain_coronal_section1/score.h5ad
+    --input_method $DATASET_DIR/mouse_brain_coronal/output.h5ad \
+    --input_solution $DATASET_DIR/mouse_brain_coronal/solution.h5ad \
+    --output $DATASET_DIR/mouse_brain_coronal/score.h5ad

@@ -9,7 +9,7 @@ set.seed(2024)
 
 ## VIASH START
 par <- list(
-  input = "resources_test/common/mouse_brain_coronal_section1/dataset.h5ad",
+  input = "resources_test/common/mouse_brain_coronal/dataset.h5ad",
   output = "dataset_sim.h5ad",
   gp_k = 50L,
   select_top_variable_genes = 50L

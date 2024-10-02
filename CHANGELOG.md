@@ -3,6 +3,7 @@
 ## Minor changes
 
 - Add the CELLxGENE immune cell atlas dataset as a common test resource (PR #907)
+- Update `dataset_id` for `tenx_visium`, `zenodo_spatial`, `zenodo_spatial_slidetags` datasets and use `mouse_brain_coronal` as a test resource in the `spatially_variable_genes` task (PR #908)
 
 # openproblems v2.0.0
 
@@ -25,7 +26,7 @@ Most relevant parts of the overall structure:
   - `openproblems_neurips2022_pbmc`: Fetch a dataset from the OpenProblems NeurIPS2022 competition
   - `openproblems_v1`: Fetch a legacy OpenProblems v1 dataset
   - `openproblems_v1_multimodal`: Fetch a legacy OpenProblems v1 multimodal dataset
-  - `tenx_vision`: Fetch a and convert 10x Visium dataset
+  - `tenx_visium`: Fetch a and convert 10x Visium dataset
   - `zenodo_spatial`: Fetch and process an Anndata file containing DBiT seq, MERFISH, seqFISH, Slide-seq v2, STARmap, and Stereo-seq data from Zenodo.
   - `zenodo_spatial_slidetags`: Download a compressed file containing gene expression matrix and spatial locations from zenodo.
 

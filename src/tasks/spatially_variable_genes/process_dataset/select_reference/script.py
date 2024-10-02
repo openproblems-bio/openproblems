@@ -3,7 +3,7 @@ import squidpy as sq
 
 ### VIASH START
 par = {
-    "input": "resources_test/common/mouse_brain_coronal_section1/dataset.h5ad",
+    "input": "resources_test/common/mouse_brain_coronal/dataset.h5ad",
     "input_layer": "normalized",
     "output": "reference_dataset.h5ad",
     "num_features": 50,

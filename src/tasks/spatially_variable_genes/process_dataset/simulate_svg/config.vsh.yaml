@@ -33,8 +33,8 @@ functionality:
   test_resources:
     - type: python_script
       path: /src/common/comp_tests/run_and_check_adata.py
-    - path: /resources_test/common/mouse_brain_coronal_section1
-      dest: resources_test/common/mouse_brain_coronal_section1
+    - path: /resources_test/common/mouse_brain_coronal
+      dest: resources_test/common/mouse_brain_coronal
 platforms:
   - type: docker
     image: ghcr.io/openproblems-bio/base_r:1.0.4
