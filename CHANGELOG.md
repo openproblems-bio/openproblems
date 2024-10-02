@@ -1,3 +1,9 @@
+# openproblems v2.1.0
+
+## Minor changes
+
+- Add the CELLxGENE immune cell atlas dataset as a common test resource (PR #907)
+
 # openproblems v2.0.0
 
 A major update to the OpenProblems framework, switching from a Python-based framework to a Viash + Nextflow-based framework. This update features the same concepts as the previous version, but with a new implementation that is more flexible, scalable, and maintainable.
@@ -66,7 +72,7 @@ Note: This changelog was automatically generated from the git log.
 ## Minor changes
 - Updated method names to be shorter and more consistent across tasks.
 - Improved method summaries for clarity.
-- Updated JAX and JAXlib versions to 0.4.6. 
+- Updated JAX and JAXlib versions to 0.4.6.
 - Updated dependencies to support new versions of Snakemake and GitPython.
 - Removed code related to "nbt2022-reproducibility" repo and merged it into the main website.
 - Updated the schema for benchmark results to include submission time, code version, and resource usage metrics.
@@ -156,7 +162,7 @@ Note: This changelog was automatically generated from the git log.
 - Updated `celltype_random_embedding` to use `jitter=None` in `_random_embedding`.
 - Removed unnecessary parameters from the `sample_dataset` function.
 - Removed unnecessary checks for PCA and neighbors in the `check_dataset` function.
-- Updated `pytest.ini` to ignore deprecation warning related to `pkg_resources`. 
+- Updated `pytest.ini` to ignore deprecation warning related to `pkg_resources`.
 - Added permission to all workflows to read and write contents
 - Added permission to write pull requests to several workflows
 - Added permission to write packages to the `run_tests` workflow.
@@ -210,7 +216,7 @@ Note: This changelog was automatically generated from the git log.
 ## Minor changes
 - Updated `scib` version to `1.1.3` in `docker/openproblems-r-extras/requirements.txt` and `docker/openproblems-r-pytorch/requirements.txt`.
 ## Bug fixes
-- Added `pytest-timestamper` to test dependencies for better debugging. 
+- Added `pytest-timestamper` to test dependencies for better debugging.
 
 
 # openproblems v0.7.2
@@ -218,7 +224,7 @@ Note: This changelog was automatically generated from the git log.
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
-- Fixed an issue where pymde did not work on sparse data. 
+- Fixed an issue where pymde did not work on sparse data.
 
 
 # openproblems v0.7.1
@@ -264,11 +270,11 @@ Note: This changelog was automatically generated from the git log.
 - Updated `scvi-tools` version to `~0.19` in both `openproblems-python-pytorch` and `openproblems-r-pytorch` dockerfiles.
 - Updated `cell2location` version to `47c8d6dc90dd3f1ab639861e8617c6ef0b62bb89` in the `openproblems-python-pytorch` dockerfile.
 - Updated `bslib` to version 0.4.2.
-- Updated `htmltools` to version 0.5.4. 
+- Updated `htmltools` to version 0.5.4.
 - Updated the `alra_sqrt` method to use square root normalization.
 - Updated the `alra_log` method to use log normalization.
 - Updated the method names to reflect the normalization used.
-- Updated dependencies for `gtfparse` and `polars`. 
+- Updated dependencies for `gtfparse` and `polars`.
 - Added PyMDE dependency to requirements.txt
 - Updated the API to specify that datasets should provide log CPM-normalized counts in `adata.X
 
@@ -320,26 +326,26 @@ Note: This changelog was automatically generated from the git log.
 - Updated `numpy` and `scipy` dependencies in setup.py.
 - Updated `scikit-learn`, `louvain`, `python-igraph`, `decorator` and `colorama` dependencies in setup.py.
 - Improved Docker image caching.
-- Removed the `counts` layer from the `immune_cells`, `pancreas` datasets, and the `batch_integration_feature` task. 
+- Removed the `counts` layer from the `immune_cells`, `pancreas` datasets, and the `batch_integration_feature` task.
 - Removed the `counts` layer from `generate_synthetic_dataset` functions in spatial decomposition datasets.
 - Updated the `normalize` functions to not modify the data in place.
 - Updated the `log_cpm_hvg` function to annotate HVGs instead of subsetting the data.
 - Updated the `_high_dim` function in the `nn_ranking` metric to subset to HVGs.
 - Updated the `dimensionality_reduction` task README to clarify the role of the `highly_variable` key.
-- Reduced the random noise added to the one-hot embedding in the `_random_embedding` function from (-0.1, 0.1) to (-0.01, 0.01). 
+- Reduced the random noise added to the one-hot embedding in the `_random_embedding` function from (-0.1, 0.1) to (-0.01, 0.01).
 - Removed `high_dim_pca` and `high_dim_spectral` methods.
 - Updated the `random_features` method to use the `check_version` function.
 - Moved raw output files from website to the NBT 2022 reproducibility repository.
 - Updated the `process_results.yml` workflow to include the NBT 2022 reproducibility repository.
 - Updated the `run_tests.yml` workflow to skip tests when pushing to specific branches.
-- Removed `# ci skip` from commit message in CI workflow. 
+- Removed `# ci skip` from commit message in CI workflow.
 - Removed redundant file deletion from `process_results.yml` workflow.
 - Added `update_website_content.yml` workflow to update benchmark content on the website repository.
 - Modified the `process_results.yml` workflow to update website content based on results.
 - Changed the `update_website_content.yml` workflow to trigger on both the `main` and `test_website` branches.
-- Updated workflow to push changes to the website only if there are changes to the website content. 
-- Added environment variable to track changes. 
-- Removed unused git command. 
+- Updated workflow to push changes to the website only if there are changes to the website content.
+- Added environment variable to track changes.
+- Removed unused git command.
 - Decreased number of samples for testing.
 - Updated `igraph` to 0.10.* in `setup.py`.
 - Updated `anndata2ri` to 1.1.* in `openproblems-r-base/README.md`.
@@ -360,7 +366,7 @@ Note: This changelog was automatically generated from the git log.
 - Added a new dataset: "Pancreas (inDrop)"
 - Added a new function: "pancreas"
 - Added a new utility function: "utils.split_data"
-- Added `tabula_muris_senis_lung_random` dataset. 
+- Added `tabula_muris_senis_lung_random` dataset.
 - Added `celltype_random_embedding` baseline method for batch integration embedding.
 - Added `celltype_random_graph` baseline method for batch integration graph.
 - Added a new argument `sctransform_n_cells` to the seuratv3 function to allow users to specify the number of cells used to build the negative binomial regression in the SCTransform function.
@@ -447,7 +453,7 @@ Note: This changelog was automatically generated from the git log.
 Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
-- Converted sparse matrix to csr format. 
+- Converted sparse matrix to csr format.
 
 
 # openproblems v0.5.18
@@ -455,7 +461,7 @@ Note: This changelog was automatically generated from the git log.
 Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
-- Converted sparse matrices to CSR format. 
+- Converted sparse matrices to CSR format.
 
 
 # openproblems v0.5.17
@@ -489,7 +495,7 @@ Note: This changelog was automatically generated from the git log.
 Note: This changelog was automatically generated from the git log.
 
 ## Major changes
-- Updated workflow to run tests against `prod` branch. 
+- Updated workflow to run tests against `prod` branch.
 
 
 # openproblems v0.5.13
@@ -519,7 +525,7 @@ Note: This changelog was automatically generated from the git log.
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
-- Reverted bump of louvain to 0.8, which caused issues. 
+- Reverted bump of louvain to 0.8, which caused issues.
 
 ## Minor changes
 - Updated torch requirement to 1.13 in the openproblems-r-pytorch docker.
@@ -557,7 +563,7 @@ Note: This changelog was automatically generated from the git log.
 Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
-- Updated scIB to 77ab015. 
+- Updated scIB to 77ab015.
 
 
 # openproblems v0.5.7
@@ -602,7 +608,7 @@ Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
 - Update Rcpp to 1.0.9
-- Update to nf-openproblems v1.7 
+- Update to nf-openproblems v1.7
 
 
 # openproblems v0.5.4
@@ -618,7 +624,7 @@ Note: This changelog was automatically generated from the git log.
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
-- Fixed a bug in the rctd method where cell types with fewer than 25 cells were not being used. 
+- Fixed a bug in the rctd method where cell types with fewer than 25 cells were not being used.
 
 
 # openproblems v0.5.2
@@ -626,7 +632,7 @@ Note: This changelog was automatically generated from the git log.
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
-- Handle missing function error by catching FileNotFoundError and NoSuchFunctionError instead of just RuntimeError. 
+- Handle missing function error by catching FileNotFoundError and NoSuchFunctionError instead of just RuntimeError.
 
 
 # openproblems v0.5.1
@@ -726,7 +732,7 @@ Note: This changelog was automatically generated from the git log.
 Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
-- Run scran pooling in series, not in parallel. 
+- Run scran pooling in series, not in parallel.
 
 
 # openproblems v0.4.1
@@ -743,7 +749,7 @@ Note: This changelog was automatically generated from the git log.
 - Improved the performance of several methods by pre-processing the data before running them.
 
 ## Bug fixes
-- Fixed bugs in `fastMNN`, `harmony`, `liger`, `scanorama`, `scanvi`, `scvi`, `mnn`, and `combat` that caused incorrect embedding. 
+- Fixed bugs in `fastMNN`, `harmony`, `liger`, `scanorama`, `scanvi`, `scvi`, `mnn`, and `combat` that caused incorrect embedding.
 
 
 # openproblems v0.4.0
@@ -879,24 +885,24 @@ Note: This changelog was automatically generated from the git log.
 - Added trustworthiness metric to the dimensionality reduction task.
 - Added density preservation metric.
 - Added several metrics based on nearest neighbor ranking: continuity, co-KNN size, co-KNN AUC, local continuity meta criterion, local property, global property.
-- Added mouse blood data from Olsson et al. (2016) Nature to the `openproblems` dataset collection. 
-- Added a test mode to the `load_olsson_2016_mouse_blood` function. 
+- Added mouse blood data from Olsson et al. (2016) Nature to the `openproblems` dataset collection.
+- Added a test mode to the `load_olsson_2016_mouse_blood` function.
 - Added a dataset function for the `mouse_blood_olssen_labelled` dataset in the `openproblems.tasks.dimensionality_reduction.datasets` module.
 - Added ALRA denoising method.
 - Added support for the Single Cell Optimal Transport (SCOT) method for multimodal data integration.
 - SCOT implements Gromov-Wasserstein optimal transport to align single-cell multi-omics data.
-- Added four variations of SCOT: 
+- Added four variations of SCOT:
 +    - sqrt CPM unbalanced
 +    - sqrt CPM balanced
 +    - log scran unbalanced
 +    - log scran balanced
 - Each variation implements different normalization strategies for the input data.
-- Added `scot` method to `openproblems.tasks.multimodal_data_integration.methods`. 
+- Added `scot` method to `openproblems.tasks.multimodal_data_integration.methods`.
 - Added pre-processing to the `dimensionality_reduction` task.
 - Added pre-processing to all `dimensionality_reduction` methods.
 - Added Wagner_2018_zebrafish_embryo_CRISPR dataset loader
-- Added PR review checklist to the pull request template. 
-- Added `cmake==3.18.4` to the `docker/openproblems-python-extras/requirements.txt` file. 
+- Added PR review checklist to the pull request template.
+- Added `cmake==3.18.4` to the `docker/openproblems-python-extras/requirements.txt` file.
 - Added `--version` flag to print the version.
 - Added `--test-hash` flag to print the current hash.
 - Added basic help message.
