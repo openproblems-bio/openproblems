@@ -463,9 +463,9 @@ ENTRYPOINT []
  
 RUN :
 LABEL org.opencontainers.image.description="Companion container for running component datasets/loaders zenodo_spatial_slidetags"
-LABEL org.opencontainers.image.created="2024-09-08T05:48:29Z"
+LABEL org.opencontainers.image.created="2024-10-02T09:41:00Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="bf274d8279e2686df64b75a799c08aa9bf311101"
+LABEL org.opencontainers.image.revision="3ba588de15b5e84d995a287f7cb943edd6a3d034"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

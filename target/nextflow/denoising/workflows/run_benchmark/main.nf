@@ -3020,14 +3020,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "check_dataset_schema",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/common/check_dataset_schema/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/check_dataset_schema"
@@ -3041,14 +3041,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "extract_metadata",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/common/extract_metadata/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/extract_metadata"
@@ -3062,14 +3062,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/control_methods/no_denoising/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "no_denoising",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/control_methods/no_denoising/config.vsh.yaml",
           "functionalityNamespace" : "denoising/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/denoising/control_methods/no_denoising/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/denoising/control_methods/no_denoising"
@@ -3083,14 +3083,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/control_methods/perfect_denoising/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "perfect_denoising",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/control_methods/perfect_denoising/config.vsh.yaml",
           "functionalityNamespace" : "denoising/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/denoising/control_methods/perfect_denoising/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/denoising/control_methods/perfect_denoising"
@@ -3104,14 +3104,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/methods/alra/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "alra",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/methods/alra/config.vsh.yaml",
           "functionalityNamespace" : "denoising/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/denoising/methods/alra/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/denoising/methods/alra"
@@ -3125,14 +3125,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/methods/dca/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "dca",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/methods/dca/config.vsh.yaml",
           "functionalityNamespace" : "denoising/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/denoising/methods/dca/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/denoising/methods/dca"
@@ -3146,14 +3146,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/methods/knn_smoothing/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "knn_smoothing",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/methods/knn_smoothing/config.vsh.yaml",
           "functionalityNamespace" : "denoising/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/denoising/methods/knn_smoothing/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/denoising/methods/knn_smoothing"
@@ -3167,14 +3167,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/methods/magic/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "magic",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/methods/magic/config.vsh.yaml",
           "functionalityNamespace" : "denoising/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/denoising/methods/magic/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/denoising/methods/magic"
@@ -3188,14 +3188,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/metrics/mse/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "mse",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/metrics/mse/config.vsh.yaml",
           "functionalityNamespace" : "denoising/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/denoising/metrics/mse/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/denoising/metrics/mse"
@@ -3209,14 +3209,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/metrics/poisson/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "poisson",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/denoising/metrics/poisson/config.vsh.yaml",
           "functionalityNamespace" : "denoising/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/denoising/metrics/poisson/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/denoising/metrics/poisson"
@@ -3263,9 +3263,9 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/denoising/workflows/run_benchmark",
     "viash_version" : "0.8.6",
-    "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+    "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1414-gbf274d82"
+    "git_tag" : "v1.0.0-1415-g3ba588de"
   }
 }'''))
 ]

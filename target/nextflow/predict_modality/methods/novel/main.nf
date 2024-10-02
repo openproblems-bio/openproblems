@@ -3242,14 +3242,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/predict_modality/methods/novel/train/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "novel_train",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/predict_modality/methods/novel/train/config.vsh.yaml",
           "functionalityNamespace" : "predict_modality/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/predict_modality/methods/novel_train/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/methods/novel_train"
@@ -3263,14 +3263,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/predict_modality/methods/novel/predict/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "novel_predict",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/predict_modality/methods/novel/predict/config.vsh.yaml",
           "functionalityNamespace" : "predict_modality/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/predict_modality/methods/novel_predict/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/methods/novel_predict"
@@ -3317,9 +3317,9 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/predict_modality/methods/novel",
     "viash_version" : "0.8.6",
-    "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+    "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1414-gbf274d82"
+    "git_tag" : "v1.0.0-1415-g3ba588de"
   }
 }'''))
 ]

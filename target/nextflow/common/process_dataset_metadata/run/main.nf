@@ -2844,14 +2844,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/process_task_results/yaml_to_json/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "yaml_to_json",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/process_task_results/yaml_to_json/config.vsh.yaml",
           "functionalityNamespace" : "common/process_task_results",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/common/process_task_results/yaml_to_json/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/process_task_results/yaml_to_json"
@@ -2898,9 +2898,9 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/process_dataset_metadata/run",
     "viash_version" : "0.8.6",
-    "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+    "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1414-gbf274d82"
+    "git_tag" : "v1.0.0-1415-g3ba588de"
   }
 }'''))
 ]

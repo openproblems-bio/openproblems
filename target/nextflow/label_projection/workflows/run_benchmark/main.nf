@@ -3188,14 +3188,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "check_dataset_schema",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/common/check_dataset_schema/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/check_dataset_schema"
@@ -3209,14 +3209,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "extract_metadata",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/common/extract_metadata/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/extract_metadata"
@@ -3230,14 +3230,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/control_methods/true_labels/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "true_labels",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/control_methods/true_labels/config.vsh.yaml",
           "functionalityNamespace" : "label_projection/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/label_projection/control_methods/true_labels/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/control_methods/true_labels"
@@ -3251,14 +3251,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/control_methods/majority_vote/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "majority_vote",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/control_methods/majority_vote/config.vsh.yaml",
           "functionalityNamespace" : "label_projection/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/label_projection/control_methods/majority_vote/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/control_methods/majority_vote"
@@ -3272,14 +3272,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/control_methods/random_labels/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "random_labels",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/control_methods/random_labels/config.vsh.yaml",
           "functionalityNamespace" : "label_projection/control_methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/label_projection/control_methods/random_labels/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/control_methods/random_labels"
@@ -3293,14 +3293,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/knn/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "knn",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/knn/config.vsh.yaml",
           "functionalityNamespace" : "label_projection/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/label_projection/methods/knn/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/methods/knn"
@@ -3314,14 +3314,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/logistic_regression/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "logistic_regression",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/logistic_regression/config.vsh.yaml",
           "functionalityNamespace" : "label_projection/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/label_projection/methods/logistic_regression/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/methods/logistic_regression"
@@ -3335,14 +3335,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/mlp/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "mlp",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/mlp/config.vsh.yaml",
           "functionalityNamespace" : "label_projection/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/label_projection/methods/mlp/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/methods/mlp"
@@ -3356,14 +3356,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/scanvi/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "scanvi",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/scanvi/config.vsh.yaml",
           "functionalityNamespace" : "label_projection/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/label_projection/methods/scanvi/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/methods/scanvi"
@@ -3377,14 +3377,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/scanvi_scarches/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "scanvi_scarches",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/scanvi_scarches/config.vsh.yaml",
           "functionalityNamespace" : "label_projection/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/label_projection/methods/scanvi_scarches/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/methods/scanvi_scarches"
@@ -3398,14 +3398,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/xgboost/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "xgboost",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/methods/xgboost/config.vsh.yaml",
           "functionalityNamespace" : "label_projection/methods",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/label_projection/methods/xgboost/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/methods/xgboost"
@@ -3419,14 +3419,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/metrics/accuracy/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "accuracy",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/metrics/accuracy/config.vsh.yaml",
           "functionalityNamespace" : "label_projection/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/label_projection/metrics/accuracy/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/metrics/accuracy"
@@ -3440,14 +3440,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/metrics/f1/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "f1",
-          "git_tag" : "v1.0.0-1414-gbf274d82",
+          "git_tag" : "v1.0.0-1415-g3ba588de",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/label_projection/metrics/f1/config.vsh.yaml",
           "functionalityNamespace" : "label_projection/metrics",
           "output" : "",
           "platform" : "",
-          "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
           "executable" : "/nextflow/label_projection/metrics/f1/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/metrics/f1"
@@ -3494,9 +3494,9 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/label_projection/workflows/run_benchmark",
     "viash_version" : "0.8.6",
-    "git_commit" : "bf274d8279e2686df64b75a799c08aa9bf311101",
+    "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1414-gbf274d82"
+    "git_tag" : "v1.0.0-1415-g3ba588de"
   }
 }'''))
 ]

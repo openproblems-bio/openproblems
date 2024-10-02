@@ -546,6 +546,6 @@ info:
   output: "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/normalization/prot_clr"
   executable: "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/normalization/prot_clr/prot_clr"
   viash_version: "0.8.6"
-  git_commit: "bf274d8279e2686df64b75a799c08aa9bf311101"
+  git_commit: "3ba588de15b5e84d995a287f7cb943edd6a3d034"
   git_remote: "https://github.com/openproblems-bio/openproblems"
-  git_tag: "v1.0.0-1414-gbf274d82"
+  git_tag: "v1.0.0-1415-g3ba588de"
