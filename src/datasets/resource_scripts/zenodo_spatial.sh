@@ -1,42 +1,42 @@
 #!/bin/bash
 
-cat > "/tmp/params.yaml" << 'HERE'
-param_list:
-  - id: zenodo_spatial/visium/human_heart_myocardial_infarction_1
-    input_data: "https://zenodo.org/records/13328275/files/10X0018.h5ad?download=1"
-    dataset_name: 10X Visium - Human Heart MI 1
-    dataset_url: "https://www.nature.com/articles/s41586-022-05060-x"
-    dataset_summary: Gene expression library of human heart using 10x Visium.
-    dataset_description: "Frozen heart samples were embedded in OCT (Tissue-Tek) and cryosectioned (Thermo Cryostar). The 10-µm section was placed on the pre-chilled Optimization slides (Visium, 10X Genomics, PN-1000193) and the optimal lysis time was determined. The tissues were treated as recommended by 10X Genomics and the optimization procedure showed an optimal permeabilization time of 12 or 18 min of digestion and release of RNA from the tissue slide. Spatial gene expression slides (Visium, 10X Genomics, PN-1000187) were used for spatial transcriptomics following the Visium User Guides"
-    dataset_reference: kuppe2022spatial
-    dataset_organism: Homo sapiens
-    spot_filter_min_genes: 200
-    gene_filter_min_spots: 50
-    remove_mitochondrial: true
+# cat > "/tmp/params.yaml" << 'HERE'
+# param_list:
+#   - id: zenodo_spatial/visium/human_heart_myocardial_infarction_1
+#     input_data: "https://zenodo.org/records/13328275/files/10X0018.h5ad?download=1"
+#     dataset_name: 10X Visium - Human Heart MI 1
+#     dataset_url: "https://www.nature.com/articles/s41586-022-05060-x"
+#     dataset_summary: Gene expression library of human heart using 10x Visium.
+#     dataset_description: "Frozen heart samples were embedded in OCT (Tissue-Tek) and cryosectioned (Thermo Cryostar). The 10-µm section was placed on the pre-chilled Optimization slides (Visium, 10X Genomics, PN-1000193) and the optimal lysis time was determined. The tissues were treated as recommended by 10X Genomics and the optimization procedure showed an optimal permeabilization time of 12 or 18 min of digestion and release of RNA from the tissue slide. Spatial gene expression slides (Visium, 10X Genomics, PN-1000187) were used for spatial transcriptomics following the Visium User Guides"
+#     dataset_reference: kuppe2022spatial
+#     dataset_organism: Homo sapiens
+#     spot_filter_min_genes: 200
+#     gene_filter_min_spots: 50
+#     remove_mitochondrial: true
 
-  - id: zenodo_spatial/visium/human_heart_myocardial_infarction_2
-    input_data: "https://zenodo.org/records/13328275/files/10X009.h5ad?download=1"
-    dataset_name: 10X Visium - Human Heart MI 2
-    dataset_url: "https://www.nature.com/articles/s41586-022-05060-x"
-    dataset_summary: Gene expression library of human heart using 10x Visium.
-    dataset_description: "Frozen heart samples were embedded in OCT (Tissue-Tek) and cryosectioned (Thermo Cryostar). The 10-µm section was placed on the pre-chilled Optimization slides (Visium, 10X Genomics, PN-1000193) and the optimal lysis time was determined. The tissues were treated as recommended by 10X Genomics and the optimization procedure showed an optimal permeabilization time of 12 or 18 min of digestion and release of RNA from the tissue slide. Spatial gene expression slides (Visium, 10X Genomics, PN-1000187) were used for spatial transcriptomics following the Visium User Guides"
-    dataset_reference: kuppe2022spatial
-    dataset_organism: Homo sapiens
-    spot_filter_min_genes: 200
-    gene_filter_min_spots: 50
-    remove_mitochondrial: true
+#   - id: zenodo_spatial/visium/human_heart_myocardial_infarction_2
+#     input_data: "https://zenodo.org/records/13328275/files/10X009.h5ad?download=1"
+#     dataset_name: 10X Visium - Human Heart MI 2
+#     dataset_url: "https://www.nature.com/articles/s41586-022-05060-x"
+#     dataset_summary: Gene expression library of human heart using 10x Visium.
+#     dataset_description: "Frozen heart samples were embedded in OCT (Tissue-Tek) and cryosectioned (Thermo Cryostar). The 10-µm section was placed on the pre-chilled Optimization slides (Visium, 10X Genomics, PN-1000193) and the optimal lysis time was determined. The tissues were treated as recommended by 10X Genomics and the optimization procedure showed an optimal permeabilization time of 12 or 18 min of digestion and release of RNA from the tissue slide. Spatial gene expression slides (Visium, 10X Genomics, PN-1000187) were used for spatial transcriptomics following the Visium User Guides"
+#     dataset_reference: kuppe2022spatial
+#     dataset_organism: Homo sapiens
+#     spot_filter_min_genes: 200
+#     gene_filter_min_spots: 50
+#     remove_mitochondrial: true
 
-normalization_methods: [log_cp10k]
-output_dataset: '$id/dataset.h5ad'
-output_meta: '$id/dataset_metadata.yaml'
-output_state: '$id/state.yaml'
-output_raw: force_null
-output_normalized: force_null
-publish_dir: resources/datasets
-remove_mitochondrial: true
-HERE
+# normalization_methods: [log_cp10k]
+# output_dataset: '$id/dataset.h5ad'
+# output_meta: '$id/dataset_metadata.yaml'
+# output_state: '$id/state.yaml'
+# output_raw: force_null
+# output_normalized: force_null
+# publish_dir: s3://openproblems-data/resources/datasets
+# remove_mitochondrial: true
+# HERE
 
-# catt > "/tmp/params.yaml" << 'HERE'
+# cat > "/tmp/params.yaml" << 'HERE'
 # param_list:
 #   - id: zenodo_spatial/dbitseq/mouse_e10_brain
 #     input_data: "https://zenodo.org/records/12785822/files/DBiT-seq_liu2020high_E10_brain_gene_25um_data.h5ad?download=1"
@@ -116,7 +116,7 @@ HERE
 # output_state: '$id/state.yaml'
 # output_raw: force_null
 # output_normalized: force_null
-# publish_dir: resources/datasets
+# publish_dir: s3://openproblems-data/resources/datasets
 # HERE
 
 # cat > "/tmp/params.yaml" << 'HERE'
@@ -187,7 +187,7 @@ HERE
 # output_state: '$id/state.yaml'
 # output_raw: force_null
 # output_normalized: force_null
-# publish_dir: resources/datasets
+# publish_dir: s3://openproblems-data/resources/datasets
 # HERE
 
 # cat > "/tmp/params.yaml" << 'HERE'
@@ -210,7 +210,7 @@ HERE
 # output_state: '$id/state.yaml'
 # output_raw: force_null
 # output_normalized: force_null
-# publish_dir: resources/datasets
+# publish_dir: s3://openproblems-data/resources/datasets
 # remove_mitochondrial: true
 # HERE
 
@@ -282,7 +282,7 @@ HERE
 # output_state: '$id/state.yaml'
 # output_raw: force_null
 # output_normalized: force_null
-# publish_dir: resources/datasets
+# publish_dir: s3://openproblems-data/resources/datasets
 # HERE
 
 # cat > "/tmp/params.yaml" << 'HERE'
@@ -317,79 +317,79 @@ HERE
 # output_state: '$id/state.yaml'
 # output_raw: force_null
 # output_normalized: force_null
-# publish_dir: resources/datasets
+# publish_dir: s3://openproblems-data/resources/datasets
 # HERE
 
-# cat > "/tmp/params.yaml" << 'HERE'
-# param_list:
-#   - id: zenodo_spatial/stereoseq/drosophila_embryo_e5_6
-#     input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_5.6.h5ad?download=1"
-#     dataset_name: Stereo-seq - Drosophila embryo E5_6
-#     dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
-#     dataset_summary: Stereo-seq faithfully captures Drosophila spatial transcriptomes with high resolution.
-#     dataset_description: "Drosophila has long been a successful model organism in multiple biomedical fields. Spatial gene expression patterns are critical for the understanding of complex pathways and interactions, whereas temporal gene expression changes are vital for studying highly dynamic physiological activities. Systematic studies in Drosophila are still impeded by the lack of spatiotemporal transcriptomic information. Here, utilizing spatial enhanced resolution omics-sequencing (Stereo-seq), we dissected the spatiotemporal transcriptomic changes of developing Drosophila with high resolution and sensitivity. (Data from an embryo collected 14-16 h after egg laying)"
-#     dataset_organism: Drosophila
-#     dataset_reference: wang2022high
-#     spot_filter_min_genes: 10
-#     gene_filter_min_spots: 50
-#     remove_mitochondrial: true
+cat > "/tmp/params.yaml" << 'HERE'
+param_list:
+  - id: zenodo_spatial/stereoseq/drosophila_embryo_e5_6
+    input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_5.6.h5ad?download=1"
+    dataset_name: Stereo-seq - Drosophila embryo E5_6
+    dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
+    dataset_summary: Stereo-seq faithfully captures Drosophila spatial transcriptomes with high resolution.
+    dataset_description: "Drosophila has long been a successful model organism in multiple biomedical fields. Spatial gene expression patterns are critical for the understanding of complex pathways and interactions, whereas temporal gene expression changes are vital for studying highly dynamic physiological activities. Systematic studies in Drosophila are still impeded by the lack of spatiotemporal transcriptomic information. Here, utilizing spatial enhanced resolution omics-sequencing (Stereo-seq), we dissected the spatiotemporal transcriptomic changes of developing Drosophila with high resolution and sensitivity. (Data from an embryo collected 14-16 h after egg laying)"
+    dataset_organism: Drosophila
+    dataset_reference: wang2022high
+    spot_filter_min_genes: 10
+    gene_filter_min_spots: 50
+    remove_mitochondrial: true
 
-#   - id: zenodo_spatial/stereoseq/drosophila_embryo_e6_3
-#     input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_6.3.h5ad?download=1"
-#     dataset_name: Stereo-seq - Drosophila embryo E6_3
-#     dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
-#     dataset_summary: Stereo-seq faithfully captures Drosophila spatial transcriptomes with high resolution.
-#     dataset_description: "Drosophila has long been a successful model organism in multiple biomedical fields. Spatial gene expression patterns are critical for the understanding of complex pathways and interactions, whereas temporal gene expression changes are vital for studying highly dynamic physiological activities. Systematic studies in Drosophila are still impeded by the lack of spatiotemporal transcriptomic information. Here, utilizing spatial enhanced resolution omics-sequencing (Stereo-seq), we dissected the spatiotemporal transcriptomic changes of developing Drosophila with high resolution and sensitivity. (Data from an embryo collected 14-16 h after egg laying)"
-#     dataset_organism: Drosophila
-#     dataset_reference: wang2022high
-#     spot_filter_min_genes: 10
-#     gene_filter_min_spots: 50
-#     remove_mitochondrial: true
+  - id: zenodo_spatial/stereoseq/drosophila_embryo_e6_3
+    input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_6.3.h5ad?download=1"
+    dataset_name: Stereo-seq - Drosophila embryo E6_3
+    dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
+    dataset_summary: Stereo-seq faithfully captures Drosophila spatial transcriptomes with high resolution.
+    dataset_description: "Drosophila has long been a successful model organism in multiple biomedical fields. Spatial gene expression patterns are critical for the understanding of complex pathways and interactions, whereas temporal gene expression changes are vital for studying highly dynamic physiological activities. Systematic studies in Drosophila are still impeded by the lack of spatiotemporal transcriptomic information. Here, utilizing spatial enhanced resolution omics-sequencing (Stereo-seq), we dissected the spatiotemporal transcriptomic changes of developing Drosophila with high resolution and sensitivity. (Data from an embryo collected 14-16 h after egg laying)"
+    dataset_organism: Drosophila
+    dataset_reference: wang2022high
+    spot_filter_min_genes: 10
+    gene_filter_min_spots: 50
+    remove_mitochondrial: true
 
-#   - id: zenodo_spatial/stereoseq/drosophila_embryo_e7
-#     input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_7.h5ad?download=1"
-#     dataset_name: Stereo-seq - Drosophila embryo E7
-#     dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
-#     dataset_summary: Stereo-seq faithfully captures Drosophila spatial transcriptomes with high resolution.
-#     dataset_description: "Drosophila has long been a successful model organism in multiple biomedical fields. Spatial gene expression patterns are critical for the understanding of complex pathways and interactions, whereas temporal gene expression changes are vital for studying highly dynamic physiological activities. Systematic studies in Drosophila are still impeded by the lack of spatiotemporal transcriptomic information. Here, utilizing spatial enhanced resolution omics-sequencing (Stereo-seq), we dissected the spatiotemporal transcriptomic changes of developing Drosophila with high resolution and sensitivity. (Data from an embryo collected 14-16 h after egg laying)"
-#     dataset_organism: Drosophila
-#     dataset_reference: wang2022high
-#     spot_filter_min_genes: 10
-#     gene_filter_min_spots: 50
-#     remove_mitochondrial: true
+  - id: zenodo_spatial/stereoseq/drosophila_embryo_e7
+    input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_7.h5ad?download=1"
+    dataset_name: Stereo-seq - Drosophila embryo E7
+    dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
+    dataset_summary: Stereo-seq faithfully captures Drosophila spatial transcriptomes with high resolution.
+    dataset_description: "Drosophila has long been a successful model organism in multiple biomedical fields. Spatial gene expression patterns are critical for the understanding of complex pathways and interactions, whereas temporal gene expression changes are vital for studying highly dynamic physiological activities. Systematic studies in Drosophila are still impeded by the lack of spatiotemporal transcriptomic information. Here, utilizing spatial enhanced resolution omics-sequencing (Stereo-seq), we dissected the spatiotemporal transcriptomic changes of developing Drosophila with high resolution and sensitivity. (Data from an embryo collected 14-16 h after egg laying)"
+    dataset_organism: Drosophila
+    dataset_reference: wang2022high
+    spot_filter_min_genes: 10
+    gene_filter_min_spots: 50
+    remove_mitochondrial: true
 
-#   - id: zenodo_spatial/stereoseq/drosophila_embryo_e9_1
-#     input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_9.1.h5ad?download=1"
-#     dataset_name: Stereo-seq - Drosophila embryo E9_1
-#     dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
-#     dataset_summary: Stereo-seq faithfully captures Drosophila spatial transcriptomes with high resolution.
-#     dataset_description: "Drosophila has long been a successful model organism in multiple biomedical fields. Spatial gene expression patterns are critical for the understanding of complex pathways and interactions, whereas temporal gene expression changes are vital for studying highly dynamic physiological activities. Systematic studies in Drosophila are still impeded by the lack of spatiotemporal transcriptomic information. Here, utilizing spatial enhanced resolution omics-sequencing (Stereo-seq), we dissected the spatiotemporal transcriptomic changes of developing Drosophila with high resolution and sensitivity. (Data from an embryo collected 14-16 h after egg laying)"
-#     dataset_organism: Drosophila
-#     dataset_reference: wang2022high
-#     spot_filter_min_genes: 10
-#     gene_filter_min_spots: 50
-#     remove_mitochondrial: true
+  - id: zenodo_spatial/stereoseq/drosophila_embryo_e9_1
+    input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_9.1.h5ad?download=1"
+    dataset_name: Stereo-seq - Drosophila embryo E9_1
+    dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
+    dataset_summary: Stereo-seq faithfully captures Drosophila spatial transcriptomes with high resolution.
+    dataset_description: "Drosophila has long been a successful model organism in multiple biomedical fields. Spatial gene expression patterns are critical for the understanding of complex pathways and interactions, whereas temporal gene expression changes are vital for studying highly dynamic physiological activities. Systematic studies in Drosophila are still impeded by the lack of spatiotemporal transcriptomic information. Here, utilizing spatial enhanced resolution omics-sequencing (Stereo-seq), we dissected the spatiotemporal transcriptomic changes of developing Drosophila with high resolution and sensitivity. (Data from an embryo collected 14-16 h after egg laying)"
+    dataset_organism: Drosophila
+    dataset_reference: wang2022high
+    spot_filter_min_genes: 10
+    gene_filter_min_spots: 50
+    remove_mitochondrial: true
 
-#   - id: zenodo_spatial/stereoseq/drosophila_embryo_e10
-#     input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_10.5.h5ad?download=1"
-#     dataset_name: Stereo-seq - Drosophila embryo E10
-#     dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
-#     dataset_summary: Stereo-seq faithfully captures Drosophila spatial transcriptomes with high resolution.
-#     dataset_description: "Drosophila has long been a successful model organism in multiple biomedical fields. Spatial gene expression patterns are critical for the understanding of complex pathways and interactions, whereas temporal gene expression changes are vital for studying highly dynamic physiological activities. Systematic studies in Drosophila are still impeded by the lack of spatiotemporal transcriptomic information. Here, utilizing spatial enhanced resolution omics-sequencing (Stereo-seq), we dissected the spatiotemporal transcriptomic changes of developing Drosophila with high resolution and sensitivity. (Data from an embryo collected 14-16 h after egg laying)"
-#     dataset_organism: Drosophila
-#     dataset_reference: wang2022high
-#     spot_filter_min_genes: 10
-#     gene_filter_min_spots: 50
-#     remove_mitochondrial: true
+  - id: zenodo_spatial/stereoseq/drosophila_embryo_e10
+    input_data: "https://zenodo.org/records/12785822/files/Stereo-seq_wang2022high_E14-16h_a_count_normal_stereoseq_data_whole_time_point_10.5.h5ad?download=1"
+    dataset_name: Stereo-seq - Drosophila embryo E10
+    dataset_url: "https://www.sciencedirect.com/science/article/pii/S1534580722002465"
+    dataset_summary: Stereo-seq faithfully captures Drosophila spatial transcriptomes with high resolution.
+    dataset_description: "Drosophila has long been a successful model organism in multiple biomedical fields. Spatial gene expression patterns are critical for the understanding of complex pathways and interactions, whereas temporal gene expression changes are vital for studying highly dynamic physiological activities. Systematic studies in Drosophila are still impeded by the lack of spatiotemporal transcriptomic information. Here, utilizing spatial enhanced resolution omics-sequencing (Stereo-seq), we dissected the spatiotemporal transcriptomic changes of developing Drosophila with high resolution and sensitivity. (Data from an embryo collected 14-16 h after egg laying)"
+    dataset_organism: Drosophila
+    dataset_reference: wang2022high
+    spot_filter_min_genes: 10
+    gene_filter_min_spots: 50
+    remove_mitochondrial: true
 
-# normalization_methods: [log_cp10k]
-# output_dataset: '$id/dataset.h5ad'
-# output_meta: '$id/dataset_metadata.yaml'
-# output_state: '$id/state.yaml'
-# output_raw: force_null
-# output_normalized: force_null
-# publish_dir: resources/datasets
-# HERE
+normalization_methods: [log_cp10k]
+output_dataset: '$id/dataset.h5ad'
+output_meta: '$id/dataset_metadata.yaml'
+output_state: '$id/state.yaml'
+output_raw: force_null
+output_normalized: force_null
+publish_dir: s3://openproblems-data/resources/datasets
+HERE
 
 cat > /tmp/nextflow.config << HERE
 process {
