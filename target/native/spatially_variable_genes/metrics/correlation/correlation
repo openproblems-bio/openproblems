@@ -176,17 +176,17 @@ function ViashHelp {
   echo "    --input_method"
   echo "        type: file, required parameter, file must exist"
   echo "        example:"
-  echo "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/output.h5ad"
+  echo "resources_test/spatially_variable_genes/mouse_brain_coronal/output.h5ad"
   echo ""
   echo "    --input_solution"
   echo "        type: file, required parameter, file must exist"
   echo "        example:"
-  echo "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/solution.h5ad"
+  echo "resources_test/spatially_variable_genes/mouse_brain_coronal/solution.h5ad"
   echo ""
   echo "    --output"
   echo "        type: file, required parameter, output, file must exist"
   echo "        example:"
-  echo "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/score.h5ad"
+  echo "resources_test/spatially_variable_genes/mouse_brain_coronal/score.h5ad"
 }
 
 # initialise array

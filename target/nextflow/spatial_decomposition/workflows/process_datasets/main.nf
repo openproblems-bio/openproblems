@@ -3170,14 +3170,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "check_dataset_schema",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/common/check_dataset_schema/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/check_dataset_schema"
@@ -3191,14 +3191,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/dataset_simulator/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "dataset_simulator",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/dataset_simulator/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/spatial_decomposition/dataset_simulator/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/dataset_simulator"
@@ -3212,14 +3212,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/process_dataset/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "process_dataset",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatial_decomposition/process_dataset/config.vsh.yaml",
           "functionalityNamespace" : "spatial_decomposition",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/spatial_decomposition/process_dataset/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/process_dataset"
@@ -3266,9 +3266,9 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatial_decomposition/workflows/process_datasets",
     "viash_version" : "0.8.6",
-    "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+    "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1415-g3ba588de"
+    "git_tag" : "v1.0.0-1416-ga01361f4"
   }
 }'''))
 ]

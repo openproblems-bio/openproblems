@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/solution.h5ad"
+example: "resources_test/spatially_variable_genes/mouse_brain_coronal/solution.h5ad"
 info:
   label: Solution
   summary: "Anndata with true spatial variability."

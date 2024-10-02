@@ -4817,14 +4817,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/datasets/loaders/openproblems_v1/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "openproblems_v1",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/datasets/loaders/openproblems_v1/config.vsh.yaml",
           "functionalityNamespace" : "datasets/loaders",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/datasets/loaders/openproblems_v1/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/loaders/openproblems_v1"
@@ -4838,14 +4838,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/datasets/normalization/log_cp/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "log_cp",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/datasets/normalization/log_cp/config.vsh.yaml",
           "functionalityNamespace" : "datasets/normalization",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/datasets/normalization/log_cp/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/normalization/log_cp"
@@ -4859,14 +4859,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/datasets/normalization/log_scran_pooling/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "log_scran_pooling",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/datasets/normalization/log_scran_pooling/config.vsh.yaml",
           "functionalityNamespace" : "datasets/normalization",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/datasets/normalization/log_scran_pooling/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/normalization/log_scran_pooling"
@@ -4880,14 +4880,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/datasets/normalization/sqrt_cp/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "sqrt_cp",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/datasets/normalization/sqrt_cp/config.vsh.yaml",
           "functionalityNamespace" : "datasets/normalization",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/datasets/normalization/sqrt_cp/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/normalization/sqrt_cp"
@@ -4901,14 +4901,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/datasets/normalization/l1_sqrt/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "l1_sqrt",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/datasets/normalization/l1_sqrt/config.vsh.yaml",
           "functionalityNamespace" : "datasets/normalization",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/datasets/normalization/l1_sqrt/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/normalization/l1_sqrt"
@@ -4922,14 +4922,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/datasets/processors/subsample/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "subsample",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/datasets/processors/subsample/config.vsh.yaml",
           "functionalityNamespace" : "datasets/processors",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/datasets/processors/subsample/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/processors/subsample"
@@ -4943,14 +4943,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/datasets/processors/pca/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "pca",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/datasets/processors/pca/config.vsh.yaml",
           "functionalityNamespace" : "datasets/processors",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/datasets/processors/pca/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/processors/pca"
@@ -4964,14 +4964,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/datasets/processors/hvg/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "hvg",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/datasets/processors/hvg/config.vsh.yaml",
           "functionalityNamespace" : "datasets/processors",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/datasets/processors/hvg/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/processors/hvg"
@@ -4985,14 +4985,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/datasets/processors/knn/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "knn",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/datasets/processors/knn/config.vsh.yaml",
           "functionalityNamespace" : "datasets/processors",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/datasets/processors/knn/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/processors/knn"
@@ -5006,14 +5006,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "extract_metadata",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/extract_metadata/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/common/extract_metadata/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/extract_metadata"
@@ -5060,9 +5060,9 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/workflows/process_openproblems_v1",
     "viash_version" : "0.8.6",
-    "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+    "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1415-g3ba588de"
+    "git_tag" : "v1.0.0-1416-ga01361f4"
   }
 }'''))
 ]

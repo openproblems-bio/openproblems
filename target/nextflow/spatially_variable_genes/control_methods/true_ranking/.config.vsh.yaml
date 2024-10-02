@@ -44,7 +44,7 @@ functionality:
           description: "Nicely formatted name."
           required: false
     example:
-    - "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/dataset.h5ad"
+    - "resources_test/spatially_variable_genes/mouse_brain_coronal/dataset.h5ad"
     must_exist: true
     create_parent: true
     required: true
@@ -109,7 +109,7 @@ functionality:
           description: "The organism of the sample in the dataset."
           required: true
     example:
-    - "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/solution.h5ad"
+    - "resources_test/spatially_variable_genes/mouse_brain_coronal/solution.h5ad"
     must_exist: true
     create_parent: true
     required: true
@@ -147,7 +147,7 @@ functionality:
           description: "A unique identifier for the method"
           required: true
     example:
-    - "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/output.h5ad"
+    - "resources_test/spatially_variable_genes/mouse_brain_coronal/output.h5ad"
     must_exist: true
     create_parent: true
     required: true
@@ -167,8 +167,8 @@ functionality:
     path: "src/common/comp_tests/run_and_check_adata.py"
     is_executable: true
   - type: "file"
-    path: "resources_test/spatially_variable_genes/mouse_brain_coronal_section1"
-    dest: "resources_test/spatially_variable_genes/mouse_brain_coronal_section1"
+    path: "resources_test/spatially_variable_genes/mouse_brain_coronal"
+    dest: "resources_test/spatially_variable_genes/mouse_brain_coronal"
   - type: "file"
     path: "src/common/library.bib"
   info:
@@ -242,6 +242,6 @@ info:
   output: "/home/runner/work/openproblems/openproblems/target/nextflow/spatially_variable_genes/control_methods/true_ranking"
   executable: "/home/runner/work/openproblems/openproblems/target/nextflow/spatially_variable_genes/control_methods/true_ranking/true_ranking"
   viash_version: "0.8.6"
-  git_commit: "3ba588de15b5e84d995a287f7cb943edd6a3d034"
+  git_commit: "a01361f4ce2cac290991756717f49cbe85815b85"
   git_remote: "https://github.com/openproblems-bio/openproblems"
-  git_tag: "v1.0.0-1415-g3ba588de"
+  git_tag: "v1.0.0-1416-ga01361f4"

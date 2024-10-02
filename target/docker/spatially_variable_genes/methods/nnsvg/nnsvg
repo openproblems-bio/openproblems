@@ -176,12 +176,12 @@ function ViashHelp {
   echo "    --input_data"
   echo "        type: file, required parameter, file must exist"
   echo "        example:"
-  echo "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/dataset.h5ad"
+  echo "resources_test/spatially_variable_genes/mouse_brain_coronal/dataset.h5ad"
   echo ""
   echo "    --output"
   echo "        type: file, required parameter, output, file must exist"
   echo "        example:"
-  echo "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/output.h5ad"
+  echo "resources_test/spatially_variable_genes/mouse_brain_coronal/output.h5ad"
 }
 
 ######## Helper functions for setting up Docker images for viash ########
@@ -412,9 +412,9 @@ RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packag
   Rscript -e 'remotes::install_cran(c("anndata", "dplyr"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component spatially_variable_genes/methods nnsvg"
-LABEL org.opencontainers.image.created="2024-10-02T09:40:58Z"
+LABEL org.opencontainers.image.created="2024-10-02T11:51:13Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="3ba588de15b5e84d995a287f7cb943edd6a3d034"
+LABEL org.opencontainers.image.revision="a01361f4ce2cac290991756717f49cbe85815b85"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

@@ -176,17 +176,17 @@ function ViashHelp {
   echo "    --input"
   echo "        type: file, required parameter, file must exist"
   echo "        example:"
-  echo "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/simulated_dataset.h5ad"
+  echo "resources_test/spatially_variable_genes/mouse_brain_coronal/simulated_dataset.h5ad"
   echo ""
   echo "    --output_dataset"
   echo "        type: file, required parameter, output, file must exist"
   echo "        example:"
-  echo "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/dataset.h5ad"
+  echo "resources_test/spatially_variable_genes/mouse_brain_coronal/dataset.h5ad"
   echo ""
   echo "    --output_solution"
   echo "        type: file, required parameter, output, file must exist"
   echo "        example:"
-  echo "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/solution.h5ad"
+  echo "resources_test/spatially_variable_genes/mouse_brain_coronal/solution.h5ad"
 }
 
 ######## Helper functions for setting up Docker images for viash ########
@@ -411,9 +411,9 @@ ENTRYPOINT []
  
 RUN :
 LABEL org.opencontainers.image.description="Companion container for running component spatially_variable_genes/process_dataset split_dataset"
-LABEL org.opencontainers.image.created="2024-10-02T09:40:59Z"
+LABEL org.opencontainers.image.created="2024-10-02T11:51:14Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="3ba588de15b5e84d995a287f7cb943edd6a3d034"
+LABEL org.opencontainers.image.revision="a01361f4ce2cac290991756717f49cbe85815b85"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

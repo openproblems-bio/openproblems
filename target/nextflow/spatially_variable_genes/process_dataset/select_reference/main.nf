@@ -2874,7 +2874,7 @@ meta = [
           }
         },
         "example" : [
-          "resources_test/common/mouse_brain_coronal_section1/dataset.h5ad"
+          "resources_test/common/mouse_brain_coronal/dataset.h5ad"
         ],
         "must_exist" : true,
         "create_parent" : true,
@@ -2987,7 +2987,7 @@ meta = [
           }
         },
         "example" : [
-          "resources_test/common/mouse_brain_coronal_section1/dataset.h5ad"
+          "resources_test/common/mouse_brain_coronal/dataset.h5ad"
         ],
         "must_exist" : true,
         "create_parent" : true,
@@ -3040,8 +3040,8 @@ meta = [
     "test_resources" : [
       {
         "type" : "file",
-        "path" : "resources_test/common/mouse_brain_coronal_section1",
-        "dest" : "resources_test/common/mouse_brain_coronal_section1",
+        "path" : "resources_test/common/mouse_brain_coronal",
+        "dest" : "resources_test/common/mouse_brain_coronal",
         "parent" : "file:///home/runner/work/openproblems/openproblems/"
       },
       {
@@ -3127,9 +3127,9 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatially_variable_genes/process_dataset/select_reference",
     "viash_version" : "0.8.6",
-    "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+    "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1415-g3ba588de"
+    "git_tag" : "v1.0.0-1416-ga01361f4"
   }
 }'''))
 ]

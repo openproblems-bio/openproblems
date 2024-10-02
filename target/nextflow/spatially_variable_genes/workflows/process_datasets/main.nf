@@ -2878,7 +2878,7 @@ meta = [
               }
             },
             "example" : [
-              "resources_test/common/mouse_brain_coronal_section1/dataset.h5ad"
+              "resources_test/common/mouse_brain_coronal/dataset.h5ad"
             ],
             "must_exist" : true,
             "create_parent" : true,
@@ -2953,7 +2953,7 @@ meta = [
               }
             },
             "example" : [
-              "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/dataset.h5ad"
+              "resources_test/spatially_variable_genes/mouse_brain_coronal/dataset.h5ad"
             ],
             "must_exist" : true,
             "create_parent" : true,
@@ -3044,7 +3044,7 @@ meta = [
               }
             },
             "example" : [
-              "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/solution.h5ad"
+              "resources_test/spatially_variable_genes/mouse_brain_coronal/solution.h5ad"
             ],
             "must_exist" : true,
             "create_parent" : true,
@@ -3156,7 +3156,7 @@ meta = [
               }
             },
             "example" : [
-              "resources_test/spatially_variable_genes/mouse_brain_coronal_section1/simulated_dataset.h5ad"
+              "resources_test/spatially_variable_genes/mouse_brain_coronal/simulated_dataset.h5ad"
             ],
             "must_exist" : true,
             "create_parent" : true,
@@ -3281,14 +3281,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "check_dataset_schema",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/common/check_dataset_schema/config.vsh.yaml",
           "functionalityNamespace" : "common",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/common/check_dataset_schema/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/common/check_dataset_schema"
@@ -3302,14 +3302,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatially_variable_genes/process_dataset/select_reference/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "select_reference",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatially_variable_genes/process_dataset/select_reference/config.vsh.yaml",
           "functionalityNamespace" : "spatially_variable_genes/process_dataset",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/spatially_variable_genes/process_dataset/select_reference/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatially_variable_genes/process_dataset/select_reference"
@@ -3323,14 +3323,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatially_variable_genes/process_dataset/simulate_svg/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "simulate_svg",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatially_variable_genes/process_dataset/simulate_svg/config.vsh.yaml",
           "functionalityNamespace" : "spatially_variable_genes/process_dataset",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/spatially_variable_genes/process_dataset/simulate_svg/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatially_variable_genes/process_dataset/simulate_svg"
@@ -3344,14 +3344,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/datasets/normalization/log_cp/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "log_cp",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/datasets/normalization/log_cp/config.vsh.yaml",
           "functionalityNamespace" : "datasets/normalization",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/datasets/normalization/log_cp/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/normalization/log_cp"
@@ -3365,14 +3365,14 @@ meta = [
         "foundConfigPath" : "/home/runner/work/openproblems/openproblems/src/tasks/spatially_variable_genes/process_dataset/split_dataset/config.vsh.yaml",
         "configInfo" : {
           "functionalityName" : "split_dataset",
-          "git_tag" : "v1.0.0-1415-g3ba588de",
+          "git_tag" : "v1.0.0-1416-ga01361f4",
           "git_remote" : "https://github.com/openproblems-bio/openproblems",
           "viash_version" : "0.8.6",
           "config" : "/home/runner/work/openproblems/openproblems/src/tasks/spatially_variable_genes/process_dataset/split_dataset/config.vsh.yaml",
           "functionalityNamespace" : "spatially_variable_genes/process_dataset",
           "output" : "",
           "platform" : "",
-          "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+          "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
           "executable" : "/nextflow/spatially_variable_genes/process_dataset/split_dataset/main.nf"
         },
         "writtenPath" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatially_variable_genes/process_dataset/split_dataset"
@@ -3419,9 +3419,9 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems/openproblems/target/nextflow/spatially_variable_genes/workflows/process_datasets",
     "viash_version" : "0.8.6",
-    "git_commit" : "3ba588de15b5e84d995a287f7cb943edd6a3d034",
+    "git_commit" : "a01361f4ce2cac290991756717f49cbe85815b85",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1415-g3ba588de"
+    "git_tag" : "v1.0.0-1416-ga01361f4"
   }
 }'''))
 ]
