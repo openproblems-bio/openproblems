@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATASET_DIR=resources_test/common
+DATASET_DIR=resources_test/common/scrnaseq
 
 
 mkdir -p $DATASET_DIR

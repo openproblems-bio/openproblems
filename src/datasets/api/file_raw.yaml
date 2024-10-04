@@ -1,13 +1,14 @@
 type: file
 example: "resources_test/common/pancreas/raw.h5ad"
-info:
-  label: "Raw dataset"
-  summary: An unprocessed dataset as output by a dataset loader.
-  description: |
-    This dataset contains raw counts and metadata as output by a dataset loader.
+label: "Raw dataset"
+summary: An unprocessed dataset as output by a dataset loader.
+description: |
+  This dataset contains raw counts and metadata as output by a dataset loader.
 
-    The format of this file is derived from the [CELLxGENE schema v4.0.0](https://github.com/chanzuckerberg/single-cell-curation/blob/main/schema/4.0.0/schema.md).
-  slots:
+  The format of this file is derived from the [CELLxGENE schema v4.0.0](https://github.com/chanzuckerberg/single-cell-curation/blob/main/schema/4.0.0/schema.md).
+info:
+  format:
+    type: h5ad
     layers: 
       - type: integer
         name: counts

@@ -125,7 +125,7 @@
 # output_state: '$id/state.yaml'
 # output_raw: force_null
 # output_normalized: force_null
-# publish_dir: s3://openproblems-data/resources/datasets
+# publish_dir: s3://openproblems-data/resources/datasets/spatial
 # HERE
 
 # cat > "/tmp/params.yaml" << 'HERE'
@@ -253,7 +253,7 @@
 # output_state: '$id/state.yaml'
 # output_raw: force_null
 # output_normalized: force_null
-# publish_dir: s3://openproblems-data/resources/datasets
+# publish_dir: s3://openproblems-data/resources/datasets/spatial
 # HERE
 
 # cat > "/tmp/params.yaml" << 'HERE'
@@ -290,7 +290,7 @@
 # output_state: '$id/state.yaml'
 # output_raw: force_null
 # output_normalized: force_null
-# publish_dir: s3://openproblems-data/resources/datasets
+# publish_dir: s3://openproblems-data/resources/datasets/spatial
 # HERE
 
 tw launch https://github.com/openproblems-bio/openproblems.git \

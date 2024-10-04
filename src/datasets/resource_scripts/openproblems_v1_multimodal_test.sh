@@ -8,7 +8,7 @@ cd "$REPO_ROOT"
 
 export TOWER_WORKSPACE_ID=53907369739130
 
-OUTPUT_DIR="resources/datasets"
+OUTPUT_DIR="resources/datasets/multimodal"
 
 if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"

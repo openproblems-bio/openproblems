@@ -38,7 +38,7 @@ output_mod2: '$id/dataset_mod2.h5ad'
 output_meta_mod1: '$id/dataset_metadata_mod1.yaml'
 output_meta_mod2: '$id/dataset_metadata_mod2.yaml'
 output_state: '$id/state.yaml'
-publish_dir: s3://openproblems-data/resources_test/common
+publish_dir: s3://openproblems-data/resources_test/common/multimodal
 HERE
 
 # nextflow run . \

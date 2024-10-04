@@ -22,7 +22,7 @@ output_meta: '$id/dataset_metadata.yaml'
 output_state: '$id/state.yaml'
 output_raw: force_null
 output_normalized: force_null
-publish_dir: resources_test/common
+publish_dir: resources_test/common/spatial
 do_subsample: true
 spot_filter_min_genes: 200
 gene_filter_min_spots: 50

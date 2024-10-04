@@ -1,14 +1,15 @@
 type: file
 example: "resources_test/common/pancreas/dataset.h5ad"
-info:
-  label: "Common dataset"
-  summary: A dataset processed by the common dataset processing pipeline. 
-  description: |
-    This dataset contains both raw counts and normalized data matrices,
-    as well as a SVD embedding and a HVG selection.
+label: "Common dataset"
+summary: A dataset processed by the common dataset processing pipeline. 
+description: |
+  This dataset contains both raw counts and normalized data matrices,
+  as well as a SVD embedding and a HVG selection.
 
-    The format of this file is derived from the [CELLxGENE schema v4.0.0](https://github.com/chanzuckerberg/single-cell-curation/blob/main/schema/4.0.0/schema.md).
-  slots:
+  The format of this file is derived from the [CELLxGENE schema v4.0.0](https://github.com/chanzuckerberg/single-cell-curation/blob/main/schema/4.0.0/schema.md).
+info:
+  format:
+    type: h5ad
     layers: 
       - type: integer
         name: counts
