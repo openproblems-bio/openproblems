@@ -18,7 +18,7 @@ KEEP_FEATURES=`cat $DATASET_DIR/temp_g2m_genes_tirosh_hm.txt $DATASET_DIR/temp_s
 
 # download dataset
 nextflow run . \
-  -main-script target/nextflow/datasets/workflows/process_openproblems_v1/main.nf \
+  -main-script target/nextflow/datasets/workflows/scrnaseq/process_openproblems_v1/main.nf \
   -profile docker \
   -c src/wf_utils/labels_ci.config \
   -resume \

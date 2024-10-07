@@ -38,7 +38,7 @@ HERE
 export NXF_VER=22.04.5
 nextflow \
   run . \
-  -main-script target/nextflow/datasets/workflows/process_openproblems_v1_multimodal/main.nf \
+  -main-script target/nextflow/datasets/workflows/multimodal/process_openproblems_v1_multimodal/main.nf \
   -profile docker \
   -resume \
   -params-file "$params_file" \

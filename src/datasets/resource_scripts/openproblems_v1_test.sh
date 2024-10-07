@@ -42,7 +42,7 @@ HERE
 
 export NXF_VER=23.04.2
 nextflow run . \
-  -main-script target/nextflow/datasets/workflows/process_openproblems_v1/main.nf \
+  -main-script target/nextflow/datasets/workflows/scrnaseq/process_openproblems_v1/main.nf \
   -profile docker \
   -resume \
   -params-file "$params_file" \

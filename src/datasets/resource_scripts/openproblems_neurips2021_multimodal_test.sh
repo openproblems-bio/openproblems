@@ -37,7 +37,7 @@ HERE
 
 export NXF_VER=23.10.1
 nextflow run . \
-  -main-script target/nextflow/datasets/workflows/process_openproblems_neurips2021_bmmc/main.nf \
+  -main-script target/nextflow/datasets/workflows/multimodal/process_openproblems_neurips2021_bmmc/main.nf \
   -profile docker \
   -resume \
   -params-file "$params_file"

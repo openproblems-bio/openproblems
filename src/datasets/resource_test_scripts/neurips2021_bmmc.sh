@@ -51,7 +51,7 @@ HERE
 # HERE
 
 nextflow run . \
-  -main-script target/nextflow/datasets/workflows/process_openproblems_neurips2021_bmmc/main.nf \
+  -main-script target/nextflow/datasets/workflows/multimodal/process_openproblems_neurips2021_bmmc/main.nf \
   -profile docker \
   -resume \
   --publish_dir resources_test/common \
