@@ -204,3 +204,15 @@ info:
         description: The organism of the sample in the dataset.
         required: false
         multiple: true
+      - name: dataset_technology 
+        type: string
+        description: The technology used to generate the dataset.
+        required: false 
+      - name: dataset_organ
+        type: string
+        description: The organ of the sample in the dataset.
+        required: false
+      - name: dataset_tissue
+        type: string
+        description: The tissue of the sample in the dataset.
+        required: false
