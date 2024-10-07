@@ -20,7 +20,7 @@ argument_groups:
         direction: output
         description: Output h5ad file
         required: true
-        __merge__: /src/datasets/api/file_raw.yaml
+        __merge__: /src/datasets/api/file_spatial_dataset.yaml
       - name: --output_meta
         direction: output
         type: file
