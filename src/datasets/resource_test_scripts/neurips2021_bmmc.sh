@@ -54,7 +54,7 @@ nextflow run . \
   -main-script target/nextflow/datasets/workflows/multimodal/process_openproblems_neurips2021_bmmc/main.nf \
   -profile docker \
   -resume \
-  --publish_dir resources_test/common \
+  --publish_dir resources_test/common/multimodal \
   -params-file "$params_file" \
   -c src/wf_utils/labels.config
 
@@ -68,4 +68,4 @@ nextflow run . \
 #   --labels predict_modality
 
 # run task process dataset components
-src/tasks/predict_modality/resources_test_scripts/neurips2021_bmmc.sh
+# src/tasks/predict_modality/resources_test_scripts/neurips2021_bmmc.sh
