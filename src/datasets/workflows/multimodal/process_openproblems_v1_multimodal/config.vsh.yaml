@@ -1,5 +1,5 @@
 name: process_openproblems_v1_multimodal
-namespace: datasets/workflows
+namespace: datasets/workflows/multimodal
 description: |
   Fetch and process legacy OpenProblems v1 multimodal datasets
 argument_groups:

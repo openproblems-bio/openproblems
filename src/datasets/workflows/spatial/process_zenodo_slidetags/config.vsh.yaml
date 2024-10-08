@@ -1,5 +1,5 @@
 name: process_zenodo_slidetags
-namespace: datasets/workflows
+namespace: datasets/workflows/spatial
 description: |
   Download and process slide tags datasets originating from Zenodo.
 argument_groups:

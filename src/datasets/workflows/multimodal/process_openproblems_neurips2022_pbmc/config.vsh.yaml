@@ -1,5 +1,5 @@
 name: process_openproblems_neurips2022_pbmc
-namespace: datasets/workflows
+namespace: datasets/workflows/multimodal
 description: |
   Fetch and process Neurips 2022 multimodal datasets
 argument_groups:

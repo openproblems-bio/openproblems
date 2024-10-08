@@ -1,5 +1,5 @@
 name: process_zenodo
-namespace: datasets/workflows
+namespace: datasets/workflows/spatial
 description: |
   Download and process DBiT seq, MERFISH, seqFISH, Slide-seq v2, STARmap, and Stereo-seq data from Zenodo.
 argument_groups:

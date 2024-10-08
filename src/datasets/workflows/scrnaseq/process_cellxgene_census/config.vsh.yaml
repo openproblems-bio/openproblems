@@ -1,5 +1,5 @@
 name: process_cellxgene_census
-namespace: datasets/workflows
+namespace: datasets/workflows/scrnaseq
 description: |
   Fetch and process datasets originating from the CELLxGENE census.
 argument_groups:

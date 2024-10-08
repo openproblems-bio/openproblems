@@ -1,5 +1,5 @@
 name: process_tenx_visium
-namespace: datasets/workflows
+namespace: datasets/workflows/spatial
 description: |
   Download and process datasets originating from 10x Genomics.
 argument_groups:

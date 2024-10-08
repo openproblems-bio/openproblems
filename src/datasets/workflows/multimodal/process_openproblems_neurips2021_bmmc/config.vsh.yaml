@@ -1,5 +1,5 @@
 name: process_openproblems_neurips2021_bmmc
-namespace: datasets/workflows
+namespace: datasets/workflows/multimodal
 description: |
   Fetch and process Neurips 2021 multimodal datasets
 argument_groups:

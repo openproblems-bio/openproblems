@@ -1,5 +1,5 @@
 name: process_openproblems_v1
-namespace: datasets/workflows
+namespace: datasets/workflows/scrnaseq
 description: |
   Fetch and process legacy OpenProblems v1 datasets
 argument_groups:
