@@ -1,6 +1,6 @@
 __merge__: file_hvg.yaml
 type: file
-example: "resources_test/common/pancreas/pca.h5ad"
+example: "resources_test/common/scrnaseq/pancreas/pca.h5ad"
 label: "Dataset+HVG+PCA"
 summary: "A normalised dataset with a PCA embedding"
 info:

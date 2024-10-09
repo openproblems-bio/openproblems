@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/common/mouse_brain_coronal/dataset.h5ad"
+example: "resources_test/common/spatial/mouse_brain_coronal/dataset.h5ad"
 label: "Common dataset"
 summary: An unprocessed dataset as output by the common dataset processing pipeline.
 description: |

@@ -1,6 +1,6 @@
 __merge__: file_pca.yaml
 type: file
-example: "resources_test/common/pancreas/knn.h5ad"
+example: "resources_test/common/scrnaseq/pancreas/knn.h5ad"
 label: "Dataset+HVG+PCA+kNN"
 summary: "A normalised data with a PCA embedding, HVG selection and a kNN graph"
 info:

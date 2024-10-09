@@ -1,6 +1,6 @@
 __merge__: file_raw.yaml
 type: file
-example: "resources_test/common/pancreas/normalized.h5ad"
+example: "resources_test/common/scrnaseq/pancreas/normalized.h5ad"
 label: "Normalized dataset"
 summary: "A normalized dataset"
 info:
