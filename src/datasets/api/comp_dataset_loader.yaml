@@ -1,16 +1,15 @@
-functionality:
-  namespace: "datasets/loaders"
-  info:
-    type: dataset_loader
-    type_info:
-      label: Dataset loader
-      summary: A component which generates a "Common dataset". 
-      description: |
-        A dataset loader will typically have an identifier (e.g. a GEO identifier)
-        or URL as input argument and additional arguments to define where the script needs to download a dataset from and how to process it.
-  arguments:
-    - name: "--output"
-      __merge__: file_raw.yaml
-      direction: "output"
-      required: true
-  test_resources: []
+# namespace: "datasets/loaders"
+info:
+  type: dataset_loader
+  type_info:
+    label: Dataset loader
+    summary: A component which generates a "Common dataset". 
+    description: |
+      A dataset loader will typically have an identifier (e.g. a GEO identifier)
+      or URL as input argument and additional arguments to define where the script needs to download a dataset from and how to process it.
+arguments:
+  - name: "--output"
+    __merge__: file_raw.yaml
+    direction: "output"
+    required: true
+test_resources: []

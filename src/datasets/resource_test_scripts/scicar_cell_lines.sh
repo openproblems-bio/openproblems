@@ -6,7 +6,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
-DATASET_DIR=resources_test/common
+DATASET_DIR=resources_test/common/multimodal
 
 set -e
 
@@ -14,7 +14,7 @@ mkdir -p $DATASET_DIR
 
 # download dataset
 nextflow run . \
-  -main-script target/nextflow/datasets/workflows/process_openproblems_v1_multimodal/main.nf \
+  -main-script target/nextflow/datasets/workflows/multimodal/process_openproblems_v1_multimodal/main.nf \
   -profile docker \
   -resume \
   --id scicar_cell_lines \

@@ -5,13 +5,13 @@ DATASETS_DIR="s3://openproblems-data/resources/datasets"
 cat > "/tmp/params.yaml" << HERE
 param_list:
   - id: openproblems_v1
-    input_states: "$DATASETS_DIR/openproblems_v1/**/log_cp10k/state.yaml"
+    input_states: "$DATASETS_DIR/scrnaseq/openproblems_v1/**/log_cp10k/state.yaml"
     rename_keys: 'input:output_dataset'
   - id: openproblems_v1_multimodal
-    input_states: "$DATASETS_DIR/openproblems_v1_multimodal/**/log_cp10k/state.yaml"
+    input_states: "$DATASETS_DIR/multimodal/openproblems_v1_multimodal/**/log_cp10k/state.yaml"
     rename_keys: 'input:output_mod1'
   - id: cellxgene_census
-    input_states: "$DATASETS_DIR/cellxgene_census/**/log_cp10k/state.yaml"
+    input_states: "$DATASETS_DIR/scrnaseq/cellxgene_census/**/log_cp10k/state.yaml"
     rename_keys: 'input:output_dataset'
 settings: '{"output": "dataset_info.yaml"}'
 output_state: state.yaml

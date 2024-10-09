@@ -8,7 +8,7 @@ cd "$REPO_ROOT"
 
 export TOWER_WORKSPACE_ID=53907369739130
 
-OUTPUT_DIR="resources/datasets"
+OUTPUT_DIR="resources/datasets/multimodal"
 
 if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"
@@ -38,7 +38,7 @@ HERE
 export NXF_VER=22.04.5
 nextflow \
   run . \
-  -main-script target/nextflow/datasets/workflows/process_openproblems_v1_multimodal/main.nf \
+  -main-script target/nextflow/datasets/workflows/multimodal/process_openproblems_v1_multimodal/main.nf \
   -profile docker \
   -resume \
   -params-file "$params_file" \

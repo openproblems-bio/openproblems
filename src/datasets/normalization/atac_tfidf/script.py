@@ -7,7 +7,7 @@ par = {
     'output': "output_norm.h5ad"
 }
 meta = {
-    'functionality_name': "tfidf"
+    'name': "tfidf"
 }
 ## VIASH END
 
@@ -20,7 +20,7 @@ normalized_counts = ac.pp.tfidf(input_adata, inplace=False)
 
 print("Store output in adata", flush=True)
 adata.layers[par["layer_output"]] = normalized_counts
-adata.uns["normalization_id"] = par["normalization_id"] or meta['functionality_name']
+adata.uns["normalization_id"] = par["normalization_id"] or meta['name']
 
 print("Write data", flush=True)
 adata.write_h5ad(par['output'], compression="gzip")

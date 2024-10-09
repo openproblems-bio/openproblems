@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATASET_DIR=resources_test/common
+DATASET_DIR=resources_test/common/scrnaseq
 
 
 mkdir -p $DATASET_DIR
@@ -40,7 +40,7 @@ keep_features: '$KEEP_FEATURES'
 HERE
 
 nextflow run . \
-  -main-script target/nextflow/datasets/workflows/process_cellxgene_census/main.nf \
+  -main-script target/nextflow/datasets/workflows/scrnaseq/process_cellxgene_census/main.nf \
   -c src/wf_utils/labels_ci.config \
   -profile docker \
   -params-file "/tmp/params.yaml"

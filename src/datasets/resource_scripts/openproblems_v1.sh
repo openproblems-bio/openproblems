@@ -162,7 +162,7 @@ output_normalized: force_null
 output_pca: force_null
 output_hvg: force_null
 output_knn: force_null
-publish_dir: s3://openproblems-data/resources/datasets
+publish_dir: s3://openproblems-data/resources/datasets/scrnaseq
 HERE
 
 cat > /tmp/nextflow.config << HERE
@@ -174,7 +174,7 @@ HERE
 tw launch https://github.com/openproblems-bio/openproblems.git \
   --revision main_build \
   --pull-latest \
-  --main-script target/nextflow/datasets/workflows/process_openproblems_v1/main.nf \
+  --main-script target/nextflow/datasets/workflows/scrnaseq/process_openproblems_v1/main.nf \
   --workspace 53907369739130 \
   --compute-env 6TeIFgV5OY4pJCk8I0bfOh \
   --params-file "$params_file" \

@@ -32,12 +32,12 @@ output_mod2: '$id/dataset_mod2.h5ad'
 output_meta_mod1: '$id/dataset_metadata_mod1.yaml'
 output_meta_mod2: '$id/dataset_metadata_mod2.yaml'
 output_state: '$id/state.yaml'
-publish_dir: resources/datasets/openproblems_neurips2021
+publish_dir: resources/datasets/multimodal/openproblems_neurips2021
 HERE
 
 export NXF_VER=23.10.1
 nextflow run . \
-  -main-script target/nextflow/datasets/workflows/process_openproblems_neurips2021_bmmc/main.nf \
+  -main-script target/nextflow/datasets/workflows/multimodal/process_openproblems_neurips2021_bmmc/main.nf \
   -profile docker \
   -resume \
   -params-file "$params_file"
