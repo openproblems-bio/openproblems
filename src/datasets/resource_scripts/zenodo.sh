@@ -192,7 +192,7 @@
 
 # cat > "/tmp/params.yaml" << 'HERE'
 # param_list:
-#   - id: zenodo/seqfish/mouse_organogenesis_seqfish
+#   - id: zenodo/seqfish/mouse_organogenesis
 #     input_data: "https://zenodo.org/records/12785822/files/seqfish.h5ad?download=1"
 #     dataset_name: Seqfish - Mouse Organogenesis
 #     dataset_url: "https://www.nature.com/articles/s41587-021-01006-2"
