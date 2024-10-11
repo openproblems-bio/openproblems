@@ -1,5 +1,6 @@
 functionality:
   name: create_task_readme
+  status: disabled
   namespace: common
   description: |
     Create a README for the task.
