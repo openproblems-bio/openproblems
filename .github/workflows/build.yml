@@ -1,4 +1,4 @@
-name: Build
+name: Build Viash components
 
 on:
   push:
@@ -6,121 +6,17 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Version tag
-        required: true
+        description: |
+          The version of the project to build. Example: `1.0.3`.
+          
+          If not provided, a development build with a version name
+          based on the branch name will be built. Otherwise, a release
+          build with the provided version will be built.
+        required: false
 
 jobs:
-  # phase 1
-  list:
-    runs-on: ubuntu-latest
-
-    outputs:
-      target_branch: ${{ steps.variables.outputs.target_branch }}
-      version: ${{ steps.variables.outputs.version }}
-      docker_matrix: ${{ steps.ns_list_docker.outputs.output_matrix }}
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'
-          fetch-depth: 0
-
-      - uses: viash-io/viash-actions/setup@v6
-
-      - name: Determine variables
-        id: variables
-        run: |
-          VERSION="${{ inputs.version }}"
-          SOURCE_BRANCH=$(echo "$GITHUB_REF" | sed 's/refs\/heads\///')
-
-          if [[ -z $VERSION ]]; then
-            TARGET_BRANCH="build/$SOURCE_BRANCH"
-            VERSION=$(echo "$TARGET_BRANCH" | sed 's/[^a-zA-Z0-9_]/_/g')
-          else
-            if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+.*$ ]]; then
-              echo "Version '$VERSION' does not match PEP440"
-              exit 1
-            fi
-            TARGET_BRANCH="release/${VERSION%.*}.x"
-          fi
-
-          echo "Set version of Viash package to '$VERSION'"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-          echo "Set target branch to '$TARGET_BRANCH'"
-          echo "target_branch=$TARGET_BRANCH" >> $GITHUB_OUTPUT
-
-      - name: Remove target folder from .gitignore
-        run: |
-          # allow publishing the target folder
-          sed -i 's#^/target/$##g' .gitignore
-
-      - uses: viash-io/viash-actions/ns-build@v6
-        with:
-          config_mod: .functionality.version := '${{ steps.variables.outputs.version }}'
-          parallel: true
-
-      - name: Deploy to target branch
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
-          publish_branch: ${{ steps.variables.outputs.target_branch }}
-
-      - id: ns_list_docker
-        uses: viash-io/viash-actions/ns-list@v6
-        with:
-          platform: docker
-          src: src
-          format: json
-
-  # phase 2
   build:
-    needs: list
-
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      packages: write
-
-    strategy:
-      fail-fast: false
-      matrix:
-        component: ${{ fromJson(needs.list.outputs.docker_matrix) }}
-
-    steps:
-      # Remove unnecessary files to free up space. Otherwise, we get 'no space left on device.'
-      - uses: data-intuitive/reclaim-the-bytes@v2
-
-      - uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'
-          fetch-depth: 0
-          ref: ${{ needs.list.outputs.target_branch }}
-
-      - uses: viash-io/viash-actions/setup@v6
-
-      - name: Build container
-        uses: viash-io/viash-actions/ns-build@v6
-        with:
-          config_mod: .functionality.version := '${{ needs.list.outputs.version }}'
-          platform: docker
-          src: ${{ matrix.component.dir }}
-          setup: build
-        
-      - name: Login to container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push container
-        uses: viash-io/viash-actions/ns-build@v6
-        with:
-          config_mod: .functionality.version := '${{ needs.list.outputs.version }}'
-          platform: docker
-          src: ${{ matrix.component.dir }}
-          setup: push
+    uses: viash-io/viash-actions/.github/workflows/build.yaml@v6
+    with:
+      version: ${{ github.event.inputs.version }}
+      project_directory: viash/core
