@@ -2,21 +2,25 @@
 
 ## Breaking changes
 
-- Moved `src/tasks/batch_integration` to [`task_batch_integration`](https://github.com/openproblems-bio/task_batch_integration).
+- Moved `src/tasks/batch_integration` to [`task_batch_integration`](https://github.com/openproblems-bio/task_batch_integration) (PR #910).
 
-- Moved `src/tasks/denoising` to [`task_denoising`](https://github.com/openproblems-bio/task_denoising).
+- Moved `src/tasks/denoising` to [`task_denoising`](https://github.com/openproblems-bio/task_denoising) (PR #910).
 
-- Moved `src/tasks/dimensionality_reduction` to [`task_dimensionality_reduction`](https://github.com/openproblems-bio/task_dimensionality_reduction).
+- Moved `src/tasks/dimensionality_reduction` to [`task_dimensionality_reduction`](https://github.com/openproblems-bio/task_dimensionality_reduction) (PR #910).
 
-- Moved `src/tasks/label_projection` to [`task_label_projection`](https://github.com/openproblems-bio/task_label_projection).
+- Moved `src/tasks/label_projection` to [`task_label_projection`](https://github.com/openproblems-bio/task_label_projection) (PR #910).
 
-- Moved `src/tasks/match_modalities` to [`task_match_modalities`](https://github.com/openproblems-bio/task_match_modalities).
+- Moved `src/tasks/match_modalities` to [`task_match_modalities`](https://github.com/openproblems-bio/task_match_modalities) (PR #910).
 
-- Moved `src/tasks/predict_modality` to [`task_predict_modality`](https://github.com/openproblems-bio/task_predict_modality).
+- Moved `src/tasks/predict_modality` to [`task_predict_modality`](https://github.com/openproblems-bio/task_predict_modality) (PR #910).
 
-- Moved `src/tasks/spatial_decomposition` to [`task_spatial_decomposition`](https://github.com/openproblems-bio/task_spatial_decomposition).
+- Moved `src/tasks/spatial_decomposition` to [`task_spatial_decomposition`](https://github.com/openproblems-bio/task_spatial_decomposition) (PR #910).
 
-- Moved `src/tasks/spatially_variable_genes` to [`task_spatially_variable_genes`](https://github.com/openproblems-bio/task_spatially_variable_genes).
+- Moved `src/tasks/spatially_variable_genes` to [`task_spatially_variable_genes`](https://github.com/openproblems-bio/task_spatially_variable_genes) (PR #910).
+
+## Major changes
+
+- Update Viash to 0.9.0 (PR #911).
 
 ## Minor changes
 
