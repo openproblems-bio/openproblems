@@ -17,6 +17,7 @@ platforms:
       - type: python
         packages:
           - muon
+          - numpy<2
   - type: nextflow
     directives: 
       label: [midtime, midmem, midcpu]

@@ -1,9 +1,28 @@
-# openproblems v2.1.0
+# openproblems [next release]
+
+## Breaking changes
+
+- Moved `src/tasks/batch_integration` to [`task_batch_integration`](https://github.com/openproblems-bio/task_batch_integration).
+
+- Moved `src/tasks/denoising` to [`task_denoising`](https://github.com/openproblems-bio/task_denoising).
+
+- Moved `src/tasks/dimensionality_reduction` to [`task_dimensionality_reduction`](https://github.com/openproblems-bio/task_dimensionality_reduction).
+
+- Moved `src/tasks/label_projection` to [`task_label_projection`](https://github.com/openproblems-bio/task_label_projection).
+
+- Moved `src/tasks/match_modalities` to [`task_match_modalities`](https://github.com/openproblems-bio/task_match_modalities).
+
+- Moved `src/tasks/predict_modality` to [`task_predict_modality`](https://github.com/openproblems-bio/task_predict_modality).
+
+- Moved `src/tasks/spatial_decomposition` to [`task_spatial_decomposition`](https://github.com/openproblems-bio/task_spatial_decomposition).
+
+- Moved `src/tasks/spatially_variable_genes` to [`task_spatially_variable_genes`](https://github.com/openproblems-bio/task_spatially_variable_genes).
 
 ## Minor changes
 
-- Add the CELLxGENE immune cell atlas dataset as a common test resource (PR #907)
-- Update `dataset_id` for `tenx_visium`, `zenodo_spatial`, `zenodo_spatial_slidetags` datasets and use `mouse_brain_coronal` as a test resource in the `spatially_variable_genes` task (PR #908)
+- Add the CELLxGENE immune cell atlas dataset as a common test resource (PR #907).
+
+- Update `dataset_id` for `tenx_visium`, `zenodo_spatial`, `zenodo_spatial_slidetags` datasets and use `mouse_brain_coronal` as a test resource in the `spatially_variable_genes` task (PR #908).
 
 # openproblems v2.0.0
 
@@ -11,7 +30,8 @@ A major update to the OpenProblems framework, switching from a Python-based fram
 
 Most relevant parts of the overall structure:
 
-* `src/tasks`: Benchmarking tasks:
+- `src/tasks`: Benchmarking tasks:
+
   - `batch_integration`: Batch integration
   - `denoising`: Denoising
   - `dimensionality_reduction`: Dimensionality reduction
@@ -20,7 +40,8 @@ Most relevant parts of the overall structure:
   - `spatial_decomposition`: Spatial decomposition
   - `spatially_variable_genes`: Spatially variable genes
 
-* `src/datasets`: Components for creating common datasets. Loaders:
+- `src/datasets`: Components for creating common datasets. Loaders:
+
   - `cellxgene_census`: Query cells from a CellxGene Census
   - `openproblems_neurips2021_bmmc`: Fetch a dataset from the OpenProblems NeurIPS2021 competition
   - `openproblems_neurips2022_pbmc`: Fetch a dataset from the OpenProblems NeurIPS2022 competition
@@ -30,7 +51,7 @@ Most relevant parts of the overall structure:
   - `zenodo_spatial`: Fetch and process an Anndata file containing DBiT seq, MERFISH, seqFISH, Slide-seq v2, STARmap, and Stereo-seq data from Zenodo.
   - `zenodo_spatial_slidetags`: Download a compressed file containing gene expression matrix and spatial locations from zenodo.
 
-* `src/common`: Common components used by all tasks.
+- `src/common`: Common components used by all tasks.
   - `check_dataset_schema`: Check whether an h5ad dataset adheres to a dataset schema
   - `check_yaml_schema`: Check whether a YAML adheres to a JSON schema
   - `comp_tests`: Reusable component unit tests
@@ -44,12 +65,12 @@ Most relevant parts of the overall structure:
 
 For more information related to the structure of this repository, see the [documentation](https://openproblems.bio/documentation/reference/openproblems/).
 
-
 # openproblems v1.0.0
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added `cell2location` to the `spatial_decomposition` task.
 - Added nearest-neighbor ranking matrix computation to `_utils`.
 - Datasets now store nearest-neighbor ranking matrix in `adata.obsm["X_ranking"]`.
@@ -61,6 +82,7 @@ Note: This changelog was automatically generated from the git log.
 - Added `obsm` parameter to `_xgboost` function to allow specifying the embedding space for XGBoost training.
 
 ## Major changes
+
 - Updated `scvi-tools` to version `0.20` in both Python and R environments.
 - Updated datasets to include nearest-neighbor ranking matrix.
 - Modified dimensionality reduction task to include nearest-neighbor ranking matrix computation in dataset generation.
@@ -71,6 +93,7 @@ Note: This changelog was automatically generated from the git log.
 - Removed the redundant computation and storage of the nearest-neighbor ranking matrix in datasets.
 
 ## Minor changes
+
 - Updated method names to be shorter and more consistent across tasks.
 - Improved method summaries for clarity.
 - Updated JAX and JAXlib versions to 0.4.6.
@@ -101,11 +124,13 @@ Note: This changelog was automatically generated from the git log.
 - Modified `_scanvi_scarches` to allow for specifying `prediction_method` and handle `unlabeled_category` consistently.
 
 ## Documentation
+
 - Improved the documentation of the `auprc` metric.
 - Improved the documentation of the `cell2location` methods.
 - Document sub-stub task behaviour
 
 ## Bug fixes
+
 - Fixed an error in `neuralee_default` where the `subsample_genes` argument could be too small.
 - Fixed an error in `knn_naive` where the `is_baseline` argument was set to `False`.
 - Fixed calculation of ranking matrix in `_utils` to include ties.
@@ -130,14 +155,14 @@ Note: This changelog was automatically generated from the git log.
 - Updated the `run_tests` workflow to skip testing on the `test_process` branch.
 - Updated the `create-pull-request` step to set the author for the pull request.
 - Updated the `run_tests` workflow to skip testing on pull request reviews.
-- Updated the `update_website_
-
+- Updated the `update*website*
 
 # openproblems v0.8.0
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added the zebrafish_labs dataset to the dimensionality reduction task.
 - Added the `diffusion_map` method to the dimensionality reduction task.
 - Added the `spectral_features` method to the dimensionality reduction task, which uses diffusion maps to create embedding features.
@@ -147,6 +172,7 @@ Note: This changelog was automatically generated from the git log.
 - Added `celltype_random_embedding_jitter` method to randomize embedding with jitter.
 
 ## Minor changes
+
 - Improved the `density_preservation` metric calculation.
 - Updated the `distance_correlation` metric to use the new `diffusion_map` method.
 - Increased the default number of components used for `distance_correlation_spectral` to 1000.
@@ -169,6 +195,7 @@ Note: This changelog was automatically generated from the git log.
 - Added permission to write packages to the `run_tests` workflow.
 
 ## Bug fixes
+
 - Fixed a bug in `density_preservation` that caused it to return 0 when there were NaN values in the embedding.
 - Removed unused `true_features_log_cp10k` and `true_features_log_cp10k_hvg` methods.
 - Removed unnecessary imports in metrics.
@@ -178,69 +205,76 @@ Note: This changelog was automatically generated from the git log.
 - Added `get_split` function for metrics that require splitting data into training and testing sets.
 - Added `feature_to_embedding` function for embedding-based metrics.
 - Fixed issue where baseline methods were not properly documented.
+
 * Increased default maximum epochs for spatial models to improve performance.
 * Improved training parameters for both spatial and single-cell models to improve stability and performance.
 * Updated validation metric used for early stopping in spatial model to improve training quality.
 
 ## Documentation
+
 - Updated documentation to clarify that the AnnData object passed to metric functions is a copy.
 - Updated the documentation for batch integration tasks to reflect the change in the expected format of the dataset objects.
 
 ## Major changes
+
 - Moved baseline methods from individual task modules to a common module.
 - Removed redundant baseline methods from individual task modules.
 - Increased default values for `max_epochs_sp` and `max_epochs_sc` in `destvi` method.
-
 
 # openproblems v0.7.4
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added metadata for all datasets, methods, and metrics.
 
 ## Major changes
+
 - Updated nf-openproblems to v1.10.
 
 ## Minor changes
+
 - Added a new `docker_pull` rule to the Snakemake workflow to pull Docker images.
 - Added a new `docker` rule to the Snakemake workflow to build Docker images.
 - Changed the `pytest` command to include coverage for the `test` directory.
 - Added new environment variables for the TOWER_TEST_ACTION_ID and TOWER_FULL_ACTION_ID to the Snakemake workflow.
 - Updated the `scripts/install_renv.R` script to increase the number of retry attempts.
 
-
 # openproblems v0.7.3
 
 Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
-- Updated `scib` version to `1.1.3` in `docker/openproblems-r-extras/requirements.txt` and `docker/openproblems-r-pytorch/requirements.txt`.
-## Bug fixes
-- Added `pytest-timestamper` to test dependencies for better debugging.
 
+- Updated `scib` version to `1.1.3` in `docker/openproblems-r-extras/requirements.txt` and `docker/openproblems-r-pytorch/requirements.txt`.
+
+## Bug fixes
+
+- Added `pytest-timestamper` to test dependencies for better debugging.
 
 # openproblems v0.7.2
 
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
-- Fixed an issue where pymde did not work on sparse data.
 
+- Fixed an issue where pymde did not work on sparse data.
 
 # openproblems v0.7.1
 
 Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
-- Added `hvg_unint` and `n_genes_pre` to the lung batch.
 
+- Added `hvg_unint` and `n_genes_pre` to the lung batch.
 
 # openproblems v0.7.0
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added a bibtex file `main.bib` for storing all references cited in the repository.
 - Added a section on adding paper references to `CONTRIBUTING.md` explaining how to add entries to `main.bib` and link to them in markdown documents.
 - Added new baseline methods for dimensionality reduction: "True Features (logCPM)", "True Features (logCPM, 1kHVG)".
@@ -255,6 +289,7 @@ Note: This changelog was automatically generated from the git log.
 - Added a new workflow to comment on pull request status.
 
 ## Major changes
+
 - Updated the `openproblems` repository to cite papers using bibtex references.
 - Renamed `alra` method to `alra_sqrt`.
 - Updated `spacexr` to latest version.
@@ -263,6 +298,7 @@ Note: This changelog was automatically generated from the git log.
 - Bumped version to 0.7.0.
 
 ## Minor changes
+
 - Added BibTex references to all data loaders in `openproblems/data`.
 - Added BibTex references to all methods in `openproblems/tasks`.
 - Added BibTex references to all metrics in `openproblems/tasks`.
@@ -279,12 +315,12 @@ Note: This changelog was automatically generated from the git log.
 - Added PyMDE dependency to requirements.txt
 - Updated the API to specify that datasets should provide log CPM-normalized counts in `adata.X
 
-
 # openproblems v0.6.1
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added `cell2location_detection_alpha_1` method, which uses `detection_alpha=1` and a hard-coded reference.
 - Added a new parameter `hard_coded_reference` to `cell2location_detection_alpha_1` method.
 - Added a new baseline method for dimensionality reduction using high-dimensional Laplacian Eigenmaps.
@@ -299,6 +335,7 @@ Note: This changelog was automatically generated from the git log.
 - Added `top_prop` parameter to `odds_ratio` metric to allow specifying the proportion of interactions to consider for calculating the odds ratio.
 
 ## Major changes
+
 - Removed unused `openproblems-python-batch-integration` docker image.
 - Moved `scanorama`, `bbknn`, `scVI`, `mnnpy` and `scib` from `openproblems-python-batch-integration` to `openproblems-r-pytorch`.
 - Moved `cell2location`, `molecular-cross-validation`, `neuralee`, `tangram` and `phate` from `openproblems-python-extras` to `openproblems-python-pytorch`.
@@ -324,6 +361,7 @@ Note: This changelog was automatically generated from the git log.
 - Renamed the `nbt2022-reproducibility` to `website-experimental`
 
 ## Minor changes
+
 - Updated `numpy` and `scipy` dependencies in setup.py.
 - Updated `scikit-learn`, `louvain`, `python-igraph`, `decorator` and `colorama` dependencies in setup.py.
 - Improved Docker image caching.
@@ -348,22 +386,22 @@ Note: This changelog was automatically generated from the git log.
 - Added environment variable to track changes.
 - Removed unused git command.
 - Decreased number of samples for testing.
-- Updated `igraph` to 0.10.* in `setup.py`.
-- Updated `anndata2ri` to 1.1.* in `openproblems-r-base/README.md`.
+- Updated `igraph` to 0.10.\* in `setup.py`.
+- Updated `anndata2ri` to 1.1.\* in `openproblems-r-base/README.md`.
 - Updated `kBET` to `a10ffea` in `openproblems-r-extras/r_requirements.txt`.
 - Updated `scib` to `f0be826` in `openproblems-r-extras/requirements.txt`.
-- Updated `harmony-pytorch` to 0.1.* in `openproblems-r-pytorch/requirements.txt`.
-- Updated `torch` to 1.13.* in `openproblems-r-pytorch/requirements.txt`.
+- Updated `harmony-pytorch` to 0.1.\* in `openproblems-r-pytorch/requirements.txt`.
+- Updated `torch` to 1.13.\* in `openproblems-r-pytorch/requirements.txt`.
 - Updated `scanorama` to 1.7.0 in `openproblems-r-pytorch/requirements.txt`.
-- Updated `scvi-tools` to 0.16.* in `openproblems-r-pytorch/requirements.txt`.
+- Updated `scvi-tools` to 0.16.\* in `openproblems-r-pytorch/requirements.txt`.
 - Updated the `regulatory_effect_prediction` task to use
-
 
 # openproblems v0.6.0
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added a new dataset: "Pancreas (inDrop)"
 - Added a new function: "pancreas"
 - Added a new utility function: "utils.split_data"
@@ -381,6 +419,7 @@ Note: This changelog was automatically generated from the git log.
 - Added support for uploading docker images to ECR.
 
 ## Minor changes
+
 - Added `tabula_muris_senis` dataset to `openproblems/tasks/denoising/datasets/__init__.py`.
 - Updated `styler` to version 1.8.1.
 - Updated the method for normalizing scores to correctly account for baseline method scores.
@@ -411,12 +450,12 @@ Note: This changelog was automatically generated from the git log.
 - Updated the workflow to include a new `test_full_benchmark` branch.
 - Removed redundant code from the workflow.
 
-
 # openproblems v0.5.21
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added a new metric, AUPRC, for evaluating cell-cell communication predictions.
 - Added support for aggregating method scores using "max" and "sum" operations.
 - Implemented a new method, true events, which predicts all possible interactions.
@@ -426,152 +465,158 @@ Note: This changelog was automatically generated from the git log.
 - Added LIANA, CellPhoneDB, Connectome, Log2FC, NATMI, and SingleCellSignalR methods to the cell-cell communication source-target task.
 
 ## Bug fixes
+
 - Fixed a bug where the odds ratio metric was not handling cases where the numerator or denominator was zero.
 
 ## Minor changes
+
 - Updated the IRkernel package version in the R base docker image to 1.3.1.
 - Updated the saezlab/liana package version in the R extras docker image to 0.1.7.
-- Updated the boto3 package version in the main docker image to 1.26.*.
+- Updated the boto3 package version in the main docker image to 1.26.\*.
 - Added a check to the cell-cell communication dataset validation to ensure that there are no duplicate entries in the target data.
 - Updated the documentation for the cell-cell communication ligand-target task.
 - Updated the documentation for the cell-cell communication source-target task.
-
 
 # openproblems v0.5.20
 
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
+
 - Fixed an issue where a sparse matrix was not being converted to CSR format.
 - Fixed a bug in `docker_run.sh` where pip check was not being executed.
 
 ## Minor changes
-- Updated `pkgload` to version 1.3.1.
 
+- Updated `pkgload` to version 1.3.1.
 
 # openproblems v0.5.19
 
 Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
-- Converted sparse matrix to csr format.
 
+- Converted sparse matrix to csr format.
 
 # openproblems v0.5.18
 
 Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
-- Converted sparse matrices to CSR format.
 
+- Converted sparse matrices to CSR format.
 
 # openproblems v0.5.17
 
 Note: This changelog was automatically generated from the git log.
-
-
-
 
 # openproblems v0.5.16
 
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
+
 - Fixed a bug where the bioconductor version was incorrect.
 - Fixed a bug where the matrix in obs was incorrect.
+
 ## Minor changes
+
 - Updated the scran package to version 1.24.1.
 - Updated the batchelor and scuttle packages.
-
 
 # openproblems v0.5.15
 
 Note: This changelog was automatically generated from the git log.
-
-
-
 
 # openproblems v0.5.14
 
 Note: This changelog was automatically generated from the git log.
 
 ## Major changes
-- Updated workflow to run tests against `prod` branch.
 
+- Updated workflow to run tests against `prod` branch.
 
 # openproblems v0.5.13
 
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
-- Skip benchmark if tester fails.
 
+- Skip benchmark if tester fails.
 
 # openproblems v0.5.12
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Explicitly push prod images on tag
 
 ## Documentation
+
 - Added short metric descriptions to README
 
 ## Minor changes
-- Added labels tests
 
+- Added labels tests
 
 # openproblems v0.5.11
 
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
+
 - Reverted bump of louvain to 0.8, which caused issues.
 
 ## Minor changes
-- Updated torch requirement to 1.13 in the openproblems-r-pytorch docker.
 
+- Updated torch requirement to 1.13 in the openproblems-r-pytorch docker.
 
 # openproblems v0.5.10
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added support for SCALEX version 1.0.2.
 
 ## Minor changes
+
 - Updated RcppAnnoy to version 0.0.20.
-- Updated SageMaker requirement to version 2.116.*.
+- Updated SageMaker requirement to version 2.116.\*.
 
 ## Bug fixes
+
 - Fixed a bug in the `docker_hash` function, which now returns a string instead of an integer.
 - Fixed a bug in the `scalex` method, which now correctly handles the `outdir` parameter.
-
 
 # openproblems v0.5.9
 
 Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
+
 - Update rpy2 requirement from <3.5.5 to <3.5.6
 - Update ragg to 1.2.4
-## Bug fixes
-- Don't fail job if hash fails
 
+## Bug fixes
+
+- Don't fail job if hash fails
 
 # openproblems v0.5.8
 
 Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
-- Updated scIB to 77ab015.
 
+- Updated scIB to 77ab015.
 
 # openproblems v0.5.7
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added a new batch integration subtask for corrected feature matrices.
 - Added a new sub-task for batch integration, "batch integration embed", which includes all methods that output a joint embedding of cells across batches.
 - Added a new sub-task for batch integration, "batch integration graph", which includes all methods that output a cell-cell similarity graph (e.g., a kNN graph).
@@ -581,77 +626,87 @@ Note: This changelog was automatically generated from the git log.
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
+
 - Fixed an issue where the `::` in branch names would cause problems.
 - Fixed an issue where the `check_r_dependencies.yml` workflow was not properly handling branch names with `::`.
+
 ## Minor changes
+
 - Updated the `caret` package to version 6.0-93.
 - Updated the README to include information about the Open Problems team and task leaders.
 - Replaced the `NuSVR` method with a faster alternative, improving performance.
+
 ## New functionality
+
 - Added a new method for running Seuratv3 from a fork, allowing for more efficient use of resources.
 - Added a new requirement to the `r_requirements.txt` file for the `bslib` package.
 - Added a new requirement to the `r_requirements.txt` file for the `caret` package.
+
 ## Documentation
+
 - Added a new section to the README to document the process of running Seuratv3 from a fork.
 - Updated the README to include a list of all contributors to the Open Problems project.
-
 
 # openproblems v0.5.5
 
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
+
 - Fix sampling and reindexing
 - Fix docker unavailable error to include image name
 
 ## New functionality
+
 - Require minimum celltype count for `spatial_decomposition`
 
 ## Minor changes
+
 - Update Rcpp to 1.0.9
 - Update to nf-openproblems v1.7
-
 
 # openproblems v0.5.4
 
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
-- Fixed an issue where some cell types were missing from the output.
 
+- Fixed an issue where some cell types were missing from the output.
 
 # openproblems v0.5.3
 
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
-- Fixed a bug in the rctd method where cell types with fewer than 25 cells were not being used.
 
+- Fixed a bug in the rctd method where cell types with fewer than 25 cells were not being used.
 
 # openproblems v0.5.2
 
 Note: This changelog was automatically generated from the git log.
 
 ## Bug fixes
-- Handle missing function error by catching FileNotFoundError and NoSuchFunctionError instead of just RuntimeError.
 
+- Handle missing function error by catching FileNotFoundError and NoSuchFunctionError instead of just RuntimeError.
 
 # openproblems v0.5.1
 
 Note: This changelog was automatically generated from the git log.
 
 ## Major changes
+
 - Updated `scipy` requirement from `==1.8.*` to `>=1.8,<1.10`.
 - Updated `igraph` to version `1.3.4`.
 
 ## Minor changes
+
 - Changed the mnnpy dependency to use a patch version instead of a specific commit hash.
 
 ## Bug fixes
+
 - Changed `docker_hash` to use the Docker API if `docker` is not available.
 - Use `curl` to retrieve the Docker hash if `docker` fails.
 - Fixed an issue with using `git+https` for `mnnpy`.
-
 
 # openproblems v0.5.0
 
@@ -699,70 +754,76 @@ Note: This changelog was automatically generated from the git log.
 - Updated issue templates to reflect the `main` branch as the default branch.
 - Updated pull request template to reflect the `main` branch as the default branch.
 
-
 # openproblems v0.4.4
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added a new docker image `openproblems-r-pytorch` for running Harmony in Python
 
 ## Major changes
+
 - Moved `harmony` to Python-based `harmony-pytorch`
 
 ## Bug fixes
+
 - Fixed an issue where `adata.var` was not being correctly handled in `_utils.py`
 - Updated the documentation for the `openproblems-r-extras` docker image
-
 
 # openproblems v0.4.3
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added PHATE with sqrt potential
 
 ## Bug fixes
+
 - Fixed path to R_HOME
 - Fixed Dockerfile to use R 4.2
 - Minor CI fixes
-
 
 # openproblems v0.4.2
 
 Note: This changelog was automatically generated from the git log.
 
 ## Minor changes
-- Run scran pooling in series, not in parallel.
 
+- Run scran pooling in series, not in parallel.
 
 # openproblems v0.4.1
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added `FastMNN`, `Harmony`, and `Liger` methods for batch integration.
 - Added `bbknn_full_unscaled` method.
 - Added Dependabot configuration for pip and GitHub Actions dependencies.
 
 ## Minor changes
+
 - Updated dependencies: `scib`, `bbknn`, `scanorama`, `annoy`, and `mnnpy`.
 - Improved the performance of several methods by pre-processing the data before running them.
 
 ## Bug fixes
-- Fixed bugs in `fastMNN`, `harmony`, `liger`, `scanorama`, `scanvi`, `scvi`, `mnn`, and `combat` that caused incorrect embedding.
 
+- Fixed bugs in `fastMNN`, `harmony`, `liger`, `scanorama`, `scanvi`, `scvi`, `mnn`, and `combat` that caused incorrect embedding.
 
 # openproblems v0.4.0
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added a new file `workflow/generate_website_markdown.py` to generate website markdown files for all tasks and datasets.
 - Updated Nextflow version to v1.5.
 - Updated Nextflow version to v1.6.
 
 ## Major changes
+
 - Added code version to the output of each method.
 - Updated `nextflow` version to `v1.3`.
 - Updated `nextflow` version to `v1.4`.
@@ -771,6 +832,7 @@ Note: This changelog was automatically generated from the git log.
 - Updated Python version to 3.8.13.
 
 ## Minor changes
+
 - Updated dependencies for the Docker images.
 - Updated pre-commit hooks to include `requirements-txt-fixer`.
 - Updated Nextflow workflow to version 1.4.
@@ -778,19 +840,20 @@ Note: This changelog was automatically generated from the git log.
 - Updated the Tower action ID.
 
 ## Bug fixes
+
 - Fixed a bug where Docker images were not properly pushed to Docker Hub.
 - Updated `requirements.txt` files to fix dependency conflicts.
 - Removed unnecessary dependencies from CI workflows to reduce disk space usage on GitHub runners.
-
 
 # openproblems v0.3.5
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added new integration methods: BBKNN, Combat, FastMNN feature, FastMNN embed, Harmony, Liger, MNN, Scanorama feature, Scanorama embed, Scanvi, Scvi
 - Added new metrics: graph_connectivity, iso_label_f1, nmi
-- Added _utils.py with functions: hvg_batch, scale_batch
+- Added \_utils.py with functions: hvg_batch, scale_batch
 - Added `run_bbknn` function.
 - Added a test for the trustworthiness metric, which now passes for sparse matrices.
 - Added a test for the density preservation metric, which now passes against densmap for a reasonable degree of similarity.
@@ -807,6 +870,7 @@ Note: This changelog was automatically generated from the git log.
 - Added a new `invite-contributors.yml` file to the repository.
 
 ## Major changes
+
 - The `test_methods.py` file has been simplified by removing unused arguments.
 - The `test_metrics.py` file has been simplified by removing unused arguments.
 - The `test_utils/docker.py` file has been modified to allow specifying the docker image as a decorator argument.
@@ -816,6 +880,7 @@ Note: This changelog was automatically generated from the git log.
 - Modified `.github/workflows/run_tests.yml` to cancel previous runs when a new commit is pushed.
 
 ## Minor changes
+
 - Removed `.nextflow`, `scratch/`, `openproblems/results/` and `openproblems/work/` from `.gitignore`.
 - Updated `CONTRIBUTING.md`
 - Methods should not edit `adata.obsm["train"]` or `adata.obsm["test"]`.
@@ -830,6 +895,7 @@ Note: This changelog was automatically generated from the git log.
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added CeNGEN, Tabula Muris Senis, and Pancreas datasets to the label_projection task.
 - Added scANVI and scArches+scANVI methods to the label_projection task.
 - Added majority_vote and random_labels baseline methods to the label_projection task.
@@ -858,18 +924,20 @@ Note: This changelog was automatically generated from the git log.
 - Added support for running benchmarks from forks
 - Added `openproblems-cli` command to run test-hash
 
-
 # openproblems v0.3.3
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added support for balanced SCOT alignment.
 
 ## Minor changes
+
 - Updated the workflow to store benchmark results in `/tmp`.
 
 ## Bug fixes
+
 - Fixed the parsing and committing of benchmark results on tag.
 - Fixed the Github Actions badge link.
 - Fixed the coverage badge.
@@ -877,12 +945,12 @@ Note: This changelog was automatically generated from the git log.
 - Ignored AWS warning and cleaned up S3 properly.
 - Updated the workflow to continue on error for forks.
 
-
 # openproblems v0.3.2
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added trustworthiness metric to the dimensionality reduction task.
 - Added density preservation metric.
 - Added several metrics based on nearest neighbor ranking: continuity, co-KNN size, co-KNN AUC, local continuity meta criterion, local property, global property.
@@ -893,10 +961,12 @@ Note: This changelog was automatically generated from the git log.
 - Added support for the Single Cell Optimal Transport (SCOT) method for multimodal data integration.
 - SCOT implements Gromov-Wasserstein optimal transport to align single-cell multi-omics data.
 - Added four variations of SCOT:
-+    - sqrt CPM unbalanced
-+    - sqrt CPM balanced
-+    - log scran unbalanced
-+    - log scran balanced
+
+* - sqrt CPM unbalanced
+* - sqrt CPM balanced
+* - log scran unbalanced
+* - log scran balanced
+
 - Each variation implements different normalization strategies for the input data.
 - Added `scot` method to `openproblems.tasks.multimodal_data_integration.methods`.
 - Added pre-processing to the `dimensionality_reduction` task.
@@ -914,12 +984,12 @@ Note: This changelog was automatically generated from the git log.
 - Added support for running benchmark tests on tags.
 - Added a test directory for use in the workflow.
 
-
 # openproblems v0.3.1
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added chromatin potential task
 - Added PHATE to the dimensional_reduction task.
 - Added support for testing docker builds on a separate branch.
@@ -953,21 +1023,23 @@ Note: This changelog was automatically generated from the git log.
 - Added 10x PBMC dataset
 - Added `load_10x_5k_pbmc` function to load the 10x 5k PBMC dataset.
 
-
 # openproblems v0.2.1
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added MLP method for label projection task.
 - Added pancreas data loading to label projection task.
 
 ## Minor changes
+
 - Updated black.
 - Updated test version of pancreas_batch to have test data.
 - Added random pancreas train data.
 
 ## Bug fixes
+
 - Fixed zebrafish code duplication.
 - Fixed pancreas import location.
 - Fixed bug in zebrafish data.
@@ -976,22 +1048,25 @@ Note: This changelog was automatically generated from the git log.
 - Removed dummy and cheat metrics/datasets.
 - Removed excess covariates from pancreas dataset.
 
-
 # openproblems v0.2
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added zebrafish label projection task
 
 ## Major changes
+
 - Moved scIB, rpy2, harmonicalignment, and mnnpy to optional dependencies
 
 ## Minor changes
+
 - Improved n_components fix
 - Moved URL into function for neater namespace
 
 ## Bug fixes
+
 - Fixed n_svd for truncatedSVD
 - Fixed data loader
 - Fixed n_pca problem
@@ -999,23 +1074,26 @@ Note: This changelog was automatically generated from the git log.
 - Scaled data for regression
 - Added check to ensure that data has nonzero size
 
-
 # openproblems v0.1
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added a results page to the website.
 - Added a new zebrafish dataset to the openproblems library.
 - Added netlify.toml to deploy website.
 
 ## Documentation
+
 - Updated documentation to reflect new features and datasets.
 
 ## Major changes
+
 - Bumped version to 0.1.
 
 ## Minor changes
+
 - Improved the website's home menu link.
 - Improved website links.
 - Updated website's hero and social links.
@@ -1029,14 +1107,15 @@ Note: This changelog was automatically generated from the git log.
 - Updated the Travis CI configuration to exclude website from black.
 
 ## Bug fixes
-- Fixed zebrafish data loader.
 
+- Fixed zebrafish data loader.
 
 # openproblems v0.0.3
 
 Note: This changelog was automatically generated from the git log.
 
 ## New functionality
+
 - Added harmonic alignment method.
 - Added scicar datasets.
 - Added logistic regression methods.
@@ -1045,9 +1124,11 @@ Note: This changelog was automatically generated from the git log.
 - Added normalization tools.
 
 ## Documentation
+
 - Updated documentation to reflect normalization changes.
 
 ## Major changes
+
 - Migrated normalizations to openproblems.tools.normalize.
 - Updated dataset specification to require normalization in methods.
 - Removed zebrafish dataset.
@@ -1058,6 +1139,7 @@ Note: This changelog was automatically generated from the git log.
 - Migrated references to github repo.
 
 ## Minor changes
+
 - Improved sparse array equality test.
 - Improved sparse inequality check.
 - Increased test data size.
@@ -1078,6 +1160,7 @@ Note: This changelog was automatically generated from the git log.
 - Increased test coverage.
 
 ## Bug fixes
+
 - Bugfix harmonic_alignment, closes #4.
 - Bugfix harmonic alignment import.
 - Normalized data inside methods, closes #19.
@@ -1087,7 +1170,6 @@ Note: This changelog was automatically generated from the git log.
 - Fix decorator.
 - Fix cheat method.
 - Don't check for raw data -- we are no longer normalizing.
-
 
 # openproblems v0.0.2
 
@@ -1123,4 +1205,5 @@ Note: This changelog was automatically generated from the git log.
 First release of OpenProblems.
 
 methods, 1 metric)
-* Multimodal data integration (2 datasets, 2 methods, 2 metrics)
+
+- Multimodal data integration (2 datasets, 2 methods, 2 metrics)
