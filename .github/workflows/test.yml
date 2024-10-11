@@ -1,4 +1,4 @@
-name: Check Viash components
+name: Test
 
 on:
   push:
@@ -9,5 +9,3 @@ on:
 jobs:
   test:
     uses: viash-io/viash-actions/.github/workflows/test.yaml@v6
-    with:
-      project_directory: viash/core

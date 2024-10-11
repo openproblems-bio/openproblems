@@ -1,4 +1,4 @@
-name: Build Viash components
+name: Build
 
 on:
   push:
@@ -19,4 +19,3 @@ jobs:
     uses: viash-io/viash-actions/.github/workflows/build.yaml@v6
     with:
       version: ${{ github.event.inputs.version }}
-      project_directory: viash/core
