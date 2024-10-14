@@ -1,0 +1,44 @@
+name: update_tasks_table
+description: Update tasks table in Supabase
+links:
+  repository: https://github.com/openproblems-bio/openproblems
+argument_groups:
+  - name: "Inputs"
+    arguments:
+      - name: --supabase_url
+        alternatives: -u
+        type: string
+        description: Supabase URL to database
+        required: true
+        default: "https://bleficzaoyltozjjndha.supabase.co"
+      - name: --supabase_key
+        alternatives: -k
+        type: string
+        description: Supabase API key
+        required: true
+      - name: --github_auth
+        alternatives: -a
+        type: string
+        description: github authentication token
+        required: true
+      - name: --github_org
+        alternatives: -g
+        type: string
+        description: Github organization
+        required: true
+        default: "openproblems-bio"
+
+resources:
+  - type: python_script
+    path: script.py
+
+runners:
+  - type: executable
+
+engines:
+  - type: docker
+    image: python:3.12
+    setup:
+      - type: python
+        pypi: ["PyGithub", "supabase"]
+
