@@ -1,0 +1,37 @@
+name: update_timeline_table
+description: Update timeline table in Supabase
+links:
+  repository: https://github.com/openproblems-bio/openproblems
+argument_groups:
+  - name: "Inputs"
+    arguments:
+      - name: --supabase_url
+        alternatives: -u
+        type: string
+        description: Supabase URL to database
+        required: true
+        default: "https://bleficzaoyltozjjndha.supabase.co"
+      - name: --supabase_key
+        alternatives: -k
+        type: string
+        description: Supabase API key
+        required: true
+      - name: --s3_bucket
+        alternatives: -b
+        type: string
+        description: S3 bucket name
+        required: true
+
+resources:
+  - type: python_script
+    path: script.py
+
+runners:
+  - type: executable
+
+engines:
+  - type: docker
+    image: python:3.12
+    setup:
+      - type: python
+        pypi: ["boto3", "supabase"]
