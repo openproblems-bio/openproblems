@@ -1,0 +1,24 @@
+name: yaml_to_json
+namespace: utils
+summary: Convert a YAML file to a JSON file
+description: |
+  This script converts a YAML file to a JSON file.
+arguments:
+  - type: file
+    name: --input
+    required: true
+    description: A YAML file.
+  - type: file
+    name: --output
+    required: true
+    description: A JSON file.
+    direction: output
+resources:
+  - type: python_script
+    path: script.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+runners:
+  - type: executable
+  - type: nextflow

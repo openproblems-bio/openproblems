@@ -1,0 +1,45 @@
+name: generate_qc
+namespace: reporting
+description: Generate task QC metrics
+arguments:
+  - name: --task_info
+    type: file
+    example: task_info.json
+    description: Task info file
+  - name: --method_info
+    type: file
+    example: method_info.json
+    description: Method info file
+  - name: --metric_info
+    type: file
+    example: metric_info.json
+    description: Metric info file
+  - name: --dataset_info
+    type: file
+    example: dataset_info.json
+    description: Dataset info file
+  - name: --results
+    type: file
+    example: results.json
+    description: Results file
+  - name: --output
+    type: file
+    direction: output
+    default: output.json
+    description: Output json
+resources:
+  - type: python_script
+    path: script.py
+test_resources:
+  - type: python_script
+    path: /common/component_tests/run_and_check_output.py
+  - path: /resources_test/common/task_metadata
+    dest: resources_test/common/task_metadata
+engines:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [lowmem, lowtime, lowcpu]

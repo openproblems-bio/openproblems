@@ -1,0 +1,38 @@
+name: upgrade_config
+namespace: project
+description: |
+  Upgrade a component config from viash version 0.8 to version 0.9. 
+usage:
+  viash run upgrade_config/config.vsh.yaml -- --input method --output foo
+
+arguments:
+  - type: file
+    name: --input
+    direction: input
+    description: Path to the input config.
+    example: input.vsh.yaml
+  - type: file
+    name: --output
+    description: Path to the output config.
+    example: input.vsh.yaml
+    direction: output
+
+resources:
+  - type: python_script
+    path: script.py
+  # - path: library.bib
+
+test_resources:
+  - type: python_script
+    path: test.py
+
+engines:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        packages: ruamel.yaml
+runners:
+  - type: executable
+  - type: nextflow
+
