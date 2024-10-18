@@ -3,10 +3,18 @@
 ## VIASH START
 ## VIASH END
 
+cat > _viash.yaml << EOM
+info:
+  test_resources:
+    - type: s3
+      path: s3://openproblems-data/resources_test/common/pancreas
+      dest: foo
+EOM
+
 echo ">> Run aws s3 sync"
-./$meta_functionality_name \
-  --input s3://openproblems-data/resources_test/common/pancreas \
-  --output foo \
+"$meta_executable" \
+  --input _viash.yaml \
+  --output . \
   --quiet
 
 echo ">> Check whether the right files were copied"

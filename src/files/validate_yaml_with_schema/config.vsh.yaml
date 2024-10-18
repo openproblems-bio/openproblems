@@ -1,0 +1,28 @@
+name: validate_yaml_with_schema
+namespace: files
+summary: Check the format of a YAML file against a schema
+description: Checks if the YAML file has the necessary data structures as defined in a schema.
+argument_groups:
+  - name:  Inputs
+    arguments:
+      - name: --input
+        type: file
+        required: true
+        description: A yaml file.
+      - name: --schema
+        type: file
+        required: true
+        description: A schema file for the yaml file.
+resources:
+  - type: python_script
+    path: script.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: python
+        pypi:
+          - jsonschema
+runners:
+  - type: executable
+  - type: nextflow

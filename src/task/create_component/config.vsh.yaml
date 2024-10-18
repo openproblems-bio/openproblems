@@ -1,0 +1,64 @@
+name: create_component
+namespace: task
+description: |
+  Create a new component
+usage:
+  create_component --type method --language r --name foo
+  create_component --type metric --language python --name bar
+argument_groups:
+  - name: Inputs
+    arguments:
+      - type: file
+        name: --input
+        direction: input
+        description: Path to the root of the project.
+        default: "."
+      - type: file
+        name: --api_file
+        description: |
+          Which API file to use. Defaults to `src/api/comp_<TYPE>.yaml`.
+          In tasks with different subtypes of method, this location might not exist and you might need
+          to manually specify a different API file to inherit from.
+        must_exist: false
+        default: src/api/comp_${VIASH_PAR_TYPE}.yaml
+  - name: Arguments
+    arguments:
+      - type: string
+        name: --type
+        example: metric
+        description: The type of component to create. Typically must be one of 'method', 'control_method' or 'metric'.
+      - type: string
+        name: --language
+        description: Which scripting language to use. Options are 'python', 'r'.
+        default: python
+        choices: [python, r]
+      - type: string
+        name: --name
+        example: new_comp
+        description: Name of the new method, formatted in snake case.
+  - name: Outputs
+    arguments:
+      - type: file
+        name: --output
+        direction: output
+        description: Path to the component directory. Suggested location is `src/<TYPE>s/<NAME>`.
+        default: src/${VIASH_PAR_TYPE}s/${VIASH_PAR_NAME}
+resources:
+  - type: python_script
+    path: script.py
+test_resources:
+  - type: python_script
+    path: test.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    test_setup:
+      - type: apt
+        packages: git
+      - type: docker
+        run: |
+          git clone https://github.com/openproblems-bio/task_template.git /opt/task_template
+runners:
+  - type: executable
+  - type: nextflow
+

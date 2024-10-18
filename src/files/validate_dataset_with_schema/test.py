@@ -16,9 +16,10 @@ def schema(tmp_path):
 type: file
 description: "A preprocessed dataset"
 example: "preprocessed.h5ad"
+label: "Preprocessed dataset"
 info:
-  label: "Preprocessed dataset"
-  slots:
+  format:
+    type: h5ad
     layers: 
       - type: integer
         name: counts
@@ -39,9 +40,10 @@ def error_schema(tmp_path):
 type: file
 description: "A preprocessed dataset"
 example: "preprocessed.h5ad"
+label: "Preprocessed dataset"
 info:
-  label: "Preprocessed dataset"
-  slots:
+  format:
+    type: h5ad
     X:
       type: double
       description: Normalized expression values

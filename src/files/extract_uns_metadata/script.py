@@ -21,6 +21,14 @@ if par["schema"]:
   print("Load schema", flush=True)
   with open(par["schema"], "r") as f:
     schema = yaml.safe_load(f)
+  
+  schema_info = schema.get("info") or {}
+  assert schema_info, "Schema must contain an 'info' field"
+
+  schema_info_format = schema_info.get("format") or {}
+  assert schema_info_format, "Schema must contain a '.info.format' field"
+
+  assert schema_info_format.get("type") == "h5ad", ".info.format.type must be 'h5ad'"
 else:
   schema = None
 
@@ -114,7 +122,8 @@ def get_structure_dtype(obj) -> str:
 def get_structure_schema_info(struct, key) -> dict:
   if schema is None:
     return {}
-  struct_args = schema.get("info", {}).get("slots", {}).get(struct, {})
+  
+  struct_args = schema_info_format.get(struct, {})
   if struct_args is None:
     return {}
   if struct == "X":
@@ -149,10 +158,15 @@ def get_structure(adata, struct):
     # see if the schema has information about this struct
     schema_info = get_structure_schema_info(struct, key)
 
-    if schema_info.get("description"):
-      out["description"] = schema_info.get("description")
-    if schema_info.get("type"):
-      out["schema_type"] = schema_info.get("type")
+    copy = {
+      "description": "description",
+      "summary": "summary",
+      "label": "label",
+      "schema_type": "type"
+    }
+    for k, v in copy.items():
+      if schema_info.get(v):
+        out[k] = schema_info.get(v)
 
     output.append(out)
   
@@ -176,16 +190,15 @@ def get_file_creation_time(path: str) -> str:
   creation_time = creation_time.strftime('%d-%m-%Y')
   return str(creation_time)
 
-
 print("Extract metadata from object", flush=True)
 # Extract metadata about the adata object
 uns = {}
 for key, val in adata.uns.items():
   if is_atomic(val):
     uns[key] = to_atomic(val)
-  elif is_list_of_atomics(val) and len(val) <= 10:
+  elif is_list_of_atomics(val) and len(val) <= par["uns_length_cutoff"]:
     uns[key] = to_list_of_atomics(val)
-  elif is_dict_of_atomics(val) and len(val) <= 10:
+  elif is_dict_of_atomics(val) and len(val) <= par["uns_length_cutoff"]:
     uns[key] = to_dict_of_atomics(val)
 
 uns["file_size"] = get_file_size(par["input"])
