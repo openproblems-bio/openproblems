@@ -40,5 +40,5 @@ test_resources:
   - path: /resources_test/common/pancreas
     dest: resources_test/common/pancreas
   - type: python_script
-    path: /src/common/comp_tests/run_and_check_adata.py
+    path: /common/component_tests/run_and_check_output.py
 
