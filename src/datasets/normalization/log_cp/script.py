@@ -9,7 +9,7 @@ par = {
     'n_cp': 1e6,
 }
 meta = {
-    "functionality_name": "normalize_log_cp10k"
+    "name": "normalize_log_cp10k"
 }
 ## VIASH END
 
@@ -36,7 +36,7 @@ lognorm = sc.pp.log1p(norm["X"])
 print(">> Store output in adata", flush=True)
 adata.layers[par["layer_output"]] = lognorm
 adata.obs[par["obs_size_factors"]] = norm["norm_factor"]
-adata.uns["normalization_id"] = par["normalization_id"] or meta['functionality_name']
+adata.uns["normalization_id"] = par["normalization_id"] or meta['name']
 
 print(">> Write data", flush=True)
 adata.write_h5ad(par['output'], compression="gzip")

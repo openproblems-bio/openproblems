@@ -1,17 +1,18 @@
 __merge__: ../../api/comp_processor_pca.yaml
-functionality:
-  name: "pca"
-  description: "Compute PCA"
-  resources:
-    - type: python_script
-      path: script.py
+name: pca
+description: Compute PCA
+resources:
+  - type: python_script
+    path: script.py
   # test_resources:
   #   - type: python_script
   #     path: test_script.py
   #   - path: "../../../resources_test/common/pancreas"
-platforms:
+engines:
   - type: docker
     image: openproblems/base_python:1.0.0
+runners:
+  - type: executable
   - type: nextflow
     directives:
       label: [midtime, highmem, midcpu]

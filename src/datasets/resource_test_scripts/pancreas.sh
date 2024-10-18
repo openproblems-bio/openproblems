@@ -6,7 +6,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
-DATASET_DIR=resources_test/common
+DATASET_DIR=resources_test/common/scrnaseq
 
 set -e
 
@@ -18,7 +18,7 @@ KEEP_FEATURES=`cat $DATASET_DIR/temp_g2m_genes_tirosh_hm.txt $DATASET_DIR/temp_s
 
 # download dataset
 nextflow run . \
-  -main-script target/nextflow/datasets/workflows/process_openproblems_v1/main.nf \
+  -main-script target/nextflow/datasets/workflows/scrnaseq/process_openproblems_v1/main.nf \
   -profile docker \
   -c src/wf_utils/labels_ci.config \
   -resume \
@@ -55,7 +55,7 @@ nextflow run . \
 rm -r $DATASET_DIR/temp_*
 
 # run task process dataset components
-src/tasks/batch_integration/resources_test_scripts/process.sh
-src/tasks/denoising/resources_test_scripts/pancreas.sh
-src/tasks/dimensionality_reduction/resources_test_scripts/pancreas.sh
-src/tasks/label_projection/resources_test_scripts/pancreas.sh
+# src/tasks/batch_integration/resources_test_scripts/process.sh
+# src/tasks/denoising/resources_test_scripts/pancreas.sh
+# src/tasks/dimensionality_reduction/resources_test_scripts/pancreas.sh
+# src/tasks/label_projection/resources_test_scripts/pancreas.sh

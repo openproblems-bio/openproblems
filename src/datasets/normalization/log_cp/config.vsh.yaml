@@ -1,18 +1,20 @@
 __merge__: ../../api/comp_normalization.yaml
-functionality:
-  name: "log_cp"
-  description: "Normalize data using Log CP"
-  resources:
-    - type: python_script
-      path: script.py
-  arguments:
-    - name: "--n_cp"
-      type: integer
-      default: 1e4
-      description: "Number of counts per cell. When set to -1, will use None."
-platforms:
+name: log_cp
+links: {}
+description: Normalize data using Log CP
+resources:
+  - type: python_script
+    path: script.py
+arguments:
+  - name: --n_cp
+    type: integer
+    default: 1e4
+    description: Number of counts per cell. When set to -1, will use None.
+engines:
   - type: docker
     image: openproblems/base_python:1.0.0
+runners:
+  - type: executable
   - type: nextflow
-    directives: 
+    directives:
       label: [midtime, midmem, midcpu]
