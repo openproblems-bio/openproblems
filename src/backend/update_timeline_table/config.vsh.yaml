@@ -34,4 +34,4 @@ engines:
     image: python:3.12
     setup:
       - type: python
-        pypi: ["boto3", "supabase"]
+        pypi: ["PyGithub", "supabase"]

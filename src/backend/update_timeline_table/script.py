@@ -1,8 +1,9 @@
 # import system packages
 import datetime
 import os
-
-import boto3
+# import the Github module from the PyGithub library
+from github import Github
+from github import Auth
 # import supabase module
 from supabase import create_client, Client
 
@@ -11,27 +12,30 @@ from supabase import create_client, Client
 par = {
   "supabase_url": "https://bleficzaoyltozjjndha.supabase.co",
   "supabase_key": os.environ.get("SERVICE_ROLE"),
-  "s3_bucket": "openproblems-data",
+  "github_auth": os.environ.get("GH_TOKEN"),
+  "github_repo": "task_perturbation_prediction",
 }
 
 ## VIASH END
 
 # authenticate with the Supabase API
-print(">> Authenticating with Supabase")
+print(">> Authenticating with Supabase", flush=True)
 url: str = par["supabase_url"]
 key: str = par["supabase_key"]
 supabase: Client = create_client(url, key)
 
-print(">> Getting tasks from db")
-tasks = supabase.table("tasks").select("task_name").execute()
-task_names=[]
-for task in tasks.data:
-    task_names.append(task["task_name"])
+print(">> Authenticating with Github", flush=True)
+auth = Auth.Token(par["github_auth"])
+g = Github(auth=auth)
 
-prefix = f"resources/denoising/results/"
+print(">> Getting repo info github", flush=True)
+repo = g.get_repo(f"openproblems-bio/{par['github_repo']}")
 
-# Let's use Amazon S3
-s3 = boto3.client('s3')
-response = s3.list_buckets()
+releases = repo.get_releases()
 
-objects = s3.list_objects_v2(Bucket=par["s3_bucket"], Prefix=prefix)
+if releases.totalCount > 0:
+  rl_date = releases[0].published_at
+  for rl in releases:
+    if rl.publshed_at < rl_date:
+      rl_date = rl.published_at
+    
