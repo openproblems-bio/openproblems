@@ -31,11 +31,16 @@ g = Github(auth=auth)
 print(">> Getting repo info github", flush=True)
 repo = g.get_repo(f"openproblems-bio/{par['github_repo']}")
 
+print(">> Fetch first release date", flush=True)
 releases = repo.get_releases()
 
 if releases.totalCount > 0:
-  rl_date = releases[0].published_at
-  for rl in releases:
-    if rl.publshed_at < rl_date:
-      rl_date = rl.published_at
+  first_release = releases.reversed[0]
+  rl_date = first_release.published_at
     
+print(">> Fetch first commit date")
+commits = repo.get_commits()
+first_commit = commits.reversed[0]
+commit_date = first_commit.commit.comitter.date
+
+
