@@ -43,4 +43,14 @@ commits = repo.get_commits()
 first_commit = commits.reversed[0]
 commit_date = first_commit.commit.comitter.date
 
-
+print(">> update timeline table")
+response= (
+  supabase.table("timeline")
+  .insert(
+    {
+      "task_name": par["github_repo"],
+      "first_release": rl_date,
+      "first_commit": commit_date,
+    }
+  )
+)
