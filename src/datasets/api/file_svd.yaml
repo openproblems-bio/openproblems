@@ -1,6 +1,6 @@
 __merge__: file_normalized.yaml
 type: file
-example: "resources_test/common/scrnaseq/pancreas/svd.h5ad"
+example: "resources_test/common/pancreas/svd.h5ad"
 label: "Dataset+SVD"
 summary: "A normalised dataset with a SVD embedding"
 info:

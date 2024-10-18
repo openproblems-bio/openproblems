@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/common/scrnaseq/pancreas/raw.h5ad"
+example: "resources_test/common/pancreas/raw.h5ad"
 label: "Raw dataset"
 summary: An unprocessed dataset as output by a dataset loader.
 description: |

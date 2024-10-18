@@ -1,6 +1,6 @@
 __merge__: file_knn.yaml
 type: file
-example: "resources_test/common/scrnaseq/pancreas/dataset.h5ad"
+example: "resources_test/common/pancreas/dataset.h5ad"
 label: "Common dataset"
 summary: A dataset processed by the common dataset processing pipeline. 
 description: |
