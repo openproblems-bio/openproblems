@@ -6,7 +6,14 @@ viash_version: 0.9.0
 description: |
   Open Problems is a living, extensible, community-guided benchmarking platform.
 license: MIT
-keywords: [openproblems, benchmark]
+keywords: [openproblems, benchmarking, single-cell omics]
+
+references:
+  doi:
+    # Malte Luecken, Scott Gigante, Daniel Burkhardt, Robrecht Cannoodt, et al.
+    # Defining and benchmarking open problems in single-cell analysis, 
+    # 03 April 2024, PREPRINT (Version 1) available at Research Square [https://doi.org/10.21203/rs.3.rs-4181617/v1]
+    - 10.21203/rs.3.rs-4181617/v1
 
 links:
   issue_tracker: https://github.com/openproblems-bio/openproblems/issues
@@ -17,17 +24,9 @@ config_mods: |
   .runners[.type == "nextflow"].config.labels := { lowmem : "memory = 20.Gb", midmem : "memory = 50.Gb", highmem : "memory = 100.Gb", lowcpu : "cpus = 5", midcpu : "cpus = 15", highcpu : "cpus = 30", lowtime : "time = 1.h", midtime : "time = 4.h", hightime : "time = 8.h", veryhightime : "time = 24.h" }
   .runners[.type == "nextflow"].config.script := "process.errorStrategy = 'ignore'"
 
-# viash_version: 0.8.6
 
-# source: src
-# target: target
-
-# config_mods: |
-#   .functionality.version := 'dev'
-#   .platforms[.type == 'docker'].target_registry := 'ghcr.io'
-#   .platforms[.type == 'docker'].target_organization := 'openproblems-bio/openproblems'
-#   .platforms[.type == 'docker'].target_image_source := 'https://github.com/openproblems-bio/openproblems'
-#   .platforms[.type == "nextflow"].directives.tag := "$id"
-#   .platforms[.type == "nextflow"].auto.simplifyOutput := false
-#   .platforms[.type == "nextflow"].config.labels := { lowmem : "memory = 20.Gb", midmem : "memory = 50.Gb", highmem : "memory = 100.Gb", lowcpu : "cpus = 5", midcpu : "cpus = 15", highcpu : "cpus = 30", lowtime : "time = 1.h", midtime : "time = 4.h", hightime : "time = 8.h", veryhightime : "time = 24.h" }
-#   .platforms[.type == "nextflow"].config.script := "process.errorStrategy = 'ignore'"
+info:
+  test_resources:
+    - type: s3
+      path: s3://openproblems-data/resources_test/common
+      dest: resources_test/common
