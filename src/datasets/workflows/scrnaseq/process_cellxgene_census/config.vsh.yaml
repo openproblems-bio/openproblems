@@ -189,7 +189,7 @@ resources:
   - type: nextflow_script
     path: main.nf
     entrypoint: run_wf
-  - path: /src/wf_utils/helper.nf
+  - path: /common/nextflow_helpers/helper.nf
 dependencies:
   - name: datasets/loaders/scrnaseq/cellxgene_census
   - name: datasets/normalization/log_cp

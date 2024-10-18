@@ -122,7 +122,7 @@ resources:
   - type: nextflow_script
     path: main.nf
     entrypoint: run_wf
-  - path: /src/wf_utils/helper.nf
+  - path: /common/nextflow_helpers/helper.nf
 dependencies:
   - name: datasets/loaders/multimodal/openproblems_neurips2022_pbmc
   - name: datasets/normalization/log_cp
