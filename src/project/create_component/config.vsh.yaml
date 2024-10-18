@@ -1,5 +1,5 @@
 name: create_component
-namespace: task
+namespace: project
 description: |
   Create a new component
 usage:

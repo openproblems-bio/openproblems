@@ -1,5 +1,5 @@
 name: render_readme
-namespace: task
+namespace: project
 description: |
   Render the task README
 argument_groups:

@@ -1,5 +1,5 @@
-name: validate_dataset_with_schema
-namespace: files
+name: check_dataset_with_schema
+namespace: validation
 summary: Check the format of a file against a schema
 description: Checks if the file has the necessary data structures as defined in a schema.
 argument_groups:

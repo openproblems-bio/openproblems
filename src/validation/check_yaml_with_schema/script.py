@@ -7,9 +7,6 @@ par = {
   'input': 'src/tasks/batch_integration/methods/bbknn/config.vsh.yaml',
   'schema': 'src/common/api/schema_task_method.yaml'
 }
-meta = {
-  'functionality_name': 'foo',
-}
 ## VIASH END
 
 def yaml_to_dict(file_path):

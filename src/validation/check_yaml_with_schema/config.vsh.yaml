@@ -1,5 +1,5 @@
-name: validate_yaml_with_schema
-namespace: files
+name: check_yaml_with_schema
+namespace: validation
 summary: Check the format of a YAML file against a schema
 description: Checks if the YAML file has the necessary data structures as defined in a schema.
 argument_groups:
