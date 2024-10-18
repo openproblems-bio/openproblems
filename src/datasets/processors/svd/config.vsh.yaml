@@ -1,16 +1,17 @@
 __merge__: ../../api/comp_processor_svd.yaml
-functionality:
-  name: "svd"
-  description: "Compute SVD pca reduction"
-  resources:
-    - type: python_script
-      path: script.py
-platforms:
+name: svd
+description: Compute SVD pca reduction
+resources:
+  - type: python_script
+    path: script.py
+engines:
   - type: docker
     image: openproblems/base_python:1.0.0
     setup:
       - type: python
         pypi: [scikit-learn]
+runners:
+  - type: executable
   - type: nextflow
     directives:
       label: [midtime, highmem, midcpu]

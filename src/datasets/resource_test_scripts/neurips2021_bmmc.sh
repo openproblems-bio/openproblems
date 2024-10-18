@@ -38,7 +38,7 @@ output_mod2: '$id/dataset_mod2.h5ad'
 output_meta_mod1: '$id/dataset_metadata_mod1.yaml'
 output_meta_mod2: '$id/dataset_metadata_mod2.yaml'
 output_state: '$id/state.yaml'
-# publish_dir: s3://openproblems-data/resources_test/common
+# publish_dir: s3://openproblems-data/resources_test/common/multimodal
 HERE
 
 # cat > /tmp/nextflow.config << HERE
@@ -51,10 +51,10 @@ HERE
 # HERE
 
 nextflow run . \
-  -main-script target/nextflow/datasets/workflows/process_openproblems_neurips2021_bmmc/main.nf \
+  -main-script target/nextflow/datasets/workflows/multimodal/process_openproblems_neurips2021_bmmc/main.nf \
   -profile docker \
   -resume \
-  --publish_dir resources_test/common \
+  --publish_dir resources_test/common/multimodal \
   -params-file "$params_file" \
   -c src/wf_utils/labels.config
 
@@ -68,4 +68,4 @@ nextflow run . \
 #   --labels predict_modality
 
 # run task process dataset components
-src/tasks/predict_modality/resources_test_scripts/neurips2021_bmmc.sh
+# src/tasks/predict_modality/resources_test_scripts/neurips2021_bmmc.sh

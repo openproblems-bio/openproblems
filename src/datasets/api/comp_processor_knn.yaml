@@ -1,39 +1,38 @@
-functionality:
-  namespace: "datasets/processors"
-  info:
-    type: dataset_processor
-    type_info:
-      label: KNN
-      summary: |
-        Computes the k-nearest-neighbours for each cell.
-      description: |
-        The resulting AnnData will contain both the knn distances and the knn connectivities in 'obsp'.
-  arguments:
-    - name: "--input"
-      __merge__: file_pca.yaml
-      required: true
-      direction: input
-    - name: "--input_layer"
-      type: string
-      default: "normalized"
-      description: Which layer to use as input.
-    - name: "--output"
-      direction: output
-      __merge__: file_knn.yaml
-      required: true
-    - name: "--key_added"
-      type: string
-      default: "knn"
-      description: |
-        The neighbors data is added to `.uns[key_added]`, 
-        distances are stored in `.obsp[key_added+'_distances']` and 
-        connectivities in `.obsp[key_added+'_connectivities']`.
-    - name: "--num_neighbors"
-      type: integer
-      default: 15
-      description: "The size of local neighborhood (in terms of number of neighboring data points) used for manifold approximation."
-  test_resources:
-    - path: /resources_test/common/pancreas
-      dest: resources_test/common/pancreas
-    - type: python_script
-      path: /src/common/comp_tests/run_and_check_adata.py
+namespace: "datasets/processors"
+info:
+  type: dataset_processor
+  type_info:
+    label: KNN
+    summary: |
+      Computes the k-nearest-neighbours for each cell.
+    description: |
+      The resulting AnnData will contain both the knn distances and the knn connectivities in 'obsp'.
+arguments:
+  - name: "--input"
+    __merge__: file_pca.yaml
+    required: true
+    direction: input
+  - name: "--input_layer"
+    type: string
+    default: "normalized"
+    description: Which layer to use as input.
+  - name: "--output"
+    direction: output
+    __merge__: file_knn.yaml
+    required: true
+  - name: "--key_added"
+    type: string
+    default: "knn"
+    description: |
+      The neighbors data is added to `.uns[key_added]`, 
+      distances are stored in `.obsp[key_added+'_distances']` and 
+      connectivities in `.obsp[key_added+'_connectivities']`.
+  - name: "--num_neighbors"
+    type: integer
+    default: 15
+    description: "The size of local neighborhood (in terms of number of neighboring data points) used for manifold approximation."
+test_resources:
+  - path: /resources_test/common/pancreas
+    dest: resources_test/common/pancreas
+  - type: python_script
+    path: /common/component_tests/run_and_check_output.py

@@ -1,10 +1,11 @@
 __merge__: file_normalized.yaml
 type: file
 example: "resources_test/common/pancreas/svd.h5ad"
+label: "Dataset+SVD"
+summary: "A normalised dataset with a SVD embedding"
 info:
-  label: "Dataset+SVD"
-  summary: "A normalised dataset with a SVD embedding"
-  slots:
+  format:
+    type: h5ad
     obsm:
       - type: double
         name: X_svd

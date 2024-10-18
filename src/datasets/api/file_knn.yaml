@@ -1,10 +1,11 @@
 __merge__: file_pca.yaml
 type: file
 example: "resources_test/common/pancreas/knn.h5ad"
+label: "Dataset+HVG+PCA+kNN"
+summary: "A normalised data with a PCA embedding, HVG selection and a kNN graph"
 info:
-  label: "Dataset+HVG+PCA+kNN"
-  summary: "A normalised data with a PCA embedding, HVG selection and a kNN graph"
-  slots:
+  format:
+    type: h5ad
     obsp:
       - type: double
         name: knn_distances

@@ -1,51 +1,54 @@
 __merge__: ../../api/comp_processor_subset.yaml
-functionality:
-  name: "subsample"
-  description: "Subsample an h5ad file"
-  arguments:
-    - name: "--n_obs"
-      type: integer
-      description: Maximum number of observations to be kept. It might end up being less because empty cells / genes are removed.
-      default: 500
-    - name: "--n_vars"
-      type: integer
-      description: Maximum number of variables to be kept. It might end up being less because empty cells / genes are removed.
-      default: 500
-    - name: "--keep_features"
-      type: string
-      multiple: true
-      description: A list of genes to keep.
-    - name: "--keep_cell_type_categories"
-      type: "string"
-      multiple: true
-      description: "Cell type indexes to be selected"
-      required: false
-    - name: "--keep_batch_categories"
-      type: "string"
-      multiple: true
-      description: "Categories indexes to be selected"
-      required: false
-    - name: "--even"
-      type: "boolean_true"
-      description: Subsample evenly from different batches
-    - name: "--seed"
-      type: "integer"
-      description: "A seed for the subsampling."
-      example: 123
-  resources:
-    - type: python_script
-      path: script.py
-  test_resources:
-    - type: python_script
-      path: test_script.py
-    - path: /resources_test/common/pancreas
-platforms:
+name: subsample
+description: Subsample an h5ad file
+arguments:
+  - name: --n_obs
+    type: integer
+    description: Maximum number of observations to be kept. It might end up being
+      less because empty cells / genes are removed.
+    default: 500
+  - name: --n_vars
+    type: integer
+    description: Maximum number of variables to be kept. It might end up being less
+      because empty cells / genes are removed.
+    default: 500
+  - name: --keep_features
+    type: string
+    multiple: true
+    description: A list of genes to keep.
+  - name: --keep_cell_type_categories
+    type: string
+    multiple: true
+    description: Cell type indexes to be selected
+    required: false
+  - name: --keep_batch_categories
+    type: string
+    multiple: true
+    description: Categories indexes to be selected
+    required: false
+  - name: --even
+    type: boolean_true
+    description: Subsample evenly from different batches
+  - name: --seed
+    type: integer
+    description: A seed for the subsampling.
+    example: 123
+resources:
+  - type: python_script
+    path: script.py
+test_resources:
+  - type: python_script
+    path: test_script.py
+  - path: /resources_test/common/pancreas
+engines:
   - type: docker
     image: openproblems/base_python:1.0.0
     test_setup:
       - type: python
         packages:
           - viashpy
+runners:
+  - type: executable
   - type: nextflow
     directives:
       label: [midtime, highmem, midcpu]

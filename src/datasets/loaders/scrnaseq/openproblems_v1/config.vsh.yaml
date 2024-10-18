@@ -1,0 +1,91 @@
+__merge__: ../../../api/comp_dataset_loader.yaml
+name: openproblems_v1
+namespace: datasets/loaders/scrnaseq
+description: Fetch a dataset from OpenProblems v1
+argument_groups:
+  - name: Inputs
+    arguments:
+      - name: --input_id
+        type: string
+        description: The ID of the dataset in OpenProblems v1
+        required: true
+      - name: --obs_cell_type
+        type: string
+        description: Location of where to find the observation cell types.
+      - name: --obs_batch
+        type: string
+        description: Location of where to find the observation batch IDs.
+      - name: --obs_tissue
+        type: string
+        description: Location of where to find the observation tissue information.
+      - name: --layer_counts
+        type: string
+        description: In which layer to find the counts matrix. Leave undefined to
+          use `.X`.
+        example: counts
+      - name: --sparse
+        type: boolean
+        default: true
+        description: Convert layers to a sparse CSR format.
+      - name: --var_feature_id
+        type: string
+        description: Location of where to find the feature IDs. Can be set to index
+          if the feature IDs are the index.
+        example: gene_ids
+      - name: --var_feature_name
+        type: string
+        description: Location of where to find the feature names. Can be set to index
+          if the feature names are the index.
+        default: index
+  - name: Metadata
+    arguments:
+      - name: --dataset_id
+        type: string
+        description: Unique identifier of the dataset.
+        required: true
+      - name: --dataset_name
+        type: string
+        description: Nicely formatted name.
+        required: true
+      - name: --dataset_url
+        type: string
+        description: Link to the original source of the dataset.
+        required: false
+      - name: --dataset_reference
+        type: string
+        description: Bibtex reference of the paper in which the dataset was published.
+        required: false
+      - name: --dataset_summary
+        type: string
+        description: Short description of the dataset.
+        required: true
+      - name: --dataset_description
+        type: string
+        description: Long description of the dataset.
+        required: true
+      - name: --dataset_organism
+        type: string
+        description: The organism of the dataset.
+        required: false
+resources:
+  - type: python_script
+    path: script.py
+test_resources:
+  - type: python_script
+    path: test.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    setup:
+      - type: apt
+        packages: git
+      - type: docker
+        run: |
+          git clone -b 'v0.8.0' --depth 1 https://github.com/openproblems-bio/openproblems.git /opt/openproblems && \
+            pip install --no-cache-dir -r /opt/openproblems/docker/openproblems/requirements.txt && \
+            pip install --no-cache-dir --editable /opt/openproblems
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [highmem, midcpu, midtime]

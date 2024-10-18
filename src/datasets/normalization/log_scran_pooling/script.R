@@ -30,7 +30,7 @@ adata$obs[[par$obs_size_factors]] <- size_factors
 adata$layers[[par$layer_output]] <- lognorm
 norm_id <- par[["normalization_id"]]
 if (is.null(norm_id)) {
-  norm_id <- meta[["functionality_name"]]
+  norm_id <- meta[["name"]]
 }
 adata$uns[["normalization_id"]] <- norm_id
 
