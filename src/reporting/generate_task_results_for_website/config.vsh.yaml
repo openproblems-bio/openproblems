@@ -1,0 +1,90 @@
+name: generate_task_results_for_website
+namespace: reporting
+description: >-
+  This workflow transforms the meta information of the results into a format
+  that can be used by the website.
+argument_groups:
+  - name: Inputs
+    arguments:
+      - name: "--input_scores"
+        type: file
+        required: true
+        direction: input
+        description: A yaml file containing the scores of each of the methods
+        example: score_uns.yaml
+      - name: "--input_method_configs"
+        type: file
+        required: true
+        direction: input
+        example: method_configs.yaml
+      - name: "--input_metric_configs"
+        type: file
+        required: true
+        direction: input
+        example: metric_configs.yaml
+      - name: "--input_dataset_info"
+        type: file
+        required: true
+        direction: input
+        example: dataset_info.yaml
+      - name: "--input_execution"
+        type: file
+        required: true
+        direction: input
+        example: trace.txt
+      - name: "--input_task_info"
+        type: file
+        required: true
+        direction: input
+        example: task_info.yaml
+  - name: Outputs
+    arguments:
+      - name: "--output_scores"
+        type: file
+        required: true
+        direction: output
+        description: A yaml file containing the scores of each of the methods
+        default: results.json
+      - name: "--output_method_info"
+        type: file
+        required: true
+        direction: output
+        default: method_info.json
+      - name: "--output_metric_info"
+        type: file
+        required: true
+        direction: output
+        default: metric_info.json
+      - name: "--output_dataset_info"
+        type: file
+        required: true
+        direction: output
+        default: dataset_info.json
+      - name: "--output_task_info"
+        type: file
+        required: true
+        direction: output
+        default: task_info.json
+      - name: "--output_qc"
+        type: file
+        required: true
+        direction: output
+        default: quality_control.json
+      - name: "--output_metric_execution_info"
+        type: file
+        required: true
+        direction: output
+        default: metric_execution_info.json
+resources:
+  - type: nextflow_script
+    path: main.nf
+    entrypoint: run_wf
+dependencies:
+  - name: reporting/get_results
+  - name: reporting/get_method_info
+  - name: reporting/get_metric_info
+  - name: reporting/get_dataset_info
+  - name: reporting/get_task_info
+  - name: reporting/generate_qc
+runners:
+  - type: nextflow
