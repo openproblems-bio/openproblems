@@ -1,7 +1,10 @@
-import sys
 import cellxgene_census
 import scanpy as sc
 import tempfile
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 ## VIASH START
 par = {
@@ -17,13 +20,7 @@ par = {
     "output": "output.h5ad",
     "output_compression": "gzip",
 }
-meta = {"resources_dir": "src/common/helper_functions"}
 ## VIASH END
-
-sys.path.append(meta["resources_dir"])
-
-from setup_logger import setup_logger
-logger = setup_logger()
 
 def get_anndata(par):
     with tempfile.TemporaryDirectory() as tmp:

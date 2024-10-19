@@ -152,7 +152,6 @@ argument_groups:
 resources:
   - type: python_script
     path: script.py
-  - path: /src/common/helper_functions/setup_logger.py
 test_resources:
   - type: python_script
     path: test.py
