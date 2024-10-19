@@ -35,3 +35,8 @@ aws s3 sync --profile op \
   "resources_test/openproblems/task_results_v2/" \
   "s3://openproblems-data/resources_test/openproblems/task_results_v2/" \
   --delete --dryrun
+
+aws s3 sync --profile op \
+  "resources_test/openproblems/" \
+  "s3://openproblems-data/resources_test/openproblems/" \
+  --delete --dryrun

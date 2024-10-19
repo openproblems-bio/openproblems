@@ -9,15 +9,16 @@ library(purrr, warn.conflicts = FALSE)
 library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
-dir <- "work/c1/6660ea0cc6155d7e13fa341d16057b/_viash_par"
 par <- list(
-  input_scores = paste0(dir, "/input_scores_1/score_uns.yaml"),
-  input_execution = paste0(dir, "/input_execution_1/trace.txt"),
-  input_dataset_info = paste0(dir, "/input_dataset_info_1/output.json"),
-  input_method_info = paste0(dir, "/input_method_info_1/output.json"),
-  input_metric_info = paste0(dir, "/input_metric_info_1/output.json"),
-  output_results = "output/results.json",
-  output_metric_execution_info = "output/metric_execution_info.json"
+  # inputs
+  input_scores = "resources_test/openproblems/task_results_v3/raw/score_uns.yaml",
+  input_execution = "resources_test/openproblems/task_results_v3/raw/trace.txt",
+  input_dataset_info = "resources_test/openproblems/task_results_v3/processed/dataset_info.json",
+  input_method_info = "resources_test/openproblems/task_results_v3/processed/method_info.json",
+  input_metric_info = "resources_test/openproblems/task_results_v3/processed/metric_info.json",
+  # outputs
+  output_results = "resources_test/openproblems/task_results_v3/processed/results.json",
+  output_metric_execution_info = "resources_test/openproblems/task_results_v3/processed/metric_execution_info.json"
 )
 ## VIASH END
 
@@ -73,7 +74,7 @@ raw_scores <-
         x[c("dataset_id", "method_id", "metric_ids", "metric_values")]
       ))
     }, error = function(e) {
-      message("Encountered error while reading scores: ", e$message)
+      message("Encountered error while reading scores.\n  Error: ", e$message, "\n  Data: ", paste(paste0(names(x), "=", x), collapse = ", "))
       NULL
     })
   })

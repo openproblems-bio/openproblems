@@ -6,7 +6,7 @@ library(rlang, warn.conflicts = FALSE)
 ## VIASH START
 par <- list(
   input = "resources_test/openproblems/task_results_v3/raw/task_info.yaml",
-  output = "output/test/task_info.json"
+  output = "resources_test/openproblems/task_results_v3/processed/task_info.json"
 )
 ## VIASH END
 

@@ -5,8 +5,8 @@ library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input = "output/label_projection/dataset_uns.yaml",
-  output = "output/dataset_info.json"
+  input = "resources_test/openproblems/task_results_v3/raw/dataset_uns.yaml",
+  output = "resources_test/openproblems/task_results_v3/processed/dataset_info.json"
 )
 ## VIASH END
 

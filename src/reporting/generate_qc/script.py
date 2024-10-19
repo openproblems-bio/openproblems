@@ -2,6 +2,14 @@ import json
 import numpy as np
 
 ## VIASH START
+par = {
+  "task_info": "resources_test/openproblems/task_results_v3/processed/task_info.json",
+  "method_info": "resources_test/openproblems/task_results_v3/processed/method_info.json",
+  "metric_info": "resources_test/openproblems/task_results_v3/processed/metric_info.json",
+  "dataset_info": "resources_test/openproblems/task_results_v3/processed/dataset_info.json",
+  "results": "resources_test/openproblems/task_results_v3/processed/results.json",
+  "output": "output.json"
+}
 ## VIASH END
 
 EXPECTED_TASK_FIELDS = ["task_id", "task_name", "task_summary", "task_description"]
@@ -57,7 +65,7 @@ def create_quality_control(task_info, dataset_info, method_info, metric_info, re
     def percent_missing(list_of_dicts, field):
         are_missing = []
         for item in list_of_dicts:
-            if field == 'paper_reference' and item.get('is_baseline', False):
+            if field == "paper_reference" and item.get("is_baseline", False):
                 are_missing.append(0.0)
             elif field in item and item[field] is not None:
                 are_missing.append(0.0)
@@ -124,7 +132,7 @@ def create_quality_control(task_info, dataset_info, method_info, metric_info, re
     # turn results into long format for easier processing
     results_long = [
         {
-            "task_id": x["task_id"],
+            "task_id": task_id,
             "method_id": x["method_id"],
             "dataset_id": x["dataset_id"],
             "metric_id": metric["metric_id"],

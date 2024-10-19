@@ -4,29 +4,33 @@ description: Generate task QC metrics
 arguments:
   - name: --task_info
     type: file
-    example: task_info.json
     description: Task info file
+    example: resources_test/openproblems/task_results_v3/processed/task_info.json
   - name: --method_info
     type: file
-    example: method_info.json
     description: Method info file
+    example: resources_test/openproblems/task_results_v3/processed/method_info.json
   - name: --metric_info
     type: file
-    example: metric_info.json
     description: Metric info file
+    example: resources_test/openproblems/task_results_v3/processed/metric_info.json
   - name: --dataset_info
     type: file
-    example: dataset_info.json
     description: Dataset info file
+    example: resources_test/openproblems/task_results_v3/processed/dataset_info.json
   - name: --results
     type: file
-    example: results.json
     description: Results file
+    example: resources_test/openproblems/task_results_v3/processed/results.json
   - name: --output
     type: file
     direction: output
     default: output.json
     description: Output json
+    info:
+      format:
+        type: json
+        # TODO: add schema
 resources:
   - type: python_script
     path: script.py
