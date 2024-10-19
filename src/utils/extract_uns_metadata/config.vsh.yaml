@@ -1,0 +1,45 @@
+name: extract_uns_metadata
+namespace: files
+description: Extract .uns metadata from an h5ad file and write it to a yaml file.
+argument_groups:
+  - name:  Inputs
+    arguments:
+      - name: --input
+        type: file
+        required: true
+        description: A h5ad file.
+      - name: --schema
+        type: file
+        required: false
+        description: An optional schema with which to annotate the output
+      - name: --uns_length_cutoff
+        type: integer
+        required: false
+        description: The maximum length of the .uns metadata to extract. If a value in uns is a list or a dictionary with more elements than the provided cutoff, it will not be extracted.
+        default: 10
+  - name: Output
+    arguments:
+      - name: --output
+        type: file
+        required: true
+        description: A yaml file containing the metadata.
+        example: output_meta.yaml
+        direction: output
+resources:
+  - type: python_script
+    path: script.py
+test_resources:
+  - path: /resources_test/common/pancreas
+  - type: python_script
+    path: test.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+    test_setup:
+      - type: python
+        packages: viashpy
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [midtime, midmem, midcpu]

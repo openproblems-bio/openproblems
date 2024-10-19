@@ -1,0 +1,49 @@
+name: generate_qc
+namespace: reporting
+description: Generate task QC metrics
+arguments:
+  - name: --task_info
+    type: file
+    description: Task info file
+    example: resources_test/openproblems/task_results_v3/processed/task_info.json
+  - name: --method_info
+    type: file
+    description: Method info file
+    example: resources_test/openproblems/task_results_v3/processed/method_info.json
+  - name: --metric_info
+    type: file
+    description: Metric info file
+    example: resources_test/openproblems/task_results_v3/processed/metric_info.json
+  - name: --dataset_info
+    type: file
+    description: Dataset info file
+    example: resources_test/openproblems/task_results_v3/processed/dataset_info.json
+  - name: --results
+    type: file
+    description: Results file
+    example: resources_test/openproblems/task_results_v3/processed/results.json
+  - name: --output
+    type: file
+    direction: output
+    default: output.json
+    description: Output json
+    info:
+      format:
+        type: json
+        # TODO: add schema
+resources:
+  - type: python_script
+    path: script.py
+test_resources:
+  - type: python_script
+    path: /common/component_tests/run_and_check_output.py
+  - path: /resources_test/openproblems/task_results_v3
+    dest: resources_test/openproblems/task_results_v3
+engines:
+  - type: docker
+    image: openproblems/base_python:1.0.0
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [lowmem, lowtime, lowcpu]
