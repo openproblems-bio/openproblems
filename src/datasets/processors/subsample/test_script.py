@@ -42,9 +42,9 @@ def test_keep_functionality(run_component):
 
     run_component([
         "--input", input_path,
-        "--keep_cell_type_categories", "acinar:beta",
-        "--keep_batch_categories", "celseq:inDrop4:smarter",
-        "--keep_features", ":".join(keep_features),
+        "--keep_cell_type_categories", "acinar;beta",
+        "--keep_batch_categories", "celseq;inDrop4;smarter",
+        "--keep_features", ";".join(keep_features),
         "--output", output_path,
         "--seed", "123"
     ])

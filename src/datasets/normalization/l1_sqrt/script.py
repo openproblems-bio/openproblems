@@ -8,7 +8,7 @@ par = {
     'output': "output_norm.h5ad"
 }
 meta = {
-    'functionality_name': "l1_sqrt"
+    'name': "l1_sqrt"
 }
 ## VIASH END
 
@@ -23,7 +23,7 @@ l1_sqrt = l1_sqrt.tocsr()
 
 print("Store output in adata", flush=True)
 adata.layers[par["layer_output"]] = l1_sqrt
-adata.uns["normalization_id"] = par["normalization_id"] or meta['functionality_name']
+adata.uns["normalization_id"] = par["normalization_id"] or meta['name']
 
 print("Write data", flush=True)
 adata.write_h5ad(par['output'], compression="gzip")

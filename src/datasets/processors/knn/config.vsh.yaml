@@ -1,13 +1,14 @@
 __merge__: ../../api/comp_processor_knn.yaml
-functionality:
-  name: "knn"
-  description: "Compute KNN"
-  resources:
-    - type: python_script
-      path: script.py
-platforms:
+name: knn
+description: Compute KNN
+resources:
+  - type: python_script
+    path: script.py
+engines:
   - type: docker
     image: openproblems/base_python:1.0.0
+runners:
+  - type: executable
   - type: nextflow
     directives:
       label: [midtime, highmem, midcpu]
