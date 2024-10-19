@@ -5,7 +5,7 @@ library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input = "output/temp/metric_configs.yaml",
+  input = "resources_test/openproblems/task_results_v3/raw/metric_configs.yaml",
   output = "output/metric_info.json"
 )
 ## VIASH END
@@ -31,6 +31,7 @@ outputs <- map(configs, function(config) {
       info$config_path <- gsub(".*/src/", "src/", build_info$config)
       info$task_id <- gsub("/.*", "", config$namespace)
       info$id <- info$name
+      info$name <- NULL
       info$component_id <- config$name
       info$namespace <- config$namespace
       info$commit_sha <- build_info$git_commit %||% "missing-sha"

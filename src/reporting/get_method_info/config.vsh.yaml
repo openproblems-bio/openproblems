@@ -6,20 +6,24 @@ arguments:
     type: file
     description: A yaml file
     required: true
-    example: resources_test/common/task_metadata/method_configs.yaml
+    example: resources_test/openproblems/task_results_v3/raw/method_configs.yaml
   - name: --output
     type: file
     direction: output
     default: output.json
     description: Output json
+    info:
+      format:
+        type: json
+        # TODO: add schema
 resources:
   - type: r_script
     path: script.R
 test_resources:
   - type: python_script
     path: /common/component_tests/run_and_check_output.py
-  - path: /resources_test/common/task_metadata
-    dest: resources_test/common/task_metadata
+  - path: /resources_test/openproblems/task_results_v3
+    dest: resources_test/openproblems/task_results_v3
 engines:
   - type: docker
     image: openproblems/base_r:1.0.0

@@ -20,7 +20,6 @@ outputs <- map(datasets, function(dataset) {
 
   # construct v1 format
   out <- list(
-    "task_id" = par$task_id,
     "dataset_id" = dataset$dataset_id,
     "dataset_name" = dataset$dataset_name,
     "dataset_summary" = dataset$dataset_summary,

@@ -5,7 +5,7 @@ library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input = "output/temp/method_configs.yaml",
+  input = "resources_test/openproblems/task_results_v3/raw/method_configs.yaml",
   output = "output/test/method_info.json"
 )
 ## VIASH END
@@ -31,13 +31,17 @@ outputs <- map(configs, function(config) {
   info$task_id <- gsub("/.*", "", config$namespace)
   info$id <- config$name
   info$namespace <- config$namespace
+  info$label <- config$label %||% info$label
+  info$summary <- config$summary %||% info$summary
+  info$description <- config$description %||% info$description
   info$commit_sha <- build_info$git_commit %||% "missing-sha"
   info$code_version <- "missing-version"
-    info$implementation_url <- paste0(
-      build_info$git_remote, "/blob/",
-      build_info$git_commit, "/",
-      info$config_path
-    )
+  info$implementation_url <- paste0(
+    build_info$git_remote, "/blob/",
+    build_info$git_commit, "/",
+    info$config_path
+  )
+  info$type_info <- NULL
 
   # ↑ this could be used as the new format
 

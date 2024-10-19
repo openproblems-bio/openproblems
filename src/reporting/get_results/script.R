@@ -11,7 +11,6 @@ library(rlang, warn.conflicts = FALSE)
 ## VIASH START
 dir <- "work/c1/6660ea0cc6155d7e13fa341d16057b/_viash_par"
 par <- list(
-  task_id = "task_1",
   input_scores = paste0(dir, "/input_scores_1/score_uns.yaml"),
   input_execution = paste0(dir, "/input_execution_1/trace.txt"),
   input_dataset_info = paste0(dir, "/input_dataset_info_1/output.json"),
