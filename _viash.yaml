@@ -33,6 +33,3 @@ info:
     - type: s3
       path: s3://openproblems-data/resources_test/openproblems
       dest: resources_test/openproblems
-    - type: s3
-      path: s3://openproblems-data/resources_test/datasets
-      dest: resources_test/datasets

@@ -31,6 +31,6 @@ nextflow run . \
   
 echo ">> Uploading results to S3"
 aws s3 sync --profile op \
-  "resources_test/common/task_results/" \
+  "resources_test/openproblems/task_results_v3/" \
   "s3://openproblems-data/resources_test/openproblems/task_results_v3/" \
   --delete --dryrun
