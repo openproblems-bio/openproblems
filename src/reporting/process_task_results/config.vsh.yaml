@@ -1,4 +1,4 @@
-name: generate_task_results_for_website
+name: process_task_results
 namespace: reporting
 description: >-
   This workflow transforms the meta information of the results into a format

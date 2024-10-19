@@ -1,4 +1,4 @@
-name: generate_dataset_metadata_for_website
+name: process_dataset_metadata
 namespace: reporting
 description: >-
   This workflow transforms the meta information of the datasets into a format
