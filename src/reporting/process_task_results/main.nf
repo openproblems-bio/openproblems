@@ -5,9 +5,8 @@ workflow run_wf {
   main:
   output_ch = input_ch
 
-    | get_task_info.run(
-      key: "task_info",
       fromState: [ 
+    | get_task_info.run(
         "input": "input_task_info"
       ],
       toState: ["output_task": "output"]
@@ -22,7 +21,6 @@ workflow run_wf {
     | get_method_info.run(
       fromState: [ 
         "input": "input_method_configs",
-        "task_id" : "task_id"
       ],
       toState: ["output_method": "output"]
     )
@@ -30,14 +28,12 @@ workflow run_wf {
     | get_metric_info.run(
       fromState: [ 
         "input": "input_metric_configs",
-        "task_id" : "task_id"
       ],
       toState: ["output_metric": "output"]
     )
 
     | get_dataset_info.run(
       fromState: [
-        "task_id" : "task_id",
         "input": "input_dataset_info",
       ],
       toState: ["output_dataset": "output"]
@@ -45,7 +41,6 @@ workflow run_wf {
 
     | get_results.run(
       fromState: [ 
-        "task_id": "task_id",
         "input_scores": "input_scores",
         "input_execution": "input_execution",
         "input_dataset_info": "output_dataset",

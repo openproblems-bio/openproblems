@@ -134,6 +134,6 @@ dependencies:
   - name: datasets/normalization/sqrt_cp
   - name: datasets/normalization/l1_sqrt
   - name: datasets/processors/subsample
-  - name: common/extract_metadata
+  - name: utils/extract_uns_metadata
 runners:
   - type: nextflow

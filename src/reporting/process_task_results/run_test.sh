@@ -24,7 +24,7 @@ for TASK in "denoising" "dimensionality_reduction" "batch_integration" "label_pr
 
   # start the run
   NXF_VER=23.10.0 nextflow run . \
-    -main-script target/nextflow/common/process_task_results/run/main.nf \
+    -main-script target/nextflow/reporting/process_task_results/main.nf \
     -profile docker \
     -resume \
     -c src/wf_utils/labels_ci.config \

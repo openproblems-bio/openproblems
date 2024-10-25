@@ -37,7 +37,7 @@ for LOADER in $(aws s3 ls $DATASET_DIR); do
 
       # start the 
       NXF_VER=23.10.0 nextflow run . \
-      -main-script target/nextflow/common/process_dataset_metadata/run/main.nf \
+      -main-script target/nextflow/reporting/process_dataset_metadata/main.nf \
       -profile docker \
       -c src/wf_utils/labels_ci.config \
       --id "extract_metadata" \

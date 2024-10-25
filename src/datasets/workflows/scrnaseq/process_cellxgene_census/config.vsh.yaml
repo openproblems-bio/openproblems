@@ -200,7 +200,7 @@ dependencies:
   - name: datasets/processors/pca
   - name: datasets/processors/hvg
   - name: datasets/processors/knn
-  - name: common/extract_metadata
+  - name: utils/extract_uns_metadata
   # test_resources:
   #   - type: nextflow_script
   #     path: main.nf
