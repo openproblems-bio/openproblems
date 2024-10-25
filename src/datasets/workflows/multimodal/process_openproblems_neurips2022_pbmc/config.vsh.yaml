@@ -134,8 +134,8 @@ dependencies:
   - name: datasets/processors/subsample
   - name: datasets/processors/svd
   - name: datasets/processors/hvg
-  - name: common/extract_metadata
-  - name: common/decompress_gzip
+  - name: utils/extract_uns_metadata
+  - name: utils/decompress_gzip
   # test_resources:
   #   - type: nextflow_script
   #     path: main.nf

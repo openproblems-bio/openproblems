@@ -19,6 +19,6 @@ resources:
     path: main.nf
     entrypoint: run_wf
 dependencies:
-  - name: common/extract_metadata
+  - name: utils/extract_uns_metadata
 runners:
   - type: nextflow

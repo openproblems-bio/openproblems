@@ -156,7 +156,7 @@ dependencies:
   - name: datasets/processors/subsample
   - name: datasets/processors/svd
   - name: datasets/processors/hvg
-  - name: common/extract_metadata
+  - name: utils/extract_uns_metadata
   # test_resources:
   #   - type: nextflow_script
   #     path: main.nf
