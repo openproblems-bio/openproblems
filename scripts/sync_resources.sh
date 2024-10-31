@@ -2,4 +2,4 @@
 
 set -e
 
-viash run src/common/sync_test_resources/config.vsh.yaml
+common/scripts/sync_resources

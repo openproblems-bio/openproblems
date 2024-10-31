@@ -1,0 +1,50 @@
+name: render_readme
+namespace: project
+description: |
+  Render the task README
+argument_groups:
+  - name: Inputs
+    arguments:
+      - name: --input
+        type: file
+        description: Path to the root directory
+        default: "."
+        required: false
+  - name: Outputs
+    arguments:
+      - type: file
+        name: --output
+        direction: output
+        description: Path to the component directory. Suggested location is `README.md`.
+        default: README.md
+        required: false
+resources:
+  - type: r_script
+    path: script.R
+test_resources:
+  - type: r_script
+    path: test.R
+engines:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        cran:
+          - processx
+        github:
+          - openproblems-bio/core/packages/r/openproblems.utils
+          - openproblems-bio/core/packages/r/openproblems
+          - openproblems-bio/core/packages/r/openproblems.docs
+      - type: apt
+        packages: [jq, curl]
+      - type: docker
+        # download and install quarto-*-linux-amd64.deb from latest release
+        run: |
+          release_info=$(curl -s https://api.github.com/repos/quarto-dev/quarto-cli/releases/latest) && \
+            download_url=$(printf "%s" "$release_info" | jq -r '.assets[] | select(.name | test("quarto-.*-linux-amd64.deb")) | .browser_download_url') && \
+            curl -sL "$download_url" -o /opt/quarto.deb && \
+            dpkg -i /opt/quarto.deb && \
+            rm /opt/quarto.deb
+runners:
+  - type: executable
+  - type: nextflow

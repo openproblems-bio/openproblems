@@ -34,7 +34,7 @@ output_mod2: '$id/dataset_mod2.h5ad'
 output_meta_mod1: '$id/dataset_metadata_mod1.yaml'
 output_meta_mod2: '$id/dataset_metadata_mod2.yaml'
 output_state: '$id/state.yaml'
-publish_dir: s3://openproblems-data/resources/datasets
+publish_dir: s3://openproblems-data/resources/datasets/multimodal
 HERE
 
 cat > /tmp/nextflow.config << HERE
@@ -49,7 +49,7 @@ HERE
 tw launch https://github.com/openproblems-bio/openproblems.git \
   --revision main_build \
   --pull-latest \
-  --main-script target/nextflow/datasets/workflows/process_openproblems_neurips2022_pbmc/main.nf \
+  --main-script target/nextflow/datasets/workflows/multimodal/process_openproblems_neurips2022_pbmc/main.nf \
   --workspace 53907369739130 \
   --compute-env 1pK56PjjzeraOOC2LDZvN2 \
   --params-file "$params_file" \

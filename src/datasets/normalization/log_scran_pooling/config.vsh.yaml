@@ -1,18 +1,20 @@
 __merge__: ../../api/comp_normalization.yaml
-functionality:
-  name: "log_scran_pooling"
-  description: "Normalize data using scran pooling"
-  resources:
-    - type: r_script
-      path: script.R
-platforms:
+name: log_scran_pooling
+links: {}
+description: Normalize data using scran pooling
+resources:
+  - type: r_script
+    path: script.R
+engines:
   - type: docker
     image: openproblems/base_r:1.0.0
     setup:
       - type: r
-        cran: [ Matrix, rlang, scran, BiocParallel ]
+        cran: [Matrix, rlang, scran, BiocParallel]
       - type: python
         pip: scanpy
+runners:
+  - type: executable
   - type: nextflow
-    directives: 
+    directives:
       label: [midtime, midmem, midcpu]

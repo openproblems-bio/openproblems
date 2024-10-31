@@ -1,10 +1,11 @@
 __merge__: file_raw.yaml
 type: file
 example: "resources_test/common/pancreas/normalized.h5ad"
+label: "Normalized dataset"
+summary: "A normalized dataset"
 info:
-  label: "Normalized dataset"
-  summary: "A normalized dataset"
-  slots:
+  format:
+    type: h5ad
     layers:
       - type: double
         name: normalized
