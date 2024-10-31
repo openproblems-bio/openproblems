@@ -1,0 +1,641 @@
+name: "openproblems_neurips2021_bmmc"
+namespace: "datasets/loaders/multimodal"
+version: "build_main"
+argument_groups:
+- name: "Inputs"
+  arguments:
+  - type: "file"
+    name: "--input"
+    description: "Processed h5ad file published at https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE194122."
+    info: null
+    example:
+    - "GSE194122_openproblems_neurips2021_cite_BMMC_processed.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--mod1"
+    description: "Name of the first modality."
+    info: null
+    example:
+    - "GEX"
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--mod2"
+    description: "Name of the second modality."
+    info: null
+    example:
+    - "ADT"
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+- name: "Metadata"
+  arguments:
+  - type: "string"
+    name: "--dataset_id"
+    description: "A unique identifier for the dataset"
+    info: null
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--dataset_name"
+    description: "Nicely formatted name."
+    info: null
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--dataset_url"
+    description: "Link to the original source of the dataset."
+    info: null
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--dataset_reference"
+    description: "Bibtex reference of the paper in which the dataset was published."
+    info: null
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--dataset_summary"
+    description: "Short description of the dataset."
+    info: null
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--dataset_description"
+    description: "Long description of the dataset."
+    info: null
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--dataset_organism"
+    description: "The organism of the dataset."
+    info: null
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+- name: "Outputs"
+  arguments:
+  - type: "file"
+    name: "--output_mod1"
+    label: "Raw dataset"
+    summary: "An unprocessed dataset as output by a dataset loader."
+    description: "This dataset contains raw counts and metadata as output by a dataset\
+      \ loader.\n\nThe format of this file is derived from the [CELLxGENE schema v4.0.0](https://github.com/chanzuckerberg/single-cell-curation/blob/main/schema/4.0.0/schema.md).\n"
+    info:
+      format:
+        type: "h5ad"
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        obs:
+        - type: "string"
+          name: "dataset_id"
+          description: "Identifier for the dataset from which the cell data is derived,\
+            \ useful for tracking and referencing purposes."
+          required: false
+        - type: "string"
+          name: "assay"
+          description: "Type of assay used to generate the cell data, indicating the\
+            \ methodology or technique employed."
+          required: false
+        - type: "string"
+          name: "assay_ontology_term_id"
+          description: "Experimental Factor Ontology (`EFO:`) term identifier for\
+            \ the assay, providing a standardized reference to the assay type."
+          required: false
+        - type: "string"
+          name: "cell_type"
+          description: "Classification of the cell type based on its characteristics\
+            \ and function within the tissue or organism."
+          required: false
+        - type: "string"
+          name: "cell_type_ontology_term_id"
+          description: "Cell Ontology (`CL:`) term identifier for the cell type, offering\
+            \ a standardized reference to the specific cell classification."
+          required: false
+        - type: "string"
+          name: "development_stage"
+          description: "Stage of development of the organism or tissue from which\
+            \ the cell is derived, indicating its maturity or developmental phase."
+          required: false
+        - type: "string"
+          name: "development_stage_ontology_term_id"
+          description: "Ontology term identifier for the developmental stage, providing\
+            \ a standardized reference to the organism's developmental phase.\n\n\
+            If the organism is human (`organism_ontology_term_id == 'NCBITaxon:9606'`),\
+            \ then the Human Developmental Stages (`HsapDv:`) ontology is used.  \n\
+            If the organism is mouse (`organism_ontology_term_id == 'NCBITaxon:10090'`),\
+            \ then the Mouse Developmental Stages (`MmusDv:`) ontology is used.\n\
+            Otherwise, the Uberon (`UBERON:`) ontology is used.\n"
+          required: false
+        - type: "string"
+          name: "disease"
+          description: "Information on any disease or pathological condition associated\
+            \ with the cell or donor."
+          required: false
+        - type: "string"
+          name: "disease_ontology_term_id"
+          description: "Ontology term identifier for the disease, enabling standardized\
+            \ disease classification and referencing.\n\nMust be a term from the Mondo\
+            \ Disease Ontology (`MONDO:`) ontology term, or `PATO:0000461` from the\
+            \ Phenotype And Trait Ontology (`PATO:`).\n"
+          required: false
+        - type: "string"
+          name: "donor_id"
+          description: "Identifier for the donor from whom the cell sample is obtained."
+          required: false
+        - type: "boolean"
+          name: "is_primary_data"
+          description: "Indicates whether the data is primary (directly obtained from\
+            \ experiments) or has been computationally derived from other primary\
+            \ data."
+          required: false
+        - type: "string"
+          name: "organism"
+          description: "Organism from which the cell sample is obtained."
+          required: false
+        - type: "string"
+          name: "organism_ontology_term_id"
+          description: "Ontology term identifier for the organism, providing a standardized\
+            \ reference for the organism.\n\nMust be a term from the NCBI Taxonomy\
+            \ Ontology (`NCBITaxon:`) which is a child of `NCBITaxon:33208`.\n"
+          required: false
+        - type: "string"
+          name: "self_reported_ethnicity"
+          description: "Ethnicity of the donor as self-reported, relevant for studies\
+            \ considering genetic diversity and population-specific traits."
+          required: false
+        - type: "string"
+          name: "self_reported_ethnicity_ontology_term_id"
+          description: "Ontology term identifier for the self-reported ethnicity,\
+            \ providing a standardized reference for ethnic classifications.\n\nIf\
+            \ the organism is human (`organism_ontology_term_id == 'NCBITaxon:9606'`),\
+            \ then the Human Ancestry Ontology (`HANCESTRO:`) is used.\n"
+          required: false
+        - type: "string"
+          name: "sex"
+          description: "Biological sex of the donor or source organism, crucial for\
+            \ studies involving sex-specific traits or conditions."
+          required: false
+        - type: "string"
+          name: "sex_ontology_term_id"
+          description: "Ontology term identifier for the biological sex, ensuring\
+            \ standardized classification of sex. Only `PATO:0000383`, `PATO:0000384`\
+            \ and `PATO:0001340` are allowed."
+          required: false
+        - type: "string"
+          name: "suspension_type"
+          description: "Type of suspension or medium in which the cells were stored\
+            \ or processed, important for understanding cell handling and conditions."
+          required: false
+        - type: "string"
+          name: "tissue"
+          description: "Specific tissue from which the cells were derived, key for\
+            \ context and specificity in cell studies."
+          required: false
+        - type: "string"
+          name: "tissue_ontology_term_id"
+          description: "Ontology term identifier for the tissue, providing a standardized\
+            \ reference for the tissue type.\n\nFor organoid or tissue samples, the\
+            \ Uber-anatomy ontology (`UBERON:`) is used. The term ids must be a child\
+            \ term of `UBERON:0001062` (anatomical entity).\nFor cell cultures, the\
+            \ Cell Ontology (`CL:`) is used. The term ids cannot be `CL:0000255`,\
+            \ `CL:0000257` or `CL:0000548`.\n"
+          required: false
+        - type: "string"
+          name: "tissue_general"
+          description: "General category or classification of the tissue, useful for\
+            \ broader grouping and comparison of cell data."
+          required: false
+        - type: "string"
+          name: "tissue_general_ontology_term_id"
+          description: "Ontology term identifier for the general tissue category,\
+            \ aiding in standardizing and grouping tissue types.\n\nFor organoid or\
+            \ tissue samples, the Uber-anatomy ontology (`UBERON:`) is used. The term\
+            \ ids must be a child term of `UBERON:0001062` (anatomical entity).\n\
+            For cell cultures, the Cell Ontology (`CL:`) is used. The term ids cannot\
+            \ be `CL:0000255`, `CL:0000257` or `CL:0000548`.\n"
+          required: false
+        - type: "string"
+          name: "batch"
+          description: "A batch identifier. This label is very context-dependent and\
+            \ may be a combination of the tissue, assay, donor, etc."
+          required: false
+        - type: "integer"
+          name: "soma_joinid"
+          description: "If the dataset was retrieved from CELLxGENE census, this is\
+            \ a unique identifier for the cell."
+          required: false
+        var:
+        - type: "string"
+          name: "feature_id"
+          description: "Unique identifier for the feature, usually a ENSEMBL gene\
+            \ id."
+          required: false
+        - type: "string"
+          name: "feature_name"
+          description: "A human-readable name for the feature, usually a gene symbol."
+          required: true
+        - type: "integer"
+          name: "soma_joinid"
+          description: "If the dataset was retrieved from CELLxGENE census, this is\
+            \ a unique identifier for the feature."
+          required: false
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset. This is different from\
+            \ the `obs.dataset_id` field, which is the identifier for the dataset\
+            \ from which the cell data is derived."
+          required: true
+        - name: "dataset_name"
+          type: "string"
+          description: "A human-readable name for the dataset."
+          required: true
+        - type: "string"
+          name: "dataset_url"
+          description: "Link to the original source of the dataset."
+          required: false
+        - name: "dataset_reference"
+          type: "string"
+          description: "Bibtex reference of the paper in which the dataset was published."
+          required: false
+          multiple: true
+        - name: "dataset_summary"
+          type: "string"
+          description: "Short description of the dataset."
+          required: true
+        - name: "dataset_description"
+          type: "string"
+          description: "Long description of the dataset."
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+          multiple: true
+        - name: "dataset_technology"
+          type: "string"
+          description: "The technology used to generate the dataset."
+          required: false
+        - name: "dataset_organ"
+          type: "string"
+          description: "The organ of the sample in the dataset."
+          required: false
+        - name: "dataset_tissue"
+          type: "string"
+          description: "The tissue of the sample in the dataset."
+          required: false
+    example:
+    - "resources_test/common/pancreas/raw.h5ad"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output_mod2"
+    label: "Raw dataset"
+    summary: "An unprocessed dataset as output by a dataset loader."
+    description: "This dataset contains raw counts and metadata as output by a dataset\
+      \ loader.\n\nThe format of this file is derived from the [CELLxGENE schema v4.0.0](https://github.com/chanzuckerberg/single-cell-curation/blob/main/schema/4.0.0/schema.md).\n"
+    info:
+      format:
+        type: "h5ad"
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        obs:
+        - type: "string"
+          name: "dataset_id"
+          description: "Identifier for the dataset from which the cell data is derived,\
+            \ useful for tracking and referencing purposes."
+          required: false
+        - type: "string"
+          name: "assay"
+          description: "Type of assay used to generate the cell data, indicating the\
+            \ methodology or technique employed."
+          required: false
+        - type: "string"
+          name: "assay_ontology_term_id"
+          description: "Experimental Factor Ontology (`EFO:`) term identifier for\
+            \ the assay, providing a standardized reference to the assay type."
+          required: false
+        - type: "string"
+          name: "cell_type"
+          description: "Classification of the cell type based on its characteristics\
+            \ and function within the tissue or organism."
+          required: false
+        - type: "string"
+          name: "cell_type_ontology_term_id"
+          description: "Cell Ontology (`CL:`) term identifier for the cell type, offering\
+            \ a standardized reference to the specific cell classification."
+          required: false
+        - type: "string"
+          name: "development_stage"
+          description: "Stage of development of the organism or tissue from which\
+            \ the cell is derived, indicating its maturity or developmental phase."
+          required: false
+        - type: "string"
+          name: "development_stage_ontology_term_id"
+          description: "Ontology term identifier for the developmental stage, providing\
+            \ a standardized reference to the organism's developmental phase.\n\n\
+            If the organism is human (`organism_ontology_term_id == 'NCBITaxon:9606'`),\
+            \ then the Human Developmental Stages (`HsapDv:`) ontology is used.  \n\
+            If the organism is mouse (`organism_ontology_term_id == 'NCBITaxon:10090'`),\
+            \ then the Mouse Developmental Stages (`MmusDv:`) ontology is used.\n\
+            Otherwise, the Uberon (`UBERON:`) ontology is used.\n"
+          required: false
+        - type: "string"
+          name: "disease"
+          description: "Information on any disease or pathological condition associated\
+            \ with the cell or donor."
+          required: false
+        - type: "string"
+          name: "disease_ontology_term_id"
+          description: "Ontology term identifier for the disease, enabling standardized\
+            \ disease classification and referencing.\n\nMust be a term from the Mondo\
+            \ Disease Ontology (`MONDO:`) ontology term, or `PATO:0000461` from the\
+            \ Phenotype And Trait Ontology (`PATO:`).\n"
+          required: false
+        - type: "string"
+          name: "donor_id"
+          description: "Identifier for the donor from whom the cell sample is obtained."
+          required: false
+        - type: "boolean"
+          name: "is_primary_data"
+          description: "Indicates whether the data is primary (directly obtained from\
+            \ experiments) or has been computationally derived from other primary\
+            \ data."
+          required: false
+        - type: "string"
+          name: "organism"
+          description: "Organism from which the cell sample is obtained."
+          required: false
+        - type: "string"
+          name: "organism_ontology_term_id"
+          description: "Ontology term identifier for the organism, providing a standardized\
+            \ reference for the organism.\n\nMust be a term from the NCBI Taxonomy\
+            \ Ontology (`NCBITaxon:`) which is a child of `NCBITaxon:33208`.\n"
+          required: false
+        - type: "string"
+          name: "self_reported_ethnicity"
+          description: "Ethnicity of the donor as self-reported, relevant for studies\
+            \ considering genetic diversity and population-specific traits."
+          required: false
+        - type: "string"
+          name: "self_reported_ethnicity_ontology_term_id"
+          description: "Ontology term identifier for the self-reported ethnicity,\
+            \ providing a standardized reference for ethnic classifications.\n\nIf\
+            \ the organism is human (`organism_ontology_term_id == 'NCBITaxon:9606'`),\
+            \ then the Human Ancestry Ontology (`HANCESTRO:`) is used.\n"
+          required: false
+        - type: "string"
+          name: "sex"
+          description: "Biological sex of the donor or source organism, crucial for\
+            \ studies involving sex-specific traits or conditions."
+          required: false
+        - type: "string"
+          name: "sex_ontology_term_id"
+          description: "Ontology term identifier for the biological sex, ensuring\
+            \ standardized classification of sex. Only `PATO:0000383`, `PATO:0000384`\
+            \ and `PATO:0001340` are allowed."
+          required: false
+        - type: "string"
+          name: "suspension_type"
+          description: "Type of suspension or medium in which the cells were stored\
+            \ or processed, important for understanding cell handling and conditions."
+          required: false
+        - type: "string"
+          name: "tissue"
+          description: "Specific tissue from which the cells were derived, key for\
+            \ context and specificity in cell studies."
+          required: false
+        - type: "string"
+          name: "tissue_ontology_term_id"
+          description: "Ontology term identifier for the tissue, providing a standardized\
+            \ reference for the tissue type.\n\nFor organoid or tissue samples, the\
+            \ Uber-anatomy ontology (`UBERON:`) is used. The term ids must be a child\
+            \ term of `UBERON:0001062` (anatomical entity).\nFor cell cultures, the\
+            \ Cell Ontology (`CL:`) is used. The term ids cannot be `CL:0000255`,\
+            \ `CL:0000257` or `CL:0000548`.\n"
+          required: false
+        - type: "string"
+          name: "tissue_general"
+          description: "General category or classification of the tissue, useful for\
+            \ broader grouping and comparison of cell data."
+          required: false
+        - type: "string"
+          name: "tissue_general_ontology_term_id"
+          description: "Ontology term identifier for the general tissue category,\
+            \ aiding in standardizing and grouping tissue types.\n\nFor organoid or\
+            \ tissue samples, the Uber-anatomy ontology (`UBERON:`) is used. The term\
+            \ ids must be a child term of `UBERON:0001062` (anatomical entity).\n\
+            For cell cultures, the Cell Ontology (`CL:`) is used. The term ids cannot\
+            \ be `CL:0000255`, `CL:0000257` or `CL:0000548`.\n"
+          required: false
+        - type: "string"
+          name: "batch"
+          description: "A batch identifier. This label is very context-dependent and\
+            \ may be a combination of the tissue, assay, donor, etc."
+          required: false
+        - type: "integer"
+          name: "soma_joinid"
+          description: "If the dataset was retrieved from CELLxGENE census, this is\
+            \ a unique identifier for the cell."
+          required: false
+        var:
+        - type: "string"
+          name: "feature_id"
+          description: "Unique identifier for the feature, usually a ENSEMBL gene\
+            \ id."
+          required: false
+        - type: "string"
+          name: "feature_name"
+          description: "A human-readable name for the feature, usually a gene symbol."
+          required: true
+        - type: "integer"
+          name: "soma_joinid"
+          description: "If the dataset was retrieved from CELLxGENE census, this is\
+            \ a unique identifier for the feature."
+          required: false
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset. This is different from\
+            \ the `obs.dataset_id` field, which is the identifier for the dataset\
+            \ from which the cell data is derived."
+          required: true
+        - name: "dataset_name"
+          type: "string"
+          description: "A human-readable name for the dataset."
+          required: true
+        - type: "string"
+          name: "dataset_url"
+          description: "Link to the original source of the dataset."
+          required: false
+        - name: "dataset_reference"
+          type: "string"
+          description: "Bibtex reference of the paper in which the dataset was published."
+          required: false
+          multiple: true
+        - name: "dataset_summary"
+          type: "string"
+          description: "Short description of the dataset."
+          required: true
+        - name: "dataset_description"
+          type: "string"
+          description: "Long description of the dataset."
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+          multiple: true
+        - name: "dataset_technology"
+          type: "string"
+          description: "The technology used to generate the dataset."
+          required: false
+        - name: "dataset_organ"
+          type: "string"
+          description: "The organ of the sample in the dataset."
+          required: false
+        - name: "dataset_tissue"
+          type: "string"
+          description: "The tissue of the sample in the dataset."
+          required: false
+    example:
+    - "resources_test/common/pancreas/raw.h5ad"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+resources:
+- type: "python_script"
+  path: "script.py"
+  is_executable: true
+description: "Fetch a dataset from the OpenProblems NeurIPS2021 competition"
+test_resources:
+- type: "python_script"
+  path: "test.py"
+  is_executable: true
+info: null
+status: "enabled"
+license: "MIT"
+links:
+  repository: "https://github.com/openproblems-bio/openproblems"
+  docker_registry: "ghcr.io"
+runners:
+- type: "executable"
+  id: "executable"
+  docker_setup_strategy: "ifneedbepullelsecachedbuild"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "highmem"
+    - "midcpu"
+    - "midtime"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+engines:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1.0.0"
+  namespace_separator: "/"
+  entrypoint: []
+  cmd: null
+build_info:
+  config: "src/datasets/loaders/multimodal/openproblems_neurips2021_bmmc/config.vsh.yaml"
+  runner: "nextflow"
+  engine: "docker"
+  output: "target/nextflow/datasets/loaders/multimodal/openproblems_neurips2021_bmmc"
+  executable: "target/nextflow/datasets/loaders/multimodal/openproblems_neurips2021_bmmc/main.nf"
+  viash_version: "0.9.0"
+  git_commit: "b95de05cf0d4fa078fdfcad9328f403854e88b3a"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1419-gb95de05c"
+package_config:
+  name: "openproblems"
+  version: "build_main"
+  description: "Open Problems is a living, extensible, community-guided benchmarking\
+    \ platform.\n"
+  info:
+    test_resources:
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/common"
+      dest: "resources_test/common"
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/openproblems"
+      dest: "resources_test/openproblems"
+  viash_version: "0.9.0"
+  source: "src"
+  target: "target"
+  config_mods:
+  - ".runners[.type == \"nextflow\"].config.labels := { lowmem : \"memory = 20.Gb\"\
+    , midmem : \"memory = 50.Gb\", highmem : \"memory = 100.Gb\", lowcpu : \"cpus\
+    \ = 5\", midcpu : \"cpus = 15\", highcpu : \"cpus = 30\", lowtime : \"time = 1.h\"\
+    , midtime : \"time = 4.h\", hightime : \"time = 8.h\", veryhightime : \"time =\
+    \ 24.h\" }\n.runners[.type == \"nextflow\"].config.script := \"process.errorStrategy\
+    \ = 'ignore'\"\n"
+  keywords:
+  - "openproblems"
+  - "benchmarking"
+  - "single-cell omics"
+  license: "MIT"
+  organization: "openproblems-bio"
+  references:
+    doi:
+    - "10.21203/rs.3.rs-4181617/v1"
+  links:
+    repository: "https://github.com/openproblems-bio/openproblems"
+    docker_registry: "ghcr.io"
+    issue_tracker: "https://github.com/openproblems-bio/openproblems/issues"

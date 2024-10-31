@@ -1,16 +1,18 @@
-functionality:
-  name: "subsample"
-  namespace: "datasets/processors"
-  version: "build_main"
+name: "subsample"
+namespace: "datasets/processors"
+version: "build_main"
+argument_groups:
+- name: "Arguments"
   arguments:
   - type: "file"
     name: "--input"
+    label: "Common dataset"
+    summary: "A dataset processed by the common dataset processing pipeline."
+    description: "This dataset contains both raw counts and normalized data matrices,\n\
+      as well as a PCA embedding, HVG selection and a kNN graph."
     info:
-      label: "Common dataset"
-      summary: "A dataset processed by the common dataset processing pipeline."
-      description: "This dataset contains both raw counts and normalized data matrices,\n\
-        as well as a PCA embedding, HVG selection and a kNN graph."
-      slots:
+      format:
+        type: "h5ad"
         obsp:
         - type: "double"
           name: "knn_distances"
@@ -53,6 +55,18 @@ functionality:
           description: "The organism of the sample in the dataset."
           required: false
           multiple: true
+        - name: "dataset_technology"
+          type: "string"
+          description: "The technology used to generate the dataset."
+          required: false
+        - name: "dataset_organ"
+          type: "string"
+          description: "The organ of the sample in the dataset."
+          required: false
+        - name: "dataset_tissue"
+          type: "string"
+          description: "The tissue of the sample in the dataset."
+          required: false
         - type: "string"
           name: "normalization_id"
           description: "Which normalization was used"
@@ -259,16 +273,16 @@ functionality:
     required: true
     direction: "input"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "file"
     name: "--input_mod2"
+    label: "Common dataset"
+    summary: "A dataset processed by the common dataset processing pipeline."
+    description: "This dataset contains both raw counts and normalized data matrices,\n\
+      as well as a PCA embedding, HVG selection and a kNN graph."
     info:
-      label: "Common dataset"
-      summary: "A dataset processed by the common dataset processing pipeline."
-      description: "This dataset contains both raw counts and normalized data matrices,\n\
-        as well as a PCA embedding, HVG selection and a kNN graph."
-      slots:
+      format:
+        type: "h5ad"
         obsp:
         - type: "double"
           name: "knn_distances"
@@ -311,6 +325,18 @@ functionality:
           description: "The organism of the sample in the dataset."
           required: false
           multiple: true
+        - name: "dataset_technology"
+          type: "string"
+          description: "The technology used to generate the dataset."
+          required: false
+        - name: "dataset_organ"
+          type: "string"
+          description: "The organ of the sample in the dataset."
+          required: false
+        - name: "dataset_tissue"
+          type: "string"
+          description: "The tissue of the sample in the dataset."
+          required: false
         - type: "string"
           name: "normalization_id"
           description: "Which normalization was used"
@@ -517,16 +543,16 @@ functionality:
     required: false
     direction: "input"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "file"
     name: "--output"
+    label: "Common dataset"
+    summary: "A dataset processed by the common dataset processing pipeline."
+    description: "This dataset contains both raw counts and normalized data matrices,\n\
+      as well as a PCA embedding, HVG selection and a kNN graph."
     info:
-      label: "Common dataset"
-      summary: "A dataset processed by the common dataset processing pipeline."
-      description: "This dataset contains both raw counts and normalized data matrices,\n\
-        as well as a PCA embedding, HVG selection and a kNN graph."
-      slots:
+      format:
+        type: "h5ad"
         obsp:
         - type: "double"
           name: "knn_distances"
@@ -569,6 +595,18 @@ functionality:
           description: "The organism of the sample in the dataset."
           required: false
           multiple: true
+        - name: "dataset_technology"
+          type: "string"
+          description: "The technology used to generate the dataset."
+          required: false
+        - name: "dataset_organ"
+          type: "string"
+          description: "The organ of the sample in the dataset."
+          required: false
+        - name: "dataset_tissue"
+          type: "string"
+          description: "The tissue of the sample in the dataset."
+          required: false
         - type: "string"
           name: "normalization_id"
           description: "Which normalization was used"
@@ -775,16 +813,16 @@ functionality:
     required: true
     direction: "output"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "file"
     name: "--output_mod2"
+    label: "Common dataset"
+    summary: "A dataset processed by the common dataset processing pipeline."
+    description: "This dataset contains both raw counts and normalized data matrices,\n\
+      as well as a PCA embedding, HVG selection and a kNN graph."
     info:
-      label: "Common dataset"
-      summary: "A dataset processed by the common dataset processing pipeline."
-      description: "This dataset contains both raw counts and normalized data matrices,\n\
-        as well as a PCA embedding, HVG selection and a kNN graph."
-      slots:
+      format:
+        type: "h5ad"
         obsp:
         - type: "double"
           name: "knn_distances"
@@ -827,6 +865,18 @@ functionality:
           description: "The organism of the sample in the dataset."
           required: false
           multiple: true
+        - name: "dataset_technology"
+          type: "string"
+          description: "The technology used to generate the dataset."
+          required: false
+        - name: "dataset_organ"
+          type: "string"
+          description: "The organ of the sample in the dataset."
+          required: false
+        - name: "dataset_tissue"
+          type: "string"
+          description: "The tissue of the sample in the dataset."
+          required: false
         - type: "string"
           name: "normalization_id"
           description: "Which normalization was used"
@@ -1033,8 +1083,7 @@ functionality:
     required: false
     direction: "output"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "integer"
     name: "--n_obs"
     description: "Maximum number of observations to be kept. It might end up being\
@@ -1045,8 +1094,7 @@ functionality:
     required: false
     direction: "input"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "integer"
     name: "--n_vars"
     description: "Maximum number of variables to be kept. It might end up being less\
@@ -1057,8 +1105,7 @@ functionality:
     required: false
     direction: "input"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "string"
     name: "--keep_features"
     description: "A list of genes to keep."
@@ -1066,8 +1113,7 @@ functionality:
     required: false
     direction: "input"
     multiple: true
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "string"
     name: "--keep_cell_type_categories"
     description: "Cell type indexes to be selected"
@@ -1075,8 +1121,7 @@ functionality:
     required: false
     direction: "input"
     multiple: true
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "string"
     name: "--keep_batch_categories"
     description: "Categories indexes to be selected"
@@ -1084,14 +1129,12 @@ functionality:
     required: false
     direction: "input"
     multiple: true
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "boolean_true"
     name: "--even"
     description: "Subsample evenly from different batches"
     info: null
     direction: "input"
-    dest: "par"
   - type: "integer"
     name: "--seed"
     description: "A seed for the subsampling."
@@ -1101,53 +1144,40 @@ functionality:
     required: false
     direction: "input"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
-  resources:
-  - type: "python_script"
-    path: "script.py"
-    is_executable: true
-  description: "Subsample an h5ad file"
-  test_resources:
-  - type: "file"
-    path: "resources_test/common/pancreas"
-    dest: "resources_test/common/pancreas"
-  - type: "python_script"
-    path: "src/common/comp_tests/run_and_check_adata.py"
-    is_executable: true
-  - type: "python_script"
-    path: "test_script.py"
-    is_executable: true
-  - type: "file"
-    path: "resources_test/common/pancreas"
-  info:
-    type: "dataset_processor"
-    type_info:
-      label: "Subset"
-      summary: "Sample cells and genes randomly."
-      description: "This component subsets the layers, obs and var to create smaller\
-        \ test datasets."
-  status: "enabled"
-  set_wd_to_resources_dir: false
-platforms:
-- type: "docker"
-  id: "docker"
-  image: "openproblems/base_python:1.0.0"
-  target_organization: "openproblems-bio/openproblems"
-  target_registry: "ghcr.io"
-  namespace_separator: "/"
-  resolve_volume: "Automatic"
-  chown: true
-  setup_strategy: "ifneedbepullelsecachedbuild"
-  target_image_source: "https://github.com/openproblems-bio/openproblems"
-  test_setup:
-  - type: "python"
-    user: false
-    packages:
-    - "viashpy"
-    upgrade: true
-  entrypoint: []
-  cmd: null
+    multiple_sep: ";"
+resources:
+- type: "python_script"
+  path: "script.py"
+  is_executable: true
+description: "Subsample an h5ad file"
+test_resources:
+- type: "file"
+  path: "resources_test/common/pancreas"
+  dest: "resources_test/common/pancreas"
+- type: "python_script"
+  path: "run_and_check_output.py"
+  is_executable: true
+- type: "python_script"
+  path: "test_script.py"
+  is_executable: true
+- type: "file"
+  path: "pancreas"
+info:
+  type: "dataset_processor"
+  type_info:
+    label: "Subset"
+    summary: "Sample cells and genes randomly."
+    description: "This component subsets the layers, obs and var to create smaller\
+      \ test datasets."
+status: "enabled"
+license: "MIT"
+links:
+  repository: "https://github.com/openproblems-bio/openproblems"
+  docker_registry: "ghcr.io"
+runners:
+- type: "executable"
+  id: "executable"
+  docker_setup_strategy: "ifneedbepullelsecachedbuild"
 - type: "nextflow"
   id: "nextflow"
   directives:
@@ -1177,12 +1207,62 @@ platforms:
     - "process.errorStrategy = 'ignore'"
   debug: false
   container: "docker"
-info:
-  config: "/home/runner/work/openproblems/openproblems/src/datasets/processors/subsample/config.vsh.yaml"
-  platform: "nextflow"
-  output: "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/processors/subsample"
-  executable: "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/processors/subsample/subsample"
-  viash_version: "0.8.6"
-  git_commit: "559f97768212dfe9e3b427c36b8223ee5d4b9651"
+engines:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1.0.0"
+  namespace_separator: "/"
+  test_setup:
+  - type: "python"
+    user: false
+    packages:
+    - "viashpy"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+build_info:
+  config: "src/datasets/processors/subsample/config.vsh.yaml"
+  runner: "nextflow"
+  engine: "docker"
+  output: "target/nextflow/datasets/processors/subsample"
+  executable: "target/nextflow/datasets/processors/subsample/main.nf"
+  viash_version: "0.9.0"
+  git_commit: "b95de05cf0d4fa078fdfcad9328f403854e88b3a"
   git_remote: "https://github.com/openproblems-bio/openproblems"
-  git_tag: "v1.0.0-1417-g559f9776"
+  git_tag: "v1.0.0-1419-gb95de05c"
+package_config:
+  name: "openproblems"
+  version: "build_main"
+  description: "Open Problems is a living, extensible, community-guided benchmarking\
+    \ platform.\n"
+  info:
+    test_resources:
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/common"
+      dest: "resources_test/common"
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/openproblems"
+      dest: "resources_test/openproblems"
+  viash_version: "0.9.0"
+  source: "src"
+  target: "target"
+  config_mods:
+  - ".runners[.type == \"nextflow\"].config.labels := { lowmem : \"memory = 20.Gb\"\
+    , midmem : \"memory = 50.Gb\", highmem : \"memory = 100.Gb\", lowcpu : \"cpus\
+    \ = 5\", midcpu : \"cpus = 15\", highcpu : \"cpus = 30\", lowtime : \"time = 1.h\"\
+    , midtime : \"time = 4.h\", hightime : \"time = 8.h\", veryhightime : \"time =\
+    \ 24.h\" }\n.runners[.type == \"nextflow\"].config.script := \"process.errorStrategy\
+    \ = 'ignore'\"\n"
+  keywords:
+  - "openproblems"
+  - "benchmarking"
+  - "single-cell omics"
+  license: "MIT"
+  organization: "openproblems-bio"
+  references:
+    doi:
+    - "10.21203/rs.3.rs-4181617/v1"
+  links:
+    repository: "https://github.com/openproblems-bio/openproblems"
+    docker_registry: "ghcr.io"
+    issue_tracker: "https://github.com/openproblems-bio/openproblems/issues"

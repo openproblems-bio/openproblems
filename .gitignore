@@ -19,7 +19,6 @@ output_bash
 
 # viash specific ignores
 docker_output/
-
 check_results/
 log.txt
 .viash*

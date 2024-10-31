@@ -1,0 +1,96 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: Method
+description: |
+  A method is a specific technique used to solve the task problem and is
+  compared to the control methods and other methods to determine the best
+  approach for the task depending on the type of dataset.
+type: object
+required: [__merge__, name, info, resources, runners]
+properties:
+  __merge__:
+    "$ref": "schema_openproblems_definitions.yaml#/definitions/CompAPIMerge"
+  name:
+    "$ref": "schema_openproblems_definitions.yaml#/definitions/Name"
+  status:
+    "$ref": "schema_viash.yaml#/definitions/Status"
+  label:
+    "$ref": "schema_openproblems_definitions.yaml#/definitions/Label"
+  summary:
+    "$ref": "schema_openproblems_definitions.yaml#/definitions/Summary"
+  description:
+    "$ref": "schema_openproblems_definitions.yaml#/definitions/Description"
+  info:
+    type: object
+    description: Metadata of the component.
+    properties:
+      preferred_normalization: 
+        "$ref": "schema_openproblems_definitions.yaml#/definitions/PreferredNormalization"
+      metrics:
+        type: array
+        minItems: 1
+        items:
+          type: object
+          description: Metadata of each metric.
+          additionalProperties: false
+          required: [label, summary, description, references, links, min, max, maximize]
+          properties:
+            name:
+              "$ref": "schema_openproblems_definitions.yaml#/definitions/Name"
+            label:
+              "$ref": "schema_openproblems_definitions.yaml#/definitions/Label"
+            summary:
+              "$ref": "schema_openproblems_definitions.yaml#/definitions/Summary"
+            description:
+              "$ref": "schema_openproblems_definitions.yaml#/definitions/Description"
+            references:
+              "$ref": "schema_viash.yaml#/definitions/References"
+            links:
+              "$ref": "schema_viash.yaml#/definitions/Links"
+            min:
+              description: The lowest possible value of the metric.
+              oneOf:
+                - type: number
+                - const: "-.inf"
+            max:
+              description: The highest possible value of the metric.
+              oneOf:
+                - type: number
+                - const: "+.inf"
+            maximize:
+              type: boolean
+              description: Whether a higher metric value is better.
+  arguments:
+    type: array
+    description: Component-specific parameters.
+    items:
+      "$ref": "schema_viash.yaml#/definitions/Argument"
+  argument_groups:
+    type: array
+    description: Component-specific parameter groups.
+    items:
+      "$ref": "schema_viash.yaml#/definitions/ArgumentGroup"
+  resources:
+    type: array
+    description: Resources required to run the component.
+    items:
+      "$ref": "schema_viash.yaml#/definitions/Resource"
+  test_resources:
+    type: array
+    description: One or more scripts and resources used to test the component.
+    items:
+      "$ref": "schema_viash.yaml#/definitions/Resource"
+  engines:
+    type: array
+    description: "A list of engine environments to execute target artifacts in.\n\
+      \n - NativeEngine\n - DockerEngine\n"
+    items:
+      anyOf:
+        - "$ref": "schema_openproblems_definitions.yaml#/definitions/DockerEngine"
+  runners:
+    type: array
+    description: "A list of runners to execute target artifacts.\n\n - ExecutableRunner\n\
+      \ - NextflowRunner\n"
+    items:
+      anyOf:
+        - "$ref": "schema_openproblems_definitions.yaml#/definitions/NextflowRunner"
+        - "$ref": "schema_openproblems_definitions.yaml#/definitions/ExecutableRunner"

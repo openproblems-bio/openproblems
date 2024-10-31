@@ -1,0 +1,83 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: Component specification
+description: |
+  A component type specification file for defining the task API.
+type: object
+required: [info]
+additionalProperties: false
+properties:
+  namespace:
+    "$ref": "schema_openproblems_definitions.yaml#/definitions/Namespace"
+  info:
+    type: object
+    description: Metadata of the component.
+    required: [type, type_info]
+    properties:
+      type:
+        "$ref": "schema_openproblems_definitions.yaml#/definitions/ComponentType"
+      subtype:
+        "$ref": "schema_openproblems_definitions.yaml#/definitions/ComponentSubtype"
+      type_info:
+        type: object
+        description: Metadata related to the component type.
+        required: [label, summary, description]
+        properties:
+          label:
+            $ref: "schema_openproblems_definitions.yaml#/definitions/Label"
+          summary: 
+            $ref: "schema_openproblems_definitions.yaml#/definitions/Summary"
+          description: 
+            $ref: "schema_openproblems_definitions.yaml#/definitions/Description"
+  arguments:
+    type: array
+    description: Component-specific parameters.
+    items:
+      anyOf:
+        - $ref: 'schema_openproblems_definitions.yaml#/definitions/ComponentAPIFile'
+        - $ref: 'schema_viash.yaml#/definitions/Argument'
+  argument_groups:
+    type: array
+    description: Component-specific parameter groups.
+    items:
+      description: "A grouping of the arguments, used to display the help message."
+      type: "object"
+      properties:
+        name:
+          description: "The name of the argument group."
+          type: "string"
+        description:
+          description: "A description of the argument group. This is only used for documentation.\
+            \ Multiline descriptions are supported."
+          type: "string"
+        label:
+          description: "A clean version of the argument group's name. This is only used\
+            \ for documentation."
+          type: "string"
+        summary:
+          description: "A one-sentence summary of the argument group. This is only used\
+            \ for documentation."
+          type: "string"
+        arguments:
+          description: "A list of arguments for this component. For each argument, a\
+            \ type and a name must be specified. Depending on the type of argument,\
+            \ different properties can be set. See these reference pages per type for\
+            \ more information:  \n\n - string\n - file\n - integer\n - double\n - boolean\n\
+            \ - boolean_true\n - boolean_false\n"
+          type: "array"
+          items:
+            anyOf:
+              - $ref: 'schema_openproblems_definitions.yaml#/definitions/ComponentAPIFile'
+              - $ref: 'schema_viash.yaml#/definitions/Argument'
+      required:
+      - "name"
+      additionalProperties: false
+  resources:
+    type: array
+    description: Resources required to run the component.
+    items:
+      "$ref": "schema_viash.yaml#/definitions/Resource"
+  test_resources:
+    type: array
+    description: One or more scripts and resources used to test the component.
+    items:
+      "$ref": "schema_viash.yaml#/definitions/Resource"

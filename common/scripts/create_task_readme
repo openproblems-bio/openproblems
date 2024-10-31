@@ -1,0 +1,40 @@
+#!/bin/bash
+
+repository="openproblems-bio/core"
+version="26382c1d4934f41b9bd301cffb9911ef5ba75a8e"
+component="project/create_task_readme"
+
+cache_dir="$HOME/.cache/openproblems/repos/$repository"
+executable_path="viash/core/target/executable/${component}/$(basename ${component})"
+version_file="$HOME/.cache/openproblems/versions/${repository}/${component}/version.txt"
+
+function get_repository {
+  if [ ! -d "$cache_dir" ]; then
+    mkdir -p "$cache_dir"
+    git clone https://github.com/${repository}.git "$cache_dir" > /dev/null
+  fi
+}
+
+function update_repository {
+  (cd "$cache_dir" && \
+    git fetch > /dev/null 2>&1 && \
+    git checkout "$version" > /dev/null 2>&1 && \
+    git pull > /dev/null 2>&1)
+}
+
+function pull_image_if_version_changed {
+  if [ ! -d "$(dirname $version_file)" ]; then
+    mkdir -p "$(dirname $version_file)"
+  fi
+  if [ ! -f "$version_file" ] || [ "$(cat $version_file)" != "$version" ]; then
+    "${cache_dir}/${executable_path}" ---setup pull
+    echo "$version" > "$version_file"
+  fi
+}
+
+get_repository
+update_repository
+pull_image_if_version_changed
+
+# run the executable
+"${cache_dir}/${executable_path}" $@

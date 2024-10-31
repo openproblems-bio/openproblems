@@ -1,0 +1,139 @@
+name: process_zenodo
+namespace: datasets/workflows/spatial
+description: |
+  Download and process DBiT seq, MERFISH, seqFISH, Slide-seq v2, STARmap, and Stereo-seq data from Zenodo.
+argument_groups:
+  - name: Input
+    arguments:
+      - name: --input_data
+        type: string
+        description: URL to the Anndata file.
+        required: true
+  - name: Outputs
+    arguments:
+      - name: --output_dataset
+        type: file
+        direction: output
+        description: Output h5ad file
+        required: true
+        __merge__: /src/datasets/api/file_spatial_dataset.yaml
+      - name: --output_meta
+        direction: output
+        type: file
+        description: Dataset metadata
+        default: dataset_metadata.yaml
+  - name: Metadata
+    arguments:
+      - name: --id
+        type: string
+        description: Unique identifier of the dataset.
+        required: true
+      - name: --dataset_name
+        type: string
+        description: Nicely formatted name.
+        required: true
+      - name: --dataset_url
+        type: string
+        description: Link to the original source of the dataset.
+        required: false
+      - name: --dataset_reference
+        type: string
+        description: Bibtex reference of the paper in which the dataset was published.
+        required: false
+      - name: --dataset_summary
+        type: string
+        description: Short description of the dataset.
+        required: true
+      - name: --dataset_description
+        type: string
+        description: Long description of the dataset.
+        required: true
+      - name: --dataset_organism
+        type: string
+        description: The organism of the dataset.
+        required: false
+  - name: Gene or spot filtering
+    description: Arguments related to filtering cells and genes by counts.
+    arguments:
+      - name: --spot_filter_min_genes
+        type: integer
+        description: Remove spots with less than this number of genes.
+        required: false
+        example: 200
+      - name: --spot_filter_min_counts
+        type: integer
+        description: Remove spots with less than this number of counts.
+        required: false
+      - name: --gene_filter_min_spots
+        type: integer
+        description: Remove genes expressed in less than this number of cells.
+        required: false
+        example: 50
+      - name: --gene_filter_min_counts
+        type: integer
+        description: Remove genes with less than this number of counts.
+        required: false
+      - name: --remove_mitochondrial
+        type: boolean
+        description: Remove mitovhondrial genes?
+        required: false
+  - name: Sampling options
+    arguments:
+      - name: --do_subsample
+        type: boolean
+        default: false
+        description: Whether or not to subsample the dataset
+      - name: --n_obs
+        type: integer
+        description: Maximum number of observations to be kept. It might end up being
+          less because empty cells / genes are removed.
+        default: 600
+      - name: --n_vars
+        type: integer
+        description: Maximum number of variables to be kept. It might end up being
+          less because empty cells / genes are removed.
+        default: 500
+        # - name: "--keep_features"
+        #   type: string
+        #   multiple: true
+        #   description: A list of genes to keep.
+        # - name: "--keep_cell_type_categories"
+        #   type: "string"
+        #   multiple: true
+        #   description: "Categories indexes to be selected"
+        #   required: false
+        # - name: "--keep_batch_categories"
+        #   type: "string"
+        #   multiple: true
+        #   description: "Categories indexes to be selected"
+        #   required: false
+        # - name: "--even"
+        #   type: "boolean_true"
+        #   description: Subsample evenly from different batches
+      - name: --seed
+        type: integer
+        description: A seed for the subsampling.
+        example: 123
+  - name: Normalization
+    arguments:
+      - name: --normalization_methods
+        type: string
+        multiple: true
+        choices: [log_cp10k, log_cpm, sqrt_cp10k, sqrt_cpm, l1_sqrt, log_scran_pooling]
+        default: [log_cp10k, log_cpm, sqrt_cp10k, sqrt_cpm, l1_sqrt]
+        description: Which normalization methods to run.
+resources:
+  - type: nextflow_script
+    path: main.nf
+    entrypoint: run_wf
+  - path: /common/nextflow_helpers/helper.nf
+dependencies:
+  - name: datasets/loaders/spatial/zenodo
+  - name: datasets/normalization/log_cp
+  - name: datasets/normalization/log_scran_pooling
+  - name: datasets/normalization/sqrt_cp
+  - name: datasets/normalization/l1_sqrt
+  - name: datasets/processors/subsample
+  - name: utils/extract_uns_metadata
+runners:
+  - type: nextflow

@@ -1,0 +1,37 @@
+name: get_dataset_info
+namespace: reporting
+description: Extract dataset info and convert to expected format for website results
+arguments:
+  - name: --input
+    type: file
+    description: A yaml file
+    required: true
+    example: resources_test/openproblems/task_results_v3/raw/dataset_uns.yaml
+  - name: --output
+    type: file
+    direction: output
+    default: output.json
+    description: Output json
+    info:
+      format:
+        type: json
+        # TODO: add schema
+resources:
+  - type: r_script
+    path: script.R
+test_resources:
+  - type: python_script
+    path: /common/component_tests/run_and_check_output.py
+  - path: /resources_test/openproblems/task_results_v3
+    dest: resources_test/openproblems/task_results_v3
+engines:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        cran: [ purrr, yaml, rlang, processx ]
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [lowmem, lowtime, lowcpu]

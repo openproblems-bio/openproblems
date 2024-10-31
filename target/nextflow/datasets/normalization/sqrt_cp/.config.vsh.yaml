@@ -1,17 +1,18 @@
-functionality:
-  name: "sqrt_cp"
-  namespace: "datasets/normalization"
-  version: "build_main"
+name: "sqrt_cp"
+namespace: "datasets/normalization"
+version: "build_main"
+argument_groups:
+- name: "Arguments"
   arguments:
   - type: "file"
     name: "--input"
+    label: "Raw dataset"
+    summary: "An unprocessed dataset as output by a dataset loader."
+    description: "This dataset contains raw counts and metadata as output by a dataset\
+      \ loader.\n\nThe format of this file is derived from the [CELLxGENE schema v4.0.0](https://github.com/chanzuckerberg/single-cell-curation/blob/main/schema/4.0.0/schema.md).\n"
     info:
-      label: "Raw dataset"
-      summary: "An unprocessed dataset as output by a dataset loader."
-      description: "This dataset contains raw counts and metadata as output by a dataset\
-        \ loader.\n\nThe format of this file is derived from the [CELLxGENE schema\
-        \ v4.0.0](https://github.com/chanzuckerberg/single-cell-curation/blob/main/schema/4.0.0/schema.md).\n"
-      slots:
+      format:
+        type: "h5ad"
         layers:
         - type: "integer"
           name: "counts"
@@ -204,6 +205,18 @@ functionality:
           description: "The organism of the sample in the dataset."
           required: false
           multiple: true
+        - name: "dataset_technology"
+          type: "string"
+          description: "The technology used to generate the dataset."
+          required: false
+        - name: "dataset_organ"
+          type: "string"
+          description: "The organ of the sample in the dataset."
+          required: false
+        - name: "dataset_tissue"
+          type: "string"
+          description: "The tissue of the sample in the dataset."
+          required: false
     example:
     - "resources_test/common/pancreas/raw.h5ad"
     must_exist: true
@@ -211,14 +224,16 @@ functionality:
     required: true
     direction: "input"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "file"
     name: "--output"
+    label: "Normalized dataset"
+    summary: "A normalized dataset"
+    description: "This dataset contains raw counts and metadata as output by a dataset\
+      \ loader.\n\nThe format of this file is derived from the [CELLxGENE schema v4.0.0](https://github.com/chanzuckerberg/single-cell-curation/blob/main/schema/4.0.0/schema.md).\n"
     info:
-      label: "Normalized dataset"
-      summary: "A normalized dataset"
-      slots:
+      format:
+        type: "h5ad"
         layers:
         - type: "integer"
           name: "counts"
@@ -404,6 +419,18 @@ functionality:
           description: "The organism of the sample in the dataset."
           required: false
           multiple: true
+        - name: "dataset_technology"
+          type: "string"
+          description: "The technology used to generate the dataset."
+          required: false
+        - name: "dataset_organ"
+          type: "string"
+          description: "The organ of the sample in the dataset."
+          required: false
+        - name: "dataset_tissue"
+          type: "string"
+          description: "The tissue of the sample in the dataset."
+          required: false
         - type: "string"
           name: "normalization_id"
           description: "Which normalization was used"
@@ -423,9 +450,6 @@ functionality:
           description: "If the dataset was retrieved from CELLxGENE census, this is\
             \ a unique identifier for the feature."
           required: false
-      description: "This dataset contains raw counts and metadata as output by a dataset\
-        \ loader.\n\nThe format of this file is derived from the [CELLxGENE schema\
-        \ v4.0.0](https://github.com/chanzuckerberg/single-cell-curation/blob/main/schema/4.0.0/schema.md).\n"
     example:
     - "resources_test/common/pancreas/normalized.h5ad"
     must_exist: true
@@ -433,8 +457,7 @@ functionality:
     required: true
     direction: "output"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "string"
     name: "--normalization_id"
     description: "The normalization id to store in the dataset metadata. If not specified,\
@@ -443,8 +466,7 @@ functionality:
     required: false
     direction: "input"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "string"
     name: "--layer_output"
     description: "The name of the layer in which to store the normalized data."
@@ -454,8 +476,7 @@ functionality:
     required: false
     direction: "input"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "string"
     name: "--obs_size_factors"
     description: "In which .obs slot to store the size factors (if any)."
@@ -465,8 +486,7 @@ functionality:
     required: false
     direction: "input"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
+    multiple_sep: ";"
   - type: "integer"
     name: "--n_cp"
     description: "Number of counts per cell"
@@ -476,43 +496,36 @@ functionality:
     required: false
     direction: "input"
     multiple: false
-    multiple_sep: ":"
-    dest: "par"
-  resources:
-  - type: "python_script"
-    path: "script.py"
-    is_executable: true
-  description: "Normalize data using Log Sqrt"
-  test_resources:
-  - type: "file"
-    path: "resources_test/common/pancreas"
-    dest: "resources_test/common/pancreas"
-  - type: "python_script"
-    path: "src/common/comp_tests/run_and_check_adata.py"
-    is_executable: true
-  info:
-    type: "dataset_normalization"
-    type_info:
-      label: "Dataset normalization"
-      summary: "A normalization method which processes the raw counts into a normalized\
-        \ dataset.\n"
-      description: "A component for normalizing the raw counts as output by dataset\
-        \ loaders into a normalized dataset."
-  status: "enabled"
-  set_wd_to_resources_dir: false
-platforms:
-- type: "docker"
-  id: "docker"
-  image: "openproblems/base_python:1.0.0"
-  target_organization: "openproblems-bio/openproblems"
-  target_registry: "ghcr.io"
-  namespace_separator: "/"
-  resolve_volume: "Automatic"
-  chown: true
-  setup_strategy: "ifneedbepullelsecachedbuild"
-  target_image_source: "https://github.com/openproblems-bio/openproblems"
-  entrypoint: []
-  cmd: null
+    multiple_sep: ";"
+resources:
+- type: "python_script"
+  path: "script.py"
+  is_executable: true
+description: "Normalize data using Log Sqrt"
+test_resources:
+- type: "file"
+  path: "resources_test/common/pancreas"
+  dest: "resources_test/common/pancreas"
+- type: "python_script"
+  path: "run_and_check_output.py"
+  is_executable: true
+info:
+  type: "dataset_normalization"
+  type_info:
+    label: "Dataset normalization"
+    summary: "A normalization method which processes the raw counts into a normalized\
+      \ dataset.\n"
+    description: "A component for normalizing the raw counts as output by dataset\
+      \ loaders into a normalized dataset."
+status: "enabled"
+license: "MIT"
+links:
+  repository: "https://github.com/openproblems-bio/openproblems"
+  docker_registry: "ghcr.io"
+runners:
+- type: "executable"
+  id: "executable"
+  docker_setup_strategy: "ifneedbepullelsecachedbuild"
 - type: "nextflow"
   id: "nextflow"
   directives:
@@ -542,12 +555,56 @@ platforms:
     - "process.errorStrategy = 'ignore'"
   debug: false
   container: "docker"
-info:
-  config: "/home/runner/work/openproblems/openproblems/src/datasets/normalization/sqrt_cp/config.vsh.yaml"
-  platform: "nextflow"
-  output: "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/normalization/sqrt_cp"
-  executable: "/home/runner/work/openproblems/openproblems/target/nextflow/datasets/normalization/sqrt_cp/sqrt_cp"
-  viash_version: "0.8.6"
-  git_commit: "559f97768212dfe9e3b427c36b8223ee5d4b9651"
+engines:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1.0.0"
+  namespace_separator: "/"
+  entrypoint: []
+  cmd: null
+build_info:
+  config: "src/datasets/normalization/sqrt_cp/config.vsh.yaml"
+  runner: "nextflow"
+  engine: "docker"
+  output: "target/nextflow/datasets/normalization/sqrt_cp"
+  executable: "target/nextflow/datasets/normalization/sqrt_cp/main.nf"
+  viash_version: "0.9.0"
+  git_commit: "b95de05cf0d4fa078fdfcad9328f403854e88b3a"
   git_remote: "https://github.com/openproblems-bio/openproblems"
-  git_tag: "v1.0.0-1417-g559f9776"
+  git_tag: "v1.0.0-1419-gb95de05c"
+package_config:
+  name: "openproblems"
+  version: "build_main"
+  description: "Open Problems is a living, extensible, community-guided benchmarking\
+    \ platform.\n"
+  info:
+    test_resources:
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/common"
+      dest: "resources_test/common"
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/openproblems"
+      dest: "resources_test/openproblems"
+  viash_version: "0.9.0"
+  source: "src"
+  target: "target"
+  config_mods:
+  - ".runners[.type == \"nextflow\"].config.labels := { lowmem : \"memory = 20.Gb\"\
+    , midmem : \"memory = 50.Gb\", highmem : \"memory = 100.Gb\", lowcpu : \"cpus\
+    \ = 5\", midcpu : \"cpus = 15\", highcpu : \"cpus = 30\", lowtime : \"time = 1.h\"\
+    , midtime : \"time = 4.h\", hightime : \"time = 8.h\", veryhightime : \"time =\
+    \ 24.h\" }\n.runners[.type == \"nextflow\"].config.script := \"process.errorStrategy\
+    \ = 'ignore'\"\n"
+  keywords:
+  - "openproblems"
+  - "benchmarking"
+  - "single-cell omics"
+  license: "MIT"
+  organization: "openproblems-bio"
+  references:
+    doi:
+    - "10.21203/rs.3.rs-4181617/v1"
+  links:
+    repository: "https://github.com/openproblems-bio/openproblems"
+    docker_registry: "ghcr.io"
+    issue_tracker: "https://github.com/openproblems-bio/openproblems/issues"
