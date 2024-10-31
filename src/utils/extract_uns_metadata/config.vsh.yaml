@@ -1,5 +1,5 @@
 name: extract_uns_metadata
-namespace: files
+namespace: utils
 description: Extract .uns metadata from an h5ad file and write it to a yaml file.
 argument_groups:
   - name:  Inputs
