@@ -7,7 +7,7 @@ set -e
 REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "$REPO_ROOT"
 
-for TASK in "denoising" "dimensionality_reduction" "batch_integration" "label_projection" "match_modalities" "predict_modality"; do
+for TASK in "task_perturbation_prediction"; do
 # for TASK in "label_projection"; do
   BASE_DIR="s3://openproblems-data/resources/$TASK/results/"
   
@@ -15,7 +15,8 @@ for TASK in "denoising" "dimensionality_reduction" "batch_integration" "label_pr
   DATE=$(aws s3 ls $BASE_DIR --recursive | awk '{print $4}' | grep 'task_info.yaml' | sort -r | head -n 1 | sed 's#.*/run_\(.*\)/[^/]*$#\1#')
   
   INPUT_DIR="$BASE_DIR/run_$DATE"
-  OUTPUT_DIR="../website/results/$TASK/data"
+  TASK_STRIP_PREFIX=$(echo $TASK | sed 's/task_//')
+  OUTPUT_DIR="../website/results/$TASK_STRIP_PREFIX/data"
 
   # # temp sync
   # aws s3 sync $INPUT_DIR output/temp
@@ -27,7 +28,7 @@ for TASK in "denoising" "dimensionality_reduction" "batch_integration" "label_pr
     -main-script target/nextflow/reporting/process_task_results/main.nf \
     -profile docker \
     -resume \
-    -c src/wf_utils/labels_ci.config \
+    -c common/nextflow_helpers/labels_ci.config \
     --id "process" \
     --input_scores "$INPUT_DIR/score_uns.yaml" \
     --input_dataset_info "$INPUT_DIR/dataset_uns.yaml" \

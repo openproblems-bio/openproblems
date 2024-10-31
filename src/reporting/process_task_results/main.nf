@@ -5,8 +5,8 @@ workflow run_wf {
   main:
   output_ch = input_ch
 
-      fromState: [ 
     | get_task_info.run(
+      fromState: [
         "input": "input_task_info"
       ],
       toState: ["output_task": "output"]

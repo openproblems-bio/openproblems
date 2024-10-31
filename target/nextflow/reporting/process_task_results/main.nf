@@ -3089,9 +3089,9 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/reporting/process_task_results",
     "viash_version" : "0.9.0",
-    "git_commit" : "b95de05cf0d4fa078fdfcad9328f403854e88b3a",
+    "git_commit" : "a8f4e9d13294ea1af4082af547c1d41caa504ce9",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1419-gb95de05c"
+    "git_tag" : "v1.0.0-1420-ga8f4e9d1"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3156,8 +3156,8 @@ workflow run_wf {
   main:
   output_ch = input_ch
 
-      fromState: [ 
     | get_task_info.run(
+      fromState: [
         "input": "input_task_info"
       ],
       toState: ["output_task": "output"]
