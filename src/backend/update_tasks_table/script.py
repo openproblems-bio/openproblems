@@ -32,7 +32,7 @@ key: str = par["supabase_key"]
 supabase: Client = create_client(url, key)
 
 # Get tasks already in db
-print(">> Getting tasks from db" flush=True)
+print(">> Getting tasks from db", flush=True)
 tasks = supabase.table("tasks").select("task_name").execute()
 
 task_names=[]
