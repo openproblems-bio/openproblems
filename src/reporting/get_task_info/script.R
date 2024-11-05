@@ -15,7 +15,9 @@ info <- yaml::yaml.load_file(par$input)
 
 # construct v1 format
 repo <-
-  if ("name" %in% names(info) && "organization" %in% names(info)) {
+  if ("links" %in% names(info) && "repository" %in% names(info$links)) {
+    info$links$repository
+  } else if ("name" %in% names(info) && "organization" %in% names(info)) {
     paste0(info$organization, "/", info$name)
   } else {
     "openproblems-bio/openproblems"
@@ -33,6 +35,7 @@ out <- list(
   task_summary = info$summary,
   task_description = description,
   repo = repo,
+  issue_tracker = info$links$issue_tracker %||% NA_character_,
   authors = info$authors
 )
 
