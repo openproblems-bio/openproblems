@@ -27,7 +27,8 @@ outputs <- map(configs, function(config) {
   info <- config$info
 
   # add extra info
-  info$config_path <- gsub(".*/src/", "src/", build_info$config)
+  info$config_path <- gsub(".*/src/", "", build_info$config)
+  info$comp_path <- gsub("/config.vsh.yaml", "", info$config_path)
   info$task_id <- gsub("/.*", "", config$namespace)
   info$id <- config$name
   info$namespace <- config$namespace
@@ -35,11 +36,19 @@ outputs <- map(configs, function(config) {
   info$summary <- config$summary %||% info$summary
   info$description <- config$description %||% info$description
   info$commit_sha <- build_info$git_commit %||% "missing-sha"
-  info$code_version <- "missing-version"
+  info$code_version <- config$version
+  info$code_url <- config$links$repository
+  info$documentation_url <- config$links$documentation
+  info$image <- paste0(
+    config$links$docker_registry, "/",
+    info$comp_path,
+    ":",
+    info$code_version
+  )
   info$implementation_url <- paste0(
     build_info$git_remote, "/blob/",
     build_info$git_commit, "/",
-    info$config_path
+    info$comp_path
   )
   info$type_info <- NULL
 
@@ -54,9 +63,11 @@ outputs <- map(configs, function(config) {
     method_description = info$description,
     is_baseline = grepl("control", info$type),
     paper_reference = info$reference %||% NA_character_,
-    code_url = info$repository_url %||% NA_character_,
+    code_url = info$code_url %||% NA_character_,
+    documentation_url = info$documentation_url %||% NA_character_,
+    image = info$image %||% NA_character_,
     implementation_url = info$implementation_url %||% NA_character_,
-    code_version = NA_character_,
+    code_version = info$code_version %||% NA_character_,
     commit_sha = info$commit_sha
   )
 
