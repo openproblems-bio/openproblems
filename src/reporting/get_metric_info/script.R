@@ -28,18 +28,25 @@ outputs <- map(configs, function(config) {
     config$info$metrics,
     function(info) {
       # add extra info
-      info$config_path <- gsub(".*/src/", "src/", build_info$config)
+      info$config_path <- gsub(".*/src/", "", build_info$config)
+      info$comp_path <- gsub("/config.vsh.yaml", "", info$config_path)
       info$task_id <- gsub("/.*", "", config$namespace)
       info$id <- info$name
       info$name <- NULL
       info$component_id <- config$name
       info$namespace <- config$namespace
       info$commit_sha <- build_info$git_commit %||% "missing-sha"
-      info$code_version <- "missing-version"
+      info$code_version <- config$version %||% "missing-version"
+      info$image_url <- paste0(
+        config$links$docker_registry, "/",
+        info$comp_path,
+        ":",
+        info$code_version
+      )
       info$implementation_url <- paste0(
         build_info$git_remote, "/blob/",
         build_info$git_commit, "/",
-        info$config_path
+        info$comp_path
       )
 
       # ↑ this could be used as the new format
