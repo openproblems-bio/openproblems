@@ -40,8 +40,8 @@ outputs <- map(configs, function(config) {
   info$documentation_url <- config$links$documentation
   info$image <- paste0(
     config$links$docker_registry, "/",
-    config$package_config$name, "/",
     config$package_config$organization, "/",
+    config$package_config$name, "/",
     gsub("src/", "", info$comp_path),
     ":",
     info$code_version
