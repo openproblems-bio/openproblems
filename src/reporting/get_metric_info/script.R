@@ -38,6 +38,7 @@ outputs <- map(configs, function(config) {
       info$code_version <- config$version %||% "missing-version"
       info$image_url <- paste0(
         config$links$docker_registry, "/",
+        config$package_config$name, "/",
         config$package_config$organization, "/",
         gsub("src/", "", info$comp_path),
         ":",
