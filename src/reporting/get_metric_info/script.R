@@ -28,7 +28,7 @@ outputs <- map(configs, function(config) {
     config$info$metrics,
     function(info) {
       # add extra info
-      info$comp_path <- gsub(".*/src/", "", build_info$config) %>% gsub("/config.vsh.yaml", "", .)
+      info$comp_path <- gsub(".*/src/", "src/", build_info$config) %>% gsub("/config.vsh.yaml", "", .)
       info$task_id <- gsub("/.*", "", config$namespace)
       info$id <- info$name
       info$name <- NULL
@@ -38,7 +38,8 @@ outputs <- map(configs, function(config) {
       info$code_version <- config$version %||% "missing-version"
       info$image_url <- paste0(
         config$links$docker_registry, "/",
-        info$comp_path,
+        config$package_config$organisation, "/",
+        gsub("src/", "", info$comp_path),
         ":",
         info$code_version
       )
@@ -59,6 +60,7 @@ outputs <- map(configs, function(config) {
         metric_description = info$description,
         paper_reference = info$reference %||% NA_character_,
         implementation_url = info$implementation_url %||% NA_character_,
+        image = info$image_url %||% NA_character_,
         code_version = NA_character_,
         commit_sha = info$commit_sha,
         maximize = info$maximize
