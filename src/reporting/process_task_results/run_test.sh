@@ -40,5 +40,5 @@ for TASK in "task_perturbation_prediction"; do
     --publish_dir "$OUTPUT_DIR"
 
   # cause quarto rerender to index page when in preview mode
-  touch ../website/results/$TASK/index.qmd
+  touch ../website/results/$TASK_STRIP_PREFIX/index.qmd
 done
