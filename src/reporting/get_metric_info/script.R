@@ -28,8 +28,7 @@ outputs <- map(configs, function(config) {
     config$info$metrics,
     function(info) {
       # add extra info
-      info$config_path <- gsub(".*/src/", "", build_info$config)
-      info$comp_path <- gsub("/config.vsh.yaml", "", info$config_path)
+      info$comp_path <- gsub(".*/src/", "", build_info$config) %>% gsub("/config.vsh.yaml", "", .)
       info$task_id <- gsub("/.*", "", config$namespace)
       info$id <- info$name
       info$name <- NULL
