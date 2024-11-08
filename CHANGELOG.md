@@ -28,6 +28,10 @@
 
 - Update `dataset_id` for `tenx_visium`, `zenodo_spatial`, `zenodo_spatial_slidetags` datasets and use `mouse_brain_coronal` as a test resource in the `spatially_variable_genes` task (PR #908).
 
+## Bug fixes
+
+- Fix extracting metadata from anndata files in the `extract_metadata` component (PR #914).
+
 # openproblems v2.0.0
 
 A major update to the OpenProblems framework, switching from a Python-based framework to a Viash + Nextflow-based framework. This update features the same concepts as the previous version, but with a new implementation that is more flexible, scalable, and maintainable.
