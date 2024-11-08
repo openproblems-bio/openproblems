@@ -8,8 +8,8 @@ import datetime
 
 ## VIASH START
 par = {
-  'input': 'resources_test/common/pancreas/dataset.h5ad',
-  'schema': 'src/datasets/api/file_raw.yaml',
+  'input': 'foo/cellxgene_census/dkd/log_cp10k.combat.asw_batch.asw_batch.output.h5ad',
+  'schema': '/home/rcannood/workspace/openproblems/task_batch_integration/src/api/file_score.yaml',
   'output': 'output/meta.yaml',
 }
 ## VIASH END
@@ -36,9 +36,15 @@ else:
 ## Helper functions for extracting the dataset metadata in uns                                    ##
 ####################################################################################################
 def is_atomic(obj):
-  return isinstance(obj, str) or isinstance(obj, int) or isinstance(obj, bool) or isinstance(obj, float)
+  return isinstance(obj, str) or isinstance(obj, int) or isinstance(obj, bool) or isinstance(obj, float) or \
+    isinstance(obj, np.int32) or isinstance(obj, np.float32) or isinstance(obj, np.int64) or \
+    isinstance(obj, np.bool_) or isinstance(obj, np.str_)
 
 def to_atomic(obj):
+  if isinstance(obj, np.int32):
+    return int(obj)
+  elif isinstance(obj, np.float32):
+    return float(obj)
   if isinstance(obj, np.float64):
     return float(obj)
   elif isinstance(obj, np.int64):
