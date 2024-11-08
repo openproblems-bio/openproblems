@@ -39,7 +39,7 @@ else:
 def is_atomic(obj):
   return isinstance(obj, str) or isinstance(obj, int) or isinstance(obj, bool) or isinstance(obj, float) or \
     isinstance(obj, np.int32) or isinstance(obj, np.float32) or isinstance(obj, np.int64) or \
-    isinstance(obj, np.bool_) or isinstance(obj, np.str_)
+    isinstance(obj, np.float64) or isinstance(obj, np.bool_) or isinstance(obj, np.str_)
 
 def to_atomic(obj):
   if isinstance(obj, np.int32):
