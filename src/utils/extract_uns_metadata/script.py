@@ -42,7 +42,7 @@ def is_atomic(obj):
 def to_atomic(obj):
   if isinstance(obj, (np.int32,np.int64)):
     return int(obj)
-  elif isinstance(obj, np.float32,np.float64):
+  elif isinstance(obj, (np.float32,np.float64)):
     return float(obj)
   elif isinstance(obj, np.bool_):
     return bool(obj)
