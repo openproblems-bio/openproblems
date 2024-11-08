@@ -2960,9 +2960,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/utils/extract_uns_metadata",
     "viash_version" : "0.9.0",
-    "git_commit" : "a8f4e9d13294ea1af4082af547c1d41caa504ce9",
+    "git_commit" : "f0ee7b727ba6538a3480d54b5a47adae57fceff9",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1420-ga8f4e9d1"
+    "git_tag" : "v1.0.0-1421-gf0ee7b72"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3082,13 +3082,13 @@ else:
 ## Helper functions for extracting the dataset metadata in uns                                    ##
 ####################################################################################################
 def is_atomic(obj):
-  return isinstance(obj, str) or isinstance(obj, int) or isinstance(obj, bool) or isinstance(obj, float)
+  return pd.api.types.is_scalar(obj)
 
 def to_atomic(obj):
-  if isinstance(obj, np.float64):
-    return float(obj)
-  elif isinstance(obj, np.int64):
+  if isinstance(obj, (np.int32,np.int64)):
     return int(obj)
+  elif isinstance(obj, (np.float32,np.float64)):
+    return float(obj)
   elif isinstance(obj, np.bool_):
     return bool(obj)
   elif isinstance(obj, np.str_):
@@ -3096,7 +3096,7 @@ def to_atomic(obj):
   return obj
 
 def is_list_of_atomics(obj):
-  if not isinstance(obj, (list,pd.core.series.Series,np.ndarray)):
+  if not isinstance(obj, (list, pd.core.series.Series, np.ndarray)):
     return False
   return all(is_atomic(elem) for elem in obj)
 

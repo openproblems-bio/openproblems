@@ -3440,9 +3440,9 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/datasets/workflows/spatial/process_tenx_visium",
     "viash_version" : "0.9.0",
-    "git_commit" : "a8f4e9d13294ea1af4082af547c1d41caa504ce9",
+    "git_commit" : "f0ee7b727ba6538a3480d54b5a47adae57fceff9",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1420-ga8f4e9d1"
+    "git_tag" : "v1.0.0-1421-gf0ee7b72"
   },
   "package_config" : {
     "name" : "openproblems",
