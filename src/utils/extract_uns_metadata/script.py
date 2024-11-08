@@ -11,6 +11,7 @@ par = {
   'input': 'foo/cellxgene_census/dkd/log_cp10k.combat.asw_batch.asw_batch.output.h5ad',
   'schema': '/home/rcannood/workspace/openproblems/task_batch_integration/src/api/file_score.yaml',
   'output': 'output/meta.yaml',
+  'uns_length_cutoff': 100
 }
 ## VIASH END
 
