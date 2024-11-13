@@ -32,6 +32,8 @@
 
 ## Bug fixes
 
+- Fix extracting metadata from anndata files in the `extract_metadata` component (PR #914).
+
 - Fix path in `touch` cmd in `reporting/process_task_results/run_test.sh` (PR #915).
 
 # openproblems v2.0.0

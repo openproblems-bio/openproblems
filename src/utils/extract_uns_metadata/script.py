@@ -11,6 +11,7 @@ par = {
   'input': 'resources_test/common/pancreas/dataset.h5ad',
   'schema': 'src/datasets/api/file_raw.yaml',
   'output': 'output/meta.yaml',
+  'uns_length_cutoff': 100
 }
 ## VIASH END
 
@@ -36,13 +37,13 @@ else:
 ## Helper functions for extracting the dataset metadata in uns                                    ##
 ####################################################################################################
 def is_atomic(obj):
-  return isinstance(obj, str) or isinstance(obj, int) or isinstance(obj, bool) or isinstance(obj, float)
+  return pd.api.types.is_scalar(obj)
 
 def to_atomic(obj):
-  if isinstance(obj, np.float64):
-    return float(obj)
-  elif isinstance(obj, np.int64):
+  if isinstance(obj, (np.int32,np.int64)):
     return int(obj)
+  elif isinstance(obj, (np.float32,np.float64)):
+    return float(obj)
   elif isinstance(obj, np.bool_):
     return bool(obj)
   elif isinstance(obj, np.str_):
@@ -50,7 +51,7 @@ def to_atomic(obj):
   return obj
 
 def is_list_of_atomics(obj):
-  if not isinstance(obj, (list,pd.core.series.Series,np.ndarray)):
+  if not isinstance(obj, (list, pd.core.series.Series, np.ndarray)):
     return False
   return all(is_atomic(elem) for elem in obj)
 
