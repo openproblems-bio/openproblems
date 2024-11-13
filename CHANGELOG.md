@@ -28,6 +28,12 @@
 
 - Update `dataset_id` for `tenx_visium`, `zenodo_spatial`, `zenodo_spatial_slidetags` datasets and use `mouse_brain_coronal` as a test resource in the `spatially_variable_genes` task (PR #908).
 
+- Update `get_task_info`, `get_method_info` and `get_metrics_info` reporting components with more info and extend output (PR #915).
+
+## Bug fixes
+
+- Fix path in `touch` cmd in `reporting/process_task_results/run_test.sh` (PR #915).
+
 # openproblems v2.0.0
 
 A major update to the OpenProblems framework, switching from a Python-based framework to a Viash + Nextflow-based framework. This update features the same concepts as the previous version, but with a new implementation that is more flexible, scalable, and maintainable.
