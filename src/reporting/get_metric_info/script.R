@@ -62,7 +62,7 @@ outputs <- map(configs, function(config) {
         paper_reference = info$reference %||% NA_character_,
         implementation_url = info$implementation_url %||% NA_character_,
         image = info$image_url %||% NA_character_,
-        code_version = NA_character_,
+        code_version = info$code_version %||% NA_character_,
         commit_sha = info$commit_sha,
         maximize = info$maximize
       )
