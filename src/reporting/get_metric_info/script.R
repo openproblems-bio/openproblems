@@ -37,6 +37,7 @@ outputs <- map(configs, function(config) {
       info$commit_sha <- build_info$git_commit %||% "missing-sha"
       info$code_version <- config$version %||% "missing-version"
       info$image_url <- paste0(
+        "https://",
         config$links$docker_registry, "/",
         config$package_config$organization, "/",
         config$package_config$name, "/",

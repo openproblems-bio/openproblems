@@ -39,6 +39,7 @@ outputs <- map(configs, function(config) {
   info$code_url <- config$links$repository
   info$documentation_url <- config$links$documentation
   info$image <- paste0(
+    "https://",
     config$links$docker_registry, "/",
     config$package_config$organization, "/",
     config$package_config$name, "/",
