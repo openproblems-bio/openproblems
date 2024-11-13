@@ -36,7 +36,9 @@ out <- list(
   task_description = description,
   repo = repo,
   issue_tracker = info$links$issue_tracker %||% NA_character_,
-  authors = info$authors
+  authors = info$authors,
+  version = info$version,
+  license = info$license %||% NA_character_
 )
 
 # show warning when certain data is missing and return null?
