@@ -5,7 +5,7 @@ library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input = "resources_test/openproblems/task_results_v3/raw/method_configs.yaml",
+  input = "test.yaml",
   output = "resources_test/openproblems/task_results_v3/processed/method_info.json"
 )
 ## VIASH END
@@ -38,15 +38,27 @@ outputs <- map(configs, function(config) {
   info$code_version <- config$version
   info$code_url <- config$links$repository
   info$documentation_url <- config$links$documentation
-  info$image <- paste0(
-    "https://",
-    config$links$docker_registry, "/",
-    config$package_config$organization, "/",
-    config$package_config$name, "/",
-    gsub("src/", "", info$comp_path),
-    ":",
-    info$code_version
-  )
+  # Check if the method has a docker container to create an image url. If it does not have a docker it will be a nextflow component consisting of different components that will have a docker image.
+  engines <- config$engines
+  has_docker <- any(map_lgl(engines, ~ .x$type == "docker"))
+  if (has_docker) {
+    info$image <- paste0(
+      "https://",
+      config$links$docker_registry, "/",
+      config$package_config$organization, "/",
+      config$package_config$name, "/",
+      gsub("src/", "", info$comp_path),
+      ":",
+      info$code_version
+    )
+  }  else {
+    info$image <- paste0(
+      "https://github.com/orgs/openproblems-bio/packages?repo_name=",
+      config$package_config$name,
+      "&q=",
+      gsub("src/", "", info$comp_path)
+    )
+  }
   info$implementation_url <- paste0(
     build_info$git_remote, "/blob/",
     build_info$git_commit, "/",
