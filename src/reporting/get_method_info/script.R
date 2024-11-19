@@ -66,6 +66,15 @@ outputs <- map(configs, function(config) {
   )
   info$type_info <- NULL
 
+  # Flatten references
+  if (!is.null(info$reference) && info$reference != "") {
+    imap(info$reference, function(value, key) {
+      info[[paste0("reference_", key)]] <- value
+    })
+  }
+  info$reference <- NULL
+
+
   # ↑ this could be used as the new format
 
   # construct v1 format
@@ -76,7 +85,8 @@ outputs <- map(configs, function(config) {
     method_summary = info$summary,
     method_description = info$description,
     is_baseline = grepl("control", info$type),
-    paper_reference = info$reference %||% NA_character_,
+    reference_doi = info$reference_doi %||% NA_character_,
+    reference_bibtex = info$reference_bibtex %||% NA_character_,
     code_url = info$code_url %||% NA_character_,
     documentation_url = info$documentation_url %||% NA_character_,
     image = info$image %||% NA_character_,

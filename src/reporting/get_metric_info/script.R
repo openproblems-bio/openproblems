@@ -51,6 +51,14 @@ outputs <- map(configs, function(config) {
         info$comp_path
       )
 
+      # Flatten references
+      if (!is.null(info$reference) && info$reference != "") {
+        imap(info$reference, function(value, key) {
+          info[[paste0("reference_", key)]] <- value
+        })
+      }
+      info$reference <- NULL
+
       # ↑ this could be used as the new format
 
       # construct v1 format
@@ -60,7 +68,8 @@ outputs <- map(configs, function(config) {
         metric_name = info$label,
         metric_summary = info$summary,
         metric_description = info$description,
-        paper_reference = info$reference %||% NA_character_,
+        reference_doi = info$reference_doi %||% NA_character_,
+        reference_bibtex = info$reference_bibtex %||% NA_character_,
         implementation_url = info$implementation_url %||% NA_character_,
         image = info$image_url %||% NA_character_,
         code_version = info$code_version %||% NA_character_,
