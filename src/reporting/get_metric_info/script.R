@@ -50,14 +50,14 @@ outputs <- map(configs, function(config) {
         build_info$git_commit, "/",
         info$comp_path
       )
-
       # Flatten references
-      if (!is.null(info$reference) && info$reference != "") {
-        imap(info$reference, function(value, key) {
-          info[[paste0("reference_", key)]] <- value
-        })
+      if (!is.null(info$references) && info$references != "") {
+        info <- imap(info$references, function(value, key) {
+          info[[paste0("references_", key)]] <- value
+          return(info)
+        })[[1]]
       }
-      info$reference <- NULL
+      info$references <- NULL
 
       # ↑ this could be used as the new format
 
@@ -68,8 +68,8 @@ outputs <- map(configs, function(config) {
         metric_name = info$label,
         metric_summary = info$summary,
         metric_description = info$description,
-        reference_doi = info$reference_doi %||% NA_character_,
-        reference_bibtex = info$reference_bibtex %||% NA_character_,
+        references_doi = info$references_doi %||% NA_character_,
+        references_bibtex = info$references_bibtex %||% NA_character_,
         implementation_url = info$implementation_url %||% NA_character_,
         image = info$image_url %||% NA_character_,
         code_version = info$code_version %||% NA_character_,
