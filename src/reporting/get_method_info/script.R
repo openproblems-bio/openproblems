@@ -5,7 +5,7 @@ library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input = "test.yaml",
+  input = "method_configs.yaml",
   output = "resources_test/openproblems/task_results_v3/processed/method_info.json"
 )
 ## VIASH END
@@ -67,13 +67,15 @@ outputs <- map(configs, function(config) {
   info$type_info <- NULL
 
   # Flatten references
-  if (!is.null(info$references) && info$references != "") {
-    info <- imap(info$references, function(value, key) {
+  if (!is.null(config$references) && config$references != "") {
+    info <- imap(config$references, function(value, key) {
       info[[paste0("references_", key)]] <- value
       return(info)
     })[[1]]
   }
   info$references <- NULL
+
+  print(info)
 
 
   # ↑ this could be used as the new format
