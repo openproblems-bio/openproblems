@@ -58,7 +58,7 @@ parse_size <- function(x) {
     if (is.na(x) || x == "-") {
       NA_integer_
     } else if (grepl("TB", x)) {
-      as.numeric(gsub(" *TB", "", x)) * 1024
+      as.numeric(gsub(" *TB", "", x)) * 1024 * 1024
     } else if (grepl("GB", x)) {
       as.numeric(gsub(" *GB", "", x)) * 1024
     } else if (grepl("MB", x)) {
