@@ -13,7 +13,7 @@ library(rlang, warn.conflicts = FALSE)
 # processed_dir <- "resources_test/openproblems/task_results_v3/processed"
 # raw_dir <- "/home/rcannood/workspace/openproblems-bio/task_perturbation_prediction/resources/results/run_2024-10-31_06-14-14"
 # processed_dir <- "/home/rcannood/workspace/openproblems-bio/website/results/perturbation_prediction/data"
-raw_dir <- "/home/rcannood/workspace/openproblems-bio/task_batch_integration/resources/results/run_2024-11-08_19-43-15"
+raw_dir <- "/home/rcannood/workspace/openproblems-bio/task_batch_integration/resources/results/run_2024-11-20_12-47-03"
 processed_dir <- "/home/rcannood/workspace/openproblems-bio/website/results/batch_integration/data"
 
 par <- list(
@@ -57,6 +57,8 @@ parse_size <- function(x) {
   out <-
     if (is.na(x) || x == "-") {
       NA_integer_
+    } else if (grepl("TB", x)) {
+      as.numeric(gsub(" *TB", "", x)) * 1024
     } else if (grepl("GB", x)) {
       as.numeric(gsub(" *GB", "", x)) * 1024
     } else if (grepl("MB", x)) {
@@ -137,16 +139,14 @@ scores <- raw_scores %>%
     .groups = "drop"
   )
 
-# read nxf log and process the task id
-norm_methods <- "/log_cp10k|/log_cpm|/sqrt_cp10k|/sqrt_cpm|/l1_sqrt|/log_scran_pooling"
-id_regex <- paste0("^.*:(.*)_process \\(([^\\.]*)(", norm_methods, ")?(.[^\\.]*)?\\.(.*)\\)$")
-
-# # reverse engineer metric component names
-# metric_info <- metric_info %>%
-#   mutate(comp_id = gsub(".*/([^/]*)/config\\.vsh\\.yaml", "\\1", implementation_url))
 
 # read execution info
-input_execution <- readr::read_tsv(par$input_execution)
+# -> only keep the last execution of each process
+input_execution <- readr::read_tsv(par$input_execution) |>
+  group_by(name) |>
+  mutate(num_runs = n()) |>
+  slice(which.max(submit)) |>
+  ungroup()
 
 method_lookup <- map_dfr(method_info$method_id, function(method_id) {
   regex <- paste0("(.*:", method_id, ":[^ ]*)")
@@ -157,7 +157,7 @@ method_lookup <- map_dfr(method_info$method_id, function(method_id) {
   tibble(method_id = method_id, name = name_)
 })
 dataset_lookup <- map_dfr(dataset_info$dataset_id, function(dataset_id) {
-  regex <- paste0(".*[(.](", dataset_id, ")[).].*")
+  regex <- paste0(".*[(.](", dataset_id, ")[)./].*")
   name <-
     input_execution$name[grepl(regex, input_execution$name)] |>
     unique()
@@ -237,14 +237,14 @@ metric_lookup2 <- pmap_dfr(metric_info, function(metric_id, component_name, ...)
   tibble(metric_id = metric_id, component_name = component_name, name = name_)
 })
 dataset_lookup2 <- map_dfr(dataset_info$dataset_id, function(dataset_id) {
-  regex <- paste0(".*[(.](", dataset_id, ")[).].*")
+  regex <- paste0(".*[(.](", dataset_id, ")[)./].*")
   name <-
     input_execution$name[grepl(regex, input_execution$name)] |>
     unique()
   tibble(dataset_id = dataset_id, name = name)
 })
 method_lookup2 <- map_dfr(method_info$method_id, function(method_id) {
-  regex <- paste0(".*[(.](", method_id, ")[).].*")
+  regex <- paste0(".*[(.](", method_id, ")[)./].*")
   name <-
     input_execution$name[grepl(regex, input_execution$name)] |>
     unique()
