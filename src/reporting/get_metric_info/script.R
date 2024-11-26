@@ -32,7 +32,7 @@ outputs <- map(configs, function(config) {
       info$task_id <- gsub("/.*", "", config$namespace)
       info$id <- info$name
       info$name <- NULL
-      info$component_id <- config$name
+      info$component_name <- config$name
       info$namespace <- config$namespace
       info$commit_sha <- build_info$git_commit %||% "missing-sha"
       info$code_version <- "missing-version"
@@ -47,6 +47,7 @@ outputs <- map(configs, function(config) {
       # construct v1 format
       out <- list(
         task_id = info$task_id,
+        component_name = info$component_name,
         metric_id = info$id,
         metric_name = info$label,
         metric_summary = info$summary,
