@@ -2943,9 +2943,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/get_task_info",
     "viash_version" : "0.9.0",
-    "git_commit" : "927b5a66b4826459f6961c4421ef297e15732cf4",
+    "git_commit" : "f52c8c4ace3696767da9aec211fc6e24f9f246c0",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1422-g927b5a66"
+    "git_tag" : "v1.0.0-1423-gf52c8c4a"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3051,7 +3051,9 @@ info <- yaml::yaml.load_file(par\\$input)
 
 # construct v1 format
 repo <-
-  if ("name" %in% names(info) && "organization" %in% names(info)) {
+  if ("links" %in% names(info) && "repository" %in% names(info\\$links)) {
+    info\\$links\\$repository
+  } else if ("name" %in% names(info) && "organization" %in% names(info)) {
     paste0(info\\$organization, "/", info\\$name)
   } else {
     "openproblems-bio/openproblems"
@@ -3069,7 +3071,10 @@ out <- list(
   task_summary = info\\$summary,
   task_description = description,
   repo = repo,
-  authors = info\\$authors
+  issue_tracker = info\\$links\\$issue_tracker %||% NA_character_,
+  authors = info\\$authors,
+  version = info\\$version,
+  license = info\\$license %||% NA_character_
 )
 
 # show warning when certain data is missing and return null?

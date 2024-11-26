@@ -538,9 +538,9 @@ RUN git clone -b 'v0.8.0' --depth 1 https://github.com/openproblems-bio/openprob
   pip install --no-cache-dir --editable /opt/openproblems
 
 LABEL org.opencontainers.image.description="Companion container for running component datasets/loaders/scrnaseq openproblems_v1"
-LABEL org.opencontainers.image.created="2024-11-26T13:48:54Z"
+LABEL org.opencontainers.image.created="2024-11-26T14:02:31Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="927b5a66b4826459f6961c4421ef297e15732cf4"
+LABEL org.opencontainers.image.revision="f52c8c4ace3696767da9aec211fc6e24f9f246c0"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

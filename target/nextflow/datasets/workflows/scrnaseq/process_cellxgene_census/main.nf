@@ -5061,9 +5061,9 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/datasets/workflows/scrnaseq/process_cellxgene_census",
     "viash_version" : "0.9.0",
-    "git_commit" : "927b5a66b4826459f6961c4421ef297e15732cf4",
+    "git_commit" : "f52c8c4ace3696767da9aec211fc6e24f9f246c0",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1422-g927b5a66"
+    "git_tag" : "v1.0.0-1423-gf52c8c4a"
   },
   "package_config" : {
     "name" : "openproblems",

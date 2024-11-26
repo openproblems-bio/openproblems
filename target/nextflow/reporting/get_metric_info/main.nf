@@ -2943,9 +2943,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/get_metric_info",
     "viash_version" : "0.9.0",
-    "git_commit" : "927b5a66b4826459f6961c4421ef297e15732cf4",
+    "git_commit" : "f52c8c4ace3696767da9aec211fc6e24f9f246c0",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1422-g927b5a66"
+    "git_tag" : "v1.0.0-1423-gf52c8c4a"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3064,19 +3064,36 @@ outputs <- map(configs, function(config) {
     config\\$info\\$metrics,
     function(info) {
       # add extra info
-      info\\$config_path <- gsub(".*/src/", "src/", build_info\\$config)
+      info\\$comp_path <- gsub(".*/src/", "src/", build_info\\$config) %>% gsub("/config.vsh.yaml", "", .)
       info\\$task_id <- gsub("/.*", "", config\\$namespace)
       info\\$id <- info\\$name
       info\\$name <- NULL
       info\\$component_name <- config\\$name
       info\\$namespace <- config\\$namespace
       info\\$commit_sha <- build_info\\$git_commit %||% "missing-sha"
-      info\\$code_version <- "missing-version"
+      info\\$code_version <- config\\$version %||% "missing-version"
+      info\\$image_url <- paste0(
+        "https://",
+        config\\$links\\$docker_registry, "/",
+        config\\$package_config\\$organization, "/",
+        config\\$package_config\\$name, "/",
+        gsub("src/", "", info\\$comp_path),
+        ":",
+        info\\$code_version
+      )
       info\\$implementation_url <- paste0(
         build_info\\$git_remote, "/blob/",
         build_info\\$git_commit, "/",
-        info\\$config_path
+        info\\$comp_path
       )
+      # Flatten references
+      if (!is.null(info\\$references) && info\\$references != "") {
+        info <- imap(info\\$references, function(value, key) {
+          info[[paste0("references_", key)]] <- value
+          return(info)
+        })[[1]]
+      }
+      info\\$references <- NULL
 
       # ↑ this could be used as the new format
 
@@ -3088,9 +3105,11 @@ outputs <- map(configs, function(config) {
         metric_name = info\\$label,
         metric_summary = info\\$summary,
         metric_description = info\\$description,
-        paper_reference = info\\$reference %||% NA_character_,
+        references_doi = info\\$references_doi %||% NA_character_,
+        references_bibtex = info\\$references_bibtex %||% NA_character_,
         implementation_url = info\\$implementation_url %||% NA_character_,
-        code_version = NA_character_,
+        image = info\\$image_url %||% NA_character_,
+        code_version = info\\$code_version %||% NA_character_,
         commit_sha = info\\$commit_sha,
         maximize = info\\$maximize
       )
