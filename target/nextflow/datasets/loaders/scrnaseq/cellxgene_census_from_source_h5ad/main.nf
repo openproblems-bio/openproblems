@@ -3114,9 +3114,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/datasets/loaders/scrnaseq/cellxgene_census_from_source_h5ad",
     "viash_version" : "0.9.0",
-    "git_commit" : "f0ee7b727ba6538a3480d54b5a47adae57fceff9",
+    "git_commit" : "927b5a66b4826459f6961c4421ef297e15732cf4",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1421-gf0ee7b72"
+    "git_tag" : "v1.0.0-1422-g927b5a66"
   },
   "package_config" : {
     "name" : "openproblems",

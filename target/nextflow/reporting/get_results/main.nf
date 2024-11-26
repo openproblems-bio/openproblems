@@ -3028,9 +3028,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/get_results",
     "viash_version" : "0.9.0",
-    "git_commit" : "f0ee7b727ba6538a3480d54b5a47adae57fceff9",
+    "git_commit" : "927b5a66b4826459f6961c4421ef297e15732cf4",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1421-gf0ee7b72"
+    "git_tag" : "v1.0.0-1422-g927b5a66"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3168,6 +3168,8 @@ parse_size <- function(x) {
   out <-
     if (is.na(x) || x == "-") {
       NA_integer_
+    } else if (grepl("TB", x)) {
+      as.numeric(gsub(" *TB", "", x)) * 1024 * 1024
     } else if (grepl("GB", x)) {
       as.numeric(gsub(" *GB", "", x)) * 1024
     } else if (grepl("MB", x)) {
@@ -3248,51 +3250,63 @@ scores <- raw_scores %>%
     .groups = "drop"
   )
 
-# read nxf log and process the task id
-norm_methods <- "/log_cp10k|/log_cpm|/sqrt_cp10k|/sqrt_cpm|/l1_sqrt|/log_scran_pooling"
-id_regex <- paste0("^.*:(.*)_process \\\\\\\\(([^\\\\\\\\.]*)(", norm_methods, ")?(.[^\\\\\\\\.]*)?\\\\\\\\.(.*)\\\\\\\\)\\$")
 
-trace <- readr::read_tsv(par\\$input_execution) %>%
-  mutate(
-    id = name,
-    process_id = stringr::str_extract(id, id_regex, 1L),
-    dataset_id = stringr::str_extract(id, id_regex, 2L),
-    normalization_id = gsub("^/", "", stringr::str_extract(id, id_regex, 3L)),
-    grp4 = gsub("^\\\\\\\\.", "", stringr::str_extract(id, id_regex, 4L)),
-    grp5 = stringr::str_extract(id, id_regex, 5L),
-    submit = strptime(submit, "%Y-%m-%d %H:%M:%S"),
-  ) %>%
-  # detect whether entry is a metric or a method
-  mutate(
-    method_id = ifelse(is.na(grp4), grp5, grp4),
-    metric_id = ifelse(is.na(grp4), grp4, grp5)
-  ) %>%
-  select(-grp4, -grp5) %>%
-  filter(!is.na(method_id)) %>%
-  # take last entry for each run
-  arrange(desc(submit)) %>%
-  group_by(name) %>%
-  slice(1) %>%
+# read execution info
+# -> only keep the last execution of each process
+input_execution <- readr::read_tsv(par\\$input_execution) |>
+  group_by(name) |>
+  mutate(num_runs = n()) |>
+  slice(which.max(submit)) |>
   ungroup()
+
+method_lookup <- map_dfr(method_info\\$method_id, function(method_id) {
+  regex <- paste0("(.*:", method_id, ":[^ ]*)")
+  name <-
+    input_execution\\$name[grepl(regex, input_execution\\$name)] |>
+    unique()
+  name_ <- name[!grepl(":publishStatesProc", name)]
+  tibble(method_id = method_id, name = name_)
+})
+dataset_lookup <- map_dfr(dataset_info\\$dataset_id, function(dataset_id) {
+  regex <- paste0(".*[(.](", dataset_id, ")[)./].*")
+  name <-
+    input_execution\\$name[grepl(regex, input_execution\\$name)] |>
+    unique()
+  tibble(dataset_id = dataset_id, name = name)
+})
 
 # parse values
-execution_info <- trace %>%
-  filter(process_id == method_id) %>% # only keep method entries
-  rowwise() %>%
-  transmute(
-    dataset_id,
-    normalization_id,
-    method_id,
-    resources = list(list(
-      exit_code = parse_exit(exit),
-      duration_sec = parse_duration(realtime),
-      cpu_pct = parse_cpu(\\`%cpu\\`),
-      peak_memory_mb = parse_size(peak_vmem),
-      disk_read_mb = parse_size(rchar),
-      disk_write_mb = parse_size(wchar)
-    ))
-  ) %>%
+execution_info_ind <- input_execution |>
+  left_join(method_lookup, by = "name") |>
+  left_join(dataset_lookup, by = "name") |>
+  filter(!is.na(method_id)) %>%
+  rowwise() |>
+  mutate(
+    process_id = gsub(" .*", "", name),
+    submit = strptime(submit, "%Y-%m-%d %H:%M:%S"),
+    exit_code = parse_exit(exit),
+    duration_sec = parse_duration(realtime),
+    cpu_pct = parse_cpu(\\`%cpu\\`),
+    peak_memory_mb = parse_size(peak_vmem),
+    disk_read_mb = parse_size(rchar),
+    disk_write_mb = parse_size(wchar)
+  ) |>
   ungroup()
+
+execution_info <- execution_info_ind |>
+  group_by(dataset_id, method_id) |>
+  summarise(
+    resources = list(list(
+      submit = min(submit),
+      exit_code = max(exit_code),
+      duration_sec = sum(duration_sec),
+      cpu_pct = sum(cpu_pct * duration_sec) / sum(duration_sec),
+      peak_memory_mb = max(peak_memory_mb),
+      disk_read_mb = sum(disk_read_mb),
+      disk_write_mb = sum(disk_write_mb)
+    )),
+    .groups = "drop"
+  )
 
 # combine scores with execution info
 # fill up missing entries with NAs and 0s
@@ -3320,24 +3334,67 @@ out <- full_join(
 
 # --- process metric execution info --------------------------------------------
 cat("Processing metric execution info\\\\n")
-metric_execution_info <- trace %>%
-  filter(process_id == metric_id) %>% # only keep metric entries
-  rowwise() %>%
-  transmute(
-    dataset_id,
-    normalization_id,
-    method_id,
-    metric_id,
-    resources = list(list(
-      exit_code = parse_exit(exit),
-      duration_sec = parse_duration(realtime),
-      cpu_pct = parse_cpu(\\`%cpu\\`),
-      peak_memory_mb = parse_size(peak_vmem),
-      disk_read_mb = parse_size(rchar),
-      disk_write_mb = parse_size(wchar)
-    ))
-  ) %>%
+
+# manually add component id to metric info
+metric_info\\$component_name <- metric_info\\$component_name %||% rep(NA_character_, nrow(metric_info)) %|%
+  gsub(".*/([^/]*)/config\\\\\\\\.vsh\\\\\\\\.yaml", "\\\\\\\\1", metric_info\\$implementation_url)
+
+metric_lookup2 <- pmap_dfr(metric_info, function(metric_id, component_name, ...) {
+  regex <- paste0("(.*:", component_name, ":[^ ]*)")
+  name <-
+    input_execution\\$name[grepl(regex, input_execution\\$name)] |>
+    unique()
+  name_ <- name[!grepl(":publishStatesProc", name)]
+  tibble(metric_id = metric_id, component_name = component_name, name = name_)
+})
+dataset_lookup2 <- map_dfr(dataset_info\\$dataset_id, function(dataset_id) {
+  regex <- paste0(".*[(.](", dataset_id, ")[)./].*")
+  name <-
+    input_execution\\$name[grepl(regex, input_execution\\$name)] |>
+    unique()
+  tibble(dataset_id = dataset_id, name = name)
+})
+method_lookup2 <- map_dfr(method_info\\$method_id, function(method_id) {
+  regex <- paste0(".*[(.](", method_id, ")[)./].*")
+  name <-
+    input_execution\\$name[grepl(regex, input_execution\\$name)] |>
+    unique()
+  tibble(method_id = method_id, name = name)
+})
+
+metric_execution_info_ind <- input_execution |>
+  left_join(metric_lookup2, by = "name") |>
+  left_join(dataset_lookup2, by = "name") |>
+  left_join(method_lookup2, by = "name") |>
+  filter(!is.na(metric_id)) %>%
+  rowwise() |>
+  mutate(
+    process_id = gsub(" .*", "", name),
+    submit = strptime(submit, "%Y-%m-%d %H:%M:%S"),
+    exit_code = parse_exit(exit),
+    duration_sec = parse_duration(realtime),
+    cpu_pct = parse_cpu(\\`%cpu\\`),
+    peak_memory_mb = parse_size(peak_vmem),
+    disk_read_mb = parse_size(rchar),
+    disk_write_mb = parse_size(wchar)
+  ) |>
   ungroup()
+
+metric_execution_info <- metric_execution_info_ind |>
+  group_by(dataset_id, method_id, metric_component_name = component_name) |>
+  summarise(
+    resources = list(list(
+      submit = min(submit),
+      exit_code = max(exit_code),
+      duration_sec = sum(duration_sec),
+      cpu_pct = sum(cpu_pct * duration_sec) / sum(duration_sec),
+      peak_memory_mb = max(peak_memory_mb),
+      disk_read_mb = sum(disk_read_mb),
+      disk_write_mb = sum(disk_write_mb)
+    )),
+    .groups = "drop"
+  )
+
 
 # --- write output files -------------------------------------------------------
 cat("Writing output files\\\\n")

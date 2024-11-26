@@ -467,9 +467,9 @@ RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packag
   Rscript -e 'remotes::install_cran(c("purrr", "yaml", "rlang", "processx"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component reporting get_metric_info"
-LABEL org.opencontainers.image.created="2024-11-08T16:53:15Z"
+LABEL org.opencontainers.image.created="2024-11-26T13:48:57Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="f0ee7b727ba6538a3480d54b5a47adae57fceff9"
+LABEL org.opencontainers.image.revision="927b5a66b4826459f6961c4421ef297e15732cf4"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -1066,7 +1066,7 @@ outputs <- map(configs, function(config) {
       info\$task_id <- gsub("/.*", "", config\$namespace)
       info\$id <- info\$name
       info\$name <- NULL
-      info\$component_id <- config\$name
+      info\$component_name <- config\$name
       info\$namespace <- config\$namespace
       info\$commit_sha <- build_info\$git_commit %||% "missing-sha"
       info\$code_version <- "missing-version"
@@ -1081,6 +1081,7 @@ outputs <- map(configs, function(config) {
       # construct v1 format
       out <- list(
         task_id = info\$task_id,
+        component_name = info\$component_name,
         metric_id = info\$id,
         metric_name = info\$label,
         metric_summary = info\$summary,

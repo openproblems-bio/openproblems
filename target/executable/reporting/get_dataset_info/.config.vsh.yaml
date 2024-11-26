@@ -103,9 +103,9 @@ build_info:
   output: "target/executable/reporting/get_dataset_info"
   executable: "target/executable/reporting/get_dataset_info/get_dataset_info"
   viash_version: "0.9.0"
-  git_commit: "f0ee7b727ba6538a3480d54b5a47adae57fceff9"
+  git_commit: "927b5a66b4826459f6961c4421ef297e15732cf4"
   git_remote: "https://github.com/openproblems-bio/openproblems"
-  git_tag: "v1.0.0-1421-gf0ee7b72"
+  git_tag: "v1.0.0-1422-g927b5a66"
 package_config:
   name: "openproblems"
   version: "build_main"

@@ -21,7 +21,7 @@ for TASK in "task_perturbation_prediction"; do
   # # temp sync
   # aws s3 sync $INPUT_DIR output/temp
 
-  echo "Processing $TASK - $DATE"
+  echo "Processing $TASK - $DATE -> $OUTPUT_DIR"
 
   # start the run
   NXF_VER=23.10.0 nextflow run . \
@@ -40,5 +40,5 @@ for TASK in "task_perturbation_prediction"; do
     --publish_dir "$OUTPUT_DIR"
 
   # cause quarto rerender to index page when in preview mode
-  touch ../website/results/$TASK/index.qmd
+  touch ../website/results/$TASK_STRIP_PREFIX/index.qmd
 done

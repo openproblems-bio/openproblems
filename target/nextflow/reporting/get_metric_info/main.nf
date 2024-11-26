@@ -2943,9 +2943,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/get_metric_info",
     "viash_version" : "0.9.0",
-    "git_commit" : "f0ee7b727ba6538a3480d54b5a47adae57fceff9",
+    "git_commit" : "927b5a66b4826459f6961c4421ef297e15732cf4",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1421-gf0ee7b72"
+    "git_tag" : "v1.0.0-1422-g927b5a66"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3068,7 +3068,7 @@ outputs <- map(configs, function(config) {
       info\\$task_id <- gsub("/.*", "", config\\$namespace)
       info\\$id <- info\\$name
       info\\$name <- NULL
-      info\\$component_id <- config\\$name
+      info\\$component_name <- config\\$name
       info\\$namespace <- config\\$namespace
       info\\$commit_sha <- build_info\\$git_commit %||% "missing-sha"
       info\\$code_version <- "missing-version"
@@ -3083,6 +3083,7 @@ outputs <- map(configs, function(config) {
       # construct v1 format
       out <- list(
         task_id = info\\$task_id,
+        component_name = info\\$component_name,
         metric_id = info\\$id,
         metric_name = info\\$label,
         metric_summary = info\\$summary,
