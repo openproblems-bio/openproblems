@@ -28,9 +28,13 @@
 
 - Update `dataset_id` for `tenx_visium`, `zenodo_spatial`, `zenodo_spatial_slidetags` datasets and use `mouse_brain_coronal` as a test resource in the `spatially_variable_genes` task (PR #908).
 
+- Update `get_task_info`, `get_method_info` and `get_metrics_info` reporting components with more info and extend output (PR #915).
+
 ## Bug fixes
 
 - Fix extracting metadata from anndata files in the `extract_metadata` component (PR #914).
+
+- Fix path in `touch` cmd in `reporting/process_task_results/run_test.sh` (PR #915).
 
 # openproblems v2.0.0
 

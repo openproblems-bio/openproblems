@@ -5,7 +5,7 @@ library(rlang, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input = "resources_test/openproblems/task_results_v3/raw/method_configs.yaml",
+  input = "method_configs.yaml",
   output = "resources_test/openproblems/task_results_v3/processed/method_info.json"
 )
 ## VIASH END
@@ -27,7 +27,7 @@ outputs <- map(configs, function(config) {
   info <- config$info
 
   # add extra info
-  info$config_path <- gsub(".*/src/", "src/", build_info$config)
+  info$comp_path <- gsub(".*/src/", "src/", build_info$config) %>% gsub("/config.vsh.yaml", "", .)
   info$task_id <- gsub("/.*", "", config$namespace)
   info$id <- config$name
   info$namespace <- config$namespace
@@ -35,13 +35,48 @@ outputs <- map(configs, function(config) {
   info$summary <- config$summary %||% info$summary
   info$description <- config$description %||% info$description
   info$commit_sha <- build_info$git_commit %||% "missing-sha"
-  info$code_version <- "missing-version"
+  info$code_version <- config$version
+  info$code_url <- config$links$repository
+  info$documentation_url <- config$links$documentation
+  # Check if the method has a docker container to create an image url. If it does not have a docker it will be a nextflow component consisting of different components that will have a docker image.
+  engines <- config$engines
+  has_docker <- any(map_lgl(engines, ~ .x$type == "docker"))
+  if (has_docker) {
+    info$image <- paste0(
+      "https://",
+      config$links$docker_registry, "/",
+      config$package_config$organization, "/",
+      config$package_config$name, "/",
+      gsub("src/", "", info$comp_path),
+      ":",
+      info$code_version
+    )
+  }  else {
+    info$image <- paste0(
+      "https://github.com/orgs/openproblems-bio/packages?repo_name=",
+      config$package_config$name,
+      "&q=",
+      gsub("src/", "", info$comp_path)
+    )
+  }
   info$implementation_url <- paste0(
     build_info$git_remote, "/blob/",
     build_info$git_commit, "/",
-    info$config_path
+    info$comp_path
   )
   info$type_info <- NULL
+
+  # Flatten references
+  if (!is.null(config$references) && config$references != "") {
+    info <- imap(config$references, function(value, key) {
+      info[[paste0("references_", key)]] <- value
+      return(info)
+    })[[1]]
+  }
+  info$references <- NULL
+
+  print(info)
+
 
   # ↑ this could be used as the new format
 
@@ -53,10 +88,13 @@ outputs <- map(configs, function(config) {
     method_summary = info$summary,
     method_description = info$description,
     is_baseline = grepl("control", info$type),
-    paper_reference = info$reference %||% NA_character_,
-    code_url = info$repository_url %||% NA_character_,
+    references_doi = info$references_doi %||% NA_character_,
+    references_bibtex = info$references_bibtex %||% NA_character_,
+    code_url = info$code_url %||% NA_character_,
+    documentation_url = info$documentation_url %||% NA_character_,
+    image = info$image %||% NA_character_,
     implementation_url = info$implementation_url %||% NA_character_,
-    code_version = NA_character_,
+    code_version = info$code_version %||% NA_character_,
     commit_sha = info$commit_sha
   )
 
