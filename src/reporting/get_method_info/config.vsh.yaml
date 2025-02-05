@@ -1,6 +1,6 @@
 name: get_method_info
 namespace: reporting
-description: Convert method info YAML to schema-compliant JSON
+description: Convert method configs YAML to schema-compliant JSON
 
 argument_groups:
   - name: Inputs
