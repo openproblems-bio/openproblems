@@ -1,35 +1,48 @@
 name: get_method_info
 namespace: reporting
-description: Extract method info
-arguments:
-  - name: --input
-    type: file
-    description: A yaml file
-    required: true
-    example: resources_test/openproblems/task_results_v3/raw/method_configs.yaml
-  - name: --output
-    type: file
-    direction: output
-    default: output.json
-    description: Output json
-    info:
-      format:
-        type: json
-        # TODO: add schema
+description: Convert method info YAML to schema-compliant JSON
+
+argument_groups:
+  - name: Inputs
+    arguments:
+    - name: --input
+      type: file
+      description: A YAML file containing method configs
+      required: true
+      example: resources_test/openproblems/task_results_v4/raw/method_configs.yaml
+
+  - name: Inputs
+    arguments:
+    - name: --output
+      type: file
+      direction: output
+      default: method_info.json
+      description: Output JSON file matching method info schema
+      info:
+        format:
+          type: json
+          schema: /src/reporting/schemas/method_info_schema.json
+      example: resources_test/openproblems/task_results_v4/processed/method_info.json
+
 resources:
   - type: r_script
     path: script.R
+
 test_resources:
   - type: python_script
     path: /common/component_tests/run_and_check_output.py
   - path: /resources_test/openproblems/task_results_v3
     dest: resources_test/openproblems/task_results_v3
+
 engines:
   - type: docker
     image: openproblems/base_r:1.0.0
     setup:
       - type: r
-        cran: [ purrr, yaml, rlang, processx ]
+        cran:
+        - purrr
+        - stringr
+
 runners:
   - type: executable
   - type: nextflow

@@ -73,8 +73,8 @@
   },
   "required": [
     "name",
-    "commit",
     "label",
+    "commit",
     "summary",
     "description",
     "repository",
