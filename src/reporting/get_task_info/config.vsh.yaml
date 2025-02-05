@@ -1,35 +1,46 @@
 name: get_task_info
 namespace: reporting
-description: Extract task info
-arguments:
-  - name: --input
-    type: file
-    description: A yaml file
-    required: true
-    example: resources_test/openproblems/task_results_v3/raw/task_info.yaml
-  - name: --output
-    type: file
-    direction: output
-    default: output.json
-    description: Output json
-    info:
-      format:
-        type: json
-        # TODO: add schema
+description: Convert task info YAML to schema-compliant JSON
+
+argument_groups:
+  - name: Inputs
+    arguments:
+    - name: --input
+      type: file
+      description: Task info YAML file
+      required: true
+      example: resources_test/openproblems/task_results_v4/raw/task_info.yaml
+
+  - name: Outputs
+    arguments:
+    - name: --output
+      type: file
+      direction: output
+      default: task_info.json
+      description: Output JSON file matching task info schema
+      info:
+        format:
+          type: json
+          schema: /src/reporting/schemas/task_info_schema.json
+
 resources:
   - type: r_script
     path: script.R
+
 test_resources:
   - type: python_script
     path: /common/component_tests/run_and_check_output.py
-  - path: /resources_test/openproblems/task_results_v3
-    dest: resources_test/openproblems/task_results_v3
+  - path: /resources_test/openproblems/task_results_v4
+    dest: resources_test/openproblems/task_results_v4
+
 engines:
   - type: docker
     image: openproblems/base_r:1.0.0
     setup:
       - type: r
-        cran: [ purrr, yaml, rlang, processx ]
+        cran:
+        - purrr
+
 runners:
   - type: executable
   - type: nextflow

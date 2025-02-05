@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openproblems.bio/schemas/references_schema.json",
+  "title": "Associated references",
+  "anyOf": [
+    {
+      "description": "List of bibliography keys (for processed output)",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "description": "Bibliography entries (for intermediate files)",
+      "type": "object",
+      "properties": {
+        "doi": {
+          "description": "List of DOIs",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bibtex": {
+          "description": "List of BibTeX entries",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["doi", "bibtex"]
+    }
+  ]
+}
