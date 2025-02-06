@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openproblems.bio/schemas/task_info_schema.json",
+  "$id": "https://openproblems.bio/schemas/method_info_schema.json",
   "title": "Method info",
   "description": "Information about methods in a task",
   "type": "array",

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openproblems.bio/schemas/task_info_schema.json",
+  "$id": "https://openproblems.bio/schemas/metric_info_schema.json",
   "title": "Metric info",
   "description": "Information about metrics in a task",
   "type": "array",

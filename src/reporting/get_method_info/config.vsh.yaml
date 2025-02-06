@@ -11,7 +11,7 @@ argument_groups:
       required: true
       example: resources_test/openproblems/task_results_v4/raw/method_configs.yaml
 
-  - name: Inputs
+  - name: Outputs
     arguments:
     - name: --output
       type: file
@@ -31,8 +31,8 @@ resources:
 test_resources:
   - type: python_script
     path: /common/component_tests/run_and_check_output.py
-  - path: /resources_test/openproblems/task_results_v3
-    dest: resources_test/openproblems/task_results_v3
+  - path: /resources_test/openproblems/task_results_v4
+    dest: resources_test/openproblems/task_results_v4
 
 engines:
   - type: docker
