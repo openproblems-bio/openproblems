@@ -1,63 +1,77 @@
 name: get_results
 namespace: reporting
-description: Extract execution info
+description: Create a schema-compliant results JSON
+
 argument_groups:
   - name: Inputs
     arguments:
       - name: --input_scores
         type: file
-        description: Scores file
-        example: resources_test/openproblems/task_results_v3/raw/score_uns.yaml
-      - name: --input_execution
+        description: Scores YAML file
+        required: true
+        example: resources_test/openproblems/task_results_v4/raw/score_uns.yaml
+      - name: --input_trace
         type: file
-        description: Nextflow log file
-        example: resources_test/openproblems/task_results_v3/raw/trace.txt
+        description: Nextflow trace file
+        required: true
+        example: resources_test/openproblems/task_results_v4/raw/trace.txt
       - name: --input_dataset_info
         type: file
-        description: Method info file
-        example: resources_test/openproblems/task_results_v3/processed/dataset_info.json
+        description: Dataset info JSON file
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/dataset_info.json
       - name: --input_method_info
         type: file
-        description: Method info file
-        example: resources_test/openproblems/task_results_v3/processed/method_info.json
+        description: Method info JSON file
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/method_info.json
       - name: --input_metric_info
         type: file
-        description: Metric info file
-        example: resources_test/openproblems/task_results_v3/processed/metric_info.json
+        description: Metric info JSON file
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/metric_info.json
+
   - name: Outputs
     arguments:
       - name: --output_results
         type: file
         direction: output
-        description: Output json
+        description: Output JSON file matching results schema
         default: results.json
         info:
           format:
             type: json
-            # TODO: add schema
-      - name: --output_metric_execution_info
+            schema: /src/reporting/schemas/results_schema.json
+      - name: --output_metric_resources
         type: file
         direction: output
-        description: Output metric execution info
-        default: metric_execution_info.json
+        description: Output JSON file matching metric resources schema
+        default: metric_resources.json
         info:
           format:
             type: json
-            # TODO: add schema
+            schema: /src/reporting/schemas/metric_resources_schema.json
+
 resources:
   - type: r_script
     path: script.R
+
 test_resources:
   - type: python_script
     path: /common/component_tests/run_and_check_output.py
-  - path: /resources_test/openproblems/task_results_v3
-    dest: resources_test/openproblems/task_results_v3
+  - path: /resources_test/openproblems/task_results_v4
+    dest: resources_test/openproblems/task_results_v4
+
 engines:
   - type: docker
     image: openproblems/base_r:1.0.0
     setup:
       - type: r
-        cran: [ purrr, yaml, rlang, dplyr, tidyr, readr, lubridate, dynutils, processx ]
+        cran:
+        - lubridate
+        - purrr
+        - stringr
+
 runners:
   - type: executable
   - type: nextflow

@@ -1,302 +1,189 @@
-requireNamespace("jsonlite", quietly = TRUE)
-requireNamespace("yaml", quietly = TRUE)
-requireNamespace("dynutils", quietly = TRUE)
-requireNamespace("readr", quietly = TRUE)
-requireNamespace("lubridate", quietly = TRUE)
-library(dplyr, warn.conflicts = FALSE)
-library(tidyr, warn.conflicts = FALSE)
-library(purrr, warn.conflicts = FALSE)
-library(rlang, warn.conflicts = FALSE)
-
 ## VIASH START
-# raw_dir <- "resources_test/openproblems/task_results_v3/raw"
-# processed_dir <- "resources_test/openproblems/task_results_v3/processed"
-# raw_dir <- "/home/rcannood/workspace/openproblems-bio/task_perturbation_prediction/resources/results/run_2024-10-31_06-14-14"
-# processed_dir <- "/home/rcannood/workspace/openproblems-bio/website/results/perturbation_prediction/data"
-raw_dir <- "/home/rcannood/workspace/openproblems-bio/task_batch_integration/resources/results/run_2024-11-20_12-47-03"
-processed_dir <- "/home/rcannood/workspace/openproblems-bio/website/results/batch_integration/data"
+raw_dir <- "resources_test/openproblems/task_results_v4/raw"
+processed_dir <- "resources_test/openproblems/task_results_v4/processed"
 
 par <- list(
-  # inputs
-  input_scores = paste0(raw_dir, "/score_uns.yaml"),
-  input_execution = paste0(raw_dir, "/trace.txt"),
-  input_dataset_info = paste0(processed_dir, "/dataset_info.json"),
-  input_method_info = paste0(processed_dir, "/method_info.json"),
-  input_method_configs = paste0(raw_dir, "/method_configs.yaml"),
-  input_metric_info = paste0(processed_dir, "/metric_info.json"),
-  # outputs
-  output_results = paste0(processed_dir, "/results.json"),
-  output_metric_execution_info = paste0(processed_dir, "/metric_execution_info.json")
+    # Inputs
+    input_scores = paste0(raw_dir, "/score_uns.yaml"),
+    input_trace = paste0(raw_dir, "/trace.txt"),
+    input_dataset_info = paste0(processed_dir, "/dataset_info.json"),
+    input_method_info = paste0(processed_dir, "/method_info.json"),
+    input_method_configs = paste0(raw_dir, "/method_configs.yaml"),
+    input_metric_info = paste0(processed_dir, "/metric_info.json"),
+    # Outputs
+    output_results = paste0(processed_dir, "/results.json"),
+    output_metric_execution_info = paste0(
+        processed_dir, "/metric_execution_info.json"
+    )
 )
 ## VIASH END
 
-# --- helper functions ---------------------------------------------------------
-cat("Loading helper functions\n")
-parse_exit <- function(x) {
-  if (is.na(x) || x == "-") {
-    NA_integer_
-  } else {
-    as.integer(x)
-  }
-}
-parse_duration <- function(x) {
-  if (is.na(x) || x == "-") {
-    NA_real_
-  } else {
-    as.numeric(lubridate::duration(toupper(x)))
-  }
-}
-parse_cpu <- function(x) {
-  if (is.na(x) || x == "-") {
-    NA_real_
-  } else {
-    as.numeric(gsub(" *%", "", x))
-  }
-}
-parse_size <- function(x) {
-  out <-
-    if (is.na(x) || x == "-") {
-      NA_integer_
-    } else if (grepl("TB", x)) {
-      as.numeric(gsub(" *TB", "", x)) * 1024 * 1024
-    } else if (grepl("GB", x)) {
-      as.numeric(gsub(" *GB", "", x)) * 1024
-    } else if (grepl("MB", x)) {
-      as.numeric(gsub(" *MB", "", x))
-    } else if (grepl("KB", x)) {
-      as.numeric(gsub(" *KB", "", x)) / 1024
-    } else if (grepl("B", x)) {
-      as.numeric(gsub(" *B", "", x)) / 1024 / 1024
-    } else {
-      NA_integer_
-    }
-  as.integer(ceiling(out))
+################################################################################
+#                               FUNCTIONS
+################################################################################
+
+parse_exit_code <- function(exit_codes) {
+    as.integer(exit_codes)
 }
 
-# --- read input files ---------------------------------------------------------
-cat("Reading input files\n")
-# read scores
-raw_scores <-
-  yaml::yaml.load_file(par$input_scores) %>%
-  map_df(function(x) {
-    tryCatch({
-      as_tibble(as.data.frame(
-        x[c("dataset_id", "method_id", "metric_ids", "metric_values")]
-      ))
-    }, error = function(e) {
-      message("Encountered error while reading scores.\n  Error: ", e$message, "\n  Data: ", paste(paste0(names(x), "=", x), collapse = ", "))
-      NULL
-    })
-  })
-
-# read metric info
-dataset_info <- jsonlite::read_json(par$input_dataset_info, simplifyVector = TRUE)
-method_info <- jsonlite::read_json(par$input_method_info, simplifyVector = TRUE)
-metric_info <- jsonlite::read_json(par$input_metric_info, simplifyVector = TRUE)
-
-# --- process scores and execution info ----------------------------------------
-cat("Processing scores and execution info\n")
-scale_scores <- function(values, is_control, maximize) {
-  control_values <- values[is_control & !is.na(values)]
-  if (length(control_values) < 2) {
-    return(NA_real_)
-  }
-
-  min_control_value <- min(control_values)
-  max_control_value <- max(control_values)
-
-  if (min_control_value == max_control_value) {
-    return(NA_real_)
-  }
-
-  scaled <- (values - min_control_value) / (max_control_value - min_control_value)
-
-  if (maximize) {
-    scaled
-  } else {
-    1 - scaled
-  }
+parse_duration <- function(durations) {
+    durations |>
+        toupper() |>
+        lubridate::duration() |>
+        as.numeric()
 }
-aggregate_scores <- function(scaled_score) {
-  mean(pmin(1, pmax(0, scaled_score)) %|% 0)
+
+parse_cpu_pct <- function(cpu_pcts) {
+    cpu_pcts |>
+        stringr::str_remove(" *%") |>
+        as.numeric()
 }
-scores <- raw_scores %>%
-  complete(
-    dataset_id,
-    method_id,
-    metric_ids,
-    fill = list(metric_values = NA_real_)
-  ) %>%
-  left_join(method_info %>% select(method_id, is_baseline), by = "method_id") %>%
-  left_join(metric_info %>% select(metric_ids = metric_id, maximize), by = "metric_ids") %>%
-  group_by(metric_ids, dataset_id) %>%
-  mutate(scaled_score = scale_scores(metric_values, is_baseline, maximize[[1]]) %|% 0) %>%
-  group_by(dataset_id, method_id) %>%
-  summarise(
-    metric_values = list(as.list(setNames(metric_values, metric_ids))),
-    scaled_scores = list(as.list(setNames(scaled_score, metric_ids))),
-    mean_score = aggregate_scores(scaled_score),
-    .groups = "drop"
-  )
 
+parse_memory <- function(memories) {
+    values <- memories |>
+        stringr::str_remove("[[:blank:][:alpha:]]+") |>
+        as.numeric()
 
-# read execution info
-# -> only keep the last execution of each process
-input_execution <- readr::read_tsv(par$input_execution) |>
-  group_by(name) |>
-  mutate(num_runs = n()) |>
-  slice(which.max(submit)) |>
-  ungroup()
+    units <- stringr::str_remove(memories, "[[:digit:]\\.[:blank:]]+")
 
-method_lookup <- map_dfr(method_info$method_id, function(method_id) {
-  regex <- paste0("(.*:", method_id, ":[^ ]*)")
-  name <-
-    input_execution$name[grepl(regex, input_execution$name)] |>
-    unique()
-  name_ <- name[!grepl(":publishStatesProc", name)]
-  tibble(method_id = method_id, name = name_)
-})
-dataset_lookup <- map_dfr(dataset_info$dataset_id, function(dataset_id) {
-  regex <- paste0(".*[(.](", dataset_id, ")[)./].*")
-  name <-
-    input_execution$name[grepl(regex, input_execution$name)] |>
-    unique()
-  tibble(dataset_id = dataset_id, name = name)
+    multipliers <- dplyr::case_when(
+        units == "TB" ~ 1024 * 1024,
+        units == "GB" ~ 1024,
+        units == "MB" ~ 1,
+        units == "KB" ~ 1 / 1024,
+        units == "B" ~ 1 / 1024 / 1024,
+        TRUE ~ NA
+    )
+
+    (values * multipliers) |>
+        ceiling() |>
+        as.integer()
+}
+
+################################################################################
+#                              MAIN SCRIPT
+################################################################################
+
+cat("====== Get results ======\n")
+
+cat("\n>>> Reading input files...\n")
+cat("Reading method info from '", par$input_method_info, "'...\n", sep = "")
+method_info <- jsonlite::read_json(par$input_method_info)
+cat("Reading dataset info from '", par$input_dataset_info, "'...\n", sep = "")
+dataset_info <- jsonlite::read_json(par$input_dataset_info)
+cat("Reading scores from '", par$input_scores, "'...\n", sep = "")
+scores <- yaml::yaml.load_file(par$input_scores) |>
+    purrr::map_dfr(\(.x) {
+        .x[c("dataset_id", "method_id", "metric_ids", "metric_values")] |>
+            as.data.frame()
+    }) |>
+    dplyr::rename(
+        dataset_name = dataset_id,
+        method_name = method_id,
+        metric_name = metric_ids,
+        metric_value = metric_values
+    )
+cat("Reading execution trace from '", par$input_trace, "'...\n", sep = "")
+trace <- readr::read_tsv(
+    par$input_trace,
+    col_types = readr::cols(
+        task_id = readr::col_integer(),
+        submit = readr::col_datetime(),
+        .default = readr::col_character(),
+    ),
+    na = c("", "-", "NA")
+) |>
+    # Only keep the most recent run of each process
+    dplyr::group_by(name) |>
+    dplyr::slice_max(submit) |>
+    dplyr::ungroup() |>
+    # Parse resources
+    dplyr::mutate(
+        run_exit_code = parse_exit_code(exit),
+        run_duration_secs = parse_duration(realtime),
+        run_cpu_pct = parse_cpu_pct(`%cpu`),
+        run_peak_memory_mb = parse_memory(peak_vmem),
+        run_disk_read_mb = parse_memory(rchar),
+        run_disk_write_mb = parse_memory(wchar)
+    )
+
+cat("\n>>> Mapping names to processes...\n")
+# Get names from info files instead of scores to avoid missing anything that
+# didn't result in any metric scores (i.e. a method that always fails)
+method_names <- purrr::map_chr(method_info, "name")
+dataset_names <- purrr::map_chr(dataset_info, "name")
+
+cat("Mapping methods...\n", sep = "")
+method_processes <- purrr::map_dfr(method_names, \(.method) {
+    is_method <- stringr::str_detect(
+        trace$name,
+        paste0(":", .method, ":")
+    )
+
+    processes <- unique(trace$name[is_method])
+
+    data.frame(method_name = .method, process_name = processes)
 })
 
-# parse values
-execution_info_ind <- input_execution |>
-  left_join(method_lookup, by = "name") |>
-  left_join(dataset_lookup, by = "name") |>
-  filter(!is.na(method_id)) %>%
-  rowwise() |>
-  mutate(
-    process_id = gsub(" .*", "", name),
-    submit = strptime(submit, "%Y-%m-%d %H:%M:%S"),
-    exit_code = parse_exit(exit),
-    duration_sec = parse_duration(realtime),
-    cpu_pct = parse_cpu(`%cpu`),
-    peak_memory_mb = parse_size(peak_vmem),
-    disk_read_mb = parse_size(rchar),
-    disk_write_mb = parse_size(wchar)
-  ) |>
-  ungroup()
+cat("Mapping datasets...\n", sep = "")
+dataset_processes <- purrr::map_dfr(dataset_names, \(.dataset) {
+    is_dataset <- stringr::str_detect(
+        trace$name,
+        paste0("[(.]", .dataset, "[)./]")
+    )
 
-execution_info <- execution_info_ind |>
-  group_by(dataset_id, method_id) |>
-  summarise(
-    resources = list(list(
-      submit = min(submit),
-      exit_code = max(exit_code),
-      duration_sec = sum(duration_sec),
-      cpu_pct = sum(cpu_pct * duration_sec) / sum(duration_sec),
-      peak_memory_mb = max(peak_memory_mb),
-      disk_read_mb = sum(disk_read_mb),
-      disk_write_mb = sum(disk_write_mb)
-    )),
-    .groups = "drop"
-  )
+    processes <- unique(trace$name[is_dataset])
 
-# combine scores with execution info
-# fill up missing entries with NAs and 0s
-metric_ids <- unique(raw_scores$metric_ids)
-rep_names <- function(val) {
-  setNames(
-    as.list(rep(val, length(metric_ids))),
-    metric_ids
-  )
-}
-out <- full_join(
-  scores,
-  execution_info,
-  by = c("method_id", "dataset_id")
-) %>%
-  rowwise() %>%
-  mutate(
-    task_id = par$task_id,
-    metric_values = list(metric_values %||% rep_names(NA_real_)),
-    scaled_scores = list(scaled_scores %||% rep_names(0)),
-    mean_score = mean_score %|% 0,
-  ) %>%
-  ungroup()
-
-
-# --- process metric execution info --------------------------------------------
-cat("Processing metric execution info\n")
-
-# manually add component id to metric info
-metric_info$component_name <- metric_info$component_name %||% rep(NA_character_, nrow(metric_info)) %|%
-  gsub(".*/([^/]*)/config\\.vsh\\.yaml", "\\1", metric_info$implementation_url)
-
-metric_lookup2 <- pmap_dfr(metric_info, function(metric_id, component_name, ...) {
-  regex <- paste0("(.*:", component_name, ":[^ ]*)")
-  name <-
-    input_execution$name[grepl(regex, input_execution$name)] |>
-    unique()
-  name_ <- name[!grepl(":publishStatesProc", name)]
-  tibble(metric_id = metric_id, component_name = component_name, name = name_)
-})
-dataset_lookup2 <- map_dfr(dataset_info$dataset_id, function(dataset_id) {
-  regex <- paste0(".*[(.](", dataset_id, ")[)./].*")
-  name <-
-    input_execution$name[grepl(regex, input_execution$name)] |>
-    unique()
-  tibble(dataset_id = dataset_id, name = name)
-})
-method_lookup2 <- map_dfr(method_info$method_id, function(method_id) {
-  regex <- paste0(".*[(.](", method_id, ")[)./].*")
-  name <-
-    input_execution$name[grepl(regex, input_execution$name)] |>
-    unique()
-  tibble(method_id = method_id, name = name)
+    data.frame(dataset_name = .dataset, process_name = processes)
 })
 
-metric_execution_info_ind <- input_execution |>
-  left_join(metric_lookup2, by = "name") |>
-  left_join(dataset_lookup2, by = "name") |>
-  left_join(method_lookup2, by = "name") |>
-  filter(!is.na(metric_id)) %>%
-  rowwise() |>
-  mutate(
-    process_id = gsub(" .*", "", name),
-    submit = strptime(submit, "%Y-%m-%d %H:%M:%S"),
-    exit_code = parse_exit(exit),
-    duration_sec = parse_duration(realtime),
-    cpu_pct = parse_cpu(`%cpu`),
-    peak_memory_mb = parse_size(peak_vmem),
-    disk_read_mb = parse_size(rchar),
-    disk_write_mb = parse_size(wchar)
-  ) |>
-  ungroup()
+cat("\n>>> Extracting resources...\n")
+resources <- trace |>
+    # Add method names
+    dplyr::left_join(method_processes, by = c(name = "process_name")) |>
+    # Add dataset names
+    dplyr::left_join(dataset_processes, by = c(name = "process_name")) |>
+    # Select only processes with a method name
+    dplyr::filter(!is.na(method_name)) |>
+    # Summarise the resources columns
+    dplyr::group_by(dataset_name, method_name) |>
+    dplyr::summarise(
+        run_exit_code = list(run_exit_code),
+        run_duration_secs = list(run_duration_secs),
+        run_cpu_pct = list(run_cpu_pct),
+        run_peak_memory_mb = list(run_peak_memory_mb),
+        run_disk_read_mb = list(run_disk_read_mb),
+        run_disk_write_mb = list(run_disk_write_mb),
+        .groups = "drop"
+    )
 
-metric_execution_info <- metric_execution_info_ind |>
-  group_by(dataset_id, method_id, metric_component_name = component_name) |>
-  summarise(
-    resources = list(list(
-      submit = min(submit),
-      exit_code = max(exit_code),
-      duration_sec = sum(duration_sec),
-      cpu_pct = sum(cpu_pct * duration_sec) / sum(duration_sec),
-      peak_memory_mb = max(peak_memory_mb),
-      disk_read_mb = sum(disk_read_mb),
-      disk_write_mb = sum(disk_write_mb)
-    )),
-    .groups = "drop"
-  )
+cat("\n>>> Summarising results...\n")
+results <- scores |>
+    # There shouldn't be any but remove missing/NaN values just in case
+    dplyr::filter(
+        !is.na(metric_value) & is.finite(metric_value)
+    ) |>
+    dplyr::group_by(dataset_name, method_name) |>
+    dplyr::summarise(
+        metric_names = list(metric_name),
+        metric_values = list(metric_value),
+        .groups = "drop"
+    ) |>
+    dplyr::left_join(resources, by = c("dataset_name", "method_name")) |>
+    # TODO: Add these once available in output
+    dplyr::mutate(
+        paramset_name = NA,
+        paramset = NA
+    )
 
-
-# --- write output files -------------------------------------------------------
-cat("Writing output files\n")
-# write output files
+cat("\n>>> Writing output files...\n")
+cat("Writing results to '", par$output_results, "'...\n", sep = "")
 jsonlite::write_json(
-  purrr::transpose(out),
-  par$output_results,
-  auto_unbox = TRUE,
-  pretty = TRUE
+    results,
+    par$output_results,
+    pretty = TRUE,
+    null = "null",
+    na = "null"
 )
-jsonlite::write_json(
-  purrr::transpose(metric_execution_info),
-  par$output_metric_execution_info,
-  auto_unbox = TRUE,
-  pretty = TRUE
-)
+
+cat("\n>>> Done!\n")

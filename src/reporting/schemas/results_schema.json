@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openproblems.bio/schemas/results_schema.json",
+  "title": "Results",
+  "description": "Results for a task",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "dataset_name" : {
+        "description": "Identifier for the dataset associated with these results",
+        "type": "string"
+      },
+      "method_name" : {
+        "description": "Identifier for the method associated with these results",
+        "type": "string"
+      },
+      "paramset_name" : {
+        "description": "Identifier for the method parameter set associated with these results",
+        "type": ["null", "string"]
+      },
+      "paramset" : {
+        "description": "Method parameter set for these results",
+        "type": ["null", "object"]
+      },
+      "run_duration_secs" : {
+        "description": "Duration of the method run in seconds. Can be multiple if the method is a workflow.",
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      },
+      "run_cpu_pct" : {
+        "description": "CPU usage percentage of the method run. Can be multiple if the method is a workflow.",
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      },
+      "run_peak_memory_mb" : {
+        "description": "Peak memory usage of the method run in MB. Can be multiple if the method is a workflow.",
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      },
+      "run_disk_read_mb" : {
+        "description": "Disk read usage of the method run in MB. Can be multiple if the method is a workflow.",
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      },
+      "run_disk_write_mb" : {
+        "description": "Disk write usage of the method run in MB. Can be multiple if the method is a workflow.",
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      },
+      "run_exit_code" : {
+        "description": "Exit code of the method run. Can be multiple if the method is a workflow.",
+        "type": "array",
+        "items": {
+          "type": "integer"
+        }
+      },
+      "metric_names" : {
+        "description": "List of metric identifiers",
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "metric_values" : {
+        "description": "List of metric values in the same order as metric_names",
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      }
+    },
+    "required": [
+      "dataset_name",
+      "method_name",
+      "paramset_name",
+      "paramset",
+      "run_duration_secs",
+      "run_cpu_pct",
+      "run_peak_memory_mb",
+      "run_disk_read_mb",
+      "run_disk_write_mb",
+      "run_exit_code",
+      "metric_names",
+      "metric_values"
+    ]
+  }
+}
