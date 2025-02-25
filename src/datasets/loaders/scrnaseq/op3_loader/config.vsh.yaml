@@ -1,0 +1,71 @@
+functionality:
+  name: op3_loader
+  namespace: datasets/loaders/scrnaseq
+  description: |
+    Loads and preprocesses the OP3 dataset from GEO accession GSE279945.
+  arguments:
+    - name: "--data_type"
+      type: string
+      description: "Type of data to load: 'sc' for single-cell RNA-seq or 'multiome' for multimodal data"
+      default: "sc"
+      choices: ["sc", "multiome"]
+    - name: "--donor_id"
+      type: string
+      description: "Donor ID to filter for (1, 2, or 3). If not specified, all donors are included."
+      required: false
+    - name: "--cell_type"
+      type: string
+      description: "Cell type to filter for (T cells, B cells, NK cells, or Myeloid). If not specified, all cell types are included."
+      required: false
+    - name: "--perturbation"
+      type: string
+      description: "Perturbation to filter for. If not specified, all perturbations are included."
+      required: false
+    - name: "--min_cells"
+      type: integer
+      description: "Minimum number of cells expressing a gene"
+      default: 3
+    - name: "--min_genes"
+      type: integer
+      description: "Minimum number of genes expressed in a cell"
+      default: 200
+    - name: "--dataset_id"
+      type: string
+      description: "Unique identifier for the dataset"
+      default: "op3"
+    - name: "--dataset_name"
+      type: string
+      description: "Human-readable name for the dataset"
+      default: "OP3: single-cell multimodal dataset in PBMCs for perturbation prediction benchmarking"
+    - name: "--dataset_summary"
+      type: string
+      description: "Short summary of the dataset"
+      default: "The Open Problems Perurbation Prediction (OP3) dataset with small molecule perturbations in PBMCs"
+    - name: "--dataset_description"
+      type: string
+      description: "Detailed description of the dataset"
+      default: "The OP3 dataset is to-date the largest single-cell small molecule perturbation dataset in primary tissue with multiple donor replicates."
+    - name: "--output"
+      type: file
+      direction: output
+      description: "Path to output h5ad file"
+      required: true
+    - name: "--output_compression"
+      type: string
+      description: "Compression format for the output file"
+      default: "gzip"
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: python:3.11
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - anndata
+          - pandas
+          - numpy
+          - requests
+          - tqdm
