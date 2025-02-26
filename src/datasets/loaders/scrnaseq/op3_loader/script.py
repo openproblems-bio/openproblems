@@ -52,16 +52,10 @@ def download_file(url, destination):
             size = file.write(data)
             bar.update(size)
 
-def download_op3_data(data_type="sc"):
+def download_op3_data():
     """Download the OP3 dataset from GEO."""
     base_url = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/"
-    
-    if data_type == "sc":
-        filename = "GSE279945_sc_counts_processed.h5ad"
-    elif data_type == "multiome":
-        filename = "GSE279945_multiome_counts_processed.h5ad"
-    else:
-        raise ValueError(f"Invalid data_type: {data_type}")
+    filename = "GSE279945_sc_counts_processed.h5ad"
     
     url = f"{base_url}{filename}"
     cache_dir = os.path.join(os.path.expanduser("~"), ".cache", "op3_loader")
@@ -108,16 +102,14 @@ def filter_by_counts(adata, par):
     return adata
 
 def move_x_to_layers(adata):
-    """Move .X to .layers['counts'] and calculate QC metrics."""
+    """Move .X to .layers['counts'] and normalize data."""
     logger.info("Moving .X to .layers['counts']")
     adata.layers["counts"] = adata.X.copy()
     
-    # Calculate QC metrics
-    logger.info("Calculating QC metrics")
-    sc.pp.calculate_qc_metrics(adata, inplace=True)
-    
     # Normalize and log transform
     logger.info("Normalizing and log-transforming data")
+    # Normalization scales gene expression values to be comparable between cells
+    # by accounting for differences in sequencing depth
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
 
@@ -163,41 +155,51 @@ def write_anndata(adata, par):
     adata.write_h5ad(par["output"], compression=par["output_compression"])
 
 def main(par, meta):
-    """Main function to process the data."""
-    # Download data
-    data_path = download_op3_data(par["data_type"])
+    """Main function."""
+    logger.info("Starting OP3 loader")
     
-    # Load data
+    # Download the data
+    data_path = download_op3_data()
+    
+    # Load the data
     logger.info(f"Loading data from {data_path}")
     adata = sc.read_h5ad(data_path)
     
-    # Print initial shape
-    logger.info(f"Initial dataset: {adata}")
+    # Filter by donor_id if specified
+    if par["donor_id"] is not None:
+        logger.info(f"Filtering for donor_id: {par['donor_id']}")
+        adata = adata[adata.obs["donor_id"] == par["donor_id"]]
     
-    # Filter data
-    adata = filter_adata(
-        adata, 
-        donor_id=par.get("donor_id"), 
-        cell_type=par.get("cell_type"), 
-        perturbation=par.get("perturbation")
-    )
+    # Filter by cell_type if specified
+    if par["cell_type"] is not None:
+        logger.info(f"Filtering for cell_type: {par['cell_type']}")
+        adata = adata[adata.obs["cell_type"] == par["cell_type"]]
     
-    # Filter by counts
-    adata = filter_by_counts(adata, par)
+    # Filter by perturbation if specified
+    if par["perturbation"] is not None:
+        logger.info(f"Filtering for perturbation: {par['perturbation']}")
+        adata = adata[adata.obs["perturbation"] == par["perturbation"]]
     
-    # Process data
+    # Filter cells and genes
+    logger.info("Filtering cells and genes")
+    sc.pp.filter_cells(adata, min_genes=par["min_genes"])
+    sc.pp.filter_genes(adata, min_cells=par["min_cells"])
+    
+    # Move X to layers and normalize
     move_x_to_layers(adata)
     
-    # Add metadata
-    add_metadata_to_uns(adata, par)
-    
-    # Print summary
-    print_summary(adata)
+    # Add dataset metadata
+    logger.info("Adding dataset metadata")
+    adata.uns["dataset_id"] = par["dataset_id"]
+    adata.uns["dataset_name"] = par["dataset_name"]
+    adata.uns["dataset_summary"] = par["dataset_summary"]
+    adata.uns["dataset_description"] = par["dataset_description"]
     
     # Write output
-    write_anndata(adata, par)
+    logger.info(f"Writing output to {par['output']}")
+    adata.write_h5ad(par["output"], compression=par["output_compression"])
     
-    return adata
+    logger.info("Done")
 
 if __name__ == "__main__":
     main(par, meta)
