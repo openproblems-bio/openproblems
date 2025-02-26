@@ -4,11 +4,6 @@ functionality:
   description: |
     Loads and preprocesses the OP3 dataset from GEO accession GSE279945.
   arguments:
-    - name: "--data_type"
-      type: string
-      description: "Type of data to load: 'sc' for single-cell RNA-seq or 'multiome' for multimodal data"
-      default: "sc"
-      choices: ["sc", "multiome"]
     - name: "--donor_id"
       type: string
       description: "Donor ID to filter for (1, 2, or 3). If not specified, all donors are included."
