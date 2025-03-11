@@ -28,29 +28,90 @@ par = {
 meta = {}
 ## VIASH END
 
-def download_file(url, destination):
-    """Download a file from a URL to a destination with progress bar."""
+def download_file(url, destination, max_retries=5):
+    """Download a file from a URL to a destination with progress bar and resume capability."""
+    # Create directory if it doesn't exist
+    os.makedirs(os.path.dirname(destination), exist_ok=True)
+    
+    # Get file size from server
+    response = requests.head(url)
+    total_size_server = int(response.headers.get('content-length', 0))
+    
+    # Check if file exists and is complete
     if os.path.exists(destination):
-        logger.info(f"File already exists at {destination}, skipping download.")
-        return
+        file_size = os.path.getsize(destination)
+        if file_size == total_size_server:
+            logger.info(f"File already exists and is complete at {destination}, skipping download.")
+            return
+        elif file_size < total_size_server:
+            logger.info(f"Resuming download from byte {file_size} of {total_size_server}")
+        else:
+            logger.warning(f"Existing file is larger than expected. Restarting download.")
+            file_size = 0
+    else:
+        file_size = 0
     
-    logger.info(f"Downloading {url} to {destination}")
-    response = requests.get(url, stream=True)
-    response.raise_for_status()
+    # Try to download with retries
+    for attempt in range(max_retries):
+        try:
+            # Set up headers for resume
+            headers = {}
+            mode = 'wb'
+            if file_size > 0:
+                headers['Range'] = f'bytes={file_size}-'
+                mode = 'ab'  # Append to existing file
+            
+            # Make request with resume header if applicable
+            response = requests.get(url, headers=headers, stream=True, timeout=60)
+            
+            # Handle resume response or normal response
+            if response.status_code == 206:  # Partial content
+                content_length = int(response.headers.get('content-length', 0))
+                total_size = content_length + file_size
+            elif response.status_code == 200:  # OK
+                total_size = int(response.headers.get('content-length', 0))
+                file_size = 0  # Reset file size for progress tracking
+            else:
+                logger.error(f"Unexpected status code: {response.status_code}")
+                continue
+            
+            # Download with progress bar
+            with open(destination, mode) as f:
+                with tqdm(
+                    total=total_size,
+                    initial=file_size,
+                    unit='iB',
+                    unit_scale=True,
+                    unit_divisor=1024,
+                    desc=destination
+                ) as bar:
+                    for chunk in response.iter_content(chunk_size=1024*1024):  # 1MB chunks
+                        if chunk:
+                            size = f.write(chunk)
+                            bar.update(size)
+            
+            # Verify file size
+            if os.path.getsize(destination) >= total_size:
+                logger.info(f"Download completed: {destination}")
+                return
+            else:
+                logger.warning(f"Downloaded file size mismatch. Retrying...")
+                file_size = os.path.getsize(destination)
+                
+        except (requests.exceptions.RequestException, IOError) as e:
+            logger.warning(f"Download error (attempt {attempt+1}/{max_retries}): {str(e)}")
+            # Update file size for next attempt
+            if os.path.exists(destination):
+                file_size = os.path.getsize(destination)
+        
+        # Wait before retrying
+        if attempt < max_retries - 1:
+            wait_time = 2 ** attempt  # Exponential backoff
+            logger.info(f"Waiting {wait_time} seconds before retrying...")
+            import time
+            time.sleep(wait_time)
     
-    total_size = int(response.headers.get('content-length', 0))
-    block_size = 1024  # 1 Kibibyte
-    
-    with open(destination, 'wb') as file, tqdm(
-            desc=destination,
-            total=total_size,
-            unit='iB',
-            unit_scale=True,
-            unit_divisor=1024,
-        ) as bar:
-        for data in response.iter_content(block_size):
-            size = file.write(data)
-            bar.update(size)
+    raise Exception(f"Failed to download {url} after {max_retries} attempts")
 
 def download_op3_data():
     """Download the OP3 dataset from GEO."""
@@ -154,6 +215,86 @@ def write_anndata(adata, par):
     logger.info(f"Writing AnnData object to '{par['output']}'")
     adata.write_h5ad(par["output"], compression=par["output_compression"])
 
+def filter_op3_data(adata):
+    """
+    Filter the OP3 dataset based on specific criteria for each small molecule and cell type.
+    
+    This function applies a series of filters to remove specific combinations of small molecules,
+    donors, and cell types that have inconsistent representation across the dataset.
+    
+    Parameters
+    ----------
+    adata : AnnData
+        The AnnData object containing the OP3 dataset.
+        
+    Returns
+    -------
+    AnnData
+        The filtered AnnData object.
+    """
+    logger.info("Applying OP3-specific filtering criteria")
+    
+    # Create a boolean mask for filtering observations
+    obs_filt = np.ones(adata.n_obs, dtype=bool)
+    
+    # Alvocidib only T cells in only 2 donors, remove
+    obs_filt = obs_filt & (adata.obs['sm_name'] != "Alvocidib")
+    
+    # BMS-387032 - one donor with only T cells, two other consistent, but only 2 cell types
+    # Leave the 2 cell types in, remove donor 2 with only T cells
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "BMS-387032") & (adata.obs['donor_id'] == "Donor 2"))
+    
+    # BMS-387032 remove myeloid cells and B cells
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "BMS-387032") & 
+                           adata.obs['cell_type'].isin(["B cells", "Myeloid cells"]))
+    
+    # CGP 60474 has only T cells left, remove
+    obs_filt = obs_filt & (adata.obs['sm_name'] != "CGP 60474")
+    
+    # Canertinib - the variation of Myeloid cell proportions is very large, skip Myeloid
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "Canertinib") & 
+                           (adata.obs['cell_type'] == "Myeloid cells"))
+    
+    # Foretinib - large variation in Myeloid cell proportions (some in T cells), skip Myeloid
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "Foretinib") & 
+                           (adata.obs['cell_type'] == "Myeloid cells"))
+    
+    # Ganetespib (STA-9090) - donor 2 has no Myeloid and small NK cells proportions
+    # Skip Myeloid, remove donor 2
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "Ganetespib (STA-9090)") & 
+                           (adata.obs['donor_id'] == "Donor 2"))
+    
+    # IN1451 - donor 2 has no NK or B, remove Donor 2
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "IN1451") & 
+                           (adata.obs['donor_id'] == "Donor 2"))
+    
+    # Navitoclax - donor 3 doesn't have B cells and has different T and Myeloid proportions
+    # Remove donor 3
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "Navitoclax") & 
+                           (adata.obs['donor_id'] == "Donor 3"))
+    
+    # PF-04691502 remove Myeloid (only present in donor 3)
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "PF-04691502") & 
+                           (adata.obs['cell_type'] == "Myeloid cells"))
+    
+    # Proscillaridin A;Proscillaridin-A remove Myeloid, since the variation is very high (4x)
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "Proscillaridin A;Proscillaridin-A") & 
+                           (adata.obs['cell_type'] == "Myeloid cells"))
+    
+    # R428 - skip NK due to high variation (close to 3x)
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "R428") & 
+                           (adata.obs['cell_type'] == "NK cells"))
+    
+    # UNII-BXU45ZH6LI - remove due to large variation across all cell types and missing cell types
+    obs_filt = obs_filt & (adata.obs['sm_name'] != "UNII-BXU45ZH6LI")
+    
+    # Apply the filter
+    filtered_adata = adata[obs_filt].copy()
+    
+    logger.info(f"Filtered data from {adata.n_obs} to {filtered_adata.n_obs} cells")
+    
+    return filtered_adata
+
 def main(par, meta):
     """Main function."""
     logger.info("Starting OP3 loader")
@@ -164,6 +305,10 @@ def main(par, meta):
     # Load the data
     logger.info(f"Loading data from {data_path}")
     adata = sc.read_h5ad(data_path)
+    
+    # Apply OP3-specific filtering
+    logger.info("Applying OP3-specific filtering")
+    adata = filter_op3_data(adata)
     
     # Filter by donor_id if specified
     if par["donor_id"] is not None:

@@ -30,3 +30,7 @@ log.txt
 /.nextflow*
 /work
 output
+
+#
+compare_anndata.py
+
