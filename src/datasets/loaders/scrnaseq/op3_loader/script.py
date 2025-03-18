@@ -127,110 +127,9 @@ def download_op3_data():
     
     return destination
 
-def filter_adata(adata, donor_id=None, cell_type=None, perturbation=None):
-    """Filter AnnData object based on donor_id, cell_type, and perturbation."""
-    n_cells_before = adata.n_obs
-    
-    if donor_id is not None:
-        logger.info(f"Filtering for donor_id: {donor_id}")
-        adata = adata[adata.obs['donor_id'] == donor_id]
-        
-    if cell_type is not None:
-        logger.info(f"Filtering for cell_type: {cell_type}")
-        adata = adata[adata.obs['cell_type'] == cell_type]
-        
-    if perturbation is not None:
-        logger.info(f"Filtering for perturbation: {perturbation}")
-        adata = adata[adata.obs['perturbation'] == perturbation]
-    
-    n_cells_after = adata.n_obs
-    logger.info(f"Filtered from {n_cells_before} to {n_cells_after} cells")
-        
-    return adata
-
-def filter_by_counts(adata, par):
-    """Filter cells and genes by count thresholds."""
-    logger.info("Filtering cells and genes by count thresholds")
-    n_cells_before, n_genes_before = adata.shape
-    
-    # Basic filtering
-    sc.pp.filter_cells(adata, min_genes=par["min_genes"])
-    sc.pp.filter_genes(adata, min_cells=par["min_cells"])
-    
-    n_cells_after, n_genes_after = adata.shape
-    logger.info(f"Removed {n_cells_before - n_cells_after} cells and {n_genes_before - n_genes_after} genes")
-    
-    return adata
-
-def move_x_to_layers(adata):
-    """Move .X to .layers['counts'] and normalize data."""
-    logger.info("Moving .X to .layers['counts']")
-    adata.layers["counts"] = adata.X.copy()
-    
-    # Normalize and log transform
-    logger.info("Normalizing and log-transforming data")
-    # Normalization scales gene expression values to be comparable between cells
-    # by accounting for differences in sequencing depth
-    sc.pp.normalize_total(adata, target_sum=1e4)
-    sc.pp.log1p(adata)
-
-def add_metadata_to_uns(adata, par):
-    """Add standardized metadata to .uns."""
-    logger.info("Adding metadata to .uns")
-    adata.uns['dataset_id'] = par["dataset_id"]
-    adata.uns['dataset_name'] = par["dataset_name"]
-    adata.uns['dataset_summary'] = par["dataset_summary"]
-    adata.uns['dataset_description'] = par["dataset_description"]
-    adata.uns['dataset_organism'] = 'Homo sapiens'
-    adata.uns['dataset_url'] = 'https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE279945'
-    adata.uns['dataset_reference'] = 'GSE279945'
-    adata.uns['dataset_version'] = '1.0.0'
-    adata.uns['processing_status'] = 'processed'
-
-def print_unique(adata, column):
-    """Print unique values in a column."""
-    if column in adata.obs:
-        values = adata.obs[column].unique()
-        if len(values) <= 10:
-            formatted = "', '".join(values)
-            logger.info(f"Unique {column}: ['{formatted}']")
-        else:
-            logger.info(f"Unique {column}: {len(values)} values")
-
-def print_summary(adata):
-    """Print a summary of the dataset."""
-    logger.info(f"Dataset shape: {adata.shape}")
-    logger.info(f"Number of cells: {adata.n_obs}")
-    logger.info(f"Number of genes: {adata.n_vars}")
-    
-    # Print unique values for key columns
-    for column in ['donor_id', 'cell_type', 'perturbation']:
-        print_unique(adata, column)
-        
-    logger.info(f"Layers: {list(adata.layers.keys())}")
-    logger.info(f"Metadata: {list(adata.uns.keys())}")
-
-def write_anndata(adata, par):
-    """Write AnnData object to file."""
-    logger.info(f"Writing AnnData object to '{par['output']}'")
-    adata.write_h5ad(par["output"], compression=par["output_compression"])
-
 def filter_op3_data(adata):
     """
     Filter the OP3 dataset based on specific criteria for each small molecule and cell type.
-    
-    This function applies a series of filters to remove specific combinations of small molecules,
-    donors, and cell types that have inconsistent representation across the dataset.
-    
-    Parameters
-    ----------
-    adata : AnnData
-        The AnnData object containing the OP3 dataset.
-        
-    Returns
-    -------
-    AnnData
-        The filtered AnnData object.
     """
     logger.info("Applying OP3-specific filtering criteria")
     
@@ -295,6 +194,70 @@ def filter_op3_data(adata):
     
     return filtered_adata
 
+def filter_by_counts(adata, par):
+    """Filter cells and genes by count thresholds."""
+    logger.info("Filtering cells and genes by count thresholds")
+    n_cells_before, n_genes_before = adata.shape
+    
+    sc.pp.filter_cells(adata, min_genes=par["min_genes"])
+    sc.pp.filter_genes(adata, min_cells=par["min_cells"])
+    
+    n_cells_after, n_genes_after = adata.shape
+    logger.info(f"Removed {n_cells_before - n_cells_after} cells and {n_genes_before - n_genes_after} genes")
+    
+    return adata
+
+def move_x_to_layers(adata):
+    """Move .X to .layers['counts'] and normalize data."""
+    logger.info("Moving .X to .layers['counts']")
+    adata.layers["counts"] = adata.X.copy()
+    
+    # Normalize and log transform
+    logger.info("Normalizing and log-transforming data")
+    sc.pp.normalize_total(adata, target_sum=1e4)
+    sc.pp.log1p(adata)
+
+def add_metadata_to_uns(adata, par):
+    """Add standardized metadata to .uns."""
+    logger.info("Adding metadata to .uns")
+    adata.uns['dataset_id'] = par["dataset_id"]
+    adata.uns['dataset_name'] = par["dataset_name"]
+    adata.uns['dataset_summary'] = par["dataset_summary"]
+    adata.uns['dataset_description'] = par["dataset_description"]
+    adata.uns['dataset_organism'] = 'Homo sapiens'
+    adata.uns['dataset_url'] = 'https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE279945'
+    adata.uns['dataset_reference'] = 'GSE279945'
+    adata.uns['dataset_version'] = '1.0.0'
+    adata.uns['processing_status'] = 'processed'
+
+def print_unique(adata, column):
+    """Print unique values in a column."""
+    if column in adata.obs:
+        values = adata.obs[column].unique()
+        if len(values) <= 10:
+            formatted = "', '".join(values)
+            logger.info(f"Unique {column}: ['{formatted}']")
+        else:
+            logger.info(f"Unique {column}: {len(values)} values")
+
+def print_summary(adata):
+    """Print a summary of the dataset."""
+    logger.info(f"Dataset shape: {adata.shape}")
+    logger.info(f"Number of cells: {adata.n_obs}")
+    logger.info(f"Number of genes: {adata.n_vars}")
+    
+    # Print unique values for key columns
+    for column in ['donor_id', 'cell_type', 'perturbation']:
+        print_unique(adata, column)
+        
+    logger.info(f"Layers: {list(adata.layers.keys())}")
+    logger.info(f"Metadata: {list(adata.uns.keys())}")
+
+def write_anndata(adata, par):
+    """Write AnnData object to file."""
+    logger.info(f"Writing AnnData object to '{par['output']}'")
+    adata.write_h5ad(par["output"], compression=par["output_compression"])
+
 def main(par, meta):
     """Main function."""
     logger.info("Starting OP3 loader")
@@ -307,42 +270,33 @@ def main(par, meta):
     adata = sc.read_h5ad(data_path)
     
     # Apply OP3-specific filtering
-    logger.info("Applying OP3-specific filtering")
     adata = filter_op3_data(adata)
     
-    # Filter by donor_id if specified
+    # Filter by parameters
     if par["donor_id"] is not None:
         logger.info(f"Filtering for donor_id: {par['donor_id']}")
         adata = adata[adata.obs["donor_id"] == par["donor_id"]]
     
-    # Filter by cell_type if specified
     if par["cell_type"] is not None:
         logger.info(f"Filtering for cell_type: {par['cell_type']}")
         adata = adata[adata.obs["cell_type"] == par["cell_type"]]
     
-    # Filter by perturbation if specified
     if par["perturbation"] is not None:
         logger.info(f"Filtering for perturbation: {par['perturbation']}")
         adata = adata[adata.obs["perturbation"] == par["perturbation"]]
     
     # Filter cells and genes
-    logger.info("Filtering cells and genes")
-    sc.pp.filter_cells(adata, min_genes=par["min_genes"])
-    sc.pp.filter_genes(adata, min_cells=par["min_cells"])
+    adata = filter_by_counts(adata, par)
     
     # Move X to layers and normalize
     move_x_to_layers(adata)
     
     # Add dataset metadata
-    logger.info("Adding dataset metadata")
-    adata.uns["dataset_id"] = par["dataset_id"]
-    adata.uns["dataset_name"] = par["dataset_name"]
-    adata.uns["dataset_summary"] = par["dataset_summary"]
-    adata.uns["dataset_description"] = par["dataset_description"]
+    add_metadata_to_uns(adata, par)
     
-    # Write output
-    logger.info(f"Writing output to {par['output']}")
-    adata.write_h5ad(par["output"], compression=par["output_compression"])
+    # Print summary and save
+    print_summary(adata)
+    write_anndata(adata, par)
     
     logger.info("Done")
 
