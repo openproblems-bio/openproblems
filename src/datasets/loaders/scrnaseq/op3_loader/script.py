@@ -208,14 +208,10 @@ def filter_by_counts(adata, par):
     return adata
 
 def move_x_to_layers(adata):
-    """Move .X to .layers['counts'] and normalize data."""
+    """Move .X to .layers['counts'] and set X to None."""
     logger.info("Moving .X to .layers['counts']")
     adata.layers["counts"] = adata.X.copy()
-    
-    # Normalize and log transform
-    logger.info("Normalizing and log-transforming data")
-    sc.pp.normalize_total(adata, target_sum=1e4)
-    sc.pp.log1p(adata)
+    adata.X = None
 
 def add_metadata_to_uns(adata, par):
     """Add standardized metadata to .uns."""
@@ -302,3 +298,20 @@ def main(par, meta):
 
 if __name__ == "__main__":
     main(par, meta)
+
+
+"""
+AnnData object
+
+AnnData object
+ obs: 'donor_id', 'cell_type', 'perturbation', [other original metadata]
+ var: [original gene metadata]
+ layers: 'counts'
+ uns: 'dataset_id', 'dataset_name', 'dataset_summary', 'dataset_description', 'dataset_organism', 'dataset_url', 'dataset_reference]
+ 
+ AnnData object
+ obs: [cellxgene metadata including 'is_primary_data', 'cell_type_ontology_term_id', 'disease', 'batch', etc.]
+ var: 'feature_name', [other gene metadata]
+ layers: 'counts' (X is set to None)
+ uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism'
+"""
