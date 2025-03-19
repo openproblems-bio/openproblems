@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 import os
 import pytest
@@ -8,13 +9,13 @@ import numpy as np
 meta = {
     'resources_dir': './resources_test/',
     'executable': './target/docker/datasets/loaders/scrnaseq/op3_loader',
-    'config': './src/datasets/loaders/scrnaseq/op3_loader/config.vsh.yaml'
+    'config': os.path.abspath('./src/datasets/loaders/scrnaseq/op3_loader/config.vsh.yaml')
 }
 ## VIASH END
 
 def test_op3_loader(run_component, tmp_path):
     """Test the OP3 loader."""
-    output_file = tmp_path / "output.h5ad"
+    output_file = str(tmp_path / "output.h5ad")  # Convert to string to be safe
 
     run_component([
         "--donor_id", "1",
@@ -49,6 +50,7 @@ def test_op3_loader(run_component, tmp_path):
 
     # check layers
     assert "counts" in adata.layers
+    assert adata.X is not None, "X matrix should not be None"
     
     # check uns
     assert adata.uns["dataset_id"] == "test_op3", "Incorrect .uns['dataset_id']"
