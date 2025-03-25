@@ -1,7 +1,8 @@
 name: process_op3
 namespace: datasets/workflows/scrnaseq
 description: |
-  Fetch and process datasets from the Open Problems Perurbation Prediction (OP3) dataset.
+  Fetch, filter, normalize, and prepare datasets from the Open Problems Perturbation Prediction (OP3) dataset 
+  for benchmarking and analysis.
 argument_groups:
   - name: Input options
     description: Options for selecting input data
@@ -120,13 +121,14 @@ argument_groups:
         direction: output
         required: true
       - name: --output_meta
-        direction: output
         type: file
-        description: Dataset metadata
+        direction: output
+        required: false
         default: dataset_metadata.yaml
+        description: Dataset metadata
       - name: --output_raw
         __merge__: /src/datasets/api/file_raw.yaml
-        direction: output
+        direction: output 
         required: false
       - name: --output_normalized
         __merge__: /src/datasets/api/file_normalized.yaml

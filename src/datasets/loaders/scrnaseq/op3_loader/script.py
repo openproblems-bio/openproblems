@@ -4,7 +4,6 @@ import anndata as ad
 import pandas as pd
 import numpy as np
 import requests
-from tqdm import tqdm # liberary for displaying progress bars
 import logging
 
 logger = logging.getLogger(__name__)
@@ -29,7 +28,7 @@ meta = {}
 ## VIASH END
 
 def download_file(url, destination, max_retries=5):
-    """Download a file from a URL to a destination with progress bar and resume capability."""
+    """Download a file from a URL to a destination."""
     # Create directory if it doesn't exist
     os.makedirs(os.path.dirname(destination), exist_ok=True)
     
@@ -61,6 +60,8 @@ def download_file(url, destination, max_retries=5):
                 headers['Range'] = f'bytes={file_size}-'
                 mode = 'ab'  # Append to existing file
             
+            logger.info(f"Downloading {url} to {destination}")
+            
             # Make request with resume header if applicable
             response = requests.get(url, headers=headers, stream=True, timeout=60)
             
@@ -75,22 +76,12 @@ def download_file(url, destination, max_retries=5):
                 logger.error(f"Unexpected status code: {response.status_code}")
                 continue
             
-            # Download with progress bar
             with open(destination, mode) as f:
-                with tqdm(
-                    total=total_size,
-                    initial=file_size,
-                    unit='iB',
-                    unit_scale=True,
-                    unit_divisor=1024,
-                    desc=destination
-                ) as bar:
-                    for chunk in response.iter_content(chunk_size=1024*1024):  # 1MB chunks
-                        if chunk:
-                            size = f.write(chunk)
-                            bar.update(size)
+                for chunk in response.iter_content(chunk_size=1024*1024):  # 1MB chunks
+                    if chunk:
+                        f.write(chunk)
             
-            # Verify file size
+            # Normal verification code
             if os.path.getsize(destination) >= total_size:
                 logger.info(f"Download completed: {destination}")
                 return
@@ -132,6 +123,8 @@ def filter_op3_data(adata):
     Filter the OP3 dataset based on specific criteria for each small molecule and cell type.
     """
     logger.info("Applying OP3-specific filtering criteria")
+    
+    # Original filter code follows...
     
     # Create a boolean mask for filtering observations
     obs_filt = np.ones(adata.n_obs, dtype=bool)
@@ -254,49 +247,45 @@ def write_anndata(adata, par):
     logger.info(f"Writing AnnData object to '{par['output']}'")
     adata.write_h5ad(par["output"], compression=par["output_compression"])
 
-def main(par, meta):
-    """Main function."""
-    logger.info("Starting OP3 loader")
-    
-    # Download the data
-    data_path = download_op3_data()
-    
-    # Load the data
-    logger.info(f"Loading data from {data_path}")
-    adata = sc.read_h5ad(data_path)
-    
-    # Apply OP3-specific filtering
-    adata = filter_op3_data(adata)
-    
-    # Filter by parameters
-    if par["donor_id"] is not None:
-        logger.info(f"Filtering for donor_id: {par['donor_id']}")
-        adata = adata[adata.obs["donor_id"] == par["donor_id"]]
-    
-    if par["cell_type"] is not None:
-        logger.info(f"Filtering for cell_type: {par['cell_type']}")
-        adata = adata[adata.obs["cell_type"] == par["cell_type"]]
-    
-    if par["perturbation"] is not None:
-        logger.info(f"Filtering for perturbation: {par['perturbation']}")
-        adata = adata[adata.obs["perturbation"] == par["perturbation"]]
-    
-    # Filter cells and genes
-    adata = filter_by_counts(adata, par)
-    
-    # Move X to layers and normalize
-    move_x_to_layers(adata)
-    
-    # Add dataset metadata
-    add_metadata_to_uns(adata, par)
-    
-    # Print summary and save
-    print_summary(adata)
-    write_anndata(adata, par)
-    
-    logger.info("Done")
+# Instead of defining main() and calling it at the end, write the code directly
+logger.info("Starting OP3 loader")
 
-if __name__ == "__main__":
-    main(par, meta)
+# Download the data
+data_path = download_op3_data()
+
+# Load the data
+logger.info(f"Loading data from {data_path}")
+adata = sc.read_h5ad(data_path)
+
+# Apply OP3-specific filtering
+adata = filter_op3_data(adata)
+
+# Filter by parameters
+if par["donor_id"] is not None:
+    logger.info(f"Filtering for donor_id: {par['donor_id']}")
+    adata = adata[adata.obs["donor_id"] == par["donor_id"]]
+
+if par["cell_type"] is not None:
+    logger.info(f"Filtering for cell_type: {par['cell_type']}")
+    adata = adata[adata.obs["cell_type"] == par["cell_type"]]
+
+if par["perturbation"] is not None:
+    logger.info(f"Filtering for perturbation: {par['perturbation']}")
+    adata = adata[adata.obs["perturbation"] == par["perturbation"]]
+
+# Filter cells and genes
+adata = filter_by_counts(adata, par)
+
+# Move X to layers and normalize
+move_x_to_layers(adata)
+
+# Add dataset metadata
+add_metadata_to_uns(adata, par)
+
+# Print summary and save
+print_summary(adata)
+write_anndata(adata, par)
+
+logger.info("Done")
 
 

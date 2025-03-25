@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys
+
 import os
 import pytest
 import anndata as ad
@@ -57,7 +57,3 @@ def test_op3_loader(run_component, tmp_path):
     assert adata.uns["dataset_name"] == "OP3 Test Dataset", "Incorrect .uns['dataset_name']"
     assert adata.uns["dataset_summary"] == "Test summary for OP3 dataset", "Incorrect .uns['dataset_summary']"
     assert adata.uns["dataset_description"] == "Test description for OP3 dataset", "Incorrect .uns['dataset_description']"
-
-
-if __name__ == '__main__':
-    sys.exit(pytest.main([__file__]))
