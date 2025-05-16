@@ -4,6 +4,15 @@ description: |
   Loads and preprocesses the OP3 dataset from GEO accession GSE279945.
 
 argument_groups:
+  - name: Input
+    arguments:
+      - name: --input
+        type: file
+        description: Input h5ad file.
+        direction: input
+        required: true
+        example: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad
+
   - name: Data Filtering
     description: Arguments for filtering the dataset
     arguments:

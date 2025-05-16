@@ -104,20 +104,6 @@ def download_file(url, destination, max_retries=5):
     
     raise Exception(f"Failed to download {url} after {max_retries} attempts")
 
-def download_op3_data():
-    """Download the OP3 dataset from GEO."""
-    base_url = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/"
-    filename = "GSE279945_sc_counts_processed.h5ad"
-    
-    url = f"{base_url}{filename}"
-    cache_dir = os.path.join(os.path.expanduser("~"), ".cache", "op3_loader")
-    os.makedirs(cache_dir, exist_ok=True)
-    
-    destination = os.path.join(cache_dir, filename)
-    download_file(url, destination)
-    
-    return destination
-
 def filter_op3_data(adata):
     """
     Filter the OP3 dataset based on specific criteria for each small molecule and cell type.
@@ -250,12 +236,9 @@ def write_anndata(adata, par):
 # Instead of defining main() and calling it at the end, write the code directly
 logger.info("Starting OP3 loader")
 
-# Download the data
-data_path = download_op3_data()
-
 # Load the data
-logger.info(f"Loading data from {data_path}")
-adata = sc.read_h5ad(data_path)
+logger.info(f"Loading data from {par["input"]}")
+adata = sc.read_h5ad(par["input"])
 
 # Apply OP3-specific filtering
 adata = filter_op3_data(adata)
@@ -287,5 +270,3 @@ print_summary(adata)
 write_anndata(adata, par)
 
 logger.info("Done")
-
-
