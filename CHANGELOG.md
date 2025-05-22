@@ -22,7 +22,7 @@
 
 - Update Viash to 0.9.0 (PR #911).
 
-- Update Viash to 0.9.4 (PR #xxx).
+- Update Viash to 0.9.4 (PR #925).
 
 ## Minor changes
 
