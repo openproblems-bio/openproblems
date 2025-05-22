@@ -1,7 +1,7 @@
 name: openproblems
 version: dev
 organization: openproblems-bio
-viash_version: 0.9.0
+viash_version: 0.9.4
 
 description: |
   Open Problems is a living, extensible, community-guided benchmarking platform.
