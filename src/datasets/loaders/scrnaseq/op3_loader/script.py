@@ -237,7 +237,7 @@ def write_anndata(adata, par):
 logger.info("Starting OP3 loader")
 
 # Load the data
-logger.info(f"Loading data from {par["input"]}")
+logger.info(f'Loading data from {par["input"]}')
 adata = sc.read_h5ad(par["input"])
 
 # Apply OP3-specific filtering

@@ -7,6 +7,10 @@ argument_groups:
   - name: Input options
     description: Options for selecting input data
     arguments:
+      - name: --input
+        type: file
+        description: path to initial input file
+        required: true
       - name: --data_type
         type: string
         description: Data type to load
