@@ -7,7 +7,7 @@ params_file="/tmp/datasets_op3.yaml"
 cat > "$params_file" << 'HERE'
 param_list:
   - id: op3
-    input: ../data/sample.h5ad
+    input: ../data/GSE279945_sc_counts_processed.h5ad
     dataset_name: "OP3: single-cell multimodal dataset in PBMCs for perturbation prediction benchmarking"
     dataset_summary: "The Open Problems Perurbation Prediction (OP3) dataset with small molecule perturbations in PBMCs"
     dataset_description: "The OP3 dataset is to-date the largest single-cell small molecule perturbation dataset in primary tissue with multiple donor replicates."
