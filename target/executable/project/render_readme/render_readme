@@ -460,7 +460,7 @@ RUN release_info=$(curl -s https://api.github.com/repos/quarto-dev/quarto-cli/re
   rm /opt/quarto.deb
 
 LABEL org.opencontainers.image.description="Companion container for running component project render_readme"
-LABEL org.opencontainers.image.created="2025-05-22T10:44:06Z"
+LABEL org.opencontainers.image.created="2025-05-23T13:20:28Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
 LABEL org.opencontainers.image.revision="6a3b3f45fd460bf4ac4d1d41d73340c9024d64c4"
 LABEL org.opencontainers.image.version="build_main"
