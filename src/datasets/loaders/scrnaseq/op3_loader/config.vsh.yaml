@@ -1,20 +1,25 @@
 name: op3_loader
 namespace: datasets/loaders/scrnaseq
 description: |
-  Loads and preprocesses the OP3 dataset from GEO accession GSE279945.
+  "Loads and preprocesses the OP3 dataset from GEO accession GSE279945."
 
 argument_groups:
   - name: Input
     arguments:
-      - name: --input
+      - name: "--input"
         type: file
-        description: Input h5ad file.
+        must_exist: false
+        description: "Input h5ad file."
         direction: input
-        required: true
+        required: false
+        default: ./tmp/GSE279945_sc_counts_processed.h5ad
         example: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad
-
+      - name: "--var_feature_name"
+        type: string
+        description: "Location of where to find the feature names. Can be set to index if the feature names are the index."
+        default: index
   - name: Data Filtering
-    description: Arguments for filtering the dataset
+    description: "Arguments for filtering the dataset"
     arguments:
       - name: "--donor_id"
         type: string
@@ -29,20 +34,8 @@ argument_groups:
         description: "Perturbation to filter for. If not specified, all perturbations are included."
         required: false
 
-  - name: Quality Control
-    description: Parameters for quality control filtering
-    arguments:
-      - name: "--min_cells"
-        type: integer
-        description: "Minimum number of cells expressing a gene"
-        default: 3
-      - name: "--min_genes"
-        type: integer
-        description: "Minimum number of genes expressed in a cell"
-        default: 200
-
   - name: Dataset Metadata
-    description: Metadata about the dataset
+    description: "Metadata about the dataset"
     arguments:
       - name: "--dataset_id"
         type: string
@@ -60,13 +53,23 @@ argument_groups:
         type: string
         description: "Detailed description of the dataset"
         default: "The OP3 dataset is to-date the largest single-cell small molecule perturbation dataset in primary tissue with multiple donor replicates."
-
+      - name: "dataset_reference"
+        type: string
+        description: "Bibtex reference of the paper in which the dataset was published."
+        required: false
+        default: GSE279945
+      - name: "--dataset_url"
+        type: string
+        description: "Link to the original source of the dataset."
+        required: false
+        default: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad
+          
   - name: Output
-    description: Output parameters
+    description: "Output parameters"
     arguments:
       - name: "--output"
         type: file
-        description: Output h5ad file.
+        description: "Output h5ad file."
         direction: output
         required: true
       - name: "--output_compression"

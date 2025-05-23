@@ -56,8 +56,6 @@ workflow run_wf {
         "donor_id": "donor_id",
         "cell_type": "cell_type",
         "perturbation": "perturbation",
-        "min_cells": "min_cells",
-        "min_genes": "min_genes",
         "dataset_id": "id",
         "dataset_name": "dataset_name",
         "dataset_url": "dataset_url",
@@ -67,12 +65,19 @@ workflow run_wf {
       ],
       toState: ["output_raw": "output"]
     )
+
+    // filter low-quality observations from the dataset
+    | filter_obs.run(
+      runIf: {id, state -> state.do_filtration_obs},
+      fromState: ["input": "output_raw"],
+      toState: ["output_filtered": "output"]
+    ) 
     
     // subsample if so desired
     | subsample.run(
       runIf: { id, state -> state.do_subsample },
       fromState: [
-        "input": "output_raw",
+        "input": "output_filtered",
         "n_obs": "n_obs",
         "n_vars": "n_vars",
         "keep_features": "keep_features",
@@ -82,12 +87,12 @@ workflow run_wf {
         "seed": "seed"
       ],
       args: [output_mod2: null],
-      toState: ["output_raw": "output"]
+      toState: ["output_filtered": "output"]
     )
 
     | runEach(
       components: normalization_methods,
-      id: { id, state, comp ->
+      id: { id, state, comp -> 
         if (state.normalization_methods.size() > 1) {
           id + "/" + comp.name
         } else {
@@ -97,7 +102,7 @@ workflow run_wf {
       filter: { id, state, comp ->
         comp.name in state.normalization_methods
       },
-      fromState: ["input": "output_raw"],
+      fromState: ["input": "output_filtered"],
       toState: { id, output, state, comp ->
         state + [
           output_normalized: output.output,
@@ -146,6 +151,7 @@ workflow run_wf {
       "output_dataset",
       "output_meta",
       "output_raw",
+      "output_filtered",
       "output_normalized",
       "output_pca",
       "output_hvg",

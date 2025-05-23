@@ -20,6 +20,7 @@ nextflow run . \
   --dataset_description: "The OP3 dataset is to-date the largest single-cell small molecule perturbation dataset in primary tissue with multiple donor replicates." \
   --normalization_methods: log_cp10k \
   --output_dataset: '$id/dataset.h5ad' \
+  --do_subsample \
   --output_meta: '$id/dataset_metadata.yaml' \
   --output_state: '$id/state.yaml' \
   --output_raw: force_null \
@@ -27,5 +28,5 @@ nextflow run . \
   --output_pca: force_null \
   --output_hvg: force_null \
   --output_knn: force_null \
-  --publish_dir: $DATASET_DIR \
+  --publish_dir: '$DATASET_DIR' \
   -c common/nextflow_helpers/labels_ci.config

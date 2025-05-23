@@ -1,0 +1,32 @@
+name: filter_obs
+namespace: "datasets/processors"
+info:
+  type: process_dataset
+  type_info:
+    label: Filter observations
+    summary: Remove low-quality observations from the dataset
+    description: |
+      This task removes low-quality observations from the dataset.
+arguments:
+  - name: --input
+    type: file
+    required: true
+    direction: input
+  - name: --output
+    type: file
+    required: true
+    direction: output
+resources:
+  - type: r_script
+    path: script.R
+engines:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        cran: [ dplyr, tidyr, purrr, tibble ]
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [ midtime, midmem, lowcpu ]
