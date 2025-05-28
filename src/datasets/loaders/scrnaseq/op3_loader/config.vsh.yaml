@@ -7,12 +7,11 @@ argument_groups:
   - name: Input
     arguments:
       - name: "--input"
-        type: file
-        must_exist: false
-        description: "Input h5ad file."
+        type: string
+        description: "Input url to the .h5ad file."
         direction: input
         required: false
-        default: ./tmp/GSE279945_sc_counts_processed.h5ad
+        default: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad
         example: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad
       - name: "--var_feature_name"
         type: string

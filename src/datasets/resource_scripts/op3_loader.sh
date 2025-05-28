@@ -7,7 +7,7 @@ params_file="/tmp/datasets_op3.yaml"
 cat > "$params_file" << 'HERE'
 param_list:
   - id: op3
-    input: ../data/GSE279945_sc_counts_processed.h5ad
+    input: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad
     dataset_name: "OP3: single-cell multimodal dataset in PBMCs for perturbation prediction benchmarking"
     dataset_summary: "The Open Problems Perurbation Prediction (OP3) dataset with small molecule perturbations in PBMCs"
     dataset_description: "The OP3 dataset is to-date the largest single-cell small molecule perturbation dataset in primary tissue with multiple donor replicates."
@@ -28,7 +28,7 @@ output_state: '$id/state.yaml'
 publish_dir: s3://openproblems-data/resources/datasets/datasets_op3
 HERE
 
-cat > /tmp/nextflow.config << HERE
+cat > "/tmp/nextflow.config" << 'HERE'
 process {
   withName:'.*publishStatesProc' {
     memory = '100GB'
@@ -52,4 +52,4 @@ nextflow run . \
   -profile docker \
   -resume \
   -params-file "$params_file" \
-  -config common/nextflow_helpers/labels_ci.config
+  -config /tmp/nextflow.config

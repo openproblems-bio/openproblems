@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 ## VIASH START
 par = {
-    "input": "resources/neurips-2023-raw/sc_counts.h5ad",
+    "input": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad",
     "var_feature_name": "index",
     "data_type": "sc",
     "donor_id": None,
@@ -105,6 +105,87 @@ def download_file(url, destination, max_retries=5):
     
     raise Exception(f"Failed to download {url} after {max_retries} attempts")
 
+def download_op3_data(url):
+    """Download the OP3 dataset from GEO."""
+    filename = "GSE279945_sc_counts_processed.h5ad"
+    
+    cache_dir = os.path.join(os.path.expanduser("~"), ".cache", "op3_loader")
+    os.makedirs(cache_dir, exist_ok=True)
+    
+    destination = os.path.join(cache_dir, filename)
+    download_file(url, destination)
+    
+    return destination
+
+def filter_op3_data(adata):
+    """
+    Filter the OP3 dataset based on specific criteria for each small molecule and cell type.
+    """
+    logger.info("Applying OP3-specific filtering criteria")
+    
+    # Original filter code follows...
+    
+    # Create a boolean mask for filtering observations
+    obs_filt = np.ones(adata.n_obs, dtype=bool)
+    
+    # Alvocidib only T cells in only 2 donors, remove
+    obs_filt = obs_filt & (adata.obs['sm_name'] != "Alvocidib")
+    
+    # BMS-387032 - one donor with only T cells, two other consistent, but only 2 cell types
+    # Leave the 2 cell types in, remove donor 2 with only T cells
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "BMS-387032") & (adata.obs['donor_id'] == "Donor 2"))
+    
+    # BMS-387032 remove myeloid cells and B cells
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "BMS-387032") & 
+                           adata.obs['cell_type'].isin(["B cells", "Myeloid cells"]))
+    
+    # CGP 60474 has only T cells left, remove
+    obs_filt = obs_filt & (adata.obs['sm_name'] != "CGP 60474")
+    
+    # Canertinib - the variation of Myeloid cell proportions is very large, skip Myeloid
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "Canertinib") & 
+                           (adata.obs['cell_type'] == "Myeloid cells"))
+    
+    # Foretinib - large variation in Myeloid cell proportions (some in T cells), skip Myeloid
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "Foretinib") & 
+                           (adata.obs['cell_type'] == "Myeloid cells"))
+    
+    # Ganetespib (STA-9090) - donor 2 has no Myeloid and small NK cells proportions
+    # Skip Myeloid, remove donor 2
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "Ganetespib (STA-9090)") & 
+                           (adata.obs['donor_id'] == "Donor 2"))
+    
+    # IN1451 - donor 2 has no NK or B, remove Donor 2
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "IN1451") & 
+                           (adata.obs['donor_id'] == "Donor 2"))
+    
+    # Navitoclax - donor 3 doesn't have B cells and has different T and Myeloid proportions
+    # Remove donor 3
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "Navitoclax") & 
+                           (adata.obs['donor_id'] == "Donor 3"))
+    
+    # PF-04691502 remove Myeloid (only present in donor 3)
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "PF-04691502") & 
+                           (adata.obs['cell_type'] == "Myeloid cells"))
+    
+    # Proscillaridin A;Proscillaridin-A remove Myeloid, since the variation is very high (4x)
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "Proscillaridin A;Proscillaridin-A") & 
+                           (adata.obs['cell_type'] == "Myeloid cells"))
+    
+    # R428 - skip NK due to high variation (close to 3x)
+    obs_filt = obs_filt & ~((adata.obs['sm_name'] == "R428") & 
+                           (adata.obs['cell_type'] == "NK cells"))
+    
+    # UNII-BXU45ZH6LI - remove due to large variation across all cell types and missing cell types
+    obs_filt = obs_filt & (adata.obs['sm_name'] != "UNII-BXU45ZH6LI")
+    
+    # Apply the filter
+    filtered_adata = adata[obs_filt].copy()
+    
+    logger.info(f"Filtered data from {adata.n_obs} to {filtered_adata.n_obs} cells")
+    
+    return filtered_adata
+
 def move_x_to_layers(adata):
     """Move .X to .layers['counts'] and set X to None."""
     logger.info("Moving .X to .layers['counts']")
@@ -155,23 +236,16 @@ def write_anndata(adata, par):
 # Instead of defining main() and calling it at the end, write the code directly
 logger.info("Starting OP3 loader")
 
+# Download the data
+logger.info(f"Downloading data from {par['input']}")
+data_path = download_op3_data(par['input'])
+
 # Load the data
-logger.info(f"Loading data from {par['input']}")
+logger.info(f"Loading data from {data_path}")
+adata = sc.read_h5ad(data_path)
 
-if os.path.isfile(par["input"]):
-    try:
-        adata = sc.read_h5ad(par["input"])
-    except:
-        raise ValueError('The downloaded dataset does not match the .h5ad type. ')
-elif (parsed := urlparse(par["dataset_url"])) and (parsed.scheme and parsed.netloc):
-    download_file(par["dataset_url"], par["input"], max_retries=5)
-    try:
-        adata = sc.read_h5ad(par["input"])
-    except:
-        raise ValueError('The downloaded dataset does not match the .h5ad type. ')
-else:
-    raise ValueError('The dataset is not found. Please enter another link/path to it.')
-
+# Apply OP3-specific filtering
+adata = filter_op3_data(adata)
 # Filter by parameters
 if par["donor_id"] is not None:
     logger.info(f"Filtering for donor_id: {par['donor_id']}")

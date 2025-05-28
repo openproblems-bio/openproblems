@@ -66,18 +66,11 @@ workflow run_wf {
       toState: ["output_raw": "output"]
     )
 
-    // filter low-quality observations from the dataset
-    | filter_obs.run(
-      runIf: {id, state -> state.do_filtration_obs},
-      fromState: ["input": "output_raw"],
-      toState: ["output_filtered": "output"]
-    ) 
-    
     // subsample if so desired
     | subsample.run(
       runIf: { id, state -> state.do_subsample },
       fromState: [
-        "input": "output_filtered",
+        "input": "output_raw",
         "n_obs": "n_obs",
         "n_vars": "n_vars",
         "keep_features": "keep_features",
@@ -87,7 +80,7 @@ workflow run_wf {
         "seed": "seed"
       ],
       args: [output_mod2: null],
-      toState: ["output_filtered": "output"]
+      toState: ["output_raw": "output"]
     )
 
     | runEach(
@@ -102,7 +95,7 @@ workflow run_wf {
       filter: { id, state, comp ->
         comp.name in state.normalization_methods
       },
-      fromState: ["input": "output_filtered"],
+      fromState: ["input": "output_raw"],
       toState: { id, output, state, comp ->
         state + [
           output_normalized: output.output,

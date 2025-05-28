@@ -8,11 +8,10 @@ argument_groups:
     description: "Options for selecting input data"
     arguments:
       - name: --input
-        type: file
-        must_exist: false
-        description: "Path to initial input file"
+        type: string
+        description: "Link to initial input dataset"
         required: false
-        default: ./tmp/GSE279945_sc_counts_processed.h5ad
+        default: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad
         example: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad
       - name: --data_type
         type: string
@@ -31,13 +30,6 @@ argument_groups:
         type: string
         description: "Filter to a specific perturbation"
         required: false
-  - name: Filter low-quality observations
-    description: "This task removes low-quality observations from the dataset."
-    arguments: 
-      - name: --do_filtration_obs
-        type: boolean
-        default: true
-        description: "Whether or not to remove low-quality observations from the dataset."
   - name: Dataset metadata
     description: "Information about the dataset that will be stored in the `.uns` slot."
     arguments:
@@ -133,8 +125,6 @@ argument_groups:
         __merge__: /src/datasets/api/file_raw.yaml
         direction: output 
         required: false
-      - name: --output_filtered
-        __merge__: /src/datasets/api/file_filtered.yaml
         direction: output
         required: false
       - name: --output_normalized
@@ -164,7 +154,6 @@ dependencies:
   - name: datasets/normalization/log_scran_pooling
   - name: datasets/normalization/sqrt_cp
   - name: datasets/normalization/l1_sqrt
-  - name: datasets/processors/filter_obs
   - name: datasets/processors/subsample
   - name: datasets/processors/pca
   - name: datasets/processors/hvg

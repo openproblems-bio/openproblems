@@ -18,7 +18,7 @@ def test_op3_loader(run_component, tmp_path):
     output_file = str(tmp_path / "output.h5ad")  # Convert to string to be safe
 
     run_component([
-        "--input", "./tmp/GSE279945_sc_counts_processed.h5ad",
+        "--input", "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad",
         "--var_feature_name", "index",
         "--donor_id", "1",
         "--cell_type", "T cells",
