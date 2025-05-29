@@ -5,7 +5,6 @@ import pandas as pd
 import numpy as np
 import requests
 import logging
-from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
