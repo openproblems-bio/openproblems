@@ -144,7 +144,6 @@ workflow run_wf {
       "output_dataset",
       "output_meta",
       "output_raw",
-      "output_filtered",
       "output_normalized",
       "output_pca",
       "output_hvg",
