@@ -41,7 +41,7 @@ test_resources:
     dest: resources_test/openproblems/task_results_v3
 engines:
   - type: docker
-    image: openproblems/base_python:1.0.0
+    image: openproblems/base_python:1
 runners:
   - type: executable
   - type: nextflow
