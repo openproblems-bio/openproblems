@@ -185,6 +185,18 @@ def filter_op3_data(adata):
     
     return filtered_adata
 
+def fix_splits(adata):
+    """Fix splits after reannotation."""
+    logger.info("Fix splits after reannotation")
+    adata.obs["cell_type_orig_updated"] = adata.obs["cell_type_orig"].apply(lambda x: "T cells" if x.startswith("T ") else x)
+    adata.obs["sm_cell_type_orig"] = adata.obs["sm_name"].astype(str) + "_" + adata.obs["cell_type_orig_updated"].astype(str)
+    mapping_to_split = adata.obs.groupby("sm_cell_type_orig")["split"].apply(lambda x: x.unique()[0]).to_dict()
+    adata.obs["sm_cell_type"] = adata.obs["sm_name"].astype(str) + "_" + adata.obs["cell_type"].astype(str)
+    adata.obs["split"] = adata.obs["sm_cell_type"].map(mapping_to_split)
+    adata.obs['control'] = adata.obs['split'].eq("control")
+    return adata
+    
+
 def move_x_to_layers(adata):
     """Move .X to .layers['counts'] and set X to None."""
     logger.info("Moving .X to .layers['counts']")
@@ -258,6 +270,8 @@ if par["perturbation"] is not None:
     logger.info(f"Filtering for perturbation: {par['perturbation']}")
     adata = adata[adata.obs["perturbation"] == par["perturbation"]]
 
+# Fix splits after reannotation
+fix_splits(adata)
 
 # Move X to layers and normalize
 move_x_to_layers(adata)
