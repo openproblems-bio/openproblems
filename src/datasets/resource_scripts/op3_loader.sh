@@ -24,7 +24,6 @@ output_normalized: force_null
 output_pca: force_null
 output_hvg: force_null
 output_knn: force_null
-output_state: '$id/state.yaml'
 publish_dir: s3://openproblems-data/resources/datasets/datasets_op3
 HERE
 
