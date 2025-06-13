@@ -39,6 +39,6 @@ nextflow run . \
   --output_pca force_null \
   --output_hvg force_null \
   --output_knn force_null \
-  --publish_dir '$DATASET_DIR' \
+  --publish_dir $DATASET_DIR \
   -config /tmp/nextflow.config
 

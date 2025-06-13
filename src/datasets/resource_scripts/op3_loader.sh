@@ -16,7 +16,7 @@ param_list:
 normalization_methods: 
   - log_cp10k
 output_dataset: '$id/dataset.h5ad'
-do_subsample: False
+do_subsample: True
 output_meta: '$id/dataset_metadata.yaml'
 output_state: '$id/state.yaml'
 output_raw: force_null
@@ -24,7 +24,7 @@ output_normalized: force_null
 output_pca: force_null
 output_hvg: force_null
 output_knn: force_null
-#publish_dir: s3://openproblems-data/resources/datasets/datasets_op3
+publish_dir: s3://openproblems-data/resources/datasets/datasets_op3
 HERE
 
 cat > "/tmp/nextflow.config" << 'HERE'
@@ -39,7 +39,7 @@ HERE
 #tw launch https://github.com/openproblems-bio/openproblems.git \
 #  --revision main_build \
 #  --pull-latest \
-#  --main-script target/nextflow/datasets/workflows/scrnaseq/op3_loader/main.nf \
+#  --main-script target/nextflow/datasets/workflows/scrnaseq/process_op3/main.nf \
 #  --workspace 53907369739130 \
 #  --params-file "$params_file" \
 #  --labels op3_loader,dataset_loader \
