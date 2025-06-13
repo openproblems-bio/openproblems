@@ -16,7 +16,7 @@ param_list:
 normalization_methods: 
   - log_cp10k
 output_dataset: '$id/dataset.h5ad'
-do_subsample: True
+do_subsample: False
 output_meta: '$id/dataset_metadata.yaml'
 output_state: '$id/state.yaml'
 output_raw: force_null
@@ -24,7 +24,7 @@ output_normalized: force_null
 output_pca: force_null
 output_hvg: force_null
 output_knn: force_null
-publish_dir: s3://openproblems-data/resources/datasets/datasets_op3
+publish_dir: s3://openproblems-data/resources/datasets/op3_rnaseq
 HERE
 
 cat > "/tmp/nextflow.config" << 'HERE'
