@@ -67,7 +67,7 @@ test_resources:
   #   path: /resources_test/common/openproblems_neurips2021/neurips2021_bmmc_cite.h5ad
 engines:
   - type: docker
-    image: openproblems/base_python:1.0.0
+    image: openproblems/base_python:1
 runners:
   - type: executable
   - type: nextflow

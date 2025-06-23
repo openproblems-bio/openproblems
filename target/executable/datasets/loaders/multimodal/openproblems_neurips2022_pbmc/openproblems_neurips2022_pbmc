@@ -443,12 +443,12 @@ function ViashDockerfile {
 
   if [[ "$engine_id" == "docker" ]]; then
     cat << 'VIASHDOCKER'
-FROM openproblems/base_python:1.0.0
+FROM openproblems/base_python:1
 ENTRYPOINT []
 LABEL org.opencontainers.image.description="Companion container for running component datasets/loaders/multimodal openproblems_neurips2022_pbmc"
-LABEL org.opencontainers.image.created="2025-05-23T13:20:30Z"
+LABEL org.opencontainers.image.created="2025-06-23T07:20:39Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="6a3b3f45fd460bf4ac4d1d41d73340c9024d64c4"
+LABEL org.opencontainers.image.revision="952c0a97c7aa6332cd239f728243deb39052454a"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

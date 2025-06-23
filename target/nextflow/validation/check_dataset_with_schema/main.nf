@@ -3176,7 +3176,7 @@ meta = [
     {
       "type" : "docker",
       "id" : "docker",
-      "image" : "openproblems/base_python:1.0.0",
+      "image" : "openproblems/base_python:1",
       "namespace_separator" : "/",
       "test_setup" : [
         {
@@ -3196,9 +3196,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/validation/check_dataset_with_schema",
     "viash_version" : "0.9.4",
-    "git_commit" : "6a3b3f45fd460bf4ac4d1d41d73340c9024d64c4",
+    "git_commit" : "952c0a97c7aa6332cd239f728243deb39052454a",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1425-g6a3b3f45"
+    "git_tag" : "v1.0.0-1426-g952c0a97"
   },
   "package_config" : {
     "name" : "openproblems",

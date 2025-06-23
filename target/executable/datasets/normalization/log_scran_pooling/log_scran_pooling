@@ -443,7 +443,7 @@ function ViashDockerfile {
 
   if [[ "$engine_id" == "docker" ]]; then
     cat << 'VIASHDOCKER'
-FROM openproblems/base_r:1.0.0
+FROM openproblems/base_r:1
 ENTRYPOINT []
 RUN Rscript -e 'options(warn = 2); if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")' && \
   Rscript -e 'options(warn = 2); remotes::install_cran(c("Matrix", "rlang", "scran", "BiocParallel"), repos = "https://cran.rstudio.com")'
@@ -452,9 +452,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "scanpy"
 
 LABEL org.opencontainers.image.description="Companion container for running component datasets/normalization log_scran_pooling"
-LABEL org.opencontainers.image.created="2025-05-23T13:20:29Z"
+LABEL org.opencontainers.image.created="2025-06-23T07:20:38Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="6a3b3f45fd460bf4ac4d1d41d73340c9024d64c4"
+LABEL org.opencontainers.image.revision="952c0a97c7aa6332cd239f728243deb39052454a"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
