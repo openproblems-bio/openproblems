@@ -36,19 +36,19 @@ process {
 }
 HERE
 
-#tw launch https://github.com/openproblems-bio/openproblems.git \
-#  --revision main_build \
-#  --pull-latest \
-#  --main-script target/nextflow/datasets/workflows/scrnaseq/process_op3/main.nf \
-#  --workspace 53907369739130 \
-#  --params-file "$params_file" \
-#  --labels op3,dataset_loader \
-#  --config /tmp/nextflow.config
-#
-set -x
-nextflow run . \
-  -main-script target/nextflow/datasets/workflows/scrnaseq/process_op3/main.nf \
-  -profile docker \
-  -resume \
-  -params-file "$params_file" \
-  -config /tmp/nextflow.config
+tw launch https://github.com/openproblems-bio/openproblems.git \
+ --revision main_build \
+ --pull-latest \
+ --main-script target/nextflow/datasets/workflows/scrnaseq/process_op3/main.nf \
+ --workspace 53907369739130 \
+ --params-file "$params_file" \
+ --labels op3,dataset_loader \
+ --config /tmp/nextflow.config
+
+# set -x
+# nextflow run . \
+#   -main-script target/nextflow/datasets/workflows/scrnaseq/process_op3/main.nf \
+#   -profile docker \
+#   -resume \
+#   -params-file "$params_file" \
+#   -config /tmp/nextflow.config
