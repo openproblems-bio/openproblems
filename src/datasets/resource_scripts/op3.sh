@@ -42,7 +42,7 @@ HERE
 #  --main-script target/nextflow/datasets/workflows/scrnaseq/process_op3/main.nf \
 #  --workspace 53907369739130 \
 #  --params-file "$params_file" \
-#  --labels op3_loader,dataset_loader \
+#  --labels op3,dataset_loader \
 #  --config /tmp/nextflow.config
 #
 set -x

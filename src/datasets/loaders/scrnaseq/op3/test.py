@@ -9,12 +9,12 @@ import sys
 ## VIASH START
 meta = {
     'resources_dir': './resources_test/',
-    'executable': './target/docker/datasets/loaders/scrnaseq/op3_loader',
-    'config': os.path.abspath('./src/datasets/loaders/scrnaseq/op3_loader/config.vsh.yaml')
+    'executable': './target/docker/datasets/loaders/scrnaseq/op3',
+    'config': os.path.abspath('./src/datasets/loaders/scrnaseq/op3/config.vsh.yaml')
 }
 ## VIASH END
 
-def test_op3_loader(run_component, tmp_path):
+def test_op3(run_component, tmp_path):
     """Test the OP3 loader."""
     input_file = tmp_path / "input.h5ad"  # Convert to string to be safe
     output_file = tmp_path / "output.h5ad"  # Convert to string to be safe
