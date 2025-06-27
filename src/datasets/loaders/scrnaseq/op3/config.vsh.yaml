@@ -81,9 +81,9 @@ resources:
   - type: python_script
     path: script.py
 
-test_resources:
-  - type: python_script
-    path: test.py
+# test_resources:
+#   - type: python_script
+#     path: test.py
 
 engines:
   - type: docker
