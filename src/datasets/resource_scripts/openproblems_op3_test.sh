@@ -19,11 +19,11 @@ HERE
 
 set -x
 nextflow run . \
-  -main-script target/nextflow/datasets/workflows/scrnaseq/process_op3/main.nf \
+  -main-script target/nextflow/datasets/workflows/scrnaseq/process_openproblems_op3/main.nf \
   -profile docker \
   -resume \
   --input https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad \
-  --id op3 \
+  --id openproblems_sop3 \
   --dataset_name "OP3: single-cell multimodal dataset in PBMCs for perturbation prediction benchmarking" \
   --dataset_summary "The Open Problems Perurbation Prediction (OP3) dataset with small molecule perturbations in PBMCs" \
   --dataset_description "The OP3 dataset is to-date the largest single-cell small molecule perturbation dataset in primary tissue with multiple donor replicates." \

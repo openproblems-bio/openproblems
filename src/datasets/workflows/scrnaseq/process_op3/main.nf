@@ -49,7 +49,7 @@ workflow run_wf {
     }
 
     // fetch data from OP3 dataset
-    | op3.run(
+    | openproblems_op3.run(
       fromState: [
 	"input": "input",
         "data_type": "data_type",
@@ -115,7 +115,7 @@ workflow run_wf {
     )
 
     | knn.run(
-      fromState: ["input": "output_pca"],
+      fromState: ["input": "output_pca", "output_compression": "output_compression"],
       toState: ["output_knn": "output"]
     )
 

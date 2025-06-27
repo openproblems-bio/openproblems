@@ -1,4 +1,4 @@
-name: op3
+name: openproblems_op3
 namespace: datasets/loaders/scrnaseq
 description: |
   "Loads and preprocesses the OP3 dataset from GEO accession GSE279945."
@@ -39,7 +39,7 @@ argument_groups:
       - name: "--dataset_id"
         type: string
         description: "Unique identifier for the dataset"
-        default: "op3"
+        default: "openproblems_op3"
       - name: "--dataset_name"
         type: string
         description: "Human-readable name for the dataset"
