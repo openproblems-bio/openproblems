@@ -49,7 +49,7 @@ workflow run_wf {
     }
 
     // fetch data from OP3 dataset
-    | op3.run(
+    | openproblems_op3.run(
       fromState: [
 	"input": "input",
         "data_type": "data_type",

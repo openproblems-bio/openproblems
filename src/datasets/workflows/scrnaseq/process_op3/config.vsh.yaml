@@ -1,4 +1,4 @@
-name: process_op3
+name: process_openproblems_op3
 namespace: datasets/workflows/scrnaseq
 description: |
   "Fetch, filter, normalize, and prepare datasets from the Open Problems Perturbation Prediction (OP3) dataset 
@@ -37,7 +37,7 @@ argument_groups:
         type: string
         description: "Unique identifier."
         required: true
-        default: op3
+        default: openproblems_op3
       - name: --dataset_name
         type: string
         description: "Nicely formatted name."
@@ -147,7 +147,7 @@ resources:
     entrypoint: run_wf
   - path: /common/nextflow_helpers/helper.nf
 dependencies:
-  - name: datasets/loaders/scrnaseq/op3
+  - name: datasets/loaders/scrnaseq/openproblems_op3
   - name: datasets/normalization/log_cp
   - name: datasets/normalization/log_scran_pooling
   - name: datasets/normalization/sqrt_cp
