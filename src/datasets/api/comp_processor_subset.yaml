@@ -22,6 +22,11 @@ arguments:
     __merge__: file_common_dataset.yaml
     direction: output
     required: false
+  - name: --output_compression
+    type: string
+    choices: [gzip, lzf]
+    required: false
+    example: gzip
 test_resources:
   - path: /resources_test/common/pancreas
     dest: resources_test/common/pancreas

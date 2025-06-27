@@ -115,7 +115,7 @@ workflow run_wf {
     )
 
     | knn.run(
-      fromState: ["input": "output_pca"],
+      fromState: ["input": "output_pca", "output_compression": "output_compression"],
       toState: ["output_knn": "output"]
     )
 

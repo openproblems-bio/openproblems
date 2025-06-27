@@ -35,5 +35,4 @@ adata.uns[par["uns_variance"]] = {
 }
 
 print(">> Writing data", flush=True)
-adata.write_h5ad(par['output'])
-
+adata.write_h5ad(par['output'], compression=par["output_compression"])

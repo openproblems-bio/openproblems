@@ -115,6 +115,11 @@ argument_groups:
         __merge__: /src/datasets/api/file_common_dataset.yaml
         direction: output
         required: true
+      - name: --output_compression
+        type: string
+        choices: [gzip, lzf]
+        required: false
+        example: gzip
       - name: --output_meta
         type: file
         direction: output
