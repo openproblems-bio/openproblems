@@ -3575,6 +3575,21 @@ meta = [
         },
         {
           "type" : "string",
+          "name" : "--output_compression",
+          "example" : [
+            "gzip"
+          ],
+          "required" : false,
+          "choices" : [
+            "gzip",
+            "lzf"
+          ],
+          "direction" : "input",
+          "multiple" : false,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "string",
           "name" : "--normalization_id",
           "description" : "The normalization id to store in the dataset metadata. If not specified, the functionality name will be used.",
           "required" : false,
@@ -3726,9 +3741,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/datasets/normalization/log_scran_pooling",
     "viash_version" : "0.9.4",
-    "git_commit" : "fcf16f1ab6e075ed5dddf110db557b209e0b2f80",
+    "git_commit" : "075e2efd9a3497fb9a848817825be7e41772f5e8",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1427-gfcf16f1a"
+    "git_tag" : "v1.0.0-1428-g075e2efd"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3798,6 +3813,7 @@ library(Matrix, warn.conflicts = FALSE)
 par <- list(
   "input" = $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_INPUT" | sed "s#['\\\\]#\\\\\\\\&#g"; echo "'"; else echo NULL; fi ),
   "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_OUTPUT" | sed "s#['\\\\]#\\\\\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "output_compression" = $( if [ ! -z ${VIASH_PAR_OUTPUT_COMPRESSION+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_OUTPUT_COMPRESSION" | sed "s#['\\\\]#\\\\\\\\&#g"; echo "'"; else echo NULL; fi ),
   "normalization_id" = $( if [ ! -z ${VIASH_PAR_NORMALIZATION_ID+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_NORMALIZATION_ID" | sed "s#['\\\\]#\\\\\\\\&#g"; echo "'"; else echo NULL; fi ),
   "layer_output" = $( if [ ! -z ${VIASH_PAR_LAYER_OUTPUT+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_LAYER_OUTPUT" | sed "s#['\\\\]#\\\\\\\\&#g"; echo "'"; else echo NULL; fi ),
   "obs_size_factors" = $( if [ ! -z ${VIASH_PAR_OBS_SIZE_FACTORS+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_OBS_SIZE_FACTORS" | sed "s#['\\\\]#\\\\\\\\&#g"; echo "'"; else echo NULL; fi )

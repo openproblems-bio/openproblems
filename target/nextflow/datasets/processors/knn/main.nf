@@ -3693,6 +3693,21 @@ meta = [
         },
         {
           "type" : "string",
+          "name" : "--output_compression",
+          "example" : [
+            "gzip"
+          ],
+          "required" : false,
+          "choices" : [
+            "gzip",
+            "lzf"
+          ],
+          "direction" : "input",
+          "multiple" : false,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "string",
           "name" : "--key_added",
           "description" : "The neighbors data is added to `.uns[key_added]`, \ndistances are stored in `.obsp[key_added+'_distances']` and \nconnectivities in `.obsp[key_added+'_connectivities']`.\n",
           "default" : [
@@ -3814,9 +3829,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/datasets/processors/knn",
     "viash_version" : "0.9.4",
-    "git_commit" : "fcf16f1ab6e075ed5dddf110db557b209e0b2f80",
+    "git_commit" : "075e2efd9a3497fb9a848817825be7e41772f5e8",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1427-gfcf16f1a"
+    "git_tag" : "v1.0.0-1428-g075e2efd"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3881,6 +3896,7 @@ par = {
   'input': $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo "r'${VIASH_PAR_INPUT//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
   'input_layer': $( if [ ! -z ${VIASH_PAR_INPUT_LAYER+x} ]; then echo "r'${VIASH_PAR_INPUT_LAYER//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
   'output': $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "r'${VIASH_PAR_OUTPUT//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
+  'output_compression': $( if [ ! -z ${VIASH_PAR_OUTPUT_COMPRESSION+x} ]; then echo "r'${VIASH_PAR_OUTPUT_COMPRESSION//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
   'key_added': $( if [ ! -z ${VIASH_PAR_KEY_ADDED+x} ]; then echo "r'${VIASH_PAR_KEY_ADDED//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
   'num_neighbors': $( if [ ! -z ${VIASH_PAR_NUM_NEIGHBORS+x} ]; then echo "int(r'${VIASH_PAR_NUM_NEIGHBORS//\\'/\\'\\"\\'\\"r\\'}')"; else echo None; fi )
 }
@@ -3922,7 +3938,7 @@ sc.pp.neighbors(
 )
 
 print(">> Writing data", flush=True)
-adata.write_h5ad(par['output'])
+adata.write_h5ad(par['output'], compression=par["output_compression"])
 VIASHMAIN
 python -B "$tempscript"
 '''

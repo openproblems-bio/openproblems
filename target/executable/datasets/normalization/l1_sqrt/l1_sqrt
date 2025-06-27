@@ -449,9 +449,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "scprep" "numpy<2"
 
 LABEL org.opencontainers.image.description="Companion container for running component datasets/normalization l1_sqrt"
-LABEL org.opencontainers.image.created="2025-06-27T11:55:51Z"
+LABEL org.opencontainers.image.created="2025-06-27T16:07:35Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="fcf16f1ab6e075ed5dddf110db557b209e0b2f80"
+LABEL org.opencontainers.image.revision="075e2efd9a3497fb9a848817825be7e41772f5e8"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -602,6 +602,11 @@ function ViashHelp {
   echo "       "
   echo "v4.0.0](https://github.com/chanzuckerberg/single-cell-curation/blob/main/schema/4.0.0/schema.md)."
   echo ""
+  echo "    --output_compression"
+  echo "        type: string"
+  echo "        example: gzip"
+  echo "        choices: [ gzip, lzf ]"
+  echo ""
   echo "    --normalization_id"
   echo "        type: string"
   echo "        The normalization id to store in the dataset metadata. If not specified,"
@@ -687,6 +692,17 @@ while [[ $# -gt 0 ]]; do
         --output=*)
             [ -n "$VIASH_PAR_OUTPUT" ] && ViashError Bad arguments for option \'--output=*\': \'$VIASH_PAR_OUTPUT\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
             VIASH_PAR_OUTPUT=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
+        --output_compression)
+            [ -n "$VIASH_PAR_OUTPUT_COMPRESSION" ] && ViashError Bad arguments for option \'--output_compression\': \'$VIASH_PAR_OUTPUT_COMPRESSION\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_OUTPUT_COMPRESSION="$2"
+            [ $# -lt 2 ] && ViashError Not enough arguments passed to --output_compression. Use "--help" to get more information on the parameters. && exit 1
+            shift 2
+            ;;
+        --output_compression=*)
+            [ -n "$VIASH_PAR_OUTPUT_COMPRESSION" ] && ViashError Bad arguments for option \'--output_compression=*\': \'$VIASH_PAR_OUTPUT_COMPRESSION\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_OUTPUT_COMPRESSION=$(ViashRemoveFlags "$1")
             shift 1
             ;;
         --normalization_id)
@@ -1013,6 +1029,19 @@ if [[ -n "$VIASH_META_MEMORY_PIB" ]]; then
   fi
 fi
 
+# check whether value is belongs to a set of choices
+if [ ! -z "$VIASH_PAR_OUTPUT_COMPRESSION" ]; then
+  VIASH_PAR_OUTPUT_COMPRESSION_CHOICES=("gzip;lzf")
+  IFS=';'
+  set -f
+  if ! [[ ";${VIASH_PAR_OUTPUT_COMPRESSION_CHOICES[*]};" =~ ";$VIASH_PAR_OUTPUT_COMPRESSION;" ]]; then
+    ViashError '--output_compression' specified value of \'$VIASH_PAR_OUTPUT_COMPRESSION\' is not in the list of allowed values. Use "--help" to get more information on the parameters.
+    exit 1
+  fi
+  set +f
+  unset IFS
+fi
+
 # create parent directories of output files, if so desired
 if [ ! -z "$VIASH_PAR_OUTPUT" ] && [ ! -d "$(dirname "$VIASH_PAR_OUTPUT")" ]; then
   mkdir -p "$(dirname "$VIASH_PAR_OUTPUT")"
@@ -1106,6 +1135,7 @@ import numpy as np
 par = {
   'input': $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo "r'${VIASH_PAR_INPUT//\'/\'\"\'\"r\'}'"; else echo None; fi ),
   'output': $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "r'${VIASH_PAR_OUTPUT//\'/\'\"\'\"r\'}'"; else echo None; fi ),
+  'output_compression': $( if [ ! -z ${VIASH_PAR_OUTPUT_COMPRESSION+x} ]; then echo "r'${VIASH_PAR_OUTPUT_COMPRESSION//\'/\'\"\'\"r\'}'"; else echo None; fi ),
   'normalization_id': $( if [ ! -z ${VIASH_PAR_NORMALIZATION_ID+x} ]; then echo "r'${VIASH_PAR_NORMALIZATION_ID//\'/\'\"\'\"r\'}'"; else echo None; fi ),
   'layer_output': $( if [ ! -z ${VIASH_PAR_LAYER_OUTPUT+x} ]; then echo "r'${VIASH_PAR_LAYER_OUTPUT//\'/\'\"\'\"r\'}'"; else echo None; fi ),
   'obs_size_factors': $( if [ ! -z ${VIASH_PAR_OBS_SIZE_FACTORS+x} ]; then echo "r'${VIASH_PAR_OBS_SIZE_FACTORS//\'/\'\"\'\"r\'}'"; else echo None; fi )

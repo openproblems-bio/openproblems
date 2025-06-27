@@ -16,6 +16,11 @@ arguments:
     __merge__: file_normalized.yaml
     direction: output
     required: true
+  - name: --output_compression
+    type: string
+    choices: [gzip, lzf]
+    required: false
+    example: gzip
   - name: "--normalization_id"
     type: string
     description: "The normalization id to store in the dataset metadata. If not specified, the functionality name will be used."

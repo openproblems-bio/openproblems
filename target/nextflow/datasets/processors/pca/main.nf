@@ -3663,6 +3663,21 @@ meta = [
         },
         {
           "type" : "string",
+          "name" : "--output_compression",
+          "example" : [
+            "gzip"
+          ],
+          "required" : false,
+          "choices" : [
+            "gzip",
+            "lzf"
+          ],
+          "direction" : "input",
+          "multiple" : false,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "string",
           "name" : "--obsm_embedding",
           "description" : "In which .obsm slot to store the resulting embedding.",
           "default" : [
@@ -3808,9 +3823,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/datasets/processors/pca",
     "viash_version" : "0.9.4",
-    "git_commit" : "fcf16f1ab6e075ed5dddf110db557b209e0b2f80",
+    "git_commit" : "075e2efd9a3497fb9a848817825be7e41772f5e8",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1427-gfcf16f1a"
+    "git_tag" : "v1.0.0-1428-g075e2efd"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3876,6 +3891,7 @@ par = {
   'input_layer': $( if [ ! -z ${VIASH_PAR_INPUT_LAYER+x} ]; then echo "r'${VIASH_PAR_INPUT_LAYER//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
   'input_var_features': $( if [ ! -z ${VIASH_PAR_INPUT_VAR_FEATURES+x} ]; then echo "r'${VIASH_PAR_INPUT_VAR_FEATURES//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
   'output': $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "r'${VIASH_PAR_OUTPUT//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
+  'output_compression': $( if [ ! -z ${VIASH_PAR_OUTPUT_COMPRESSION+x} ]; then echo "r'${VIASH_PAR_OUTPUT_COMPRESSION//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
   'obsm_embedding': $( if [ ! -z ${VIASH_PAR_OBSM_EMBEDDING+x} ]; then echo "r'${VIASH_PAR_OBSM_EMBEDDING//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
   'varm_loadings': $( if [ ! -z ${VIASH_PAR_VARM_LOADINGS+x} ]; then echo "r'${VIASH_PAR_VARM_LOADINGS//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
   'uns_variance': $( if [ ! -z ${VIASH_PAR_UNS_VARIANCE+x} ]; then echo "r'${VIASH_PAR_UNS_VARIANCE//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
@@ -3929,7 +3945,7 @@ adata.uns[par["uns_variance"]] = {
 }
 
 print(">> Writing data", flush=True)
-adata.write_h5ad(par['output'])
+adata.write_h5ad(par['output'], compression=par["output_compression"])
 VIASHMAIN
 python -B "$tempscript"
 '''

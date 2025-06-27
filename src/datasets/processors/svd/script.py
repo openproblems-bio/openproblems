@@ -39,7 +39,7 @@ if par["input_mod2"] is not None:
 
 
 print(">> Writing data", flush=True)
-adata.write_h5ad(par["output"])
+adata.write_h5ad(par["output"], compression=par["output_compression"])
 if par["input_mod2"] is not None:
-    adata2.write_h5ad(par["output_mod2"])
+    adata2.write_h5ad(par["output_mod2"], compression=par["output_compression"])
 

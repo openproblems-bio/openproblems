@@ -20,6 +20,11 @@ arguments:
     direction: output
     __merge__: file_hvg.yaml
     required: true
+  - name: --output_compression
+    type: string
+    choices: [gzip, lzf]
+    required: false
+    example: gzip
   - name: "--var_hvg"
     type: string
     default: "hvg"
