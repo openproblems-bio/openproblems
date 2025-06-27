@@ -1,4 +1,4 @@
-name: op3_loader
+name: op3
 namespace: datasets/loaders/scrnaseq
 description: |
   "Loads and preprocesses the OP3 dataset from GEO accession GSE279945."
@@ -7,7 +7,7 @@ argument_groups:
   - name: Input
     arguments:
       - name: "--input"
-        type: string
+        type: file
         description: "Input url to the .h5ad file."
         direction: input
         required: false
@@ -81,17 +81,13 @@ resources:
   - type: python_script
     path: script.py
 
+test_resources:
+  - type: python_script
+    path: test.py
+
 engines:
   - type: docker
-    image: python:3.11
-    setup:
-      - type: python
-        packages:
-          - scanpy
-          - anndata
-          - pandas
-          - numpy
-          - requests
+    image: openproblems/base_python:1
     test_setup:
       - type: python
         packages:
@@ -100,8 +96,5 @@ engines:
 runners:
   - type: executable
   - type: nextflow
-
-test_resources:
-  - type: python_script
-    path: test.py
-
+    directives:
+      label: [highmem, midcpu, midtime]

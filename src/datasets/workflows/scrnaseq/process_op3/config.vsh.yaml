@@ -8,7 +8,7 @@ argument_groups:
     description: "Options for selecting input data"
     arguments:
       - name: --input
-        type: string
+        type: file
         description: "Link to initial input dataset"
         required: false
         default: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad

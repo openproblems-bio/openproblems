@@ -1,9 +1,5 @@
-import os
-import scanpy as sc
 import anndata as ad
-import pandas as pd
 import numpy as np
-import requests
 import logging
 
 logger = logging.getLogger(__name__)
@@ -26,95 +22,6 @@ par = {
 }
 meta = {}
 ## VIASH END
-
-def download_file(url, destination, max_retries=5):
-    """Download a file from a URL to a destination."""
-    # Create directory if it doesn't exist
-    os.makedirs(os.path.dirname(destination), exist_ok=True)
-    
-    # Get file size from server
-    response = requests.head(url)
-    total_size_server = int(response.headers.get('content-length', 0))
-    
-    # Check if file exists and is complete
-    if os.path.exists(destination):
-        file_size = os.path.getsize(destination)
-        if file_size == total_size_server:
-            logger.info(f"File already exists and is complete at {destination}, skipping download.")
-            return
-        elif file_size < total_size_server:
-            logger.info(f"Resuming download from byte {file_size} of {total_size_server}")
-        else:
-            logger.warning(f"Existing file is larger than expected. Restarting download.")
-            file_size = 0
-    else:
-        file_size = 0
-    
-    # Try to download with retries
-    for attempt in range(max_retries):
-        try:
-            # Set up headers for resume
-            headers = {}
-            mode = 'wb'
-            if file_size > 0:
-                headers['Range'] = f'bytes={file_size}-'
-                mode = 'ab'  # Append to existing file
-            
-            logger.info(f"Downloading {url} to {destination}")
-            
-            # Make request with resume header if applicable
-            response = requests.get(url, headers=headers, stream=True, timeout=60)
-            
-            # Handle resume response or normal response
-            if response.status_code == 206:  # Partial content
-                content_length = int(response.headers.get('content-length', 0))
-                total_size = content_length + file_size
-            elif response.status_code == 200:  # OK
-                total_size = int(response.headers.get('content-length', 0))
-                file_size = 0  # Reset file size for progress tracking
-            else:
-                logger.error(f"Unexpected status code: {response.status_code}")
-                continue
-            
-            with open(destination, mode) as f:
-                for chunk in response.iter_content(chunk_size=1024*1024):  # 1MB chunks
-                    if chunk:
-                        f.write(chunk)
-            
-            # Normal verification code
-            if os.path.getsize(destination) >= total_size:
-                logger.info(f"Download completed: {destination}")
-                return
-            else:
-                logger.warning(f"Downloaded file size mismatch. Retrying...")
-                file_size = os.path.getsize(destination)
-                
-        except (requests.exceptions.RequestException, IOError) as e:
-            logger.warning(f"Download error (attempt {attempt+1}/{max_retries}): {str(e)}")
-            # Update file size for next attempt
-            if os.path.exists(destination):
-                file_size = os.path.getsize(destination)
-        
-        # Wait before retrying
-        if attempt < max_retries - 1:
-            wait_time = 2 ** attempt  # Exponential backoff
-            logger.info(f"Waiting {wait_time} seconds before retrying...")
-            import time
-            time.sleep(wait_time)
-    
-    raise Exception(f"Failed to download {url} after {max_retries} attempts")
-
-def download_op3_data(url):
-    """Download the OP3 dataset from GEO."""
-    filename = "GSE279945_sc_counts_processed.h5ad"
-    
-    cache_dir = os.path.join(os.path.expanduser("~"), ".cache", "op3_loader")
-    os.makedirs(cache_dir, exist_ok=True)
-    
-    destination = os.path.join(cache_dir, filename)
-    download_file(url, destination)
-    
-    return destination
 
 def filter_op3_data(adata):
     """
@@ -246,14 +153,9 @@ def write_anndata(adata, par):
 
 # Instead of defining main() and calling it at the end, write the code directly
 logger.info("Starting OP3 loader")
-
-# Download the data
-logger.info(f"Downloading data from {par['input']}")
-data_path = download_op3_data(par['input'])
-
 # Load the data
-logger.info(f"Loading data from {data_path}")
-adata = sc.read_h5ad(data_path)
+logger.info(f"Loading data at {par['input']}")
+adata = ad.read_h5ad(par["input"])
 
 # Apply OP3-specific filtering
 adata = filter_op3_data(adata)
