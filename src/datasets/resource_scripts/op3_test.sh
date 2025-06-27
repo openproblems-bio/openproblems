@@ -41,4 +41,3 @@ nextflow run . \
   --output_knn force_null \
   --publish_dir $DATASET_DIR \
   -config /tmp/nextflow.config
-

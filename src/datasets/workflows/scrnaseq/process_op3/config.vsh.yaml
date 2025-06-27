@@ -147,7 +147,7 @@ resources:
     entrypoint: run_wf
   - path: /common/nextflow_helpers/helper.nf
 dependencies:
-  - name: datasets/loaders/scrnaseq/op3_loader
+  - name: datasets/loaders/scrnaseq/op3
   - name: datasets/normalization/log_cp
   - name: datasets/normalization/log_scran_pooling
   - name: datasets/normalization/sqrt_cp
