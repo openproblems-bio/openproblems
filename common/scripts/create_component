@@ -1,11 +1,11 @@
 #!/bin/bash
 
-repository="openproblems-bio/core"
-version="f1793a4dd9f5e0aaa25745ae644f1172cb3fc496"
+repository="openproblems-bio/openproblems"
+version="b25109b542107847f1f440e21e8f853138f3f010"
 component="project/create_component"
 
 cache_dir="$HOME/.cache/openproblems/repos/$repository"
-executable_path="viash/core/target/executable/${component}/$(basename ${component})"
+executable_path="target/executable/${component}/$(basename ${component})"
 version_file="$HOME/.cache/openproblems/versions/${repository}/${component}/version.txt"
 
 function get_repository {

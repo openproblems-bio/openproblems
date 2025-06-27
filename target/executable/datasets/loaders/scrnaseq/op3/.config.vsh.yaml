@@ -1,0 +1,258 @@
+name: "op3"
+namespace: "datasets/loaders/scrnaseq"
+version: "build_main"
+argument_groups:
+- name: "Input"
+  arguments:
+  - type: "file"
+    name: "--input"
+    description: "Input url to the .h5ad file."
+    info: null
+    example:
+    - "https:/ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad"
+    default:
+    - "https:/ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--var_feature_name"
+    description: "Location of where to find the feature names. Can be set to index\
+      \ if the feature names are the index."
+    info: null
+    default:
+    - "index"
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+- name: "Data Filtering"
+  description: "Arguments for filtering the dataset"
+  arguments:
+  - type: "string"
+    name: "--donor_id"
+    description: "Donor ID to filter for (1, 2, or 3). If not specified, all donors\
+      \ are included."
+    info: null
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--cell_type"
+    description: "Cell type to filter for (T cells, B cells, NK cells, or Myeloid).\
+      \ If not specified, all cell types are included."
+    info: null
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--perturbation"
+    description: "Perturbation to filter for. If not specified, all perturbations\
+      \ are included."
+    info: null
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+- name: "Dataset Metadata"
+  description: "Metadata about the dataset"
+  arguments:
+  - type: "string"
+    name: "--dataset_id"
+    description: "Unique identifier for the dataset"
+    info: null
+    default:
+    - "op3"
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--dataset_name"
+    description: "Human-readable name for the dataset"
+    info: null
+    default:
+    - "OP3: single-cell multimodal dataset in PBMCs for perturbation prediction benchmarking"
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--dataset_summary"
+    description: "Short summary of the dataset"
+    info: null
+    default:
+    - "The Open Problems Perurbation Prediction (OP3) dataset with small molecule\
+      \ perturbations in PBMCs"
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--dataset_description"
+    description: "Detailed description of the dataset"
+    info: null
+    default:
+    - "The OP3 dataset is to-date the largest single-cell small molecule perturbation\
+      \ dataset in primary tissue with multiple donor replicates."
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "dataset_reference"
+    description: "Bibtex reference of the paper in which the dataset was published."
+    info: null
+    default:
+    - "GSE279945"
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--dataset_url"
+    description: "Link to the original source of the dataset."
+    info: null
+    default:
+    - "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad"
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+- name: "Output"
+  description: "Output parameters"
+  arguments:
+  - type: "file"
+    name: "--output"
+    description: "Output h5ad file."
+    info: null
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--output_compression"
+    info: null
+    default:
+    - "gzip"
+    required: false
+    choices:
+    - "gzip"
+    - "lzf"
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+resources:
+- type: "python_script"
+  path: "script.py"
+  is_executable: true
+description: "\"Loads and preprocesses the OP3 dataset from GEO accession GSE279945.\"\
+  \n"
+info: null
+status: "enabled"
+scope:
+  image: "public"
+  target: "public"
+license: "MIT"
+links:
+  repository: "https://github.com/openproblems-bio/openproblems"
+  docker_registry: "ghcr.io"
+runners:
+- type: "executable"
+  id: "executable"
+  docker_setup_strategy: "ifneedbepullelsecachedbuild"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "highmem"
+    - "midcpu"
+    - "midtime"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+engines:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1"
+  namespace_separator: "/"
+  test_setup:
+  - type: "python"
+    user: false
+    packages:
+    - "viashpy"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+build_info:
+  config: "src/datasets/loaders/scrnaseq/op3/config.vsh.yaml"
+  runner: "executable"
+  engine: "docker"
+  output: "target/executable/datasets/loaders/scrnaseq/op3"
+  executable: "target/executable/datasets/loaders/scrnaseq/op3/op3"
+  viash_version: "0.9.4"
+  git_commit: "fcf16f1ab6e075ed5dddf110db557b209e0b2f80"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1427-gfcf16f1a"
+package_config:
+  name: "openproblems"
+  version: "build_main"
+  description: "Open Problems is a living, extensible, community-guided benchmarking\
+    \ platform.\n"
+  info:
+    test_resources:
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/common"
+      dest: "resources_test/common"
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/openproblems"
+      dest: "resources_test/openproblems"
+  viash_version: "0.9.4"
+  source: "src"
+  target: "target"
+  config_mods:
+  - ".runners[.type == \"nextflow\"].config.labels := { lowmem : \"memory = 20.Gb\"\
+    , midmem : \"memory = 50.Gb\", highmem : \"memory = 100.Gb\", lowcpu : \"cpus\
+    \ = 5\", midcpu : \"cpus = 15\", highcpu : \"cpus = 30\", lowtime : \"time = 1.h\"\
+    , midtime : \"time = 4.h\", hightime : \"time = 8.h\", veryhightime : \"time =\
+    \ 24.h\" }\n.runners[.type == \"nextflow\"].config.script := \"process.errorStrategy\
+    \ = 'ignore'\"\n"
+  keywords:
+  - "openproblems"
+  - "benchmarking"
+  - "single-cell omics"
+  license: "MIT"
+  organization: "openproblems-bio"
+  references:
+    doi:
+    - "10.21203/rs.3.rs-4181617/v1"
+  links:
+    repository: "https://github.com/openproblems-bio/openproblems"
+    docker_registry: "ghcr.io"
+    issue_tracker: "https://github.com/openproblems-bio/openproblems/issues"

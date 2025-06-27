@@ -42,7 +42,7 @@ def check_format(arg):
     arg_info = arg.get("info") or {}
     if arg["type"] == "file":
         arg_format = arg_info.get("format", {})
-        file_type = arg_format.get("type") or arg_info.get("file_type") or "h5ad"
+        file_type = arg_format.get("type") or arg_info.get("file_type")
 
         if file_type == "h5ad":
             print(f"Reading and checking {arg['clean_name']}", flush=True)
@@ -110,13 +110,13 @@ def get_argument_sets(config):
     for arg in config["all_arguments"]:
         new_arg = arg.copy()
         arg_info = new_arg.get("info") or {}
+        example = arg.get("example", [None])[0]
 
         # use example to find test resource file
-        if arg["type"] == "file":
+        if example and arg["type"] == "file":
             if arg["direction"] == "input":
-                value = f"{meta['resources_dir']}/{arg['example'][0]}"
+                value = f"{meta['resources_dir']}/{example}"
             else:
-                example = arg.get("example", ["example"])[0]
                 ext_res = re.search(r"\.(\w+)$", example)
                 if ext_res:
                     value = f"{arg['clean_name']}.{ext_res.group(1)}"
