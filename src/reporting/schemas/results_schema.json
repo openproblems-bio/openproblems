@@ -23,6 +23,10 @@
         "description": "Method parameter set for these results",
         "type": ["null", "object"]
       },
+      "succeeded" : {
+        "description": "Whether the method run succeeded",
+        "type": "boolean"
+      },
       "run_duration_secs" : {
         "description": "Duration of the method run in seconds. Can be multiple if the method is a workflow.",
         "type": "array",
@@ -78,6 +82,84 @@
         "items": {
           "type": "number"
         }
+      },
+      "metric_components" : {
+        "description": "Run information for metric components",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "component_name": {
+              "description": "Metric component name",
+              "type": "string"
+            },
+            "metric_names": {
+              "description": "List of metric names calculated by this component",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "succeeded" : {
+              "description": "Whether the metric component run succeeded",
+              "type": "boolean"
+            },
+            "run_duration_secs" : {
+              "description": "Duration of the metric run in seconds. Can be multiple if the metric is a workflow.",
+              "type": "array",
+                "items": {
+                  "type": "number"
+                }
+            },
+            "run_cpu_pct" : {
+              "description": "CPU usage percentage of the metric run. Can be multiple if the metric is a workflow.",
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "run_peak_memory_mb" : {
+              "description": "Peak memory usage of the metric run in MB. Can be multiple if the metric is a workflow.",
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "run_disk_read_mb" : {
+              "description": "Disk read usage of the metric run in MB. Can be multiple if the metric is a workflow.",
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "run_disk_write_mb" : {
+              "description": "Disk write usage of the metric run in MB. Can be multiple if the metric is a workflow.",
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "run_exit_code" : {
+              "description": "Exit code of the metric run. Can be multiple if the metric is a workflow.",
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": [
+            "component_name",
+            "metric_names",
+            "succeeded",
+            "run_duration_secs",
+            "run_cpu_pct",
+            "run_peak_memory_mb",
+            "run_disk_read_mb",
+            "run_disk_write_mb",
+            "run_exit_code"
+          ],
+          "additionalProperties": false
+        }
       }
     },
     "required": [
@@ -85,6 +167,7 @@
       "method_name",
       "paramset_name",
       "paramset",
+      "succeeded",
       "run_duration_secs",
       "run_cpu_pct",
       "run_peak_memory_mb",
@@ -92,7 +175,9 @@
       "run_disk_write_mb",
       "run_exit_code",
       "metric_names",
-      "metric_values"
-    ]
+      "metric_values",
+      "metric_components"
+    ],
+    "additionalProperties": false
   }
 }

@@ -42,15 +42,6 @@ argument_groups:
           format:
             type: json
             schema: /src/reporting/schemas/results_schema.json
-      - name: --output_metric_resources
-        type: file
-        direction: output
-        description: Output JSON file matching metric resources schema
-        default: metric_resources.json
-        info:
-          format:
-            type: json
-            schema: /src/reporting/schemas/metric_resources_schema.json
 
 resources:
   - type: r_script
@@ -68,9 +59,12 @@ engines:
     setup:
       - type: r
         cran:
+        - dplyr
         - lubridate
         - purrr
+        - readr
         - stringr
+        - tidyr
 
 runners:
   - type: executable
