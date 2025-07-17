@@ -1,47 +1,85 @@
 name: generate_qc
 namespace: reporting
 description: Generate task QC metrics
-arguments:
-  - name: --task_info
-    type: file
-    description: Task info file
-    example: resources_test/openproblems/task_results_v3/processed/task_info.json
-  - name: --method_info
-    type: file
-    description: Method info file
-    example: resources_test/openproblems/task_results_v3/processed/method_info.json
-  - name: --metric_info
-    type: file
-    description: Metric info file
-    example: resources_test/openproblems/task_results_v3/processed/metric_info.json
-  - name: --dataset_info
-    type: file
-    description: Dataset info file
-    example: resources_test/openproblems/task_results_v3/processed/dataset_info.json
-  - name: --results
-    type: file
-    description: Results file
-    example: resources_test/openproblems/task_results_v3/processed/results.json
-  - name: --output
-    type: file
-    direction: output
-    default: output.json
-    description: Output json
-    info:
-      format:
-        type: json
-        # TODO: add schema
+
+argument_groups:
+  - name: Inputs
+    arguments:
+    - name: --input_task_info
+      type: file
+      description: Task info file
+      info:
+        format:
+          type: json
+      required: true
+      example: resources_test/openproblems/task_results_v4/processed/task_info.json
+    - name: --input_dataset_info
+      type: file
+      description: Dataset info file
+      info:
+        format:
+          type: json
+      required: true
+      example: resources_test/openproblems/task_results_v4/processed/dataset_info.json
+    - name: --input_method_info
+      type: file
+      description: Method info file
+      info:
+        format:
+          type: json
+      required: true
+      example: resources_test/openproblems/task_results_v4/processed/method_info.json
+    - name: --input_metric_info
+      type: file
+      description: Metric info file
+      info:
+        format:
+          type: json
+      required: true
+      example: resources_test/openproblems/task_results_v4/processed/metric_info.json
+    - name: --input_results
+      type: file
+      description: Results JSON file
+      info:
+        format:
+          type: json
+      required: true
+      example: resources_test/openproblems/task_results_v4/processed/results.json
+
+  - name: Outputs
+    arguments:
+    - name: --output
+      type: file
+      direction: output
+      default: quality_control.json
+      description: Output quality control JSON file
+      info:
+        format:
+          type: json
+          schema: /src/reporting/schemas/quality_control_schema.json
+
 resources:
-  - type: python_script
-    path: script.py
+  - type: r_script
+    path: script.R
+
 test_resources:
-  - type: python_script
+  - type: r_script
     path: /common/component_tests/run_and_check_output.py
-  - path: /resources_test/openproblems/task_results_v3
-    dest: resources_test/openproblems/task_results_v3
+  - path: /resources_test/openproblems/task_results_v4
+    dest: resources_test/openproblems/task_results_v4
+
 engines:
   - type: docker
-    image: openproblems/base_python:1.0.0
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: r
+        cran:
+        - dplyr
+        - purrr
+        - readr
+        - stringr
+        - tidyr
+
 runners:
   - type: executable
   - type: nextflow
