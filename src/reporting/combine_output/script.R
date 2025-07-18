@@ -1,49 +1,64 @@
-### VIASH START
+## VIASH START
+processed_dir <- "resources_test/openproblems/task_results_v4/processed"
+
 par <- list(
-  input_task_info = "test-results/label_projection/processed/task_info.json",
-  input_quality_control = "test-results/label_projection/processed/quality_control.json",
-  input_metric_info = "test-results/label_projection/processed/metric_info.json",
-  input_method_info = "test-results/label_projection/processed/method_info.json",
-  input_dataset_info = "test-results/label_projection/processed/dataset_info.json",
-  input_results = "test-results/label_projection/processed/results.json",
-  input_metric_executions = "test-results/label_projection/processed/metric_execution_info.json",
-  output = "tasks.json"
+  # Inputs
+  input_task_info = paste0(processed_dir, "/task_info.json"),
+  input_quality_control = paste0(processed_dir, "/quality_control.json"),
+  input_metric_info = paste0(processed_dir, "/metric_info.json"),
+  input_method_info = paste0(processed_dir, "/method_info.json"),
+  input_dataset_info = paste0(processed_dir, "/dataset_info.json"),
+  input_results = paste0(processed_dir, "/results.json")
+  # Outputs
+  output = "task_results.json"
 )
-### VIASH END
+## VIASH END
 
+################################################################################
+#                              MAIN SCRIPT
+################################################################################
+
+cat("====== Combine output ======\n")
+
+cat("\n>>> Reading input files...\n")
+cat("Reading task info from '", par$input_task_info, "'...\n", sep = "")
 task_info <- jsonlite::read_json(par$input_task_info)
+
+cat("Reading quality control from '", par$input_quality_control, "'...\n", sep = "")
 quality_control <- jsonlite::read_json(par$input_quality_control)
+
+cat("Reading metric info from '", par$input_metric_info, "'...\n", sep = "")
 metric_info <- jsonlite::read_json(par$input_metric_info)
+
+cat("Reading method info from '", par$input_method_info, "'...\n", sep = "")
 method_info <- jsonlite::read_json(par$input_method_info)
+
+cat("Reading dataset info from '", par$input_dataset_info, "'...\n", sep = "")
 dataset_info <- jsonlite::read_json(par$input_dataset_info)
+
+cat("Reading results from '", par$input_results, "'...\n", sep = "")
 results <- jsonlite::read_json(par$input_results)
-metric_executions <- jsonlite::read_json(par$input_metric_executions)
 
-task_id_clean <- stringr::str_remove(task_info$task_id, "^task_")
-
-task <- list(
-  task_id = task_info$task_id,
-  commit_sha = task_info$commit_sha, # Missing from new output
-  task_name = task_info$task_name,
-  task_summary = task_info$task_summary,
-  task_description = task_info$task_description,
-  repo_url = task_info$repo,
-  version = task_info$version, # build_main in new output
-  license = task_info$license,
-  authors = task_info$authors,
-  quality_control = quality_control,
-  metrics = metric_info,
-  methods = method_info,
-  datasets = dataset_info,
+cat("\n>>> Combining outputs...\n")
+# Create combined output according to task_results_schema.json
+combined_output <- list(
+  task_info = task_info,
+  dataset_info = dataset_info,
+  method_info = method_info,
+  metric_info = metric_info,
   results = results,
-  metric_executions = metric_executions,
-  image_url = paste0("/images/benchmarks/", task_id_clean, ".svg"),
-  is_prerelease = FALSE
+  quality_control = quality_control
 )
 
+cat("\n>>> Writing output file...\n")
+cat("Writing combined output to '", par$output, "'...\n", sep = "")
 jsonlite::write_json(
-  list(task),
+  combined_output,
   par$output,
-  auto_unbox = TRUE,
-  pretty = TRUE
+  pretty = TRUE,
+  null = "null",
+  na = "null",
+  auto_unbox = TRUE
 )
+
+cat("\n>>> Done!\n")

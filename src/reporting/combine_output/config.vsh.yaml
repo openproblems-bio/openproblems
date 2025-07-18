@@ -12,31 +12,7 @@ argument_groups:
           format:
             type: json
         required: true
-        example: resources_test/openproblems/task_results_v3/processed/task_info.json
-      - name: --input_quality_control
-        type: file
-        description: Quality contol file
-        info:
-          format:
-            type: json
-        required: true
-        example: resources_test/openproblems/task_results_v3/processed/quality_control.json
-      - name: --input_metric_info
-        type: file
-        description: Metric info file
-        info:
-          format:
-            type: json
-        required: true
-        example: resources_test/openproblems/task_results_v3/processed/metric_info.json
-      - name: --input_method_info
-        type: file
-        description: Method info file
-        info:
-          format:
-            type: json
-        required: true
-        example: resources_test/openproblems/task_results_v3/processed/method_info.json
+        example: resources_test/openproblems/task_results_v4/processed/task_info.json
       - name: --input_dataset_info
         type: file
         description: Dataset info file
@@ -44,7 +20,23 @@ argument_groups:
           format:
             type: json
         required: true
-        example: resources_test/openproblems/task_results_v3/processed/dataset_info.json
+        example: resources_test/openproblems/task_results_v4/processed/dataset_info.json
+      - name: --input_method_info
+        type: file
+        description: Method info file
+        info:
+          format:
+            type: json
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/method_info.json
+      - name: --input_metric_info
+        type: file
+        description: Metric info file
+        info:
+          format:
+            type: json
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/metric_info.json
       - name: --input_results
         type: file
         description: Results file
@@ -52,26 +44,27 @@ argument_groups:
           format:
             type: json
         required: true
-        example: resources_test/openproblems/task_results_v3/processed/results.json
-      - name: --input_metric_executions
+        example: resources_test/openproblems/task_results_v4/processed/results.json
+      - name: --input_quality_control
         type: file
-        description: Metric executions file
+        description: Quality control file
         info:
           format:
             type: json
         required: true
-        example: resources_test/openproblems/task_results_v3/processed/metric_execution_info.json
+        example: resources_test/openproblems/task_results_v4/processed/quality_control.json
+
   - name: Outputs
     arguments:
-      - name: --output
-        type: file
-        direction: output
-        description: Combined output JSON
-        default: tasks.json
-        info:
-          format:
-            type: json
-            # TODO: add schema
+    - name: --output
+      type: file
+      direction: output
+      description: Combined output JSON
+      default: task_results.json
+      info:
+        format:
+          type: json
+          schema: /src/reporting/schemas/combined_output_schema.json
 
 resources:
   - type: r_script
@@ -80,16 +73,12 @@ resources:
 test_resources:
   - type: python_script
     path: /common/component_tests/run_and_check_output.py
-  - path: /resources_test/openproblems/task_results_v3
-    dest: resources_test/openproblems/task_results_v3
+  - path: /resources_test/openproblems/task_results_v4
+    dest: resources_test/openproblems/task_results_v4
 
 engines:
   - type: docker
     image: openproblems/base_r:1.0.0
-    setup:
-      - type: r
-        cran:
-          - stringr
 
 runners:
   - type: executable
