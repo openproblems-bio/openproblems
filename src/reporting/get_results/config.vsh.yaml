@@ -33,7 +33,7 @@ argument_groups:
 
   - name: Outputs
     arguments:
-      - name: --output_results
+      - name: --output
         type: file
         direction: output
         description: Output JSON file matching results schema
@@ -42,6 +42,7 @@ argument_groups:
           format:
             type: json
             schema: /src/reporting/schemas/results_schema.json
+        example: resources_test/openproblems/task_results_v4/processed/results.json
 
 resources:
   - type: r_script

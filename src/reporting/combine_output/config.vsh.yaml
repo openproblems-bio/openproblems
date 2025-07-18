@@ -60,7 +60,7 @@ argument_groups:
       type: file
       direction: output
       description: Combined output JSON
-      default: task_results.json
+      default: combined_output.json
       info:
         format:
           type: json

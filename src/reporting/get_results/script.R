@@ -11,11 +11,7 @@ par <- list(
   input_method_configs = paste0(raw_dir, "/method_configs.yaml"),
   input_metric_info = paste0(processed_dir, "/metric_info.json"),
   # Outputs
-  output_results = paste0(processed_dir, "/results.json"),
-  output_metric_execution_info = paste0(
-    processed_dir,
-    "/metric_execution_info.json"
-  )
+  output = paste0(processed_dir, "/results.json")
 )
 ## VIASH END
 
@@ -310,10 +306,10 @@ results <- scores |>
 dplyr::glimpse(results)
 
 cat("\n>>> Writing output files...\n")
-cat("Writing results to '", par$output_results, "'...\n", sep = "")
+cat("Writing results to '", par$output, "'...\n", sep = "")
 jsonlite::write_json(
   results,
-  par$output_results,
+  par$output,
   pretty = TRUE,
   null = "null",
   na = "null"
