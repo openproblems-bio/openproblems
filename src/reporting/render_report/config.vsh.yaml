@@ -12,7 +12,7 @@ argument_groups:
           format:
             type: json
         required: true
-        example: resources_test/openproblems/task_results_v4/processed/task_results.json
+        example: resources_test/openproblems/task_results_v4/processed/combined_output.json
 
   - name: Outputs
     arguments:

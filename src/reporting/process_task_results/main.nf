@@ -75,8 +75,16 @@ workflow run_wf {
       toState: ["output_combined": "output"]
     )
 
+    | render_report.run(
+      fromState: [
+        "input_task_results": "output_combined"
+      ],
+      toState: ["output_report": "output"]
+    )
+
     | setState([
       "output_combined": "output_combined",
+      "output_report": "output_report",
       "output_task_info": "output_task",
       "output_dataset_info": "output_dataset",
       "output_method_info": "output_method",

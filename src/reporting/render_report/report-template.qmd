@@ -500,6 +500,7 @@ Click the tabs to see the plots for each metric.
 :::
 
 ```{r}
+#| label: normalization
 dataset_names <- purrr::map_chr(dataset_info, "name")
 method_names <- purrr::map_chr(method_info, "name")
 metric_names <- purrr::map_chr(metric_info, "name")

@@ -56,6 +56,15 @@ argument_groups:
           format:
             type: json
             schema: /src/reporting/schemas/task_results_schema.json
+      - name: "--output_report"
+        type: file
+        required: true
+        direction: output
+        description: HTML run report
+        default: report.html
+        info:
+          format:
+            type: html
       - name: "--output_task_info"
         type: file
         required: true
@@ -130,6 +139,7 @@ dependencies:
   - name: reporting/get_task_info
   - name: reporting/generate_qc
   - name: reporting/combine_output
+  - name: reporting/render_report
 
 runners:
   - type: nextflow

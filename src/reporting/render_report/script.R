@@ -15,6 +15,13 @@ par <- list(
 
 cat("====== Render report ======\n")
 
+cat("\n>>> Copying input file...\n")
+file.copy(
+  par$input_task_results,
+  file.path(meta$resources_dir, "task_results.json"),
+  overwrite = TRUE
+)
+
 cat("\n>>> Rendering ...\n")
 cat("Quarto version: ", as.character(quarto::quarto_version()), sep = "")
 xfun::in_dir(
@@ -23,7 +30,7 @@ xfun::in_dir(
     input = "report.qmd",
     output_file = "report.html",
     execute_params = list(
-      task_results_json = par$input_task_results,
+      task_results_json = "task_results.json",
       logo = "logo.svg",
       functions = "functions.R"
     )
