@@ -1,0 +1,1147 @@
+---
+title: "Open Problems task run report"
+date: today
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    embed-resources: true
+    grid:
+      body-width: 1000px
+
+brand:
+  logo:
+    medium: favicon.svg
+  
+  color:
+    palette:
+      black: "#1A1A1A"
+      white: "#FFFFFF"
+      blue: "#165AE3"
+    foreground: black
+    background: white
+    primary: blue
+  
+  typography:
+    fonts:
+      - family: DM Sans
+        source: google
+      - family: Plus Jakarta Sans
+        source: google
+  
+    base: DM Sans
+    headings:
+      family: Plus Jakarta Sans
+      weight: 400
+  
+lightbox: true
+number-sections: true
+
+execute:
+  echo: false
+
+knitr:
+  opts_chunk:
+    out.width: "100%"
+    
+params:
+  task_results_json: task_results.json
+  logo: logo.svg
+  functions: functions.R
+---
+
+```{r}
+#| label: source
+source(params$functions)
+```
+
+```{r}
+#| label: load
+task_results <- jsonlite::read_json(
+  params$task_results_json,
+  simplifyVector = FALSE,
+  simplifyDataFrame = FALSE
+)
+```
+
+![](`r params$logo`){fig-align="center" width=80%}
+
+# Introduction
+
+This report displays and summarizes the output from an Open Problems task run.
+You can use it to check the results before they are uploaded to the Open Problems website.
+
+Please pay particular attention to **@sec-normalization Normalization** and **@sec-quality-control Quality control** to see if there are any issues with the task run.
+
+::: {.callout-caution}
+The results in this report are preliminary and may be slightly different to what
+are displayed in the final version on the Open Problems website
+:::
+
+# Task information
+
+::: {.callout-note}
+This section displays the task information as provided in the task `_viash.yaml` file
+:::
+
+```{r}
+#| label: task-info
+task_info <- task_results$task_info
+```
+
+## Summary
+
+**Task:** `r task_info$label`
+
+`r task_info$summary`
+
+```{r}
+#| label: task-repo_str
+task_repo_str <- stringr::str_remove(task_info$repository, "https://github.com/")
+```
+
+**Repository:** [``r task_repo_str``](`r task_info$repository`)
+
+**License:** `r task_info$license`
+
+```{r}
+#| label: task-info-version
+task_version <- task_info$version
+task_prerelease <- ifelse(task_info$is_prerelease, "(Pre-release)", "")
+```
+
+**Version:** ``r task_version`` `r task_prerelease`
+
+`r if(!is.null(task_info$commit)) paste0("**Commit:** \x60", task_info$commit, "\x60")`
+
+## Description
+
+`r task_info$description`
+
+## Authors
+
+```{r}
+#| label: task-authors
+task_authors <- purrr::map_dfr(task_info$authors, function(.author) {
+  other_info <- purrr::map_chr(names(.author$info), \(.info) {
+    paste(.info, toString(.author$info[[.info]]), sep = ": ")
+  }) |>
+    paste(collapse = ", ")
+  
+  data.frame(
+    name = .author$name,
+    github = .author$github,
+    orcid = .author$orcid,
+    info = other_info
+  )
+})
+
+colnames(task_authors) <- stringr::str_to_sentence(colnames(task_authors))
+reactable::reactable(
+  task_authors,
+  columns = list(
+    Github = reactable::colDef(
+      name = "GitHub",
+      cell = function(value, index, column) {
+        paste0("<a href='https://github.com/", value, "'>", value, "</a>")
+      },
+      style = list("font-family" = "monospace"),
+      html = TRUE
+    ),
+    Orcid = reactable::colDef(
+      name = "ORCiD",
+      cell = function(value, index, column) {
+        paste0("<a href='https://orcid.org/", value, "'>", value, "</a>")
+      },
+      html = TRUE
+    )
+  ),
+  striped = TRUE
+)
+```
+
+## References
+
+```{r}
+#| label: task-references
+get_references_table(task_info$references)
+```
+
+# Dataset information
+
+::: {.callout-note}
+This section displays the dataset information as provided in the dataset `config.vsh.yaml` files.
+
+Expand each row of the table for more details.
+:::
+
+```{r}
+#| label: dataset-info
+dataset_info <- task_results$dataset_info
+
+dataset_summary <- purrr::map_dfr(dataset_info, function(.dataset) {
+  data.frame(
+    dataset = .dataset$name,
+    label = .dataset$label,
+    summary = .dataset$summary
+  )
+})
+
+dataset_details <- purrr::map_dfr(dataset_info, function(.dataset) {
+  data.frame(
+    description = .dataset$description,
+    modalities = paste(.dataset$modalities, collapse = ", "),
+    organisms = paste(.dataset$organisms, collapse = ", "),
+    file_size_mb = .dataset$file_size_mb,
+    commit = .dataset$commit,
+    source_url = .dataset$source_url,
+    common_dataset_names = paste(.dataset$common_dataset_names, collapse = ", "),
+    date_created = .dataset$date_created
+  )
+})
+
+detail_columns <- c("modalities","organisms", "file_size_mb")
+source_columns <- c("commit", "source_url", "common_dataset_names", "date_created")
+
+reactable::reactable(
+  dataset_summary,
+  columns = list(
+    dataset = reactable::colDef(
+      name = "Dataset",
+      style = list("font-family" = "monospace"),
+      html = TRUE
+    ),
+    label = reactable::colDef(name = "Label"),
+    summary = reactable::colDef(name = "Summary")
+  ),
+  
+  details = function(index, column) {
+    description_table <- get_description_table(
+      dataset_details[index, c("description"), drop = FALSE]
+    )
+    
+    details_table <- reactable::reactable(
+      dataset_details[index, detail_columns],
+      columns = list(
+        modalities = reactable::colDef(name = "Modalities"),
+        organisms = reactable::colDef(name = "Organisms"),
+        file_size_mb = reactable::colDef(
+          name = "File size (MB)",
+          format = reactable::colFormat(digits = 2)
+        )
+      ),
+      sortable = FALSE
+    )
+    
+    source_table <- reactable::reactable(
+      dataset_details[index, source_columns],
+      columns = list(
+        commit = reactable::colDef(
+          name = "Commit",
+          style = list("font-family" = "monospace")
+        ),
+        source_url = reactable::colDef(
+          name = "Source URL",
+          cell = format_html_link,
+          html = TRUE
+        ),
+        common_dataset_names = reactable::colDef(name = "Common datasets"),
+        date_created = reactable::colDef(name = "Date created")
+      ),
+      sortable = FALSE
+    )
+    
+    references_table <- get_references_table(dataset_info[[index]]$references)
+    
+    htmltools::div(
+      style = "padding: 1rem",
+      description_table,
+      details_table,
+      source_table,
+      references_table
+    )
+  },
+  
+  highlight = TRUE,
+  striped = TRUE,
+  pagination = FALSE,
+  
+  rowStyle = reactable::JS(
+    "function(rowInfo) {
+      if (rowInfo.level == 0) { // corresponds to row group
+        return { 
+          borderLeft: '2px solid #104E8B',
+          fontWeight: 400
+        }
+      } 
+    }"
+  )
+)
+```
+
+# Method information
+
+::: {.callout-note}
+This section displays the method information as provided in the method `config.vsh.yaml` files.
+
+Expand each row of the table for more details.
+:::
+
+```{r}
+#| label: method-info
+method_info <- task_results$method_info
+
+method_summary <- purrr::map_dfr(method_info, function(.method) {
+  data.frame(
+    method = .method$name,
+    label = .method$label,
+    type = .method$type,
+    summary = .method$summary
+  )
+})
+
+method_details <- purrr::map_dfr(method_info, function(.method) {
+  method_data <- purrr::map(.method, \(.x) {ifelse(is.null(.x), "", .x)})
+  
+  data.frame(
+    description = method_data$description,
+    commit = method_data$commit,
+    version = method_data$version,
+    link_code = method_data$link_code,
+    link_documentation = method_data$link_documentation,
+    link_implementation = method_data$link_implementation,
+    link_container_image = method_data$link_container_image
+  )
+})
+
+source_columns <- c(
+  "Commit" = "commit",
+  "Version" = "version"
+)
+
+link_columns <- c(
+  "Code" = "link_code",
+  "Documentation" = "link_documentation",
+  "Implementation" = "link_implementation",
+  "Image" = "link_container_image"
+)
+
+reactable::reactable(
+  method_summary,
+  columns = list(
+    method = reactable::colDef(
+      name = "Method",
+      style = list("font-family" = "monospace"),
+      html = TRUE
+    ),
+    label = reactable::colDef(name = "Label"),
+    type = reactable::colDef(
+      name = "Type",
+      cell = function(value) {
+        value |>
+          stringr::str_replace_all("_", " ") |>
+          stringr::str_to_sentence()
+      },
+    ),
+    summary = reactable::colDef(name = "Summary")
+  ),
+  
+  details = function(index, column) {
+    description_table <- get_description_table(
+      method_details[index, c("description"), drop = FALSE]
+    )
+    
+    source_table <- get_source_table(method_details[index, ], source_columns)
+    
+    links_table <- get_links_table(method_details[index, ], link_columns)
+    
+    additional_table <- get_additional_info_table(
+      method_info[[index]]$additional_info
+    )
+    
+    references_table <- get_references_table(method_info[[index]]$references)
+
+    htmltools::div(
+      style = "padding: 1rem",
+      description_table,
+      source_table,
+      links_table,
+      additional_table,
+      references_table
+    )
+  },
+  
+  highlight = TRUE,
+  striped = TRUE,
+  pagination = FALSE,
+  
+  rowStyle = reactable::JS(
+    "function(rowInfo) {
+      if (rowInfo.level == 0) { // corresponds to row group
+        return { 
+          borderLeft: '2px solid #104E8B',
+          fontWeight: 400
+        }
+      } 
+    }"
+  )
+)
+```
+
+# Metric information
+
+::: {.callout-note}
+This section displays the metric information as provided in the metric `config.vsh.yaml` files.
+
+Expand each row of the table for more details.
+:::
+
+```{r}
+#| label: metric-info
+metric_info <- task_results$metric_info
+
+metric_summary <- purrr::map_dfr(metric_info, function(.metric) {
+  data.frame(
+    metric = .metric$name,
+    label = .metric$label,
+    summary = .metric$summary
+  )
+})
+
+metric_details <- purrr::map_dfr(metric_info, function(.metric) {
+  metric_data <- purrr::map(.metric, \(.x) {ifelse(is.null(.x), "", .x)})
+  
+  data.frame(
+    description = metric_data$description,
+    component_name = metric_data$component_name,
+    commit = metric_data$commit,
+    version = metric_data$version,
+    maximize = metric_data$maximize,
+    link_implementation = metric_data$link_implementation,
+    link_container_image = metric_data$link_container_image
+  )
+})
+
+source_columns <- c(
+  "Component" = "component_name",
+  "Commit" = "commit",
+  "Version" = "version",
+  "Maximize?" = "maximize"
+)
+link_columns <- c(
+  "Implementation" = "link_implementation",
+  "Image" = "link_container_image"
+)
+
+reactable::reactable(
+  metric_summary,
+  columns = list(
+    metric = reactable::colDef(
+      name = "Metric",
+      style = list("font-family" = "monospace"),
+      html = TRUE
+    ),
+    label = reactable::colDef(name = "Label"),
+    summary = reactable::colDef(name = "Summary")
+  ),
+  
+  details = function(index, column) {
+    description_table <- get_description_table(
+      metric_details[index, c("description"), drop = FALSE]
+    )
+    
+    source_table <- get_source_table(metric_details[index, ], source_columns)
+    
+    links_table <- get_links_table(metric_details[index, ], link_columns)
+    
+    additional_table <- get_additional_info_table(
+      metric_info[[index]]$additional_info
+    )
+    
+    references_table <- get_references_table(metric_info[[index]]$references)
+
+    htmltools::div(
+      style = "padding: 1rem",
+      description_table,
+      source_table,
+      links_table,
+      additional_table,
+      references_table
+    )
+  },
+  
+  highlight = TRUE,
+  striped = TRUE,
+  pagination = FALSE,
+  
+  rowStyle = reactable::JS(
+    "function(rowInfo) {
+      if (rowInfo.level == 0) { // corresponds to row group
+        return { 
+          borderLeft: '2px solid #104E8B',
+          fontWeight: 400
+        }
+      } 
+    }"
+  )
+)
+```
+
+# Normalization {#sec-normalization}
+
+::: {.callout-note}
+This section displays the normalization information for each metric.
+The scores for control methods are used to create a control range and scale the scores from other methods.
+Points outside the control range indicate that a metric is lacking an appropriate control method.
+
+Click the tabs to see the plots for each metric.
+:::
+
+```{r}
+dataset_names <- purrr::map_chr(dataset_info, "name")
+method_names <- purrr::map_chr(method_info, "name")
+metric_names <- purrr::map_chr(metric_info, "name")
+
+dataset_details <- purrr::map_dfr(dataset_info, function(.dataset) {
+  data.frame(
+    dataset = .dataset$name,
+    dataset_label = .dataset$label
+  )
+}) |>
+  dplyr::arrange(dataset)
+
+method_details <- purrr::map_dfr(method_info, function(.method) {
+  data.frame(
+    method = .method$name,
+    method_label = .method$label,
+    method_type = .method$type
+  )
+}) |>
+  dplyr::arrange(method)
+
+metric_details <- purrr::map_dfr(metric_info, function(.metric) {
+  data.frame(
+    metric = .metric$name,
+    metric_label = .metric$label
+  )
+}) |>
+  dplyr::arrange(metric)
+
+scores <- purrr::map_dfr(task_results$results, function(.result) {
+  if (!.result$succeeded) {
+    return(NULL)
+  }
+  
+  data.frame(
+    dataset = .result$dataset_name,
+    method = .result$method,
+    metric = unlist(.result$metric_names),
+    value = unlist(.result$metric_values)
+  )
+})
+  
+control_ranges <- scores |>
+  dplyr::left_join(method_details, by = "method") |>
+  dplyr::filter(method_type == "control_method") |>
+  dplyr::group_by(dataset, metric) |>
+  dplyr::summarise(
+    control_min = min(value, na.rm = TRUE),
+    control_max = max(value, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+scaled_scores <- scores |>
+  dplyr::left_join(control_ranges, by = c("dataset", "metric")) |>
+  dplyr::mutate(
+    scaled_value = (value - control_min) / (control_max - control_min)
+  )
+  
+complete_scores <- tidyr::expand_grid(
+  dataset = dataset_names,
+  method = method_names,
+  metric = metric_names
+) |>
+  dplyr::left_join(dataset_details, by = "dataset") |>
+  dplyr::relocate(method, metric, .after = dplyr::last_col()) |>
+  dplyr::left_join(method_details, by = "method") |>
+  dplyr::relocate(metric, .after = dplyr::last_col()) |>
+  dplyr::left_join(metric_details, by = "metric") |>
+  dplyr::left_join(scaled_scores, by = c("dataset", "method", "metric")) |>
+  tidyr::replace_na(list(scaled_value = 0)) |>
+  dplyr::arrange(dataset, method, metric)
+```
+
+::: {.panel-tabset}
+
+```{r}
+#| label: normalization-plots
+#| results: hide
+fig_height <- 0.8 * length(metric_names) + 1
+
+src_list <- purrr::map(metric_names, function(.metric) {
+  metric_label <- metric_details$metric_label[metric_details$metric == .metric]
+  
+  src <- c(
+    "## <<metric_label>> {.unnumbered .unlisted}",
+    "",
+    "```{r normalization-plot-<<.metric>>, fig.height=<<fig_height>>}",
+    "plot_scaling(complete_scores, '<<.metric>>', method_details, metric_details)",
+    "```",
+    ""
+  )
+  knitr::knit_expand(text = src, delim = c("<<", ">>"))
+})
+
+out <- knitr::knit_child(text = unlist(src_list), options = list(cache = FALSE))
+```
+
+`r out`
+
+:::
+
+# Quality control {#sec-quality-control}
+
+::: {.callout-note}
+This section displays quality control information about the task run.
+
+Click on the tabs to see each category of quality control checks and expand the rows to see more information.
+:::
+
+```{r}
+#| label: quality-control
+quality_control <- task_results$quality_control |>
+  purrr::map_dfr(as.data.frame) |>
+  dplyr::filter(severity > 0)
+
+qc_summary <- quality_control |>
+  dplyr::group_by(category) |>
+  dplyr::count(name = "failed") |>
+  dplyr::ungroup() |>
+  dplyr::mutate(
+    category = factor(
+      category,
+      levels = c(
+        "Task info",
+        "Dataset info",
+        "Method info",
+        "Metric info",
+        "Raw results",
+        "Scaling" 
+      )
+    )
+  ) |>
+  tidyr::complete(category, fill = list(failed = 0))
+
+reactable::reactable(
+  qc_summary,
+  columns = list(
+    category = reactable::colDef(name = "Category"),
+    failed = reactable::colDef(name = "Failed checks")
+  ),
+  
+  sortable = FALSE,
+  striped = TRUE,
+)
+```
+
+::: {.panel-tabset}
+
+## Task information {.unnumbered .unlisted}
+
+```{r}
+#| label: quality-control-task
+quality_control |>
+  dplyr::filter(category == "Task info") |>
+  dplyr::select(-category) |>
+  get_qc_table()
+```
+
+## Dataset information {.unnumbered .unlisted}
+
+```{r}
+#| label: quality-control-datasets
+quality_control |>
+  dplyr::filter(category == "Dataset info") |>
+  dplyr::select(-category) |>
+  get_qc_table()
+```
+
+## Method information {.unnumbered .unlisted}
+
+```{r}
+#| label: quality-control-methods
+quality_control |>
+  dplyr::filter(category == "Method info") |>
+  dplyr::select(-category) |>
+  get_qc_table()
+```
+
+## Metric information {.unnumbered .unlisted}
+
+```{r}
+#| label: quality-control-metrics
+quality_control |>
+  dplyr::filter(category == "Metric info") |>
+  dplyr::select(-category) |>
+  get_qc_table()
+```
+
+## Raw results {.unnumbered .unlisted}
+
+```{r}
+#| label: quality-control-results
+quality_control |>
+  dplyr::filter(category == "Raw results") |>
+  dplyr::select(-category) |>
+  get_qc_table()
+```
+
+## Scaling {.unnumbered .unlisted}
+
+```{r}
+#| label: quality-control-scaling
+quality_control |>
+  dplyr::filter(category == "Scaling") |>
+  dplyr::select(-category) |>
+  get_qc_table()
+```
+
+:::
+
+# Results
+
+```{r}
+#| label: results
+mean_scores <- complete_scores |>
+  dplyr::group_by(dataset, method) |>
+  dplyr::summarise(
+    mean_score = aggregate_scores(scaled_value),
+    .groups = "drop"
+  )
+
+dataset_scores <- complete_scores |>
+  dplyr::select(dataset, method, metric, scaled_value) |>
+  tidyr::pivot_wider(
+    names_from = metric,
+    values_from = scaled_value
+  ) |>
+  dplyr::left_join(mean_scores, by = c("dataset", "method"))
+
+overall_scores <- dataset_scores |>
+  dplyr::group_by(method) |>
+  dplyr::summarise(
+    dataset = "overall",
+    dplyr::across(
+      tidyselect::where(is.numeric),
+      aggregate_scores
+    ),
+    .groups = "drop"
+  )
+
+exit_names <- c(
+  "Memory limit exceeded",
+  "Time limit exceeded",
+  "Execution error",
+  "Unknown error",
+  "Not applicable",
+  "No error"
+)
+
+exit_codes <- purrr::map_dfr(task_results$results, function(.result) {
+  data.frame(
+    dataset = .result$dataset_name,
+    method = .result$method
+  )
+}) |>
+  dplyr::mutate(
+    exit_codes = purrr::map(task_results$results, "run_exit_code")
+  ) |>
+  dplyr::mutate(
+    exit_codes = purrr::map(exit_codes, \(.codes) {
+      if (length(.codes) == 0) {
+        0
+      } else {
+        .codes
+      }
+    })
+  ) |>
+  dplyr::group_by(method) |>
+  dplyr::summarise(
+    exit_codes = list(unlist(exit_codes)),
+    .groups = "drop"
+  ) |>
+  dplyr::mutate(
+    all_codes = purrr::map_chr(exit_codes, function(.codes) {
+      paste(.codes, collapse = ", ")
+    }),
+    pct_oom = purrr::map_dbl(exit_codes, function(.codes) {
+      mean(.codes == 137)
+    }),
+    pct_timeout = purrr::map_dbl(exit_codes, function(.codes) {
+      mean(.codes == 143)
+    }),
+    pct_error = purrr::map_dbl(exit_codes, function(.codes) {
+      mean(.codes > 0 & .codes != 137 & .codes != 143 & .codes != 99)
+    }),
+    pct_unknown = purrr::map_dbl(exit_codes, function(.codes) {
+      mean(.codes < 0)
+    }),
+    pct_na = purrr::map_dbl(exit_codes, function(.codes) {
+      mean(.codes == 99)
+    }),
+    pct_ok = purrr::map_dbl(exit_codes, function(.codes) {
+      mean(.codes == 0)
+    }),
+  ) |>
+  tidyr::nest(exit_summary = tidyselect::starts_with("pct")) |>
+  dplyr::mutate(exit_summary = purrr::map(exit_summary, \(.summary) {
+    exit_vec <- unlist(as.vector(.summary))
+    names(exit_vec) <- exit_names
+    
+    exit_vec
+  }))
+
+resources <- purrr::map_dfr(task_results$results, function(.result) {
+  data.frame(
+    dataset = .result$dataset_name,
+    method = .result$method
+  )
+}) |>
+  dplyr::mutate(
+    run_duration_secs = purrr::map(task_results$results, "run_duration_secs"),
+    run_cpu_pct = purrr::map(task_results$results, "run_cpu_pct"),
+    run_peak_memory_mb = purrr::map(task_results$results, "run_peak_memory_mb"),
+    run_disk_read_mb = purrr::map(task_results$results, "run_disk_read_mb"),
+    run_disk_write_mb = purrr::map(task_results$results, "run_disk_write_mb")
+  ) |>
+  # Summarise per task
+  dplyr::mutate(
+    run_cpu_pct = purrr::map_dbl(run_cpu_pct, function(.values) {
+      if (length(.values) == 0) {
+        return(NA_real_)
+      }
+      
+      mean(unlist(.values), na.rm = TRUE)
+    }),
+    run_peak_memory_mb = purrr::map_dbl(run_peak_memory_mb, function(.values) {
+      if (length(.values) == 0) {
+        return(NA_real_)
+      }
+      
+      max(unlist(.values), na.rm = TRUE)
+    }),
+    run_disk_read_mb = purrr::map_dbl(run_disk_read_mb, function(.values) {
+      if (length(.values) == 0) {
+        return(NA_real_)
+      }
+      
+      sum(unlist(.values), na.rm = TRUE)
+    }),
+    run_disk_write_mb = purrr::map_dbl(run_disk_write_mb, function(.values) {
+      if (length(.values) == 0) {
+        return(NA_real_)
+      }
+      
+      sum(unlist(.values), na.rm = TRUE)
+    }),
+    run_duration_secs = purrr::map_dbl(run_duration_secs, function(.values) {
+      if (length(.values) == 0) {
+        return(NA_real_)
+      }
+      
+      sum(unlist(.values), na.rm = TRUE)
+    })
+  ) |>
+  # Summarise by method
+  dplyr::group_by(method) |>
+  dplyr::summarise(
+    mean_cpu_pct = mean(run_cpu_pct, na.rm = TRUE),
+    mean_peak_memory_mb = mean(run_peak_memory_mb, na.rm = TRUE),
+    mean_disk_read_mb = mean(run_disk_read_mb, na.rm = TRUE),
+    mean_disk_write_mb = mean(run_disk_write_mb, na.rm = TRUE),
+    mean_duration_secs = mean(run_duration_secs, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  dplyr::mutate(
+    mean_peak_memory_mb_log = -log10(mean_peak_memory_mb),
+    mean_peak_memory_label = paste0(" ", label_memory(mean_peak_memory_mb), " "),
+    mean_disk_read_mb_log = -log10(mean_disk_read_mb),
+    mean_disk_read_label = paste0(" ", label_memory(mean_disk_read_mb), " "),
+    mean_disk_write_mb_log = -log10(mean_disk_write_mb),
+    mean_disk_write_label = paste0(" ", label_memory(mean_disk_write_mb), " "),
+    mean_duration_secs_log = -log10(mean_duration_secs),
+    mean_duration_label = paste0(" ", label_time(mean_duration_secs), " ")
+  )
+```
+
+## Summary figure
+
+::: {.callout-note}
+This is a static version of the main summary figure shown on the Open Problems website.
+
+Click on the image to expand it.
+:::
+
+```{r}
+#| label: results-figure
+#| message: false
+#| fig-width: 18
+#| fig-height: 16
+figure_data <- overall_scores |>
+  dplyr::select(-dataset) |>
+  dplyr::relocate(mean_score, .after = method) |>
+  dplyr::left_join(
+    dplyr::select(exit_codes, method, exit_summary),
+    by = "method"
+  ) |>
+  dplyr::relocate(exit_summary, .after = mean_score) |>
+  dplyr::left_join(
+    mean_scores |>
+      dplyr::arrange(dataset) |>
+      tidyr::pivot_wider(names_from = "dataset", values_from = "mean_score"),
+    by = "method"
+  ) |>
+  dplyr::relocate(
+    tidyselect::all_of(dataset_details$dataset),
+    .after = exit_summary
+  ) |>
+  dplyr::left_join(
+    resources |>
+      dplyr::select(
+        method,
+        mean_cpu_pct,
+        mean_peak_memory_mb_log,
+        mean_peak_memory_label,
+        mean_disk_read_mb_log,
+        mean_disk_read_label,
+        mean_disk_write_mb_log,
+        mean_disk_write_label,
+        mean_duration_secs_log,
+        mean_duration_label
+      ),
+    by = "method"
+  ) |>
+  # Resources are not 0-1 so need to be rescaled
+  dplyr::mutate(
+    mean_cpu_pct = scales::rescale(mean_cpu_pct),
+    mean_peak_memory_mb_log = scales::rescale(mean_peak_memory_mb_log),
+    mean_disk_read_mb_log = scales::rescale(mean_disk_read_mb_log),
+    mean_disk_write_mb_log = scales::rescale(mean_disk_write_mb_log),
+    mean_duration_secs_log = scales::rescale(mean_duration_secs_log)
+  ) |>
+  dplyr::arrange(dplyr::desc(mean_score)) |>
+  dplyr::mutate(
+    method = factor(
+      method,
+      levels = method_details$method,
+      labels = method_details$method_label
+    )
+  ) |>
+  dplyr::rename(id = method)
+
+column_info <- tibble::tibble(
+  id = colnames(figure_data),
+  name = c(
+    "Method",
+    "Overall score",
+    "Error reason",
+    dataset_details$dataset_label,
+    metric_details$metric_label,
+    "% CPU",
+    "Peak memory",
+    "",
+    "Disk read",
+    "",
+    "Disk write",
+    "",
+    "Duration",
+    ""
+  ),
+  geom = c(
+    "text",
+    "bar",
+    "pie",
+    rep("funkyrect", length(dataset_names)),
+    rep("funkyrect", length(metric_names)),
+    c("funkyrect", rep(c("rect", "text"), 4))
+  ),
+  group = c(
+    NA,
+    "overall",
+    "overall", 
+    rep("datasets", length(dataset_names)),
+    rep("metrics", length(metric_names)),
+    rep("resources", 9)
+  ),
+  palette = c(
+    NA,
+    "overall_palette",
+    "error_reason_palette",
+    rep("datasets_palette", length(dataset_names)),
+    rep("metrics_palette", length(metric_names)),
+    "resources_palette", rep(c("resources_palette", "black"), 4)
+  ),
+  width = c(
+    12,
+    4,
+    1,
+    rep(1, length(dataset_names)),
+    rep(1, length(metric_names)),
+    rep(1, 9)
+  ),
+  overlay = c(
+    FALSE,
+    FALSE,
+    FALSE,
+    rep(FALSE, length(dataset_names)),
+    rep(FALSE, length(metric_names)),
+    FALSE, rep(c(FALSE, TRUE), 4)
+  ),
+  hjust = c(
+    0,
+    0,
+    0.5,
+    rep(0.5, length(dataset_names)),
+    rep(0.5, length(metric_names)),
+    rep(0.5, 9)
+  )
+)
+
+column_groups <- tibble::tibble(
+  group = c("overall", "datasets", "metrics", "resources"),
+  category = c("Overall", "Datasets", "Metrics", "Resources"),
+  palette = c("overall_palette", "datasets_palette", "metrics_palette", "resources_palette"),
+)
+
+palettes <- list(
+  overall_palette = "Greys",
+  error_reason_palette = c(
+    "#8DD3C7",
+    "#FFFFB3",
+    "#BEBADA",
+    "#fdb462",
+    "#999999",
+    "#FFFFFF"
+  ),
+  datasets_palette = "Blues",
+  metrics_palette = "Reds",
+  resources_palette = "YlOrBr",
+  black = c("black", "black")
+)
+names(palettes$error_reason_palette) <- exit_names
+
+legends <- list(
+  list(
+    geom = "funkyrect",
+    title = "Score",
+    colour = "white"
+  ),
+  list(
+    palette = "overall_palette",
+    enabled = FALSE
+  ),
+  list(
+    palette = "error_reason_palette",
+    geom = "pie",
+    title = "",
+    label_width = 5
+  ),
+  list(
+    palette = "datasets_palette",
+    enabled = FALSE
+  ),
+  list(
+    palette = "metrics_palette",
+    enabled = FALSE
+  ),
+  list(
+    palette = "resources_palette",
+    enabled = FALSE
+  )
+)
+
+funkyheatmap::funky_heatmap(
+  figure_data,
+  column_info = column_info,
+  column_groups = column_groups,
+  palettes = palettes,
+  legends = legends,
+  scale_column = FALSE,
+  position_args = funkyheatmap::position_arguments(
+    col_space = 0.2,
+    col_bigspace = 0.8,
+    col_annot_offset = 6
+  )
+)
+```
+
+## Table
+
+::: {.callout-note}
+This table displays the scaled metric scores.
+The "Overall" dataset gives the mean score across all of the actual datasets.
+
+Sort and filter the table to check scores you are interested in.
+:::
+
+```{r}
+#| label: results-table
+table_data <- dataset_scores |>
+  dplyr::bind_rows(overall_scores) |>
+  dplyr::mutate(
+    dataset = factor(
+      dataset,
+      levels = c("overall", dataset_details$dataset),
+      labels = c("Overall", dataset_details$dataset_label)
+    ),
+    method = factor(
+      method,
+      levels = method_details$method,
+      labels = method_details$method_label
+    )
+  ) |>
+  dplyr::relocate(dataset, .after = method) |>
+  dplyr::relocate(mean_score, .after = dataset) |>
+  dplyr::arrange(dataset, method)
+
+reactable::reactable(
+  table_data,
+  
+  columns = c(
+    list(
+      method = reactable::colDef(
+        name = "Method",
+        sticky = "left"
+      ),
+      dataset = reactable::colDef(
+        name = "Dataset",
+        sticky = "left",
+        style = list(borderRight = "2px solid #999"),
+        headerStyle = list(borderRight = "2px solid #999")
+      ),
+      mean_score = reactable::colDef(
+        name = "Mean score",
+        format = reactable::colFormat(digits = 3)
+      )
+    ),
+    purrr::map( metric_details$metric_label, 
+      function(.metric_label) {
+        reactable::colDef(
+          name = .metric_label,
+          format = reactable::colFormat(digits = 3)
+        )
+      }
+    ) |>
+      purrr::set_names(metric_details$metric)
+  ),
+  
+  highlight = TRUE,
+  striped = TRUE,
+  defaultPageSize = 25,
+  showPageSizeOptions = TRUE,
+  filterable = TRUE,
+  searchable = TRUE
+)
+```

@@ -1,0 +1,81 @@
+name: render_report
+namespace: reporting
+description: Render a HTML report summarizing the results
+
+argument_groups:
+  - name: Inputs
+    arguments:
+      - name: --input_task_results
+        type: file
+        description: Task results JSON file
+        info:
+          format:
+            type: json
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/task_results.json
+
+  - name: Outputs
+    arguments:
+    - name: --output
+      type: file
+      direction: output
+      description: HTML report file
+      default: report.html
+      info:
+        format:
+          type: html
+
+resources:
+  - type: r_script
+    path: script.R
+  - path: /src/reporting/render_report/report-template.qmd
+    dest: report.qmd
+  - path: /src/reporting/render_report/report-functions.R
+    dest: functions.R
+  - path: /src/reporting/render_report/logo.svg
+    dest: logo.svg
+
+test_resources:
+  - type: python_script
+    path: /common/component_tests/run_and_check_output.py
+  - path: /resources_test/openproblems/task_results_v4
+    dest: resources_test/openproblems/task_results_v4
+
+engines:
+  - type: docker
+    image: openproblems/base_r:1.0.0
+    setup:
+      - type: docker
+        run: |
+          export QUARTO_VERSION="1.7.32" && \
+          mkdir -p /opt/quarto/${QUARTO_VERSION} && \
+          wget -O quarto.tar.gz "https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.tar.gz" && \
+          tar -zxvf quarto.tar.gz -C "/opt/quarto/${QUARTO_VERSION}" --strip-components=1 && \
+          ln -s /opt/quarto/${QUARTO_VERSION}/bin/quarto /usr/local/bin/quarto && \
+          rm quarto.tar.gz
+      - type: r
+        cran:
+        - commonmark
+        - dplyr
+        - funkyheatmap
+        - ggplot2
+        - here
+        - htmltools
+        - jsonlite
+        - knitr
+        - patchwork
+        - purrr
+        - quarto
+        - rcrossref
+        - reactable
+        - scales
+        - stringr
+        - tibble
+        - tidyr
+        - xfun
+
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [lowmem, lowtime, lowcpu]
