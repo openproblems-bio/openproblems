@@ -24,6 +24,11 @@ arguments:
     direction: output
     __merge__: file_pca.yaml
     required: true
+  - name: --output_compression
+    type: string
+    choices: [gzip, lzf]
+    required: false
+    example: gzip
   - name: "--obsm_embedding"
     type: string
     default: "X_pca"

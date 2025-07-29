@@ -12,4 +12,9 @@ arguments:
     __merge__: file_raw.yaml
     direction: "output"
     required: true
+  - name: --output_compression
+    type: string
+    choices: [gzip, lzf]
+    required: false
+    example: gzip
 test_resources: []
