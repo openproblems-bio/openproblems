@@ -500,11 +500,68 @@ Click the tabs to see the plots for each metric.
 :::
 
 ```{r}
-#| label: normalization
+#| label: normalization-controls
+#| results: asis
 dataset_names <- purrr::map_chr(dataset_info, "name")
 method_names <- purrr::map_chr(method_info, "name")
 metric_names <- purrr::map_chr(metric_info, "name")
 
+control_method_names <- method_summary$method[method_summary$type == "control_method"]
+
+n_controls <- purrr::map_dfr(task_results$results, function(.result) {
+  data.frame(dataset = .result$dataset_name, method = .result$method)
+}) |>
+  dplyr::filter(
+    method %in% control_method_names
+  ) |>
+  dplyr::group_by(dataset) |>
+  dplyr::count(name = "n_controls") |>
+  dplyr::ungroup() |>
+  dplyr::mutate(dataset = factor(dataset, levels = dataset_names)) |>
+  tidyr::complete(dataset, fill = list(n_controls = 0)) 
+
+has_controls <- all(n_controls$n_controls >= 2)
+
+if (isFALSE(has_controls)) {
+  out <- c("## No normalization performed")
+  
+  cat(
+    c(
+      "::: {.callout-important}",
+      "There are less than two control methods for some datasets.",
+      "**Scaling cannot be peformed and the results sections will be empty.**",
+      "See the quality control section for more information.",
+      "",
+      knitr::kable(
+        n_controls,
+        col.names = c("Dataset", "Number of control methods")
+      ),
+      ":::"
+    ),
+    sep = "\n"
+  )
+} else if (!all(n_controls$n_controls == length(control_method_names))) {
+    cat(
+    c(
+      "::: {.callout-warning}",
+      "Some control method results are missing for some datasets.",
+      "This may affect scaling and results.",
+      "See the normalization plots and the quality control section for more information.",
+      "",
+      knitr::kable(
+        n_controls,
+        col.names = c("Dataset", "Number of control methods")
+      ),
+      ":::"
+    ),
+    sep = "\n"
+  )
+}
+```
+
+```{r}
+#| label: normalization
+#| eval: !expr has_controls
 dataset_details <- purrr::map_dfr(dataset_info, function(.dataset) {
   data.frame(
     dataset = .dataset$name,
@@ -579,6 +636,7 @@ complete_scores <- tidyr::expand_grid(
 ```{r}
 #| label: normalization-plots
 #| results: hide
+#| eval: !expr has_controls
 fig_height <- 0.8 * length(metric_names) + 1
 
 src_list <- purrr::map(metric_names, function(.metric) {
@@ -643,7 +701,7 @@ reactable::reactable(
   ),
   
   sortable = FALSE,
-  striped = TRUE,
+  striped = TRUE
 )
 ```
 
@@ -715,6 +773,7 @@ quality_control |>
 
 ```{r}
 #| label: results
+#| eval: !expr has_controls
 mean_scores <- complete_scores |>
   dplyr::group_by(dataset, method) |>
   dplyr::summarise(
@@ -890,6 +949,7 @@ Click on the image to expand it.
 #| message: false
 #| fig-width: 18
 #| fig-height: 16
+#| eval: !expr has_controls
 figure_data <- overall_scores |>
   dplyr::select(-dataset) |>
   dplyr::relocate(mean_score, .after = method) |>
@@ -1089,6 +1149,7 @@ Sort and filter the table to check scores you are interested in.
 
 ```{r}
 #| label: results-table
+#| eval: !expr has_controls
 table_data <- dataset_scores |>
   dplyr::bind_rows(overall_scores) |>
   dplyr::mutate(
