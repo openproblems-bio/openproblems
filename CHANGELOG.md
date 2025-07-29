@@ -18,7 +18,7 @@
 
 - Moved `src/tasks/spatially_variable_genes` to [`task_spatially_variable_genes`](https://github.com/openproblems-bio/task_spatially_variable_genes) (PR #910).
 
-- Moved `src/datasets` to [`datasets`](https://github.com/openproblems-bio/datasets) (PR #xxx).
+- Moved `src/datasets` to [`datasets`](https://github.com/openproblems-bio/datasets) (PR #933).
 
 ## Major changes
 
