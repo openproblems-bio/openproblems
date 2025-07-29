@@ -18,6 +18,8 @@
 
 - Moved `src/tasks/spatially_variable_genes` to [`task_spatially_variable_genes`](https://github.com/openproblems-bio/task_spatially_variable_genes) (PR #910).
 
+- Moved `src/datasets` to [`datasets`](https://github.com/openproblems-bio/datasets) (PR #xxx).
+
 ## Major changes
 
 - Update Viash to 0.9.0 (PR #911).
