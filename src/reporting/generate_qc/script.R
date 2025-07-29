@@ -25,7 +25,18 @@ create_qc_entry <- function(
   condition,
   message
 ) {
+  # If values are missing, set to -1
+  # This can happen if a method/metric is not run and therefore has no results
+  if (is.null(value) || is.na(value) || length(value) == 0) {
+    value <- -1
+  }
+
+  if (is.null(severity_value) || is.na(severity_value) || length(severity_value) == 0) {
+    severity_value <- -1
+  }
+
   severity <- dplyr::case_when(
+    severity_value < 0 ~ 3L,
     severity_value <= 1 ~ 0L,
     severity_value <= 2 ~ 1L,
     severity_value <= 3 ~ 2L,
