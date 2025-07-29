@@ -449,9 +449,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "muon" "numpy<2"
 
 LABEL org.opencontainers.image.description="Companion container for running component datasets/normalization atac_tfidf"
-LABEL org.opencontainers.image.created="2025-07-04T11:36:52Z"
+LABEL org.opencontainers.image.created="2025-07-29T11:29:44Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="075e2efd9a3497fb9a848817825be7e41772f5e8"
+LABEL org.opencontainers.image.revision="6b9ff7320a0c882808c72de0424fc57ec448b114"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

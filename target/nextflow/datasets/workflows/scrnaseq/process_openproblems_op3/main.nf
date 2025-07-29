@@ -5251,14 +5251,14 @@ meta = [
     }
   ],
   "build_info" : {
-    "config" : "/home/runner/work/openproblems/openproblems/src/datasets/workflows/scrnaseq/process_op3/config.vsh.yaml",
+    "config" : "/home/runner/work/openproblems/openproblems/src/datasets/workflows/scrnaseq/process_openproblems_op3/config.vsh.yaml",
     "runner" : "nextflow",
     "engine" : "native",
     "output" : "target/nextflow/datasets/workflows/scrnaseq/process_openproblems_op3",
     "viash_version" : "0.9.4",
-    "git_commit" : "075e2efd9a3497fb9a848817825be7e41772f5e8",
+    "git_commit" : "6b9ff7320a0c882808c72de0424fc57ec448b114",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1428-g075e2efd"
+    "git_tag" : "v1.0.0-1429-g6b9ff732"
   },
   "package_config" : {
     "name" : "openproblems",

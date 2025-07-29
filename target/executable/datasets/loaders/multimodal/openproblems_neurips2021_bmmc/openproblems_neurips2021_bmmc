@@ -446,9 +446,9 @@ function ViashDockerfile {
 FROM openproblems/base_python:1
 ENTRYPOINT []
 LABEL org.opencontainers.image.description="Companion container for running component datasets/loaders/multimodal openproblems_neurips2021_bmmc"
-LABEL org.opencontainers.image.created="2025-07-04T11:36:50Z"
+LABEL org.opencontainers.image.created="2025-07-29T11:29:43Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="075e2efd9a3497fb9a848817825be7e41772f5e8"
+LABEL org.opencontainers.image.revision="6b9ff7320a0c882808c72de0424fc57ec448b114"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
