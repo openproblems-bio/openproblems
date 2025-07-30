@@ -960,6 +960,17 @@ figure_data <- overall_scores |>
     by = "method"
   ) |>
   dplyr::relocate(exit_summary, .after = mean_score) |>
+  # Fill in missing exit summaries for methods that were skipped
+  dplyr::mutate(
+    exit_summary = purrr::map(exit_summary, \(.summary) {
+      if (!is.null(.summary)) {
+        return(.summary)
+      } else {
+        rep(0, length(exit_names)) |>
+          setNames(exit_names)
+      }
+    })
+  ) |>
   dplyr::left_join(
     mean_scores |>
       dplyr::arrange(dataset) |>
@@ -1033,7 +1044,7 @@ column_info <- tibble::tibble(
   group = c(
     NA,
     "overall",
-    "overall", 
+    "overall",
     rep("datasets", length(dataset_names)),
     rep("metrics", length(metric_names)),
     rep("resources", 9)
