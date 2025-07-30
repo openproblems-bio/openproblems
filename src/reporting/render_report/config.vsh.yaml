@@ -7,10 +7,11 @@ argument_groups:
     arguments:
       - name: --input_task_results
         type: file
-        description: Task results JSON file
+        description: Combined task results JSON file
         info:
           format:
             type: json
+            schema: /src/reporting/schemas/combined_output_schema.json
         required: true
         example: resources_test/openproblems/task_results_v4/processed/combined_output.json
 

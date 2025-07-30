@@ -27,6 +27,8 @@ argument_groups:
 resources:
   - type: r_script
     path: script.R
+  - path: /src/reporting/schemas
+    dest: schemas
 
 test_resources:
   - type: python_script
@@ -38,6 +40,12 @@ engines:
   - type: docker
     image: openproblems/base_r:1
     setup:
+      - type: apt
+        packages:
+        - nodejs
+        - npm
+      - type: docker
+        run: npm install -g ajv-cli
       - type: r
         cran:
         - purrr

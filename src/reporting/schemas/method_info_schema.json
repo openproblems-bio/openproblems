@@ -74,6 +74,7 @@
       "references",
       "additional_info",
       "version"
-    ]
+    ],
+    "additionalProperties": false
   }
 }

@@ -11,6 +11,7 @@ argument_groups:
         info:
           format:
             type: json
+            schema: /src/reporting/schemas/task_info_schema.json
         required: true
         example: resources_test/openproblems/task_results_v4/processed/task_info.json
       - name: --input_dataset_info
@@ -19,6 +20,7 @@ argument_groups:
         info:
           format:
             type: json
+            schema: /src/reporting/schemas/dataset_info_schema.json
         required: true
         example: resources_test/openproblems/task_results_v4/processed/dataset_info.json
       - name: --input_method_info
@@ -27,6 +29,7 @@ argument_groups:
         info:
           format:
             type: json
+            schema: /src/reporting/schemas/method_info_schema.json
         required: true
         example: resources_test/openproblems/task_results_v4/processed/method_info.json
       - name: --input_metric_info
@@ -35,6 +38,7 @@ argument_groups:
         info:
           format:
             type: json
+            schema: /src/reporting/schemas/metric_info_schema.json
         required: true
         example: resources_test/openproblems/task_results_v4/processed/metric_info.json
       - name: --input_results
@@ -43,6 +47,7 @@ argument_groups:
         info:
           format:
             type: json
+            schema: /src/reporting/schemas/results_schema.json
         required: true
         example: resources_test/openproblems/task_results_v4/processed/results.json
       - name: --input_quality_control
@@ -51,6 +56,7 @@ argument_groups:
         info:
           format:
             type: json
+            schema: /src/reporting/schemas/quality_control_schema.json
         required: true
         example: resources_test/openproblems/task_results_v4/processed/quality_control.json
 
@@ -69,6 +75,8 @@ argument_groups:
 resources:
   - type: r_script
     path: script.R
+  - path: /src/reporting/schemas
+    dest: schemas
 
 test_resources:
   - type: python_script
@@ -79,6 +87,13 @@ test_resources:
 engines:
   - type: docker
     image: openproblems/base_r:1.0.0
+    setup:
+      - type: apt
+        packages:
+        - nodejs
+        - npm
+      - type: docker
+        run: npm install -g ajv-cli
 
 runners:
   - type: executable

@@ -61,4 +61,30 @@ jsonlite::write_json(
   auto_unbox = TRUE
 )
 
+cat("\n>>> Validating output against schema...\n")
+ajv_args <- paste(
+  "validate",
+  "--spec draft2020",
+  "-s", file.path(meta$resources_dir, "schemas", "combined_output_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "task_info_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "references_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "dataset_info_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "method_info_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "metric_info_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "results_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "quality_control_schema.json"),
+  "-d", par$output
+)
+
+cat("Running validation command:", "ajv", ajv_args, "\n")
+cat("Output:\n")
+validation_result <- system2("ajv", ajv_args)
+
+if (validation_result == 0) {
+  cat("JSON validation passed successfully!\n")
+} else {
+  cat("JSON validation failed!\n")
+  stop("Output JSON does not conform to schema")
+}
+
 cat("\n>>> Done!\n")

@@ -67,6 +67,7 @@
       "component_name",
       "references",
       "version"
-    ]
+    ],
+    "additionalProperties": false
   }
 }
