@@ -132,6 +132,7 @@ task_authors <- purrr::map_dfr(task_info$authors, function(.author) {
   
   data.frame(
     name = .author$name,
+    roles = paste(.author$roles, collapse = ", "),
     github = .author$github,
     orcid = .author$orcid,
     info = other_info
@@ -142,6 +143,7 @@ colnames(task_authors) <- stringr::str_to_sentence(colnames(task_authors))
 reactable::reactable(
   task_authors,
   columns = list(
+    Roles = reactable::colDef(name = "Roles"),
     Github = reactable::colDef(
       name = "GitHub",
       cell = function(value, index, column) {

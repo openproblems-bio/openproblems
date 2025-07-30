@@ -39,6 +39,13 @@
             "description": "Author name",
             "type": "string"
           },
+          "roles": {
+            "description": "Author roles",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "github": {
             "description": "Author GitHub username",
             "type": ["null", "string"]
@@ -52,7 +59,7 @@
             "type": "object"
           }
         },
-        "required": ["name", "github", "orcid"]
+        "required": ["name", "roles", "github", "orcid"]
       }
     },
     "license": {

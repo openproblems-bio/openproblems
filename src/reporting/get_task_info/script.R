@@ -30,6 +30,7 @@ authors <- purrr::map(task_info_yaml$authors, function(.author) {
 
   list(
     name = jsonlite::unbox(.author$name),
+    roles = .author$roles %||% character(0),
     github = jsonlite::unbox(.author$info$github),
     orcid = jsonlite::unbox(.author$info$orcid),
     info = .author$info[other_fields]
