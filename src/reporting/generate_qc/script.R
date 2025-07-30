@@ -37,9 +37,9 @@ create_qc_entry <- function(
 
   severity <- dplyr::case_when(
     severity_value < 0 ~ 3L,
-    severity_value <= 1 ~ 0L,
-    severity_value <= 2 ~ 1L,
-    severity_value <= 3 ~ 2L,
+    severity_value < 1 ~ 0L,
+    severity_value < 2 ~ 1L,
+    severity_value < 3 ~ 2L,
     TRUE ~ 3L
   )
 
@@ -554,12 +554,73 @@ failed_metrics <- purrr::map(
   }
 )
 
-cat("\n>>> Checking metric scaling...\n")
+cat("\n>>> Checking control methods...\n")
 is_control <- purrr::map_lgl(method_info, \(.method) {
   .method$type == "control_method"
 })
 control_methods <- method_names[is_control]
 
+dataset_controls <- results_long |>
+  dplyr::filter(method_name %in% control_methods) |>
+  dplyr::select(dataset_name, method_name) |>
+  dplyr::distinct() |>
+  dplyr::group_by(dataset_name) |>
+  dplyr::count(name = "n_controls") |>
+  dplyr::ungroup() |>
+  dplyr::mutate(dataset_name = factor(dataset_name, levels = dataset_names)) |>
+  tidyr::complete(dataset_name, fill = list(n_controls = 0))
+
+controls_datasets <- purrr::map(seq_len(nrow(dataset_controls)), function(.idx) {
+  dataset_name <- dataset_controls$dataset_name[.idx]
+  n_controls <- dataset_controls$n_controls[.idx]
+
+  create_qc_entry(
+    category = "Raw results",
+    label = "Dataset number of control methods",
+    value = n_controls,
+    severity_value = ifelse(n_controls != length(control_methods), 3, 0),
+    condition = "n_controls != length(control_methods)",
+    message = paste0(
+      "Number of successful control methods for a dataset should equal the number of controls\n",
+      "  Task: ", task_name, "\n",
+      "  Succeeded control_methods: ", n_controls, "\n",
+      "  Total control methods: ", length(control_methods), "\n",
+      "  Percentage succeeded: ", round(n_controls / length(control_methods) * 100, 0), "%\n"
+    )
+  )
+})
+
+metric_controls <- results_long |>
+  dplyr::filter(method_name %in% control_methods) |>
+  dplyr::select(method_name, metric_name) |>
+  dplyr::group_by(metric_name) |>
+  dplyr::count(name = "n_controls") |>
+  dplyr::ungroup() |>
+  dplyr::mutate(metric_name = factor(metric_name, levels = metric_names)) |>
+  tidyr::complete(metric_name, fill = list(n_controls = 0))
+
+n_expected <- length(dataset_names) * length(control_methods)
+controls_metrics <- purrr::map(seq_len(nrow(metric_controls)), function(.idx) {
+  metric_name <- metric_controls$metric_name[.idx]
+  n_controls <- metric_controls$n_controls[.idx]
+
+  create_qc_entry(
+    category = "Raw results",
+    label = "Metric number of control methods",
+    value = n_controls,
+    severity_value = ifelse(n_controls != n_expected, 3, 0),
+    condition = "n_controls != length(datasets) * length(control_methods)",
+    message = paste0(
+      "Number of metric scores for control methods should be equal to #datasets × #control_methods\n",
+      "  Task: ", task_name, "\n",
+      "  Control method scores: ", n_controls, "\n",
+      "  Expected control method scores: ", n_expected, "\n",
+      "  Percentage succeeded: ", round(n_controls / n_expected * 100, 0), "%\n"
+    )
+  )
+})
+
+cat("\n>>> Checking metric scaling...\n")
 scaling <- purrr::map(metric_names, function(.metric) {
   check_metric_scaling(results_long, .metric, control_methods, task_name)
 }) |>
@@ -579,6 +640,8 @@ qc_results <- c(
   failed_datasets,
   failed_methods,
   failed_metrics,
+  controls_datasets,
+  controls_metrics,
   scaling
 )
 
