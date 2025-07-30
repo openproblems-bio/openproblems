@@ -105,8 +105,14 @@ method_info_json <- purrr::map(method_configs, function(.config) {
     name = jsonlite::unbox(.config$name),
     label = jsonlite::unbox(.config$label),
     commit = jsonlite::unbox(.config$build_info$git_commit %||% "missing-sha"),
-    summary = jsonlite::unbox(.config$summary),
-    description = jsonlite::unbox(.config$description),
+    summary = .config$summary |>
+      stringr::str_trim() |>
+      stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+      jsonlite::unbox(),
+    description = .config$description |>
+      stringr::str_trim() |>
+      stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+      jsonlite::unbox(),
     type = jsonlite::unbox(.config$info$type),
     link_code = jsonlite::unbox(.config$links$repository),
     link_documentation = jsonlite::unbox(.config$links$documentation),

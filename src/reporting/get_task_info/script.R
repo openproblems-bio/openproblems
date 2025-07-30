@@ -42,8 +42,14 @@ task_info_json <- list(
   name = jsonlite::unbox(sub("^task_", "", task_info_yaml$name)), # Remove "task_" prefix
   commit = jsonlite::unbox(NA_character_), # TODO: Add when available in task_info.yaml
   label = jsonlite::unbox(task_info_yaml$label),
-  summary = jsonlite::unbox(task_info_yaml$summary),
-  description = jsonlite::unbox(task_info_yaml$description),
+  summary = task_info_yaml$summary |>
+    stringr::str_trim() |>
+    stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+    jsonlite::unbox(),
+  description = task_info_yaml$description |>
+    stringr::str_trim() |>
+    stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+    jsonlite::unbox(),
   repository = jsonlite::unbox(task_info_yaml$links$repository),
   authors = authors,
   license = jsonlite::unbox(task_info_yaml$license),

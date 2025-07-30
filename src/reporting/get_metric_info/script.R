@@ -108,8 +108,14 @@ metric_info_json <- purrr::map(metric_configs, function(.config) {
       commit = jsonlite::unbox(
         .config$build_info$git_commit %||% "missing-sha"
       ),
-      summary = jsonlite::unbox(.metric$summary),
-      description = jsonlite::unbox(.metric$description),
+      summary = .metric$summary |>
+        stringr::str_trim() |>
+        stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+        jsonlite::unbox(),
+      description = .metric$description |>
+        stringr::str_trim() |>
+        stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+        jsonlite::unbox(),
       maximize = jsonlite::unbox(.metric$maximize),
       link_implementation = jsonlite::unbox(get_implementation_url(.config)),
       link_container_image = jsonlite::unbox(get_container_image(.config)),

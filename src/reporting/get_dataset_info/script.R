@@ -37,8 +37,14 @@ dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
     name = jsonlite::unbox(.dataset$dataset_id),
     label = jsonlite::unbox(.dataset$dataset_name),
     commit = jsonlite::unbox(.dataset$dataset_commit %||% "missing-sha"),
-    summary = jsonlite::unbox(.dataset$dataset_summary),
-    description = jsonlite::unbox(.dataset$dataset_description),
+    summary = .dataset$dataset_summary |>
+      stringr::str_trim() |>
+      stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+      jsonlite::unbox(),
+    description = .dataset$dataset_description |>
+      stringr::str_trim() |>
+      stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+      jsonlite::unbox(),
     source_url = jsonlite::unbox(.dataset$dataset_url),
     common_dataset_names = .dataset$common_dataset_id,
     modalities = jsonlite::unbox(.dataset$dataset_modality),

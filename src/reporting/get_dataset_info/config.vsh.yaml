@@ -41,6 +41,7 @@ engines:
       - type: r
         cran:
         - purrr
+        - stringr
 
 runners:
   - type: executable
