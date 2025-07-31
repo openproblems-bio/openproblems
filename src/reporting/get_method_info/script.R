@@ -103,13 +103,13 @@ method_info_json <- purrr::map(method_configs, function(.config) {
 
   list(
     name = jsonlite::unbox(.config$name),
-    label = jsonlite::unbox(.config$label),
+    label = jsonlite::unbox(.config$label %||% .config$info$label),
     commit = jsonlite::unbox(.config$build_info$git_commit %||% "missing-sha"),
-    summary = .config$summary |>
+    summary = .config$summary %||% .config$info$summary |>
       stringr::str_trim() |>
       stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
       jsonlite::unbox(),
-    description = .config$description |>
+    description = .config$description %||% .config$info$description |>
       stringr::str_trim() |>
       stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
       jsonlite::unbox(),
