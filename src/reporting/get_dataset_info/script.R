@@ -24,13 +24,42 @@ cat(
 dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
   cat("Processing dataset uns '", .dataset$dataset_id, "'\n", sep = "")
 
-  references <- if (is.list(.dataset$dataset_reference)) {
+  if ("dataset_reference" %in% names(.dataset)) {
+    reference_name <- "dataset_reference"
+  } else if ("data_reference" %in% names(.dataset)) {
+    reference_name <- "data_reference"
+  } else {
+    stop("No reference found in dataset uns for '", .dataset$dataset_id, "'")
+  }
+  references <- if (is.list(.dataset[[reference_name]])) {
     list(
-      doi = .dataset$dataset_reference$doi %||% character(0),
-      bibtex = .dataset$dataset_reference$bibtex %||% character(0)
+      doi = .dataset[[reference_name]]$doi %||% character(0),
+      bibtex = .dataset[[reference_name]]$bibtex %||% character(0)
     )
   } else {
-    .dataset$dataset_reference
+    reference <- .dataset[[reference_name]]
+
+    if (startsWith(reference, "@")) {
+      list(
+        doi = character(0),
+        bibtex = reference
+      )
+    } else if (startsWith(reference, "1")) {
+      list(
+        doi = reference,
+        bibtex = character(0)
+      )
+    } else {
+      reference
+    }
+  }
+
+  if ("dataset_url" %in% names(.dataset)) {
+    url_name <- "dataset_url"
+  } else if ("data_url" %in% names(.dataset)) {
+    url_name <- "data_url"
+  } else {
+    stop("No URL found in dataset uns for '", .dataset$dataset_id, "'")
   }
 
   list(
@@ -45,7 +74,7 @@ dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
       stringr::str_trim() |>
       stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
       jsonlite::unbox(),
-    source_url = jsonlite::unbox(.dataset$dataset_url),
+    source_url = jsonlite::unbox(.dataset[[url_name]]),
     common_dataset_names = .dataset$common_dataset_id,
     modalities = jsonlite::unbox(.dataset$dataset_modality),
     organisms = .dataset$dataset_organism,
