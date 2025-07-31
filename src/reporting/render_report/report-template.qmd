@@ -55,6 +55,8 @@ params:
 ```{r}
 #| label: source
 source(params$functions)
+
+`%||%` <- rlang::`%||%`
 ```
 
 ```{r}
@@ -133,8 +135,8 @@ task_authors <- purrr::map_dfr(task_info$authors, function(.author) {
   data.frame(
     name = .author$name,
     roles = paste(.author$roles, collapse = ", "),
-    github = .author$github,
-    orcid = .author$orcid,
+    github = .author$github %||% NA_character_,
+    orcid = .author$orcid %||% NA_character_,
     info = other_info
   )
 })
@@ -147,7 +149,11 @@ reactable::reactable(
     Github = reactable::colDef(
       name = "GitHub",
       cell = function(value, index, column) {
-        paste0("<a href='https://github.com/", value, "'>", value, "</a>")
+        if (!is.na(value)) {
+          paste0("<a href='https://github.com/", value, "'>", value, "</a>")
+        } else {
+          ""
+        }
       },
       style = list("font-family" = "monospace"),
       html = TRUE
@@ -155,7 +161,11 @@ reactable::reactable(
     Orcid = reactable::colDef(
       name = "ORCiD",
       cell = function(value, index, column) {
-        paste0("<a href='https://orcid.org/", value, "'>", value, "</a>")
+        if (!is.na(value)) {
+          paste0("<a href='https://orcid.org/", value, "'>", value, "</a>")
+        } else {
+          ""
+        }
       },
       html = TRUE
     )
