@@ -64,7 +64,7 @@ get_references <- function(config) {
 
 get_additional_info <- function(config) {
   # Fields that are stored elsewhere and we don't want to save here
-  exclude <- c("type", "type_info")
+  exclude <- c("type", "type_info", "label", "summary", "description", "documentation_url")
 
   config$info[setdiff(names(config$info), exclude)] |>
     purrr::map(recurse_unbox)
@@ -115,7 +115,7 @@ method_info_json <- purrr::map(method_configs, function(.config) {
       jsonlite::unbox(),
     type = jsonlite::unbox(.config$info$type),
     link_code = jsonlite::unbox(.config$links$repository),
-    link_documentation = jsonlite::unbox(.config$links$documentation),
+    link_documentation = jsonlite::unbox(.config$links$documentation %||% .config$info$documentation_url),
     link_implementation = jsonlite::unbox(get_implementation_url(.config)),
     link_container_image = jsonlite::unbox(get_container_image(.config)),
     references = get_references(.config),
