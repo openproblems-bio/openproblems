@@ -70,7 +70,7 @@ resources:
     dest: schemas
 
 test_resources:
-  - type: r_script
+  - type: python_script
     path: /common/component_tests/run_and_check_output.py
   - path: /resources_test/openproblems/task_results_v4
     dest: resources_test/openproblems/task_results_v4
