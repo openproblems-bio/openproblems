@@ -1,35 +1,56 @@
 name: get_dataset_info
 namespace: reporting
-description: Extract dataset info and convert to expected format for website results
-arguments:
-  - name: --input
-    type: file
-    description: A yaml file
-    required: true
-    example: resources_test/openproblems/task_results_v3/raw/dataset_uns.yaml
-  - name: --output
-    type: file
-    direction: output
-    default: output.json
-    description: Output json
-    info:
-      format:
-        type: json
-        # TODO: add schema
+description: Convert dataset uns YAML to schema-compliant JSON
+
+argument_groups:
+  - name: Inputs
+    arguments:
+    - name: --input
+      type: file
+      description: A YAML file containing dataset uns
+      required: true
+      example: resources_test/openproblems/task_results_v4/raw/dataset_uns.yaml
+
+  - name: Outputs
+    arguments:
+    - name: --output
+      type: file
+      direction: output
+      default: dataset_info.json
+      description: Output JSON file matching dataset info schema
+      info:
+        format:
+          type: json
+          schema: /src/reporting/schemas/dataset_info_schema.json
+      example: resources_test/openproblems/task_results_v4/processed/dataset_info.json
+
 resources:
   - type: r_script
     path: script.R
+  - path: /src/reporting/schemas
+    dest: schemas
+
 test_resources:
   - type: python_script
     path: /common/component_tests/run_and_check_output.py
-  - path: /resources_test/openproblems/task_results_v3
-    dest: resources_test/openproblems/task_results_v3
+  - path: /resources_test/openproblems/task_results_v4
+    dest: resources_test/openproblems/task_results_v4
+
 engines:
   - type: docker
     image: openproblems/base_r:1
     setup:
+      - type: apt
+        packages:
+        - nodejs
+        - npm
+      - type: docker
+        run: npm install -g ajv-cli
       - type: r
-        cran: [ purrr, yaml, rlang, processx ]
+        cran:
+        - purrr
+        - stringr
+
 runners:
   - type: executable
   - type: nextflow

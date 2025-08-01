@@ -1,23 +1,22 @@
-name: get_results
+name: combine_output
 namespace: reporting
-description: Create a schema-compliant results JSON
+description: Combine task outputs into a single JSON
 
 argument_groups:
   - name: Inputs
     arguments:
-      - name: --input_scores
+      - name: --input_task_info
         type: file
-        description: Scores YAML file
+        description: Task info file
+        info:
+          format:
+            type: json
+            schema: /src/reporting/schemas/task_info_schema.json
         required: true
-        example: resources_test/openproblems/task_results_v4/raw/score_uns.yaml
-      - name: --input_trace
-        type: file
-        description: Nextflow trace file
-        required: true
-        example: resources_test/openproblems/task_results_v4/raw/trace.txt
+        example: resources_test/openproblems/task_results_v4/processed/task_info.json
       - name: --input_dataset_info
         type: file
-        description: Dataset info JSON file
+        description: Dataset info file
         info:
           format:
             type: json
@@ -26,7 +25,7 @@ argument_groups:
         example: resources_test/openproblems/task_results_v4/processed/dataset_info.json
       - name: --input_method_info
         type: file
-        description: Method info JSON file
+        description: Method info file
         info:
           format:
             type: json
@@ -35,26 +34,43 @@ argument_groups:
         example: resources_test/openproblems/task_results_v4/processed/method_info.json
       - name: --input_metric_info
         type: file
-        description: Metric info JSON file
+        description: Metric info file
         info:
           format:
             type: json
             schema: /src/reporting/schemas/metric_info_schema.json
         required: true
         example: resources_test/openproblems/task_results_v4/processed/metric_info.json
-
-  - name: Outputs
-    arguments:
-      - name: --output
+      - name: --input_results
         type: file
-        direction: output
-        description: Output JSON file matching results schema
-        default: results.json
+        description: Results file
         info:
           format:
             type: json
             schema: /src/reporting/schemas/results_schema.json
+        required: true
         example: resources_test/openproblems/task_results_v4/processed/results.json
+      - name: --input_quality_control
+        type: file
+        description: Quality control file
+        info:
+          format:
+            type: json
+            schema: /src/reporting/schemas/quality_control_schema.json
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/quality_control.json
+
+  - name: Outputs
+    arguments:
+    - name: --output
+      type: file
+      direction: output
+      description: Combined output JSON
+      default: combined_output.json
+      info:
+        format:
+          type: json
+          schema: /src/reporting/schemas/combined_output_schema.json
 
 resources:
   - type: r_script
@@ -78,14 +94,6 @@ engines:
         - npm
       - type: docker
         run: npm install -g ajv-cli
-      - type: r
-        cran:
-        - dplyr
-        - lubridate
-        - purrr
-        - readr
-        - stringr
-        - tidyr
 
 runners:
   - type: executable

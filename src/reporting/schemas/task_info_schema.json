@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openproblems.bio/schemas/task_info_schema.json",
+  "title": "Task info",
+  "description": "Information about a task",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "Task identifier (no 'task_' prefix)",
+      "type": "string"
+    },
+    "label": {
+      "description": "Human-readable label for the task",
+      "type": "string"
+    },
+    "commit": {
+      "description": "Git commit SHA for this version of the task",
+      "type": ["null", "string"]
+    },
+    "summary": {
+      "description": "One line summary of the task",
+      "type": "string"
+    },
+    "description": {
+      "description": "Detailed description of the task",
+      "type": "string"
+    },
+    "repository": {
+      "description": "URL of the repository containing the task",
+      "type": "string"
+    },
+    "authors": {
+      "description": "List of task authors",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Author name",
+            "type": "string"
+          },
+          "roles": {
+            "description": "Author roles",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "github": {
+            "description": "Author GitHub username",
+            "type": ["null", "string"]
+          },
+          "orcid": {
+            "description": "Author ORCID",
+            "type": ["null", "string"]
+          },
+          "info": {
+            "description": "Additional information about the author",
+            "type": "object"
+          }
+        },
+        "required": ["name", "roles", "github", "orcid"]
+      }
+    },
+    "license": {
+      "description": "License for the task",
+      "type": "string"
+    },
+    "references": {
+      "$ref": "https://openproblems.bio/schemas/references_schema.json"
+    },
+    "version": {
+      "description": "Tag for this version of the task",
+      "type": "string"
+    },
+    "is_prerelease": {
+      "description": "Whether this is a pre-release version of the task",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "name",
+    "label",
+    "commit",
+    "summary",
+    "description",
+    "repository",
+    "authors",
+    "license",
+    "references",
+    "version",
+    "is_prerelease"
+  ]
+}

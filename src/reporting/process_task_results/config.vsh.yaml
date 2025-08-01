@@ -1,84 +1,136 @@
 name: process_task_results
 namespace: reporting
-description: >-
-  This workflow transforms the meta information of the results into a format
+description: |
+  This workflow summarises and collects the output from a task run in a format
   that can be used by the website.
+
 argument_groups:
   - name: Inputs
     arguments:
-      - name: "--input_scores"
-        type: file
-        required: true
-        direction: input
-        description: A yaml file containing the scores of each of the methods
-        example: score_uns.yaml
-      - name: "--input_method_configs"
-        type: file
-        required: true
-        direction: input
-        example: method_configs.yaml
-      - name: "--input_metric_configs"
-        type: file
-        required: true
-        direction: input
-        example: metric_configs.yaml
-      - name: "--input_dataset_info"
-        type: file
-        required: true
-        direction: input
-        example: dataset_info.yaml
-      - name: "--input_execution"
-        type: file
-        required: true
-        direction: input
-        example: trace.txt
       - name: "--input_task_info"
         type: file
         required: true
         direction: input
-        example: task_info.yaml
+        description: A YAML file containing task information
+        example: resources_test/openproblems/task_results_v4/raw/task_info.yaml
+      - name: "--input_dataset_info"
+        type: file
+        required: true
+        direction: input
+        description: A YAML file containing dataset information
+        example: resources_test/openproblems/task_results_v4/raw/dataset_info.yaml
+      - name: "--input_method_configs"
+        type: file
+        required: true
+        direction: input
+        description: A YAML file containing method configurations
+        example: resources_test/openproblems/task_results_v4/raw/method_configs.yaml
+      - name: "--input_metric_configs"
+        type: file
+        required: true
+        direction: input
+        description: A YAML file containing metric configurations
+        example: resources_test/openproblems/task_results_v4/raw/metric_configs.yaml
+      - name: "--input_scores"
+        type: file
+        required: true
+        direction: input
+        description: A YAML file containing the scores of each of the methods
+        example: resources_test/openproblems/task_results_v4/raw/score_uns.yaml
+      - name: "--input_trace"
+        type: file
+        required: true
+        direction: input
+        description: Nextflow execution trace file
+        example: resources_test/openproblems/task_results_v4/raw/trace.txt
+
   - name: Outputs
     arguments:
-      - name: "--output_scores"
+      - name: "--output_combined"
         type: file
         required: true
         direction: output
-        description: A yaml file containing the scores of each of the methods
-        default: results.json
-      - name: "--output_method_info"
+        description: Combined task results JSON file
+        default: combined_output.json
+        info:
+          format:
+            type: json
+            schema: /src/reporting/schemas/task_results_schema.json
+      - name: "--output_report"
         type: file
         required: true
         direction: output
-        default: method_info.json
-      - name: "--output_metric_info"
-        type: file
-        required: true
-        direction: output
-        default: metric_info.json
-      - name: "--output_dataset_info"
-        type: file
-        required: true
-        direction: output
-        default: dataset_info.json
+        description: HTML run report
+        default: report.html
+        info:
+          format:
+            type: html
       - name: "--output_task_info"
         type: file
         required: true
         direction: output
+        description: Task info JSON file
         default: task_info.json
-      - name: "--output_qc"
+        info:
+          format:
+            type: json
+            schema: /src/reporting/schemas/task_info_schema.json
+      - name: "--output_dataset_info"
         type: file
         required: true
         direction: output
+        description: Dataset info JSON file
+        default: dataset_info.json
+        info:
+          format:
+            type: json
+            schema: /src/reporting/schemas/dataset_info_schema.json
+      - name: "--output_method_info"
+        type: file
+        required: true
+        direction: output
+        description: Method info JSON file
+        default: method_info.json
+        info:
+          format:
+            type: json
+            schema: /src/reporting/schemas/method_info_schema.json
+      - name: "--output_metric_info"
+        type: file
+        required: true
+        direction: output
+        description: Metric info JSON file
+        default: metric_info.json
+        info:
+          format:
+            type: json
+            schema: /src/reporting/schemas/metric_info_schema.json
+      - name: "--output_results"
+        type: file
+        required: true
+        direction: output
+        description: Results JSON file
+        default: results.json
+        info:
+          format:
+            type: json
+            schema: /src/reporting/schemas/results_schema.json
+      - name: "--output_quality_control"
+        type: file
+        required: true
+        direction: output
+        description: Quality control JSON file
         default: quality_control.json
-      - name: "--output_metric_execution_info"
-        type: file
-        required: true
-        direction: output
-        default: metric_execution_info.json
+        info:
+          format:
+            type: json
+            schema: /src/reporting/schemas/quality_control_schema.json
+
 resources:
   - type: nextflow_script
     path: main.nf
     entrypoint: run_wf
+
 dependencies:
   - name: reporting/get_results
   - name: reporting/get_method_info
@@ -86,5 +138,8 @@ dependencies:
   - name: reporting/get_dataset_info
   - name: reporting/get_task_info
   - name: reporting/generate_qc
+  - name: reporting/combine_output
+  - name: reporting/render_report
+
 runners:
   - type: nextflow

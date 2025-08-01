@@ -1,57 +1,92 @@
-requireNamespace("jsonlite", quietly = TRUE)
-requireNamespace("yaml", quietly = TRUE)
-library(purrr, warn.conflicts = FALSE)
-library(rlang, warn.conflicts = FALSE)
-
-## VIASH START
+### VIASH START
 par <- list(
-  input = "resources_test/openproblems/task_results_v3/raw/task_info.yaml",
-  output = "resources_test/openproblems/task_results_v3/processed/task_info.json"
+  input = "resources_test/openproblems/task_results_v4/raw/task_info.yaml",
+  output = "task_info.json"
 )
-## VIASH END
+### VIASH END
 
-info <- yaml::yaml.load_file(par$input)
-# ↑ this could be used as the new format
+cat("====== Get task info ======\n")
 
-# construct v1 format
-repo <-
-  if ("links" %in% names(info) && "repository" %in% names(info$links)) {
-    info$links$repository
-  } else if ("name" %in% names(info) && "organization" %in% names(info)) {
-    paste0(info$organization, "/", info$name)
-  } else {
-    "openproblems-bio/openproblems"
-  }
-description <-
-  if ("motivation" %in% names(info)) {
-    paste0(info$motivation, "\n\n", info$description)
-  } else {
-    info$description
-  }
-out <- list(
-  task_id = info$name,
-  commit_sha = NA_character_,
-  task_name = info$label,
-  task_summary = info$summary,
-  task_description = description,
-  repo = repo,
-  issue_tracker = info$links$issue_tracker %||% NA_character_,
-  authors = info$authors,
-  version = info$version,
-  license = info$license %||% NA_character_
+`%||%` <- rlang::`%||%`
+
+cat("\n>>> Reading input files...\n")
+cat("Reading task info from '", par$input, "'...\n", sep = "")
+task_info_yaml <- yaml::read_yaml(par$input)
+
+cat("\n>>> Getting references...\n")
+references <- if (!is.null(task_info_yaml$references)) {
+  list(
+    doi = task_info_yaml$references$doi %||% character(0),
+    bibtex = task_info_yaml$references$bibtex %||% character(0)
+  )
+} else {
+  list(doi = character(0), bibtex = character(0))
+}
+str(references)
+
+cat("\n>>> Getting authors...\n")
+authors <- purrr::map(task_info_yaml$authors, function(.author) {
+  other_fields <- setdiff(names(.author$info), c("github", "orcid"))
+
+  list(
+    name = jsonlite::unbox(.author$name),
+    roles = .author$roles %||% character(0),
+    github = jsonlite::unbox(.author$info$github),
+    orcid = jsonlite::unbox(.author$info$orcid),
+    info = .author$info[other_fields]
+  )
+})
+cat("Found", length(authors), "authors\n")
+
+cat("\n>>> Creating JSON list...\n")
+task_info_json <- list(
+  name = jsonlite::unbox(sub("^task_", "", task_info_yaml$name)), # Remove "task_" prefix
+  commit = jsonlite::unbox(NA_character_), # TODO: Add when available in task_info.yaml
+  label = jsonlite::unbox(task_info_yaml$label),
+  summary = task_info_yaml$summary |>
+    stringr::str_trim() |>
+    stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+    jsonlite::unbox(),
+  description = task_info_yaml$description |>
+    stringr::str_trim() |>
+    stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+    jsonlite::unbox(),
+  repository = jsonlite::unbox(task_info_yaml$links$repository),
+  authors = authors,
+  license = jsonlite::unbox(task_info_yaml$license),
+  references = references,
+  version = jsonlite::unbox(task_info_yaml$version),
+  is_prerelease = jsonlite::unbox(TRUE)
+)
+str(task_info_json)
+
+cat("\n>>> Writing output files...\n")
+cat("Writing task info to '", par$output, "'...\n", sep = "")
+jsonlite::write_json(
+  task_info_json,
+  par$output,
+  pretty = TRUE,
+  null = "null"
 )
 
-# show warning when certain data is missing and return null?
-for (n in names(out)) {
-  if (is.null(out[[n]])) {
-    out_as_str <- jsonlite::toJSON(out, auto_unbox = TRUE, pretty = TRUE)
-    stop("missing value for value '", n, "' in ", out_as_str)
-  }
+cat("\n>>> Validating output against schema...\n")
+ajv_args <- paste(
+  "validate",
+  "--spec draft2020",
+  "-s", file.path(meta$resources_dir, "schemas", "task_info_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "references_schema.json"),
+  "-d", par$output
+)
+
+cat("Running validation command:", "ajv", ajv_args, "\n")
+cat("Output:\n")
+validation_result <- system2("ajv", ajv_args)
+
+if (validation_result == 0) {
+  cat("JSON validation passed successfully!\n")
+} else {
+  cat("JSON validation failed!\n")
+  stop("Output JSON does not conform to schema")
 }
 
-jsonlite::write_json(
-  out,
-  par$output,
-  auto_unbox = TRUE,
-  pretty = TRUE
-)
+cat("\n>>> Done!\n")

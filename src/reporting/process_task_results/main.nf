@@ -18,20 +18,6 @@ workflow run_wf {
       [id, state + ["task_id": task_id]]
     }
 
-    | get_method_info.run(
-      fromState: [ 
-        "input": "input_method_configs",
-      ],
-      toState: ["output_method": "output"]
-    )
-
-    | get_metric_info.run(
-      fromState: [ 
-        "input": "input_metric_configs",
-      ],
-      toState: ["output_metric": "output"]
-    )
-
     | get_dataset_info.run(
       fromState: [
         "input": "input_dataset_info",
@@ -39,39 +25,72 @@ workflow run_wf {
       toState: ["output_dataset": "output"]
     )
 
+    | get_method_info.run(
+      fromState: [
+        "input": "input_method_configs",
+      ],
+      toState: ["output_method": "output"]
+    )
+
+    | get_metric_info.run(
+      fromState: [
+        "input": "input_metric_configs",
+      ],
+      toState: ["output_metric": "output"]
+    )
+
     | get_results.run(
-      fromState: [ 
+      fromState: [
         "input_scores": "input_scores",
-        "input_execution": "input_execution",
+        "input_trace": "input_trace",
         "input_dataset_info": "output_dataset",
         "input_method_info": "output_method",
         "input_metric_info": "output_metric"
       ],
       toState: [
-        "output_results": "output_results",
-        "output_metric_execution_info": "output_metric_execution_info"
+        "output_results": "output"
       ]
     )
 
     | generate_qc.run(
       fromState: [
-        "task_info": "output_task",
-        "method_info": "output_method",
-        "metric_info": "output_metric",
-        "dataset_info": "output_dataset",
-        "results": "output_results"
+        "input_task_info": "output_task",
+        "input_dataset_info": "output_dataset",
+        "input_method_info": "output_method",
+        "input_metric_info": "output_metric",
+        "input_results": "output_results"
       ],
       toState: ["output_qc": "output"]
     )
 
+    | combine_output.run(
+      fromState: [
+        "input_task_info": "output_task",
+        "input_quality_control": "output_qc",
+        "input_metric_info": "output_metric",
+        "input_method_info": "output_method",
+        "input_dataset_info": "output_dataset",
+        "input_results": "output_results"
+      ],
+      toState: ["output_combined": "output"]
+    )
+
+    | render_report.run(
+      fromState: [
+        "input_task_results": "output_combined"
+      ],
+      toState: ["output_report": "output"]
+    )
+
     | setState([
-      "output_scores": "output_results",
+      "output_combined": "output_combined",
+      "output_report": "output_report",
+      "output_task_info": "output_task",
+      "output_dataset_info": "output_dataset",
       "output_method_info": "output_method",
       "output_metric_info": "output_metric",
-      "output_dataset_info": "output_dataset",
-      "output_task_info": "output_task",
-      "output_qc": "output_qc",
-      "output_metric_execution_info": "output_metric_execution_info"
+      "output_results": "output_results",
+      "output_quality_control": "output_qc"
     ])
 
   emit:
