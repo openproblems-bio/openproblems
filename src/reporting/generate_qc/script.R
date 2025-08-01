@@ -576,13 +576,14 @@ controls_datasets <- purrr::map(seq_len(nrow(dataset_controls)), function(.idx) 
 
   create_qc_entry(
     category = "Raw results",
-    label = "Dataset number of control methods",
+    label = paste0("Dataset `", dataset_name, "' number of control methods"),
     value = n_controls,
     severity_value = ifelse(n_controls != length(control_methods), 3, 0),
     condition = "n_controls != length(control_methods)",
     message = paste0(
       "Number of successful control methods for a dataset should equal the number of controls\n",
       "  Task: ", task_name, "\n",
+      "  Dataset: ", dataset_name, "\n",
       "  Succeeded control_methods: ", n_controls, "\n",
       "  Total control methods: ", length(control_methods), "\n",
       "  Percentage succeeded: ", round(n_controls / length(control_methods) * 100, 0), "%\n"
@@ -606,13 +607,14 @@ controls_metrics <- purrr::map(seq_len(nrow(metric_controls)), function(.idx) {
 
   create_qc_entry(
     category = "Raw results",
-    label = "Metric number of control methods",
+    label = paste0("Metric '", metric_name, "' number of control methods"),
     value = n_controls,
     severity_value = ifelse(n_controls != n_expected, 3, 0),
     condition = "n_controls != length(datasets) * length(control_methods)",
     message = paste0(
       "Number of metric scores for control methods should be equal to #datasets × #control_methods\n",
       "  Task: ", task_name, "\n",
+      "  Metric: ", metric_name, "\n",
       "  Control method scores: ", n_controls, "\n",
       "  Expected control method scores: ", n_expected, "\n",
       "  Percentage succeeded: ", round(n_controls / n_expected * 100, 0), "%\n"
