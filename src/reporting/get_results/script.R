@@ -8,7 +8,6 @@ par <- list(
   input_trace = paste0(raw_dir, "/trace.txt"),
   input_dataset_info = paste0(processed_dir, "/dataset_info.json"),
   input_method_info = paste0(processed_dir, "/method_info.json"),
-  input_method_configs = paste0(raw_dir, "/method_configs.yaml"),
   input_metric_info = paste0(processed_dir, "/metric_info.json"),
   # Outputs
   output = paste0(processed_dir, "/results.json")
