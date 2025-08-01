@@ -62,9 +62,11 @@ get_references <- function(config) {
   }
 }
 
-get_additional_info <- function(info, exclude) {
-  info[setdiff(names(info), exclude)] |>
+get_additional_info <- function(info, exclude, name_prefix = "") {
+  additional <- info[setdiff(names(info), exclude)] |>
     purrr::map(recurse_unbox)
+
+  rlang::set_names(additional, paste0(name_prefix, names(additional)))
 }
 
 recurse_unbox <- function(x) {
@@ -123,7 +125,9 @@ metric_info_json <- purrr::map(metric_configs, function(.config) {
       references = get_references(.metric),
       additional_info = c(
         get_additional_info(
-          .config$info, exclude = c("metrics", "type", "type_info")
+          .config$info,
+          exclude = c("metrics", "type", "type_info"),
+          name_prefix = "component_"
         ),
         get_additional_info(
           .metric,
