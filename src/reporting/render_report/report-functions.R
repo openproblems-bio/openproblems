@@ -1,5 +1,60 @@
 # Tables ----
 
+#' Get authors table
+#'
+#' @param authors Authors list from results JSON
+#'
+#' @returns A `reactable` table containing the authors
+get_authors_table <- function(authors) {
+  authors_data <- purrr::map_dfr(authors, function(.author) {
+    other_info <- purrr::map_chr(names(.author$info), \(.info) {
+      paste(.info, toString(.author$info[[.info]]), sep = ": ")
+    }) |>
+      paste(collapse = ", ")
+
+    data.frame(
+      name = .author$name,
+      roles = paste(.author$roles, collapse = ", "),
+      github = .author$github %||% NA_character_,
+      orcid = .author$orcid %||% NA_character_,
+      info = other_info
+    )
+  })
+
+  colnames(authors_data) <- stringr::str_to_sentence(colnames(authors_data))
+  reactable::reactable(
+    authors_data,
+    columns = list(
+      Roles = reactable::colDef(name = "Roles"),
+      Github = reactable::colDef(
+        name = "GitHub",
+        cell = function(value, index, column) {
+          if (!is.na(value)) {
+            paste0("<a href='https://github.com/", value, "'>", value, "</a>")
+          } else {
+            ""
+          }
+        },
+        style = list("font-family" = "monospace"),
+        html = TRUE
+      ),
+      Orcid = reactable::colDef(
+        name = "ORCiD",
+        cell = function(value, index, column) {
+          if (!is.na(value)) {
+            paste0("<a href='https://orcid.org/", value, "'>", value, "</a>")
+          } else {
+            ""
+          }
+        },
+        html = TRUE
+      )
+    ),
+    striped = TRUE,
+    sortable = FALSE
+  )
+}
+
 #' Get references table
 #'
 #' @param references References list from results JSON
@@ -74,7 +129,9 @@ get_references_table <- function(references) {
         html = TRUE
       ),
       reference_type = reactable::colDef(show = FALSE)
-    )
+    ),
+    striped = TRUE,
+    sortable = FALSE
   )
 }
 
@@ -169,7 +226,7 @@ get_links_table <- function(details_df, link_columns) {
 #' as given. The additional information can contain any fields so we cannot
 #' handle them specifically.
 #'
-#' If there are is no additional information, a div containing a messsage is
+#' If there are is no additional information, a div containing a message is
 #' returned. A message is also returned if the additional information fails to
 #' render.
 get_additional_info_table <- function(additional_info) {

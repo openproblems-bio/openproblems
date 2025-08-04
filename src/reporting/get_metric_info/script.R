@@ -51,6 +51,20 @@ get_container_image <- function(config) {
   }
 }
 
+get_authors <- function(config) {
+  purrr::map(config$authors, function(.author) {
+    other_fields <- setdiff(names(.author$info), c("github", "orcid"))
+
+    list(
+      name = jsonlite::unbox(.author$name),
+      roles = .author$roles %||% character(0),
+      github = jsonlite::unbox(.author$info$github),
+      orcid = jsonlite::unbox(.author$info$orcid),
+      info = .author$info[other_fields]
+    )
+  })
+}
+
 get_references <- function(config) {
   if (!is.null(config$references)) {
     list(
@@ -122,6 +136,7 @@ metric_info_json <- purrr::map(metric_configs, function(.config) {
       link_implementation = jsonlite::unbox(get_implementation_url(.config)),
       link_container_image = jsonlite::unbox(get_container_image(.config)),
       component_name = jsonlite::unbox(.config$name),
+      authors = get_authors(.metric),
       references = get_references(.metric),
       additional_info = c(
         get_additional_info(
@@ -140,6 +155,7 @@ metric_info_json <- purrr::map(metric_configs, function(.config) {
             "min",
             "max",
             "links",
+            "authors",
             "references"
           )
         )
@@ -164,6 +180,7 @@ ajv_args <- paste(
   "validate",
   "--spec draft2020",
   "-s", file.path(meta$resources_dir, "schemas", "metric_info_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "authors_schema.json"),
   "-r", file.path(meta$resources_dir, "schemas", "references_schema.json"),
   "-d", par$output
 )

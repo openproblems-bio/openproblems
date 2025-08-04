@@ -126,52 +126,7 @@ task_prerelease <- ifelse(task_info$is_prerelease, "(Pre-release)", "")
 
 ```{r}
 #| label: task-authors
-task_authors <- purrr::map_dfr(task_info$authors, function(.author) {
-  other_info <- purrr::map_chr(names(.author$info), \(.info) {
-    paste(.info, toString(.author$info[[.info]]), sep = ": ")
-  }) |>
-    paste(collapse = ", ")
-  
-  data.frame(
-    name = .author$name,
-    roles = paste(.author$roles, collapse = ", "),
-    github = .author$github %||% NA_character_,
-    orcid = .author$orcid %||% NA_character_,
-    info = other_info
-  )
-})
-
-colnames(task_authors) <- stringr::str_to_sentence(colnames(task_authors))
-reactable::reactable(
-  task_authors,
-  columns = list(
-    Roles = reactable::colDef(name = "Roles"),
-    Github = reactable::colDef(
-      name = "GitHub",
-      cell = function(value, index, column) {
-        if (!is.na(value)) {
-          paste0("<a href='https://github.com/", value, "'>", value, "</a>")
-        } else {
-          ""
-        }
-      },
-      style = list("font-family" = "monospace"),
-      html = TRUE
-    ),
-    Orcid = reactable::colDef(
-      name = "ORCiD",
-      cell = function(value, index, column) {
-        if (!is.na(value)) {
-          paste0("<a href='https://orcid.org/", value, "'>", value, "</a>")
-        } else {
-          ""
-        }
-      },
-      html = TRUE
-    )
-  ),
-  striped = TRUE
-)
+get_authors_table(task_info$authors)
 ```
 
 ## References
@@ -265,6 +220,12 @@ reactable::reactable(
       sortable = FALSE
     )
     
+    if (length(dataset_info[[index]]$authors) > 0) {
+      authors_table <- get_authors_table(dataset_info[[index]]$authors)
+    } else {
+      authors_table <- NULL
+    }
+    
     references_table <- get_references_table(dataset_info[[index]]$references)
     
     htmltools::div(
@@ -272,6 +233,7 @@ reactable::reactable(
       description_table,
       details_table,
       source_table,
+      authors_table,
       references_table
     )
   },
@@ -373,6 +335,12 @@ reactable::reactable(
       method_info[[index]]$additional_info
     )
     
+    if (length(method_info[[index]]$authors) > 0) {
+      authors_table <- get_authors_table(method_info[[index]]$authors)
+    } else {
+      authors_table <- NULL
+    }
+    
     references_table <- get_references_table(method_info[[index]]$references)
 
     htmltools::div(
@@ -381,6 +349,7 @@ reactable::reactable(
       source_table,
       links_table,
       additional_table,
+      authors_table,
       references_table
     )
   },
@@ -472,6 +441,12 @@ reactable::reactable(
       metric_info[[index]]$additional_info
     )
     
+    if (length(metric_info[[index]]$authors) > 0) {
+      authors_table <- get_authors_table(metric_info[[index]]$authors)
+    } else {
+      authors_table <- NULL
+    }
+    
     references_table <- get_references_table(metric_info[[index]]$references)
 
     htmltools::div(
@@ -480,6 +455,7 @@ reactable::reactable(
       source_table,
       links_table,
       additional_table,
+      authors_table,
       references_table
     )
   },

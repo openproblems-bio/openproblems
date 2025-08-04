@@ -52,6 +52,9 @@
           "type": "string"
         }
       },
+      "authors": {
+        "$ref": "https://openproblems.bio/schemas/authors_schema.json"
+      },
       "references": {
         "$ref": "https://openproblems.bio/schemas/references_schema.json"
       },
@@ -74,6 +77,7 @@
       "common_dataset_names",
       "modalities",
       "organisms",
+      "authors",
       "references",
       "date_created",
       "file_size_mb"

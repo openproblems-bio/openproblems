@@ -24,6 +24,18 @@ cat(
 dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
   cat("Processing dataset uns '", .dataset$dataset_id, "'\n", sep = "")
 
+  authors <- purrr::map(.dataset$authors, function(.author) {
+    other_fields <- setdiff(names(.author$info), c("github", "orcid"))
+
+    list(
+      name = jsonlite::unbox(.author$name),
+      roles = .author$roles %||% character(0),
+      github = jsonlite::unbox(.author$info$github),
+      orcid = jsonlite::unbox(.author$info$orcid),
+      info = .author$info[other_fields]
+    )
+  })
+
   if ("dataset_reference" %in% names(.dataset)) {
     reference_name <- "dataset_reference"
   } else if ("data_reference" %in% names(.dataset)) {
@@ -78,6 +90,7 @@ dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
     common_dataset_names = .dataset$common_dataset_id,
     modalities = jsonlite::unbox(.dataset$dataset_modality),
     organisms = .dataset$dataset_organism,
+    authors = authors,
     references = references,
     date_created = jsonlite::unbox(.dataset$date_created),
     file_size_mb = jsonlite::unbox(.dataset$file_size / 1048576)
@@ -98,6 +111,7 @@ ajv_args <- paste(
   "validate",
   "--spec draft2020",
   "-s", file.path(meta$resources_dir, "schemas", "dataset_info_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "authors_schema.json"),
   "-r", file.path(meta$resources_dir, "schemas", "references_schema.json"),
   "-d", par$output
 )

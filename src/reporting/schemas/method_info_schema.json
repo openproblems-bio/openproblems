@@ -48,6 +48,9 @@
         "description": "URL to the container image used by the method component",
         "type": "string"
       },
+      "authors": {
+        "$ref": "https://openproblems.bio/schemas/authors_schema.json"
+      },
       "references": {
         "$ref": "https://openproblems.bio/schemas/references_schema.json"
       },
@@ -71,6 +74,7 @@
       "link_documentation",
       "link_implementation",
       "link_container_image",
+      "authors",
       "references",
       "additional_info",
       "version"

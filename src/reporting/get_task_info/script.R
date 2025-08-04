@@ -74,6 +74,7 @@ ajv_args <- paste(
   "validate",
   "--spec draft2020",
   "-s", file.path(meta$resources_dir, "schemas", "task_info_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "authors_schema.json"),
   "-r", file.path(meta$resources_dir, "schemas", "references_schema.json"),
   "-d", par$output
 )

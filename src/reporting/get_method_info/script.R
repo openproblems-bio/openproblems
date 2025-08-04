@@ -51,6 +51,20 @@ get_container_image <- function(config) {
   }
 }
 
+get_authors <- function(config) {
+  purrr::map(config$authors, function(.author) {
+    other_fields <- setdiff(names(.author$info), c("github", "orcid"))
+
+    list(
+      name = jsonlite::unbox(.author$name),
+      roles = .author$roles %||% character(0),
+      github = jsonlite::unbox(.author$info$github),
+      orcid = jsonlite::unbox(.author$info$orcid),
+      info = .author$info[other_fields]
+    )
+  })
+}
+
 get_references <- function(config) {
   if (!is.null(config$references)) {
     list(
@@ -64,7 +78,15 @@ get_references <- function(config) {
 
 get_additional_info <- function(config) {
   # Fields that are stored elsewhere and we don't want to save here
-  exclude <- c("type", "type_info", "label", "summary", "description", "documentation_url")
+  exclude <- c(
+    "type",
+    "type_info",
+    "label",
+    "summary",
+    "description",
+    "documentation_url",
+    "authors"
+  )
 
   config$info[setdiff(names(config$info), exclude)] |>
     purrr::map(recurse_unbox)
@@ -118,6 +140,7 @@ method_info_json <- purrr::map(method_configs, function(.config) {
     link_documentation = jsonlite::unbox(.config$links$documentation %||% .config$info$documentation_url),
     link_implementation = jsonlite::unbox(get_implementation_url(.config)),
     link_container_image = jsonlite::unbox(get_container_image(.config)),
+    authors = get_authors(.config),
     references = get_references(.config),
     additional_info = get_additional_info(.config),
     version = jsonlite::unbox(.config$version)
@@ -138,6 +161,7 @@ ajv_args <- paste(
   "validate",
   "--spec draft2020",
   "-s", file.path(meta$resources_dir, "schemas", "method_info_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "authors_schema.json"),
   "-r", file.path(meta$resources_dir, "schemas", "references_schema.json"),
   "-d", par$output
 )

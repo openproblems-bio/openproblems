@@ -67,12 +67,13 @@ ajv_args <- paste(
   "--spec draft2020",
   "-s", file.path(meta$resources_dir, "schemas", "combined_output_schema.json"),
   "-r", file.path(meta$resources_dir, "schemas", "task_info_schema.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "references_schema.json"),
   "-r", file.path(meta$resources_dir, "schemas", "dataset_info_schema.json"),
   "-r", file.path(meta$resources_dir, "schemas", "method_info_schema.json"),
   "-r", file.path(meta$resources_dir, "schemas", "metric_info_schema.json"),
   "-r", file.path(meta$resources_dir, "schemas", "results_schema.json"),
   "-r", file.path(meta$resources_dir, "schemas", "quality_control_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "authors_schema.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "references_schema.json"),
   "-d", par$output
 )
 
