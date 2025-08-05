@@ -59,7 +59,7 @@ argument_groups:
 resources:
   - type: r_script
     path: script.R
-  - path: /src/reporting/schemas
+  - path: /common/schemas
     dest: schemas
 
 test_resources:
