@@ -668,12 +668,13 @@ Click on the tabs to see each category of quality control checks and expand the 
 #| label: quality-control
 quality_control <- task_results$quality_control |>
   purrr::map_dfr(as.data.frame) |>
-  dplyr::filter(severity > 0)
+  dplyr::mutate(check = ifelse(severity > 0, "failed", "passed"))
 
 qc_summary <- quality_control |>
-  dplyr::group_by(category) |>
-  dplyr::count(name = "failed") |>
+  dplyr::group_by(category, check) |>
+  dplyr::count(name = "amount") |>
   dplyr::ungroup() |>
+  tidyr::spread(check, amount, fill = 0) |>
   dplyr::mutate(
     category = factor(
       category,
@@ -687,15 +688,15 @@ qc_summary <- quality_control |>
       )
     )
   ) |>
-  tidyr::complete(category, fill = list(failed = 0))
+  tidyr::complete(category, fill = list(passed = 0, failed = 0))
 
 reactable::reactable(
   qc_summary,
   columns = list(
     category = reactable::colDef(name = "Category"),
+    passed = reactable::colDef(name = "Passed checks"),
     failed = reactable::colDef(name = "Failed checks")
   ),
-  
   sortable = FALSE,
   striped = TRUE
 )
@@ -708,8 +709,8 @@ reactable::reactable(
 ```{r}
 #| label: quality-control-task
 quality_control |>
-  dplyr::filter(category == "Task info") |>
-  dplyr::select(-category) |>
+  dplyr::filter(category == "Task info", check == "failed") |>
+  dplyr::select(-category, -check) |>
   get_qc_table()
 ```
 
@@ -718,8 +719,8 @@ quality_control |>
 ```{r}
 #| label: quality-control-datasets
 quality_control |>
-  dplyr::filter(category == "Dataset info") |>
-  dplyr::select(-category) |>
+  dplyr::filter(category == "Dataset info", check == "failed") |>
+  dplyr::select(-category, -check) |>
   get_qc_table()
 ```
 
@@ -728,8 +729,8 @@ quality_control |>
 ```{r}
 #| label: quality-control-methods
 quality_control |>
-  dplyr::filter(category == "Method info") |>
-  dplyr::select(-category) |>
+  dplyr::filter(category == "Method info", check == "failed") |>
+  dplyr::select(-category, -check) |>
   get_qc_table()
 ```
 
@@ -738,8 +739,8 @@ quality_control |>
 ```{r}
 #| label: quality-control-metrics
 quality_control |>
-  dplyr::filter(category == "Metric info") |>
-  dplyr::select(-category) |>
+  dplyr::filter(category == "Metric info", check == "failed") |>
+  dplyr::select(-category, -check) |>
   get_qc_table()
 ```
 
@@ -748,8 +749,8 @@ quality_control |>
 ```{r}
 #| label: quality-control-results
 quality_control |>
-  dplyr::filter(category == "Raw results") |>
-  dplyr::select(-category) |>
+  dplyr::filter(category == "Raw results", check == "failed") |>
+  dplyr::select(-category, -check) |>
   get_qc_table()
 ```
 
@@ -758,8 +759,8 @@ quality_control |>
 ```{r}
 #| label: quality-control-scaling
 quality_control |>
-  dplyr::filter(category == "Scaling") |>
-  dplyr::select(-category) |>
+  dplyr::filter(category == "Scaling", check == "failed") |>
+  dplyr::select(-category, -check) |>
   get_qc_table()
 ```
 
