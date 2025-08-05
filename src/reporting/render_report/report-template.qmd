@@ -52,6 +52,14 @@ params:
   functions: functions.R
 ---
 
+```{r params, eval=FALSE}
+params <- list(
+  task_results_json = "resources_test/openproblems/task_results_v4/processed/combined_output.json",
+  logo = "src/reporting/render_report/logo.svg",
+  functions = "src/reporting/render_report/report-functions.R"
+)
+```
+
 ```{r}
 #| label: source
 source(params$functions)
