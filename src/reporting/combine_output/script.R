@@ -72,8 +72,7 @@ ajv_args <- paste(
   "-r", file.path(meta$resources_dir, "schemas", "metric_info.json"),
   "-r", file.path(meta$resources_dir, "schemas", "results.json"),
   "-r", file.path(meta$resources_dir, "schemas", "quality_control.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "authors.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "references.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "core.json"),
   "-d", par$output
 )
 
