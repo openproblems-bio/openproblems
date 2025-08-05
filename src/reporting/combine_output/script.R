@@ -40,7 +40,7 @@ cat("Reading results from '", par$input_results, "'...\n", sep = "")
 results <- jsonlite::read_json(par$input_results)
 
 cat("\n>>> Combining outputs...\n")
-# Create combined output according to task_results_schema.json
+# Create combined output according to task_results.json
 combined_output <- list(
   task_info = task_info,
   dataset_info = dataset_info,
@@ -65,15 +65,15 @@ cat("\n>>> Validating output against schema...\n")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
-  "-s", file.path(meta$resources_dir, "schemas", "combined_output_schema.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "task_info_schema.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "dataset_info_schema.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "method_info_schema.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "metric_info_schema.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "results_schema.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "quality_control_schema.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "authors_schema.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "references_schema.json"),
+  "-s", file.path(meta$resources_dir, "schemas", "combined_output.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "task_info.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "dataset_info.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "method_info.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "metric_info.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "results.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "quality_control.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "authors.json"),
+  "-r", file.path(meta$resources_dir, "schemas", "references.json"),
   "-d", par$output
 )
 

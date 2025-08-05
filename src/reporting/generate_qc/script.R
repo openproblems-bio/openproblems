@@ -662,7 +662,7 @@ cat("\n>>> Validating output against schema...\n")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
-  "-s", file.path(meta$resources_dir, "schemas", "quality_control_schema.json"),
+  "-s", file.path(meta$resources_dir, "schemas", "quality_control.json"),
   "-d", par$output
 )
 
