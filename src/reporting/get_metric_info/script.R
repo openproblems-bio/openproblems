@@ -176,11 +176,12 @@ jsonlite::write_json(
 )
 
 cat("\n>>> Validating output against schema...\n")
+results_schemas <- file.path(meta$resources_dir, "schemas", "results_v4")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
-  "-s", file.path(meta$resources_dir, "schemas", "metric_info.json"),
-  "-r", file.path(meta$resources_dir, "schemas", "core.json"),
+  "-s", file.path(results_schemas, "metric_info.json"),
+  "-r", file.path(results_schemas, "core.json"),
   "-d", par$output
 )
 

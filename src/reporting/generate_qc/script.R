@@ -659,10 +659,11 @@ jsonlite::write_json(
 )
 
 cat("\n>>> Validating output against schema...\n")
+results_schemas <- file.path(meta$resources_dir, "schemas", "results_v4")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
-  "-s", file.path(meta$resources_dir, "schemas", "quality_control.json"),
+  "-s", file.path(results_schemas, "quality_control.json"),
   "-d", par$output
 )
 
