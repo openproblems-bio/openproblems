@@ -21,7 +21,7 @@ argument_groups:
       info:
         format:
           type: json
-          schema: /src/reporting/schemas/dataset_info_schema.json
+          schema: /common/schemas/results_v4/dataset_info.json
       example: resources_test/openproblems/task_results_v4/processed/dataset_info.json
 
 resources:

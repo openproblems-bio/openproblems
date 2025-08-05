@@ -11,7 +11,7 @@ argument_groups:
         info:
           format:
             type: json
-            schema: /src/reporting/schemas/combined_output_schema.json
+            schema: /common/schemas/results_v4/combined_output.json
         required: true
         example: resources_test/openproblems/task_results_v4/processed/combined_output.json
 
