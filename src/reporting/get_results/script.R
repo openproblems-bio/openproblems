@@ -19,7 +19,10 @@ par <- list(
 ################################################################################
 
 parse_exit_code <- function(exit_codes) {
-  as.integer(exit_codes)
+  exit_codes <- as.integer(exit_codes)
+  # Set missing exit codes to -1 for "Unknown error"
+  exit_codes[is.na(exit_codes)] <- -1L
+  exit_codes
 }
 
 parse_duration <- function(durations) {
