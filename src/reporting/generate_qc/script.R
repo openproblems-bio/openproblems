@@ -264,13 +264,13 @@ check_metric_scaling <- function(
 
   pct_outside <- sum(scaled_metrics$outside) / nrow(scaled_metrics)
   worst_score <- min(scaled_metrics$scaled_value)
-  worst_pct_outside <- if (worst_score < 0) {
+  worst_pct_outside <- if (!is.na(worst_score) && worst_score < 0) {
     max(scaled_metrics$pct_outside[scaled_metrics$scaled_value < 0])
   } else {
     0
   }
   best_score <- max(scaled_metrics$scaled_value)
-  best_pct_outside <- if (best_score > 1) {
+  best_pct_outside <- if (!is.na(best_score) && best_score > 1) {
     max(scaled_metrics$pct_outside[scaled_metrics$scaled_value > 1])
   } else {
     0
@@ -369,7 +369,7 @@ check_method_metric_scaling <- function(
     dplyr::filter(method_name == method)
 
   worst_score <- min(method_scaled_metrics$scaled_value)
-  worst_pct_outside <- if (worst_score < 0) {
+  worst_pct_outside <- if (!is.na(worst_score) && worst_score < 0) {
     max(method_scaled_metrics$pct_outside[
       method_scaled_metrics$scaled_value < 0
     ])
@@ -377,7 +377,7 @@ check_method_metric_scaling <- function(
     0
   }
   best_score <- max(method_scaled_metrics$scaled_value)
-  best_pct_outside <- if (best_score > 1) {
+  best_pct_outside <- if (!is.na(worst_score) && best_score > 1) {
     max(method_scaled_metrics$pct_outside[
       method_scaled_metrics$scaled_value > 1
     ])
