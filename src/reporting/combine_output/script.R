@@ -8,7 +8,7 @@ par <- list(
   input_metric_info = paste0(processed_dir, "/metric_info.json"),
   input_method_info = paste0(processed_dir, "/method_info.json"),
   input_dataset_info = paste0(processed_dir, "/dataset_info.json"),
-  input_results = paste0(processed_dir, "/results.json")
+  input_results = paste0(processed_dir, "/results.json"),
   # Outputs
   output = "task_results.json"
 )
@@ -24,7 +24,12 @@ cat("\n>>> Reading input files...\n")
 cat("Reading task info from '", par$input_task_info, "'...\n", sep = "")
 task_info <- jsonlite::read_json(par$input_task_info)
 
-cat("Reading quality control from '", par$input_quality_control, "'...\n", sep = "")
+cat(
+  "Reading quality control from '",
+  par$input_quality_control,
+  "'...\n",
+  sep = ""
+)
 quality_control <- jsonlite::read_json(par$input_quality_control)
 
 cat("Reading metric info from '", par$input_metric_info, "'...\n", sep = "")
@@ -66,15 +71,24 @@ results_schemas <- file.path(meta$resources_dir, "schemas", "results_v4")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
-  "-s", file.path(results_schemas, "combined_output.json"),
-  "-r", file.path(results_schemas, "task_info.json"),
-  "-r", file.path(results_schemas, "dataset_info.json"),
-  "-r", file.path(results_schemas, "method_info.json"),
-  "-r", file.path(results_schemas, "metric_info.json"),
-  "-r", file.path(results_schemas, "results.json"),
-  "-r", file.path(results_schemas, "quality_control.json"),
-  "-r", file.path(results_schemas, "core.json"),
-  "-d", par$output
+  "-s",
+  file.path(results_schemas, "combined_output.json"),
+  "-r",
+  file.path(results_schemas, "task_info.json"),
+  "-r",
+  file.path(results_schemas, "dataset_info.json"),
+  "-r",
+  file.path(results_schemas, "method_info.json"),
+  "-r",
+  file.path(results_schemas, "metric_info.json"),
+  "-r",
+  file.path(results_schemas, "results.json"),
+  "-r",
+  file.path(results_schemas, "quality_control.json"),
+  "-r",
+  file.path(results_schemas, "core.json"),
+  "-d",
+  par$output
 )
 
 cat("Running validation command:", "ajv", ajv_args, "\n")

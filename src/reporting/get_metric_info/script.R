@@ -32,9 +32,12 @@ get_container_image <- function(config) {
   if (has_docker) {
     paste0(
       "https://",
-      config$links$docker_registry, "/",
-      config$package_config$organization, "/",
-      config$package_config$name, "/",
+      config$links$docker_registry,
+      "/",
+      config$package_config$organization,
+      "/",
+      config$package_config$name,
+      "/",
       config$build_info$config |>
         stringr::str_remove(".*/src/") |>
         stringr::str_remove("/config.vsh.yaml"),
@@ -83,7 +86,9 @@ cat("Reading metric info from '", par$input, "'...\n", sep = "")
 metric_configs <- yaml::yaml.load_file(par$input)
 
 cat(
-  "\n>>> Processing ", length(metric_configs), " metric configs...\n",
+  "\n>>> Processing ",
+  length(metric_configs),
+  " metric configs...\n",
   sep = ""
 )
 bibliography <- read_bibliography(
@@ -160,9 +165,12 @@ results_schemas <- file.path(meta$resources_dir, "schemas", "results_v4")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
-  "-s", file.path(results_schemas, "metric_info.json"),
-  "-r", file.path(results_schemas, "core.json"),
-  "-d", par$output
+  "-s",
+  file.path(results_schemas, "metric_info.json"),
+  "-r",
+  file.path(results_schemas, "core.json"),
+  "-d",
+  par$output
 )
 
 cat("Running validation command:", "ajv", ajv_args, "\n")

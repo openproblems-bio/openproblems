@@ -31,7 +31,11 @@ create_qc_entry <- function(
     value <- -1
   }
 
-  if (is.null(severity_value) || is.na(severity_value) || length(severity_value) == 0) {
+  if (
+    is.null(severity_value) ||
+      is.na(severity_value) ||
+      length(severity_value) == 0
+  ) {
     severity_value <- -1
   }
 
@@ -103,10 +107,18 @@ check_info_fields <- function(info, type, expected_fields, task_name) {
       severity_value = ifelse(pct_missing > 0, 3.0, 0.0),
       condition = "pct_missing <= 0",
       message = paste0(
-        category, " field '", .field, "' should be defined\n",
-        "  Task: ", task_name, "\n",
-        "  Field: ", .field, "\n",
-        "  Percentage missing: ", round(pct_missing * 100, 0)
+        category,
+        " field '",
+        .field,
+        "' should be defined\n",
+        "  Task: ",
+        task_name,
+        "\n",
+        "  Field: ",
+        .field,
+        "\n",
+        "  Percentage missing: ",
+        round(pct_missing * 100, 0)
       )
     )
   })
@@ -146,11 +158,23 @@ check_missing_results <- function(
     condition = "pct_missing <= 0.1",
     message = paste0(
       "Percentage of missing results should be less than 10%\n",
-      "  Task: ", task_name, "\n",
-      "  ", title, ": ", name, "\n",
-      "  Number of results: ", n_results, "\n",
-      "  Expected number of results: ", n_expected, "\n",
-      "  Percentage missing: ", round(pct_missing * 100, 0), "%\n"
+      "  Task: ",
+      task_name,
+      "\n",
+      "  ",
+      title,
+      ": ",
+      name,
+      "\n",
+      "  Number of results: ",
+      n_results,
+      "\n",
+      "  Expected number of results: ",
+      n_expected,
+      "\n",
+      "  Percentage missing: ",
+      round(pct_missing * 100, 0),
+      "%\n"
     )
   )
 }
@@ -176,11 +200,23 @@ check_failed_processes <- function(results, name, type, task_name) {
     condition = "pct_failed <= 0.1",
     message = paste0(
       "Percentage of failed processes should be less than 10%\n",
-      "  Task: ", task_name, "\n",
-      "  ", title, ": ", name, "\n",
-      "  Succeeded processes: ", n_succeeded, "\n",
-      "  Attempted processes: ", n_expected, "\n",
-      "  Percentage failed: ", round(pct_failed * 100, 0), "%\n"
+      "  Task: ",
+      task_name,
+      "\n",
+      "  ",
+      title,
+      ": ",
+      name,
+      "\n",
+      "  Succeeded processes: ",
+      n_succeeded,
+      "\n",
+      "  Attempted processes: ",
+      n_expected,
+      "\n",
+      "  Percentage failed: ",
+      round(pct_failed * 100, 0),
+      "%\n"
     )
   )
 }
@@ -249,11 +285,21 @@ check_metric_scaling <- function(
       condition = "pct_outside <= 0.1",
       message = paste0(
         "Percentage of scaled scores outside control range should be less than 10%\n",
-        "  Task: ", task_name, "\n",
-        "  Metric: ", metric, "\n",
-        "  Inside range: ", sum(!scaled_metrics$outside), "\n",
-        "  Scaled scores: ", nrow(scaled_metrics), "\n",
-        "  Percentage outside: ", round(pct_outside * 100, 0), "%\n"
+        "  Task: ",
+        task_name,
+        "\n",
+        "  Metric: ",
+        metric,
+        "\n",
+        "  Inside range: ",
+        sum(!scaled_metrics$outside),
+        "\n",
+        "  Scaled scores: ",
+        nrow(scaled_metrics),
+        "\n",
+        "  Percentage outside: ",
+        round(pct_outside * 100, 0),
+        "%\n"
       )
     ),
     create_qc_entry(
@@ -264,10 +310,18 @@ check_metric_scaling <- function(
       condition = "worst_pct_outside <= 0.1",
       message = paste0(
         "The worst scaled score should be less than 10% outside the control range\n",
-        "  Task: ", task_name, "\n",
-        "  Metric: ", metric, "\n",
-        "  Worst score: ", worst_score, "\n",
-        "  Percentage outside range: ", round(worst_pct_outside * 100, 0), "%\n"
+        "  Task: ",
+        task_name,
+        "\n",
+        "  Metric: ",
+        metric,
+        "\n",
+        "  Worst score: ",
+        worst_score,
+        "\n",
+        "  Percentage outside range: ",
+        round(worst_pct_outside * 100, 0),
+        "%\n"
       )
     ),
     create_qc_entry(
@@ -278,10 +332,18 @@ check_metric_scaling <- function(
       condition = "best_pct_outside <= 0.1",
       message = paste0(
         "The best scaled score should be less than 10% outside the control range\n",
-        "  Task: ", task_name, "\n",
-        "  Metric: ", metric, "\n",
-        "  Best score: ", best_score, "\n",
-        "  Percentage outside range: ", round(best_pct_outside * 100, 0), "%\n"
+        "  Task: ",
+        task_name,
+        "\n",
+        "  Metric: ",
+        metric,
+        "\n",
+        "  Best score: ",
+        best_score,
+        "\n",
+        "  Percentage outside range: ",
+        round(best_pct_outside * 100, 0),
+        "%\n"
       )
     )
   )
@@ -331,12 +393,26 @@ check_method_metric_scaling <- function(
       severity_value = ifelse(worst_score < -1, worst_pct_outside, 0),
       condition = "worst_score < -1",
       message = paste0(
-        "Method '", method,"' performs much worse than controls for metric' ", metric_name, "'\n",
-        "  Task: ",task_name, "\n",
-        "  Method: ", method, "\n",
-        "  Metric: ", metric_name, "\n",
-        "  Worst score: ", worst_score, "\n",
-        "  Percentage outside range: ", round(worst_pct_outside * 100, 0), "%\n"
+        "Method '",
+        method,
+        "' performs much worse than controls for metric' ",
+        metric_name,
+        "'\n",
+        "  Task: ",
+        task_name,
+        "\n",
+        "  Method: ",
+        method,
+        "\n",
+        "  Metric: ",
+        metric_name,
+        "\n",
+        "  Worst score: ",
+        worst_score,
+        "\n",
+        "  Percentage outside range: ",
+        round(worst_pct_outside * 100, 0),
+        "%\n"
       )
     ),
     create_qc_entry(
@@ -346,12 +422,26 @@ check_method_metric_scaling <- function(
       severity_value = ifelse(best_score > 2, best_pct_outside, 0),
       condition = "best_score > 2",
       message = paste0(
-        "Method '", method, "' performs much better than controls for metric '", metric_name, "'\n",
-        "  Task: ", task_name, "\n",
-        "  Method: ", method, "\n",
-        "  Metric: ", metric_name, "\n",
-        "  Best score: ", best_score, "\n",
-        "  Percentage outside range: ", round(best_pct_outside * 100, 0), "%\n"
+        "Method '",
+        method,
+        "' performs much better than controls for metric '",
+        metric_name,
+        "'\n",
+        "  Task: ",
+        task_name,
+        "\n",
+        "  Method: ",
+        method,
+        "\n",
+        "  Metric: ",
+        metric_name,
+        "\n",
+        "  Best score: ",
+        best_score,
+        "\n",
+        "  Percentage outside range: ",
+        round(best_pct_outside * 100, 0),
+        "%\n"
       )
     )
   )
@@ -464,12 +554,24 @@ results_task <- list(
     condition = "length(dataset_info) * length(results) == length(method_info) * length(metric_info)",
     message = paste0(
       "Number of results should be equal to #datasets × #methods × #metrics \n",
-      "  Task: ", task_name, "\n",
-      "  Number of results: ", n_results, "\n",
-      "  Number of datasets: ", n_datasets, "\n",
-      "  Number of methods: ", n_methods, "\n",
-      "  Number of metrics: ", n_metrics, "\n",
-      "  Expected number of results: ", n_results_expected, "\n"
+      "  Task: ",
+      task_name,
+      "\n",
+      "  Number of results: ",
+      n_results,
+      "\n",
+      "  Number of datasets: ",
+      n_datasets,
+      "\n",
+      "  Number of methods: ",
+      n_methods,
+      "\n",
+      "  Number of metrics: ",
+      n_metrics,
+      "\n",
+      "  Expected number of results: ",
+      n_results_expected,
+      "\n"
     )
   )
 )
@@ -527,10 +629,18 @@ failed_task <- list(
     condition = "sum(results$succeeded) + sum(metric_component_results$succeeded) == nrow(results) + nrow(metric_component_results)",
     message = paste0(
       "Number of successful processes should be equal to the number of attempted processes\n",
-      "  Task: ", task_name, "\n",
-      "  Succeeded processes: ", n_succeeded, "\n",
-      "  Attempted processes: ", n_processes, "\n",
-      "  Percentage failed: ", round(pct_failed * 100, 0), "%\n"
+      "  Task: ",
+      task_name,
+      "\n",
+      "  Succeeded processes: ",
+      n_succeeded,
+      "\n",
+      "  Attempted processes: ",
+      n_processes,
+      "\n",
+      "  Percentage failed: ",
+      round(pct_failed * 100, 0),
+      "%\n"
     )
   )
 )
@@ -570,26 +680,39 @@ dataset_controls <- results_long |>
   dplyr::mutate(dataset_name = factor(dataset_name, levels = dataset_names)) |>
   tidyr::complete(dataset_name, fill = list(n_controls = 0))
 
-controls_datasets <- purrr::map(seq_len(nrow(dataset_controls)), function(.idx) {
-  dataset_name <- dataset_controls$dataset_name[.idx]
-  n_controls <- dataset_controls$n_controls[.idx]
+controls_datasets <- purrr::map(
+  seq_len(nrow(dataset_controls)),
+  function(.idx) {
+    dataset_name <- dataset_controls$dataset_name[.idx]
+    n_controls <- dataset_controls$n_controls[.idx]
 
-  create_qc_entry(
-    category = "Raw results",
-    label = paste0("Dataset `", dataset_name, "' number of control methods"),
-    value = n_controls,
-    severity_value = ifelse(n_controls != length(control_methods), 3, 0),
-    condition = "n_controls != length(control_methods)",
-    message = paste0(
-      "Number of successful control methods for a dataset should equal the number of controls\n",
-      "  Task: ", task_name, "\n",
-      "  Dataset: ", dataset_name, "\n",
-      "  Succeeded control_methods: ", n_controls, "\n",
-      "  Total control methods: ", length(control_methods), "\n",
-      "  Percentage succeeded: ", round(n_controls / length(control_methods) * 100, 0), "%\n"
+    create_qc_entry(
+      category = "Raw results",
+      label = paste0("Dataset `", dataset_name, "' number of control methods"),
+      value = n_controls,
+      severity_value = ifelse(n_controls != length(control_methods), 3, 0),
+      condition = "n_controls != length(control_methods)",
+      message = paste0(
+        "Number of successful control methods for a dataset should equal the number of controls\n",
+        "  Task: ",
+        task_name,
+        "\n",
+        "  Dataset: ",
+        dataset_name,
+        "\n",
+        "  Succeeded control_methods: ",
+        n_controls,
+        "\n",
+        "  Total control methods: ",
+        length(control_methods),
+        "\n",
+        "  Percentage succeeded: ",
+        round(n_controls / length(control_methods) * 100, 0),
+        "%\n"
+      )
     )
-  )
-})
+  }
+)
 
 metric_controls <- results_long |>
   dplyr::filter(method_name %in% control_methods) |>
@@ -613,11 +736,21 @@ controls_metrics <- purrr::map(seq_len(nrow(metric_controls)), function(.idx) {
     condition = "n_controls != length(datasets) * length(control_methods)",
     message = paste0(
       "Number of metric scores for control methods should be equal to #datasets × #control_methods\n",
-      "  Task: ", task_name, "\n",
-      "  Metric: ", metric_name, "\n",
-      "  Control method scores: ", n_controls, "\n",
-      "  Expected control method scores: ", n_expected, "\n",
-      "  Percentage succeeded: ", round(n_controls / n_expected * 100, 0), "%\n"
+      "  Task: ",
+      task_name,
+      "\n",
+      "  Metric: ",
+      metric_name,
+      "\n",
+      "  Control method scores: ",
+      n_controls,
+      "\n",
+      "  Expected control method scores: ",
+      n_expected,
+      "\n",
+      "  Percentage succeeded: ",
+      round(n_controls / n_expected * 100, 0),
+      "%\n"
     )
   )
 })
@@ -663,8 +796,10 @@ results_schemas <- file.path(meta$resources_dir, "schemas", "results_v4")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
-  "-s", file.path(results_schemas, "quality_control.json"),
-  "-d", par$output
+  "-s",
+  file.path(results_schemas, "quality_control.json"),
+  "-d",
+  par$output
 )
 
 cat("Running validation command:", "ajv", ajv_args, "\n")

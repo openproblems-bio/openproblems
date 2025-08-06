@@ -32,16 +32,19 @@ get_container_image <- function(config) {
   if (has_docker) {
     paste0(
       "https://",
-      config$links$docker_registry, "/",
-      config$package_config$organization, "/",
-      config$package_config$name, "/",
+      config$links$docker_registry,
+      "/",
+      config$package_config$organization,
+      "/",
+      config$package_config$name,
+      "/",
       config$build_info$config |>
         stringr::str_remove(".*/src/") |>
         stringr::str_remove("/config.vsh.yaml"),
       ":",
       config$version
     )
-  }  else {
+  } else {
     paste0(
       "https://github.com/orgs/openproblems-bio/packages?repo_name=",
       config$package_config$name,
@@ -91,7 +94,12 @@ cat("\n>>> Reading input files...\n")
 cat("Reading method info from '", par$input, "'...\n", sep = "")
 method_configs <- yaml::yaml.load_file(par$input)
 
-cat("\n>>> Processing ", length(method_configs), " method configs...\n", sep = "")
+cat(
+  "\n>>> Processing ",
+  length(method_configs),
+  " method configs...\n",
+  sep = ""
+)
 bibliography <- read_bibliography(
   file.path(meta$resources_dir, "bibliography.bib")
 )
@@ -107,17 +115,21 @@ method_info_json <- purrr::map(method_configs, function(.config) {
     name = jsonlite::unbox(.config$name),
     label = jsonlite::unbox(.config$label %||% .config$info$label),
     commit = jsonlite::unbox(.config$build_info$git_commit %||% "missing-sha"),
-    summary = .config$summary %||% .config$info$summary |>
+    summary = .config$summary %||%
+      .config$info$summary |>
       stringr::str_trim() |>
       stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
       jsonlite::unbox(),
-    description = .config$description %||% .config$info$description |>
+    description = .config$description %||%
+      .config$info$description |>
       stringr::str_trim() |>
       stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
       jsonlite::unbox(),
     type = jsonlite::unbox(.config$info$type),
     link_code = jsonlite::unbox(.config$links$repository),
-    link_documentation = jsonlite::unbox(.config$links$documentation %||% .config$info$documentation_url),
+    link_documentation = jsonlite::unbox(
+      .config$links$documentation %||% .config$info$documentation_url
+    ),
     link_implementation = jsonlite::unbox(get_implementation_url(.config)),
     link_container_image = jsonlite::unbox(get_container_image(.config)),
     authors = get_authors_list(.config$authors),
@@ -141,9 +153,12 @@ results_schemas <- file.path(meta$resources_dir, "schemas", "results_v4")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
-  "-s", file.path(results_schemas, "method_info.json"),
-  "-r", file.path(results_schemas, "core.json"),
-  "-d", par$output
+  "-s",
+  file.path(results_schemas, "method_info.json"),
+  "-r",
+  file.path(results_schemas, "core.json"),
+  "-d",
+  par$output
 )
 
 cat("Running validation command:", "ajv", ajv_args, "\n")

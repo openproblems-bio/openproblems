@@ -16,11 +16,15 @@ cat("Reading dataset uns from '", par$input, "'...\n", sep = "")
 dataset_uns <- yaml::yaml.load_file(
   par$input,
   # Read file sizes as floats to avoid issues with big integers
-  handlers = list(int = \(x) {as.numeric(x)})
+  handlers = list(int = \(x) {
+    as.numeric(x)
+  })
 )
 
 cat(
-  "\n>>> Processing ", length(dataset_uns), " datasets...\n",
+  "\n>>> Processing ",
+  length(dataset_uns),
+  " datasets...\n",
   sep = ""
 )
 bibliography <- read_bibliography(
@@ -86,9 +90,12 @@ results_schemas <- file.path(meta$resources_dir, "schemas", "results_v4")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
-  "-s", file.path(results_schemas, "dataset_info.json"),
-  "-r", file.path(results_schemas, "core.json"),
-  "-d", par$output
+  "-s",
+  file.path(results_schemas, "dataset_info.json"),
+  "-r",
+  file.path(results_schemas, "core.json"),
+  "-d",
+  par$output
 )
 
 cat("Running validation command:", "ajv", ajv_args, "\n")

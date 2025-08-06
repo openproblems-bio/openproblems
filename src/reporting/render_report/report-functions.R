@@ -240,7 +240,9 @@ get_additional_info_table <- function(additional_info) {
   tryCatch(
     {
       additional_data <- additional_info |>
-        purrr::map(\(.x) {paste(.x, collapse = ", ")}) |>
+        purrr::map(\(.x) {
+          paste(.x, collapse = ", ")
+        }) |>
         as.data.frame()
 
       colnames(additional_data) <- colnames(additional_data) |>
@@ -250,7 +252,8 @@ get_additional_info_table <- function(additional_info) {
       reactable::reactable(
         additional_data
       )
-    }, error = function(e) {
+    },
+    error = function(e) {
       htmltools::div(
         paste(
           "Additional information failed to render with error: ",
@@ -276,11 +279,7 @@ get_qc_table <- function(qc_df) {
       severity = reactable::colDef(
         name = "Severity",
         cell = function(value) {
-          switch(value,
-                 "1" = "❌",
-                 "2" = "❌❌",
-                 "3" = "❌❌❌",
-          )
+          switch(value, "1" = "❌", "2" = "❌❌", "3" = "❌❌❌", )
         }
       )
     ),
@@ -367,11 +366,11 @@ get_qc_table <- function(qc_df) {
 #' values outside the [0, 1] range. A main panel shows all datasets and a
 #' secondary panel is faceted by dataset.
 plot_scaling <- function(
-    complete_scores,
-    sel_metric,
-    method_details,
-    metric_details
-  ) {
+  complete_scores,
+  sel_metric,
+  method_details,
+  metric_details
+) {
   plot_data <- complete_scores |>
     dplyr::filter(metric == sel_metric) |>
     dplyr::mutate(
@@ -431,10 +430,12 @@ plot_scaling <- function(
 
   norm_facets <- norm_plot +
     ggplot2::facet_wrap(
-      ~ dataset,
+      ~dataset,
       scales = "free_x",
       labeller = ggplot2::as_labeller(
-        \(.x) {stringr::str_wrap(.x, width = 10, whitespace_only = FALSE)}
+        \(.x) {
+          stringr::str_wrap(.x, width = 10, whitespace_only = FALSE)
+        }
       )
     )
 
@@ -446,9 +447,10 @@ plot_scaling <- function(
   ) &
     ggplot2::theme(legend.position = "bottom")
 
-  norm_panel + patchwork::plot_annotation(
-    title = metric_details$metric_label[metric_details$metric == sel_metric],
-  )
+  norm_panel +
+    patchwork::plot_annotation(
+      title = metric_details$metric_label[metric_details$metric == sel_metric],
+    )
 }
 
 # Formatting ----
