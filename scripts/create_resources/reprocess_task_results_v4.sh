@@ -54,7 +54,7 @@ HERE
 
 echo ">>> Creating params.yaml..."
 cat > /tmp/params.yaml << HERE
-input_states: resources/**/state.yaml
+input_states: resources/*/results/run_*/state.yaml
 rename_keys: 'input_task_info:output_task_info;input_dataset_info:output_dataset_info;input_method_configs:output_method_configs;input_metric_configs:output_metric_configs;input_scores:output_scores;input_trace:output_trace'
 output_state: '\$id/state.yaml'
 settings: '{"output_combined": "\$id/output_combined.json", "output_report": "\$id/output_report.html", "output_task_info": "\$id/output_task_info.json", "output_dataset_info": "\$id/output_dataset_info.json", "output_method_info": "\$id/output_method_info.json", "output_metric_info": "\$id/output_metric_info.json", "output_results": "\$id/output_results.json", "output_scores": "\$id/output_quality_control.json"}'
