@@ -5,6 +5,8 @@ par <- list(
 )
 ## VIASH END
 
+source(file.path(meta$resources_dir, "functions.R"))
+
 ################################################################################
 #                               FUNCTIONS
 ################################################################################
@@ -51,31 +53,6 @@ get_container_image <- function(config) {
   }
 }
 
-get_authors <- function(config) {
-  purrr::map(config$authors, function(.author) {
-    other_fields <- setdiff(names(.author$info), c("github", "orcid"))
-
-    list(
-      name = jsonlite::unbox(.author$name),
-      roles = .author$roles %||% character(0),
-      github = jsonlite::unbox(.author$info$github),
-      orcid = jsonlite::unbox(.author$info$orcid),
-      info = .author$info[other_fields]
-    )
-  })
-}
-
-get_references <- function(config) {
-  if (!is.null(config$references)) {
-    list(
-      doi = config$references$doi %||% character(0),
-      bibtex = config$references$bibtex %||% character(0)
-    )
-  } else {
-    list(doi = character(0), bibtex = character(0))
-  }
-}
-
 get_additional_info <- function(info, exclude, name_prefix = "") {
   additional <- info[setdiff(names(info), exclude)] |>
     purrr::map(recurse_unbox)
@@ -109,6 +86,9 @@ cat(
   "\n>>> Processing ", length(metric_configs), " metric configs...\n",
   sep = ""
 )
+bibliography <- read_bibliography(
+  file.path(meta$resources_dir, "bibliography.bib")
+)
 metric_info_json <- purrr::map(metric_configs, function(.config) {
   if (.config$status == "disabled") {
     cat("Skipping disabled metric component '", .config$name, "'\n", sep = "")
@@ -136,8 +116,8 @@ metric_info_json <- purrr::map(metric_configs, function(.config) {
       link_implementation = jsonlite::unbox(get_implementation_url(.config)),
       link_container_image = jsonlite::unbox(get_container_image(.config)),
       component_name = jsonlite::unbox(.config$name),
-      authors = get_authors(.metric),
-      references = get_references(.metric),
+      authors = get_authors_list(.metric$authors),
+      references = get_references_list(.metric$references, bibliography),
       additional_info = c(
         get_additional_info(
           .config$info,

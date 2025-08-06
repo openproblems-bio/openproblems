@@ -3,39 +3,26 @@ par <- list(
   input = "resources_test/openproblems/task_results_v4/raw/task_info.yaml",
   output = "task_info.json"
 )
-### VIASH END
+## VIASH END
+
+source(file.path(meta$resources_dir, "functions.R"))
 
 cat("====== Get task info ======\n")
 
 `%||%` <- rlang::`%||%`
-
 cat("\n>>> Reading input files...\n")
 cat("Reading task info from '", par$input, "'...\n", sep = "")
 task_info_yaml <- yaml::read_yaml(par$input)
 
 cat("\n>>> Getting references...\n")
-references <- if (!is.null(task_info_yaml$references)) {
-  list(
-    doi = task_info_yaml$references$doi %||% character(0),
-    bibtex = task_info_yaml$references$bibtex %||% character(0)
-  )
-} else {
-  list(doi = character(0), bibtex = character(0))
-}
+bibliography <- read_bibliography(
+  file.path(meta$resources_dir, "bibliography.bib")
+)
+references <- get_references_list(task_info_yaml$references, bibliography)
 str(references)
 
 cat("\n>>> Getting authors...\n")
-authors <- purrr::map(task_info_yaml$authors, function(.author) {
-  other_fields <- setdiff(names(.author$info), c("github", "orcid"))
-
-  list(
-    name = jsonlite::unbox(.author$name),
-    roles = .author$roles %||% character(0),
-    github = jsonlite::unbox(.author$info$github),
-    orcid = jsonlite::unbox(.author$info$orcid),
-    info = .author$info[other_fields]
-  )
-})
+authors <- get_authors_list(task_info_yaml$authors)
 cat("Found", length(authors), "authors\n")
 
 cat("\n>>> Creating JSON list...\n")

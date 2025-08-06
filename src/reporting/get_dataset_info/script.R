@@ -5,9 +5,11 @@ par <- list(
 )
 ## VIASH END
 
-cat("====== Get dataset info ======\n")
+source(file.path(meta$resources_dir, "functions.R"))
 
 `%||%` <- rlang::`%||%`
+
+cat("====== Get dataset info ======\n")
 
 cat("\n>>> Reading input files...\n")
 cat("Reading dataset uns from '", par$input, "'...\n", sep = "")
@@ -21,20 +23,13 @@ cat(
   "\n>>> Processing ", length(dataset_uns), " datasets...\n",
   sep = ""
 )
+bibliography <- read_bibliography(
+  file.path(meta$resources_dir, "bibliography.bib")
+)
 dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
   cat("Processing dataset uns '", .dataset$dataset_id, "'\n", sep = "")
 
-  authors <- purrr::map(.dataset$authors, function(.author) {
-    other_fields <- setdiff(names(.author$info), c("github", "orcid"))
-
-    list(
-      name = jsonlite::unbox(.author$name),
-      roles = .author$roles %||% character(0),
-      github = jsonlite::unbox(.author$info$github),
-      orcid = jsonlite::unbox(.author$info$orcid),
-      info = .author$info[other_fields]
-    )
-  })
+  authors <- get_authors_list(.dataset$authors)
 
   if ("dataset_reference" %in% names(.dataset)) {
     reference_name <- "dataset_reference"
@@ -43,28 +38,8 @@ dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
   } else {
     stop("No reference found in dataset uns for '", .dataset$dataset_id, "'")
   }
-  references <- if (is.list(.dataset[[reference_name]])) {
-    list(
-      doi = .dataset[[reference_name]]$doi %||% character(0),
-      bibtex = .dataset[[reference_name]]$bibtex %||% character(0)
-    )
-  } else {
-    reference <- .dataset[[reference_name]]
 
-    if (startsWith(reference, "@")) {
-      list(
-        doi = character(0),
-        bibtex = reference
-      )
-    } else if (startsWith(reference, "1")) {
-      list(
-        doi = reference,
-        bibtex = character(0)
-      )
-    } else {
-      reference
-    }
-  }
+  references <- get_references_list(.dataset[[reference_name]], bibliography)
 
   if ("dataset_url" %in% names(.dataset)) {
     url_name <- "dataset_url"

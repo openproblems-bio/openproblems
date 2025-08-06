@@ -27,8 +27,12 @@ argument_groups:
 resources:
   - type: r_script
     path: script.R
+  - path: /src/reporting/shared/functions.R
+    dest: functions.R
   - path: /common/schemas
     dest: schemas
+  - path: /src/reporting/shared/bibliography.bib
+    dest: bibliography.bib
 
 test_resources:
   - type: python_script
@@ -48,6 +52,7 @@ engines:
         run: npm install -g ajv-cli
       - type: r
         cran:
+        - bibtex
         - purrr
         - stringr
 

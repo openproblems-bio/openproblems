@@ -5,6 +5,8 @@ par <- list(
 )
 ## VIASH END
 
+source(file.path(meta$resources_dir, "functions.R"))
+
 ################################################################################
 #                               FUNCTIONS
 ################################################################################
@@ -51,31 +53,6 @@ get_container_image <- function(config) {
   }
 }
 
-get_authors <- function(config) {
-  purrr::map(config$authors, function(.author) {
-    other_fields <- setdiff(names(.author$info), c("github", "orcid"))
-
-    list(
-      name = jsonlite::unbox(.author$name),
-      roles = .author$roles %||% character(0),
-      github = jsonlite::unbox(.author$info$github),
-      orcid = jsonlite::unbox(.author$info$orcid),
-      info = .author$info[other_fields]
-    )
-  })
-}
-
-get_references <- function(config) {
-  if (!is.null(config$references)) {
-    list(
-      doi = config$references$doi %||% character(0),
-      bibtex = config$references$bibtex %||% character(0)
-    )
-  } else {
-    list(doi = character(0), bibtex = character(0))
-  }
-}
-
 get_additional_info <- function(config) {
   # Fields that are stored elsewhere and we don't want to save here
   exclude <- c(
@@ -115,6 +92,9 @@ cat("Reading method info from '", par$input, "'...\n", sep = "")
 method_configs <- yaml::yaml.load_file(par$input)
 
 cat("\n>>> Processing ", length(method_configs), " method configs...\n", sep = "")
+bibliography <- read_bibliography(
+  file.path(meta$resources_dir, "bibliography.bib")
+)
 method_info_json <- purrr::map(method_configs, function(.config) {
   if (.config$status == "disabled") {
     cat("Skipping disabled method '", .config$name, "'\n", sep = "")
@@ -140,8 +120,8 @@ method_info_json <- purrr::map(method_configs, function(.config) {
     link_documentation = jsonlite::unbox(.config$links$documentation %||% .config$info$documentation_url),
     link_implementation = jsonlite::unbox(get_implementation_url(.config)),
     link_container_image = jsonlite::unbox(get_container_image(.config)),
-    authors = get_authors(.config),
-    references = get_references(.config),
+    authors = get_authors_list(.config$authors),
+    references = get_references_list(.config$references, bibliography),
     additional_info = get_additional_info(.config),
     version = jsonlite::unbox(.config$version)
   )
