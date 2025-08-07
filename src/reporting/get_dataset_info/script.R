@@ -40,7 +40,11 @@ dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
   } else if ("data_reference" %in% names(.dataset)) {
     reference_name <- "data_reference"
   } else {
-    stop("No reference found in dataset uns for '", .dataset$dataset_id, "'")
+    warning(
+      "No reference found in dataset uns for '", .dataset$dataset_id, "'",
+      immediate. = TRUE
+    )
+    reference_name <- "NO_REFERENCE"
   }
 
   references <- get_references_list(.dataset[[reference_name]], bibliography)
@@ -50,25 +54,36 @@ dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
   } else if ("data_url" %in% names(.dataset)) {
     url_name <- "data_url"
   } else {
-    stop("No URL found in dataset uns for '", .dataset$dataset_id, "'")
+    warning(
+      "No URL found in dataset uns for '", .dataset$dataset_id, "'",
+      immediate. = TRUE
+    )
+    url_name <- "NO_URL"
   }
 
   list(
     name = jsonlite::unbox(.dataset$dataset_id),
-    label = jsonlite::unbox(.dataset$dataset_name),
+    label = jsonlite::unbox(.dataset$dataset_name %||% .dataset$dataset_id),
     commit = jsonlite::unbox(.dataset$dataset_commit %||% "missing-sha"),
-    summary = .dataset$dataset_summary |>
+    summary = .dataset$dataset_summary %||%
+        .dataset$dataset_description %||%
+        .dataset$dataset_id |>
       stringr::str_trim() |>
       stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
       jsonlite::unbox(),
-    description = .dataset$dataset_description |>
+    description = .dataset$dataset_description %||%
+        .dataset$dataset_summary %||%
+        .dataset$dataset_id |>
       stringr::str_trim() |>
       stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
       jsonlite::unbox(),
-    source_url = jsonlite::unbox(.dataset[[url_name]]),
+    source_url = .dataset[[url_name]] %||%
+      # Point to the datasets repo if there is no dataset URL
+      "https://github.com/openproblems-bio/datasets" |>
+      jsonlite::unbox(),
     common_dataset_names = .dataset$common_dataset_id,
     modalities = jsonlite::unbox(.dataset$dataset_modality),
-    organisms = .dataset$dataset_organism,
+    organisms = .dataset$dataset_organism %||% list(),
     authors = authors,
     references = references,
     date_created = jsonlite::unbox(.dataset$date_created),
