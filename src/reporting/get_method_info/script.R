@@ -104,7 +104,11 @@ bibliography <- read_bibliography(
   file.path(meta$resources_dir, "bibliography.bib")
 )
 method_info_json <- purrr::map(method_configs, function(.config) {
-  if (.config$status == "disabled") {
+  if ("functionality" %in% names(.config)) {
+    .config <- .config$functionality
+  }
+
+  if (!is.null(.config$status) && .config$status == "disabled") {
     cat("Skipping disabled method '", .config$name, "'\n", sep = "")
     return(NULL)
   } else {
