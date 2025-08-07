@@ -40,7 +40,11 @@ read_bibliography <- function(bib_file) {
 #'   containing corresponding DOIs or BibTeX entries
 get_references_list <- function(reference, bibliography) {
   # If null, return empty references
-  if (is.null(reference)) {
+  if (
+    is.null(reference) ||
+      length(reference) == 0 ||
+      (length(reference) == 1 && reference == "")
+  ) {
     return(list(doi = character(0), bibtex = character(0)))
   }
 
