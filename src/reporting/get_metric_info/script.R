@@ -78,6 +78,10 @@ bibliography <- read_bibliography(
   file.path(meta$resources_dir, "bibliography.bib")
 )
 metric_info_json <- purrr::map(metric_configs, function(.config) {
+  if ("functionality" %in% names(.config)) {
+    .config <- .config$functionality
+  }
+
   if (!is.null(.config$status) && .config$status == "disabled") {
     cat("Skipping disabled metric component '", .config$name, "'\n", sep = "")
     return(NULL)
