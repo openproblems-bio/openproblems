@@ -64,7 +64,7 @@ get_references_list <- function(reference, bibliography) {
   # Otherwise, assume it is a bibliography key
   if (reference %in% names(bibliography$doi)) {
     return(list(doi = bibliography$doi[[reference]], bibtex = character(0)))
-  } else if (reference %in% names(bibliograph$bibtex)) {
+  } else if (reference %in% names(bibliography$bibtex)) {
     return(list(doi = character(0), bibtex = bibliography$bibtex[[reference]]))
   } else {
     stop("Reference key '", reference, "' not found in bibliography")
