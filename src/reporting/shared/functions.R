@@ -89,7 +89,7 @@ get_authors_list <- function(authors) {
       roles = .author$roles %||% character(0),
       github = jsonlite::unbox(.author$info$github),
       orcid = jsonlite::unbox(.author$info$orcid),
-      info = .author$info[other_fields]
+      info = .author$info[other_fields] %||% setNames(list(), character(0))
     )
   })
 }
