@@ -100,6 +100,19 @@ metric_info <- jsonlite::read_json(par$input_metric_info)
 cat("Reading scores from '", par$input_scores, "'...\n", sep = "")
 scores <- yaml::yaml.load_file(par$input_scores) |>
   purrr::map_dfr(\(.x) {
+    if (!("metric_ids") %in% names(.x)) {
+      warning(
+        "Skipping score entry without 'metric_ids': ",
+        jsonlite::toJSON(.x, auto_unbox = TRUE),
+        immediate. = TRUE
+      )
+      return(NULL)
+    }
+
+    if (!("metric_values") %in% names(.x)) {
+      .x$metric_values <- NA_real_
+    }
+
     .x[c("dataset_id", "method_id", "metric_ids", "metric_values")] |>
       tibble::as_tibble()
   }) |>
