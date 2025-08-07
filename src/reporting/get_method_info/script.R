@@ -56,32 +56,6 @@ get_container_image <- function(config) {
   }
 }
 
-get_additional_info <- function(config) {
-  # Fields that are stored elsewhere and we don't want to save here
-  exclude <- c(
-    "type",
-    "type_info",
-    "label",
-    "summary",
-    "description",
-    "documentation_url",
-    "authors"
-  )
-
-  config$info[setdiff(names(config$info), exclude)] |>
-    purrr::map(recurse_unbox)
-}
-
-recurse_unbox <- function(x) {
-  if (is.list(x)) {
-    purrr::map(x, recurse_unbox)
-  } else if (length(x) == 1) {
-    jsonlite::unbox(x)
-  } else {
-    x
-  }
-}
-
 ################################################################################
 #                              MAIN SCRIPT
 ################################################################################
@@ -138,7 +112,18 @@ method_info_json <- purrr::map(method_configs, function(.config) {
     link_container_image = jsonlite::unbox(get_container_image(.config)),
     authors = get_authors_list(.config$authors),
     references = get_references_list(.config$references, bibliography),
-    additional_info = get_additional_info(.config),
+    additional_info = get_additional_info(
+      .config,
+      exclude = c(
+        "type",
+        "type_info",
+        "label",
+        "summary",
+        "description",
+        "documentation_url",
+        "authors"
+      )
+    ),
     version = jsonlite::unbox(.config$version)
   )
 })

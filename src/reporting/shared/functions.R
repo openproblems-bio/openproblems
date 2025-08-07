@@ -97,3 +97,42 @@ get_authors_list <- function(authors) {
     )
   })
 }
+
+#' Get additional info
+#'
+#' Get a list of additional information, excluding specified fields
+#'
+#' @param info The info field from a config file
+#' @param exclude Vector of field names to exclude
+#' @param name_prefix A prefix added to names in the final list
+#'
+#' @returns A list of additional information
+get_additional_info <- function(info, exclude = c(), name_prefix = "") {
+  kept_names <- setdiff(names(info), exclude)
+
+  if (length(kept_names) == 0) {
+    return(setNames(list(), character(0)))
+  }
+
+  additional <- info[kept_names] |>
+    purrr::map(recurse_unbox)
+
+  rlang::set_names(additional, paste0(name_prefix, names(additional)))
+}
+
+#' Recurse unbox
+#'
+#' Recursively unbox items for JSON output
+#'
+#' @param x The list or vector to unbox
+#'
+#' @returns An unboxed version of `x`
+recurse_unbox <- function(x) {
+  if (is.list(x)) {
+    purrr::map(x, recurse_unbox)
+  } else if (length(x) == 1) {
+    jsonlite::unbox(x)
+  } else {
+    x
+  }
+}
