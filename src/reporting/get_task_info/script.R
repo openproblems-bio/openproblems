@@ -38,11 +38,14 @@ task_info_json <- list(
     stringr::str_trim() |>
     stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
     jsonlite::unbox(),
-  repository = jsonlite::unbox(task_info_yaml$links$repository),
+  repository = task_info_yaml$links$repository %||%
+    # Use the main repo if not specified
+    "https://github.com/openproblems-bio/openproblems" |>
+    jsonlite::unbox(),
   authors = authors,
-  license = jsonlite::unbox(task_info_yaml$license),
+  license = task_info_yaml$license %||% "Missing!" |> jsonlite::unbox(),
   references = references,
-  version = jsonlite::unbox(task_info_yaml$version),
+  version = task_info_yaml$version %||% "Missing!" |> jsonlite::unbox(),
   is_prerelease = jsonlite::unbox(TRUE)
 )
 str(task_info_json)
