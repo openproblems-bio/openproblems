@@ -87,7 +87,11 @@ dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
     authors = authors,
     references = references,
     date_created = jsonlite::unbox(.dataset$date_created),
-    file_size_mb = jsonlite::unbox(.dataset$file_size / 1048576)
+    file_size_mb = if (is.null(.dataset$file_size)) {
+      NULL
+    } else {
+      jsonlite::unbox(.dataset$file_size / 1048576)
+    }
   )
 })
 
