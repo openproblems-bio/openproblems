@@ -123,7 +123,7 @@ metric_info_json <- purrr::map(metric_configs, function(.config) {
         stringr::str_trim() |>
         stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
         jsonlite::unbox(),
-      maximize = jsonlite::unbox(.metric$maximize),
+      maximize = jsonlite::unbox(.metric$maximize %||% TRUE),
       link_implementation = jsonlite::unbox(get_implementation_url(.config)),
       link_container_image = jsonlite::unbox(get_container_image(.config)),
       component_name = jsonlite::unbox(.config$name),
