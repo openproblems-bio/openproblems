@@ -93,10 +93,13 @@ cat("====== Get results ======\n")
 cat("\n>>> Reading input files...\n")
 cat("Reading method info from '", par$input_method_info, "'...\n", sep = "")
 method_info <- jsonlite::read_json(par$input_method_info)
+method_names <- purrr::map_chr(method_info, "name")
 cat("Reading dataset info from '", par$input_dataset_info, "'...\n", sep = "")
 dataset_info <- jsonlite::read_json(par$input_dataset_info)
+dataset_names <- purrr::map_chr(dataset_info, "name")
 cat("Reading metric info from '", par$input_metric_info, "'...\n", sep = "")
 metric_info <- jsonlite::read_json(par$input_metric_info)
+metric_components <- unique(purrr::map_chr(metric_info, "component_name"))
 cat("Reading scores from '", par$input_scores, "'...\n", sep = "")
 scores <- yaml::yaml.load_file(par$input_scores) |>
   purrr::map_dfr(\(.x) {
@@ -122,9 +125,39 @@ scores <- yaml::yaml.load_file(par$input_scores) |>
     metric_name = metric_ids,
     metric_value = metric_values
   )
+
+if (!all(unique(scores$method_name) %in% method_names)) {
+  not_matched <- setdiff(unique(scores$method_name), method_names)
+
+  warning(
+    "Some method names in scores do not match method info: ",
+    paste(not_matched, collapse = ", "),
+    "\n Attempting to map method names.",
+    immediate. = TRUE,
+    call. = FALSE
+  )
+
+  scores_methods <- unique(scores$method_name)
+  methods_map <- purrr::map_chr(scores_methods, function(.method) {
+    if (.method %in% method_names) {
+      return(.method)
+    }
+
+    mapped <- method_names[stringr::str_detect(.method, method_names)][1]
+    warning(
+      "Mapping method '", .method, "' to '", mapped, "'",
+      immediate. = TRUE,
+      call. = FALSE
+    )
+
+    mapped
+  }) |>
+    purrr::set_names(scores_methods)
+
+  scores$method_name <- methods_map[scores$method_name]
+}
+
 cat("Reading execution trace from '", par$input_trace, "'...\n", sep = "")
-method_names <- purrr::map_chr(method_info, "name")
-metric_components <- unique(purrr::map_chr(metric_info, "component_name"))
 trace <- readr::read_tsv(
   par$input_trace,
   col_types = readr::cols(
@@ -141,17 +174,6 @@ trace <- readr::read_tsv(
   # Separate process name and id
   dplyr::mutate(name_copy = name) |>
   tidyr::separate_wider_delim(name_copy, " ", names = c("process", "id")) |>
-  # Extract component from process name
-  dplyr::mutate(
-    component = purrr::map_chr(process, \(.process) {
-      rev(stringr::str_split(.process, ":")[[1]])[1]
-    })
-  ) |>
-  dplyr::mutate(component = stringr::str_remove(component, "_process")) |>
-  # Only keep method and metric components
-  dplyr::filter(
-    component %in% method_names | component %in% metric_components
-  ) |>
   dplyr::mutate(id = stringr::str_remove_all(id, "\\(|\\)")) |>
   # Split ID into dataset, method, metric
   tidyr::separate_wider_delim(
@@ -159,6 +181,10 @@ trace <- readr::read_tsv(
     delim = ".",
     names = c("dataset_name", "method_name", "metric_component"),
     too_few = "align_start"
+  ) |>
+  # Only keep method and metric processes
+  dplyr::filter(
+    method_name %in% method_names | metric_component %in% metric_components
   ) |>
   # Parse resources
   dplyr::mutate(
@@ -173,7 +199,6 @@ trace <- readr::read_tsv(
   dplyr::select(
     name,
     process,
-    component,
     dataset_name,
     method_name,
     metric_component,
@@ -181,7 +206,6 @@ trace <- readr::read_tsv(
   )
 
 # Dataset names in the trace may have normalisations appended, map back to the name
-dataset_names <- purrr::map_chr(dataset_info, "name")
 process_datasets <- unique(trace$dataset_name)
 dataset_map <- purrr::map_chr(process_datasets, function(.dataset) {
   dataset_names[stringr::str_detect(.dataset, dataset_names)][1]
@@ -192,7 +216,10 @@ trace$dataset_name <- dataset_map[trace$dataset_name]
 cat("\n>>> Extracting resources...\n")
 cat("Extracting method resources...\n", sep = "")
 method_resources <- trace |>
-  dplyr::filter(component %in% method_names) |>
+  dplyr::filter(
+    method_name %in% method_names,
+    is.na(metric_component)
+  ) |>
   dplyr::group_by(dataset_name, method_name) |>
   dplyr::summarise(
     run_exit_code = list(run_exit_code),
@@ -225,7 +252,7 @@ method_resources <- trace |>
 
 cat("Extracting metric resources...\n", sep = "")
 metric_resources <- trace |>
-  dplyr::filter(component %in% metric_components) |>
+  dplyr::filter(metric_component %in% metric_components) |>
   dplyr::group_by(dataset_name, method_name, metric_component) |>
   dplyr::summarise(
     run_exit_code = list(run_exit_code),
