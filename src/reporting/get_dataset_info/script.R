@@ -77,13 +77,12 @@ dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
       stringr::str_trim() |>
       stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
       jsonlite::unbox(),
-    source_url = .dataset[[url_name]] %||%
-      # Point to the datasets repo if there is no dataset URL
-      "https://github.com/openproblems-bio/datasets" |>
-      jsonlite::unbox(),
+    source_urls = .dataset[[url_name]] %||% character(0),
     common_dataset_names = .dataset$common_dataset_id,
-    modalities = jsonlite::unbox(.dataset$dataset_modality),
-    organisms = .dataset$dataset_organism %||% list(),
+    modalities = .dataset$dataset_modality %||%
+      .dataset$modality %||%
+      character(0),
+    organisms = .dataset$dataset_organism %||% character(0),
     authors = authors,
     references = references,
     date_created = jsonlite::unbox(.dataset$date_created),
@@ -94,6 +93,19 @@ dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
     }
   )
 })
+
+dataset_names <- purrr::map_chr(dataset_info_json, "name")
+if (any(duplicated(dataset_names))) {
+  warning(
+    "Duplicate dataset names found: ",
+    paste(dataset_names[duplicated(dataset_names)], collapse = ", "),
+    "\nOnly the first instance will be kept",
+    immediate. = TRUE,
+    call. = FALSE
+  )
+
+  dataset_info_json <- dataset_info_json[!duplicated(dataset_names)]
+}
 
 cat("\n>>> Writing output files...\n")
 cat("Writing dataset info to '", par$output, "'...\n", sep = "")
