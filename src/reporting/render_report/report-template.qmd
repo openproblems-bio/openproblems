@@ -171,14 +171,17 @@ dataset_details <- purrr::map_dfr(dataset_info, function(.dataset) {
     organisms = paste(.dataset$organisms, collapse = ", "),
     file_size_mb = .dataset$file_size_mb,
     commit = .dataset$commit,
-    source_url = .dataset$source_url,
+    source_urls = .dataset$source_urls |>
+      as.character() |>
+      format_html_link() |>
+      paste(collapse = "<br>"),
     common_dataset_names = paste(.dataset$common_dataset_names, collapse = ", "),
     date_created = .dataset$date_created
   )
 })
 
 detail_columns <- c("modalities","organisms", "file_size_mb")
-source_columns <- c("commit", "source_url", "common_dataset_names", "date_created")
+source_columns <- c("commit", "source_urls", "common_dataset_names", "date_created")
 
 reactable::reactable(
   dataset_summary,
@@ -217,9 +220,8 @@ reactable::reactable(
           name = "Commit",
           style = list("font-family" = "monospace")
         ),
-        source_url = reactable::colDef(
-          name = "Source URL",
-          cell = format_html_link,
+        source_urls = reactable::colDef(
+          name = "Source URLs",
           html = TRUE
         ),
         common_dataset_names = reactable::colDef(name = "Common datasets"),
