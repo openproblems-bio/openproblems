@@ -61,7 +61,7 @@ get_references_list <- function(reference, bibliography) {
   # If not a list, check if it is a DOI or BibTeX entry
   if (startsWith(reference, "@")) {
     return(list(doi = character(0), bibtex = reference))
-  } else if (stringr::str_detect(reference, "^10\\.\\d{4,9}[-._;()/:A-Z0-9]+$")) {
+  } else if (stringr::str_detect(reference, "^10\\.\\d{4,9}/[-._;()/:A-Za-z0-9]+$")) {
     return(list(doi = reference, bibtex = character(0)))
   }
 
