@@ -215,9 +215,14 @@ trace <- readr::read_tsv(
 # Dataset names in the trace may have normalisations appended, map back to the name
 process_datasets <- unique(trace$dataset_name)
 dataset_map <- purrr::map_chr(process_datasets, function(.dataset) {
-  dataset_names[stringr::str_detect(.dataset, dataset_names)][1]
+  if (.dataset %in% dataset_names) {
+    .dataset
+  } else {
+    dataset_names[stringr::str_detect(.dataset, dataset_names)][1]
+  }
 }) |>
   purrr::set_names(process_datasets)
+
 if (any(is.na(dataset_map))) {
   not_matched <- process_datasets[is.na(dataset_map)]
   stop(
@@ -226,6 +231,7 @@ if (any(is.na(dataset_map))) {
     call. = FALSE
   )
 }
+
 trace$dataset_name <- dataset_map[trace$dataset_name]
 
 cat("\n>>> Extracting resources...\n")
