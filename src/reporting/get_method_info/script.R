@@ -113,7 +113,7 @@ method_info_json <- purrr::map(method_configs, function(.config) {
     authors = get_authors_list(.config$authors),
     references = get_references_list(.config$references, bibliography),
     additional_info = get_additional_info(
-      .config,
+      .config$info,
       exclude = c(
         "type",
         "type_info",
