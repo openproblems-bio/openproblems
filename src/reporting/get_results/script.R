@@ -103,7 +103,7 @@ metric_components <- unique(purrr::map_chr(metric_info, "component_name"))
 cat("Reading scores from '", par$input_scores, "'...\n", sep = "")
 scores <- yaml::yaml.load_file(par$input_scores) |>
   purrr::map_dfr(\(.x) {
-    if (!("metric_ids") %in% names(.x)) {
+    if (!("metric_ids") %in% names(.x) || is.null(.x$metric_ids)) {
       warning(
         "Skipping score entry without 'metric_ids': ",
         jsonlite::toJSON(.x, auto_unbox = TRUE),
@@ -211,6 +211,14 @@ dataset_map <- purrr::map_chr(process_datasets, function(.dataset) {
   dataset_names[stringr::str_detect(.dataset, dataset_names)][1]
 }) |>
   purrr::set_names(process_datasets)
+if (any(is.na(dataset_map))) {
+  not_matched <- process_datasets[is.na(dataset_map)]
+  stop(
+    "Failed to match some dataset names in trace to dataset info: ",
+    paste(not_matched, collapse = ", "),
+    call. = FALSE
+  )
+}
 trace$dataset_name <- dataset_map[trace$dataset_name]
 
 cat("\n>>> Extracting resources...\n")
