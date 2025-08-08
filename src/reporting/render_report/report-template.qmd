@@ -590,7 +590,7 @@ scores <- purrr::map_dfr(task_results$results, function(.result) {
     return(NULL)
   }
   
-  if (all(isFALSE(unlist(purrr::map(.result$metric_components, "succeeded"))))) {
+  if (all(unlist(purrr::map(.result$metric_components, "succeeded")) == FALSE)) {
     return(NULL)
   }
   
