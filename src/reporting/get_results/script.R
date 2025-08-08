@@ -126,6 +126,13 @@ scores <- yaml::yaml.load_file(par$input_scores) |>
     metric_value = metric_values
   )
 
+if (nrow(scores) == 0 || (nrow(scores) > 0 && all(is.na(scores$metric_value)))) {
+  stop(
+    "No valid scores found, please check the `score_uns.yaml` file",
+    call. = FALSE
+  )
+}
+
 if (!all(unique(scores$method_name) %in% method_names)) {
   not_matched <- setdiff(unique(scores$method_name), method_names)
 
