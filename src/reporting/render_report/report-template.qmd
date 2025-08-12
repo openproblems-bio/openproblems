@@ -14,7 +14,7 @@ format:
 brand:
   logo:
     medium: favicon.svg
-  
+
   color:
     palette:
       black: "#1A1A1A"
@@ -23,19 +23,19 @@ brand:
     foreground: black
     background: white
     primary: blue
-  
+
   typography:
     fonts:
       - family: DM Sans
         source: google
       - family: Plus Jakarta Sans
         source: google
-  
+
     base: DM Sans
     headings:
       family: Plus Jakarta Sans
       weight: 400
-  
+
 lightbox: true
 number-sections: true
 
@@ -45,7 +45,7 @@ execute:
 knitr:
   opts_chunk:
     out.width: "100%"
-    
+
 params:
   task_results_json: task_results.json
   logo: logo.svg
@@ -194,12 +194,12 @@ reactable::reactable(
     label = reactable::colDef(name = "Label"),
     summary = reactable::colDef(name = "Summary")
   ),
-  
+
   details = function(index, column) {
     description_table <- get_description_table(
       dataset_details[index, c("description"), drop = FALSE]
     )
-    
+
     details_table <- reactable::reactable(
       dataset_details[index, detail_columns],
       columns = list(
@@ -212,7 +212,7 @@ reactable::reactable(
       ),
       sortable = FALSE
     )
-    
+
     source_table <- reactable::reactable(
       dataset_details[index, source_columns],
       columns = list(
@@ -229,15 +229,15 @@ reactable::reactable(
       ),
       sortable = FALSE
     )
-    
+
     if (length(dataset_info[[index]]$authors) > 0) {
       authors_table <- get_authors_table(dataset_info[[index]]$authors)
     } else {
       authors_table <- NULL
     }
-    
+
     references_table <- get_references_table(dataset_info[[index]]$references)
-    
+
     htmltools::div(
       style = "padding: 1rem",
       description_table,
@@ -247,19 +247,19 @@ reactable::reactable(
       references_table
     )
   },
-  
+
   highlight = TRUE,
   striped = TRUE,
   pagination = FALSE,
-  
+
   rowStyle = reactable::JS(
     "function(rowInfo) {
       if (rowInfo.level == 0) { // corresponds to row group
-        return { 
+        return {
           borderLeft: '2px solid #104E8B',
           fontWeight: 400
         }
-      } 
+      }
     }"
   )
 )
@@ -288,7 +288,7 @@ method_summary <- purrr::map_dfr(method_info, function(.method) {
 
 method_details <- purrr::map_dfr(method_info, function(.method) {
   method_data <- purrr::map(.method, \(.x) {ifelse(is.null(.x), "", .x)})
-  
+
   data.frame(
     description = method_data$description,
     commit = method_data$commit,
@@ -331,26 +331,26 @@ reactable::reactable(
     ),
     summary = reactable::colDef(name = "Summary")
   ),
-  
+
   details = function(index, column) {
     description_table <- get_description_table(
       method_details[index, c("description"), drop = FALSE]
     )
-    
+
     source_table <- get_source_table(method_details[index, ], source_columns)
-    
+
     links_table <- get_links_table(method_details[index, ], link_columns)
-    
+
     additional_table <- get_additional_info_table(
       method_info[[index]]$additional_info
     )
-    
+
     if (length(method_info[[index]]$authors) > 0) {
       authors_table <- get_authors_table(method_info[[index]]$authors)
     } else {
       authors_table <- NULL
     }
-    
+
     references_table <- get_references_table(method_info[[index]]$references)
 
     htmltools::div(
@@ -363,19 +363,19 @@ reactable::reactable(
       references_table
     )
   },
-  
+
   highlight = TRUE,
   striped = TRUE,
   pagination = FALSE,
-  
+
   rowStyle = reactable::JS(
     "function(rowInfo) {
       if (rowInfo.level == 0) { // corresponds to row group
-        return { 
+        return {
           borderLeft: '2px solid #104E8B',
           fontWeight: 400
         }
-      } 
+      }
     }"
   )
 )
@@ -403,7 +403,7 @@ metric_summary <- purrr::map_dfr(metric_info, function(.metric) {
 
 metric_details <- purrr::map_dfr(metric_info, function(.metric) {
   metric_data <- purrr::map(.metric, \(.x) {ifelse(is.null(.x), "", .x)})
-  
+
   data.frame(
     description = metric_data$description,
     component_name = metric_data$component_name,
@@ -437,26 +437,26 @@ reactable::reactable(
     label = reactable::colDef(name = "Label"),
     summary = reactable::colDef(name = "Summary")
   ),
-  
+
   details = function(index, column) {
     description_table <- get_description_table(
       metric_details[index, c("description"), drop = FALSE]
     )
-    
+
     source_table <- get_source_table(metric_details[index, ], source_columns)
-    
+
     links_table <- get_links_table(metric_details[index, ], link_columns)
-    
+
     additional_table <- get_additional_info_table(
       metric_info[[index]]$additional_info
     )
-    
+
     if (length(metric_info[[index]]$authors) > 0) {
       authors_table <- get_authors_table(metric_info[[index]]$authors)
     } else {
       authors_table <- NULL
     }
-    
+
     references_table <- get_references_table(metric_info[[index]]$references)
 
     htmltools::div(
@@ -469,19 +469,19 @@ reactable::reactable(
       references_table
     )
   },
-  
+
   highlight = TRUE,
   striped = TRUE,
   pagination = FALSE,
-  
+
   rowStyle = reactable::JS(
     "function(rowInfo) {
       if (rowInfo.level == 0) { // corresponds to row group
-        return { 
+        return {
           borderLeft: '2px solid #104E8B',
           fontWeight: 400
         }
-      } 
+      }
     }"
   )
 )
@@ -516,13 +516,13 @@ n_controls <- purrr::map_dfr(task_results$results, function(.result) {
   dplyr::count(name = "n_controls") |>
   dplyr::ungroup() |>
   dplyr::mutate(dataset = factor(dataset, levels = dataset_names)) |>
-  tidyr::complete(dataset, fill = list(n_controls = 0)) 
+  tidyr::complete(dataset, fill = list(n_controls = 0))
 
 has_controls <- all(n_controls$n_controls >= 2)
 
 if (isFALSE(has_controls)) {
   out <- c("## No normalization performed")
-  
+
   cat(
     c(
       "::: {.callout-important}",
@@ -589,11 +589,21 @@ scores <- purrr::map_dfr(task_results$results, function(.result) {
   if (!.result$succeeded) {
     return(NULL)
   }
-  
+
   if (all(unlist(purrr::map(.result$metric_components, "succeeded")) == FALSE)) {
     return(NULL)
   }
-  
+
+  if (length(.result$metric_values) == 0) {
+    warning(
+      "At least one metric component succeeded but there are no metric values ",
+      "for method '", .result$method_name, "' on dataset '",
+      .result$dataset_name, "'",
+      call. = FALSE
+    )
+    return(NULL)
+  }
+
   data.frame(
     dataset = .result$dataset_name,
     method = .result$method,
@@ -601,7 +611,7 @@ scores <- purrr::map_dfr(task_results$results, function(.result) {
     value = unlist(.result$metric_values)
   )
 })
-  
+
 control_ranges <- scores |>
   dplyr::left_join(method_details, by = "method") |>
   dplyr::filter(method_type == "control_method") |>
@@ -617,7 +627,7 @@ scaled_scores <- scores |>
   dplyr::mutate(
     scaled_value = (value - control_min) / (control_max - control_min)
   )
-  
+
 complete_scores <- tidyr::expand_grid(
   dataset = dataset_names,
   method = method_names,
@@ -643,7 +653,7 @@ fig_height <- max(c(length(metric_names), 10))
 
 src_list <- purrr::map(metric_names, function(.metric) {
   metric_label <- metric_details$metric_label[metric_details$metric == .metric]
-  
+
   src <- c(
     "## <<metric_label>> {.unnumbered .unlisted}",
     "",
@@ -690,7 +700,7 @@ qc_summary <- quality_control |>
         "Method info",
         "Metric info",
         "Raw results",
-        "Scaling" 
+        "Scaling"
       )
     )
   ) |>
@@ -862,7 +872,7 @@ exit_codes <- purrr::map_dfr(task_results$results, function(.result) {
   dplyr::mutate(exit_summary = purrr::map(exit_summary, \(.summary) {
     exit_vec <- unlist(as.vector(.summary))
     names(exit_vec) <- exit_names
-    
+
     exit_vec
   }))
 
@@ -885,35 +895,35 @@ resources <- purrr::map_dfr(task_results$results, function(.result) {
       if (length(.values) == 0) {
         return(NA_real_)
       }
-      
+
       mean(unlist(.values), na.rm = TRUE)
     }),
     run_peak_memory_mb = purrr::map_dbl(run_peak_memory_mb, function(.values) {
       if (length(.values) == 0) {
         return(NA_real_)
       }
-      
+
       max(unlist(.values), na.rm = TRUE)
     }),
     run_disk_read_mb = purrr::map_dbl(run_disk_read_mb, function(.values) {
       if (length(.values) == 0) {
         return(NA_real_)
       }
-      
+
       sum(unlist(.values), na.rm = TRUE)
     }),
     run_disk_write_mb = purrr::map_dbl(run_disk_write_mb, function(.values) {
       if (length(.values) == 0) {
         return(NA_real_)
       }
-      
+
       sum(unlist(.values), na.rm = TRUE)
     }),
     run_duration_secs = purrr::map_dbl(run_duration_secs, function(.values) {
       if (length(.values) == 0) {
         return(NA_real_)
       }
-      
+
       sum(unlist(.values), na.rm = TRUE)
     })
   ) |>
@@ -1184,7 +1194,7 @@ table_data <- dataset_scores |>
 
 reactable::reactable(
   table_data,
-  
+
   columns = c(
     list(
       method = reactable::colDef(
@@ -1202,7 +1212,7 @@ reactable::reactable(
         format = reactable::colFormat(digits = 3)
       )
     ),
-    purrr::map( metric_details$metric_label, 
+    purrr::map( metric_details$metric_label,
       function(.metric_label) {
         reactable::colDef(
           name = .metric_label,
@@ -1212,7 +1222,7 @@ reactable::reactable(
     ) |>
       purrr::set_names(metric_details$metric)
   ),
-  
+
   highlight = TRUE,
   striped = TRUE,
   defaultPageSize = 25,
