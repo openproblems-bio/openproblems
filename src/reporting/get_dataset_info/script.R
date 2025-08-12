@@ -40,7 +40,11 @@ dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
   } else if ("data_reference" %in% names(.dataset)) {
     reference_name <- "data_reference"
   } else {
-    stop("No reference found in dataset uns for '", .dataset$dataset_id, "'")
+    warning(
+      "No reference found in dataset uns for '", .dataset$dataset_id, "'",
+      immediate. = TRUE
+    )
+    reference_name <- "NO_REFERENCE"
   }
 
   references <- get_references_list(.dataset[[reference_name]], bibliography)
@@ -50,31 +54,58 @@ dataset_info_json <- purrr::map(dataset_uns, function(.dataset) {
   } else if ("data_url" %in% names(.dataset)) {
     url_name <- "data_url"
   } else {
-    stop("No URL found in dataset uns for '", .dataset$dataset_id, "'")
+    warning(
+      "No URL found in dataset uns for '", .dataset$dataset_id, "'",
+      immediate. = TRUE
+    )
+    url_name <- "NO_URL"
   }
 
   list(
     name = jsonlite::unbox(.dataset$dataset_id),
-    label = jsonlite::unbox(.dataset$dataset_name),
+    label = jsonlite::unbox(.dataset$dataset_name %||% .dataset$dataset_id),
     commit = jsonlite::unbox(.dataset$dataset_commit %||% "missing-sha"),
-    summary = .dataset$dataset_summary |>
+    summary = .dataset$dataset_summary %||%
+        .dataset$dataset_description %||%
+        .dataset$dataset_id |>
       stringr::str_trim() |>
       stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
       jsonlite::unbox(),
-    description = .dataset$dataset_description |>
+    description = .dataset$dataset_description %||%
+        .dataset$dataset_summary %||%
+        .dataset$dataset_id |>
       stringr::str_trim() |>
       stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
       jsonlite::unbox(),
-    source_url = jsonlite::unbox(.dataset[[url_name]]),
+    source_urls = .dataset[[url_name]] %||% character(0),
     common_dataset_names = .dataset$common_dataset_id,
-    modalities = jsonlite::unbox(.dataset$dataset_modality),
-    organisms = .dataset$dataset_organism,
+    modalities = .dataset$dataset_modality %||%
+      .dataset$modality %||%
+      character(0),
+    organisms = .dataset$dataset_organism %||% character(0),
     authors = authors,
     references = references,
     date_created = jsonlite::unbox(.dataset$date_created),
-    file_size_mb = jsonlite::unbox(.dataset$file_size / 1048576)
+    file_size_mb = if (is.null(.dataset$file_size)) {
+      NULL
+    } else {
+      jsonlite::unbox(.dataset$file_size / 1048576)
+    }
   )
 })
+
+dataset_names <- purrr::map_chr(dataset_info_json, "name")
+if (any(duplicated(dataset_names))) {
+  warning(
+    "Duplicate dataset names found: ",
+    paste(dataset_names[duplicated(dataset_names)], collapse = ", "),
+    "\nOnly the first instance will be kept",
+    immediate. = TRUE,
+    call. = FALSE
+  )
+
+  dataset_info_json <- dataset_info_json[!duplicated(dataset_names)]
+}
 
 cat("\n>>> Writing output files...\n")
 cat("Writing dataset info to '", par$output, "'...\n", sep = "")

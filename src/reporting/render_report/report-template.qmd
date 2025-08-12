@@ -169,16 +169,19 @@ dataset_details <- purrr::map_dfr(dataset_info, function(.dataset) {
     description = .dataset$description,
     modalities = paste(.dataset$modalities, collapse = ", "),
     organisms = paste(.dataset$organisms, collapse = ", "),
-    file_size_mb = .dataset$file_size_mb,
+    file_size_mb = .dataset$file_size_mb %||% NA_real_,
     commit = .dataset$commit,
-    source_url = .dataset$source_url,
+    source_urls = .dataset$source_urls |>
+      as.character() |>
+      format_html_link() |>
+      paste(collapse = "<br>"),
     common_dataset_names = paste(.dataset$common_dataset_names, collapse = ", "),
-    date_created = .dataset$date_created
+    date_created = .dataset$date_created %||% NA_character_
   )
 })
 
 detail_columns <- c("modalities","organisms", "file_size_mb")
-source_columns <- c("commit", "source_url", "common_dataset_names", "date_created")
+source_columns <- c("commit", "source_urls", "common_dataset_names", "date_created")
 
 reactable::reactable(
   dataset_summary,
@@ -217,9 +220,8 @@ reactable::reactable(
           name = "Commit",
           style = list("font-family" = "monospace")
         ),
-        source_url = reactable::colDef(
-          name = "Source URL",
-          cell = format_html_link,
+        source_urls = reactable::colDef(
+          name = "Source URLs",
           html = TRUE
         ),
         common_dataset_names = reactable::colDef(name = "Common datasets"),
@@ -588,6 +590,10 @@ scores <- purrr::map_dfr(task_results$results, function(.result) {
     return(NULL)
   }
   
+  if (all(unlist(purrr::map(.result$metric_components, "succeeded")) == FALSE)) {
+    return(NULL)
+  }
+  
   data.frame(
     dataset = .result$dataset_name,
     method = .result$method,
@@ -633,7 +639,7 @@ complete_scores <- tidyr::expand_grid(
 #| label: normalization-plots
 #| results: hide
 #| eval: !expr has_controls
-fig_height <- 0.8 * length(metric_names) + 1
+fig_height <- max(c(length(metric_names), 10))
 
 src_list <- purrr::map(metric_names, function(.metric) {
   metric_label <- metric_details$metric_label[metric_details$metric == .metric]

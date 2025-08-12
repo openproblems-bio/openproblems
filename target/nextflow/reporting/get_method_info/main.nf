@@ -3211,9 +3211,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/get_method_info",
     "viash_version" : "0.9.4",
-    "git_commit" : "5a18f35a4b9e724269047c4ca758d5b41fa95a90",
+    "git_commit" : "efa00bbc12867d1345920ba79d90b41aec87fc26",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1486-g5a18f35a"
+    "git_tag" : "v1.0.0-1512-gefa00bbc"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3360,32 +3360,6 @@ get_container_image <- function(config) {
   }
 }
 
-get_additional_info <- function(config) {
-  # Fields that are stored elsewhere and we don't want to save here
-  exclude <- c(
-    "type",
-    "type_info",
-    "label",
-    "summary",
-    "description",
-    "documentation_url",
-    "authors"
-  )
-
-  config\\$info[setdiff(names(config\\$info), exclude)] |>
-    purrr::map(recurse_unbox)
-}
-
-recurse_unbox <- function(x) {
-  if (is.list(x)) {
-    purrr::map(x, recurse_unbox)
-  } else if (length(x) == 1) {
-    jsonlite::unbox(x)
-  } else {
-    x
-  }
-}
-
 ################################################################################
 #                              MAIN SCRIPT
 ################################################################################
@@ -3408,7 +3382,11 @@ bibliography <- read_bibliography(
   file.path(meta\\$resources_dir, "bibliography.bib")
 )
 method_info_json <- purrr::map(method_configs, function(.config) {
-  if (.config\\$status == "disabled") {
+  if ("functionality" %in% names(.config)) {
+    .config <- .config\\$functionality
+  }
+
+  if (!is.null(.config\\$status) && .config\\$status == "disabled") {
     cat("Skipping disabled method '", .config\\$name, "'\\\\n", sep = "")
     return(NULL)
   } else {
@@ -3438,7 +3416,18 @@ method_info_json <- purrr::map(method_configs, function(.config) {
     link_container_image = jsonlite::unbox(get_container_image(.config)),
     authors = get_authors_list(.config\\$authors),
     references = get_references_list(.config\\$references, bibliography),
-    additional_info = get_additional_info(.config),
+    additional_info = get_additional_info(
+      .config\\$info,
+      exclude = c(
+        "type",
+        "type_info",
+        "label",
+        "summary",
+        "description",
+        "documentation_url",
+        "authors"
+      )
+    ),
     version = jsonlite::unbox(.config\\$version)
   )
 })

@@ -3286,9 +3286,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/generate_qc",
     "viash_version" : "0.9.4",
-    "git_commit" : "5a18f35a4b9e724269047c4ca758d5b41fa95a90",
+    "git_commit" : "efa00bbc12867d1345920ba79d90b41aec87fc26",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1486-g5a18f35a"
+    "git_tag" : "v1.0.0-1512-gefa00bbc"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3406,12 +3406,30 @@ create_qc_entry <- function(
     value <- -1
   }
 
+  if (is.infinite(value)) {
+    warning(
+      "QC value for check \\\\"", label, "\\\\" is infinite, setting to ", sign(value) * 1e6,
+      immediate. = TRUE,
+      call. = FALSE
+    )
+    value <- sign(value) * 1e6
+  }
+
   if (
     is.null(severity_value) ||
       is.na(severity_value) ||
       length(severity_value) == 0
   ) {
     severity_value <- -1
+  }
+
+  if (is.infinite(severity_value)) {
+    warning(
+      "QC severity value for check \\\\"", label, "\\\\" is infinite, setting to ", sign(severity_value) * 1e6,
+      immediate. = TRUE,
+      call. = FALSE
+    )
+    severity_value <- sign(severity_value) * 1e6
   }
 
   severity <- dplyr::case_when(
@@ -4026,7 +4044,6 @@ failed_datasets <- purrr::map(dataset_names, function(.dataset) {
 failed_methods <- purrr::map(method_names, function(.method) {
   check_failed_processes(results, .method, "method", task_name)
 })
-
 failed_metrics <- purrr::map(
   unique(metric_component_results\\$metric_component_name),
   function(.component) {

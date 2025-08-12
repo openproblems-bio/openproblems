@@ -56,23 +56,6 @@ get_container_image <- function(config) {
   }
 }
 
-get_additional_info <- function(info, exclude, name_prefix = "") {
-  additional <- info[setdiff(names(info), exclude)] |>
-    purrr::map(recurse_unbox)
-
-  rlang::set_names(additional, paste0(name_prefix, names(additional)))
-}
-
-recurse_unbox <- function(x) {
-  if (is.list(x)) {
-    purrr::map(x, recurse_unbox)
-  } else if (length(x) == 1) {
-    jsonlite::unbox(x)
-  } else {
-    x
-  }
-}
-
 ################################################################################
 #                              MAIN SCRIPT
 ################################################################################
@@ -95,7 +78,11 @@ bibliography <- read_bibliography(
   file.path(meta$resources_dir, "bibliography.bib")
 )
 metric_info_json <- purrr::map(metric_configs, function(.config) {
-  if (.config$status == "disabled") {
+  if ("functionality" %in% names(.config)) {
+    .config <- .config$functionality
+  }
+
+  if (!is.null(.config$status) && .config$status == "disabled") {
     cat("Skipping disabled metric component '", .config$name, "'\n", sep = "")
     return(NULL)
   } else {
@@ -103,6 +90,29 @@ metric_info_json <- purrr::map(metric_configs, function(.config) {
   }
 
   purrr::map(.config$info$metrics, function(.metric) {
+    additional_info <- c(
+      get_additional_info(
+        .config$info,
+        exclude = c("metrics", "type", "type_info"),
+        name_prefix = "component_"
+      ),
+      get_additional_info(
+        .metric,
+        exclude = c(
+          "name",
+          "label",
+          "summary",
+          "description",
+          "maximize",
+          "min",
+          "max",
+          "links",
+          "authors",
+          "references"
+        )
+      )
+    )
+
     list(
       name = jsonlite::unbox(.metric$name),
       label = jsonlite::unbox(.metric$label),
@@ -117,34 +127,17 @@ metric_info_json <- purrr::map(metric_configs, function(.config) {
         stringr::str_trim() |>
         stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
         jsonlite::unbox(),
-      maximize = jsonlite::unbox(.metric$maximize),
+      maximize = jsonlite::unbox(.metric$maximize %||% TRUE),
       link_implementation = jsonlite::unbox(get_implementation_url(.config)),
       link_container_image = jsonlite::unbox(get_container_image(.config)),
       component_name = jsonlite::unbox(.config$name),
       authors = get_authors_list(.metric$authors),
       references = get_references_list(.metric$references, bibliography),
-      additional_info = c(
-        get_additional_info(
-          .config$info,
-          exclude = c("metrics", "type", "type_info"),
-          name_prefix = "component_"
-        ),
-        get_additional_info(
-          .metric,
-          exclude = c(
-            "name",
-            "label",
-            "summary",
-            "description",
-            "maximize",
-            "min",
-            "max",
-            "links",
-            "authors",
-            "references"
-          )
-        )
-      ),
+      additional_info = if (length(additional_info) > 0) {
+        additional_info
+      } else {
+        setNames(list(), character(0))
+      },
       version = jsonlite::unbox(.config$version)
     )
   })

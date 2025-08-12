@@ -31,12 +31,30 @@ create_qc_entry <- function(
     value <- -1
   }
 
+  if (is.infinite(value)) {
+    warning(
+      "QC value for check \"", label, "\" is infinite, setting to ", sign(value) * 1e6,
+      immediate. = TRUE,
+      call. = FALSE
+    )
+    value <- sign(value) * 1e6
+  }
+
   if (
     is.null(severity_value) ||
       is.na(severity_value) ||
       length(severity_value) == 0
   ) {
     severity_value <- -1
+  }
+
+  if (is.infinite(severity_value)) {
+    warning(
+      "QC severity value for check \"", label, "\" is infinite, setting to ", sign(severity_value) * 1e6,
+      immediate. = TRUE,
+      call. = FALSE
+    )
+    severity_value <- sign(severity_value) * 1e6
   }
 
   severity <- dplyr::case_when(
@@ -651,7 +669,6 @@ failed_datasets <- purrr::map(dataset_names, function(.dataset) {
 failed_methods <- purrr::map(method_names, function(.method) {
   check_failed_processes(results, .method, "method", task_name)
 })
-
 failed_metrics <- purrr::map(
   unique(metric_component_results$metric_component_name),
   function(.component) {

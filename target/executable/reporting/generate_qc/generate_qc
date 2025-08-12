@@ -454,9 +454,9 @@ RUN Rscript -e 'options(warn = 2); if (!requireNamespace("remotes", quietly = TR
   Rscript -e 'options(warn = 2); remotes::install_cran(c("dplyr", "purrr", "readr", "stringr", "tidyr"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component reporting generate_qc"
-LABEL org.opencontainers.image.created="2025-08-12T08:02:07Z"
+LABEL org.opencontainers.image.created="2025-08-12T09:30:16Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="5a18f35a4b9e724269047c4ca758d5b41fa95a90"
+LABEL org.opencontainers.image.revision="efa00bbc12867d1345920ba79d90b41aec87fc26"
 LABEL org.opencontainers.image.version="build_feature_no_ref_update_process_results"
 
 VIASHDOCKER
@@ -1209,12 +1209,30 @@ create_qc_entry <- function(
     value <- -1
   }
 
+  if (is.infinite(value)) {
+    warning(
+      "QC value for check \\"", label, "\\" is infinite, setting to ", sign(value) * 1e6,
+      immediate. = TRUE,
+      call. = FALSE
+    )
+    value <- sign(value) * 1e6
+  }
+
   if (
     is.null(severity_value) ||
       is.na(severity_value) ||
       length(severity_value) == 0
   ) {
     severity_value <- -1
+  }
+
+  if (is.infinite(severity_value)) {
+    warning(
+      "QC severity value for check \\"", label, "\\" is infinite, setting to ", sign(severity_value) * 1e6,
+      immediate. = TRUE,
+      call. = FALSE
+    )
+    severity_value <- sign(severity_value) * 1e6
   }
 
   severity <- dplyr::case_when(
@@ -1829,7 +1847,6 @@ failed_datasets <- purrr::map(dataset_names, function(.dataset) {
 failed_methods <- purrr::map(method_names, function(.method) {
   check_failed_processes(results, .method, "method", task_name)
 })
-
 failed_metrics <- purrr::map(
   unique(metric_component_results\$metric_component_name),
   function(.component) {

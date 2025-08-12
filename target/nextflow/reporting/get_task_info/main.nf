@@ -3211,9 +3211,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/get_task_info",
     "viash_version" : "0.9.4",
-    "git_commit" : "5a18f35a4b9e724269047c4ca758d5b41fa95a90",
+    "git_commit" : "efa00bbc12867d1345920ba79d90b41aec87fc26",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1486-g5a18f35a"
+    "git_tag" : "v1.0.0-1512-gefa00bbc"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3333,8 +3333,18 @@ cat("\\\\n>>> Creating JSON list...\\\\n")
 task_info_json <- list(
   name = jsonlite::unbox(sub("^task_", "", task_info_yaml\\$name)), # Remove "task_" prefix
   commit = jsonlite::unbox(NA_character_), # TODO: Add when available in task_info.yaml
-  label = jsonlite::unbox(task_info_yaml\\$label),
-  summary = task_info_yaml\\$summary |>
+  label = task_info_yaml\\$label %||%
+    # Create label from task name if missing
+    (
+      task_info_yaml\\$name |>
+        stringr::str_remove("^task_") |>
+        stringr::str_replace_all("_", " ") |>
+        stringr::str_to_title()
+    ) |>
+    jsonlite::unbox(),
+  summary = task_info_yaml\\$summary %||%
+    # Use the full description if the summary is missing
+    task_info_yaml\\$description |>
     stringr::str_trim() |>
     stringr::str_remove_all('(^"|"\\$|^\\\\'|\\\\'\\$)') |>
     jsonlite::unbox(),
@@ -3342,11 +3352,14 @@ task_info_json <- list(
     stringr::str_trim() |>
     stringr::str_remove_all('(^"|"\\$|^\\\\'|\\\\'\\$)') |>
     jsonlite::unbox(),
-  repository = jsonlite::unbox(task_info_yaml\\$links\\$repository),
+  repository = task_info_yaml\\$links\\$repository %||%
+    # Use the main repo if not specified
+    "https://github.com/openproblems-bio/openproblems" |>
+    jsonlite::unbox(),
   authors = authors,
-  license = jsonlite::unbox(task_info_yaml\\$license),
+  license = task_info_yaml\\$license %||% "Missing!" |> jsonlite::unbox(),
   references = references,
-  version = jsonlite::unbox(task_info_yaml\\$version),
+  version = task_info_yaml\\$version %||% "Missing!" |> jsonlite::unbox(),
   is_prerelease = jsonlite::unbox(TRUE)
 )
 str(task_info_json)

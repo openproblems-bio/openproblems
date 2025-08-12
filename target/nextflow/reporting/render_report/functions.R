@@ -72,16 +72,14 @@ get_references_table <- function(references) {
     )
 
     dois <- references$doi
-    if (!(is.null(dois) || length(dois) == 0)) {
-      doi_strs <- unlist(rcrossref::cr_cn(references$doi, format = "text"))
-      references_df <- dplyr::bind_rows(
-        references_df,
-        data.frame(
-          reference_type = "DOI",
-          reference = doi_strs
-        )
+    dois_df <- purrr::map_dfr(dois, function(.doi) {
+      doi_str <- get_doi_str(.doi)
+      data.frame(
+        reference_type = doi_str$type,
+        reference = doi_str$string
       )
-    }
+    })
+    references_df <- dplyr::bind_rows(references_df, dois_df)
 
     bibtex <- references$bibtex
     if (!(is.null(bibtex) || length(bibtex) == 0)) {
@@ -132,6 +130,30 @@ get_references_table <- function(references) {
     ),
     striped = TRUE,
     sortable = FALSE
+  )
+}
+
+#' Get DOI string
+#'
+#' Get a string representation of a citation from a DOI
+#'
+#' @param doi The DOI to get a representation for
+#'
+#' @returns A list with items "string" containing the string representation,
+#'   and "type" indicating if the format is a text citation ("DOI") or a BibTex
+#'   entry ("BibTeX")
+get_doi_str <- function(doi) {
+  doi_str <- suppressWarnings(rcrossref::cr_cn(doi, format = "text"))
+  type <- "DOI"
+  if (is.null(doi_str)) {
+    doi_str <- rcrossref::cr_cn(doi, format = "bibtex") |>
+      prettify_bibtex(output = "html")
+    type <- "BibTeX"
+  }
+
+  list(
+    string = doi_str,
+    type = type
   )
 }
 

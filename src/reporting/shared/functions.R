@@ -40,7 +40,11 @@ read_bibliography <- function(bib_file) {
 #'   containing corresponding DOIs or BibTeX entries
 get_references_list <- function(reference, bibliography) {
   # If null, return empty references
-  if (is.null(reference)) {
+  if (
+    is.null(reference) ||
+      length(reference) == 0 ||
+      (length(reference) == 1 && reference == "")
+  ) {
     return(list(doi = character(0), bibtex = character(0)))
   }
 
@@ -57,14 +61,14 @@ get_references_list <- function(reference, bibliography) {
   # If not a list, check if it is a DOI or BibTeX entry
   if (startsWith(reference, "@")) {
     return(list(doi = character(0), bibtex = reference))
-  } else if (startsWith(reference, "1")) {
+  } else if (stringr::str_detect(reference, "^10\\.\\d{4,9}/[-._;()/:A-Za-z0-9]+$")) {
     return(list(doi = reference, bibtex = character(0)))
   }
 
   # Otherwise, assume it is a bibliography key
   if (reference %in% names(bibliography$doi)) {
     return(list(doi = bibliography$doi[[reference]], bibtex = character(0)))
-  } else if (reference %in% names(bibliograph$bibtex)) {
+  } else if (reference %in% names(bibliography$bibtex)) {
     return(list(doi = character(0), bibtex = bibliography$bibtex[[reference]]))
   } else {
     stop("Reference key '", reference, "' not found in bibliography")
@@ -89,7 +93,46 @@ get_authors_list <- function(authors) {
       roles = .author$roles %||% character(0),
       github = jsonlite::unbox(.author$info$github),
       orcid = jsonlite::unbox(.author$info$orcid),
-      info = .author$info[other_fields]
+      info = .author$info[other_fields] %||% setNames(list(), character(0))
     )
   })
+}
+
+#' Get additional info
+#'
+#' Get a list of additional information, excluding specified fields
+#'
+#' @param info The info field from a config file
+#' @param exclude Vector of field names to exclude
+#' @param name_prefix A prefix added to names in the final list
+#'
+#' @returns A list of additional information
+get_additional_info <- function(info, exclude = c(), name_prefix = "") {
+  kept_names <- setdiff(names(info), exclude)
+
+  if (length(kept_names) == 0) {
+    return(setNames(list(), character(0)))
+  }
+
+  additional <- info[kept_names] |>
+    purrr::map(recurse_unbox)
+
+  rlang::set_names(additional, paste0(name_prefix, names(additional)))
+}
+
+#' Recurse unbox
+#'
+#' Recursively unbox items for JSON output
+#'
+#' @param x The list or vector to unbox
+#'
+#' @returns An unboxed version of `x`
+recurse_unbox <- function(x) {
+  if (is.list(x)) {
+    purrr::map(x, recurse_unbox)
+  } else if (length(x) == 1) {
+    jsonlite::unbox(x)
+  } else {
+    x
+  }
 }

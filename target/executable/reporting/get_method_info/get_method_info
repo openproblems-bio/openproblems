@@ -454,9 +454,9 @@ RUN Rscript -e 'options(warn = 2); if (!requireNamespace("remotes", quietly = TR
   Rscript -e 'options(warn = 2); remotes::install_cran(c("bibtex", "purrr", "stringr"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component reporting get_method_info"
-LABEL org.opencontainers.image.created="2025-08-12T08:02:06Z"
+LABEL org.opencontainers.image.created="2025-08-12T09:30:15Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="5a18f35a4b9e724269047c4ca758d5b41fa95a90"
+LABEL org.opencontainers.image.revision="efa00bbc12867d1345920ba79d90b41aec87fc26"
 LABEL org.opencontainers.image.version="build_feature_no_ref_update_process_results"
 
 VIASHDOCKER
@@ -1124,32 +1124,6 @@ get_container_image <- function(config) {
   }
 }
 
-get_additional_info <- function(config) {
-  # Fields that are stored elsewhere and we don't want to save here
-  exclude <- c(
-    "type",
-    "type_info",
-    "label",
-    "summary",
-    "description",
-    "documentation_url",
-    "authors"
-  )
-
-  config\$info[setdiff(names(config\$info), exclude)] |>
-    purrr::map(recurse_unbox)
-}
-
-recurse_unbox <- function(x) {
-  if (is.list(x)) {
-    purrr::map(x, recurse_unbox)
-  } else if (length(x) == 1) {
-    jsonlite::unbox(x)
-  } else {
-    x
-  }
-}
-
 ################################################################################
 #                              MAIN SCRIPT
 ################################################################################
@@ -1172,7 +1146,11 @@ bibliography <- read_bibliography(
   file.path(meta\$resources_dir, "bibliography.bib")
 )
 method_info_json <- purrr::map(method_configs, function(.config) {
-  if (.config\$status == "disabled") {
+  if ("functionality" %in% names(.config)) {
+    .config <- .config\$functionality
+  }
+
+  if (!is.null(.config\$status) && .config\$status == "disabled") {
     cat("Skipping disabled method '", .config\$name, "'\\n", sep = "")
     return(NULL)
   } else {
@@ -1202,7 +1180,18 @@ method_info_json <- purrr::map(method_configs, function(.config) {
     link_container_image = jsonlite::unbox(get_container_image(.config)),
     authors = get_authors_list(.config\$authors),
     references = get_references_list(.config\$references, bibliography),
-    additional_info = get_additional_info(.config),
+    additional_info = get_additional_info(
+      .config\$info,
+      exclude = c(
+        "type",
+        "type_info",
+        "label",
+        "summary",
+        "description",
+        "documentation_url",
+        "authors"
+      )
+    ),
     version = jsonlite::unbox(.config\$version)
   )
 })
