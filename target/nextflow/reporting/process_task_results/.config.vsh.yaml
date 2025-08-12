@@ -1,0 +1,321 @@
+name: "process_task_results"
+namespace: "reporting"
+version: "build_feature_no_ref_update_process_results"
+argument_groups:
+- name: "Inputs"
+  arguments:
+  - type: "file"
+    name: "--input_task_info"
+    description: "A YAML file containing task information"
+    info: null
+    example:
+    - "resources_test/openproblems/task_results_v4/raw/task_info.yaml"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--input_dataset_info"
+    description: "A YAML file containing dataset information"
+    info: null
+    example:
+    - "resources_test/openproblems/task_results_v4/raw/dataset_info.yaml"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--input_method_configs"
+    description: "A YAML file containing method configurations"
+    info: null
+    example:
+    - "resources_test/openproblems/task_results_v4/raw/method_configs.yaml"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--input_metric_configs"
+    description: "A YAML file containing metric configurations"
+    info: null
+    example:
+    - "resources_test/openproblems/task_results_v4/raw/metric_configs.yaml"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--input_scores"
+    description: "A YAML file containing the scores of each of the methods"
+    info: null
+    example:
+    - "resources_test/openproblems/task_results_v4/raw/score_uns.yaml"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--input_trace"
+    description: "Nextflow execution trace file"
+    info: null
+    example:
+    - "resources_test/openproblems/task_results_v4/raw/trace.txt"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+- name: "Outputs"
+  arguments:
+  - type: "file"
+    name: "--output_combined"
+    description: "Combined task results JSON file"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/task_results.json"
+    default:
+    - "combined_output.json"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output_report"
+    description: "HTML run report"
+    info:
+      format:
+        type: "html"
+    default:
+    - "report.html"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output_task_info"
+    description: "Task info JSON file"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/task_info.json"
+    default:
+    - "task_info.json"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output_dataset_info"
+    description: "Dataset info JSON file"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/dataset_info.json"
+    default:
+    - "dataset_info.json"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output_method_info"
+    description: "Method info JSON file"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/method_info.json"
+    default:
+    - "method_info.json"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output_metric_info"
+    description: "Metric info JSON file"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/metric_info.json"
+    default:
+    - "metric_info.json"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output_results"
+    description: "Results JSON file"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/results.json"
+    default:
+    - "results.json"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output_quality_control"
+    description: "Quality control JSON file"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/quality_control.json"
+    default:
+    - "quality_control.json"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+resources:
+- type: "nextflow_script"
+  path: "main.nf"
+  is_executable: true
+  entrypoint: "run_wf"
+description: "This workflow summarises and collects the output from a task run in\
+  \ a format\nthat can be used by the website.\n"
+info: null
+status: "enabled"
+scope:
+  image: "public"
+  target: "public"
+dependencies:
+- name: "reporting/get_results"
+  repository:
+    type: "local"
+- name: "reporting/get_method_info"
+  repository:
+    type: "local"
+- name: "reporting/get_metric_info"
+  repository:
+    type: "local"
+- name: "reporting/get_dataset_info"
+  repository:
+    type: "local"
+- name: "reporting/get_task_info"
+  repository:
+    type: "local"
+- name: "reporting/generate_qc"
+  repository:
+    type: "local"
+- name: "reporting/combine_output"
+  repository:
+    type: "local"
+- name: "reporting/render_report"
+  repository:
+    type: "local"
+license: "MIT"
+links:
+  repository: "https://github.com/openproblems-bio/openproblems"
+  docker_registry: "ghcr.io"
+runners:
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+build_info:
+  config: "src/reporting/process_task_results/config.vsh.yaml"
+  runner: "nextflow"
+  engine: "native"
+  output: "target/nextflow/reporting/process_task_results"
+  executable: "target/nextflow/reporting/process_task_results/main.nf"
+  viash_version: "0.9.4"
+  git_commit: "5a18f35a4b9e724269047c4ca758d5b41fa95a90"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1486-g5a18f35a"
+  dependencies:
+  - "target/nextflow/reporting/get_results"
+  - "target/nextflow/reporting/get_method_info"
+  - "target/nextflow/reporting/get_metric_info"
+  - "target/nextflow/reporting/get_dataset_info"
+  - "target/nextflow/reporting/get_task_info"
+  - "target/nextflow/reporting/generate_qc"
+  - "target/nextflow/reporting/combine_output"
+  - "target/nextflow/reporting/render_report"
+package_config:
+  name: "openproblems"
+  version: "build_feature_no_ref_update_process_results"
+  description: "Open Problems is a living, extensible, community-guided benchmarking\
+    \ platform.\n"
+  info:
+    test_resources:
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/common"
+      dest: "resources_test/common"
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/openproblems"
+      dest: "resources_test/openproblems"
+  viash_version: "0.9.4"
+  source: "src"
+  target: "target"
+  config_mods:
+  - ".runners[.type == \"nextflow\"].config.labels := { lowmem : \"memory = 20.Gb\"\
+    , midmem : \"memory = 50.Gb\", highmem : \"memory = 100.Gb\", lowcpu : \"cpus\
+    \ = 5\", midcpu : \"cpus = 15\", highcpu : \"cpus = 30\", lowtime : \"time = 1.h\"\
+    , midtime : \"time = 4.h\", hightime : \"time = 8.h\", veryhightime : \"time =\
+    \ 24.h\" }\n.runners[.type == \"nextflow\"].config.script := \"process.errorStrategy\
+    \ = 'ignore'\"\n"
+  keywords:
+  - "openproblems"
+  - "benchmarking"
+  - "single-cell omics"
+  license: "MIT"
+  organization: "openproblems-bio"
+  references:
+    doi:
+    - "10.1038/s41587-025-02694-w"
+  links:
+    repository: "https://github.com/openproblems-bio/openproblems"
+    docker_registry: "ghcr.io"
+    issue_tracker: "https://github.com/openproblems-bio/openproblems/issues"

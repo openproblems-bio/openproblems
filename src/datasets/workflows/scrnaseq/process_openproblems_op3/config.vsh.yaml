@@ -1,0 +1,166 @@
+name: process_openproblems_op3
+namespace: datasets/workflows/scrnaseq
+description: |
+  "Fetch, filter, normalize, and prepare datasets from the Open Problems Perturbation Prediction (OP3) dataset 
+  for benchmarking and analysis."
+argument_groups:
+  - name: Input options
+    description: "Options for selecting input data"
+    arguments:
+      - name: --input
+        type: file
+        description: "Link to initial input dataset"
+        required: false
+        default: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad
+        example: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad
+      - name: --data_type
+        type: string
+        description: "Data type to load"
+        default: sc
+        choices: [sc]
+      - name: --donor_id
+        type: string
+        description: "Filter to a specific donor"
+        required: false
+      - name: --cell_type
+        type: string
+        description: "Filter to a specific cell type"
+        required: false
+      - name: --perturbation
+        type: string
+        description: "Filter to a specific perturbation"
+        required: false
+  - name: Dataset metadata
+    description: "Information about the dataset that will be stored in the `.uns` slot."
+    arguments:
+      - name: --id
+        type: string
+        description: "Unique identifier."
+        required: true
+        default: openproblems_op3
+      - name: --dataset_name
+        type: string
+        description: "Nicely formatted name."
+        required: true
+        default: "OP3: single-cell multimodal dataset in PBMCs for perturbation prediction benchmarking"
+      - name: --dataset_url
+        type: string
+        description: "Link to the original source of the dataset."
+        required: false
+        default: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE279nnn/GSE279945/suppl/GSE279945_sc_counts_processed.h5ad
+      - name: --dataset_reference
+        type: string
+        description: "Bibtex reference of the paper in which the dataset was published."
+        required: false
+        default: GSE279945
+      - name: --dataset_summary
+        type: string
+        description: "Short description of the dataset."
+        required: true
+        default: "The Open Problems Perurbation Prediction (OP3) dataset with small molecule perturbations in PBMCs"
+      - name: --dataset_description
+        type: string
+        description: "Long description of the dataset."
+        required: true
+        default: "The OP3 dataset is to-date the largest single-cell small molecule perturbation 
+          dataset in primary tissue with multiple donor replicates."
+  - name: Sampling options
+    arguments:
+      - name: --do_subsample
+        type: boolean
+        default: false
+        description: "Whether or not to subsample the dataset."
+      - name: --n_obs
+        type: integer
+        description: "Maximum number of observations to be kept. It might end up being
+          less because empty cells / genes are removed."
+        default: 500
+      - name: --n_vars
+        type: integer
+        description: "Maximum number of variables to be kept. It might end up being
+          less because empty cells / genes are removed."
+        default: 500
+      - name: --keep_features
+        type: string
+        multiple: true
+        description: "A list of genes to keep."
+      - name: --keep_cell_type_categories
+        type: string
+        multiple: true
+        description: "Categories indexes to be selected."
+        required: false
+      - name: --keep_batch_categories
+        type: string
+        multiple: true
+        description: "Categories indexes to be selected."
+        required: false
+      - name: --even
+        type: boolean_true
+        description: "Subsample evenly from different batches."
+      - name: --seed
+        type: integer
+        description: "A seed for the subsampling."
+        example: 123
+  - name: Normalization
+    arguments:
+      - name: --normalization_methods
+        type: string
+        multiple: true
+        choices: [log_cp10k, log_cpm, sqrt_cp10k, sqrt_cpm, l1_sqrt, log_scran_pooling]
+        default: [log_cp10k, log_cpm, sqrt_cp10k, sqrt_cpm, l1_sqrt]
+        description: "Which normalization methods to run."
+  - name: Outputs
+    arguments:
+      - name: --output_dataset
+        __merge__: /src/datasets/api/file_common_dataset.yaml
+        direction: output
+        required: true
+      - name: --output_compression
+        type: string
+        choices: [gzip, lzf]
+        required: false
+        example: gzip
+      - name: --output_meta
+        type: file
+        direction: output
+        required: false
+        default: dataset_metadata.yaml
+        description: "Dataset metadata."
+      - name: --output_raw
+        __merge__: /src/datasets/api/file_raw.yaml
+        direction: output 
+        required: false
+      - name: --output_normalized
+        __merge__: /src/datasets/api/file_normalized.yaml
+        direction: output
+        required: false
+      - name: --output_pca
+        __merge__: /src/datasets/api/file_pca.yaml
+        direction: output
+        required: false
+      - name: --output_hvg
+        __merge__: /src/datasets/api/file_hvg.yaml
+        direction: output
+        required: false
+      - name: --output_knn
+        __merge__: /src/datasets/api/file_knn.yaml
+        direction: output
+        required: false
+resources:
+  - type: nextflow_script
+    path: main.nf
+    entrypoint: run_wf
+  - path: /common/nextflow_helpers/helper.nf
+dependencies:
+  - name: datasets/loaders/scrnaseq/openproblems_op3
+  - name: datasets/normalization/log_cp
+  - name: datasets/normalization/log_scran_pooling
+  - name: datasets/normalization/sqrt_cp
+  - name: datasets/normalization/l1_sqrt
+  - name: datasets/processors/subsample
+  - name: datasets/processors/pca
+  - name: datasets/processors/hvg
+  - name: datasets/processors/knn
+  - name: utils/extract_uns_metadata
+runners:
+  - type: nextflow

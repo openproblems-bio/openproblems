@@ -1,0 +1,169 @@
+name: "get_metric_info"
+namespace: "reporting"
+version: "build_feature_no_ref_update_process_results"
+argument_groups:
+- name: "Inputs"
+  arguments:
+  - type: "file"
+    name: "--input"
+    description: "A YAML file containing metric configs"
+    info: null
+    example:
+    - "resources_test/openproblems/task_results_v4/raw/metric_configs.yaml"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+- name: "Outputs"
+  arguments:
+  - type: "file"
+    name: "--output"
+    description: "Output JSON file matching metric info schema"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/metric_info.json"
+    example:
+    - "resources_test/openproblems/task_results_v4/processed/metric_info.json"
+    default:
+    - "metric_info.json"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+resources:
+- type: "r_script"
+  path: "script.R"
+  is_executable: true
+- type: "file"
+  path: "functions.R"
+  dest: "functions.R"
+- type: "file"
+  path: "schemas"
+  dest: "schemas"
+- type: "file"
+  path: "bibliography.bib"
+  dest: "bibliography.bib"
+description: "Convert metric configs YAML to schema-compliant JSON"
+test_resources:
+- type: "python_script"
+  path: "run_and_check_output.py"
+  is_executable: true
+- type: "file"
+  path: "resources_test/openproblems/task_results_v4"
+  dest: "resources_test/openproblems/task_results_v4"
+info: null
+status: "enabled"
+scope:
+  image: "public"
+  target: "public"
+license: "MIT"
+links:
+  repository: "https://github.com/openproblems-bio/openproblems"
+  docker_registry: "ghcr.io"
+runners:
+- type: "executable"
+  id: "executable"
+  docker_setup_strategy: "ifneedbepullelsecachedbuild"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "lowmem"
+    - "lowtime"
+    - "lowcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+engines:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_r:1"
+  namespace_separator: "/"
+  setup:
+  - type: "apt"
+    packages:
+    - "nodejs"
+    - "npm"
+    interactive: false
+  - type: "docker"
+    run:
+    - "npm install -g ajv-cli"
+  - type: "r"
+    cran:
+    - "bibtex"
+    - "purrr"
+    - "stringr"
+    bioc_force_install: false
+    warnings_as_errors: true
+  entrypoint: []
+  cmd: null
+build_info:
+  config: "src/reporting/get_metric_info/config.vsh.yaml"
+  runner: "nextflow"
+  engine: "docker"
+  output: "target/nextflow/reporting/get_metric_info"
+  executable: "target/nextflow/reporting/get_metric_info/main.nf"
+  viash_version: "0.9.4"
+  git_commit: "5a18f35a4b9e724269047c4ca758d5b41fa95a90"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1486-g5a18f35a"
+package_config:
+  name: "openproblems"
+  version: "build_feature_no_ref_update_process_results"
+  description: "Open Problems is a living, extensible, community-guided benchmarking\
+    \ platform.\n"
+  info:
+    test_resources:
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/common"
+      dest: "resources_test/common"
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/openproblems"
+      dest: "resources_test/openproblems"
+  viash_version: "0.9.4"
+  source: "src"
+  target: "target"
+  config_mods:
+  - ".runners[.type == \"nextflow\"].config.labels := { lowmem : \"memory = 20.Gb\"\
+    , midmem : \"memory = 50.Gb\", highmem : \"memory = 100.Gb\", lowcpu : \"cpus\
+    \ = 5\", midcpu : \"cpus = 15\", highcpu : \"cpus = 30\", lowtime : \"time = 1.h\"\
+    , midtime : \"time = 4.h\", hightime : \"time = 8.h\", veryhightime : \"time =\
+    \ 24.h\" }\n.runners[.type == \"nextflow\"].config.script := \"process.errorStrategy\
+    \ = 'ignore'\"\n"
+  keywords:
+  - "openproblems"
+  - "benchmarking"
+  - "single-cell omics"
+  license: "MIT"
+  organization: "openproblems-bio"
+  references:
+    doi:
+    - "10.1038/s41587-025-02694-w"
+  links:
+    repository: "https://github.com/openproblems-bio/openproblems"
+    docker_registry: "ghcr.io"
+    issue_tracker: "https://github.com/openproblems-bio/openproblems/issues"

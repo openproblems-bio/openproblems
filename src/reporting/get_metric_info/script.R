@@ -1,0 +1,187 @@
+## VIASH START
+par <- list(
+  input = "resources_test/openproblems/task_results_v4/raw/metric_configs.yaml",
+  output = "resources_test/openproblems/task_results_v4/processed/metric_info.json"
+)
+## VIASH END
+
+source(file.path(meta$resources_dir, "functions.R"))
+
+################################################################################
+#                               FUNCTIONS
+################################################################################
+
+get_implementation_url <- function(config) {
+  paste0(
+    config$build_info$git_remote,
+    "/blob/",
+    config$build_info$git_commit,
+    "/",
+    config$build_info$config |>
+      stringr::str_replace(".*/src/", "src/") |>
+      stringr::str_remove("/config.vsh.yaml")
+  )
+}
+
+get_container_image <- function(config) {
+  # Check if the method has a docker container to create an image url.
+  # If it does not have a docker it will be a nextflow component consisting of
+  # different components that will have a docker image.
+  engines <- config$engines
+  has_docker <- any(purrr::map_lgl(engines, ~ .x$type == "docker"))
+  if (has_docker) {
+    paste0(
+      "https://",
+      config$links$docker_registry,
+      "/",
+      config$package_config$organization,
+      "/",
+      config$package_config$name,
+      "/",
+      config$build_info$config |>
+        stringr::str_remove(".*/src/") |>
+        stringr::str_remove("/config.vsh.yaml"),
+      ":",
+      config$version
+    )
+  } else {
+    paste0(
+      "https://github.com/orgs/openproblems-bio/packages?repo_name=",
+      config$package_config$name,
+      "&q=",
+      config$build_info$config |>
+        stringr::str_remove(".*/src/") |>
+        stringr::str_remove("/config.vsh.yaml")
+    )
+  }
+}
+
+get_additional_info <- function(info, exclude, name_prefix = "") {
+  additional <- info[setdiff(names(info), exclude)] |>
+    purrr::map(recurse_unbox)
+
+  rlang::set_names(additional, paste0(name_prefix, names(additional)))
+}
+
+recurse_unbox <- function(x) {
+  if (is.list(x)) {
+    purrr::map(x, recurse_unbox)
+  } else if (length(x) == 1) {
+    jsonlite::unbox(x)
+  } else {
+    x
+  }
+}
+
+################################################################################
+#                              MAIN SCRIPT
+################################################################################
+
+cat("====== Get metric info ======\n")
+
+`%||%` <- rlang::`%||%`
+
+cat("\n>>> Reading input files...\n")
+cat("Reading metric info from '", par$input, "'...\n", sep = "")
+metric_configs <- yaml::yaml.load_file(par$input)
+
+cat(
+  "\n>>> Processing ",
+  length(metric_configs),
+  " metric configs...\n",
+  sep = ""
+)
+bibliography <- read_bibliography(
+  file.path(meta$resources_dir, "bibliography.bib")
+)
+metric_info_json <- purrr::map(metric_configs, function(.config) {
+  if (.config$status == "disabled") {
+    cat("Skipping disabled metric component '", .config$name, "'\n", sep = "")
+    return(NULL)
+  } else {
+    cat("Processing metric component '", .config$name, "'\n", sep = "")
+  }
+
+  purrr::map(.config$info$metrics, function(.metric) {
+    list(
+      name = jsonlite::unbox(.metric$name),
+      label = jsonlite::unbox(.metric$label),
+      commit = jsonlite::unbox(
+        .config$build_info$git_commit %||% "missing-sha"
+      ),
+      summary = .metric$summary |>
+        stringr::str_trim() |>
+        stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+        jsonlite::unbox(),
+      description = .metric$description |>
+        stringr::str_trim() |>
+        stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+        jsonlite::unbox(),
+      maximize = jsonlite::unbox(.metric$maximize),
+      link_implementation = jsonlite::unbox(get_implementation_url(.config)),
+      link_container_image = jsonlite::unbox(get_container_image(.config)),
+      component_name = jsonlite::unbox(.config$name),
+      authors = get_authors_list(.metric$authors),
+      references = get_references_list(.metric$references, bibliography),
+      additional_info = c(
+        get_additional_info(
+          .config$info,
+          exclude = c("metrics", "type", "type_info"),
+          name_prefix = "component_"
+        ),
+        get_additional_info(
+          .metric,
+          exclude = c(
+            "name",
+            "label",
+            "summary",
+            "description",
+            "maximize",
+            "min",
+            "max",
+            "links",
+            "authors",
+            "references"
+          )
+        )
+      ),
+      version = jsonlite::unbox(.config$version)
+    )
+  })
+}) |>
+  purrr::list_flatten()
+
+cat("\n>>> Writing output files...\n")
+cat("Writing task info to '", par$output, "'...\n", sep = "")
+jsonlite::write_json(
+  metric_info_json,
+  par$output,
+  pretty = TRUE,
+  null = "null"
+)
+
+cat("\n>>> Validating output against schema...\n")
+results_schemas <- file.path(meta$resources_dir, "schemas", "results_v4")
+ajv_args <- paste(
+  "validate",
+  "--spec draft2020",
+  "-s",
+  file.path(results_schemas, "metric_info.json"),
+  "-r",
+  file.path(results_schemas, "core.json"),
+  "-d",
+  par$output
+)
+
+cat("Running validation command:", "ajv", ajv_args, "\n")
+cat("Output:\n")
+validation_result <- system2("ajv", ajv_args)
+
+if (validation_result == 0) {
+  cat("JSON validation passed successfully!\n")
+} else {
+  cat("JSON validation failed!\n")
+  stop("Output JSON does not conform to schema")
+}
+
+cat("\n>>> Done!\n")

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openproblems.bio/schemas/results_v4/core.json",
+  "$defs": {
+    "author": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Author name",
+          "type": "string"
+        },
+        "roles": {
+          "description": "Author roles",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "github": {
+          "description": "Author GitHub username",
+          "type": ["null", "string"]
+        },
+        "orcid": {
+          "description": "Author ORCID",
+          "type": ["null", "string"]
+        },
+        "info": {
+          "description": "Additional information about the author",
+          "type": "object"
+        }
+      },
+      "required": ["name", "roles", "github", "orcid"]
+    },
+    "authors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/author"
+      },
+      "description": "List of authors"
+    },
+    "references": {
+      "description": "Bibliography entries",
+      "type": "object",
+      "properties": {
+        "doi": {
+          "description": "List of DOIs",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bibtex": {
+          "description": "List of BibTeX entries",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["doi", "bibtex"]
+    }
+  }
+}

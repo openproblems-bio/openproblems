@@ -1,0 +1,29 @@
+name: openproblems
+version: build_feature_no_ref_update_process_results
+organization: openproblems-bio
+viash_version: 0.9.4
+description: |
+  Open Problems is a living, extensible, community-guided benchmarking platform.
+license: MIT
+keywords: [openproblems, benchmarking, single-cell omics]
+references:
+  doi:
+    # Malte Luecken, Scott Gigante, Daniel Burkhardt, Robrecht Cannoodt, et al.
+    # Defining and benchmarking open problems in single-cell analysis.
+    # Nat Biotechnol 43, 1035–1040 (2025).
+    - 10.1038/s41587-025-02694-w
+links:
+  issue_tracker: https://github.com/openproblems-bio/openproblems/issues
+  repository: https://github.com/openproblems-bio/openproblems
+  docker_registry: ghcr.io
+config_mods: |
+  .runners[.type == "nextflow"].config.labels := { lowmem : "memory = 20.Gb", midmem : "memory = 50.Gb", highmem : "memory = 100.Gb", lowcpu : "cpus = 5", midcpu : "cpus = 15", highcpu : "cpus = 30", lowtime : "time = 1.h", midtime : "time = 4.h", hightime : "time = 8.h", veryhightime : "time = 24.h" }
+  .runners[.type == "nextflow"].config.script := "process.errorStrategy = 'ignore'"
+info:
+  test_resources:
+    - type: s3
+      path: s3://openproblems-data/resources_test/common
+      dest: resources_test/common
+    - type: s3
+      path: s3://openproblems-data/resources_test/openproblems
+      dest: resources_test/openproblems

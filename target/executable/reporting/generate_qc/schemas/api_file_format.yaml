@@ -1,0 +1,31 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: File format
+description: A file format specification file for defining the task API.
+type: object
+additionalProperties: false
+required: [type, label, summary]
+properties:
+  type:
+    const: file
+  label:
+    $ref: "schema_openproblems_definitions.yaml#/definitions/Label"
+  summary: 
+    $ref: "schema_openproblems_definitions.yaml#/definitions/Summary"
+  description: 
+    $ref: "schema_openproblems_definitions.yaml#/definitions/Description"
+  example:
+    description: A file in the `resources_test` folder which is an example of this file format.
+    type: string
+  __merge__:
+    $ref: "schema_openproblems_definitions.yaml#/definitions/Merge"
+  info:
+    description: 'Structured information. Can be any shape: a string, vector, map or even nested map.'
+    type: object
+    properties:
+      format:
+        oneOf:
+          - $ref: "schema_openproblems_definitions.yaml#/definitions/H5ADFormat"
+          - $ref: "schema_openproblems_definitions.yaml#/definitions/CSVFormat"
+          - $ref: "schema_openproblems_definitions.yaml#/definitions/TSVFormat"
+          - $ref: "schema_openproblems_definitions.yaml#/definitions/ParquetFormat"
+          - $ref: "schema_openproblems_definitions.yaml#/definitions/SpatialDataZarrFormat"

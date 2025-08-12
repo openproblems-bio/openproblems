@@ -1,0 +1,439 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+definitions:
+  NextflowRunner:
+    title: Nextflow Runner
+    description: Run a Viash component on a Nextflow backend engine.
+    properties:
+      type:
+        description: "Run a Viash component on a Nextflow backend engine.\n"
+        const: "nextflow"
+      directives:
+        $ref: 'schema_viash.yaml#/definitions/NextflowDirectives'
+    required: [ type ]
+    additionalProperties: false
+  ExecutableRunner:
+    description: "Run code as an executable.\n\nThis runner is the default runner.\
+      \ It will generate a bash script that can be run directly.\n\nThis runner is\
+      \ also used for the native engine.\n\nThis runner is also used for the docker\
+      \ engine.\n"
+    type: "object"
+    properties:
+      docker_run_args:
+        oneOf:
+        - description: "Provide runtime arguments to Docker. See the documentation\
+            \ on [`docker run`](https://docs.docker.com/engine/reference/run/) for\
+            \ more information."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Provide runtime arguments to Docker. See the documentation\
+              \ on [`docker run`](https://docs.docker.com/engine/reference/run/) for\
+              \ more information."
+            type: "string"
+      type:
+        description: "Run code as an executable.\n\nThis runner is the default runner.\
+          \ It will generate a bash script that can be run directly.\n\nThis runner\
+          \ is also used for the native engine.\n\nThis runner is also used for the\
+          \ docker engine.\n"
+        const: "executable"
+    required:
+    - "type"
+    additionalProperties: false
+  DockerEngine:
+    title: Docker Engine
+    description: "Run a Viash component on a Docker backend engine.\nBy specifying\
+      \ which dependencies your component needs, users will be able to build a docker\
+      \ container from scratch using the setup flag, or pull it from a docker repository.\n"
+    type: object
+    properties:
+      type:
+        const: docker
+        description: Run a Viash component on a Docker backend platform.
+      image:
+        type: string
+        description: The base container to start from. You can also add the tag here
+          if you wish.
+      run_args:
+        anyOf:
+        - type: string
+          description: Add docker run arguments.
+        - type: array
+          items:
+            type: string
+          description: Add docker run arguments.
+      setup:
+        type: array
+        items:
+          "$ref": "schema_viash.yaml#/definitions/Requirements"
+      test_setup:
+        type: array
+        items:
+          "$ref": "schema_viash.yaml#/definitions/Requirements"
+    required: [type, image]
+    additionalProperties: false
+  PreferredNormalization:
+    enum: [l1_sqrt, log_cpm, log_cp10k, log_scran_pooling, sqrt_cpm, sqrt_cp10k, counts]
+    description: |
+      Which normalization method a component prefers. 
+      
+      Each value corresponds to a normalization component in the directory `src/datasets/normalization`.
+  ComponentSubtype:
+    type: string
+    description: |
+      A component subtype, in case the task has multiple subtypes of methods and metrics.
+  ComponentType:
+    type: string
+    description: |
+      A component subtype, in case the task has multiple subtypes of methods and metrics.
+  Name:
+    type: string
+    description: |
+      A unique identifier. Can only contain lowercase letters, numbers or underscores.
+    pattern: "^[a-z_][a-z0-9_]*$"
+    maxLength: 50
+  Namespace:
+    type: string
+    description: |
+      The namespace a component is part of.
+    pattern: "^[a-z_][a-z0-9_/]*$"
+  Label:
+    type: string
+    description: |
+      A unique, human-readable, short label. Used for creating summary tables and visualisations.
+    maxLength: 50
+  Image:
+    type: string
+    description: |
+      The name of the image file to use for the component on the website.
+  Summary:
+    type: string
+    description: |
+      A one sentence summary of purpose and methodology. Used for creating an overview tables.
+    minLength: 15
+    maxLength: 180
+  Description:
+    type: string
+    description: |
+      A longer description (one or more paragraphs). Used for creating reference documentation and supplementary information.
+    minLength: 30
+  BibtexReference:
+    type: string
+    description: |
+      A bibtex reference key to the paper where the component is described.
+  DocumentationURL:
+    type: string
+    format: uri
+    pattern: "^https://"
+    description: The url to the documentation of the used software library.
+  RepositoryURL:
+    type: string
+    format: uri
+    pattern: "^https://"
+    description: The url to the repository of the used software library.
+  MethodVariants:
+    type: object
+    description: Alternative parameter sets which should be evaluated in the benchmark.
+    properties:
+      preferred_normalization:
+        "$ref": "#/definitions/PreferredNormalization"
+  CompAPIMerge:
+    type: string
+    description: |
+      The API specifies which type of component this is.
+      It contains specifications for:
+
+        - The input/output files
+        - Common parameters
+        - A unit test
+  Merge:
+    type: string
+    description: |
+      Another YAML to inherit values from.
+  ComponentAPIFile:
+    description: A `file` type argument has a string value that points to a file or folder path.
+    type: object
+    properties:
+      name:
+        description: "The name of the argument. Can be in the formats `--foo`, `-f` or `foo`. The number of dashes determines how values can be passed:  \n\n  - `--foo` is a long option, which can be passed with `executable_name --foo=value` or `executable_name --foo value`\n  - `-f` is a short option, which can be passed with `executable_name -f value`\n  - `foo` is an argument, which can be passed with `executable_name value`  \n"
+        type: string
+      __merge__:
+        type: string
+        description: The file format specification file.
+      direction:
+        description: Makes this argument an `input` or an `output`, as in does the file/folder needs to be read or written. `input` by default.
+        $ref: 'schema_viash.yaml#/definitions/Direction'
+      info:
+        description: 'Structured information. Can be any shape: a string, vector, map or even nested map.'
+        type: object
+      required:
+        description: Make the value for this argument required. If set to `true`, an error will be produced if no value was provided. `false` by default.
+        type: boolean
+    required: [name, __merge__, direction, required]
+    #additionalProperties: false
+  AnnDataObject:
+    properties:
+      X:
+        $ref: "#/definitions/DataTypeSpec"
+      layers:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeSpec"
+      var:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeSpec"
+      varm:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeSpec"
+      varp:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeSpec"
+      obs:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeSpec"
+      obsm:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeSpec"
+      obsp:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeSpec"
+      uns:
+        type: array
+        items:
+          anyOf:
+            - $ref: "#/definitions/DataTypeSpec"
+            - $ref: "#/definitions/DataTypeObject"
+  H5ADFormat:
+    type: object
+    properties:
+      type:
+        const: h5ad
+        description: The file format.
+      X:
+        type: object
+      layers:
+        type: array
+      obs:
+        type: array
+      obsm:
+        type: array
+      obsp:
+        type: array
+      var:
+        type: array
+      varm:
+        type: array
+      varp:
+        type: array
+      uns:
+        type: array
+    required: [type]
+    additionalProperties: false
+    allOf: 
+      - $ref: "#/definitions/AnnDataObject"
+  CSVFormat:
+    type: object
+    required: [type]
+    additionalProperties: false
+    properties:
+      type:
+        const: csv
+        description: The file format.
+      columns:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeSpec"
+  TSVFormat:
+    type: object
+    required: [type]
+    additionalProperties: false
+    properties:
+      type:
+        const: tsv
+        description: The file format.
+      columns:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeSpec"
+  ParquetFormat:
+    type: object
+    required: [type]
+    additionalProperties: false
+    properties:
+      type:
+        const: parquet
+        description: The file format.
+      columns:
+        type: array
+        items:
+          $ref: "#/definitions/MoreDataTypeSpec"
+  SpatialDataZarrFormat:
+    type: object
+    required: [type]
+    additionalProperties: false
+    properties:
+      type:
+        const: spatialdata_zarr
+        description: The file format.
+      images:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeObject"
+      labels:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeObject"
+      points:
+        type: array
+        items:
+          type: object
+          properties:
+            type:
+              const: dataframe
+            name:
+              type: string
+            description:
+              type: string
+            required:
+              type: boolean
+            columns:
+              type: array
+              items:
+                $ref: "#/definitions/MoreDataTypeSpec"
+          required: [type, name, description, required]
+          additionalProperties: false
+      shapes:
+        type: array
+        items:
+          type: object
+          properties:
+            type:
+              const: dataframe
+            name:
+              type: string
+            description:
+              type: string
+            required:
+              type: boolean
+            columns:
+              type: array
+              items:
+                $ref: "#/definitions/MoreDataTypeSpec"
+          required: [type, name, description, required]
+          additionalProperties: false
+      tables:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            type:
+              const: anndata
+            description:
+              type: string
+            required:
+              type: boolean
+            X:
+              type: object
+            layers:
+              type: array
+            obs:
+              type: array
+            obsm:
+              type: array
+            obsp:
+              type: array
+            var:
+              type: array
+            varm:
+              type: array
+            varp:
+              type: array
+            uns:
+              type: array
+          required: [type, name, description, required]
+          additionalProperties: false
+          allOf: 
+            - $ref: "#/definitions/AnnDataObject"
+      coordinate_systems:
+        type: array
+        items:
+          $ref: "#/definitions/DataTypeObject"
+  DataTypeSpec:
+    properties:
+      type:
+        enum: [integer, double, string, boolean]
+      name:
+        type: string
+        description: A unique identifier.
+        pattern: "^[a-zA-Z_][a-zA-Z0-9_]*$"
+      description:
+        type: string
+      required:
+        type: boolean
+    required: [type, name, description, required]
+  MoreDataTypeSpec:
+    properties:
+      type:
+        enum: [integer, long, float, double, string, categorical, boolean, object]
+      name:
+        type: string
+        description: A unique identifier.
+        pattern: "^[a-zA-Z_][a-zA-Z0-9_]*$"
+      description:
+        type: string
+      required:
+        type: boolean
+    required: [type, name, description, required]
+  DataTypeObject:
+    properties:
+      type:
+        const: object
+      name:
+        type: string
+        description: A unique identifier.
+        pattern: "^[a-zA-Z_][a-zA-Z0-9_]*$"
+      description:
+        type: string
+      required:
+        type: boolean
+    required: [type, name, description, required]
+  Author:
+    description: Author metadata.
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        description: Full name of the author, usually in the name of FirstName MiddleName LastName.
+        type: string
+      info:
+        description: Additional information on the author
+        type: object
+        additionalProperties: false
+        properties:
+          github:
+            type: string
+          orcid:
+            type: string
+          email:
+            type: string
+          twitter:
+            type: string
+          linkedin:
+            type: string
+      roles:
+        description: |
+            Role of the author. Possible values:
+
+            * `"author"`: Authors who have made substantial contributions to the component.
+            * `"maintainer"`: The maintainer of the component.
+            * `"contributor"`: Authors who have made smaller contributions (such as code patches etc.).
+        type: array
+        items:
+          enum: [maintainer, author, contributor]
