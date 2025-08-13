@@ -507,10 +507,15 @@ metric_names <- purrr::map_chr(metric_info, "name")
 control_method_names <- method_summary$method[method_summary$type == "control_method"]
 
 n_controls <- purrr::map_dfr(task_results$results, function(.result) {
-  data.frame(dataset = .result$dataset_name, method = .result$method)
+  data.frame(
+    dataset = .result$dataset_name,
+    method = .result$method,
+    succeeded = .result$succeeded
+  )
 }) |>
   dplyr::filter(
-    method %in% control_method_names
+    method %in% control_method_names,
+    succeeded
   ) |>
   dplyr::group_by(dataset) |>
   dplyr::count(name = "n_controls") |>
