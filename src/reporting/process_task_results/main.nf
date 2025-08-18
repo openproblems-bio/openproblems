@@ -52,10 +52,42 @@ workflow run_wf {
         "input_trace": "input_trace",
         "input_dataset_info": "output_dataset",
         "input_method_info": "output_method",
-        "input_metric_info": "output_metric"
+        "input_metric_info": "output_metric",
+        "datasets_include": "datasets_include",
+        "datasets_exclude": "datasets_exclude",
+        "methods_include": "methods_include",
+        "methods_exclude": "methods_exclude",
+        "metrics_include": "metrics_include",
+        "metrics_exclude": "metrics_exclude"
       ],
       toState: [
         "output_results": "output"
+      ]
+    )
+
+    | filter_results.run(
+      runIf: { id, state ->
+        // Only run filtering if there are include/exclude lists defined
+        return state.datasets_exclude || state.methods_exclude || state.metrics_exclude ||
+          state.datasets_include || state.methods_include || state.metrics_include
+      },
+      fromState: [
+        "input_dataset_info": "output_dataset",
+        "input_method_info": "output_method",
+        "input_metric_info": "output_metric",
+        "input_results": "output_results",
+        "datasets_include": "datasets_include",
+        "datasets_exclude": "datasets_exclude",
+        "methods_include": "methods_include",
+        "methods_exclude": "methods_exclude",
+        "metrics_include": "metrics_include",
+        "metrics_exclude": "metrics_exclude"
+      ],
+      toState: [
+        "output_dataset": "output_dataset_info",
+        "output_method": "output_method_info",
+        "output_metric": "output_metric_info",
+        "output_results": "output_results"
       ]
     )
 
@@ -90,14 +122,8 @@ workflow run_wf {
     )
 
     | setState([
-      "output_combined": "output_combined",
-      "output_report": "output_report",
-      "output_task_info": "output_task",
-      "output_dataset_info": "output_dataset",
-      "output_method_info": "output_method",
-      "output_metric_info": "output_metric",
-      "output_results": "output_results",
-      "output_quality_control": "output_qc"
+      "output_data": "output_combined",
+      "output_report": "output_report"
     ])
 
   emit:
