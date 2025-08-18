@@ -34,7 +34,7 @@
       },
       "link_code": {
         "description": "URL to the package or code provided by the method authors",
-        "type": "string"
+        "type": ["null", "string"]
       },
       "link_documentation": {
         "description": "URL to documentation provided by the method authors",
@@ -42,7 +42,7 @@
       },
       "link_implementation": {
         "description": "Permalink URL to the version of the method component used",
-        "type": "string"
+        "type": ["null", "string"]
       },
       "link_container_image": {
         "description": "URL to the container image used by the method component",

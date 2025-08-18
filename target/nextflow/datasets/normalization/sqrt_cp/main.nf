@@ -3732,9 +3732,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/datasets/normalization/sqrt_cp",
     "viash_version" : "0.9.4",
-    "git_commit" : "efa00bbc12867d1345920ba79d90b41aec87fc26",
+    "git_commit" : "6ba4f4989745e5546c3c71501167720d934d6348",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1512-gefa00bbc"
+    "git_tag" : "v1.0.0-1515-g6ba4f498"
   },
   "package_config" : {
     "name" : "openproblems",

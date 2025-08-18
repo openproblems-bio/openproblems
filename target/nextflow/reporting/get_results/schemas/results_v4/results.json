@@ -31,35 +31,35 @@
         "description": "Duration of the method run in seconds. Can be multiple if the method is a workflow.",
         "type": "array",
         "items": {
-          "type": "number"
+          "type": ["null", "number"]
         }
       },
       "run_cpu_pct" : {
         "description": "CPU usage percentage of the method run. Can be multiple if the method is a workflow.",
         "type": "array",
         "items": {
-          "type": "number"
+          "type": ["null", "number"]
         }
       },
       "run_peak_memory_mb" : {
         "description": "Peak memory usage of the method run in MB. Can be multiple if the method is a workflow.",
         "type": "array",
         "items": {
-          "type": "number"
+          "type": ["null", "number"]
         }
       },
       "run_disk_read_mb" : {
         "description": "Disk read usage of the method run in MB. Can be multiple if the method is a workflow.",
         "type": "array",
         "items": {
-          "type": "number"
+          "type": ["null", "number"]
         }
       },
       "run_disk_write_mb" : {
         "description": "Disk write usage of the method run in MB. Can be multiple if the method is a workflow.",
         "type": "array",
         "items": {
-          "type": "number"
+          "type": ["null", "number"]
         }
       },
       "run_exit_code" : {
@@ -108,35 +108,35 @@
               "description": "Duration of the metric run in seconds. Can be multiple if the metric is a workflow.",
               "type": "array",
                 "items": {
-                  "type": "number"
+                  "type": ["null", "number"]
                 }
             },
             "run_cpu_pct" : {
               "description": "CPU usage percentage of the metric run. Can be multiple if the metric is a workflow.",
               "type": "array",
               "items": {
-                "type": "number"
+                "type": ["null", "number"]
               }
             },
             "run_peak_memory_mb" : {
               "description": "Peak memory usage of the metric run in MB. Can be multiple if the metric is a workflow.",
               "type": "array",
               "items": {
-                "type": "number"
+                "type": ["null", "number"]
               }
             },
             "run_disk_read_mb" : {
               "description": "Disk read usage of the metric run in MB. Can be multiple if the metric is a workflow.",
               "type": "array",
               "items": {
-                "type": "number"
+                "type": ["null", "number"]
               }
             },
             "run_disk_write_mb" : {
               "description": "Disk write usage of the metric run in MB. Can be multiple if the metric is a workflow.",
               "type": "array",
               "items": {
-                "type": "number"
+                "type": ["null", "number"]
               }
             },
             "run_exit_code" : {

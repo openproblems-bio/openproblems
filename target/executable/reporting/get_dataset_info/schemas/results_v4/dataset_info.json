@@ -27,9 +27,12 @@
         "description": "Detailed description of the method",
         "type": "string"
       },
-      "source_url": {
+      "source_urls": {
         "description": "URL to the original source of the dataset",
-        "type": "string"
+        "type": ["null", "array"],
+        "items": {
+          "type": "string"
+        }
       },
       "common_dataset_names": {
         "description": "Identifier(s) for the common dataset(s) this dataset was derived from. Only if the dataset_name is different.",
@@ -60,11 +63,11 @@
       },
       "date_created": {
         "description": "Date when the dataset was created",
-        "type": "string"
+        "type": ["null", "string"]
       },
       "file_size_mb": {
         "description": "Size of the dataset in MB",
-        "type": "number"
+        "type": ["null", "number"]
       }
     },
     "required": [
@@ -73,7 +76,7 @@
       "commit",
       "summary",
       "description",
-      "source_url",
+      "source_urls",
       "common_dataset_names",
       "modalities",
       "organisms",

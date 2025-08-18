@@ -456,9 +456,9 @@ RUN Rscript -e 'options(warn = 2); if (!requireNamespace("remotes", quietly = TR
   Rscript -e 'options(warn = 2); remotes::install_cran(c("commonmark", "dplyr", "funkyheatmap", "ggplot2", "here", "htmltools", "jsonlite", "knitr", "patchwork", "purrr", "quarto", "rcrossref", "reactable", "scales", "stringr", "tibble", "tidyr", "xfun"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component reporting render_report"
-LABEL org.opencontainers.image.created="2025-08-12T09:30:15Z"
+LABEL org.opencontainers.image.created="2025-08-18T06:25:18Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="efa00bbc12867d1345920ba79d90b41aec87fc26"
+LABEL org.opencontainers.image.revision="6ba4f4989745e5546c3c71501167720d934d6348"
 LABEL org.opencontainers.image.version="build_feature_no_ref_update_process_results"
 
 VIASHDOCKER
