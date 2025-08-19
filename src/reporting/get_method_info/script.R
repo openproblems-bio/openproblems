@@ -1,118 +1,164 @@
-requireNamespace("jsonlite", quietly = TRUE)
-requireNamespace("yaml", quietly = TRUE)
-library(purrr, warn.conflicts = FALSE)
-library(rlang, warn.conflicts = FALSE)
-
 ## VIASH START
 par <- list(
-  input = "method_configs.yaml",
-  output = "resources_test/openproblems/task_results_v3/processed/method_info.json"
+  input = "resources_test/openproblems/task_results_v4/processed/task_info.json",
+  output = "resources_test/openproblems/task_results_v4/processed/method_info.json"
 )
 ## VIASH END
 
-configs <- yaml::yaml.load_file(par$input)
+source(file.path(meta$resources_dir, "functions.R"))
 
-outputs <- map(configs, function(config) {
-  if (length(config$functionality$status) > 0 && config$functionality$status == "disabled") {
-    return(NULL)
-  }
+################################################################################
+#                               FUNCTIONS
+################################################################################
 
-  # prep for viash 0.9.0
-  build_info <- config$build_info %||% config$info
-  if ("functionality" %in% names(config)) {
-    config[names(config$functionality)] <- config$functionality
-    config[["functionality"]] <- NULL
-  }
+get_implementation_url <- function(config) {
+  paste0(
+    config$build_info$git_remote,
+    "/blob/",
+    config$build_info$git_commit,
+    "/",
+    config$build_info$config |>
+      stringr::str_replace(".*/src/", "src/") |>
+      stringr::str_remove("/config.vsh.yaml")
+  )
+}
 
-  info <- config$info
-
-  # add extra info
-  info$comp_path <- gsub(".*/src/", "src/", build_info$config) %>% gsub("/config.vsh.yaml", "", .)
-  info$task_id <- gsub("/.*", "", config$namespace)
-  info$id <- config$name
-  info$namespace <- config$namespace
-  info$label <- config$label %||% info$label
-  info$summary <- config$summary %||% info$summary
-  info$description <- config$description %||% info$description
-  info$commit_sha <- build_info$git_commit %||% "missing-sha"
-  info$code_version <- config$version
-  info$code_url <- config$links$repository
-  info$documentation_url <- config$links$documentation
-  # Check if the method has a docker container to create an image url. If it does not have a docker it will be a nextflow component consisting of different components that will have a docker image.
+get_container_image <- function(config) {
+  # Check if the method has a docker container to create an image url.
+  # If it does not have a docker it will be a nextflow component consisting of
+  # different components that will have a docker image.
   engines <- config$engines
-  has_docker <- any(map_lgl(engines, ~ .x$type == "docker"))
+  has_docker <- any(purrr::map_lgl(engines, ~ .x$type == "docker"))
   if (has_docker) {
-    info$image <- paste0(
+    paste0(
       "https://",
-      config$links$docker_registry, "/",
-      config$package_config$organization, "/",
-      config$package_config$name, "/",
-      gsub("src/", "", info$comp_path),
+      config$links$docker_registry,
+      "/",
+      config$package_config$organization,
+      "/",
+      config$package_config$name,
+      "/",
+      config$build_info$config |>
+        stringr::str_remove(".*/src/") |>
+        stringr::str_remove("/config.vsh.yaml"),
       ":",
-      info$code_version
+      config$version
     )
-  }  else {
-    info$image <- paste0(
+  } else {
+    paste0(
       "https://github.com/orgs/openproblems-bio/packages?repo_name=",
       config$package_config$name,
       "&q=",
-      gsub("src/", "", info$comp_path)
+      config$build_info$config |>
+        stringr::str_remove(".*/src/") |>
+        stringr::str_remove("/config.vsh.yaml")
     )
   }
-  info$implementation_url <- paste0(
-    build_info$git_remote, "/blob/",
-    build_info$git_commit, "/",
-    info$comp_path
-  )
-  info$type_info <- NULL
+}
 
-  # Flatten references
-  if (!is.null(config$references) && config$references != "") {
-    info <- imap(config$references, function(value, key) {
-      info[[paste0("references_", key)]] <- value
-      return(info)
-    })[[1]]
-  }
-  info$references <- NULL
+################################################################################
+#                              MAIN SCRIPT
+################################################################################
 
-  print(info)
+cat("====== Get method info ======\n")
 
+`%||%` <- rlang::`%||%`
 
-  # ↑ this could be used as the new format
+cat("\n>>> Reading input files...\n")
+cat("Reading method info from '", par$input, "'...\n", sep = "")
+method_configs <- yaml::yaml.load_file(par$input)
 
-  # construct v1 format
-  out <- list(
-    task_id = info$task_id,
-    method_id = info$id,
-    method_name = info$label,
-    method_summary = info$summary,
-    method_description = info$description,
-    is_baseline = grepl("control", info$type),
-    references_doi = info$references_doi %||% NA_character_,
-    references_bibtex = info$references_bibtex %||% NA_character_,
-    code_url = info$code_url %||% NA_character_,
-    documentation_url = info$documentation_url %||% NA_character_,
-    image = info$image %||% NA_character_,
-    implementation_url = info$implementation_url %||% NA_character_,
-    code_version = info$code_version %||% NA_character_,
-    commit_sha = info$commit_sha
-  )
-
-  # show warning when certain data is missing and return null?
-  for (n in names(out)) {
-    if (is.null(out[[n]])) {
-      out_as_str <- jsonlite::toJSON(out, auto_unbox = TRUE, pretty = TRUE)
-      stop("missing value for value '", n, "' in ", out_as_str)
-    }
+cat(
+  "\n>>> Processing ",
+  length(method_configs),
+  " method configs...\n",
+  sep = ""
+)
+bibliography <- read_bibliography(
+  file.path(meta$resources_dir, "bibliography.bib")
+)
+method_info_json <- purrr::map(method_configs, function(.config) {
+  if ("functionality" %in% names(.config)) {
+    .config <- .config$functionality
   }
 
-  # return output
-  out
+  if (!is.null(.config$status) && .config$status == "disabled") {
+    cat("Skipping disabled method '", .config$name, "'\n", sep = "")
+    return(NULL)
+  } else {
+    cat("Processing method '", .config$name, "'\n", sep = "")
+  }
+
+  list(
+    name = jsonlite::unbox(.config$name),
+    label = jsonlite::unbox(.config$label %||% .config$info$label),
+    commit = jsonlite::unbox(.config$build_info$git_commit %||% "missing-sha"),
+    summary = .config$summary %||%
+      .config$info$summary |>
+      stringr::str_trim() |>
+      stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+      jsonlite::unbox(),
+    description = .config$description %||%
+      .config$info$description |>
+      stringr::str_trim() |>
+      stringr::str_remove_all('(^"|"$|^\'|\'$)') |>
+      jsonlite::unbox(),
+    type = jsonlite::unbox(.config$info$type),
+    link_code = jsonlite::unbox(.config$links$repository),
+    link_documentation = jsonlite::unbox(
+      .config$links$documentation %||% .config$info$documentation_url
+    ),
+    link_implementation = jsonlite::unbox(get_implementation_url(.config)),
+    link_container_image = jsonlite::unbox(get_container_image(.config)),
+    authors = get_authors_list(.config$authors),
+    references = get_references_list(.config$references, bibliography),
+    additional_info = get_additional_info(
+      .config$info,
+      exclude = c(
+        "type",
+        "type_info",
+        "label",
+        "summary",
+        "description",
+        "documentation_url",
+        "authors"
+      )
+    ),
+    version = jsonlite::unbox(.config$version)
+  )
 })
 
+cat("\n>>> Writing output files...\n")
+cat("Writing task info to '", par$output, "'...\n", sep = "")
 jsonlite::write_json(
-  outputs,
+  method_info_json,
   par$output,
-  auto_unbox = TRUE,
-  pretty = TRUE
+  pretty = TRUE,
+  null = "null"
 )
+
+cat("\n>>> Validating output against schema...\n")
+results_schemas <- file.path(meta$resources_dir, "schemas", "results_v4")
+ajv_args <- paste(
+  "validate",
+  "--spec draft2020",
+  "-s",
+  file.path(results_schemas, "method_info.json"),
+  "-r",
+  file.path(results_schemas, "core.json"),
+  "-d",
+  par$output
+)
+
+cat("Running validation command:", "ajv", ajv_args, "\n")
+cat("Output:\n")
+validation_result <- system2("ajv", ajv_args)
+
+if (validation_result == 0) {
+  cat("JSON validation passed successfully!\n")
+} else {
+  cat("JSON validation failed!\n")
+  stop("Output JSON does not conform to schema")
+}
+
+cat("\n>>> Done!\n")
