@@ -73,7 +73,7 @@ def apply_name_filter(
             )
 
         filtered_data = [item for item in data_list if item["name"] in items_to_include]
-        print(f">>> Included {len(filtered_data)} out of {original_count} {item_type}s")
+        print(f"Included {len(filtered_data)} out of {original_count} {item_type}s")
         return filtered_data
 
     elif exclude_list:
@@ -91,7 +91,7 @@ def apply_name_filter(
             item for item in data_list if item["name"] not in items_to_exclude
         ]
         print(
-            f">>> Excluded {len(items_to_exclude)} {item_type}s, keeping {len(filtered_data)} out of {original_count} {item_type}s"
+            f"Excluded {len(items_to_exclude)} {item_type}s, keeping {len(filtered_data)} out of {original_count} {item_type}s"
         )
         return filtered_data
 
@@ -151,7 +151,7 @@ def filter_results_data(
             filtered_results.append(filtered_result)
 
     print(
-        f">>> Filtered results: keeping {len(filtered_results)} out of {original_count} result entries"
+        f"Filtered results: keeping {len(filtered_results)} out of {original_count} result entries"
     )
     return filtered_results
 
@@ -295,7 +295,7 @@ for validation in validation_files:
     )
     if not is_valid:
         print(f'✗ {validation["name"]} validation failed')
-        print(f"Validation error: {error_msg}", file=sys.stderr)
+        print(f"Validation error: {error_msg}")
         all_valid = False
 
 if not all_valid:
