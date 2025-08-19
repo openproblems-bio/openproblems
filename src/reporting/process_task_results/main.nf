@@ -116,8 +116,14 @@ workflow run_wf {
     )
 
     | setState([
-      "output_data": "output_combined",
-      "output_report": "output_report"
+      "output_combined": "output_combined",
+      "output_report": "output_report",
+      "output_task_info": "output_task",
+      "output_dataset_info": "output_dataset",
+      "output_method_info": "output_method",
+      "output_metric_info": "output_metric",
+      "output_results": "output_results",
+      "output_quality_control": "output_qc"
     ])
 
   emit:
