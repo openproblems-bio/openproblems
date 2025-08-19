@@ -44,6 +44,63 @@ argument_groups:
         description: Nextflow execution trace file
         example: resources_test/openproblems/task_results_v4/raw/trace.txt
 
+  - name: Dataset filtering
+    description: |
+      Use these arguments to filter datasets by name. By default, all datasets are
+      run. If `--datasets_include` is defined, only those datasets are run. If
+      `--datasets_exclude` is defined, all datasets except those specified are run.
+      These arguments are mutually exclusive, so only `--datasets_include` OR
+      `--datasets_exclude` can set but not both.
+    arguments:
+      - name: "--datasets_include"
+        type: string
+        multiple: true
+        description: |
+          A list of dataset ids to include. If specified, only these datasets will be run.
+      - name: "--datasets_exclude"
+        type: string
+        multiple: true
+        description: |
+          A list of dataset ids to exclude. If specified, all datasets except the ones listed will be run.
+
+  - name: Method filtering
+    description: |
+      Use these arguments to filter methods by name. By default, all methods are
+      run. If `--methods_include` is defined, only those methods are run. If
+      `--methods_exclude` is defined, all methods except those specified are run.
+      These arguments are mutually exclusive, so only `--methods_include` OR
+      `--methods_exclude` can set but not both.
+    arguments:
+      - name: "--methods_include"
+        type: string
+        multiple: true
+        description: |
+          A list of method ids to include. If specified, only these methods will be run.
+      - name: "--methods_exclude"
+        type: string
+        multiple: true
+        description: |
+          A list of method ids to exclude. If specified, all methods except the ones listed will be run.
+
+  - name: Metric filtering
+    description: |
+      Use these arguments to filter metrics by name. By default, all metrics are
+      run. If `--metrics_include` is defined, only those metrics are run. If
+      `--metrics_exclude` is defined, all metrics except those specified are run.
+      These arguments are mutually exclusive, so only `--metrics_include` OR
+      `--metrics_exclude` can set but not both.
+    arguments:
+      - name: "--metrics_include"
+        type: string
+        multiple: true
+        description: |
+          A list of metric ids to include. If specified, only these metrics will be run.
+      - name: "--metrics_exclude"
+        type: string
+        multiple: true
+        description: |
+          A list of metric ids to exclude. If specified, all metrics except the ones listed will be run.
+
   - name: Outputs
     arguments:
       - name: "--output_combined"
@@ -137,6 +194,7 @@ dependencies:
   - name: reporting/get_metric_info
   - name: reporting/get_dataset_info
   - name: reporting/get_task_info
+  - name: reporting/filter_results
   - name: reporting/generate_qc
   - name: reporting/combine_output
   - name: reporting/render_report
