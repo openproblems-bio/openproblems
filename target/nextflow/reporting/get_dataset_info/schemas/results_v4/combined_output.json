@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openproblems.bio/schemas/results_v4/task_results.json",
+  "title": "Combined task results",
+  "description": "Combined results for a task, including task info, dataset info, method info, metric info, results and quality control",
+  "type": "object",
+  "properties": {
+    "task_info": {
+      "$ref": "https://openproblems.bio/schemas/results_v4/task_info.json"
+    },
+    "dataset_info": {
+      "$ref": "https://openproblems.bio/schemas/results_v4/dataset_info.json"
+    },
+    "method_info": {
+      "$ref": "https://openproblems.bio/schemas/results_v4/method_info.json"
+    },
+    "metric_info": {
+      "$ref": "https://openproblems.bio/schemas/results_v4/metric_info.json"
+    },
+    "results": {
+      "$ref": "https://openproblems.bio/schemas/results_v4/results.json"
+    },
+    "quality_control": {
+      "$ref": "https://openproblems.bio/schemas/results_v4/quality_control.json"
+    }
+  },
+  "required": [
+    "task_info",
+    "dataset_info",
+    "method_info",
+    "results",
+    "quality_control"
+  ],
+  "additionalProperties": false
+}

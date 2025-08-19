@@ -1,0 +1,94 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+name: "Task configuration"
+description: "A Viash package configuration file. It's name should be `_viash.yaml`."
+type: "object"
+properties:
+  organization:
+    description: "The organization of the package."
+    type: "string"
+  name:
+    description: "The name of the package."
+    type: "string"
+  source:
+    description: "Which source directory to use for the `viash ns` commands."
+    type: "string"
+  description:
+    description: "A description of the package. This is only used for documentation.\
+      \ Multiline descriptions are supported."
+    type: "string"
+  config_mods:
+    oneOf:
+    - description: "Which config mods to apply."
+      type: "string"
+    - type: "array"
+      items:
+        description: "Which config mods to apply."
+        type: "string"
+  info:
+    description: "Structured information. Can be any shape: a string, vector,\
+      \ map or even nested map."
+    type: "object"
+    required: ["image"]
+    properties:
+      image:
+        description: "Path to a thumbnail for this OpenProblems task. Should be an *.svg file renderable to a 450x150 px image."
+        type: "string"
+      test_resources:
+        description: "A list of test resources that are required to run the tests."
+        type: "array"
+        items:
+          type: "object"
+          required: ["type", "path", "dest"]
+          additionalProperties: false
+          properties:
+            type:
+              description: "The type of the test resource."
+              const: "s3"
+            path: 
+              description: "The path to the test resource."
+              type: "string"
+            dest:
+              description: "The destination path of the test resource."
+              type: "string"
+  license:
+    description: "The license of the package."
+    type: "string"
+  references:
+    description: "References to external resources related to the package."
+    $ref: "schema_viash.yaml#/definitions/References"
+  authors:
+    description: "The authors of the package."
+    type: "array"
+    items:
+      $ref: "schema_viash.yaml#/definitions/Author"
+  repositories:
+    description: "Common repository definitions for component dependencies."
+    type: "array"
+    items:
+      $ref: "schema_viash.yaml#/definitions/RepositoryWithName"
+  keywords:
+    description: "The keywords of the package."
+    type: "array"
+    items:
+      type: "string"
+  target:
+    description: "Which target directory to use for `viash ns build`."
+    type: "string"
+  summary:
+    description: "A one-sentence summary of the package. This is only used for\
+      \ documentation."
+    type: "string"
+  viash_version:
+    description: "Which version of Viash to use."
+    type: "string"
+  label:
+    description: "A clean version of the package name. This is only used for documentation."
+    type: "string"
+  version:
+    description: "The version of the package."
+    type: "string"
+  links:
+    description: "External links of the package."
+    $ref: "schema_viash.yaml#/definitions/Links"
+required: [viash_version, name, organization, license, label, keywords, summary, description, authors, links, info]
+additionalProperties: false

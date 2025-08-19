@@ -3039,36 +3039,10 @@ meta = [
       "arguments" : [
         {
           "type" : "file",
-          "name" : "--input_scores",
-          "description" : "A yaml file containing the scores of each of the methods",
+          "name" : "--input_task_info",
+          "description" : "A YAML file containing task information",
           "example" : [
-            "score_uns.yaml"
-          ],
-          "must_exist" : true,
-          "create_parent" : true,
-          "required" : true,
-          "direction" : "input",
-          "multiple" : false,
-          "multiple_sep" : ";"
-        },
-        {
-          "type" : "file",
-          "name" : "--input_method_configs",
-          "example" : [
-            "method_configs.yaml"
-          ],
-          "must_exist" : true,
-          "create_parent" : true,
-          "required" : true,
-          "direction" : "input",
-          "multiple" : false,
-          "multiple_sep" : ";"
-        },
-        {
-          "type" : "file",
-          "name" : "--input_metric_configs",
-          "example" : [
-            "metric_configs.yaml"
+            "resources_test/openproblems/task_results_v4/raw/task_info.yaml"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -3080,8 +3054,9 @@ meta = [
         {
           "type" : "file",
           "name" : "--input_dataset_info",
+          "description" : "A YAML file containing dataset information",
           "example" : [
-            "dataset_info.yaml"
+            "resources_test/openproblems/task_results_v4/raw/dataset_info.yaml"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -3092,9 +3067,10 @@ meta = [
         },
         {
           "type" : "file",
-          "name" : "--input_execution",
+          "name" : "--input_method_configs",
+          "description" : "A YAML file containing method configurations",
           "example" : [
-            "trace.txt"
+            "resources_test/openproblems/task_results_v4/raw/method_configs.yaml"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -3105,9 +3081,38 @@ meta = [
         },
         {
           "type" : "file",
-          "name" : "--input_task_info",
+          "name" : "--input_metric_configs",
+          "description" : "A YAML file containing metric configurations",
           "example" : [
-            "task_info.yaml"
+            "resources_test/openproblems/task_results_v4/raw/metric_configs.yaml"
+          ],
+          "must_exist" : true,
+          "create_parent" : true,
+          "required" : true,
+          "direction" : "input",
+          "multiple" : false,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "file",
+          "name" : "--input_scores",
+          "description" : "A YAML file containing the scores of each of the methods",
+          "example" : [
+            "resources_test/openproblems/task_results_v4/raw/score_uns.yaml"
+          ],
+          "must_exist" : true,
+          "create_parent" : true,
+          "required" : true,
+          "direction" : "input",
+          "multiple" : false,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "file",
+          "name" : "--input_trace",
+          "description" : "Nextflow execution trace file",
+          "example" : [
+            "resources_test/openproblems/task_results_v4/raw/trace.txt"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -3119,14 +3124,151 @@ meta = [
       ]
     },
     {
+      "name" : "Dataset filtering",
+      "description" : "Use these arguments to filter datasets by name. By default, all datasets are\nrun. If `--datasets_include` is defined, only those datasets are run. If\n`--datasets_exclude` is defined, all datasets except those specified are run.\nThese arguments are mutually exclusive, so only `--datasets_include` OR\n`--datasets_exclude` can set but not both.\n",
+      "arguments" : [
+        {
+          "type" : "string",
+          "name" : "--datasets_include",
+          "description" : "A list of dataset ids to include. If specified, only these datasets will be run.\n",
+          "required" : false,
+          "direction" : "input",
+          "multiple" : true,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "string",
+          "name" : "--datasets_exclude",
+          "description" : "A list of dataset ids to exclude. If specified, all datasets except the ones listed will be run.\n",
+          "required" : false,
+          "direction" : "input",
+          "multiple" : true,
+          "multiple_sep" : ";"
+        }
+      ]
+    },
+    {
+      "name" : "Method filtering",
+      "description" : "Use these arguments to filter methods by name. By default, all methods are\nrun. If `--methods_include` is defined, only those methods are run. If\n`--methods_exclude` is defined, all methods except those specified are run.\nThese arguments are mutually exclusive, so only `--methods_include` OR\n`--methods_exclude` can set but not both.\n",
+      "arguments" : [
+        {
+          "type" : "string",
+          "name" : "--methods_include",
+          "description" : "A list of method ids to include. If specified, only these methods will be run.\n",
+          "required" : false,
+          "direction" : "input",
+          "multiple" : true,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "string",
+          "name" : "--methods_exclude",
+          "description" : "A list of method ids to exclude. If specified, all methods except the ones listed will be run.\n",
+          "required" : false,
+          "direction" : "input",
+          "multiple" : true,
+          "multiple_sep" : ";"
+        }
+      ]
+    },
+    {
+      "name" : "Metric filtering",
+      "description" : "Use these arguments to filter metrics by name. By default, all metrics are\nrun. If `--metrics_include` is defined, only those metrics are run. If\n`--metrics_exclude` is defined, all metrics except those specified are run.\nThese arguments are mutually exclusive, so only `--metrics_include` OR\n`--metrics_exclude` can set but not both.\n",
+      "arguments" : [
+        {
+          "type" : "string",
+          "name" : "--metrics_include",
+          "description" : "A list of metric ids to include. If specified, only these metrics will be run.\n",
+          "required" : false,
+          "direction" : "input",
+          "multiple" : true,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "string",
+          "name" : "--metrics_exclude",
+          "description" : "A list of metric ids to exclude. If specified, all metrics except the ones listed will be run.\n",
+          "required" : false,
+          "direction" : "input",
+          "multiple" : true,
+          "multiple_sep" : ";"
+        }
+      ]
+    },
+    {
       "name" : "Outputs",
       "arguments" : [
         {
           "type" : "file",
-          "name" : "--output_scores",
-          "description" : "A yaml file containing the scores of each of the methods",
+          "name" : "--output_combined",
+          "description" : "Combined task results JSON file",
+          "info" : {
+            "format" : {
+              "type" : "json",
+              "schema" : "/common/schemas/results_v4/task_results.json"
+            }
+          },
           "default" : [
-            "results.json"
+            "combined_output.json"
+          ],
+          "must_exist" : true,
+          "create_parent" : true,
+          "required" : true,
+          "direction" : "output",
+          "multiple" : false,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "file",
+          "name" : "--output_report",
+          "description" : "HTML run report",
+          "info" : {
+            "format" : {
+              "type" : "html"
+            }
+          },
+          "default" : [
+            "report.html"
+          ],
+          "must_exist" : true,
+          "create_parent" : true,
+          "required" : true,
+          "direction" : "output",
+          "multiple" : false,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "file",
+          "name" : "--output_task_info",
+          "description" : "Task info JSON file",
+          "info" : {
+            "format" : {
+              "type" : "json",
+              "schema" : "/common/schemas/results_v4/task_info.json"
+            }
+          },
+          "default" : [
+            "task_info.json"
+          ],
+          "must_exist" : true,
+          "create_parent" : true,
+          "required" : true,
+          "direction" : "output",
+          "multiple" : false,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "file",
+          "name" : "--output_dataset_info",
+          "description" : "Dataset info JSON file",
+          "info" : {
+            "format" : {
+              "type" : "json",
+              "schema" : "/common/schemas/results_v4/dataset_info.json"
+            }
+          },
+          "default" : [
+            "dataset_info.json"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -3138,6 +3280,13 @@ meta = [
         {
           "type" : "file",
           "name" : "--output_method_info",
+          "description" : "Method info JSON file",
+          "info" : {
+            "format" : {
+              "type" : "json",
+              "schema" : "/common/schemas/results_v4/method_info.json"
+            }
+          },
           "default" : [
             "method_info.json"
           ],
@@ -3151,6 +3300,13 @@ meta = [
         {
           "type" : "file",
           "name" : "--output_metric_info",
+          "description" : "Metric info JSON file",
+          "info" : {
+            "format" : {
+              "type" : "json",
+              "schema" : "/common/schemas/results_v4/metric_info.json"
+            }
+          },
           "default" : [
             "metric_info.json"
           ],
@@ -3163,9 +3319,16 @@ meta = [
         },
         {
           "type" : "file",
-          "name" : "--output_dataset_info",
+          "name" : "--output_results",
+          "description" : "Results JSON file",
+          "info" : {
+            "format" : {
+              "type" : "json",
+              "schema" : "/common/schemas/results_v4/results.json"
+            }
+          },
           "default" : [
-            "dataset_info.json"
+            "results.json"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -3176,35 +3339,16 @@ meta = [
         },
         {
           "type" : "file",
-          "name" : "--output_task_info",
-          "default" : [
-            "task_info.json"
-          ],
-          "must_exist" : true,
-          "create_parent" : true,
-          "required" : true,
-          "direction" : "output",
-          "multiple" : false,
-          "multiple_sep" : ";"
-        },
-        {
-          "type" : "file",
-          "name" : "--output_qc",
+          "name" : "--output_quality_control",
+          "description" : "Quality control JSON file",
+          "info" : {
+            "format" : {
+              "type" : "json",
+              "schema" : "/common/schemas/results_v4/quality_control.json"
+            }
+          },
           "default" : [
             "quality_control.json"
-          ],
-          "must_exist" : true,
-          "create_parent" : true,
-          "required" : true,
-          "direction" : "output",
-          "multiple" : false,
-          "multiple_sep" : ";"
-        },
-        {
-          "type" : "file",
-          "name" : "--output_metric_execution_info",
-          "default" : [
-            "metric_execution_info.json"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -3224,7 +3368,7 @@ meta = [
       "entrypoint" : "run_wf"
     }
   ],
-  "description" : "This workflow transforms the meta information of the results into a format that can be used by the website.",
+  "description" : "This workflow summarises and collects the output from a task run in a format\nthat can be used by the website.\n",
   "status" : "enabled",
   "scope" : {
     "image" : "public",
@@ -3262,7 +3406,25 @@ meta = [
       }
     },
     {
+      "name" : "reporting/filter_results",
+      "repository" : {
+        "type" : "local"
+      }
+    },
+    {
       "name" : "reporting/generate_qc",
+      "repository" : {
+        "type" : "local"
+      }
+    },
+    {
+      "name" : "reporting/combine_output",
+      "repository" : {
+        "type" : "local"
+      }
+    },
+    {
+      "name" : "reporting/render_report",
       "repository" : {
         "type" : "local"
       }
@@ -3319,9 +3481,9 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/reporting/process_task_results",
     "viash_version" : "0.9.4",
-    "git_commit" : "7687b7b5b5fe61b1f90515dbef1556a942124a07",
+    "git_commit" : "6729bf63b7e2b3aec7be2de6fdaf7ef1812a0bb9",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1430-g7687b7b5"
+    "git_tag" : "v1.0.0-1431-g6729bf63"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3356,7 +3518,7 @@ meta = [
     "organization" : "openproblems-bio",
     "references" : {
       "doi" : [
-        "10.21203/rs.3.rs-4181617/v1"
+        "10.1038/s41587-025-02694-w"
       ]
     },
     "links" : {
@@ -3375,10 +3537,20 @@ include { get_method_info } from "${meta.resources_dir}/../../../nextflow/report
 include { get_metric_info } from "${meta.resources_dir}/../../../nextflow/reporting/get_metric_info/main.nf"
 include { get_dataset_info } from "${meta.resources_dir}/../../../nextflow/reporting/get_dataset_info/main.nf"
 include { get_task_info } from "${meta.resources_dir}/../../../nextflow/reporting/get_task_info/main.nf"
+include { filter_results } from "${meta.resources_dir}/../../../nextflow/reporting/filter_results/main.nf"
 include { generate_qc } from "${meta.resources_dir}/../../../nextflow/reporting/generate_qc/main.nf"
+include { combine_output } from "${meta.resources_dir}/../../../nextflow/reporting/combine_output/main.nf"
+include { render_report } from "${meta.resources_dir}/../../../nextflow/reporting/render_report/main.nf"
 
 // inner workflow
 // user-provided Nextflow code
+workflow auto {
+  findStates(params, meta.config)
+    | meta.workflow.run(
+      auto: [publish: "state"]
+    )
+}
+
 workflow run_wf {
   take:
   input_ch
@@ -3399,20 +3571,6 @@ workflow run_wf {
       [id, state + ["task_id": task_id]]
     }
 
-    | get_method_info.run(
-      fromState: [ 
-        "input": "input_method_configs",
-      ],
-      toState: ["output_method": "output"]
-    )
-
-    | get_metric_info.run(
-      fromState: [ 
-        "input": "input_metric_configs",
-      ],
-      toState: ["output_metric": "output"]
-    )
-
     | get_dataset_info.run(
       fromState: [
         "input": "input_dataset_info",
@@ -3420,39 +3578,98 @@ workflow run_wf {
       toState: ["output_dataset": "output"]
     )
 
+    | get_method_info.run(
+      fromState: [
+        "input": "input_method_configs",
+      ],
+      toState: ["output_method": "output"]
+    )
+
+    | get_metric_info.run(
+      fromState: [
+        "input": "input_metric_configs",
+      ],
+      toState: ["output_metric": "output"]
+    )
+
     | get_results.run(
-      fromState: [ 
+      fromState: [
         "input_scores": "input_scores",
-        "input_execution": "input_execution",
+        "input_trace": "input_trace",
         "input_dataset_info": "output_dataset",
         "input_method_info": "output_method",
         "input_metric_info": "output_metric"
       ],
       toState: [
-        "output_results": "output_results",
-        "output_metric_execution_info": "output_metric_execution_info"
+        "output_results": "output"
+      ]
+    )
+
+    | filter_results.run(
+      runIf: { id, state ->
+        // Only run filtering if there are include/exclude lists defined
+        return state.datasets_exclude || state.methods_exclude || state.metrics_exclude ||
+          state.datasets_include || state.methods_include || state.metrics_include
+      },
+      fromState: [
+        "input_dataset_info": "output_dataset",
+        "input_method_info": "output_method",
+        "input_metric_info": "output_metric",
+        "input_results": "output_results",
+        "datasets_include": "datasets_include",
+        "datasets_exclude": "datasets_exclude",
+        "methods_include": "methods_include",
+        "methods_exclude": "methods_exclude",
+        "metrics_include": "metrics_include",
+        "metrics_exclude": "metrics_exclude"
+      ],
+      toState: [
+        "output_dataset": "output_dataset_info",
+        "output_method": "output_method_info",
+        "output_metric": "output_metric_info",
+        "output_results": "output_results"
       ]
     )
 
     | generate_qc.run(
       fromState: [
-        "task_info": "output_task",
-        "method_info": "output_method",
-        "metric_info": "output_metric",
-        "dataset_info": "output_dataset",
-        "results": "output_results"
+        "input_task_info": "output_task",
+        "input_dataset_info": "output_dataset",
+        "input_method_info": "output_method",
+        "input_metric_info": "output_metric",
+        "input_results": "output_results"
       ],
       toState: ["output_qc": "output"]
     )
 
+    | combine_output.run(
+      fromState: [
+        "input_task_info": "output_task",
+        "input_quality_control": "output_qc",
+        "input_metric_info": "output_metric",
+        "input_method_info": "output_method",
+        "input_dataset_info": "output_dataset",
+        "input_results": "output_results"
+      ],
+      toState: ["output_combined": "output"]
+    )
+
+    | render_report.run(
+      fromState: [
+        "input_task_results": "output_combined"
+      ],
+      toState: ["output_report": "output"]
+    )
+
     | setState([
-      "output_scores": "output_results",
+      "output_combined": "output_combined",
+      "output_report": "output_report",
+      "output_task_info": "output_task",
+      "output_dataset_info": "output_dataset",
       "output_method_info": "output_method",
       "output_metric_info": "output_metric",
-      "output_dataset_info": "output_dataset",
-      "output_task_info": "output_task",
-      "output_qc": "output_qc",
-      "output_metric_execution_info": "output_metric_execution_info"
+      "output_results": "output_results",
+      "output_quality_control": "output_qc"
     ])
 
   emit:

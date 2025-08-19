@@ -443,12 +443,20 @@ function ViashDockerfile {
 
   if [[ "$engine_id" == "docker" ]]; then
     cat << 'VIASHDOCKER'
-FROM openproblems/base_python:1
+FROM openproblems/base_r:1
 ENTRYPOINT []
+RUN apt-get update && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs npm && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g ajv-cli
+RUN Rscript -e 'options(warn = 2); if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")' && \
+  Rscript -e 'options(warn = 2); remotes::install_cran(c("dplyr", "purrr", "readr", "stringr", "tidyr"), repos = "https://cran.rstudio.com")'
+
 LABEL org.opencontainers.image.description="Companion container for running component reporting generate_qc"
-LABEL org.opencontainers.image.created="2025-07-30T06:34:48Z"
+LABEL org.opencontainers.image.created="2025-08-19T15:57:15Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="7687b7b5b5fe61b1f90515dbef1556a942124a07"
+LABEL org.opencontainers.image.revision="6729bf63b7e2b3aec7be2de6fdaf7ef1812a0bb9"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -570,41 +578,42 @@ function ViashHelp {
   echo ""
   echo "Generate task QC metrics"
   echo ""
-  echo "Arguments:"
-  echo "    --task_info"
-  echo "        type: file, file must exist"
+  echo "Inputs:"
+  echo "    --input_task_info"
+  echo "        type: file, required parameter, file must exist"
   echo "        example:"
-  echo "resources_test/openproblems/task_results_v3/processed/task_info.json"
+  echo "resources_test/openproblems/task_results_v4/processed/task_info.json"
   echo "        Task info file"
   echo ""
-  echo "    --method_info"
-  echo "        type: file, file must exist"
+  echo "    --input_dataset_info"
+  echo "        type: file, required parameter, file must exist"
   echo "        example:"
-  echo "resources_test/openproblems/task_results_v3/processed/method_info.json"
-  echo "        Method info file"
-  echo ""
-  echo "    --metric_info"
-  echo "        type: file, file must exist"
-  echo "        example:"
-  echo "resources_test/openproblems/task_results_v3/processed/metric_info.json"
-  echo "        Metric info file"
-  echo ""
-  echo "    --dataset_info"
-  echo "        type: file, file must exist"
-  echo "        example:"
-  echo "resources_test/openproblems/task_results_v3/processed/dataset_info.json"
+  echo "resources_test/openproblems/task_results_v4/processed/dataset_info.json"
   echo "        Dataset info file"
   echo ""
-  echo "    --results"
-  echo "        type: file, file must exist"
+  echo "    --input_method_info"
+  echo "        type: file, required parameter, file must exist"
   echo "        example:"
-  echo "resources_test/openproblems/task_results_v3/processed/results.json"
-  echo "        Results file"
+  echo "resources_test/openproblems/task_results_v4/processed/method_info.json"
+  echo "        Method info file"
   echo ""
+  echo "    --input_metric_info"
+  echo "        type: file, required parameter, file must exist"
+  echo "        example:"
+  echo "resources_test/openproblems/task_results_v4/processed/metric_info.json"
+  echo "        Metric info file"
+  echo ""
+  echo "    --input_results"
+  echo "        type: file, required parameter, file must exist"
+  echo "        example:"
+  echo "resources_test/openproblems/task_results_v4/processed/results.json"
+  echo "        Results JSON file"
+  echo ""
+  echo "Outputs:"
   echo "    --output"
   echo "        type: file, output, file must exist"
-  echo "        default: output.json"
-  echo "        Output json"
+  echo "        default: quality_control.json"
+  echo "        Output quality control JSON file"
   echo ""
   echo "Viash built in Computational Requirements:"
   echo "    ---cpus=INT"
@@ -656,59 +665,59 @@ while [[ $# -gt 0 ]]; do
             echo "generate_qc build_main"
             exit
             ;;
-        --task_info)
-            [ -n "$VIASH_PAR_TASK_INFO" ] && ViashError Bad arguments for option \'--task_info\': \'$VIASH_PAR_TASK_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_TASK_INFO="$2"
-            [ $# -lt 2 ] && ViashError Not enough arguments passed to --task_info. Use "--help" to get more information on the parameters. && exit 1
+        --input_task_info)
+            [ -n "$VIASH_PAR_INPUT_TASK_INFO" ] && ViashError Bad arguments for option \'--input_task_info\': \'$VIASH_PAR_INPUT_TASK_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INPUT_TASK_INFO="$2"
+            [ $# -lt 2 ] && ViashError Not enough arguments passed to --input_task_info. Use "--help" to get more information on the parameters. && exit 1
             shift 2
             ;;
-        --task_info=*)
-            [ -n "$VIASH_PAR_TASK_INFO" ] && ViashError Bad arguments for option \'--task_info=*\': \'$VIASH_PAR_TASK_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_TASK_INFO=$(ViashRemoveFlags "$1")
+        --input_task_info=*)
+            [ -n "$VIASH_PAR_INPUT_TASK_INFO" ] && ViashError Bad arguments for option \'--input_task_info=*\': \'$VIASH_PAR_INPUT_TASK_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INPUT_TASK_INFO=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        --method_info)
-            [ -n "$VIASH_PAR_METHOD_INFO" ] && ViashError Bad arguments for option \'--method_info\': \'$VIASH_PAR_METHOD_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_METHOD_INFO="$2"
-            [ $# -lt 2 ] && ViashError Not enough arguments passed to --method_info. Use "--help" to get more information on the parameters. && exit 1
+        --input_dataset_info)
+            [ -n "$VIASH_PAR_INPUT_DATASET_INFO" ] && ViashError Bad arguments for option \'--input_dataset_info\': \'$VIASH_PAR_INPUT_DATASET_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INPUT_DATASET_INFO="$2"
+            [ $# -lt 2 ] && ViashError Not enough arguments passed to --input_dataset_info. Use "--help" to get more information on the parameters. && exit 1
             shift 2
             ;;
-        --method_info=*)
-            [ -n "$VIASH_PAR_METHOD_INFO" ] && ViashError Bad arguments for option \'--method_info=*\': \'$VIASH_PAR_METHOD_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_METHOD_INFO=$(ViashRemoveFlags "$1")
+        --input_dataset_info=*)
+            [ -n "$VIASH_PAR_INPUT_DATASET_INFO" ] && ViashError Bad arguments for option \'--input_dataset_info=*\': \'$VIASH_PAR_INPUT_DATASET_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INPUT_DATASET_INFO=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        --metric_info)
-            [ -n "$VIASH_PAR_METRIC_INFO" ] && ViashError Bad arguments for option \'--metric_info\': \'$VIASH_PAR_METRIC_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_METRIC_INFO="$2"
-            [ $# -lt 2 ] && ViashError Not enough arguments passed to --metric_info. Use "--help" to get more information on the parameters. && exit 1
+        --input_method_info)
+            [ -n "$VIASH_PAR_INPUT_METHOD_INFO" ] && ViashError Bad arguments for option \'--input_method_info\': \'$VIASH_PAR_INPUT_METHOD_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INPUT_METHOD_INFO="$2"
+            [ $# -lt 2 ] && ViashError Not enough arguments passed to --input_method_info. Use "--help" to get more information on the parameters. && exit 1
             shift 2
             ;;
-        --metric_info=*)
-            [ -n "$VIASH_PAR_METRIC_INFO" ] && ViashError Bad arguments for option \'--metric_info=*\': \'$VIASH_PAR_METRIC_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_METRIC_INFO=$(ViashRemoveFlags "$1")
+        --input_method_info=*)
+            [ -n "$VIASH_PAR_INPUT_METHOD_INFO" ] && ViashError Bad arguments for option \'--input_method_info=*\': \'$VIASH_PAR_INPUT_METHOD_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INPUT_METHOD_INFO=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        --dataset_info)
-            [ -n "$VIASH_PAR_DATASET_INFO" ] && ViashError Bad arguments for option \'--dataset_info\': \'$VIASH_PAR_DATASET_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_DATASET_INFO="$2"
-            [ $# -lt 2 ] && ViashError Not enough arguments passed to --dataset_info. Use "--help" to get more information on the parameters. && exit 1
+        --input_metric_info)
+            [ -n "$VIASH_PAR_INPUT_METRIC_INFO" ] && ViashError Bad arguments for option \'--input_metric_info\': \'$VIASH_PAR_INPUT_METRIC_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INPUT_METRIC_INFO="$2"
+            [ $# -lt 2 ] && ViashError Not enough arguments passed to --input_metric_info. Use "--help" to get more information on the parameters. && exit 1
             shift 2
             ;;
-        --dataset_info=*)
-            [ -n "$VIASH_PAR_DATASET_INFO" ] && ViashError Bad arguments for option \'--dataset_info=*\': \'$VIASH_PAR_DATASET_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_DATASET_INFO=$(ViashRemoveFlags "$1")
+        --input_metric_info=*)
+            [ -n "$VIASH_PAR_INPUT_METRIC_INFO" ] && ViashError Bad arguments for option \'--input_metric_info=*\': \'$VIASH_PAR_INPUT_METRIC_INFO\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INPUT_METRIC_INFO=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        --results)
-            [ -n "$VIASH_PAR_RESULTS" ] && ViashError Bad arguments for option \'--results\': \'$VIASH_PAR_RESULTS\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_RESULTS="$2"
-            [ $# -lt 2 ] && ViashError Not enough arguments passed to --results. Use "--help" to get more information on the parameters. && exit 1
+        --input_results)
+            [ -n "$VIASH_PAR_INPUT_RESULTS" ] && ViashError Bad arguments for option \'--input_results\': \'$VIASH_PAR_INPUT_RESULTS\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INPUT_RESULTS="$2"
+            [ $# -lt 2 ] && ViashError Not enough arguments passed to --input_results. Use "--help" to get more information on the parameters. && exit 1
             shift 2
             ;;
-        --results=*)
-            [ -n "$VIASH_PAR_RESULTS" ] && ViashError Bad arguments for option \'--results=*\': \'$VIASH_PAR_RESULTS\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_RESULTS=$(ViashRemoveFlags "$1")
+        --input_results=*)
+            [ -n "$VIASH_PAR_INPUT_RESULTS" ] && ViashError Bad arguments for option \'--input_results=*\': \'$VIASH_PAR_INPUT_RESULTS\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INPUT_RESULTS=$(ViashRemoveFlags "$1")
             shift 1
             ;;
         --output)
@@ -892,6 +901,26 @@ fi
 
 
 # check whether required parameters exist
+if [ -z ${VIASH_PAR_INPUT_TASK_INFO+x} ]; then
+  ViashError '--input_task_info' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z ${VIASH_PAR_INPUT_DATASET_INFO+x} ]; then
+  ViashError '--input_dataset_info' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z ${VIASH_PAR_INPUT_METHOD_INFO+x} ]; then
+  ViashError '--input_method_info' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z ${VIASH_PAR_INPUT_METRIC_INFO+x} ]; then
+  ViashError '--input_metric_info' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z ${VIASH_PAR_INPUT_RESULTS+x} ]; then
+  ViashError '--input_results' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
 if [ -z ${VIASH_META_NAME+x} ]; then
   ViashError 'name' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
@@ -919,28 +948,28 @@ fi
 
 # filling in defaults
 if [ -z ${VIASH_PAR_OUTPUT+x} ]; then
-  VIASH_PAR_OUTPUT="output.json"
+  VIASH_PAR_OUTPUT="quality_control.json"
 fi
 
 # check whether required files exist
-if [ ! -z "$VIASH_PAR_TASK_INFO" ] && [ ! -e "$VIASH_PAR_TASK_INFO" ]; then
-  ViashError "Input file '$VIASH_PAR_TASK_INFO' does not exist."
+if [ ! -z "$VIASH_PAR_INPUT_TASK_INFO" ] && [ ! -e "$VIASH_PAR_INPUT_TASK_INFO" ]; then
+  ViashError "Input file '$VIASH_PAR_INPUT_TASK_INFO' does not exist."
   exit 1
 fi
-if [ ! -z "$VIASH_PAR_METHOD_INFO" ] && [ ! -e "$VIASH_PAR_METHOD_INFO" ]; then
-  ViashError "Input file '$VIASH_PAR_METHOD_INFO' does not exist."
+if [ ! -z "$VIASH_PAR_INPUT_DATASET_INFO" ] && [ ! -e "$VIASH_PAR_INPUT_DATASET_INFO" ]; then
+  ViashError "Input file '$VIASH_PAR_INPUT_DATASET_INFO' does not exist."
   exit 1
 fi
-if [ ! -z "$VIASH_PAR_METRIC_INFO" ] && [ ! -e "$VIASH_PAR_METRIC_INFO" ]; then
-  ViashError "Input file '$VIASH_PAR_METRIC_INFO' does not exist."
+if [ ! -z "$VIASH_PAR_INPUT_METHOD_INFO" ] && [ ! -e "$VIASH_PAR_INPUT_METHOD_INFO" ]; then
+  ViashError "Input file '$VIASH_PAR_INPUT_METHOD_INFO' does not exist."
   exit 1
 fi
-if [ ! -z "$VIASH_PAR_DATASET_INFO" ] && [ ! -e "$VIASH_PAR_DATASET_INFO" ]; then
-  ViashError "Input file '$VIASH_PAR_DATASET_INFO' does not exist."
+if [ ! -z "$VIASH_PAR_INPUT_METRIC_INFO" ] && [ ! -e "$VIASH_PAR_INPUT_METRIC_INFO" ]; then
+  ViashError "Input file '$VIASH_PAR_INPUT_METRIC_INFO' does not exist."
   exit 1
 fi
-if [ ! -z "$VIASH_PAR_RESULTS" ] && [ ! -e "$VIASH_PAR_RESULTS" ]; then
-  ViashError "Input file '$VIASH_PAR_RESULTS' does not exist."
+if [ ! -z "$VIASH_PAR_INPUT_RESULTS" ] && [ ! -e "$VIASH_PAR_INPUT_RESULTS" ]; then
+  ViashError "Input file '$VIASH_PAR_INPUT_RESULTS' does not exist."
   exit 1
 fi
 
@@ -1026,25 +1055,25 @@ fi
 if [[ "$VIASH_ENGINE_TYPE" == "docker" ]]; then
   # detect volumes from file arguments
   VIASH_CHOWN_VARS=()
-if [ ! -z "$VIASH_PAR_TASK_INFO" ]; then
-  VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_TASK_INFO")" )
-  VIASH_PAR_TASK_INFO=$(ViashDockerAutodetectMount "$VIASH_PAR_TASK_INFO")
+if [ ! -z "$VIASH_PAR_INPUT_TASK_INFO" ]; then
+  VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_INPUT_TASK_INFO")" )
+  VIASH_PAR_INPUT_TASK_INFO=$(ViashDockerAutodetectMount "$VIASH_PAR_INPUT_TASK_INFO")
 fi
-if [ ! -z "$VIASH_PAR_METHOD_INFO" ]; then
-  VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_METHOD_INFO")" )
-  VIASH_PAR_METHOD_INFO=$(ViashDockerAutodetectMount "$VIASH_PAR_METHOD_INFO")
+if [ ! -z "$VIASH_PAR_INPUT_DATASET_INFO" ]; then
+  VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_INPUT_DATASET_INFO")" )
+  VIASH_PAR_INPUT_DATASET_INFO=$(ViashDockerAutodetectMount "$VIASH_PAR_INPUT_DATASET_INFO")
 fi
-if [ ! -z "$VIASH_PAR_METRIC_INFO" ]; then
-  VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_METRIC_INFO")" )
-  VIASH_PAR_METRIC_INFO=$(ViashDockerAutodetectMount "$VIASH_PAR_METRIC_INFO")
+if [ ! -z "$VIASH_PAR_INPUT_METHOD_INFO" ]; then
+  VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_INPUT_METHOD_INFO")" )
+  VIASH_PAR_INPUT_METHOD_INFO=$(ViashDockerAutodetectMount "$VIASH_PAR_INPUT_METHOD_INFO")
 fi
-if [ ! -z "$VIASH_PAR_DATASET_INFO" ]; then
-  VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_DATASET_INFO")" )
-  VIASH_PAR_DATASET_INFO=$(ViashDockerAutodetectMount "$VIASH_PAR_DATASET_INFO")
+if [ ! -z "$VIASH_PAR_INPUT_METRIC_INFO" ]; then
+  VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_INPUT_METRIC_INFO")" )
+  VIASH_PAR_INPUT_METRIC_INFO=$(ViashDockerAutodetectMount "$VIASH_PAR_INPUT_METRIC_INFO")
 fi
-if [ ! -z "$VIASH_PAR_RESULTS" ]; then
-  VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_RESULTS")" )
-  VIASH_PAR_RESULTS=$(ViashDockerAutodetectMount "$VIASH_PAR_RESULTS")
+if [ ! -z "$VIASH_PAR_INPUT_RESULTS" ]; then
+  VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_INPUT_RESULTS")" )
+  VIASH_PAR_INPUT_RESULTS=$(ViashDockerAutodetectMount "$VIASH_PAR_INPUT_RESULTS")
 fi
 if [ ! -z "$VIASH_PAR_OUTPUT" ]; then
   VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_OUTPUT")" )
@@ -1107,7 +1136,7 @@ fi
 ViashDebug "Running command: $(echo $VIASH_CMD)"
 cat << VIASHEOF | eval $VIASH_CMD
 set -e
-tempscript=\$(mktemp "$VIASH_META_TEMP_DIR/viash-run-generate_qc-XXXXXX").py
+tempscript=\$(mktemp "$VIASH_META_TEMP_DIR/viash-run-generate_qc-XXXXXX").R
 function clean_up {
   rm "\$tempscript"
 }
@@ -1118,335 +1147,870 @@ function interrupt {
 trap clean_up EXIT
 trap interrupt INT SIGINT
 cat > "\$tempscript" << 'VIASHMAIN'
-import json
-import numpy as np
-
 ## VIASH START
 # The following code has been auto-generated by Viash.
-par = {
-  'task_info': $( if [ ! -z ${VIASH_PAR_TASK_INFO+x} ]; then echo "r'${VIASH_PAR_TASK_INFO//\'/\'\"\'\"r\'}'"; else echo None; fi ),
-  'method_info': $( if [ ! -z ${VIASH_PAR_METHOD_INFO+x} ]; then echo "r'${VIASH_PAR_METHOD_INFO//\'/\'\"\'\"r\'}'"; else echo None; fi ),
-  'metric_info': $( if [ ! -z ${VIASH_PAR_METRIC_INFO+x} ]; then echo "r'${VIASH_PAR_METRIC_INFO//\'/\'\"\'\"r\'}'"; else echo None; fi ),
-  'dataset_info': $( if [ ! -z ${VIASH_PAR_DATASET_INFO+x} ]; then echo "r'${VIASH_PAR_DATASET_INFO//\'/\'\"\'\"r\'}'"; else echo None; fi ),
-  'results': $( if [ ! -z ${VIASH_PAR_RESULTS+x} ]; then echo "r'${VIASH_PAR_RESULTS//\'/\'\"\'\"r\'}'"; else echo None; fi ),
-  'output': $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "r'${VIASH_PAR_OUTPUT//\'/\'\"\'\"r\'}'"; else echo None; fi )
-}
-meta = {
-  'name': $( if [ ! -z ${VIASH_META_NAME+x} ]; then echo "r'${VIASH_META_NAME//\'/\'\"\'\"r\'}'"; else echo None; fi ),
-  'functionality_name': $( if [ ! -z ${VIASH_META_FUNCTIONALITY_NAME+x} ]; then echo "r'${VIASH_META_FUNCTIONALITY_NAME//\'/\'\"\'\"r\'}'"; else echo None; fi ),
-  'resources_dir': $( if [ ! -z ${VIASH_META_RESOURCES_DIR+x} ]; then echo "r'${VIASH_META_RESOURCES_DIR//\'/\'\"\'\"r\'}'"; else echo None; fi ),
-  'executable': $( if [ ! -z ${VIASH_META_EXECUTABLE+x} ]; then echo "r'${VIASH_META_EXECUTABLE//\'/\'\"\'\"r\'}'"; else echo None; fi ),
-  'config': $( if [ ! -z ${VIASH_META_CONFIG+x} ]; then echo "r'${VIASH_META_CONFIG//\'/\'\"\'\"r\'}'"; else echo None; fi ),
-  'temp_dir': $( if [ ! -z ${VIASH_META_TEMP_DIR+x} ]; then echo "r'${VIASH_META_TEMP_DIR//\'/\'\"\'\"r\'}'"; else echo None; fi ),
-  'cpus': $( if [ ! -z ${VIASH_META_CPUS+x} ]; then echo "int(r'${VIASH_META_CPUS//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'memory_b': $( if [ ! -z ${VIASH_META_MEMORY_B+x} ]; then echo "int(r'${VIASH_META_MEMORY_B//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'memory_kb': $( if [ ! -z ${VIASH_META_MEMORY_KB+x} ]; then echo "int(r'${VIASH_META_MEMORY_KB//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'memory_mb': $( if [ ! -z ${VIASH_META_MEMORY_MB+x} ]; then echo "int(r'${VIASH_META_MEMORY_MB//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'memory_gb': $( if [ ! -z ${VIASH_META_MEMORY_GB+x} ]; then echo "int(r'${VIASH_META_MEMORY_GB//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'memory_tb': $( if [ ! -z ${VIASH_META_MEMORY_TB+x} ]; then echo "int(r'${VIASH_META_MEMORY_TB//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'memory_pb': $( if [ ! -z ${VIASH_META_MEMORY_PB+x} ]; then echo "int(r'${VIASH_META_MEMORY_PB//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'memory_kib': $( if [ ! -z ${VIASH_META_MEMORY_KIB+x} ]; then echo "int(r'${VIASH_META_MEMORY_KIB//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'memory_mib': $( if [ ! -z ${VIASH_META_MEMORY_MIB+x} ]; then echo "int(r'${VIASH_META_MEMORY_MIB//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'memory_gib': $( if [ ! -z ${VIASH_META_MEMORY_GIB+x} ]; then echo "int(r'${VIASH_META_MEMORY_GIB//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'memory_tib': $( if [ ! -z ${VIASH_META_MEMORY_TIB+x} ]; then echo "int(r'${VIASH_META_MEMORY_TIB//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'memory_pib': $( if [ ! -z ${VIASH_META_MEMORY_PIB+x} ]; then echo "int(r'${VIASH_META_MEMORY_PIB//\'/\'\"\'\"r\'}')"; else echo None; fi )
-}
-dep = {
+# treat warnings as errors
+.viash_orig_warn <- options(warn = 2)
+
+par <- list(
+  "input_task_info" = $( if [ ! -z ${VIASH_PAR_INPUT_TASK_INFO+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_INPUT_TASK_INFO" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "input_dataset_info" = $( if [ ! -z ${VIASH_PAR_INPUT_DATASET_INFO+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_INPUT_DATASET_INFO" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "input_method_info" = $( if [ ! -z ${VIASH_PAR_INPUT_METHOD_INFO+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_INPUT_METHOD_INFO" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "input_metric_info" = $( if [ ! -z ${VIASH_PAR_INPUT_METRIC_INFO+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_INPUT_METRIC_INFO" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "input_results" = $( if [ ! -z ${VIASH_PAR_INPUT_RESULTS+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_INPUT_RESULTS" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_OUTPUT" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi )
+)
+meta <- list(
+  "name" = $( if [ ! -z ${VIASH_META_NAME+x} ]; then echo -n "'"; echo -n "$VIASH_META_NAME" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "functionality_name" = $( if [ ! -z ${VIASH_META_FUNCTIONALITY_NAME+x} ]; then echo -n "'"; echo -n "$VIASH_META_FUNCTIONALITY_NAME" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "resources_dir" = $( if [ ! -z ${VIASH_META_RESOURCES_DIR+x} ]; then echo -n "'"; echo -n "$VIASH_META_RESOURCES_DIR" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "executable" = $( if [ ! -z ${VIASH_META_EXECUTABLE+x} ]; then echo -n "'"; echo -n "$VIASH_META_EXECUTABLE" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "config" = $( if [ ! -z ${VIASH_META_CONFIG+x} ]; then echo -n "'"; echo -n "$VIASH_META_CONFIG" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "temp_dir" = $( if [ ! -z ${VIASH_META_TEMP_DIR+x} ]; then echo -n "'"; echo -n "$VIASH_META_TEMP_DIR" | sed "s#['\\]#\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "cpus" = $( if [ ! -z ${VIASH_META_CPUS+x} ]; then echo -n "as.integer('"; echo -n "$VIASH_META_CPUS" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi ),
+  "memory_b" = $( if [ ! -z ${VIASH_META_MEMORY_B+x} ]; then echo -n "bit64::as.integer64('"; echo -n "$VIASH_META_MEMORY_B" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi ),
+  "memory_kb" = $( if [ ! -z ${VIASH_META_MEMORY_KB+x} ]; then echo -n "bit64::as.integer64('"; echo -n "$VIASH_META_MEMORY_KB" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi ),
+  "memory_mb" = $( if [ ! -z ${VIASH_META_MEMORY_MB+x} ]; then echo -n "bit64::as.integer64('"; echo -n "$VIASH_META_MEMORY_MB" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi ),
+  "memory_gb" = $( if [ ! -z ${VIASH_META_MEMORY_GB+x} ]; then echo -n "bit64::as.integer64('"; echo -n "$VIASH_META_MEMORY_GB" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi ),
+  "memory_tb" = $( if [ ! -z ${VIASH_META_MEMORY_TB+x} ]; then echo -n "bit64::as.integer64('"; echo -n "$VIASH_META_MEMORY_TB" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi ),
+  "memory_pb" = $( if [ ! -z ${VIASH_META_MEMORY_PB+x} ]; then echo -n "bit64::as.integer64('"; echo -n "$VIASH_META_MEMORY_PB" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi ),
+  "memory_kib" = $( if [ ! -z ${VIASH_META_MEMORY_KIB+x} ]; then echo -n "bit64::as.integer64('"; echo -n "$VIASH_META_MEMORY_KIB" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi ),
+  "memory_mib" = $( if [ ! -z ${VIASH_META_MEMORY_MIB+x} ]; then echo -n "bit64::as.integer64('"; echo -n "$VIASH_META_MEMORY_MIB" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi ),
+  "memory_gib" = $( if [ ! -z ${VIASH_META_MEMORY_GIB+x} ]; then echo -n "bit64::as.integer64('"; echo -n "$VIASH_META_MEMORY_GIB" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi ),
+  "memory_tib" = $( if [ ! -z ${VIASH_META_MEMORY_TIB+x} ]; then echo -n "bit64::as.integer64('"; echo -n "$VIASH_META_MEMORY_TIB" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi ),
+  "memory_pib" = $( if [ ! -z ${VIASH_META_MEMORY_PIB+x} ]; then echo -n "bit64::as.integer64('"; echo -n "$VIASH_META_MEMORY_PIB" | sed "s#['\\]#\\\\&#g"; echo "')"; else echo NULL; fi )
+)
+dep <- list(
   
-}
+)
+
+
+# restore original warn setting
+options(.viash_orig_warn)
+rm(.viash_orig_warn)
 
 ## VIASH END
 
-EXPECTED_TASK_FIELDS = ["task_id", "task_name", "task_summary", "task_description"]
-EXPECTED_METHOD_FIELDS = ["task_id", "commit_sha", "method_id", "method_name", "method_summary", "paper_reference", "is_baseline"]
-EXPECTED_METRIC_FIELDS = ["task_id", "commit_sha", "metric_id", "metric_name", "metric_summary", "paper_reference", "maximize"]
-EXPECTED_DATASET_FIELDS = ["task_id", "dataset_id", "dataset_name", "dataset_summary", "data_reference", "data_url"]
+################################################################################
+#                               FUNCTIONS
+################################################################################
 
-def dump_json(obj, fp):
-    """Dump to JSON in a numpy-safe fashion."""
-    json.dump(
-        obj,
-        fp,
-        indent=4,
-        sort_keys=False,
-        separators=(", ", ": "),
-        ensure_ascii=False,
+create_qc_entry <- function(
+  category,
+  label,
+  value,
+  severity_value,
+  condition,
+  message
+) {
+  # If values are missing, set to -1
+  # This can happen if a method/metric is not run and therefore has no results
+  if (is.null(value) || is.na(value) || length(value) == 0) {
+    value <- -1
+  }
+
+  if (is.infinite(value)) {
+    warning(
+      "QC value for check \\"", label, "\\" is infinite, setting to ", sign(value) * 1e6,
+      immediate. = TRUE,
+      call. = FALSE
+    )
+    value <- sign(value) * 1e6
+  }
+
+  if (
+    is.null(severity_value) ||
+      is.na(severity_value) ||
+      length(severity_value) == 0
+  ) {
+    severity_value <- -1
+  }
+
+  if (is.infinite(severity_value)) {
+    warning(
+      "QC severity value for check \\"", label, "\\" is infinite, setting to ", sign(severity_value) * 1e6,
+      immediate. = TRUE,
+      call. = FALSE
+    )
+    severity_value <- sign(severity_value) * 1e6
+  }
+
+  severity <- dplyr::case_when(
+    severity_value < 0 ~ 3L,
+    severity_value < 1 ~ 0L,
+    severity_value < 2 ~ 1L,
+    severity_value < 3 ~ 2L,
+    TRUE ~ 3L
+  )
+
+  list(
+    category = category,
+    label = label,
+    value = value,
+    severity = severity,
+    severity_value = severity_value,
+    condition = condition,
+    message = message
+  )
+}
+
+percent_missing <- function(items, field) {
+  is_missing <- purrr::map_lgl(items, \\(.item) {
+    if (field == "references") {
+      return(references_missing(.item))
+    }
+
+    field_value <- .item[[field]]
+    is.null(field_value) ||
+      is.na(field_value) ||
+      (is.character(field_value) && field_value == "")
+  })
+
+  mean(is_missing)
+}
+
+references_missing <- function(item) {
+  # Special case for control methods without references
+  if ("type" %in% names(item) && item\$type == "control_method") {
+    return(FALSE)
+  }
+
+  references <- item\$references
+  if (length(references) == 0) {
+    return(TRUE)
+  }
+
+  if (
+    length(references) == 2 && all(c("doi", "bibtex") %in% names(references))
+  ) {
+    if (length(references\$doi) == 0 && length(references\$bibtex) == 0) {
+      return(TRUE)
+    }
+  }
+
+  return(FALSE)
+}
+
+check_info_fields <- function(info, type, expected_fields, task_name) {
+  category <- paste(stringr::str_to_title(type), "info")
+
+  purrr::map(expected_fields, function(.field) {
+    pct_missing <- percent_missing(info, .field)
+    create_qc_entry(
+      category = category,
+      label = paste0("Info field '", .field, "' % missing"),
+      value = pct_missing,
+      severity_value = ifelse(pct_missing > 0, 3.0, 0.0),
+      condition = "pct_missing <= 0",
+      message = paste0(
+        category,
+        " field '",
+        .field,
+        "' should be defined\\n",
+        "  Task: ",
+        task_name,
+        "\\n",
+        "  Field: ",
+        .field,
+        "\\n",
+        "  Percentage missing: ",
+        round(pct_missing * 100, 0)
+      )
+    )
+  })
+}
+
+check_missing_results <- function(
+  results_long,
+  name,
+  type,
+  n_datasets,
+  n_methods,
+  n_metrics,
+  task_name
+) {
+  n_expected <- switch(
+    type,
+    "dataset" = n_methods * n_metrics,
+    "method" = n_datasets * n_metrics,
+    "metric" = n_datasets * n_methods
+  )
+
+  name_col <- paste0(type, "_name")
+  n_results <- results_long |>
+    dplyr::filter(!!rlang::sym(name_col) == name) |>
+    nrow()
+  pct_missing <- 1 - (n_results / n_expected)
+
+  title <- type |>
+    stringr::str_replace_all("_", " ") |>
+    stringr::str_to_sentence()
+
+  create_qc_entry(
+    category = "Raw results",
+    label = paste0(title, " '", name, "' % missing"),
+    value = pct_missing,
+    severity_value = pct_missing / 0.1,
+    condition = "pct_missing <= 0.1",
+    message = paste0(
+      "Percentage of missing results should be less than 10%\\n",
+      "  Task: ",
+      task_name,
+      "\\n",
+      "  ",
+      title,
+      ": ",
+      name,
+      "\\n",
+      "  Number of results: ",
+      n_results,
+      "\\n",
+      "  Expected number of results: ",
+      n_expected,
+      "\\n",
+      "  Percentage missing: ",
+      round(pct_missing * 100, 0),
+      "%\\n"
+    )
+  )
+}
+
+check_failed_processes <- function(results, name, type, task_name) {
+  name_col <- paste0(type, "_name")
+  results_name <- results |>
+    dplyr::filter(!!rlang::sym(name_col) == name)
+
+  n_expected <- nrow(results_name)
+  n_succeeded <- sum(results_name\$succeeded)
+  pct_failed <- 1 - (n_succeeded / n_expected)
+
+  title <- type |>
+    stringr::str_replace_all("_", " ") |>
+    stringr::str_to_sentence()
+
+  create_qc_entry(
+    category = "Raw results",
+    label = paste0(title, " '", name, "' % failed"),
+    value = pct_failed,
+    severity_value = pct_failed / 0.1,
+    condition = "pct_failed <= 0.1",
+    message = paste0(
+      "Percentage of failed processes should be less than 10%\\n",
+      "  Task: ",
+      task_name,
+      "\\n",
+      "  ",
+      title,
+      ": ",
+      name,
+      "\\n",
+      "  Succeeded processes: ",
+      n_succeeded,
+      "\\n",
+      "  Attempted processes: ",
+      n_expected,
+      "\\n",
+      "  Percentage failed: ",
+      round(pct_failed * 100, 0),
+      "%\\n"
+    )
+  )
+}
+
+check_metric_scaling <- function(
+  results_long,
+  metric,
+  control_methods,
+  task_name
+) {
+  \`%||%\` <- rlang::\`%||%\`
+
+  metric_results <- results_long |>
+    dplyr::filter(metric_name == metric) |>
+    dplyr::select(-metric_name)
+
+  if (
+    nrow(metric_results) == 0 ||
+      !any(control_methods %in% metric_results\$method_name)
+  ) {
+    return(list())
+  }
+
+  control_range <- metric_results |>
+    dplyr::filter(
+      method_name %in% control_methods
+    ) |>
+    dplyr::group_by(dataset_name) |>
+    dplyr::summarise(
+      control_min = min(metric_value),
+      control_max = max(metric_value)
     )
 
-def create_quality_control(task_info, dataset_info, method_info, metric_info, results):
-    """Quality control to detect anomalies in the results."""
-    task_id = task_info["task_id"]
-
-    result_qc = []
-
-    def add_qc(
-        category: str,
-        name: str,
-        value,
-        severity_value: float,
-        code: str,
-        message: str,
-    ) -> None:
-        "Add an entry to the result qc"
-        if severity_value <= 1:
-            severity = 0
-        elif severity_value <= 2:
-            severity = 1
-        elif severity_value <= 3:
-            severity = 2
-        else:
-            severity = 3
-        result_qc.append({
-            "task_id": task_id,
-            "category": category,
-            "name": name,
-            "value": value,
-            "severity": severity,
-            "severity_value": severity_value,
-            "code": code,
-            "message": message
-        })
-    
-    def percent_missing(list_of_dicts, field):
-        are_missing = []
-        for item in list_of_dicts:
-            if field == "paper_reference" and item.get("is_baseline", False):
-                are_missing.append(0.0)
-            elif field in item and item[field] is not None:
-                are_missing.append(0.0)
-            else:
-                are_missing.append(1.0)
-        return np.mean(are_missing)
-    
-    # check task_info
-    for field in EXPECTED_TASK_FIELDS:
-        pct_missing = percent_missing([task_info], field)
-        add_qc(
-            "Task info",
-            f"Pct '{field}' missing",
-            pct_missing,
-            3.0 if pct_missing > 0 else 0.0,
-            "percent_missing([task_info], field)",
-            f"Task metadata field '{field}' should be defined\\n"
-            f"  Task id: {task_id}\\n"
-            f"  Field: {field}\\n"
-        )
-    
-    # check method_info
-    for field in EXPECTED_METHOD_FIELDS:
-        pct_missing = percent_missing(method_info, field)
-        add_qc(
-            "Method info",
-            f"Pct '{field}' missing",
-            pct_missing,
-            3.0 if pct_missing > 0 else 0.0,
-            "percent_missing(method_info, field)",
-            f"Method metadata field '{field}' should be defined\\n"
-            f"  Task id: {task_id}\\n"
-            f"  Field: {field}\\n"
-        )
-
-    # check metric_info
-    for field in EXPECTED_METRIC_FIELDS:
-        pct_missing = percent_missing(metric_info, field)
-        add_qc(
-            "Metric info",
-            f"Pct '{field}' missing",
-            pct_missing,
-            3.0 if pct_missing > 0 else 0.0,
-            "percent_missing(metric_info, field)",
-            f"Metric metadata field '{field}' should be defined\\n"
-            f"  Task id: {task_id}\\n"
-            f"  Field: {field}\\n"
-        )
-
-    # check dataset_info
-    for field in EXPECTED_DATASET_FIELDS:
-        pct_missing = percent_missing(dataset_info, field)
-        add_qc(
-            "Dataset info",
-            f"Pct '{field}' missing",
-            pct_missing,
-            3.0 if pct_missing > 0 else 0.0,
-            "percent_missing(dataset_info, field)",
-            f"Dataset metadata field '{field}' should be defined\\n"
-            f"  Task id: {task_id}\\n"
-            f"  Field: {field}\\n"
-        )
-
-    # turn results into long format for easier processing
-    results_long = [
-        {
-            "task_id": task_id,
-            "method_id": x["method_id"],
-            "dataset_id": x["dataset_id"],
-            "metric_id": metric["metric_id"],
-            "metric_value" : x["metric_values"].get(metric["metric_id"]),
-            "scaled_score" : x["scaled_scores"].get(metric["metric_id"]),
-        }
-        for metric in metric_info
-        for x in results
-    ]
-
-    # check percentage missing
-    pct_missing = 1 - len(results_long) / (len(method_info) * len(metric_info) * len(dataset_info))
-    add_qc(
-        "Raw data",
-        "Number of results",
-        len(results),
-        pct_missing / .1,
-        "len(results) == len(method_info) * len(metric_info) * len(dataset_info)",
-        f"Number of results should be equal to #methods × #metrics × #datasets.\\n"
-        f"  Task id: {task_id}\\n"
-        f"  Number of results: {len(results)}\\n"
-        f"  Number of methods: {len(method_info)}\\n"
-        f"  Number of metrics: {len(metric_info)}\\n"
-        f"  Number of datasets: {len(dataset_info)}\\n"
+  scaled_metrics <- metric_results |>
+    dplyr::left_join(control_range, by = "dataset_name") |>
+    dplyr::mutate(
+      scaled_value = (metric_value - control_min) / (control_max - control_min),
+      outside = scaled_value < 0 | scaled_value > 1,
+      pct_outside = dplyr::case_when(
+        scaled_value < 0 ~ 0 - scaled_value,
+        scaled_value > 1 ~ scaled_value - 1,
+        TRUE ~ NA
+      )
     )
 
-    # QC per metric
-    for metric in metric_info:
-        metric_id = metric["metric_id"]
-        values = [
-            res
-            for res in results_long
-            if res["metric_id"] == metric_id
-            and res["metric_value"] is not None
-            and np.isreal(res["metric_value"])
-        ]
-        pct_missing = 1 - len(values) / len(dataset_info) / len(method_info)
+  pct_outside <- sum(scaled_metrics\$outside) / nrow(scaled_metrics)
+  worst_score <- min(scaled_metrics\$scaled_value)
+  worst_pct_outside <- if (!is.na(worst_score) && worst_score < 0) {
+    max(scaled_metrics\$pct_outside[scaled_metrics\$scaled_value < 0])
+  } else {
+    0
+  }
+  best_score <- max(scaled_metrics\$scaled_value)
+  best_pct_outside <- if (!is.na(best_score) && best_score > 1) {
+    max(scaled_metrics\$pct_outside[scaled_metrics\$scaled_value > 1])
+  } else {
+    0
+  }
 
-        add_qc(
-            "Raw results",
-            f"Metric '{metric_id}' %missing",
-            pct_missing,
-            pct_missing / .1,
-            "pct_missing <= .1",
-            f"Percentage of missing results should be less than 10%.\\n"
-            f"  Task id: {task_id}\\n"
-            f"  Metric id: {metric_id}\\n"
-            f"  Percentage missing: {pct_missing*100:.0f}%\\n"
-        )
+  metric_checks <- list(
+    create_qc_entry(
+      category = "Scaling",
+      label = paste0("Metric '", metric, "' % outside range"),
+      value = pct_outside,
+      severity_value = pct_outside / 0.1,
+      condition = "pct_outside <= 0.1",
+      message = paste0(
+        "Percentage of scaled scores outside control range should be less than 10%\\n",
+        "  Task: ",
+        task_name,
+        "\\n",
+        "  Metric: ",
+        metric,
+        "\\n",
+        "  Inside range: ",
+        sum(!scaled_metrics\$outside),
+        "\\n",
+        "  Scaled scores: ",
+        nrow(scaled_metrics),
+        "\\n",
+        "  Percentage outside: ",
+        round(pct_outside * 100, 0),
+        "%\\n"
+      )
+    ),
+    create_qc_entry(
+      category = "Scaling",
+      label = paste0("Metric '", metric, "' worst score % outside range"),
+      value = worst_pct_outside,
+      severity_value = worst_pct_outside / 0.1,
+      condition = "worst_pct_outside <= 0.1",
+      message = paste0(
+        "The worst scaled score should be less than 10% outside the control range\\n",
+        "  Task: ",
+        task_name,
+        "\\n",
+        "  Metric: ",
+        metric,
+        "\\n",
+        "  Worst score: ",
+        worst_score,
+        "\\n",
+        "  Percentage outside range: ",
+        round(worst_pct_outside * 100, 0),
+        "%\\n"
+      )
+    ),
+    create_qc_entry(
+      category = "Scaling",
+      label = paste0("Metric '", metric, "' best score % outside range"),
+      value = best_pct_outside,
+      severity_value = best_pct_outside / 0.1,
+      condition = "best_pct_outside <= 0.1",
+      message = paste0(
+        "The best scaled score should be less than 10% outside the control range\\n",
+        "  Task: ",
+        task_name,
+        "\\n",
+        "  Metric: ",
+        metric,
+        "\\n",
+        "  Best score: ",
+        best_score,
+        "\\n",
+        "  Percentage outside range: ",
+        round(best_pct_outside * 100, 0),
+        "%\\n"
+      )
+    )
+  )
 
-    # QC per method
-    for method in method_info:
-        method_id = method["method_id"]
-        values = [ 
-            res
-            for res in results_long
-            if res["method_id"] == method_id
-            and res["metric_value"] is not None
-            and np.isreal(res["metric_value"])
-        ]
-        pct_missing = 1 - len(values) / len(dataset_info) / len(metric_info)
+  method_metric_checks <- purrr::map(
+    sort(unique(scaled_metrics\$method_name)),
+    function(.method) {
+      check_method_metric_scaling(scaled_metrics, .method, task_name, metric)
+    }
+  ) |>
+    purrr::list_flatten()
 
-        add_qc(
-            "Raw results",
-            f"Method '{method_id}' %missing",
-            pct_missing,
-            pct_missing / .1,
-            "pct_missing <= .1",
-            f"Percentage of missing results should be less than 10%.\\n"
-            f"  Task id: {task_id}\\n"
-            f"  method id: {method_id}\\n"
-            f"  Percentage missing: {pct_missing*100:.0f}%\\n"
-        )
+  c(metric_checks, method_metric_checks)
+}
 
-    # QC per dataset
-    for dataset in dataset_info:
-        dataset_id = dataset["dataset_id"]
-        values = [
-            res
-            for res in results_long
-            if res["dataset_id"] == dataset_id
-            and res["metric_value"] is not None
-            and np.isreal(res["metric_value"])
-        ]
-        pct_missing = 1 - len(values) / len(metric_info) / len(method_info)
+check_method_metric_scaling <- function(
+  scaled_metrics,
+  method,
+  task_name,
+  metric_name
+) {
+  method_scaled_metrics <- scaled_metrics |>
+    dplyr::filter(method_name == method)
 
-        add_qc(
-            "Raw results",
-            f"Dataset '{dataset_id}' %missing",
-            pct_missing,
-            pct_missing / .1,
-            "pct_missing <= .1",
-            f"Percentage of missing results should be less than 10%.\\n"
-            f"  Task id: {task_id}\\n"
-            f"  dataset id: {dataset_id}\\n"
-            f"  Percentage missing: {pct_missing*100:.0f}%\\n"
-        )
+  worst_score <- min(method_scaled_metrics\$scaled_value)
+  worst_pct_outside <- if (!is.na(worst_score) && worst_score < 0) {
+    max(method_scaled_metrics\$pct_outside[
+      method_scaled_metrics\$scaled_value < 0
+    ])
+  } else {
+    0
+  }
+  best_score <- max(method_scaled_metrics\$scaled_value)
+  best_pct_outside <- if (!is.na(worst_score) && best_score > 1) {
+    max(method_scaled_metrics\$pct_outside[
+      method_scaled_metrics\$scaled_value > 1
+    ])
+  } else {
+    0
+  }
 
+  list(
+    create_qc_entry(
+      category = "Scaling",
+      label = paste0("Worst '", metric_name, "' score for '", method, "'"),
+      value = worst_score,
+      severity_value = ifelse(worst_score < -1, worst_pct_outside, 0),
+      condition = "worst_score < -1",
+      message = paste0(
+        "Method '",
+        method,
+        "' performs much worse than controls for metric' ",
+        metric_name,
+        "'\\n",
+        "  Task: ",
+        task_name,
+        "\\n",
+        "  Method: ",
+        method,
+        "\\n",
+        "  Metric: ",
+        metric_name,
+        "\\n",
+        "  Worst score: ",
+        worst_score,
+        "\\n",
+        "  Percentage outside range: ",
+        round(worst_pct_outside * 100, 0),
+        "%\\n"
+      )
+    ),
+    create_qc_entry(
+      category = "Scaling",
+      label = paste0("Best '", metric_name, "' score for '", method, "'"),
+      value = best_score,
+      severity_value = ifelse(best_score > 2, best_pct_outside, 0),
+      condition = "best_score > 2",
+      message = paste0(
+        "Method '",
+        method,
+        "' performs much better than controls for metric '",
+        metric_name,
+        "'\\n",
+        "  Task: ",
+        task_name,
+        "\\n",
+        "  Method: ",
+        method,
+        "\\n",
+        "  Metric: ",
+        metric_name,
+        "\\n",
+        "  Best score: ",
+        best_score,
+        "\\n",
+        "  Percentage outside range: ",
+        round(best_pct_outside * 100, 0),
+        "%\\n"
+      )
+    )
+  )
+}
 
-    # QC per metric and method
-    for metric in metric_info:
-        for method in method_info:
-            metric_id = metric["metric_id"]
-            method_id = method["method_id"]
-            scores = [ 
-                res["scaled_score"]
-                for res in results_long
-                if res["metric_id"] == metric_id
-                and res["method_id"] == method_id
-                and res["scaled_score"] is not None
-                and np.isreal(res["scaled_score"])
-            ]
+################################################################################
+#                              MAIN SCRIPT
+################################################################################
 
-            if len(scores) >= 1:
-                worst_score = np.min(scores).item()
-                best_score = np.max(scores).item()
+cat("====== Generate QC ======\\n")
 
-                add_qc(
-                    "Scaling",
-                    f"Worst score {method_id} {metric_id}",
-                    worst_score,
-                    worst_score / -1,
-                    "worst_score >= -1",
-                    f"Method {method_id} performs much worse than baselines.\\n"
-                    f"  Task id: {task_id}\\n"
-                    f"  Method id: {method_id}\\n"
-                    f"  Metric id: {metric_id}\\n"
-                    f"  Worst score: {worst_score}%\\n"
-                )
+cat("\\n>>> Reading input files...\\n")
+cat("Reading task info from '", par\$input_task_info, "'...\\n", sep = "")
+task_info <- jsonlite::read_json(par\$input_task_info)
 
-                add_qc(
-                    "Scaling",
-                    f"Best score {method_id} {metric_id}",
-                    best_score,
-                    best_score / 2,
-                    "best_score <= 2",
-                    f"Method {method_id} performs a lot better than baselines.\\n"
-                    f"  Task id: {task_id}\\n"
-                    f"  Method id: {method_id}\\n"
-                    f"  Metric id: {metric_id}\\n"
-                    f"  Best score: {best_score}%\\n"
-                )
+cat("Reading dataset info from '", par\$input_dataset_info, "'...\\n", sep = "")
+dataset_info <- jsonlite::read_json(par\$input_dataset_info)
 
-    return result_qc
+cat("Reading method info from '", par\$input_method_info, "'...\\n", sep = "")
+method_info <- jsonlite::read_json(par\$input_method_info)
 
-def main(par):
-    # read data from files
-    with open(par["task_info"], "r", encoding="utf8") as file:
-        task_info = json.load(file)
-    with open(par["method_info"], "r", encoding="utf8") as file:
-        method_info = json.load(file)
-    with open(par["metric_info"], "r", encoding="utf8") as file:
-        metric_info = json.load(file)
-    with open(par["dataset_info"], "r", encoding="utf8") as file:
-        dataset_info = json.load(file)
-    with open(par["results"], "r", encoding="utf8") as file:
-        results = json.load(file)
+cat("Reading metric info from '", par\$input_metric_info, "'...\\n", sep = "")
+metric_info <- jsonlite::read_json(par\$input_metric_info)
 
-    # create info objects
-    quality_control = create_quality_control(task_info, dataset_info, method_info, metric_info, results)
+cat("Reading results from '", par\$input_results, "'...\\n", sep = "")
+results <- jsonlite::read_json(par\$input_results, simplifyVector = TRUE)
 
-    # write data to files
-    with open(par["output"], "w", encoding="utf8") as file:
-        dump_json(quality_control, file)
+cat("\\n>>> Checking expected info fields...\\n")
 
-if __name__ == "__main__":
-    main(par)
+expected_task_fields <- c("name", "label", "summary", "description")
+expected_dataset_fields <- c(
+  "name",
+  "label",
+  "summary",
+  "description",
+  "references"
+)
+expected_method_fields <- c(
+  "name",
+  "label",
+  "commit",
+  "summary",
+  "description",
+  "references"
+)
+expected_metric_fields <- c(
+  "name",
+  "label",
+  "commit",
+  "summary",
+  "description",
+  "references"
+)
+
+task_name <- task_info\$name %||% "unknown"
+
+info_task <- check_info_fields(
+  list(task_info),
+  "task",
+  expected_task_fields,
+  task_name
+)
+info_datasets <- check_info_fields(
+  dataset_info,
+  "dataset",
+  expected_dataset_fields,
+  task_name
+)
+info_methods <- check_info_fields(
+  method_info,
+  "method",
+  expected_method_fields,
+  task_name
+)
+info_metrics <- check_info_fields(
+  metric_info,
+  "metric",
+  expected_metric_fields,
+  task_name
+)
+
+cat("\\n>>> Checking missing results...\\n")
+results_long <- results |>
+  dplyr::select(dataset_name, method_name, metric_names, metric_values) |>
+  tidyr::unnest_longer(c("metric_names", "metric_values")) |>
+  dplyr::rename(
+    metric_name = metric_names,
+    metric_value = metric_values
+  ) |>
+  dplyr::filter(!is.na(metric_value))
+
+dataset_names <- purrr::map_chr(dataset_info, "name")
+method_names <- purrr::map_chr(method_info, "name")
+metric_names <- purrr::map_chr(metric_info, "name")
+
+n_datasets <- length(dataset_names)
+n_methods <- length(method_names)
+n_metrics <- length(metric_names)
+
+n_results_expected <- n_datasets * n_methods * n_metrics
+n_results <- nrow(results_long)
+pct_results_missing <- 1 - (n_results / n_results_expected)
+
+results_task <- list(
+  create_qc_entry(
+    category = "Raw results",
+    label = "Task number of results",
+    value = n_results,
+    severity_value = pct_results_missing / 0.1,
+    condition = "length(dataset_info) * length(results) == length(method_info) * length(metric_info)",
+    message = paste0(
+      "Number of results should be equal to #datasets × #methods × #metrics \\n",
+      "  Task: ",
+      task_name,
+      "\\n",
+      "  Number of results: ",
+      n_results,
+      "\\n",
+      "  Number of datasets: ",
+      n_datasets,
+      "\\n",
+      "  Number of methods: ",
+      n_methods,
+      "\\n",
+      "  Number of metrics: ",
+      n_metrics,
+      "\\n",
+      "  Expected number of results: ",
+      n_results_expected,
+      "\\n"
+    )
+  )
+)
+
+results_datasets <- purrr::map(dataset_names, function(.dataset) {
+  check_missing_results(
+    results_long,
+    .dataset,
+    "dataset",
+    n_datasets,
+    n_methods,
+    n_metrics,
+    task_name
+  )
+})
+results_methods <- purrr::map(method_names, function(.method) {
+  check_missing_results(
+    results_long,
+    .method,
+    "method",
+    n_datasets,
+    n_methods,
+    n_metrics,
+    task_name
+  )
+})
+results_metrics <- purrr::map(metric_names, function(.metric) {
+  check_missing_results(
+    results_long,
+    .metric,
+    "metric",
+    n_datasets,
+    n_methods,
+    n_metrics,
+    task_name
+  )
+})
+
+cat("\\n>>> Checking failed processes\\n")
+metric_component_results <- results |>
+  dplyr::select(dataset_name, method_name, metric_components) |>
+  tidyr::unnest(metric_components) |>
+  dplyr::rename(metric_component_name = component_name)
+
+n_processes <- nrow(results) + nrow(metric_component_results)
+n_succeeded <- sum(results\$succeeded) + sum(metric_component_results\$succeeded)
+pct_failed <- 1 - (n_succeeded / n_processes)
+
+failed_task <- list(
+  create_qc_entry(
+    category = "Raw results",
+    label = "Task number of successful processes",
+    value = n_succeeded,
+    severity_value = pct_failed / 0.1,
+    condition = "sum(results\$succeeded) + sum(metric_component_results\$succeeded) == nrow(results) + nrow(metric_component_results)",
+    message = paste0(
+      "Number of successful processes should be equal to the number of attempted processes\\n",
+      "  Task: ",
+      task_name,
+      "\\n",
+      "  Succeeded processes: ",
+      n_succeeded,
+      "\\n",
+      "  Attempted processes: ",
+      n_processes,
+      "\\n",
+      "  Percentage failed: ",
+      round(pct_failed * 100, 0),
+      "%\\n"
+    )
+  )
+)
+
+failed_datasets <- purrr::map(dataset_names, function(.dataset) {
+  check_failed_processes(results, .dataset, "dataset", task_name)
+})
+failed_methods <- purrr::map(method_names, function(.method) {
+  check_failed_processes(results, .method, "method", task_name)
+})
+failed_metrics <- purrr::map(
+  unique(metric_component_results\$metric_component_name),
+  function(.component) {
+    check_failed_processes(
+      metric_component_results,
+      .component,
+      "metric_component",
+      task_name
+    )
+  }
+)
+
+cat("\\n>>> Checking control methods...\\n")
+is_control <- purrr::map_lgl(method_info, \\(.method) {
+  .method\$type == "control_method"
+})
+control_methods <- method_names[is_control]
+
+dataset_controls <- results_long |>
+  dplyr::filter(method_name %in% control_methods) |>
+  dplyr::select(dataset_name, method_name) |>
+  dplyr::distinct() |>
+  dplyr::group_by(dataset_name) |>
+  dplyr::count(name = "n_controls") |>
+  dplyr::ungroup() |>
+  dplyr::mutate(dataset_name = factor(dataset_name, levels = dataset_names)) |>
+  tidyr::complete(dataset_name, fill = list(n_controls = 0))
+
+controls_datasets <- purrr::map(
+  seq_len(nrow(dataset_controls)),
+  function(.idx) {
+    dataset_name <- dataset_controls\$dataset_name[.idx]
+    n_controls <- dataset_controls\$n_controls[.idx]
+
+    create_qc_entry(
+      category = "Raw results",
+      label = paste0("Dataset \`", dataset_name, "' number of control methods"),
+      value = n_controls,
+      severity_value = ifelse(n_controls != length(control_methods), 3, 0),
+      condition = "n_controls != length(control_methods)",
+      message = paste0(
+        "Number of successful control methods for a dataset should equal the number of controls\\n",
+        "  Task: ",
+        task_name,
+        "\\n",
+        "  Dataset: ",
+        dataset_name,
+        "\\n",
+        "  Succeeded control_methods: ",
+        n_controls,
+        "\\n",
+        "  Total control methods: ",
+        length(control_methods),
+        "\\n",
+        "  Percentage succeeded: ",
+        round(n_controls / length(control_methods) * 100, 0),
+        "%\\n"
+      )
+    )
+  }
+)
+
+metric_controls <- results_long |>
+  dplyr::filter(method_name %in% control_methods) |>
+  dplyr::select(method_name, metric_name) |>
+  dplyr::group_by(metric_name) |>
+  dplyr::count(name = "n_controls") |>
+  dplyr::ungroup() |>
+  dplyr::mutate(metric_name = factor(metric_name, levels = metric_names)) |>
+  tidyr::complete(metric_name, fill = list(n_controls = 0))
+
+n_expected <- length(dataset_names) * length(control_methods)
+controls_metrics <- purrr::map(seq_len(nrow(metric_controls)), function(.idx) {
+  metric_name <- metric_controls\$metric_name[.idx]
+  n_controls <- metric_controls\$n_controls[.idx]
+
+  create_qc_entry(
+    category = "Raw results",
+    label = paste0("Metric '", metric_name, "' number of control methods"),
+    value = n_controls,
+    severity_value = ifelse(n_controls != n_expected, 3, 0),
+    condition = "n_controls != length(datasets) * length(control_methods)",
+    message = paste0(
+      "Number of metric scores for control methods should be equal to #datasets × #control_methods\\n",
+      "  Task: ",
+      task_name,
+      "\\n",
+      "  Metric: ",
+      metric_name,
+      "\\n",
+      "  Control method scores: ",
+      n_controls,
+      "\\n",
+      "  Expected control method scores: ",
+      n_expected,
+      "\\n",
+      "  Percentage succeeded: ",
+      round(n_controls / n_expected * 100, 0),
+      "%\\n"
+    )
+  )
+})
+
+cat("\\n>>> Checking metric scaling...\\n")
+scaling <- purrr::map(metric_names, function(.metric) {
+  check_metric_scaling(results_long, .metric, control_methods, task_name)
+}) |>
+  purrr::list_flatten()
+
+cat("\\n>>> Collecting QC results...\\n")
+qc_results <- c(
+  info_task,
+  info_datasets,
+  info_methods,
+  info_metrics,
+  results_task,
+  results_datasets,
+  results_methods,
+  results_metrics,
+  failed_task,
+  failed_datasets,
+  failed_methods,
+  failed_metrics,
+  controls_datasets,
+  controls_metrics,
+  scaling
+)
+
+cat("\\n>>> Writing output file...\\n")
+cat("Writing quality control to '", par\$output, "'...\\n", sep = "")
+jsonlite::write_json(
+  qc_results,
+  par\$output,
+  pretty = TRUE,
+  null = "null",
+  na = "null",
+  auto_unbox = TRUE
+)
+
+cat("\\n>>> Validating output against schema...\\n")
+results_schemas <- file.path(meta\$resources_dir, "schemas", "results_v4")
+ajv_args <- paste(
+  "validate",
+  "--spec draft2020",
+  "-s",
+  file.path(results_schemas, "quality_control.json"),
+  "-d",
+  par\$output
+)
+
+cat("Running validation command:", "ajv", ajv_args, "\\n")
+cat("Output:\\n")
+validation_result <- system2("ajv", ajv_args)
+
+if (validation_result == 0) {
+  cat("JSON validation passed successfully!\\n")
+} else {
+  cat("JSON validation failed!\\n")
+  stop("Output JSON does not conform to schema")
+}
+
+cat("\\n>>> Done!\\n")
 VIASHMAIN
-python -B "\$tempscript" &
+Rscript "\$tempscript" &
 wait "\$!"
 
 VIASHEOF
@@ -1455,20 +2019,20 @@ VIASHEOF
 if [[ "$VIASH_ENGINE_TYPE" == "docker" ]]; then
   # strip viash automount from file paths
   
-  if [ ! -z "$VIASH_PAR_TASK_INFO" ]; then
-    VIASH_PAR_TASK_INFO=$(ViashDockerStripAutomount "$VIASH_PAR_TASK_INFO")
+  if [ ! -z "$VIASH_PAR_INPUT_TASK_INFO" ]; then
+    VIASH_PAR_INPUT_TASK_INFO=$(ViashDockerStripAutomount "$VIASH_PAR_INPUT_TASK_INFO")
   fi
-  if [ ! -z "$VIASH_PAR_METHOD_INFO" ]; then
-    VIASH_PAR_METHOD_INFO=$(ViashDockerStripAutomount "$VIASH_PAR_METHOD_INFO")
+  if [ ! -z "$VIASH_PAR_INPUT_DATASET_INFO" ]; then
+    VIASH_PAR_INPUT_DATASET_INFO=$(ViashDockerStripAutomount "$VIASH_PAR_INPUT_DATASET_INFO")
   fi
-  if [ ! -z "$VIASH_PAR_METRIC_INFO" ]; then
-    VIASH_PAR_METRIC_INFO=$(ViashDockerStripAutomount "$VIASH_PAR_METRIC_INFO")
+  if [ ! -z "$VIASH_PAR_INPUT_METHOD_INFO" ]; then
+    VIASH_PAR_INPUT_METHOD_INFO=$(ViashDockerStripAutomount "$VIASH_PAR_INPUT_METHOD_INFO")
   fi
-  if [ ! -z "$VIASH_PAR_DATASET_INFO" ]; then
-    VIASH_PAR_DATASET_INFO=$(ViashDockerStripAutomount "$VIASH_PAR_DATASET_INFO")
+  if [ ! -z "$VIASH_PAR_INPUT_METRIC_INFO" ]; then
+    VIASH_PAR_INPUT_METRIC_INFO=$(ViashDockerStripAutomount "$VIASH_PAR_INPUT_METRIC_INFO")
   fi
-  if [ ! -z "$VIASH_PAR_RESULTS" ]; then
-    VIASH_PAR_RESULTS=$(ViashDockerStripAutomount "$VIASH_PAR_RESULTS")
+  if [ ! -z "$VIASH_PAR_INPUT_RESULTS" ]; then
+    VIASH_PAR_INPUT_RESULTS=$(ViashDockerStripAutomount "$VIASH_PAR_INPUT_RESULTS")
   fi
   if [ ! -z "$VIASH_PAR_OUTPUT" ]; then
     VIASH_PAR_OUTPUT=$(ViashDockerStripAutomount "$VIASH_PAR_OUTPUT")

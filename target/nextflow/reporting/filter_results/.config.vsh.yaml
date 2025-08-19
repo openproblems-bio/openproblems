@@ -1,0 +1,319 @@
+name: "filter_results"
+namespace: "reporting"
+version: "build_main"
+argument_groups:
+- name: "Inputs"
+  arguments:
+  - type: "file"
+    name: "--input_dataset_info"
+    description: "JSON file containing dataset information"
+    info: null
+    example:
+    - "resources_test/openproblems/task_results_v4/processed/dataset_info.json"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--input_method_info"
+    description: "JSON file containing method information"
+    info: null
+    example:
+    - "resources_test/openproblems/task_results_v4/processed/method_info.json"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--input_metric_info"
+    description: "JSON file containing metric information"
+    info: null
+    example:
+    - "resources_test/openproblems/task_results_v4/processed/metric_info.json"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--input_results"
+    description: "JSON file containing results"
+    info: null
+    example:
+    - "resources_test/openproblems/task_results_v4/processed/results.json"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+- name: "Dataset filtering"
+  description: "Use these arguments to filter datasets by name. By default, all datasets\
+    \ are\nincluded. If `--datasets_include` is defined, only those datasets are included.\
+    \ If\n`--datasets_exclude` is defined, all datasets except those specified are\
+    \ included.\nThese arguments are mutually exclusive, so only `--datasets_include`\
+    \ OR\n`--datasets_exclude` can be set but not both.\n"
+  arguments:
+  - type: "string"
+    name: "--datasets_include"
+    description: "A list of dataset ids to include. If specified, only these datasets\
+      \ will be included.\n"
+    info: null
+    required: false
+    direction: "input"
+    multiple: true
+    multiple_sep: ";"
+  - type: "string"
+    name: "--datasets_exclude"
+    description: "A list of dataset ids to exclude. If specified, all datasets except\
+      \ the ones listed will be included.\n"
+    info: null
+    required: false
+    direction: "input"
+    multiple: true
+    multiple_sep: ";"
+- name: "Method filtering"
+  description: "Use these arguments to filter methods by name. By default, all methods\
+    \ are\nincluded. If `--methods_include` is defined, only those methods are included.\
+    \ If\n`--methods_exclude` is defined, all methods except those specified are included.\n\
+    These arguments are mutually exclusive, so only `--methods_include` OR\n`--methods_exclude`\
+    \ can be set but not both.\n"
+  arguments:
+  - type: "string"
+    name: "--methods_include"
+    description: "A list of method ids to include. If specified, only these methods\
+      \ will be included.\n"
+    info: null
+    required: false
+    direction: "input"
+    multiple: true
+    multiple_sep: ";"
+  - type: "string"
+    name: "--methods_exclude"
+    description: "A list of method ids to exclude. If specified, all methods except\
+      \ the ones listed will be included.\n"
+    info: null
+    required: false
+    direction: "input"
+    multiple: true
+    multiple_sep: ";"
+- name: "Metric filtering"
+  description: "Use these arguments to filter metrics by name. By default, all metrics\
+    \ are\nincluded. If `--metrics_include` is defined, only those metrics are included.\
+    \ If\n`--metrics_exclude` is defined, all metrics except those specified are included.\n\
+    These arguments are mutually exclusive, so only `--metrics_include` OR\n`--metrics_exclude`\
+    \ can be set but not both.\n"
+  arguments:
+  - type: "string"
+    name: "--metrics_include"
+    description: "A list of metric ids to include. If specified, only these metrics\
+      \ will be included.\n"
+    info: null
+    required: false
+    direction: "input"
+    multiple: true
+    multiple_sep: ";"
+  - type: "string"
+    name: "--metrics_exclude"
+    description: "A list of metric ids to exclude. If specified, all metrics except\
+      \ the ones listed will be included.\n"
+    info: null
+    required: false
+    direction: "input"
+    multiple: true
+    multiple_sep: ";"
+- name: "Outputs"
+  arguments:
+  - type: "file"
+    name: "--output_dataset_info"
+    description: "Filtered dataset info JSON file"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/dataset_info.json"
+    example:
+    - "resources_test/openproblems/task_results_v4/processed/filtered_dataset_info.json"
+    default:
+    - "filtered_dataset_info.json"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output_method_info"
+    description: "Filtered method info JSON file"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/method_info.json"
+    example:
+    - "resources_test/openproblems/task_results_v4/processed/filtered_method_info.json"
+    default:
+    - "filtered_method_info.json"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output_metric_info"
+    description: "Filtered metric info JSON file"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/metric_info.json"
+    example:
+    - "resources_test/openproblems/task_results_v4/processed/filtered_metric_info.json"
+    default:
+    - "filtered_metric_info.json"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output_results"
+    description: "Filtered results JSON file"
+    info:
+      format:
+        type: "json"
+        schema: "/common/schemas/results_v4/results.json"
+    example:
+    - "resources_test/openproblems/task_results_v4/processed/filtered_results.json"
+    default:
+    - "filtered_results.json"
+    must_exist: true
+    create_parent: true
+    required: false
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+resources:
+- type: "python_script"
+  path: "script.py"
+  is_executable: true
+- type: "file"
+  path: "schemas"
+  dest: "schemas"
+description: "Filter dataset, method, metric info and results based on include/exclude\
+  \ criteria"
+test_resources:
+- type: "python_script"
+  path: "run_and_check_output.py"
+  is_executable: true
+- type: "file"
+  path: "resources_test/openproblems/task_results_v4"
+  dest: "resources_test/openproblems/task_results_v4"
+info: null
+status: "enabled"
+scope:
+  image: "public"
+  target: "public"
+license: "MIT"
+links:
+  repository: "https://github.com/openproblems-bio/openproblems"
+  docker_registry: "ghcr.io"
+runners:
+- type: "executable"
+  id: "executable"
+  docker_setup_strategy: "ifneedbepullelsecachedbuild"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "lowmem"
+    - "lowtime"
+    - "lowcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+    script:
+    - "process.errorStrategy = 'ignore'"
+  debug: false
+  container: "docker"
+engines:
+- type: "docker"
+  id: "docker"
+  image: "openproblems/base_python:1"
+  namespace_separator: "/"
+  setup:
+  - type: "apt"
+    packages:
+    - "nodejs"
+    - "npm"
+    interactive: false
+  - type: "docker"
+    run:
+    - "npm install -g ajv-cli"
+  entrypoint: []
+  cmd: null
+build_info:
+  config: "src/reporting/filter_results/config.vsh.yaml"
+  runner: "nextflow"
+  engine: "docker"
+  output: "target/nextflow/reporting/filter_results"
+  executable: "target/nextflow/reporting/filter_results/main.nf"
+  viash_version: "0.9.4"
+  git_commit: "6729bf63b7e2b3aec7be2de6fdaf7ef1812a0bb9"
+  git_remote: "https://github.com/openproblems-bio/openproblems"
+  git_tag: "v1.0.0-1431-g6729bf63"
+package_config:
+  name: "openproblems"
+  version: "build_main"
+  description: "Open Problems is a living, extensible, community-guided benchmarking\
+    \ platform.\n"
+  info:
+    test_resources:
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/common"
+      dest: "resources_test/common"
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/openproblems"
+      dest: "resources_test/openproblems"
+  viash_version: "0.9.4"
+  source: "src"
+  target: "target"
+  config_mods:
+  - ".runners[.type == \"nextflow\"].config.labels := { lowmem : \"memory = 20.Gb\"\
+    , midmem : \"memory = 50.Gb\", highmem : \"memory = 100.Gb\", lowcpu : \"cpus\
+    \ = 5\", midcpu : \"cpus = 15\", highcpu : \"cpus = 30\", lowtime : \"time = 1.h\"\
+    , midtime : \"time = 4.h\", hightime : \"time = 8.h\", veryhightime : \"time =\
+    \ 24.h\" }\n.runners[.type == \"nextflow\"].config.script := \"process.errorStrategy\
+    \ = 'ignore'\"\n"
+  keywords:
+  - "openproblems"
+  - "benchmarking"
+  - "single-cell omics"
+  license: "MIT"
+  organization: "openproblems-bio"
+  references:
+    doi:
+    - "10.1038/s41587-025-02694-w"
+  links:
+    repository: "https://github.com/openproblems-bio/openproblems"
+    docker_registry: "ghcr.io"
+    issue_tracker: "https://github.com/openproblems-bio/openproblems/issues"

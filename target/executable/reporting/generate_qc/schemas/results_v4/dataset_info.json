@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openproblems.bio/schemas/results_v4/dataset_info.json",
+  "title": "Method info",
+  "description": "Information about datasets in a task",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "description": "Method identifier",
+        "type": "string"
+      },
+      "label": {
+        "description": "Human-readable label for the method",
+        "type": "string"
+      },
+      "commit": {
+        "description": "Git commit SHA for this version of the method",
+        "type": "string"
+      },
+      "summary": {
+        "description": "One line summary of the method",
+        "type": "string"
+      },
+      "description": {
+        "description": "Detailed description of the method",
+        "type": "string"
+      },
+      "source_urls": {
+        "description": "URL to the original source of the dataset",
+        "type": ["null", "array"],
+        "items": {
+          "type": "string"
+        }
+      },
+      "common_dataset_names": {
+        "description": "Identifier(s) for the common dataset(s) this dataset was derived from. Only if the dataset_name is different.",
+        "type": ["null", "array"],
+        "items": {
+          "type": "string"
+        }
+      },
+      "modalities": {
+        "description": "Modalities of the dataset",
+        "type": ["null", "array"],
+        "items": {
+          "type": "string"
+        }
+      },
+      "organisms": {
+        "description": "Organisms in the dataset",
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "authors": {
+        "$ref": "https://openproblems.bio/schemas/results_v4/core.json#/$defs/authors"
+      },
+      "references": {
+        "$ref": "https://openproblems.bio/schemas/results_v4/core.json#/$defs/references"
+      },
+      "date_created": {
+        "description": "Date when the dataset was created",
+        "type": ["null", "string"]
+      },
+      "file_size_mb": {
+        "description": "Size of the dataset in MB",
+        "type": ["null", "number"]
+      }
+    },
+    "required": [
+      "name",
+      "label",
+      "commit",
+      "summary",
+      "description",
+      "source_urls",
+      "common_dataset_names",
+      "modalities",
+      "organisms",
+      "authors",
+      "references",
+      "date_created",
+      "file_size_mb"
+    ],
+    "additionalProperties": false
+  }
+}

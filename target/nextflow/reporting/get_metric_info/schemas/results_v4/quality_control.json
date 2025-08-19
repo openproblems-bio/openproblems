@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openproblems.bio/schemas/results_v4/quality_control.json",
+  "title": "Quality control",
+  "description": "Quality control information for a task",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "category" : {
+        "description": "Category of the quality control check",
+        "type": "string"
+      },
+      "label" : {
+        "description": "Human-readable label for the quality control check",
+        "type": "string"
+      },
+      "value" : {
+        "description": "Value of the quality control check",
+        "type": "number"
+      },
+      "severity" : {
+        "description": "Severity code for the quality control check",
+        "type": "integer"
+      },
+      "severity_value" : {
+        "description": "Severity value for the quality control check",
+        "type": "number"
+      },
+      "condition" : {
+        "description": "Condition for warning about this quality control check",
+        "type": "string"
+      },
+      "message": {
+        "description": "Message to display for the quality control check",
+        "type": "string"
+      }
+    },
+    "required": [
+      "category",
+      "label",
+      "value",
+      "severity",
+      "severity_value",
+      "condition",
+      "message"
+    ],
+    "additionalProperties": false
+  }
+}
