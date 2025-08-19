@@ -52,13 +52,7 @@ workflow run_wf {
         "input_trace": "input_trace",
         "input_dataset_info": "output_dataset",
         "input_method_info": "output_method",
-        "input_metric_info": "output_metric",
-        "datasets_include": "datasets_include",
-        "datasets_exclude": "datasets_exclude",
-        "methods_include": "methods_include",
-        "methods_exclude": "methods_exclude",
-        "metrics_include": "metrics_include",
-        "metrics_exclude": "metrics_exclude"
+        "input_metric_info": "output_metric"
       ],
       toState: [
         "output_results": "output"
