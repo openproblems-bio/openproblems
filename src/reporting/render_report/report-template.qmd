@@ -590,6 +590,11 @@ metric_details <- purrr::map_dfr(metric_info, function(.metric) {
 }) |>
   dplyr::arrange(metric)
 
+metric_maximize <- purrr::map_lgl(metric_info, "maximize") |>
+  purrr::set_names(metric_details$metric)
+
+metric_reverse <- names(metric_maximize)[metric_maximize == FALSE]
+
 scores <- purrr::map_dfr(task_results$results, function(.result) {
   if (!.result$succeeded) {
     return(NULL)
@@ -609,13 +614,16 @@ scores <- purrr::map_dfr(task_results$results, function(.result) {
     return(NULL)
   }
 
-  data.frame(
+  tibble::tibble(
     dataset = .result$dataset_name,
     method = .result$method,
     metric = unlist(.result$metric_names),
-    value = unlist(.result$metric_values)
+    raw_value = unlist(.result$metric_values)
   )
-})
+}) |>
+  dplyr::mutate(
+    value = dplyr::if_else(metric %in% metric_reverse, -raw_value, raw_value)
+  )
 
 control_ranges <- scores |>
   dplyr::left_join(method_details, by = "method") |>
@@ -1217,7 +1225,7 @@ reactable::reactable(
         format = reactable::colFormat(digits = 3)
       )
     ),
-    purrr::map( metric_details$metric_label,
+    purrr::map(metric_details$metric_label,
       function(.metric_label) {
         reactable::colDef(
           name = .metric_label,
