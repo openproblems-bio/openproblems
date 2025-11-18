@@ -243,13 +243,22 @@ check_metric_scaling <- function(
   results_long,
   metric,
   control_methods,
-  task_name
+  task_name,
+  maximize
 ) {
   `%||%` <- rlang::`%||%`
 
   metric_results <- results_long |>
     dplyr::filter(metric_name == metric) |>
     dplyr::select(-metric_name)
+
+  # Reverse metric values if lower is better
+  if (isFALSE(maximize)) {
+    metric_results <- metric_results |>
+      dplyr::mutate(
+        metric_value = -metric_value
+      )
+  }
 
   if (
     nrow(metric_results) == 0 ||
@@ -381,7 +390,8 @@ check_method_metric_scaling <- function(
   scaled_metrics,
   method,
   task_name,
-  metric_name
+  metric_name,
+  maximize
 ) {
   method_scaled_metrics <- scaled_metrics |>
     dplyr::filter(method_name == method)
@@ -773,8 +783,10 @@ controls_metrics <- purrr::map(seq_len(nrow(metric_controls)), function(.idx) {
 })
 
 cat("\n>>> Checking metric scaling...\n")
+metric_maximize <- purrr::map_lgl(metric_info, "maximize") |>
+  purrr::set_names(metric_names)
 scaling <- purrr::map(metric_names, function(.metric) {
-  check_metric_scaling(results_long, .metric, control_methods, task_name)
+  check_metric_scaling(results_long, .metric, control_methods, task_name, maximize = metric_maximize[[.metric]])
 }) |>
   purrr::list_flatten()
 
