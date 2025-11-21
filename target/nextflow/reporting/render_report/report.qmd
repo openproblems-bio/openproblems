@@ -590,6 +590,11 @@ metric_details <- purrr::map_dfr(metric_info, function(.metric) {
 }) |>
   dplyr::arrange(metric)
 
+metric_maximize <- purrr::map_lgl(metric_info, "maximize") |>
+  purrr::set_names(metric_details$metric)
+
+metric_reverse <- names(metric_maximize)[metric_maximize == FALSE]
+
 scores <- purrr::map_dfr(task_results$results, function(.result) {
   if (!.result$succeeded) {
     return(NULL)
@@ -609,7 +614,7 @@ scores <- purrr::map_dfr(task_results$results, function(.result) {
     return(NULL)
   }
 
-  data.frame(
+  tibble::tibble(
     dataset = .result$dataset_name,
     method = .result$method,
     metric = unlist(.result$metric_names),
@@ -630,7 +635,12 @@ control_ranges <- scores |>
 scaled_scores <- scores |>
   dplyr::left_join(control_ranges, by = c("dataset", "metric")) |>
   dplyr::mutate(
-    scaled_value = (value - control_min) / (control_max - control_min)
+    scaled_value = (value - control_min) / (control_max - control_min),
+    scaled_value = dplyr::if_else(
+      metric %in% metric_reverse,
+      1 - scaled_value,
+      scaled_value
+    )
   )
 
 complete_scores <- tidyr::expand_grid(
@@ -1217,7 +1227,7 @@ reactable::reactable(
         format = reactable::colFormat(digits = 3)
       )
     ),
-    purrr::map( metric_details$metric_label,
+    purrr::map(metric_details$metric_label,
       function(.metric_label) {
         reactable::colDef(
           name = .metric_label,

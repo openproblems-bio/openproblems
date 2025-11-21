@@ -3286,9 +3286,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/generate_qc",
     "viash_version" : "0.9.4",
-    "git_commit" : "6729bf63b7e2b3aec7be2de6fdaf7ef1812a0bb9",
+    "git_commit" : "0fc92415b72a0a7bc247a2fcc5a0bb424460db38",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1431-g6729bf63"
+    "git_tag" : "v1.0.0-1432-g0fc92415"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3618,7 +3618,8 @@ check_metric_scaling <- function(
   results_long,
   metric,
   control_methods,
-  task_name
+  task_name,
+  maximize
 ) {
   \\`%||%\\` <- rlang::\\`%||%\\`
 
@@ -3647,6 +3648,8 @@ check_metric_scaling <- function(
     dplyr::left_join(control_range, by = "dataset_name") |>
     dplyr::mutate(
       scaled_value = (metric_value - control_min) / (control_max - control_min),
+      # Reverse metric values if lower is better
+      scaled_value = ifelse(maximize, scaled_value, 1 - scaled_value),
       outside = scaled_value < 0 | scaled_value > 1,
       pct_outside = dplyr::case_when(
         scaled_value < 0 ~ 0 - scaled_value,
@@ -3756,7 +3759,8 @@ check_method_metric_scaling <- function(
   scaled_metrics,
   method,
   task_name,
-  metric_name
+  metric_name,
+  maximize
 ) {
   method_scaled_metrics <- scaled_metrics |>
     dplyr::filter(method_name == method)
@@ -4148,8 +4152,10 @@ controls_metrics <- purrr::map(seq_len(nrow(metric_controls)), function(.idx) {
 })
 
 cat("\\\\n>>> Checking metric scaling...\\\\n")
+metric_maximize <- purrr::map_lgl(metric_info, "maximize") |>
+  purrr::set_names(metric_names)
 scaling <- purrr::map(metric_names, function(.metric) {
-  check_metric_scaling(results_long, .metric, control_methods, task_name)
+  check_metric_scaling(results_long, .metric, control_methods, task_name, maximize = metric_maximize[[.metric]])
 }) |>
   purrr::list_flatten()
 
