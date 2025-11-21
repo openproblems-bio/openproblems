@@ -618,12 +618,9 @@ scores <- purrr::map_dfr(task_results$results, function(.result) {
     dataset = .result$dataset_name,
     method = .result$method,
     metric = unlist(.result$metric_names),
-    raw_value = unlist(.result$metric_values)
+    value = unlist(.result$metric_values)
   )
-}) |>
-  dplyr::mutate(
-    value = dplyr::if_else(metric %in% metric_reverse, -raw_value, raw_value)
-  )
+})
 
 control_ranges <- scores |>
   dplyr::left_join(method_details, by = "method") |>
@@ -638,7 +635,12 @@ control_ranges <- scores |>
 scaled_scores <- scores |>
   dplyr::left_join(control_ranges, by = c("dataset", "metric")) |>
   dplyr::mutate(
-    scaled_value = (value - control_min) / (control_max - control_min)
+    scaled_value = (value - control_min) / (control_max - control_min),
+    scaled_value = dplyr::if_else(
+      metric %in% metric_reverse,
+      1 - scaled_value,
+      scaled_value
+    )
   )
 
 complete_scores <- tidyr::expand_grid(

@@ -252,14 +252,6 @@ check_metric_scaling <- function(
     dplyr::filter(metric_name == metric) |>
     dplyr::select(-metric_name)
 
-  # Reverse metric values if lower is better
-  if (isFALSE(maximize)) {
-    metric_results <- metric_results |>
-      dplyr::mutate(
-        metric_value = -metric_value
-      )
-  }
-
   if (
     nrow(metric_results) == 0 ||
       !any(control_methods %in% metric_results$method_name)
@@ -281,6 +273,8 @@ check_metric_scaling <- function(
     dplyr::left_join(control_range, by = "dataset_name") |>
     dplyr::mutate(
       scaled_value = (metric_value - control_min) / (control_max - control_min),
+      # Reverse metric values if lower is better
+      scaled_value = ifelse(maximize, scaled_value, 1 - scaled_value),
       outside = scaled_value < 0 | scaled_value > 1,
       pct_outside = dplyr::case_when(
         scaled_value < 0 ~ 0 - scaled_value,
