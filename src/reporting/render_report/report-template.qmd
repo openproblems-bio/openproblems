@@ -1181,10 +1181,17 @@ funkyheatmap::funky_heatmap(
 
 ::: {.callout-note}
 This table displays the scaled metric scores.
+After scaling, higher scores are always better and any missing values are set to 0.
 The "Overall" dataset gives the mean score across all of the actual datasets.
+
+Raw scores are also provided to help with understanding any issues but should not be used to compare performance.
 
 Sort and filter the table to check scores you are interested in.
 :::
+
+::: {.panel-tabset}
+
+### Scaled scores {.unnumbered .unlisted}
 
 ```{r}
 #| label: results-table
@@ -1246,3 +1253,69 @@ reactable::reactable(
   searchable = TRUE
 )
 ```
+
+### Raw scores {.unnumbered .unlisted}
+
+```{r}
+#| label: results-table-raw
+#| eval: !expr has_controls
+dataset_scores_raw <- complete_scores |>
+  dplyr::select(dataset, method, metric, value) |>
+  tidyr::pivot_wider(
+    names_from = metric,
+    values_from = value
+  )
+
+table_data_raw <- dataset_scores_raw |>
+  dplyr::mutate(
+    dataset = factor(
+      dataset,
+      levels = dataset_details$dataset,
+      labels = dataset_details$dataset_label
+    ),
+    method = factor(
+      method,
+      levels = method_details$method,
+      labels = method_details$method_label
+    )
+  ) |>
+  dplyr::relocate(dataset, .after = method) |>
+  dplyr::arrange(dataset, method)
+
+reactable::reactable(
+  table_data_raw,
+
+  columns = c(
+    list(
+      method = reactable::colDef(
+        name = "Method",
+        sticky = "left"
+      ),
+      dataset = reactable::colDef(
+        name = "Dataset",
+        sticky = "left",
+        style = list(borderRight = "2px solid #999"),
+        headerStyle = list(borderRight = "2px solid #999")
+      )
+    ),
+    purrr::map(metric_details$metric_label,
+      function(.metric_label) {
+        reactable::colDef(
+          name = .metric_label,
+          format = reactable::colFormat(digits = 3)
+        )
+      }
+    ) |>
+      purrr::set_names(metric_details$metric)
+  ),
+
+  highlight = TRUE,
+  striped = TRUE,
+  defaultPageSize = 25,
+  showPageSizeOptions = TRUE,
+  filterable = TRUE,
+  searchable = TRUE
+)
+```
+
+:::
