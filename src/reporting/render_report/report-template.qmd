@@ -585,15 +585,15 @@ method_details <- purrr::map_dfr(method_info, function(.method) {
 metric_details <- purrr::map_dfr(metric_info, function(.metric) {
   data.frame(
     metric = .metric$name,
-    metric_label = .metric$label
+    metric_label = .metric$label,
+    metric_maximize = .metric$maximize
   )
 }) |>
   dplyr::arrange(metric)
 
-metric_maximize <- purrr::map_lgl(metric_info, "maximize") |>
-  purrr::set_names(metric_details$metric)
-
-metric_reverse <- names(metric_maximize)[metric_maximize == FALSE]
+metric_reverse <- metric_details |>
+  dplyr::filter(metric_maximize == FALSE) |>
+  dplyr::pull(metric)
 
 scores <- purrr::map_dfr(task_results$results, function(.result) {
   if (!.result$succeeded) {
