@@ -454,9 +454,9 @@ RUN Rscript -e 'options(warn = 2); if (!requireNamespace("remotes", quietly = TR
   Rscript -e 'options(warn = 2); remotes::install_cran(c("bibtex", "purrr", "stringr"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component reporting get_task_info"
-LABEL org.opencontainers.image.created="2025-11-26T15:54:12Z"
+LABEL org.opencontainers.image.created="2026-04-21T10:20:26Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="2a7aee4bb2aae0c3f7f6281955c8b607f51cc104"
+LABEL org.opencontainers.image.revision="76e280c7477ea73c9bb97ae65e22ddb206be3949"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

@@ -1,0 +1,418 @@
+#!/bin/bash
+
+# fail on error
+set -e
+
+# Script configuration
+SCRIPT_NAME=$(basename "$0")
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+# Default values
+DEFAULT_OUTPUT_DIR="output/report"
+S3_BASE_PATH="s3://openproblems-data/resources"
+
+# Function to display usage
+usage() {
+    cat << EOF
+Usage: $SCRIPT_NAME [OPTIONS] MODE
+
+A script to render benchmark reports from results data.
+Automatically detects AWS CLI availability and falls back to Docker if needed.
+
+MODES:
+    local <path>        Process results from a local directory
+    s3 <s3_path>        Process results from a specific S3 path
+    latest              Process the latest results from S3
+    select              Show selection window of different runs
+
+OPTIONS:
+    -h, --help          Show this help message
+    -o, --output DIR    Output directory (default: $DEFAULT_OUTPUT_DIR)
+    -t, --task NAME     Task name (auto-detected from _viash.yaml if not provided)
+    -v, --verbose       Enable verbose output
+    --dry-run           Show commands that would be executed without running them
+
+EXAMPLES:
+    $SCRIPT_NAME latest
+    $SCRIPT_NAME s3 s3://openproblems-data/resources/task_cyto_batch_integration/results/run_20241010
+    $SCRIPT_NAME local /path/to/local/results
+    $SCRIPT_NAME select
+    $SCRIPT_NAME -o custom_output latest
+
+EOF
+}
+
+# Function to extract task name from _viash.yaml
+get_task_name() {
+    local viash_file="$REPO_ROOT/_viash.yaml"
+    if [[ -f "$viash_file" ]]; then
+        grep "^name:" "$viash_file" | sed 's/name: *//' | tr -d '"' | tr -d "'"
+    else
+        echo "Error: _viash.yaml not found in repository root" >&2
+        exit 1
+    fi
+}
+
+# Function to log messages
+log() {
+    if [[ "$VERBOSE" == "true" ]]; then
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >&2
+    fi
+}
+
+# Function to check if AWS CLI is available
+check_aws_cli() {
+    if command -v aws >/dev/null 2>&1; then
+        log "AWS CLI found locally"
+        return 0
+    else
+        log "AWS CLI not found locally, will use Docker"
+        return 1
+    fi
+}
+
+# Function to check if Docker is available
+check_docker() {
+    if command -v docker >/dev/null 2>&1; then
+        if docker info >/dev/null 2>&1; then
+            log "Docker is available and running"
+            return 0
+        else
+            echo "Error: Docker is installed but not running. Please start Docker." >&2
+            return 1
+        fi
+    else
+        echo "Error: Neither AWS CLI nor Docker is available. Please install one of them." >&2
+        return 1
+    fi
+}
+
+# Function to run AWS S3 commands (with Docker fallback)
+run_aws_s3() {
+    if check_aws_cli; then
+        aws s3 "$@"
+    else
+        # Check if Docker is available before trying to use it
+        if ! check_docker; then
+            exit 1
+        fi
+        
+        # Use Docker to run AWS CLI
+        log "Running AWS CLI via Docker: aws s3 $*"
+        
+        # Mount AWS credentials if they exist, otherwise rely on --no-sign-request
+        local aws_mount=""
+        if [[ -d "$HOME/.aws" ]]; then
+            aws_mount="-v $HOME/.aws:/root/.aws:ro"
+            log "Using AWS credentials from $HOME/.aws"
+        else
+            log "No AWS credentials found, relying on --no-sign-request flag"
+        fi
+        
+        # Suppress Docker's stderr output to avoid mixing with command output
+        docker run --rm \
+            $aws_mount \
+            -e AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}" \
+            amazon/aws-cli:latest \
+            s3 "$@" 2>/dev/null || {
+                # If the command fails, run it again with stderr visible for debugging
+                echo "AWS CLI command failed, running with error output:" >&2
+                docker run --rm \
+                    $aws_mount \
+                    -e AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}" \
+                    amazon/aws-cli:latest \
+                    s3 "$@"
+            }
+    fi
+}
+
+# Function to find latest results on S3
+find_latest_s3_results() {
+    local base_dir="$1"
+    log "Searching for latest results in $base_dir"
+    
+    local latest_date
+    latest_date=$(run_aws_s3 ls "$base_dir" --recursive --no-sign-request | \
+        awk '{print $4}' | \
+        grep 'task_info.yaml' | \
+        sort -r | \
+        head -n 1 | \
+        sed 's#.*/run_\(.*\)/[^/]*$#\1#')
+    
+    if [[ -z "$latest_date" ]]; then
+        echo "Error: No results found in $base_dir" >&2
+        exit 1
+    fi
+    
+    echo "$latest_date"
+}
+
+# Function to list available S3 runs for selection
+list_s3_runs() {
+    local base_dir="$1"
+    log "Listing available runs in $base_dir"
+    
+    run_aws_s3 ls "$base_dir" --recursive --no-sign-request | \
+        awk '{print $4}' | \
+        grep 'task_info.yaml' | \
+        sed 's#.*/run_\(.*\)/[^/]*$#\1#' | \
+        sort -r
+}
+
+# Function to select run interactively
+select_run() {
+    local base_dir="$1"
+    
+    echo "Fetching available runs..." >&2
+    
+    # Capture runs with proper error handling
+    local temp_file
+    temp_file=$(mktemp)
+    if ! list_s3_runs "$base_dir" > "$temp_file" 2>&1; then
+        echo "Error: Failed to fetch runs from $base_dir" >&2
+        rm -f "$temp_file"
+        exit 1
+    fi
+    
+    local runs
+    readarray -t runs < "$temp_file"
+    rm -f "$temp_file"
+    
+    if [[ ${#runs[@]} -eq 0 ]]; then
+        echo "Error: No runs found in $base_dir" >&2
+        exit 1
+    fi
+    
+    # Check if we're in an interactive terminal
+    if [[ -t 0 ]] && command -v select >/dev/null 2>&1; then
+        # Use bash's built-in select for a better user experience
+        echo >&2  # Empty line for clarity
+        PS3="Select a run (1-$((${#runs[@]}+1))): "
+        
+        select run_date in "${runs[@]}" "Quit"; do
+            case "$run_date" in
+                "Quit")
+                    echo "Selection cancelled." >&2
+                    return 1
+                    ;;
+                "")
+                    echo "Invalid selection. Please enter a number between 1 and $((${#runs[@]}+1))." >&2
+                    ;;
+                *)
+                    echo "$run_date"
+                    return 0
+                    ;;
+            esac
+        done
+    else
+        # Fallback for non-interactive or systems without select
+        echo "Available runs:" >&2
+        for i in "${!runs[@]}"; do
+            echo "$((i+1)). ${runs[i]}" >&2
+        done
+        echo >&2  # Empty line for clarity
+        
+        while true; do
+            read -p "Select a run (1-${#runs[@]}) or 'q' to quit: " selection >&2
+            
+            if [[ "$selection" == "q" || "$selection" == "Q" ]]; then
+                echo "Selection cancelled." >&2
+                return 1
+            elif [[ "$selection" =~ ^[0-9]+$ ]] && [[ "$selection" -ge 1 ]] && [[ "$selection" -le ${#runs[@]} ]]; then
+                echo "${runs[$((selection-1))]}"
+                return 0
+            else
+                echo "Invalid selection. Please enter a number between 1 and ${#runs[@]}, or 'q' to quit." >&2
+            fi
+        done
+    fi
+}
+
+# Function to validate input directory/path
+validate_input() {
+    local input_path="$1"
+    local mode="$2"
+    
+    case "$mode" in
+        "local")
+            if [[ ! -d "$input_path" ]]; then
+                echo "Error: Local directory '$input_path' does not exist" >&2
+                exit 1
+            fi
+            # Check for required files
+            local required_files=("task_info.yaml" "score_uns.yaml" "dataset_uns.yaml" "method_configs.yaml" "metric_configs.yaml" "trace.txt")
+            for file in "${required_files[@]}"; do
+                if [[ ! -f "$input_path/$file" ]]; then
+                    echo "Warning: Required file '$file' not found in '$input_path'" >&2
+                fi
+            done
+            ;;
+        "s3")
+            # For S3, we'll let aws s3 commands handle validation
+            log "S3 path validation will be handled by AWS CLI"
+            ;;
+    esac
+}
+
+# Function to run the nextflow pipeline
+run_pipeline() {
+    local input_dir="$1"
+    local output_dir="$2"
+    local task="$3"
+    local run_id="$4"
+    
+    log "Running pipeline with input: $input_dir, output: $output_dir, task: $task, run_id: $run_id"
+    
+    local cmd=(
+        nextflow run openproblems-bio/openproblems
+        -r build/main
+        -main-script target/nextflow/reporting/process_task_results/main.nf
+        -profile docker
+        -resume
+        -latest
+        -c common/nextflow_helpers/labels_ci.config
+        --id "$run_id"
+        --input_scores "$input_dir/score_uns.yaml"
+        --input_dataset_info "$input_dir/dataset_uns.yaml"
+        --input_method_configs "$input_dir/method_configs.yaml"
+        --input_metric_configs "$input_dir/metric_configs.yaml"
+        --input_trace "$input_dir/trace.txt"
+        --input_task_info "$input_dir/task_info.yaml"
+        --output_state '$id/state.yaml'
+        --output_combined '$id/combined_output.json'
+        --output_report '$id/report.html'
+        --output_dataset_info '$id/dataset_info.json'
+        --output_method_info '$id/method_info.json'
+        --output_metric_info '$id/metric_info.json'
+        --output_results '$id/results.json'
+        --output_quality_control '$id/quality_control.json'
+        --publish_dir "$output_dir"
+    )
+    
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo "DRY RUN - Command that would be executed:"
+        printf '%q ' "${cmd[@]}"
+        echo
+    else
+        echo "Processing $run_id -> $output_dir"
+        "${cmd[@]}"
+    fi
+}
+
+# Parse command line arguments
+VERBOSE=false
+DRY_RUN=false
+OUTPUT_DIR=""
+TASK=""
+MODE=""
+INPUT_PATH=""
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -o|--output)
+            OUTPUT_DIR="$2"
+            shift 2
+            ;;
+        -t|--task)
+            TASK="$2"
+            shift 2
+            ;;
+        -v|--verbose)
+            VERBOSE=true
+            shift
+            ;;
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        local|s3|latest|select)
+            MODE="$1"
+            if [[ "$MODE" == "local" || "$MODE" == "s3" ]]; then
+                INPUT_PATH="$2"
+                shift 2
+            else
+                shift
+            fi
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+# Validate required arguments
+if [[ -z "$MODE" ]]; then
+    echo "Error: MODE is required" >&2
+    usage
+    exit 1
+fi
+
+if [[ ("$MODE" == "local" || "$MODE" == "s3") && -z "$INPUT_PATH" ]]; then
+    echo "Error: $MODE mode requires a path argument" >&2
+    usage
+    exit 1
+fi
+
+# Set defaults
+cd "$REPO_ROOT"
+OUTPUT_DIR="${OUTPUT_DIR:-$DEFAULT_OUTPUT_DIR}"
+
+# Get task name if not provided
+if [[ -z "$TASK" ]]; then
+    TASK=$(get_task_name)
+    log "Auto-detected task name: $TASK"
+fi
+
+# Create S3 base path
+S3_TASK_BASE="$S3_BASE_PATH/$TASK/results"
+
+# Process based on mode
+case "$MODE" in
+    "local")
+        validate_input "$INPUT_PATH" "local"
+        RUN_ID="$TASK/local_$(date +%Y%m%d_%H%M%S)"
+        run_pipeline "$INPUT_PATH" "$OUTPUT_DIR" "$TASK" "$RUN_ID"
+        ;;
+    
+    "s3")
+        validate_input "$INPUT_PATH" "s3"
+        # Extract run date from S3 path if possible
+        if [[ "$INPUT_PATH" =~ run_([0-9]+) ]]; then
+            DATE="${BASH_REMATCH[1]}"
+            RUN_ID="$TASK/run_$DATE"
+        else
+            RUN_ID="$TASK/s3_$(date +%Y%m%d_%H%M%S)"
+        fi
+        run_pipeline "$INPUT_PATH" "$OUTPUT_DIR" "$TASK" "$RUN_ID"
+        ;;
+    
+    "latest")
+        DATE=$(find_latest_s3_results "$S3_TASK_BASE")
+        INPUT_DIR="$S3_TASK_BASE/run_$DATE"
+        RUN_ID="$TASK/run_$DATE"
+        run_pipeline "$INPUT_DIR" "$OUTPUT_DIR" "$TASK" "$RUN_ID"
+        ;;
+    
+    "select")
+        if DATE=$(select_run "$S3_TASK_BASE"); then
+            INPUT_DIR="$S3_TASK_BASE/run_$DATE"
+            RUN_ID="$TASK/run_$DATE"
+            run_pipeline "$INPUT_DIR" "$OUTPUT_DIR" "$TASK" "$RUN_ID"
+        else
+            echo "Operation cancelled by user." >&2
+            exit 0
+        fi
+        ;;
+esac
+
+echo "Report generation completed successfully!"
+if [[ "$DRY_RUN" != "true" ]]; then
+    echo "Output available at: $OUTPUT_DIR"
+fi
