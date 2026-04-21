@@ -19,24 +19,17 @@ argument_groups:
         default: README.md
         required: false
 resources:
-  - type: r_script
-    path: script.R
+  - type: python_script
+    path: script.py
 test_resources:
-  - type: r_script
-    path: test.R
+  - type: python_script
+    path: test.py
 engines:
   - type: docker
-    image: openproblems/base_r:1
+    image: openproblems/base_python:1
     setup:
-      - type: r
-        cran:
-          - processx
-        github:
-          - openproblems-bio/core/packages/r/openproblems.utils
-          - openproblems-bio/core/packages/r/openproblems
-          - openproblems-bio/core/packages/r/openproblems.docs
       - type: apt
-        packages: [jq, curl]
+        packages: [jq, curl, git]
       - type: docker
         # download and install quarto-*-linux-amd64.deb from latest release
         run: |
