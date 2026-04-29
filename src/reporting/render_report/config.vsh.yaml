@@ -44,8 +44,10 @@ test_resources:
 
 engines:
   - type: docker
-    image: openproblems/base_r:1.0.0
+    image: openproblems/base_r:1
     setup:
+      - type: apt
+        packages: [wget]
       - type: docker
         run: |
           export QUARTO_VERSION="1.7.32" && \
