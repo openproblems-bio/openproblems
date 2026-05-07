@@ -1,4 +1,4 @@
-# openproblems v2.1.0
+# openproblems v3.0.0
 
 ## Breaking changes
 
@@ -22,11 +22,29 @@
 
 ## Major changes
 
+- Update results processing workflow for the new website, including new JSON schema (v4), new `combine_output` and `filter_results` components, and updated `get_dataset_info`, `get_method_info`, `get_metric_info`, `get_results`, `get_task_info` reporting scripts (PR #919).
+
+- Update paper reference from preprint to published article (PR #919).
+
 - Update Viash to 0.9.0 (PR #911).
 
 - Update Viash to 0.9.4 (PR #925).
 
+- Update Viash to 0.9.7 (PR #938).
+
 ## Minor changes
+
+- Add `openproblems_op3` (Open Problems Perturbation Prediction) scRNA-seq dataset loader from GEO GSE279945 (PR #926, PR #930).
+
+- Add `--output_compression` argument to dataset loader, normalization, and processor components (PR #930).
+
+- Add contact email address to Code of Conduct (PR #923).
+
+- Update Docker image tags from `:1.0.0` to `:1` for `openproblems/base_python` and `openproblems/base_r` images (PR #928).
+
+- Add `filter_results` component and dataset/method/metric filtering arguments to the `process_task_results` workflow (PR #935).
+
+- Update `common` submodule (PR #934).
 
 - Add the CELLxGENE immune cell atlas dataset as a common test resource (PR #907).
 
@@ -34,7 +52,13 @@
 
 - Update `get_task_info`, `get_method_info` and `get_metrics_info` reporting components with more info and extend output (PR #915).
 
+- Use new functionality in Python `openproblems` package to generate a project's README (PR #938).
+
 ## Bug fixes
+
+- Fix metric direction (`maximize`/`minimize`) handling in `generate_qc` and `render_report` components of the `process_task_results` workflow (PR #936).
+
+- Fix bug in metric maximize handling and add raw scores table to the benchmark report (PR #937).
 
 - Fix extracting metadata from anndata files in the `extract_metadata` component (PR #914).
 
