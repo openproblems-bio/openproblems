@@ -446,9 +446,9 @@ function ViashDockerfile {
 FROM ubuntu:latest
 ENTRYPOINT []
 LABEL org.opencontainers.image.description="Companion container for running component utils decompress_gzip"
-LABEL org.opencontainers.image.created="2026-05-07T07:40:01Z"
+LABEL org.opencontainers.image.created="2026-05-07T07:42:58Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="5a8f22954b29f1a587df2449fa0055fb9a869af7"
+LABEL org.opencontainers.image.revision="9b5f2d1d3d4d92660c6c61a87591abe449f9e845"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

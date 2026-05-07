@@ -3221,9 +3221,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/get_method_info",
     "viash_version" : "0.9.7",
-    "git_commit" : "5a8f22954b29f1a587df2449fa0055fb9a869af7",
+    "git_commit" : "9b5f2d1d3d4d92660c6c61a87591abe449f9e845",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1438-g5a8f2295"
+    "git_tag" : "v1.0.0-1438-g9b5f2d1d"
   },
   "package_config" : {
     "name" : "openproblems",

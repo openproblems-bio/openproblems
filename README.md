@@ -1,5 +1,8 @@
-[![](https://raw.githubusercontent.com/openproblems-bio/logos/refs/heads/main/banner/openproblems-banner-1024px.png#gh-light-mode-only)](https://openproblems.bio)
-[![](https://raw.githubusercontent.com/openproblems-bio/logos/refs/heads/main/banner/openproblems-banner_white-1024px.png#gh-dark-mode-only)](https://openproblems.bio)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/openproblems-bio/logos/refs/heads/main/banner/openproblems-banner_white-1024px.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/openproblems-bio/logos/refs/heads/main/banner/openproblems-banner-1024px.png">
+  <img alt="OpenProblems logo." src="https://raw.githubusercontent.com/openproblems-bio/logos/refs/heads/main/banner/openproblems-banner-1024px.png">
+</picture>
 
 ------
 
