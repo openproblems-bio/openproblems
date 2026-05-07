@@ -1,4 +1,5 @@
-[![](https://openproblems.bio/images/heros/home_hero_text.png)](https://openproblems.bio)
+[![](https://raw.githubusercontent.com/openproblems-bio/logos/refs/heads/main/banner/openproblems-banner-1024px.png#gh-light-mode-only)](https://openproblems.bio)
+[![](https://raw.githubusercontent.com/openproblems-bio/logos/refs/heads/main/banner/openproblems-banner_white-1024px.png#gh-dark-mode-only)](https://openproblems.bio)
 
 ------
 
