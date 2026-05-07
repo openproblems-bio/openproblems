@@ -721,6 +721,9 @@ qc_summary <- quality_control |>
   ) |>
   tidyr::complete(category, fill = list(passed = 0, failed = 0))
 
+if (!"passed" %in% names(qc_summary)) qc_summary$passed <- 0L
+if (!"failed" %in% names(qc_summary)) qc_summary$failed <- 0L
+
 reactable::reactable(
   qc_summary,
   columns = list(
