@@ -3491,9 +3491,9 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/reporting/process_task_results",
     "viash_version" : "0.9.7",
-    "git_commit" : "5d53ffbc7658953a623fdc2c2cd803306d0eeca2",
+    "git_commit" : "82822646e234d9f544e84e7776ee6c3c6770d167",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1435-g5d53ffbc"
+    "git_tag" : "v1.0.0-1436-g82822646"
   },
   "package_config" : {
     "name" : "openproblems",
