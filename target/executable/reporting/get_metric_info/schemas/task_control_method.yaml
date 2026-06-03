@@ -1,0 +1,71 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: Control Method
+description: |
+  A control method is used to test the relative performance of all other methods,
+  and also as a quality control for the pipeline as a whole. A control method can
+  either be a positive control or a negative control. The positive control and
+  negative control methods set a maximum and minimum threshold for performance,
+  so any new method should perform better than the negative control methods and
+  worse than the positive control method.
+type: object
+required: [__merge__, name, label, summary, description, info, resources, runners]
+properties:
+  __merge__:
+    "$ref": "schema_openproblems_definitions.yaml#/definitions/CompAPIMerge"
+  name:
+    "$ref": "schema_openproblems_definitions.yaml#/definitions/Name"
+  status:
+    "$ref": "schema_viash.yaml#/definitions/Status"
+  label:
+    "$ref": "schema_openproblems_definitions.yaml#/definitions/Label"
+  summary:
+    "$ref": "schema_openproblems_definitions.yaml#/definitions/Summary"
+  description:
+    "$ref": "schema_openproblems_definitions.yaml#/definitions/Description"
+  references:
+    "$ref": "schema_viash.yaml#/definitions/References"
+  links:
+    "$ref": "schema_viash.yaml#/definitions/Links"
+  info:
+    type: object
+    description: Metadata of the component.
+    properties:
+      preferred_normalization: 
+        "$ref": "schema_openproblems_definitions.yaml#/definitions/PreferredNormalization"
+      variants:
+        "$ref": "schema_openproblems_definitions.yaml#/definitions/MethodVariants"
+  arguments:
+    type: array
+    description: Component-specific parameters.
+    items:
+      "$ref": "schema_viash.yaml#/definitions/Argument"
+  argument_groups:
+    type: array
+    description: Component-specific parameter groups.
+    items:
+      "$ref": "schema_viash.yaml#/definitions/ArgumentGroup"
+  resources:
+    type: array
+    description: Resources required to run the component.
+    items:
+      "$ref": "schema_viash.yaml#/definitions/Resource"
+  test_resources:
+    type: array
+    description: One or more scripts and resources used to test the component.
+    items:
+      "$ref": "schema_viash.yaml#/definitions/Resource"
+  engines:
+    type: array
+    description: "A list of engine environments to execute target artifacts in.\n\
+      \n - NativeEngine\n - DockerEngine\n"
+    items:
+      anyOf:
+        - "$ref": "schema_openproblems_definitions.yaml#/definitions/DockerEngine"
+  runners:
+    type: array
+    description: "A list of runners to execute target artifacts.\n\n - ExecutableRunner\n\
+      \ - NextflowRunner\n"
+    items:
+      anyOf:
+        - "$ref": "schema_openproblems_definitions.yaml#/definitions/NextflowRunner"
+        - "$ref": "schema_openproblems_definitions.yaml#/definitions/ExecutableRunner"

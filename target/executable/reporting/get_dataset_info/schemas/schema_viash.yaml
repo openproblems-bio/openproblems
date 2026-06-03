@@ -1,0 +1,3135 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+definitions:
+  Config:
+    description: "A Viash configuration is a YAML file which contains metadata to\
+      \ describe the behaviour and build target(s) of a component.  \nWe commonly\
+      \ name this file `config.vsh.yaml` in our examples, but you can name it however\
+      \ you choose.  \n"
+    type: "object"
+    properties:
+      label:
+        description: "A clean version of the component's name. This is only used for\
+          \ documentation."
+        type: "string"
+      license:
+        description: "The license of the package."
+        type: "string"
+      authors:
+        description: "A list of authors. An author must at least have a name, but\
+          \ can also have a list of roles, an e-mail address, and a map of custom\
+          \ properties.\n\nSuggested values for roles are:\n \n| Role | Abbrev. |\
+          \ Description |\n|------|---------|-------------|\n| maintainer | mnt |\
+          \ for the maintainer of the code. Ideally, exactly one maintainer is specified.\
+          \ |\n| author | aut | for persons who have made substantial contributions\
+          \ to the software. |\n| contributor | ctb| for persons who have made smaller\
+          \ contributions (such as code patches).\n| datacontributor | dtc | for persons\
+          \ or organisations that contributed data sets for the software\n| copyrightholder\
+          \ | cph | for all copyright holders. This is a legal concept so should use\
+          \ the legal name of an institution or corporate body.\n| funder | fnd |\
+          \ for persons or organizations that furnished financial support for the\
+          \ development of the software\n\nThe [full list of roles](https://www.loc.gov/marc/relators/relaterm.html)\
+          \ is extremely comprehensive.\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Author"
+      status:
+        description: "Allows setting a component to active, deprecated or disabled."
+        $ref: "#/definitions/Status"
+      requirements:
+        description: "Computational requirements related to running the component.\
+          \ \n`cpus` specifies the maximum number of (logical) cpus a component is\
+          \ allowed to use., whereas\n`memory` specifies the maximum amount of memory\
+          \ a component is allowed to allicate. Memory units must be\nin B, KB, MB,\
+          \ GB, TB or PB for SI units (1000-base), or KiB, MiB, GiB, TiB or PiB for\
+          \ binary IEC units (1024-base)."
+        $ref: "#/definitions/ComputationalRequirements"
+      repositories:
+        description: "(Pre-)defines repositories that can be used as repository in\
+          \ dependencies.\nAllows reusing repository definitions in case it is used\
+          \ in multiple dependencies."
+        type: "array"
+        items:
+          $ref: "#/definitions/RepositoryWithName"
+      dependencies:
+        description: "Allows listing Viash components required by this Viash component"
+        type: "array"
+        items:
+          $ref: "#/definitions/Dependency"
+      summary:
+        description: "A one-sentence summary of the component. This is only used for\
+          \ documentation."
+        type: "string"
+      functionality:
+        description: "The functionality describes the behaviour of the script in terms\
+          \ of arguments and resources.\nBy specifying a few restrictions (e.g. mandatory\
+          \ arguments) and adding some descriptions, Viash will automatically generate\
+          \ a stylish command-line interface for you.\n"
+        $ref: "#/definitions/Functionality"
+      runners:
+        description: "A list of runners to execute target artifacts.\n\n - ExecutableRunner\n\
+          \ - NextflowRunner\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Runner"
+      name:
+        description: "Name of the component and the filename of the executable when\
+          \ built with `viash build`."
+        type: "string"
+      build_info:
+        $ref: "#/definitions/BuildInfo"
+      argument_groups:
+        description: "A grouping of the arguments, used to display the help message.\n\
+          \n - `name: foo`, the name of the argument group. \n - `description: Description\
+          \ of foo`, a description of the argument group. Multiline descriptions are\
+          \ supported.\n - `arguments: [arg1, arg2, ...]`, list of the arguments.\n\
+          \n"
+        type: "array"
+        items:
+          $ref: "#/definitions/ArgumentGroup"
+      description:
+        description: "A description of the component. This is only used for documentation.\
+          \ Multiline descriptions are supported."
+        type: "string"
+      usage:
+        description: "A description on how to use the component. This will be displayed\
+          \ with `--help` under the 'Usage:' section."
+        type: "string"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      package_config:
+        description: "The package config content used during build."
+        $ref: "#/definitions/PackageConfig"
+      platforms:
+        description: "A list of platforms to generate target artifacts for.\n\n -\
+          \ Native\n - Docker\n - Nextflow\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Platform"
+      version:
+        description: "Version of the component. This field will be used to version\
+          \ the executable and the Docker container."
+        type: "string"
+      links:
+        description: "External links of the component."
+        $ref: "#/definitions/Links"
+      references:
+        description: "References to external resources related to the component."
+        $ref: "#/definitions/References"
+      engines:
+        description: "A list of engine environments to execute target artifacts in.\n\
+          \n - NativeEngine\n - DockerEngine\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Engine"
+      resources:
+        description: "Resources are files that support the component. The first resource\
+          \ should be a script that will be executed when the component is run. Additional\
+          \ resources will be copied to the same directory.\n\nCommon properties:\n\
+          \n * type: `file` / `r_script` / `python_script` / `bash_script` / `javascript_script`\
+          \ / `scala_script` / `csharp_script`, specifies the type of the resource.\
+          \ The first resource cannot be of type `file`. When the type is not specified,\
+          \ the default type is simply `file`.\n * dest: filename, the resulting name\
+          \ of the resource.  From within a script, the file can be accessed at `meta[\"\
+          resources_dir\"] + \"/\" + dest`. If unspecified, `dest` will be set to\
+          \ the basename of the `path` parameter.\n * path: `path/to/file`, the path\
+          \ of the input file. Can be a relative or an absolute path, or a URI. Mutually\
+          \ exclusive with `text`.\n * text: ...multiline text..., the content of\
+          \ the resulting file specified as a string. Mutually exclusive with `path`.\n\
+          \ * is_executable: `true` / `false`, whether the resulting resource file\
+          \ should be made executable.\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Resource"
+      keywords:
+        description: "The keywords of the components."
+        type: "array"
+        items:
+          type: "string"
+      test_resources:
+        description: "One or more scripts to be used to test the component behaviour\
+          \ when `viash test` is invoked. Additional files of type `file` will be\
+          \ made available only during testing. Each test script should expect no\
+          \ command-line inputs, be platform-independent, and return an exit code\
+          \ >0 when unexpected behaviour occurs during testing. See Unit Testing for\
+          \ more info."
+        type: "array"
+        items:
+          $ref: "#/definitions/Resource"
+      namespace:
+        description: "Namespace this component is a part of. See the Namespaces guide\
+          \ for more information on namespaces."
+        type: "string"
+      arguments:
+        description: "A list of arguments for this component. For each argument, a\
+          \ type and a name must be specified. Depending on the type of argument,\
+          \ different properties can be set. See these reference pages per type for\
+          \ more information:  \n\n - string\n - file\n - integer\n - double\n - boolean\n\
+          \ - boolean_true\n - boolean_false\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Argument"
+    required:
+    - "name"
+    additionalProperties: false
+  PackageConfig:
+    description: "A Viash package configuration file. It's name should be `_viash.yaml`."
+    type: "object"
+    properties:
+      organization:
+        description: "The organization of the package."
+        type: "string"
+      name:
+        description: "The name of the package."
+        type: "string"
+      source:
+        description: "Which source directory to use for the `viash ns` commands."
+        type: "string"
+      description:
+        description: "A description of the package. This is only used for documentation.\
+          \ Multiline descriptions are supported."
+        type: "string"
+      config_mods:
+        oneOf:
+        - description: "Which config mods to apply."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Which config mods to apply."
+            type: "string"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      license:
+        description: "The license of the package."
+        type: "string"
+      references:
+        description: "References to external resources related to the package."
+        $ref: "#/definitions/References"
+      authors:
+        description: "The authors of the package."
+        type: "array"
+        items:
+          $ref: "#/definitions/Author"
+      repositories:
+        description: "Common repository definitions for component dependencies."
+        type: "array"
+        items:
+          $ref: "#/definitions/RepositoryWithName"
+      keywords:
+        description: "The keywords of the package."
+        type: "array"
+        items:
+          type: "string"
+      target:
+        description: "Which target directory to use for `viash ns build`."
+        type: "string"
+      summary:
+        description: "A one-sentence summary of the package. This is only used for\
+          \ documentation."
+        type: "string"
+      viash_version:
+        description: "Which version of Viash to use."
+        type: "string"
+      label:
+        description: "A clean version of the package name. This is only used for documentation."
+        type: "string"
+      version:
+        description: "The version of the package."
+        type: "string"
+      links:
+        description: "External links of the package."
+        $ref: "#/definitions/Links"
+    required: []
+    additionalProperties: false
+  BuildInfo:
+    description: "Meta information fields filled in by Viash during build."
+    type: "object"
+    properties:
+      git_tag:
+        description: "Git tag."
+        type: "string"
+      git_remote:
+        description: "Git remote name."
+        type: "string"
+      viash_version:
+        description: "The Viash version that was used to build the component."
+        type: "string"
+      output:
+        description: "Folder path to the build artifacts."
+        type: "string"
+      git_commit:
+        description: "Git commit hash."
+        type: "string"
+      engine:
+        description: "The engine id used during build."
+        type: "string"
+      runner:
+        description: "The runner id used during build."
+        type: "string"
+      config:
+        description: "Path to the config used during build."
+        type: "string"
+      dependencies:
+        description: "List of dependencies used during build."
+        type: "array"
+        items:
+          type: "string"
+      executable:
+        description: "Output folder with main executable path."
+        type: "string"
+    required:
+    - "config"
+    additionalProperties: false
+  Functionality:
+    description: "The functionality-part of the config file describes the behaviour\
+      \ of the script in terms of arguments and resources.\nBy specifying a few restrictions\
+      \ (e.g. mandatory arguments) and adding some descriptions, Viash will automatically\
+      \ generate a stylish command-line interface for you.\n"
+    type: "object"
+    properties:
+      organization:
+        description: "The organization of the package."
+        type: "string"
+      name:
+        description: "Name of the component and the filename of the executable when\
+          \ built with `viash build`."
+        type: "string"
+      argument_groups:
+        description: "A grouping of the arguments, used to display the help message.\n\
+          \n - `name: foo`, the name of the argument group. \n - `description: Description\
+          \ of foo`, a description of the argument group. Multiline descriptions are\
+          \ supported.\n - `arguments: [arg1, arg2, ...]`, list of the arguments.\n\
+          \n"
+        type: "array"
+        items:
+          $ref: "#/definitions/ArgumentGroup"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      license:
+        description: "The license of the package."
+        type: "string"
+      references:
+        description: "References to external resources related to the component."
+        $ref: "#/definitions/References"
+      authors:
+        description: "A list of authors. An author must at least have a name, but\
+          \ can also have a list of roles, an e-mail address, and a map of custom\
+          \ properties.\n\nSuggested values for roles are:\n \n| Role | Abbrev. |\
+          \ Description |\n|------|---------|-------------|\n| maintainer | mnt |\
+          \ for the maintainer of the code. Ideally, exactly one maintainer is specified.\
+          \ |\n| author | aut | for persons who have made substantial contributions\
+          \ to the software. |\n| contributor | ctb| for persons who have made smaller\
+          \ contributions (such as code patches).\n| datacontributor | dtc | for persons\
+          \ or organisations that contributed data sets for the software\n| copyrightholder\
+          \ | cph | for all copyright holders. This is a legal concept so should use\
+          \ the legal name of an institution or corporate body.\n| funder | fnd |\
+          \ for persons or organizations that furnished financial support for the\
+          \ development of the software\n\nThe [full list of roles](https://www.loc.gov/marc/relators/relaterm.html)\
+          \ is extremely comprehensive.\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Author"
+      status:
+        description: "Allows setting a component to active, deprecated or disabled."
+        $ref: "#/definitions/Status"
+      requirements:
+        description: "Computational requirements related to running the component.\
+          \ \n`cpus` specifies the maximum number of (logical) cpus a component is\
+          \ allowed to use., whereas\n`memory` specifies the maximum amount of memory\
+          \ a component is allowed to allicate. Memory units must be\nin B, KB, MB,\
+          \ GB, TB or PB for SI units (1000-base), or KiB, MiB, GiB, TiB or PiB for\
+          \ binary IEC units (1024-base)."
+        $ref: "#/definitions/ComputationalRequirements"
+      repositories:
+        description: "(Pre-)defines repositories that can be used as repository in\
+          \ dependencies.\nAllows reusing repository definitions in case it is used\
+          \ in multiple dependencies."
+        type: "array"
+        items:
+          $ref: "#/definitions/RepositoryWithName"
+      test_resources:
+        description: "One or more scripts to be used to test the component behaviour\
+          \ when `viash test` is invoked. Additional files of type `file` will be\
+          \ made available only during testing. Each test script should expect no\
+          \ command-line inputs, be platform-independent, and return an exit code\
+          \ >0 when unexpected behaviour occurs during testing. See Unit Testing for\
+          \ more info."
+        type: "array"
+        items:
+          $ref: "#/definitions/Resource"
+      dependencies:
+        description: "Allows listing Viash components required by this Viash component"
+        type: "array"
+        items:
+          $ref: "#/definitions/Dependency"
+      description:
+        description: "A description of the component. This will be displayed with\
+          \ `--help`."
+        type: "string"
+      usage:
+        description: "A description on how to use the component. This will be displayed\
+          \ with `--help` under the 'Usage:' section."
+        type: "string"
+      version:
+        description: "Version of the component. This field will be used to version\
+          \ the executable and the Docker container."
+        type: "string"
+      links:
+        description: "External links of the component."
+        $ref: "#/definitions/Links"
+      resources:
+        description: "Resources are files that support the component. The first resource\
+          \ should be a script that will be executed when the functionality is run.\
+          \ Additional resources will be copied to the same directory.\n\nCommon properties:\n\
+          \n * type: `file` / `r_script` / `python_script` / `bash_script` / `javascript_script`\
+          \ / `scala_script` / `csharp_script`, specifies the type of the resource.\
+          \ The first resource cannot be of type `file`. When the type is not specified,\
+          \ the default type is simply `file`.\n * dest: filename, the resulting name\
+          \ of the resource.  From within a script, the file can be accessed at `meta[\"\
+          resources_dir\"] + \"/\" + dest`. If unspecified, `dest` will be set to\
+          \ the basename of the `path` parameter.\n * path: `path/to/file`, the path\
+          \ of the input file. Can be a relative or an absolute path, or a URI. Mutually\
+          \ exclusive with `text`.\n * text: ...multiline text..., the content of\
+          \ the resulting file specified as a string. Mutually exclusive with `path`.\n\
+          \ * is_executable: `true` / `false`, whether the resulting resource file\
+          \ should be made executable.\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Resource"
+      keywords:
+        description: "The keywords of the components."
+        type: "array"
+        items:
+          type: "string"
+      namespace:
+        description: "Namespace this component is a part of. See the Namespaces guide\
+          \ for more information on namespaces."
+        type: "string"
+      arguments:
+        description: "A list of arguments for this component. For each argument, a\
+          \ type and a name must be specified. Depending on the type of argument,\
+          \ different properties can be set. See these reference pages per type for\
+          \ more information:  \n\n - string\n - file\n - integer\n - double\n - boolean\n\
+          \ - boolean_true\n - boolean_false\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Argument"
+    required:
+    - "name"
+    additionalProperties: false
+  Author:
+    description: "Author metadata."
+    type: "object"
+    properties:
+      name:
+        description: "Full name of the author, usually in the name of FirstName MiddleName\
+          \ LastName."
+        type: "string"
+      email:
+        description: "E-mail of the author."
+        type: "string"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      roles:
+        oneOf:
+        - description: "Role of the author. Suggested items:\n\n* \"author\": Authors\
+            \ who have made substantial contributions to the component.\n* \"maintainer\"\
+            : The maintainer of the component.\n* \"contributor\": Authors who have\
+            \ made smaller contributions (such as code patches etc.).\n"
+          type: "string"
+        - type: "array"
+          items:
+            description: "Role of the author. Suggested items:\n\n* \"author\": Authors\
+              \ who have made substantial contributions to the component.\n* \"maintainer\"\
+              : The maintainer of the component.\n* \"contributor\": Authors who have\
+              \ made smaller contributions (such as code patches etc.).\n"
+            type: "string"
+    required:
+    - "name"
+    additionalProperties: false
+  ComputationalRequirements:
+    description: "Computational requirements related to running the component."
+    type: "object"
+    properties:
+      cpus:
+        description: "The maximum number of (logical) cpus a component is allowed\
+          \ to use."
+        type: "integer"
+      commands:
+        description: "A list of commands which should be present on the system for\
+          \ the script to function."
+        type: "array"
+        items:
+          type: "string"
+      memory:
+        description: "The maximum amount of memory a component is allowed to allocate.\
+          \ Unit must be one of B, KB, MB, GB, TB or PB for SI units (1000-base),\
+          \ or KiB, MiB, GiB, TiB or PiB for binary IEC units (1024-base)."
+        type: "string"
+    required: []
+    additionalProperties: false
+  ArgumentGroup:
+    description: "A grouping of the arguments, used to display the help message."
+    type: "object"
+    properties:
+      name:
+        description: "The name of the argument group."
+        type: "string"
+      description:
+        description: "A description of the argument group. This is only used for documentation.\
+          \ Multiline descriptions are supported."
+        type: "string"
+      label:
+        description: "A clean version of the argument group's name. This is only used\
+          \ for documentation."
+        type: "string"
+      summary:
+        description: "A one-sentence summary of the argument group. This is only used\
+          \ for documentation."
+        type: "string"
+      arguments:
+        description: "A list of arguments for this component. For each argument, a\
+          \ type and a name must be specified. Depending on the type of argument,\
+          \ different properties can be set. See these reference pages per type for\
+          \ more information:  \n\n - string\n - file\n - integer\n - double\n - boolean\n\
+          \ - boolean_true\n - boolean_false\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Argument"
+    required:
+    - "name"
+    additionalProperties: false
+  Links:
+    description: "Links to external resources related to the component."
+    type: "object"
+    properties:
+      repository:
+        description: "Source repository url."
+        type: "string"
+      documentation:
+        description: "Documentation website url."
+        type: "string"
+      docker_registry:
+        description: "Docker registry url."
+        type: "string"
+      homepage:
+        description: "Homepage website url."
+        type: "string"
+      issue_tracker:
+        description: "Issue tracker url."
+        type: "string"
+    required: []
+    additionalProperties: false
+  References:
+    description: "A list of scholarly sources or publications relevant to the tools\
+      \ or analysis defined in the component. This is important for attribution, scientific\
+      \ reproducibility and transparency."
+    type: "object"
+    properties:
+      bibtex:
+        oneOf:
+        - description: "One or multiple BibTeX reference(s) of the component."
+          type: "string"
+        - type: "array"
+          items:
+            description: "One or multiple BibTeX reference(s) of the component."
+            type: "string"
+      doi:
+        oneOf:
+        - description: "One or multiple DOI reference(s) of the component."
+          type: "string"
+        - type: "array"
+          items:
+            description: "One or multiple DOI reference(s) of the component."
+            type: "string"
+    required: []
+    additionalProperties: false
+  Runner:
+    oneOf:
+    - $ref: "#/definitions/ExecutableRunner"
+    - $ref: "#/definitions/NextflowRunner"
+  ExecutableRunner:
+    description: "Run code as an executable.\n\nThis runner is the default runner.\
+      \ It will generate a bash script that can be run directly.\n\nThis runner is\
+      \ also used for the native engine.\n\nThis runner is also used for the docker\
+      \ engine.\n"
+    type: "object"
+    properties:
+      docker_setup_strategy:
+        description: "The Docker setup strategy to use when building a docker engine\
+          \ enrivonment.\n\n| Strategy | Description |\n|-----|----------|\n| `alwaysbuild`\
+          \ / `build` / `b` | Always build the image from the dockerfile. This is\
+          \ the default setup strategy.\n| `alwayscachedbuild` / `cachedbuild` / `cb`\
+          \ | Always build the image from the dockerfile, with caching enabled.\n\
+          | `ifneedbebuild` |  Build the image if it does not exist locally.\n| `ifneedbecachedbuild`\
+          \ | Build the image with caching enabled if it does not exist locally, with\
+          \ caching enabled.\n| `alwayspull` / `pull` / `p` |  Try to pull the container\
+          \ from [Docker Hub](https://hub.docker.com) or the specified docker registry.\n\
+          | `alwayspullelsebuild` / `pullelsebuild` |  Try to pull the image from\
+          \ a registry and build it if it doesn't exist.\n| `alwayspullelsecachedbuild`\
+          \ / `pullelsecachedbuild` |  Try to pull the image from a registry and build\
+          \ it with caching if it doesn't exist.\n| `ifneedbepull` |  If the image\
+          \ does not exist locally, pull the image.\n| `ifneedbepullelsebuild` | \
+          \ If the image does not exist locally, pull the image. If the image does\
+          \ exist, build it.\n| `ifneedbepullelsecachedbuild` | If the image does\
+          \ not exist locally, pull the image. If the image does exist, build it with\
+          \ caching enabled.\n| `push` | Push the container to [Docker Hub](https://hub.docker.com)\
+          \  or the specified docker registry.\n| `pushifnotpresent` | Push the container\
+          \ to [Docker Hub](https://hub.docker.com) or the specified docker registry\
+          \ if the tag does not exist yet.\n| `donothing` / `meh` | Do not build or\
+          \ pull anything.\n\n"
+        $ref: "#/definitions/DockerSetupStrategy"
+      workdir:
+        description: "The working directory when starting the engine. This doesn't\
+          \ change the Dockerfile but gets added as a command-line argument at runtime."
+        type: "string"
+      docker_run_args:
+        oneOf:
+        - description: "Provide runtime arguments to Docker. See the documentation\
+            \ on [`docker run`](https://docs.docker.com/engine/reference/run/) for\
+            \ more information."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Provide runtime arguments to Docker. See the documentation\
+              \ on [`docker run`](https://docs.docker.com/engine/reference/run/) for\
+              \ more information."
+            type: "string"
+      id:
+        description: "Name of the runner. As with all runners, you can give an runner\
+          \ a different name. By specifying `id: foo`, you can target this executor\
+          \ (only) by specifying `...` in any of the Viash commands."
+        type: "string"
+      port:
+        oneOf:
+        - description: "A list of enabled ports. This doesn't change the Dockerfile\
+            \ but gets added as a command-line argument at runtime."
+          type: "integer"
+        - description: "A list of enabled ports. This doesn't change the Dockerfile\
+            \ but gets added as a command-line argument at runtime."
+          type: "string"
+        - description: "A list of enabled ports. This doesn't change the Dockerfile\
+            \ but gets added as a command-line argument at runtime."
+          type: "array"
+          items:
+            type: "integer"
+        - description: "A list of enabled ports. This doesn't change the Dockerfile\
+            \ but gets added as a command-line argument at runtime."
+          type: "array"
+          items:
+            type: "string"
+      type:
+        description: "Run code as an executable.\n\nThis runner is the default runner.\
+          \ It will generate a bash script that can be run directly.\n\nThis runner\
+          \ is also used for the native engine.\n\nThis runner is also used for the\
+          \ docker engine.\n"
+        const: "executable"
+    required:
+    - "type"
+    additionalProperties: false
+  NextflowRunner:
+    description: "Run a Viash component on a Nextflow backend engine.\n"
+    type: "object"
+    properties:
+      auto:
+        description: "Automated processing flags which can be toggled on or off:\n\
+          \n| Flag | Description | Default |\n|---|---------|----|\n| `simplifyInput`\
+          \ | If `true`, an input tuple only containing only a single File (e.g. `[\"\
+          foo\", file(\"in.h5ad\")]`) is automatically transformed to a map (i.e.\
+          \ `[\"foo\", [ input: file(\"in.h5ad\") ] ]`). | `true` |\n| `simplifyOutput`\
+          \ | If `true`, an output tuple containing a map with a File (e.g. `[\"foo\"\
+          , [ output: file(\"out.h5ad\") ] ]`) is automatically transformed to a map\
+          \ (i.e. `[\"foo\", file(\"out.h5ad\")]`). | `false` |\n| `transcript` |\
+          \ If `true`, the module's transcripts from `work/` are automatically published\
+          \ to `params.transcriptDir`. If not defined, `params.publishDir + \"/_transcripts\"\
+          ` will be used. Will throw an error if neither are defined. | `false` |\n\
+          | `publish` | If `true`, the module's outputs are automatically published\
+          \ to `params.publishDir`. If equal to \"state\", also a `.state.yaml` file\
+          \ will be published in the publish dir. Will throw an error if `params.publishDir`\
+          \ is not defined. | `false` |\n\n"
+        $ref: "#/definitions/NextflowAuto"
+      directives:
+        description: "Directives are optional settings that affect the execution of\
+          \ the process. These mostly match up with the Nextflow counterparts.  \n"
+        $ref: "#/definitions/NextflowDirectives"
+      container:
+        description: "Specifies the Docker engine id to be used to run Nextflow."
+        type: "string"
+      config:
+        description: "Allows tweaking how the Nextflow Config file is generated."
+        $ref: "#/definitions/NextflowConfig"
+      debug:
+        description: "Whether or not to print debug messages."
+        type: "boolean"
+      id:
+        description: "Name of the runner. As with all runners, you can give an runner\
+          \ a different name. By specifying `id: foo`, you can target this runner\
+          \ (only) by specifying `...` in any of the Viash commands."
+        type: "string"
+      type:
+        description: "Run a Viash component on a Nextflow backend engine.\n"
+        const: "nextflow"
+    required:
+    - "type"
+    additionalProperties: false
+  Engine:
+    oneOf:
+    - $ref: "#/definitions/DockerEngine"
+    - $ref: "#/definitions/NativeEngine"
+  NativeEngine:
+    description: "Running a Viash component on a native engine means that the script\
+      \ will be executed in your current environment.\nAny dependencies are assumed\
+      \ to have been installed by the user, so the native engine is meant for developers\
+      \ (who know what they're doing) or for simple bash scripts (which have no extra\
+      \ dependencies).\n"
+    type: "object"
+    properties:
+      id:
+        description: "Name of the engine. As with all engines, you can give an engine\
+          \ a different name. By specifying `id: foo`, you can target this engine\
+          \ (only) by specifying `...` in any of the Viash commands."
+        type: "string"
+      type:
+        description: "Running a Viash component on a native engine means that the\
+          \ script will be executed in your current environment.\nAny dependencies\
+          \ are assumed to have been installed by the user, so the native engine is\
+          \ meant for developers (who know what they're doing) or for simple bash\
+          \ scripts (which have no extra dependencies).\n"
+        const: "native"
+    required:
+    - "type"
+    additionalProperties: false
+  DockerEngine:
+    description: "Run a Viash component on a Docker backend engine.\nBy specifying\
+      \ which dependencies your component needs, users will be able to build a docker\
+      \ container from scratch using the setup flag, or pull it from a docker repository.\n"
+    type: "object"
+    properties:
+      organization:
+        description: "Name of a start container's [organization](https://docs.docker.com/docker-hub/orgs/)."
+        type: "string"
+      registry:
+        description: "The URL to the a [custom Docker registry](https://docs.docker.com/registry/)\
+          \ where the start container is located."
+        type: "string"
+      image:
+        description: "The base container to start from. You can also add the tag here\
+          \ if you wish."
+        type: "string"
+      tag:
+        description: "Specify a Docker image based on its tag."
+        type: "string"
+      target_image:
+        description: "If anything is specified in the setup section, running the `---setup`\
+          \ will result in an image with the name of `<target_image>:<version>`. If\
+          \ nothing is specified in the `setup` section, simply `image` will be used.\
+          \ Advanced usage only."
+        type: "string"
+      target_tag:
+        description: "The tag the resulting image gets. Advanced usage only."
+        type: "string"
+      namespace_separator:
+        description: "The separator between the namespace and the name of the component,\
+          \ used for determining the image name. Default: \"/\"."
+        type: "string"
+      target_package:
+        description: "The package name set in the resulting image. Advanced usage\
+          \ only."
+        type: "string"
+      id:
+        description: "Name of the engine. As with all engines, you can give a engine\
+          \ a different name. By specifying `id: foo`, you can target this engine\
+          \ (only) by specifying `...` in any of the Viash commands."
+        type: "string"
+      target_registry:
+        description: "The URL where the resulting image will be pushed to. Advanced\
+          \ usage only."
+        type: "string"
+      type:
+        description: "Run a Viash component on a Docker backend engine.\nBy specifying\
+          \ which dependencies your component needs, users will be able to build a\
+          \ docker container from scratch using the setup flag, or pull it from a\
+          \ docker repository.\n"
+        const: "docker"
+      target_organization:
+        description: "The organization set in the resulting image. Advanced usage\
+          \ only."
+        type: "string"
+      setup:
+        description: "A list of requirements for installing the following types of\
+          \ packages:\n\n - apt\n - apk\n - Docker setup instructions\n - JavaScript\n\
+          \ - Python\n - R\n - Ruby\n - yum\n\nThe order in which these dependencies\
+          \ are specified determines the order in which they will be installed.\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Requirements"
+      cmd:
+        oneOf:
+        - description: "Set the default command being executed when running the Docker\
+            \ container."
+          type: "string"
+        - description: "Set the default command being executed when running the Docker\
+            \ container."
+          type: "array"
+          items:
+            type: "string"
+      target_image_source:
+        description: "The source of the target image. This is used for defining labels\
+          \ in the dockerfile."
+        type: "string"
+      test_setup:
+        description: "Additional requirements specific for running unit tests."
+        type: "array"
+        items:
+          $ref: "#/definitions/Requirements"
+      entrypoint:
+        oneOf:
+        - description: "Override the entrypoint of the base container. Default set\
+            \ `ENTRYPOINT []`."
+          type: "string"
+        - description: "Override the entrypoint of the base container. Default set\
+            \ `ENTRYPOINT []`."
+          type: "array"
+          items:
+            type: "string"
+    required:
+    - "image"
+    - "type"
+    additionalProperties: false
+  Platform:
+    oneOf:
+    - $ref: "#/definitions/NativePlatform"
+    - $ref: "#/definitions/DockerPlatform"
+    - $ref: "#/definitions/NextflowPlatform"
+  NativePlatform:
+    description: "Running a Viash component on a native platform means that the script\
+      \ will be executed in your current environment.\nAny dependencies are assumed\
+      \ to have been installed by the user, so the native platform is meant for developers\
+      \ (who know what they're doing) or for simple bash scripts (which have no extra\
+      \ dependencies).\n"
+    type: "object"
+    properties:
+      id:
+        description: "As with all platforms, you can give a platform a different name.\
+          \ By specifying `id: foo`, you can target this platform (only) by specifying\
+          \ `-p foo` in any of the Viash commands."
+        type: "string"
+      type:
+        description: "Running a Viash component on a native platform means that the\
+          \ script will be executed in your current environment.\nAny dependencies\
+          \ are assumed to have been installed by the user, so the native platform\
+          \ is meant for developers (who know what they're doing) or for simple bash\
+          \ scripts (which have no extra dependencies).\n"
+        const: "native"
+    required:
+    - "type"
+    additionalProperties: false
+  DockerPlatform:
+    description: "Run a Viash component on a Docker backend platform.\nBy specifying\
+      \ which dependencies your component needs, users will be able to build a docker\
+      \ container from scratch using the setup flag, or pull it from a docker repository.\n"
+    type: "object"
+    properties:
+      organization:
+        description: "Name of a container's [organization](https://docs.docker.com/docker-hub/orgs/)."
+        type: "string"
+      registry:
+        description: "The URL to the a [custom Docker registry](https://docs.docker.com/registry/)"
+        type: "string"
+      image:
+        description: "The base container to start from. You can also add the tag here\
+          \ if you wish."
+        type: "string"
+      tag:
+        description: "Specify a Docker image based on its tag."
+        type: "string"
+      target_tag:
+        description: "The tag the resulting image gets. Advanced usage only."
+        type: "string"
+      run_args:
+        oneOf:
+        - description: "Add [docker run](https://docs.docker.com/engine/reference/run/)\
+            \ arguments."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Add [docker run](https://docs.docker.com/engine/reference/run/)\
+              \ arguments."
+            type: "string"
+      namespace_separator:
+        description: "The separator between the namespace and the name of the component,\
+          \ used for determining the image name. Default: \"/\"."
+        type: "string"
+      resolve_volume:
+        description: "Enables or disables automatic volume mapping. Enabled when set\
+          \ to `Automatic` or disabled when set to `Manual`. Default: `Automatic`."
+        $ref: "#/definitions/DockerResolveVolume"
+      cmd:
+        oneOf:
+        - description: "Set the default command being executed when running the Docker\
+            \ container."
+          type: "string"
+        - description: "Set the default command being executed when running the Docker\
+            \ container."
+          type: "array"
+          items:
+            type: "string"
+      id:
+        description: "As with all platforms, you can give a platform a different name.\
+          \ By specifying `id: foo`, you can target this platform (only) by specifying\
+          \ `-p foo` in any of the Viash commands."
+        type: "string"
+      port:
+        oneOf:
+        - description: "A list of enabled ports. This doesn't change the Dockerfile\
+            \ but gets added as a command-line argument at runtime."
+          type: "string"
+        - type: "array"
+          items:
+            description: "A list of enabled ports. This doesn't change the Dockerfile\
+              \ but gets added as a command-line argument at runtime."
+            type: "string"
+      target_registry:
+        description: "The URL where the resulting image will be pushed to. Advanced\
+          \ usage only."
+        type: "string"
+      setup:
+        description: "A list of requirements for installing the following types of\
+          \ packages:\n\n - apt\n - apk\n - Docker setup instructions\n - JavaScript\n\
+          \ - Python\n - R\n - Ruby\n - yum\n\nThe order in which these dependencies\
+          \ are specified determines the order in which they will be installed.\n"
+        type: "array"
+        items:
+          $ref: "#/definitions/Requirements"
+      workdir:
+        description: "The working directory when starting the container. This doesn't\
+          \ change the Dockerfile but gets added as a command-line argument at runtime."
+        type: "string"
+      target_image:
+        description: "If anything is specified in the setup section, running the `---setup`\
+          \ will result in an image with the name of `<target_image>:<version>`. If\
+          \ nothing is specified in the `setup` section, simply `image` will be used.\
+          \ Advanced usage only."
+        type: "string"
+      target_image_source:
+        description: "The source of the target image. This is used for defining labels\
+          \ in the dockerfile."
+        type: "string"
+      test_setup:
+        description: "Additional requirements specific for running unit tests."
+        type: "array"
+        items:
+          $ref: "#/definitions/Requirements"
+      entrypoint:
+        oneOf:
+        - description: "Override the entrypoint of the base container. Default set\
+            \ `ENTRYPOINT []`."
+          type: "string"
+        - description: "Override the entrypoint of the base container. Default set\
+            \ `ENTRYPOINT []`."
+          type: "array"
+          items:
+            type: "string"
+      setup_strategy:
+        description: "The Docker setup strategy to use when building a container.\n\
+          \n| Strategy | Description |\n|-----|----------|\n| `alwaysbuild` / `build`\
+          \ / `b` | Always build the image from the dockerfile. This is the default\
+          \ setup strategy.\n| `alwayscachedbuild` / `cachedbuild` / `cb` | Always\
+          \ build the image from the dockerfile, with caching enabled.\n| `ifneedbebuild`\
+          \ |  Build the image if it does not exist locally.\n| `ifneedbecachedbuild`\
+          \ | Build the image with caching enabled if it does not exist locally, with\
+          \ caching enabled.\n| `alwayspull` / `pull` / `p` |  Try to pull the container\
+          \ from [Docker Hub](https://hub.docker.com) or the specified docker registry.\n\
+          | `alwayspullelsebuild` / `pullelsebuild` |  Try to pull the image from\
+          \ a registry and build it if it does not exist.\n| `alwayspullelsecachedbuild`\
+          \ / `pullelsecachedbuild` |  Try to pull the image from a registry and build\
+          \ it with caching if it does not exist.\n| `ifneedbepull` |  If the image\
+          \ does not exist locally, pull the image.\n| `ifneedbepullelsebuild` | \
+          \ Do nothing if the image exists locally. Else, try to pull the image from\
+          \ a registry. Otherwise build the image from scratch.\n| `ifneedbepullelsecachedbuild`\
+          \ | Do nothing if the image exists locally. Else, try to pull the image\
+          \ from a registry. Otherwise build the image with caching enabled.\n| `push`\
+          \ | Push the container to [Docker Hub](https://hub.docker.com)  or the specified\
+          \ docker registry.\n| `pushifnotpresent` | Push the container to [Docker\
+          \ Hub](https://hub.docker.com) or the specified docker registry if the tag\
+          \ does not exist yet.\n| `donothing` / `meh` | Do not build or pull anything.\n\
+          \n"
+        $ref: "#/definitions/DockerSetupStrategy"
+      type:
+        description: "Run a Viash component on a Docker backend platform.\nBy specifying\
+          \ which dependencies your component needs, users will be able to build a\
+          \ docker container from scratch using the setup flag, or pull it from a\
+          \ docker repository.\n"
+        const: "docker"
+      target_organization:
+        description: "The organization set in the resulting image. Advanced usage\
+          \ only."
+        type: "string"
+    required:
+    - "image"
+    - "type"
+    additionalProperties: false
+  NextflowPlatform:
+    description: "Platform for generating Nextflow VDSL3 modules."
+    type: "object"
+    properties:
+      auto:
+        description: "Automated processing flags which can be toggled on or off:\n\
+          \n| Flag | Description | Default |\n|---|---------|----|\n| `simplifyInput`\
+          \ | If `true`, an input tuple only containing only a single File (e.g. `[\"\
+          foo\", file(\"in.h5ad\")]`) is automatically transformed to a map (i.e.\
+          \ `[\"foo\", [ input: file(\"in.h5ad\") ] ]`). | `true` |\n| `simplifyOutput`\
+          \ | If `true`, an output tuple containing a map with a File (e.g. `[\"foo\"\
+          , [ output: file(\"out.h5ad\") ] ]`) is automatically transformed to a map\
+          \ (i.e. `[\"foo\", file(\"out.h5ad\")]`). | `false` |\n| `transcript` |\
+          \ If `true`, the module's transcripts from `work/` are automatically published\
+          \ to `params.transcriptDir`. If not defined, `params.publishDir + \"/_transcripts\"\
+          ` will be used. Will throw an error if neither are defined. | `false` |\n\
+          | `publish` | If `true`, the module's outputs are automatically published\
+          \ to `params.publishDir`. If equal to \"state\", also a `.state.yaml` file\
+          \ will be published in the publish dir. Will throw an error if `params.publishDir`\
+          \ is not defined. | `false` |\n\n"
+        $ref: "#/definitions/NextflowAuto"
+      directives:
+        description: "Directives are optional settings that affect the execution of\
+          \ the process. These mostly match up with the Nextflow counterparts.  \n"
+        $ref: "#/definitions/NextflowDirectives"
+      container:
+        description: "Specifies the Docker platform id to be used to run Nextflow."
+        type: "string"
+      config:
+        description: "Allows tweaking how the Nextflow Config file is generated."
+        $ref: "#/definitions/NextflowConfig"
+      debug:
+        description: "Whether or not to print debug messages."
+        type: "boolean"
+      id:
+        description: "Every platform can be given a specific id that can later be\
+          \ referred to explicitly when running or building the Viash component."
+        type: "string"
+      type:
+        description: "Platform for generating Nextflow VDSL3 modules."
+        const: "nextflow"
+    required:
+    - "type"
+    additionalProperties: false
+  Requirements:
+    oneOf:
+    - $ref: "#/definitions/ApkRequirements"
+    - $ref: "#/definitions/AptRequirements"
+    - $ref: "#/definitions/DockerRequirements"
+    - $ref: "#/definitions/JavaScriptRequirements"
+    - $ref: "#/definitions/PythonRequirements"
+    - $ref: "#/definitions/RRequirements"
+    - $ref: "#/definitions/RubyRequirements"
+    - $ref: "#/definitions/YumRequirements"
+  ApkRequirements:
+    description: "Specify which apk packages should be available in order to run the\
+      \ component."
+    type: "object"
+    properties:
+      type:
+        description: "Specify which apk packages should be available in order to run\
+          \ the component."
+        const: "apk"
+      packages:
+        oneOf:
+        - description: "Specifies which packages to install."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install."
+            type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  AptRequirements:
+    description: "Specify which apt packages should be available in order to run the\
+      \ component."
+    type: "object"
+    properties:
+      interactive:
+        description: "If `false`, the Debian frontend is set to non-interactive (recommended).\
+          \ Default: false."
+        type: "boolean"
+      type:
+        description: "Specify which apt packages should be available in order to run\
+          \ the component."
+        const: "apt"
+      packages:
+        oneOf:
+        - description: "Specifies which packages to install."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install."
+            type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  DockerRequirements:
+    description: "Specify which Docker commands should be run during setup."
+    type: "object"
+    properties:
+      run:
+        oneOf:
+        - description: "Specifies which `RUN` entries to add to the Dockerfile while\
+            \ building it."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which `RUN` entries to add to the Dockerfile while\
+              \ building it."
+            type: "string"
+      label:
+        oneOf:
+        - description: "Specifies which `LABEL` entries to add to the Dockerfile while\
+            \ building it."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which `LABEL` entries to add to the Dockerfile\
+              \ while building it."
+            type: "string"
+      build_args:
+        oneOf:
+        - description: "Specifies which `ARG` entries to add to the Dockerfile while\
+            \ building it."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which `ARG` entries to add to the Dockerfile while\
+              \ building it."
+            type: "string"
+      copy:
+        oneOf:
+        - description: "Specifies which `COPY` entries to add to the Dockerfile while\
+            \ building it."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which `COPY` entries to add to the Dockerfile\
+              \ while building it."
+            type: "string"
+      type:
+        description: "Specify which Docker commands should be run during setup."
+        const: "docker"
+      add:
+        oneOf:
+        - description: "Specifies which `ADD` entries to add to the Dockerfile while\
+            \ building it."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which `ADD` entries to add to the Dockerfile while\
+              \ building it."
+            type: "string"
+      env:
+        oneOf:
+        - description: "Specifies which `ENV` entries to add to the Dockerfile while\
+            \ building it. Unlike `ARG`, `ENV` entries are also accessible from inside\
+            \ the container."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which `ENV` entries to add to the Dockerfile while\
+              \ building it. Unlike `ARG`, `ENV` entries are also accessible from\
+              \ inside the container."
+            type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  JavaScriptRequirements:
+    description: "Specify which JavaScript packages should be available in order to\
+      \ run the component."
+    type: "object"
+    properties:
+      github:
+        oneOf:
+        - description: "Specifies which packages to install from GitHub."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from GitHub."
+            type: "string"
+      url:
+        oneOf:
+        - description: "Specifies which packages to install using a generic URI."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install using a generic URI."
+            type: "string"
+      git:
+        oneOf:
+        - description: "Specifies which packages to install using a Git URI."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install using a Git URI."
+            type: "string"
+      npm:
+        oneOf:
+        - description: "Specifies which packages to install from npm."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from npm."
+            type: "string"
+      type:
+        description: "Specify which JavaScript packages should be available in order\
+          \ to run the component."
+        const: "javascript"
+      packages:
+        oneOf:
+        - description: "Specifies which packages to install from npm."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from npm."
+            type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  PythonRequirements:
+    description: "Specify which Python packages should be available in order to run\
+      \ the component."
+    type: "object"
+    properties:
+      github:
+        oneOf:
+        - description: "Specifies which packages to install from GitHub."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from GitHub."
+            type: "string"
+      gitlab:
+        oneOf:
+        - description: "Specifies which packages to install from GitLab."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from GitLab."
+            type: "string"
+      pip:
+        oneOf:
+        - description: "Specifies which packages to install from pip."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from pip."
+            type: "string"
+      pypi:
+        oneOf:
+        - description: "Specifies which packages to install from PyPI using pip."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from PyPI using pip."
+            type: "string"
+      git:
+        oneOf:
+        - description: "Specifies which packages to install using a Git URI."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install using a Git URI."
+            type: "string"
+      upgrade:
+        description: "Sets the `--upgrade` flag when set to true. Default: true."
+        type: "boolean"
+      packages:
+        oneOf:
+        - description: "Specifies which packages to install from pip."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from pip."
+            type: "string"
+      url:
+        oneOf:
+        - description: "Specifies which packages to install using a generic URI."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install using a generic URI."
+            type: "string"
+      svn:
+        oneOf:
+        - description: "Specifies which packages to install using an SVN URI."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install using an SVN URI."
+            type: "string"
+      bazaar:
+        oneOf:
+        - description: "Specifies which packages to install using a Bazaar URI."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install using a Bazaar URI."
+            type: "string"
+      script:
+        oneOf:
+        - description: "Specifies a code block to run as part of the build."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies a code block to run as part of the build."
+            type: "string"
+      type:
+        description: "Specify which Python packages should be available in order to\
+          \ run the component."
+        const: "python"
+      mercurial:
+        oneOf:
+        - description: "Specifies which packages to install using a Mercurial URI."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install using a Mercurial URI."
+            type: "string"
+      user:
+        description: "Sets the `--user` flag when set to true. Default: false."
+        type: "boolean"
+    required:
+    - "type"
+    additionalProperties: false
+  RRequirements:
+    description: "Specify which R packages should be available in order to run the\
+      \ component."
+    type: "object"
+    properties:
+      bioc:
+        oneOf:
+        - description: "Specifies which packages to install from BioConductor."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from BioConductor."
+            type: "string"
+      github:
+        oneOf:
+        - description: "Specifies which packages to install from GitHub."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from GitHub."
+            type: "string"
+      gitlab:
+        oneOf:
+        - description: "Specifies which packages to install from GitLab."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from GitLab."
+            type: "string"
+      url:
+        oneOf:
+        - description: "Specifies which packages to install using a generic URI."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install using a generic URI."
+            type: "string"
+      bioc_force_install:
+        description: "Forces packages specified in `bioc` to be reinstalled, even\
+          \ if they are already present in the container. Default: false."
+        type: "boolean"
+      git:
+        oneOf:
+        - description: "Specifies which packages to install using a Git URI."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install using a Git URI."
+            type: "string"
+      cran:
+        oneOf:
+        - description: "Specifies which packages to install from CRAN."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from CRAN."
+            type: "string"
+      bitbucket:
+        oneOf:
+        - description: "Specifies which packages to install from Bitbucket."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from Bitbucket."
+            type: "string"
+      svn:
+        oneOf:
+        - description: "Specifies which packages to install using an SVN URI."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install using an SVN URI."
+            type: "string"
+      packages:
+        oneOf:
+        - description: "Specifies which packages to install from CRAN."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install from CRAN."
+            type: "string"
+      script:
+        oneOf:
+        - description: "Specifies a code block to run as part of the build."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies a code block to run as part of the build."
+            type: "string"
+      type:
+        description: "Specify which R packages should be available in order to run\
+          \ the component."
+        const: "r"
+    required:
+    - "type"
+    additionalProperties: false
+  RubyRequirements:
+    description: "Specify which Ruby packages should be available in order to run\
+      \ the component."
+    type: "object"
+    properties:
+      type:
+        description: "Specify which Ruby packages should be available in order to\
+          \ run the component."
+        const: "ruby"
+      packages:
+        oneOf:
+        - description: "Specifies which packages to install."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install."
+            type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  YumRequirements:
+    description: "Specify which yum packages should be available in order to run the\
+      \ component."
+    type: "object"
+    properties:
+      type:
+        description: "Specify which yum packages should be available in order to run\
+          \ the component."
+        const: "yum"
+      packages:
+        oneOf:
+        - description: "Specifies which packages to install."
+          type: "string"
+        - type: "array"
+          items:
+            description: "Specifies which packages to install."
+            type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  Argument:
+    oneOf:
+    - $ref: "#/definitions/BooleanArgument"
+    - $ref: "#/definitions/BooleanTrueArgument"
+    - $ref: "#/definitions/BooleanFalseArgument"
+    - $ref: "#/definitions/DoubleArgument"
+    - $ref: "#/definitions/FileArgument"
+    - $ref: "#/definitions/IntegerArgument"
+    - $ref: "#/definitions/LongArgument"
+    - $ref: "#/definitions/StringArgument"
+  BooleanArgument:
+    description: "A `boolean` type argument has two possible values: `true` or `false`."
+    type: "object"
+    properties:
+      alternatives:
+        oneOf:
+        - description: "List of alternative format variations for this argument."
+          type: "string"
+        - type: "array"
+          items:
+            description: "List of alternative format variations for this argument."
+            type: "string"
+      name:
+        description: "The name of the argument. Can be in the formats `--trim`, `-t`\
+          \ or `trim`. The number of dashes determines how values can be passed: \
+          \ \n\n  - `--trim` is a long option, which can be passed with `executable_name\
+          \ --trim`\n  - `-t` is a short option, which can be passed with `executable_name\
+          \ -t`\n  - `trim` is an argument, which can be passed with `executable_name\
+          \ trim`  \n"
+        type: "string"
+      label:
+        description: "A clean version of the argument's name. This is only used for\
+          \ documentation."
+        type: "string"
+      direction:
+        $ref: "#/definitions/Direction"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      default:
+        oneOf:
+        - description: "The default value when no argument value is provided. This\
+            \ will not work if the [`required`](#required) property is enabled."
+          type: "boolean"
+        - type: "array"
+          items:
+            description: "The default value when no argument value is provided. This\
+              \ will not work if the [`required`](#required) property is enabled."
+            type: "boolean"
+      example:
+        oneOf:
+        - description: "An example value for this argument. If no [`default`](#default)\
+            \ property was specified, this will be used for that purpose."
+          type: "boolean"
+        - type: "array"
+          items:
+            description: "An example value for this argument. If no [`default`](#default)\
+              \ property was specified, this will be used for that purpose."
+            type: "boolean"
+      summary:
+        description: "A one-sentence summary of the argument. This is only used for\
+          \ documentation."
+        type: "string"
+      description:
+        description: "A description of the argument. This is only used for documentation.\
+          \ Multiline descriptions are supported."
+        type: "string"
+      multiple_sep:
+        description: "The delimiter character for providing [`multiple`](#multiple)\
+          \ values. `:` by default."
+        type: "string"
+      multiple:
+        description: "Treat the argument value as an array. Arrays can be passed using\
+          \ the delimiter `--foo=1:2:3` or by providing the same argument multiple\
+          \ times `--foo 1 --foo 2`. You can use a custom delimiter by using the [`multiple_sep`](#multiple_sep)\
+          \ property. `false` by default."
+        type: "boolean"
+      type:
+        description: "A `boolean` type argument has two possible values: `true` or\
+          \ `false`."
+        const: "boolean"
+      required:
+        description: "Make the value for this argument required. If set to `true`,\
+          \ an error will be produced if no value was provided. `false` by default."
+        type: "boolean"
+    required:
+    - "name"
+    - "type"
+    additionalProperties: false
+  BooleanTrueArgument:
+    description: "An argument of the `boolean_true` type acts like a `boolean` flag\
+      \ with a default value of `false`. When called as an argument it sets the `boolean`\
+      \ to `true`."
+    type: "object"
+    properties:
+      alternatives:
+        oneOf:
+        - description: "List of alternative format variations for this argument."
+          type: "string"
+        - type: "array"
+          items:
+            description: "List of alternative format variations for this argument."
+            type: "string"
+      name:
+        description: "The name of the argument. Can be in the formats `--silent`,\
+          \ `-s` or `silent`. The number of dashes determines how values can be passed:\
+          \  \n\n  - `--silent` is a long option, which can be passed with `executable_name\
+          \ --silent`\n  - `-s` is a short option, which can be passed with `executable_name\
+          \ -s`\n  - `silent` is an argument, which can be passed with `executable_name\
+          \ silent`  \n"
+        type: "string"
+      label:
+        description: "A clean version of the argument's name. This is only used for\
+          \ documentation."
+        type: "string"
+      direction:
+        $ref: "#/definitions/Direction"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      summary:
+        description: "A one-sentence summary of the argument. This is only used for\
+          \ documentation."
+        type: "string"
+      description:
+        description: "A description of the argument. This is only used for documentation.\
+          \ Multiline descriptions are supported."
+        type: "string"
+      type:
+        description: "An argument of the `boolean_true` type acts like a `boolean`\
+          \ flag with a default value of `false`. When called as an argument it sets\
+          \ the `boolean` to `true`."
+        const: "boolean_true"
+    required:
+    - "name"
+    - "type"
+    additionalProperties: false
+  BooleanFalseArgument:
+    description: "An argument of the `boolean_false` type acts like an inverted `boolean`\
+      \ flag with a default value of `true`. When called as an argument it sets the\
+      \ `boolean` to `false`."
+    type: "object"
+    properties:
+      alternatives:
+        oneOf:
+        - description: "List of alternative format variations for this argument."
+          type: "string"
+        - type: "array"
+          items:
+            description: "List of alternative format variations for this argument."
+            type: "string"
+      name:
+        description: "The name of the argument. Can be in the formats `--no-log`,\
+          \ `-n` or `no-log`. The number of dashes determines how values can be passed:\
+          \  \n\n  - `--no-log` is a long option, which can be passed with `executable_name\
+          \ --no-log`\n  - `-n` is a short option, which can be passed with `executable_name\
+          \ -n`\n  - `no-log` is an argument, which can be passed with `executable_name\
+          \ no-log`  \n"
+        type: "string"
+      label:
+        description: "A clean version of the argument's name. This is only used for\
+          \ documentation."
+        type: "string"
+      direction:
+        $ref: "#/definitions/Direction"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      summary:
+        description: "A one-sentence summary of the argument. This is only used for\
+          \ documentation."
+        type: "string"
+      description:
+        description: "A description of the argument. This is only used for documentation.\
+          \ Multiline descriptions are supported."
+        type: "string"
+      type:
+        description: "An argument of the `boolean_false` type acts like an inverted\
+          \ `boolean` flag with a default value of `true`. When called as an argument\
+          \ it sets the `boolean` to `false`."
+        const: "boolean_false"
+    required:
+    - "name"
+    - "type"
+    additionalProperties: false
+  DoubleArgument:
+    description: "A `double` type argument has a numeric value with decimal points"
+    type: "object"
+    properties:
+      alternatives:
+        oneOf:
+        - description: "List of alternative format variations for this argument."
+          type: "string"
+        - type: "array"
+          items:
+            description: "List of alternative format variations for this argument."
+            type: "string"
+      name:
+        description: "The name of the argument. Can be in the formats `--foo`, `-f`\
+          \ or `foo`. The number of dashes determines how values can be passed:  \n\
+          \n  - `--foo` is a long option, which can be passed with `executable_name\
+          \ --foo=value` or `executable_name --foo value`\n  - `-f` is a short option,\
+          \ which can be passed with `executable_name -f value`\n  - `foo` is an argument,\
+          \ which can be passed with `executable_name value`  \n"
+        type: "string"
+      label:
+        description: "A clean version of the argument's name. This is only used for\
+          \ documentation."
+        type: "string"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      max:
+        description: "Maximum allowed value for this argument. If set and the provided\
+          \ value is higher than the maximum, an error will be produced. Can be combined\
+          \ with [`min`](#min) to clamp values."
+        $ref: "#/definitions/DoubleWithInf"
+      default:
+        oneOf:
+        - description: "The default value when no argument value is provided. This\
+            \ will not work if the [`required`](#required) property is enabled."
+          $ref: "#/definitions/DoubleWithInf"
+        - type: "array"
+          items:
+            description: "The default value when no argument value is provided. This\
+              \ will not work if the [`required`](#required) property is enabled."
+            $ref: "#/definitions/DoubleWithInf"
+      example:
+        oneOf:
+        - description: "An example value for this argument. If no [`default`](#default)\
+            \ property was specified, this will be used for that purpose."
+          $ref: "#/definitions/DoubleWithInf"
+        - type: "array"
+          items:
+            description: "An example value for this argument. If no [`default`](#default)\
+              \ property was specified, this will be used for that purpose."
+            $ref: "#/definitions/DoubleWithInf"
+      summary:
+        description: "A one-sentence summary of the argument. This is only used for\
+          \ documentation."
+        type: "string"
+      description:
+        description: "A description of the argument. This is only used for documentation.\
+          \ Multiline descriptions are supported."
+        type: "string"
+      multiple_sep:
+        description: "The delimiter character for providing [`multiple`](#multiple)\
+          \ values. `:` by default."
+        type: "string"
+      min:
+        description: "Minimum allowed value for this argument. If set and the provided\
+          \ value is lower than the minimum, an error will be produced. Can be combined\
+          \ with [`max`](#max) to clamp values."
+        $ref: "#/definitions/DoubleWithInf"
+      direction:
+        $ref: "#/definitions/Direction"
+      multiple:
+        description: "Treat the argument value as an array. Arrays can be passed using\
+          \ the delimiter `--foo=1:2:3` or by providing the same argument multiple\
+          \ times `--foo 1 --foo 2`. You can use a custom delimiter by using the [`multiple_sep`](#multiple_sep)\
+          \ property. `false` by default."
+        type: "boolean"
+      type:
+        description: "A `double` type argument has a numeric value with decimal points"
+        const: "double"
+      required:
+        description: "Make the value for this argument required. If set to `true`,\
+          \ an error will be produced if no value was provided. `false` by default."
+        type: "boolean"
+    required:
+    - "name"
+    - "type"
+    additionalProperties: false
+  FileArgument:
+    description: "A `file` type argument has a string value that points to a file\
+      \ or folder path."
+    type: "object"
+    properties:
+      alternatives:
+        oneOf:
+        - description: "List of alternative format variations for this argument."
+          type: "string"
+        - type: "array"
+          items:
+            description: "List of alternative format variations for this argument."
+            type: "string"
+      name:
+        description: "The name of the argument. Can be in the formats `--foo`, `-f`\
+          \ or `foo`. The number of dashes determines how values can be passed:  \n\
+          \n  - `--foo` is a long option, which can be passed with `executable_name\
+          \ --foo=value` or `executable_name --foo value`\n  - `-f` is a short option,\
+          \ which can be passed with `executable_name -f value`\n  - `foo` is an argument,\
+          \ which can be passed with `executable_name value`  \n"
+        type: "string"
+      create_parent:
+        description: "If the output filename is a path and it does not exist, create\
+          \ it before executing the script (only for `direction: output`)."
+        type: "boolean"
+      label:
+        description: "A clean version of the argument's name. This is only used for\
+          \ documentation."
+        type: "string"
+      direction:
+        description: "Makes this argument an `input` or an `output`, as in does the\
+          \ file/folder needs to be read or written. `input` by default."
+        $ref: "#/definitions/Direction"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      must_exist:
+        description: "Checks whether the file or folder exists. For input files, this\
+          \ check will happen before the execution of the script, while for output\
+          \ files the check will happen afterwards."
+        type: "boolean"
+      default:
+        oneOf:
+        - description: "The default value when no argument value is provided. This\
+            \ will not work if the [`required`](#required) property is enabled."
+          type: "string"
+        - type: "array"
+          items:
+            description: "The default value when no argument value is provided. This\
+              \ will not work if the [`required`](#required) property is enabled."
+            type: "string"
+      example:
+        oneOf:
+        - description: "An example value for this argument. If no [`default`](#default)\
+            \ property was specified, this will be used for that purpose."
+          type: "string"
+        - type: "array"
+          items:
+            description: "An example value for this argument. If no [`default`](#default)\
+              \ property was specified, this will be used for that purpose."
+            type: "string"
+      summary:
+        description: "A one-sentence summary of the argument. This is only used for\
+          \ documentation."
+        type: "string"
+      description:
+        description: "A description of the argument. This is only used for documentation.\
+          \ Multiline descriptions are supported."
+        type: "string"
+      multiple_sep:
+        description: "The delimiter character for providing [`multiple`](#multiple)\
+          \ values. `:` by default."
+        type: "string"
+      multiple:
+        description: "Allow for multiple values (`false` by default).\n\nFor input\
+          \ arguments, this will be treated as a list of values. For example, values\n\
+          can be passed using the delimiter `--foo=1:2:3` or by providing the same\
+          \ argument \nmultiple times `--foo 1 --foo 2`. You can use a custom delimiter\
+          \ by using the \n[`multiple_sep`](#multiple_sep) property.\n\nFor output\
+          \ file arguments, the passed value needs to contain a wildcard. For example,\n\
+          `--foo 'foo_*.txt'` will be treated as a list of files that match the pattern.\
+          \ Note that in Bash,\n the wildcard will need to be in quotes (\"foo_*.txt\"\
+          \ or `'foo_*.txt'`) or else Bash will\n automatically attempt to expand\
+          \ the expression.\n\nOther output arguments (e.g. integer, double, ...)\
+          \ are not supported yet.\n"
+        type: "boolean"
+      type:
+        description: "A `file` type argument has a string value that points to a file\
+          \ or folder path."
+        const: "file"
+      required:
+        description: "Make the value for this argument required. If set to `true`,\
+          \ an error will be produced if no value was provided. `false` by default."
+        type: "boolean"
+    required:
+    - "name"
+    - "type"
+    additionalProperties: false
+  IntegerArgument:
+    description: "An `integer` type argument has a numeric value without decimal points."
+    type: "object"
+    properties:
+      alternatives:
+        oneOf:
+        - description: "List of alternative format variations for this argument."
+          type: "string"
+        - type: "array"
+          items:
+            description: "List of alternative format variations for this argument."
+            type: "string"
+      name:
+        description: "The name of the argument. Can be in the formats `--foo`, `-f`\
+          \ or `foo`. The number of dashes determines how values can be passed:  \n\
+          \n  - `--foo` is a long option, which can be passed with `executable_name\
+          \ --foo=value` or `executable_name --foo value`\n  - `-f` is a short option,\
+          \ which can be passed with `executable_name -f value`\n  - `foo` is an argument,\
+          \ which can be passed with `executable_name value`  \n"
+        type: "string"
+      choices:
+        description: "Limit the amount of valid values for this argument to those\
+          \ set in this list. When set and a value not present in the list is provided,\
+          \ an error will be produced."
+        type: "array"
+        items:
+          type: "integer"
+      label:
+        description: "A clean version of the argument's name. This is only used for\
+          \ documentation."
+        type: "string"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      max:
+        description: "Maximum allowed value for this argument. If set and the provided\
+          \ value is higher than the maximum, an error will be produced. Can be combined\
+          \ with [`min`](#min) to clamp values."
+        type: "integer"
+      default:
+        oneOf:
+        - description: "The default value when no argument value is provided. This\
+            \ will not work if the [`required`](#required) property is enabled."
+          type: "integer"
+        - type: "array"
+          items:
+            description: "The default value when no argument value is provided. This\
+              \ will not work if the [`required`](#required) property is enabled."
+            type: "integer"
+      example:
+        oneOf:
+        - description: "An example value for this argument. If no [`default`](#default)\
+            \ property was specified, this will be used for that purpose."
+          type: "integer"
+        - type: "array"
+          items:
+            description: "An example value for this argument. If no [`default`](#default)\
+              \ property was specified, this will be used for that purpose."
+            type: "integer"
+      summary:
+        description: "A one-sentence summary of the argument. This is only used for\
+          \ documentation."
+        type: "string"
+      description:
+        description: "A description of the argument. This is only used for documentation.\
+          \ Multiline descriptions are supported."
+        type: "string"
+      multiple_sep:
+        description: "The delimiter character for providing [`multiple`](#multiple)\
+          \ values. `:` by default."
+        type: "string"
+      min:
+        description: "Minimum allowed value for this argument. If set and the provided\
+          \ value is lower than the minimum, an error will be produced. Can be combined\
+          \ with [`max`](#max) to clamp values."
+        type: "integer"
+      direction:
+        $ref: "#/definitions/Direction"
+      multiple:
+        description: "Treat the argument value as an array. Arrays can be passed using\
+          \ the delimiter `--foo=1:2:3` or by providing the same argument multiple\
+          \ times `--foo 1 --foo 2`. You can use a custom delimiter by using the [`multiple_sep`](#multiple_sep)\
+          \ property. `false` by default."
+        type: "boolean"
+      type:
+        description: "An `integer` type argument has a numeric value without decimal\
+          \ points."
+        const: "integer"
+      required:
+        description: "Make the value for this argument required. If set to `true`,\
+          \ an error will be produced if no value was provided. `false` by default."
+        type: "boolean"
+    required:
+    - "name"
+    - "type"
+    additionalProperties: false
+  LongArgument:
+    description: "An `long` type argument has a numeric value without decimal points."
+    type: "object"
+    properties:
+      alternatives:
+        oneOf:
+        - description: "List of alternative format variations for this argument."
+          type: "string"
+        - type: "array"
+          items:
+            description: "List of alternative format variations for this argument."
+            type: "string"
+      name:
+        description: "The name of the argument. Can be in the formats `--foo`, `-f`\
+          \ or `foo`. The number of dashes determines how values can be passed:  \n\
+          \n  - `--foo` is a long option, which can be passed with `executable_name\
+          \ --foo=value` or `executable_name --foo value`\n  - `-f` is a short option,\
+          \ which can be passed with `executable_name -f value`\n  - `foo` is an argument,\
+          \ which can be passed with `executable_name value`  \n"
+        type: "string"
+      choices:
+        description: "Limit the amount of valid values for this argument to those\
+          \ set in this list. When set and a value not present in the list is provided,\
+          \ an error will be produced."
+        type: "array"
+        items:
+          type: "integer"
+      label:
+        description: "A clean version of the argument's name. This is only used for\
+          \ documentation."
+        type: "string"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      max:
+        description: "Maximum allowed value for this argument. If set and the provided\
+          \ value is higher than the maximum, an error will be produced. Can be combined\
+          \ with [`min`](#min) to clamp values."
+        type: "integer"
+      default:
+        oneOf:
+        - description: "The default value when no argument value is provided. This\
+            \ will not work if the [`required`](#required) property is enabled."
+          type: "integer"
+        - type: "array"
+          items:
+            description: "The default value when no argument value is provided. This\
+              \ will not work if the [`required`](#required) property is enabled."
+            type: "integer"
+      example:
+        oneOf:
+        - description: "An example value for this argument. If no [`default`](#default)\
+            \ property was specified, this will be used for that purpose."
+          type: "integer"
+        - type: "array"
+          items:
+            description: "An example value for this argument. If no [`default`](#default)\
+              \ property was specified, this will be used for that purpose."
+            type: "integer"
+      summary:
+        description: "A one-sentence summary of the argument. This is only used for\
+          \ documentation."
+        type: "string"
+      description:
+        description: "A description of the argument. This is only used for documentation.\
+          \ Multiline descriptions are supported."
+        type: "string"
+      multiple_sep:
+        description: "The delimiter character for providing [`multiple`](#multiple)\
+          \ values. `:` by default."
+        type: "string"
+      min:
+        description: "Minimum allowed value for this argument. If set and the provided\
+          \ value is lower than the minimum, an error will be produced. Can be combined\
+          \ with [`max`](#max) to clamp values."
+        type: "integer"
+      direction:
+        $ref: "#/definitions/Direction"
+      multiple:
+        description: "Treat the argument value as an array. Arrays can be passed using\
+          \ the delimiter `--foo=1:2:3` or by providing the same argument multiple\
+          \ times `--foo 1 --foo 2`. You can use a custom delimiter by using the [`multiple_sep`](#multiple_sep)\
+          \ property. `false` by default."
+        type: "boolean"
+      type:
+        description: "An `long` type argument has a numeric value without decimal\
+          \ points."
+        const: "long"
+      required:
+        description: "Make the value for this argument required. If set to `true`,\
+          \ an error will be produced if no value was provided. `false` by default."
+        type: "boolean"
+    required:
+    - "name"
+    - "type"
+    additionalProperties: false
+  StringArgument:
+    description: "A `string` type argument has a value made up of an ordered sequences\
+      \ of characters, like \"Hello\" or \"I'm a string\"."
+    type: "object"
+    properties:
+      alternatives:
+        oneOf:
+        - description: "List of alternative format variations for this argument."
+          type: "string"
+        - type: "array"
+          items:
+            description: "List of alternative format variations for this argument."
+            type: "string"
+      name:
+        description: "The name of the argument. Can be in the formats `--foo`, `-f`\
+          \ or `foo`. The number of dashes determines how values can be passed:  \n\
+          \n  - `--foo` is a long option, which can be passed with `executable_name\
+          \ --foo=value` or `executable_name --foo value`\n  - `-f` is a short option,\
+          \ which can be passed with `executable_name -f value`\n  - `foo` is an argument,\
+          \ which can be passed with `executable_name value`  \n"
+        type: "string"
+      choices:
+        description: "Limit the amount of valid values for this argument to those\
+          \ set in this list. When set and a value not present in the list is provided,\
+          \ an error will be produced."
+        type: "array"
+        items:
+          type: "string"
+      label:
+        description: "A clean version of the argument's name. This is only used for\
+          \ documentation."
+        type: "string"
+      direction:
+        $ref: "#/definitions/Direction"
+      info:
+        description: "Structured information. Can be any shape: a string, vector,\
+          \ map or even nested map."
+        type: "object"
+      default:
+        oneOf:
+        - description: "The default value when no argument value is provided. This\
+            \ will not work if the [`required`](#required) property is enabled."
+          type: "string"
+        - type: "array"
+          items:
+            description: "The default value when no argument value is provided. This\
+              \ will not work if the [`required`](#required) property is enabled."
+            type: "string"
+      example:
+        oneOf:
+        - description: "An example value for this argument. If no [`default`](#default)\
+            \ property was specified, this will be used for that purpose."
+          type: "string"
+        - type: "array"
+          items:
+            description: "An example value for this argument. If no [`default`](#default)\
+              \ property was specified, this will be used for that purpose."
+            type: "string"
+      summary:
+        description: "A one-sentence summary of the argument. This is only used for\
+          \ documentation."
+        type: "string"
+      description:
+        description: "A description of the argument. This is only used for documentation.\
+          \ Multiline descriptions are supported."
+        type: "string"
+      multiple_sep:
+        description: "The delimiter character for providing [`multiple`](#multiple)\
+          \ values. `:` by default."
+        type: "string"
+      multiple:
+        description: "Treat the argument value as an array. Arrays can be passed using\
+          \ the delimiter `--foo=1:2:3` or by providing the same argument multiple\
+          \ times `--foo 1 --foo 2`. You can use a custom delimiter by using the [`multiple_sep`](#multiple_sep)\
+          \ property. `false` by default."
+        type: "boolean"
+      type:
+        description: "A `string` type argument has a value made up of an ordered sequences\
+          \ of characters, like \"Hello\" or \"I'm a string\"."
+        const: "string"
+      required:
+        description: "Make the value for this argument required. If set to `true`,\
+          \ an error will be produced if no value was provided. `false` by default."
+        type: "boolean"
+    required:
+    - "name"
+    - "type"
+    additionalProperties: false
+  Resource:
+    oneOf:
+    - $ref: "#/definitions/BashScript"
+    - $ref: "#/definitions/CSharpScript"
+    - $ref: "#/definitions/Executable"
+    - $ref: "#/definitions/JavaScriptScript"
+    - $ref: "#/definitions/NextflowScript"
+    - $ref: "#/definitions/PlainFile"
+    - $ref: "#/definitions/PythonScript"
+    - $ref: "#/definitions/RScript"
+    - $ref: "#/definitions/ScalaScript"
+  BashScript:
+    description: "An executable Bash script.\nWhen defined in resources, only the\
+      \ first entry will be executed when running the built component or when running\
+      \ `viash run`.\nWhen defined in test_resources, all entries will be executed\
+      \ during `viash test`."
+    type: "object"
+    properties:
+      path:
+        description: "The path of the input file. Can be a relative or an absolute\
+          \ path, or a URI. Mutually exclusive with `text`."
+        type: "string"
+      text:
+        description: "The content of the resulting file specified as a string. Mutually\
+          \ exclusive with `path`."
+        type: "string"
+      is_executable:
+        description: "Whether the resulting resource file should be made executable."
+        type: "boolean"
+      type:
+        description: "An executable Bash script.\nWhen defined in resources, only\
+          \ the first entry will be executed when running the built component or when\
+          \ running `viash run`.\nWhen defined in test_resources, all entries will\
+          \ be executed during `viash test`."
+        const: "bash_script"
+      dest:
+        description: "Resulting filename of the resource. From within a script, the\
+          \ file can be accessed at `meta[\"resources_dir\"] + \"/\" + dest`. If unspecified,\
+          \ `dest` will be set to the basename of the `path` parameter."
+        type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  CSharpScript:
+    description: "An executable C# script.\nWhen defined in resources, only the first\
+      \ entry will be executed when running the built component or when running `viash\
+      \ run`.\nWhen defined in test_resources, all entries will be executed during\
+      \ `viash test`."
+    type: "object"
+    properties:
+      path:
+        description: "The path of the input file. Can be a relative or an absolute\
+          \ path, or a URI. Mutually exclusive with `text`."
+        type: "string"
+      text:
+        description: "The content of the resulting file specified as a string. Mutually\
+          \ exclusive with `path`."
+        type: "string"
+      is_executable:
+        description: "Whether the resulting resource file should be made executable."
+        type: "boolean"
+      type:
+        description: "An executable C# script.\nWhen defined in resources, only the\
+          \ first entry will be executed when running the built component or when\
+          \ running `viash run`.\nWhen defined in test_resources, all entries will\
+          \ be executed during `viash test`."
+        const: "csharp_script"
+      dest:
+        description: "Resulting filename of the resource. From within a script, the\
+          \ file can be accessed at `meta[\"resources_dir\"] + \"/\" + dest`. If unspecified,\
+          \ `dest` will be set to the basename of the `path` parameter."
+        type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  Executable:
+    description: "An executable file."
+    type: "object"
+    properties:
+      path:
+        description: "The path of the input file. Can be a relative or an absolute\
+          \ path, or a URI. Mutually exclusive with `text`."
+        type: "string"
+      text:
+        description: "The content of the resulting file specified as a string. Mutually\
+          \ exclusive with `path`."
+        type: "string"
+      is_executable:
+        description: "Whether the resulting resource file should be made executable."
+        type: "boolean"
+      type:
+        description: "An executable file."
+        const: "executable"
+      dest:
+        description: "Resulting filename of the resource. From within a script, the\
+          \ file can be accessed at `meta[\"resources_dir\"] + \"/\" + dest`. If unspecified,\
+          \ `dest` will be set to the basename of the `path` parameter."
+        type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  JavaScriptScript:
+    description: "An executable JavaScript script.\nWhen defined in resources, only\
+      \ the first entry will be executed when running the built component or when\
+      \ running `viash run`.\nWhen defined in test_resources, all entries will be\
+      \ executed during `viash test`."
+    type: "object"
+    properties:
+      path:
+        description: "The path of the input file. Can be a relative or an absolute\
+          \ path, or a URI. Mutually exclusive with `text`."
+        type: "string"
+      text:
+        description: "The content of the resulting file specified as a string. Mutually\
+          \ exclusive with `path`."
+        type: "string"
+      is_executable:
+        description: "Whether the resulting resource file should be made executable."
+        type: "boolean"
+      type:
+        description: "An executable JavaScript script.\nWhen defined in resources,\
+          \ only the first entry will be executed when running the built component\
+          \ or when running `viash run`.\nWhen defined in test_resources, all entries\
+          \ will be executed during `viash test`."
+        const: "javascript_script"
+      dest:
+        description: "Resulting filename of the resource. From within a script, the\
+          \ file can be accessed at `meta[\"resources_dir\"] + \"/\" + dest`. If unspecified,\
+          \ `dest` will be set to the basename of the `path` parameter."
+        type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  NextflowScript:
+    description: "A Nextflow script. Work in progress; added mainly for annotation\
+      \ at the moment."
+    type: "object"
+    properties:
+      path:
+        description: "The path of the input file. Can be a relative or an absolute\
+          \ path, or a URI. Mutually exclusive with `text`."
+        type: "string"
+      text:
+        description: "The content of the resulting file specified as a string. Mutually\
+          \ exclusive with `path`."
+        type: "string"
+      entrypoint:
+        description: "The name of the workflow to be wrapped."
+        type: "string"
+      is_executable:
+        description: "Whether the resulting resource file should be made executable."
+        type: "boolean"
+      type:
+        description: "A Nextflow script. Work in progress; added mainly for annotation\
+          \ at the moment."
+        const: "nextflow_script"
+      dest:
+        description: "Resulting filename of the resource. From within a script, the\
+          \ file can be accessed at `meta[\"resources_dir\"] + \"/\" + dest`. If unspecified,\
+          \ `dest` will be set to the basename of the `path` parameter."
+        type: "string"
+    required:
+    - "entrypoint"
+    - "type"
+    additionalProperties: false
+  PlainFile:
+    description: "A plain file. This can only be used as a supporting resource for\
+      \ the main script or unit tests."
+    type: "object"
+    properties:
+      path:
+        description: "The path of the input file. Can be a relative or an absolute\
+          \ path, or a URI. Mutually exclusive with `text`."
+        type: "string"
+      text:
+        description: "The content of the resulting file specified as a string. Mutually\
+          \ exclusive with `path`."
+        type: "string"
+      is_executable:
+        description: "Whether the resulting resource file should be made executable."
+        type: "boolean"
+      type:
+        description: "A plain file. This can only be used as a supporting resource\
+          \ for the main script or unit tests."
+        const: "file"
+      dest:
+        description: "Resulting filename of the resource. From within a script, the\
+          \ file can be accessed at `meta[\"resources_dir\"] + \"/\" + dest`. If unspecified,\
+          \ `dest` will be set to the basename of the `path` parameter."
+        type: "string"
+    required: []
+    additionalProperties: false
+  PythonScript:
+    description: "An executable Python script.\nWhen defined in resources, only the\
+      \ first entry will be executed when running the built component or when running\
+      \ `viash run`.\nWhen defined in test_resources, all entries will be executed\
+      \ during `viash test`."
+    type: "object"
+    properties:
+      path:
+        description: "The path of the input file. Can be a relative or an absolute\
+          \ path, or a URI. Mutually exclusive with `text`."
+        type: "string"
+      text:
+        description: "The content of the resulting file specified as a string. Mutually\
+          \ exclusive with `path`."
+        type: "string"
+      is_executable:
+        description: "Whether the resulting resource file should be made executable."
+        type: "boolean"
+      type:
+        description: "An executable Python script.\nWhen defined in resources, only\
+          \ the first entry will be executed when running the built component or when\
+          \ running `viash run`.\nWhen defined in test_resources, all entries will\
+          \ be executed during `viash test`."
+        const: "python_script"
+      dest:
+        description: "Resulting filename of the resource. From within a script, the\
+          \ file can be accessed at `meta[\"resources_dir\"] + \"/\" + dest`. If unspecified,\
+          \ `dest` will be set to the basename of the `path` parameter."
+        type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  RScript:
+    description: "An executable R script.\nWhen defined in resources, only the first\
+      \ entry will be executed when running the built component or when running `viash\
+      \ run`.\nWhen defined in test_resources, all entries will be executed during\
+      \ `viash test`."
+    type: "object"
+    properties:
+      path:
+        description: "The path of the input file. Can be a relative or an absolute\
+          \ path, or a URI. Mutually exclusive with `text`."
+        type: "string"
+      text:
+        description: "The content of the resulting file specified as a string. Mutually\
+          \ exclusive with `path`."
+        type: "string"
+      is_executable:
+        description: "Whether the resulting resource file should be made executable."
+        type: "boolean"
+      type:
+        description: "An executable R script.\nWhen defined in resources, only the\
+          \ first entry will be executed when running the built component or when\
+          \ running `viash run`.\nWhen defined in test_resources, all entries will\
+          \ be executed during `viash test`."
+        const: "r_script"
+      dest:
+        description: "Resulting filename of the resource. From within a script, the\
+          \ file can be accessed at `meta[\"resources_dir\"] + \"/\" + dest`. If unspecified,\
+          \ `dest` will be set to the basename of the `path` parameter."
+        type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  ScalaScript:
+    description: "An executable Scala script.\nWhen defined in resources, only the\
+      \ first entry will be executed when running the built component or when running\
+      \ `viash run`.\nWhen defined in test_resources, all entries will be executed\
+      \ during `viash test`."
+    type: "object"
+    properties:
+      path:
+        description: "The path of the input file. Can be a relative or an absolute\
+          \ path, or a URI. Mutually exclusive with `text`."
+        type: "string"
+      text:
+        description: "The content of the resulting file specified as a string. Mutually\
+          \ exclusive with `path`."
+        type: "string"
+      is_executable:
+        description: "Whether the resulting resource file should be made executable."
+        type: "boolean"
+      type:
+        description: "An executable Scala script.\nWhen defined in resources, only\
+          \ the first entry will be executed when running the built component or when\
+          \ running `viash run`.\nWhen defined in test_resources, all entries will\
+          \ be executed during `viash test`."
+        const: "scala_script"
+      dest:
+        description: "Resulting filename of the resource. From within a script, the\
+          \ file can be accessed at `meta[\"resources_dir\"] + \"/\" + dest`. If unspecified,\
+          \ `dest` will be set to the basename of the `path` parameter."
+        type: "string"
+    required:
+    - "type"
+    additionalProperties: false
+  NextflowDirectives:
+    description: "Directives are optional settings that affect the execution of the\
+      \ process.\n"
+    type: "object"
+    properties:
+      beforeScript:
+        description: "The `beforeScript` directive allows you to execute a custom\
+          \ (Bash) snippet before the main process script is run. This may be useful\
+          \ to initialise the underlying cluster environment or for other custom initialisation.\n\
+          \nSee [`beforeScript`](https://www.nextflow.io/docs/latest/process.html#beforeScript).\n"
+        type: "string"
+      module:
+        oneOf:
+        - description: "Environment Modules is a package manager that allows you to\
+            \ dynamically configure your execution environment and easily switch between\
+            \ multiple versions of the same software tool.\n\nIf it is available in\
+            \ your system you can use it with Nextflow in order to configure the processes\
+            \ execution environment in your pipeline.\n\nIn a process definition you\
+            \ can use the `module` directive to load a specific module version to\
+            \ be used in the process execution environment.\n\nSee [`module`](https://www.nextflow.io/docs/latest/process.html#module).\n"
+          type: "string"
+        - type: "array"
+          items:
+            description: "Environment Modules is a package manager that allows you\
+              \ to dynamically configure your execution environment and easily switch\
+              \ between multiple versions of the same software tool.\n\nIf it is available\
+              \ in your system you can use it with Nextflow in order to configure\
+              \ the processes execution environment in your pipeline.\n\nIn a process\
+              \ definition you can use the `module` directive to load a specific module\
+              \ version to be used in the process execution environment.\n\nSee [`module`](https://www.nextflow.io/docs/latest/process.html#module).\n"
+            type: "string"
+      queue:
+        oneOf:
+        - description: "The `queue` directory allows you to set the queue where jobs\
+            \ are scheduled when using a grid based executor in your pipeline.\n\n\
+            See [`queue`](https://www.nextflow.io/docs/latest/process.html#queue).\n"
+          type: "string"
+        - type: "array"
+          items:
+            description: "The `queue` directory allows you to set the queue where\
+              \ jobs are scheduled when using a grid based executor in your pipeline.\n\
+              \nSee [`queue`](https://www.nextflow.io/docs/latest/process.html#queue).\n"
+            type: "string"
+      label:
+        oneOf:
+        - description: "The `label` directive allows the annotation of processes with\
+            \ mnemonic identifier of your choice.\n\nSee [`label`](https://www.nextflow.io/docs/latest/process.html#label).\n"
+          type: "string"
+        - type: "array"
+          items:
+            description: "The `label` directive allows the annotation of processes\
+              \ with mnemonic identifier of your choice.\n\nSee [`label`](https://www.nextflow.io/docs/latest/process.html#label).\n"
+            type: "string"
+      container:
+        oneOf:
+        - description: "The `container` directive allows you to execute the process\
+            \ script in a Docker container.\n\nIt requires the Docker daemon to be\
+            \ running in machine where the pipeline is executed, i.e. the local machine\
+            \ when using the local executor or the cluster nodes when the pipeline\
+            \ is deployed through a grid executor.\n\nViash implements allows either\
+            \ a string value or a map. In case a map is used, the allowed keys are:\
+            \ `registry`, `image`, and `tag`. The `image` value must be specified.\n\
+            \nSee [`container`](https://www.nextflow.io/docs/latest/process.html#container).\n"
+          type: "object"
+          additionalProperties:
+            type: "string"
+        - description: "The `container` directive allows you to execute the process\
+            \ script in a Docker container.\n\nIt requires the Docker daemon to be\
+            \ running in machine where the pipeline is executed, i.e. the local machine\
+            \ when using the local executor or the cluster nodes when the pipeline\
+            \ is deployed through a grid executor.\n\nViash implements allows either\
+            \ a string value or a map. In case a map is used, the allowed keys are:\
+            \ `registry`, `image`, and `tag`. The `image` value must be specified.\n\
+            \nSee [`container`](https://www.nextflow.io/docs/latest/process.html#container).\n"
+          type: "string"
+      publishDir:
+        oneOf:
+        - oneOf:
+          - description: "The `publishDir` directive allows you to publish the process\
+              \ output files to a specified folder.\n\nViash implements this directive\
+              \ as a plain string or a map. The allowed keywords for the map are:\
+              \ `path`, `mode`, `overwrite`, `pattern`, `saveAs`, `enabled`. The `path`\
+              \ key and value are required.\nThe allowed values for `mode` are: `symlink`,\
+              \ `rellink`, `link`, `copy`, `copyNoFollow`, `move`.\n\nSee [`publishDir`](https://www.nextflow.io/docs/latest/process.html#publishdir).\n"
+            type: "string"
+          - description: "The `publishDir` directive allows you to publish the process\
+              \ output files to a specified folder.\n\nViash implements this directive\
+              \ as a plain string or a map. The allowed keywords for the map are:\
+              \ `path`, `mode`, `overwrite`, `pattern`, `saveAs`, `enabled`. The `path`\
+              \ key and value are required.\nThe allowed values for `mode` are: `symlink`,\
+              \ `rellink`, `link`, `copy`, `copyNoFollow`, `move`.\n\nSee [`publishDir`](https://www.nextflow.io/docs/latest/process.html#publishdir).\n"
+            type: "object"
+            additionalProperties:
+              type: "string"
+        - type: "array"
+          items:
+            oneOf:
+            - description: "The `publishDir` directive allows you to publish the process\
+                \ output files to a specified folder.\n\nViash implements this directive\
+                \ as a plain string or a map. The allowed keywords for the map are:\
+                \ `path`, `mode`, `overwrite`, `pattern`, `saveAs`, `enabled`. The\
+                \ `path` key and value are required.\nThe allowed values for `mode`\
+                \ are: `symlink`, `rellink`, `link`, `copy`, `copyNoFollow`, `move`.\n\
+                \nSee [`publishDir`](https://www.nextflow.io/docs/latest/process.html#publishdir).\n"
+              type: "string"
+            - description: "The `publishDir` directive allows you to publish the process\
+                \ output files to a specified folder.\n\nViash implements this directive\
+                \ as a plain string or a map. The allowed keywords for the map are:\
+                \ `path`, `mode`, `overwrite`, `pattern`, `saveAs`, `enabled`. The\
+                \ `path` key and value are required.\nThe allowed values for `mode`\
+                \ are: `symlink`, `rellink`, `link`, `copy`, `copyNoFollow`, `move`.\n\
+                \nSee [`publishDir`](https://www.nextflow.io/docs/latest/process.html#publishdir).\n"
+              type: "object"
+              additionalProperties:
+                type: "string"
+      maxForks:
+        oneOf:
+        - description: "The `maxForks` directive allows you to define the maximum\
+            \ number of process instances that can be executed in parallel. By default\
+            \ this value is equals to the number of CPU cores available minus 1.\n\
+            \nIf you want to execute a process in a sequential manner, set this directive\
+            \ to one.\n\nSee [`maxForks`](https://www.nextflow.io/docs/latest/process.html#maxforks).\n"
+          type: "string"
+        - description: "The `maxForks` directive allows you to define the maximum\
+            \ number of process instances that can be executed in parallel. By default\
+            \ this value is equals to the number of CPU cores available minus 1.\n\
+            \nIf you want to execute a process in a sequential manner, set this directive\
+            \ to one.\n\nSee [`maxForks`](https://www.nextflow.io/docs/latest/process.html#maxforks).\n"
+          type: "integer"
+      maxErrors:
+        oneOf:
+        - description: "The `maxErrors` directive allows you to specify the maximum\
+            \ number of times a process can fail when using the `retry` error strategy.\
+            \ By default this directive is disabled.\n\nSee [`maxErrors`](https://www.nextflow.io/docs/latest/process.html#maxerrors).\n"
+          type: "string"
+        - description: "The `maxErrors` directive allows you to specify the maximum\
+            \ number of times a process can fail when using the `retry` error strategy.\
+            \ By default this directive is disabled.\n\nSee [`maxErrors`](https://www.nextflow.io/docs/latest/process.html#maxerrors).\n"
+          type: "integer"
+      cpus:
+        oneOf:
+        - description: "The `cpus` directive allows you to define the number of (logical)\
+            \ CPU required by the process' task.\n\nSee [`cpus`](https://www.nextflow.io/docs/latest/process.html#cpus).\n"
+          type: "integer"
+        - description: "The `cpus` directive allows you to define the number of (logical)\
+            \ CPU required by the process' task.\n\nSee [`cpus`](https://www.nextflow.io/docs/latest/process.html#cpus).\n"
+          type: "string"
+      accelerator:
+        description: "The `accelerator` directive allows you to specify the hardware\
+          \ accelerator requirement for the task execution e.g. GPU processor.\n\n\
+          Viash implements this directive as a map with accepted keywords: `type`,\
+          \ `limit`, `request`, and `runtime`.\n\nSee [`accelerator`](https://www.nextflow.io/docs/latest/process.html#accelerator).\n"
+        type: "object"
+        additionalProperties:
+          type: "string"
+      time:
+        description: "The `time` directive allows you to define how long a process\
+          \ is allowed to run.\n\nSee [`time`](https://www.nextflow.io/docs/latest/process.html#time).\n"
+        type: "string"
+      afterScript:
+        description: "The `afterScript` directive allows you to execute a custom (Bash)\
+          \ snippet immediately after the main process has run. This may be useful\
+          \ to clean up your staging area.\n\nSee [`afterScript`](https://www.nextflow.io/docs/latest/process.html#afterscript).\n"
+        type: "string"
+      executor:
+        description: "The `executor` defines the underlying system where processes\
+          \ are executed. By default a process uses the executor defined globally\
+          \ in the nextflow.config file.\n\nThe `executor` directive allows you to\
+          \ configure what executor has to be used by the process, overriding the\
+          \ default configuration. The following values can be used:\n\n| Name | Executor\
+          \ |\n|------|----------|\n| awsbatch | The process is executed using the\
+          \ AWS Batch service. | \n| azurebatch | The process is executed using the\
+          \ Azure Batch service. | \n| condor | The process is executed using the\
+          \ HTCondor job scheduler. | \n| google-lifesciences | The process is executed\
+          \ using the Google Genomics Pipelines service. | \n| ignite | The process\
+          \ is executed using the Apache Ignite cluster. | \n| k8s | The process is\
+          \ executed using the Kubernetes cluster. | \n| local | The process is executed\
+          \ in the computer where Nextflow is launched. | \n| lsf | The process is\
+          \ executed using the Platform LSF job scheduler. | \n| moab | The process\
+          \ is executed using the Moab job scheduler. | \n| nqsii | The process is\
+          \ executed using the NQSII job scheduler. | \n| oge | Alias for the sge\
+          \ executor. | \n| pbs | The process is executed using the PBS/Torque job\
+          \ scheduler. | \n| pbspro | The process is executed using the PBS Pro job\
+          \ scheduler. | \n| sge | The process is executed using the Sun Grid Engine\
+          \ / Open Grid Engine. | \n| slurm | The process is executed using the SLURM\
+          \ job scheduler. | \n| tes | The process is executed using the GA4GH TES\
+          \ service. | \n| uge | Alias for the sge executor. |\n\nSee [`executor`](https://www.nextflow.io/docs/latest/process.html#executor).\n"
+        type: "string"
+      containerOptions:
+        oneOf:
+        - description: "The `containerOptions` directive allows you to specify any\
+            \ container execution option supported by the underlying container engine\
+            \ (ie. Docker, Singularity, etc). This can be useful to provide container\
+            \ settings only for a specific process e.g. mount a custom path.\n\nSee\
+            \ [`containerOptions`](https://www.nextflow.io/docs/latest/process.html#containeroptions).\n"
+          type: "string"
+        - type: "array"
+          items:
+            description: "The `containerOptions` directive allows you to specify any\
+              \ container execution option supported by the underlying container engine\
+              \ (ie. Docker, Singularity, etc). This can be useful to provide container\
+              \ settings only for a specific process e.g. mount a custom path.\n\n\
+              See [`containerOptions`](https://www.nextflow.io/docs/latest/process.html#containeroptions).\n"
+            type: "string"
+      disk:
+        description: "The `disk` directive allows you to define how much local disk\
+          \ storage the process is allowed to use.\n\nSee [`disk`](https://www.nextflow.io/docs/latest/process.html#disk).\n"
+        type: "string"
+      tag:
+        description: "The `tag` directive allows you to associate each process execution\
+          \ with a custom label, so that it will be easier to identify them in the\
+          \ log file or in the trace execution report.\n\nFor ease of use, the default\
+          \ tag is set to \"$id\", which allows tracking the progression of the channel\
+          \ events through the workflow more easily.\n\nSee [`tag`](https://www.nextflow.io/docs/latest/process.html#tag).\n"
+        type: "string"
+      conda:
+        oneOf:
+        - description: "The `conda` directive allows for the definition of the process\
+            \ dependencies using the Conda package manager.\n\nNextflow automatically\
+            \ sets up an environment for the given package names listed by in the\
+            \ `conda` directive.\n\nSee [`conda`](https://www.nextflow.io/docs/latest/process.html#conda).\n"
+          type: "string"
+        - type: "array"
+          items:
+            description: "The `conda` directive allows for the definition of the process\
+              \ dependencies using the Conda package manager.\n\nNextflow automatically\
+              \ sets up an environment for the given package names listed by in the\
+              \ `conda` directive.\n\nSee [`conda`](https://www.nextflow.io/docs/latest/process.html#conda).\n"
+            type: "string"
+      machineType:
+        description: " The `machineType` can be used to specify a predefined Google\
+          \ Compute Platform machine type when running using the Google Life Sciences\
+          \ executor.\n\nSee [`machineType`](https://www.nextflow.io/docs/latest/process.html#machinetype).\n"
+        type: "string"
+      stageInMode:
+        description: "The `stageInMode` directive defines how input files are staged-in\
+          \ to the process work directory. The following values are allowed:\n\n|\
+          \ Value | Description |\n|-------|-------------| \n| copy | Input files\
+          \ are staged in the process work directory by creating a copy. | \n| link\
+          \ | Input files are staged in the process work directory by creating an\
+          \ (hard) link for each of them. | \n| symlink | Input files are staged in\
+          \ the process work directory by creating a symbolic link with an absolute\
+          \ path for each of them (default). | \n| rellink | Input files are staged\
+          \ in the process work directory by creating a symbolic link with a relative\
+          \ path for each of them. | \n\nSee [`stageInMode`](https://www.nextflow.io/docs/latest/process.html#stageinmode).\n"
+        type: "string"
+      cache:
+        oneOf:
+        - description: "The `cache` directive allows you to store the process results\
+            \ to a local cache. When the cache is enabled and the pipeline is launched\
+            \ with the resume option, any following attempt to execute the process,\
+            \ along with the same inputs, will cause the process execution to be skipped,\
+            \ producing the stored data as the actual results.\n\nThe caching feature\
+            \ generates a unique key by indexing the process script and inputs. This\
+            \ key is used to identify univocally the outputs produced by the process\
+            \ execution.\n\nThe `cache` is enabled by default, you can disable it\
+            \ for a specific process by setting the cache directive to `false`.\n\n\
+            Accepted values are: `true`, `false`, \"deep\", and \"lenient\".\n\nSee\
+            \ [`cache`](https://www.nextflow.io/docs/latest/process.html#cache).\n"
+          type: "boolean"
+        - description: "The `cache` directive allows you to store the process results\
+            \ to a local cache. When the cache is enabled and the pipeline is launched\
+            \ with the resume option, any following attempt to execute the process,\
+            \ along with the same inputs, will cause the process execution to be skipped,\
+            \ producing the stored data as the actual results.\n\nThe caching feature\
+            \ generates a unique key by indexing the process script and inputs. This\
+            \ key is used to identify univocally the outputs produced by the process\
+            \ execution.\n\nThe `cache` is enabled by default, you can disable it\
+            \ for a specific process by setting the cache directive to `false`.\n\n\
+            Accepted values are: `true`, `false`, \"deep\", and \"lenient\".\n\nSee\
+            \ [`cache`](https://www.nextflow.io/docs/latest/process.html#cache).\n"
+          type: "string"
+      pod:
+        oneOf:
+        - description: "The `pod` directive allows the definition of pods specific\
+            \ settings, such as environment variables, secrets and config maps when\
+            \ using the Kubernetes executor.\n\nSee [`pod`](https://www.nextflow.io/docs/latest/process.html#pod).\n"
+          type: "object"
+          additionalProperties:
+            type: "string"
+        - type: "array"
+          items:
+            description: "The `pod` directive allows the definition of pods specific\
+              \ settings, such as environment variables, secrets and config maps when\
+              \ using the Kubernetes executor.\n\nSee [`pod`](https://www.nextflow.io/docs/latest/process.html#pod).\n"
+            type: "object"
+            additionalProperties:
+              type: "string"
+      penv:
+        description: "The `penv` directive allows you to define the parallel environment\
+          \ to be used when submitting a parallel task to the SGE resource manager.\n\
+          \nSee [`penv`](https://www.nextflow.io/docs/latest/process.html#penv).\n"
+        type: "string"
+      scratch:
+        oneOf:
+        - description: "The `scratch` directive allows you to execute the process\
+            \ in a temporary folder that is local to the execution node.\n\nSee [`scratch`](https://www.nextflow.io/docs/latest/process.html#scratch).\n"
+          type: "boolean"
+        - description: "The `scratch` directive allows you to execute the process\
+            \ in a temporary folder that is local to the execution node.\n\nSee [`scratch`](https://www.nextflow.io/docs/latest/process.html#scratch).\n"
+          type: "string"
+      storeDir:
+        description: "The `storeDir` directive allows you to define a directory that\
+          \ is used as a permanent cache for your process results.\n\nSee [`storeDir`](https://www.nextflow.io/docs/latest/process.html#storeDir).\n"
+        type: "string"
+      maxRetries:
+        oneOf:
+        - description: "The `maxRetries` directive allows you to define the maximum\
+            \ number of times a process instance can be re-submitted in case of failure.\
+            \ This value is applied only when using the retry error strategy. By default\
+            \ only one retry is allowed.\n\nSee [`maxRetries`](https://www.nextflow.io/docs/latest/process.html#maxretries).\n"
+          type: "string"
+        - description: "The `maxRetries` directive allows you to define the maximum\
+            \ number of times a process instance can be re-submitted in case of failure.\
+            \ This value is applied only when using the retry error strategy. By default\
+            \ only one retry is allowed.\n\nSee [`maxRetries`](https://www.nextflow.io/docs/latest/process.html#maxretries).\n"
+          type: "integer"
+      echo:
+        oneOf:
+        - description: "By default the stdout produced by the commands executed in\
+            \ all processes is ignored. By setting the `echo` directive to true, you\
+            \ can forward the process stdout to the current top running process stdout\
+            \ file, showing it in the shell terminal.\n \nSee [`echo`](https://www.nextflow.io/docs/latest/process.html#echo).\n"
+          type: "boolean"
+        - description: "By default the stdout produced by the commands executed in\
+            \ all processes is ignored. By setting the `echo` directive to true, you\
+            \ can forward the process stdout to the current top running process stdout\
+            \ file, showing it in the shell terminal.\n \nSee [`echo`](https://www.nextflow.io/docs/latest/process.html#echo).\n"
+          type: "string"
+      errorStrategy:
+        description: "The `errorStrategy` directive allows you to define how an error\
+          \ condition is managed by the process. By default when an error status is\
+          \ returned by the executed script, the process stops immediately. This in\
+          \ turn forces the entire pipeline to terminate.\n\nTable of available error\
+          \ strategies:\n| Name | Executor |\n|------|----------|\n| `terminate` |\
+          \ Terminates the execution as soon as an error condition is reported. Pending\
+          \ jobs are killed (default) |\n| `finish` | Initiates an orderly pipeline\
+          \ shutdown when an error condition is raised, waiting the completion of\
+          \ any submitted job. |\n| `ignore` | Ignores processes execution errors.\
+          \ |\n| `retry` | Re-submit for execution a process returning an error condition.\
+          \ |\n\nSee [`errorStrategy`](https://www.nextflow.io/docs/latest/process.html#errorstrategy).\n"
+        type: "string"
+      memory:
+        description: "The `memory` directive allows you to define how much memory\
+          \ the process is allowed to use.\n\nSee [`memory`](https://www.nextflow.io/docs/latest/process.html#memory).\n"
+        type: "string"
+      stageOutMode:
+        description: "The `stageOutMode` directive defines how output files are staged-out\
+          \ from the scratch directory to the process work directory. The following\
+          \ values are allowed:\n\n| Value | Description |\n|-------|-------------|\
+          \ \n| copy | Output files are copied from the scratch directory to the work\
+          \ directory. | \n| move | Output files are moved from the scratch directory\
+          \ to the work directory. | \n| rsync | Output files are copied from the\
+          \ scratch directory to the work directory by using the rsync utility. |\n\
+          \nSee [`stageOutMode`](https://www.nextflow.io/docs/latest/process.html#stageoutmode).\n"
+        type: "string"
+    required: []
+    additionalProperties: false
+  NextflowAuto:
+    description: "Automated processing flags which can be toggled on or off."
+    type: "object"
+    properties:
+      simplifyInput:
+        description: "If `true`, an input tuple only containing only a single File\
+          \ (e.g. `[\"foo\", file(\"in.h5ad\")]`) is automatically transformed to\
+          \ a map (i.e. `[\"foo\", [ input: file(\"in.h5ad\") ] ]`).\n\nDefault: `true`.\n"
+        type: "boolean"
+      simplifyOutput:
+        description: "If `true`, an output tuple containing a map with a File (e.g.\
+          \ `[\"foo\", [ output: file(\"out.h5ad\") ] ]`) is automatically transformed\
+          \ to a map (i.e. `[\"foo\", file(\"out.h5ad\")]`).\n\nDefault: `false`.\n"
+        type: "boolean"
+      publish:
+        oneOf:
+        - description: "If `true`, the module's outputs are automatically published\
+            \ to `params.publishDir`.\nIf equal to \"state\", also a `.state.yaml`\
+            \ file will be published in the publish dir.\nWill throw an error if `params.publishDir`\
+            \ is not defined.\n\nDefault: `false`.\n"
+          type: "boolean"
+        - description: "If `true`, the module's outputs are automatically published\
+            \ to `params.publishDir`.\nIf equal to \"state\", also a `.state.yaml`\
+            \ file will be published in the publish dir.\nWill throw an error if `params.publishDir`\
+            \ is not defined.\n\nDefault: `false`.\n"
+          type: "string"
+      transcript:
+        description: "If `true`, the module's transcripts from `work/` are automatically\
+          \ published to `params.transcriptDir`.\nIf not defined, `params.publishDir\
+          \ + \"/_transcripts\"` will be used.\nWill throw an error if neither are\
+          \ defined.\n\nDefault: `false`.\n"
+        type: "boolean"
+    required: []
+    additionalProperties: false
+  NextflowConfig:
+    description: "Allows tweaking how the Nextflow Config file is generated."
+    type: "object"
+    properties:
+      labels:
+        description: "A series of default labels to specify memory and cpu constraints.\n\
+          \nThe default memory labels are defined as \"mem1gb\", \"mem2gb\", \"mem4gb\"\
+          , ... upto \"mem512tb\" and follows powers of 2.\nThe default cpu labels\
+          \ are defined as \"cpu1\", \"cpu2\", \"cpu5\", \"cpu10\", ... upto \"cpu1000\"\
+          \ and follows a semi logarithmic scale (1, 2, 5 per decade).\n\nConceptually\
+          \ it is possible for a Viash Config to overwrite the full labels parameter,\
+          \ however likely it is more efficient to add additional labels\nin the Viash\
+          \ Package with a config mod.\n"
+        type: "object"
+        additionalProperties:
+          type: "string"
+      script:
+        oneOf:
+        - description: "Includes a single string or list of strings into the nextflow.config\
+            \ file.\nThis can be used to add custom profiles or include an additional\
+            \ config file.\n"
+          type: "string"
+        - type: "array"
+          items:
+            description: "Includes a single string or list of strings into the nextflow.config\
+              \ file.\nThis can be used to add custom profiles or include an additional\
+              \ config file.\n"
+            type: "string"
+    required: []
+    additionalProperties: false
+  Dependency:
+    description: "Specifies a Viash component (script or executable) that should be\
+      \ made available for the code defined in the component.\nThe dependency components\
+      \ are collected and copied to the output folder during the Viash build step.\n"
+    type: "object"
+    properties:
+      name:
+        description: "The full name of the dependency component. This should include\
+          \ the namespace."
+        type: "string"
+      repository:
+        oneOf:
+        - description: "Specifies the repository location where the dependency component\
+            \ can be found.\nThis must either be a full definition of the repository\
+            \ or the name of a repository referenced as it is defined under repositories.\n\
+            Additionally, the full definition can be specified as a single string\
+            \ where all parameters such as repository type, url, branch or tag are\
+            \ specified.\nOmitting the value sets the dependency as a local dependency,\
+            \ ie. the dependency is available in the same namespace as the component.\n"
+          type: "string"
+        - description: "Specifies the repository location where the dependency component\
+            \ can be found.\nThis must either be a full definition of the repository\
+            \ or the name of a repository referenced as it is defined under repositories.\n\
+            Additionally, the full definition can be specified as a single string\
+            \ where all parameters such as repository type, url, branch or tag are\
+            \ specified.\nOmitting the value sets the dependency as a local dependency,\
+            \ ie. the dependency is available in the same namespace as the component.\n"
+          $ref: "#/definitions/Repository"
+      alias:
+        description: "An alternative name for the dependency component. This can include\
+          \ a namespace if so needed."
+        type: "string"
+    required:
+    - "name"
+    additionalProperties: false
+  Repository:
+    oneOf:
+    - $ref: "#/definitions/LocalRepository"
+    - $ref: "#/definitions/GitRepository"
+    - $ref: "#/definitions/GithubRepository"
+    - $ref: "#/definitions/ViashhubRepository"
+  LocalRepository:
+    description: "Defines a locally present and available repository.\nThis can be\
+      \ used to define components from the same code base as the current component.\n\
+      Alternatively, this can be used to refer to a code repository present on the\
+      \ local hard-drive instead of fetchable remotely, for example during development.\n"
+    type: "object"
+    properties:
+      path:
+        description: "Defines a subfolder of the repository to use as base to look\
+          \ for the dependency components."
+        type: "string"
+      tag:
+        description: "Defines which version of the dependency component to use. Typically\
+          \ this can be a specific tag, branch or commit hash."
+        type: "string"
+      type:
+        description: "Defines a locally present and available repository.\nThis can\
+          \ be used to define components from the same code base as the current component.\n\
+          Alternatively, this can be used to refer to a code repository present on\
+          \ the local hard-drive instead of fetchable remotely, for example during\
+          \ development.\n"
+        const: "local"
+    required:
+    - "type"
+    additionalProperties: false
+  GitRepository:
+    description: "A Git repository where remote dependency components can be found."
+    type: "object"
+    properties:
+      path:
+        description: "Defines a subfolder of the repository to use as base to look\
+          \ for the dependency components."
+        type: "string"
+      tag:
+        description: "Defines which version of the dependency component to use. Typically\
+          \ this can be a specific tag, branch or commit hash."
+        type: "string"
+      uri:
+        description: "The URI of the Git repository."
+        type: "string"
+      type:
+        description: "A Git repository where remote dependency components can be found."
+        const: "git"
+    required:
+    - "uri"
+    - "type"
+    additionalProperties: false
+  GithubRepository:
+    description: "A GitHub repository where remote dependency components can be found."
+    type: "object"
+    properties:
+      path:
+        description: "Defines a subfolder of the repository to use as base to look\
+          \ for the dependency components."
+        type: "string"
+      tag:
+        description: "Defines which version of the dependency component to use. Typically\
+          \ this can be a specific tag, branch or commit hash."
+        type: "string"
+      repo:
+        description: "The name of the GitHub repository."
+        type: "string"
+      type:
+        description: "A GitHub repository where remote dependency components can be\
+          \ found."
+        const: "github"
+    required:
+    - "repo"
+    - "type"
+    additionalProperties: false
+  ViashhubRepository:
+    description: "A Viash-Hub repository where remote dependency components can be\
+      \ found."
+    type: "object"
+    properties:
+      path:
+        description: "Defines a subfolder of the repository to use as base to look\
+          \ for the dependency components."
+        type: "string"
+      tag:
+        description: "Defines which version of the dependency component to use. Typically\
+          \ this can be a specific tag, branch or commit hash."
+        type: "string"
+      repo:
+        description: "The name of the Viash-Hub repository."
+        type: "string"
+      type:
+        description: "A Viash-Hub repository where remote dependency components can\
+          \ be found."
+        const: "viashhub"
+    required:
+    - "repo"
+    - "type"
+    additionalProperties: false
+  RepositoryWithName:
+    oneOf:
+    - $ref: "#/definitions/LocalRepositoryWithName"
+    - $ref: "#/definitions/GitRepositoryWithName"
+    - $ref: "#/definitions/GithubRepositoryWithName"
+    - $ref: "#/definitions/ViashhubRepositoryWithName"
+  LocalRepositoryWithName:
+    description: "Defines a locally present and available repository.\nThis can be\
+      \ used to define components from the same code base as the current component.\n\
+      Alternatively, this can be used to refer to a code repository present on the\
+      \ local hard-drive instead of fetchable remotely, for example during development.\n"
+    type: "object"
+    properties:
+      name:
+        description: "The identifier used to refer to this repository from dependencies."
+        type: "string"
+      path:
+        description: "Defines a subfolder of the repository to use as base to look\
+          \ for the dependency components."
+        type: "string"
+      tag:
+        description: "Defines which version of the dependency component to use. Typically\
+          \ this can be a specific tag, branch or commit hash."
+        type: "string"
+      type:
+        description: "Defines a locally present and available repository.\nThis can\
+          \ be used to define components from the same code base as the current component.\n\
+          Alternatively, this can be used to refer to a code repository present on\
+          \ the local hard-drive instead of fetchable remotely, for example during\
+          \ development.\n"
+        const: "local"
+    required:
+    - "name"
+    - "type"
+    additionalProperties: false
+  GitRepositoryWithName:
+    description: "A Git repository where remote dependency components can be found."
+    type: "object"
+    properties:
+      name:
+        description: "The identifier used to refer to this repository from dependencies."
+        type: "string"
+      path:
+        description: "Defines a subfolder of the repository to use as base to look\
+          \ for the dependency components."
+        type: "string"
+      tag:
+        description: "Defines which version of the dependency component to use. Typically\
+          \ this can be a specific tag, branch or commit hash."
+        type: "string"
+      uri:
+        description: "The URI of the Git repository."
+        type: "string"
+      type:
+        description: "A Git repository where remote dependency components can be found."
+        const: "git"
+    required:
+    - "name"
+    - "uri"
+    - "type"
+    additionalProperties: false
+  GithubRepositoryWithName:
+    description: "A GitHub repository where remote dependency components can be found."
+    type: "object"
+    properties:
+      name:
+        description: "The identifier used to refer to this repository from dependencies."
+        type: "string"
+      path:
+        description: "Defines a subfolder of the repository to use as base to look\
+          \ for the dependency components."
+        type: "string"
+      tag:
+        description: "Defines which version of the dependency component to use. Typically\
+          \ this can be a specific tag, branch or commit hash."
+        type: "string"
+      repo:
+        description: "The name of the GitHub repository."
+        type: "string"
+      type:
+        description: "A GitHub repository where remote dependency components can be\
+          \ found."
+        const: "github"
+    required:
+    - "name"
+    - "repo"
+    - "type"
+    additionalProperties: false
+  ViashhubRepositoryWithName:
+    description: "A Viash-Hub repository where remote dependency components can be\
+      \ found."
+    type: "object"
+    properties:
+      name:
+        description: "The identifier used to refer to this repository from dependencies."
+        type: "string"
+      path:
+        description: "Defines a subfolder of the repository to use as base to look\
+          \ for the dependency components."
+        type: "string"
+      tag:
+        description: "Defines which version of the dependency component to use. Typically\
+          \ this can be a specific tag, branch or commit hash."
+        type: "string"
+      repo:
+        description: "The name of the Viash-Hub repository."
+        type: "string"
+      type:
+        description: "A Viash-Hub repository where remote dependency components can\
+          \ be found."
+        const: "viashhub"
+    required:
+    - "name"
+    - "repo"
+    - "type"
+    additionalProperties: false
+  DockerSetupStrategy:
+    enum:
+    - "cb"
+    - "ifneedbepullelsecachedbuild"
+    - "donothing"
+    - "gentlepush"
+    - "alwayspullelsebuild"
+    - "build"
+    - "alwayspull"
+    - "alwaysbuild"
+    - "ifneedbebuild"
+    - "pullelsebuild"
+    - "p"
+    - "alwayspullelsecachedbuild"
+    - "pull"
+    - "maybepush"
+    - "ifneedbepullelsebuild"
+    - "cachedbuild"
+    - "pullelsecachedbuild"
+    - "push"
+    - "forcepush"
+    - "alwayspush"
+    - "b"
+    - "pushifnotpresent"
+    - "alwayscachedbuild"
+    - "meh"
+    - "ifneedbepull"
+    - "ifneedbecachedbuild"
+    $comment: "TODO add descriptions to different strategies"
+    description: "The Docker setup strategy to use when building a container."
+  Direction:
+    enum:
+    - "input"
+    - "output"
+    description: "Makes this argument an `input` or an `output`, as in does the file/folder\
+      \ needs to be read or written. `input` by default."
+  Status:
+    enum:
+    - "enabled"
+    - "disabled"
+    - "deprecated"
+    description: "Allows setting a component to active, deprecated or disabled."
+  DockerResolveVolume:
+    enum:
+    - "manual"
+    - "automatic"
+    - "auto"
+    - "Manual"
+    - "Automatic"
+    - "Auto"
+    $comment: "TODO make fully case insensitive"
+    description: "Enables or disables automatic volume mapping. Enabled when set to\
+      \ `Automatic` or disabled when set to `Manual`. Default: `Automatic`"
+  DoubleStrings:
+    enum:
+    - "+.inf"
+    - "+inf"
+    - "+infinity"
+    - "positiveinfinity"
+    - "positiveinf"
+    - "-.inf"
+    - "-inf"
+    - "-infinity"
+    - "negativeinfinity"
+    - "negativeinf"
+    - ".nan"
+    - "nan"
+  DoubleWithInf:
+    oneOf:
+    - type: "number"
+    - $ref: "#/definitions/DoubleStrings"
+oneOf:
+- $ref: "#/definitions/Config"
+

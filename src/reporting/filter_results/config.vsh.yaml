@@ -1,0 +1,162 @@
+name: filter_results
+namespace: reporting
+description: Filter dataset, method, metric info and results based on include/exclude criteria
+
+argument_groups:
+  - name: Inputs
+    arguments:
+    - name: --input_dataset_info
+      type: file
+      description: JSON file containing dataset information
+      required: true
+      example: resources_test/openproblems/task_results_v4/processed/dataset_info.json
+
+    - name: --input_method_info
+      type: file
+      description: JSON file containing method information
+      required: true
+      example: resources_test/openproblems/task_results_v4/processed/method_info.json
+
+    - name: --input_metric_info
+      type: file
+      description: JSON file containing metric information
+      required: true
+      example: resources_test/openproblems/task_results_v4/processed/metric_info.json
+
+    - name: --input_results
+      type: file
+      description: JSON file containing results
+      required: true
+      example: resources_test/openproblems/task_results_v4/processed/results.json
+
+  - name: Dataset filtering
+    description: |
+      Use these arguments to filter datasets by name. By default, all datasets are
+      included. If `--datasets_include` is defined, only those datasets are included. If
+      `--datasets_exclude` is defined, all datasets except those specified are included.
+      These arguments are mutually exclusive, so only `--datasets_include` OR
+      `--datasets_exclude` can be set but not both.
+    arguments:
+      - name: "--datasets_include"
+        type: string
+        multiple: true
+        description: |
+          A list of dataset ids to include. If specified, only these datasets will be included.
+      - name: "--datasets_exclude"
+        type: string
+        multiple: true
+        description: |
+          A list of dataset ids to exclude. If specified, all datasets except the ones listed will be included.
+
+  - name: Method filtering
+    description: |
+      Use these arguments to filter methods by name. By default, all methods are
+      included. If `--methods_include` is defined, only those methods are included. If
+      `--methods_exclude` is defined, all methods except those specified are included.
+      These arguments are mutually exclusive, so only `--methods_include` OR
+      `--methods_exclude` can be set but not both.
+    arguments:
+      - name: "--methods_include"
+        type: string
+        multiple: true
+        description: |
+          A list of method ids to include. If specified, only these methods will be included.
+      - name: "--methods_exclude"
+        type: string
+        multiple: true
+        description: |
+          A list of method ids to exclude. If specified, all methods except the ones listed will be included.
+
+  - name: Metric filtering
+    description: |
+      Use these arguments to filter metrics by name. By default, all metrics are
+      included. If `--metrics_include` is defined, only those metrics are included. If
+      `--metrics_exclude` is defined, all metrics except those specified are included.
+      These arguments are mutually exclusive, so only `--metrics_include` OR
+      `--metrics_exclude` can be set but not both.
+    arguments:
+      - name: "--metrics_include"
+        type: string
+        multiple: true
+        description: |
+          A list of metric ids to include. If specified, only these metrics will be included.
+      - name: "--metrics_exclude"
+        type: string
+        multiple: true
+        description: |
+          A list of metric ids to exclude. If specified, all metrics except the ones listed will be included.
+
+  - name: Outputs
+    arguments:
+    - name: --output_dataset_info
+      type: file
+      direction: output
+      default: filtered_dataset_info.json
+      description: Filtered dataset info JSON file
+      info:
+        format:
+          type: json
+          schema: /common/schemas/results_v4/dataset_info.json
+      example: resources_test/openproblems/task_results_v4/processed/filtered_dataset_info.json
+
+    - name: --output_method_info
+      type: file
+      direction: output
+      default: filtered_method_info.json
+      description: Filtered method info JSON file
+      info:
+        format:
+          type: json
+          schema: /common/schemas/results_v4/method_info.json
+      example: resources_test/openproblems/task_results_v4/processed/filtered_method_info.json
+
+    - name: --output_metric_info
+      type: file
+      direction: output
+      default: filtered_metric_info.json
+      description: Filtered metric info JSON file
+      info:
+        format:
+          type: json
+          schema: /common/schemas/results_v4/metric_info.json
+      example: resources_test/openproblems/task_results_v4/processed/filtered_metric_info.json
+
+    - name: --output_results
+      type: file
+      direction: output
+      default: filtered_results.json
+      description: Filtered results JSON file
+      info:
+        format:
+          type: json
+          schema: /common/schemas/results_v4/results.json
+      example: resources_test/openproblems/task_results_v4/processed/filtered_results.json
+
+resources:
+  - type: python_script
+    path: script.py
+  - path: /common/schemas
+    dest: schemas
+
+test_resources:
+  - type: python_script
+    path: /common/component_tests/run_and_check_output.py
+  - path: /resources_test/openproblems/task_results_v4
+    dest: resources_test/openproblems/task_results_v4
+
+engines:
+  - type: docker
+    image: openproblems/base_python:1
+    setup:
+      - type: apt
+        packages:
+        - nodejs
+        - npm
+      - type: docker
+        run: npm install -g ajv-cli
+
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [lowmem, lowtime, lowcpu]

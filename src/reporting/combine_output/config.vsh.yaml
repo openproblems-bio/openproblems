@@ -1,0 +1,102 @@
+name: combine_output
+namespace: reporting
+description: Combine task outputs into a single JSON
+
+argument_groups:
+  - name: Inputs
+    arguments:
+      - name: --input_task_info
+        type: file
+        description: Task info file
+        info:
+          format:
+            type: json
+            schema: /common/schemas/results_v4/task_info.json
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/task_info.json
+      - name: --input_dataset_info
+        type: file
+        description: Dataset info file
+        info:
+          format:
+            type: json
+            schema: /common/schemas/results_v4/dataset_info.json
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/dataset_info.json
+      - name: --input_method_info
+        type: file
+        description: Method info file
+        info:
+          format:
+            type: json
+            schema: /common/schemas/results_v4/method_info.json
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/method_info.json
+      - name: --input_metric_info
+        type: file
+        description: Metric info file
+        info:
+          format:
+            type: json
+            schema: /common/schemas/results_v4/metric_info.json
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/metric_info.json
+      - name: --input_results
+        type: file
+        description: Results file
+        info:
+          format:
+            type: json
+            schema: /common/schemas/results_v4/results.json
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/results.json
+      - name: --input_quality_control
+        type: file
+        description: Quality control file
+        info:
+          format:
+            type: json
+            schema: /common/schemas/results_v4/quality_control.json
+        required: true
+        example: resources_test/openproblems/task_results_v4/processed/quality_control.json
+
+  - name: Outputs
+    arguments:
+    - name: --output
+      type: file
+      direction: output
+      description: Combined output JSON
+      default: combined_output.json
+      info:
+        format:
+          type: json
+          schema: /common/schemas/results_v4/combined_output.json
+
+resources:
+  - type: r_script
+    path: script.R
+  - path: /common/schemas
+    dest: schemas
+
+test_resources:
+  - type: python_script
+    path: /common/component_tests/run_and_check_output.py
+  - path: /resources_test/openproblems/task_results_v4
+    dest: resources_test/openproblems/task_results_v4
+
+engines:
+  - type: docker
+    image: openproblems/base_r:1
+    setup:
+      - type: apt
+        packages:
+        - nodejs
+        - npm
+      - type: docker
+        run: npm install -g ajv-cli
+
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [lowmem, lowtime, lowcpu]

@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openproblems.bio/schemas/results_v4/metric_info.json",
+  "title": "Metric info",
+  "description": "Information about metrics in a task",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "description": "Metric identifier",
+        "type": "string"
+      },
+      "label": {
+        "description": "Human-readable label for the metric",
+        "type": "string"
+      },
+      "commit": {
+        "description": "Git commit SHA for this version of the metric",
+        "type": "string"
+      },
+      "summary": {
+        "description": "One line summary of the metric",
+        "type": "string"
+      },
+      "description": {
+        "description": "Detailed description of the metric",
+        "type": "string"
+      },
+      "maximize" : {
+        "description": "Whether the metric should be maximized (i.e. higher values are better)",
+        "type": "boolean"
+      },
+      "link_implementation": {
+        "description": "Permalink URL to the version of the method component used",
+        "type": "string"
+      },
+      "link_container_image": {
+        "description": "URL to the container image used by the method component",
+        "type": "string"
+      },
+      "component_name" : {
+        "description": "Name of the component used to calculate the metric",
+        "type": "string"
+      },
+      "authors": {
+        "$ref": "https://openproblems.bio/schemas/results_v4/core.json#/$defs/authors"
+      },
+      "references": {
+        "$ref": "https://openproblems.bio/schemas/results_v4/core.json#/$defs/references"
+      },
+      "additional_info": {
+        "description": "Additional information from the metric config",
+        "type": "object"
+      },
+      "version": {
+        "description": "Tag for this version of the task",
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "label",
+      "commit",
+      "summary",
+      "description",
+      "maximize",
+      "link_implementation",
+      "link_container_image",
+      "component_name",
+      "authors",
+      "references",
+      "version"
+    ],
+    "additionalProperties": false
+  }
+}

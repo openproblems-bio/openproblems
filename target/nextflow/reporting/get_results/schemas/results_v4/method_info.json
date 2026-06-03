@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openproblems.bio/schemas/results_v4/method_info.json",
+  "title": "Method info",
+  "description": "Information about methods in a task",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "description": "Method identifier",
+        "type": "string"
+      },
+      "label": {
+        "description": "Human-readable label for the method",
+        "type": "string"
+      },
+      "commit": {
+        "description": "Git commit SHA for this version of the method",
+        "type": "string"
+      },
+      "summary": {
+        "description": "One line summary of the method",
+        "type": "string"
+      },
+      "description": {
+        "description": "Detailed description of the method",
+        "type": "string"
+      },
+      "type": {
+        "description": "Type of the method. Either 'control_method' (a positive or negative control used for scaling metric values), 'method' (a real method that is being benchmarked) or 'reference_method' (another method that is included in results for comparison but not used for scaling)",
+        "type": "string",
+        "enum": ["control_method", "method", "reference_method"]
+      },
+      "link_code": {
+        "description": "URL to the package or code provided by the method authors",
+        "type": ["null", "string"]
+      },
+      "link_documentation": {
+        "description": "URL to documentation provided by the method authors",
+        "type": ["null", "string"]
+      },
+      "link_implementation": {
+        "description": "Permalink URL to the version of the method component used",
+        "type": ["null", "string"]
+      },
+      "link_container_image": {
+        "description": "URL to the container image used by the method component",
+        "type": "string"
+      },
+      "authors": {
+        "$ref": "https://openproblems.bio/schemas/results_v4/core.json#/$defs/authors"
+      },
+      "references": {
+        "$ref": "https://openproblems.bio/schemas/results_v4/core.json#/$defs/references"
+      },
+      "additional_info": {
+        "description": "Additional information from the method config",
+        "type": "object"
+      },
+      "version": {
+        "description": "Tag for this version of the task",
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "label",
+      "commit",
+      "summary",
+      "description",
+      "type",
+      "link_code",
+      "link_documentation",
+      "link_implementation",
+      "link_container_image",
+      "authors",
+      "references",
+      "additional_info",
+      "version"
+    ],
+    "additionalProperties": false
+  }
+}

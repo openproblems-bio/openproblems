@@ -1,0 +1,56 @@
+name: sync_resources
+namespace: project
+description: Sync test resources to the local filesystem
+usage: |
+  sync_resources
+  sync_resources --input _viash.yaml --output .
+argument_groups:
+  - name: Inputs
+    arguments:
+      - name: "--input"
+        alternatives: ["-i"]
+        type: file
+        description: "Path to the _viash.yaml project configuration file."
+        default: _viash.yaml
+  - name: Outputs
+    arguments:
+      - name: "--output"
+        alternatives: ["-o"]
+        type: file
+        default: .
+        direction: output
+        description: "Path to the directory where the resources will be synced to."
+  - name: Arguments
+    arguments:
+      - name: "--quiet"
+        type: boolean_true
+        description: "Displays the operations that would be performed using the specified command without actually running them."
+      - name: "--dryrun"
+        type: boolean_true
+        description: "Does not display the operations performed from the specified command."
+      - name: "--delete"
+        type: boolean_true
+        description: "Files that exist in the destination but not in the source are deleted during sync."
+      - name: "--exclude"
+        type: "string"
+        multiple: true
+        description: Exclude all files or objects from the command that matches the specified pattern.
+resources:
+  - type: bash_script
+    path: script.sh
+test_resources:
+  - type: bash_script
+    path: test.sh
+engines:
+  - type: docker
+    image: "amazon/aws-cli:2.17.11"
+    setup:
+      - type: yum
+        packages: [wget]
+      - type: docker
+        run : |
+          wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && \
+            chmod +x /usr/bin/yq
+runners:
+  - type: executable
+  - type: nextflow

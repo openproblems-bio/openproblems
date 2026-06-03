@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openproblems.bio/schemas/results_v4/task_info.json",
+  "title": "Task info",
+  "description": "Information about a task",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "Task identifier (no 'task_' prefix)",
+      "type": "string"
+    },
+    "label": {
+      "description": "Human-readable label for the task",
+      "type": "string"
+    },
+    "commit": {
+      "description": "Git commit SHA for this version of the task",
+      "type": ["null", "string"]
+    },
+    "summary": {
+      "description": "One line summary of the task",
+      "type": "string"
+    },
+    "description": {
+      "description": "Detailed description of the task",
+      "type": "string"
+    },
+    "repository": {
+      "description": "URL of the repository containing the task",
+      "type": "string"
+    },
+    "authors": {
+      "$ref": "https://openproblems.bio/schemas/results_v4/core.json#/$defs/authors"
+    },
+    "license": {
+      "description": "License for the task",
+      "type": "string"
+    },
+    "references": {
+      "$ref": "https://openproblems.bio/schemas/results_v4/core.json#/$defs/references"
+    },
+    "version": {
+      "description": "Tag for this version of the task",
+      "type": "string"
+    },
+    "is_prerelease": {
+      "description": "Whether this is a pre-release version of the task",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "name",
+    "label",
+    "commit",
+    "summary",
+    "description",
+    "repository",
+    "authors",
+    "license",
+    "references",
+    "version",
+    "is_prerelease"
+  ]
+}

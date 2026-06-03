@@ -1,0 +1,23 @@
+name: fetch_run_work_dir
+namespace: project
+description: Fetches a task execution directory from an S3 bucket and sync the input data.
+arguments:
+  - type: string
+    name: --input
+    required: true
+    direction: input
+    example: s3://openproblems-work/work/65/369e661a583488755685199c87fadf
+    description: The S3 path to the task execution directory to fetch.
+  - type: file
+    name: --output
+    required: true
+    direction: output
+    description: Output directory containing the fetched task execution files.
+resources:
+  - type: bash_script
+    path: script.sh
+engines:
+  - type: docker
+    image: amazon/aws-cli:latest
+runners:
+  - type: executable
