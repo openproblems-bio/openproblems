@@ -819,6 +819,7 @@ results_schemas <- file.path(meta$resources_dir, "schemas", "results_v4")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
+  "--strict=false",
   "-s",
   file.path(results_schemas, "quality_control.json"),
   "-d",

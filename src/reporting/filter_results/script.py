@@ -170,6 +170,7 @@ def validate_json_against_schema(
             "validate",
             "--spec",
             "draft2020",
+            "--strict=false",
             "-s",
             schema_file,
             "-r",
