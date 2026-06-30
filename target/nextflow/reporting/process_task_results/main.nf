@@ -3062,6 +3062,18 @@ meta = [
           "multiple_sep" : ";"
         },
         {
+          "type" : "string",
+          "name" : "--timestamp",
+          "description" : "ISO 8601 timestamp of when these results were generated. If not\nprovided, the `timestamp` field from the input task info YAML is used.\nIf neither is available, the workflow fails.\n",
+          "example" : [
+            "2024-10-10T00:00:00Z"
+          ],
+          "required" : false,
+          "direction" : "input",
+          "multiple" : false,
+          "multiple_sep" : ";"
+        },
+        {
           "type" : "file",
           "name" : "--input_dataset_info",
           "description" : "A YAML file containing dataset information",
@@ -3219,7 +3231,7 @@ meta = [
             }
           },
           "default" : [
-            "combined_output.json"
+            "task_results.json"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -3491,9 +3503,9 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/reporting/process_task_results",
     "viash_version" : "0.9.7",
-    "git_commit" : "83a656e018992f1a9f12435a146ba144b729a272",
+    "git_commit" : "9fe740d9899e882716aacb737153f1c1465907a7",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v3.0.0-1-g83a656e0"
+    "git_tag" : "v1.0.0-1442-g9fe740d9"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3570,16 +3582,11 @@ workflow run_wf {
 
     | get_task_info.run(
       fromState: [
-        "input": "input_task_info"
+        "input": "input_task_info",
+        "timestamp": "timestamp"
       ],
       toState: ["output_task": "output"]
     )
-
-    // extract task id from task info
-    | map { id, state ->
-      def task_id = readJson(state.output_task).task_id
-      [id, state + ["task_id": task_id]]
-    }
 
     | get_dataset_info.run(
       fromState: [

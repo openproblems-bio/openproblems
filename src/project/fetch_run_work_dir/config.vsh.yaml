@@ -13,10 +13,21 @@ arguments:
     required: true
     direction: output
     description: Output directory containing the fetched task execution files.
+  - type: file
+    name: --aws_credentials
+    required: true
+    direction: input
+    description: AWS credentials file containing the access key and secret key for accessing the S3 bucket
+  - type: string
+    name: --aws_profile
+    required: true
+    direction: input
+    description: AWS profile to use for accessing the S3 bucket.
 resources:
   - type: bash_script
     path: script.sh
 engines:
+  - type: native
   - type: docker
     image: amazon/aws-cli:latest
 runners:

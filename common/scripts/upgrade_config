@@ -1,7 +1,7 @@
 #!/bin/bash
 
 repository="openproblems-bio/core"
-version="f1793a4dd9f5e0aaa25745ae644f1172cb3fc496"
+version="ff8161ffc679c5027bf25dee8f080ab33c215137"
 component="project/upgrade_config"
 
 cache_dir="$HOME/.cache/openproblems/repos/$repository"

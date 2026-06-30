@@ -10,6 +10,14 @@ argument_groups:
       description: Task info YAML file
       required: true
       example: resources_test/openproblems/task_results_v4/raw/task_info.yaml
+    - name: --timestamp
+      type: string
+      required: false
+      description: |
+        ISO 8601 timestamp of when these results were generated. If not provided,
+        the `timestamp` field from the input task info YAML is used. If neither is
+        available, the component fails.
+      example: "2024-10-10T00:00:00Z"
 
   - name: Outputs
     arguments:

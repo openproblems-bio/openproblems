@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ## VIASH START
 par_input=s3://openproblems-nextflow/work/f6/8565066aee4771cc2790b92b4ac660
 par_aws_profile=op

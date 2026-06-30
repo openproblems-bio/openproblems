@@ -3060,6 +3060,18 @@ meta = [
           "direction" : "input",
           "multiple" : false,
           "multiple_sep" : ";"
+        },
+        {
+          "type" : "string",
+          "name" : "--timestamp",
+          "description" : "ISO 8601 timestamp of when these results were generated. If not provided,\nthe `timestamp` field from the input task info YAML is used. If neither is\navailable, the component fails.\n",
+          "example" : [
+            "2024-10-10T00:00:00Z"
+          ],
+          "required" : false,
+          "direction" : "input",
+          "multiple" : false,
+          "multiple_sep" : ";"
         }
       ]
     },
@@ -3221,9 +3233,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/get_task_info",
     "viash_version" : "0.9.7",
-    "git_commit" : "83a656e018992f1a9f12435a146ba144b729a272",
+    "git_commit" : "9fe740d9899e882716aacb737153f1c1465907a7",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v3.0.0-1-g83a656e0"
+    "git_tag" : "v1.0.0-1442-g9fe740d9"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3286,6 +3298,7 @@ cat > "$tempscript" << VIASHMAIN
 
 par <- list(
   "input" = $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_INPUT" | sed "s#['\\\\]#\\\\\\\\&#g"; echo "'"; else echo NULL; fi ),
+  "timestamp" = $( if [ ! -z ${VIASH_PAR_TIMESTAMP+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_TIMESTAMP" | sed "s#['\\\\]#\\\\\\\\&#g"; echo "'"; else echo NULL; fi ),
   "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo -n "'"; echo -n "$VIASH_PAR_OUTPUT" | sed "s#['\\\\]#\\\\\\\\&#g"; echo "'"; else echo NULL; fi )
 )
 meta <- list(
@@ -3339,6 +3352,19 @@ cat("\\\\n>>> Getting authors...\\\\n")
 authors <- get_authors_list(task_info_yaml\\$authors)
 cat("Found", length(authors), "authors\\\\n")
 
+cat("\\\\n>>> Resolving timestamp...\\\\n")
+# Prefer the timestamp in the task info YAML, fall back to the --timestamp
+# argument (e.g. inferred by render_results_report from the run path or file
+# modification time). Fail if neither is available.
+timestamp <- task_info_yaml\\$timestamp %||% par\\$timestamp
+if (is.null(timestamp) || is.na(timestamp) || !nzchar(timestamp)) {
+  stop(
+    "No timestamp found. Add a 'timestamp' field to the task info YAML or ",
+    "pass one via the --timestamp argument."
+  )
+}
+cat("Using timestamp:", timestamp, "\\\\n")
+
 cat("\\\\n>>> Creating JSON list...\\\\n")
 task_info_json <- list(
   name = jsonlite::unbox(sub("^task_", "", task_info_yaml\\$name)), # Remove "task_" prefix
@@ -3370,7 +3396,8 @@ task_info_json <- list(
   license = task_info_yaml\\$license %||% "Missing!" |> jsonlite::unbox(),
   references = references,
   version = task_info_yaml\\$version %||% "Missing!" |> jsonlite::unbox(),
-  is_prerelease = jsonlite::unbox(TRUE)
+  is_prerelease = jsonlite::unbox(TRUE),
+  timestamp = jsonlite::unbox(timestamp)
 )
 str(task_info_json)
 
@@ -3388,6 +3415,7 @@ results_schemas <- file.path(meta\\$resources_dir, "schemas", "results_v4")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
+  "--strict=false",
   "-s",
   file.path(results_schemas, "task_info.json"),
   "-r",

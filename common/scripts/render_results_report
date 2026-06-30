@@ -255,15 +255,55 @@ validate_input() {
     esac
 }
 
+# Function to infer an ISO 8601 timestamp for a run
+# Tries to parse the run date (YYYYMMDD or YYYYMMDD_HHMMSS) extracted from the
+# results path, and falls back to the modification time of task_info.yaml for
+# local runs. Prints an empty string if neither is available.
+infer_timestamp() {
+    local input_dir="$1"
+    local date_str="$2"
+
+    # Compact format: YYYYMMDD or YYYYMMDD_HHMMSS
+    if [[ "$date_str" =~ ^([0-9]{4})([0-9]{2})([0-9]{2})(_([0-9]{2})([0-9]{2})([0-9]{2}))?$ ]]; then
+        local y="${BASH_REMATCH[1]}" mo="${BASH_REMATCH[2]}" d="${BASH_REMATCH[3]}"
+        local h="${BASH_REMATCH[5]:-00}" mi="${BASH_REMATCH[6]:-00}" s="${BASH_REMATCH[7]:-00}"
+        echo "${y}-${mo}-${d}T${h}:${mi}:${s}Z"
+        return 0
+    fi
+
+    # Dashed format: YYYY-MM-DD or YYYY-MM-DD_HH-MM-SS
+    if [[ "$date_str" =~ ^([0-9]{4})-([0-9]{2})-([0-9]{2})(_([0-9]{2})-([0-9]{2})-([0-9]{2}))?$ ]]; then
+        local y="${BASH_REMATCH[1]}" mo="${BASH_REMATCH[2]}" d="${BASH_REMATCH[3]}"
+        local h="${BASH_REMATCH[5]:-00}" mi="${BASH_REMATCH[6]:-00}" s="${BASH_REMATCH[7]:-00}"
+        echo "${y}-${mo}-${d}T${h}:${mi}:${s}Z"
+        return 0
+    fi
+
+    # Fall back to the modification time of the local task info file
+    local task_info_file="$input_dir/task_info.yaml"
+    if [[ -f "$task_info_file" ]]; then
+        date -u -r "$task_info_file" +"%Y-%m-%dT%H:%M:%SZ"
+        return 0
+    fi
+
+    echo ""
+}
+
 # Function to run the nextflow pipeline
 run_pipeline() {
     local input_dir="$1"
     local output_dir="$2"
     local task="$3"
     local run_id="$4"
-    
-    log "Running pipeline with input: $input_dir, output: $output_dir, task: $task, run_id: $run_id"
-    
+    local timestamp="$5"
+
+    log "Running pipeline with input: $input_dir, output: $output_dir, task: $task, run_id: $run_id, timestamp: $timestamp"
+
+    if [[ -z "$timestamp" ]]; then
+        echo "Error: Could not determine a timestamp for this run. Provide a 'timestamp' field in task_info.yaml or use a 'run_<date>' results path." >&2
+        exit 1
+    fi
+
     local cmd=(
         nextflow run openproblems-bio/openproblems
         -r build/main
@@ -279,8 +319,9 @@ run_pipeline() {
         --input_metric_configs "$input_dir/metric_configs.yaml"
         --input_trace "$input_dir/trace.txt"
         --input_task_info "$input_dir/task_info.yaml"
+        --timestamp "$timestamp"
         --output_state '$id/state.yaml'
-        --output_combined '$id/combined_output.json'
+        --output_combined '$id/task_results.json'
         --output_report '$id/report.html'
         --output_dataset_info '$id/dataset_info.json'
         --output_method_info '$id/method_info.json'
@@ -378,33 +419,39 @@ case "$MODE" in
     "local")
         validate_input "$INPUT_PATH" "local"
         RUN_ID="$TASK/local_$(date +%Y%m%d_%H%M%S)"
-        run_pipeline "$INPUT_PATH" "$OUTPUT_DIR" "$TASK" "$RUN_ID"
+        TIMESTAMP=$(infer_timestamp "$INPUT_PATH" "")
+        run_pipeline "$INPUT_PATH" "$OUTPUT_DIR" "$TASK" "$RUN_ID" "$TIMESTAMP"
         ;;
-    
+
     "s3")
         validate_input "$INPUT_PATH" "s3"
-        # Extract run date from S3 path if possible
-        if [[ "$INPUT_PATH" =~ run_([0-9]+) ]]; then
+        # Extract run date from S3 path if possible (e.g. run_20241010 or
+        # run_2025-01-23_18-03-16)
+        if [[ "$INPUT_PATH" =~ run_([0-9][-_0-9]*[0-9]) ]]; then
             DATE="${BASH_REMATCH[1]}"
             RUN_ID="$TASK/run_$DATE"
         else
+            DATE=""
             RUN_ID="$TASK/s3_$(date +%Y%m%d_%H%M%S)"
         fi
-        run_pipeline "$INPUT_PATH" "$OUTPUT_DIR" "$TASK" "$RUN_ID"
+        TIMESTAMP=$(infer_timestamp "$INPUT_PATH" "$DATE")
+        run_pipeline "$INPUT_PATH" "$OUTPUT_DIR" "$TASK" "$RUN_ID" "$TIMESTAMP"
         ;;
-    
+
     "latest")
         DATE=$(find_latest_s3_results "$S3_TASK_BASE")
         INPUT_DIR="$S3_TASK_BASE/run_$DATE"
         RUN_ID="$TASK/run_$DATE"
-        run_pipeline "$INPUT_DIR" "$OUTPUT_DIR" "$TASK" "$RUN_ID"
+        TIMESTAMP=$(infer_timestamp "$INPUT_DIR" "$DATE")
+        run_pipeline "$INPUT_DIR" "$OUTPUT_DIR" "$TASK" "$RUN_ID" "$TIMESTAMP"
         ;;
-    
+
     "select")
         if DATE=$(select_run "$S3_TASK_BASE"); then
             INPUT_DIR="$S3_TASK_BASE/run_$DATE"
             RUN_ID="$TASK/run_$DATE"
-            run_pipeline "$INPUT_DIR" "$OUTPUT_DIR" "$TASK" "$RUN_ID"
+            TIMESTAMP=$(infer_timestamp "$INPUT_DIR" "$DATE")
+            run_pipeline "$INPUT_DIR" "$OUTPUT_DIR" "$TASK" "$RUN_ID" "$TIMESTAMP"
         else
             echo "Operation cancelled by user." >&2
             exit 0

@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openproblems.bio/schemas/results_v4/results.json",
+  "$id": "https://raw.githubusercontent.com/openproblems-bio/common_resources/main/schemas/results_v4/results.json",
+  "x-schema-version": "4.0.0",
   "title": "Results",
   "description": "Results for a task",
   "type": "array",

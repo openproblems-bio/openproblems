@@ -451,9 +451,9 @@ RUN apt-get update && \
 
 RUN npm install -g ajv-cli
 LABEL org.opencontainers.image.description="Companion container for running component reporting combine_output"
-LABEL org.opencontainers.image.created="2026-05-07T12:18:47Z"
+LABEL org.opencontainers.image.created="2026-06-30T14:04:08Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="83a656e018992f1a9f12435a146ba144b729a272"
+LABEL org.opencontainers.image.revision="9fe740d9899e882716aacb737153f1c1465907a7"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -615,7 +615,7 @@ function ViashHelp {
   echo "Outputs:"
   echo "    --output"
   echo "        type: file, output, file must exist"
-  echo "        default: combined_output.json"
+  echo "        default: task_results.json"
   echo "        Combined output JSON"
   echo ""
   echo "Viash built in Computational Requirements:"
@@ -966,7 +966,7 @@ fi
 
 # filling in defaults
 if [ -z ${VIASH_PAR_OUTPUT+x} ]; then
-  VIASH_PAR_OUTPUT="combined_output.json"
+  VIASH_PAR_OUTPUT="task_results.json"
 fi
 
 # check whether required files exist
@@ -1275,8 +1275,9 @@ results_schemas <- file.path(meta\$resources_dir, "schemas", "results_v4")
 ajv_args <- paste(
   "validate",
   "--spec draft2020",
+  "--strict=false",
   "-s",
-  file.path(results_schemas, "combined_output.json"),
+  file.path(results_schemas, "task_results.json"),
   "-r",
   file.path(results_schemas, "task_info.json"),
   "-r",

@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://openproblems.bio/schemas/results_v4/task_info.json",
+  "$id": "https://raw.githubusercontent.com/openproblems-bio/common_resources/main/schemas/results_v4/task_info.json",
+  "x-schema-version": "4.0.0",
   "title": "Task info",
   "description": "Information about a task",
   "type": "object",
@@ -30,14 +31,14 @@
       "type": "string"
     },
     "authors": {
-      "$ref": "https://openproblems.bio/schemas/results_v4/core.json#/$defs/authors"
+      "$ref": "https://raw.githubusercontent.com/openproblems-bio/common_resources/main/schemas/results_v4/core.json#/$defs/authors"
     },
     "license": {
       "description": "License for the task",
       "type": "string"
     },
     "references": {
-      "$ref": "https://openproblems.bio/schemas/results_v4/core.json#/$defs/references"
+      "$ref": "https://raw.githubusercontent.com/openproblems-bio/common_resources/main/schemas/results_v4/core.json#/$defs/references"
     },
     "version": {
       "description": "Tag for this version of the task",
@@ -46,6 +47,11 @@
     "is_prerelease": {
       "description": "Whether this is a pre-release version of the task",
       "type": "boolean"
+    },
+    "timestamp": {
+      "description": "ISO 8601 timestamp of when these results were generated.",
+      "type": "string",
+      "format": "date-time"
     }
   },
   "required": [
@@ -59,6 +65,7 @@
     "license",
     "references",
     "version",
-    "is_prerelease"
+    "is_prerelease",
+    "timestamp"
   ]
 }

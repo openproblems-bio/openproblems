@@ -172,7 +172,7 @@ VIASH_META_TEMP_DIR="$VIASH_TEMP"
 
 # initialise variables
 VIASH_MODE='run'
-VIASH_ENGINE_ID='docker'
+VIASH_ENGINE_ID='native'
 
 ######## Helper functions for setting up Docker images for viash ########
 # expects: ViashDockerBuild
@@ -446,9 +446,9 @@ function ViashDockerfile {
 FROM amazon/aws-cli:latest
 ENTRYPOINT []
 LABEL org.opencontainers.image.description="Companion container for running component project fetch_run_work_dir"
-LABEL org.opencontainers.image.created="2026-05-07T12:18:45Z"
+LABEL org.opencontainers.image.created="2026-06-30T14:04:08Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="83a656e018992f1a9f12435a146ba144b729a272"
+LABEL org.opencontainers.image.revision="9fe740d9899e882716aacb737153f1c1465907a7"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -580,6 +580,15 @@ function ViashHelp {
   echo "        type: file, required parameter, output, file must exist"
   echo "        Output directory containing the fetched task execution files."
   echo ""
+  echo "    --aws_credentials"
+  echo "        type: file, required parameter, file must exist"
+  echo "        AWS credentials file containing the access key and secret key for"
+  echo "        accessing the S3 bucket"
+  echo ""
+  echo "    --aws_profile"
+  echo "        type: string, required parameter"
+  echo "        AWS profile to use for accessing the S3 bucket."
+  echo ""
   echo "Viash built in Computational Requirements:"
   echo "    ---cpus=INT"
   echo "        Number of CPUs to use"
@@ -601,8 +610,8 @@ function ViashHelp {
   echo ""
   echo "Viash built in Engines:"
   echo "    ---engine=ENGINE_ID"
-  echo "        Specify the engine to use. Options are: docker."
-  echo "        Default: docker"
+  echo "        Specify the engine to use. Options are: native, docker."
+  echo "        Default: native"
 }
 
 # initialise array
@@ -650,6 +659,28 @@ while [[ $# -gt 0 ]]; do
         --output=*)
             [ -n "$VIASH_PAR_OUTPUT" ] && ViashError Bad arguments for option \'--output=*\': \'$VIASH_PAR_OUTPUT\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
             VIASH_PAR_OUTPUT=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
+        --aws_credentials)
+            [ -n "$VIASH_PAR_AWS_CREDENTIALS" ] && ViashError Bad arguments for option \'--aws_credentials\': \'$VIASH_PAR_AWS_CREDENTIALS\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_AWS_CREDENTIALS="$2"
+            [ $# -lt 2 ] && ViashError Not enough arguments passed to --aws_credentials. Use "--help" to get more information on the parameters. && exit 1
+            shift 2
+            ;;
+        --aws_credentials=*)
+            [ -n "$VIASH_PAR_AWS_CREDENTIALS" ] && ViashError Bad arguments for option \'--aws_credentials=*\': \'$VIASH_PAR_AWS_CREDENTIALS\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_AWS_CREDENTIALS=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
+        --aws_profile)
+            [ -n "$VIASH_PAR_AWS_PROFILE" ] && ViashError Bad arguments for option \'--aws_profile\': \'$VIASH_PAR_AWS_PROFILE\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_AWS_PROFILE="$2"
+            [ $# -lt 2 ] && ViashError Not enough arguments passed to --aws_profile. Use "--help" to get more information on the parameters. && exit 1
+            shift 2
+            ;;
+        --aws_profile=*)
+            [ -n "$VIASH_PAR_AWS_PROFILE" ] && ViashError Bad arguments for option \'--aws_profile=*\': \'$VIASH_PAR_AWS_PROFILE\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_AWS_PROFILE=$(ViashRemoveFlags "$1")
             shift 1
             ;;
         ---engine)
@@ -725,10 +756,12 @@ done
 eval set -- $VIASH_POSITIONAL_ARGS
 
 
-if   [ "$VIASH_ENGINE_ID" == "docker" ]  ; then
+if   [ "$VIASH_ENGINE_ID" == "native" ]  ; then
+  VIASH_ENGINE_TYPE='native'
+elif   [ "$VIASH_ENGINE_ID" == "docker" ]  ; then
   VIASH_ENGINE_TYPE='docker'
 else
-  ViashError "Engine '$VIASH_ENGINE_ID' is not recognized. Options are: docker."
+  ViashError "Engine '$VIASH_ENGINE_ID' is not recognized. Options are: native, docker."
   exit 1
 fi
 
@@ -830,6 +863,14 @@ if [ -z ${VIASH_PAR_OUTPUT+x} ]; then
   ViashError '--output' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
 fi
+if [ -z ${VIASH_PAR_AWS_CREDENTIALS+x} ]; then
+  ViashError '--aws_credentials' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z ${VIASH_PAR_AWS_PROFILE+x} ]; then
+  ViashError '--aws_profile' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
 if [ -z ${VIASH_META_NAME+x} ]; then
   ViashError 'name' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
@@ -852,6 +893,12 @@ if [ -z ${VIASH_META_CONFIG+x} ]; then
 fi
 if [ -z ${VIASH_META_TEMP_DIR+x} ]; then
   ViashError 'temp_dir' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+
+# check whether required files exist
+if [ ! -z "$VIASH_PAR_AWS_CREDENTIALS" ] && [ ! -e "$VIASH_PAR_AWS_CREDENTIALS" ]; then
+  ViashError "Input file '$VIASH_PAR_AWS_CREDENTIALS' does not exist."
   exit 1
 fi
 
@@ -934,6 +981,15 @@ if [ ! -z "$VIASH_PAR_OUTPUT" ] && [ ! -d "$(dirname "$VIASH_PAR_OUTPUT")" ]; th
   mkdir -p "$(dirname "$VIASH_PAR_OUTPUT")"
 fi
 
+if  [ "$VIASH_ENGINE_ID" == "native" ]  ; then
+  if [ "$VIASH_MODE" == "run" ]; then
+    VIASH_CMD="bash"
+  else
+    ViashError "Engine '$VIASH_ENGINE_ID' does not support mode '$VIASH_MODE'."
+    exit 1
+  fi
+fi
+
 if [[ "$VIASH_ENGINE_TYPE" == "docker" ]]; then
   # detect volumes from file arguments
   VIASH_CHOWN_VARS=()
@@ -941,6 +997,10 @@ if [ ! -z "$VIASH_PAR_OUTPUT" ]; then
   VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_OUTPUT")" )
   VIASH_PAR_OUTPUT=$(ViashDockerAutodetectMount "$VIASH_PAR_OUTPUT")
   VIASH_CHOWN_VARS+=( "$VIASH_PAR_OUTPUT" )
+fi
+if [ ! -z "$VIASH_PAR_AWS_CREDENTIALS" ]; then
+  VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_PAR_AWS_CREDENTIALS")" )
+  VIASH_PAR_AWS_CREDENTIALS=$(ViashDockerAutodetectMount "$VIASH_PAR_AWS_CREDENTIALS")
 fi
 if [ ! -z "$VIASH_META_RESOURCES_DIR" ]; then
   VIASH_DIRECTORY_MOUNTS+=( "$(ViashDockerAutodetectMountArg "$VIASH_META_RESOURCES_DIR")" )
@@ -1009,10 +1069,14 @@ function interrupt {
 trap clean_up EXIT
 trap interrupt INT SIGINT
 cat > "\$tempscript" << 'VIASHMAIN'
+#!/usr/bin/env bash
+
 ## VIASH START
 # The following code has been auto-generated by Viash.
 $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo "${VIASH_PAR_INPUT}" | sed "s#'#'\"'\"'#g;s#.*#par_input='&'#" ; else echo "# par_input="; fi )
 $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "${VIASH_PAR_OUTPUT}" | sed "s#'#'\"'\"'#g;s#.*#par_output='&'#" ; else echo "# par_output="; fi )
+$( if [ ! -z ${VIASH_PAR_AWS_CREDENTIALS+x} ]; then echo "${VIASH_PAR_AWS_CREDENTIALS}" | sed "s#'#'\"'\"'#g;s#.*#par_aws_credentials='&'#" ; else echo "# par_aws_credentials="; fi )
+$( if [ ! -z ${VIASH_PAR_AWS_PROFILE+x} ]; then echo "${VIASH_PAR_AWS_PROFILE}" | sed "s#'#'\"'\"'#g;s#.*#par_aws_profile='&'#" ; else echo "# par_aws_profile="; fi )
 $( if [ ! -z ${VIASH_META_NAME+x} ]; then echo "${VIASH_META_NAME}" | sed "s#'#'\"'\"'#g;s#.*#meta_name='&'#" ; else echo "# meta_name="; fi )
 $( if [ ! -z ${VIASH_META_FUNCTIONALITY_NAME+x} ]; then echo "${VIASH_META_FUNCTIONALITY_NAME}" | sed "s#'#'\"'\"'#g;s#.*#meta_functionality_name='&'#" ; else echo "# meta_functionality_name="; fi )
 $( if [ ! -z ${VIASH_META_RESOURCES_DIR+x} ]; then echo "${VIASH_META_RESOURCES_DIR}" | sed "s#'#'\"'\"'#g;s#.*#meta_resources_dir='&'#" ; else echo "# meta_resources_dir="; fi )
@@ -1063,6 +1127,9 @@ if [[ "$VIASH_ENGINE_TYPE" == "docker" ]]; then
   
   if [ ! -z "$VIASH_PAR_OUTPUT" ]; then
     VIASH_PAR_OUTPUT=$(ViashDockerStripAutomount "$VIASH_PAR_OUTPUT")
+  fi
+  if [ ! -z "$VIASH_PAR_AWS_CREDENTIALS" ]; then
+    VIASH_PAR_AWS_CREDENTIALS=$(ViashDockerStripAutomount "$VIASH_PAR_AWS_CREDENTIALS")
   fi
   if [ ! -z "$VIASH_META_RESOURCES_DIR" ]; then
     VIASH_META_RESOURCES_DIR=$(ViashDockerStripAutomount "$VIASH_META_RESOURCES_DIR")

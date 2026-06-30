@@ -1,11 +1,11 @@
 #!/bin/bash
 
-repository="openproblems-bio/core"
-version="fb6a86d18870f7cc771bf9db764d56aa0969f2c5"
-component="project/fetch_task_run"
+repository="openproblems-bio/openproblems"
+version="ff8161ffc679c5027bf25dee8f080ab33c215137"
+component="project/fetch_run_work_dir"
 
 cache_dir="$HOME/.cache/openproblems/repos/$repository"
-executable_path="viash/core/target/executable/${component}/$(basename ${component})"
+executable_path="target/executable/${component}/$(basename ${component})"
 version_file="$HOME/.cache/openproblems/versions/${repository}/${component}/version.txt"
 
 function get_repository {

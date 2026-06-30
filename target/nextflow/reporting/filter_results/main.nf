@@ -3384,9 +3384,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/filter_results",
     "viash_version" : "0.9.7",
-    "git_commit" : "83a656e018992f1a9f12435a146ba144b729a272",
+    "git_commit" : "9fe740d9899e882716aacb737153f1c1465907a7",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v3.0.0-1-g83a656e0"
+    "git_tag" : "v1.0.0-1442-g9fe740d9"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3635,6 +3635,7 @@ def validate_json_against_schema(
             "validate",
             "--spec",
             "draft2020",
+            "--strict=false",
             "-s",
             schema_file,
             "-r",

@@ -66,11 +66,11 @@ argument_groups:
       type: file
       direction: output
       description: Combined output JSON
-      default: combined_output.json
+      default: task_results.json
       info:
         format:
           type: json
-          schema: /common/schemas/results_v4/combined_output.json
+          schema: /common/schemas/results_v4/task_results.json
 
 resources:
   - type: r_script
