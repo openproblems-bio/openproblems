@@ -72,7 +72,7 @@ ajv_args <- paste(
   "validate",
   "--spec draft2020",
   "-s",
-  file.path(results_schemas, "combined_output.json"),
+  file.path(results_schemas, "task_results.json"),
   "-r",
   file.path(results_schemas, "task_info.json"),
   "-r",

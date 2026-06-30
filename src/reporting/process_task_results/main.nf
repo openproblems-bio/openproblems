@@ -14,16 +14,11 @@ workflow run_wf {
 
     | get_task_info.run(
       fromState: [
-        "input": "input_task_info"
+        "input": "input_task_info",
+        "timestamp": "timestamp"
       ],
       toState: ["output_task": "output"]
     )
-
-    // extract task id from task info
-    | map { id, state ->
-      def task_id = readJson(state.output_task).task_id
-      [id, state + ["task_id": task_id]]
-    }
 
     | get_dataset_info.run(
       fromState: [

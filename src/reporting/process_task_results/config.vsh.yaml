@@ -13,6 +13,14 @@ argument_groups:
         direction: input
         description: A YAML file containing task information
         example: resources_test/openproblems/task_results_v4/raw/task_info.yaml
+      - name: "--timestamp"
+        type: string
+        required: false
+        description: |
+          ISO 8601 timestamp of when these results were generated. If not
+          provided, the `timestamp` field from the input task info YAML is used.
+          If neither is available, the workflow fails.
+        example: "2024-10-10T00:00:00Z"
       - name: "--input_dataset_info"
         type: file
         required: true
@@ -108,7 +116,7 @@ argument_groups:
         required: true
         direction: output
         description: Combined task results JSON file
-        default: combined_output.json
+        default: task_results.json
         info:
           format:
             type: json

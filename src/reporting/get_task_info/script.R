@@ -1,6 +1,7 @@
 ### VIASH START
 par <- list(
   input = "resources_test/openproblems/task_results_v4/raw/task_info.yaml",
+  timestamp = "2024-10-10T00:00:00Z",
   output = "task_info.json"
 )
 ## VIASH END
@@ -24,6 +25,19 @@ str(references)
 cat("\n>>> Getting authors...\n")
 authors <- get_authors_list(task_info_yaml$authors)
 cat("Found", length(authors), "authors\n")
+
+cat("\n>>> Resolving timestamp...\n")
+# Prefer the timestamp in the task info YAML, fall back to the --timestamp
+# argument (e.g. inferred by render_results_report from the run path or file
+# modification time). Fail if neither is available.
+timestamp <- task_info_yaml$timestamp %||% par$timestamp
+if (is.null(timestamp) || is.na(timestamp) || !nzchar(timestamp)) {
+  stop(
+    "No timestamp found. Add a 'timestamp' field to the task info YAML or ",
+    "pass one via the --timestamp argument."
+  )
+}
+cat("Using timestamp:", timestamp, "\n")
 
 cat("\n>>> Creating JSON list...\n")
 task_info_json <- list(
@@ -56,7 +70,8 @@ task_info_json <- list(
   license = task_info_yaml$license %||% "Missing!" |> jsonlite::unbox(),
   references = references,
   version = task_info_yaml$version %||% "Missing!" |> jsonlite::unbox(),
-  is_prerelease = jsonlite::unbox(TRUE)
+  is_prerelease = jsonlite::unbox(TRUE),
+  timestamp = jsonlite::unbox(timestamp)
 )
 str(task_info_json)
 
