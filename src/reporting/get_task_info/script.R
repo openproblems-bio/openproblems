@@ -42,7 +42,7 @@ cat("Using timestamp:", timestamp, "\n")
 cat("\n>>> Creating JSON list...\n")
 task_info_json <- list(
   name = jsonlite::unbox(sub("^task_", "", task_info_yaml$name)), # Remove "task_" prefix
-  commit = jsonlite::unbox(NA_character_), # TODO: Add when available in task_info.yaml
+  commit = jsonlite::unbox(task_info_yaml$commit %||% NA_character_),
   label = task_info_yaml$label %||%
     # Create label from task name if missing
     (
