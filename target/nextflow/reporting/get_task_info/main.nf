@@ -3065,6 +3065,9 @@ meta = [
           "type" : "string",
           "name" : "--timestamp",
           "description" : "ISO 8601 timestamp of when these results were generated. If not provided,\nthe `timestamp` field from the input task info YAML is used. If neither is\navailable, the component fails.\n",
+          "info" : {
+            "test_default" : "2024-10-10T00:00:00Z"
+          },
           "example" : [
             "2024-10-10T00:00:00Z"
           ],
@@ -3233,9 +3236,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/get_task_info",
     "viash_version" : "0.9.7",
-    "git_commit" : "9fe740d9899e882716aacb737153f1c1465907a7",
+    "git_commit" : "0ca5d0cd040b741c1b6cc2e4cad7230cb2c50131",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1442-g9fe740d9"
+    "git_tag" : "v1.0.0-1443-g0ca5d0cd"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3368,7 +3371,7 @@ cat("Using timestamp:", timestamp, "\\\\n")
 cat("\\\\n>>> Creating JSON list...\\\\n")
 task_info_json <- list(
   name = jsonlite::unbox(sub("^task_", "", task_info_yaml\\$name)), # Remove "task_" prefix
-  commit = jsonlite::unbox(NA_character_), # TODO: Add when available in task_info.yaml
+  commit = jsonlite::unbox(task_info_yaml\\$commit %||% NA_character_),
   label = task_info_yaml\\$label %||%
     # Create label from task name if missing
     (

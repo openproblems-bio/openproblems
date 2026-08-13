@@ -21,7 +21,8 @@ argument_groups:
     description: "ISO 8601 timestamp of when these results were generated. If not\
       \ provided,\nthe `timestamp` field from the input task info YAML is used. If\
       \ neither is\navailable, the component fails.\n"
-    info: null
+    info:
+      test_default: "2024-10-10T00:00:00Z"
     example:
     - "2024-10-10T00:00:00Z"
     required: false
@@ -140,9 +141,9 @@ build_info:
   output: "target/executable/reporting/get_task_info"
   executable: "target/executable/reporting/get_task_info/get_task_info"
   viash_version: "0.9.7"
-  git_commit: "9fe740d9899e882716aacb737153f1c1465907a7"
+  git_commit: "0ca5d0cd040b741c1b6cc2e4cad7230cb2c50131"
   git_remote: "https://github.com/openproblems-bio/openproblems"
-  git_tag: "v1.0.0-1442-g9fe740d9"
+  git_tag: "v1.0.0-1443-g0ca5d0cd"
 package_config:
   name: "openproblems"
   version: "build_main"

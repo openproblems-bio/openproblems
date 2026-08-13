@@ -454,9 +454,9 @@ RUN Rscript -e 'options(warn = 2); if (!requireNamespace("remotes", quietly = TR
   Rscript -e 'options(warn = 2); remotes::install_cran(c("bibtex", "purrr", "stringr"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component reporting get_task_info"
-LABEL org.opencontainers.image.created="2026-06-30T14:04:08Z"
+LABEL org.opencontainers.image.created="2026-08-13T08:24:23Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="9fe740d9899e882716aacb737153f1c1465907a7"
+LABEL org.opencontainers.image.revision="0ca5d0cd040b741c1b6cc2e4cad7230cb2c50131"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -1129,7 +1129,7 @@ cat("Using timestamp:", timestamp, "\\n")
 cat("\\n>>> Creating JSON list...\\n")
 task_info_json <- list(
   name = jsonlite::unbox(sub("^task_", "", task_info_yaml\$name)), # Remove "task_" prefix
-  commit = jsonlite::unbox(NA_character_), # TODO: Add when available in task_info.yaml
+  commit = jsonlite::unbox(task_info_yaml\$commit %||% NA_character_),
   label = task_info_yaml\$label %||%
     # Create label from task name if missing
     (

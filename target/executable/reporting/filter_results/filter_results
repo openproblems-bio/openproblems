@@ -451,9 +451,9 @@ RUN apt-get update && \
 
 RUN npm install -g ajv-cli
 LABEL org.opencontainers.image.description="Companion container for running component reporting filter_results"
-LABEL org.opencontainers.image.created="2026-06-30T14:04:08Z"
+LABEL org.opencontainers.image.created="2026-08-13T08:24:23Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/openproblems"
-LABEL org.opencontainers.image.revision="9fe740d9899e882716aacb737153f1c1465907a7"
+LABEL org.opencontainers.image.revision="0ca5d0cd040b741c1b6cc2e4cad7230cb2c50131"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

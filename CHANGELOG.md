@@ -56,6 +56,8 @@
 
 ## Bug fixes
 
+- Read the task commit from `task_info.yaml` in `get_task_info`, instead of always writing a null (PR #943).
+
 - Fix metric direction (`maximize`/`minimize`) handling in `generate_qc` and `render_report` components of the `process_task_results` workflow (PR #936).
 
 - Fix bug in metric maximize handling and add raw scores table to the benchmark report (PR #937).
