@@ -18,6 +18,8 @@ argument_groups:
         the `timestamp` field from the input task info YAML is used. If neither is
         available, the component fails.
       example: "2024-10-10T00:00:00Z"
+      info:
+        test_default: "2024-10-10T00:00:00Z"
 
   - name: Outputs
     arguments:
