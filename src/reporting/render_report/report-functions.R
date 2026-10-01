@@ -569,3 +569,58 @@ aggregate_scores <- function(scores) {
 
   mean(scores, na.rm = TRUE)
 }
+
+#' Split methods by parameter set
+#'
+#' @param results Results list from results JSON
+#' @param method_info Method info list from results JSON
+#'
+#' @returns A list with items "results" and "method_info" in which every
+#'   parameter set of a method is a method of its own
+#'
+#' @details
+#' Results are keyed by parameter set as well as by method but the report is
+#' keyed by method alone. A method run with parameter sets is therefore shown as
+#' one method per set, named "<method>.<paramset>" as in the benchmark workflow.
+split_methods_by_paramset <- function(results, method_info) {
+  paramsets <- purrr::map_dfr(results, function(.result) {
+    data.frame(
+      method = .result$method_name,
+      paramset = .result$paramset_name %||% NA_character_
+    )
+  }) |>
+    dplyr::distinct()
+
+  results <- purrr::map(results, function(.result) {
+    if (!is.null(.result$paramset_name)) {
+      .result$method_name <- paste0(
+        .result$method_name,
+        ".",
+        .result$paramset_name
+      )
+    }
+
+    .result
+  })
+
+  method_info <- purrr::map(method_info, function(.method) {
+    method_paramsets <- paramsets$paramset[paramsets$method == .method$name]
+
+    # Methods without parameter sets, or without any results, are kept as they are
+    if (all(is.na(method_paramsets))) {
+      return(list(.method))
+    }
+
+    purrr::map(method_paramsets, function(.paramset) {
+      if (!is.na(.paramset)) {
+        .method$name <- paste0(.method$name, ".", .paramset)
+        .method$label <- paste0(.method$label, " (", .paramset, ")")
+      }
+
+      .method
+    })
+  }) |>
+    purrr::list_flatten()
+
+  list(results = results, method_info = method_info)
+}
