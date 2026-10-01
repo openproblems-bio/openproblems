@@ -33,19 +33,18 @@ echo
 echo ">>> Adding dummy paramsets if none are present..."
 # get_results keys its output by parameter set as well as by method, so the test
 # resources need score entries with a paramset. This run predates paramsets, so
-# duplicate one method's scores under two dummy paramsets. The report drops the
-# extra rows (they have no metric component runs), so the rest of the processed
-# output is unaffected.
-python3 - "$OUT_DIR/raw/score_uns.yaml" << 'HERE'
+# duplicate one method's scores and trace rows under two dummy paramsets, tagged
+# "<dataset>.<method>.<paramset>[.<metric>]" like a run_benchmark workflow would.
+python3 - "$OUT_DIR/raw/score_uns.yaml" "$OUT_DIR/raw/trace.txt" << 'HERE'
 import copy
 import sys
 import yaml
 
-path = sys.argv[1]
-with open(path) as f:
+scores_path, trace_path = sys.argv[1:3]
+with open(scores_path) as f:
     scores = yaml.safe_load(f)
 
-if any("paramset_id" in entry for entry in scores):
+if any(entry.get("paramset_name") for entry in scores):
     print("Scores already contain paramsets; leaving them as-is.")
     sys.exit(0)
 
@@ -54,21 +53,46 @@ paramsets = {
     "dummy_paramset_1": {"learning_rate": 0.1, "n_iterations": 100, "mode": "fast"},
     "dummy_paramset_2": {"learning_rate": 0.01, "n_iterations": 500, "mode": "accurate"},
 }
+
+# duplicate the scores
 new_entries = []
 for entry in scores:
     if entry["method_id"] != method_id:
         continue
-    for paramset_id, paramset in paramsets.items():
+    for paramset_name, paramset in paramsets.items():
         dup = copy.deepcopy(entry)
-        dup["paramset_id"] = paramset_id
+        dup["paramset_name"] = paramset_name
         dup["paramset"] = dict(paramset)
         new_entries.append(dup)
 
 scores.extend(new_entries)
-with open(path, "w") as f:
+with open(scores_path, "w") as f:
     yaml.safe_dump(scores, f, sort_keys=False)
 
-print(f"Added {len(new_entries)} dummy paramset entries for method '{method_id}'.")
+# duplicate the trace rows of the method and of the metrics run on its output
+with open(trace_path) as f:
+    lines = f.read().splitlines()
+
+name_ix = lines[0].split("\t").index("name")
+new_lines = []
+for line in lines[1:]:
+    fields = line.split("\t")
+    process, _, tag = fields[name_ix].partition(" (")
+    tag_parts = tag.rstrip(")").split(".")
+    if len(tag_parts) < 2 or tag_parts[1] != method_id:
+        continue
+    for paramset_name in paramsets:
+        new_tag = ".".join(tag_parts[:2] + [paramset_name] + tag_parts[2:])
+        fields[name_ix] = f"{process} ({new_tag})"
+        new_lines.append("\t".join(fields))
+
+with open(trace_path, "w") as f:
+    f.write("\n".join(lines + new_lines) + "\n")
+
+print(
+    f"Added {len(new_entries)} dummy paramset entries and {len(new_lines)} trace "
+    f"rows for method '{method_id}'."
+)
 HERE
 
 echo
