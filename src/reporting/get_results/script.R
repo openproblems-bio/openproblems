@@ -18,6 +18,8 @@ par <- list(
 #                               FUNCTIONS
 ################################################################################
 
+`%||%` <- rlang::`%||%`
+
 parse_exit_code <- function(exit_codes) {
   exit_codes <- as.integer(exit_codes)
   # Set missing exit codes to -1 for "Unknown error"
@@ -101,23 +103,28 @@ cat("Reading metric info from '", par$input_metric_info, "'...\n", sep = "")
 metric_info <- jsonlite::read_json(par$input_metric_info)
 metric_components <- unique(purrr::map_chr(metric_info, "component_name"))
 cat("Reading scores from '", par$input_scores, "'...\n", sep = "")
-scores <- yaml::yaml.load_file(par$input_scores) |>
-  purrr::map_dfr(\(.x) {
+score_entries <- yaml::yaml.load_file(par$input_scores) |>
+  purrr::keep(\(.x) {
     if (!("metric_ids") %in% names(.x) || is.null(.x$metric_ids)) {
       warning(
         "Skipping score entry without 'metric_ids': ",
         jsonlite::toJSON(.x, auto_unbox = TRUE),
         immediate. = TRUE
       )
-      return(NULL)
+      return(FALSE)
     }
+    TRUE
+  })
 
+scores <- score_entries |>
+  purrr::map_dfr(\(.x) {
     if (!("metric_values") %in% names(.x)) {
       .x$metric_values <- NA_real_
     }
 
     .x[c("dataset_id", "method_id", "metric_ids", "metric_values")] |>
-      tibble::as_tibble()
+      tibble::as_tibble() |>
+      dplyr::mutate(paramset_name = .x$paramset_id %||% NA_character_)
   }) |>
   dplyr::rename(
     dataset_name = dataset_id,
@@ -125,6 +132,34 @@ scores <- yaml::yaml.load_file(par$input_scores) |>
     metric_name = metric_ids,
     metric_value = metric_values
   )
+
+# Per score entry: the parameter set it belongs to, and the Nextflow tags of the
+# processes that produced it. A task whose "method" is a whole sub-workflow cannot be
+# identified from the process tag alone -- an upstream process is shared by every
+# downstream path branching off it -- so it may name its processes here instead.
+run_index <- score_entries |>
+  purrr::map_dfr(\(.x) {
+    # unbox scalar paramset values, otherwise write_json emits them as arrays
+    paramset <- purrr::map(.x$paramset, \(.v) {
+      if (is.atomic(.v) && length(.v) == 1) jsonlite::unbox(.v) else .v
+    })
+    tibble::tibble(
+      dataset_name = .x$dataset_id,
+      method_name = .x$method_id,
+      paramset_name = .x$paramset_id %||% NA_character_,
+      paramset = list(if (is.null(.x$paramset)) NULL else paramset),
+      run_ids = list(as.character(unlist(.x$run_ids) %||% character(0))),
+      metric_component = .x$metric_component %||% NA_character_,
+      metric_run_id = .x$metric_run_id %||% NA_character_
+    )
+  })
+
+use_run_ids <- nrow(run_index) > 0 &&
+  any(lengths(run_index$run_ids) > 0)
+
+if (use_run_ids) {
+  cat("Scores name their own processes; using those to attribute the trace.\n")
+}
 
 if (nrow(scores) == 0 || (nrow(scores) > 0 && all(is.na(scores$metric_value)))) {
   stop(
@@ -162,6 +197,7 @@ if (!all(unique(scores$method_name) %in% method_names)) {
     purrr::set_names(scores_methods)
 
   scores$method_name <- methods_map[scores$method_name]
+  run_index$method_name <- methods_map[run_index$method_name]
 }
 
 cat("Reading execution trace from '", par$input_trace, "'...\n", sep = "")
@@ -180,19 +216,13 @@ trace <- readr::read_tsv(
   dplyr::ungroup() |>
   # Separate process name and id
   dplyr::mutate(name_copy = name) |>
-  tidyr::separate_wider_delim(name_copy, " ", names = c("process", "id")) |>
-  dplyr::mutate(id = stringr::str_remove_all(id, "\\(|\\)")) |>
-  # Split ID into dataset, method, metric
   tidyr::separate_wider_delim(
-    id,
-    delim = ".",
-    names = c("dataset_name", "method_name", "metric_component"),
-    too_few = "align_start"
+    name_copy,
+    " ",
+    names = c("process", "id"),
+    too_many = "merge"
   ) |>
-  # Only keep method and metric processes
-  dplyr::filter(
-    method_name %in% method_names | metric_component %in% metric_components
-  ) |>
+  dplyr::mutate(id = stringr::str_remove_all(id, "\\(|\\)")) |>
   # Parse resources
   dplyr::mutate(
     run_exit_code = parse_exit_code(exit),
@@ -201,135 +231,188 @@ trace <- readr::read_tsv(
     run_peak_memory_mb = parse_memory(peak_vmem),
     run_disk_read_mb = parse_memory(rchar),
     run_disk_write_mb = parse_memory(wchar)
-  ) |>
-  # Select columns
-  dplyr::select(
-    name,
-    process,
-    dataset_name,
-    method_name,
-    metric_component,
-    tidyselect::starts_with("run_")
   )
 
-# Dataset names in the trace may have normalisations appended, map back to the name
-process_datasets <- unique(trace$dataset_name)
-dataset_map <- purrr::map_chr(process_datasets, function(.dataset) {
-  if (.dataset %in% dataset_names) {
-    .dataset
-  } else {
-    dataset_names[stringr::str_detect(.dataset, dataset_names)][1]
+if (!use_run_ids) {
+  # Split the process tag into dataset, method and metric
+  trace <- trace |>
+    tidyr::separate_wider_delim(
+      id,
+      delim = ".",
+      names = c("dataset_name", "method_name", "metric_component"),
+      too_few = "align_start",
+      too_many = "drop"
+    ) |>
+    # Only keep method and metric processes
+    dplyr::filter(
+      method_name %in% method_names | metric_component %in% metric_components
+    ) |>
+    dplyr::select(
+      name,
+      process,
+      dataset_name,
+      method_name,
+      metric_component,
+      tidyselect::starts_with("run_")
+    )
+
+  # Dataset names in the trace may have normalisations appended, map back to the name
+  process_datasets <- unique(trace$dataset_name)
+  dataset_map <- purrr::map_chr(process_datasets, function(.dataset) {
+    if (.dataset %in% dataset_names) {
+      .dataset
+    } else {
+      dataset_names[stringr::str_detect(.dataset, dataset_names)][1]
+    }
+  }) |>
+    purrr::set_names(process_datasets)
+
+  if (any(is.na(dataset_map))) {
+    not_matched <- process_datasets[is.na(dataset_map)]
+    stop(
+      "Failed to match some dataset names in trace to dataset info: ",
+      paste(not_matched, collapse = ", "),
+      call. = FALSE
+    )
   }
-}) |>
-  purrr::set_names(process_datasets)
 
-if (any(is.na(dataset_map))) {
-  not_matched <- process_datasets[is.na(dataset_map)]
-  stop(
-    "Failed to match some dataset names in trace to dataset info: ",
-    paste(not_matched, collapse = ", "),
-    call. = FALSE
+  trace$dataset_name <- dataset_map[trace$dataset_name]
+} else {
+  # The scores name their own processes, so attribute each trace row by exact tag.
+  trace <- trace |>
+    dplyr::select(name, process, id, tidyselect::starts_with("run_"))
+
+  method_tags <- run_index |>
+    dplyr::select(dataset_name, method_name, paramset_name, run_ids) |>
+    tidyr::unnest(run_ids) |>
+    dplyr::distinct() |>
+    dplyr::rename(id = run_ids)
+
+  metric_tags <- run_index |>
+    dplyr::filter(!is.na(metric_run_id)) |>
+    dplyr::select(
+      dataset_name,
+      method_name,
+      paramset_name,
+      metric_component,
+      id = metric_run_id
+    ) |>
+    dplyr::distinct()
+
+  unmatched <- setdiff(
+    c(method_tags$id, metric_tags$id),
+    trace$id
   )
+  if (length(unmatched) > 0) {
+    warning(
+      "Some processes named by the scores are absent from the trace: ",
+      paste(utils::head(unmatched, 10), collapse = ", "),
+      if (length(unmatched) > 10) paste0(" (and ", length(unmatched) - 10, " more)"),
+      immediate. = TRUE,
+      call. = FALSE
+    )
+  }
 }
 
-trace$dataset_name <- dataset_map[trace$dataset_name]
-
 cat("\n>>> Extracting resources...\n")
+
+summarise_resources <- function(df, group_cols) {
+  df |>
+    dplyr::group_by(dplyr::across(tidyselect::all_of(group_cols))) |>
+    dplyr::summarise(
+      run_exit_code = list(run_exit_code),
+      run_duration_secs = list(run_duration_secs),
+      run_cpu_pct = list(run_cpu_pct),
+      run_peak_memory_mb = list(run_peak_memory_mb),
+      run_disk_read_mb = list(run_disk_read_mb),
+      run_disk_write_mb = list(run_disk_write_mb),
+      .groups = "drop"
+    ) |>
+    dplyr::mutate(
+      succeeded = purrr::map_lgl(run_exit_code, ~ all(.x == 0)),
+      run_exit_code = map_missing_to_empty(run_exit_code, mode = "integer"),
+      run_duration_secs = map_missing_to_empty(
+        run_duration_secs,
+        mode = "numeric"
+      ),
+      run_cpu_pct = map_missing_to_empty(run_cpu_pct, mode = "numeric"),
+      run_peak_memory_mb = map_missing_to_empty(
+        run_peak_memory_mb,
+        mode = "numeric"
+      ),
+      run_disk_read_mb = map_missing_to_empty(
+        run_disk_read_mb,
+        mode = "numeric"
+      ),
+      run_disk_write_mb = map_missing_to_empty(
+        run_disk_write_mb,
+        mode = "numeric"
+      )
+    ) |>
+    dplyr::relocate(succeeded, .after = method_name)
+}
+
+# Results are keyed by parameter set as well as by method, so that a method run with
+# several parameter sets contributes one row per set rather than merging them.
+result_keys <- c("dataset_name", "method_name", "paramset_name")
+
+if (use_run_ids) {
+  method_trace <- method_tags |>
+    dplyr::inner_join(trace, by = "id", relationship = "many-to-many")
+  metric_trace <- metric_tags |>
+    dplyr::inner_join(trace, by = "id", relationship = "many-to-many")
+} else {
+  method_trace <- trace |>
+    dplyr::filter(
+      method_name %in% method_names,
+      is.na(metric_component)
+    ) |>
+    dplyr::mutate(paramset_name = NA_character_)
+  metric_trace <- trace |>
+    dplyr::filter(metric_component %in% metric_components) |>
+    dplyr::mutate(paramset_name = NA_character_)
+}
+
 cat("Extracting method resources...\n", sep = "")
-method_resources <- trace |>
-  dplyr::filter(
-    method_name %in% method_names,
-    is.na(metric_component)
-  ) |>
-  dplyr::group_by(dataset_name, method_name) |>
-  dplyr::summarise(
-    run_exit_code = list(run_exit_code),
-    run_duration_secs = list(run_duration_secs),
-    run_cpu_pct = list(run_cpu_pct),
-    run_peak_memory_mb = list(run_peak_memory_mb),
-    run_disk_read_mb = list(run_disk_read_mb),
-    run_disk_write_mb = list(run_disk_write_mb),
-    .groups = "drop"
-  ) |>
-  dplyr::mutate(
-    succeeded = purrr::map_lgl(run_exit_code, ~ all(.x == 0)),
-    run_exit_code = map_missing_to_empty(run_exit_code, mode = "integer"),
-    run_duration_secs = map_missing_to_empty(
-      run_duration_secs,
-      mode = "numeric"
-    ),
-    run_cpu_pct = map_missing_to_empty(run_cpu_pct, mode = "numeric"),
-    run_peak_memory_mb = map_missing_to_empty(
-      run_peak_memory_mb,
-      mode = "numeric"
-    ),
-    run_disk_read_mb = map_missing_to_empty(run_disk_read_mb, mode = "numeric"),
-    run_disk_write_mb = map_missing_to_empty(
-      run_disk_write_mb,
-      mode = "numeric"
-    )
-  ) |>
-  dplyr::relocate(succeeded, .after = method_name)
+method_resources <- summarise_resources(method_trace, result_keys)
 
 cat("Extracting metric resources...\n", sep = "")
-metric_resources <- trace |>
-  dplyr::filter(metric_component %in% metric_components) |>
-  dplyr::group_by(dataset_name, method_name, metric_component) |>
-  dplyr::summarise(
-    run_exit_code = list(run_exit_code),
-    run_duration_secs = list(run_duration_secs),
-    run_cpu_pct = list(run_cpu_pct),
-    run_peak_memory_mb = list(run_peak_memory_mb),
-    run_disk_read_mb = list(run_disk_read_mb),
-    run_disk_write_mb = list(run_disk_write_mb),
-    .groups = "drop"
-  ) |>
-  dplyr::mutate(
-    succeeded = purrr::map_lgl(run_exit_code, ~ all(.x == 0)),
-    run_exit_code = map_missing_to_empty(run_exit_code, mode = "integer"),
-    run_duration_secs = map_missing_to_empty(
-      run_duration_secs,
-      mode = "numeric"
-    ),
-    run_cpu_pct = map_missing_to_empty(run_cpu_pct, mode = "numeric"),
-    run_peak_memory_mb = map_missing_to_empty(
-      run_peak_memory_mb,
-      mode = "numeric"
-    ),
-    run_disk_read_mb = map_missing_to_empty(run_disk_read_mb, mode = "numeric"),
-    run_disk_write_mb = map_missing_to_empty(
-      run_disk_write_mb,
-      mode = "numeric"
-    )
-  ) |>
-  dplyr::relocate(succeeded, .after = method_name)
+metric_resources <- summarise_resources(
+  metric_trace,
+  c(result_keys, "metric_component")
+)
 
 cat("\n>>> Summarising results...\n")
 metric_component_names <- purrr::map_chr(metric_info, "component_name")
 metric_component_map <- purrr::map_chr(metric_info, "name") |>
   purrr::set_names(metric_component_names)
+
+paramset_values <- run_index |>
+  dplyr::select(tidyselect::all_of(result_keys), paramset) |>
+  dplyr::distinct(dplyr::across(tidyselect::all_of(result_keys)), .keep_all = TRUE)
+
 results <- scores |>
   # There shouldn't be any but remove missing/NaN values just in case
   dplyr::filter(
     !is.na(metric_value) & is.finite(metric_value)
   ) |>
-  dplyr::arrange(dataset_name, method_name, metric_name) |>
-  dplyr::group_by(dataset_name, method_name) |>
+  dplyr::arrange(dataset_name, method_name, paramset_name, metric_name) |>
+  dplyr::group_by(dataset_name, method_name, paramset_name) |>
   dplyr::summarise(
     metric_names = list(metric_name),
     metric_values = list(metric_value),
     .groups = "drop"
   ) |>
-  dplyr::full_join(method_resources, by = c("dataset_name", "method_name")) |>
+  dplyr::full_join(method_resources, by = result_keys) |>
   dplyr::mutate(
-    metric_components = purrr::map2(
-      dataset_name,
-      method_name,
-      function(.dataset, .method) {
+    metric_components = purrr::pmap(
+      list(dataset_name, method_name, paramset_name),
+      function(.dataset, .method, .paramset) {
         metric_resources |>
           dplyr::filter(
             dataset_name == .dataset,
-            method_name == .method
+            method_name == .method,
+            (is.na(paramset_name) & is.na(.paramset)) | paramset_name == .paramset
           ) |>
           dplyr::mutate(
             metric_names = purrr::map(metric_component, function(.component) {
@@ -345,15 +428,28 @@ results <- scores |>
       }
     )
   ) |>
-  # TODO: Add these once available in output
-  dplyr::mutate(
-    paramset_name = NA,
-    paramset = NA
-  ) |>
+  dplyr::left_join(paramset_values, by = result_keys) |>
   dplyr::mutate(
     metric_names = map_missing_to_empty(metric_names, mode = "character"),
-    metric_values = map_missing_to_empty(metric_values, mode = "numeric")
+    metric_values = map_missing_to_empty(metric_values, mode = "numeric"),
+    # A paramset row has no trace rows of its own in tag-attribution mode, so it
+    # gets empty run stats rather than nulls the schema rejects.
+    run_exit_code = map_missing_to_empty(run_exit_code, mode = "integer"),
+    run_duration_secs = map_missing_to_empty(run_duration_secs, mode = "numeric"),
+    run_cpu_pct = map_missing_to_empty(run_cpu_pct, mode = "numeric"),
+    run_peak_memory_mb = map_missing_to_empty(
+      run_peak_memory_mb,
+      mode = "numeric"
+    ),
+    run_disk_read_mb = map_missing_to_empty(run_disk_read_mb, mode = "numeric"),
+    run_disk_write_mb = map_missing_to_empty(
+      run_disk_write_mb,
+      mode = "numeric"
+    )
   ) |>
+  # A row can only come from a metric that ran on this method's output, so treat a
+  # missing trace match as success rather than emitting a null the schema rejects.
+  dplyr::mutate(succeeded = dplyr::coalesce(succeeded, TRUE)) |>
   dplyr::select(
     dataset_name,
     method_name,
