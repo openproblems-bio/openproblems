@@ -500,6 +500,11 @@ Click the tabs to see the plots for each metric.
 ```{r}
 #| label: normalization-controls
 #| results: asis
+# From here on every parameter set of a method is shown as a method of its own
+split_results <- split_methods_by_paramset(task_results$results, method_info)
+task_results$results <- split_results$results
+method_info <- split_results$method_info
+
 dataset_names <- purrr::map_chr(dataset_info, "name")
 method_names <- purrr::map_chr(method_info, "name")
 metric_names <- purrr::map_chr(metric_info, "name")

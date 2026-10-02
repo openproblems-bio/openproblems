@@ -3288,9 +3288,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/reporting/get_results",
     "viash_version" : "0.9.7",
-    "git_commit" : "fea93433ae8304ce501fadbbb82497cb619694dc",
+    "git_commit" : "673fa8f63ac620fd296b506ae2a741b027f979f2",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1444-gfea93433"
+    "git_tag" : "v1.0.0-1445-g673fa8f6"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3500,7 +3500,7 @@ scores <- score_entries |>
 
     .x[c("dataset_id", "method_id", "metric_ids", "metric_values")] |>
       tibble::as_tibble() |>
-      dplyr::mutate(paramset_name = .x\\$paramset_id %||% NA_character_)
+      dplyr::mutate(paramset_name = .x\\$paramset_name %||% NA_character_)
   }) |>
   dplyr::rename(
     dataset_name = dataset_id,
@@ -3522,7 +3522,7 @@ run_index <- score_entries |>
     tibble::tibble(
       dataset_name = .x\\$dataset_id,
       method_name = .x\\$method_id,
-      paramset_name = .x\\$paramset_id %||% NA_character_,
+      paramset_name = .x\\$paramset_name %||% NA_character_,
       paramset = list(if (is.null(.x\\$paramset)) NULL else paramset),
       run_ids = list(as.character(unlist(.x\\$run_ids) %||% character(0))),
       metric_component = .x\\$metric_component %||% NA_character_,
@@ -3610,14 +3610,28 @@ trace <- readr::read_tsv(
   )
 
 if (!use_run_ids) {
-  # Split the process tag into dataset, method and metric
+  # Split the process tag: "<dataset>.<method>[.<paramset>][.<metric>]"
   trace <- trace |>
     tidyr::separate_wider_delim(
       id,
       delim = ".",
-      names = c("dataset_name", "method_name", "metric_component"),
+      names = c("dataset_name", "method_name", "tag_rest"),
       too_few = "align_start",
-      too_many = "drop"
+      too_many = "merge"
+    ) |>
+    dplyr::mutate(
+      metric_component = stringr::str_extract(tag_rest, "[^.]+\\$"),
+      metric_component = dplyr::if_else(
+        metric_component %in% metric_components,
+        metric_component,
+        NA_character_
+      ),
+      paramset_name = dplyr::if_else(
+        is.na(metric_component),
+        tag_rest,
+        stringr::str_remove(tag_rest, "\\\\\\\\.?[^.]+\\$")
+      ),
+      paramset_name = dplyr::na_if(paramset_name, "")
     ) |>
     # Only keep method and metric processes
     dplyr::filter(
@@ -3628,6 +3642,7 @@ if (!use_run_ids) {
       process,
       dataset_name,
       method_name,
+      paramset_name,
       metric_component,
       tidyselect::starts_with("run_")
     )
@@ -3742,11 +3757,9 @@ if (use_run_ids) {
     dplyr::filter(
       method_name %in% method_names,
       is.na(metric_component)
-    ) |>
-    dplyr::mutate(paramset_name = NA_character_)
+    )
   metric_trace <- trace |>
-    dplyr::filter(metric_component %in% metric_components) |>
-    dplyr::mutate(paramset_name = NA_character_)
+    dplyr::filter(metric_component %in% metric_components)
 }
 
 cat("Extracting method resources...\\\\n", sep = "")
@@ -3763,9 +3776,11 @@ metric_component_names <- purrr::map_chr(metric_info, "component_name")
 metric_component_map <- purrr::map_chr(metric_info, "name") |>
   purrr::set_names(metric_component_names)
 
+# Look up parameter sets by method, so that failed runs get their parameters too
+paramset_keys <- c("method_name", "paramset_name")
 paramset_values <- run_index |>
-  dplyr::select(tidyselect::all_of(result_keys), paramset) |>
-  dplyr::distinct(dplyr::across(tidyselect::all_of(result_keys)), .keep_all = TRUE)
+  dplyr::select(tidyselect::all_of(paramset_keys), paramset) |>
+  dplyr::distinct(dplyr::across(tidyselect::all_of(paramset_keys)), .keep_all = TRUE)
 
 results <- scores |>
   # There shouldn't be any but remove missing/NaN values just in case
@@ -3804,12 +3819,12 @@ results <- scores |>
       }
     )
   ) |>
-  dplyr::left_join(paramset_values, by = result_keys) |>
+  dplyr::left_join(paramset_values, by = paramset_keys) |>
   dplyr::mutate(
     metric_names = map_missing_to_empty(metric_names, mode = "character"),
     metric_values = map_missing_to_empty(metric_values, mode = "numeric"),
-    # A paramset row has no trace rows of its own in tag-attribution mode, so it
-    # gets empty run stats rather than nulls the schema rejects.
+    # A row whose processes are not in the trace under its parameter set gets empty
+    # run stats rather than nulls the schema rejects.
     run_exit_code = map_missing_to_empty(run_exit_code, mode = "integer"),
     run_duration_secs = map_missing_to_empty(run_duration_secs, mode = "numeric"),
     run_cpu_pct = map_missing_to_empty(run_cpu_pct, mode = "numeric"),

@@ -56,6 +56,8 @@
 
 ## Bug fixes
 
+- Split results by `paramset_name` in `get_results` instead of merging all parameter sets of a method, and show each parameter set as a separate method in `render_report` (PR #946).
+
 - Read the task commit from `task_info.yaml` in `get_task_info`, instead of always writing a null (PR #943).
 
 - Fix metric direction (`maximize`/`minimize`) handling in `generate_qc` and `render_report` components of the `process_task_results` workflow (PR #936).

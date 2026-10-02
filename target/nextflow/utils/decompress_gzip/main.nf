@@ -3160,9 +3160,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/utils/decompress_gzip",
     "viash_version" : "0.9.7",
-    "git_commit" : "fea93433ae8304ce501fadbbb82497cb619694dc",
+    "git_commit" : "673fa8f63ac620fd296b506ae2a741b027f979f2",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1444-gfea93433"
+    "git_tag" : "v1.0.0-1445-g673fa8f6"
   },
   "package_config" : {
     "name" : "openproblems",
