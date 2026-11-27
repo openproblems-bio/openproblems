@@ -1,13 +1,13 @@
 name: extract_uns_metadata
 namespace: utils
-description: Extract .uns metadata from an h5ad file and write it to a yaml file.
+description: Extract .uns metadata from an AnnData h5ad file or zarr store and write it to a yaml file.
 argument_groups:
   - name:  Inputs
     arguments:
       - name: --input
         type: file
         required: true
-        description: A h5ad file.
+        description: An AnnData h5ad file or zarr store.
       - name: --schema
         type: file
         required: false

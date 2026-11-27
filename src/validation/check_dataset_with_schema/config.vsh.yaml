@@ -8,7 +8,7 @@ argument_groups:
       - name: --input
         type: file
         required: true
-        description: An input file. Can be an .h5ad, .parquet, .csv, or .tsv file.
+        description: An input file. Can be an AnnData .h5ad file or .zarr store.
       - name: --schema
         type: file
         required: true

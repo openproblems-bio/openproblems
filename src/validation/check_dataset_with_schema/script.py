@@ -44,7 +44,8 @@ schema_info_format = schema_info.get("format")
 assert schema_info_format, "Schema must contain a '.info.format' field"
 
 format_type = schema_info_format.get("type")
-assert format_type == "h5ad", ".info.format.type must be 'h5ad'"
+anndata_types = ["h5ad", "anndata_hdf5", "anndata_zarr"]
+assert format_type in anndata_types, f".info.format.type must be one of {anndata_types}"
 
 # create output data structure
 out = {
@@ -54,7 +55,9 @@ out = {
 }
 
 print('Load data', flush=True)
-if format_type == "h5ad":
+if format_type == "anndata_zarr":
+    data = ad.read_zarr(par['input'])
+elif format_type in anndata_types:
     data = ad.read_h5ad(par['input'])
 elif format_type == "csv":
     data = pd.read_csv(par['input'])
@@ -71,7 +74,7 @@ out = {
     "data_schema": "ok"
 }
 print("Check file against schema", flush=True)
-if format_type == "h5ad":
+if format_type in anndata_types:
     for struc, struc_fields in schema_info_format.items():
         if struc == "type":
             continue
