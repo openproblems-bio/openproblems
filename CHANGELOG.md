@@ -54,6 +54,8 @@
 
 - Use new functionality in Python `openproblems` package to generate a project's README (PR #938).
 
+- Support AnnData zarr stores (`anndata_zarr`) in the `extract_uns_metadata` and `check_dataset_with_schema` components (PR #948).
+
 ## Bug fixes
 
 - Split results by `paramset_name` in `get_results` instead of merging all parameter sets of a method, and show each parameter set as a separate method in `render_report` (PR #946).

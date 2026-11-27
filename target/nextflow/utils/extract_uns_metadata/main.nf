@@ -3050,7 +3050,7 @@ meta = [
         {
           "type" : "file",
           "name" : "--input",
-          "description" : "A h5ad file.",
+          "description" : "An AnnData h5ad file or zarr store.",
           "must_exist" : true,
           "create_parent" : true,
           "required" : true,
@@ -3110,7 +3110,7 @@ meta = [
       "is_executable" : true
     }
   ],
-  "description" : "Extract .uns metadata from an h5ad file and write it to a yaml file.",
+  "description" : "Extract .uns metadata from an AnnData h5ad file or zarr store and write it to a yaml file.",
   "test_resources" : [
     {
       "type" : "file",
@@ -3200,9 +3200,9 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/utils/extract_uns_metadata",
     "viash_version" : "0.9.7",
-    "git_commit" : "673fa8f63ac620fd296b506ae2a741b027f979f2",
+    "git_commit" : "b8223c2edcc67106f44b43e7e3fb68fcc1d5873b",
     "git_remote" : "https://github.com/openproblems-bio/openproblems",
-    "git_tag" : "v1.0.0-1445-g673fa8f6"
+    "git_tag" : "v1.0.0-1446-gb8223c2e"
   },
   "package_config" : {
     "name" : "openproblems",
@@ -3301,7 +3301,11 @@ dep = {
 ## VIASH END
 
 print('Load data', flush=True)
-adata = ad.read_h5ad(par['input']).copy()
+# an AnnData zarr store is a directory, an h5ad file is not
+if os.path.isdir(par['input']):
+  adata = ad.read_zarr(par['input'])
+else:
+  adata = ad.read_h5ad(par['input']).copy()
 
 if par["schema"]:
   print("Load schema", flush=True)
@@ -3314,7 +3318,8 @@ if par["schema"]:
   schema_info_format = schema_info.get("format") or {}
   assert schema_info_format, "Schema must contain a '.info.format' field"
 
-  assert schema_info_format.get("type") == "h5ad", ".info.format.type must be 'h5ad'"
+  assert schema_info_format.get("type") in ["h5ad", "anndata_hdf5", "anndata_zarr"], \\\\
+    ".info.format.type must be 'h5ad', 'anndata_hdf5' or 'anndata_zarr'"
 else:
   schema = None
 
@@ -3463,7 +3468,13 @@ def get_structure(adata, struct):
 ####################################################################################################
 
 def get_file_size(path: str) -> int:
-  """Get the file size in bytes of the file at the given path."""
+  """Get the size in bytes of the file or directory at the given path."""
+  if os.path.isdir(path):
+    return sum(
+      os.path.getsize(os.path.join(root, file))
+      for root, _, files in os.walk(path)
+      for file in files
+    )
   return os.path.getsize(path)
 
 def get_file_creation_time(path: str) -> str:

@@ -16,7 +16,11 @@ par = {
 ## VIASH END
 
 print('Load data', flush=True)
-adata = ad.read_h5ad(par['input']).copy()
+# an AnnData zarr store is a directory, an h5ad file is not
+if os.path.isdir(par['input']):
+  adata = ad.read_zarr(par['input'])
+else:
+  adata = ad.read_h5ad(par['input']).copy()
 
 if par["schema"]:
   print("Load schema", flush=True)
@@ -29,7 +33,8 @@ if par["schema"]:
   schema_info_format = schema_info.get("format") or {}
   assert schema_info_format, "Schema must contain a '.info.format' field"
 
-  assert schema_info_format.get("type") == "h5ad", ".info.format.type must be 'h5ad'"
+  assert schema_info_format.get("type") in ["h5ad", "anndata_hdf5", "anndata_zarr"], \
+    ".info.format.type must be 'h5ad', 'anndata_hdf5' or 'anndata_zarr'"
 else:
   schema = None
 
@@ -178,7 +183,13 @@ def get_structure(adata, struct):
 ####################################################################################################
 
 def get_file_size(path: str) -> int:
-  """Get the file size in bytes of the file at the given path."""
+  """Get the size in bytes of the file or directory at the given path."""
+  if os.path.isdir(path):
+    return sum(
+      os.path.getsize(os.path.join(root, file))
+      for root, _, files in os.walk(path)
+      for file in files
+    )
   return os.path.getsize(path)
 
 def get_file_creation_time(path: str) -> str:

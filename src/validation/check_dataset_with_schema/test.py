@@ -76,6 +76,30 @@ def test_run(run_component, tmp_path, schema):
 
   assert output_path.exists(), "Output path does not exist"
 
+def test_run_zarr(run_component, tmp_path, schema):
+  import anndata as ad
+
+  zarr_path = tmp_path / "dataset.anndata.zarr"
+  ad.read_h5ad(input_path).write_zarr(zarr_path)
+
+  schema.write_text(schema.read_text().replace("type: h5ad", "type: anndata_zarr"))
+
+  output_path = tmp_path / "checks.json"
+
+  run_component([
+    "--input", str(zarr_path),
+    "--schema", str(schema),
+    "--stop_on_error", "true",
+    "--output", str(output_path)
+  ])
+
+  assert output_path.exists(), "Output path does not exist"
+
+  with open(output_path, "r") as f:
+    out = json.load(f)
+  assert out["exit_code"] == 0
+  assert out["data_schema"] == "ok"
+
 def test_error(run_component, tmp_path, error_schema):
   output_checks = tmp_path / "checks.json"
 

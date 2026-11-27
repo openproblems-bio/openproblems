@@ -6,7 +6,7 @@ argument_groups:
   arguments:
   - type: "file"
     name: "--input"
-    description: "A h5ad file."
+    description: "An AnnData h5ad file or zarr store."
     info: null
     must_exist: true
     create_parent: true
@@ -54,7 +54,8 @@ resources:
 - type: "python_script"
   path: "script.py"
   is_executable: true
-description: "Extract .uns metadata from an h5ad file and write it to a yaml file."
+description: "Extract .uns metadata from an AnnData h5ad file or zarr store and write\
+  \ it to a yaml file."
 test_resources:
 - type: "file"
   path: "pancreas"
@@ -123,9 +124,9 @@ build_info:
   output: "target/executable/utils/extract_uns_metadata"
   executable: "target/executable/utils/extract_uns_metadata/extract_uns_metadata"
   viash_version: "0.9.7"
-  git_commit: "673fa8f63ac620fd296b506ae2a741b027f979f2"
+  git_commit: "b8223c2edcc67106f44b43e7e3fb68fcc1d5873b"
   git_remote: "https://github.com/openproblems-bio/openproblems"
-  git_tag: "v1.0.0-1445-g673fa8f6"
+  git_tag: "v1.0.0-1446-gb8223c2e"
 package_config:
   name: "openproblems"
   version: "build_main"
